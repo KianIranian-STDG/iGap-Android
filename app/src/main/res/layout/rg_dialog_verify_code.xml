@@ -1,0 +1,91 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+    <!-- Pretty hint text, and maxLines -->
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp52"
+        android:gravity="center"
+        android:text="Phone Verification"
+        android:textSize="@dimen/sp22"
+        android:textStyle="bold"
+        android:textColor="@color/toolbar_background" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/toolbar_background" />
+
+
+    <com.uncopt.android.widget.text.justify.JustifiedTextView
+        android:id="@+id/txt_p4_l2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/dp16"
+        android:gravity="center"
+        android:lineSpacingExtra="0dp"
+        android:paddingLeft="@dimen/dp12"
+        android:paddingRight="@dimen/dp12"
+        android:text="@string/rg_verify_dialog_enter_code"
+        android:textColor="@color/rg_border_editText"
+        android:textSize="@dimen/sp14" />
+
+
+    <EditText
+        android:id="@+id/rg_edt_dialog_verifyCode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp8"
+        android:inputType="number"
+        android:maxLength="6"
+        android:layout_marginBottom="@dimen/dp40"
+        android:layout_marginRight="@dimen/dp20"
+        android:layout_marginLeft="@dimen/dp20"
+        android:layout_marginTop="@dimen/dp24"
+        android:hint="Enter Verify Code Please"
+        android:textSize="@dimen/sp16" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/rg_border_editText" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp52"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layoutDirection="ltr">
+
+        <Button
+            android:id="@+id/rg_btn_cancelVerifyCode"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="@dimen/dp60"
+            android:text="@string/rg_verify_dialog_try_code"
+            android:background="@android:color/transparent"
+            android:textAllCaps="false"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/rg_border_editText" />
+
+        <Button
+            android:id="@+id/rg_btn_dialog_okVerifyCode"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="@dimen/dp60"
+            android:text="@string/rg_verify_dialog_resend_code"
+            android:background="@android:color/transparent"
+            android:textAllCaps="false"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,90 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rg_layoutRoot_dialog"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/rg_whit_background"
+    android:orientation="vertical">
+
+    <!-- Pretty hint text, and maxLines -->
+
+    <RelativeLayout
+
+        android:id="@+id/rg_layout_search_chooseCountry"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp52"
+        android:background="@color/toolbar_background"
+        android:layoutDirection="ltr"
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.SearchView
+            android:id="@+id/rg_edtSearch_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:iconifiedByDefault="false"
+            android:imeOptions="flagNoExtractUi"
+            android:padding="2dp"
+            android:queryHint="Search...."
+            android:theme="@style/MySearch"
+            app:queryHint=""
+            app:searchHintIcon="@null" />
+
+        <TextView
+
+            android:id="@+id/rg_txt_titleToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="Choose a Country"
+            android:textColor="@color/rg_whit_background"
+            android:textSize="@dimen/sp20"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/toolbar_background" />
+
+    <ListView
+        android:id="@+id/lstContent"
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:background="@color/structCountry"
+        android:choiceMode="singleChoice"
+        android:divider="@color/rg_background_editText"
+        android:dividerHeight="1dp"
+        android:fadeScrollbars="false"
+        android:scrollbarSize="@dimen/dp4"
+        android:scrollbarThumbVertical="@color/rg_start_background" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/rg_whit_background" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/toolbar_background"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+
+        <Button
+            android:id="@+id/rg_btn_okDialog"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp40"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:text="OK"
+            android:textColor="@color/rg_whit_background"
+            android:textSize="@dimen/sp20"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+</LinearLayout>

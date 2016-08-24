@@ -1,0 +1,141 @@
+package com.iGap.activitys;
+
+import android.app.Dialog;
+import android.content.Context;
+import android.view.Gravity;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.TextView;
+
+import com.iGap.G;
+import com.iGap.R;
+import com.iGap.module.MyType;
+import com.iGap.module.OnComplete;
+
+/**
+ * Created by android3 on 8/3/2016.
+ */
+public class MyDialog {
+
+
+    public static void showDialogMenuItemContacts(final Context context, final MyType.ChatType mType, boolean isMute, final OnComplete complete) {
+
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.contact_popup_dialog_);
+        dialog.setCancelable(true);
+
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        layoutParams.copyFrom(dialog.getWindow().getAttributes());
+        // layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+        layoutParams.gravity = Gravity.CENTER;
+
+        dialog.show();
+        dialog.getWindow().setAttributes(layoutParams);
+
+
+        TextView txtMuteNotification = (TextView) dialog.findViewById(R.id.cm_txt_mute_notification);
+        TextView txtClearHistory = (TextView) dialog.findViewById(R.id.cm_txt_clear_history);
+        TextView txtDeleteChat = (TextView) dialog.findViewById(R.id.cm_txt_delete_chat);
+        TextView txtCancle = (TextView) dialog.findViewById(R.id.cm_txt_cancle);
+
+        txtMuteNotification.setText(isMute ? context.getString(R.string.unmute_notification) : context.getString(R.string.mute_notification));
+
+        txtMuteNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (complete != null)
+                    complete.complete(true, "txtMuteNotification", "");
+                dialog.cancel();
+            }
+        });
+
+        txtClearHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (complete != null)
+                    complete.complete(true, "txtClearHistory", "");
+                dialog.cancel();
+            }
+        });
+
+        txtDeleteChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String str = "";
+                if (mType == MyType.ChatType.singleChat)
+                    str = context.getString(R.string.chat);
+                else if (mType == MyType.ChatType.groupChat)
+                    str = context.getString(R.string.group);
+                else if (mType == MyType.ChatType.channel)
+                    str = context.getString(R.string.channel);
+
+                showDialogNotification(context, context.getString(R.string.do_you_want_delete_this) + str + " ?", complete, "txtDeleteChat");
+
+                dialog.cancel();
+            }
+        });
+
+        txtCancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.cancel();
+            }
+        });
+
+    }
+
+
+    public static void showDialogNotification(Context context, String Message, final OnComplete complete, final String result) {
+
+
+        final Dialog dialog = new Dialog(context);
+        // dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setTitle("iGap");
+        dialog.setContentView(R.layout.dialog_notification);
+        dialog.show();
+
+        TextView txtMessage = (TextView) dialog.findViewById(R.id.md_txt_message);
+        txtMessage.setTypeface(G.robotoBold);
+        txtMessage.setText(Message);
+
+        Button tvYes = (Button) dialog.findViewById(R.id.md_btn_yes);
+        tvYes.setTypeface(G.robotoLight);
+        tvYes.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (complete != null)
+                    complete.complete(true, result, "yes");
+
+                dialog.cancel();
+
+            }
+        });
+
+        Button tvNo = (Button) dialog.findViewById(R.id.md_btn_no);
+        tvNo.setTypeface(G.robotoLight);
+        tvNo.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                dialog.cancel();
+            }
+        });
+
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialog.getWindow().getAttributes());
+        // lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.gravity = Gravity.CENTER;
+        dialog.getWindow().setAttributes(lp);
+        dialog.show();
+
+    }
+
+
+}

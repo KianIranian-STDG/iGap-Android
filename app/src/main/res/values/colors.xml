@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="gray">#999797</color>
+    <color name="red">#f23131</color>
+    <color name="green">#31bdb6</color>
+
+    //mo
+    <!--toolbar-->
+
+    <color name="toolbar_title_register_page">#fff</color>
+    <color name="toolbar_background">#41c6c4</color>
+
+    <!--REGISTER PAGE-->
+
+    <color name="your_country">#606060</color>
+    <color name="country">#000</color>
+
+    <!--connectivity Page-->
+
+    <color name="White_connect">#fff</color>
+    <color name="layout_background_top_connectivity">#f2b33d</color>
+    <color name="layout_background_bottom_connectivity">#f2b33d</color>
+
+    <!--guide app-->
+
+    <color name="text_line1_igap_dark">#2a2a2a</color>
+    <color name="text_logo_line1_igap_dark">#353535</color>
+    <color name="text_line2_lc__dark">#4c4c4c</color>
+    <color name="btn_start_page5">#30BCB6</color>
+    <color name="txt_start_page5">#fff</color>
+
+    <!--REGISTER PAGE-->
+
+    <color name="background_verify">#e7e7e7</color>
+    <color name="background_editText">#e7e7e7</color>
+    <color name="border_editText">#757575</color>
+    <color name="black_register">#1a1a1a</color>
+    <color name="agreement_background">#f1f1f1</color>
+    <color name="whit_background">#ffffff</color>
+    <color name="start_background">#31bdb6</color>
+    <color name="line1_background">#34a49f</color>
+    <color name="line2_background">#e4e4e4</color>
+    <color name="confirm_country">#151515</color>
+    <color name="text_verify">#636363</color>
+    <color name="text_dark_verify">#232323</color>
+    <color name="rg_error_red">#ff0000</color>
+
+    <color name="pu_edtHintText">#cacaca</color>
+
+    <!--REGISTER PAGE-->
+
+    <color name="rg_background_verify">#e7e7e7</color>
+    <color name="rg_background_editText">#e7e7e7</color>
+    <color name="rg_border_editText">#757575</color>
+    <color name="rg_black_register">#1a1a1a</color>
+    <color name="rg_agreement_background">#f1f1f1</color>
+    <color name="rg_whit_background">#ffffff</color>
+    <color name="rg_start_background">#31bdb6</color>
+    <color name="rg_line1_background">#34a49f</color>
+    <color name="rg_line2_background">#e4e4e4</color>
+    <color name="rg_confirm_country">#151515</color>
+    <color name="rg_text_verify">#636363</color>
+    <color name="rg_text_dark_verify">#232323</color>
+
+    <color name="toolbar_title_register">#fff</color>
+    <color name="structCountry">#fff</color>
+
+    <!-- FlowingDrawer -->
+
+    <color name="paint_color">@color/drawerColorWhite</color>
+
+    <color name="drawerColorWhite">#ffffff</color>
+
+    <color name="ou_background_crop">#50000000</color>
+
+
+</resources>

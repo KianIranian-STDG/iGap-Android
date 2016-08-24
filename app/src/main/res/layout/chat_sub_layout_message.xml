@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layoutDirection="ltr">
+
+    <TextView
+        android:id="@+id/cslm_txt_message"
+        android:layout_width="wrap_content"
+        android:textSize="@dimen/sp16"
+        android:paddingRight="@dimen/dp4"
+        android:maxWidth="@dimen/dp280"
+        android:paddingLeft="@dimen/dp4"
+        android:textColor="@android:color/black"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp20"
+        android:text="New Text" />
+</LinearLayout>

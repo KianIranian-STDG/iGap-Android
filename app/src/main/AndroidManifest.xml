@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.iGap">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+
+    <application
+        android:name=".G"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+
+
+        <activity
+            android:name=".activitys.ActivityChat"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
+
+        <activity
+            android:name=".activitys.ActivityMain"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"></activity>
+
+        <activity
+            android:name=".activitys.ActivityIntroduce"
+            android:configChanges="keyboard|keyboardHidden|screenSize|locale">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activitys.ActivityProfile"
+            android:configChanges="keyboard|keyboardHidden|screenSize|locale"></activity>
+
+        <activity android:name=".activitys.ActivityCrop" />
+
+        <activity
+            android:name=".activitys.ActivityRegister"
+            android:configChanges="keyboard|keyboardHidden|screenSize|locale"
+            android:windowSoftInputMode="adjustPan|adjustResize">
+
+        </activity>
+
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/AppTheme22" />
+
+        <receiver android:name=".module.IncomingSms" />
+
+    </application>
+
+</manifest>

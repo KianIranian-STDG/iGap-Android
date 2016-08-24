@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/toolbar_background"
+        android:gravity="center"
+        android:padding="@dimen/dp8"
+        android:text="Set your Photo"
+        android:textStyle="bold"
+        android:textSize="@dimen/sp18"
+        android:textColor="@android:color/white" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/line1_background" />
+
+    <TextView
+        android:id="@+id/pu_layout_dialog_picGallery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/dp20"
+        android:text="From Gallery"
+        android:textSize="@dimen/dp16"
+        android:textStyle="bold"
+        android:textColor="@android:color/black" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/border_editText" />
+
+    <TextView
+        android:id="@+id/pu_layout_dialog_picCamera"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/dp20"
+        android:text="Take Now"
+        android:textStyle="bold"
+        android:textSize="@dimen/dp16"
+        android:textColor="@android:color/black" />
+
+
+</LinearLayout>

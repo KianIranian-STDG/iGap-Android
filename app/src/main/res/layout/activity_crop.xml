@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layoutDirection="ltr">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/pu_toolbarRegister"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp60"
+            android:background="@color/toolbar_background"
+            app:contentInsetLeft="0dp"
+            app:contentInsetStart="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/pu_img_agreeImage"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp32"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight=".15"
+                    android:src="@mipmap/back_arrow"
+                    android:tint="@color/whit_background" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".6" />
+
+                <ImageView
+                    android:id="@+id/pu_img_crop"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.15"
+                    android:gravity="center_vertical"
+                    android:paddingRight="@dimen/dp32"
+                    android:scaleType="centerInside"
+                    android:src="@mipmap/crop"
+                    android:textColor="@color/whit_background"
+                    android:textSize="@dimen/sp18"
+                    android:tint="@color/whit_background" />
+            </LinearLayout>
+        </android.support.v7.widget.Toolbar>
+
+
+        <ImageView
+            android:id="@+id/pu_img_imageBefore"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            android:src="@mipmap/pu_gallary" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp60"
+            android:background="@color/toolbar_background">
+
+            <TextView
+                android:id="@+id/pu_txt_cancel_crop"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".5"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:text="CANCEL"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp18"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/pu_txt_set_crop"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".5"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:text="SET"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp18"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</RelativeLayout>

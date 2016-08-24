@@ -1,0 +1,35 @@
+package com.iGap.request;
+
+import android.os.Bundle;
+
+import com.iGap.activitys.ActivityEnhanced;
+import com.iGap.helper.HelperString;
+import com.iGap.proto.ProtoUserRegister;
+
+public class RequestUserRegister extends ActivityEnhanced {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // build proto class
+        ProtoUserRegister.UserRegister.Builder builder = ProtoUserRegister.UserRegister.newBuilder();
+        builder.setCountryCode("IR");
+        builder.setPhoneNumber(1123456789L);
+        ProtoUserRegister.UserRegister userRegister = builder.build();
+
+
+        String currentClassName = this.getClass().getSimpleName();
+        int actionId = HelperString.getActionId(currentClassName);
+
+        // initialize request wrapper
+        RequestWrapper requestWrapper = new RequestWrapper(actionId, userRegister);
+        try {
+            RequestQueue.sendRequest(requestWrapper);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+}

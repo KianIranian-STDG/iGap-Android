@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layoutDirection="ltr"
+    android:orientation="vertical">
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/cl_recycler_view_contact"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:scrollbars="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:elevation="8dp"
+            app:layout_scrollFlags="scroll|enterAlways">
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp60"
+                android:background="@color/green"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/cl_btn_menu"
+                    android:layout_width="@dimen/dp60"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:text="@string/fa_menu_bar"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/sp20" />
+
+                <TextView
+                    android:id="@+id/cl_txt_igap"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/igap"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/sp18" />
+
+                <Button
+                    android:id="@+id/cl_btn_search"
+                    android:layout_width="@dimen/dp60"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:text="@string/fa_search"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/sp20" />
+
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#34a49f"></View>
+        </LinearLayout>
+
+
+    </android.support.design.widget.AppBarLayout>
+
+
+    <com.iGap.libs.floatingAddButton.ArcMenu
+        android:id="@+id/ac_arc_button_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:menu_color="@color/green"
+        android:layout_gravity="bottom|end"
+        app:menu_open="arc_left"
+        app:menu_scr="@mipmap/plus">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/ac_fab_start_new_chat"
+            app:backgroundTint="@color/green"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/single_chat" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/ac_fab_crate_new_group"
+            android:layout_width="wrap_content"
+            app:backgroundTint="@color/green"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/group_chat" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/ac_fab_crate_new_channel"
+            android:layout_width="wrap_content"
+            app:backgroundTint="@color/green"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/channel" />
+
+    </com.iGap.libs.floatingAddButton.ArcMenu>
+
+
+</android.support.design.widget.CoordinatorLayout>

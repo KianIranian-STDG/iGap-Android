@@ -1,0 +1,108 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/rg_whit_background"
+    android:orientation="vertical"
+    android:id="@+id/rg_layoutRoot_dialog">
+
+    <!-- Pretty hint text, and maxLines -->
+
+    <LinearLayout
+        android:id="@+id/rg_layout_search_chooseCountry"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp60"
+        android:background="@color/toolbar_background"
+        android:orientation="horizontal"
+        android:layoutDirection="ltr">
+
+        <TextView
+            android:id="@+id/rg_txt_titleToolbar"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".85"
+            android:gravity="center"
+            android:text="Choose a Country"
+            android:paddingLeft="@dimen/dp48"
+            android:textColor="@color/rg_whit_background"
+            android:textSize="@dimen/sp18"
+            android:textStyle="bold" />
+
+        <android.support.v7.widget.SearchView
+            android:imeOptions="actionSearch"
+            android:layoutDirection="rtl"
+            android:id="@+id/rg_edtSearch_toolbar"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".15"
+            android:iconifiedByDefault="false"
+            android:padding="2dp"
+            app:queryHint=""
+            app:searchHintIcon="@null"
+            android:theme="@style/MySearch"
+            android:queryHint="Search...." />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/toolbar_background" />
+
+    <ListView
+        android:id="@+id/lstContent"
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:background="@color/structCountry"
+        android:choiceMode="singleChoice"
+        android:fadeScrollbars="false"
+        android:scrollbarSize="@dimen/dp4"
+        android:dividerHeight="1dp"
+        android:divider="@color/rg_background_editText"
+        android:scrollbarThumbVertical="@color/rg_start_background" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/rg_whit_background" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:background="@color/toolbar_background">
+
+        <!--<Button-->
+        <!--android:id="@+id/rg_btn_cancelDialog"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="@dimen/dp52"-->
+        <!--android:layout_weight="1"-->
+        <!--android:background="@android:color/transparent"-->
+        <!--android:text="CANCEL"-->
+        <!--android:textColor="@color/whit_background"-->
+        <!--android:textStyle="bold"-->
+        <!--android:textSize="@dimen/sp16"-->
+        <!--/>-->
+
+        <!--<View-->
+        <!--android:layout_width="2dp"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:background="@color/whit_background"-->
+        <!--/>-->
+
+        <Button
+            android:textColor="@color/rg_whit_background"
+            android:id="@+id/rg_btn_okDialog"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp52"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:text="OK"
+            android:textSize="@dimen/sp20"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+</LinearLayout>

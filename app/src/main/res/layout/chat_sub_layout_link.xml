@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:id="@+id/csll_ll_channel_link"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+
+        android:orientation="horizontal"
+        android:paddingRight="@dimen/dp60">
+
+        <TextView
+            android:id="@+id/csll_txt_link"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:visibility="gone"
+            android:paddingLeft="@dimen/dp4"
+            android:paddingRight="@dimen/dp4"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/sp12" />
+
+        <TextView
+            android:id="@+id/csll_txt_eye"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right|bottom"
+            android:textColor="@android:color/black"
+            android:textAlignment="gravity"
+            android:paddingLeft="@dimen/dp4"
+            android:paddingRight="@dimen/dp4"
+            android:text="@string/fa_eye"
+            android:textSize="@dimen/sp12" />
+
+        <TextView
+            android:id="@+id/csll_txt_seen_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:gravity="bottom"
+            android:paddingRight="@dimen/dp8"
+            android:text="32k"
+            android:textSize="@dimen/sp12" />
+    </LinearLayout>
+
+</LinearLayout>

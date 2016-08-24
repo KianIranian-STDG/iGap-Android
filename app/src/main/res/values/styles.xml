@@ -1,0 +1,42 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="Widget.GifMoviewView" parent="@android:style/Widget"></style>
+
+    //mo
+
+    <style name="AppTheme22" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/toolbar_background</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/toolbar_background</item>
+
+    </style>
+
+    <style name="RedHUGEText" parent="@android:style/Widget.TextView">
+
+        <item name="android:textColor">@color/black_register</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="MyToolbar" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@color/colorAccent</item>
+    </style>
+
+
+    <style name="MySearch">
+        <item name="android:editTextColor">@color/whit_background</item>
+        <item name="android:textColorHint">@color/text_verify</item>
+        <item name="colorAccent">@color/whit_background</item>
+        <item name="android:tint">@color/whit_background</item>
+
+    </style>
+
+</resources>

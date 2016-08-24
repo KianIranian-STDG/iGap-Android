@@ -1,0 +1,153 @@
+<resources>
+    <string name="app_name">iGap</string>
+
+    <string name="fa_menu_bar">&#xf0c9;</string>
+    <string name="fa_bell_slash_o">&#xf1f7;</string>
+    <string name="fa_bullhorn">&#xf0a1;</string>
+    <string name="fa_check">&#xf00c;</string>
+    <string name="fa_close">&#xf00d;</string>
+    <string name="fa_ellipsis_v">&#xf142;</string>
+    <string name="fa_eye">&#xf06e;</string>
+    <string name="fa_group">&#xf0c0;</string>
+    <string name="fa_life_ring">&#xf1cd;</string>
+    <string name="fa_mail_forward">&#xf064;</string>
+    <string name="fa_mail_replay">&#xf112;</string>
+    <string name="fa_smile_o">&#xf118;</string>
+    <string name="fa_microphone">&#xf130;</string>
+    <string name="fa_send">&#xf1d9;</string>
+    <string name="fa_paperclip">&#xf0c6;</string>
+    <string name="fa_search">&#xf002;</string>
+    <string name="fa_chevron_left">&#xf053;</string>
+    <string name="fa_user">&#xf007;</string>
+
+
+    <string name="f_supervisor_account">&#xe8d3;</string>
+    <string name="f_people">&#xe7fb;</string>
+    <string name="f_person">&#xe7fd;</string>
+    <string name="f_attach_file">&#xe226;</string>
+    <string name="f_mic">&#xe029;</string>
+    <string name="f_more_vert">&#xe5d4;</string>
+    <string name="f_send">&#xe163;</string>
+    <string name="f_add">&#xe145;</string>
+    <string name="f_forward">&#xe154;</string>
+    <string name="f_keyboard_arrow_down">&#xe313;</string>
+
+
+    <string name="unmute_notification">UnMute Notification</string>
+    <string name="mute_notification">Mute Notification</string>
+    <string name="chat">chat</string>
+    <string name="group">group</string>
+    <string name="channel">channel</string>
+    <string name="do_you_want_delete_this">"do you want delete this "</string>
+    <string name="igap">iGAP</string>
+    <string name="clear_history">Clear history</string>
+    <string name="delete_chat">Delete Chat</string>
+    <string name="cancel">Cancel</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="ok">Ok</string>
+
+
+    //mo
+
+    <!--Toolbar-->
+
+    <string name="toolbar_title_register_page">Connect to server</string>
+
+    <!--REGISTER PAGE-->
+
+    <string name="your_country">YOUR COUNTRY</string>
+    <string name="code_country">YOUR COUNTRY CODE AND PHONE NUMBER</string>
+    <string name="phone_number">PHONE NUMBER</string>
+    <string name="verify">Verify your phone number to connect to IGap</string>
+    <string name="register">Registration transmit some connect Information to server. it is not stored </string>
+    <string name="copy_right_rooyekhat">power by rooyekhat</string>
+    <string name="button_register">Register</string>
+    <string name="Re_dialog_message">Double Check that this is your number! we\'re about to verify it an SMS </string>
+    <string name="Re_dialog_message_error">The number you specified</string>
+    <string name="Re_dialog_message_error2">is invalid</string>
+
+    <!--check connect to internet Page-->
+
+    <string name="connect_error">Connectivity error</string>
+    <string name="connect_error0">No network connectivity</string>
+    <string name="connect_error1">your device needs network connectivity</string>
+    <string name="connect_error2">order to use this Signal feature. Check to</string>
+    <string name="connect_error3">ensure that it is connect to mobile data or wifi</string>
+
+    <string name="connect_firewall0">Restrictive firewall</string>
+    <string name="connect_firewall1">if you are connected via wi-Fi , it\'s possible </string>
+    <string name="connect_firewall2">that there is a firewall blocking access to</string>
+    <string name="connect_firewall3">th IGap server. try another network or mobile data </string>
+
+    <!--introduce app-->
+
+
+    <string name="text_i_introduce_page1">i</string>
+    <string name="text_line_1_introduce_page1">GAP</string>
+    <string name="text_line_2_introduce_page1">Limitless Connection</string>
+    <string name="text_line_3_introduce_page1"> Create your very own world \n with iGap right now</string>
+
+    <!--page2-->
+
+    <string name="text_line_1_introduce_page2">SECURITY</string>
+    <string name="text_line_2_introduce_page2"> The thing is, iGap promises you providing a secure connection with your friends and family. We use all new encryption algorithms to secure your privacy. </string>
+
+    <!--page3-->
+
+    <string name="text_line_1_introduce_page3">CHAT</string>
+    <string name="text_line_2_introduce_page3"> You can chat in private or groups and even create your own channel and add members. </string>
+
+    <!--page4-->
+
+    <string name="text_line_1_introduce_page4">FILE TRANSFER</string>
+    <string name="text_line_2_introduce_page4"> You can transfer any file with any extension \n and size, Share anything you’d like to with whoever you want to. </string>
+
+    <!--page5-->
+
+    <string name="btn_start_page5">START NOW</string>
+    <string name="text_line_1_introduce_page5">EVERYTHING FOR FREE!</string>
+
+
+    -<string name="text_line_2_introduce_page5">
+
+-<![CDATA[ Not to bore you no more! <br /> iGap is all Free. Create your own world just now! ]]>
+</string>
+
+    //profile user
+    <string name="pu_title_profileUser">YOUR INFORMATION</string>
+    <string name="pu_desc_profileUser">Enter your name and add a profile picture.</string>
+    <string name="pu_addPhoto_profileUser">Profile Picture</string>
+    <string name="pu_nikname_profileUser">Nike Name</string>
+
+
+    <!--REGISTER PAGE-->
+    <string name="rg_title_register">Registration</string>
+    <string name="rg_your_country">YOUR COUNTRY</string>
+    <string name="rg_confirm_text_register">Please confirm your structCountry code end enter your phone number</string>
+    <string name="rg_phone_number">PHONE NUMBER</string>
+    <string name="rg_verify">Verify your phone number to connect to IGap</string>
+    <string name="rg_copy_right_rooyekhat">power by rooyekhat</string>
+    <string name="rg_button_register">Register</string>
+
+    <string name="rg_agreement_title_register">agreement</string>
+    <string name="rg_agreement_text_register">
+        Double Check that this is your number! we\'re about to verify it an SMSDouble Check that this is your number!
+        Double Check that this is your number! we\'re about to verify it an SMSDouble Check that this is your number!
+        Double Check that this is your number! we\'re about to verify it an SMSDouble Check that this is your number!
+        Double Check that this is your number! we\'re about to verify it an SMSDouble Check that this is your number!
+        Double Check that this is your number! we\'re about to verify it an SMSDouble Check that this is your number!
+        Double Check that this is your number! we\'re about to verify it an SMSDouble Check that this is your number!
+        Double Check that this is your number! we\'re about to verify it an SMSDouble Check that this is your number!
+    </string>
+    <string name="rg_verify_register1">Connecting...</string>
+    <string name="rg_verify_register2">Waiting for SMS Verification...</string>
+    <string name="rg_verify_register3">Generating Key...</string>
+    <string name="rg_verify_register4">Registering with server...</string>
+
+    <string name="rg_verify_dialog_enter_code">iGap App try to detect sms via your phone but maybe you used other phone or another reason happen app cannot detect number of verification code , you can wrote manually and try or resend again .</string>
+    <string name="rg_verify_dialog_try_code">Try</string>
+    <string name="rg_verify_dialog_resend_code">Resend Code</string>
+    <string name="search">rg_search</string>
+
+</resources>

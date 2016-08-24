@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/dp240"
+    android:background="@android:color/white"
+    android:layoutDirection="ltr"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/cm_txt_mute_notification"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp12"
+        android:gravity="center"
+        android:padding="@dimen/dp12"
+        android:text="@string/mute_notification"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/sp20" />
+
+    <TextView
+        android:id="@+id/cm_txt_clear_history"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/dp12"
+        android:text="@string/clear_history"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/sp20" />
+
+    <TextView
+        android:id="@+id/cm_txt_delete_chat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/dp12"
+        android:text="@string/delete_chat"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/sp20" />
+
+    <TextView
+        android:id="@+id/cm_txt_cancle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp20"
+        android:background="@color/green"
+        android:gravity="center"
+        android:padding="@dimen/dp12"
+        android:text="@string/cancel"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/sp22" />
+
+
+</LinearLayout>

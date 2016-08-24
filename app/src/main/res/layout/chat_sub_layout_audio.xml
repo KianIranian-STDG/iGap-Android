@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:minWidth="@dimen/dp140"
+    android:layoutDirection="ltr"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <FrameLayout
+        android:layout_width="@dimen/dp68"
+        android:layout_height="@dimen/dp68">
+
+        <ImageView
+            android:id="@+id/csla_imv_state_audio"
+            android:layout_width="@dimen/dp40"
+            android:layout_height="@dimen/dp40"
+            android:layout_gravity="center"
+            android:src="@mipmap/play" />
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_gravity="left|center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="@dimen/dp12"
+        android:layout_marginLeft="@dimen/dp4"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/csla_txt_audio_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="@dimen/dp200"
+                android:singleLine="true"
+                android:text="music golha "
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/sp16" />
+
+            <TextView
+                android:id="@+id/csla_txt_audio_mime_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="@dimen/dp88"
+                android:singleLine="true"
+                android:text=".mp3"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/sp16" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/csla_txt_audio_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp4"
+            android:maxWidth="@dimen/dp200"
+            android:singleLine="true"
+            android:text="1.8 mb"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/sp14" />
+
+    </LinearLayout>
+
+    <Button
+        android:layout_width="@dimen/dp40"
+        android:layout_height="match_parent"
+        android:background="@null"
+        android:gravity="center"
+        android:textSize="@dimen/sp26"
+        android:text="@string/fa_ellipsis_v"
+        android:id="@+id/csla_btn_audio_menu" />
+
+
+</LinearLayout>
