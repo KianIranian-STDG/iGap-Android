@@ -2,11 +2,7 @@ package com.iGap.realm;
 
 import io.realm.RealmObject;
 
-/**
- * Created by Erfan on 8/13/2016.
- */
-public class
-RealmCountry extends RealmObject {
+public class RealmCountry extends RealmObject {
     private String countryName, countryPhonePattern, CountryCode, countryAbbreviation;
 
     public String getCountryName() {

@@ -2,6 +2,7 @@ package com.iGap.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,6 +77,8 @@ public class AdapterDialog extends BaseAdapter implements Filterable {
                     ActivityRegister.edtPhoneNumber.setMask((countrylist.get(position).getPhonePattetn().replace("X", "#").replace(" ", "-")));
                 }
                 ActivityRegister.btnChoseCountry.setText((countrylist.get(position).getName()));
+                ActivityRegister.isoCode = countrylist.get(position).getAbbreviation();
+                Log.i("XXX", "isoCode : " + ActivityRegister.isoCode);
             }
         });
 
@@ -104,6 +107,7 @@ public class AdapterDialog extends BaseAdapter implements Filterable {
                         structCountry.setName(mStringFilterList.get(i).getName());
                         structCountry.setCountryCode(mStringFilterList.get(i).getCountryCode());
                         structCountry.setPhonePattetn(mStringFilterList.get(i).getPhonePattetn());
+                        structCountry.setAbbreviation(mStringFilterList.get(i).getAbbreviation());
                         filterList.add(structCountry);
                     }
                 }

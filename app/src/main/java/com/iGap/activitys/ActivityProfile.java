@@ -18,10 +18,12 @@ import android.widget.Toast;
 
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.realm.RealmUserInfo;
 
 import java.io.ByteArrayOutputStream;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.realm.Realm;
 
 public class ActivityProfile extends AppCompatActivity {
 
@@ -48,7 +50,6 @@ public class ActivityProfile extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
 //
         if (!IsDeleteFile && G.imageFile.exists()) {
-//
             G.imageFile.delete();
         }
 
@@ -85,10 +86,20 @@ public class ActivityProfile extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                String getTextNikName = edtNikName.getText().toString();
-                Intent intent = new Intent(G.context, ActivityMain.class);
-                startActivity(intent);
-                finish();
+                final String nickName = edtNikName.getText().toString();
+
+                if (!nickName.equals("")) {
+                    G.realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            RealmUserInfo userInfo = realm.createObject(RealmUserInfo.class);
+                            userInfo.setNickName(nickName);
+                        }
+                    });
+                    Intent intent = new Intent(G.context, ActivityMain.class);
+                    startActivity(intent);
+                    finish();
+                }
 
             }
         });

@@ -27,6 +27,7 @@ public class MyType {
     public static final int reciveLayout = 2;
     public static final int timeLayout = 3;
 
+
     public enum SendType {
 
         send(MyType.sendLayot),

@@ -1,8 +1,5 @@
 package com.iGap.module;
 
-/**
- * Created by Erfan on 8/10/2016.
- */
 public class StructCountry {
 
     int flag;
