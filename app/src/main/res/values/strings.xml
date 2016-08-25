@@ -20,6 +20,10 @@
     <string name="fa_chevron_left">&#xf053;</string>
     <string name="fa_user">&#xf007;</string>
 
+    <string name="fa_commenting_o">&#xf27b;</string>
+    <string name="fa_thumbs_o_down">&#xf088;</string>
+    <string name="fa_thumbs_o_up">&#xf087;</string>
+
 
     <string name="f_supervisor_account">&#xe8d3;</string>
     <string name="f_people">&#xe7fb;</string>

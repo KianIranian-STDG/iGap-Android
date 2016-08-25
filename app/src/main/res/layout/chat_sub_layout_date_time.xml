@@ -5,20 +5,33 @@
     android:orientation="horizontal">
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:gravity="center"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
 
         <TextView
             android:id="@+id/csldt_txt_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dp4"
-            android:textColor="@android:color/white"
-            android:layout_marginTop="@dimen/dp4"
+            android:layout_margin="@dimen/dp12"
             android:background="@drawable/recangle_gray_tranceparent"
-            android:padding="@dimen/dp4"
-            android:text="21/2/2014" />
+            android:paddingBottom="@dimen/dp4"
+
+            android:paddingLeft="@dimen/dp12"
+            android:paddingRight="@dimen/dp12"
+            android:paddingTop="@dimen/dp4"
+            android:singleLine="true"
+            android:text="21/2/2014"
+            android:textColor="@android:color/white" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
     </LinearLayout>
 </LinearLayout>

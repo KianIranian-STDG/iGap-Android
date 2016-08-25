@@ -36,7 +36,6 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private MyType.ChatType chatType;
 
     private boolean isSelectedMode = false;
-    private boolean isSetBackGroundLayout = false;
     private int numberOfSelected = 0;
 
     public AdapterChat(Context context, MyType.ChatType chatType, ArrayList<StructChatInfo> list) {
@@ -54,29 +53,33 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         View main = null;
 
         // inflate layout send or recive
-        if (list.get(viewType).sendType == MyType.SendType.timeLayout) {
+        if (list.get(viewType).sendType == MyType.SendType.timeLayout) {// inflate time layout
             main = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_sub_layout_date_time, null);
             viewHolder = new holdrNoAction(main);
             return viewHolder;
-        } else if (list.get(viewType).sendType.getValue() == MyType.sendLayot || chatType == MyType.ChatType.channel) {
+        } else if (chatType == MyType.ChatType.channel) {//inflate layout channel
+            main = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_sub_layout_channel, null);
+            RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            main.setLayoutParams(lp);
+        } else if (list.get(viewType).sendType == MyType.SendType.send) {// inflate layout send
             main = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_sub_layout_send, null);
-        } else {
+        } else {//inflate layout recive
             main = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_sub_layout_recive, null);
         }
 
 
         // add layout forward message to layout
-        if (list.get(viewType).forwardMessageFrom.length() > 0) {
+        if (list.get(viewType).forwardMessageFrom.length() > 0 && chatType != MyType.ChatType.channel) {
             main.findViewById(R.id.cslr_ll_forward).setVisibility(View.VISIBLE);
             TextView txtForwardMessage = (TextView) main.findViewById(R.id.cslr_txt_forward_from);
             txtForwardMessage.setText("Forward From " + list.get(viewType).forwardMessageFrom);
-
         }
+
 
         // set layout mergin for group chat or message or channel
         if (chatType == MyType.ChatType.singleChat) {
 
-            if (list.get(viewType).sendType == MyType.SendType.recvive) {
+            if (list.get(viewType).sendType == MyType.SendType.recvive) {// gone avatar sernder message and set layout mergin
                 main.findViewById(R.id.cslr_imv_sender_picture).setVisibility(View.GONE);
 
                 FrameLayout frameLayout = (FrameLayout) main.findViewById(R.id.cslr_ll_frame);
@@ -93,17 +96,14 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         } else if (chatType == MyType.ChatType.groupChat) {
 
-        } else if (chatType == MyType.ChatType.channel) {
-            main.findViewById(R.id.cslr_view_distance).setVisibility(View.GONE);
-            if (list.get(viewType).sendType == MyType.SendType.recvive)
-                main.findViewById(R.id.cslr_txt_tic).setVisibility(View.GONE);
         }
 
 
         LinearLayout frameLayout = (LinearLayout) main.findViewById(R.id.cslr_ll_content_main);
 
-        if (list.get(viewType).sendType == MyType.SendType.send)
-            ((TextView) main.findViewById(R.id.cslr_txt_tic)).setTypeface(G.fontawesome);
+        if (chatType != MyType.ChatType.channel)
+            if (list.get(viewType).sendType == MyType.SendType.send)
+                ((TextView) main.findViewById(R.id.cslr_txt_tic)).setTypeface(G.fontawesome);
 
 
         //add layout replay to layout
@@ -116,26 +116,31 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             case MyType.message:
                 viewHolder = new viewHolderMessage(main);
+                configureViewHolderMessage((viewHolderMessage) viewHolder, viewType);
                 break;
             case MyType.image:
                 v = inflater.inflate(R.layout.chat_sub_layout_image, parent, false);
                 frameLayout.addView(v);
                 viewHolder = new viewHolderImage(main);
+                configureViewHolderImage((viewHolderImage) viewHolder, viewType);
                 break;
             case MyType.files:
                 v = inflater.inflate(R.layout.chat_sub_layout_file, parent, false);
                 frameLayout.addView(v);
                 viewHolder = new viewHolderFile(main);
+                configureViewHolderFile((viewHolderFile) viewHolder, viewType);
                 break;
             case MyType.audio:
                 v = inflater.inflate(R.layout.chat_sub_layout_audio, parent, false);
                 frameLayout.addView(v);
                 viewHolder = new viewHolderAudio(main);
+                configureViewHolderAudio((viewHolderAudio) viewHolder, viewType);
                 break;
             case MyType.gif:
                 v = inflater.inflate(R.layout.chat_sub_layout_gif, parent, false);
                 frameLayout.addView(v);
                 viewHolder = new viewHolderGif(main);
+                configureViewHolderGif((viewHolderGif) viewHolder, viewType);
                 break;
             case MyType.sticker:
                 v = inflater.inflate(R.layout.chat_sub_layout_sticker, parent, false);
@@ -156,153 +161,49 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
 
-        //set background layout time
-        if (((list.get(viewType).messageType == MyType.MessageType.image || list.get(viewType).messageType == MyType.MessageType.gif)
-                && list.get(viewType).messag == "" && chatType != MyType.ChatType.channel) || list.get(viewType).messageType == MyType.MessageType.sticker) {
+        //set background layout time in single chat or group chat
+        if (chatType != MyType.ChatType.channel) {
+            if (((list.get(viewType).messageType == MyType.MessageType.image || list.get(viewType).messageType == MyType.MessageType.gif)
+                    && list.get(viewType).messag == "") || list.get(viewType).messageType == MyType.MessageType.sticker) {
 
-            LinearLayout layoutTime = (LinearLayout) main.findViewById(R.id.cslr_ll_time);
-            layoutTime.setBackgroundResource(R.drawable.recangle_gray_tranceparent);
+                LinearLayout layoutTime = (LinearLayout) main.findViewById(R.id.cslr_ll_time);
+                layoutTime.setBackgroundResource(R.drawable.recangle_gray_tranceparent);
 
-            FrameLayout.LayoutParams timeParaams = (FrameLayout.LayoutParams) layoutTime.getLayoutParams();
-            timeParaams.setMargins(0, 0, 6, 6);
-            layoutTime.setLayoutParams(timeParaams);
+                FrameLayout.LayoutParams timeParaams = (FrameLayout.LayoutParams) layoutTime.getLayoutParams();
+                timeParaams.setMargins(0, 0, 6, 6);
+                layoutTime.setLayoutParams(timeParaams);
 
-            ((TextView) main.findViewById(R.id.cslr_txt_time)).setTextColor(Color.WHITE);
+                ((TextView) main.findViewById(R.id.cslr_txt_time)).setTextColor(Color.WHITE);
+            }
         }
 
-        setBackGroundLayout(viewType, (FrameLayout) main.findViewById(R.id.cslr_ll_frame));
+        if (list.get(viewType).sendType != MyType.SendType.timeLayout)
+            setBackGroundLayout(viewType, main.findViewById(R.id.cslr_ll_frame));
 
 
-        //add layout link
-        if (chatType == MyType.ChatType.channel && list.get(viewType).messageType != MyType.MessageType.sticker)
-            addLayoutLink(inflater, frameLayout, viewType);
+        if (chatType == MyType.ChatType.channel && list.get(viewType).sendType != MyType.SendType.timeLayout)
+            configureLayoutChannel(viewHolder, viewType);
 
-        main.findViewById(R.id.cslr_ll_time).bringToFront();
-
-        return viewHolder;
-    }
-
-
-    /**
-     * add layout replay to layout
-     */
-    private void addLayoutReplay(LayoutInflater inflater, LinearLayout layout, final int position) {
-        View v = inflater.inflate(R.layout.chat_sub_layout_replay, null, false);
-        TextView txtReplayFrom = (TextView) v.findViewById(R.id.chslr_txt_replay_from);
-        TextView txtReplayMessage = (TextView) v.findViewById(R.id.chslr_txt_replay_message);
-        ImageView imv;
-
-        txtReplayFrom.setText(list.get(position).replayFrom);
-        txtReplayMessage.setText(list.get(position).replayMessage);
-
-        if (list.get(position).replayPicturePath.length() > 0) {
-            imv = (ImageView) v.findViewById(R.id.chslr_imv_replay_pic);
-            imv.setVisibility(View.VISIBLE);
-
-            //ToDo  set image from file path
-        }
-
-        layout.addView(v);
-
-    }
-
-    /**
-     * set background color for evry item
-     *
-     * @param position
-     * @param layout
-     */
-    private void setBackGroundLayout(int position, FrameLayout layout) {
-
-        Drawable drawable = null;
-
-        if (list.get(position).isSelected) {
-            drawable = context.getResources().getDrawable(R.drawable.rectangle_round_yellow);
-        } else if (list.get(position).messageType == MyType.MessageType.sticker) {
-            drawable = new ColorDrawable(Color.TRANSPARENT);
-            ;
-        } else if (list.get(position).sendType == MyType.SendType.send) {
-            drawable = context.getResources().getDrawable(R.drawable.rectangle_round_white);
-        } else if (list.get(position).sendType == MyType.SendType.recvive) {
-            drawable = context.getResources().getDrawable(R.drawable.rectangle_round_gray);
-        }
-
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            layout.setBackground(drawable);
-        } else {
-            layout.setBackgroundDrawable(drawable);
-        }
-
-    }
-
-    /**
-     * add layout link to item in channel list
-     */
-    private void addLayoutLink(LayoutInflater inflater, LinearLayout layout, final int position) {
-
-        View v = inflater.inflate(R.layout.chat_sub_layout_link, null, false);
-
-        TextView txtEye = (TextView) v.findViewById(R.id.csll_txt_eye);
-        txtEye.setTypeface(G.fontawesome);
-
-        TextView txtSeen = (TextView) v.findViewById(R.id.csll_txt_seen_count);
-        txtSeen.setText(list.get(position).seen);
-
-        if (list.get(position).channelLink.length() > 0) {
-            TextView txtLink = (TextView) v.findViewById(R.id.csll_txt_link);
-            txtLink.setText(list.get(position).channelLink);
-            txtLink.setVisibility(View.VISIBLE);
-
-            txtLink.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Log.e("ddd", "link clicked   " + position);
-                }
-            });
-        }
-
-
-        layout.addView(v);
-
-    }
-
-
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
-        if (isSetBackGroundLayout)
-            setBackGroundLayout(position, (FrameLayout) holder.itemView.findViewById(R.id.cslr_ll_frame));
 
         // set sender image in group chat
         if (chatType == MyType.ChatType.groupChat) {
-            if (list.get(position).sendType == MyType.SendType.recvive) {
-                if (list.get(position).senderAvatar.length() > 0) {
-                    CircleImageView imvSenderAvatar = (CircleImageView) holder.itemView.findViewById(R.id.cslr_imv_sender_picture);
-                    imvSenderAvatar.setImageResource(Integer.parseInt(list.get(position).senderAvatar));
+            if (list.get(viewType).sendType == MyType.SendType.recvive) {
+                if (list.get(viewType).senderAvatar.length() > 0) {
+                    CircleImageView imvSenderAvatar = (CircleImageView) viewHolder.itemView.findViewById(R.id.cslr_imv_sender_picture);
+                    imvSenderAvatar.setImageResource(Integer.parseInt(list.get(viewType).senderAvatar));
                 }
             }
         }
 
 
-        switch (list.get(holder.getItemViewType()).messageType.getValue()) {
+        return viewHolder;
+    }
 
-            case MyType.message:
-                configureViewHolderMessage((viewHolderMessage) holder, position);
-                break;
-            case MyType.image:
-                configureViewHolderImage((viewHolderImage) holder, position);
-                break;
-            case MyType.files:
-                configureViewHolderFile((viewHolderFile) holder, position);
-                break;
-            case MyType.audio:
-                configureViewHolderAudio((viewHolderAudio) holder, position);
-                break;
-            case MyType.gif:
-                configureViewHolderGif((viewHolderGif) holder, position);
-                break;
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
+        if (list.get(position).isChenged > 0) {
+            UpdateSomething(position, holder, list.get(position).isChenged);
         }
 
     }
@@ -318,109 +219,7 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return position;
     }
 
-
-    //********************************************************************************************************
-
-    private void configureViewHolderFile(viewHolderFile holder, int position) {
-
-
-    }
-
-    private void configureViewHolderAudio(viewHolderAudio holder, int position) {
-
-
-    }
-
-    private void configureViewHolderMessage(viewHolderMessage holder, int position) {
-
-
-    }
-
-    private void configureViewHolderImage(final viewHolderImage holder, final int position) {
-        holder.imvPicture.setImageResource(Integer.parseInt(list.get(position).filePath));
-    }
-
-    private void configureViewHolderGif(final viewHolderGif holder, final int position) {
-
-        holder.gifview.setMovieResource(R.drawable.anim2);
-        holder.gifview.setPaused(true);
-
-        if (holder.gifview.isPaused())
-            holder.btnPlay.setVisibility(View.VISIBLE);
-        else holder.btnPlay.setVisibility(View.GONE);
-
-
-        holder.gifview.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.e("ddd", "gif click");
-
-                if (isSelectedMode) {
-                    setIsSelectedItem(position);
-                } else {
-                    holder.gifview.setPaused(true);
-                    holder.gifview.requestLayout();
-                    holder.btnPlay.setVisibility(View.VISIBLE);
-                }
-
-
-            }
-        });
-
-        holder.gifview.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-
-                isSelectedMode = true;
-
-                if (list.get(position).isSelected == false) {
-                    list.get(position).isSelected = true;
-                    numberOfSelected++;
-                    notifyItemChanged(position);
-                }
-
-                return true;
-            }
-        });
-
-        holder.btnPlay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Log.e("ddd", "btn gif click");
-
-                holder.gifview.setPaused(false);
-                holder.btnPlay.setVisibility(View.GONE);
-
-
-            }
-        });
-
-
-    }
-
-
-    //********************************************************************************************************
-
-
-    private void setIsSelectedItem(int position) {
-
-
-        if (list.get(position).isSelected == false) {
-            list.get(position).isSelected = true;
-            numberOfSelected++;
-        } else {
-            list.get(position).isSelected = false;
-            numberOfSelected--;
-
-            if (numberOfSelected < 1) {
-                isSelectedMode = false;
-            }
-        }
-        notifyItemChanged(position);
-
-    }
-
+    //***********************************************************************************************************
 
     class holdrNoAction extends RecyclerView.ViewHolder {
 
@@ -458,10 +257,10 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     if (list.get(position).isSelected == false) {
 
                         list.get(position).isSelected = true;
+                        list.get(position).isChenged = 1;
                         numberOfSelected++;
                         notifyItemChanged(position);
                     }
-
 
                     Log.e("ddd", " item   " + numberOfSelected + "   numbrer of selected   onlong");
 
@@ -490,7 +289,6 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-
     class viewHolderAudio extends myHolder {
 
         public ImageView imvStateAudio;
@@ -517,7 +315,6 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             });
         }
     }
-
 
     class viewHolderMessage extends myHolder {
 
@@ -554,8 +351,192 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
+    //***********************************************************************************************************
 
-    //****************************************************************************************************************
+    private void configureLayoutChannel(RecyclerView.ViewHolder holder, final int position) {
+
+        TextView txtTimeDate = (TextView) holder.itemView.findViewById(R.id.cslch_txt_time_date);
+        TextView txtTimeClock = (TextView) holder.itemView.findViewById(R.id.cslch_txt_time_clock);
+        TextView txtImageLike = (TextView) holder.itemView.findViewById(R.id.cslch_txt_image_like);
+        TextView txtlike = (TextView) holder.itemView.findViewById(R.id.cslch_txt_like);
+        TextView txtImageUnlike = (TextView) holder.itemView.findViewById(R.id.cslch_txt_image_unlike);
+        TextView txtLike = (TextView) holder.itemView.findViewById(R.id.cslch_txt_like);
+        TextView txtImageComment = (TextView) holder.itemView.findViewById(R.id.cslch_txt_image_comment);
+        TextView txtComment = (TextView) holder.itemView.findViewById(R.id.cslch_txt_comment);
+        TextView txtImageSeen = (TextView) holder.itemView.findViewById(R.id.cslch_txt_image_seen);
+        TextView txtSeen = (TextView) holder.itemView.findViewById(R.id.cslch_txt_seen);
+
+        txtImageLike.setTypeface(G.fontawesome);
+        txtImageUnlike.setTypeface(G.fontawesome);
+        txtImageComment.setTypeface(G.fontawesome);
+        txtImageSeen.setTypeface(G.fontawesome);
+
+        Button btnMenu = (Button) holder.itemView.findViewById(R.id.cslch_btn_item_menu);
+        btnMenu.setTypeface(G.fontawesome);
+        btnMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.e("ddd", "item menu click " + position);
+            }
+        });
+
+        LinearLayout layout_like = (LinearLayout) holder.itemView.findViewById(R.id.cslch_ll_like);
+        layout_like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.e("ddd", "like click " + position);
+            }
+        });
+
+        LinearLayout layout_Unlike = (LinearLayout) holder.itemView.findViewById(R.id.cslch_ll_unlike);
+        layout_Unlike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.e("ddd", "Unclick " + position);
+            }
+        });
+
+        LinearLayout layout_Comment = (LinearLayout) holder.itemView.findViewById(R.id.cslch_ll_comment);
+        layout_Comment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.e("ddd", "omment click " + position);
+            }
+        });
+
+
+        if (list.get(position).messageType == MyType.MessageType.image)
+            holder.itemView.findViewById(R.id.cslr_ll_content_main).setPadding(0, 0, 0, 0);
+
+
+        if (list.get(position).messageType == MyType.MessageType.audio) {
+            holder.itemView.findViewById(R.id.csla_btn_audio_menu).setVisibility(View.GONE);
+        } else if (list.get(position).messageType == MyType.MessageType.sticker) {
+            holder.itemView.findViewById(R.id.cslch_ll_info).setVisibility(View.INVISIBLE);
+            holder.itemView.findViewById(R.id.cslch_btn_item_menu).setVisibility(View.INVISIBLE);
+        }
+
+
+    }
+
+    private void configureViewHolderFile(viewHolderFile holder, int position) {
+
+
+    }
+
+    private void configureViewHolderAudio(viewHolderAudio holder, int position) {
+
+
+    }
+
+    private void configureViewHolderMessage(viewHolderMessage holder, int position) {
+
+
+    }
+
+    private void configureViewHolderImage(final viewHolderImage holder, final int position) {
+        holder.imvPicture.setImageResource(Integer.parseInt(list.get(position).filePath));
+    }
+
+    private void configureViewHolderGif(final viewHolderGif holder, final int position) {
+
+        holder.gifview.setMovieResource(R.drawable.anim2);
+        holder.gifview.setPaused(true);
+
+        if (holder.gifview.isPaused())
+            holder.btnPlay.setVisibility(View.VISIBLE);
+        else holder.btnPlay.setVisibility(View.GONE);
+
+
+        holder.gifview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (isSelectedMode) {
+                    setIsSelectedItem(position);
+                } else {
+                    holder.gifview.setPaused(true);
+                    holder.gifview.requestLayout();
+                    holder.btnPlay.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        holder.gifview.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+
+                isSelectedMode = true;
+
+                if (list.get(position).isSelected == false) {
+                    list.get(position).isSelected = true;
+                    numberOfSelected++;
+                    list.get(position).isChenged = 1;
+                    notifyItemChanged(position);
+                }
+
+                return true;
+            }
+        });
+
+        holder.btnPlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Log.e("ddd", "btn gif click");
+
+                holder.gifview.setPaused(false);
+                holder.btnPlay.setVisibility(View.GONE);
+
+
+            }
+        });
+
+
+    }
+
+    /**
+     * add layout replay to layout
+     */
+    private void addLayoutReplay(LayoutInflater inflater, LinearLayout layout, final int position) {
+        View v = inflater.inflate(R.layout.chat_sub_layout_replay, null, false);
+        TextView txtReplayFrom = (TextView) v.findViewById(R.id.chslr_txt_replay_from);
+        TextView txtReplayMessage = (TextView) v.findViewById(R.id.chslr_txt_replay_message);
+        ImageView imv;
+
+        txtReplayFrom.setText(list.get(position).replayFrom);
+        txtReplayMessage.setText(list.get(position).replayMessage);
+
+        if (list.get(position).replayPicturePath.length() > 0) {
+            imv = (ImageView) v.findViewById(R.id.chslr_imv_replay_pic);
+            imv.setVisibility(View.VISIBLE);
+
+            //ToDo  set image from file path
+        }
+
+        layout.addView(v);
+
+    }
+
+    //********************************************************************************************************
+    private void setIsSelectedItem(int position) {
+
+        list.get(position).isChenged = 1;
+
+        if (list.get(position).isSelected == false) {
+            list.get(position).isSelected = true;
+            numberOfSelected++;
+        } else {
+            list.get(position).isSelected = false;
+            numberOfSelected--;
+
+            if (numberOfSelected < 1) {
+                isSelectedMode = false;
+            }
+        }
+        notifyItemChanged(position);
+
+    }
 
     /**
      * reset all background color item in list
@@ -568,21 +549,71 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         if (isSelectedMode == true) {
             isSelectedMode = false;
-            isSetBackGroundLayout = true;
 
             for (int i = 0; i < list.size(); i++) {
                 if (list.get(i).isSelected) {
                     list.get(i).isSelected = false;
+                    list.get(i).isChenged = 1;
                     notifyItemChanged(i);
                     numberOfSelected--;
                     if (numberOfSelected < 1)
                         break;
                 }
             }
+
         }
 
 
         return result;
     }
+
+    /**
+     * set background color for evry item
+     *
+     * @param position
+     * @param layout
+     */
+    private void setBackGroundLayout(int position, View layout) {
+
+        Drawable drawable = null;
+
+        if (list.get(position).isSelected) {
+            drawable = context.getResources().getDrawable(R.drawable.rectangle_round_yellow);
+        } else if (list.get(position).messageType == MyType.MessageType.sticker) {
+            drawable = new ColorDrawable(Color.TRANSPARENT);
+        } else if (list.get(position).sendType == MyType.SendType.send) {
+            drawable = context.getResources().getDrawable(R.drawable.rectangle_round_white);
+        } else if (list.get(position).sendType == MyType.SendType.recvive) {
+            drawable = context.getResources().getDrawable(R.drawable.rectangle_round_gray);
+        }
+
+
+        if (chatType == MyType.ChatType.channel)
+            layout = (View) layout.getParent();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            layout.setBackground(drawable);
+        } else {
+            layout.setBackgroundDrawable(drawable);
+        }
+
+    }
+
+
+    private void UpdateSomething(int position, RecyclerView.ViewHolder holder, int whatUpdate) {
+
+        switch (whatUpdate) {
+
+            case 1: // update background layout
+                if (list.get(position).sendType != MyType.SendType.timeLayout)
+                    setBackGroundLayout(position, holder.itemView.findViewById(R.id.cslr_ll_frame));
+                break;
+        }
+
+        list.get(position).isChenged = 0;
+
+
+    }
+
 
 }

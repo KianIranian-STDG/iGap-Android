@@ -12,6 +12,7 @@ public class StructChatInfo {
     public String senderID = "";
     public String seen = "1";
     public String channelLink = "";
+    public int isChenged = 0;
 
     public String forwardMessageFrom = "";
     public MyType.MessageType messageType = MyType.MessageType.none;
