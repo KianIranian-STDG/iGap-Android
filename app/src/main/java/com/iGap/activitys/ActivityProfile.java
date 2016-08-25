@@ -1,6 +1,7 @@
 package com.iGap.activitys;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -16,12 +17,14 @@ import android.widget.Toast;
 
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.realm.RealmUserInfo;
 import com.iGap.module.HelperCopyFile;
 import com.iGap.module.HelperDecodeFile;
 
 import java.io.File;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.realm.Realm;
 
 public class ActivityProfile extends ActivityEnhanced {
 
@@ -41,7 +44,6 @@ public class ActivityProfile extends ActivityEnhanced {
         setContentView(R.layout.activity_profile);
 //
         if (!IsDeleteFile && G.imageFile.exists()) {
-//
             G.imageFile.delete();
         }
 
@@ -77,9 +79,21 @@ public class ActivityProfile extends ActivityEnhanced {
             @Override
             public void onClick(View view) {
 
-                String getTextNikName = edtNikName.getText().toString();
-
+                final String nickName = edtNikName.getText().toString();
                 HelperCopyFile.copyFile(pathImageUser, G.imageFile.toString());
+
+                if (!nickName.equals("")) {
+                    G.realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            RealmUserInfo userInfo = realm.createObject(RealmUserInfo.class);
+                            userInfo.setNickName(nickName);
+                        }
+                    });
+                    Intent intent = new Intent(G.context, ActivityMain.class);
+                    startActivity(intent);
+                    finish();
+                }
 
             }
         });

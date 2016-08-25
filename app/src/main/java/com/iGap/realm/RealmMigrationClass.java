@@ -3,9 +3,6 @@ package com.iGap.realm;
 import io.realm.DynamicRealm;
 import io.realm.RealmMigration;
 
-/**
- * Created by Erfan on 8/14/2016.
- */
 public class RealmMigrationClass implements RealmMigration {
     @Override
     public void migrate(DynamicRealm realm, long oldVersion, long newVersion) {

@@ -11,6 +11,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.text.Editable;
 import android.text.Html;
@@ -45,17 +46,20 @@ import com.iGap.module.IncomingSms;
 import com.iGap.module.SoftKeyboard;
 import com.iGap.module.StructCountry;
 import com.iGap.proto.ProtoRequest;
-import com.iGap.proto.ProtoUserLogin;
 import com.iGap.proto.ProtoUserRegister;
 import com.iGap.proto.ProtoUserVerify;
+import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestQueue;
+import com.iGap.request.RequestUserLogin;
 import com.iGap.request.RequestWrapper;
 import com.vicmikhailau.maskededittext.MaskedEditText;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class ActivityRegister extends ActivityEnhanced {
+import io.realm.Realm;
+
+public class ActivityRegister extends AppCompatActivity {
 
     private SoftKeyboard softKeyboard;
 
@@ -76,10 +80,14 @@ public class ActivityRegister extends ActivityEnhanced {
     public static String setTextCodePhone;
     public static String setTextNameCountry;
     public static String setMaskPhoneNumber;
-    private String isoCode = "IR";
+    public static String isoCode = "IR";
     private String code;
     private String pattern;
     private String regex;
+    private String userName;
+    private String token;
+
+    private long userId;
 
     private boolean newUser;
 
@@ -97,7 +105,6 @@ public class ActivityRegister extends ActivityEnhanced {
 
     private SearchView edtSearchView;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,7 +112,6 @@ public class ActivityRegister extends ActivityEnhanced {
 
         txtTitleToolbar = (TextView) findViewById(R.id.rg_txt_titleToolbar);
         txtTitleToolbar.setTypeface(G.FONT_IGAP);
-
 
         edtPhoneNumber = (MaskedEditText) findViewById(R.id.rg_edt_PhoneNumber);
         edtPhoneNumber.addTextChangedListener(new TextWatcher() {
@@ -183,6 +189,7 @@ public class ActivityRegister extends ActivityEnhanced {
             item.setName(structCountryArrayList.get(i).getName());
             item.setCountryCode(structCountryArrayList.get(i).getCountryCode());
             item.setPhonePattetn(structCountryArrayList.get(i).getPhonePattetn());
+            item.setAbbreviation(structCountryArrayList.get(i).getAbbreviation());
             items.add(item);
         }
         //==================================================================================================== set item for adapterListView from Realm
@@ -562,12 +569,16 @@ public class ActivityRegister extends ActivityEnhanced {
         G.onUserRegistration = new OnUserRegistration() {
 
             @Override
-            public void onRegister(final String userName, long userId, final ProtoUserRegister.UserRegisterResponse.Method methodValue) {
+            public void onRegister(final String userNameR, final long userIdR, final ProtoUserRegister.UserRegisterResponse.Method methodValue) {
 
                 Log.i("SOC_INFO", "userRegister is ok !");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
+                        userName = userNameR;
+                        userId = userIdR;
+
 
                         if (methodValue == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SMS) {//verification with sms
 
@@ -590,11 +601,11 @@ public class ActivityRegister extends ActivityEnhanced {
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                String phone = phoneNumber.replace("-", "");
+                phoneNumber = phoneNumber.replace("-", "");
 
                 ProtoUserRegister.UserRegister.Builder builder = ProtoUserRegister.UserRegister.newBuilder();
-                builder.setCountryCode(isoCode); //TODO [Saeed Mozaffari] [2016-08-22 10:18 AM] - isoCode fill default
-                builder.setPhoneNumber(Long.parseLong(phone));
+                builder.setCountryCode(isoCode);
+                builder.setPhoneNumber(Long.parseLong(phoneNumber));
                 builder.setRequest(ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
                 Log.i("SOC_INFO", "User Registration Start !");
                 RequestWrapper requestWrapper = new RequestWrapper(100, builder);
@@ -631,20 +642,19 @@ public class ActivityRegister extends ActivityEnhanced {
         rg_txt_verify_register.setTextAppearance(G.context, R.style.RedHUGEText);
         G.onUserVerification = new OnUserVerification() {
             @Override
-            public void onUserVerify(final String token, final boolean newUserR) {
+            public void onUserVerify(final String tokenR, final boolean newUserR) {
                 Log.i("SOC_INFO", "userVerification is Ok !");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         newUser = newUserR;
+                        token = tokenR;
                         rg_prg_verify_generate.setVisibility(View.GONE);
                         rg_img_verify_generate.setVisibility(View.VISIBLE);
                         rg_txt_verify_generate.setTextColor(getResources().getColor(R.color.rg_text_verify));
                         userLogin(token);
                     }
                 });
-
-
             }
         };
 
@@ -681,6 +691,20 @@ public class ActivityRegister extends ActivityEnhanced {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
+                        G.realm.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                RealmUserInfo userInfo = realm.createObject(RealmUserInfo.class);
+                                userInfo.setUserId(userId);
+                                userInfo.setUserName(userName);
+                                userInfo.setCountryISOCode(isoCode);
+                                userInfo.setPhoneNumber(phoneNumber);
+                                userInfo.setToken(token);
+                                userInfo.setUserRegistrationState(true);
+                            }
+                        });
+
                         rg_prg_verify_register.setVisibility(View.GONE);
                         rg_img_verify_register.setVisibility(View.VISIBLE);
                         rg_txt_verify_register.setTextColor(getResources().getColor(R.color.rg_text_verify));
@@ -705,16 +729,7 @@ public class ActivityRegister extends ActivityEnhanced {
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                ProtoUserLogin.UserLogin.Builder userLogin = ProtoUserLogin.UserLogin.newBuilder();
-                userLogin.setRequest(ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
-                userLogin.setToken(token);
-
-                RequestWrapper requestWrapper = new RequestWrapper(102, userLogin);
-                try {
-                    RequestQueue.sendRequest(requestWrapper);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
+                new RequestUserLogin(token).userLogin();
             }
         }, 4000);
 
@@ -779,8 +794,5 @@ public class ActivityRegister extends ActivityEnhanced {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        G.realm.close();
     }
-
-
 }

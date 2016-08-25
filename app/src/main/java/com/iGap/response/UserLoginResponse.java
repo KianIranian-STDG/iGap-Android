@@ -28,7 +28,7 @@ public class UserLoginResponse extends MessageHandler {
         ProtoResponse.Response.Builder response = ProtoResponse.Response.newBuilder().mergeFrom(userLoginResponse.getResponse());
         Log.i("SOC", "userLoginResponse response.getId() : " + response.getId());
         Log.i("SOC", "userLoginResponse response.getTimestamp() : " + response.getTimestamp());
-
+        G.userLogin = true;
         G.onUserLogin.onLogin();
     }
 
@@ -41,6 +41,9 @@ public class UserLoginResponse extends MessageHandler {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
+
+        Log.i("SOC", "userLoginResponse response.majorCode() : " + majorCode);
+        Log.i("SOC", "userLoginResponse response.minorCode() : " + minorCode);
     }
 }
 

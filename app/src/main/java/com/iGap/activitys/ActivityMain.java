@@ -12,12 +12,14 @@ import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AdapterContact;
 import com.iGap.interface_package.IActionClick;
 import com.iGap.interface_package.IOpenDrawer;
+import com.iGap.interface_package.OnUserLogin;
 import com.iGap.libs.floatingAddButton.ArcMenu;
 import com.iGap.libs.floatingAddButton.StateChangeListener;
 import com.iGap.libs.flowingdrawer.FlowingView;
@@ -27,6 +29,8 @@ import com.iGap.module.MyType;
 import com.iGap.module.OnComplete;
 import com.iGap.module.StructContactInfo;
 import com.iGap.module.Utils;
+import com.iGap.realm.RealmUserInfo;
+import com.iGap.request.RequestUserLogin;
 
 import java.util.ArrayList;
 
@@ -45,6 +49,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        userLogin();
         initFloatingButtonCreateNew();
         initDrawerMenu();
         initComponent();
@@ -53,6 +58,26 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
 
     FlowingView mFlowingView;
     FragmentDrawerMenu mMenuFragment;
+
+    private void userLogin() {
+
+        G.onUserLogin = new OnUserLogin() {
+            @Override
+            public void onLogin() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(G.context, "User Login!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        };
+
+        if (!G.userLogin) { //  need login
+            RealmUserInfo userInfo = G.realm.where(RealmUserInfo.class).findFirst();
+            new RequestUserLogin(userInfo.getToken()).userLogin();
+        }
+    }
 
     /**
      * init floating menu drawer

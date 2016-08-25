@@ -26,6 +26,7 @@ import com.iGap.module.CustomCircleImage;
 import com.iGap.proto.ProtoInfoLocation;
 import com.iGap.proto.ProtoInfoPage;
 import com.iGap.proto.ProtoRequest;
+import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestQueue;
 import com.iGap.request.RequestWrapper;
 import com.uncopt.android.widget.text.justify.JustifiedTextView;
@@ -62,8 +63,16 @@ public class ActivityIntroduce extends ActivityEnhanced {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_introduce);
 
+        RealmUserInfo userInfo = G.realm.where(RealmUserInfo.class).findFirst();
+        if (userInfo != null && userInfo.getUserRegistrationState()) { // user registered before
+            Intent intent = new Intent(G.context, ActivityMain.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
+
+        setContentView(R.layout.activity_introduce);
         getTermsOfServiceBody();
         getInfoLocation();
 
