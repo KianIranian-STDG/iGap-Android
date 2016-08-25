@@ -3,8 +3,6 @@ package com.iGap.activitys;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,18 +13,11 @@ import com.iGap.R;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
-public class ActivityCrop extends AppCompatActivity {
+public class ActivityCrop extends ActivityEnhanced {
 
     private ImageView imgPic, imgCrop, imgAgreeImage;
-    private String stringUri;
     private Uri resultUri;
-    private TextView txtCancell, txtSet;
+    private TextView txtCancel, txtSet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,16 +28,13 @@ public class ActivityCrop extends AppCompatActivity {
         imgCrop = (ImageView) findViewById(R.id.pu_img_crop);
         imgAgreeImage = (ImageView) findViewById(R.id.pu_img_agreeImage);
 
-        txtCancell = (TextView) findViewById(R.id.pu_txt_cancel_crop);
+        txtCancel = (TextView) findViewById(R.id.pu_txt_cancel_crop);
         txtSet = (TextView) findViewById(R.id.pu_txt_set_crop);
-
         final Bundle bundle = getIntent().getExtras();
-
         if (bundle != null) {
 
             resultUri = Uri.parse(bundle.getString("IMAGE_CAMERA"));
         }
-
         if (resultUri != null) {
 
             imgPic.setImageURI(resultUri);
@@ -54,21 +42,20 @@ public class ActivityCrop extends AppCompatActivity {
         imgCrop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 CropImage.activity(resultUri).setGuidelines(CropImageView.Guidelines.ON)
                         .setMinCropResultSize(120, 120)
                         .setAutoZoomEnabled(false)
+                        .setInitialCropWindowPaddingRatio(.08f)
+//                        .setMaxCropResultSize(2500,2500)
                         .setBorderCornerLength(50)
                         .setBorderCornerOffset(0)
                         .setAllowCounterRotation(true)
-                        .setInitialCropWindowPaddingRatio(0)
                         .setBorderCornerThickness(10.0f)
                         .setBorderCornerColor(getResources().getColor(R.color.whit_background))
                         .setBackgroundColor(getResources().getColor(R.color.ou_background_crop))
                         .start(ActivityCrop.this);
             }
         });
-
         imgAgreeImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -76,34 +63,33 @@ public class ActivityCrop extends AppCompatActivity {
                 Intent intent = new Intent(ActivityCrop.this, ActivityProfile.class);
                 startActivity(intent);
                 finish();
-
             }
         });
-
-        txtCancell.setOnClickListener(new View.OnClickListener() {
+        txtCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 Intent intent = new Intent(ActivityCrop.this, ActivityProfile.class);
                 startActivity(intent);
                 finish();
-
             }
         });
-
         txtSet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                copyImageWithUri(resultUri, "image_user");
+                G.saveImageUserProfile = resultUri;
+//                HelperCopyFile.copyFile(G.saveImageUserProfile.toString()+".jpg",G.IMAGE_USER);
                 Intent intent = new Intent(ActivityCrop.this, ActivityProfile.class);
                 startActivity(intent);
-                ActivityProfile.resultUri = resultUri;
                 ActivityProfile.IsDeleteFile = true;
                 finish();
             }
         });
     }
+
+    //======================================================================================================// result from crop
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -120,47 +106,6 @@ public class ActivityCrop extends AppCompatActivity {
             }
         } else {
             Toast.makeText(ActivityCrop.this, "can't save Image", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    //======================================================================================================// copy image user in spacial folder
-
-
-    private void copyImageWithUri(Uri uri, String nikName) {
-        String sourceFilename = uri.getPath();
-        Log.i("TAGSS", "0: " + uri);
-        BufferedInputStream bis = null;
-        BufferedOutputStream bos = null;
-        Log.i("TAGSS", "0: " + G.imageFile);
-        try {
-            bis = new BufferedInputStream(new FileInputStream(sourceFilename));
-
-            if (G.imageFile.exists()) {
-                G.imageFile.delete();
-                Log.i("TAGSS", "1: " + G.imageFile);
-            }
-            Log.i("TAGSS", "2: " + uri.getPath());
-
-            bos = new BufferedOutputStream(new FileOutputStream(G.imageFile, false));
-            byte[] buf = new byte[1024];
-            bis.read(buf);
-            do {
-                bos.write(buf);
-            } while (bis.read(buf) != -1);
-        } catch (IOException e) {
-            Log.i("TAGSS", "error1: ");
-            e.getStackTrace();
-
-        } finally {
-            try {
-                if (bis != null) bis.close();
-                if (bos != null) bos.close();
-                Log.i("TAGSS", "ff: " + G.imageFile);
-
-            } catch (IOException e) {
-                Log.i("TAGSS", "error2: ");
-                e.getStackTrace();
-            }
         }
     }
 }

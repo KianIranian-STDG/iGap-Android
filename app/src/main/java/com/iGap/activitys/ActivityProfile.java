@@ -1,14 +1,12 @@
 package com.iGap.activitys;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -18,28 +16,23 @@ import android.widget.Toast;
 
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.module.HelperCopyFile;
+import com.iGap.module.HelperDecodeFile;
 
-import java.io.ByteArrayOutputStream;
+import java.io.File;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ActivityProfile extends AppCompatActivity {
+public class ActivityProfile extends ActivityEnhanced {
 
     private TextView txtTitle;
     private Button btnSetImage, btnLetsGo;
     private CircleImageView imgSetImage;
-
     private int myResultCodeCamera = 1;
-    private Bitmap myBitmapCamera;
-    private String myfinalImageCamera;
-
     private int myResultCodeGallery = 0;
-    private String myfinalImageGallery;
-
-    public static Uri resultUri = null;
-
     private EditText edtNikName;
-
+    private Uri uriIntent;
+    private String pathImageUser;
     public static boolean IsDeleteFile;
 
     @Override
@@ -59,8 +52,7 @@ public class ActivityProfile extends AppCompatActivity {
         btnSetImage.setOnClickListener(new View.OnClickListener() { // button for set image
             @Override
             public void onClick(View view) {
-                startDalog(); // this dialog show 2 way for choose image : gallery and camera
-
+                startDialog(); // this dialog show 2 way for choose image : gallery and camera
             }
         });
 
@@ -70,7 +62,7 @@ public class ActivityProfile extends AppCompatActivity {
             imgSetImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startDalog();
+                    startDialog();
                 }
             });
         } else {
@@ -86,37 +78,30 @@ public class ActivityProfile extends AppCompatActivity {
             public void onClick(View view) {
 
                 String getTextNikName = edtNikName.getText().toString();
-                Intent intent = new Intent(G.context, ActivityMain.class);
-                startActivity(intent);
-                finish();
+
+                HelperCopyFile.copyFile(pathImageUser, G.imageFile.toString());
 
             }
         });
 
-        if (G.imageFile.exists()) {
-
-            Uri u = Uri.fromFile(G.imageFile);
+        if (G.saveImageUserProfile != null) {
+            pathImageUser = getRealPathFromURI(G.saveImageUserProfile);
+            File ts2 = new File(pathImageUser);
+            G.decodeBitmapProfile = HelperDecodeFile.decodeFile(ts2);
             imgSetImage.setVisibility(View.VISIBLE);
-            imgSetImage.setImageURI(u);
-            btnSetImage.setVisibility(View.GONE);
-        } else if (resultUri != null) {
-
-            imgSetImage.setVisibility(View.VISIBLE);
-            imgSetImage.setImageURI(resultUri);
+            imgSetImage.setImageBitmap(G.decodeBitmapProfile);
             btnSetImage.setVisibility(View.GONE);
 
         }
-
-
     }
 
     //======================================================================================================dialog for choose image
-    private void startDalog() {
+    private void startDialog() {
 
         final Dialog dialog = new Dialog(ActivityProfile.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        dialog.setContentView(R.layout.dialog2);
+        dialog.setContentView(R.layout.dialog_profile);
         TextView picCamera = (TextView) dialog.findViewById(R.id.pu_layout_dialog_picCamera);
         picCamera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,7 +109,9 @@ public class ActivityProfile extends AppCompatActivity {
                 if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
 
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(intent, 1);
+                    uriIntent = Uri.fromFile(G.imageFile);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
+                    startActivityForResult(intent, myResultCodeCamera);
                     dialog.dismiss();
 
                 } else {
@@ -138,19 +125,12 @@ public class ActivityProfile extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent, 0);
+                G.saveImageUserProfile = Uri.fromFile(G.imageFile);
+                startActivityForResult(intent, myResultCodeGallery);
                 dialog.dismiss();
             }
         });
-
         dialog.show();
-    }
-
-    public Uri getImageUri(Context inContext, Bitmap inImage) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.PNG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
-        return Uri.parse(path);
     }
 
     //======================================================================================================result from camera , gallery and crop
@@ -160,18 +140,13 @@ public class ActivityProfile extends AppCompatActivity {
 
         if (requestCode == myResultCodeCamera && resultCode == RESULT_OK) {// result for camera
 
-            Bundle bundle = data.getExtras();
-            myBitmapCamera = (Bitmap) bundle.get("data");
-
-            Uri uriImag = getImageUri(G.context, myBitmapCamera);
-
             Intent intent = new Intent(ActivityProfile.this, ActivityCrop.class);
-            intent.putExtra("IMAGE_CAMERA", uriImag.toString());
+            intent.putExtra("IMAGE_CAMERA", uriIntent.toString());
             startActivity(intent);
 
         } else if (requestCode == myResultCodeGallery && resultCode == RESULT_OK) {// result for gallery
-
             Intent intent = new Intent(ActivityProfile.this, ActivityCrop.class);
+            G.saveImageUserProfile = data.getData();
             intent.putExtra("IMAGE_CAMERA", data.getData().toString());
             startActivity(intent);
         }
@@ -181,16 +156,28 @@ public class ActivityProfile extends AppCompatActivity {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        Uri uri = Uri.fromFile(G.imageFile);
 
-        if (G.imageFile.exists()) {
-            btnSetImage.setVisibility(View.GONE);
+        if (G.saveImageUserProfile != null) {
+            pathImageUser = getRealPathFromURI(G.saveImageUserProfile);
+            File ts2 = new File(pathImageUser);
+            G.decodeBitmapProfile = HelperDecodeFile.decodeFile(ts2);
             imgSetImage.setVisibility(View.VISIBLE);
-            imgSetImage.setImageURI(uri);
-
-        } else {
-            btnSetImage.setVisibility(View.VISIBLE);
-            imgSetImage.setVisibility(View.GONE);
+            imgSetImage.setImageBitmap(G.decodeBitmapProfile);
+            btnSetImage.setVisibility(View.GONE);
         }
+    }
+
+    private String getRealPathFromURI(Uri contentURI) {
+        String result;
+        Cursor cursor = getContentResolver().query(contentURI, null, null, null, null);
+        if (cursor == null) { // Source is Dropbox or other similar local file path
+            result = contentURI.getPath();
+        } else {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            result = cursor.getString(idx);
+            cursor.close();
+        }
+        return result;
     }
 }

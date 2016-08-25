@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
+import android.net.Uri;
+import android.os.Environment;
 import android.os.Handler;
 import android.view.LayoutInflater;
 
@@ -74,8 +77,8 @@ public class G extends Application {
 
 
     //mo
-    public static LayoutInflater inflater;
     public static Activity currentActivity;
+    public static LayoutInflater inflater;
 
     public static Typeface FONT_IGAP;
     public static Typeface HELETICBLK_TITR;
@@ -83,8 +86,9 @@ public class G extends Application {
     public static Typeface YEKAN_FARSI;
     public static Typeface YEKAN_BOLD;
     public static File imageFile;
-
-//    public static final String PATH_REALM = "data/data/"+G.context.getPackageName()+"/files/CountryListA.realm";
+    public static Uri saveImageUserProfile = null;
+    public static Bitmap decodeBitmapProfile = null;
+    public static int COPY_BUFFER_SIZE = 1024;
 
     public static RealmConfiguration realmConfig;
     public static Realm realm;
@@ -123,7 +127,6 @@ public class G extends Application {
         fillUnSecureList();
         WebSocketClient.getInstance();
 
-
         realmConfig = new RealmConfiguration.Builder(getApplicationContext())
                 .name("CountryListA.realm")
                 .schemaVersion(1)
@@ -133,26 +136,24 @@ public class G extends Application {
 
         realm = Realm.getInstance(realmConfig);
 
-        String path = "data/data/com.iGap/image_profile";
-        File imageFolder = new File(path);
-        if (!imageFolder.exists()) {
-            imageFolder.mkdirs();
-        }
-        imageFile = new File(imageFolder, "image_user.jpg");
-//        uriSaveImage = Uri.fromFile(imageFile);
+        String imageUser = Environment.getExternalStorageDirectory() + "/.image_user";
 
+        FONT_IGAP = Typeface.createFromAsset(context.getAssets(), "fonts/neuropolitical.ttf");
+        imageFile = new File(imageUser);
+        if (!imageFile.exists()) {
+            imageFile.mkdirs();
+        }
+        imageFile = new File(imageUser, "image_user.jpg");
         FONT_IGAP = Typeface.createFromAsset(context.getAssets(), "fonts/neuropolitical.ttf");
 
         SharedPreferences sharedPreferences = getSharedPreferences("CopyDataBase", MODE_PRIVATE);
         boolean isCopyFromAsset = sharedPreferences.getBoolean("isCopyRealm", true);
 
         if (isCopyFromAsset) {
-
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean("isCopyRealm", false);
             editor.apply();
             try {
-
                 copyFromAsset();
 
             } catch (IOException e) {
@@ -162,7 +163,6 @@ public class G extends Application {
         //realm.close();
 
     }
-
     private void copyFromAsset() throws IOException {
         InputStream inputStream = getAssets().open("CountryListA.realm");
         String outFileName = realm.getPath();

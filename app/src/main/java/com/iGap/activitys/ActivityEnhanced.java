@@ -9,7 +9,10 @@ import io.realm.Realm;
 /**
  * Created by android on 8/1/2016.
  */
+
+
 public class ActivityEnhanced extends AppCompatActivity {
+
 
     @Override
     protected void onResume() {
@@ -17,6 +20,7 @@ public class ActivityEnhanced extends AppCompatActivity {
 
         //WebSocketClient.getInstance();
         G.realm = Realm.getInstance(G.realmConfig);
+        G.currentActivity = this;
     }
 
 }

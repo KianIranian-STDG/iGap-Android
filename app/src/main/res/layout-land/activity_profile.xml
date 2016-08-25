@@ -90,6 +90,7 @@
                 android:background="@drawable/pu_circle_button_give_image"
                 android:gravity="center"
                 android:text="+"
+                android:paddingBottom="@dimen/dp4"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/sp48"
                 android:textStyle="normal" />
@@ -140,6 +141,10 @@
             android:hint="@string/pu_nikname_profileUser"
             android:textColor="@color/black_register"
             android:textColorHint="@color/pu_edtHintText"
+            android:singleLine="true"
+            android:lines="1"
+            android:maxLines="1"
+            android:maxLength="20"
             android:textSize="@dimen/sp18" />
 
 

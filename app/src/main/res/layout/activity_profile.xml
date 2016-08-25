@@ -90,6 +90,7 @@
                 android:background="@drawable/pu_circle_button_give_image"
                 android:gravity="center"
                 android:text="+"
+                android:paddingBottom="@dimen/dp4"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/sp48"
                 android:layout_marginTop="@dimen/dp12"
@@ -141,6 +142,10 @@
             android:textColor="@color/black_register"
             android:textColorHint="@color/pu_edtHintText"
             android:textSize="@dimen/sp22"
+            android:singleLine="false"
+            android:lines="1"
+            android:maxLines="1"
+            android:maxLength="20"
             android:layout_marginBottom="@dimen/dp8" />
 
 

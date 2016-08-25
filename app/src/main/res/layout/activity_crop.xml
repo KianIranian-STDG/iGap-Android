@@ -25,9 +25,10 @@
                 <ImageView
                     android:id="@+id/pu_img_agreeImage"
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/dp32"
+                    android:layout_height="@dimen/dp40"
                     android:layout_gravity="center_vertical"
-                    android:layout_weight=".15"
+                    android:layout_weight=".18"
+                    android:paddingLeft="@dimen/dp8"
                     android:src="@mipmap/back_arrow"
                     android:tint="@color/whit_background" />
 
@@ -37,16 +38,16 @@
                     android:layout_weight=".6" />
 
                 <ImageView
+                    android:layout_gravity="center"
                     android:id="@+id/pu_img_crop"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.15"
-                    android:gravity="center_vertical"
-                    android:paddingRight="@dimen/dp32"
+                    android:layout_height="@dimen/dp28"
+                    android:layout_weight="0.10"
+                    android:gravity="center"
+                    android:layout_marginRight="@dimen/dp24"
                     android:scaleType="centerInside"
                     android:src="@mipmap/crop"
                     android:textColor="@color/whit_background"
-                    android:textSize="@dimen/sp18"
                     android:tint="@color/whit_background" />
             </LinearLayout>
         </android.support.v7.widget.Toolbar>
@@ -58,9 +59,8 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:adjustViewBounds="true"
-            android:scaleType="fitXY"
+            android:scaleType="centerCrop"
             android:src="@mipmap/pu_gallary" />
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -76,8 +76,13 @@
                 android:gravity="center"
                 android:text="CANCEL"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/sp18"
+                android:textSize="@dimen/sp16"
                 android:textStyle="bold" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/whit_background" />
 
             <TextView
                 android:id="@+id/pu_txt_set_crop"
@@ -86,9 +91,10 @@
                 android:layout_weight=".5"
                 android:background="@android:color/transparent"
                 android:gravity="center"
+
                 android:text="SET"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/sp18"
+                android:textSize="@dimen/sp16"
                 android:textStyle="bold" />
 
         </LinearLayout>

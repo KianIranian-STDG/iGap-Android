@@ -11,7 +11,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.text.Editable;
 import android.text.Html;
@@ -56,7 +55,7 @@ import com.vicmikhailau.maskededittext.MaskedEditText;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class ActivityRegister extends AppCompatActivity {
+public class ActivityRegister extends ActivityEnhanced {
 
     private SoftKeyboard softKeyboard;
 
