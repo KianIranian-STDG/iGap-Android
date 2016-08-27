@@ -15,6 +15,8 @@ import com.iGap.helper.HelperFillLookUpClass;
 import com.iGap.interface_package.OnReceiveInfoLocation;
 import com.iGap.interface_package.OnReceivePageInfoTOS;
 import com.iGap.interface_package.OnUserLogin;
+import com.iGap.interface_package.OnUserProfileEmailResponse;
+import com.iGap.interface_package.OnUserProfileGenderResponse;
 import com.iGap.interface_package.OnUserRegistration;
 import com.iGap.interface_package.OnUserVerification;
 import com.iGap.realm.RealmMigrationClass;
@@ -99,6 +101,8 @@ public class G extends Application {
     public static OnUserVerification onUserVerification;
     public static OnReceivePageInfoTOS onReceivePageInfoTOS;
     public static OnUserLogin onUserLogin;
+    public static OnUserProfileEmailResponse onUserProfileEmailResponse;
+    public static OnUserProfileGenderResponse onUserProfileGenderResponse;
 
     @Override
     public void onCreate() {
@@ -161,9 +165,10 @@ public class G extends Application {
                 e.printStackTrace();
             }
         }
-        //realm.close();
+        realm.close();
 
     }
+
     private void copyFromAsset() throws IOException {
         InputStream inputStream = getAssets().open("CountryListA.realm");
         String outFileName = realm.getPath();

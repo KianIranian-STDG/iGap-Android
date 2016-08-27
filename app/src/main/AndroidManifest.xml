@@ -29,22 +29,22 @@
 
         <activity
             android:name=".activitys.ActivityMain"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"></activity>
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
 
         <activity
             android:name=".activitys.ActivityIntroduce"
-            android:configChanges="keyboard|keyboardHidden|screenSize|locale">
-
-        </activity>
-
-        <activity
-            android:name=".activitys.ActivityProfile"
             android:configChanges="keyboard|keyboardHidden|screenSize|locale">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activitys.ActivityProfile"
+            android:configChanges="keyboard|keyboardHidden|screenSize|locale">
+
         </activity>
 
         <activity android:name=".activitys.ActivityCrop" />

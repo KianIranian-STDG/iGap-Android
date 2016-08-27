@@ -73,8 +73,8 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
             }
         };
 
-        if (!G.userLogin) { //  need login
-            RealmUserInfo userInfo = G.realm.where(RealmUserInfo.class).findFirst();
+        RealmUserInfo userInfo = G.realm.where(RealmUserInfo.class).findFirst();
+        if (!G.userLogin && userInfo != null) { //  need login
             new RequestUserLogin(userInfo.getToken()).userLogin();
         }
     }

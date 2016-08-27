@@ -1,7 +1,6 @@
 package com.iGap.activitys;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -17,9 +16,9 @@ import android.widget.Toast;
 
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.realm.RealmUserInfo;
 import com.iGap.module.HelperCopyFile;
 import com.iGap.module.HelperDecodeFile;
+import com.iGap.realm.RealmUserInfo;
 
 import java.io.File;
 
@@ -80,14 +79,17 @@ public class ActivityProfile extends ActivityEnhanced {
             public void onClick(View view) {
 
                 final String nickName = edtNikName.getText().toString();
-                HelperCopyFile.copyFile(pathImageUser, G.imageFile.toString());
 
                 if (!nickName.equals("")) {
                     G.realm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
-                            RealmUserInfo userInfo = realm.createObject(RealmUserInfo.class);
-                            userInfo.setNickName(nickName);
+                            RealmUserInfo realmUserInfo = G.realm.where(RealmUserInfo.class).findFirst();
+                            realmUserInfo.setNickName(nickName);
+                            if (pathImageUser != null) {
+                                HelperCopyFile.copyFile(pathImageUser, G.imageFile.toString());
+                                realmUserInfo.setAvatarPath(G.imageFile.toString());
+                            }
                         }
                     });
                     Intent intent = new Intent(G.context, ActivityMain.class);

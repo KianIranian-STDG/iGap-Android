@@ -4,7 +4,7 @@ import io.realm.RealmObject;
 
 public class RealmUserInfo extends RealmObject {
 
-    private boolean needRegistration;
+    private boolean registrationStatus;
     private long userId;
     private String userName;
     private String countryISOCode;
@@ -18,7 +18,7 @@ public class RealmUserInfo extends RealmObject {
     //===Setters
 
     public void setUserRegistrationState(boolean value) {
-        this.needRegistration = value;
+        this.registrationStatus = value;
     }
 
     public void setUserId(long value) {
@@ -60,7 +60,7 @@ public class RealmUserInfo extends RealmObject {
     //===Getters
 
     public boolean getUserRegistrationState() {
-        return this.needRegistration;
+        return this.registrationStatus;
     }
 
     public long getUserId() {
