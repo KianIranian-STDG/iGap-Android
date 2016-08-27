@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:textSize="@dimen/sp16"
         android:paddingRight="@dimen/dp4"
-        android:maxWidth="@dimen/dp280"
+        android:maxWidth="@dimen/dp300"
         android:paddingLeft="@dimen/dp4"
         android:textColor="@android:color/black"
         android:layout_height="wrap_content"

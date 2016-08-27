@@ -27,6 +27,10 @@ public class MyType {
     public static final int reciveLayout = 2;
     public static final int timeLayout = 3;
 
+    public static final int owner = 1;
+    public static final int admin = 2;
+    public static final int member = 3;
+
 
     public enum SendType {
 
@@ -61,7 +65,6 @@ public class MyType {
             return value;
         }
     }
-
 
     public enum MessageType {
 
@@ -101,4 +104,25 @@ public class MyType {
             return value;
         }
     }
+
+    public enum OwnerShip {
+
+        owner(MyType.owner),
+        admin(MyType.admin),
+        member(MyType.member);
+
+        private int value;
+
+        OwnerShip(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
+
+
+
+
 }

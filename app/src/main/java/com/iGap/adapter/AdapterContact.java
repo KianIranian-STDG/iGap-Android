@@ -68,10 +68,15 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.MyViewHo
                     if (ActivityMain.isMenuButtonAddShown) {
                         complete.complete(true, "closeMenuButton", "");
                     } else {
+
+                        int position = MyViewHolder.super.getPosition();
+
                         Intent intent = new Intent(context, ActivityChat.class);
-                        intent.putExtra("chattype", list.get(MyViewHolder.super.getPosition()).contactType);
-                        intent.putExtra("contactid", list.get(MyViewHolder.super.getPosition()).contactID);
-                        intent.putExtra("ismute", list.get(MyViewHolder.super.getPosition()).muteNotification);
+                        intent.putExtra("ChatType", list.get(position).contactType);
+                        intent.putExtra("ContactID", list.get(position).contactID);
+                        intent.putExtra("IsMute", list.get(position).muteNotification);
+                        intent.putExtra("OwnerShip", list.get(position).ownerShip);
+
                         context.startActivity(intent);
                     }
                 }

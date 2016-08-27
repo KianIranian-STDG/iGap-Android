@@ -10,6 +10,5 @@
         android:maxHeight="@dimen/dp360"
         android:adjustViewBounds="true"
         android:src="@mipmap/c"
-        android:scaleType="centerCrop"
         android:id="@+id/shli_imv_image" />
 </LinearLayout>
