@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2016 Alireza Eskandarpour Shoferi
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/EmojiPopup"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/emojiCategories"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/bottom_border"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/emojiCategoryRecents"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:contentDescription="@null"
+            android:scaleType="center"
+            android:src="@drawable/ic_recent" />
+
+        <ImageButton
+            android:id="@+id/emojiCategoryPeople"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:contentDescription="@null"
+            android:scaleType="center"
+            android:src="@drawable/ic_people" />
+
+        <ImageButton
+            android:id="@+id/emojiCategoryNature"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:contentDescription="@null"
+            android:scaleType="center"
+            android:src="@drawable/ic_nature" />
+
+        <ImageButton
+            android:id="@+id/emojiCategoryFood"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:contentDescription="@null"
+            android:scaleType="center"
+            android:src="@drawable/ic_foods" />
+
+        <ImageButton
+            android:id="@+id/emojiCategoryPlaces"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:contentDescription="@null"
+            android:scaleType="center"
+            android:src="@drawable/ic_travel" />
+
+        <ImageButton
+            android:id="@+id/emojiCategoryObjects"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:contentDescription="@null"
+            android:scaleType="center"
+            android:src="@drawable/ic_objects" />
+
+        <ImageButton
+            android:id="@+id/emojiCategoryStickers"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:contentDescription="@null"
+            android:scaleType="center"
+            android:src="@drawable/ic_stickers" />
+
+        <ImageButton
+            android:id="@+id/backspace"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_backspace" />
+    </LinearLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/emojiPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/emojiCategories">
+
+    </android.support.v4.view.ViewPager>
+</RelativeLayout>
