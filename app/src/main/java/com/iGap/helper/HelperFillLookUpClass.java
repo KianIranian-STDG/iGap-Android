@@ -28,6 +28,14 @@ public class HelperFillLookUpClass {
         G.lookupMap.put(30104, "ProtoUserProfileGender.UserProfileGenderResponse");
         G.lookupMap.put(105, "User.Profile.Nickname");
         G.lookupMap.put(30105, "ProtoUserProfileNickname.UserProfileNicknameResponse");
+        G.lookupMap.put(106, "UserContactsImport");
+        G.lookupMap.put(30106, "ProtoUserContactsImport.UserContactsImportResponse");
+        G.lookupMap.put(107, "UserContactsGetList");
+        G.lookupMap.put(30107, "ProtoUserContactsGetList.UserContactsGetListResponse");
+        G.lookupMap.put(108, "UserContactsDelete");
+        G.lookupMap.put(30108, "ProtoUserContactsDelete.UserContactsDeleteResponse");
+        G.lookupMap.put(109, "UserContactsEdit");
+        G.lookupMap.put(30109, "ProtoUserContactsEdit.UserContactsEditResponse");
 
         // Chat 2xx , 302xx
         G.lookupMap.put(200, "Chat.GetRoom");
