@@ -19,8 +19,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.iGap.G;
@@ -166,7 +166,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
 
         recyclerView = (RecyclerView) findViewById(R.id.chl_recycler_view_chat);
-        mAdapter = new AdapterChat(ActivityChat.this, chatType, getChatList());
+        mAdapter = new AdapterChat(ActivityChat.this, chatType, getChatList(), complete);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(ActivityChat.this);
         mLayoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(mLayoutManager);
