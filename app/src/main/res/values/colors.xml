@@ -73,7 +73,7 @@
 
     <color name="paint_color">@color/drawerColorWhite</color>
 
-    <color name="drawerColorWhite">#ffffff</color>
+    <color name="drawerColorWhite">@android:color/transparent</color>
 
     <color name="ou_background_crop">#50000000</color>
 

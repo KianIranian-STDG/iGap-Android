@@ -427,17 +427,19 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         anim.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-
+                int windowWidth = Utils.getWindowWidth(ActivityMain.this);
+                mFlowingView.invalidate(windowWidth);
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
                 // replace new menu fragment
+                int windowWidth = Utils.getWindowWidth(ActivityMain.this);
                 FragmentManager fm = getSupportFragmentManager();
                 ContactsFragmentDrawerMenu sc;
                 fm.beginTransaction().replace(R.id.id_container_menu, sc = new ContactsFragmentDrawerMenu()).commit();
                 sc.setOpenDrawerListener(ActivityMain.this);
-                sc.setMaxActivityWidth(Utils.getWindowWidth(ActivityMain.this));
+                sc.setMaxActivityWidth(windowWidth);
                 mLeftDrawerLayout.setMenuFragment(sc);
             }
 
