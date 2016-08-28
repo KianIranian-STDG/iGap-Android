@@ -17,6 +17,8 @@ import android.view.LayoutInflater;
 
 import com.iGap.adapter.CountryNamesAdapter;
 import com.iGap.helper.HelperFillLookUpClass;
+import com.iGap.interface_package.OnInfoCountryResponse;
+import com.iGap.interface_package.OnInfoTime;
 import com.iGap.interface_package.OnReceiveInfoLocation;
 import com.iGap.interface_package.OnReceivePageInfoTOS;
 import com.iGap.interface_package.OnUserLogin;
@@ -107,15 +109,23 @@ public class G extends Application {
     public static OnUserProfileEmailResponse onUserProfileEmailResponse;
     public static OnUserProfileGenderResponse onUserProfileGenderResponse;
     public static OnUserProfileNickNameResponse onUserProfileNickNameResponse;
+    public static OnInfoCountryResponse onInfoCountryResponse;
+    public static OnInfoTime onInfoTime;
+
+    public static final String DIR_SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();
+    public static final String DIR_APP = DIR_SDCARD + "/iGap";
+    public static final String DIR_IMAGES = DIR_APP + "/images";
+    public static final String DIR_VIDEOS = DIR_APP + "/videos";
+    public static final String DIR_AUDIOS = DIR_APP + "/audios";
 
 
-    public static ArrayList<CountryNamesAdapter.LineItem> Retrive(String s){
+    public static ArrayList<CountryNamesAdapter.LineItem> Retrive(String s) {
         Cursor cur = null;
         ArrayList<CountryNamesAdapter.LineItem> mItems = new ArrayList<>();
         try {
             ContentResolver cr = G.context.getContentResolver();
-            cur = cr.query(ContactsContract.Contacts.CONTENT_URI,  new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME},
-                    null, null,  "upper("+ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + ") ASC");
+            cur = cr.query(ContactsContract.Contacts.CONTENT_URI, new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME},
+                    null, null, "upper(" + ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + ") ASC");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -124,18 +134,20 @@ public class G extends Application {
         //String  names = null;
         String[] items = new String[cur.getCount()];
         if (cur.getCount() > 0) {
-            for(int i = 0; i<cur.getCount(); i++) {
+            for (int i = 0; i < cur.getCount(); i++) {
                 cur.moveToPosition(i);
 
                 // String id = cur.getString(
                 //       cur.getColumnIndex(ContactsContract.Contacts._ID));
-                String  name = cur.getString(cur.getColumnIndex(
+                String name = cur.getString(cur.getColumnIndex(
                         ContactsContract.Contacts.DISPLAY_NAME));
-                try{if(!name.toLowerCase().toString().trim().equals("null")&&name.toLowerCase().toString().trim().contains(s.toLowerCase()))
-                    items[i] = name;
+                try {
+                    if (!name.toLowerCase().toString().trim().equals("null") && name.toLowerCase().toString().trim().contains(s.toLowerCase()))
+                        items[i] = name;
                     //items[i] = "Dominika Faniz";
 
-                } catch (Exception e) {}
+                } catch (Exception e) {
+                }
             }
         }
 
@@ -147,7 +159,8 @@ public class G extends Application {
         int sectionFirstPosition = 0;
 
         for (int i = 0; i < items.length; i++) {
-            try {String header = items[i].substring(0, 1);
+            try {
+                String header = items[i].substring(0, 1);
 
                 if (!TextUtils.equals(lastHeader.toLowerCase(), header.toLowerCase())) {
                     // Insert new header view and update section data.
@@ -155,9 +168,9 @@ public class G extends Application {
                     sectionFirstPosition = i + headerCount;
                     lastHeader = header.toUpperCase();
                     headerCount += 1;
-                    mItems.add(new CountryNamesAdapter.LineItem( header.toUpperCase(), "", true, sectionManager, sectionFirstPosition));
+                    mItems.add(new CountryNamesAdapter.LineItem(header.toUpperCase(), "", true, sectionManager, sectionFirstPosition));
                 }
-                mItems.add(new CountryNamesAdapter.LineItem( items[i], "Last seen recently", false, sectionManager, sectionFirstPosition));
+                mItems.add(new CountryNamesAdapter.LineItem(items[i], "Last seen recently", false, sectionManager, sectionFirstPosition));
 
             } catch (Exception e) {
             }
@@ -168,6 +181,11 @@ public class G extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        new File(DIR_APP).mkdirs();
+        new File(DIR_IMAGES).mkdirs();
+        new File(DIR_VIDEOS).mkdirs();
+        new File(DIR_AUDIOS).mkdirs();
 
         context = getApplicationContext();
         handler = new Handler();

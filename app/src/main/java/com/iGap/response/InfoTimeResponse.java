@@ -1,9 +1,8 @@
 package com.iGap.response;
 
-import android.util.Log;
-
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
+import com.iGap.proto.ProtoInfoTime;
 
 public class InfoTimeResponse extends MessageHandler {
 
@@ -20,22 +19,22 @@ public class InfoTimeResponse extends MessageHandler {
 
     @Override
     public void handler() {
-        G.handlerCount += 1;
+        //G.handlerCount += 1;
+        ProtoInfoTime.InfoTimeResponse.Builder infoTime = (ProtoInfoTime.InfoTimeResponse.Builder) message;
+        G.onInfoTime.onInfoTime(infoTime.getTimestamp(), infoTime.getResponse());
     }
 
     @Override
     public void timeOut() {
-        G.timeoutCount += 1;
+        //G.timeoutCount += 1;
     }
 
     @Override
     public void error() {
-        G.errorCount += 1;
+        //G.errorCount += 1;
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
-        Log.i("SOC", "InfoTimeResponse majorCode : " + majorCode);
-        Log.i("SOC", "InfoTimeResponse minorCode : " + minorCode);
     }
 }
 

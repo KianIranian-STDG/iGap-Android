@@ -25,7 +25,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
-
         <activity
             android:name=".activitys.ActivityChat"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
