@@ -20,6 +20,7 @@
     <string name="fa_chevron_left">&#xf053;</string>
     <string name="fa_user">&#xf007;</string>
 
+
     <string name="fa_commenting_o">&#xf27b;</string>
     <string name="fa_thumbs_o_down">&#xf088;</string>
     <string name="fa_thumbs_o_up">&#xf087;</string>
@@ -153,5 +154,15 @@
     <string name="rg_verify_dialog_try_code">Try</string>
     <string name="rg_verify_dialog_resend_code">Resend Code</string>
     <string name="search">rg_search</string>
+
+    <!--setting-->
+    <string name="st_popupMenu_toolbar_rename">rename</string>
+    <string name="st_popupMenu_toolbar_more">more</string>
+    <string name="st_titleToolbar">Settings</string>
+    <string name="st_title_general">General</string>
+    <string name="st_username">UserName:</string>
+    <string name="st_nickname">Nickname:</string>
+    <string name="st_phoneNumber">Phone Number:</string>
+
 
 </resources>

@@ -23,7 +23,7 @@ public class AdapterDialog extends BaseAdapter implements Filterable {
     ArrayList<StructCountry> countrylist;
     ArrayList<StructCountry> mStringFilterList;
     ValueFilter valueFilter;
-    private int mSelectedVariation = -1;
+    public static int mSelectedVariation = -1;
 
     private RadioButton name_tv;
 
@@ -68,7 +68,9 @@ public class AdapterDialog extends BaseAdapter implements Filterable {
             public void onClick(View v) {
 
                 mSelectedVariation = (Integer) v.getTag();
+                ActivityRegister.positionRadioButton = mSelectedVariation;
                 notifyDataSetChanged();
+
 
 //                ActivityRegister.dialogChooseCountry.dismiss();
 

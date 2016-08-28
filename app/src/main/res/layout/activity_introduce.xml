@@ -47,7 +47,7 @@
         <!--page 1-->
         <ImageView
             android:id="@+id/int_img_logo_introduce"
-            android:layout_width="@dimen/dp75"
+            android:layout_width="@dimen/dp80"
             android:layout_height="@dimen/dp110"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
@@ -56,7 +56,7 @@
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
             android:src="@mipmap/logo"
-            android:visibility="invisible" />
+            android:visibility="visible" />
 
         <!--page 1-->
         <!--page 2-->

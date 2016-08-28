@@ -4,9 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -87,8 +85,6 @@ public class G extends Application {
     public static Typeface YEKAN_FARSI;
     public static Typeface YEKAN_BOLD;
     public static File imageFile;
-    public static Uri saveImageUserProfile = null;
-    public static Bitmap decodeBitmapProfile = null;
     public static int COPY_BUFFER_SIZE = 1024;
 
     public static RealmConfiguration realmConfig;
@@ -137,7 +133,7 @@ public class G extends Application {
 
         realm = Realm.getInstance(realmConfig);
 
-        String imageUser = Environment.getExternalStorageDirectory() + "/.image_user";
+        String imageUser = Environment.getExternalStorageDirectory() + "/image_user";
 
         FONT_IGAP = Typeface.createFromAsset(context.getAssets(), "fonts/neuropolitical.ttf");
         imageFile = new File(imageUser);
