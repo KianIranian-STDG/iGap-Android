@@ -25,6 +25,14 @@
     <string name="fa_thumbs_o_up">&#xf087;</string>
 
 
+    <string name="fa_trash_o">&#xf014;</string>
+    <string name="fa_files_o">&#xf0c5;</string>
+    <string name="fa_long_arrow_right">&#xf178;</string>
+
+    <string name="fa_chevron_down">&#xf078;</string>
+    <string name="fa_chevron_up">&#xf077;</string>
+
+
     <string name="f_supervisor_account">&#xe8d3;</string>
     <string name="f_people">&#xe7fb;</string>
     <string name="f_person">&#xe7fd;</string>

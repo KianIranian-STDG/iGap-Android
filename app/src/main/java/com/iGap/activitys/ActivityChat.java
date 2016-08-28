@@ -5,6 +5,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,6 +20,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.iGap.G;
@@ -36,6 +38,7 @@ import com.iGap.module.EmojiEditText;
 import com.iGap.module.EmojiPopup;
 import com.iGap.module.EmojiRecentsManager;
 import com.iGap.module.MyType;
+import com.iGap.module.OnComplete;
 import com.iGap.module.StructChatInfo;
 
 import java.util.ArrayList;
@@ -49,6 +52,15 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     private Button btnSend;
     private Button btnAttachFile;
     private Button btnMic;
+
+    private Button btnCloseAppBarSelected;
+    private Button btnReplaySelected;
+    private Button btnCopySelected;
+    private Button btnForwardSelected;
+    private Button btnDeleteSelected;
+    private TextView txtNumberOfSelected;
+    private LinearLayout ll_AppBarSelected;
+
     private TextView txtName;
     private TextView txtLastSeen;
     private TextView txt_mute;
@@ -60,6 +72,14 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     private MyType.ChatType chatType;
     private String contactId;
     private boolean isMute = false;
+    private MyType.OwnerShip ownerShip;
+
+    private Button btnUp;
+    private Button btnDown;
+    private TextView txtChannelMute;
+
+    private AppBarLayout appBarLayout;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,11 +87,12 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
         Bundle bundle = getIntent().getExtras();  // get chat type and contact id and  finish activity if value equal null
         if (bundle != null) {
-            chatType = (MyType.ChatType) bundle.getSerializable("chattype");
-            contactId = bundle.getString("contactid");
-            isMute = bundle.getBoolean("ismute");
+            chatType = (MyType.ChatType) bundle.getSerializable("ChatType");
+            contactId = bundle.getString("ContactID");
+            isMute = bundle.getBoolean("IsMute");
+            ownerShip = (MyType.OwnerShip) bundle.getSerializable("OwnerShip");
         }
-        if (chatType == null || contactId == null) {
+        if (chatType == null || contactId == null || ownerShip == null) {
             finish();
         }
 
@@ -79,19 +100,26 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         setContentView(R.layout.activity_chat);
 
         initComponent();
+        initAppbarSelected();
+
+        if (chatType == MyType.ChatType.channel && ownerShip == MyType.OwnerShip.member)
+            initLayotChannelFooter();
+
     }
 
     private void initComponent() {
+
+        appBarLayout = (AppBarLayout) findViewById(R.id.chl_appbar_main);
 
         Button btnBack = (Button) findViewById(R.id.chl_btn_back);
         btnBack.setTypeface(G.fontawesome);
 
         txtName = (TextView) findViewById(R.id.chl_txt_name);
         txtLastSeen = (TextView) findViewById(R.id.chl_txt_last_seen);
+        txt_mute = (TextView) findViewById(R.id.chl_txt_mute);
+        txt_mute.setTypeface(G.fontawesome);
 
         if (isMute) {
-            txt_mute = (TextView) findViewById(R.id.chl_txt_mute);
-            txt_mute.setTypeface(G.fontawesome);
             txt_mute.setVisibility(View.VISIBLE);
         }
 
@@ -115,6 +143,26 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
         btnMic = (Button) findViewById(R.id.chl_btn_mic);
         btnMic.setTypeface(G.fontawesome);
+
+
+        OnComplete complete = new OnComplete() {
+            @Override
+            public void complete(boolean result, String messageOne, String MessageTow) {
+
+                int whatAction = 0;
+                String number = "0";
+
+                if (messageOne != null)
+                    if (messageOne.length() > 0)
+                        whatAction = Integer.parseInt(messageOne);
+
+                if (MessageTow != null)
+                    if (MessageTow.length() > 0)
+                        number = MessageTow;
+
+                callBack(result, whatAction, number);
+            }
+        };
 
 
         recyclerView = (RecyclerView) findViewById(R.id.chl_recycler_view_chat);
@@ -319,6 +367,148 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         return false;
     }
 
+    private void initAppbarSelected() {
+
+        btnCloseAppBarSelected = (Button) findViewById(R.id.chl_btn_close_layout);
+        btnCloseAppBarSelected.setTypeface(G.fontawesome);
+        btnCloseAppBarSelected.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mAdapter.resetSelected();
+            }
+        });
+
+        btnReplaySelected = (Button) findViewById(R.id.chl_btn_replay_selected);
+        btnReplaySelected.setTypeface(G.fontawesome);
+        btnReplaySelected.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.e("ddd", "btnReplaySelected");
+            }
+        });
+
+        btnCopySelected = (Button) findViewById(R.id.chl_btn_copy_selected);
+        btnCopySelected.setTypeface(G.fontawesome);
+        btnCopySelected.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.e("ddd", "btnCopySelected");
+            }
+        });
+
+
+        btnForwardSelected = (Button) findViewById(R.id.chl_btn_forward_selected);
+        btnForwardSelected.setTypeface(G.fontawesome);
+        btnForwardSelected.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.e("ddd", "btnForwardSelected");
+            }
+        });
+
+        btnDeleteSelected = (Button) findViewById(R.id.chl_btn_delete_selected);
+        btnDeleteSelected.setTypeface(G.fontawesome);
+        btnDeleteSelected.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.e("ddd", "btnDeleteSelected");
+            }
+        });
+
+        txtNumberOfSelected = (TextView) findViewById(R.id.chl_txt_number_of_selected);
+        txtNumberOfSelected.setTypeface(G.fontawesome);
+
+
+        ll_AppBarSelected = (LinearLayout) findViewById(R.id.chl_ll_appbar_selelected);
+
+    }
+
+    private void initLayotChannelFooter() {
+
+
+        LinearLayout layoutAttach = (LinearLayout) findViewById(R.id.chl_ll_attach);
+        LinearLayout layoutChannelFooter = (LinearLayout) findViewById(R.id.chl_ll_channel_footer);
+
+        layoutAttach.setVisibility(View.GONE);
+        layoutChannelFooter.setVisibility(View.VISIBLE);
+
+        btnUp = (Button) findViewById(R.id.chl_btn_up);
+        btnUp.setTypeface(G.fontawesome);
+        btnUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.e("ddd", "up click");
+                int position = recyclerView.getAdapter().getItemCount();
+                if (position > 0)
+                    recyclerView.scrollToPosition(0);
+
+                appBarLayout.setExpanded(true, true);
+            }
+        });
+
+
+        btnDown = (Button) findViewById(R.id.chl_btn_down);
+        btnDown.setTypeface(G.fontawesome);
+        btnDown.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.e("ddd", "btnDown");
+                int position = recyclerView.getAdapter().getItemCount();
+                if (position > 0)
+                    recyclerView.scrollToPosition(position - 1);
+            }
+        });
+
+
+        txtChannelMute = (TextView) findViewById(R.id.chl_txt_mute_channel);
+        txtChannelMute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isMute = !isMute;
+                if (isMute) {
+                    txtChannelMute.setText("UnMute");
+                    txt_mute.setVisibility(View.VISIBLE);
+
+                } else {
+                    txtChannelMute.setText("Mute");
+                    txt_mute.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        if (isMute) {
+            txtChannelMute.setText("UnMute");
+        } else {
+            txtChannelMute.setText("Mute");
+        }
+
+    }
+
+    private void callBack(boolean result, int whatAction, String number) {
+
+        switch (whatAction) {
+
+            case 1://for show or gone layout appBar selected
+                if (result) {
+                    ll_AppBarSelected.setVisibility(View.VISIBLE);
+                    txtNumberOfSelected.setText(number);
+
+                    int x = Integer.parseInt(number);
+                    if (x > 1)
+                        btnReplaySelected.setVisibility(View.INVISIBLE);
+                    else
+                        btnReplaySelected.setVisibility(View.VISIBLE);
+                } else {
+                    ll_AppBarSelected.setVisibility(View.GONE);
+                    appBarLayout.setExpanded(true, true);
+                }
+                break;
+
+        }
+
+
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -378,7 +568,9 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         StructChatInfo c14 = new StructChatInfo();
         c14.messageType = MyType.MessageType.audio;
         c14.sendType = MyType.SendType.recvive;
-        c14.messag = "the good media";
+        c14.messag = "بهترین موسیقی منتخب" +
+                "\n" + " how are you";
+        c14.senderAvatar = R.mipmap.a + "";
         list.add(c14);
 
         StructChatInfo c15 = new StructChatInfo();

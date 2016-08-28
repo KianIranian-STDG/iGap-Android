@@ -6,12 +6,11 @@
     android:layoutDirection="ltr"
     android:orientation="vertical">
 
-
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="@mipmap/aaa"
+        android:background="@mipmap/cats"
         android:orientation="vertical">
 
 
@@ -24,6 +23,7 @@
 
 
         <android.support.design.widget.AppBarLayout
+            android:id="@+id/chl_appbar_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -71,9 +71,9 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:paddingLeft="@dimen/dp4"
-                                android:textColor="@color/gray"
                                 android:paddingRight="@dimen/dp4"
                                 android:text="@string/fa_bell_slash_o"
+                                android:textColor="@color/gray"
                                 android:textSize="@dimen/sp14"
                                 android:visibility="gone" />
 
@@ -103,8 +103,7 @@
                         android:id="@+id/chl_imv_user_picture"
                         android:layout_width="@dimen/dp60"
                         android:layout_height="@dimen/dp60"
-                        android:padding="@dimen/dp4"
-                        android:src="@mipmap/b" />
+                        android:src="@mipmap/h" />
 
                     <Button
                         android:id="@+id/chl_btn_menu"
@@ -123,10 +122,110 @@
                     android:background="#34a49f"></View>
             </LinearLayout>
         </android.support.design.widget.AppBarLayout>
+
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/chl_ll_appbar_selelected"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone"
+                app:elevation="8dp">
+
+                <LinearLayout
+
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp60"
+                    android:background="@android:color/white"
+                    android:orientation="horizontal">
+
+
+                    <Button
+                        android:id="@+id/chl_btn_close_layout"
+                        android:layout_width="@dimen/dp48"
+                        android:layout_height="match_parent"
+                        android:background="@null"
+                        android:paddingLeft="@dimen/dp12"
+                        android:text="@string/fa_close"
+                        android:textColor="@color/gray"
+                        android:textSize="@dimen/sp20" />
+
+                    <TextView
+                        android:id="@+id/chl_txt_number_of_selected"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/dp8"
+                        android:gravity="center"
+                        android:maxWidth="@dimen/dp60"
+                        android:minWidth="@dimen/dp40"
+                        android:singleLine="true"
+                        android:text="0"
+                        android:textSize="@dimen/sp20" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/chl_btn_replay_selected"
+                            android:layout_width="@dimen/dp60"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:text="@string/fa_mail_replay"
+                            android:textColor="@color/gray"
+                            android:textSize="@dimen/sp20" />
+
+                        <Button
+                            android:id="@+id/chl_btn_copy_selected"
+                            android:layout_width="@dimen/dp60"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:text="@string/fa_files_o"
+                            android:textColor="@color/gray"
+                            android:textSize="@dimen/sp20" />
+
+                        <Button
+                            android:id="@+id/chl_btn_forward_selected"
+                            android:layout_width="@dimen/dp60"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:text="@string/fa_long_arrow_right"
+                            android:textColor="@color/gray"
+                            android:textSize="@dimen/sp20" />
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/chl_btn_delete_selected"
+                        android:layout_width="@dimen/dp60"
+                        android:layout_height="match_parent"
+                        android:background="@null"
+                        android:text="@string/fa_trash_o"
+                        android:textColor="@color/gray"
+                        android:textSize="@dimen/sp20" />
+
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/gray"></View>
+
+            </LinearLayout>
+
+
+        </android.support.design.widget.AppBarLayout>
+
     </android.support.design.widget.CoordinatorLayout>
 
-
     <LinearLayout
+        android:id="@+id/chl_ll_attach"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -210,4 +309,59 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/chl_ll_channel_footer"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp48"
+            android:background="@android:color/black"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/chl_btn_up"
+                android:layout_width="@dimen/dp60"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:gravity="center"
+                android:text="@string/fa_chevron_up"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp20" />
+
+
+            <TextView
+                android:id="@+id/chl_txt_mute_channel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textSize="@dimen/sp20"
+                android:text="Mute"
+                android:textColor="@android:color/white" />
+
+            <Button
+                android:id="@+id/chl_btn_down"
+                android:layout_width="@dimen/dp60"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:gravity="center"
+                android:text="@string/fa_chevron_down"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp20" />
+        </LinearLayout>
+
+    </LinearLayout>
+
 </LinearLayout>
+
+
+

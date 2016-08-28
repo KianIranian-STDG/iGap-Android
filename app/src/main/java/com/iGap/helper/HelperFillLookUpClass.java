@@ -56,6 +56,10 @@ public class HelperFillLookUpClass {
         // Client 6xx , 306xx
         G.lookupMap.put(600, "Client.Condition");
         G.lookupMap.put(30600, "ProtoClientCondition.ClientConditionResponse");
+        G.lookupMap.put(601, "Client.GetRoomList");
+        G.lookupMap.put(30601, "ProtoClientGetRoomList.ClientGetRoomList");
+        G.lookupMap.put(602, "Client.GetRoom");
+        G.lookupMap.put(30602, "ProtoClientGetRoom.ClientGetRoomResponse");
     }
 
 }

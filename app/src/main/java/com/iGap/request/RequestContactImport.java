@@ -2,11 +2,16 @@ package com.iGap.request;
 
 import com.iGap.helper.HelperString;
 import com.iGap.proto.ProtoRequest;
+import com.iGap.proto.ProtoUserContactsImport;
 import com.iGap.proto.ProtoUserLogin;
 
-public class RequestUserLogin {
+public class RequestContactImport {
 
-    public void userLogin(String token) {
+    public void contactImport(String token) {
+
+        ProtoUserContactsImport.UserContactsImport.Builder userContactsImport = ProtoUserContactsImport.UserContactsImport.newBuilder();
+        userContactsImport.setRequest(ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
+
         ProtoUserLogin.UserLogin.Builder userLogin = ProtoUserLogin.UserLogin.newBuilder();
         userLogin.setRequest(ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
         userLogin.setToken(token);
@@ -18,4 +23,5 @@ public class RequestUserLogin {
             e.printStackTrace();
         }
     }
+
 }
