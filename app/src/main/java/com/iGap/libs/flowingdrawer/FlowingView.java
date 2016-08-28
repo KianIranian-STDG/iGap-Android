@@ -109,6 +109,12 @@ public class FlowingView extends View {
         valueAnimator.start();
     }
 
+    public void invalidate(int maxWidth) {
+        currentPointX = maxWidth;
+        autoUppingX = maxWidth;
+        invalidate();
+    }
+
     private void drawBG(Canvas canvas) {
         mPath.reset();
         switch (mStatus) {

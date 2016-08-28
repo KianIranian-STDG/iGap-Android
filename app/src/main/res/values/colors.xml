@@ -73,7 +73,7 @@
 
     <color name="paint_color">@color/drawerColorWhite</color>
 
-    <color name="drawerColorWhite">#ffffff</color>
+    <color name="drawerColorWhite">@android:color/transparent</color>
 
     <color name="ou_background_crop">#50000000</color>
 
@@ -82,5 +82,8 @@
     <color name="primary_dark">#00796b</color>
     <color name="accent">#d500f9</color>
 
+    <!-- emoji popup window-->
+    <color name="colorEmojiPopupBackground">#f4f6f5</color>
+    <color name="colorEmojiPopupCategoryBottomBorder">#e4e6e5</color>
 
 </resources>
