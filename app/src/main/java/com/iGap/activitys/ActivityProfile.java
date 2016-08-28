@@ -16,7 +16,14 @@ import android.widget.Toast;
 
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.interface_package.OnUserProfileNickNameResponse;
+import com.iGap.module.HelperCopyFile;
 import com.iGap.module.HelperDecodeFile;
+import com.iGap.proto.ProtoResponse;
+import com.iGap.realm.RealmUserInfo;
+import com.iGap.request.RequestUserProfileNickName;
+
+import java.io.File;
 import com.iGap.realm.RealmUserInfo;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -83,13 +90,33 @@ public class ActivityProfile extends ActivityEnhanced {
                     G.realm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
-                            RealmUserInfo userInfo = realm.createObject(RealmUserInfo.class);
-                            userInfo.setNickName(nickName);
+                            final RealmUserInfo realmUserInfo = G.realm.where(RealmUserInfo.class).findFirst();
+
+                            G.onUserProfileNickNameResponse = new OnUserProfileNickNameResponse() {
+                                @Override
+                                public void onUserProfileNickNameResponse(final String nickName, ProtoResponse.Response response) {
+                                    Intent intent = new Intent(G.context, ActivityMain.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            };
+                            new RequestUserProfileNickName().userProfileNickName(nickName);
+
+                            if (pathImageUser != null) {
+                                HelperCopyFile.copyFile(pathImageUser, G.imageFile.toString());
+                                realmUserInfo.setAvatarPath(G.imageFile.toString());
+                            }
+                            realmUserInfo.setNickName(nickName);
                         }
                     });
-                    Intent intent = new Intent(G.context, ActivityMain.class);
-                    startActivity(intent);
-                    finish();
+
+                } else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(G.context, "Please Write Your NickName", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
 
             }

@@ -6,9 +6,11 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/cslch_ll_parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dp4"
+        android:layout_margin="@dimen/dp8"
+        android:background="@drawable/rectangle_round_white"
         android:orientation="horizontal">
 
         <FrameLayout
@@ -21,7 +23,9 @@
             <LinearLayout
                 android:paddingTop="@dimen/dp48"
                 android:id="@+id/cslr_ll_content_main"
+                android:layout_gravity="center"
                 android:layout_width="match_parent"
+                android:paddingLeft="@dimen/dp20"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
@@ -43,12 +47,13 @@
             android:layout_width="@dimen/dp48"
             android:layout_height="match_parent"
             android:minHeight="@dimen/dp260"
-            android:background="#eeeeee"
+            android:background="@drawable/rectangle_light_gray"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp48"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <TextView
@@ -156,7 +161,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp12"
+                android:layout_marginTop="@dimen/dp8"
                 android:orientation="vertical">
 
                 <TextView
@@ -166,13 +171,14 @@
                     android:gravity="center"
                     android:text="@string/fa_eye"
                     android:textColor="@android:color/black"
-                    android:textSize="@dimen/sp20" />
+                    android:textSize="@dimen/sp18" />
 
                 <TextView
                     android:id="@+id/cslch_txt_seen"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:layout_marginBottom="@dimen/dp8"
                     android:text="38.4k"
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/sp12" />

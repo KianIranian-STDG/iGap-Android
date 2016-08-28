@@ -12,7 +12,7 @@ public abstract class MessageHandler {
 
     }
 
-    public abstract void handler();
+    public abstract void handler() throws NullPointerException;
 
     public void timeOut() {
         error();

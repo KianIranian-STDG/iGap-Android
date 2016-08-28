@@ -9,6 +9,7 @@ public class StructContactInfo {
 
     public String contactID = "";
     public boolean muteNotification = false;
+    public MyType.OwnerShip ownerShip = MyType.OwnerShip.member;
 
     public String imageSource = "";
     public String viewDistanceColor = "";

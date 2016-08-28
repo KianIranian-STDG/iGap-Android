@@ -6,14 +6,7 @@ import com.iGap.proto.ProtoUserLogin;
 
 public class RequestUserLogin {
 
-    private String token;
-
-    public RequestUserLogin(String token) {
-        this.token = token;
-    }
-
-
-    public void userLogin() {
+    public void userLogin(String token) {
         ProtoUserLogin.UserLogin.Builder userLogin = ProtoUserLogin.UserLogin.newBuilder();
         userLogin.setRequest(ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
         userLogin.setToken(token);

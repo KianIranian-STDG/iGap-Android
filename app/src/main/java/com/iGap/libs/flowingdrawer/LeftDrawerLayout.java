@@ -31,6 +31,14 @@ public class LeftDrawerLayout extends ViewGroup {
      */
     private int mMinDrawerMargin;
 
+    public void openHalfDrawer(int halfWidth) {
+        mLeftMenuOnScrren = 1.0f;
+        pointY = getHeight() / 2;
+        mLeftMenuView.getLayoutParams().width = halfWidth;
+        mLeftMenuView.requestLayout();
+        mHelper.smoothSlideViewTo(mLeftMenuView, 0, mLeftMenuView.getTop());
+    }
+
     private View mLeftMenuView;
     private ViewGroup mContentView;
 
@@ -50,7 +58,11 @@ public class LeftDrawerLayout extends ViewGroup {
     private ImageView mBg;
 
     private int rightMargin;
+    private int mActivityWidth;
 
+    public void setActivityWidth(int i) {
+        this.mActivityWidth = i;
+    }
 
     public LeftDrawerLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -73,6 +85,9 @@ public class LeftDrawerLayout extends ViewGroup {
 
             @Override
             public void onEdgeDragStarted(int edgeFlags, int pointerId) {
+                // change left menu view to support pull to end
+                mLeftMenuView.getLayoutParams().width = mActivityWidth;
+                mLeftMenuView.requestLayout();
                 mHelper.captureChildView(mLeftMenuView, pointerId);
             }
 
@@ -248,11 +263,11 @@ public class LeftDrawerLayout extends ViewGroup {
     }
 
 
-    public void toggle() {
+    public void toggle(int openHalfWidth) {
         if (isShownMenu()) {
             closeDrawer();
         } else {
-            openDrawer();
+            openHalfDrawer(openHalfWidth);
         }
     }
 
@@ -263,15 +278,6 @@ public class LeftDrawerLayout extends ViewGroup {
         releasing = true;
         mFlowingView.resetContent();
         mHelper.smoothSlideViewTo(menuView, -menuView.getWidth(), menuView.getTop());
-        postInvalidate();
-    }
-
-    public void openDrawer() {
-        View menuView = mLeftMenuView;
-        mLeftMenuOnScrren = 1.0f;
-        pointY = getHeight() / 2;
-
-        mHelper.smoothSlideViewTo(menuView, 0, menuView.getTop());
         postInvalidate();
     }
 

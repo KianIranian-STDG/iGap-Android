@@ -29,7 +29,11 @@ public class MenuFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return null;
     }
+    private int mMaxActivityWidth;
 
+    public void setMaxActivityWidth(int i) {
+        this.mMaxActivityWidth = i;
+    }
     public void show(int y) {
         if (!isShown) {
             isShown = true;
@@ -37,20 +41,20 @@ public class MenuFragment extends Fragment {
 
             //event call back
             if (mOpenDrawerListener != null) {
-                mOpenDrawerListener.onOpenDrawer();
+                mOpenDrawerListener.onOpenDrawer(mRevealLayout.getMeasuredWidth() == mMaxActivityWidth);
             }
         }
     }
 
     public void hideView() {
+        mRevealLayout.hide();
+        //event call back
         if (isShown) {
             if (mOpenDrawerListener != null) {
                 mOpenDrawerListener.onCloseDrawer();
             }
         }
-        mRevealLayout.hide();
         isShown = false;
-        //event call back
     }
 
 

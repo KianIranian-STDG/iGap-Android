@@ -4,12 +4,12 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -20,8 +20,10 @@ import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.module.CircleImageView;
+import com.iGap.module.CustomRoundCornerImageView;
 import com.iGap.module.GifMovieView;
 import com.iGap.module.MyType;
+import com.iGap.module.OnComplete;
 import com.iGap.module.StructChatInfo;
 
 import java.util.ArrayList;
@@ -34,14 +36,16 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private ArrayList<StructChatInfo> list;
     private Context context;
     private MyType.ChatType chatType;
+    private OnComplete complete;
 
     private boolean isSelectedMode = false;
     private int numberOfSelected = 0;
 
-    public AdapterChat(Context context, MyType.ChatType chatType, ArrayList<StructChatInfo> list) {
+    public AdapterChat(Context context, MyType.ChatType chatType, ArrayList<StructChatInfo> list, OnComplete complete) {
         this.list = list;
         this.context = context;
         this.chatType = chatType;
+        this.complete = complete;
     }
 
     @Override
@@ -147,6 +151,10 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 frameLayout.addView(v);
                 ImageView imvSticker = (ImageView) v.findViewById(R.id.cslst_imv_sticker);
                 imvSticker.setImageResource(Integer.parseInt(list.get(viewType).filePath));
+                if (chatType == MyType.ChatType.channel)
+                    main.findViewById(R.id.cslch_ll_parent).setBackgroundColor(Color.TRANSPARENT);
+                else
+                    main.findViewById(R.id.cslr_ll_frame).setBackgroundColor(Color.TRANSPARENT);
                 viewHolder = new myHolder(main);
                 break;
         }
@@ -157,6 +165,9 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             ((TextView) v.findViewById(R.id.cslm_txt_message)).setText(list.get(viewType).messag);
             if (list.get(viewType).sendType == MyType.SendType.recvive && chatType == MyType.ChatType.groupChat && list.get(viewType).messageType == MyType.MessageType.message)
                 v.setPadding((int) context.getResources().getDimension(R.dimen.dp24), 0, 0, 0);
+            else if (chatType == MyType.ChatType.channel)
+                if (list.get(viewType).messageType == MyType.MessageType.image)
+                    v.setPadding((int) context.getResources().getDimension(R.dimen.dp20), 0, 0, 0);
             frameLayout.addView(v);
         }
 
@@ -178,7 +189,7 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         if (list.get(viewType).sendType != MyType.SendType.timeLayout)
-            setBackGroundLayout(viewType, main.findViewById(R.id.cslr_ll_frame));
+            setBackGroundLayout(viewType, viewHolder);
 
 
         if (chatType == MyType.ChatType.channel && list.get(viewType).sendType != MyType.SendType.timeLayout)
@@ -254,13 +265,7 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     int position = myHolder.super.getPosition();
                     isSelectedMode = true;
 
-                    if (list.get(position).isSelected == false) {
-
-                        list.get(position).isSelected = true;
-                        list.get(position).isChenged = 1;
-                        numberOfSelected++;
-                        notifyItemChanged(position);
-                    }
+                    setIsSelectedItem(position);
 
                     Log.e("ddd", " item   " + numberOfSelected + "   numbrer of selected   onlong");
 
@@ -436,6 +441,37 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private void configureViewHolderImage(final viewHolderImage holder, final int position) {
         holder.imvPicture.setImageResource(Integer.parseInt(list.get(position).filePath));
+
+        if (chatType == MyType.ChatType.channel) {
+            ViewTreeObserver vto = holder.imvPicture.getViewTreeObserver();
+            vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                public boolean onPreDraw() {
+                    holder.imvPicture.getViewTreeObserver().removeOnPreDrawListener(this);
+
+                    int imageWith = holder.imvPicture.getWidth();
+                    int imageHeight = holder.imvPicture.getHeight();
+
+                    int layoutWith = ((View) holder.imvPicture.getParent().getParent()).getWidth();
+                    int layoutHeight = ((View) holder.imvPicture.getParent().getParent()).getHeight();
+
+                    if (imageWith == layoutWith) {
+                        int radiousTop = 0;
+                        int radiousBottom = 0;
+                        CustomRoundCornerImageView view = (CustomRoundCornerImageView) holder.imvPicture;
+                        radiousTop = (int) context.getResources().getDimension(R.dimen.dp8);
+                        if (imageHeight == layoutHeight)
+                            radiousBottom = radiousTop;
+
+                        if (radiousTop > 0 || radiousBottom > 0)
+                            view.setCornerRadiiDP(radiousTop, 0, radiousBottom, 0);
+
+                    }
+
+                    return true;
+                }
+            });
+        }
+
     }
 
     private void configureViewHolderGif(final viewHolderGif holder, final int position) {
@@ -467,13 +503,7 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             public boolean onLongClick(View view) {
 
                 isSelectedMode = true;
-
-                if (list.get(position).isSelected == false) {
-                    list.get(position).isSelected = true;
-                    numberOfSelected++;
-                    list.get(position).isChenged = 1;
-                    notifyItemChanged(position);
-                }
+                setIsSelectedItem(position);
 
                 return true;
             }
@@ -536,6 +566,10 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
         notifyItemChanged(position);
 
+        if (complete != null) {
+            complete.complete(isSelectedMode, "1", numberOfSelected + "");
+        }
+
     }
 
     /**
@@ -562,7 +596,7 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             }
 
         }
-
+        complete.complete(false, "1", "0");//
 
         return result;
     }
@@ -571,32 +605,20 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
      * set background color for evry item
      *
      * @param position
-     * @param layout
      */
-    private void setBackGroundLayout(int position, View layout) {
+    private void setBackGroundLayout(int position, RecyclerView.ViewHolder holder) {
 
-        Drawable drawable = null;
+        int color;
 
         if (list.get(position).isSelected) {
-            drawable = context.getResources().getDrawable(R.drawable.rectangle_round_yellow);
-        } else if (list.get(position).messageType == MyType.MessageType.sticker) {
-            drawable = new ColorDrawable(Color.TRANSPARENT);
-        } else if (list.get(position).sendType == MyType.SendType.send) {
-            drawable = context.getResources().getDrawable(R.drawable.rectangle_round_white);
-        } else if (list.get(position).sendType == MyType.SendType.recvive) {
-            drawable = context.getResources().getDrawable(R.drawable.rectangle_round_gray);
-        }
-
-
-        if (chatType == MyType.ChatType.channel)
-            layout = (View) layout.getParent();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            layout.setBackground(drawable);
+            color = Color.parseColor("#99AADFF7");
         } else {
-            layout.setBackgroundDrawable(drawable);
+            color = Color.TRANSPARENT;
         }
 
+        Drawable drawable = new ColorDrawable(color);
+        ((FrameLayout) holder.itemView.findViewById(R.id.cslr_ll_frame)).setForeground(drawable);
+        holder.itemView.setBackgroundColor(color);
     }
 
 
@@ -606,7 +628,7 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             case 1: // update background layout
                 if (list.get(position).sendType != MyType.SendType.timeLayout)
-                    setBackGroundLayout(position, holder.itemView.findViewById(R.id.cslr_ll_frame));
+                    setBackGroundLayout(position, holder);
                 break;
         }
 

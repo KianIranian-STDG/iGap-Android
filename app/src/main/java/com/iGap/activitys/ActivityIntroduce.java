@@ -19,16 +19,12 @@ import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AdapterViewPager;
-import com.iGap.helper.HelperString;
 import com.iGap.interface_package.OnReceiveInfoLocation;
 import com.iGap.interface_package.OnReceivePageInfoTOS;
 import com.iGap.module.CustomCircleImage;
-import com.iGap.proto.ProtoInfoLocation;
-import com.iGap.proto.ProtoInfoPage;
-import com.iGap.proto.ProtoRequest;
 import com.iGap.realm.RealmUserInfo;
-import com.iGap.request.RequestQueue;
-import com.iGap.request.RequestWrapper;
+import com.iGap.request.RequestInfoLocation;
+import com.iGap.request.RequestInfoPage;
 import com.uncopt.android.widget.text.justify.JustifiedTextView;
 
 import java.util.Locale;
@@ -73,8 +69,14 @@ public class ActivityIntroduce extends ActivityEnhanced {
         }
 
         setContentView(R.layout.activity_introduce);
-        getTermsOfServiceBody();
-        getInfoLocation();
+
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getTermsOfServiceBody();
+                getInfoLocation();
+            }
+        }, 3000);
 
         layout_test = (ViewGroup) findViewById(R.id.int_layout_test);
 
@@ -358,15 +360,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
             }
         };
 
-        ProtoInfoLocation.InfoLocation.Builder infoLocation = ProtoInfoLocation.InfoLocation.newBuilder();
-        infoLocation.setRequest(ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
-
-        RequestWrapper requestWrapper = new RequestWrapper(500, infoLocation);
-        try {
-            RequestQueue.sendRequest(requestWrapper);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
+        new RequestInfoLocation().infoLocation();
     }
 
     private void getTermsOfServiceBody() {
@@ -378,16 +372,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
             }
         };
 
-        ProtoInfoPage.InfoPage.Builder infoPage = ProtoInfoPage.InfoPage.newBuilder();
-        infoPage.setRequest(ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
-        infoPage.setId("TOS");
-
-        RequestWrapper requestWrapper = new RequestWrapper(503, infoPage);
-        try {
-            RequestQueue.sendRequest(requestWrapper);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
+        new RequestInfoPage().infoPage("TOS");
     }
 
     private void animationInPage1(final ImageView logo, final ViewGroup txt1, final TextView txt2, final TextView txt3) {

@@ -1,5 +1,8 @@
 package com.iGap.response;
 
+import com.iGap.G;
+import com.iGap.proto.ProtoInfoCountry;
+
 public class InfoCountryResponse extends MessageHandler {
 
     public int actionId;
@@ -15,6 +18,15 @@ public class InfoCountryResponse extends MessageHandler {
 
     @Override
     public void handler() {
+
+        ProtoInfoCountry.InfoCountryResponse.Builder infoCountryResponse = (ProtoInfoCountry.InfoCountryResponse.Builder) message;
+
+        G.onInfoCountryResponse.onInfoCountryResponse(
+                infoCountryResponse.getCallingCode()
+                , infoCountryResponse.getName()
+                , infoCountryResponse.getPattern()
+                , infoCountryResponse.getRegex()
+                , infoCountryResponse.getResponse());
 
     }
 

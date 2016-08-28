@@ -8,6 +8,7 @@
 
     <FrameLayout
         android:layout_width="@dimen/dp68"
+        android:background="#99ffffff"
         android:layout_height="@dimen/dp68">
 
         <ImageView
