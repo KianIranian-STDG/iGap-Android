@@ -91,6 +91,7 @@ public class RequestQueue {
                 message = AESCrypt.encrypt(G.symmetricKey, message);
             }
 
+            Log.i("SOC_REQ", "RequestQueue **************** message : " + message);
             WebSocketClient.getInstance().sendBinary(message);
             Log.i("SOC_REQ", "RequestQueue 3 sendRequest successful");
 

@@ -35,6 +35,13 @@ public class InfoLocationResponse extends MessageHandler {
         Log.i("SOC_INFO", "iso code : " + infoLocationResponse.getPattern());
         Log.i("SOC_INFO", "iso code : " + infoLocationResponse.getRegex());
 
+        G.onReceiveInfoLocation.onReceive(
+                infoLocationResponse.getIsoCode()
+                , infoLocationResponse.getCallingCode()
+                , infoLocationResponse.getName()
+                , infoLocationResponse.getPattern()
+                , infoLocationResponse.getRegex());
+
     }
 
     @Override
@@ -52,6 +59,6 @@ public class InfoLocationResponse extends MessageHandler {
         Log.i("SOC_INFO", "getMajorCode : " + errorResponse.getMajorCode());
         Log.i("SOC_INFO", "getMinorCode : " + errorResponse.getMinorCode());
 
-        G.onReceiveInfoLocation.onReceive("IR", 98, "Iran Test", "pattern", "Regex");
+        //G.onReceiveInfoLocation.onReceive("IR", 98, "Iran Test", "pattern", "Regex");
     }
 }

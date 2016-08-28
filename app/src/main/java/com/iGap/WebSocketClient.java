@@ -23,14 +23,14 @@ public class WebSocketClient {
     private static WebSocket createSocketConnection() {
         WebSocket websocketFactory = null;
         try {
-            Log.i("SOC", "createSocket Connection");
+            Log.i("SOC_WebSocket", "createSocket Connection : " + Config.urlWebsocket);
             websocketFactory = new WebSocketFactory().createSocket(Config.urlWebsocket);
 
             websocketFactory.addListener(new WebSocketAdapter() {
 
                 @Override
                 public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
-                    Log.i("SOC", "onConnected");
+                    Log.i("SOC_WebSocket", "onConnected");
                     //checkFirstResponse();
                     super.onConnected(websocket, headers);
                 }
@@ -38,7 +38,7 @@ public class WebSocketClient {
 
                 @Override
                 public void onBinaryMessage(WebSocket websocket, final byte[] binary) throws Exception {
-                    Log.i("SOC", "WebSocketClient binary : " + binary);
+                    Log.i("SOC_WebSocket", "WebSocketClient binary : " + binary);
                     //G.responseCount++;
                     new HandleResponse(binary).run();
 
@@ -47,13 +47,13 @@ public class WebSocketClient {
 
                 @Override
                 public void onError(WebSocket websocket, WebSocketException cause) throws Exception {
-                    Log.i("SOC", "onError");
+                    Log.i("SOC_WebSocket", "onError");
                     super.onError(websocket, cause);
                 }
 
                 @Override
                 public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
-                    Log.i("SOC", "onDisconnected");
+                    Log.i("SOC_WebSocket", "onDisconnected");
 
                     reconnect();
                     super.onDisconnected(websocket, serverCloseFrame, clientCloseFrame, closedByServer);
@@ -61,32 +61,32 @@ public class WebSocketClient {
 
                 @Override
                 public void onConnectError(WebSocket websocket, WebSocketException exception) throws Exception {
-                    Log.i("SOC", "onConnectError");
+                    Log.i("SOC_WebSocket", "onConnectError");
                     super.onConnectError(websocket, exception);
                 }
 
                 @Override
                 public void onMessageError(WebSocket websocket, WebSocketException cause, List<WebSocketFrame> frames) throws Exception {
-                    Log.i("SOC", "onMessageError");
+                    Log.i("SOC_WebSocket", "onMessageError");
                     super.onMessageError(websocket, cause, frames);
                 }
 
                 @Override
                 public void onTextMessage(WebSocket websocket, String text) throws Exception {
-                    Log.i("SOC", "onTextMessage : " + text);
+                    Log.i("SOC_WebSocket", "onTextMessage : " + text);
                     super.onTextMessage(websocket, text);
                 }
 
                 @Override
                 public void onTextMessageError(WebSocket websocket, WebSocketException cause, byte[] data) throws Exception {
-                    Log.i("SOC", "onTextMessageError");
+                    Log.i("SOC_WebSocket", "onTextMessageError");
                     super.onTextMessageError(websocket, cause, data);
                 }
 
 
             });
         } catch (IOException e) {
-            Log.i("SOC", "iGap IOException iGap : " + e);
+            Log.i("SOC_WebSocket", "iGap IOException iGap : " + e);
             e.printStackTrace();
         }
 
@@ -96,12 +96,12 @@ public class WebSocketClient {
             public void run() {
                 if (G.allowForConnect) {
                     try {
-                        Log.i("SOC", "Connecting");
+                        Log.i("SOC_WebSocket", "Connecting");
                         if (finalWs != null) {
                             finalWs.connect();
                         }
                     } catch (WebSocketException e) {
-                        Log.i("SOC", "WebSocketException : " + e);
+                        Log.i("SOC_WebSocket", "WebSocketException : " + e);
                         e.printStackTrace();
                     }
                 }
@@ -126,9 +126,9 @@ public class WebSocketClient {
             webSocketClient = createSocketConnection();
         } else {
 
-            Log.i("SOC", "instance is not null");
+            Log.i("SOC_WebSocket", "instance is not null");
             if (!webSocketClient.isOpen()) {
-                Log.i("SOC", "instance need createSocketConnection again");
+                Log.i("SOC_WebSocket", "instance need createSocketConnection again");
                 webSocketClient = createSocketConnection();
             }
         }

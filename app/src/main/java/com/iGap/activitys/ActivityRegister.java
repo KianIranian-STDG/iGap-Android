@@ -11,7 +11,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.text.Editable;
 import android.text.Html;
@@ -59,7 +58,7 @@ import java.util.Collections;
 
 import io.realm.Realm;
 
-public class ActivityRegister extends AppCompatActivity {
+public class ActivityRegister extends ActivityEnhanced {
 
     private SoftKeyboard softKeyboard;
 
@@ -559,6 +558,7 @@ public class ActivityRegister extends AppCompatActivity {
         rg_prg_verify_sms.setVisibility(View.GONE);
         rg_img_verify_sms.setVisibility(View.VISIBLE);
         rg_txt_verify_sms.setTextColor(getResources().getColor(R.color.rg_start_background));
+        userVerify(userName);
     }
 
 
@@ -607,7 +607,6 @@ public class ActivityRegister extends AppCompatActivity {
                 builder.setCountryCode(isoCode);
                 builder.setPhoneNumber(Long.parseLong(phoneNumber));
                 builder.setRequest(ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
-                Log.i("SOC_INFO", "User Registration Start !");
                 RequestWrapper requestWrapper = new RequestWrapper(100, builder);
 
                 try {
@@ -729,7 +728,7 @@ public class ActivityRegister extends AppCompatActivity {
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                new RequestUserLogin(token).userLogin();
+                new RequestUserLogin().userLogin(token);
             }
         }, 4000);
 

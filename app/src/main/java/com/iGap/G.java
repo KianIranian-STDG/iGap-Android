@@ -17,6 +17,7 @@ import com.iGap.interface_package.OnReceivePageInfoTOS;
 import com.iGap.interface_package.OnUserLogin;
 import com.iGap.interface_package.OnUserProfileEmailResponse;
 import com.iGap.interface_package.OnUserProfileGenderResponse;
+import com.iGap.interface_package.OnUserProfileNickNameResponse;
 import com.iGap.interface_package.OnUserRegistration;
 import com.iGap.interface_package.OnUserVerification;
 import com.iGap.realm.RealmMigrationClass;
@@ -37,9 +38,6 @@ import javax.crypto.spec.SecretKeySpec;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
-/**
- * Created by android on 8/1/2016.
- */
 public class G extends Application {
 
     public static Typeface neuroplp;
@@ -103,6 +101,8 @@ public class G extends Application {
     public static OnUserLogin onUserLogin;
     public static OnUserProfileEmailResponse onUserProfileEmailResponse;
     public static OnUserProfileGenderResponse onUserProfileGenderResponse;
+    public static OnUserProfileNickNameResponse onUserProfileNickNameResponse;
+
 
     @Override
     public void onCreate() {

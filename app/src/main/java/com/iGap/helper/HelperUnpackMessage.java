@@ -46,10 +46,14 @@ public class HelperUnpackMessage {
         Log.i("SOC", "HelperUnpackMessage protoClassName : " + protoClassName);
         Object protoObject = fillProtoClassData(protoClassName, payload);
         String responseId = getResponseId(protoObject);
-
+        Log.i("SOC", "HelperUnpackMessage responseId : " + responseId + "  ||  actionId : " + actionId);
 
         if (responseId == null) { //TODO [Saeed Mozaffari] [2016-08-10 12:15 PM] - set if , else for this block if actionId == 0
-            instanceResponseClass(actionId, protoObject, "handler");
+            if (actionId == 0) {
+
+            } else {
+                instanceResponseClass(actionId, protoObject, "handler");
+            }
         } else {
             if (!G.requestQueueMap.containsKey(responseId)) {
                 Log.i("SOC", "HelperUnpackMessage responseId is not exist in requestQueueMap ");
