@@ -13,6 +13,9 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_SMS" />
 
+    <!--required for drawer contacts fragment-->
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <application
         android:name=".G"
         android:allowBackup="true"

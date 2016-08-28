@@ -85,6 +85,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
     private void initDrawerMenu() {
 
         mLeftDrawerLayout = (LeftDrawerLayout) findViewById(R.id.id_drawerlayout);
+        mLeftDrawerLayout.setActivityWidth(Utils.getWindowWidth(this));
 
         mFlowingView = (FlowingView) findViewById(R.id.sv);
 
@@ -96,6 +97,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         }
         mMenuFragment.setOpenDrawerListener(this);
         mMenuFragment.setActionClickListener(this);
+        mMenuFragment.setMaxActivityWidth(Utils.getWindowWidth(this));
         mLeftDrawerLayout.setFluidView(mFlowingView);
         mLeftDrawerLayout.setMenuFragment(mMenuFragment);
 
@@ -130,7 +132,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         btnMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mLeftDrawerLayout.toggle();
+                mLeftDrawerLayout.toggle(Utils.dpToPx(getApplicationContext(),R.dimen.dp280));
             }
         });
 
@@ -393,20 +395,26 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
     }
 
     @Override
-    public void onOpenDrawer() {
-
+    public void onOpenDrawer(boolean fullWidth) {
+        if (fullWidth){
+            // replace new menu fragment
+            FragmentManager fm = getSupportFragmentManager();
+            ContactsFragmentDrawerMenu sc;
+            fm.beginTransaction().replace(R.id.id_container_menu, sc = new ContactsFragmentDrawerMenu()).commit();
+            sc.setOpenDrawerListener(ActivityMain.this);
+            sc.setMaxActivityWidth(Utils.getWindowWidth(ActivityMain.this));
+            mLeftDrawerLayout.setMenuFragment(sc);
+        }
     }
 
     @Override
     public void onCloseDrawer() {
-        RelativeLayout parent = (RelativeLayout) mFlowingView.getParent();
-        parent.getLayoutParams().width = Utils.dpToPx(getApplicationContext(), R.dimen.dp240);
-        parent.requestLayout();
         mFlowingView.downing();
         FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction().replace(R.id.id_container_menu, mMenuFragment = new FragmentDrawerMenu()).commit();
         mMenuFragment.setActionClickListener(this);
         mMenuFragment.setOpenDrawerListener(this);
+        mMenuFragment.setMaxActivityWidth(Utils.getWindowWidth(this));
         mLeftDrawerLayout.setMenuFragment(mMenuFragment);
     }
 
@@ -429,6 +437,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                 ContactsFragmentDrawerMenu sc;
                 fm.beginTransaction().replace(R.id.id_container_menu, sc = new ContactsFragmentDrawerMenu()).commit();
                 sc.setOpenDrawerListener(ActivityMain.this);
+                sc.setMaxActivityWidth(Utils.getWindowWidth(ActivityMain.this));
                 mLeftDrawerLayout.setMenuFragment(sc);
             }
 
