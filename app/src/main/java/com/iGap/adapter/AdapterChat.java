@@ -4,12 +4,12 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.module.CircleImageView;
+import com.iGap.module.CustomRoundCornerImageView;
 import com.iGap.module.GifMovieView;
 import com.iGap.module.MyType;
 import com.iGap.module.OnComplete;
@@ -441,7 +442,36 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private void configureViewHolderImage(final viewHolderImage holder, final int position) {
         holder.imvPicture.setImageResource(Integer.parseInt(list.get(position).filePath));
 
-        Log.e("ddd", holder.imvPicture.getWidth() + "  " + holder.imvPicture.getHeight() + "  " + holder.imvPicture.getLayoutParams().width);
+        if (chatType == MyType.ChatType.channel) {
+            ViewTreeObserver vto = holder.imvPicture.getViewTreeObserver();
+            vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                public boolean onPreDraw() {
+                    holder.imvPicture.getViewTreeObserver().removeOnPreDrawListener(this);
+
+                    int imageWith = holder.imvPicture.getWidth();
+                    int imageHeight = holder.imvPicture.getHeight();
+
+                    int layoutWith = ((View) holder.imvPicture.getParent().getParent()).getWidth();
+                    int layoutHeight = ((View) holder.imvPicture.getParent().getParent()).getHeight();
+
+                    if (imageWith == layoutWith) {
+                        int radiousTop = 0;
+                        int radiousBottom = 0;
+                        CustomRoundCornerImageView view = (CustomRoundCornerImageView) holder.imvPicture;
+                        radiousTop = (int) context.getResources().getDimension(R.dimen.dp8);
+                        if (imageHeight == layoutHeight)
+                            radiousBottom = radiousTop;
+
+                        if (radiousTop > 0 || radiousBottom > 0)
+                            view.setCornerRadiiDP(radiousTop, 0, radiousBottom, 0);
+
+                    }
+
+                    return true;
+                }
+            });
+        }
+
     }
 
     private void configureViewHolderGif(final viewHolderGif holder, final int position) {
