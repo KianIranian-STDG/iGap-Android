@@ -3,6 +3,9 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
+    <!--emoji popup window dimens-->
+    <dimen name="emojiPopupIconSize">24sp</dimen>
+    <dimen name="keyboard_height">250dp</dimen>
 
     <dimen name="sp8">8sp</dimen>
     <dimen name="sp10">10sp</dimen>

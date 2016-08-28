@@ -142,27 +142,25 @@
             android:background="@android:color/white"
             android:orientation="horizontal">
 
-            <Button
+            <ImageButton
                 android:id="@+id/chl_btn_smile"
                 android:layout_width="@dimen/dp40"
                 android:layout_height="match_parent"
                 android:background="@null"
                 android:gravity="center"
-                android:text="@string/fa_smile_o"
-                android:textColor="@color/gray"
+                android:src="@drawable/ic_emoticon"
                 android:textSize="@dimen/sp26" />
 
-            <EditText
+            <com.iGap.module.EmojiEditText
                 android:id="@+id/chl_edt_chat"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_height="match_parent"
                 android:background="@null"
+                android:layout_weight="1"
                 android:hint="      Type Message"
-
-                android:paddingRight="@dimen/dp4"
-
-                android:textColorHint="@color/gray" />
+                android:textColorHint="@color/gray"
+                android:maxLines="4"
+                android:paddingRight="@dimen/dp4" />
 
             <View
                 android:layout_width="1dp"
