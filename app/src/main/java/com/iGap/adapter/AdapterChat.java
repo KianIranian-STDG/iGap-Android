@@ -458,7 +458,7 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         int radiousTop = 0;
                         int radiousBottom = 0;
                         CustomRoundCornerImageView view = (CustomRoundCornerImageView) holder.imvPicture;
-                        radiousTop = (int) context.getResources().getDimension(R.dimen.dp8);
+                        radiousTop = (int) context.getResources().getDimension(R.dimen.dp4);
                         if (imageHeight == layoutHeight)
                             radiousBottom = radiousTop;
 

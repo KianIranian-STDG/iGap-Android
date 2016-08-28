@@ -201,10 +201,11 @@ public class CustomRoundCornerImageView extends ImageView {
     /**
      * Set radii for each corner.
      *
-     * @param leftTop     The desired radius for left-top corner in dip.
-     * @param rightTop    The desired desired radius for right-top corner in dip.
-     * @param leftBottom  The desired radius for left-bottom corner in dip.
+     * @param leftTop The desired radius for left-top corner in dip.
+     * @param rightTop The desired desired radius for right-top corner in dip.
+     * @param leftBottom The desired radius for left-bottom corner in dip.
      * @param rightBottom The desired radius for right-bottom corner in dip.
+     *
      */
     public void setCornerRadiiDP(float leftTop, float rightTop, float leftBottom, float rightBottom) {
         final float density = getResources().getDisplayMetrics().density;
@@ -225,7 +226,8 @@ public class CustomRoundCornerImageView extends ImageView {
     /**
      * Set border width.
      *
-     * @param width The desired width in dip.
+     * @param width
+     *            The desired width in dip.
      */
     public void setBorderWidthDP(float width) {
         float scaledWidth = getResources().getDisplayMetrics().density * width;
@@ -607,8 +609,10 @@ public class CustomRoundCornerImageView extends ImageView {
         /**
          * Controls border color of this ImageView.
          *
-         * @param colors The desired border color. If it's null, no border will be
-         *               drawn.
+         * @param colors
+         *            The desired border color. If it's null, no border will be
+         *            drawn.
+         *
          */
         public void setBorderColor(ColorStateList colors) {
             if (colors == null) {
