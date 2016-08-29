@@ -48,11 +48,11 @@ public class HelperUnpackMessage {
         String responseId = getResponseId(protoObject);
         Log.i("SOC", "HelperUnpackMessage responseId : " + responseId + "  ||  actionId : " + actionId);
 
-        if (responseId == null) { //TODO [Saeed Mozaffari] [2016-08-10 12:15 PM] - set if , else for this block if actionId == 0
+        if (responseId == null) {
             if (actionId == 0) {
-
+                instanceResponseClass(actionId, protoObject, null, "error");
             } else {
-                instanceResponseClass(actionId, protoObject, "handler");
+                instanceResponseClass(actionId, protoObject, null, "handler");
             }
         } else {
             if (!G.requestQueueMap.containsKey(responseId)) {
@@ -88,14 +88,15 @@ public class HelperUnpackMessage {
                                 currentProto = errorResponse;
                             }
                             G.requestQueueMap.remove(currentResponseId);
-                            instanceResponseClass(currentRequestWrapper.getActionId() + Config.LOOKUP_MAP_RESPONSE_OFFSET, currentProto, "error");
+                            instanceResponseClass(currentRequestWrapper.getActionId() + Config.LOOKUP_MAP_RESPONSE_OFFSET, currentProto, currentRequestWrapper.identity, "error");
                         }
 
 
                     } else {
                         RequestWrapper requestWrapper = G.requestQueueMap.get(responseId);
                         G.requestQueueMap.remove(responseId);
-                        instanceResponseClass(requestWrapper.getActionId() + Config.LOOKUP_MAP_RESPONSE_OFFSET, protoObject, "error");
+
+                        instanceResponseClass(requestWrapper.getActionId() + Config.LOOKUP_MAP_RESPONSE_OFFSET, protoObject, requestWrapper.identity, "error");
                     }
 
                 } else {
@@ -105,7 +106,7 @@ public class HelperUnpackMessage {
                         String indexString = responseId.split("\\.")[1];
                         int index = Integer.parseInt(indexString);
 
-                        Object responseClass = instanceResponseClass(actionId, protoObject, null);
+                        Object responseClass = instanceResponseClass(actionId, protoObject, null, null);
 
                         ArrayList<Object> objectValues = G.requestQueueRelationMap.get(randomId);
                         objectValues.set(index, responseClass);
@@ -129,17 +130,19 @@ public class HelperUnpackMessage {
 
                                 Field fieldActionId = object.getClass().getDeclaredField("actionId");
                                 Field fieldMessage = object.getClass().getDeclaredField("message");
+                                Field fieldIdentity = object.getClass().getDeclaredField("identity");
                                 int currentActionId = fieldActionId.getInt(object);
                                 Object currentMessage = fieldMessage.get(object);
+                                String currentIdentity = fieldIdentity.get(object).toString();
 
-                                instanceResponseClass(currentActionId, currentMessage, "handler");
+                                instanceResponseClass(currentActionId, currentMessage, currentIdentity, "handler");
                             }
                         }
 
                     } else {
+                        RequestWrapper requestWrapper = G.requestQueueMap.get(responseId);
                         G.requestQueueMap.remove(responseId);
-                        instanceResponseClass(actionId, protoObject, "handler");
-
+                        instanceResponseClass(actionId, protoObject, requestWrapper.identity, "handler");
                     }
 
                 }
@@ -271,7 +274,7 @@ public class HelperUnpackMessage {
         return object3;
     }
 
-    public static synchronized Object instanceResponseClass(int actionId, Object protoObject, String optionalMethod) {
+    public static synchronized Object instanceResponseClass(int actionId, Object protoObject, String identity, String optionalMethod) {
         Log.i("SOC", "HelperUnpackMessage 5 instanceResponseClass");
         Object object = null;
         try {
@@ -279,9 +282,9 @@ public class HelperUnpackMessage {
             String responseClassName = HelperClassNamePreparation.preparationResponseClassName(className);
             Log.i("SOC", "HelperUnpackMessage 5 responseClassName : " + responseClassName);
             Class<?> responseClass = Class.forName(responseClassName);
-            Constructor<?> constructor = responseClass.getDeclaredConstructor(int.class, Object.class);
+            Constructor<?> constructor = responseClass.getDeclaredConstructor(int.class, Object.class, String.class);
             constructor.setAccessible(true);
-            object = constructor.newInstance(actionId, protoObject);
+            object = constructor.newInstance(actionId, protoObject, identity);
             if (optionalMethod != null) {
                 responseClass.getMethod(optionalMethod).invoke(object);
             }

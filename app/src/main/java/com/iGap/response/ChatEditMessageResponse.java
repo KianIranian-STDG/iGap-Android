@@ -4,12 +4,14 @@ public class ChatEditMessageResponse extends MessageHandler {
 
     public int actionId;
     public Object message;
+    public String identity;
 
-    public ChatEditMessageResponse(int actionId, Object protoClass) {
-        super(actionId, protoClass);
+    public ChatEditMessageResponse(int actionId, Object protoClass, String identity) {
+        super(actionId, protoClass, identity);
 
         this.message = protoClass;
         this.actionId = actionId;
+        this.identity = identity;
     }
 
 

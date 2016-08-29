@@ -1,8 +1,6 @@
 package com.iGap.helper;
 
 import android.util.Base64;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.iGap.G;
 
@@ -26,15 +24,9 @@ import javax.crypto.spec.SecretKeySpec;
  */
 public class HelperString {
 
-    private HelperString(String value) {
-        Log.i("XXX", value);
-        Toast.makeText(G.context, value, Toast.LENGTH_SHORT).show();
-    }
-
-
     /**
      * generate random id contain 0-9 , a-z , A-Z
-     * <p>
+     * <p/>
      * return string with 10 character
      */
 
