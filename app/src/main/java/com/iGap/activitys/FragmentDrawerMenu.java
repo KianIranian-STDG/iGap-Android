@@ -1,6 +1,7 @@
 package com.iGap.activitys;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -87,7 +88,8 @@ public class FragmentDrawerMenu extends MenuFragment {
         btnSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("ddd", "setting");
+                Intent intent = new Intent(G.context, ActivitySetting.class);
+                startActivity(intent);
             }
         });
 

@@ -27,7 +27,6 @@ import com.iGap.realm.RealmUserInfo;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
-import io.realm.RealmResults;
 
 public class ActivitySetting extends ActivityEnhanced {
 
@@ -46,7 +45,7 @@ public class ActivitySetting extends ActivityEnhanced {
     private CircleImageView circleImageView;
     public static Bitmap decodeBitmapProfile = null;
 
-    private String nikname;
+    private String nickName;
     private String userName;
     private String phoneName;
 
@@ -55,21 +54,21 @@ public class ActivitySetting extends ActivityEnhanced {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
+        final TextView txtNickNameTitle = (TextView) findViewById(R.id.ac_txt_nickname_title);
+
         edtNickName = (EditText) findViewById(R.id.st_edt_nikName);
         edtUserName = (EditText) findViewById(R.id.st_edt_userName);
         edtPhoneNumber = (EditText) findViewById(R.id.st_edt_phoneNumber);
 
-        RealmResults<RealmUserInfo> items = G.realm.where(RealmUserInfo.class).findAll();
+        RealmUserInfo realmUserInfo = G.realm.where(RealmUserInfo.class).findFirst();
+        nickName = realmUserInfo.getNickName();
+        userName = realmUserInfo.getUserName();
+        phoneName = realmUserInfo.getPhoneNumber();
 
-        for (RealmUserInfo it : items) {
-
-            nikname = it.getNickName();
-            userName = it.getUserName();
-            phoneName = it.getPhoneNumber();
-
+        if (nickName != null) {
+            edtNickName.setText(nickName);
+            txtNickNameTitle.setText(nickName);
         }
-
-        if (nikname != null) edtNickName.setText(nikname);
         if (userName != null) edtUserName.setText(userName);
         if (phoneName != null) edtPhoneNumber.setText(phoneName);
 
@@ -91,8 +90,11 @@ public class ActivitySetting extends ActivityEnhanced {
                     @Override
                     public void execute(Realm realm) {
 
-                        RealmUserInfo user = G.realm.where(RealmUserInfo.class).equalTo("nickName", edtNickName.getText().toString()).findFirst();
-                        if (user != null) user.setNickName(editable.toString());
+                        if (!editable.toString().equals("")) {
+                            RealmUserInfo userInfo = G.realm.where(RealmUserInfo.class).findFirst();
+                            userInfo.setNickName(editable.toString());
+                            txtNickNameTitle.setText(nickName);
+                        }
 
                     }
                 });
@@ -120,8 +122,6 @@ public class ActivitySetting extends ActivityEnhanced {
                     @Override
                     public void execute(Realm realm) {
 
-                        RealmUserInfo user = G.realm.where(RealmUserInfo.class).equalTo("userName", edtUserName.getText().toString()).findFirst();
-                        if (user != null) user.setUserName(editable.toString());
                     }
                 });
 
@@ -147,10 +147,6 @@ public class ActivitySetting extends ActivityEnhanced {
                 G.realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-
-                        RealmUserInfo user = G.realm.where(RealmUserInfo.class).equalTo("phoneNumber", edtPhoneNumber.getText().toString()).findFirst();
-                        if (user != null) user.setPhoneNumber(editable.toString());
-
 
                     }
                 });
