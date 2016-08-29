@@ -69,6 +69,12 @@
     <color name="toolbar_title_register">#fff</color>
     <color name="structCountry">#fff</color>
 
+    <color name="st_title_s">#c4c4c4</color>
+    <color name="st_line_editText">#e1e1e1</color>
+    <color name="st_line2_item">#d7d7d7</color>
+    <color name="st_background2">#f7f7f7</color>
+
+
     <!-- FlowingDrawer -->
 
     <color name="paint_color">@color/drawerColorWhite</color>

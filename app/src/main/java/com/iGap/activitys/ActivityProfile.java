@@ -3,7 +3,7 @@ package com.iGap.activitys;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -24,6 +24,7 @@ import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestUserProfileNickName;
 
 import java.io.File;
+import com.iGap.realm.RealmUserInfo;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
@@ -39,6 +40,8 @@ public class ActivityProfile extends ActivityEnhanced {
     private Uri uriIntent;
     private String pathImageUser;
     public static boolean IsDeleteFile;
+
+    public static Bitmap decodeBitmapProfile = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,14 +122,14 @@ public class ActivityProfile extends ActivityEnhanced {
             }
         });
 
-        if (G.saveImageUserProfile != null) {
-            pathImageUser = getRealPathFromURI(G.saveImageUserProfile);
-            File ts2 = new File(pathImageUser);
-            G.decodeBitmapProfile = HelperDecodeFile.decodeFile(ts2);
+        if (G.imageFile.exists()) {
+            decodeBitmapProfile = HelperDecodeFile.decodeFile(G.imageFile);
             imgSetImage.setVisibility(View.VISIBLE);
-            imgSetImage.setImageBitmap(G.decodeBitmapProfile);
+            imgSetImage.setImageBitmap(decodeBitmapProfile);
             btnSetImage.setVisibility(View.GONE);
-
+        } else {
+            imgSetImage.setVisibility(View.GONE);
+            btnSetImage.setVisibility(View.VISIBLE);
         }
     }
 
@@ -160,7 +163,6 @@ public class ActivityProfile extends ActivityEnhanced {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                G.saveImageUserProfile = Uri.fromFile(G.imageFile);
                 startActivityForResult(intent, myResultCodeGallery);
                 dialog.dismiss();
             }
@@ -177,42 +179,16 @@ public class ActivityProfile extends ActivityEnhanced {
 
             Intent intent = new Intent(ActivityProfile.this, ActivityCrop.class);
             intent.putExtra("IMAGE_CAMERA", uriIntent.toString());
+            intent.putExtra("TYPE", "camera");
+            intent.putExtra("PAGE", "profile");
             startActivity(intent);
 
         } else if (requestCode == myResultCodeGallery && resultCode == RESULT_OK) {// result for gallery
             Intent intent = new Intent(ActivityProfile.this, ActivityCrop.class);
-            G.saveImageUserProfile = data.getData();
             intent.putExtra("IMAGE_CAMERA", data.getData().toString());
+            intent.putExtra("TYPE", "gallery");
+            intent.putExtra("PAGE", "profile");
             startActivity(intent);
         }
-    }
-    //======================================================================================================// save data for orientate
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-
-        if (G.saveImageUserProfile != null) {
-            pathImageUser = getRealPathFromURI(G.saveImageUserProfile);
-            File ts2 = new File(pathImageUser);
-            G.decodeBitmapProfile = HelperDecodeFile.decodeFile(ts2);
-            imgSetImage.setVisibility(View.VISIBLE);
-            imgSetImage.setImageBitmap(G.decodeBitmapProfile);
-            btnSetImage.setVisibility(View.GONE);
-        }
-    }
-
-    private String getRealPathFromURI(Uri contentURI) {
-        String result;
-        Cursor cursor = getContentResolver().query(contentURI, null, null, null, null);
-        if (cursor == null) { // Source is Dropbox or other similar local file path
-            result = contentURI.getPath();
-        } else {
-            cursor.moveToFirst();
-            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-            result = cursor.getString(idx);
-            cursor.close();
-        }
-        return result;
     }
 }

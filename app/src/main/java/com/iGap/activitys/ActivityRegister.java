@@ -99,10 +99,10 @@ public class ActivityRegister extends ActivityEnhanced {
     private IncomingSms smsReceiver;
 
     private CountDownTimer countDownTimer;
-
     public static Dialog dialogChooseCountry;
-
     private SearchView edtSearchView;
+
+    public static int positionRadioButton = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
