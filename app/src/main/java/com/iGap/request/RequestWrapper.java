@@ -1,13 +1,17 @@
 package com.iGap.request;
 
-/**
- * Created by android on 2016-08-07.
- */
 public class RequestWrapper {
 
     protected Object protoObject;
     protected int actionId;
     public long time;
+    public String identity;
+
+    public RequestWrapper(int actionId, Object protoObject, String identity) {
+        this.actionId = actionId;
+        this.protoObject = protoObject;
+        this.identity = identity;
+    }
 
     public RequestWrapper(int actionId, Object protoObject) {
         this.actionId = actionId;

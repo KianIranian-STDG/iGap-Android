@@ -17,14 +17,10 @@ import android.widget.Toast;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.interface_package.OnUserProfileNickNameResponse;
-import com.iGap.module.HelperCopyFile;
 import com.iGap.module.HelperDecodeFile;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestUserProfileNickName;
-
-import java.io.File;
-import com.iGap.realm.RealmUserInfo;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
@@ -77,7 +73,7 @@ public class ActivityProfile extends ActivityEnhanced {
             btnSetImage.setVisibility(View.VISIBLE);
         }
 
-        edtNikName = (EditText) findViewById(R.id.pu_edt_nikeName); // edit Text for NikName
+        edtNikName = (EditText) findViewById(R.id.pu_edt_nikeName); // edit Text for NikName //TODO [Saeed Mozaffari] [2016-08-30 10:12 AM] - (Saeed Mozaffari to Mr Mollareza) disable enter for edt
 
         btnLetsGo = (Button) findViewById(R.id.pu_btn_letsGo);
         btnLetsGo.setOnClickListener(new View.OnClickListener() { // button for save data and go to next page
@@ -102,8 +98,7 @@ public class ActivityProfile extends ActivityEnhanced {
                             };
                             new RequestUserProfileNickName().userProfileNickName(nickName);
 
-                            if (pathImageUser != null) {
-                                HelperCopyFile.copyFile(pathImageUser, G.imageFile.toString());
+                            if (G.imageFile.exists()) {
                                 realmUserInfo.setAvatarPath(G.imageFile.toString());
                             }
                             realmUserInfo.setNickName(nickName);
@@ -182,6 +177,7 @@ public class ActivityProfile extends ActivityEnhanced {
             intent.putExtra("TYPE", "camera");
             intent.putExtra("PAGE", "profile");
             startActivity(intent);
+            finish();
 
         } else if (requestCode == myResultCodeGallery && resultCode == RESULT_OK) {// result for gallery
             Intent intent = new Intent(ActivityProfile.this, ActivityCrop.class);
@@ -189,6 +185,7 @@ public class ActivityProfile extends ActivityEnhanced {
             intent.putExtra("TYPE", "gallery");
             intent.putExtra("PAGE", "profile");
             startActivity(intent);
+            finish();
         }
     }
 }

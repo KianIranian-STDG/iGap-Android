@@ -30,7 +30,6 @@ import com.iGap.request.RequestUserLogin;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
-import io.realm.RealmResults;
 
 public class ActivitySetting extends ActivityEnhanced {
 
@@ -49,7 +48,7 @@ public class ActivitySetting extends ActivityEnhanced {
     private CircleImageView circleImageView;
     public static Bitmap decodeBitmapProfile = null;
 
-    private String nikname;
+    private String nickName;
     private String userName;
     private String phoneName;
 
@@ -58,40 +57,21 @@ public class ActivitySetting extends ActivityEnhanced {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                userLogin();
-                Toast.makeText(G.context, "User Login", Toast.LENGTH_SHORT).show();
-            }
-        }, 3000);
-
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                RequestUserContactsEdit requestUserContactsGetList = new RequestUserContactsEdit();
-                requestUserContactsGetList.contactsEdit(0, "", "");
-                Toast.makeText(G.context, "Import Contact", Toast.LENGTH_SHORT).show();
-            }
-        }, 6000);
+        final TextView txtNickNameTitle = (TextView) findViewById(R.id.ac_txt_nickname_title);
 
         edtNickName = (EditText) findViewById(R.id.st_edt_nikName);
         edtUserName = (EditText) findViewById(R.id.st_edt_userName);
         edtPhoneNumber = (EditText) findViewById(R.id.st_edt_phoneNumber);
 
-        RealmResults<RealmUserInfo> items = G.realm.where(RealmUserInfo.class).findAll();
+        RealmUserInfo realmUserInfo = G.realm.where(RealmUserInfo.class).findFirst();
+        nickName = realmUserInfo.getNickName();
+        userName = realmUserInfo.getUserName();
+        phoneName = realmUserInfo.getPhoneNumber();
 
-        for (RealmUserInfo it : items) {
-
-            nikname = it.getNickName();
-            userName = it.getUserName();
-            phoneName = it.getPhoneNumber();
-
+        if (nickName != null) {
+            edtNickName.setText(nickName);
+            txtNickNameTitle.setText(nickName);
         }
-
-        if (nikname != null) edtNickName.setText(nikname);
         if (userName != null) edtUserName.setText(userName);
         if (phoneName != null) edtPhoneNumber.setText(phoneName);
 
@@ -113,8 +93,11 @@ public class ActivitySetting extends ActivityEnhanced {
                     @Override
                     public void execute(Realm realm) {
 
-                        RealmUserInfo user = G.realm.where(RealmUserInfo.class).equalTo("nickName", edtNickName.getText().toString()).findFirst();
-                        if (user != null) user.setNickName(editable.toString());
+                        if (!editable.toString().equals("")) {
+                            RealmUserInfo userInfo = G.realm.where(RealmUserInfo.class).findFirst();
+                            userInfo.setNickName(editable.toString());
+                            txtNickNameTitle.setText(nickName);
+                        }
 
                     }
                 });
@@ -142,8 +125,6 @@ public class ActivitySetting extends ActivityEnhanced {
                     @Override
                     public void execute(Realm realm) {
 
-                        RealmUserInfo user = G.realm.where(RealmUserInfo.class).equalTo("userName", edtUserName.getText().toString()).findFirst();
-                        if (user != null) user.setUserName(editable.toString());
                     }
                 });
 
@@ -169,10 +150,6 @@ public class ActivitySetting extends ActivityEnhanced {
                 G.realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-
-                        RealmUserInfo user = G.realm.where(RealmUserInfo.class).equalTo("phoneNumber", edtPhoneNumber.getText().toString()).findFirst();
-                        if (user != null) user.setPhoneNumber(editable.toString());
-
 
                     }
                 });
@@ -252,9 +229,18 @@ public class ActivitySetting extends ActivityEnhanced {
         });
 
         circleImageView = (CircleImageView) findViewById(R.id.st_img_circleImage);
-        if (G.imageFile != null) {
-            decodeBitmapProfile = HelperDecodeFile.decodeFile(G.imageFile);
+        if (G.imageFile.exists()) {
+            decodeBitmapProfile = HelperDecodeFile.decodeFile(G.imageFile); //TODO [Saeed Mozaffari] [2016-08-30 9:43 AM] - (Saeed Mozaffari to Mr Mollareza) 1-user photo should decode for first time and reuse again and again , 2- read and write file from iGap directory
             circleImageView.setImageBitmap(decodeBitmapProfile);
+
+            G.realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmUserInfo realmUserInfo = G.realm.where(RealmUserInfo.class).findFirst();
+                    realmUserInfo.setAvatarPath(G.imageFile.toString());
+                }
+            });
+
         } else {
             circleImageView.setImageResource(R.mipmap.b);
 
@@ -308,8 +294,8 @@ public class ActivitySetting extends ActivityEnhanced {
             intent.putExtra("IMAGE_CAMERA", uriIntent.toString());
             intent.putExtra("TYPE", "camera");
             intent.putExtra("PAGE", "setting");
-
             startActivity(intent);
+            finish();
 
         } else if (requestCode == myResultCodeGallery && resultCode == RESULT_OK) {// result for gallery
             Intent intent = new Intent(ActivitySetting.this, ActivityCrop.class);
@@ -317,6 +303,7 @@ public class ActivitySetting extends ActivityEnhanced {
             intent.putExtra("TYPE", "gallery");
             intent.putExtra("PAGE", "setting");
             startActivity(intent);
+            finish();
         }
     }
 
@@ -324,25 +311,5 @@ public class ActivitySetting extends ActivityEnhanced {
     protected void onDestroy() {
         super.onDestroy();
         G.realm.close();
-    }
-
-    private void userLogin() {
-
-        G.onUserLogin = new OnUserLogin() {
-            @Override
-            public void onLogin() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(G.context, "User Login!", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        };
-
-        RealmUserInfo userInfo = G.realm.where(RealmUserInfo.class).findFirst();
-        if (!G.userLogin && userInfo != null) { //  need login
-            new RequestUserLogin().userLogin(userInfo.getToken());
-        }
     }
 }

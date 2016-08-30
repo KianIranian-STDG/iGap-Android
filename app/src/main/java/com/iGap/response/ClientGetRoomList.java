@@ -1,12 +1,12 @@
 package com.iGap.response;
 
-public class ClientGetRoomResponse extends MessageHandler {
+public class ClientGetRoomList extends MessageHandler {
 
     public int actionId;
     public Object message;
     public String identity;
 
-    public ClientGetRoomResponse(int actionId, Object protoClass, String identity) {
+    public ClientGetRoomList(int actionId, Object protoClass, String identity) {
         super(actionId, protoClass, identity);
 
         this.message = protoClass;

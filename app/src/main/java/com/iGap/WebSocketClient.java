@@ -19,6 +19,49 @@ import java.util.Map;
 public class WebSocketClient {
 
     private static WebSocket webSocketClient;
+    private static WebSocket webSocketFileUpload;
+
+    private static WebSocket createFileUploadConnection(String fileSocketAddress) {
+        WebSocket webSocketFile = null;
+
+        try {
+            webSocketFile = new WebSocketFactory().createSocket(fileSocketAddress);
+            webSocketFile.addListener(new WebSocketAdapter() {
+
+                @Override
+                public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
+                    super.onConnected(websocket, headers);
+                }
+
+                @Override
+                public void onConnectError(WebSocket websocket, WebSocketException exception) throws Exception {
+                    super.onConnectError(websocket, exception);
+                }
+
+                @Override
+                public void onBinaryMessage(WebSocket websocket, byte[] binary) throws Exception {
+                    super.onBinaryMessage(websocket, binary);
+                }
+
+                @Override
+                public void onError(WebSocket websocket, WebSocketException cause) throws Exception {
+                    super.onError(websocket, cause);
+                }
+
+                @Override
+                public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
+                    super.onDisconnected(websocket, serverCloseFrame, clientCloseFrame, closedByServer);
+
+                    webSocketFileUpload = null;
+                }
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 
     private static WebSocket createSocketConnection() {
         WebSocket websocketFactory = null;
@@ -133,6 +176,18 @@ public class WebSocketClient {
             }
         }
         return webSocketClient;
+    }
+
+    public static WebSocket getFileUploadSocketInstance(String fileSocketAddress) {
+
+        if (webSocketFileUpload == null) {
+            webSocketFileUpload = createFileUploadConnection(fileSocketAddress);
+        } else {
+            if (!webSocketFileUpload.isOpen()) {
+                webSocketFileUpload = createFileUploadConnection(fileSocketAddress);
+            }
+        }
+        return webSocketFileUpload;
     }
 
 

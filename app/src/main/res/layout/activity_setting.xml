@@ -46,7 +46,8 @@
                     android:text="Amir Molareza"
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/sp16"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:id="@+id/ac_txt_nickname_title" />
 
             </LinearLayout>
 
