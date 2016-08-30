@@ -7,10 +7,6 @@ import com.iGap.G;
 
 import io.realm.Realm;
 
-/**
- * Created by android on 8/1/2016.
- */
-
 
 public class ActivityEnhanced extends AppCompatActivity {
 
@@ -25,6 +21,10 @@ public class ActivityEnhanced extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         G.realm = Realm.getInstance(G.realmConfig);
         super.onCreate(savedInstanceState);
+
+//        UserContactsImportResponse
+
+
     }
 
     @Override

@@ -18,7 +18,6 @@ public class RequestUserRegister extends ActivityEnhanced {
         builder.setPhoneNumber(1123456789L);
         ProtoUserRegister.UserRegister userRegister = builder.build();
 
-
         String currentClassName = this.getClass().getSimpleName();
         int actionId = HelperString.getActionId(currentClassName);
 

@@ -18,7 +18,6 @@ public class UserVerifyResponse extends MessageHandler {
         this.actionId = actionId;
     }
 
-
     @Override
     public void handler() {
         Log.i("SOC_RES", "UserRegisterResponse handler");

@@ -14,7 +14,7 @@ import java.util.ArrayList;
 /**
  *
  */
-public class CountryNamesAdapter extends RecyclerView.Adapter<CountryViewHolder> {
+public class ContactNamesAdapter extends RecyclerView.Adapter<CountryViewHolder> {
 
     private static final int VIEW_TYPE_HEADER = 0x01;
 
@@ -24,7 +24,7 @@ public class CountryNamesAdapter extends RecyclerView.Adapter<CountryViewHolder>
 
     private final Context mContext;
 
-    public CountryNamesAdapter(Context context, ArrayList<LineItem> _mItems) {
+    public ContactNamesAdapter(Context context, ArrayList<LineItem> _mItems) {
         mContext = context;
        this.mItems = _mItems;
 

@@ -10,10 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import com.iGap.G;
 import com.iGap.R;
-import com.iGap.adapter.CountryNamesAdapter;
+import com.iGap.adapter.ContactNamesAdapter;
 import com.iGap.libs.flowingdrawer.MenuFragment;
+import com.iGap.module.ListOfContact;
 
 import java.util.ArrayList;
 
@@ -22,9 +22,9 @@ public class ContactsFragmentDrawerMenu extends MenuFragment {
 
     private ViewHolder mViews;
     EditText editsearch;
-    private CountryNamesAdapter mAdapter;
+    private ContactNamesAdapter mAdapter;
 
-    private ArrayList<CountryNamesAdapter.LineItem> mItems = new ArrayList<>();
+    private ArrayList<ContactNamesAdapter.LineItem> mItems = new ArrayList<>();
 
 
     @Override
@@ -41,10 +41,9 @@ public class ContactsFragmentDrawerMenu extends MenuFragment {
             @Override
             public void afterTextChanged(Editable arg0) {
                 mItems.clear();
-                mItems = G.Retrive(editsearch.getText().toString().trim());
-                mAdapter = new CountryNamesAdapter(getActivity(),mItems);
+                mItems = ListOfContact.Retrive(editsearch.getText().toString().trim());
+                mAdapter = new ContactNamesAdapter(getActivity(), mItems);
                 mViews.setAdapter(mAdapter);
-
             }
 
             @Override
@@ -58,8 +57,7 @@ public class ContactsFragmentDrawerMenu extends MenuFragment {
             }
         });
 
-
-        mItems = G.Retrive("");
+        mItems = ListOfContact.Retrive("");
 
         return setupReveal(rootView, false);
     }
@@ -70,7 +68,7 @@ public class ContactsFragmentDrawerMenu extends MenuFragment {
 
         mViews = new ViewHolder(view);
         mViews.initViews(new LinearLayoutManager(getActivity()));
-        mAdapter = new CountryNamesAdapter(getActivity(),mItems);
+        mAdapter = new ContactNamesAdapter(getActivity(), mItems);
         mViews.setAdapter(mAdapter);
     }
 
@@ -88,12 +86,7 @@ public class ContactsFragmentDrawerMenu extends MenuFragment {
         public void initViews(LinearLayoutManager lm) {
             mRecyclerView.setLayoutManager(lm);
 
-
-
-
         }
-
-
 
         public void setAdapter(RecyclerView.Adapter<?> adapter) {
             try {

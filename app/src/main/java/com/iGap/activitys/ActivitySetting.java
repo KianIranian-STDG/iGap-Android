@@ -22,8 +22,11 @@ import android.widget.Toast;
 
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.interface_package.OnUserLogin;
 import com.iGap.module.HelperDecodeFile;
 import com.iGap.realm.RealmUserInfo;
+import com.iGap.request.RequestUserContactsEdit;
+import com.iGap.request.RequestUserLogin;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
@@ -54,6 +57,25 @@ public class ActivitySetting extends ActivityEnhanced {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
+
+
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                userLogin();
+                Toast.makeText(G.context, "User Login", Toast.LENGTH_SHORT).show();
+            }
+        }, 3000);
+
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                RequestUserContactsEdit requestUserContactsGetList = new RequestUserContactsEdit();
+                requestUserContactsGetList.contactsEdit(0, "", "");
+                Toast.makeText(G.context, "Import Contact", Toast.LENGTH_SHORT).show();
+            }
+        }, 6000);
 
         edtNickName = (EditText) findViewById(R.id.st_edt_nikName);
         edtUserName = (EditText) findViewById(R.id.st_edt_userName);
@@ -302,5 +324,25 @@ public class ActivitySetting extends ActivityEnhanced {
     protected void onDestroy() {
         super.onDestroy();
         G.realm.close();
+    }
+
+    private void userLogin() {
+
+        G.onUserLogin = new OnUserLogin() {
+            @Override
+            public void onLogin() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(G.context, "User Login!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        };
+
+        RealmUserInfo userInfo = G.realm.where(RealmUserInfo.class).findFirst();
+        if (!G.userLogin && userInfo != null) { //  need login
+            new RequestUserLogin().userLogin(userInfo.getToken());
+        }
     }
 }

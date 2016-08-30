@@ -5,7 +5,7 @@
 
 package com.iGap.interface_package;
 
-public interface OnContactImport {
+public interface OnUserContactImport {
 
     void onContactImport();
 

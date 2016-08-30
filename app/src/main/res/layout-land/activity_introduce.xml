@@ -6,6 +6,11 @@
     android:orientation="vertical">
 
 
+    <android.support.v4.view.ViewPager
+        android:id="@+id/int_viewPager_introduce"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <android.support.percent.PercentRelativeLayout
         android:id="@+id/int_layout_0"
         android:layout_width="match_parent"
@@ -360,9 +365,5 @@
             android:foregroundGravity="top" />
     </RelativeLayout>
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/int_viewPager_introduce"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 
 </android.support.percent.PercentRelativeLayout>
