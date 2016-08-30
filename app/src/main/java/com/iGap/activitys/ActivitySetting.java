@@ -226,9 +226,18 @@ public class ActivitySetting extends ActivityEnhanced {
         });
 
         circleImageView = (CircleImageView) findViewById(R.id.st_img_circleImage);
-        if (G.imageFile != null) {
-            decodeBitmapProfile = HelperDecodeFile.decodeFile(G.imageFile);
+        if (G.imageFile.exists()) {
+            decodeBitmapProfile = HelperDecodeFile.decodeFile(G.imageFile); //TODO [Saeed Mozaffari] [2016-08-30 9:43 AM] - (Saeed Mozaffari to Mr Mollareza) 1-user photo should decode for first time and reuse again and again , 2- read and write file from iGap directory
             circleImageView.setImageBitmap(decodeBitmapProfile);
+
+            G.realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmUserInfo realmUserInfo = G.realm.where(RealmUserInfo.class).findFirst();
+                    realmUserInfo.setAvatarPath(G.imageFile.toString());
+                }
+            });
+
         } else {
             circleImageView.setImageResource(R.mipmap.b);
 
@@ -282,8 +291,8 @@ public class ActivitySetting extends ActivityEnhanced {
             intent.putExtra("IMAGE_CAMERA", uriIntent.toString());
             intent.putExtra("TYPE", "camera");
             intent.putExtra("PAGE", "setting");
-
             startActivity(intent);
+            finish();
 
         } else if (requestCode == myResultCodeGallery && resultCode == RESULT_OK) {// result for gallery
             Intent intent = new Intent(ActivitySetting.this, ActivityCrop.class);
@@ -291,6 +300,7 @@ public class ActivitySetting extends ActivityEnhanced {
             intent.putExtra("TYPE", "gallery");
             intent.putExtra("PAGE", "setting");
             startActivity(intent);
+            finish();
         }
     }
 

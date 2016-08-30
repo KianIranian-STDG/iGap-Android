@@ -78,7 +78,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
             public void run() {
                 RealmUserInfo userInfo = G.realm.where(RealmUserInfo.class).findFirst();
                 if (!G.userLogin && userInfo != null) { //  need login //TODO [Saeed Mozaffari] [2016-08-29 11:51 AM] - check for securing
-                    Log.i("SOC", "Login Start token : " + userInfo.getToken());
+                    Log.i("SOC", "Login Start userInfo : " + userInfo);
                     new RequestUserLogin().userLogin(userInfo.getToken());
                 }
             }
