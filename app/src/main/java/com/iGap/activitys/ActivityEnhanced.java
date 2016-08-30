@@ -22,9 +22,6 @@ public class ActivityEnhanced extends AppCompatActivity {
         G.realm = Realm.getInstance(G.realmConfig);
         super.onCreate(savedInstanceState);
 
-//        UserContactsImportResponse
-
-
     }
 
     @Override

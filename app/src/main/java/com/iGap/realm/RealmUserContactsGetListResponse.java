@@ -16,8 +16,12 @@ public class RealmUserContactsGetListResponse extends RealmObject {
     private String initials;
     private String color;
     private long last_seen;
-//    private Enum status ;
+    private String status;
 
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public long getId() {
         return id;
@@ -91,11 +95,8 @@ public class RealmUserContactsGetListResponse extends RealmObject {
         this.last_seen = last_seen;
     }
 
-//    public Enum getStatus() {
-//        return status;
-//    }
-//
-//    public void setStatus(Enum status) {
-//        this.status = status;
-//    }
+    public String getStatus() {
+        return status;
+    }
+
 }

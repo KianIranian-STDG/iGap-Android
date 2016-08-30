@@ -5,6 +5,7 @@ import android.util.Log;
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoUserContactsImport;
+import com.iGap.request.RequestUserContactsGetList;
 
 public class UserContactsImportResponse extends MessageHandler {
 
@@ -20,23 +21,19 @@ public class UserContactsImportResponse extends MessageHandler {
         this.identity = identity;
     }
 
-
     @Override
     public void handler() {
 
-
+        Log.i("XXX", "UserContactsImportResponse handler");
         ProtoUserContactsImport.UserContactsImportResponse.Builder userContactResponse = (ProtoUserContactsImport.UserContactsImportResponse.Builder) message;
-
+        new RequestUserContactsGetList().contactImport("");
         G.onContactImport.onContactImport();
-
-
-        Log.i("XXX", "handler");
-
 
     }
 
     @Override
     public void timeOut() {
+        Log.i("XXX", "UserContactsImportResponse timeOut");
     }
 
     @Override
@@ -44,7 +41,6 @@ public class UserContactsImportResponse extends MessageHandler {
         ProtoError.ErrorResponse.Builder errorReponse = (ProtoError.ErrorResponse.Builder) message;
         errorReponse.getMajorCode();
         errorReponse.getMinorCode();
-
 
         Log.i("XXX", "UserContactsImportResponse errorReponse.getMajorCode() : " + errorReponse.getMajorCode());
         Log.i("XXX", "UserContactsImportResponse errorReponse.getMinorCode() : " + errorReponse.getMinorCode());

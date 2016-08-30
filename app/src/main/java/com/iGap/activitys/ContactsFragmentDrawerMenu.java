@@ -28,8 +28,7 @@ public class ContactsFragmentDrawerMenu extends MenuFragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View rootView =  inflater.inflate(R.layout.contacts_drawer_layout, container, false);
 
