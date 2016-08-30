@@ -1,5 +1,7 @@
 package com.iGap.response;
 
+import com.iGap.proto.ProtoChatGetRoom;
+
 public class ChatGetRoomResponse extends MessageHandler {
 
     public int actionId;
@@ -17,7 +19,8 @@ public class ChatGetRoomResponse extends MessageHandler {
 
     @Override
     public void handler() {
-
+        ProtoChatGetRoom.ChatGetRoomResponse.Builder chatGetRoomResponse = (ProtoChatGetRoom.ChatGetRoomResponse.Builder) message;
+        chatGetRoomResponse.getRoomId();
     }
 
     @Override

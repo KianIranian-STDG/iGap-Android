@@ -1,5 +1,7 @@
 package com.iGap.response;
 
+import com.iGap.proto.ProtoChatDeleteMessage;
+
 public class ChatDeleteMessageResponse extends MessageHandler {
 
 //    public int actionId;
@@ -17,6 +19,12 @@ public class ChatDeleteMessageResponse extends MessageHandler {
 
     @Override
     public void handler() {
+
+        ProtoChatDeleteMessage.ChatDeleteMessageResponse.Builder chatDeleteMessage = (ProtoChatDeleteMessage.ChatDeleteMessageResponse.Builder) message;
+        chatDeleteMessage.getRoomId();
+        chatDeleteMessage.getMessageId();
+        chatDeleteMessage.clearDeleteVersion();
+
     }
 
     @Override

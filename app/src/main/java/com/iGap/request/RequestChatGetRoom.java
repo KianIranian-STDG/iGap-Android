@@ -1,17 +1,15 @@
 package com.iGap.request;
 
-import com.iGap.proto.ProtoClientCondition;
+import com.iGap.proto.ProtoChatGetRoom;
 
 public class RequestChatGetRoom {
 
-    public void clientCondition() {
+    public void chatGetRoom(int peerId) {
 
-        ProtoClientCondition.ClientCondition.Room.Builder room = ProtoClientCondition.ClientCondition.Room.newBuilder();
+        ProtoChatGetRoom.ChatGetRoom.Builder chatGetRoom = ProtoChatGetRoom.ChatGetRoom.newBuilder();
+        chatGetRoom.setPeerId(peerId);
 
-        ProtoClientCondition.ClientCondition.Builder clientCondition = ProtoClientCondition.ClientCondition.newBuilder();
-
-
-        RequestWrapper requestWrapper = new RequestWrapper(600, clientCondition);
+        RequestWrapper requestWrapper = new RequestWrapper(200, chatGetRoom);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

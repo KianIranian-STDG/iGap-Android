@@ -73,10 +73,17 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
             }
         };
 
-        RealmUserInfo userInfo = G.realm.where(RealmUserInfo.class).findFirst();
-        if (!G.userLogin && userInfo != null) { //  need login
-            new RequestUserLogin().userLogin(userInfo.getToken());
-        }
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                RealmUserInfo userInfo = G.realm.where(RealmUserInfo.class).findFirst();
+                if (!G.userLogin && userInfo != null) { //  need login //TODO [Saeed Mozaffari] [2016-08-29 11:51 AM] - check for securing
+                    Log.i("SOC", "Login Start token : " + userInfo.getToken());
+                    new RequestUserLogin().userLogin(userInfo.getToken());
+                }
+            }
+        }, 2000);
+
     }
 
     /**
@@ -132,7 +139,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         btnMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mLeftDrawerLayout.toggle(Utils.dpToPx(getApplicationContext(),R.dimen.dp280));
+                mLeftDrawerLayout.toggle(Utils.dpToPx(getApplicationContext(), R.dimen.dp280));
             }
         });
 
@@ -396,7 +403,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
 
     @Override
     public void onOpenDrawer(boolean fullWidth) {
-        if (fullWidth){
+        if (fullWidth) {
             // replace new menu fragment
             FragmentManager fm = getSupportFragmentManager();
             ContactsFragmentDrawerMenu sc;
