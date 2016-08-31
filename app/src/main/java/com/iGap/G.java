@@ -23,6 +23,7 @@ import com.iGap.interface_package.OnUserProfileGenderResponse;
 import com.iGap.interface_package.OnUserProfileNickNameResponse;
 import com.iGap.interface_package.OnUserRegistration;
 import com.iGap.interface_package.OnUserVerification;
+import com.iGap.module.UploaderUtil;
 import com.iGap.realm.RealmMigrationClass;
 import com.iGap.request.RequestWrapper;
 
@@ -94,6 +95,7 @@ public class G extends Application {
 
     public static RealmConfiguration realmConfig;
     public static Realm realm;
+    public static UploaderUtil uploaderUtil = new UploaderUtil();
 
     public static OnReceiveInfoLocation onReceiveInfoLocation;
     public static OnUserRegistration onUserRegistration;
