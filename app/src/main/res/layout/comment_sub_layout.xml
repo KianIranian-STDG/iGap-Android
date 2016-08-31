@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layoutDirection="ltr"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:orientation="horizontal">
+
+
+        <com.iGap.module.CircleImageView
+            android:id="@+id/csl_img_comment_sender_picture"
+            android:layout_width="@dimen/dp48"
+            android:layout_height="@dimen/dp48"
+            android:layout_margin="@dimen/dp12"
+            android:src="@mipmap/c" />
+
+
+        <TextView
+            android:id="@+id/csl_txt_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp20"
+            android:layout_weight="1"
+            android:paddingBottom="@dimen/dp8"
+            android:text="New Text"
+            android:textSize="@dimen/sp16" />
+
+
+        <LinearLayout
+            android:layout_width="@dimen/dp80"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="bottom"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/csl_txt_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="agust 23"
+                android:textSize="@dimen/sp14" />
+
+            <TextView
+                android:id="@+id/csl_txt_clock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/dp8"
+                android:singleLine="true"
+                android:text="23:14"
+                android:textSize="@dimen/sp14" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#e1dfdf" />
+
+</LinearLayout>

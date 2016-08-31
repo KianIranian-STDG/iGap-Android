@@ -1,6 +1,7 @@
 package com.iGap.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.activitys.ActivityComment;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.CustomRoundCornerImageView;
 import com.iGap.module.GifMovieView;
@@ -406,6 +408,13 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             @Override
             public void onClick(View view) {
                 Log.e("ddd", "omment click " + position);
+
+
+                Intent intent = new Intent(context, ActivityComment.class);
+                intent.putExtra("MessageID", list.get(position).messageID);
+
+                context.startActivity(intent);
+
             }
         });
 
@@ -471,7 +480,7 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         int radiousTop = 0;
                         int radiousBottom = 0;
                         CustomRoundCornerImageView view = (CustomRoundCornerImageView) holder.imvImageVideo;
-                        radiousTop = (int) context.getResources().getDimension(R.dimen.dp8);
+                        radiousTop = (int) context.getResources().getDimension(R.dimen.dp4);
                         if (imageHeight == layoutHeight)
                             radiousBottom = radiousTop;
 
@@ -512,7 +521,7 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         int radiousTop = 0;
                         int radiousBottom = 0;
                         CustomRoundCornerImageView view = (CustomRoundCornerImageView) holder.imvPicture;
-                        radiousTop = (int) context.getResources().getDimension(R.dimen.dp8);
+                        radiousTop = (int) context.getResources().getDimension(R.dimen.dp4);
                         if (imageHeight == layoutHeight)
                             radiousBottom = radiousTop;
 

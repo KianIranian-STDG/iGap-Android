@@ -5,7 +5,7 @@
 
 package com.iGap.interface_package;
 
-public interface OnUserContactDelete {
+public interface OnUserContactdelete {
 
     void onContactDelete();
 

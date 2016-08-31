@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:id="@+id/chl_ll_attach"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp48"
+            android:background="@android:color/white"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/chl_btn_smile"
+                android:layout_width="@dimen/dp40"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:gravity="center"
+                android:src="@drawable/ic_emoticon"
+                android:textSize="@dimen/sp26" />
+
+            <com.iGap.module.EmojiEditText
+                android:id="@+id/chl_edt_chat"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:layout_weight="1"
+                android:hint="      Type Message"
+                android:textColorHint="@color/gray"
+                android:maxLines="4"
+                android:paddingRight="@dimen/dp4" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/dp4"
+                android:layout_marginTop="@dimen/dp4"
+                android:background="@color/gray" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/chl_btn_send"
+                    android:layout_width="@dimen/dp80"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:text="@string/fa_send"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/sp26"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/chl_btn_attach"
+                    android:layout_width="@dimen/dp40"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:text="@string/fa_paperclip"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/sp26" />
+
+                <Button
+                    android:id="@+id/chl_btn_mic"
+                    android:layout_width="@dimen/dp40"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:text="@string/fa_microphone"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/sp26" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>

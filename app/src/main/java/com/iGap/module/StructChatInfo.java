@@ -9,6 +9,7 @@ import java.util.ArrayList;
  */
 public class StructChatInfo {
 
+    public String messageID = "1";
     public String senderAvatar = "";  // this use for show avater in group
     public String senderName = "";
     public String senderID = "";
