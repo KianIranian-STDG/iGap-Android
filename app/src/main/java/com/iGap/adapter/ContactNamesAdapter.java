@@ -3,11 +3,13 @@ package com.iGap.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.iGap.R;
+import com.iGap.request.RequestChatGetRoom;
 
 import java.util.ArrayList;
 
@@ -26,7 +28,7 @@ public class ContactNamesAdapter extends RecyclerView.Adapter<CountryViewHolder>
 
     public ContactNamesAdapter(Context context, ArrayList<LineItem> _mItems) {
         mContext = context;
-       this.mItems = _mItems;
+        this.mItems = _mItems;
 
     }
 
@@ -48,9 +50,16 @@ public class ContactNamesAdapter extends RecyclerView.Adapter<CountryViewHolder>
         final LineItem item = mItems.get(position);
         final View itemView = holder.itemView;
 
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("XXX", "onClick item.peerId : " + item.peerId);
+                chatGetRoom(item.peerId);
+            }
+        });
 
         try {
-            holder.bindItem( item.text, item.Status);
+            holder.bindItem(item.text, item.Status);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -71,24 +80,24 @@ public class ContactNamesAdapter extends RecyclerView.Adapter<CountryViewHolder>
 
     public static class LineItem {
 
+        public long peerId;
         public int sectionManager;
-
         public int sectionFirstPosition;
-
         public boolean isHeader;
-
         public String text;
-
         public String Status;
 
-        public LineItem( String text, String status, boolean isHeader, int sectionManager,
-                int sectionFirstPosition) {
+        public LineItem(long peerId, String text, String status, boolean isHeader, int sectionManager, int sectionFirstPosition) {
+            this.peerId = peerId;
             this.isHeader = isHeader;
             this.text = text;
             this.Status = status;
             this.sectionManager = sectionManager;
             this.sectionFirstPosition = sectionFirstPosition;
-
         }
+    }
+
+    private void chatGetRoom(long peerId) {
+        new RequestChatGetRoom().chatGetRoom(peerId);
     }
 }

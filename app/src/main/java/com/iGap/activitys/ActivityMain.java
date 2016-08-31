@@ -21,6 +21,9 @@ import com.iGap.helper.HelperRealm;
 import com.iGap.interface_package.IActionClick;
 import com.iGap.interface_package.IOpenDrawer;
 import com.iGap.interface_package.OnClientGetRoomListResponse;
+import com.iGap.interface_package.OnSecuring;
+import com.iGap.interface_package.OnUserContactGetList;
+import com.iGap.interface_package.OnUserContactImport;
 import com.iGap.interface_package.OnUserLogin;
 import com.iGap.libs.floatingAddButton.ArcMenu;
 import com.iGap.libs.floatingAddButton.StateChangeListener;
@@ -36,6 +39,7 @@ import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestClientGetRoomList;
+import com.iGap.request.RequestUserContactsGetList;
 import com.iGap.request.RequestUserLogin;
 
 import java.util.ArrayList;
@@ -67,7 +71,24 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
     FlowingView mFlowingView;
     FragmentDrawerMenu mMenuFragment;
 
-    private void userLogin() {
+    public void userLogin() {
+
+        G.onSecuring = new OnSecuring() {
+            @Override
+            public void onSecure() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        RealmUserInfo userInfo = G.realm.where(RealmUserInfo.class).findFirst();
+                        Log.i("SOC", "Login Start userInfo : " + userInfo);
+                        if (!G.userLogin && userInfo != null) { //  need login //TODO [Saeed Mozaffari] [2016-08-29 11:51 AM] - check for securing
+                            Log.i("SOC", "Login Start userInfo : " + userInfo);
+                            new RequestUserLogin().userLogin(userInfo.getToken());
+                        }
+                    }
+                });
+            }
+        };
 
         G.onUserLogin = new OnUserLogin() {
             @Override
@@ -76,26 +97,41 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                     @Override
                     public void run() {
                         Toast.makeText(G.context, "User Login!", Toast.LENGTH_SHORT).show();
-                        ListOfContact.getListOfContact();
-
+                        importContact();
                         initRecycleView();
                     }
                 });
             }
         };
-
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                RealmUserInfo userInfo = G.realm.where(RealmUserInfo.class).findFirst();
-                if (!G.userLogin && userInfo != null) { //  need login //TODO [Saeed Mozaffari] [2016-08-29 11:51 AM] - check for securing
-                    Log.i("SOC", "Login Start userInfo : " + userInfo);
-                    new RequestUserLogin().userLogin(userInfo.getToken());
-                }
-            }
-        }, 5000);
-
     }
+
+    private void importContact() {
+
+        G.onContactImport = new OnUserContactImport() {
+            @Override
+            public void onContactImport() {
+                getContactListFromServer();
+            }
+        };
+        ListOfContact.getListOfContact();
+    }
+
+    private void getContactListFromServer() {
+        G.onUserContactGetList = new OnUserContactGetList() {
+            @Override
+            public void onContactGetList() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(G.context, "Get Contact List!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        };
+
+        new RequestUserContactsGetList().userContactGetList();
+    }
+
 
     /**
      * init floating menu drawer

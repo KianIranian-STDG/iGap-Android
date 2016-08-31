@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.iGap.G;
 import com.iGap.R;
@@ -40,6 +41,8 @@ import com.iGap.module.EmojiRecentsManager;
 import com.iGap.module.MyType;
 import com.iGap.module.OnComplete;
 import com.iGap.module.StructChatInfo;
+import com.iGap.proto.ProtoGlobal;
+import com.iGap.request.RequestChatSendMessage;
 
 import java.util.ArrayList;
 
@@ -77,6 +80,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     private String contactName;
     private String memberCount;
     private String lastSeen;
+    private long roomId;
 
 
     private Button btnUp;
@@ -100,10 +104,11 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             contactName = bundle.getString("ContactName");
             memberCount = bundle.getString("MemberCount");
             lastSeen = bundle.getString("LastSeen");
+            roomId = bundle.getLong("RoomId");
         }
-        if (chatType == null || contactId == null) {
-            finish();
-        }
+//        if (chatType == null || contactId == null) {
+//            finish();
+//        }
 
 
         initComponent();
@@ -220,7 +225,19 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("ddd", " btnSend ");
+                Log.e("ddd", " btnSend");
+
+                String message = edtChat.getText().toString();
+
+                if (message != null) {
+                    new RequestChatSendMessage()
+                            .newBuilder(ProtoGlobal.RoomMessageType.TEXT, roomId)
+                            .message(message)
+                            .sendMessage();
+                } else {
+                    Toast.makeText(G.context, "Please Write Your Messge!", Toast.LENGTH_LONG).show();
+                }
+
             }
         });
 
@@ -362,6 +379,18 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
             @Override
             public void afterTextChanged(Editable editable) {
+
+                if (edtChat.getText().length() > 0) {
+                    btnAttachFile.setVisibility(View.GONE);
+                    btnMic.setVisibility(View.GONE);
+                    btnSend.setVisibility(View.VISIBLE);
+                } else {
+                    btnSend.setVisibility(View.GONE);
+                    btnAttachFile.setVisibility(View.VISIBLE);
+                    btnMic.setVisibility(View.VISIBLE);
+                }
+
+
                 // android emojione doesn't support common space unicode
                 // to support space character, a new unicode will be replaced.
                 if (editable.toString().contains("\u0020")) {

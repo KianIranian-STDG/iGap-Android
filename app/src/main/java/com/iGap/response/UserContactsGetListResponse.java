@@ -36,6 +36,8 @@ public class UserContactsGetListResponse extends MessageHandler {
             @Override
             public void execute(Realm realm) {
 
+                G.realm.delete(RealmUserContactsGetListResponse.class);
+
                 for (ProtoGlobal.RegisteredUser registerUser : builder.getRegisteredUserList()) {
 
                     RealmUserContactsGetListResponse listResponse = G.realm.createObject(RealmUserContactsGetListResponse.class);
@@ -52,7 +54,7 @@ public class UserContactsGetListResponse extends MessageHandler {
             }
         });
 
-        G.onUserContactGetLis.onContactGetList();
+        G.onUserContactGetList.onContactGetList();
 
         G.realm.close();
     }

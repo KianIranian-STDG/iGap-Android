@@ -38,6 +38,7 @@ public class ConnectionSymmetricKeyResponse extends MessageHandler {
             String sm = builder.getSymmetricMethod();
             G.symmetricMethod = sm.split("-")[2];
             Log.i("SOC", "ConnectionSymmetricKeyResponse handler mode : " + G.symmetricMethod);
+            G.onSecuring.onSecure();
         }
 
     }

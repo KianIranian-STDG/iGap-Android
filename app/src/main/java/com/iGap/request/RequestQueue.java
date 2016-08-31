@@ -193,7 +193,7 @@ public class RequestQueue {
         long currentTime = System.currentTimeMillis();
         difference = (currentTime - beforeTime);
 
-        if (difference >= Config.TIME_OUT_MS) {
+        if (difference >= 100000) { // Config.TIME_OUT_MS
             return true;
         }
 

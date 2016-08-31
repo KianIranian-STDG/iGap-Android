@@ -4,7 +4,7 @@ import com.iGap.proto.ProtoUserContactsGetList;
 
 public class RequestUserContactsGetList {
 
-    public void contactImport(String s) {
+    public void userContactGetList() {
 
         ProtoUserContactsGetList.UserContactsGetList.Builder builder = ProtoUserContactsGetList.UserContactsGetList.newBuilder();
         RequestWrapper requestWrapper = new RequestWrapper(107, builder);

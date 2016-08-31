@@ -5,8 +5,8 @@
 
 package com.iGap.interface_package;
 
-public interface OnUserContactGetLis {
+public interface OnChatGetRoom {
 
-    void onContactGetList();
+    void onChatGetRoom(long roomId);
 
 }

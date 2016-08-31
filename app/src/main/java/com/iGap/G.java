@@ -9,15 +9,18 @@ import android.os.Environment;
 import android.os.Handler;
 import android.view.LayoutInflater;
 
+import com.iGap.activitys.ActivityMain;
 import com.iGap.helper.HelperFillLookUpClass;
+import com.iGap.interface_package.OnChatGetRoom;
 import com.iGap.interface_package.OnClientGetRoomListResponse;
 import com.iGap.interface_package.OnInfoCountryResponse;
 import com.iGap.interface_package.OnInfoTime;
 import com.iGap.interface_package.OnReceiveInfoLocation;
 import com.iGap.interface_package.OnReceivePageInfoTOS;
-import com.iGap.interface_package.OnUserContactGetLis;
+import com.iGap.interface_package.OnSecuring;
+import com.iGap.interface_package.OnUserContactDelete;
+import com.iGap.interface_package.OnUserContactGetList;
 import com.iGap.interface_package.OnUserContactImport;
-import com.iGap.interface_package.OnUserContactdelete;
 import com.iGap.interface_package.OnUserLogin;
 import com.iGap.interface_package.OnUserProfileEmailResponse;
 import com.iGap.interface_package.OnUserProfileGenderResponse;
@@ -109,9 +112,11 @@ public class G extends Application {
     public static OnInfoCountryResponse onInfoCountryResponse;
     public static OnInfoTime onInfoTime;
     public static OnUserContactImport onContactImport;
-    public static OnUserContactGetLis onUserContactGetLis;
-    public static OnUserContactdelete onUserContactdelete;
+    public static OnUserContactGetList onUserContactGetList;
+    public static OnUserContactDelete onUserContactdelete;
     public static OnClientGetRoomListResponse onClientGetRoomListResponse;
+    public static OnSecuring onSecuring;
+    public static OnChatGetRoom onChatGetRoom;
 
     // list of sr
     public static String[] serverPhoneNumbers = {"9372779537"};
@@ -126,7 +131,7 @@ public class G extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        new ActivityMain().userLogin();
         new File(DIR_APP).mkdirs();
         new File(DIR_IMAGES).mkdirs();
         new File(DIR_VIDEOS).mkdirs();

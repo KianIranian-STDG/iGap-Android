@@ -1,5 +1,7 @@
 package com.iGap.request;
 
+import android.util.Log;
+
 import com.iGap.module.StructListOfContact;
 import com.iGap.proto.ProtoUserContactsImport;
 
@@ -35,11 +37,9 @@ public class RequestUserContactImport {
             } else {
                 contact.setLastName("a");
             }
-            //=======================================================For Test
-//            Log.i("TAGTAGTTT", "Name : " + contact.getPhone());
-//            Log.i("TAGTAGTTT", "family : " + contact.getFirstName());
-//            Log.i("TAGTAGTTT", "Phone : " + contact.getLastName());
-            //=======================================================End Test
+            Log.i("XXX", "Name : " + contact.getFirstName());
+            Log.i("XXX", "family : " + contact.getLastName());
+            Log.i("XXX", "Phone : " + contact.getPhone());
 
             userContactsImport.addContacts(i, contact);
 

@@ -4,8 +4,6 @@ import android.util.Log;
 
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
-import com.iGap.proto.ProtoUserContactsImport;
-import com.iGap.request.RequestUserContactsGetList;
 
 public class UserContactsImportResponse extends MessageHandler {
 
@@ -25,8 +23,6 @@ public class UserContactsImportResponse extends MessageHandler {
     public void handler() {
 
         Log.i("XXX", "UserContactsImportResponse handler");
-        ProtoUserContactsImport.UserContactsImportResponse.Builder userContactResponse = (ProtoUserContactsImport.UserContactsImportResponse.Builder) message;
-        new RequestUserContactsGetList().contactImport("");
         G.onContactImport.onContactImport();
 
     }

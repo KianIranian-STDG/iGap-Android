@@ -12,6 +12,7 @@ import com.iGap.request.RequestUserContactImport;
 
 import java.util.ArrayList;
 
+import io.realm.Realm;
 import io.realm.RealmResults;
 
 /**
@@ -24,6 +25,7 @@ public class ListOfContact {
         ArrayList<ContactNamesAdapter.LineItem> mItems = new ArrayList<>();
         RealmResults<RealmUserContactsGetListResponse> items = null;
 
+        G.realm = Realm.getInstance(G.realmConfig);
         if (s.equals("")) {
             items = G.realm.where(RealmUserContactsGetListResponse.class).findAll();
         } else {
@@ -49,14 +51,15 @@ public class ListOfContact {
                     sectionFirstPosition = i + headerCount;
                     lastHeader = header.toUpperCase();
                     headerCount += 1;
-                    mItems.add(new ContactNamesAdapter.LineItem(header.toUpperCase(), "", true, sectionManager, sectionFirstPosition));
+                    mItems.add(new ContactNamesAdapter.LineItem(items.get(i).getId(), header.toUpperCase(), "", true, sectionManager, sectionFirstPosition));
                 }
-                mItems.add(new ContactNamesAdapter.LineItem(items.get(i).getDisplay_name(), "Last seen recently", false, sectionManager, sectionFirstPosition));
+                mItems.add(new ContactNamesAdapter.LineItem(items.get(i).getId(), items.get(i).getDisplay_name(), "Last seen recently", false, sectionManager, sectionFirstPosition));
 
             } catch (Exception e) {
             }
         }
 
+        G.realm.close();
         return mItems;
     }
 
@@ -72,7 +75,7 @@ public class ListOfContact {
 //            String display = nameCur.getString(nameCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME));// get family and name togater
             item.setFirst_name(nameCur.getString(nameCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME)));
             item.setLast_name(nameCur.getString(nameCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME)));
-            item.setPhone(nameCur.getString(nameCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
+            item.setPhone(nameCur.getString(nameCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NORMALIZED_NUMBER)));
 
             itemList.add(item);
         }

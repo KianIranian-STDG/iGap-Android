@@ -4,7 +4,7 @@ import com.iGap.proto.ProtoChatGetRoom;
 
 public class RequestChatGetRoom {
 
-    public void chatGetRoom(int peerId) {
+    public void chatGetRoom(long peerId) {
 
         ProtoChatGetRoom.ChatGetRoom.Builder chatGetRoom = ProtoChatGetRoom.ChatGetRoom.newBuilder();
         chatGetRoom.setPeerId(peerId);

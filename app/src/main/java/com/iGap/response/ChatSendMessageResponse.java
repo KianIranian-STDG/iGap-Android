@@ -1,5 +1,7 @@
 package com.iGap.response;
 
+import android.util.Log;
+
 import com.iGap.proto.ProtoChatSendMessage;
 
 public class ChatSendMessageResponse extends MessageHandler {
@@ -10,14 +12,18 @@ public class ChatSendMessageResponse extends MessageHandler {
 
     public ChatSendMessageResponse(int actionId, Object protoClass, String identity) {
         super(actionId, protoClass, identity);
+
+        this.actionId = actionId;
+        this.identity = identity;
+        this.message = protoClass;
     }
 
 
     @Override
     public void handler() {
         ProtoChatSendMessage.ChatSendMessageResponse.Builder chatSendMessageResponse = (ProtoChatSendMessage.ChatSendMessageResponse.Builder) message;
-        chatSendMessageResponse.getRoomId();
-        chatSendMessageResponse.getRoomMessage();
+        Log.i("MMM", "RoomId : " + chatSendMessageResponse.getRoomId());
+        Log.i("MMM", "RoomMessage : " + chatSendMessageResponse.getRoomMessage());
     }
 
     @Override
