@@ -15,9 +15,9 @@ import com.iGap.interface_package.OnInfoCountryResponse;
 import com.iGap.interface_package.OnInfoTime;
 import com.iGap.interface_package.OnReceiveInfoLocation;
 import com.iGap.interface_package.OnReceivePageInfoTOS;
-import com.iGap.interface_package.OnUserContactDelete;
 import com.iGap.interface_package.OnUserContactGetLis;
 import com.iGap.interface_package.OnUserContactImport;
+import com.iGap.interface_package.OnUserContactdelete;
 import com.iGap.interface_package.OnUserLogin;
 import com.iGap.interface_package.OnUserProfileEmailResponse;
 import com.iGap.interface_package.OnUserProfileGenderResponse;
@@ -110,7 +110,7 @@ public class G extends Application {
     public static OnInfoTime onInfoTime;
     public static OnUserContactImport onContactImport;
     public static OnUserContactGetLis onUserContactGetLis;
-    public static OnUserContactDelete onUserContactdelete;
+    public static OnUserContactdelete onUserContactdelete;
     public static OnClientGetRoomListResponse onClientGetRoomListResponse;
 
     // list of sr

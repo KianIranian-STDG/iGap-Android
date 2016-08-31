@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.iGap.R;
@@ -62,6 +63,47 @@ public class AdapterComment extends RecyclerView.Adapter<RecyclerView.ViewHolder
             txtDate.setText(list.get(position).date);
             txtClock.setText(list.get(position).time);
 
+
+            if (list.get(position).replayMessageList != null) {
+
+                int count = list.get(position).replayMessageList.size();
+                if (count > 0) {
+
+                    LinearLayout layout = (LinearLayout) itemView.findViewById(R.id.csl_ll_replay_comment);
+
+                    for (int i = 0; i < count; i++) {
+
+                        View v = LayoutInflater.from(context).inflate(R.layout.comment_sub_layout, null, false);
+
+                        StructCommentInfo infoReplay = list.get(position).replayMessageList.get(i);
+
+
+                        CircleImageView imvSenderPictureReplay = (CircleImageView) v.findViewById(R.id.csl_img_comment_sender_picture);
+                        TextView txtMessageReplay = (TextView) v.findViewById(R.id.csl_txt_message);
+                        TextView txtDateReplay = (TextView) v.findViewById(R.id.csl_txt_date);
+                        TextView txtClockReplay = (TextView) v.findViewById(R.id.csl_txt_clock);
+
+
+                        if (infoReplay.senderPicturePath.length() > 0) {
+                            imvSenderPictureReplay.setImageResource(Integer.parseInt(infoReplay.senderPicturePath));
+                        } else {
+                            imvSenderPictureReplay.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) context.getResources().getDimension(R.dimen.dp60), infoReplay.senderName, ""));
+                        }
+
+
+                        txtMessageReplay.setText(infoReplay.message);
+
+                        txtDateReplay.setText(infoReplay.date);
+                        txtClockReplay.setText(infoReplay.time);
+
+
+                        layout.addView(v);
+
+                    }
+
+
+                }
+            }
         }
 
     }

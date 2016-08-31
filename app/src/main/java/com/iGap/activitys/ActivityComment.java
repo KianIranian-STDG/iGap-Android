@@ -61,11 +61,27 @@ public class ActivityComment extends ActivityEnhanced {
         info.senderID = " ali@kjfkd.com";
         info.time = "10:25";
         info.senderPicturePath = R.mipmap.a + "";
-        list.add(info);
+        info.replayMessageList = new ArrayList<>();
+        info.replayMessageList.add(info);
+        info.replayMessageList.add(info);
+
+
+        StructCommentInfo info2 = new StructCommentInfo();
+        info2.date = "agust 24";
+        info2.message = "this is a sample comment andf lsdkfj ldkjfldkjf ldkjf ldkfj ldfkhsjkfodfjkdlf ";
+        info2.senderName = "ali";
+        info2.senderID = " ali@kjfkd.com";
+        info2.time = "10:25";
+        info2.senderPicturePath = R.mipmap.b + "";
+
+
+        list.add(info2);
+        list.add(info2);
 
         list.add(info);
-        list.add(info);
 
+        list.add(info2);
+        list.add(info2);
 
         numberOfComment = list.size();
 
