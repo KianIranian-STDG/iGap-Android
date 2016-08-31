@@ -13,14 +13,15 @@
 
         <ImageView
             android:id="@+id/cslf_imv_image_file"
-            android:src="@mipmap/c"
+            android:src="@mipmap/doc_blue"
             android:layout_width="match_parent"
+            android:padding="@dimen/dp4"
             android:layout_height="match_parent" />
 
         <ImageView
             android:id="@+id/cslf_imv_state_file"
             android:layout_width="@dimen/dp32"
-            android:src="@mipmap/play"
+            android:src="@mipmap/file_b_load_s"
             android:layout_height="@dimen/dp32"
             android:layout_gravity="center" />
     </FrameLayout>
@@ -40,7 +41,8 @@
 
             <TextView
                 android:id="@+id/cslf_txt_file_name"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:maxWidth="@dimen/dp200"
                 android:singleLine="true"

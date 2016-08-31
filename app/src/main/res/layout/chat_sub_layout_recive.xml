@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layoutDirection="ltr"
+
     android:orientation="horizontal"
     android:padding="@dimen/dp4">
 
 
     <FrameLayout
+        android:layout_marginRight="@dimen/dp20"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
@@ -18,15 +20,25 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp32">
 
+
             <LinearLayout
+
+                android:layout_width="wrap_content"
+
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <LinearLayout
                 android:id="@+id/cslr_ll_content_main"
                 android:layout_width="wrap_content"
+
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <LinearLayout
                     android:id="@+id/cslr_ll_forward"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp24"
                     android:orientation="vertical"
@@ -46,7 +58,23 @@
                         android:paddingBottom="@dimen/dp8"
                         android:textSize="@dimen/sp14" />
                 </LinearLayout>
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/cslr_txt_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dp20"
+                    android:paddingRight="@dimen/dp4"
+                    android:maxWidth="@dimen/dp300"
+                    android:text=""
+                    android:visibility="gone"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/sp16" />
+
             </LinearLayout>
+
 
             <LinearLayout
                 android:id="@+id/cslr_ll_time"
@@ -75,29 +103,12 @@
             android:id="@+id/cslr_imv_sender_picture"
             android:layout_width="@dimen/dp52"
             android:layout_height="@dimen/dp52" />
+
     </FrameLayout>
-
-    <LinearLayout
-        android:id="@+id/cslr_ll_secend"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <Button
-            android:id="@+id/cslr_btn_forward_message"
-            android:layout_width="@dimen/dp32"
-            android:layout_height="@dimen/dp24"
-            android:layout_marginBottom="@dimen/dp8"
-            android:layout_marginLeft="@dimen/dp8"
-            android:background="@mipmap/reply"
-            android:text="" />
-    </LinearLayout>
 
     <View
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="1dp"
         android:layout_weight="1" />
 
 </LinearLayout>

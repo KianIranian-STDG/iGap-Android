@@ -18,8 +18,6 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 
 import com.iGap.R;
@@ -50,9 +48,6 @@ public class ArcMenu extends FrameLayout {
     MenuSideEnum mMenuSideEnum;
     int cx, cy; //Represents the center points of the circle whose arc we are considering
     private StateChangeListener mStateChangeListener;
-
-    private Animation rotate_forward;
-    private Animation rotate_backward;
 
 
     public ArcMenu(Context context) {
@@ -97,8 +92,6 @@ public class ArcMenu extends FrameLayout {
 
         menuMargin = attr.getDimensionPixelSize(R.styleable.ArcMenu_menu_margin, resources.getDimensionPixelSize(R.dimen.dp8));
 
-        rotate_forward = AnimationUtils.loadAnimation(getContext(), R.anim.animation_forward);
-        rotate_backward = AnimationUtils.loadAnimation(getContext(), R.anim.animation_backward);
     }
 
     /**
@@ -300,7 +293,7 @@ public class ArcMenu extends FrameLayout {
                 toggleVisibilityOfAllChildViews(mIsOpened);
 
                 Log.e("ddd", "open");
-                fabMenu.startAnimation(rotate_forward);
+                fabMenu.setRotation(45);
             }
 
             @Override
@@ -360,7 +353,8 @@ public class ArcMenu extends FrameLayout {
             @Override
             public void onAnimationStart(Animator animation) {
                 Log.e("ddd", "close");
-                fabMenu.startAnimation(rotate_backward);
+
+                fabMenu.setRotation(0);
             }
 
             @Override

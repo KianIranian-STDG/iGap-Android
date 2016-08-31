@@ -12,61 +12,65 @@
         android:layout_height="1dp"
         android:layout_weight="1" />
 
-    <LinearLayout
-        android:id="@+id/cslr_ll_secend"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <Button
-            android:id="@+id/cslr_btn_forward_message"
-            android:layout_width="@dimen/dp32"
-            android:layout_height="@dimen/dp24"
-            android:layout_marginBottom="@dimen/dp8"
-            android:layout_marginRight="@dimen/dp8"
-            android:background="@mipmap/ic_ab_reply"
-            android:text="" />
-    </LinearLayout>
-
     <FrameLayout
         android:id="@+id/cslr_ll_frame"
         android:layout_width="wrap_content"
-        android:padding="@dimen/dp4"
-        android:background="@drawable/rectangle_round_white"
         android:layout_height="wrap_content"
-        android:layout_marginRight="@dimen/dp4">
+        android:layout_marginLeft="@dimen/dp20"
+        android:layout_marginRight="@dimen/dp4"
+        android:background="@drawable/rectangle_round_white"
+        android:padding="@dimen/dp4">
+
 
         <LinearLayout
-            android:id="@+id/cslr_ll_content_main"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-
             <LinearLayout
-                android:id="@+id/cslr_ll_forward"
+                android:id="@+id/cslr_ll_content_main"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone">
+                android:orientation="vertical">
 
-                <TextView
-
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/cslr_ll_forward"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Forward message"
-                    android:textSize="@dimen/sp14" />
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
-                <TextView
-                    android:id="@+id/cslr_txt_forward_from"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="@dimen/dp8"
-                    android:text=""
-                    android:textSize="@dimen/sp14" />
+                    <TextView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Forward message"
+                        android:textSize="@dimen/sp14" />
+
+                    <TextView
+                        android:id="@+id/cslr_txt_forward_from"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="@dimen/dp8"
+                        android:text=""
+                        android:textSize="@dimen/sp14" />
+                </LinearLayout>
+
+
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/cslr_txt_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dp20"
+                android:maxWidth="@dimen/dp300"
+                android:paddingRight="@dimen/dp4"
+                android:text=""
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/sp16"
+                android:visibility="gone" />
+
         </LinearLayout>
 
         <LinearLayout

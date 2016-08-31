@@ -189,7 +189,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         btnCreateNewChannel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("ddd", "crate new channel");
+                Log.e("ddd", "crate new channel_white");
             }
         });
 
@@ -249,7 +249,8 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         c.contactName = "mehdi hosiny";
         c.contactType = MyType.ChatType.groupChat;
         c.viewDistanceColor = "#ff3131";
-        c.contactTime = "10:21";
+        c.memberCount = 122 + "";
+        c.lastSeen = "10:21";
         c.lastmessage = "how are you jhjh hjh jhhhh";
         c.muteNotification = true;
         c.imageSource = "";
@@ -262,7 +263,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         c1.contactName = "Valerie";
         c1.contactType = MyType.ChatType.singleChat;
         c1.viewDistanceColor = "#5c9dff";
-        c1.contactTime = "10:21";
+        c1.lastSeen = "10:21";
         c1.lastmessage = "Valeri is typing...";
         c1.muteNotification = false;
         c1.imageSource = "";
@@ -273,9 +274,10 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         c2.unreadMessag = 823;
         c2.contactID = "user2";
         c2.contactName = "ali";
+        c2.memberCount = "12k";
         c2.contactType = MyType.ChatType.channel;
         c2.viewDistanceColor = "#f1d900";
-        c2.contactTime = "2:45";
+        c2.lastSeen = "2:45";
         c2.lastmessage = "where are you";
         c2.muteNotification = false;
         c2.imageSource = R.mipmap.d + "";
@@ -287,7 +289,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         c3.contactName = "hiwa";
         c3.contactType = MyType.ChatType.singleChat;
         c3.viewDistanceColor = "#f75cff";
-        c3.contactTime = "21:45";
+        c3.lastSeen = "21:45";
         c3.lastmessage = "iz typing how are you";
         c3.muteNotification = true;
         c3.imageSource = R.mipmap.h + "";
@@ -300,7 +302,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         c4.contactName = "has";
         c4.contactType = MyType.ChatType.groupChat;
         c4.viewDistanceColor = "#4fb559";
-        c4.contactTime = "21:30";
+        c4.lastSeen = "21:30";
         c4.lastmessage = "go to link";
         c4.muteNotification = false;
         c4.imageSource = "";
@@ -312,7 +314,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         c5.contactName = "has";
         c5.contactType = MyType.ChatType.channel;
         c5.viewDistanceColor = "#f26d7d";
-        c5.contactTime = "21:30";
+        c5.lastSeen = "21:30";
         c5.lastmessage = "go to link";
         c5.muteNotification = false;
         c5.imageSource = R.mipmap.e + "";
@@ -324,7 +326,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         c6.contactName = "hasan";
         c6.contactType = MyType.ChatType.groupChat;
         c6.viewDistanceColor = "#ff8a00";
-        c6.contactTime = "21:30";
+        c6.lastSeen = "21:30";
         c6.lastmessage = "go to link";
         c6.muteNotification = false;
         c6.imageSource = R.mipmap.c + "";
@@ -336,7 +338,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         c7.contactName = "sorosh";
         c7.contactType = MyType.ChatType.singleChat;
         c7.viewDistanceColor = "#47dfff";
-        c7.contactTime = "21:30";
+        c7.lastSeen = "21:30";
         c7.lastmessage = "go to link";
         c7.muteNotification = false;
         c7.imageSource = R.mipmap.g + "";

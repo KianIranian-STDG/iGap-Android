@@ -105,7 +105,7 @@
             android:layout_width="wrap_content"
             app:backgroundTint="@color/green"
             android:layout_height="wrap_content"
-            android:src="@mipmap/channel" />
+            android:src="@mipmap/channel_white" />
 
     </com.iGap.libs.floatingAddButton.ArcMenu>
 

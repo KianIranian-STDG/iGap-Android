@@ -41,7 +41,7 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.MyViewHo
         public TextView txtlastSeen;
         public TextView txtUnreadMessage;
 
-        public MyViewHolder(View itemView, int position) {
+        public MyViewHolder(View itemView,int position) {
             super(itemView);
 
             imvContactPicture = (CircleImageView) itemView.findViewById(R.id.cs_img_contact_picture);
@@ -104,6 +104,13 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.MyViewHo
             });
 
 
+
+
+
+
+
+
+
             String color = list.get(position).viewDistanceColor;
 
             if (list.get(position).imageSource.length() > 0) {
@@ -121,19 +128,19 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.MyViewHo
 
             txtContactIcon.setText(getStringChatIcon(list.get(position).contactType));
             if (list.get(position).contactType == MyType.ChatType.singleChat) {
-                txtContactIcon.setVisibility(View.GONE);
+               txtContactIcon.setVisibility(View.GONE);
             } else {
                 txtContactIcon.setVisibility(View.VISIBLE);
             }
 
 
-            txtContactName.setText(list.get(position).contactName);
-            txtLastMessage.setText(list.get(position).lastmessage);
+           txtContactName.setText(list.get(position).contactName);
+           txtLastMessage.setText(list.get(position).lastmessage);
             txtlastSeen.setText(list.get(position).lastSeen);
 
             int unread = list.get(position).unreadMessag;
             if (unread < 1) {
-                txtUnreadMessage.setVisibility(View.INVISIBLE);
+             txtUnreadMessage.setVisibility(View.INVISIBLE);
             } else {
                 txtUnreadMessage.setVisibility(View.VISIBLE);
 //            if(unread>99)
@@ -142,7 +149,7 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.MyViewHo
                 txtUnreadMessage.setText(unread + "");
 
                 if (list.get(position).muteNotification) {
-                    txtUnreadMessage.setBackgroundResource(R.drawable.oval_gray);
+                   txtUnreadMessage.setBackgroundResource(R.drawable.oval_gray);
                 } else {
                     txtUnreadMessage.setBackgroundResource(R.drawable.oval_green);
                 }
@@ -170,14 +177,14 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.MyViewHo
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_sub_layout, parent, false);
-        return new MyViewHolder(itemView, viewType);
+        return new MyViewHolder(itemView,viewType);
     }
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
 
-        if (list.get(position).whatChange > 0)
-            updateSomething(position, holder, list.get(position).whatChange);
+        if(list.get(position).whatChange>0)
+            updateSomething(position,holder,list.get(position).whatChange);
 
     }
 

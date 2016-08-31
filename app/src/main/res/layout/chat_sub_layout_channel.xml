@@ -21,24 +21,45 @@
             android:minHeight="@dimen/dp260">
 
             <LinearLayout
-                android:paddingTop="@dimen/dp48"
-                android:id="@+id/cslr_ll_content_main"
-                android:layout_gravity="center"
+
                 android:layout_width="match_parent"
-                android:paddingLeft="@dimen/dp20"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center|left"
                 android:orientation="vertical">
 
+                <LinearLayout
+                    android:id="@+id/cslr_ll_content_main"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/dp20">
+
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/cslr_txt_message"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/dp16"
+                    android:layout_marginBottom="@dimen/dp20"
+                    android:paddingLeft="@dimen/dp20"
+                    android:paddingRight="@dimen/dp4"
+                    android:text=""
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/sp16"
+                    android:visibility="gone" />
 
             </LinearLayout>
+
 
             <Button
                 android:id="@+id/cslch_btn_item_menu"
                 android:layout_width="@dimen/dp40"
                 android:layout_height="@dimen/dp40"
                 android:background="@null"
-                android:textColor="#b7b3b3"
                 android:text="@string/fa_ellipsis_v"
+                android:textColor="#b7b3b3"
                 android:textSize="@dimen/sp26" />
         </FrameLayout>
 
@@ -46,8 +67,8 @@
             android:id="@+id/cslch_ll_info"
             android:layout_width="@dimen/dp48"
             android:layout_height="match_parent"
-            android:minHeight="@dimen/dp260"
             android:background="@drawable/rectangle_light_gray"
+            android:minHeight="@dimen/dp260"
             android:orientation="vertical">
 
             <LinearLayout
@@ -97,11 +118,11 @@
                     android:id="@+id/cslch_txt_like"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/sp12"
                     android:gravity="center"
                     android:singleLine="true"
                     android:text="1.2k"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/sp12" />
             </LinearLayout>
 
             <LinearLayout
@@ -177,8 +198,8 @@
                     android:id="@+id/cslch_txt_seen"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:layout_marginBottom="@dimen/dp8"
+                    android:gravity="center"
                     android:text="38.4k"
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/sp12" />

@@ -66,13 +66,18 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     private TextView txt_mute;
     private ImageView imvUserPicture;
     private RecyclerView recyclerView;
-    ImageButton btnSmile;
+    private ImageButton btnSmile;
 
-    AdapterChat mAdapter;
+    private AdapterChat mAdapter;
     private MyType.ChatType chatType;
     private String contactId;
     private boolean isMute = false;
     private MyType.OwnerShip ownerShip;
+
+    private String contactName;
+    private String memberCount;
+    private String lastSeen;
+
 
     private Button btnUp;
     private Button btnDown;
@@ -84,6 +89,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_chat);
 
         Bundle bundle = getIntent().getExtras();  // get chat type and contact id and  finish activity if value equal null
         if (bundle != null) {
@@ -91,13 +97,14 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             contactId = bundle.getString("ContactID");
             isMute = bundle.getBoolean("IsMute");
             ownerShip = (MyType.OwnerShip) bundle.getSerializable("OwnerShip");
+            contactName = bundle.getString("ContactName");
+            memberCount = bundle.getString("MemberCount");
+            lastSeen = bundle.getString("LastSeen");
         }
-        if (chatType == null || contactId == null || ownerShip == null) {
+        if (chatType == null || contactId == null) {
             finish();
         }
 
-
-        setContentView(R.layout.activity_chat);
 
         initComponent();
         initAppbarSelected();
@@ -115,7 +122,21 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         btnBack.setTypeface(G.fontawesome);
 
         txtName = (TextView) findViewById(R.id.chl_txt_name);
+        txtName.setTypeface(G.arialBold);
+        if (contactName != null)
+            txtName.setText(contactName);
+
+
         txtLastSeen = (TextView) findViewById(R.id.chl_txt_last_seen);
+
+        if (chatType == MyType.ChatType.channel || chatType == MyType.ChatType.groupChat) {
+            if (memberCount != null)
+                txtLastSeen.setText(memberCount + " member");
+        } else {
+            if (lastSeen != null)
+                txtLastSeen.setText(lastSeen);
+        }
+
         txt_mute = (TextView) findViewById(R.id.chl_txt_mute);
         txt_mute.setTypeface(G.fontawesome);
 
@@ -527,6 +548,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         c.sendType = MyType.SendType.send;
         c.senderAvatar = R.mipmap.a + "";
         c.filePath = R.mipmap.a + "";
+        c.messag = "where are you  going hgf hgf hgf hgf  good good";
         c.channelLink = "@igap";
         c.seen = "122k";
         list.add(c);
@@ -569,7 +591,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         c14.messageType = MyType.MessageType.audio;
         c14.sendType = MyType.SendType.recvive;
         c14.messag = "بهترین موسیقی منتخب" +
-                "\n" + " how are you";
+                "\n" + " how are you fghg hgfh fhgf hgf hgf hgf hgf fjhg jhg jhgjhg jhgjh";
         c14.senderAvatar = R.mipmap.a + "";
         list.add(c14);
 
@@ -602,9 +624,14 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         list.add(c2);
 
         StructChatInfo c3 = new StructChatInfo();
-        c3.messageType = MyType.MessageType.message;
-        c3.messag = "where are you  going";
+        c3.messageType = MyType.MessageType.video;
+        c3.messag = "where are you  going hgf hgf hgf hgf  good good";
         c3.sendType = MyType.SendType.send;
+        c3.fileName = "good video";
+        c3.fileMime = ".mpv";
+        c3.fileState = MyType.FileState.notUpload;
+        c3.fileInfo = "3:20 (2.4 MB)";
+        c3.filePic = R.mipmap.a + "";
         list.add(c3);
 
         StructChatInfo c4 = new StructChatInfo();
@@ -613,7 +640,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         c4.messag = "the good picture for all the word";
         c4.sendType = MyType.SendType.recvive;
         c4.senderAvatar = R.mipmap.d + "";
-        c4.filePath = R.mipmap.d + "";
+        c4.filePath = R.mipmap.c + "";
         list.add(c4);
 
         StructChatInfo c5 = new StructChatInfo();
@@ -643,12 +670,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         c8.sendType = MyType.SendType.send;
         c8.filePath = R.mipmap.h + "";
         list.add(c8);
-
-
-        for (int i = 0; i < 100; i++) {
-
-            list.add(c8);
-        }
 
         return list;
     }
