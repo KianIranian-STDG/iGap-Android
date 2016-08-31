@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 
 import com.iGap.helper.HelperFillLookUpClass;
+import com.iGap.interface_package.OnClientGetRoomListResponse;
 import com.iGap.interface_package.OnInfoCountryResponse;
 import com.iGap.interface_package.OnInfoTime;
 import com.iGap.interface_package.OnReceiveInfoLocation;
@@ -110,6 +111,10 @@ public class G extends Application {
     public static OnUserContactImport onContactImport;
     public static OnUserContactGetLis onUserContactGetLis;
     public static OnUserContactDelete onUserContactdelete;
+    public static OnClientGetRoomListResponse onClientGetRoomListResponse;
+
+    // list of sr
+    public static String[] serverPhoneNumbers = {"9372779537"};
 
     public static final String DIR_SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static final String DIR_APP = DIR_SDCARD + "/iGap";

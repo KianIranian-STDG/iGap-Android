@@ -16,9 +16,11 @@ import android.widget.Toast;
 
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.adapter.AdapterContact;
+import com.iGap.adapter.AdapterChatsList;
+import com.iGap.helper.HelperRealm;
 import com.iGap.interface_package.IActionClick;
 import com.iGap.interface_package.IOpenDrawer;
+import com.iGap.interface_package.OnClientGetRoomListResponse;
 import com.iGap.interface_package.OnUserLogin;
 import com.iGap.libs.floatingAddButton.ArcMenu;
 import com.iGap.libs.floatingAddButton.StateChangeListener;
@@ -30,16 +32,22 @@ import com.iGap.module.MyType;
 import com.iGap.module.OnComplete;
 import com.iGap.module.StructContactInfo;
 import com.iGap.module.Utils;
+import com.iGap.proto.ProtoGlobal;
+import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmUserInfo;
+import com.iGap.request.RequestClientGetRoomList;
 import com.iGap.request.RequestUserLogin;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import io.realm.Realm;
 
 public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActionClick {
 
     private LeftDrawerLayout mLeftDrawerLayout;
     private RecyclerView recyclerView;
-    private AdapterContact mAdapter;
+    private AdapterChatsList mAdapter;
     private FloatingActionButton floatingActionButton;
     private ArcMenu arcMenu;
 
@@ -54,7 +62,6 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         initFloatingButtonCreateNew();
         initDrawerMenu();
         initComponent();
-        initRecycleView();
     }
 
     FlowingView mFlowingView;
@@ -70,6 +77,8 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                     public void run() {
                         Toast.makeText(G.context, "User Login!", Toast.LENGTH_SHORT).show();
                         ListOfContact.getListOfContact();
+
+                        initRecycleView();
                     }
                 });
             }
@@ -84,7 +93,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                     new RequestUserLogin().userLogin(userInfo.getToken());
                 }
             }
-        }, 2000);
+        }, 5000);
 
     }
 
@@ -196,9 +205,9 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
     }
 
     private void initRecycleView() {
-
+        ArrayList<StructContactInfo> chats = new ArrayList<>(0);
         recyclerView = (RecyclerView) findViewById(R.id.cl_recycler_view_contact);
-        mAdapter = new AdapterContact(getContactList(), ActivityMain.this, new OnComplete() {
+        mAdapter = new AdapterChatsList(chats, ActivityMain.this, new OnComplete() {
             @Override
             public void complete(boolean result, String messageOne, String MessageTow) {
                 if (messageOne.equals("closeMenuButton")) {
@@ -235,13 +244,172 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
             }
         });
 
-
+        getChatsList();
     }
 
+    /**
+     * put fetched chat to database
+     *
+     * @param room ProtoGlobal.Room
+     */
+    private void putChatToDatabase(final ProtoGlobal.Room room) {
+        G.realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.copyToRealmOrUpdate(HelperRealm.convert(room));
+            }
+        });
+    }
 
-    private ArrayList<StructContactInfo> getContactList() {
+    private void getChatsList() {
+        G.onClientGetRoomListResponse = new OnClientGetRoomListResponse() {
+            @Override
+            public void onClientGetRoomList(final List<ProtoGlobal.Room> roomList, ProtoResponse.Response response) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(ActivityMain.this, "rooms list fetched: " + Integer.toString(roomList.size()), Toast.LENGTH_LONG).show();
+                        Log.i(ActivityMain.class.getSimpleName(), "rooms list fetched: " + Integer.toString(roomList.size()));
 
-        ArrayList<StructContactInfo> list = new ArrayList<>();
+                        // creating new struct for each room and add them to adapter
+                        for (ProtoGlobal.Room room : roomList) {
+                            StructContactInfo info = new StructContactInfo();
+                            info.unreadMessag = room.getUnreadCount();
+                            info.contactID = Long.toString(room.getId());
+                            info.contactName = room.getTitle();
+                            switch (room.getType()) {
+                                case CHAT:
+                                    info.contactType = MyType.ChatType.singleChat;
+                                    info.memberCount = "1";
+                                    break;
+                                case CHANNEL:
+                                    info.contactType = MyType.ChatType.channel;
+                                    info.memberCount = room.getChannelRoom().getParticipantsCountLabel();
+                                    break;
+                                case GROUP:
+                                    info.contactType = MyType.ChatType.groupChat;
+                                    info.memberCount = room.getGroupRoom().getParticipantsCountLabel();
+                                    break;
+                            }
+                            info.viewDistanceColor = room.getColor();
+                            info.lastSeen = "lastSeen"; // FIXME
+                            info.lastmessage = "lastMessage"; // FIXME
+                            info.muteNotification = false; // FIXME
+                            info.imageSource = ""; // FIXME
+                            mAdapter.insert(info);
+
+                            putChatToDatabase(room);
+                        }
+
+                        // FIXME clear later
+                        // fake data set
+                        StructContactInfo c = new StructContactInfo();
+                        c.unreadMessag = 5256;
+                        c.contactID = "user";
+                        c.contactName = "mehdi hosiny";
+                        c.contactType = MyType.ChatType.groupChat;
+                        c.viewDistanceColor = "#ff3131";
+                        c.memberCount = 122 + "";
+                        c.lastSeen = "10:21";
+                        c.lastmessage = "how are you jhjh hjh jhhhh";
+                        c.muteNotification = true;
+                        c.imageSource = "";
+                        mAdapter.insert(c);
+
+                        StructContactInfo c1 = new StructContactInfo();
+                        c1.unreadMessag = 325515;
+                        c1.contactID = "user1";
+                        c1.contactName = "Valerie";
+                        c1.contactType = MyType.ChatType.singleChat;
+                        c1.viewDistanceColor = "#5c9dff";
+                        c1.lastSeen = "10:21";
+                        c1.lastmessage = "Valeri is typing...";
+                        c1.muteNotification = false;
+                        c1.imageSource = "";
+                        mAdapter.insert(c1);
+
+
+                        StructContactInfo c2 = new StructContactInfo();
+                        c2.unreadMessag = 823;
+                        c2.contactID = "user2";
+                        c2.contactName = "ali";
+                        c2.memberCount = "12k";
+                        c2.contactType = MyType.ChatType.channel;
+                        c2.viewDistanceColor = "#f1d900";
+                        c2.lastSeen = "2:45";
+                        c2.lastmessage = "where are you";
+                        c2.muteNotification = false;
+                        c2.imageSource = R.mipmap.d + "";
+                        mAdapter.insert(c2);
+
+                        StructContactInfo c3 = new StructContactInfo();
+                        c3.unreadMessag = 65;
+                        c3.contactID = "user3";
+                        c3.contactName = "hiwa";
+                        c3.contactType = MyType.ChatType.singleChat;
+                        c3.viewDistanceColor = "#f75cff";
+                        c3.lastSeen = "21:45";
+                        c3.lastmessage = "iz typing how are you";
+                        c3.muteNotification = true;
+                        c3.imageSource = R.mipmap.h + "";
+                        mAdapter.insert(c3);
+
+
+                        StructContactInfo c4 = new StructContactInfo();
+                        c4.unreadMessag = 0;
+                        c4.contactID = "user4";
+                        c4.contactName = "has";
+                        c4.contactType = MyType.ChatType.groupChat;
+                        c4.viewDistanceColor = "#4fb559";
+                        c4.lastSeen = "21:30";
+                        c4.lastmessage = "go to link";
+                        c4.muteNotification = false;
+                        c4.imageSource = "";
+                        mAdapter.insert(c4);
+
+                        StructContactInfo c5 = new StructContactInfo();
+                        c5.unreadMessag = 50;
+                        c5.contactID = "user5";
+                        c5.contactName = "has";
+                        c5.contactType = MyType.ChatType.channel;
+                        c5.viewDistanceColor = "#f26d7d";
+                        c5.lastSeen = "21:30";
+                        c5.lastmessage = "go to link";
+                        c5.muteNotification = false;
+                        c5.imageSource = R.mipmap.e + "";
+                        mAdapter.insert(c5);
+
+                        StructContactInfo c6 = new StructContactInfo();
+                        c6.unreadMessag = 0;
+                        c6.contactID = "user6";
+                        c6.contactName = "hasan";
+                        c6.contactType = MyType.ChatType.groupChat;
+                        c6.viewDistanceColor = "#ff8a00";
+                        c6.lastSeen = "21:30";
+                        c6.lastmessage = "go to link";
+                        c6.muteNotification = false;
+                        c6.imageSource = R.mipmap.c + "";
+                        mAdapter.insert(c6);
+
+                        StructContactInfo c7 = new StructContactInfo();
+                        c7.unreadMessag = 55;
+                        c7.contactID = "user7";
+                        c7.contactName = "sorosh";
+                        c7.contactType = MyType.ChatType.singleChat;
+                        c7.viewDistanceColor = "#47dfff";
+                        c7.lastSeen = "21:30";
+                        c7.lastmessage = "go to link";
+                        c7.muteNotification = false;
+                        c7.imageSource = R.mipmap.g + "";
+                        mAdapter.insert(c7);
+                    }
+                });
+            }
+        };
+
+        new RequestClientGetRoomList().clientGetRoomList();
+
+        /*ArrayList<StructContactInfo> list = new ArrayList<>();
 
         StructContactInfo c = new StructContactInfo();
         c.unreadMessag = 5256;
@@ -393,7 +561,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         list.add(c6);
         list.add(c7);
 
-        return list;
+        return list;*/
     }
 
     @Override

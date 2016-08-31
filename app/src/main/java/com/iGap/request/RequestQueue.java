@@ -176,7 +176,7 @@ public class RequestQueue {
             errorBuilder.build();
 
             Class<?> c = Class.forName(responseClassName);
-            Object object = c.getConstructor(int.class, Object.class).newInstance(actionId, errorBuilder);
+            Object object = c.getConstructor(int.class, Object.class, String.class).newInstance(actionId, errorBuilder, requestWrapper.identity);
             Method setTimeoutMethod = object.getClass().getMethod("timeOut");
             setTimeoutMethod.invoke(object);
 
