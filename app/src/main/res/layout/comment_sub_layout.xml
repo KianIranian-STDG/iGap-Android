@@ -5,84 +5,119 @@
     android:layoutDirection="ltr"
     android:orientation="vertical">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white"
         android:orientation="horizontal">
 
-
-        <com.iGap.module.CircleImageView
-            android:id="@+id/csl_img_comment_sender_picture"
-            android:layout_width="@dimen/dp48"
-            android:layout_height="@dimen/dp48"
-            android:layout_margin="@dimen/dp12"
-            android:src="@mipmap/c" />
-
-
-        <TextView
-            android:id="@+id/csl_txt_message"
+        <LinearLayout
+            android:id="@+id/csl_ll_comment"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp20"
             android:layout_weight="1"
-            android:paddingBottom="@dimen/dp8"
-            android:text="New Text"
-            android:textSize="@dimen/sp16" />
+            android:background="@android:color/white"
+            android:orientation="horizontal">
 
+            <View
+                android:id="@+id/csl_vertical_line_gray"
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:background="#e1dfdf" />
 
-        <LinearLayout
-            android:layout_width="@dimen/dp80"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_gravity="bottom"
-            android:orientation="vertical">
+            <com.iGap.module.CircleImageView
+                android:id="@+id/csl_img_comment_sender_picture"
+                android:layout_width="@dimen/dp48"
+                android:layout_height="@dimen/dp48"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/dp8"
+                android:src="@mipmap/c" />
+
 
             <TextView
-                android:id="@+id/csl_txt_date"
-                android:layout_width="wrap_content"
+                android:id="@+id/csl_txt_message"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:text="agust 23"
-                android:textSize="@dimen/sp14" />
-
-            <TextView
-                android:id="@+id/csl_txt_clock"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp12"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:maxLines="2"
                 android:paddingBottom="@dimen/dp8"
-                android:singleLine="true"
-                android:text="23:14"
-                android:textSize="@dimen/sp14" />
+                android:text="New Text"
+                android:textSize="@dimen/sp16" />
+
+
+            <LinearLayout
+                android:layout_width="@dimen/dp68"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/csl_txt_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="agu 23"
+                    android:textSize="@dimen/sp14" />
+
+                <TextView
+                    android:id="@+id/csl_txt_clock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="@dimen/dp8"
+                    android:singleLine="true"
+                    android:text="23:14"
+                    android:textSize="@dimen/sp14" />
+            </LinearLayout>
+
+
         </LinearLayout>
 
 
+        <LinearLayout
+            android:id="@+id/csl_ll_replay_comment"
+            android:layout_width="@dimen/dp88"
+            android:gravity="center"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:padding="@dimen/dp4"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/sp18"
+                android:textColor="@android:color/black"
+                android:text="Replay"
+                android:id="@+id/textView7" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_ab_reply"
+                android:paddingRight="@dimen/dp4"
+                android:id="@+id/imageView2" />
+        </LinearLayout>
 
     </LinearLayout>
 
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:id="@+id/csl_ll_add_replay"
         android:layout_width="match_parent"
-        android:paddingLeft="@dimen/dp40"
+        android:layout_height="wrap_content"
         android:background="@android:color/white"
-        android:layout_height="match_parent">
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/dp40"></LinearLayout>
 
-        <View
-            android:layout_width="1px"
-            android:layout_height="match_parent"
-            android:background="#e1dfdf" />
 
-        <LinearLayout
-            android:id="@+id/csl_ll_replay_comment"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"></LinearLayout>
-
-    </LinearLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="#e1dfdf" />
+
 
 </LinearLayout>

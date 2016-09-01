@@ -64,7 +64,8 @@ public class ActivityComment extends ActivityEnhanced {
         info.replayMessageList = new ArrayList<>();
         info.replayMessageList.add(info);
         info.replayMessageList.add(info);
-
+        info.replayMessageList.add(info);
+        info.replayMessageList.add(info);
 
         StructCommentInfo info2 = new StructCommentInfo();
         info2.date = "agust 24";
@@ -80,6 +81,8 @@ public class ActivityComment extends ActivityEnhanced {
 
         list.add(info);
 
+        list.add(info2);
+        list.add(info2);
         list.add(info2);
         list.add(info2);
 
@@ -112,9 +115,9 @@ public class ActivityComment extends ActivityEnhanced {
 
         TextView txtNumberOfComment = (TextView) findViewById(R.id.acs_txt_number_of_comment);
         if (numberOfComment > 0)
-            txtNumberOfComment.setText(numberOfComment + "  Comment");
+            txtNumberOfComment.setText("Comment (" + numberOfComment + ")");
         else
-            txtNumberOfComment.setText(numberOfComment + "NO Comment");
+            txtNumberOfComment.setText("NO Comment");
 
     }
 

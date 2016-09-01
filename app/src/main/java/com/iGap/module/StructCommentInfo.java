@@ -14,6 +14,9 @@ public class StructCommentInfo {
     public String date = "";
     public String time = "";
 
+    public boolean isChange = false;
+    public ArrayList<String> allChanges = new ArrayList<>();
+
     public ArrayList<StructCommentInfo> replayMessageList;
 
 

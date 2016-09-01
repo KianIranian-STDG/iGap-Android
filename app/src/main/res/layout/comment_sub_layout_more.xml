@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="@android:color/white"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp4"
+        android:textSize="@dimen/sp16"
+        android:gravity="center"
+        android:background="#dddddd"
+        android:layout_marginBottom="@dimen/dp20"
+        android:text="more ...."
+        android:id="@+id/cslmo_txt_more" />
+
+</LinearLayout>
