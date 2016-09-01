@@ -86,9 +86,9 @@ public class AdapterComment extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         visibleLayoutReplay(position, itemView);
 
                     } else if (replayCommentNumber == position) {
-                        goneLayoutReplay(position, itemView);
+                        goneLayoutReplay(position);
                     } else {
-                        goneLayoutReplay(replayCommentNumber, itemView);
+                        goneLayoutReplay(replayCommentNumber);
                         visibleLayoutReplay(position, itemView);
                     }
 
@@ -212,15 +212,13 @@ public class AdapterComment extends RecyclerView.Adapter<RecyclerView.ViewHolder
         itemView.findViewById(R.id.csl_ll_replay_comment).setVisibility(View.VISIBLE);
         itemView.findViewById(R.id.csl_ll_comment).setBackgroundColor(Color.parseColor("#999999"));
 
-
     }
 
-    private void goneLayoutReplay(int position, View itemView) {
+    private void goneLayoutReplay(int position) {
 
         list.get(position).isChange = true;
         list.get(position).allChanges.add("1");
         replayCommentNumber = -1;
-
 
         notifyItemChanged(position);
     }

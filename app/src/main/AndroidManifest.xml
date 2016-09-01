@@ -32,6 +32,11 @@
             android:name=".activitys.ActivityChat"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
+
+        <activity
+            android:name=".activitys.ActivityComment"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
+
         <activity
             android:name=".activitys.ActivityMain"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale">
