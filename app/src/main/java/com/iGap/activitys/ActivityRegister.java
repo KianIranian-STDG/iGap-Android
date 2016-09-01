@@ -745,18 +745,14 @@ public class ActivityRegister extends ActivityEnhanced {
 
     @Override
     protected void onResume() {
-
         final IntentFilter filter = new IntentFilter();
         filter.addAction("android.provider.Telephony.SMS_RECEIVED");
 
-
-        smsReceiver = new IncomingSms("9372779537", new OnComplete() {
+        smsReceiver = new IncomingSms("555", new OnComplete() {
 
             @Override
             public void onComplete(Boolean result, String message) {
-
                 code = message;
-                Toast.makeText(ActivityRegister.this, "1" + message, Toast.LENGTH_SHORT).show();
                 try {
                     if (message != null && !message.isEmpty() && !message.equals("null") && !message.equals("")) {
                         rg_txt_verify_sms.setText(message);
@@ -778,7 +774,6 @@ public class ActivityRegister extends ActivityEnhanced {
         registerReceiver(smsReceiver, filter);
         super.onResume();
     }
-
 
     @Override
     protected void onPause() {

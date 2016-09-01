@@ -32,7 +32,7 @@ public class ActivityCrop extends ActivityEnhanced {
         setContentView(R.layout.activity_crop);
 
         imgPic = (ImageView) findViewById(R.id.pu_img_imageBefore);
-        imgCrop = (ImageView) findViewById(R.id.pu_img_crop);
+
         imgAgreeImage = (ImageView) findViewById(R.id.pu_img_agreeImage);
 
         txtCancel = (TextView) findViewById(R.id.pu_txt_cancel_crop);
@@ -48,23 +48,28 @@ public class ActivityCrop extends ActivityEnhanced {
 
             imgPic.setImageURI(resultUri);
         }
+
+        imgCrop = (ImageView) findViewById(R.id.pu_img_crop);
         imgCrop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 CropImage.activity(resultUri).setGuidelines(CropImageView.Guidelines.ON)
                         .setMinCropResultSize(120, 120)
                         .setAutoZoomEnabled(false)
-                        .setInitialCropWindowPaddingRatio(.08f)
+                        .setInitialCropWindowPaddingRatio(.08f) // padding window from all
                         .setBorderCornerLength(50)
                         .setBorderCornerOffset(0)
                         .setAllowCounterRotation(true)
                         .setBorderCornerThickness(10.0f)
                         .setShowCropOverlay(true)
+                        .setScaleType(CropImageView.ScaleType.CENTER_INSIDE)
                         .setBorderCornerColor(getResources().getColor(R.color.whit_background))
                         .setBackgroundColor(getResources().getColor(R.color.ou_background_crop))
                         .start(ActivityCrop.this);
             }
         });
+
+
         imgAgreeImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

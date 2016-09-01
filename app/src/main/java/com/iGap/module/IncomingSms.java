@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
-import android.util.Log;
 
 import com.iGap.interface_package.OnComplete;
 
@@ -30,7 +29,6 @@ public class IncomingSms extends BroadcastReceiver {
     }
 
     public IncomingSms(String PhoneNumberServer, OnComplete listener) {
-
         this.PhoneNumberServer = PhoneNumberServer;
         this.listener = listener;
     }
@@ -41,12 +39,10 @@ public class IncomingSms extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         // Retrieves a map of extended data from the intent.
-        Log.i("TAG1234", "onReceivebbbbbb: ");
         final Bundle bundle = intent.getExtras();
         try {
 
             if (bundle != null) {
-
                 final Object[] pdusObj = (Object[]) bundle.get("pdus");
 
                 for (int i = 0; i < pdusObj.length; i++) {
@@ -60,6 +56,7 @@ public class IncomingSms extends BroadcastReceiver {
                     if (senderNum.contains(PhoneNumberServer)) {
                         listener.onComplete(true, message);
                         break;
+
                     }
                 }
             }

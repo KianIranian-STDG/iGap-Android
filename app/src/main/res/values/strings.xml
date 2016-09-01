@@ -171,6 +171,19 @@
     <string name="st_username">UserName:</string>
     <string name="st_nickname">Nickname:</string>
     <string name="st_phoneNumber">Phone Number:</string>
+    <string name="st_title_info">Info</string>
 
+    <!--chanel_info-->
+    <string name="chi_chanel_link">Chanel Link:</string>
+    <string name="chi_shared_Media">Shared Media:</string>
+    <string name="chi_clearChat">Clear Chat History</string>
+    <string name="chi_blockContact">Block this contact</string>
+    <string name="chi_title_setting">Settings</string>
+    <string name="chi_popup_addContact">Add to contact</string>
+    <string name="chi_popup_call">call</string>
+    <string name="chi_popup_copy">copy</string>
+    <string name="chi_popup_share">Share</string>
+    <string name="chi_popup_delete">Delete</string>
+    <string name="chi_popup_shortcut">Add Shortcut</string>
 
 </resources>

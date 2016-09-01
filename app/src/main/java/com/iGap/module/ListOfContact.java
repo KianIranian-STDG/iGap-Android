@@ -8,7 +8,6 @@ import android.util.Log;
 import com.iGap.G;
 import com.iGap.adapter.ContactNamesAdapter;
 import com.iGap.realm.RealmUserContactsGetListResponse;
-import com.iGap.request.RequestUserContactImport;
 
 import java.util.ArrayList;
 
@@ -22,10 +21,12 @@ public class ListOfContact {
 
     public static ArrayList<ContactNamesAdapter.LineItem> Retrive(String s) {
 
+
         ArrayList<ContactNamesAdapter.LineItem> mItems = new ArrayList<>();
         RealmResults<RealmUserContactsGetListResponse> items = null;
 
         G.realm = Realm.getInstance(G.realmConfig);
+
         if (s.equals("")) {
             items = G.realm.where(RealmUserContactsGetListResponse.class).findAll();
         } else {
@@ -51,15 +52,14 @@ public class ListOfContact {
                     sectionFirstPosition = i + headerCount;
                     lastHeader = header.toUpperCase();
                     headerCount += 1;
-                    mItems.add(new ContactNamesAdapter.LineItem(items.get(i).getId(), header.toUpperCase(), "", true, sectionManager, sectionFirstPosition));
+                    mItems.add(new ContactNamesAdapter.LineItem(header.toUpperCase(), "", true, sectionManager, sectionFirstPosition));
                 }
-                mItems.add(new ContactNamesAdapter.LineItem(items.get(i).getId(), items.get(i).getDisplay_name(), "Last seen recently", false, sectionManager, sectionFirstPosition));
+                mItems.add(new ContactNamesAdapter.LineItem(items.get(i).getDisplay_name(), "Last seen recently", false, sectionManager, sectionFirstPosition));
 
             } catch (Exception e) {
             }
         }
 
-        G.realm.close();
         return mItems;
     }
 
@@ -68,21 +68,34 @@ public class ListOfContact {
         final ArrayList<StructListOfContact> itemList = new ArrayList<>();
 
         String whereName = ContactsContract.Data.MIMETYPE + " = ?";
-        String[] whereNameParams = new String[]{ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE};
-        Cursor nameCur = G.context.getContentResolver().query(ContactsContract.Data.CONTENT_URI, null, null, null, null);
+        String[] whereNameParams = new String[]{ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME
+                , ContactsContract.CommonDataKinds.Phone.NUMBER
+                , ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME
+                , ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME};
+        Cursor nameCur = G.context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, whereNameParams, null, null, null);
+
         while (nameCur.moveToNext()) {
             StructListOfContact item = new StructListOfContact();
-//            String display = nameCur.getString(nameCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME));// get family and name togater
+            String display = nameCur.getString(nameCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME));// get family and name togater
             item.setFirst_name(nameCur.getString(nameCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME)));
             item.setLast_name(nameCur.getString(nameCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME)));
-            item.setPhone(nameCur.getString(nameCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NORMALIZED_NUMBER)));
-
+            item.setPhone(nameCur.getString(nameCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
+//            item.setLast_name(nameCur.getString(nameCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME)));
+            Log.i("CCC", "getPhone: " + display);
             itemList.add(item);
         }
         nameCur.close();
 
-        RequestUserContactImport t = new RequestUserContactImport();
-        t.contactImport(itemList);
+        for (int i = 0; i < itemList.size(); i++) {
+
+            Log.i("CCC", "getPhone: " + itemList.get(i).getPhone());
+            Log.i("CCC", "getFirst_name: " + itemList.get(i).getFirst_name());
+            Log.i("CCC", "getLast_name: " + itemList.get(i).getLast_name());
+
+        }
+
+//        RequestUserContactImport t = new RequestUserContactImport();
+//        t.contactImport(itemList);
 
         Log.i("TAGTAGTTT", "Phone : ");
 
