@@ -9,7 +9,7 @@ import com.iGap.R;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.MyType;
 import com.iGap.module.OnComplete;
-import com.iGap.module.StructContactInfo;
+import com.iGap.module.StructChatInfo;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 
@@ -24,7 +24,7 @@ import java.util.List;
  */
 public class ChatItem extends AbstractItem<ChatItem, ChatItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
-    public StructContactInfo mInfo;
+    public StructChatInfo mInfo;
     public OnComplete mComplete;
 
     public ChatItem setComplete(OnComplete complete) {
@@ -32,7 +32,7 @@ public class ChatItem extends AbstractItem<ChatItem, ChatItem.ViewHolder> {
         return this;
     }
 
-    public ChatItem setInfo(StructContactInfo info) {
+    public ChatItem setInfo(StructChatInfo info) {
         this.mInfo = info;
         return this;
     }

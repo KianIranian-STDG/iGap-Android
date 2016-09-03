@@ -26,7 +26,7 @@ import com.iGap.module.CustomRoundCornerImageView;
 import com.iGap.module.GifMovieView;
 import com.iGap.module.MyType;
 import com.iGap.module.OnComplete;
-import com.iGap.module.StructChatInfo;
+import com.iGap.module.StructMessageInfo;
 
 import java.util.ArrayList;
 
@@ -35,7 +35,7 @@ import java.util.ArrayList;
  */
 public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private ArrayList<StructChatInfo> list;
+    private ArrayList<StructMessageInfo> list;
     private Context context;
     private MyType.ChatType chatType;
     private OnComplete complete;
@@ -43,7 +43,7 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private boolean isSelectedMode = false;
     private int numberOfSelected = 0;
 
-    public AdapterChat(Context context, MyType.ChatType chatType, ArrayList<StructChatInfo> list, OnComplete complete) {
+    public AdapterChat(Context context, MyType.ChatType chatType, ArrayList<StructMessageInfo> list, OnComplete complete) {
         this.list = list;
         this.context = context;
         this.chatType = chatType;

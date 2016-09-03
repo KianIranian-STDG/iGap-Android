@@ -34,7 +34,7 @@ import com.iGap.libs.flowingdrawer.ResizeWidthAnimation;
 import com.iGap.module.ListOfContact;
 import com.iGap.module.MyType;
 import com.iGap.module.OnComplete;
-import com.iGap.module.StructContactInfo;
+import com.iGap.module.StructChatInfo;
 import com.iGap.module.Utils;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
@@ -383,7 +383,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                             putChatToDatabase(room);
 
                             ChatItem chatItem = new ChatItem();
-                            StructContactInfo info = new StructContactInfo();
+                            StructChatInfo info = new StructChatInfo();
                             info.unreadMessag = room.getUnreadCount();
                             info.contactID = Long.toString(room.getId());
                             info.contactName = room.getTitle();
@@ -415,7 +415,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
 
                         // FIXME clear later
                         // fake data set
-                        StructContactInfo c = new StructContactInfo();
+                        StructChatInfo c = new StructChatInfo();
                         c.unreadMessag = 5256;
                         c.contactID = "123";
                         c.contactName = "mehdi hosiny";
@@ -428,7 +428,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                         c.imageSource = "";
                         mAdapter.add(new ChatItem().setInfo(c).setComplete(ActivityMain.this));
 
-                        StructContactInfo c1 = new StructContactInfo();
+                        StructChatInfo c1 = new StructChatInfo();
                         c1.unreadMessag = 325515;
                         c1.contactID = "123";
                         c1.contactName = "Valerie";
@@ -441,7 +441,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                         mAdapter.add(new ChatItem().setInfo(c1).setComplete(ActivityMain.this));
 
 
-                        StructContactInfo c2 = new StructContactInfo();
+                        StructChatInfo c2 = new StructChatInfo();
                         c2.unreadMessag = 823;
                         c2.contactID = "123";
                         c2.contactName = "ali";
@@ -454,7 +454,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                         c2.imageSource = R.mipmap.d + "";
                         mAdapter.add(new ChatItem().setInfo(c2).setComplete(ActivityMain.this));
 
-                        StructContactInfo c3 = new StructContactInfo();
+                        StructChatInfo c3 = new StructChatInfo();
                         c3.unreadMessag = 65;
                         c3.contactID = "123";
                         c3.contactName = "hiwa";
@@ -467,7 +467,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                         mAdapter.add(new ChatItem().setInfo(c3).setComplete(ActivityMain.this));
 
 
-                        StructContactInfo c4 = new StructContactInfo();
+                        StructChatInfo c4 = new StructChatInfo();
                         c4.unreadMessag = 0;
                         c4.contactID = "123";
                         c4.contactName = "has";
@@ -479,7 +479,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                         c4.imageSource = "";
                         mAdapter.add(new ChatItem().setInfo(c4).setComplete(ActivityMain.this));
 
-                        StructContactInfo c5 = new StructContactInfo();
+                        StructChatInfo c5 = new StructChatInfo();
                         c5.unreadMessag = 50;
                         c5.contactID = "123";
                         c5.contactName = "has";
@@ -491,7 +491,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                         c5.imageSource = R.mipmap.e + "";
                         mAdapter.add(new ChatItem().setInfo(c5).setComplete(ActivityMain.this));
 
-                        StructContactInfo c6 = new StructContactInfo();
+                        StructChatInfo c6 = new StructChatInfo();
                         c6.unreadMessag = 0;
                         c6.contactID = "123";
                         c6.contactName = "hasan";
@@ -503,7 +503,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                         c6.imageSource = R.mipmap.c + "";
                         mAdapter.add(new ChatItem().setInfo(c6).setComplete(ActivityMain.this));
 
-                        StructContactInfo c7 = new StructContactInfo();
+                        StructChatInfo c7 = new StructChatInfo();
                         c7.unreadMessag = 55;
                         c7.contactID = "123";
                         c7.contactName = "sorosh";
@@ -521,9 +521,9 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
 
         new RequestClientGetRoomList().clientGetRoomList();
 
-        /*ArrayList<StructContactInfo> list = new ArrayList<>();
+        /*ArrayList<StructChatInfo> list = new ArrayList<>();
 
-        StructContactInfo c = new StructContactInfo();
+        StructChatInfo c = new StructChatInfo();
         c.unreadMessag = 5256;
         c.contactID = "user";
         c.contactName = "mehdi hosiny";
@@ -537,7 +537,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         list.add(c);
 
 
-        StructContactInfo c1 = new StructContactInfo();
+        StructChatInfo c1 = new StructChatInfo();
         c1.unreadMessag = 325515;
         c1.contactID = "user1";
         c1.contactName = "Valerie";
@@ -550,7 +550,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         list.add(c1);
 
 
-        StructContactInfo c2 = new StructContactInfo();
+        StructChatInfo c2 = new StructChatInfo();
         c2.unreadMessag = 823;
         c2.contactID = "user2";
         c2.contactName = "ali";
@@ -563,7 +563,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         c2.imageSource = R.mipmap.d + "";
         list.add(c2);
 
-        StructContactInfo c3 = new StructContactInfo();
+        StructChatInfo c3 = new StructChatInfo();
         c3.unreadMessag = 65;
         c3.contactID = "user3";
         c3.contactName = "hiwa";
@@ -576,7 +576,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         list.add(c3);
 
 
-        StructContactInfo c4 = new StructContactInfo();
+        StructChatInfo c4 = new StructChatInfo();
         c4.unreadMessag = 0;
         c4.contactID = "user4";
         c4.contactName = "has";
@@ -588,7 +588,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         c4.imageSource = "";
         list.add(c4);
 
-        StructContactInfo c5 = new StructContactInfo();
+        StructChatInfo c5 = new StructChatInfo();
         c5.unreadMessag = 50;
         c5.contactID = "user5";
         c5.contactName = "has";
@@ -600,7 +600,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         c5.imageSource = R.mipmap.e + "";
         list.add(c5);
 
-        StructContactInfo c6 = new StructContactInfo();
+        StructChatInfo c6 = new StructChatInfo();
         c6.unreadMessag = 0;
         c6.contactID = "user6";
         c6.contactName = "hasan";
@@ -612,7 +612,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         c6.imageSource = R.mipmap.c + "";
         list.add(c6);
 
-        StructContactInfo c7 = new StructContactInfo();
+        StructChatInfo c7 = new StructChatInfo();
         c7.unreadMessag = 55;
         c7.contactID = "user7";
         c7.contactName = "sorosh";

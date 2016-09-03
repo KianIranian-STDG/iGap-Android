@@ -41,7 +41,7 @@ import com.iGap.module.EmojiPopup;
 import com.iGap.module.EmojiRecentsManager;
 import com.iGap.module.MyType;
 import com.iGap.module.OnComplete;
-import com.iGap.module.StructChatInfo;
+import com.iGap.module.StructMessageInfo;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmChatHistory;
 import com.iGap.request.RequestChatSendMessage;
@@ -630,26 +630,26 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         }
     }
 
-    private ArrayList<StructChatInfo> getChatList() {
+    private ArrayList<StructMessageInfo> getChatList() {
 
-        ArrayList<StructChatInfo> messageList = new ArrayList<>();
+        ArrayList<StructMessageInfo> messageList = new ArrayList<>();
         for (RealmChatHistory realmChatHistory : G.realm.where(RealmChatHistory.class).equalTo("roomId", roomId).findAll()) {
-            StructChatInfo structChatInfo = new StructChatInfo();
-            structChatInfo.messag = realmChatHistory.getRoomMessage().getMessage();
+            StructMessageInfo structMessageInfo = new StructMessageInfo();
+            structMessageInfo.messag = realmChatHistory.getRoomMessage().getMessage();
             if (realmChatHistory.getRoomMessage().getMessageType().equals("TEXT")) {
-                structChatInfo.messageType = MyType.MessageType.message;
+                structMessageInfo.messageType = MyType.MessageType.message;
             }
-            messageList.add(structChatInfo);
+            messageList.add(structMessageInfo);
         }
         return messageList;
     }
 
 
-//    private ArrayList<StructChatInfo> getChatList() {
+//    private ArrayList<StructMessageInfo> getChatList() {
 //
-//        ArrayList<StructChatInfo> list = new ArrayList<>();
+//        ArrayList<StructMessageInfo> list = new ArrayList<>();
 //
-//        StructChatInfo c = new StructChatInfo();
+//        StructMessageInfo c = new StructMessageInfo();
 //        c.messageType = MyType.MessageType.image;
 //        c.sendType = MyType.SendType.send;
 //        c.senderAvatar = R.mipmap.a + "";
@@ -660,7 +660,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 //        list.add(c);
 //
 //
-//        StructChatInfo c9 = new StructChatInfo();
+//        StructMessageInfo c9 = new StructMessageInfo();
 //        c9.messageType = MyType.MessageType.files;
 //        c9.forwardMessageFrom = "ali";
 //        c9.replayFrom = "ali";
@@ -669,7 +669,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 //        c9.senderAvatar = R.mipmap.a + "";
 //        list.add(c9);
 //
-//        StructChatInfo c10 = new StructChatInfo();
+//        StructMessageInfo c10 = new StructMessageInfo();
 //        c10.messageType = MyType.MessageType.files;
 //        c10.forwardMessageFrom = "hasan";
 //        c10.replayFrom = "mehdi";
@@ -679,21 +679,21 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 //        c10.senderAvatar = R.mipmap.a + "";
 //        list.add(c10);
 //
-//        StructChatInfo c12 = new StructChatInfo();
+//        StructMessageInfo c12 = new StructMessageInfo();
 //        c12.messageType = MyType.MessageType.gif;
 //        c12.sendType = MyType.SendType.send;
 //        list.add(c12);
 //
-//        StructChatInfo c16 = new StructChatInfo();
+//        StructMessageInfo c16 = new StructMessageInfo();
 //        c16.sendType = MyType.SendType.timeLayout;
 //        list.add(c16);
 //
-//        StructChatInfo c13 = new StructChatInfo();
+//        StructMessageInfo c13 = new StructMessageInfo();
 //        c13.messageType = MyType.MessageType.audio;
 //        c13.sendType = MyType.SendType.send;
 //        list.add(c13);
 //
-//        StructChatInfo c14 = new StructChatInfo();
+//        StructMessageInfo c14 = new StructMessageInfo();
 //        c14.messageType = MyType.MessageType.audio;
 //        c14.sendType = MyType.SendType.recvive;
 //        c14.messag = "بهترین موسیقی منتخب" +
@@ -701,19 +701,19 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 //        c14.senderAvatar = R.mipmap.a + "";
 //        list.add(c14);
 //
-//        StructChatInfo c15 = new StructChatInfo();
+//        StructMessageInfo c15 = new StructMessageInfo();
 //        c15.messageType = MyType.MessageType.sticker;
 //        c15.sendType = MyType.SendType.recvive;
 //        c15.filePath = R.mipmap.sd + "";
 //        list.add(c15);
 //
-//        StructChatInfo c11 = new StructChatInfo();
+//        StructMessageInfo c11 = new StructMessageInfo();
 //        c11.messageType = MyType.MessageType.files;
 //        c11.sendType = MyType.SendType.recvive;
 //        c11.senderAvatar = R.mipmap.a + "";
 //        list.add(c11);
 //
-//        StructChatInfo c1 = new StructChatInfo();
+//        StructMessageInfo c1 = new StructMessageInfo();
 //        c1.messageType = MyType.MessageType.message;
 //        c1.messag = "how";
 //
@@ -721,7 +721,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 //        c1.senderAvatar = R.mipmap.b + "";
 //        list.add(c1);
 //
-//        StructChatInfo c2 = new StructChatInfo();
+//        StructMessageInfo c2 = new StructMessageInfo();
 //        c2.messageType = MyType.MessageType.message;
 //        c2.senderAvatar = R.mipmap.c + "";
 //        c2.messag = "i am fine";
@@ -729,7 +729,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 //        c2.sendType = MyType.SendType.recvive;
 //        list.add(c2);
 //
-//        StructChatInfo c3 = new StructChatInfo();
+//        StructMessageInfo c3 = new StructMessageInfo();
 //        c3.messageType = MyType.MessageType.video;
 //        c3.messag = "where are you  going hgf hgf hgf hgf  good good";
 //        c3.sendType = MyType.SendType.send;
@@ -740,7 +740,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 //        c3.filePic = R.mipmap.a + "";
 //        list.add(c3);
 //
-//        StructChatInfo c4 = new StructChatInfo();
+//        StructMessageInfo c4 = new StructMessageInfo();
 //        c4.messageType = MyType.MessageType.image;
 //        c4.forwardMessageFrom = "ali";
 //        c4.messag = "the good picture for all the word";
@@ -749,7 +749,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 //        c4.filePath = R.mipmap.c + "";
 //        list.add(c4);
 //
-//        StructChatInfo c5 = new StructChatInfo();
+//        StructMessageInfo c5 = new StructMessageInfo();
 //        c5.messageType = MyType.MessageType.image;
 //        c5.forwardMessageFrom = "ali";
 //        c5.sendType = MyType.SendType.send;
@@ -757,21 +757,21 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 //        c5.filePath = R.mipmap.e + "";
 //        list.add(c5);
 //
-//        StructChatInfo c6 = new StructChatInfo();
+//        StructMessageInfo c6 = new StructMessageInfo();
 //        c6.messageType = MyType.MessageType.image;
 //        c6.sendType = MyType.SendType.recvive;
 //        c6.senderAvatar = R.mipmap.f + "";
 //        c6.filePath = R.mipmap.f + "";
 //        list.add(c6);
 //
-//        StructChatInfo c7 = new StructChatInfo();
+//        StructMessageInfo c7 = new StructMessageInfo();
 //        c7.messageType = MyType.MessageType.image;
 //        c7.sendType = MyType.SendType.recvive;
 //        c7.senderAvatar = R.mipmap.g + "";
 //        c7.filePath = R.mipmap.g + "";
 //        list.add(c7);
 //
-//        StructChatInfo c8 = new StructChatInfo();
+//        StructMessageInfo c8 = new StructMessageInfo();
 //        c8.messageType = MyType.MessageType.image;
 //        c8.sendType = MyType.SendType.send;
 //        c8.filePath = R.mipmap.h + "";
