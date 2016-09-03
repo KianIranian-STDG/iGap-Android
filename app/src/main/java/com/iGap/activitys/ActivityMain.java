@@ -1,5 +1,6 @@
 package com.iGap.activitys;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
@@ -16,7 +17,7 @@ import android.widget.Toast;
 
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.adapter.AdapterChatsList;
+import com.iGap.adapter.items.ChatItem;
 import com.iGap.helper.HelperRealm;
 import com.iGap.interface_package.IActionClick;
 import com.iGap.interface_package.IOpenDrawer;
@@ -41,17 +42,19 @@ import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestClientGetRoomList;
 import com.iGap.request.RequestUserContactsGetList;
 import com.iGap.request.RequestUserLogin;
+import com.mikepenz.fastadapter.FastAdapter;
+import com.mikepenz.fastadapter.IAdapter;
+import com.mikepenz.fastadapter.adapters.FastItemAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
 
-public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActionClick {
+public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActionClick, OnComplete {
 
     private LeftDrawerLayout mLeftDrawerLayout;
     private RecyclerView recyclerView;
-    private AdapterChatsList mAdapter;
+    private FastItemAdapter<ChatItem> mAdapter;
     private FloatingActionButton floatingActionButton;
     private ArcMenu arcMenu;
 
@@ -241,14 +244,48 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
     }
 
     private void initRecycleView() {
-        ArrayList<StructContactInfo> chats = new ArrayList<>(0);
         recyclerView = (RecyclerView) findViewById(R.id.cl_recycler_view_contact);
-        mAdapter = new AdapterChatsList(chats, ActivityMain.this, new OnComplete() {
+        mAdapter = new FastItemAdapter<>();
+        mAdapter.withOnClickListener(new FastAdapter.OnClickListener<ChatItem>() {
             @Override
-            public void complete(boolean result, String messageOne, String MessageTow) {
-                if (messageOne.equals("closeMenuButton")) {
-                    arcMenu.toggleMenu();
+            public boolean onClick(View v, IAdapter<ChatItem> adapter, ChatItem item, int position) {
+                Log.i("XXX", "CLICK");
+                if (ActivityMain.isMenuButtonAddShown) {
+                    Log.i("XXX", "CLICK 1");
+                    item.mComplete.complete(true, "closeMenuButton", "");
+                } else {
+                    Log.i("XXX", "CLICK ActivityChat");
+                    Intent intent = new Intent(ActivityMain.this, ActivityChat.class);
+//                    intent.putExtra("ChatType", mInfo.contactType);
+                    intent.putExtra("ChatType", "CHAT");
+                    intent.putExtra("ContactID", item.mInfo.contactID);
+                    intent.putExtra("IsMute", item.mInfo.muteNotification);
+                    intent.putExtra("OwnerShip", item.mInfo.ownerShip);
+                    intent.putExtra("ContactName", item.mInfo.contactName);
+                    intent.putExtra("MemberCount", item.mInfo.memberCount);
+                    intent.putExtra("LastSeen", item.mInfo.lastSeen);
+                    intent.putExtra("RoomId", Long.parseLong(item.mInfo.contactID));
+
+                    startActivity(intent);
                 }
+                return false;
+            }
+        });
+
+        mAdapter.withOnLongClickListener(new FastAdapter.OnLongClickListener<ChatItem>() {
+            @Override
+            public boolean onLongClick(View v, IAdapter<ChatItem> adapter, final ChatItem item, final int position) {
+                if (ActivityMain.isMenuButtonAddShown) {
+                    item.mComplete.complete(true, "closeMenuButton", "");
+                } else {
+                    MyDialog.showDialogMenuItemContacts(ActivityMain.this, item.mInfo.contactType, item.mInfo.muteNotification, new OnComplete() {
+                        @Override
+                        public void complete(boolean result, String messageOne, String MessageTow) {
+                            onSelectContactMenu(messageOne, position, item);
+                        }
+                    });
+                }
+                return true;
             }
         });
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(ActivityMain.this);
@@ -297,6 +334,40 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         });
     }
 
+
+    private void muteNotification(int position, ChatItem item) {
+        Log.e("fff", " txtMuteNotification " + position);
+
+        item.mInfo.muteNotification = !item.mInfo.muteNotification;
+    }
+
+    private void clearHistory(int position) {
+        Log.e("fff", " txtClearHistory " + position);
+    }
+
+    private void deleteChat(int position) {
+        Log.e("fff", " txtDeleteChat " + position);
+    }
+
+    /**
+     * on select contact menu
+     *
+     * @param message  message text
+     * @param position position dfdfdfdf
+     */
+    private void onSelectContactMenu(String message, int position, ChatItem item) {
+        switch (message) {
+            case "txtMuteNotification":
+                muteNotification(position, item);
+                break;
+            case "txtClearHistory":
+                clearHistory(position);
+                break;
+            case "txtDeleteChat":
+                deleteChat(position);
+                break;
+        }
+    }
     private void getChatsList() {
         G.onClientGetRoomListResponse = new OnClientGetRoomListResponse() {
             @Override
@@ -309,6 +380,9 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
 
                         // creating new struct for each room and add them to adapter
                         for (ProtoGlobal.Room room : roomList) {
+                            putChatToDatabase(room);
+
+                            ChatItem chatItem = new ChatItem();
                             StructContactInfo info = new StructContactInfo();
                             info.unreadMessag = room.getUnreadCount();
                             info.contactID = Long.toString(room.getId());
@@ -332,16 +406,18 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                             info.lastmessage = "lastMessage"; // FIXME
                             info.muteNotification = false; // FIXME
                             info.imageSource = ""; // FIXME
-                            mAdapter.insert(info);
 
-                            putChatToDatabase(room);
+                            // create item from info
+                            chatItem.setInfo(info);
+                            chatItem.setComplete(ActivityMain.this);
+                            mAdapter.add(chatItem);
                         }
 
                         // FIXME clear later
                         // fake data set
                         StructContactInfo c = new StructContactInfo();
                         c.unreadMessag = 5256;
-                        c.contactID = "user";
+                        c.contactID = "123";
                         c.contactName = "mehdi hosiny";
                         c.contactType = MyType.ChatType.groupChat;
                         c.viewDistanceColor = "#ff3131";
@@ -350,11 +426,11 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                         c.lastmessage = "how are you jhjh hjh jhhhh";
                         c.muteNotification = true;
                         c.imageSource = "";
-                        mAdapter.insert(c);
+                        mAdapter.add(new ChatItem().setInfo(c).setComplete(ActivityMain.this));
 
                         StructContactInfo c1 = new StructContactInfo();
                         c1.unreadMessag = 325515;
-                        c1.contactID = "user1";
+                        c1.contactID = "123";
                         c1.contactName = "Valerie";
                         c1.contactType = MyType.ChatType.singleChat;
                         c1.viewDistanceColor = "#5c9dff";
@@ -362,12 +438,12 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                         c1.lastmessage = "Valeri is typing...";
                         c1.muteNotification = false;
                         c1.imageSource = "";
-                        mAdapter.insert(c1);
+                        mAdapter.add(new ChatItem().setInfo(c1).setComplete(ActivityMain.this));
 
 
                         StructContactInfo c2 = new StructContactInfo();
                         c2.unreadMessag = 823;
-                        c2.contactID = "user2";
+                        c2.contactID = "123";
                         c2.contactName = "ali";
                         c2.memberCount = "12k";
                         c2.contactType = MyType.ChatType.channel;
@@ -376,11 +452,11 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                         c2.lastmessage = "where are you";
                         c2.muteNotification = false;
                         c2.imageSource = R.mipmap.d + "";
-                        mAdapter.insert(c2);
+                        mAdapter.add(new ChatItem().setInfo(c2).setComplete(ActivityMain.this));
 
                         StructContactInfo c3 = new StructContactInfo();
                         c3.unreadMessag = 65;
-                        c3.contactID = "user3";
+                        c3.contactID = "123";
                         c3.contactName = "hiwa";
                         c3.contactType = MyType.ChatType.singleChat;
                         c3.viewDistanceColor = "#f75cff";
@@ -388,12 +464,12 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                         c3.lastmessage = "iz typing how are you";
                         c3.muteNotification = true;
                         c3.imageSource = R.mipmap.h + "";
-                        mAdapter.insert(c3);
+                        mAdapter.add(new ChatItem().setInfo(c3).setComplete(ActivityMain.this));
 
 
                         StructContactInfo c4 = new StructContactInfo();
                         c4.unreadMessag = 0;
-                        c4.contactID = "user4";
+                        c4.contactID = "123";
                         c4.contactName = "has";
                         c4.contactType = MyType.ChatType.groupChat;
                         c4.viewDistanceColor = "#4fb559";
@@ -401,11 +477,11 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                         c4.lastmessage = "go to link";
                         c4.muteNotification = false;
                         c4.imageSource = "";
-                        mAdapter.insert(c4);
+                        mAdapter.add(new ChatItem().setInfo(c4).setComplete(ActivityMain.this));
 
                         StructContactInfo c5 = new StructContactInfo();
                         c5.unreadMessag = 50;
-                        c5.contactID = "user5";
+                        c5.contactID = "123";
                         c5.contactName = "has";
                         c5.contactType = MyType.ChatType.channel;
                         c5.viewDistanceColor = "#f26d7d";
@@ -413,11 +489,11 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                         c5.lastmessage = "go to link";
                         c5.muteNotification = false;
                         c5.imageSource = R.mipmap.e + "";
-                        mAdapter.insert(c5);
+                        mAdapter.add(new ChatItem().setInfo(c5).setComplete(ActivityMain.this));
 
                         StructContactInfo c6 = new StructContactInfo();
                         c6.unreadMessag = 0;
-                        c6.contactID = "user6";
+                        c6.contactID = "123";
                         c6.contactName = "hasan";
                         c6.contactType = MyType.ChatType.groupChat;
                         c6.viewDistanceColor = "#ff8a00";
@@ -425,11 +501,11 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                         c6.lastmessage = "go to link";
                         c6.muteNotification = false;
                         c6.imageSource = R.mipmap.c + "";
-                        mAdapter.insert(c6);
+                        mAdapter.add(new ChatItem().setInfo(c6).setComplete(ActivityMain.this));
 
                         StructContactInfo c7 = new StructContactInfo();
                         c7.unreadMessag = 55;
-                        c7.contactID = "user7";
+                        c7.contactID = "123";
                         c7.contactName = "sorosh";
                         c7.contactType = MyType.ChatType.singleChat;
                         c7.viewDistanceColor = "#47dfff";
@@ -437,7 +513,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                         c7.lastmessage = "go to link";
                         c7.muteNotification = false;
                         c7.imageSource = R.mipmap.g + "";
-                        mAdapter.insert(c7);
+                        mAdapter.add(new ChatItem().setInfo(c7).setComplete(ActivityMain.this));
                     }
                 });
             }
@@ -667,4 +743,10 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         parent.startAnimation(anim);
     }
 
+    @Override
+    public void complete(boolean result, String messageOne, String MessageTow) {
+        if (messageOne.equals("closeMenuButton")) {
+            arcMenu.toggleMenu();
+        }
+    }
 }
