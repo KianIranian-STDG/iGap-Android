@@ -1,22 +1,21 @@
 package com.iGap.module;
 
+import android.content.ContentResolver;
 import android.database.Cursor;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.iGap.G;
 import com.iGap.adapter.ContactNamesAdapter;
 import com.iGap.realm.RealmUserContactsGetListResponse;
+import com.iGap.request.RequestUserContactImport;
 
 import java.util.ArrayList;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-/**
- * Created by molareza on 9/6/95.
- */
+
 public class ListOfContact {
 
     public static ArrayList<ContactNamesAdapter.LineItem> Retrive(String s) {
@@ -54,7 +53,7 @@ public class ListOfContact {
                     headerCount += 1;
                     mItems.add(new ContactNamesAdapter.LineItem(header.toUpperCase(), "", true, sectionManager, sectionFirstPosition));
                 }
-                mItems.add(new ContactNamesAdapter.LineItem(items.get(i).getDisplay_name(), "Last seen recently", false, sectionManager, sectionFirstPosition));
+                mItems.add(new ContactNamesAdapter.LineItem(items.get(i).getFirst_name(), "Last seen recently", false, sectionManager, sectionFirstPosition));
 
             } catch (Exception e) {
             }
@@ -63,42 +62,70 @@ public class ListOfContact {
         return mItems;
     }
 
-    public static void getListOfContact() {
+    public static ArrayList<StructListOfContact> getListOfContact() { //get List Of Contact
 
-        final ArrayList<StructListOfContact> itemList = new ArrayList<>();
-
-        String whereName = ContactsContract.Data.MIMETYPE + " = ?";
-        String[] whereNameParams = new String[]{ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME
-                , ContactsContract.CommonDataKinds.Phone.NUMBER
-                , ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME
-                , ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME};
-        Cursor nameCur = G.context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, whereNameParams, null, null, null);
-
-        while (nameCur.moveToNext()) {
-            StructListOfContact item = new StructListOfContact();
-            String display = nameCur.getString(nameCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME));// get family and name togater
-            item.setFirst_name(nameCur.getString(nameCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME)));
-            item.setLast_name(nameCur.getString(nameCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME)));
-            item.setPhone(nameCur.getString(nameCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
-//            item.setLast_name(nameCur.getString(nameCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME)));
-            Log.i("CCC", "getPhone: " + display);
-            itemList.add(item);
+        ArrayList<StructListOfContact> contactList = new ArrayList<>();
+        ContentResolver cr = G.context.getContentResolver();
+        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+        assert cur != null;
+        if (cur.getCount() > 0) {
+            while (cur.moveToNext()) {
+                StructListOfContact itemContact = new StructListOfContact();
+                itemContact.setDisplayName(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
+                String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
+                if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
+                    Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{
+                            id}, null);
+                    assert pCur != null;
+                    while (pCur.moveToNext()) {
+                        int phoneType = pCur.getInt(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
+                        if (phoneType == ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE) {
+                            itemContact.setPhone(pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
+                        }
+                    }
+                    pCur.close();
+                }
+                contactList.add(itemContact);
+            }
         }
-        nameCur.close();
+        cur.close();
+        ArrayList<StructListOfContact> resultContactList = new ArrayList<>();
+        for (int i = 0; i < contactList.size(); i++) {
 
-        for (int i = 0; i < itemList.size(); i++) {
+            if (contactList.get(i).getPhone() != null) {
+                StructListOfContact itemContact = new StructListOfContact();
+                String[] sp = contactList.get(i).getDisplayName().split(" ");
+                if (sp.length == 1) {
 
-            Log.i("CCC", "getPhone: " + itemList.get(i).getPhone());
-            Log.i("CCC", "getFirst_name: " + itemList.get(i).getFirst_name());
-            Log.i("CCC", "getLast_name: " + itemList.get(i).getLast_name());
+                    itemContact.setFirstName(sp[0]);
+                    itemContact.setLastName("");
+                    itemContact.setPhone(contactList.get(i).getPhone());
+                    itemContact.setDisplayName(contactList.get(i).displayName);
 
+                } else if (sp.length == 2) {
+                    itemContact.setFirstName(sp[0]);
+                    itemContact.setLastName(sp[1]);
+                    itemContact.setPhone(contactList.get(i).getPhone());
+                    itemContact.setDisplayName(contactList.get(i).displayName);
+
+                } else if (sp.length == 3) {
+                    itemContact.setFirstName(sp[0]);
+                    itemContact.setLastName(sp[1] + sp[2]);
+                    itemContact.setPhone(contactList.get(i).getPhone());
+                    itemContact.setDisplayName(contactList.get(i).displayName);
+                } else if (sp.length >= 3) {
+                    itemContact.setFirstName(contactList.get(i).getDisplayName());
+                    itemContact.setLastName("");
+                    itemContact.setPhone(contactList.get(i).getPhone());
+                    itemContact.setDisplayName(contactList.get(i).displayName);
+                }
+
+                resultContactList.add(itemContact);
+            }
         }
+        RequestUserContactImport listContact = new RequestUserContactImport();
+        listContact.contactImport(resultContactList);
 
-//        RequestUserContactImport t = new RequestUserContactImport();
-//        t.contactImport(itemList);
-
-        Log.i("TAGTAGTTT", "Phone : ");
-
+        return resultContactList;
     }
-
 }

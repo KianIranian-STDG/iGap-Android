@@ -16,8 +16,8 @@ public class RequestUserContactImport {
         for (int i = 0; i < itemContactList.size(); i++) {
 
             String phone = itemContactList.get(i).getPhone();
-            String first_name = itemContactList.get(i).getFirst_name();
-            String last_name = itemContactList.get(i).getLast_name();
+            String first_name = itemContactList.get(i).getFirstName();
+            String last_name = itemContactList.get(i).getLastName();
 
             ProtoUserContactsImport.UserContactsImport.Contact.Builder contact = ProtoUserContactsImport.UserContactsImport.Contact.newBuilder();
             if (phone != null) {

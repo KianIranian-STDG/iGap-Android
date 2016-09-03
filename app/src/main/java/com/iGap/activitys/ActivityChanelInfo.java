@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
 import android.util.Log;
 import android.view.Gravity;
@@ -28,14 +27,13 @@ import android.widget.Toast;
 
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.module.ListOfContact;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ActivityChanelInfo extends AppCompatActivity {
+public class ActivityChanelInfo extends ActivityEnhanced {
 
     private AppBarLayout appBarLayout;
     private EditText edtNikName;
@@ -51,10 +49,7 @@ public class ActivityChanelInfo extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chanel_info);
 
-        ListOfContact.getListOfContact();
-
         imgUser = (CircleImageView) findViewById(R.id.chi_img_circleImage);
-
         txtBack = (TextView) findViewById(R.id.chi_txt_back);
         txtBack.setTypeface(G.fontawesome);
 

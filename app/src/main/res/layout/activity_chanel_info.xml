@@ -315,7 +315,6 @@
                     android:textSize="@dimen/sp18"
                     android:textStyle="normal" />
 
-
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
@@ -339,6 +338,7 @@
         android:clickable="true"
         android:src="@mipmap/comment"
         android:theme="@style/FabButton"
+        android:scaleType="fitXY"
         android:tint="@color/gray"
         app:layout_anchor="@+id/chi_appbar"
         app:layout_anchorGravity="bottom|right|end" />

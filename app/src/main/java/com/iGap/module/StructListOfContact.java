@@ -6,30 +6,47 @@ package com.iGap.module;
 public class StructListOfContact {
 
     public String phone;
-    public String first_name;
-    public String last_name;
+    public String firstName;
+    public String lastName;
+    public String displayName;
+
 
     public String getPhone() {
         return phone;
     }
 
     public void setPhone(String phone) {
-        this.phone = phone;
+
+        if (phone == null) this.phone = "";
+        else this.phone = phone;
     }
 
-    public String getFirst_name() {
-        return first_name;
+    public String getFirstName() {
+
+        return firstName;
     }
 
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
+    public void setFirstName(String firstName) {
+
+        if (firstName == null) this.firstName = "";
+        else this.firstName = firstName;
     }
 
-    public String getLast_name() {
-        return last_name;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
+    public void setLastName(String lastName) {
+
+        if (lastName == null) this.lastName = "";
+        else this.lastName = lastName;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 }

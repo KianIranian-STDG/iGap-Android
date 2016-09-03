@@ -15,8 +15,7 @@
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.PERMISSION_GRANTED" />//im not shore need or
-    noy
-
+    no
     <!-- required for drawer contacts fragment -->
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
@@ -68,13 +67,10 @@
         <receiver android:name=".module.IncomingSms" />
 
         <activity android:name=".activitys.ActivityChanelInfo">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
     </application>
 
