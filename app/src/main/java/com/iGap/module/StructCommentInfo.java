@@ -13,6 +13,7 @@ public class StructCommentInfo {
     public String message = "";
     public String date = "";
     public String time = "";
+    public boolean maxLine = true;
 
     public boolean isChange = false;
     public ArrayList<String> allChanges = new ArrayList<>();

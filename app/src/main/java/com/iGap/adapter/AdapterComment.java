@@ -3,6 +3,10 @@ package com.iGap.adapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.iGap.R;
+import com.iGap.activitys.ActivityComment;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.StructCommentInfo;
 
@@ -23,13 +28,13 @@ public class AdapterComment extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private ArrayList<StructCommentInfo> list;
     private Context context;
+    private ActivityComment.FragmentSubLayoutReplay layoutReplay;
+    public int replayCommentNumber = -1;
 
-    private int replayCommentNumber = -1;
-
-    public AdapterComment(Context context, ArrayList<StructCommentInfo> list) {
+    public AdapterComment(Context context, ArrayList<StructCommentInfo> list, ActivityComment.FragmentSubLayoutReplay layoutReplay) {
         this.list = list;
         this.context = context;
-
+        this.layoutReplay = layoutReplay;
     }
 
     @Override
@@ -62,7 +67,10 @@ public class AdapterComment extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
 
 
-            txtMessage.setText(list.get(position).message);
+            SpannableString s = new SpannableString(list.get(position).senderName + ": " + list.get(position).message);
+            s.setSpan(new ForegroundColorSpan(Color.parseColor("#37B8CC")), 0, list.get(position).senderName.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            txtMessage.setText(s);
+
 
             txtDate.setText(list.get(position).date);
             txtClock.setText(list.get(position).time);
@@ -71,16 +79,23 @@ public class AdapterComment extends RecyclerView.Adapter<RecyclerView.ViewHolder
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.e("ddd", "comment click  " + position);
+                    if (list.get(position).maxLine) {
+                        txtMessage.setEllipsize(null);
+                        txtMessage.setMaxLines(Integer.MAX_VALUE);
+                        list.get(position).maxLine = false;
+
+                    } else {
+                        txtMessage.setEllipsize(TextUtils.TruncateAt.END);
+                        txtMessage.setMaxLines(2);
+                        list.get(position).maxLine = true;
+                    }
+
                 }
             });
 
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-
-                    Log.e("ddd", "long comment click  " + position);
-
 
                     if (replayCommentNumber == -1) {
                         visibleLayoutReplay(position, itemView);
@@ -97,61 +112,8 @@ public class AdapterComment extends RecyclerView.Adapter<RecyclerView.ViewHolder
             });
 
 
+            addThreeSubLayoutReplay(position, 0, itemView);
 
-            if (list.get(position).replayMessageList != null) {
-
-                int count = list.get(position).replayMessageList.size();
-                if (count > 0) {
-
-                    LinearLayout layout = (LinearLayout) itemView.findViewById(R.id.csl_ll_add_replay);
-
-                    for (int i = 0; i < count && i < 3; i++) {
-
-                        View v = LayoutInflater.from(context).inflate(R.layout.comment_sub_layout, null, false);
-
-                        StructCommentInfo infoReplay = list.get(position).replayMessageList.get(i);
-
-                        CircleImageView imvSenderPictureReplay = (CircleImageView) v.findViewById(R.id.csl_img_comment_sender_picture);
-                        TextView txtMessageReplay = (TextView) v.findViewById(R.id.csl_txt_message);
-                        TextView txtDateReplay = (TextView) v.findViewById(R.id.csl_txt_date);
-                        TextView txtClockReplay = (TextView) v.findViewById(R.id.csl_txt_clock);
-
-
-                        if (infoReplay.senderPicturePath.length() > 0) {
-                            imvSenderPictureReplay.setImageResource(Integer.parseInt(infoReplay.senderPicturePath));
-                        } else {
-                            imvSenderPictureReplay.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) context.getResources().getDimension(R.dimen.dp60), infoReplay.senderName, ""));
-                        }
-
-
-                        txtMessageReplay.setText(infoReplay.message);
-
-                        txtDateReplay.setText(infoReplay.date);
-                        txtClockReplay.setText(infoReplay.time);
-
-                        v.setOnLongClickListener(null);
-
-
-                        layout.addView(v);
-
-                    }
-
-                    if (count > 2) {
-                        View vMore = LayoutInflater.from(context).inflate(R.layout.comment_sub_layout_more, null, false);
-
-                        vMore.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Log.e("ddd", " btn more clicked");
-                            }
-                        });
-
-                        layout.addView(vMore);
-                    }
-
-
-                }
-            }
         }
 
     }
@@ -178,6 +140,88 @@ public class AdapterComment extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
 
     //************************************************************************************************
+
+
+    private void addThreeSubLayoutReplay(final int position, int start, final View itemView) {
+
+        int count = 0;
+
+        if (list.get(position).replayMessageList != null) {
+            count = list.get(position).replayMessageList.size();
+            if (count < 1) {
+
+                return;
+
+            }
+        }
+
+
+        final LinearLayout layout = (LinearLayout) itemView.findViewById(R.id.csl_ll_add_replay);
+
+        for (int i = start; i < count && i < 3 + start; i++) {
+
+            View v = LayoutInflater.from(context).inflate(R.layout.comment_sub_layout, null, false);
+
+            final StructCommentInfo infoReplay = list.get(position).replayMessageList.get(i);
+
+            CircleImageView imvSenderPictureReplay = (CircleImageView) v.findViewById(R.id.csl_img_comment_sender_picture);
+            final TextView txtMessageReplay = (TextView) v.findViewById(R.id.csl_txt_message);
+            TextView txtDateReplay = (TextView) v.findViewById(R.id.csl_txt_date);
+            TextView txtClockReplay = (TextView) v.findViewById(R.id.csl_txt_clock);
+
+
+            if (infoReplay.senderPicturePath.length() > 0) {
+                imvSenderPictureReplay.setImageResource(Integer.parseInt(infoReplay.senderPicturePath));
+            } else {
+                imvSenderPictureReplay.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) context.getResources().getDimension(R.dimen.dp60), infoReplay.senderName, ""));
+            }
+
+
+            SpannableString s = new SpannableString(infoReplay.senderName + ": " + infoReplay.message);
+            s.setSpan(new ForegroundColorSpan(Color.parseColor("#37B8CC")), 0, infoReplay.senderName.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            txtMessageReplay.setText(s);
+
+
+            txtDateReplay.setText(infoReplay.date);
+            txtClockReplay.setText(infoReplay.time);
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    if (infoReplay.maxLine) {
+                        txtMessageReplay.setEllipsize(null);
+                        txtMessageReplay.setMaxLines(Integer.MAX_VALUE);
+                        infoReplay.maxLine = false;
+
+                    } else {
+                        txtMessageReplay.setEllipsize(TextUtils.TruncateAt.END);
+                        txtMessageReplay.setMaxLines(2);
+                        infoReplay.maxLine = true;
+                    }
+
+
+                }
+            });
+
+            layout.addView(v);
+
+        }
+
+        if (count > 3 + start) {
+            View vMore = LayoutInflater.from(context).inflate(R.layout.comment_sub_layout_more, null, false);
+
+            vMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    layout.removeViewAt(layout.getChildCount() - 1);
+                    addThreeSubLayoutReplay(position, layout.getChildCount(), itemView);
+                }
+            });
+
+            layout.addView(vMore);
+        }
+    }
+
 
     private void updateSomething(int position, View holder) {
 
@@ -212,6 +256,9 @@ public class AdapterComment extends RecyclerView.Adapter<RecyclerView.ViewHolder
         itemView.findViewById(R.id.csl_ll_replay_comment).setVisibility(View.VISIBLE);
         itemView.findViewById(R.id.csl_ll_comment).setBackgroundColor(Color.parseColor("#999999"));
 
+        layoutReplay.setLayoutVisible(true);
+        layoutReplay.setLayoutParameter(list.get(position).senderPicturePath, list.get(position).senderName, list.get(position).message);
+
     }
 
     private void goneLayoutReplay(int position) {
@@ -220,8 +267,16 @@ public class AdapterComment extends RecyclerView.Adapter<RecyclerView.ViewHolder
         list.get(position).allChanges.add("1");
         replayCommentNumber = -1;
 
+        layoutReplay.setLayoutVisible(false);
+
         notifyItemChanged(position);
     }
+
+
+    public void closeLayoutReplay() {
+        goneLayoutReplay(replayCommentNumber);
+    }
+
 
 
 

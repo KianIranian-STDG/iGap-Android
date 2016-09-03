@@ -86,10 +86,138 @@
 
     </android.support.design.widget.CoordinatorLayout>
 
-    <include
-        android:layout_width="wrap_content"
+
+    <LinearLayout
+        android:id="@+id/acs_ll_replay"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp60"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+
+        <ImageView
+            android:layout_width="@dimen/dp40"
+            android:layout_height="@dimen/dp40"
+            android:layout_marginLeft="@dimen/dp8"
+            android:adjustViewBounds="true"
+            android:padding="@dimen/dp4"
+            android:src="@mipmap/reply"
+            android:visibility="visible" />
+
+        <View
+            android:layout_width="3dp"
+            android:layout_height="@dimen/dp40"
+            android:layout_marginLeft="@dimen/dp8"
+            android:background="@color/green" />
+
+
+        <com.iGap.module.CircleImageView
+            android:id="@+id/acs_imv_replay_pic"
+            android:layout_width="@dimen/dp40"
+            android:layout_height="@dimen/dp40"
+            android:layout_marginLeft="@dimen/dp8"
+            android:src="@mipmap/d"
+            android:visibility="visible" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dp8"
+            android:layout_weight="1"
+            android:gravity="left|center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/acs_txt_replay_from"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="@dimen/dp280"
+                android:singleLine="true"
+                android:text="New Text"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/sp14" />
+
+            <TextView
+                android:id="@+id/acs_txt_replay_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp4"
+                android:maxWidth="@dimen/dp280"
+                android:singleLine="true"
+                android:text="New Text"
+                android:textSize="@dimen/sp14" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/acs_btn_close"
+            android:layout_width="@dimen/dp40"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:text="@string/fa_close"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="@dimen/sp22"
+            android:visibility="visible" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/acs_ll_attach"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        layout="@layout/layout_attach_file" />
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp48"
+            android:background="@android:color/white"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/acs_btn_smile"
+                android:layout_width="@dimen/dp40"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/sp12"
+                android:background="@null"
+                android:gravity="center"
+                android:padding="@dimen/dp4"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_emoticon" />
+
+            <com.iGap.module.EmojiEditText
+                android:id="@+id/acs_edt_chat"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:paddingLeft="@dimen/dp6"
+                android:background="@null"
+                android:hint="           Type Message"
+                android:maxLines="4"
+                android:paddingRight="@dimen/dp4"
+                android:textColorHint="@color/gray" />
+
+
+            <Button
+                android:id="@+id/acs_btn_send"
+                android:layout_width="@dimen/dp80"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:gravity="center"
+                android:text="@string/fa_send"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/sp26"
+                android:visibility="visible" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 
 </LinearLayout>

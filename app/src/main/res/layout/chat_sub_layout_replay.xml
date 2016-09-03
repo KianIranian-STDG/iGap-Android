@@ -1,55 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="@dimen/dp48"
-    android:padding="@dimen/dp4"
     android:layout_marginBottom="@dimen/dp8"
     android:gravity="left|center"
     android:layoutDirection="ltr"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:padding="@dimen/dp4">
+
+    ImageView
+    android:id="@+id/chslr_imv_icon_replay"
+    android:layout_width="@dimen/dp40"
+    android:layout_height="@dimen/dp40"
+    android:layout_marginLeft="@dimen/dp8"
+    android:padding="@dimen/dp4"
+    android:adjustViewBounds="true"
+    android:src="@mipmap/reply"
+    android:visibility="visible" />
 
     <View
+        android:id="@+id/chslr_v_vertical_line"
         android:layout_width="3dp"
         android:layout_height="@dimen/dp40"
         android:layout_marginLeft="@dimen/dp8"
         android:background="@color/green" />
 
+
     <ImageView
+        android:id="@+id/chslr_imv_replay_pic"
         android:layout_width="@dimen/dp40"
         android:layout_height="@dimen/dp40"
-        android:visibility="gone"
-        android:layout_marginLeft="@dimen/dp8"
-
-        android:src="@mipmap/d"
         android:adjustViewBounds="true"
-        android:id="@+id/chslr_imv_replay_pic" />
+        android:layout_marginLeft="@dimen/dp8"
+        android:src="@mipmap/d"
+        android:visibility="gone" />
 
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:gravity="left|center"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
         android:layout_marginLeft="@dimen/dp8"
-        android:layout_height="match_parent">
+        android:gravity="left|center"
+        android:orientation="vertical">
 
         <TextView
+            android:id="@+id/chslr_txt_replay_from"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/sp14"
             android:maxWidth="@dimen/dp280"
             android:singleLine="true"
+            android:text="New Text"
             android:textColor="@color/colorPrimary"
-            android:text="New Text"
-            android:id="@+id/chslr_txt_replay_from" />
+            android:textSize="@dimen/sp14" />
 
         <TextView
+            android:id="@+id/chslr_txt_replay_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:singleLine="true"
             android:layout_marginTop="@dimen/dp4"
-            android:textSize="@dimen/sp14"
             android:maxWidth="@dimen/dp280"
+            android:singleLine="true"
             android:text="New Text"
-            android:id="@+id/chslr_txt_replay_message" />
+            android:textSize="@dimen/sp14" />
     </LinearLayout>
+
 
 </LinearLayout>
