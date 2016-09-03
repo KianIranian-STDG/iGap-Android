@@ -380,7 +380,7 @@ public class ActivityRegister extends ActivityEnhanced {
             pattern = extras.getString("PATTERN");
             regex = extras.getString("REGEX");
             String body = extras.getString("TERMS_BODY");
-            if (body != null) {
+            if (body != null & txtAgreement_register != null) { //TODO [Saeed Mozaffari] [2016-09-01 9:28 AM] - txtAgreement_register !=null is wrong. change it
                 txtAgreement_register.setText(Html.fromHtml(body));
             }
         }

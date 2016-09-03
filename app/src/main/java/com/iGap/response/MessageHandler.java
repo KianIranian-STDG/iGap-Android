@@ -1,9 +1,6 @@
 package com.iGap.response;
 
-/**
- * Created by android on 8/2/2016.
- */
-public abstract class MessageHandler {
+public abstract class MessageHandler { //TODO [Saeed Mozaffari] [2016-09-01 9:47 AM] - MessageHandler extends from ActivityEnhanced for instance and close realm, test it
 
     int actionId;
     public Object message;

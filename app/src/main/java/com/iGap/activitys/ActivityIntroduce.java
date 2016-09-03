@@ -60,6 +60,46 @@ public class ActivityIntroduce extends ActivityEnhanced {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+//        final RealmResults<RealmChatHistory> results = G.realm.where(RealmChatHistory.class).findAll();
+
+//        G.realm.executeTransaction(new Realm.Transaction() {
+//            @Override
+//            public void execute(Realm realm) {
+//                results.deleteAllFromRealm();
+//            }
+//        });
+
+        //RealmUserInfo = [{registrationStatus:true},{userId:39354},{userName:6dxGLliQtmpYAPa},{countryISOCode:IR},{email:null},{nickName:human},{gender:null},{phoneNumber:9336355473},{avatarPath:null},{token:ZmX9LTFbJtwKvUP7HXU1esN3TiWdKuQTNj7esn9Dsy6eBatVkfMU4INvz36jYsxFLtf8cr6rVvz5jpxdi3XNm0MJLUY32F4WD5ErvEDwRlb8gNMOTuDJwGJDDIxMaaVVMDTWX3eUkRe4gLdHFYY5fFB0Abkgu5d2X9yXnFGWCUwzNvD3YIy6FmkdbAiEMRARb0GL4yvR8rzezvbeeJziRt5XaGg8wjdVkWdjnZe8EnSdkl634pmJp5jQa63di8E6l0YevDMGV26N2tU00VDWqWBR0NheuS46eImBjaDZ5EMPiAEgr9wAIDVKpXXwAWeg41aFXXEGVtiUvZ5DsN0mOfmI4nMyK8EZiYkPZ2NoVTcc8IwqSjkdCTLK43JdjYf7iZOpx9MZRuiJgIdXgy4RERZe4cyTnfcs6Kc34VErrs9C1H2dMyb9NqfgX1fjSJL15KAI9dmnR5RHN0dXG4NnC51KRiUuD5DqBov2JAVORGkvcr1PpVkJpTnxCexFOvaS}]
+
+//        G.realm.executeTransaction(new Realm.Transaction() { // Huawei Info
+//            @Override
+//            public void execute(Realm realm) {
+//                RealmUserInfo realmUserInfo = realm.createObject(RealmUserInfo.class);
+//                realmUserInfo.setUserRegistrationState(true);
+//                realmUserInfo.setUserId(39354);
+//                realmUserInfo.setUserName("6dxGLliQtmpYAPa");
+//                realmUserInfo.setCountryISOCode("IR");
+//                realmUserInfo.setNickName("Huawei");
+//                realmUserInfo.setPhoneNumber("9336355473");
+//                realmUserInfo.setToken("ZmX9LTFbJtwKvUP7HXU1esN3TiWdKuQTNj7esn9Dsy6eBatVkfMU4INvz36jYsxFLtf8cr6rVvz5jpxdi3XNm0MJLUY32F4WD5ErvEDwRlb8gNMOTuDJwGJDDIxMaaVVMDTWX3eUkRe4gLdHFYY5fFB0Abkgu5d2X9yXnFGWCUwzNvD3YIy6FmkdbAiEMRARb0GL4yvR8rzezvbeeJziRt5XaGg8wjdVkWdjnZe8EnSdkl634pmJp5jQa63di8E6l0YevDMGV26N2tU00VDWqWBR0NheuS46eImBjaDZ5EMPiAEgr9wAIDVKpXXwAWeg41aFXXEGVtiUvZ5DsN0mOfmI4nMyK8EZiYkPZ2NoVTcc8IwqSjkdCTLK43JdjYf7iZOpx9MZRuiJgIdXgy4RERZe4cyTnfcs6Kc34VErrs9C1H2dMyb9NqfgX1fjSJL15KAI9dmnR5RHN0dXG4NnC51KRiUuD5DqBov2JAVORGkvcr1PpVkJpTnxCexFOvaS");
+//            }
+//        });
+
+//        G.realm.executeTransaction(new Realm.Transaction() { // LG Big Info
+//            @Override
+//            public void execute(Realm realm) {
+//                RealmUserInfo realmUserInfo = realm.createObject(RealmUserInfo.class);
+//                realmUserInfo.setUserRegistrationState(true);
+//                realmUserInfo.setUserId(40200);
+//                realmUserInfo.setUserName("1PpVkJpTnxCexFO");
+//                realmUserInfo.setCountryISOCode("IR");
+//                realmUserInfo.setNickName("LG Phone");
+//                realmUserInfo.setPhoneNumber("9337122617");
+//                // this token is wrong
+//                realmUserInfo.setToken("ZmX9LTFbJtwKvUP7HXU1esN3TiWdKuQTNj7esn9Dsy6eBatVkfMU4INvz36jYsxFLtf8cr6rVvz5jpxdi3XNm0MJLUY32F4WD5ErvEDwRlb8gNMOTuDJwGJDDIxMaaVVMDTWX3eUkRe4gLdHFYY5fFB0Abkgu5d2X9yXnFGWCUwzNvD3YIy6FmkdbAiEMRARb0GL4yvR8rzezvbeeJziRt5XaGg8wjdVkWdjnZe8EnSdkl634pmJp5jQa63di8E6l0YevDMGV26N2tU00VDWqWBR0NheuS46eImBjaDZ5EMPiAEgr9wAIDVKpXXwAWeg41aFXXEGVtiUvZ5DsN0mOfmI4nMyK8EZiYkPZ2NoVTcc8IwqSjkdCTLK43JdjYf7iZOpx9MZRuiJgIdXgy4RERZe4cyTnfcs6Kc34VErrs9C1H2dMyb9NqfgX1fjSJL15KAI9dmnR5RHN0dXG4NnC51KRiUuD5DqBov2JAVORGkvcr1PpVkJpTnxCexFOvaS");
+//            }
+//        });
+
         RealmUserInfo userInfo = G.realm.where(RealmUserInfo.class).findFirst();
         if (userInfo != null && userInfo.getUserRegistrationState()) { // user registered before
             Intent intent = new Intent(G.context, ActivityMain.class);

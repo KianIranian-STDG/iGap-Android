@@ -6,7 +6,7 @@ import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoUserContactsGetList;
-import com.iGap.realm.RealmUserContactsGetListResponse;
+import com.iGap.realm.RealmContacts;
 
 import io.realm.Realm;
 
@@ -28,7 +28,7 @@ public class UserContactsGetListResponse extends MessageHandler {
     @Override
     public void handler() {
 
-        Log.i("XXX", "UserContactsGetListResponse handler");
+        Log.i("XXX", "UserContactsGetListResponse handler message : " + message);
         final ProtoUserContactsGetList.UserContactsGetListResponse.Builder builder = (ProtoUserContactsGetList.UserContactsGetListResponse.Builder) message;
         builder.toString().length();
         G.realm = Realm.getInstance(G.realmConfig);
@@ -36,11 +36,11 @@ public class UserContactsGetListResponse extends MessageHandler {
             @Override
             public void execute(Realm realm) {
 
-                G.realm.delete(RealmUserContactsGetListResponse.class);
+                G.realm.delete(RealmContacts.class);
 
                 for (ProtoGlobal.RegisteredUser registerUser : builder.getRegisteredUserList()) {
-
-                    RealmUserContactsGetListResponse listResponse = G.realm.createObject(RealmUserContactsGetListResponse.class);
+                    Log.i("XXX", "UserContactsGetListResponse handler registerUser : " + registerUser);
+                    RealmContacts listResponse = G.realm.createObject(RealmContacts.class);
                     listResponse.setId(registerUser.getId());
                     listResponse.setPhone(registerUser.getPhone());
                     listResponse.setFirst_name(registerUser.getFirstName());

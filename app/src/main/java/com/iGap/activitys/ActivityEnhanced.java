@@ -26,7 +26,11 @@ public class ActivityEnhanced extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        G.realm.close();
+        try {
+            G.realm.close();
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        }
         super.onDestroy();
     }
 }

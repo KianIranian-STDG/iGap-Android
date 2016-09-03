@@ -73,7 +73,7 @@ public class MyType {
         }
     }
 
-    public enum MessageType {
+    public enum MessageType { //TODO [Saeed Mozaffari] [2016-09-01 10:31 AM] - Change Type Message to ProtoGlobal.RoomMessageType
 
         none(MyType.none),
         message(MyType.message),

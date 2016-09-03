@@ -15,6 +15,7 @@ import com.iGap.interface_package.OnChatGetRoom;
 import com.iGap.interface_package.OnClientGetRoomListResponse;
 import com.iGap.interface_package.OnInfoCountryResponse;
 import com.iGap.interface_package.OnInfoTime;
+import com.iGap.interface_package.OnReceiveChatMessage;
 import com.iGap.interface_package.OnReceiveInfoLocation;
 import com.iGap.interface_package.OnReceivePageInfoTOS;
 import com.iGap.interface_package.OnSecuring;
@@ -117,6 +118,7 @@ public class G extends Application {
     public static OnClientGetRoomListResponse onClientGetRoomListResponse;
     public static OnSecuring onSecuring;
     public static OnChatGetRoom onChatGetRoom;
+    public static OnReceiveChatMessage onReceiveChatMessage;
 
     // list of sr
     public static String[] serverPhoneNumbers = {"9372779537"};
@@ -132,6 +134,7 @@ public class G extends Application {
     public void onCreate() {
         super.onCreate();
         new ActivityMain().userLogin();
+        //new ActivityChat().receiveMessage();
         new File(DIR_APP).mkdirs();
         new File(DIR_IMAGES).mkdirs();
         new File(DIR_VIDEOS).mkdirs();

@@ -21,6 +21,7 @@ import com.iGap.helper.HelperRealm;
 import com.iGap.interface_package.IActionClick;
 import com.iGap.interface_package.IOpenDrawer;
 import com.iGap.interface_package.OnClientGetRoomListResponse;
+import com.iGap.interface_package.OnSecuring;
 import com.iGap.interface_package.OnUserContactGetList;
 import com.iGap.interface_package.OnUserContactImport;
 import com.iGap.interface_package.OnUserLogin;
@@ -36,8 +37,10 @@ import com.iGap.module.StructContactInfo;
 import com.iGap.module.Utils;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
+import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestClientGetRoomList;
 import com.iGap.request.RequestUserContactsGetList;
+import com.iGap.request.RequestUserLogin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,22 +73,22 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
 
     public void userLogin() {
 
-//        G.onSecuring = new OnSecuring() {
-//            @Override
-//            public void onSecure() {
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        RealmUserInfo userInfo = G.realm.where(RealmUserInfo.class).findFirst();
-//                        Log.i("SOC", "Login Start userInfo : " + userInfo);
-//                        if (!G.userLogin && userInfo != null) { //  need login //TODO [Saeed Mozaffari] [2016-08-29 11:51 AM] - check for securing
-//                            Log.i("SOC", "Login Start userInfo : " + userInfo);
-//                            new RequestUserLogin().userLogin(userInfo.getToken());
-//                        }
-//                    }
-//                });
-//            }
-//        };
+        G.onSecuring = new OnSecuring() {
+            @Override
+            public void onSecure() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        RealmUserInfo userInfo = G.realm.where(RealmUserInfo.class).findFirst();
+                        Log.i("SOC", "Login Start userInfo : " + userInfo);
+                        if (!G.userLogin && userInfo != null) { //  need login //TODO [Saeed Mozaffari] [2016-08-29 11:51 AM] - check for securing
+                            Log.i("SOC", "Login Start userInfo : " + userInfo);
+                            new RequestUserLogin().userLogin(userInfo.getToken());
+                        }
+                    }
+                });
+            }
+        };
 
         G.onUserLogin = new OnUserLogin() {
             @Override
@@ -286,7 +289,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
      * @param room ProtoGlobal.Room
      */
     private void putChatToDatabase(final ProtoGlobal.Room room) {
-        G.realm.executeTransaction(new Realm.Transaction() {
+        G.realm.executeTransaction(new Realm.Transaction() { //TODO [Saeed Mozaffari] [2016-09-03 12:27 PM] - error IllegalStateException: Realm access from incorrect thread. Realm objects can only be accessed on the thread they were created.
             @Override
             public void execute(Realm realm) {
                 realm.copyToRealmOrUpdate(HelperRealm.convert(room));

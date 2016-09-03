@@ -10,10 +10,6 @@ import com.iGap.realm.enums.GroupChatRole;
 import com.iGap.realm.enums.RoomType;
 
 /**
- * Created by Alireza Eskandarpour Shoferi (meNESS) on 8/31/2016.
- */
-
-/**
  * helper methods while working with Realm
  * note: when any field of classes was changed, update this helper.
  */

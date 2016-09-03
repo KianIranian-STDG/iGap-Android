@@ -5,7 +5,7 @@ import android.util.Log;
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoUserContactsDelete;
-import com.iGap.realm.RealmUserContactsGetListResponse;
+import com.iGap.realm.RealmContacts;
 
 import io.realm.Realm;
 
@@ -29,8 +29,8 @@ public class UserContactsDeleteResponse extends MessageHandler {
         ProtoUserContactsDelete.UserContactsDeleteResponse.Builder builder = (ProtoUserContactsDelete.UserContactsDeleteResponse.Builder) message;
         long phone = builder.getPhone();
         G.realm = Realm.getInstance(G.realmConfig);
-        RealmUserContactsGetListResponse realmUserContactsGetListResponse = G.realm
-                .where(RealmUserContactsGetListResponse.class)
+        RealmContacts realmUserContactsGetListResponse = G.realm
+                .where(RealmContacts.class)
                 .equalTo("phone", phone)
                 .findFirst();
         realmUserContactsGetListResponse.deleteFromRealm();

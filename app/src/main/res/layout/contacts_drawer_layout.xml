@@ -25,7 +25,6 @@
             android:id="@+id/edit_search"
             android:singleLine="true"
             android:inputType="text"
-            android:drawableRight="@drawable/searchbar3"
             android:textColor="@android:color/white"
             android:imeOptions="actionSearch"
             android:drawablePadding="10dp"

@@ -21,9 +21,6 @@ import com.iGap.module.StructContactInfo;
 
 import java.util.ArrayList;
 
-/**
- * Created by android3 on 8/2/2016.
- */
 public class AdapterContact extends RecyclerView.Adapter<AdapterContact.MyViewHolder> {
 
     private ArrayList<StructContactInfo> list;
@@ -41,7 +38,7 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.MyViewHo
         public TextView txtlastSeen;
         public TextView txtUnreadMessage;
 
-        public MyViewHolder(View itemView, int position) {
+        public MyViewHolder(View itemView, final int position) {
             super(itemView);
 
             imvContactPicture = (CircleImageView) itemView.findViewById(R.id.cs_img_contact_picture);
@@ -65,20 +62,22 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.MyViewHo
                 @Override
                 public void onClick(View view) {
 
+                    Log.i("XXX", "CLICK");
                     if (ActivityMain.isMenuButtonAddShown) {
+                        Log.i("XXX", "CLICK 1");
                         complete.complete(true, "closeMenuButton", "");
                     } else {
-
-                        int position = MyViewHolder.super.getPosition();
-
+                        Log.i("XXX", "CLICK ActivityChat");
                         Intent intent = new Intent(context, ActivityChat.class);
-                        intent.putExtra("ChatType", list.get(position).contactType);
+//                    intent.putExtra("ChatType", list.get(holder.getAdapterPosition()).contactType);
+                        intent.putExtra("ChatType", "CHAT");
                         intent.putExtra("ContactID", list.get(position).contactID);
                         intent.putExtra("IsMute", list.get(position).muteNotification);
                         intent.putExtra("OwnerShip", list.get(position).ownerShip);
                         intent.putExtra("ContactName", list.get(position).contactName);
                         intent.putExtra("MemberCount", list.get(position).memberCount);
                         intent.putExtra("LastSeen", list.get(position).lastSeen);
+                        intent.putExtra("RoomId", Long.parseLong(list.get(position).contactID));
 
                         context.startActivity(intent);
                     }

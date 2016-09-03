@@ -2,10 +2,7 @@ package com.iGap.realm;
 
 import io.realm.RealmObject;
 
-/**
- * Created by Rahmani on 8/29/2016.
- */
-public class RealmUserContactsGetListResponse extends RealmObject {
+public class RealmContacts extends RealmObject {
 
     private long id;
     private String username;

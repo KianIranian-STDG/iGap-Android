@@ -83,17 +83,22 @@ public class AdapterChatsList extends RecyclerView.Adapter<AdapterChatsList.View
             @Override
             public void onClick(View view) {
 
+                Log.i("XXX", "CLICK");
                 if (ActivityMain.isMenuButtonAddShown) {
+                    Log.i("XXX", "CLICK 1");
                     complete.complete(true, "closeMenuButton", "");
                 } else {
+                    Log.i("XXX", "CLICK ActivityChat");
                     Intent intent = new Intent(context, ActivityChat.class);
-                    intent.putExtra("ChatType", list.get(holder.getAdapterPosition()).contactType);
+//                    intent.putExtra("ChatType", list.get(holder.getAdapterPosition()).contactType);
+                    intent.putExtra("ChatType", "CHAT");
                     intent.putExtra("ContactID", list.get(holder.getAdapterPosition()).contactID);
                     intent.putExtra("IsMute", list.get(holder.getAdapterPosition()).muteNotification);
                     intent.putExtra("OwnerShip", list.get(holder.getAdapterPosition()).ownerShip);
                     intent.putExtra("ContactName", list.get(holder.getAdapterPosition()).contactName);
                     intent.putExtra("MemberCount", list.get(holder.getAdapterPosition()).memberCount);
                     intent.putExtra("LastSeen", list.get(holder.getAdapterPosition()).lastSeen);
+                    intent.putExtra("RoomId", Long.parseLong(list.get(holder.getAdapterPosition()).contactID));
 
                     context.startActivity(intent);
                 }

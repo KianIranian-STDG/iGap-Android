@@ -2,14 +2,14 @@ package com.iGap.request;
 
 import com.iGap.G;
 import com.iGap.proto.ProtoUserContactsEdit;
-import com.iGap.realm.RealmUserContactsGetListResponse;
+import com.iGap.realm.RealmContacts;
 
 public class RequestUserContactsEdit {
 
     public void contactsEdit(long phone, String first_name, String last_name) {
 
         ProtoUserContactsEdit.UserContactsEdit.Builder builder = ProtoUserContactsEdit.UserContactsEdit.newBuilder();
-        RealmUserContactsGetListResponse realmItem = G.realm.where(RealmUserContactsGetListResponse.class).equalTo("phone", phone).findFirst();
+        RealmContacts realmItem = G.realm.where(RealmContacts.class).equalTo("phone", phone).findFirst();
 
         if (realmItem != null) {
 

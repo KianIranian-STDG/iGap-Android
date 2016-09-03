@@ -1,7 +1,5 @@
 package com.iGap.request;
 
-import android.util.Log;
-
 import com.iGap.module.StructListOfContact;
 import com.iGap.proto.ProtoUserContactsImport;
 
@@ -20,29 +18,12 @@ public class RequestUserContactImport {
             String last_name = itemContactList.get(i).getLastName();
 
             ProtoUserContactsImport.UserContactsImport.Contact.Builder contact = ProtoUserContactsImport.UserContactsImport.Contact.newBuilder();
-            if (phone != null) {
-                contact.setPhone(phone);
-            } else {
-                contact.setPhone("a");
-            }
 
-            if (first_name != null) {
-                contact.setFirstName(first_name);
-            } else {
-                contact.setFirstName("a");
-            }
-            if (last_name != null) {
-                contact.setLastName(last_name);
-
-            } else {
-                contact.setLastName("a");
-            }
-            Log.i("XXX", "Name : " + contact.getFirstName());
-            Log.i("XXX", "family : " + contact.getLastName());
-            Log.i("XXX", "Phone : " + contact.getPhone());
+            contact.setPhone(phone);
+            contact.setFirstName(first_name);
+            contact.setLastName(last_name);
 
             userContactsImport.addContacts(i, contact);
-
         }
 
         RequestWrapper requestWrapper = new RequestWrapper(106, userContactsImport);

@@ -7,7 +7,7 @@ import android.text.TextUtils;
 
 import com.iGap.G;
 import com.iGap.adapter.ContactNamesAdapter;
-import com.iGap.realm.RealmUserContactsGetListResponse;
+import com.iGap.realm.RealmContacts;
 import com.iGap.request.RequestUserContactImport;
 
 import java.util.ArrayList;
@@ -22,15 +22,15 @@ public class ListOfContact {
 
 
         ArrayList<ContactNamesAdapter.LineItem> mItems = new ArrayList<>();
-        RealmResults<RealmUserContactsGetListResponse> items = null;
+        RealmResults<RealmContacts> items = null;
 
         G.realm = Realm.getInstance(G.realmConfig);
 
         if (s.equals("")) {
-            items = G.realm.where(RealmUserContactsGetListResponse.class).findAll();
+            items = G.realm.where(RealmContacts.class).findAll();
         } else {
             items = G.realm
-                    .where(RealmUserContactsGetListResponse.class)
+                    .where(RealmContacts.class)
                     .contains("display_name", s)
                     .findAll();
         }
@@ -51,9 +51,9 @@ public class ListOfContact {
                     sectionFirstPosition = i + headerCount;
                     lastHeader = header.toUpperCase();
                     headerCount += 1;
-                    mItems.add(new ContactNamesAdapter.LineItem(header.toUpperCase(), "", true, sectionManager, sectionFirstPosition));
+                    mItems.add(new ContactNamesAdapter.LineItem(items.get(i).getId(), header.toUpperCase(), "", true, sectionManager, sectionFirstPosition));
                 }
-                mItems.add(new ContactNamesAdapter.LineItem(items.get(i).getFirst_name(), "Last seen recently", false, sectionManager, sectionFirstPosition));
+                mItems.add(new ContactNamesAdapter.LineItem(items.get(i).getId(), items.get(i).getDisplay_name(), "Last seen recently", false, sectionManager, sectionFirstPosition));
 
             } catch (Exception e) {
             }

@@ -35,6 +35,7 @@ import com.iGap.interface_package.IEmojiStickerClick;
 import com.iGap.interface_package.IEmojiViewCreate;
 import com.iGap.interface_package.IRecentsLongClick;
 import com.iGap.interface_package.ISoftKeyboardOpenClose;
+import com.iGap.interface_package.OnReceiveChatMessage;
 import com.iGap.module.EmojiEditText;
 import com.iGap.module.EmojiPopup;
 import com.iGap.module.EmojiRecentsManager;
@@ -42,7 +43,9 @@ import com.iGap.module.MyType;
 import com.iGap.module.OnComplete;
 import com.iGap.module.StructChatInfo;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.realm.RealmChatHistory;
 import com.iGap.request.RequestChatSendMessage;
+import com.iGap.request.RequestClientGetRoom;
 
 import java.util.ArrayList;
 
@@ -75,6 +78,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     private MyType.ChatType chatType;
     private String contactId;
     private boolean isMute = false;
+    private boolean newChatRoom = false;
     private MyType.OwnerShip ownerShip;
 
     private String contactName;
@@ -89,6 +93,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
     private AppBarLayout appBarLayout;
 
+    private OnComplete complete;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -97,7 +102,11 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
         Bundle bundle = getIntent().getExtras();  // get chat type and contact id and  finish activity if value equal null
         if (bundle != null) {
-            chatType = (MyType.ChatType) bundle.getSerializable("ChatType");
+//            chatType = (MyType.ChatType) bundle.getSerializable("ChatType"); //TODO [Saeed Mozaffari] [2016-09-03 12:10 PM] - change type to ProtoGlobal.Room.Type
+            String type = bundle.getString("ChatType");
+            if (type.equals("CHAT")) {
+                chatType = MyType.ChatType.singleChat;
+            }
             contactId = bundle.getString("ContactID");
             isMute = bundle.getBoolean("IsMute");
             ownerShip = (MyType.OwnerShip) bundle.getSerializable("OwnerShip");
@@ -105,18 +114,43 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             memberCount = bundle.getString("MemberCount");
             lastSeen = bundle.getString("LastSeen");
             roomId = bundle.getLong("RoomId");
+            newChatRoom = bundle.getBoolean("NewChatRoom");
+            Log.i("MMM", "roomId : " + roomId);
         }
-//        if (chatType == null || contactId == null) {
-//            finish();
-//        }
-
 
         initComponent();
         initAppbarSelected();
+        receiveMessage();
 
         if (chatType == MyType.ChatType.channel && ownerShip == MyType.OwnerShip.member)
             initLayotChannelFooter();
 
+    }
+
+    public void receiveMessage() {
+
+        G.onReceiveChatMessage = new OnReceiveChatMessage() {
+            @Override
+            public void onReceiveChatMessage(String message, String messageType) {
+                if (newChatRoom) {
+                    newChatRoom = false;
+                    new RequestClientGetRoom().clientGetRoom(roomId);
+                }
+
+                mAdapter = new AdapterChat(ActivityChat.this, chatType, getChatList(), complete);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        recyclerView.setAdapter(mAdapter);
+                        mAdapter.notifyDataSetChanged();
+
+                        int position = recyclerView.getAdapter().getItemCount();
+                        if (position > 0)
+                            recyclerView.scrollToPosition(position - 1);
+                    }
+                });
+            }
+        };
     }
 
     private void initComponent() {
@@ -171,7 +205,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         btnMic.setTypeface(G.fontawesome);
 
 
-        OnComplete complete = new OnComplete() {
+        complete = new OnComplete() {
             @Override
             public void complete(boolean result, String messageOne, String MessageTow) {
 
@@ -194,16 +228,18 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         recyclerView = (RecyclerView) findViewById(R.id.chl_recycler_view_chat);
         mAdapter = new AdapterChat(ActivityChat.this, chatType, getChatList(), complete);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(ActivityChat.this);
-        mLayoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
+
+        int position = recyclerView.getAdapter().getItemCount();
+        if (position > 0)
+            recyclerView.scrollToPosition(position - 1);
 
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 finish();
             }
         });
@@ -211,29 +247,57 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         imvUserPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("ddd", " imvUserPicture ");
             }
         });
 
         btnMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("ddd", "btnMenu  ");
             }
         });
 
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("ddd", " btnSend");
+                Log.i("MMM", "Send Message Start");
 
-                String message = edtChat.getText().toString();
+                final String message = edtChat.getText().toString();
+                edtChat.setText("");
 
                 if (message != null) {
+
+
+                    // G.realm = Realm.getInstance(G.realmConfig);
+//                    G.realm.executeTransaction(new Realm.Transaction() {
+//                        @Override
+//                        public void execute(Realm realm) { //TODO [Saeed Mozaffari] [2016-09-01 10:39 AM] - don't new realm object in every send message
+//
+//                        }
+//                    });
+//                    G.realm.beginTransaction();
+//                    RealmChatHistory realmChatHistory = G.realm.createObject(RealmChatHistory.class);
+//                    RealmRoomMessage realmRoomMessage = G.realm.createObject(RealmRoomMessage.class);
+//
+//                    realmRoomMessage.setMessage(message);
+//                    realmRoomMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT.toString());
+//
+//                    realmChatHistory.setRoomId(1);
+//                    realmChatHistory.setRoomMessage(realmRoomMessage);
+//
+//                    mAdapter = new AdapterChat(ActivityChat.this, chatType, getChatList(), complete);
+//                    LinearLayoutManager mLayoutManager = new LinearLayoutManager(ActivityChat.this);
+//                    recyclerView.setLayoutManager(mLayoutManager);
+//                    recyclerView.setItemAnimator(new DefaultItemAnimator());
+//                    recyclerView.setAdapter(mAdapter);
+//
+//                    getChatList();
+//                    G.realm.commitTransaction();
+
                     new RequestChatSendMessage()
                             .newBuilder(ProtoGlobal.RoomMessageType.TEXT, roomId)
                             .message(message)
                             .sendMessage();
+
                 } else {
                     Toast.makeText(G.context, "Please Write Your Messge!", Toast.LENGTH_LONG).show();
                 }
@@ -244,14 +308,12 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         btnAttachFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("ddd", " btnAttachFile ");
             }
         });
 
         btnMic.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                Log.e("ddd", " btnMic  ");
                 return false;
             }
         });
@@ -570,137 +632,152 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
     private ArrayList<StructChatInfo> getChatList() {
 
-        ArrayList<StructChatInfo> list = new ArrayList<>();
-
-        StructChatInfo c = new StructChatInfo();
-        c.messageType = MyType.MessageType.image;
-        c.sendType = MyType.SendType.send;
-        c.senderAvatar = R.mipmap.a + "";
-        c.filePath = R.mipmap.a + "";
-        c.messag = "where are you  going hgf hgf hgf hgf  good good";
-        c.channelLink = "@igap";
-        c.seen = "122k";
-        list.add(c);
-
-
-        StructChatInfo c9 = new StructChatInfo();
-        c9.messageType = MyType.MessageType.files;
-        c9.forwardMessageFrom = "ali";
-        c9.replayFrom = "ali";
-        c9.replayMessage = "where are you djkdj kjf kdj";
-        c9.sendType = MyType.SendType.send;
-        c9.senderAvatar = R.mipmap.a + "";
-        list.add(c9);
-
-        StructChatInfo c10 = new StructChatInfo();
-        c10.messageType = MyType.MessageType.files;
-        c10.forwardMessageFrom = "hasan";
-        c10.replayFrom = "mehdi";
-        c10.replayMessage = "i am fine";
-        c10.replayPicturePath = " fd";
-        c10.sendType = MyType.SendType.recvive;
-        c10.senderAvatar = R.mipmap.a + "";
-        list.add(c10);
-
-        StructChatInfo c12 = new StructChatInfo();
-        c12.messageType = MyType.MessageType.gif;
-        c12.sendType = MyType.SendType.send;
-        list.add(c12);
-
-        StructChatInfo c16 = new StructChatInfo();
-        c16.sendType = MyType.SendType.timeLayout;
-        list.add(c16);
-
-        StructChatInfo c13 = new StructChatInfo();
-        c13.messageType = MyType.MessageType.audio;
-        c13.sendType = MyType.SendType.send;
-        list.add(c13);
-
-        StructChatInfo c14 = new StructChatInfo();
-        c14.messageType = MyType.MessageType.audio;
-        c14.sendType = MyType.SendType.recvive;
-        c14.messag = "بهترین موسیقی منتخب" +
-                "\n" + " how are you fghg hgfh fhgf hgf hgf hgf hgf fjhg jhg jhgjhg jhgjh";
-        c14.senderAvatar = R.mipmap.a + "";
-        list.add(c14);
-
-        StructChatInfo c15 = new StructChatInfo();
-        c15.messageType = MyType.MessageType.sticker;
-        c15.sendType = MyType.SendType.recvive;
-        c15.filePath = R.mipmap.sd + "";
-        list.add(c15);
-
-        StructChatInfo c11 = new StructChatInfo();
-        c11.messageType = MyType.MessageType.files;
-        c11.sendType = MyType.SendType.recvive;
-        c11.senderAvatar = R.mipmap.a + "";
-        list.add(c11);
-
-        StructChatInfo c1 = new StructChatInfo();
-        c1.messageType = MyType.MessageType.message;
-        c1.messag = "how";
-
-        c1.sendType = MyType.SendType.send;
-        c1.senderAvatar = R.mipmap.b + "";
-        list.add(c1);
-
-        StructChatInfo c2 = new StructChatInfo();
-        c2.messageType = MyType.MessageType.message;
-        c2.senderAvatar = R.mipmap.c + "";
-        c2.messag = "i am fine";
-        c2.forwardMessageFrom = "Android cade";
-        c2.sendType = MyType.SendType.recvive;
-        list.add(c2);
-
-        StructChatInfo c3 = new StructChatInfo();
-        c3.messageType = MyType.MessageType.video;
-        c3.messag = "where are you  going hgf hgf hgf hgf  good good";
-        c3.sendType = MyType.SendType.send;
-        c3.fileName = "good video";
-        c3.fileMime = ".mpv";
-        c3.fileState = MyType.FileState.notUpload;
-        c3.fileInfo = "3:20 (2.4 MB)";
-        c3.filePic = R.mipmap.a + "";
-        list.add(c3);
-
-        StructChatInfo c4 = new StructChatInfo();
-        c4.messageType = MyType.MessageType.image;
-        c4.forwardMessageFrom = "ali";
-        c4.messag = "the good picture for all the word";
-        c4.sendType = MyType.SendType.recvive;
-        c4.senderAvatar = R.mipmap.d + "";
-        c4.filePath = R.mipmap.c + "";
-        list.add(c4);
-
-        StructChatInfo c5 = new StructChatInfo();
-        c5.messageType = MyType.MessageType.image;
-        c5.forwardMessageFrom = "ali";
-        c5.sendType = MyType.SendType.send;
-        c5.senderAvatar = R.mipmap.e + "";
-        c5.filePath = R.mipmap.e + "";
-        list.add(c5);
-
-        StructChatInfo c6 = new StructChatInfo();
-        c6.messageType = MyType.MessageType.image;
-        c6.sendType = MyType.SendType.recvive;
-        c6.senderAvatar = R.mipmap.f + "";
-        c6.filePath = R.mipmap.f + "";
-        list.add(c6);
-
-        StructChatInfo c7 = new StructChatInfo();
-        c7.messageType = MyType.MessageType.image;
-        c7.sendType = MyType.SendType.recvive;
-        c7.senderAvatar = R.mipmap.g + "";
-        c7.filePath = R.mipmap.g + "";
-        list.add(c7);
-
-        StructChatInfo c8 = new StructChatInfo();
-        c8.messageType = MyType.MessageType.image;
-        c8.sendType = MyType.SendType.send;
-        c8.filePath = R.mipmap.h + "";
-        list.add(c8);
-
-        return list;
+        ArrayList<StructChatInfo> messageList = new ArrayList<>();
+        for (RealmChatHistory realmChatHistory : G.realm.where(RealmChatHistory.class).equalTo("roomId", roomId).findAll()) {
+            StructChatInfo structChatInfo = new StructChatInfo();
+            structChatInfo.messag = realmChatHistory.getRoomMessage().getMessage();
+            if (realmChatHistory.getRoomMessage().getMessageType().equals("TEXT")) {
+                structChatInfo.messageType = MyType.MessageType.message;
+            }
+            messageList.add(structChatInfo);
+        }
+        return messageList;
     }
+
+
+//    private ArrayList<StructChatInfo> getChatList() {
+//
+//        ArrayList<StructChatInfo> list = new ArrayList<>();
+//
+//        StructChatInfo c = new StructChatInfo();
+//        c.messageType = MyType.MessageType.image;
+//        c.sendType = MyType.SendType.send;
+//        c.senderAvatar = R.mipmap.a + "";
+//        c.filePath = R.mipmap.a + "";
+//        c.messag = "where are you  going hgf hgf hgf hgf  good good";
+//        c.channelLink = "@igap";
+//        c.seen = "122k";
+//        list.add(c);
+//
+//
+//        StructChatInfo c9 = new StructChatInfo();
+//        c9.messageType = MyType.MessageType.files;
+//        c9.forwardMessageFrom = "ali";
+//        c9.replayFrom = "ali";
+//        c9.replayMessage = "where are you djkdj kjf kdj";
+//        c9.sendType = MyType.SendType.send;
+//        c9.senderAvatar = R.mipmap.a + "";
+//        list.add(c9);
+//
+//        StructChatInfo c10 = new StructChatInfo();
+//        c10.messageType = MyType.MessageType.files;
+//        c10.forwardMessageFrom = "hasan";
+//        c10.replayFrom = "mehdi";
+//        c10.replayMessage = "i am fine";
+//        c10.replayPicturePath = " fd";
+//        c10.sendType = MyType.SendType.recvive;
+//        c10.senderAvatar = R.mipmap.a + "";
+//        list.add(c10);
+//
+//        StructChatInfo c12 = new StructChatInfo();
+//        c12.messageType = MyType.MessageType.gif;
+//        c12.sendType = MyType.SendType.send;
+//        list.add(c12);
+//
+//        StructChatInfo c16 = new StructChatInfo();
+//        c16.sendType = MyType.SendType.timeLayout;
+//        list.add(c16);
+//
+//        StructChatInfo c13 = new StructChatInfo();
+//        c13.messageType = MyType.MessageType.audio;
+//        c13.sendType = MyType.SendType.send;
+//        list.add(c13);
+//
+//        StructChatInfo c14 = new StructChatInfo();
+//        c14.messageType = MyType.MessageType.audio;
+//        c14.sendType = MyType.SendType.recvive;
+//        c14.messag = "بهترین موسیقی منتخب" +
+//                "\n" + " how are you fghg hgfh fhgf hgf hgf hgf hgf fjhg jhg jhgjhg jhgjh";
+//        c14.senderAvatar = R.mipmap.a + "";
+//        list.add(c14);
+//
+//        StructChatInfo c15 = new StructChatInfo();
+//        c15.messageType = MyType.MessageType.sticker;
+//        c15.sendType = MyType.SendType.recvive;
+//        c15.filePath = R.mipmap.sd + "";
+//        list.add(c15);
+//
+//        StructChatInfo c11 = new StructChatInfo();
+//        c11.messageType = MyType.MessageType.files;
+//        c11.sendType = MyType.SendType.recvive;
+//        c11.senderAvatar = R.mipmap.a + "";
+//        list.add(c11);
+//
+//        StructChatInfo c1 = new StructChatInfo();
+//        c1.messageType = MyType.MessageType.message;
+//        c1.messag = "how";
+//
+//        c1.sendType = MyType.SendType.send;
+//        c1.senderAvatar = R.mipmap.b + "";
+//        list.add(c1);
+//
+//        StructChatInfo c2 = new StructChatInfo();
+//        c2.messageType = MyType.MessageType.message;
+//        c2.senderAvatar = R.mipmap.c + "";
+//        c2.messag = "i am fine";
+//        c2.forwardMessageFrom = "Android cade";
+//        c2.sendType = MyType.SendType.recvive;
+//        list.add(c2);
+//
+//        StructChatInfo c3 = new StructChatInfo();
+//        c3.messageType = MyType.MessageType.video;
+//        c3.messag = "where are you  going hgf hgf hgf hgf  good good";
+//        c3.sendType = MyType.SendType.send;
+//        c3.fileName = "good video";
+//        c3.fileMime = ".mpv";
+//        c3.fileState = MyType.FileState.notUpload;
+//        c3.fileInfo = "3:20 (2.4 MB)";
+//        c3.filePic = R.mipmap.a + "";
+//        list.add(c3);
+//
+//        StructChatInfo c4 = new StructChatInfo();
+//        c4.messageType = MyType.MessageType.image;
+//        c4.forwardMessageFrom = "ali";
+//        c4.messag = "the good picture for all the word";
+//        c4.sendType = MyType.SendType.recvive;
+//        c4.senderAvatar = R.mipmap.d + "";
+//        c4.filePath = R.mipmap.c + "";
+//        list.add(c4);
+//
+//        StructChatInfo c5 = new StructChatInfo();
+//        c5.messageType = MyType.MessageType.image;
+//        c5.forwardMessageFrom = "ali";
+//        c5.sendType = MyType.SendType.send;
+//        c5.senderAvatar = R.mipmap.e + "";
+//        c5.filePath = R.mipmap.e + "";
+//        list.add(c5);
+//
+//        StructChatInfo c6 = new StructChatInfo();
+//        c6.messageType = MyType.MessageType.image;
+//        c6.sendType = MyType.SendType.recvive;
+//        c6.senderAvatar = R.mipmap.f + "";
+//        c6.filePath = R.mipmap.f + "";
+//        list.add(c6);
+//
+//        StructChatInfo c7 = new StructChatInfo();
+//        c7.messageType = MyType.MessageType.image;
+//        c7.sendType = MyType.SendType.recvive;
+//        c7.senderAvatar = R.mipmap.g + "";
+//        c7.filePath = R.mipmap.g + "";
+//        list.add(c7);
+//
+//        StructChatInfo c8 = new StructChatInfo();
+//        c8.messageType = MyType.MessageType.image;
+//        c8.sendType = MyType.SendType.send;
+//        c8.filePath = R.mipmap.h + "";
+//        list.add(c8);
+//
+//        return list;
+//    }
 
 }

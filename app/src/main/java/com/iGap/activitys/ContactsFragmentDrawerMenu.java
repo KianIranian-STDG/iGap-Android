@@ -30,11 +30,11 @@ public class ContactsFragmentDrawerMenu extends MenuFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View rootView =  inflater.inflate(R.layout.contacts_drawer_layout, container, false);
-        editsearch = (EditText)rootView.findViewById(R.id.edit_search);
+        View rootView = inflater.inflate(R.layout.contacts_drawer_layout, container, false);
+        editsearch = (EditText) rootView.findViewById(R.id.edit_search);
 
         // Capture Text in EditText
-        editsearch.addTextChangedListener(new TextWatcher() {
+        editsearch.addTextChangedListener(new TextWatcher() { //TODO [Saeed Mozaffari] [2016-09-03 11:33 AM] - search with big and small letters
 
             @Override
             public void afterTextChanged(Editable arg0) {
@@ -45,13 +45,11 @@ public class ContactsFragmentDrawerMenu extends MenuFragment {
             }
 
             @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1,
-                                          int arg2, int arg3) {
+            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
             }
 
             @Override
-            public void onTextChanged(CharSequence arg0, int arg1, int arg2,
-                                      int arg3) {
+            public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
             }
         });
 
@@ -73,7 +71,6 @@ public class ContactsFragmentDrawerMenu extends MenuFragment {
     private static class ViewHolder {
 
         private final RecyclerView mRecyclerView;
-
 
 
         public ViewHolder(View view) {
