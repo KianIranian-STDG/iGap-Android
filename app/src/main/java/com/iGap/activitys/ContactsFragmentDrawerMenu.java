@@ -1,23 +1,32 @@
 package com.iGap.activitys;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.StickyHeaderAdapter;
 import com.iGap.adapter.items.ContactItem;
+import com.iGap.interface_package.OnChatGetRoom;
 import com.iGap.libs.flowingdrawer.MenuFragment;
 import com.iGap.module.ListOfContact;
 import com.iGap.module.StructContactInfo;
+import com.iGap.proto.ProtoGlobal;
+import com.iGap.realm.RealmContacts;
+import com.iGap.realm.RealmRoom;
+import com.iGap.request.RequestChatGetRoom;
 import com.mikepenz.fastadapter.FastAdapter;
+import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItem;
 import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.adapters.HeaderAdapter;
@@ -55,6 +64,13 @@ public class ContactsFragmentDrawerMenu extends MenuFragment {
             @Override
             public boolean filter(ContactItem item, CharSequence constraint) {
                 return !item.mContact.text.toLowerCase().startsWith(String.valueOf(constraint).toLowerCase());
+            }
+        });
+        fastAdapter.withOnClickListener(new FastAdapter.OnClickListener<ContactItem>() {
+            @Override
+            public boolean onClick(View v, IAdapter adapter, ContactItem item, int position) {
+                chatGetRoom(item.mContact.peerId);
+                return false;
             }
         });
 
@@ -108,6 +124,46 @@ public class ContactsFragmentDrawerMenu extends MenuFragment {
 
         //restore selections (this has to be done after the items were added
         fastAdapter.withSavedInstanceState(savedInstanceState);
+    }
+
+    private void chatGetRoom(final long peerId) {
+
+        final RealmRoom realmRoom = G.realm.where(RealmRoom.class).equalTo("chat_room.peer_id", peerId).findFirst();
+
+        if (realmRoom != null) {
+            Log.i("XXX", "Room Exist");
+            Intent intent = new Intent(G.context, ActivityChat.class);
+            intent.putExtra("ChatID", realmRoom.getId());
+            intent.putExtra("ChatType", realmRoom.getType().toString());
+            intent.putExtra("NewChatRoom", false);
+            //intent.putExtra("IsMute", ); //TODO [Saeed Mozaffari] [2016-09-03 11:12 AM] - set IsMute in RealmRoom
+            intent.putExtra("LastSeen", G.realm.where(RealmContacts.class).equalTo("id", peerId).findFirst().getLast_seen());
+            intent.putExtra("RoomId", realmRoom.getId());
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            G.context.startActivity(intent);
+
+        } else {
+            Log.i("XXX", "Create new Room");
+            G.onChatGetRoom = new OnChatGetRoom() {
+                @Override
+                public void onChatGetRoom(final long roomId) {
+                    G.currentActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent intent = new Intent(G.context, ActivityChat.class);
+                            intent.putExtra("NewChatRoom", true);
+                            intent.putExtra("ChatType", ProtoGlobal.Room.Type.CHAT.toString());
+                            intent.putExtra("LastSeen", G.realm.where(RealmContacts.class).equalTo("id", peerId).findFirst().getLast_seen());
+                            intent.putExtra("RoomId", roomId);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            G.context.startActivity(intent);
+                        }
+                    });
+                }
+            };
+
+            new RequestChatGetRoom().chatGetRoom(peerId);
+        }
     }
 
     @Override
