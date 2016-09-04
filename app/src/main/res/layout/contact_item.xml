@@ -29,33 +29,34 @@
             android:layout_height="@dimen/dp48"
             android:src="@drawable/sample" />
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
             android:layout_marginLeft="@dimen/dp8"
             android:layout_marginStart="@dimen/dp8"
             android:orientation="vertical">
 
             <com.iGap.module.CustomTextViewMedium
-                android:id="@+id/text"
+                android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.6"
+                android:layout_alignParentTop="true"
                 android:singleLine="true"
-                android:textColor="#ffffff"
-                android:textSize="@dimen/sp12" />
+                android:text="Dominika Faniz"
+                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+                android:textColor="#000000"
+                android:textSize="@dimen/sp16" />
 
             <com.iGap.module.CustomTextViewMedium
-                android:id="@+id/textView"
+                android:id="@+id/subtitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.4"
+                android:layout_alignParentBottom="true"
                 android:gravity="bottom"
                 android:singleLine="true"
                 android:text="Last seen recently"
-                android:textColor="#bbbbbb"
-                android:textSize="@dimen/sp10" />
-        </LinearLayout>
+                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
+                android:textColor="#bbbbbb" />
+        </RelativeLayout>
     </LinearLayout>
 </LinearLayout>

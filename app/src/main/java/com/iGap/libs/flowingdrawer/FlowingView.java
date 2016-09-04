@@ -3,7 +3,6 @@ package com.iGap.libs.flowingdrawer;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.os.Build;
@@ -11,6 +10,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
 
+import com.iGap.R;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ValueAnimator;
 
@@ -61,7 +61,7 @@ public class FlowingView extends View {
     private void init() {
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
-        mPaint.setColor(Color.parseColor("#cc000000"));
+        mPaint.setColor(getResources().getColor(R.color.colorNavigationDrawerBgColor));
     }
 
     @Override

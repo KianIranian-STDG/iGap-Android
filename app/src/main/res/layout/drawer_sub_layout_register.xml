@@ -1,41 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dp68"
-    android:gravity="center_vertical">
-
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/dp16"
+    android:orientation="horizontal">
 
     <com.iGap.module.CircleImageView
         android:id="@+id/dlsr_imv_user_picture"
         android:layout_width="@dimen/dp60"
         android:layout_height="@dimen/dp60"
-        android:src="@mipmap/c" />
+        android:src="@drawable/sample" />
 
-
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="bottom"
-        android:orientation="vertical"
-        android:paddingBottom="@dimen/dp12"
-        android:paddingLeft="@dimen/dp8">
+        android:layout_marginLeft="@dimen/dp8"
+        android:layout_marginStart="@dimen/dp8"
+        android:orientation="vertical">
 
-        <TextView
+        <com.iGap.module.CustomTextViewMedium
             android:id="@+id/dlsr_txt_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/dlsr_txt_lastseen"
+            android:layout_alignParentTop="true"
+            android:gravity="bottom"
             android:singleLine="true"
-            android:text="Domenika Faniz"
-            android:textColor="@android:color/white"
+            android:text="Dominika Faniz"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:textColor="#000000"
             android:textSize="@dimen/sp16" />
 
-        <TextView
+        <com.iGap.module.CustomTextViewMedium
             android:id="@+id/dlsr_txt_lastseen"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="bottom"
             android:singleLine="true"
-            android:text="lastseen recently"
-            android:textColor="@color/gray"
-            android:textSize="@dimen/sp12" />
-    </LinearLayout>
+            android:text="Last seen recently"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
+            android:textColor="#bbbbbb" />
+    </RelativeLayout>
 </LinearLayout>

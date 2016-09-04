@@ -91,5 +91,6 @@
     <!-- emoji popup window-->
     <color name="colorEmojiPopupBackground">#f4f6f5</color>
     <color name="colorEmojiPopupCategoryBottomBorder">#e4e6e5</color>
+    <color name="colorNavigationDrawerBgColor">#ffffff</color>
 
 </resources>
