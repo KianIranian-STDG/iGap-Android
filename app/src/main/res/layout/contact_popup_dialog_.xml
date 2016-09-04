@@ -3,6 +3,7 @@
     android:layout_width="@dimen/dp240"
     android:background="@android:color/white"
     android:layoutDirection="ltr"
+    android:padding="@dimen/dp4"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
@@ -12,7 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp12"
-        android:gravity="center"
         android:padding="@dimen/dp12"
         android:text="@string/mute_notification"
         android:textColor="@android:color/black"
@@ -22,7 +22,6 @@
         android:id="@+id/cm_txt_clear_history"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:padding="@dimen/dp12"
         android:text="@string/clear_history"
         android:textColor="@android:color/black"
@@ -32,7 +31,6 @@
         android:id="@+id/cm_txt_delete_chat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:padding="@dimen/dp12"
         android:text="@string/delete_chat"
         android:textColor="@android:color/black"
@@ -42,12 +40,10 @@
         android:id="@+id/cm_txt_cancle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp20"
-        android:background="@color/green"
-        android:gravity="center"
+        android:gravity="right"
         android:padding="@dimen/dp12"
         android:text="@string/cancel"
-        android:textColor="@android:color/white"
+        android:textColor="@color/green"
         android:textSize="@dimen/sp22" />
 
 
