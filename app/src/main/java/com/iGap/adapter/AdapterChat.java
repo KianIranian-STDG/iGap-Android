@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activitys.ActivityComment;
+import com.iGap.interface_package.OnMessageClick;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.CustomRoundCornerImageView;
 import com.iGap.module.GifMovieView;
@@ -39,15 +40,17 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
     private MyType.ChatType chatType;
     private OnComplete complete;
+    private OnMessageClick mOnMessageClick;
 
     private boolean isSelectedMode = false;
     private int numberOfSelected = 0;
 
-    public AdapterChat(Context context, MyType.ChatType chatType, ArrayList<StructMessageInfo> list, OnComplete complete) {
+    public AdapterChat(Context context, MyType.ChatType chatType, ArrayList<StructMessageInfo> list, OnComplete complete, OnMessageClick onMessageClick) {
         this.list = list;
         this.context = context;
         this.chatType = chatType;
         this.complete = complete;
+        mOnMessageClick = onMessageClick;
     }
 
     @Override
@@ -247,7 +250,10 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     if (isSelectedMode) {
                         setIsSelectedItem(position);
                     } else {
-                        Log.e("ddd", " item   " + position + "   clicked");
+                        // when message item clicked
+                        if (mOnMessageClick != null) {
+                            mOnMessageClick.onMessageClick(view, list.get(getAdapterPosition()));
+                        }
                     }
 
                 }

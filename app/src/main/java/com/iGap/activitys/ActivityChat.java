@@ -35,6 +35,7 @@ import com.iGap.interface_package.IEmojiStickerClick;
 import com.iGap.interface_package.IEmojiViewCreate;
 import com.iGap.interface_package.IRecentsLongClick;
 import com.iGap.interface_package.ISoftKeyboardOpenClose;
+import com.iGap.interface_package.OnMessageClick;
 import com.iGap.interface_package.OnReceiveChatMessage;
 import com.iGap.module.EmojiEditText;
 import com.iGap.module.EmojiPopup;
@@ -44,6 +45,7 @@ import com.iGap.module.OnComplete;
 import com.iGap.module.StructMessageInfo;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmChatHistory;
+import com.iGap.request.RequestChatEditMessage;
 import com.iGap.request.RequestChatSendMessage;
 import com.iGap.request.RequestClientGetRoom;
 
@@ -52,7 +54,7 @@ import java.util.ArrayList;
 /**
  * Created by android3 on 8/5/2016.
  */
-public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, IRecentsLongClick {
+public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, IRecentsLongClick, OnMessageClick {
 
     private EmojiEditText edtChat;
     private Button btnSend;
@@ -137,7 +139,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     new RequestClientGetRoom().clientGetRoom(roomId);
                 }
 
-                mAdapter = new AdapterChat(ActivityChat.this, chatType, getChatList(), complete);
+                mAdapter = new AdapterChat(ActivityChat.this, chatType, getChatList(), complete, ActivityChat.this);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -226,7 +228,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
 
         recyclerView = (RecyclerView) findViewById(R.id.chl_recycler_view_chat);
-        mAdapter = new AdapterChat(ActivityChat.this, chatType, getChatList(), complete);
+        mAdapter = new AdapterChat(ActivityChat.this, chatType, getChatList(), complete, this);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(ActivityChat.this);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -261,13 +263,25 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             public void onClick(View view) {
                 Log.i("MMM", "Send Message Start");
 
-                final String message = edtChat.getText().toString();
-                edtChat.setText("");
+                // if use click on a message, the message's text will be put to the EditText
+                // i set the message object for that view's tag to obtain it here
+                // request message edit only if there is any changes to the message text
+                if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
+                    StructMessageInfo messageInfo = (StructMessageInfo) edtChat.getTag();
+                    final String message = edtChat.getText().toString().trim();
+                    if (!message.equals(messageInfo.messag)) {
+                        // send edit message request
+                        new RequestChatEditMessage().chatEditMessage(roomId, Long.parseLong(messageInfo.messageID), message);
 
-                if (message != null) {
-
-
-                    // G.realm = Realm.getInstance(G.realmConfig);
+                        // should be null after requesting
+                        edtChat.setTag(null);
+                        edtChat.setText("");
+                    }
+                } else {
+                    // new message has written
+                    final String message = edtChat.getText().toString().trim();
+                    if (!message.isEmpty()) {
+                        // G.realm = Realm.getInstance(G.realmConfig);
 //                    G.realm.executeTransaction(new Realm.Transaction() {
 //                        @Override
 //                        public void execute(Realm realm) { //TODO [Saeed Mozaffari] [2016-09-01 10:39 AM] - don't new realm object in every send message
@@ -293,15 +307,16 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 //                    getChatList();
 //                    G.realm.commitTransaction();
 
-                    new RequestChatSendMessage()
-                            .newBuilder(ProtoGlobal.RoomMessageType.TEXT, roomId)
-                            .message(message)
-                            .sendMessage();
+                        new RequestChatSendMessage()
+                                .newBuilder(ProtoGlobal.RoomMessageType.TEXT, roomId)
+                                .message(message)
+                                .sendMessage();
 
-                } else {
-                    Toast.makeText(G.context, "Please Write Your Messge!", Toast.LENGTH_LONG).show();
+                        edtChat.setText("");
+                    } else {
+                        Toast.makeText(G.context, "Please Write Your Messge!", Toast.LENGTH_LONG).show();
+                    }
                 }
-
             }
         });
 
