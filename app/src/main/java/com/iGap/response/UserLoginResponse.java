@@ -15,6 +15,9 @@ public class UserLoginResponse extends MessageHandler {
     public UserLoginResponse(int actionId, Object protoClass, String identity) {
         super(actionId, protoClass, identity);
 
+        this.message = protoClass;
+        this.identity = identity;
+        this.actionId = actionId;
     }
 
 

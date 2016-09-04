@@ -33,11 +33,16 @@ public class UserVerifyResponse extends MessageHandler {
         Log.i("SOC_RES", "userVerifyResponse getToken : " + userVerifyResponse.getToken());
         Log.i("SOC_RES", "userVerifyResponse getNewUser : " + userVerifyResponse.getNewUser());
 
-        G.onUserVerification.onUserVerify(userVerifyResponse.getToken(), userVerifyResponse.getNewUser());
+        G.onUserVerification.onUserVerify(userVerifyResponse.getToken(), userVerifyResponse.getNewUser(), "handler");
 
     }
 
     @Override
+    public void timeOut() {
+    }
+
+    @Override
     public void error() {
+        G.onUserVerification.onUserVerify("", false, "error");
     }
 }

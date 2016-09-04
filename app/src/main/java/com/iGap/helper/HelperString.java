@@ -16,6 +16,8 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Iterator;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.crypto.spec.SecretKeySpec;
 
@@ -26,7 +28,7 @@ public class HelperString {
 
     /**
      * generate random id contain 0-9 , a-z , A-Z
-     * <p/>
+     * <p>
      * return string with 10 character
      */
 
@@ -114,5 +116,22 @@ public class HelperString {
         return -1;
     }
 
+    /**
+     * regex for detect number from text
+     *
+     * @param text  input text that contain number
+     * @param regex regex pattern for detection
+     * @return
+     */
+
+    public static String regexExtractValue(String text, String regex) {
+        Pattern pattern = Pattern.compile(regex);
+        Matcher m = pattern.matcher(text);
+        String code = "";
+        while (m.find()) {
+            code = m.group();
+        }
+        return code;
+    }
 
 }

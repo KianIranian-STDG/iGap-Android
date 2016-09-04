@@ -27,10 +27,18 @@ public class ChatSendMessageResponse extends MessageHandler {
 
 
     @Override
-    public void handler() {
+    public void handler() { //TODO [Saeed Mozaffari] [2016-09-03 4:46 PM] - Eskandarpour if received first message from room add new room
+        //TODO [Saeed Mozaffari] [2016-09-04 9:22 AM] - if response is null message is not for me (should be message is for my another account). check it
         G.realm = Realm.getInstance(G.realmConfig);
 
         final ProtoChatSendMessage.ChatSendMessageResponse.Builder chatSendMessageResponse = (ProtoChatSendMessage.ChatSendMessageResponse.Builder) message;
+
+        if (chatSendMessageResponse.getResponse() == null) { // i'm not sender
+
+        } else { // i'm sender
+
+        }
+
         Log.i("MMM", "RoomId : " + chatSendMessageResponse.getRoomId());
         Log.i("MMM", "RoomMessage : " + chatSendMessageResponse.getRoomMessage());
 
@@ -62,7 +70,7 @@ public class ChatSendMessageResponse extends MessageHandler {
                 long realmUserId = G.realm.where(RealmUserInfo.class).findFirst().getUserId();
                 Log.i("MMM", "realmUserId : " + realmUserId);
                 Log.i("MMM", "roomMessage.getUserId() : " + roomMessage.getUserId());
-                G.onReceiveChatMessage.onReceiveChatMessage(roomMessage.getMessage(), roomMessage.getMessageType().toString());
+                G.onReceiveChatMessage.onReceiveChatMessage(roomMessage.getMessage(), roomMessage.getMessageType().toString(), chatSendMessageResponse);
 //                if (realmUserId != roomMessage.getUserId()) {
 //                    Log.i("MMM", "onReceiveChatMessage");
 //                    G.onReceiveChatMessage.onReceiveChatMessage(roomMessage.getMessage(), roomMessage.getMessageType().toString());

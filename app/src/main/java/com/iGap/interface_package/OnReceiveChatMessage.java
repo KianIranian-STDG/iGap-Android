@@ -5,8 +5,10 @@
 
 package com.iGap.interface_package;
 
+import com.iGap.proto.ProtoChatSendMessage;
+
 public interface OnReceiveChatMessage {
 
-    void onReceiveChatMessage(String message, String messageType);
+    void onReceiveChatMessage(String message, String messageType, ProtoChatSendMessage.ChatSendMessageResponse.Builder roomMessage);
 
 }

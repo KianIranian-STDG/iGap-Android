@@ -1,6 +1,7 @@
 package com.iGap.response;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
@@ -23,13 +24,13 @@ public class InfoLocationResponse extends MessageHandler {
 
     @Override
     public void handler() {
-
+        G.currentActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(G.context, "Get Info Location Successfully", Toast.LENGTH_SHORT).show();
+            }
+        });
         ProtoInfoLocation.InfoLocationResponse.Builder infoLocationResponse = (ProtoInfoLocation.InfoLocationResponse.Builder) message;
-//        infoLocationResponse.getIsoCode();//string
-//        infoLocationResponse.getCallingCode();
-//        infoLocationResponse.getName();
-//        infoLocationResponse.getPattern();
-//        infoLocationResponse.getRegex();
 
         Log.i("SOC_INFO", "iso code : " + infoLocationResponse.getIsoCode());
         Log.i("SOC_INFO", "iso code : " + infoLocationResponse.getCallingCode());
@@ -43,6 +44,7 @@ public class InfoLocationResponse extends MessageHandler {
                 , infoLocationResponse.getName()
                 , infoLocationResponse.getPattern()
                 , infoLocationResponse.getRegex());
+
 
     }
 

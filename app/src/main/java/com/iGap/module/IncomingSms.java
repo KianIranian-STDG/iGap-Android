@@ -9,10 +9,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
+import android.util.Log;
 
-import com.iGap.interface_package.OnComplete;
+import com.iGap.G;
+import com.iGap.interface_package.OnSmsReceive;
 
 
 /**
@@ -21,47 +22,42 @@ import com.iGap.interface_package.OnComplete;
 
 public class IncomingSms extends BroadcastReceiver {
 
-    private String PhoneNumberServer;
-    private OnComplete listener;
+    private OnSmsReceive listener;
 
     public IncomingSms() {
         super();
     }
 
-    public IncomingSms(String PhoneNumberServer, OnComplete listener) {
-        this.PhoneNumberServer = PhoneNumberServer;
+    public IncomingSms(OnSmsReceive listener) {
         this.listener = listener;
     }
 
-    // Get the object of SmsManager
-    final SmsManager sms = SmsManager.getDefault();
-
     @Override
     public void onReceive(Context context, Intent intent) {
-        // Retrieves a map of extended data from the intent.
+
+        Log.i("SSS", "Receive SMS");
         final Bundle bundle = intent.getExtras();
         try {
-
             if (bundle != null) {
+
                 final Object[] pdusObj = (Object[]) bundle.get("pdus");
 
                 for (int i = 0; i < pdusObj.length; i++) {
-
                     SmsMessage currentMessage = SmsMessage.createFromPdu((byte[]) pdusObj[i]);
                     String phoneNumber = currentMessage.getDisplayOriginatingAddress();
-
-                    String senderNum = phoneNumber;
                     String message = currentMessage.getDisplayMessageBody();
-
-                    if (senderNum.contains(PhoneNumberServer)) {
-                        listener.onComplete(true, message);
-                        break;
-
+                    Log.i("SSS", "1 phoneNumber : " + phoneNumber + "  ||  message : " + message);
+                    for (Long number : G.smsNumbers) {
+                        if (phoneNumber.contains(number.toString())) {
+                            Log.i("SSS", "onSmsReceive start");
+                            listener.onSmsReceive(message);
+                            break;
+                        }
                     }
                 }
             }
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 }

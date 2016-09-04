@@ -21,6 +21,7 @@ import com.iGap.R;
 import com.iGap.adapter.AdapterViewPager;
 import com.iGap.interface_package.OnReceiveInfoLocation;
 import com.iGap.interface_package.OnReceivePageInfoTOS;
+import com.iGap.interface_package.OnSecuring;
 import com.iGap.module.CustomCircleImage;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestInfoLocation;
@@ -59,6 +60,27 @@ public class ActivityIntroduce extends ActivityEnhanced {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        G.smsNumbers.add(10002128319L);
+        for (Long number : G.smsNumbers) {
+            Log.i("SSS", "3 G.smsNumbers : " + number);
+
+            if ("+9810002128319".contains("+98")) {
+
+            }
+
+            if (number.toString().contains("+9810002128319".replace("+98", ""))) {
+                Log.i("SSS", "onSmsReceive start 1");
+            }
+
+            if (number.toString().contains("10002128319")) {
+                Log.i("SSS", "onSmsReceive start 2");
+            }
+
+            if ("+9810002128319".contains(number.toString())) {
+                Log.i("SSS", "onSmsReceive start 3");
+            }
+        }
 
 //        final RealmResults<RealmChatHistory> results = G.realm.where(RealmChatHistory.class).findAll();
 
@@ -110,13 +132,20 @@ public class ActivityIntroduce extends ActivityEnhanced {
 
         setContentView(R.layout.activity_introduce);
 
-        G.handler.postDelayed(new Runnable() {
+//        G.handler.postDelayed(new Runnable() { //TODO [Saeed Mozaffari] [2016-09-03 4:25 PM] - list for unSecuring requests
+//            @Override
+//            public void run() {
+//
+//            }
+//        }, 3000);
+//
+        G.onSecuring = new OnSecuring() {
             @Override
-            public void run() {
+            public void onSecure() {
                 getTermsOfServiceBody();
                 getInfoLocation();
             }
-        }, 3000);
+        };
 
         layout_test = (ViewGroup) findViewById(R.id.int_layout_test);
 

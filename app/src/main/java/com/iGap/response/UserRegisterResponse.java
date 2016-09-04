@@ -1,10 +1,10 @@
 package com.iGap.response;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
-import com.iGap.proto.ProtoResponse;
 import com.iGap.proto.ProtoUserRegister;
 
 public class UserRegisterResponse extends MessageHandler {
@@ -24,33 +24,25 @@ public class UserRegisterResponse extends MessageHandler {
     @Override
     public void handler() {
         Log.i("SOC_RES", "UserRegisterResponse handler");
-
         ProtoUserRegister.UserRegisterResponse.Builder builder = (ProtoUserRegister.UserRegisterResponse.Builder) message;
-
-        ProtoResponse.Response.Builder response = ProtoResponse.Response.newBuilder().mergeFrom(builder.getResponse());
-        Log.i("SOC_RES", "UserRegisterResponse response.getId() : " + response.getId());
-        Log.i("SOC_RES", "UserRegisterResponse response.getTimestamp() : " + response.getTimestamp());
-
-        Log.i("SOC_RES", "UserRegisterResponse getUserId : " + builder.getUserId());
-        Log.i("SOC_RES", "UserRegisterResponse getUsername : " + builder.getUsername());
-
-
-        G.onUserRegistration.onRegister(builder.getUsername(), builder.getUserId(), builder.getMethod());
-
-
+        G.onUserRegistration.onRegister(builder.getUsername(), builder.getUserId(), builder.getMethod(), builder.getSmsNumberList(), builder.getVerifyCodeRegex());
     }
 
     @Override
     public void error() {
-        Log.i("SOC_RES", "UserRegisterResponse error");
-
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
-        int majorCode = errorResponse.getMajorCode();
-        int minorCode = errorResponse.getMinorCode();
+        final int majorCode = errorResponse.getMajorCode();
+        final int minorCode = errorResponse.getMinorCode();
 
         Log.i("SOC_RES", "UserRegisterResponse majorCode : " + majorCode);
         Log.i("SOC_RES", "UserRegisterResponse minorCode : " + minorCode);
 
+        G.currentActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(G.context, "Internal Error Major:" + majorCode + " and Minor:" + minorCode, Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 }

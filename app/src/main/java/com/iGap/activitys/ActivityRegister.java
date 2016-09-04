@@ -35,7 +35,7 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AdapterDialog;
 import com.iGap.helper.HelperString;
-import com.iGap.interface_package.OnComplete;
+import com.iGap.interface_package.OnSmsReceive;
 import com.iGap.interface_package.OnUserLogin;
 import com.iGap.interface_package.OnUserRegistration;
 import com.iGap.interface_package.OnUserVerification;
@@ -55,6 +55,7 @@ import com.vicmikhailau.maskededittext.MaskedEditText;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import io.realm.Realm;
 
@@ -85,6 +86,7 @@ public class ActivityRegister extends ActivityEnhanced {
     private String regex;
     private String userName;
     private String token;
+    private String regexFetchCodeVerification;
 
     private long userId;
 
@@ -312,8 +314,12 @@ public class ActivityRegister extends ActivityEnhanced {
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.i("XXX", "Regex 1 : " + edtPhoneNumber.getText().toString().matches("^\\d{9}$"));
+                Log.i("XXX", "Regex 2 : " + edtPhoneNumber.getText().toString().matches(regex));
+                Log.i("XXX", "Regex 3 : " + edtPhoneNumber.getText().toString().replace("-", "").matches(regex));
 
-                if (edtPhoneNumber.getText().length() > 0) {
+//                if ((regex != null && edtPhoneNumber.getText().toString().replace("-", "").matches(regex)) || (regex == null && edtPhoneNumber.getText().toString().length() > 0)) {
+                if (edtPhoneNumber.getText().toString().length() > 0) {
                     btnStart.setEnabled(false);
                     phoneNumber = edtPhoneNumber.getText().toString();
                     codeNumber = edtCodeNumber.getText().toString();
@@ -395,7 +401,7 @@ public class ActivityRegister extends ActivityEnhanced {
 
             userRegister();
 
-            countDownTimer = new CountDownTimer(1000 * 60, 1000) { // wait for verify sms
+            countDownTimer = new CountDownTimer(1000 * 30, 1000) { // wait for verify sms
 
                 TextView txtTimer;
                 TextView txtTimerLand;
@@ -526,13 +532,14 @@ public class ActivityRegister extends ActivityEnhanced {
         dialog.setContentView(R.layout.rg_dialog_verify_code);
         dialog.setCanceledOnTouchOutside(false);
 
-        EditText edtEnterCodeVerify = (EditText) dialog.findViewById(R.id.rg_edt_dialog_verifyCode); //EditText For Enter sms cod
+        final EditText edtEnterCodeVerify = (EditText) dialog.findViewById(R.id.rg_edt_dialog_verifyCode); //EditText For Enter sms cod
         // // TODO: 8/13/2016  enter code for verify
 
         Button btnCancel = (Button) dialog.findViewById(R.id.rg_btn_cancelVerifyCode);
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                userVerify(userName, edtEnterCodeVerify.getText().toString());
                 dialog.dismiss();
             }
         });
@@ -541,7 +548,6 @@ public class ActivityRegister extends ActivityEnhanced {
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 edtPhoneNumber.setText("");
                 dialog.dismiss();
             }
@@ -551,33 +557,35 @@ public class ActivityRegister extends ActivityEnhanced {
     }
 
     //    sms verify is ok
-    private void receiveVerifySms() { //when sms is receive
-
+    private void receiveVerifySms(String message) { //when sms is receive
+        String verificationCode = HelperString.regexExtractValue(message, regexFetchCodeVerification);
         countDownTimer.cancel(); //cancel method CountDown and continue process verify
 
         rg_prg_verify_sms.setVisibility(View.GONE);
         rg_img_verify_sms.setVisibility(View.VISIBLE);
         rg_txt_verify_sms.setTextColor(getResources().getColor(R.color.rg_start_background));
-        userVerify(userName);
+        userVerify(userName, verificationCode);
     }
 
 
     private void userRegister() {
 
         rg_prg_verify_connect.setVisibility(View.VISIBLE);
-        rg_txt_verify_sms.setTextAppearance(G.context, R.style.RedHUGEText);
+
         G.onUserRegistration = new OnUserRegistration() {
 
             @Override
-            public void onRegister(final String userNameR, final long userIdR, final ProtoUserRegister.UserRegisterResponse.Method methodValue) {
+            public void onRegister(final String userNameR, final long userIdR, final ProtoUserRegister.UserRegisterResponse.Method methodValue, final List<Long> smsNumbersR, String regex) {
 
                 Log.i("SOC_INFO", "userRegister is ok !");
+                regexFetchCodeVerification = regex;
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
 
                         userName = userNameR;
                         userId = userIdR;
+                        G.smsNumbers = smsNumbersR;
 
 
                         if (methodValue == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SMS) {//verification with sms
@@ -591,7 +599,11 @@ public class ActivityRegister extends ActivityEnhanced {
                         rg_prg_verify_connect.setVisibility(View.GONE);
                         rg_img_verify_connect.setVisibility(View.VISIBLE);
                         rg_txt_verify_connect.setTextColor(getResources().getColor(R.color.rg_text_verify));
-                        getVerificationSms(userName);
+
+                        rg_prg_verify_sms.setVisibility(View.VISIBLE);
+                        rg_txt_verify_sms.setTextAppearance(G.context, R.style.RedHUGEText);
+                        // rg_txt_verify_generate.setTextAppearance(G.context, R.style.RedHUGEText);
+                        //getVerificationSms();
                     }
                 });
             }
@@ -602,7 +614,8 @@ public class ActivityRegister extends ActivityEnhanced {
             @Override
             public void run() {
                 phoneNumber = phoneNumber.replace("-", "");
-
+                Log.i("SOC_INFO", "phoneNumber : " + phoneNumber);
+                Log.i("SOC_INFO", "isoCode : " + isoCode);
                 ProtoUserRegister.UserRegister.Builder builder = ProtoUserRegister.UserRegister.newBuilder();
                 builder.setCountryCode(isoCode);
                 builder.setPhoneNumber(Long.parseLong(phoneNumber));
@@ -620,38 +633,52 @@ public class ActivityRegister extends ActivityEnhanced {
 
     }
 
-    private void getVerificationSms(final String userName) { //TODO [Saeed Mozaffari] [2016-08-22 10:48 AM] - this method is fake and will be removed later
+    private void getVerificationSms() { //TODO [Saeed Mozaffari] [2016-08-22 10:48 AM] - this method is fake and will be removed later
         rg_prg_verify_sms.setVisibility(View.VISIBLE);
         rg_txt_verify_generate.setTextAppearance(G.context, R.style.RedHUGEText);
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                receiveVerifySms();
                 rg_prg_verify_sms.setVisibility(View.GONE);
                 rg_img_verify_sms.setVisibility(View.VISIBLE);
                 rg_txt_verify_sms.setTextColor(getResources().getColor(R.color.rg_start_background));
 
-                userVerify(userName);
+                receiveVerifySms("Your login code is : 12345 This code can be used to login to your account.");
             }
         }, 4000);
     }
 
-    private void userVerify(final String userName) {
+    private void userVerify(final String userName, final String verificationCode) {
         rg_prg_verify_generate.setVisibility(View.VISIBLE);
-        rg_txt_verify_register.setTextAppearance(G.context, R.style.RedHUGEText);
+        rg_txt_verify_generate.setTextAppearance(G.context, R.style.RedHUGEText);
+//        rg_txt_verify_register.setTextAppearance(G.context, R.style.RedHUGEText);
         G.onUserVerification = new OnUserVerification() {
             @Override
-            public void onUserVerify(final String tokenR, final boolean newUserR) {
+            public void onUserVerify(final String tokenR, final boolean newUserR, final String state) {
                 Log.i("SOC_INFO", "userVerification is Ok !");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        newUser = newUserR;
-                        token = tokenR;
-                        rg_prg_verify_generate.setVisibility(View.GONE);
-                        rg_img_verify_generate.setVisibility(View.VISIBLE);
-                        rg_txt_verify_generate.setTextColor(getResources().getColor(R.color.rg_text_verify));
-                        userLogin(token);
+                        if (state.equals("error")) {
+                            Toast.makeText(G.context, "Your verification code is incorrect", Toast.LENGTH_SHORT).show();
+                            errorVerifySms();
+                        } else {
+
+                            rg_txt_verify_sms.setText("Your login code is : 12345");
+                            rg_prg_verify_sms.setVisibility(View.GONE);
+                            rg_img_verify_sms.setVisibility(View.VISIBLE);
+                            rg_img_verify_sms.setImageResource(R.mipmap.check);
+                            rg_img_verify_sms.setColorFilter(getResources().getColor(R.color.rg_text_verify), PorterDuff.Mode.SRC_ATOP);
+                            rg_txt_verify_sms.setTextColor(getResources().getColor(R.color.rg_start_background));
+
+                            newUser = newUserR;
+                            token = tokenR;
+                            rg_prg_verify_generate.setVisibility(View.GONE);
+                            rg_img_verify_generate.setVisibility(View.VISIBLE);
+                            rg_txt_verify_generate.setTextColor(getResources().getColor(R.color.rg_text_verify));
+
+                            userLogin(token);
+                        }
                     }
                 });
             }
@@ -661,13 +688,14 @@ public class ActivityRegister extends ActivityEnhanced {
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Log.i("SOC_INFO", "userVerification Start!");
+                Log.i("SOC_INFO", "userVerification Start! verificationCode : " + verificationCode);
                 ProtoUserVerify.UserVerify.Builder userVerify = ProtoUserVerify.UserVerify.newBuilder();
-                userVerify.setCode(12345);
+                userVerify.setCode(Integer.parseInt(verificationCode));
                 userVerify.setUsername(userName);
-                userVerify.setDevice("Mobile");
+                userVerify.setDevice(getResources().getBoolean(R.bool.isTablet) ? "Tablet" : "Mobile");
                 userVerify.setOsName("android");
-                userVerify.setOsVersion("21"); // TODO [Saeed Mozaffari] [2016-08-21 11:37 AM] - get phone version
+                userVerify.setOsVersion(Integer.toString(android.os.Build.VERSION.SDK_INT));
+
 
                 RequestWrapper requestWrapper = new RequestWrapper(101, userVerify);
                 try {
@@ -682,6 +710,7 @@ public class ActivityRegister extends ActivityEnhanced {
 
     private void userLogin(final String token) {
         rg_prg_verify_register.setVisibility(View.VISIBLE);
+        rg_txt_verify_register.setTextAppearance(G.context, R.style.RedHUGEText);
         G.onUserLogin = new OnUserLogin() {
             @Override
             public void onLogin() {
@@ -748,23 +777,22 @@ public class ActivityRegister extends ActivityEnhanced {
         final IntentFilter filter = new IntentFilter();
         filter.addAction("android.provider.Telephony.SMS_RECEIVED");
 
-        smsReceiver = new IncomingSms("555", new OnComplete() {
+        smsReceiver = new IncomingSms(new OnSmsReceive() {
 
             @Override
-            public void onComplete(Boolean result, String message) {
+            public void onSmsReceive(String message) {
                 code = message;
                 try {
                     if (message != null && !message.isEmpty() && !message.equals("null") && !message.equals("")) {
                         rg_txt_verify_sms.setText(message);
-                        receiveVerifySms();
+                        receiveVerifySms(message);
                     }
                 } catch (Exception e1) {
-
                     e1.getStackTrace();
                 }
 
                 try {
-                    unregisterReceiver(smsReceiver);
+                    //unregisterReceiver(smsReceiver);
                 } catch (Exception e) {
                     e.getStackTrace();
                 }

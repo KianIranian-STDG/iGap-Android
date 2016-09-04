@@ -372,6 +372,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                 break;
         }
     }
+
     private void getChatsList() {
         G.onClientGetRoomListResponse = new OnClientGetRoomListResponse() {
             @Override
@@ -419,105 +420,105 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
 
                         // FIXME clear later
                         // fake data set
-                        StructChatInfo c = new StructChatInfo();
-                        c.unreadMessag = 5256;
-                        c.contactID = "123";
-                        c.contactName = "mehdi hosiny";
-                        c.contactType = MyType.ChatType.groupChat;
-                        c.viewDistanceColor = "#ff3131";
-                        c.memberCount = 122 + "";
-                        c.lastSeen = "10:21";
-                        c.lastmessage = "how are you jhjh hjh jhhhh";
-                        c.muteNotification = true;
-                        c.imageSource = "";
-                        mAdapter.add(new ChatItem().setInfo(c).setComplete(ActivityMain.this));
-
-                        StructChatInfo c1 = new StructChatInfo();
-                        c1.unreadMessag = 325515;
-                        c1.contactID = "123";
-                        c1.contactName = "Valerie";
-                        c1.contactType = MyType.ChatType.singleChat;
-                        c1.viewDistanceColor = "#5c9dff";
-                        c1.lastSeen = "10:21";
-                        c1.lastmessage = "Valeri is typing...";
-                        c1.muteNotification = false;
-                        c1.imageSource = "";
-                        mAdapter.add(new ChatItem().setInfo(c1).setComplete(ActivityMain.this));
-
-
-                        StructChatInfo c2 = new StructChatInfo();
-                        c2.unreadMessag = 823;
-                        c2.contactID = "123";
-                        c2.contactName = "ali";
-                        c2.memberCount = "12k";
-                        c2.contactType = MyType.ChatType.channel;
-                        c2.viewDistanceColor = "#f1d900";
-                        c2.lastSeen = "2:45";
-                        c2.lastmessage = "where are you";
-                        c2.muteNotification = false;
-                        c2.imageSource = R.mipmap.d + "";
-                        mAdapter.add(new ChatItem().setInfo(c2).setComplete(ActivityMain.this));
-
-                        StructChatInfo c3 = new StructChatInfo();
-                        c3.unreadMessag = 65;
-                        c3.contactID = "123";
-                        c3.contactName = "hiwa";
-                        c3.contactType = MyType.ChatType.singleChat;
-                        c3.viewDistanceColor = "#f75cff";
-                        c3.lastSeen = "21:45";
-                        c3.lastmessage = "iz typing how are you";
-                        c3.muteNotification = true;
-                        c3.imageSource = R.mipmap.h + "";
-                        mAdapter.add(new ChatItem().setInfo(c3).setComplete(ActivityMain.this));
-
-
-                        StructChatInfo c4 = new StructChatInfo();
-                        c4.unreadMessag = 0;
-                        c4.contactID = "123";
-                        c4.contactName = "has";
-                        c4.contactType = MyType.ChatType.groupChat;
-                        c4.viewDistanceColor = "#4fb559";
-                        c4.lastSeen = "21:30";
-                        c4.lastmessage = "go to link";
-                        c4.muteNotification = false;
-                        c4.imageSource = "";
-                        mAdapter.add(new ChatItem().setInfo(c4).setComplete(ActivityMain.this));
-
-                        StructChatInfo c5 = new StructChatInfo();
-                        c5.unreadMessag = 50;
-                        c5.contactID = "123";
-                        c5.contactName = "has";
-                        c5.contactType = MyType.ChatType.channel;
-                        c5.viewDistanceColor = "#f26d7d";
-                        c5.lastSeen = "21:30";
-                        c5.lastmessage = "go to link";
-                        c5.muteNotification = false;
-                        c5.imageSource = R.mipmap.e + "";
-                        mAdapter.add(new ChatItem().setInfo(c5).setComplete(ActivityMain.this));
-
-                        StructChatInfo c6 = new StructChatInfo();
-                        c6.unreadMessag = 0;
-                        c6.contactID = "123";
-                        c6.contactName = "hasan";
-                        c6.contactType = MyType.ChatType.groupChat;
-                        c6.viewDistanceColor = "#ff8a00";
-                        c6.lastSeen = "21:30";
-                        c6.lastmessage = "go to link";
-                        c6.muteNotification = false;
-                        c6.imageSource = R.mipmap.c + "";
-                        mAdapter.add(new ChatItem().setInfo(c6).setComplete(ActivityMain.this));
-
-                        StructChatInfo c7 = new StructChatInfo();
-                        c7.unreadMessag = 55;
-                        c7.contactID = "123";
-                        c7.contactName = "sorosh";
-                        c7.contactType = MyType.ChatType.singleChat;
-                        c7.viewDistanceColor = "#47dfff";
-                        c7.lastSeen = "21:30";
-                        c7.lastmessage = "go to link";
-                        c7.muteNotification = false;
-                        c7.imageSource = R.mipmap.g + "";
-                        mAdapter.add(new ChatItem().setInfo(c7).setComplete(ActivityMain.this));
+//                        StructChatInfo c = new StructChatInfo();
+//                        c.unreadMessag = 5256;
+//                        c.contactID = "123";
+//                        c.contactName = "mehdi hosiny";
+//                        c.contactType = MyType.ChatType.groupChat;
+//                        c.viewDistanceColor = "#ff3131";
+//                        c.memberCount = 122 + "";
+//                        c.lastSeen = "10:21";
+//                        c.lastmessage = "how are you jhjh hjh jhhhh";
+//                        c.muteNotification = true;
+//                        c.imageSource = "";
+//                        mAdapter.add(new ChatItem().setInfo(c).setComplete(ActivityMain.this));
+//
+//                        StructChatInfo c1 = new StructChatInfo();
+//                        c1.unreadMessag = 325515;
+//                        c1.contactID = "123";
+//                        c1.contactName = "Valerie";
+//                        c1.contactType = MyType.ChatType.singleChat;
+//                        c1.viewDistanceColor = "#5c9dff";
+//                        c1.lastSeen = "10:21";
+//                        c1.lastmessage = "Valeri is typing...";
+//                        c1.muteNotification = false;
+//                        c1.imageSource = "";
+//                        mAdapter.add(new ChatItem().setInfo(c1).setComplete(ActivityMain.this));
+//
+//
+//                        StructChatInfo c2 = new StructChatInfo();
+//                        c2.unreadMessag = 823;
+//                        c2.contactID = "123";
+//                        c2.contactName = "ali";
+//                        c2.memberCount = "12k";
+//                        c2.contactType = MyType.ChatType.channel;
+//                        c2.viewDistanceColor = "#f1d900";
+//                        c2.lastSeen = "2:45";
+//                        c2.lastmessage = "where are you";
+//                        c2.muteNotification = false;
+//                        c2.imageSource = R.mipmap.d + "";
+//                        mAdapter.add(new ChatItem().setInfo(c2).setComplete(ActivityMain.this));
+//
+//                        StructChatInfo c3 = new StructChatInfo();
+//                        c3.unreadMessag = 65;
+//                        c3.contactID = "123";
+//                        c3.contactName = "hiwa";
+//                        c3.contactType = MyType.ChatType.singleChat;
+//                        c3.viewDistanceColor = "#f75cff";
+//                        c3.lastSeen = "21:45";
+//                        c3.lastmessage = "iz typing how are you";
+//                        c3.muteNotification = true;
+//                        c3.imageSource = R.mipmap.h + "";
+//                        mAdapter.add(new ChatItem().setInfo(c3).setComplete(ActivityMain.this));
+//
+//
+//                        StructChatInfo c4 = new StructChatInfo();
+//                        c4.unreadMessag = 0;
+//                        c4.contactID = "123";
+//                        c4.contactName = "has";
+//                        c4.contactType = MyType.ChatType.groupChat;
+//                        c4.viewDistanceColor = "#4fb559";
+//                        c4.lastSeen = "21:30";
+//                        c4.lastmessage = "go to link";
+//                        c4.muteNotification = false;
+//                        c4.imageSource = "";
+//                        mAdapter.add(new ChatItem().setInfo(c4).setComplete(ActivityMain.this));
+//
+//                        StructChatInfo c5 = new StructChatInfo();
+//                        c5.unreadMessag = 50;
+//                        c5.contactID = "123";
+//                        c5.contactName = "has";
+//                        c5.contactType = MyType.ChatType.channel;
+//                        c5.viewDistanceColor = "#f26d7d";
+//                        c5.lastSeen = "21:30";
+//                        c5.lastmessage = "go to link";
+//                        c5.muteNotification = false;
+//                        c5.imageSource = R.mipmap.e + "";
+//                        mAdapter.add(new ChatItem().setInfo(c5).setComplete(ActivityMain.this));
+//
+//                        StructChatInfo c6 = new StructChatInfo();
+//                        c6.unreadMessag = 0;
+//                        c6.contactID = "123";
+//                        c6.contactName = "hasan";
+//                        c6.contactType = MyType.ChatType.groupChat;
+//                        c6.viewDistanceColor = "#ff8a00";
+//                        c6.lastSeen = "21:30";
+//                        c6.lastmessage = "go to link";
+//                        c6.muteNotification = false;
+//                        c6.imageSource = R.mipmap.c + "";
+//                        mAdapter.add(new ChatItem().setInfo(c6).setComplete(ActivityMain.this));
+//
+//                        StructChatInfo c7 = new StructChatInfo();
+//                        c7.unreadMessag = 55;
+//                        c7.contactID = "123";
+//                        c7.contactName = "sorosh";
+//                        c7.contactType = MyType.ChatType.singleChat;
+//                        c7.viewDistanceColor = "#47dfff";
+//                        c7.lastSeen = "21:30";
+//                        c7.lastmessage = "go to link";
+//                        c7.muteNotification = false;
+//                        c7.imageSource = R.mipmap.g + "";
+//                        mAdapter.add(new ChatItem().setInfo(c7).setComplete(ActivityMain.this));
                     }
                 });
             }

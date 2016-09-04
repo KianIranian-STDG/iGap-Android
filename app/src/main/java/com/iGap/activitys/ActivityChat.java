@@ -43,6 +43,7 @@ import com.iGap.module.EmojiRecentsManager;
 import com.iGap.module.MyType;
 import com.iGap.module.OnComplete;
 import com.iGap.module.StructMessageInfo;
+import com.iGap.proto.ProtoChatSendMessage;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmChatHistory;
 import com.iGap.request.RequestChatEditMessage;
@@ -133,7 +134,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
         G.onReceiveChatMessage = new OnReceiveChatMessage() {
             @Override
-            public void onReceiveChatMessage(String message, String messageType) {
+            public void onReceiveChatMessage(String message, String messageType, ProtoChatSendMessage.ChatSendMessageResponse.Builder roomMessage) {
                 if (newChatRoom) {
                     newChatRoom = false;
                     new RequestClientGetRoom().clientGetRoom(roomId);
@@ -317,6 +318,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                         Toast.makeText(G.context, "Please Write Your Messge!", Toast.LENGTH_LONG).show();
                     }
                 }
+
             }
         });
 

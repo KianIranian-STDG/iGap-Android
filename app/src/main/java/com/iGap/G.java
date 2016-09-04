@@ -39,6 +39,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -67,6 +68,7 @@ public class G extends Application {
     public static HashMap<Integer, String> lookupMap = new HashMap<>();
     public static ConcurrentHashMap<String, RequestWrapper> requestQueueMap = new ConcurrentHashMap<>();
     public static HashMap<String, ArrayList<Object>> requestQueueRelationMap = new HashMap<>();
+    public static List<Long> smsNumbers = new ArrayList<>();
 
 
     public static AtomicBoolean pullRequestQueueRunned = new AtomicBoolean(false);
