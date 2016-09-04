@@ -32,7 +32,7 @@
             android:inputType="text"
             android:paddingRight="10dp"
             android:singleLine="true"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/black" />
 
         <Space
             android:layout_width="0dp"
