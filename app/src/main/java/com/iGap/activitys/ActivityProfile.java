@@ -22,14 +22,13 @@ import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestUserProfileNickName;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
 
 public class ActivityProfile extends ActivityEnhanced {
 
     private TextView txtTitle;
-    private Button btnSetImage, btnLetsGo;
-    private CircleImageView imgSetImage;
+    private Button btnLetsGo;
+    private com.iGap.module.CircleImageView btnSetImage;
     private int myResultCodeCamera = 1;
     private int myResultCodeGallery = 0;
     private EditText edtNikName;
@@ -51,27 +50,13 @@ public class ActivityProfile extends ActivityEnhanced {
         txtTitle = (TextView) findViewById(R.id.pu_titleToolbar);
         txtTitle.setTypeface(G.FONT_IGAP);
 
-        btnSetImage = (Button) findViewById(R.id.pu_btn_giveImage);
+        btnSetImage = (com.iGap.module.CircleImageView) findViewById(R.id.pu_profile_circle_image);
         btnSetImage.setOnClickListener(new View.OnClickListener() { // button for set image
             @Override
             public void onClick(View view) {
                 startDialog(); // this dialog show 2 way for choose image : gallery and camera
             }
         });
-
-        imgSetImage = (CircleImageView) findViewById(R.id.pu_profile_circle_image);
-        if (imgSetImage != null) { // for choose another image
-
-            imgSetImage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    startDialog();
-                }
-            });
-        } else {
-
-            btnSetImage.setVisibility(View.VISIBLE);
-        }
 
         edtNikName = (EditText) findViewById(R.id.pu_edt_nikeName); // edit Text for NikName //TODO [Saeed Mozaffari] [2016-08-30 10:12 AM] - (Saeed Mozaffari to Mr Mollareza) disable enter for edt
 
@@ -119,12 +104,8 @@ public class ActivityProfile extends ActivityEnhanced {
 
         if (G.imageFile.exists()) {
             decodeBitmapProfile = HelperDecodeFile.decodeFile(G.imageFile);
-            imgSetImage.setVisibility(View.VISIBLE);
-            imgSetImage.setImageBitmap(decodeBitmapProfile);
-            btnSetImage.setVisibility(View.GONE);
-        } else {
-            imgSetImage.setVisibility(View.GONE);
-            btnSetImage.setVisibility(View.VISIBLE);
+            btnSetImage.setImageBitmap(decodeBitmapProfile);
+            btnSetImage.setBackgroundColor(getResources().getColor(android.R.color.transparent));
         }
     }
 

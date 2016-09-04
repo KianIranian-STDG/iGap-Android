@@ -187,6 +187,7 @@ public class ActivityRegister extends ActivityEnhanced {
 
             countryNameList[i] = structCountryArrayList.get(i).getName();
             StructCountry item = new StructCountry();
+            item.setId(i);
             item.setName(structCountryArrayList.get(i).getName());
             item.setCountryCode(structCountryArrayList.get(i).getCountryCode());
             item.setPhonePattetn(structCountryArrayList.get(i).getPhonePattetn());
@@ -213,7 +214,6 @@ public class ActivityRegister extends ActivityEnhanced {
                 dialogChooseCountry.getWindow().setLayout(setWidth, setHeight);
 
                 final TextView txtTitle = (TextView) dialogChooseCountry.findViewById(R.id.rg_txt_titleToolbar);
-
                 edtSearchView = (SearchView) dialogChooseCountry.findViewById(R.id.rg_edtSearch_toolbar);
 
                 txtTitle.setOnClickListener(new View.OnClickListener() {
@@ -271,8 +271,11 @@ public class ActivityRegister extends ActivityEnhanced {
                 adapterDialog = new AdapterDialog(ActivityRegister.this, items);
                 listView.setAdapter(adapterDialog);
 //                setiItemCountr();
-                adapterDialog.notifyDataSetChanged();
 
+                AdapterDialog.mSelectedVariation = positionRadioButton;
+
+                Toast.makeText(ActivityRegister.this, "" + positionRadioButton, Toast.LENGTH_SHORT).show();
+                adapterDialog.notifyDataSetChanged();
 
                 edtSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                     @Override
@@ -535,7 +538,7 @@ public class ActivityRegister extends ActivityEnhanced {
         final EditText edtEnterCodeVerify = (EditText) dialog.findViewById(R.id.rg_edt_dialog_verifyCode); //EditText For Enter sms cod
         // // TODO: 8/13/2016  enter code for verify
 
-        Button btnCancel = (Button) dialog.findViewById(R.id.rg_btn_cancelVerifyCode);
+        TextView btnCancel = (TextView) dialog.findViewById(R.id.rg_btn_cancelVerifyCode);
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -544,7 +547,7 @@ public class ActivityRegister extends ActivityEnhanced {
             }
         });
 
-        Button btnOk = (Button) dialog.findViewById(R.id.rg_btn_dialog_okVerifyCode);
+        TextView btnOk = (TextView) dialog.findViewById(R.id.rg_btn_dialog_okVerifyCode);
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -2,11 +2,20 @@ package com.iGap.module;
 
 public class StructCountry {
 
+    int id;
     int flag;
     String name;
     String phonePattetn;
     String abbreviation;
     String countryCode;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

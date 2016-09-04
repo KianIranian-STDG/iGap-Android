@@ -68,9 +68,9 @@ public class AdapterDialog extends BaseAdapter implements Filterable {
             public void onClick(View v) {
 
                 mSelectedVariation = (Integer) v.getTag();
-                ActivityRegister.positionRadioButton = mSelectedVariation;
-                notifyDataSetChanged();
 
+                ActivityRegister.positionRadioButton = countrylist.get(position).getId();
+                notifyDataSetChanged();
 
 //                ActivityRegister.dialogChooseCountry.dismiss();
 
@@ -106,6 +106,7 @@ public class AdapterDialog extends BaseAdapter implements Filterable {
                             .contains(constraint.toString().toUpperCase())) {
 
                         StructCountry structCountry = new StructCountry();
+                        structCountry.setId(mStringFilterList.get(i).getId());
                         structCountry.setName(mStringFilterList.get(i).getName());
                         structCountry.setCountryCode(mStringFilterList.get(i).getCountryCode());
                         structCountry.setPhonePattetn(mStringFilterList.get(i).getPhonePattetn());
