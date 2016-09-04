@@ -35,6 +35,7 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.theartofdev.edmodo:android-image-cropper:2.2.+'
     compile 'com.android.support:percent:24.2.0'
+    compile 'com.timehop.stickyheadersrecyclerview:library:0.4.3@aar'
 
     compile('com.mikepenz:fastadapter:1.8.1@aar') {
         transitive = true
