@@ -23,20 +23,19 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:24.1.1'
     compile 'com.google.protobuf:protobuf-java:3.0.0'
     compile 'com.neovisionaries:nv-websocket-client:1.29'
     compile 'com.nineoldandroids:library:2.4.0'
-    compile 'com.android.support:recyclerview-v7:24.1.1'
-    compile 'com.android.support:design:24.1.1'
-    provided 'com.android.support:support-annotations:24.1.1'
+    provided 'com.android.support:support-annotations:24.2.0'
     compile 'com.vicmikhailau:MaskedEditText:1.1.1'
     compile 'com.uncopt:android.justified:1.0'
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.theartofdev.edmodo:android-image-cropper:2.2.+'
-    compile 'com.android.support:percent:24.1.1'
-
+    compile 'com.android.support:percent:24.2.0'
     compile('com.mikepenz:fastadapter:1.8.1@aar') {
         transitive = true
     }
+    compile 'com.android.support:design:24.2.0'
+    compile 'com.android.support:appcompat-v7:24.2.0'
+    compile 'com.android.support:recyclerview-v7:24.2.0'
 }
