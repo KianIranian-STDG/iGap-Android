@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.iGap.R;
+import com.iGap.module.Utils;
 import com.nineoldandroids.view.ViewHelper;
 
 
@@ -64,7 +66,7 @@ public class LeftDrawerLayout extends ViewGroup {
         this.mActivityWidth = i;
     }
 
-    public LeftDrawerLayout(Context context, AttributeSet attrs) {
+    public LeftDrawerLayout(final Context context, AttributeSet attrs) {
         super(context, attrs);
 
         //setup drawer's minMargin
@@ -101,6 +103,10 @@ public class LeftDrawerLayout extends ViewGroup {
                 if (!openMark) {
                     releasing = true;
                     mFlowingView.resetContent();
+                } else {
+                    if (offset >= 0.5f && offset < 0.7f) {
+                        openHalfDrawer(Utils.dpToPx(context, R.dimen.dp280));
+                    }
                 }
                 invalidate();
             }
@@ -278,7 +284,8 @@ public class LeftDrawerLayout extends ViewGroup {
         releasing = true;
         mFlowingView.resetContent();
         mHelper.smoothSlideViewTo(menuView, -menuView.getWidth(), menuView.getTop());
-        postInvalidate();
+        mLeftMenuView.getLayoutParams().width = 0;
+        mLeftMenuView.requestLayout();
     }
 
     @Override

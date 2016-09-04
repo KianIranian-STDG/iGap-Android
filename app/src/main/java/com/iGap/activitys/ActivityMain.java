@@ -207,6 +207,10 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
             public void onMenuOpened() {
 
                 isMenuButtonAddShown = true;
+
+                if (!mLeftDrawerLayout.isShownMenu()) {
+                    mLeftDrawerLayout.toggle(Utils.getWindowWidth(ActivityMain.this));
+                }
             }
 
             @Override
