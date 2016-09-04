@@ -1,38 +1,24 @@
 package com.iGap.activitys;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.adapter.AdapterDrawerMenu;
 import com.iGap.interface_package.IActionClick;
 import com.iGap.libs.flowingdrawer.MenuFragment;
-import com.iGap.module.CircleImageView;
-import com.iGap.module.MyType;
-import com.iGap.module.StructUserInfo;
-
-import java.util.ArrayList;
 
 
 public class FragmentDrawerMenu extends MenuFragment {
 
     Context context;
-    RecyclerView recyclerView;
     private IActionClick mActionClickListener;
 
     @Override
@@ -50,150 +36,109 @@ public class FragmentDrawerMenu extends MenuFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.drawer_layout, container, false);
+        View view = inflater.inflate(R.layout.layout_menu, container, false);
+        initLayoutMenu(view);
 
-        initComponent(view);
 
         return setupReveal(view, true);
     }
 
-    private void initComponent(View view) {
 
-        initRecycleView(view);
+    private void initLayoutMenu(View v) {
 
-        CircleImageView imvUserPicture = (CircleImageView) view.findViewById(R.id.dl_imv_user_picture);
-        imvUserPicture.setOnClickListener(new View.OnClickListener() {
+        // init icon
+        TextView txtIconNewGroup = (TextView) v.findViewById(R.id.lm_txt_icon_group);
+        txtIconNewGroup.setTypeface(G.fontawesome);
+
+        TextView txtIconNewChat = (TextView) v.findViewById(R.id.lm_txt_icon_new_chat);
+        txtIconNewChat.setTypeface(G.fontawesome);
+
+        TextView txtIconNewChannle = (TextView) v.findViewById(R.id.lm_txt_icon_channel);
+        txtIconNewChannle.setTypeface(G.fontawesome);
+
+        TextView txtIconContacts = (TextView) v.findViewById(R.id.lm_txt_icon_contacts);
+        txtIconContacts.setTypeface(G.fontawesome);
+
+        TextView txtIconInviteFriends = (TextView) v.findViewById(R.id.lm_txt_icon_invite_friends);
+        txtIconInviteFriends.setTypeface(G.fontawesome);
+
+        TextView txtIconSetting = (TextView) v.findViewById(R.id.lm_txt_icon_setting);
+        txtIconSetting.setTypeface(G.fontawesome);
+
+        TextView txtIconiGapFAQ = (TextView) v.findViewById(R.id.lm_txt_icon_igap_faq);
+        txtIconiGapFAQ.setTypeface(G.fontawesome);
+
+
+        LinearLayout layoutNewGroup = (LinearLayout) v.findViewById(R.id.lm_ll_new_group);
+        layoutNewGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("ddd", "user picture click");
+                Log.e("ddd", "layoutNewGroup");
             }
         });
 
-        TextView txtName = (TextView) view.findViewById(R.id.dl_txt_name);
-        txtName.setTypeface(G.arialBold);
 
-        TextView txtPhone = (TextView) view.findViewById(R.id.dl_txt_phone_number);
-        txtPhone.setTypeface(G.arial);
-
-
-        ImageButton btnAboutUs = (ImageButton) view.findViewById(R.id.dl_btn_about_us);
-        btnAboutUs.setOnClickListener(new View.OnClickListener() {
+        LinearLayout layoutNewChat = (LinearLayout) v.findViewById(R.id.lm_ll_new_chat);
+        layoutNewChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("ddd", "about us");
+                Log.e("ddd", "layoutNewChat");
             }
         });
 
-        ImageButton btnSetting = (ImageButton) view.findViewById(R.id.dl_btn_setting);
-        btnSetting.setOnClickListener(new View.OnClickListener() {
+
+        LinearLayout layoutNewChannel = (LinearLayout) v.findViewById(R.id.lm_ll_new_channle);
+        layoutNewChannel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(G.context, ActivitySetting.class);
-                startActivity(intent);
+                Log.e("ddd", "layoutNewChannel");
             }
         });
 
-        ImageButton btnFAQ = (ImageButton) view.findViewById(R.id.dl_btn_faq);
-        btnFAQ.setOnClickListener(new View.OnClickListener() {
+
+        LinearLayout layoutContacts = (LinearLayout) v.findViewById(R.id.lm_ll_contacts);
+        layoutContacts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("ddd", "FAQ");
-            }
-        });
-
-        final EditText edtSearch = (EditText) view.findViewById(R.id.dl_edt_search);
-        edtSearch.setTypeface(G.arialBold);
-
-        ImageButton btnSearch = (ImageButton) view.findViewById(R.id.dl_btn_search);
-        btnSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                edtSearch.requestFocus();
+                Log.e("ddd", "layoutContacts");
 
                 // click on search action btn event
                 if (mActionClickListener != null) {
                     mActionClickListener.onActionSearchClick();
                 }
-            }
-        });
-
-        edtSearch.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                Log.e("ddd", "edt text change   " + charSequence);
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
 
             }
         });
 
+
+        LinearLayout layoutInviteFriends = (LinearLayout) v.findViewById(R.id.lm_ll_invite_friends);
+        layoutInviteFriends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.e("ddd", "layoutInviteFriends");
+            }
+        });
+
+
+        LinearLayout layoutSetting = (LinearLayout) v.findViewById(R.id.lm_ll_setting);
+        layoutSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.e("ddd", "layoutSetting");
+            }
+        });
+
+
+        LinearLayout layoutiGapFAQ = (LinearLayout) v.findViewById(R.id.lm_ll_igap_faq);
+        layoutiGapFAQ.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.e("ddd", "layoutiGapFAQ");
+            }
+        });
+
+
     }
 
 
-    private void initRecycleView(View view) {
-
-        recyclerView = (RecyclerView) view.findViewById(R.id.dl_recycleview_contacts);
-
-        AdapterDrawerMenu mAdapter = new AdapterDrawerMenu(getUserList(), context);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(mAdapter);
-
-    }
-
-
-    private ArrayList<StructUserInfo> getUserList() {
-
-        ArrayList<StructUserInfo> list = new ArrayList<>();
-
-        StructUserInfo u1 = new StructUserInfo();
-        u1.contactState = MyType.ContactState.registered;
-        list.add(u1);
-
-        StructUserInfo u2 = new StructUserInfo();
-        u2.contactState = MyType.ContactState.registered;
-        list.add(u2);
-
-        StructUserInfo u5 = new StructUserInfo();
-        u5.contactState = MyType.ContactState.registered;
-        list.add(u5);
-        list.add(u5);
-        list.add(u5);
-        list.add(u5);
-        list.add(u5);
-        list.add(u5);
-        list.add(u5);
-        list.add(u5);
-
-        StructUserInfo u6 = new StructUserInfo();
-        u6.contactState = MyType.ContactState.line;
-        list.add(u6);
-
-        StructUserInfo u3 = new StructUserInfo();
-        u3.contactState = MyType.ContactState.notRegistered;
-        list.add(u3);
-        list.add(u3);
-        list.add(u3);
-        list.add(u3);
-        list.add(u3);
-        list.add(u3);
-        list.add(u3);
-        list.add(u3);
-        list.add(u3);
-
-        StructUserInfo u4 = new StructUserInfo();
-        u4.contactState = MyType.ContactState.notRegistered;
-        list.add(u4);
-
-
-        return list;
-    }
 }
