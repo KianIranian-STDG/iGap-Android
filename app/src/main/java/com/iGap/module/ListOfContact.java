@@ -6,7 +6,6 @@ import android.provider.ContactsContract;
 import android.text.TextUtils;
 
 import com.iGap.G;
-import com.iGap.adapter.ContactNamesAdapter;
 import com.iGap.realm.RealmContacts;
 import com.iGap.request.RequestUserContactImport;
 
@@ -18,10 +17,10 @@ import io.realm.RealmResults;
 
 public class ListOfContact {
 
-    public static ArrayList<ContactNamesAdapter.LineItem> Retrive(String s) {
+    public static ArrayList<StructContactInfo> Retrive(String s) {
 
 
-        ArrayList<ContactNamesAdapter.LineItem> mItems = new ArrayList<>();
+        ArrayList<StructContactInfo> mItems = new ArrayList<>();
         RealmResults<RealmContacts> items = null;
 
         G.realm = Realm.getInstance(G.realmConfig);
@@ -51,9 +50,9 @@ public class ListOfContact {
                     sectionFirstPosition = i + headerCount;
                     lastHeader = header.toUpperCase();
                     headerCount += 1;
-                    mItems.add(new ContactNamesAdapter.LineItem(items.get(i).getId(), header.toUpperCase(), "", true, sectionManager, sectionFirstPosition));
+                    mItems.add(new StructContactInfo(items.get(i).getId(), header.toUpperCase(), "", true, sectionManager, sectionFirstPosition));
                 }
-                mItems.add(new ContactNamesAdapter.LineItem(items.get(i).getId(), items.get(i).getDisplay_name(), "Last seen recently", false, sectionManager, sectionFirstPosition));
+                mItems.add(new StructContactInfo(items.get(i).getId(), items.get(i).getDisplay_name(), "Last seen recently", false, sectionManager, sectionFirstPosition));
 
             } catch (Exception e) {
             }

@@ -12,11 +12,11 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.iGap.R;
-import com.iGap.adapter.ContactNamesAdapter;
 import com.iGap.adapter.StickyHeaderAdapter;
 import com.iGap.adapter.items.ContactItem;
 import com.iGap.libs.flowingdrawer.MenuFragment;
 import com.iGap.module.ListOfContact;
+import com.iGap.module.StructContactInfo;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IItem;
 import com.mikepenz.fastadapter.IItemAdapter;
@@ -91,8 +91,8 @@ public class ContactsFragmentDrawerMenu extends MenuFragment {
         rv.addItemDecoration(decoration);
 
         List<IItem> items = new ArrayList<>();
-        ArrayList<ContactNamesAdapter.LineItem> contacts = ListOfContact.Retrive("");
-        for (ContactNamesAdapter.LineItem contact : contacts) {
+        ArrayList<StructContactInfo> contacts = ListOfContact.Retrive("");
+        for (StructContactInfo contact : contacts) {
             items.add(new ContactItem().setContact(contact).withIdentifier(100 + contacts.indexOf(contact)));
         }
         itemAdapter.add(items);

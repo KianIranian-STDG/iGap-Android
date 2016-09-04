@@ -8,11 +8,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activitys.ActivityChat;
 import com.iGap.interface_package.OnChatGetRoom;
+import com.iGap.module.StructContactInfo;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmContacts;
 import com.iGap.realm.RealmRoom;
@@ -20,33 +23,33 @@ import com.iGap.request.RequestChatGetRoom;
 
 import java.util.ArrayList;
 
-public class ContactNamesAdapter extends RecyclerView.Adapter<CountryViewHolder> {
+public class ContactNamesAdapter extends RecyclerView.Adapter<ContactNamesAdapter.ViewHolder> {
 
     private static final int VIEW_TYPE_HEADER = 0x01;
     private static final int VIEW_TYPE_CONTENT = 0x00;
-    private ArrayList<LineItem> mItems = new ArrayList<>();
+    private ArrayList<StructContactInfo> mItems = new ArrayList<>();
 
     private final Context mContext;
 
-    public ContactNamesAdapter(Context context, ArrayList<LineItem> _mItems) {
+    public ContactNamesAdapter(Context context, ArrayList<StructContactInfo> _mItems) {
         mContext = context;
         this.mItems = _mItems;
     }
 
     @Override
-    public CountryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
         if (viewType == VIEW_TYPE_HEADER) {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_header_item, parent, false); //TODO [Saeed Mozaffari] [2016-09-03 11:48 AM] - header naming is wrong
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_header_item, parent, false);
         } else {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_item, parent, false);
         }
-        return new CountryViewHolder(view);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(CountryViewHolder holder, int position) {
-        final LineItem item = mItems.get(position);
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        final StructContactInfo item = mItems.get(position);
         final View itemView = holder.itemView;
 
         itemView.setOnClickListener(new View.OnClickListener() {
@@ -72,26 +75,6 @@ public class ContactNamesAdapter extends RecyclerView.Adapter<CountryViewHolder>
     @Override
     public int getItemCount() {
         return mItems.size();
-    }
-
-
-    public static class LineItem {
-
-        public long peerId;
-        public int sectionManager;
-        public int sectionFirstPosition;
-        public boolean isHeader;
-        public String text;
-        public String Status;
-
-        public LineItem(long peerId, String text, String status, boolean isHeader, int sectionManager, int sectionFirstPosition) {
-            this.peerId = peerId;
-            this.isHeader = isHeader;
-            this.text = text;
-            this.Status = status;
-            this.sectionManager = sectionManager;
-            this.sectionFirstPosition = sectionFirstPosition;
-        }
     }
 
     private void chatGetRoom(final long peerId) {
@@ -128,4 +111,52 @@ public class ContactNamesAdapter extends RecyclerView.Adapter<CountryViewHolder>
             new RequestChatGetRoom().chatGetRoom(peerId);
         }
     }
+
+    protected static class ViewHolder extends RecyclerView.ViewHolder {
+
+        public TextView mTextView;
+        public TextView mStatus;
+        public ImageView img;
+
+
+        ViewHolder(View view) {
+            super(view);
+
+            img = (ImageView) view.findViewById(R.id.imageView);
+            mTextView = (TextView) view.findViewById(R.id.title);
+            mStatus = (TextView) view.findViewById(R.id.subtitle);
+
+        }
+
+        public void bindItem(String text, String text2) {
+            try {
+                mTextView.setText(text);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                mStatus.setText(text2);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+      /*  try {
+            if(sli.equals("sli"))
+                mLine.setVisibility(View.VISIBLE);
+            else
+                mLine.setVisibility(View.GONE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+*/
+        }
+
+   /* @Override
+    public String toString() {
+        return mTextView.getText().toString();
+    }*/
+
+
+    }
+
 }

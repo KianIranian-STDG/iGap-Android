@@ -5,9 +5,9 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.iGap.R;
-import com.iGap.adapter.ContactNamesAdapter;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.CustomTextViewMedium;
+import com.iGap.module.StructContactInfo;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 
@@ -22,9 +22,9 @@ import java.util.List;
  */
 public class ContactItem extends AbstractItem<ContactItem, ContactItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
-    public ContactNamesAdapter.LineItem mContact;
+    public StructContactInfo mContact;
 
-    public ContactItem setContact(ContactNamesAdapter.LineItem contact) {
+    public ContactItem setContact(StructContactInfo contact) {
         this.mContact = contact;
         return this;
     }
@@ -75,8 +75,8 @@ public class ContactItem extends AbstractItem<ContactItem, ContactItem.ViewHolde
             super(view);
 
             image = (CircleImageView) view.findViewById(R.id.imageView);
-            title = (CustomTextViewMedium) view.findViewById(R.id.text);
-            subtitle = (CustomTextViewMedium) view.findViewById(R.id.textView);
+            title = (CustomTextViewMedium) view.findViewById(R.id.title);
+            subtitle = (CustomTextViewMedium) view.findViewById(R.id.subtitle);
             topLine = (ImageView) view.findViewById(R.id.topLine);
         }
     }
