@@ -1,56 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/layout_root"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/dp8"
-    android:paddingTop="@dimen/dp8">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-
-    <LinearLayout
+    <EditText
+        android:id="@+id/edit_search"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp32"
-        android:orientation="horizontal">
-
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.1" />
-
-
-        <EditText
-            android:id="@+id/edit_search"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_weight="0.8"
-            android:background="@drawable/press_button_stroke"
-            android:drawablePadding="10dp"
-            android:gravity="center"
-            android:imeOptions="actionSearch"
-            android:inputType="text"
-            android:paddingRight="10dp"
-            android:singleLine="true"
-            android:textColor="@android:color/black" />
-
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.1" />
-
-    </LinearLayout>
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="@dimen/dp6"
+        android:layout_marginEnd="@dimen/dp32"
+        android:layout_marginLeft="@dimen/dp32"
+        android:layout_marginRight="@dimen/dp32"
+        android:layout_marginStart="@dimen/dp32"
+        android:layout_marginTop="@dimen/dp6"
+        android:background="@drawable/press_button_stroke"
+        android:gravity="center"
+        android:hint="@string/hint_search"
+        android:imeOptions="actionSearch"
+        android:inputType="textPersonName"
+        android:paddingEnd="@dimen/dp16"
+        android:paddingLeft="@dimen/dp16"
+        android:paddingRight="@dimen/dp16"
+        android:paddingStart="@dimen/dp16"
+        android:textColor="@android:color/black" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/edit_search"
-        android:layout_marginTop="@dimen/dp8"
-        android:clipToPadding="false"
-        android:scrollbars="vertical" />
-
-
-</LinearLayout>
+        android:layout_below="@+id/edit_search" />
+</RelativeLayout>
 
 

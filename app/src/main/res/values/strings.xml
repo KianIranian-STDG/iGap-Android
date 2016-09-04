@@ -173,5 +173,6 @@
     <string name="chi_popup_share">Share</string>
     <string name="chi_popup_delete">Delete</string>
     <string name="chi_popup_shortcut">Add Shortcut</string>
+    <string name="hint_search">Search…</string>
 
 </resources>
