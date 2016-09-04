@@ -660,139 +660,168 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     }
 
 
-//    private ArrayList<StructMessageInfo> getChatList() {
-//
-//        ArrayList<StructMessageInfo> list = new ArrayList<>();
-//
-//        StructMessageInfo c = new StructMessageInfo();
-//        c.messageType = MyType.MessageType.image;
-//        c.sendType = MyType.SendType.send;
-//        c.senderAvatar = R.mipmap.a + "";
-//        c.filePath = R.mipmap.a + "";
-//        c.messag = "where are you  going hgf hgf hgf hgf  good good";
-//        c.channelLink = "@igap";
-//        c.seen = "122k";
-//        list.add(c);
-//
-//
-//        StructMessageInfo c9 = new StructMessageInfo();
-//        c9.messageType = MyType.MessageType.files;
-//        c9.forwardMessageFrom = "ali";
-//        c9.replayFrom = "ali";
-//        c9.replayMessage = "where are you djkdj kjf kdj";
-//        c9.sendType = MyType.SendType.send;
-//        c9.senderAvatar = R.mipmap.a + "";
-//        list.add(c9);
-//
-//        StructMessageInfo c10 = new StructMessageInfo();
-//        c10.messageType = MyType.MessageType.files;
-//        c10.forwardMessageFrom = "hasan";
-//        c10.replayFrom = "mehdi";
-//        c10.replayMessage = "i am fine";
-//        c10.replayPicturePath = " fd";
-//        c10.sendType = MyType.SendType.recvive;
-//        c10.senderAvatar = R.mipmap.a + "";
-//        list.add(c10);
-//
-//        StructMessageInfo c12 = new StructMessageInfo();
-//        c12.messageType = MyType.MessageType.gif;
-//        c12.sendType = MyType.SendType.send;
-//        list.add(c12);
-//
-//        StructMessageInfo c16 = new StructMessageInfo();
-//        c16.sendType = MyType.SendType.timeLayout;
-//        list.add(c16);
-//
-//        StructMessageInfo c13 = new StructMessageInfo();
-//        c13.messageType = MyType.MessageType.audio;
-//        c13.sendType = MyType.SendType.send;
-//        list.add(c13);
-//
-//        StructMessageInfo c14 = new StructMessageInfo();
-//        c14.messageType = MyType.MessageType.audio;
-//        c14.sendType = MyType.SendType.recvive;
-//        c14.messag = "بهترین موسیقی منتخب" +
-//                "\n" + " how are you fghg hgfh fhgf hgf hgf hgf hgf fjhg jhg jhgjhg jhgjh";
-//        c14.senderAvatar = R.mipmap.a + "";
-//        list.add(c14);
-//
-//        StructMessageInfo c15 = new StructMessageInfo();
-//        c15.messageType = MyType.MessageType.sticker;
-//        c15.sendType = MyType.SendType.recvive;
-//        c15.filePath = R.mipmap.sd + "";
-//        list.add(c15);
-//
-//        StructMessageInfo c11 = new StructMessageInfo();
-//        c11.messageType = MyType.MessageType.files;
-//        c11.sendType = MyType.SendType.recvive;
-//        c11.senderAvatar = R.mipmap.a + "";
-//        list.add(c11);
-//
-//        StructMessageInfo c1 = new StructMessageInfo();
-//        c1.messageType = MyType.MessageType.message;
-//        c1.messag = "how";
-//
-//        c1.sendType = MyType.SendType.send;
-//        c1.senderAvatar = R.mipmap.b + "";
-//        list.add(c1);
-//
-//        StructMessageInfo c2 = new StructMessageInfo();
-//        c2.messageType = MyType.MessageType.message;
-//        c2.senderAvatar = R.mipmap.c + "";
-//        c2.messag = "i am fine";
-//        c2.forwardMessageFrom = "Android cade";
-//        c2.sendType = MyType.SendType.recvive;
-//        list.add(c2);
-//
-//        StructMessageInfo c3 = new StructMessageInfo();
-//        c3.messageType = MyType.MessageType.video;
-//        c3.messag = "where are you  going hgf hgf hgf hgf  good good";
-//        c3.sendType = MyType.SendType.send;
-//        c3.fileName = "good video";
-//        c3.fileMime = ".mpv";
-//        c3.fileState = MyType.FileState.notUpload;
-//        c3.fileInfo = "3:20 (2.4 MB)";
-//        c3.filePic = R.mipmap.a + "";
-//        list.add(c3);
-//
-//        StructMessageInfo c4 = new StructMessageInfo();
-//        c4.messageType = MyType.MessageType.image;
-//        c4.forwardMessageFrom = "ali";
-//        c4.messag = "the good picture for all the word";
-//        c4.sendType = MyType.SendType.recvive;
-//        c4.senderAvatar = R.mipmap.d + "";
-//        c4.filePath = R.mipmap.c + "";
-//        list.add(c4);
-//
-//        StructMessageInfo c5 = new StructMessageInfo();
-//        c5.messageType = MyType.MessageType.image;
-//        c5.forwardMessageFrom = "ali";
-//        c5.sendType = MyType.SendType.send;
-//        c5.senderAvatar = R.mipmap.e + "";
-//        c5.filePath = R.mipmap.e + "";
-//        list.add(c5);
-//
-//        StructMessageInfo c6 = new StructMessageInfo();
-//        c6.messageType = MyType.MessageType.image;
-//        c6.sendType = MyType.SendType.recvive;
-//        c6.senderAvatar = R.mipmap.f + "";
-//        c6.filePath = R.mipmap.f + "";
-//        list.add(c6);
-//
-//        StructMessageInfo c7 = new StructMessageInfo();
-//        c7.messageType = MyType.MessageType.image;
-//        c7.sendType = MyType.SendType.recvive;
-//        c7.senderAvatar = R.mipmap.g + "";
-//        c7.filePath = R.mipmap.g + "";
-//        list.add(c7);
-//
-//        StructMessageInfo c8 = new StructMessageInfo();
-//        c8.messageType = MyType.MessageType.image;
-//        c8.sendType = MyType.SendType.send;
-//        c8.filePath = R.mipmap.h + "";
-//        list.add(c8);
-//
-//        return list;
-//    }
+    /*private ArrayList<StructMessageInfo> getChatList() {
 
+        ArrayList<StructMessageInfo> list = new ArrayList<>();
+
+        StructMessageInfo c = new StructMessageInfo();
+        c.messageType = MyType.MessageType.image;
+        c.sendType = MyType.SendType.send;
+        c.senderAvatar = R.mipmap.a + "";
+        c.messageID = "123";
+        c.filePath = R.mipmap.a + "";
+        c.messag = "where are you  going hgf hgf hgf hgf  good good";
+        c.channelLink = "@igap";
+        c.seen = "122k";
+        list.add(c);
+
+
+        StructMessageInfo c9 = new StructMessageInfo();
+        c9.messageType = MyType.MessageType.files;
+        c9.forwardMessageFrom = "ali";
+        c9.replayFrom = "ali";
+        c9.messageID = "123";
+        c9.replayMessage = "where are you djkdj kjf kdj";
+        c9.sendType = MyType.SendType.send;
+        c9.senderAvatar = R.mipmap.a + "";
+        list.add(c9);
+
+        StructMessageInfo c10 = new StructMessageInfo();
+        c10.messageType = MyType.MessageType.files;
+        c10.forwardMessageFrom = "hasan";
+        c10.replayFrom = "mehdi";
+        c10.messageID = "123";
+        c10.replayMessage = "i am fine";
+        c10.replayPicturePath = " fd";
+        c10.sendType = MyType.SendType.recvive;
+        c10.senderAvatar = R.mipmap.a + "";
+        list.add(c10);
+
+        StructMessageInfo c12 = new StructMessageInfo();
+        c12.messageType = MyType.MessageType.gif;
+        c12.messageID = "123";
+        c12.sendType = MyType.SendType.send;
+        list.add(c12);
+
+        StructMessageInfo c16 = new StructMessageInfo();
+        c16.sendType = MyType.SendType.timeLayout;
+        c16.messageID = "123";
+        list.add(c16);
+
+        StructMessageInfo c13 = new StructMessageInfo();
+        c13.messageType = MyType.MessageType.audio;
+        c13.messageID = "123";
+        c13.sendType = MyType.SendType.send;
+        list.add(c13);
+
+        StructMessageInfo c14 = new StructMessageInfo();
+        c14.messageType = MyType.MessageType.audio;
+        c14.messageID = "123";
+        c14.sendType = MyType.SendType.recvive;
+        c14.messag = "بهترین موسیقی منتخب" +
+                "\n" + " how are you fghg hgfh fhgf hgf hgf hgf hgf fjhg jhg jhgjhg jhgjh";
+        c14.senderAvatar = R.mipmap.a + "";
+        list.add(c14);
+
+        StructMessageInfo c15 = new StructMessageInfo();
+        c15.messageType = MyType.MessageType.sticker;
+        c15.sendType = MyType.SendType.recvive;
+        c15.messageID = "123";
+        c15.filePath = R.mipmap.sd + "";
+        list.add(c15);
+
+        StructMessageInfo c11 = new StructMessageInfo();
+        c11.messageType = MyType.MessageType.files;
+        c11.sendType = MyType.SendType.recvive;
+        c11.messageID = "123";
+        c11.senderAvatar = R.mipmap.a + "";
+        list.add(c11);
+
+        StructMessageInfo c1 = new StructMessageInfo();
+        c1.messageType = MyType.MessageType.message;
+        c1.messageID = "123";
+        c1.messag = "how";
+
+        c1.sendType = MyType.SendType.send;
+        c1.senderAvatar = R.mipmap.b + "";
+        c1.messageID = "123";
+        list.add(c1);
+
+        StructMessageInfo c2 = new StructMessageInfo();
+        c2.messageType = MyType.MessageType.message;
+        c2.senderAvatar = R.mipmap.c + "";
+        c2.messag = "i am fine";
+        c2.messageID = "123";
+        c2.forwardMessageFrom = "Android cade";
+        c2.sendType = MyType.SendType.recvive;
+        list.add(c2);
+
+        StructMessageInfo c3 = new StructMessageInfo();
+        c3.messageType = MyType.MessageType.video;
+        c3.messag = "where are you  going hgf hgf hgf hgf  good good";
+        c3.sendType = MyType.SendType.send;
+        c3.fileName = "good video";
+        c3.fileMime = ".mpv";
+        c3.messageID = "123";
+        c3.fileState = MyType.FileState.notUpload;
+        c3.fileInfo = "3:20 (2.4 MB)";
+        c3.filePic = R.mipmap.a + "";
+        list.add(c3);
+
+        StructMessageInfo c4 = new StructMessageInfo();
+        c4.messageType = MyType.MessageType.image;
+        c4.forwardMessageFrom = "ali";
+        c4.messag = "the good picture for all the word";
+        c4.sendType = MyType.SendType.recvive;
+        c4.messageID = "123";
+        c4.senderAvatar = R.mipmap.d + "";
+        c4.filePath = R.mipmap.c + "";
+        list.add(c4);
+
+        StructMessageInfo c5 = new StructMessageInfo();
+        c5.messageType = MyType.MessageType.image;
+        c5.forwardMessageFrom = "ali";
+        c5.sendType = MyType.SendType.send;
+        c5.senderAvatar = R.mipmap.e + "";
+        c5.messageID = "123";
+        c5.filePath = R.mipmap.e + "";
+        list.add(c5);
+
+        StructMessageInfo c6 = new StructMessageInfo();
+        c6.messageType = MyType.MessageType.image;
+        c6.sendType = MyType.SendType.recvive;
+        c6.messageID = "123";
+        c6.senderAvatar = R.mipmap.f + "";
+        c6.filePath = R.mipmap.f + "";
+        list.add(c6);
+
+        StructMessageInfo c7 = new StructMessageInfo();
+        c7.messageType = MyType.MessageType.image;
+        c7.sendType = MyType.SendType.recvive;
+        c7.messageID = "123";
+        c7.senderAvatar = R.mipmap.g + "";
+        c7.filePath = R.mipmap.g + "";
+        list.add(c7);
+
+        StructMessageInfo c8 = new StructMessageInfo();
+        c8.messageType = MyType.MessageType.image;
+        c8.messageID = "123";
+        c8.sendType = MyType.SendType.send;
+        c8.filePath = R.mipmap.h + "";
+        list.add(c8);
+
+        return list;
+    }*/
+
+    @Override
+    public void onMessageClick(View view, StructMessageInfo messageInfo) {
+        Log.i(ActivityChat.class.getSimpleName(), "Message clicked");
+        // put message text to EditText
+        if (!messageInfo.messag.isEmpty()) {
+            edtChat.setText(messageInfo.messag);
+            // put message object to edtChat's tag to obtain it later and
+            // found is user trying to edit a message
+            edtChat.setTag(messageInfo);
+        }
+    }
 }
