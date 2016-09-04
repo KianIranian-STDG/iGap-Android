@@ -4,52 +4,51 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:paddingTop="@dimen/dp8"
-    android:paddingBottom="@dimen/dp8">
+    android:paddingBottom="@dimen/dp8"
+    android:paddingTop="@dimen/dp8">
 
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp32">
+        android:layout_height="@dimen/dp32"
+        android:orientation="horizontal">
+
         <Space
             android:layout_width="0dp"
-            android:layout_weight="0.1"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1" />
 
 
         <EditText
-            android:layout_width="0dp"
-            android:layout_weight="0.8"
-            android:layout_height="match_parent"
             android:id="@+id/edit_search"
-            android:singleLine="true"
-            android:inputType="text"
-            android:textColor="@android:color/white"
-            android:imeOptions="actionSearch"
-            android:drawablePadding="10dp"
-            android:paddingRight="10dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:gravity="center"
+            android:layout_weight="0.8"
             android:background="@drawable/press_button_stroke"
-            />
+            android:drawablePadding="10dp"
+            android:gravity="center"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:paddingRight="10dp"
+            android:singleLine="true"
+            android:textColor="@android:color/white" />
+
         <Space
             android:layout_width="0dp"
-            android:layout_weight="0.1"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1" />
 
     </LinearLayout>
 
-
-    <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
-        android:scrollbars="vertical"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/edit_search"
         android:layout_marginTop="@dimen/dp8"
         android:clipToPadding="false"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/edit_search" />
-
+        android:scrollbars="vertical" />
 
 
 </LinearLayout>

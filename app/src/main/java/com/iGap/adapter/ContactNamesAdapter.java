@@ -37,9 +37,9 @@ public class ContactNamesAdapter extends RecyclerView.Adapter<CountryViewHolder>
     public CountryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
         if (viewType == VIEW_TYPE_HEADER) {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.header_item, parent, false); //TODO [Saeed Mozaffari] [2016-09-03 11:48 AM] - header naming is wrong
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_header_item, parent, false); //TODO [Saeed Mozaffari] [2016-09-03 11:48 AM] - header naming is wrong
         } else {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.text_line_item, parent, false);
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_item, parent, false);
         }
         return new CountryViewHolder(view);
     }

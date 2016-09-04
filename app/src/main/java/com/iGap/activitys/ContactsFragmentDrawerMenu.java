@@ -1,6 +1,7 @@
 package com.iGap.activitys;
 
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -12,84 +13,107 @@ import android.widget.EditText;
 
 import com.iGap.R;
 import com.iGap.adapter.ContactNamesAdapter;
+import com.iGap.adapter.StickyHeaderAdapter;
+import com.iGap.adapter.items.ContactItem;
 import com.iGap.libs.flowingdrawer.MenuFragment;
 import com.iGap.module.ListOfContact;
+import com.mikepenz.fastadapter.FastAdapter;
+import com.mikepenz.fastadapter.IItem;
+import com.mikepenz.fastadapter.IItemAdapter;
+import com.mikepenz.fastadapter.adapters.HeaderAdapter;
+import com.mikepenz.fastadapter.adapters.ItemAdapter;
+import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class ContactsFragmentDrawerMenu extends MenuFragment {
 
-    private ViewHolder mViews;
-    EditText editsearch;
-    private ContactNamesAdapter mAdapter;
-
-    private ArrayList<ContactNamesAdapter.LineItem> mItems = new ArrayList<>();
-
+    private FastAdapter fastAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.contacts_drawer_layout, container, false);
 
-        View rootView = inflater.inflate(R.layout.contacts_drawer_layout, container, false);
-        editsearch = (EditText) rootView.findViewById(R.id.edit_search);
-
-        // Capture Text in EditText
-        editsearch.addTextChangedListener(new TextWatcher() { //TODO [Saeed Mozaffari] [2016-09-03 11:33 AM] - search with big and small letters
-
-            @Override
-            public void afterTextChanged(Editable arg0) {
-                mItems.clear();
-                mItems = ListOfContact.Retrive(editsearch.getText().toString().trim());
-                mAdapter = new ContactNamesAdapter(getActivity(), mItems);
-                mViews.setAdapter(mAdapter);
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-            }
-        });
-
-        mItems = ListOfContact.Retrive("");
-
-        return setupReveal(rootView, false);
+        return setupReveal(view, false);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mViews = new ViewHolder(view);
-        mViews.initViews(new LinearLayoutManager(getActivity()));
-        mAdapter = new ContactNamesAdapter(getActivity(), mItems);
-        mViews.setAdapter(mAdapter);
+        //create our FastAdapter
+        fastAdapter = new FastAdapter();
+        fastAdapter.withSelectable(true);
+
+        //create our adapters
+        final StickyHeaderAdapter stickyHeaderAdapter = new StickyHeaderAdapter();
+        final HeaderAdapter headerAdapter = new HeaderAdapter();
+        final ItemAdapter itemAdapter = new ItemAdapter();
+        itemAdapter.withFilterPredicate(new IItemAdapter.Predicate<ContactItem>() {
+            @Override
+            public boolean filter(ContactItem item, CharSequence constraint) {
+                return !item.mContact.text.toLowerCase().startsWith(String.valueOf(constraint).toLowerCase());
+            }
+        });
+
+        EditText searchView = (EditText) view.findViewById(R.id.edit_search);
+        searchView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                itemAdapter.filter(editable);
+            }
+        });
+
+        //configure our fastAdapter
+        //as we provide id's for the items we want the hasStableIds enabled to speed up things
+        fastAdapter.setHasStableIds(true);
+
+        //get our recyclerView and do basic setup
+        RecyclerView rv = (RecyclerView) view.findViewById(R.id.recycler_view);
+        rv.setLayoutManager(new LinearLayoutManager(getContext()));
+        rv.setItemAnimator(new DefaultItemAnimator());
+        rv.setAdapter(stickyHeaderAdapter.wrap(itemAdapter.wrap(headerAdapter.wrap(fastAdapter))));
+
+        //this adds the Sticky Headers within our list
+        final StickyRecyclerHeadersDecoration decoration = new StickyRecyclerHeadersDecoration(stickyHeaderAdapter);
+        rv.addItemDecoration(decoration);
+
+        List<IItem> items = new ArrayList<>();
+        ArrayList<ContactNamesAdapter.LineItem> contacts = ListOfContact.Retrive("");
+        for (ContactNamesAdapter.LineItem contact : contacts) {
+            items.add(new ContactItem().setContact(contact).withIdentifier(100 + contacts.indexOf(contact)));
+        }
+        itemAdapter.add(items);
+
+        //so the headers are aware of changes
+        stickyHeaderAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                decoration.invalidateHeaders();
+            }
+        });
+
+
+        //restore selections (this has to be done after the items were added
+        fastAdapter.withSavedInstanceState(savedInstanceState);
     }
 
-    private static class ViewHolder {
-
-        private final RecyclerView mRecyclerView;
-
-
-        public ViewHolder(View view) {
-            mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-
-        }
-
-        public void initViews(LinearLayoutManager lm) {
-            mRecyclerView.setLayoutManager(lm);
-
-        }
-
-        public void setAdapter(RecyclerView.Adapter<?> adapter) {
-            try {
-                mRecyclerView.setAdapter(adapter);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        //add the values which need to be saved from the adapter to the bundel
+        outState = fastAdapter.saveInstanceState(outState);
+        super.onSaveInstanceState(outState);
     }
 }

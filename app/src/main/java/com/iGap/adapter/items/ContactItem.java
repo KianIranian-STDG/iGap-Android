@@ -1,0 +1,83 @@
+package com.iGap.adapter.items;
+
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.ImageView;
+
+import com.iGap.R;
+import com.iGap.adapter.ContactNamesAdapter;
+import com.iGap.module.CircleImageView;
+import com.iGap.module.CustomTextViewMedium;
+import com.mikepenz.fastadapter.items.AbstractItem;
+import com.mikepenz.fastadapter.utils.ViewHolderFactory;
+
+import java.util.List;
+
+/**
+ * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/2016.
+ */
+
+/**
+ * Contact item used with FastAdapter for Navigation drawer contacts fragment.
+ */
+public class ContactItem extends AbstractItem<ContactItem, ContactItem.ViewHolder> {
+    private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
+    public ContactNamesAdapter.LineItem mContact;
+
+    public ContactItem setContact(ContactNamesAdapter.LineItem contact) {
+        this.mContact = contact;
+        return this;
+    }
+
+    @Override
+    public int getType() {
+        return 0;
+    }
+
+    @Override
+    public int getLayoutRes() {
+        return R.layout.contact_item;
+    }
+
+    @Override
+    public void bindView(ViewHolder holder, List payloads) {
+        super.bindView(holder, payloads);
+
+        if (mContact.isHeader) {
+            holder.topLine.setVisibility(View.VISIBLE);
+        } else {
+            holder.topLine.setVisibility(View.GONE);
+        }
+
+        holder.title.setText(mContact.text);
+        // TODO set image
+        // TODO set subtitle
+    }
+
+    protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {
+        public ViewHolder create(View v) {
+            return new ViewHolder(v);
+        }
+    }
+
+    @Override
+    public ViewHolderFactory<? extends ViewHolder> getFactory() {
+        return FACTORY;
+    }
+
+    protected static class ViewHolder extends RecyclerView.ViewHolder {
+        protected CircleImageView image;
+        protected CustomTextViewMedium title;
+        protected CustomTextViewMedium subtitle;
+        protected ImageView topLine;
+
+        public ViewHolder(View view) {
+            super(view);
+
+            image = (CircleImageView) view.findViewById(R.id.imageView);
+            title = (CustomTextViewMedium) view.findViewById(R.id.text);
+            subtitle = (CustomTextViewMedium) view.findViewById(R.id.textView);
+            topLine = (ImageView) view.findViewById(R.id.topLine);
+        }
+    }
+}
