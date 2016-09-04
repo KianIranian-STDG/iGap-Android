@@ -310,7 +310,7 @@ public class ActivityComment extends ActivityEnhanced implements IEmojiViewCreat
             @Override
             public void afterTextChanged(Editable editable) {
 
-                if (edtChat.getText().length() > 0 && mAdapter.replayCommentNumber > 0) {
+                if (edtChat.getText().length() > 0 && mAdapter.replayCommentNumber >= 0) {
                     btnSend.setTextColor(Color.BLUE);
                 } else {
                     btnSend.setTextColor(Color.GRAY);

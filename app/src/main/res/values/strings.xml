@@ -19,31 +19,19 @@
     <string name="fa_search">&#xf002;</string>
     <string name="fa_chevron_left">&#xf053;</string>
     <string name="fa_user">&#xf007;</string>
-
-
     <string name="fa_commenting_o">&#xf27b;</string>
     <string name="fa_thumbs_o_down">&#xf088;</string>
     <string name="fa_thumbs_o_up">&#xf087;</string>
-
-
     <string name="fa_trash_o">&#xf014;</string>
     <string name="fa_files_o">&#xf0c5;</string>
     <string name="fa_long_arrow_right">&#xf178;</string>
-
     <string name="fa_chevron_down">&#xf078;</string>
     <string name="fa_chevron_up">&#xf077;</string>
 
-
-    <string name="f_supervisor_account">&#xe8d3;</string>
-    <string name="f_people">&#xe7fb;</string>
-    <string name="f_person">&#xe7fd;</string>
-    <string name="f_attach_file">&#xe226;</string>
-    <string name="f_mic">&#xe029;</string>
-    <string name="f_more_vert">&#xe5d4;</string>
-    <string name="f_send">&#xe163;</string>
-    <string name="f_add">&#xe145;</string>
-    <string name="f_forward">&#xe154;</string>
-    <string name="f_keyboard_arrow_down">&#xe313;</string>
+    <string name="fa_cog">&#xf013;</string>
+    <string name="fa_user_plus">&#xf234;</string>
+    <string name="fa_lock">&#xf023;</string>
+    <string name="fa_question_circle">&#xf059;</string>
 
 
     <string name="unmute_notification">UnMute Notification</string>
