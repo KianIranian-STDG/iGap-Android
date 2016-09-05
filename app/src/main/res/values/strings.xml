@@ -182,4 +182,12 @@
     <string name="mh_popup_file">Files</string>
     <string name="mh_popup_audio">Audio</string>
 
+
+    <string-array name="pop_up_shared_media">
+        <item>Media</item>
+        <item>Files</item>
+        <item>Links</item>
+        <item>Music</item>
+    </string-array>
+
 </resources>

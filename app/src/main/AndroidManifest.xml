@@ -33,6 +33,13 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
 
+
+        <activity
+            android:name=".activitys.ActivityShearedMedia"
+            android:configChanges="keyboard|keyboardHidden|screenSize|locale">
+
+        </activity>
+
         <activity
             android:name=".activitys.ActivityComment"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
