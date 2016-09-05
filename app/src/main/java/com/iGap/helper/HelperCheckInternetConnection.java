@@ -16,6 +16,7 @@ import java.net.URL;
 public class HelperCheckInternetConnection {
 
     public static boolean hasActiveInternetConnection() {
+
         ConnectivityManager cm = ((ConnectivityManager) G.context.getSystemService(Context.CONNECTIVITY_SERVICE));
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
 
@@ -35,4 +36,5 @@ public class HelperCheckInternetConnection {
         }
         return false;
     }
+
 }

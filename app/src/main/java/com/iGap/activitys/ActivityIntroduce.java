@@ -8,12 +8,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.iGap.G;
 import com.iGap.R;
@@ -176,34 +178,44 @@ public class ActivityIntroduce extends ActivityEnhanced {
             @Override
             public void onClick(View view) {
 
-
-                Intent intent = new Intent(G.context, ActivityRegister.class);
-                if (isoCode != null) {
-                    intent.putExtra("ISO_CODE", isoCode);
-                    intent.putExtra("CALLING_CODE", callingCode);
-                    intent.putExtra("COUNTRY_NAME", countryName);
-                    intent.putExtra("PATTERN", pattern);
-                    intent.putExtra("REGEX", regex);
-                    intent.putExtra("TERMS_BODY", body);
-                }
-                startActivity(intent);
-                finish();
-
-//                if (HelperCheckInternetConnection.hasActiveInternetConnection()) {
-//                    Intent intent = new Intent(G.context, ActivityRegister.class);
-//                    if (isoCode != null) {
-//                        intent.putExtra("ISO_CODE", isoCode);
-//                        intent.putExtra("CALLING_CODE", callingCode);
-//                        intent.putExtra("COUNTRY_NAME", countryName);
-//                        intent.putExtra("PATTERN", pattern);
-//                        intent.putExtra("REGEX", regex);
-//                        intent.putExtra("TERMS_BODY", body);
-//                    }
-//                    startActivity(intent);
-//                    finish();
-//                } else {
-//                    Toast.makeText(G.context, "check your internet connection", Toast.LENGTH_SHORT).show();
-//                }
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+//                        if (HelperCheckInternetConnection.hasActiveInternetConnection()) {
+                        if (true) {
+                            Log.i("III", "Connection OK");
+                            if (isoCode != null & body != null) {
+                                Log.i("III", "Info OK");
+                                Intent intent = new Intent(G.context, ActivityRegister.class);
+                                intent.putExtra("ISO_CODE", isoCode);
+                                intent.putExtra("CALLING_CODE", callingCode);
+                                intent.putExtra("COUNTRY_NAME", countryName);
+                                intent.putExtra("PATTERN", pattern);
+                                intent.putExtra("REGEX", regex);
+                                intent.putExtra("TERMS_BODY", body);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                Log.i("III", "Info Failed");
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(G.context, "waiting fot get info", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                getInfo();
+                            }
+                        } else {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(G.context, "check your internet connection", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    }
+                });
+                thread.start();
             }
         });
 

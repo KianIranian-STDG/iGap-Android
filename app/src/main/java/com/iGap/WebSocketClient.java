@@ -91,13 +91,14 @@ public class WebSocketClient {
                 @Override
                 public void onError(WebSocket websocket, WebSocketException cause) throws Exception {
                     Log.i("SOC_WebSocket", "onError");
+                    clearSocketConnection();
                     super.onError(websocket, cause);
                 }
 
                 @Override
                 public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
                     Log.i("SOC_WebSocket", "onDisconnected");
-
+                    clearSocketConnection();
                     reconnect();
                     super.onDisconnected(websocket, serverCloseFrame, clientCloseFrame, closedByServer);
                 }
@@ -105,6 +106,7 @@ public class WebSocketClient {
                 @Override
                 public void onConnectError(WebSocket websocket, WebSocketException exception) throws Exception {
                     Log.i("SOC_WebSocket", "onConnectError");
+                    clearSocketConnection();
                     super.onConnectError(websocket, exception);
                 }
 
@@ -152,7 +154,6 @@ public class WebSocketClient {
         });
         thread.start();
 
-
         return websocketFactory;
     }
 
@@ -162,17 +163,15 @@ public class WebSocketClient {
      * @return webSocketConnection
      */
 
-    public static WebSocket getInstance() {
+    public static WebSocket getInstance() { //TODO [Saeed Mozaffari] [2016-09-05 11:16 AM] - avoid multiple instance , hint : synchronize
 
         if (webSocketClient == null) {
-            Log.i("SOC", "Instance is null");
             webSocketClient = createSocketConnection();
         } else {
-
-            Log.i("SOC_WebSocket", "instance is not null");
             if (!webSocketClient.isOpen()) {
-                Log.i("SOC_WebSocket", "instance need createSocketConnection again");
                 webSocketClient = createSocketConnection();
+            } else {
+                return webSocketClient;
             }
         }
         return webSocketClient;
@@ -199,7 +198,6 @@ public class WebSocketClient {
 
         if (G.allowForConnect) {
             resetWebsocketInfo();
-
             G.handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -207,14 +205,16 @@ public class WebSocketClient {
                 }
             }, 1000);
         }
-
     }
 
 
+    private static void clearSocketConnection() {
+        webSocketClient = null;
+    }
+
     private static void resetWebsocketInfo() {
         G.isSecure = false;
-//        G.symmetricKey = null;
-//        G.ivSize = 0;
+        clearSocketConnection();
     }
 
     /**
