@@ -74,8 +74,6 @@ public class AdapterDialog extends BaseAdapter implements Filterable {
                 mSelectedVariation = countrylist.get(position).getId();
                 notifyDataSetChanged();
 
-//                ActivityRegister.dialogChooseCountry.dismiss();
-
                 ActivityRegister.edtCodeNumber.setText(("+ " + countrylist.get(position).getCountryCode()));
                 if (countrylist.get(position).getPhonePattetn() != null) {
                     if (countrylist.get(position).getPhonePattetn().equals(" ")) {

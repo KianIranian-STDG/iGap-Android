@@ -226,6 +226,11 @@ public class FileUploadTestActivity extends ActivityEnhanced implements OnFileUp
                     }
                 });
             }
+
+            @Override
+            public void onLoginError() {
+
+            }
         };
 
         RealmUserInfo userInfo = G.realm.where(RealmUserInfo.class).findFirst();

@@ -9,4 +9,6 @@ public interface OnUserLogin {
 
     void onLogin();
 
+    void onLoginError();
+
 }

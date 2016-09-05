@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
@@ -21,7 +20,6 @@ import com.iGap.R;
 import com.iGap.adapter.AdapterViewPager;
 import com.iGap.interface_package.OnReceiveInfoLocation;
 import com.iGap.interface_package.OnReceivePageInfoTOS;
-import com.iGap.interface_package.OnSecuring;
 import com.iGap.module.CustomCircleImage;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestInfoLocation;
@@ -57,70 +55,10 @@ public class ActivityIntroduce extends ActivityEnhanced {
     private String isoCode = null, countryName, pattern, regex, body = null;
     private int callingCode;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        G.smsNumbers.add(10002128319L);
-        for (Long number : G.smsNumbers) {
-            Log.i("SSS", "3 G.smsNumbers : " + number);
-
-            if ("+9810002128319".contains("+98")) {
-
-            }
-
-            if (number.toString().contains("+9810002128319".replace("+98", ""))) {
-                Log.i("SSS", "onSmsReceive start 1");
-            }
-
-            if (number.toString().contains("10002128319")) {
-                Log.i("SSS", "onSmsReceive start 2");
-            }
-
-            if ("+9810002128319".contains(number.toString())) {
-                Log.i("SSS", "onSmsReceive start 3");
-            }
-        }
-
-//        final RealmResults<RealmChatHistory> results = G.realm.where(RealmChatHistory.class).findAll();
-
-//        G.realm.executeTransaction(new Realm.Transaction() {
-//            @Override
-//            public void execute(Realm realm) {
-//                results.deleteAllFromRealm();
-//            }
-//        });
-
-        //RealmUserInfo = [{registrationStatus:true},{userId:39354},{userName:6dxGLliQtmpYAPa},{countryISOCode:IR},{email:null},{nickName:human},{gender:null},{phoneNumber:9336355473},{avatarPath:null},{token:ZmX9LTFbJtwKvUP7HXU1esN3TiWdKuQTNj7esn9Dsy6eBatVkfMU4INvz36jYsxFLtf8cr6rVvz5jpxdi3XNm0MJLUY32F4WD5ErvEDwRlb8gNMOTuDJwGJDDIxMaaVVMDTWX3eUkRe4gLdHFYY5fFB0Abkgu5d2X9yXnFGWCUwzNvD3YIy6FmkdbAiEMRARb0GL4yvR8rzezvbeeJziRt5XaGg8wjdVkWdjnZe8EnSdkl634pmJp5jQa63di8E6l0YevDMGV26N2tU00VDWqWBR0NheuS46eImBjaDZ5EMPiAEgr9wAIDVKpXXwAWeg41aFXXEGVtiUvZ5DsN0mOfmI4nMyK8EZiYkPZ2NoVTcc8IwqSjkdCTLK43JdjYf7iZOpx9MZRuiJgIdXgy4RERZe4cyTnfcs6Kc34VErrs9C1H2dMyb9NqfgX1fjSJL15KAI9dmnR5RHN0dXG4NnC51KRiUuD5DqBov2JAVORGkvcr1PpVkJpTnxCexFOvaS}]
-
-//        G.realm.executeTransaction(new Realm.Transaction() { // Huawei Info
-//            @Override
-//            public void execute(Realm realm) {
-//                RealmUserInfo realmUserInfo = realm.createObject(RealmUserInfo.class);
-//                realmUserInfo.setUserRegistrationState(true);
-//                realmUserInfo.setUserId(39354);
-//                realmUserInfo.setUserName("6dxGLliQtmpYAPa");
-//                realmUserInfo.setCountryISOCode("IR");
-//                realmUserInfo.setNickName("Huawei");
-//                realmUserInfo.setPhoneNumber("9336355473");
-//                realmUserInfo.setToken("ZmX9LTFbJtwKvUP7HXU1esN3TiWdKuQTNj7esn9Dsy6eBatVkfMU4INvz36jYsxFLtf8cr6rVvz5jpxdi3XNm0MJLUY32F4WD5ErvEDwRlb8gNMOTuDJwGJDDIxMaaVVMDTWX3eUkRe4gLdHFYY5fFB0Abkgu5d2X9yXnFGWCUwzNvD3YIy6FmkdbAiEMRARb0GL4yvR8rzezvbeeJziRt5XaGg8wjdVkWdjnZe8EnSdkl634pmJp5jQa63di8E6l0YevDMGV26N2tU00VDWqWBR0NheuS46eImBjaDZ5EMPiAEgr9wAIDVKpXXwAWeg41aFXXEGVtiUvZ5DsN0mOfmI4nMyK8EZiYkPZ2NoVTcc8IwqSjkdCTLK43JdjYf7iZOpx9MZRuiJgIdXgy4RERZe4cyTnfcs6Kc34VErrs9C1H2dMyb9NqfgX1fjSJL15KAI9dmnR5RHN0dXG4NnC51KRiUuD5DqBov2JAVORGkvcr1PpVkJpTnxCexFOvaS");
-//            }
-//        });
-
-//        G.realm.executeTransaction(new Realm.Transaction() { // LG Big Info
-//            @Override
-//            public void execute(Realm realm) {
-//                RealmUserInfo realmUserInfo = realm.createObject(RealmUserInfo.class);
-//                realmUserInfo.setUserRegistrationState(true);
-//                realmUserInfo.setUserId(40200);
-//                realmUserInfo.setUserName("1PpVkJpTnxCexFO");
-//                realmUserInfo.setCountryISOCode("IR");
-//                realmUserInfo.setNickName("LG Phone");
-//                realmUserInfo.setPhoneNumber("9337122617");
-//                // this token is wrong
-//                realmUserInfo.setToken("ZmX9LTFbJtwKvUP7HXU1esN3TiWdKuQTNj7esn9Dsy6eBatVkfMU4INvz36jYsxFLtf8cr6rVvz5jpxdi3XNm0MJLUY32F4WD5ErvEDwRlb8gNMOTuDJwGJDDIxMaaVVMDTWX3eUkRe4gLdHFYY5fFB0Abkgu5d2X9yXnFGWCUwzNvD3YIy6FmkdbAiEMRARb0GL4yvR8rzezvbeeJziRt5XaGg8wjdVkWdjnZe8EnSdkl634pmJp5jQa63di8E6l0YevDMGV26N2tU00VDWqWBR0NheuS46eImBjaDZ5EMPiAEgr9wAIDVKpXXwAWeg41aFXXEGVtiUvZ5DsN0mOfmI4nMyK8EZiYkPZ2NoVTcc8IwqSjkdCTLK43JdjYf7iZOpx9MZRuiJgIdXgy4RERZe4cyTnfcs6Kc34VErrs9C1H2dMyb9NqfgX1fjSJL15KAI9dmnR5RHN0dXG4NnC51KRiUuD5DqBov2JAVORGkvcr1PpVkJpTnxCexFOvaS");
-//            }
-//        });
 
         RealmUserInfo userInfo = G.realm.where(RealmUserInfo.class).findFirst();
         if (userInfo != null && userInfo.getUserRegistrationState()) { // user registered before
@@ -132,20 +70,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
 
         setContentView(R.layout.activity_introduce);
 
-//        G.handler.postDelayed(new Runnable() { //TODO [Saeed Mozaffari] [2016-09-03 4:25 PM] - list for unSecuring requests
-//            @Override
-//            public void run() {
-//
-//            }
-//        }, 3000);
-//
-        G.onSecuring = new OnSecuring() {
-            @Override
-            public void onSecure() {
-                getTermsOfServiceBody();
-                getInfoLocation();
-            }
-        };
+        getInfo();
 
         layout_test = (ViewGroup) findViewById(R.id.int_layout_test);
 
@@ -250,7 +175,8 @@ public class ActivityIntroduce extends ActivityEnhanced {
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i("LOG", "CLICK!");
+
+
                 Intent intent = new Intent(G.context, ActivityRegister.class);
                 if (isoCode != null) {
                     intent.putExtra("ISO_CODE", isoCode);
@@ -262,6 +188,22 @@ public class ActivityIntroduce extends ActivityEnhanced {
                 }
                 startActivity(intent);
                 finish();
+
+//                if (HelperCheckInternetConnection.hasActiveInternetConnection()) {
+//                    Intent intent = new Intent(G.context, ActivityRegister.class);
+//                    if (isoCode != null) {
+//                        intent.putExtra("ISO_CODE", isoCode);
+//                        intent.putExtra("CALLING_CODE", callingCode);
+//                        intent.putExtra("COUNTRY_NAME", countryName);
+//                        intent.putExtra("PATTERN", pattern);
+//                        intent.putExtra("REGEX", regex);
+//                        intent.putExtra("TERMS_BODY", body);
+//                    }
+//                    startActivity(intent);
+//                    finish();
+//                } else {
+//                    Toast.makeText(G.context, "check your internet connection", Toast.LENGTH_SHORT).show();
+//                }
             }
         });
 
@@ -415,6 +357,20 @@ public class ActivityIntroduce extends ActivityEnhanced {
         animator.start();
     }
 
+    private void getInfo() {
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (G.isSecure) {
+                    getTermsOfServiceBody();
+                    getInfoLocation();
+                } else {
+                    getInfo();
+                }
+            }
+        }, 1000);
+    }
+
     private void getInfoLocation() {
 
         G.onReceiveInfoLocation = new OnReceiveInfoLocation() {
@@ -425,7 +381,6 @@ public class ActivityIntroduce extends ActivityEnhanced {
                 countryName = countryNameR;
                 pattern = patternR;
                 regex = regexR;
-
             }
         };
 

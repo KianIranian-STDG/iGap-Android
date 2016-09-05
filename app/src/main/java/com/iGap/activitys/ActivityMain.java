@@ -24,6 +24,7 @@ import com.iGap.interface_package.IOpenDrawer;
 import com.iGap.interface_package.OnClientGetRoomListResponse;
 import com.iGap.interface_package.OnUserContactGetList;
 import com.iGap.interface_package.OnUserContactImport;
+import com.iGap.interface_package.OnUserLogin;
 import com.iGap.libs.floatingAddButton.ArcMenu;
 import com.iGap.libs.floatingAddButton.StateChangeListener;
 import com.iGap.libs.flowingdrawer.FlowingView;
@@ -36,8 +37,10 @@ import com.iGap.module.StructChatInfo;
 import com.iGap.module.Utils;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
+import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestClientGetRoomList;
 import com.iGap.request.RequestUserContactsGetList;
+import com.iGap.request.RequestUserLogin;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.adapters.FastItemAdapter;
@@ -61,7 +64,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        userLogin();
+        userLogin();
         initFloatingButtonCreateNew();
         initDrawerMenu();
         initComponent();
@@ -70,39 +73,47 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
     FlowingView mFlowingView;
     FragmentDrawerMenu mMenuFragment;
 
-//    public void userLogin() {
-//
-//        G.onSecuring = new OnSecuring() {
-//            @Override
-//            public void onSecure() {
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        RealmUserInfo userInfo = G.realm.where(RealmUserInfo.class).findFirst();
-//                        Log.i("SOC", "Login Start userInfo : " + userInfo);
-//                        if (!G.userLogin && userInfo != null) { //  need login //TODO [Saeed Mozaffari] [2016-08-29 11:51 AM] - check for securing
-//                            Log.i("SOC", "Login Start userInfo : " + userInfo);
-//                            new RequestUserLogin().userLogin(userInfo.getToken());
-//                        }
-//                    }
-//                });
-//            }
-//        };
-//
-//        G.onUserLogin = new OnUserLogin() {
-//            @Override
-//            public void onLogin() {
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        Toast.makeText(G.context, "User Login!", Toast.LENGTH_SHORT).show();
-//                        importContact();
-//                        initRecycleView();
-//                    }
-//                });
-//            }
-//        };
-//    }
+    public void userLogin() {
+
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (G.isSecure) {
+                    RealmUserInfo userInfo = G.realm.where(RealmUserInfo.class).findFirst();
+                    if (!G.userLogin && userInfo != null) {
+                        new RequestUserLogin().userLogin(userInfo.getToken());
+                    } else {
+                        getChatList();
+                    }
+                } else {
+                    userLogin();
+                }
+            }
+        }, 1000);
+
+        G.onUserLogin = new OnUserLogin() {
+            @Override
+            public void onLogin() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        getChatList();
+                    }
+                });
+            }
+
+            @Override
+            public void onLoginError() {
+
+            }
+        };
+    }
+
+    private void getChatList() {
+        Toast.makeText(G.context, "User Login!", Toast.LENGTH_SHORT).show();
+        importContact();
+        initRecycleView();
+    }
 
     private void importContact() {
 
@@ -249,12 +260,9 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         mAdapter.withOnClickListener(new FastAdapter.OnClickListener<ChatItem>() {
             @Override
             public boolean onClick(View v, IAdapter<ChatItem> adapter, ChatItem item, int position) {
-                Log.i("XXX", "CLICK");
                 if (ActivityMain.isMenuButtonAddShown) {
-                    Log.i("XXX", "CLICK 1");
                     item.mComplete.complete(true, "closeMenuButton", "");
                 } else {
-                    Log.i("XXX", "CLICK ActivityChat");
                     Intent intent = new Intent(ActivityMain.this, ActivityChat.class);
 //                    intent.putExtra("ChatType", mInfo.contactType);
                     intent.putExtra("ChatType", "CHAT");

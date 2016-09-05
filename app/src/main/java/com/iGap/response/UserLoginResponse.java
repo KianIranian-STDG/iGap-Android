@@ -42,6 +42,7 @@ public class UserLoginResponse extends MessageHandler {
 
         Log.i("SOC", "userLoginResponse response.majorCode() : " + majorCode);
         Log.i("SOC", "userLoginResponse response.minorCode() : " + minorCode);
+        G.onUserLogin.onLoginError();
     }
 }
 
