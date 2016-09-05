@@ -734,6 +734,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         StructMessageInfo c = new StructMessageInfo();
         c.messageType = MyType.MessageType.image;
         c.sendType = MyType.SendType.send;
+        c.status = ProtoGlobal.RoomMessageStatus.SENDING;
         c.senderAvatar = R.mipmap.a + "";
         c.messageID = "123";
         c.filePath = R.mipmap.a + "";
@@ -747,6 +748,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         c9.messageType = MyType.MessageType.files;
         c9.forwardMessageFrom = "ali";
         c9.replayFrom = "ali";
+        c9.status = ProtoGlobal.RoomMessageStatus.DELIVERED;
         c9.messageID = "123";
         c9.replayMessage = "where are you djkdj kjf kdj";
         c9.sendType = MyType.SendType.send;
@@ -757,6 +759,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         c10.messageType = MyType.MessageType.files;
         c10.forwardMessageFrom = "hasan";
         c10.replayFrom = "mehdi";
+        c10.status = ProtoGlobal.RoomMessageStatus.FAILED;
         c10.messageID = "123";
         c10.replayMessage = "i am fine";
         c10.replayPicturePath = " fd";
@@ -766,23 +769,27 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
         StructMessageInfo c12 = new StructMessageInfo();
         c12.messageType = MyType.MessageType.gif;
+        c12.status = ProtoGlobal.RoomMessageStatus.SEEN;
         c12.messageID = "123";
         c12.sendType = MyType.SendType.send;
         list.add(c12);
 
         StructMessageInfo c16 = new StructMessageInfo();
         c16.sendType = MyType.SendType.timeLayout;
+        c16.status = ProtoGlobal.RoomMessageStatus.SENT;
         c16.messageID = "123";
         list.add(c16);
 
         StructMessageInfo c13 = new StructMessageInfo();
         c13.messageType = MyType.MessageType.audio;
+        c13.status = ProtoGlobal.RoomMessageStatus.SENT;
         c13.messageID = "123";
         c13.sendType = MyType.SendType.send;
         list.add(c13);
 
         StructMessageInfo c14 = new StructMessageInfo();
         c14.messageType = MyType.MessageType.audio;
+        c14.status = ProtoGlobal.RoomMessageStatus.SEEN;
         c14.messageID = "123";
         c14.sendType = MyType.SendType.recvive;
         c14.messag = "بهترین موسیقی منتخب" +
@@ -793,6 +800,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         StructMessageInfo c15 = new StructMessageInfo();
         c15.messageType = MyType.MessageType.sticker;
         c15.sendType = MyType.SendType.recvive;
+        c15.status = ProtoGlobal.RoomMessageStatus.SEEN;
         c15.messageID = "123";
         c15.filePath = R.mipmap.sd + "";
         list.add(c15);
@@ -801,14 +809,15 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         c11.messageType = MyType.MessageType.files;
         c11.sendType = MyType.SendType.recvive;
         c11.messageID = "123";
+        c11.status = ProtoGlobal.RoomMessageStatus.SEEN;
         c11.senderAvatar = R.mipmap.a + "";
         list.add(c11);
 
         StructMessageInfo c1 = new StructMessageInfo();
         c1.messageType = MyType.MessageType.message;
+        c1.status = ProtoGlobal.RoomMessageStatus.SEEN;
         c1.messageID = "123";
         c1.messag = "how";
-
         c1.sendType = MyType.SendType.send;
         c1.senderAvatar = R.mipmap.b + "";
         c1.messageID = "123";
@@ -816,6 +825,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
         StructMessageInfo c2 = new StructMessageInfo();
         c2.messageType = MyType.MessageType.message;
+        c2.status = ProtoGlobal.RoomMessageStatus.SEEN;
         c2.senderAvatar = R.mipmap.c + "";
         c2.messag = "i am fine";
         c2.messageID = "123";
@@ -828,6 +838,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         c3.messag = "where are you  going hgf hgf hgf hgf  good good";
         c3.sendType = MyType.SendType.send;
         c3.fileName = "good video";
+        c3.status = ProtoGlobal.RoomMessageStatus.SEEN;
         c3.fileMime = ".mpv";
         c3.messageID = "123";
         c3.fileState = MyType.FileState.notUpload;
@@ -839,6 +850,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         c4.messageType = MyType.MessageType.image;
         c4.forwardMessageFrom = "ali";
         c4.messag = "the good picture for all the word";
+        c4.status = ProtoGlobal.RoomMessageStatus.SEEN;
         c4.sendType = MyType.SendType.recvive;
         c4.messageID = "123";
         c4.senderAvatar = R.mipmap.d + "";
@@ -849,6 +861,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         c5.messageType = MyType.MessageType.image;
         c5.forwardMessageFrom = "ali";
         c5.sendType = MyType.SendType.send;
+        c5.status = ProtoGlobal.RoomMessageStatus.SEEN;
         c5.senderAvatar = R.mipmap.e + "";
         c5.messageID = "123";
         c5.filePath = R.mipmap.e + "";
@@ -858,6 +871,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         c6.messageType = MyType.MessageType.image;
         c6.sendType = MyType.SendType.recvive;
         c6.messageID = "123";
+        c6.status = ProtoGlobal.RoomMessageStatus.SEEN;
         c6.senderAvatar = R.mipmap.f + "";
         c6.filePath = R.mipmap.f + "";
         list.add(c6);
@@ -866,6 +880,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         c7.messageType = MyType.MessageType.image;
         c7.sendType = MyType.SendType.recvive;
         c7.messageID = "123";
+        c7.status = ProtoGlobal.RoomMessageStatus.SEEN;
         c7.senderAvatar = R.mipmap.g + "";
         c7.filePath = R.mipmap.g + "";
         list.add(c7);
@@ -873,6 +888,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         StructMessageInfo c8 = new StructMessageInfo();
         c8.messageType = MyType.MessageType.image;
         c8.messageID = "123";
+        c8.status = ProtoGlobal.RoomMessageStatus.SEEN;
         c8.sendType = MyType.SendType.send;
         c8.filePath = R.mipmap.h + "";
         list.add(c8);

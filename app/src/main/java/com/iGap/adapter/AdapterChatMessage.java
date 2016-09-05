@@ -85,6 +85,32 @@ public class AdapterChatMessage extends RecyclerView.Adapter<RecyclerView.ViewHo
         mOnMessageClick = onMessageClick;
     }
 
+    private void defineMessageStatus(StructMessageInfo messageInfo, TextView view) {
+        CharSequence status = null;
+        switch (messageInfo.status) {
+            case DELIVERED:
+                status = context.getResources().getString(R.string.fa_check);
+                break;
+            case FAILED:
+                status = context.getResources().getString(R.string.fa_exclamation_triangle);
+                break;
+            case SEEN:
+                status = context.getResources().getString(R.string.fa_check) + context.getResources().getString(R.string.fa_check);
+                break;
+            case SENDING:
+                status = context.getResources().getString(R.string.fa_clock_o);
+                break;
+            case SENT:
+                status = context.getResources().getString(R.string.fa_check);
+                break;
+            case UNRECOGNIZED:
+                status = null; // FIXME: 9/5/2016 [Alireza Eskandarpour Shoferi] fill appreciate icon
+                break;
+        }
+
+        view.setText(status);
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -139,6 +165,10 @@ public class AdapterChatMessage extends RecyclerView.Adapter<RecyclerView.ViewHo
                 LinearLayout.LayoutParams paramsa = (LinearLayout.LayoutParams) linearLayout.getLayoutParams();
                 paramsa.setMargins(0, 0, 0, 0);
                 linearLayout.setLayoutParams(paramsa);
+            } else if (list.get(viewType).sendType == MyType.SendType.send) {
+                // update message status
+                TextView messageStatus = (TextView) main.findViewById(R.id.cslr_txt_tic);
+                defineMessageStatus(list.get(viewType), messageStatus);
             }
         }
 
