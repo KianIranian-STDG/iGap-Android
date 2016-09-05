@@ -14,11 +14,11 @@ import com.iGap.interface_package.OnChatClearMessageResponse;
 import com.iGap.interface_package.OnChatDeleteMessageResponse;
 import com.iGap.interface_package.OnChatEditMessageResponse;
 import com.iGap.interface_package.OnChatGetRoom;
+import com.iGap.interface_package.OnChatSendMessageResponse;
 import com.iGap.interface_package.OnChatUpdateStatusResponse;
 import com.iGap.interface_package.OnClientGetRoomListResponse;
 import com.iGap.interface_package.OnInfoCountryResponse;
 import com.iGap.interface_package.OnInfoTime;
-import com.iGap.interface_package.OnReceiveChatMessage;
 import com.iGap.interface_package.OnReceiveInfoLocation;
 import com.iGap.interface_package.OnReceivePageInfoTOS;
 import com.iGap.interface_package.OnSecuring;
@@ -123,11 +123,11 @@ public class G extends Application {
     public static OnClientGetRoomListResponse onClientGetRoomListResponse;
     public static OnSecuring onSecuring;
     public static OnChatGetRoom onChatGetRoom;
-    public static OnReceiveChatMessage onReceiveChatMessage;
     public static OnChatEditMessageResponse onChatEditMessageResponse;
     public static OnChatClearMessageResponse onChatClearMessageResponse;
     public static OnChatDeleteMessageResponse onChatDeleteMessageResponse;
     public static OnChatUpdateStatusResponse onChatUpdateStatusResponse;
+    public static OnChatSendMessageResponse onChatSendMessageResponse;
 
     // list of sr
     public static String[] serverPhoneNumbers = {"9372779537"};

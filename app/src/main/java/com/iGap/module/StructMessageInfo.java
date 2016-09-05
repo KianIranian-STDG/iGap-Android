@@ -15,8 +15,7 @@ public class StructMessageInfo {
     public String senderName = "";
     public String senderID = "";
 
-    public String seen = "1";
-    public ProtoGlobal.RoomMessageStatus status;
+    public String status = ProtoGlobal.RoomMessageStatus.SENDING.toString();
     public String channelLink = "";
 
     public boolean isChange = false;
@@ -33,7 +32,7 @@ public class StructMessageInfo {
     public String replayMessage = "";
     public String replayPicturePath = "";
 
-    public String messag = "";
+    public String messageText = "";
 
     public String fileName = "";
     public String fileMime = "";

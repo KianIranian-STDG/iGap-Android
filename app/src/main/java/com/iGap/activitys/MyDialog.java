@@ -24,7 +24,7 @@ public class MyDialog {
 
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.contact_popup_dialog_);
+        dialog.setContentView(R.layout.chat_popup_dialog);
         dialog.setCancelable(true);
 
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();

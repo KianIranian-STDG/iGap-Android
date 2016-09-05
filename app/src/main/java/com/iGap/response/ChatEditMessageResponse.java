@@ -6,6 +6,9 @@ import com.iGap.G;
 import com.iGap.proto.ProtoChatEditMessage;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoResponse;
+import com.iGap.realm.RealmRoomMessage;
+
+import io.realm.Realm;
 
 public class ChatEditMessageResponse extends MessageHandler {
 
@@ -20,14 +23,26 @@ public class ChatEditMessageResponse extends MessageHandler {
         this.actionId = actionId;
     }
 
-
     @Override
     public void handler() {
-        ProtoChatEditMessage.ChatEditMessageResponse.Builder chatEditMessageResponse = (ProtoChatEditMessage.ChatEditMessageResponse.Builder) message;
+        final ProtoChatEditMessage.ChatEditMessageResponse.Builder chatEditMessageResponse = (ProtoChatEditMessage.ChatEditMessageResponse.Builder) message;
 
         ProtoResponse.Response.Builder response = ProtoResponse.Response.newBuilder().mergeFrom(chatEditMessageResponse.getResponse());
         Log.i("SOC", "ChatEditMessageResponse response.getId() : " + response.getId());
         Log.i("SOC", "ChatEditMessageResponse response.getTimestamp() : " + response.getTimestamp());
+
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", chatEditMessageResponse.getMessageId()).findFirst();
+                if (roomMessage != null) {
+                    // update message text in database
+                    roomMessage.setMessage(chatEditMessageResponse.getMessage());
+                }
+            }
+        });
+        realm.close();
 
         G.onChatEditMessageResponse.onChatEditMessage(chatEditMessageResponse.getRoomId(), chatEditMessageResponse.getMessageId(), chatEditMessageResponse.getMessageVersion(), chatEditMessageResponse.getMessage(), chatEditMessageResponse.getResponse());
     }

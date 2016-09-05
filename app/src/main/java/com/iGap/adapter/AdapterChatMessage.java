@@ -31,6 +31,7 @@ import com.iGap.module.StructMessageInfo;
 import com.iGap.proto.ProtoGlobal;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by android3 on 8/5/2016.
@@ -42,6 +43,7 @@ public class AdapterChatMessage extends RecyclerView.Adapter<RecyclerView.ViewHo
     private MyType.ChatType chatType;
     private OnComplete complete;
     private OnMessageClick mOnMessageClick;
+    private List<String> mSelectedMessagesIds = new ArrayList<>();
 
     private boolean isSelectedMode = false;
     private int numberOfSelected = 0;
@@ -56,11 +58,67 @@ public class AdapterChatMessage extends RecyclerView.Adapter<RecyclerView.ViewHo
         notifyItemInserted(getItemCount());
     }
 
+    /**
+     * update message status
+     *
+     * @param messageId message id
+     * @param status    ProtoGlobal.RoomMessageStatus
+     */
     public void updateMessageStatus(long messageId, ProtoGlobal.RoomMessageStatus status) {
         for (StructMessageInfo messageInfo : list) {
             if (messageInfo.messageID.equals(Long.toString(messageId))) {
-                messageInfo.status = status;
-                notifyItemChanged(list.indexOf(messageInfo));
+                int pos = list.indexOf(messageInfo);
+                messageInfo.status = status.toString();
+                notifyItemChanged(pos);
+                break;
+            }
+        }
+    }
+
+    /**
+     * update message text
+     *
+     * @param messageId   message id
+     * @param updatedText new message text
+     */
+    public void updateMessageText(long messageId, String updatedText) {
+        for (StructMessageInfo messageInfo : list) {
+            if (messageInfo.messageID.equals(Long.toString(messageId))) {
+                int pos = list.indexOf(messageInfo);
+                messageInfo.messageText = updatedText;
+                notifyItemChanged(pos);
+                break;
+            }
+        }
+    }
+
+    public void removeMessage(long messageId) {
+        for (StructMessageInfo messageInfo : list) {
+            if (messageInfo.messageID.equals(Long.toString(messageId))) {
+                int pos = list.indexOf(messageInfo);
+                // remove from selected messages too
+                setIsSelectedItem(pos);
+                list.remove(pos);
+                notifyItemRemoved(pos);
+                break;
+            }
+        }
+    }
+
+    /**
+     * update message id and its status
+     *
+     * @param messageId new message id
+     * @param identity  old manually defined as identity id
+     * @param status    ProtoGlobal.RoomMessageStatus
+     */
+    public void updateMessageIdAndStatus(long messageId, String identity, ProtoGlobal.RoomMessageStatus status) {
+        for (StructMessageInfo messageInfo : list) {
+            if (messageInfo.messageID.equals(identity)) {
+                int pos = list.indexOf(messageInfo);
+                messageInfo.status = status.toString();
+                messageInfo.messageID = Long.toString(messageId);
+                notifyItemChanged(pos);
                 break;
             }
         }
@@ -88,22 +146,22 @@ public class AdapterChatMessage extends RecyclerView.Adapter<RecyclerView.ViewHo
     private void defineMessageStatus(StructMessageInfo messageInfo, TextView view) {
         CharSequence status = null;
         switch (messageInfo.status) {
-            case DELIVERED:
+            case "DELIVERED":
                 status = context.getResources().getString(R.string.fa_check);
                 break;
-            case FAILED:
+            case "FAILED":
                 status = context.getResources().getString(R.string.fa_exclamation_triangle);
                 break;
-            case SEEN:
+            case "SEEN":
                 status = context.getResources().getString(R.string.fa_check) + context.getResources().getString(R.string.fa_check);
                 break;
-            case SENDING:
+            case "SENDING":
                 status = context.getResources().getString(R.string.fa_clock_o);
                 break;
-            case SENT:
+            case "SENT":
                 status = context.getResources().getString(R.string.fa_check);
                 break;
-            case UNRECOGNIZED:
+            case "UNRECOGNIZED":
                 status = null; // FIXME: 9/5/2016 [Alireza Eskandarpour Shoferi] fill appreciate icon
                 break;
         }
@@ -135,10 +193,10 @@ public class AdapterChatMessage extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
 
 
-        if (list.get(viewType).messag.length() > 0) {
+        if (list.get(viewType).messageText.length() > 0) {
             TextView txtMessage = (TextView) main.findViewById(R.id.cslr_txt_message);
             txtMessage.setVisibility(View.VISIBLE);
-            txtMessage.setText(list.get(viewType).messag);
+            txtMessage.setText(list.get(viewType).messageText);
         }
 
 
@@ -237,7 +295,7 @@ public class AdapterChatMessage extends RecyclerView.Adapter<RecyclerView.ViewHo
         //set background layout time in single chat or group chat
         if (chatType != MyType.ChatType.channel) {
             if (((list.get(viewType).messageType == MyType.MessageType.image || list.get(viewType).messageType == MyType.MessageType.gif)
-                    && list.get(viewType).messag == "") || list.get(viewType).messageType == MyType.MessageType.sticker) {
+                    && list.get(viewType).messageText == "") || list.get(viewType).messageType == MyType.MessageType.sticker) {
 
                 LinearLayout layoutTime = (LinearLayout) main.findViewById(R.id.cslr_ll_time);
                 layoutTime.setBackgroundResource(R.drawable.recangle_gray_tranceparent);
@@ -701,6 +759,15 @@ public class AdapterChatMessage extends RecyclerView.Adapter<RecyclerView.ViewHo
             complete.complete(isSelectedMode, "1", numberOfSelected + "");
         }
 
+        if (mSelectedMessagesIds.contains(list.get(position).messageID)) {
+            mSelectedMessagesIds.remove(list.get(position).messageID);
+        } else {
+            mSelectedMessagesIds.add(list.get(position).messageID);
+        }
+    }
+
+    public List<String> getSelectedMessages() {
+        return mSelectedMessagesIds;
     }
 
     /**

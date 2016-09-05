@@ -6,6 +6,9 @@ import com.iGap.G;
 import com.iGap.proto.ProtoChatDeleteMessage;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoResponse;
+import com.iGap.realm.RealmRoomMessage;
+
+import io.realm.Realm;
 
 public class ChatDeleteMessageResponse extends MessageHandler {
 
@@ -21,14 +24,26 @@ public class ChatDeleteMessageResponse extends MessageHandler {
         this.identity = identity;
     }
 
-
     @Override
     public void handler() {
-        ProtoChatDeleteMessage.ChatDeleteMessageResponse.Builder chatDeleteMessage = (ProtoChatDeleteMessage.ChatDeleteMessageResponse.Builder) message;
+        final ProtoChatDeleteMessage.ChatDeleteMessageResponse.Builder chatDeleteMessage = (ProtoChatDeleteMessage.ChatDeleteMessageResponse.Builder) message;
 
         ProtoResponse.Response.Builder response = ProtoResponse.Response.newBuilder().mergeFrom(chatDeleteMessage.getResponse());
         Log.i("SOC", "ChatDeleteMessageResponse response.getId() : " + response.getId());
         Log.i("SOC", "ChatDeleteMessageResponse response.getTimestamp() : " + response.getTimestamp());
+
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", chatDeleteMessage.getMessageId()).findFirst();
+                if (roomMessage != null) {
+                    // delete message from database
+                    roomMessage.deleteFromRealm();
+                }
+            }
+        });
+        realm.close();
 
         G.onChatDeleteMessageResponse.onChatDeleteMessage(chatDeleteMessage.getDeleteVersion(), chatDeleteMessage.getMessageId(), chatDeleteMessage.getRoomId(), chatDeleteMessage.getResponse());
     }

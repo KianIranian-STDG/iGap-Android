@@ -95,6 +95,10 @@ public class ChatSendMessageResponse extends MessageHandler {
                             message.setLog(roomMessage.getLog().toString());
                             message.setEdited(roomMessage.getEdited());
                             message.setUpdateTime(roomMessage.getUpdateTime());
+
+                            realm.copyToRealmOrUpdate(message);
+                            G.onChatSendMessageResponse.onMessageUpdated(roomMessage.getMessageId(), roomMessage.getStatus(), identity, chatSendMessageResponse);
+                            break;
                         }
                     }
                 }
@@ -104,7 +108,7 @@ public class ChatSendMessageResponse extends MessageHandler {
 
         // invoke following callback when i'm not the sender, because I already done everything after sending message
         if (userId != roomMessage.getUserId() && chatSendMessageResponse.getResponse() == null) {
-            G.onReceiveChatMessage.onReceiveChatMessage(roomMessage.getMessage(), roomMessage.getMessageType().toString(), chatSendMessageResponse);
+            G.onChatSendMessageResponse.onReceiveChatMessage(roomMessage.getMessage(), roomMessage.getMessageType().toString(), chatSendMessageResponse);
         }
 
         G.realm.close();

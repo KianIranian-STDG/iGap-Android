@@ -38,9 +38,9 @@ import com.iGap.interface_package.ISoftKeyboardOpenClose;
 import com.iGap.interface_package.OnChatClearMessageResponse;
 import com.iGap.interface_package.OnChatDeleteMessageResponse;
 import com.iGap.interface_package.OnChatEditMessageResponse;
+import com.iGap.interface_package.OnChatSendMessageResponse;
 import com.iGap.interface_package.OnChatUpdateStatusResponse;
 import com.iGap.interface_package.OnMessageClick;
-import com.iGap.interface_package.OnReceiveChatMessage;
 import com.iGap.module.EmojiEditText;
 import com.iGap.module.EmojiPopup;
 import com.iGap.module.EmojiRecentsManager;
@@ -53,6 +53,7 @@ import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmChatHistory;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmUserInfo;
+import com.iGap.request.RequestChatDeleteMessage;
 import com.iGap.request.RequestChatEditMessage;
 import com.iGap.request.RequestChatSendMessage;
 import com.iGap.request.RequestChatUpdateStatus;
@@ -140,20 +141,21 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     }
 
     public void initCallbacks() {
-        G.onChatUpdateStatusResponse = new OnChatUpdateStatusResponse() {
+        G.onChatSendMessageResponse = new OnChatSendMessageResponse() {
             @Override
-            public void onChatUpdateStatus(long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, int statusVersion) {
-                Log.i(ActivityChat.class.getSimpleName(), "onChatUpdateStatus called");
-
+            public void onMessageUpdated(final long messageId, final ProtoGlobal.RoomMessageStatus status, final String identity, ProtoChatSendMessage.ChatSendMessageResponse.Builder roomMessage) {
                 // I'm in the room
-                if (mRoomId == roomId) {
-                    // so update the message status ina adapter
-                    mAdapter.updateMessageStatus(messageId, status);
+                if (roomMessage.getRoomId() == mRoomId) {
+                    // update message status in telegram
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mAdapter.updateMessageIdAndStatus(messageId, identity, status);
+                        }
+                    });
                 }
             }
-        };
 
-        G.onReceiveChatMessage = new OnReceiveChatMessage() {
             @Override
             public void onReceiveChatMessage(String message, String messageType, ProtoChatSendMessage.ChatSendMessageResponse.Builder roomMessage) {
                 Log.i(ActivityChat.class.getSimpleName(), "onReceiveChatMessage called");
@@ -184,11 +186,33 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             }
         };
 
+        G.onChatUpdateStatusResponse = new OnChatUpdateStatusResponse() {
+            @Override
+            public void onChatUpdateStatus(long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, int statusVersion) {
+                Log.i(ActivityChat.class.getSimpleName(), "onChatUpdateStatus called");
+
+                // I'm in the room
+                if (mRoomId == roomId) {
+                    // so update the message status ina adapter
+                    mAdapter.updateMessageStatus(messageId, status);
+                }
+            }
+        };
+
         G.onChatEditMessageResponse = new OnChatEditMessageResponse() {
             @Override
-            public void onChatEditMessage(long roomId, long messageId, int messageVersion, String message, ProtoResponse.Response response) {
+            public void onChatEditMessage(long roomId, final long messageId, int messageVersion, final String message, ProtoResponse.Response response) {
                 Log.i(ActivityMain.class.getSimpleName(), "onChatEditMessage called");
-                // TODO
+                if (mRoomId == roomId) {
+                    // I'm in the room
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // update message text in adapter
+                            mAdapter.updateMessageText(messageId, message);
+                        }
+                    });
+                }
             }
         };
 
@@ -202,9 +226,25 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
         G.onChatDeleteMessageResponse = new OnChatDeleteMessageResponse() {
             @Override
-            public void onChatDeleteMessage(long deleteVersion, long messageId, long roomId, ProtoResponse.Response response) {
+            public void onChatDeleteMessage(long deleteVersion, final long messageId, long roomId, ProtoResponse.Response response) {
                 Log.i(ActivityMain.class.getSimpleName(), "onChatDeleteMessage called");
-                // TODO
+
+                if (mRoomId == roomId) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // remove deleted message from adapter
+                            mAdapter.removeMessage(messageId);
+
+                            // remove tag from edtChat if the message has deleted
+                            if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
+                                if (Long.toString(messageId).equals(((StructMessageInfo) edtChat.getTag()).messageID)) {
+                                    edtChat.setTag(null);
+                                }
+                            }
+                        }
+                    });
+                }
             }
         };
     }
@@ -249,6 +289,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         btnSmile = (ImageButton) findViewById(R.id.chl_btn_smile);
 
         edtChat = (EmojiEditText) findViewById(R.id.chl_edt_chat);
+        edtChat.requestFocus();
 
 
         btnSend = (Button) findViewById(R.id.chl_btn_send);
@@ -322,7 +363,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
                     StructMessageInfo messageInfo = (StructMessageInfo) edtChat.getTag();
                     final String message = edtChat.getText().toString().trim();
-                    if (!message.equals(messageInfo.messag)) {
+                    if (!message.equals(messageInfo.messageText)) {
                         // send edit message request
                         new RequestChatEditMessage().chatEditMessage(mRoomId, Long.parseLong(messageInfo.messageID), message);
 
@@ -353,6 +394,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                                 roomMessage.setMessage(message);
                                 roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
                                 roomMessage.setMessageId(Long.parseLong(identity));
+                                roomMessage.setUserId(senderId);
                                 roomMessage.setUpdateTime((int) System.currentTimeMillis());
                                 chatHistory.setRoomId(mRoomId);
                                 chatHistory.setRoomMessage(roomMessage);
@@ -365,7 +407,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                                     @Override
                                     public void run() {
                                         StructMessageInfo messageInfo = new StructMessageInfo();
-                                        messageInfo.messag = message;
+                                        messageInfo.messageText = message;
                                         messageInfo.messageID = identity;
                                         messageInfo.messageType = MyType.MessageType.message;
                                         messageInfo.senderID = Long.toString(senderId);
@@ -606,6 +648,9 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             @Override
             public void onClick(View view) {
                 Log.e("ddd", "btnDeleteSelected");
+                for (String messageID : mAdapter.getSelectedMessages()) {
+                    new RequestChatDeleteMessage().chatDeleteMessage(mRoomId, Long.parseLong(messageID));
+                }
             }
         });
 
@@ -712,22 +757,35 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         }
     }
 
-    /*private ArrayList<StructMessageInfo> getChatList() {
-
+    private ArrayList<StructMessageInfo> getChatList() {
+        Realm realm = Realm.getDefaultInstance();
+        long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
         ArrayList<StructMessageInfo> messageList = new ArrayList<>();
         for (RealmChatHistory realmChatHistory : G.realm.where(RealmChatHistory.class).equalTo("roomId", mRoomId).findAll()) {
-            StructMessageInfo structMessageInfo = new StructMessageInfo();
-            structMessageInfo.messag = realmChatHistory.getRoomMessage().getMessage();
-            if (realmChatHistory.getRoomMessage().getMessageType().equals("TEXT")) {
-                structMessageInfo.messageType = MyType.MessageType.message;
+            RealmRoomMessage roomMessage = realmChatHistory.getRoomMessage();
+            if (roomMessage != null) {
+                StructMessageInfo structMessageInfo = new StructMessageInfo();
+                structMessageInfo.messageText = roomMessage.getMessage();
+                structMessageInfo.status = roomMessage.getStatus();
+                structMessageInfo.messageID = Long.toString(roomMessage.getMessageId());
+                structMessageInfo.senderID = Long.toString(roomMessage.getUserId());
+                if (roomMessage.getUserId() == userId) {
+                    structMessageInfo.sendType = MyType.SendType.send;
+                } else if (roomMessage.getUserId() != userId) {
+                    structMessageInfo.sendType = MyType.SendType.recvive;
+                }
+                // TODO: 9/5/2016 [Alireza Eskandarpour Shoferi] add timeLayouts to adapter
+                if (realmChatHistory.getRoomMessage().getMessageType().equals("TEXT")) {
+                    structMessageInfo.messageType = MyType.MessageType.message;
+                }
+                messageList.add(structMessageInfo);
             }
-            messageList.add(structMessageInfo);
         }
         return messageList;
-    }*/
+    }
 
 
-    private ArrayList<StructMessageInfo> getChatList() {
+    /*private ArrayList<StructMessageInfo> getChatList() {
 
         ArrayList<StructMessageInfo> list = new ArrayList<>();
 
@@ -738,7 +796,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         c.senderAvatar = R.mipmap.a + "";
         c.messageID = "123";
         c.filePath = R.mipmap.a + "";
-        c.messag = "where are you  going hgf hgf hgf hgf  good good";
+        c.messageText = "where are you  going hgf hgf hgf hgf  good good";
         c.channelLink = "@igap";
         c.seen = "122k";
         list.add(c);
@@ -792,7 +850,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         c14.status = ProtoGlobal.RoomMessageStatus.SEEN;
         c14.messageID = "123";
         c14.sendType = MyType.SendType.recvive;
-        c14.messag = "بهترین موسیقی منتخب" +
+        c14.messageText = "بهترین موسیقی منتخب" +
                 "\n" + " how are you fghg hgfh fhgf hgf hgf hgf hgf fjhg jhg jhgjhg jhgjh";
         c14.senderAvatar = R.mipmap.a + "";
         list.add(c14);
@@ -817,7 +875,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         c1.messageType = MyType.MessageType.message;
         c1.status = ProtoGlobal.RoomMessageStatus.SEEN;
         c1.messageID = "123";
-        c1.messag = "how";
+        c1.messageText = "how";
         c1.sendType = MyType.SendType.send;
         c1.senderAvatar = R.mipmap.b + "";
         c1.messageID = "123";
@@ -827,7 +885,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         c2.messageType = MyType.MessageType.message;
         c2.status = ProtoGlobal.RoomMessageStatus.SEEN;
         c2.senderAvatar = R.mipmap.c + "";
-        c2.messag = "i am fine";
+        c2.messageText = "i am fine";
         c2.messageID = "123";
         c2.forwardMessageFrom = "Android cade";
         c2.sendType = MyType.SendType.recvive;
@@ -835,7 +893,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
         StructMessageInfo c3 = new StructMessageInfo();
         c3.messageType = MyType.MessageType.video;
-        c3.messag = "where are you  going hgf hgf hgf hgf  good good";
+        c3.messageText = "where are you  going hgf hgf hgf hgf  good good";
         c3.sendType = MyType.SendType.send;
         c3.fileName = "good video";
         c3.status = ProtoGlobal.RoomMessageStatus.SEEN;
@@ -849,7 +907,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         StructMessageInfo c4 = new StructMessageInfo();
         c4.messageType = MyType.MessageType.image;
         c4.forwardMessageFrom = "ali";
-        c4.messag = "the good picture for all the word";
+        c4.messageText = "the good picture for all the word";
         c4.status = ProtoGlobal.RoomMessageStatus.SEEN;
         c4.sendType = MyType.SendType.recvive;
         c4.messageID = "123";
@@ -894,14 +952,15 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         list.add(c8);
 
         return list;
-    }
+    }*/
 
     @Override
     public void onMessageClick(View view, StructMessageInfo messageInfo) {
         Log.i(ActivityChat.class.getSimpleName(), "Message clicked");
         // put message text to EditText
-        if (!messageInfo.messag.isEmpty()) {
-            edtChat.setText(messageInfo.messag);
+        if (!messageInfo.messageText.isEmpty()) {
+            edtChat.setText(messageInfo.messageText);
+            edtChat.setSelection(0, edtChat.getText().length());
             // put message object to edtChat's tag to obtain it later and
             // found is user trying to edit a message
             edtChat.setTag(messageInfo);
