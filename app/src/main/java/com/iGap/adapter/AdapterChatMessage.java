@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -23,7 +22,6 @@ import com.iGap.R;
 import com.iGap.activitys.ActivityComment;
 import com.iGap.interface_package.OnMessageClick;
 import com.iGap.module.CircleImageView;
-import com.iGap.module.CustomRoundCornerImageView;
 import com.iGap.module.GifMovieView;
 import com.iGap.module.MyType;
 import com.iGap.module.OnComplete;
@@ -589,37 +587,6 @@ public class AdapterChatMessage extends RecyclerView.Adapter<RecyclerView.ViewHo
         });
 
 
-        if (chatType == MyType.ChatType.channel) {  // for round the corner of image
-            ViewTreeObserver vto = holder.imvImageVideo.getViewTreeObserver();
-            vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                public boolean onPreDraw() {
-                    holder.imvImageVideo.getViewTreeObserver().removeOnPreDrawListener(this);
-
-                    int imageWith = holder.imvImageVideo.getWidth();
-                    int imageHeight = holder.imvImageVideo.getHeight();
-
-                    int layoutWith = ((View) holder.imvImageVideo.getParent().getParent()).getWidth();
-                    int layoutHeight = ((View) holder.imvImageVideo.getParent().getParent()).getHeight();
-
-                    if (imageWith == layoutWith) {
-                        int radiousTop = 0;
-                        int radiousBottom = 0;
-                        CustomRoundCornerImageView view = (CustomRoundCornerImageView) holder.imvImageVideo;
-                        radiousTop = (int) context.getResources().getDimension(R.dimen.dp4);
-                        if (imageHeight == layoutHeight)
-                            radiousBottom = radiousTop;
-
-                        if (radiousTop > 0 || radiousBottom > 0)
-                            view.setCornerRadiiDP(radiousTop, 0, radiousBottom, 0);
-
-                    }
-
-                    return true;
-                }
-            });
-        }
-
-
     }
 
     private void configureViewHolderAudio(viewHolderAudio holder, int position) {
@@ -629,36 +596,6 @@ public class AdapterChatMessage extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private void configureViewHolderImage(final viewHolderImage holder, final int position) {
         holder.imvPicture.setImageResource(Integer.parseInt(list.get(position).filePath));
-
-        if (chatType == MyType.ChatType.channel) {
-            ViewTreeObserver vto = holder.imvPicture.getViewTreeObserver();
-            vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                public boolean onPreDraw() {
-                    holder.imvPicture.getViewTreeObserver().removeOnPreDrawListener(this);
-
-                    int imageWith = holder.imvPicture.getWidth();
-                    int imageHeight = holder.imvPicture.getHeight();
-
-                    int layoutWith = ((View) holder.imvPicture.getParent().getParent().getParent()).getWidth();
-                    int layoutHeight = ((View) holder.imvPicture.getParent().getParent().getParent()).getHeight();
-
-                    if (imageWith == layoutWith) {
-                        int radiousTop = 0;
-                        int radiousBottom = 0;
-                        CustomRoundCornerImageView view = (CustomRoundCornerImageView) holder.imvPicture;
-                        radiousTop = (int) context.getResources().getDimension(R.dimen.dp4);
-                        if (imageHeight == layoutHeight)
-                            radiousBottom = radiousTop;
-
-                        if (radiousTop > 0 || radiousBottom > 0)
-                            view.setCornerRadiiDP(radiousTop, 0, radiousBottom, 0);
-
-                    }
-
-                    return true;
-                }
-            });
-        }
 
     }
 

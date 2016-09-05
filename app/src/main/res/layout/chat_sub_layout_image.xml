@@ -4,7 +4,7 @@
     android:layout_height="wrap_content">
 
 
-    <com.iGap.module.CustomRoundCornerImageView
+    <ImageView
         android:id="@+id/shli_imv_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

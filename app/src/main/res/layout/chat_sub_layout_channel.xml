@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="@dimen/dp8"
+
     android:layoutDirection="ltr"
-    android:orientation="vertical">
+    card_view:cardCornerRadius="@dimen/dp8"
+    card_view:cardUseCompatPadding="true">
+
 
     <LinearLayout
         android:id="@+id/cslch_ll_parent"
         android:layout_width="match_parent"
+        android:background="@android:color/white"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dp8"
-        android:background="@drawable/rectangle_round_white"
         android:orientation="horizontal">
 
         <FrameLayout
@@ -41,10 +45,10 @@
                     android:id="@+id/cslr_txt_message"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="@dimen/dp16"
                     android:layout_marginBottom="@dimen/dp20"
                     android:paddingLeft="@dimen/dp20"
                     android:paddingRight="@dimen/dp4"
+                    android:paddingTop="@dimen/dp16"
                     android:text=""
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/sp16"
@@ -209,4 +213,5 @@
 
     </LinearLayout>
 
-</LinearLayout>
+
+</android.support.v7.widget.CardView>
