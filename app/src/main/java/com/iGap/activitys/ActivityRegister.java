@@ -130,7 +130,7 @@ public class ActivityRegister extends ActivityEnhanced {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().equals("0")) {
-                    Toast.makeText(ActivityRegister.this, "نیازی به 0 اول نیست", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ActivityRegister.this, "Don't need First 0", Toast.LENGTH_SHORT).show();
                     edtPhoneNumber.setText("");
                 }
             }
@@ -274,7 +274,6 @@ public class ActivityRegister extends ActivityEnhanced {
 
                 AdapterDialog.mSelectedVariation = positionRadioButton;
 
-                Toast.makeText(ActivityRegister.this, "" + positionRadioButton, Toast.LENGTH_SHORT).show();
                 adapterDialog.notifyDataSetChanged();
 
                 edtSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -288,6 +287,7 @@ public class ActivityRegister extends ActivityEnhanced {
                     public boolean onQueryTextChange(String s) {
 
                         adapterDialog.getFilter().filter(s);
+
                         return false;
                     }
                 });
@@ -414,7 +414,6 @@ public class ActivityRegister extends ActivityEnhanced {
                     int seconds = (int) ((millisUntilFinished) / 1000);
                     int minutes = seconds / 60;
                     seconds = seconds % 60;
-
 
                     int portaret_landscope = getResources().getConfiguration().orientation;
                     if (portaret_landscope == 1) {//portrait

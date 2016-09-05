@@ -87,7 +87,7 @@
             android:layout_height="@dimen/dp40"
             android:layout_marginLeft="@dimen/dp32"
             android:layout_marginRight="@dimen/dp32"
-            android:layout_marginTop="@dimen/dp8"
+            android:layout_marginTop="0dp"
             android:background="@drawable/rg_background_agreement"
             android:drawableLeft="@mipmap/flesh"
             android:paddingLeft="@dimen/dp12"
@@ -101,7 +101,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/dp32"
             android:layout_marginRight="@dimen/dp32"
-            android:layout_marginTop="@dimen/dp12"
+            android:layout_marginTop="@dimen/dp20"
             android:layoutDirection="ltr"
             android:orientation="horizontal">
 
@@ -145,7 +145,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="@dimen/dp8"
+            android:layout_marginBottom="@dimen/dp4"
             android:background="@drawable/rg_background_button_start_register"
             android:text="Start"
             android:textColor="@color/rg_whit_background" />
