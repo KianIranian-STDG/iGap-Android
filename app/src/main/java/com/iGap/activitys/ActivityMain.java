@@ -30,7 +30,7 @@ import com.iGap.libs.floatingAddButton.StateChangeListener;
 import com.iGap.libs.flowingdrawer.FlowingView;
 import com.iGap.libs.flowingdrawer.LeftDrawerLayout;
 import com.iGap.libs.flowingdrawer.ResizeWidthAnimation;
-import com.iGap.module.ListOfContact;
+import com.iGap.module.Contacts;
 import com.iGap.module.MyType;
 import com.iGap.module.OnComplete;
 import com.iGap.module.StructChatInfo;
@@ -126,7 +126,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                 getContactListFromServer();
             }
         };
-        ListOfContact.getListOfContact();
+        Contacts.getListOfContact();
     }
 
     private void getContactListFromServer() {

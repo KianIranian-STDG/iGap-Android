@@ -19,7 +19,7 @@ import com.iGap.adapter.StickyHeaderAdapter;
 import com.iGap.adapter.items.ContactItem;
 import com.iGap.interface_package.OnChatGetRoom;
 import com.iGap.libs.flowingdrawer.MenuFragment;
-import com.iGap.module.ListOfContact;
+import com.iGap.module.Contacts;
 import com.iGap.module.StructContactInfo;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmContacts;
@@ -65,7 +65,7 @@ public class ContactsFragmentDrawerMenu extends MenuFragment {
         itemAdapter.withFilterPredicate(new IItemAdapter.Predicate<ContactItem>() {
             @Override
             public boolean filter(ContactItem item, CharSequence constraint) {
-                return !item.mContact.text.toLowerCase().startsWith(String.valueOf(constraint).toLowerCase());
+                return !item.mContact.displayName.toLowerCase().startsWith(String.valueOf(constraint).toLowerCase());
             }
         });
         fastAdapter.withOnClickListener(new FastAdapter.OnClickListener<ContactItem>() {
@@ -109,7 +109,7 @@ public class ContactsFragmentDrawerMenu extends MenuFragment {
         rv.addItemDecoration(decoration);
 
         List<IItem> items = new ArrayList<>();
-        ArrayList<StructContactInfo> contacts = ListOfContact.Retrive("");
+        List<StructContactInfo> contacts = Contacts.retrieve(null);
         for (StructContactInfo contact : contacts) {
             items.add(new ContactItem().setContact(contact).withIdentifier(100 + contacts.indexOf(contact)));
         }
@@ -122,7 +122,6 @@ public class ContactsFragmentDrawerMenu extends MenuFragment {
                 decoration.invalidateHeaders();
             }
         });
-
 
         //restore selections (this has to be done after the items were added
         fastAdapter.withSavedInstanceState(savedInstanceState);

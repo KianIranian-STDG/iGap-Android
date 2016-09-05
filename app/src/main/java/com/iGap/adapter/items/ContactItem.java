@@ -49,7 +49,7 @@ public class ContactItem extends AbstractItem<ContactItem, ContactItem.ViewHolde
             holder.topLine.setVisibility(View.GONE);
         }
 
-        holder.title.setText(mContact.text);
+        holder.title.setText(mContact.displayName);
         // TODO set image
         // TODO set subtitle
     }

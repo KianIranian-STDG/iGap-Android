@@ -5,18 +5,14 @@ package com.iGap.module;
  */
 public class StructContactInfo {
     public long peerId;
-    public int sectionManager;
-    public int sectionFirstPosition;
     public boolean isHeader;
-    public String text;
-    public String Status;
+    public String displayName;
+    public String status;
 
-    public StructContactInfo(long peerId, String text, String status, boolean isHeader, int sectionManager, int sectionFirstPosition) {
+    public StructContactInfo(long peerId, String displayName, String status, boolean isHeader) {
         this.peerId = peerId;
         this.isHeader = isHeader;
-        this.text = text;
-        this.Status = status;
-        this.sectionManager = sectionManager;
-        this.sectionFirstPosition = sectionFirstPosition;
+        this.displayName = displayName;
+        this.status = status;
     }
 }

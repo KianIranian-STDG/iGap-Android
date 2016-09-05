@@ -3,62 +3,59 @@ package com.iGap.module;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.provider.ContactsContract;
-import android.text.TextUtils;
 
 import com.iGap.G;
 import com.iGap.realm.RealmContacts;
 import com.iGap.request.RequestUserContactImport;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
 
+/**
+ * work with saved contacts in database
+ */
+public class Contacts {
 
-public class ListOfContact {
+    /**
+     * retrieve contacts from database
+     *
+     * @param filter filter contacts
+     * @return List<StructContactInfo>
+     */
+    public static List<StructContactInfo> retrieve(String filter) {
+        ArrayList<StructContactInfo> items = new ArrayList<>();
 
-    public static ArrayList<StructContactInfo> Retrive(String s) {
-
-
-        ArrayList<StructContactInfo> mItems = new ArrayList<>();
-        RealmResults<RealmContacts> items = null;
-
-        G.realm = Realm.getInstance(G.realmConfig);
-
-        if (s.equals("")) {
-            items = G.realm.where(RealmContacts.class).findAll();
+        RealmResults<RealmContacts> contacts;
+        Realm realm = Realm.getDefaultInstance();
+        if (filter == null) {
+            contacts = realm.where(RealmContacts.class).findAll();
         } else {
-            items = G.realm
+            contacts = realm
                     .where(RealmContacts.class)
-                    .contains("display_name", s)
+                    .contains("display_name", filter)
                     .findAll();
         }
+        realm.close();
 
-        //Insert headers into list of items.
         String lastHeader = "";
-        int sectionManager = -1;
-        int headerCount = 0;
-        int sectionFirstPosition = 0;
+        for (int i = 0; i < contacts.size(); i++) {
+            String header = contacts.get(i).getDisplay_name();
+            long peerId = contacts.get(i).getId();
 
-        for (int i = 0; i < items.size(); i++) {
-            try {
-                String header = items.get(i).getDisplay_name();
-
-                if (!TextUtils.equals(lastHeader.toLowerCase(), header.toLowerCase())) {
-                    // Insert new header view and update section data.
-                    sectionManager = (sectionManager + 1) % 2;
-                    sectionFirstPosition = i + headerCount;
-                    lastHeader = header.toUpperCase();
-                    headerCount += 1;
-                    mItems.add(new StructContactInfo(items.get(i).getId(), header.toUpperCase(), "", true, sectionManager, sectionFirstPosition));
-                }
-                mItems.add(new StructContactInfo(items.get(i).getId(), items.get(i).getDisplay_name(), "Last seen recently", false, sectionManager, sectionFirstPosition));
-
-            } catch (Exception e) {
+            // new header exists
+            if (lastHeader.isEmpty() || (!lastHeader.isEmpty() && !header.isEmpty() && lastHeader.toLowerCase().charAt(0) != header.toLowerCase().charAt(0))) {
+                // TODO: 9/5/2016 [Alireza Eskandarpour Shoferi] implement contact last seen
+                items.add(new StructContactInfo(peerId, header, "", true));
+            } else {
+                items.add(new StructContactInfo(peerId, header, "", false));
             }
+            lastHeader = header;
         }
 
-        return mItems;
+        return items;
     }
 
     public static ArrayList<StructListOfContact> getListOfContact() { //get List Of Contact
