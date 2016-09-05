@@ -28,13 +28,14 @@ import com.iGap.module.GifMovieView;
 import com.iGap.module.MyType;
 import com.iGap.module.OnComplete;
 import com.iGap.module.StructMessageInfo;
+import com.iGap.proto.ProtoGlobal;
 
 import java.util.ArrayList;
 
 /**
  * Created by android3 on 8/5/2016.
  */
-public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class AdapterChatMessage extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private ArrayList<StructMessageInfo> list;
     private Context context;
@@ -45,7 +46,38 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private boolean isSelectedMode = false;
     private int numberOfSelected = 0;
 
-    public AdapterChat(Context context, MyType.ChatType chatType, ArrayList<StructMessageInfo> list, OnComplete complete, OnMessageClick onMessageClick) {
+    /**
+     * use this method for adding and notifying
+     *
+     * @param messageInfo StructMessageInfo
+     */
+    public void insert(StructMessageInfo messageInfo) {
+        list.add(messageInfo);
+        notifyItemInserted(getItemCount());
+    }
+
+    public void updateMessageStatus(long messageId, ProtoGlobal.RoomMessageStatus status) {
+        for (StructMessageInfo messageInfo : list) {
+            if (messageInfo.messageID.equals(Long.toString(messageId))) {
+                messageInfo.status = status;
+                notifyItemChanged(list.indexOf(messageInfo));
+                break;
+            }
+        }
+    }
+
+    public void clear() {
+        int count = list.size();
+        list.clear();
+        notifyItemRangeRemoved(0, count);
+    }
+
+    public void insert(ArrayList<StructMessageInfo> messageInfos) {
+        list.addAll(messageInfos);
+        notifyItemRangeInserted(0, messageInfos.size());
+    }
+
+    public AdapterChatMessage(Context context, MyType.ChatType chatType, ArrayList<StructMessageInfo> list, OnComplete complete, OnMessageClick onMessageClick) {
         this.list = list;
         this.context = context;
         this.chatType = chatType;
@@ -82,7 +114,6 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             txtMessage.setVisibility(View.VISIBLE);
             txtMessage.setText(list.get(viewType).messag);
         }
-
 
 
         // add layout forward message to layout

@@ -36,6 +36,8 @@ import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
+
 
 public class ContactsFragmentDrawerMenu extends MenuFragment {
 
@@ -128,7 +130,8 @@ public class ContactsFragmentDrawerMenu extends MenuFragment {
 
     private void chatGetRoom(final long peerId) {
 
-        final RealmRoom realmRoom = G.realm.where(RealmRoom.class).equalTo("chat_room.peer_id", peerId).findFirst();
+        final Realm realm = Realm.getDefaultInstance();
+        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("chat_room.peer_id", peerId).findFirst();
 
         if (realmRoom != null) {
             Log.i("XXX", "Room Exist");
@@ -137,7 +140,7 @@ public class ContactsFragmentDrawerMenu extends MenuFragment {
             intent.putExtra("ChatType", realmRoom.getType().toString());
             intent.putExtra("NewChatRoom", false);
             //intent.putExtra("IsMute", ); //TODO [Saeed Mozaffari] [2016-09-03 11:12 AM] - set IsMute in RealmRoom
-            intent.putExtra("LastSeen", G.realm.where(RealmContacts.class).equalTo("id", peerId).findFirst().getLast_seen());
+            intent.putExtra("LastSeen", realm.where(RealmContacts.class).equalTo("id", peerId).findFirst().getLast_seen());
             intent.putExtra("RoomId", realmRoom.getId());
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             G.context.startActivity(intent);
@@ -153,7 +156,7 @@ public class ContactsFragmentDrawerMenu extends MenuFragment {
                             Intent intent = new Intent(G.context, ActivityChat.class);
                             intent.putExtra("NewChatRoom", true);
                             intent.putExtra("ChatType", ProtoGlobal.Room.Type.CHAT.toString());
-                            intent.putExtra("LastSeen", G.realm.where(RealmContacts.class).equalTo("id", peerId).findFirst().getLast_seen());
+                            intent.putExtra("LastSeen", realm.where(RealmContacts.class).equalTo("id", peerId).findFirst().getLast_seen());
                             intent.putExtra("RoomId", roomId);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             G.context.startActivity(intent);
@@ -164,6 +167,7 @@ public class ContactsFragmentDrawerMenu extends MenuFragment {
 
             new RequestChatGetRoom().chatGetRoom(peerId);
         }
+        realm.close();
     }
 
     @Override

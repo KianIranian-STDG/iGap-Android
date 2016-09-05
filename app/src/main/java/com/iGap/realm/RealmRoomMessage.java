@@ -1,12 +1,10 @@
 package com.iGap.realm;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 public class RealmRoomMessage extends RealmObject {
-
-//    @PrimaryKey
-//    private long id;
-
+    @PrimaryKey
     private long messageId;
     private int messageVersion;
     private String status;

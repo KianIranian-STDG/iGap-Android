@@ -1,5 +1,7 @@
 package com.iGap.module;
 
+import com.iGap.proto.ProtoGlobal;
+
 import java.util.ArrayList;
 
 /**
@@ -14,6 +16,7 @@ public class StructMessageInfo {
     public String senderID = "";
 
     public String seen = "1";
+    public ProtoGlobal.RoomMessageStatus status;
     public String channelLink = "";
 
     public boolean isChange = false;

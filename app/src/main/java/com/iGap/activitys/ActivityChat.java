@@ -26,7 +26,7 @@ import android.widget.Toast;
 
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.adapter.AdapterChat;
+import com.iGap.adapter.AdapterChatMessage;
 import com.iGap.helper.Emojione;
 import com.iGap.interface_package.IEmojiBackspaceClick;
 import com.iGap.interface_package.IEmojiClickListener;
@@ -35,6 +35,10 @@ import com.iGap.interface_package.IEmojiStickerClick;
 import com.iGap.interface_package.IEmojiViewCreate;
 import com.iGap.interface_package.IRecentsLongClick;
 import com.iGap.interface_package.ISoftKeyboardOpenClose;
+import com.iGap.interface_package.OnChatClearMessageResponse;
+import com.iGap.interface_package.OnChatDeleteMessageResponse;
+import com.iGap.interface_package.OnChatEditMessageResponse;
+import com.iGap.interface_package.OnChatUpdateStatusResponse;
 import com.iGap.interface_package.OnMessageClick;
 import com.iGap.interface_package.OnReceiveChatMessage;
 import com.iGap.module.EmojiEditText;
@@ -45,12 +49,17 @@ import com.iGap.module.OnComplete;
 import com.iGap.module.StructMessageInfo;
 import com.iGap.proto.ProtoChatSendMessage;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmChatHistory;
+import com.iGap.realm.RealmRoomMessage;
+import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestChatEditMessage;
 import com.iGap.request.RequestChatSendMessage;
-import com.iGap.request.RequestClientGetRoom;
+import com.iGap.request.RequestChatUpdateStatus;
 
 import java.util.ArrayList;
+
+import io.realm.Realm;
 
 /**
  * Created by android3 on 8/5/2016.
@@ -77,7 +86,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     private RecyclerView recyclerView;
     private ImageButton btnSmile;
 
-    private AdapterChat mAdapter;
+    private AdapterChatMessage mAdapter;
     private MyType.ChatType chatType;
     private String contactId;
     private boolean isMute = false;
@@ -87,7 +96,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     private String contactName;
     private String memberCount;
     private String lastSeen;
-    private long roomId;
+    private long mRoomId;
 
 
     private Button btnUp;
@@ -115,32 +124,52 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             ownerShip = (MyType.OwnerShip) bundle.getSerializable("OwnerShip");
             contactName = bundle.getString("ContactName");
             memberCount = bundle.getString("MemberCount");
-            lastSeen = bundle.getString("LastSeen");
-            roomId = bundle.getLong("RoomId");
+            lastSeen = Long.toString(bundle.getLong("LastSeen"));
+            mRoomId = bundle.getLong("RoomId");
             newChatRoom = bundle.getBoolean("NewChatRoom");
-            Log.i("MMM", "roomId : " + roomId);
+            Log.i("MMM", "roomId : " + mRoomId);
         }
 
         initComponent();
         initAppbarSelected();
-        receiveMessage();
+        initCallbacks();
 
         if (chatType == MyType.ChatType.channel && ownerShip == MyType.OwnerShip.member)
             initLayotChannelFooter();
 
     }
 
-    public void receiveMessage() {
+    public void initCallbacks() {
+        G.onChatUpdateStatusResponse = new OnChatUpdateStatusResponse() {
+            @Override
+            public void onChatUpdateStatus(long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, int statusVersion) {
+                Log.i(ActivityChat.class.getSimpleName(), "onChatUpdateStatus called");
+
+                // I'm in the room
+                if (mRoomId == roomId) {
+                    // so update the message status ina adapter
+                    mAdapter.updateMessageStatus(messageId, status);
+                }
+            }
+        };
 
         G.onReceiveChatMessage = new OnReceiveChatMessage() {
             @Override
             public void onReceiveChatMessage(String message, String messageType, ProtoChatSendMessage.ChatSendMessageResponse.Builder roomMessage) {
-                if (newChatRoom) {
-                    newChatRoom = false;
-                    new RequestClientGetRoom().clientGetRoom(roomId);
+                Log.i(ActivityChat.class.getSimpleName(), "onReceiveChatMessage called");
+                // I'm in the room
+                if (roomMessage.getRoomId() == mRoomId) {
+                    Log.i(ActivityChat.class.getSimpleName(), "onReceiveChatMessage 1");
+                    // make update status to message sender that i've read his message
+                    new RequestChatUpdateStatus().updateStatus(roomMessage.getRoomId(), roomMessage.getRoomMessage().getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+                } else {
+                    Log.i(ActivityChat.class.getSimpleName(), "onReceiveChatMessage 2");
+                    // I'm not in the room (or another room), so I just received the message (the message has delivered)
+                    new RequestChatUpdateStatus().updateStatus(roomMessage.getRoomId(), roomMessage.getRoomMessage().getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
                 }
 
-                mAdapter = new AdapterChat(ActivityChat.this, chatType, getChatList(), complete, ActivityChat.this);
+                // FIXME: 9/5/2016 [Alireza Eskandarpour Shoferi] we shouldn't re-init adapter, that's a very bad workaround!
+                mAdapter = new AdapterChatMessage(ActivityChat.this, chatType, getChatList(), complete, ActivityChat.this);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -152,6 +181,30 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                             recyclerView.scrollToPosition(position - 1);
                     }
                 });
+            }
+        };
+
+        G.onChatEditMessageResponse = new OnChatEditMessageResponse() {
+            @Override
+            public void onChatEditMessage(long roomId, long messageId, int messageVersion, String message, ProtoResponse.Response response) {
+                Log.i(ActivityMain.class.getSimpleName(), "onChatEditMessage called");
+                // TODO
+            }
+        };
+
+        G.onChatClearMessageResponse = new OnChatClearMessageResponse() {
+            @Override
+            public void onChatClearMessage(long roomId, long clearId, ProtoResponse.Response response) {
+                Log.i(ActivityMain.class.getSimpleName(), "onChatClearMessage called");
+                // TODO
+            }
+        };
+
+        G.onChatDeleteMessageResponse = new OnChatDeleteMessageResponse() {
+            @Override
+            public void onChatDeleteMessage(long deleteVersion, long messageId, long roomId, ProtoResponse.Response response) {
+                Log.i(ActivityMain.class.getSimpleName(), "onChatDeleteMessage called");
+                // TODO
             }
         };
     }
@@ -227,9 +280,8 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             }
         };
 
-
         recyclerView = (RecyclerView) findViewById(R.id.chl_recycler_view_chat);
-        mAdapter = new AdapterChat(ActivityChat.this, chatType, getChatList(), complete, this);
+        mAdapter = new AdapterChatMessage(ActivityChat.this, chatType, getChatList(), complete, this);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(ActivityChat.this);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -272,7 +324,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     final String message = edtChat.getText().toString().trim();
                     if (!message.equals(messageInfo.messag)) {
                         // send edit message request
-                        new RequestChatEditMessage().chatEditMessage(roomId, Long.parseLong(messageInfo.messageID), message);
+                        new RequestChatEditMessage().chatEditMessage(mRoomId, Long.parseLong(messageInfo.messageID), message);
 
                         // should be null after requesting
                         edtChat.setTag(null);
@@ -281,37 +333,50 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 } else {
                     // new message has written
                     final String message = edtChat.getText().toString().trim();
+                    final Realm realm = Realm.getDefaultInstance();
+                    final long senderId = realm.where(RealmUserInfo.class).findFirst().getUserId();
                     if (!message.isEmpty()) {
-                        // G.realm = Realm.getInstance(G.realmConfig);
-//                    G.realm.executeTransaction(new Realm.Transaction() {
-//                        @Override
-//                        public void execute(Realm realm) { //TODO [Saeed Mozaffari] [2016-09-01 10:39 AM] - don't new realm object in every send message
-//
-//                        }
-//                    });
-//                    G.realm.beginTransaction();
-//                    RealmChatHistory realmChatHistory = G.realm.createObject(RealmChatHistory.class);
-//                    RealmRoomMessage realmRoomMessage = G.realm.createObject(RealmRoomMessage.class);
-//
-//                    realmRoomMessage.setMessage(message);
-//                    realmRoomMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT.toString());
-//
-//                    realmChatHistory.setRoomId(1);
-//                    realmChatHistory.setRoomMessage(realmRoomMessage);
-//
-//                    mAdapter = new AdapterChat(ActivityChat.this, chatType, getChatList(), complete);
-//                    LinearLayoutManager mLayoutManager = new LinearLayoutManager(ActivityChat.this);
-//                    recyclerView.setLayoutManager(mLayoutManager);
-//                    recyclerView.setItemAnimator(new DefaultItemAnimator());
-//                    recyclerView.setAdapter(mAdapter);
-//
-//                    getChatList();
-//                    G.realm.commitTransaction();
+                        final String identity = Long.toString(System.currentTimeMillis());
 
                         new RequestChatSendMessage()
-                                .newBuilder(ProtoGlobal.RoomMessageType.TEXT, roomId)
+                                .newBuilder(ProtoGlobal.RoomMessageType.TEXT, mRoomId)
                                 .message(message)
-                                .sendMessage();
+                                .sendMessage(identity);
+
+                        realm.executeTransactionAsync(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                RealmChatHistory chatHistory = new RealmChatHistory();
+                                RealmRoomMessage roomMessage = new RealmRoomMessage();
+
+                                roomMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT.toString());
+                                roomMessage.setMessage(message);
+                                roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
+                                roomMessage.setMessageId(Long.parseLong(identity));
+                                roomMessage.setUpdateTime((int) System.currentTimeMillis());
+                                chatHistory.setRoomId(mRoomId);
+                                chatHistory.setRoomMessage(roomMessage);
+                                realm.copyToRealm(chatHistory);
+                            }
+                        }, new Realm.Transaction.OnSuccess() {
+                            @Override
+                            public void onSuccess() {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        StructMessageInfo messageInfo = new StructMessageInfo();
+                                        messageInfo.messag = message;
+                                        messageInfo.messageID = identity;
+                                        messageInfo.messageType = MyType.MessageType.message;
+                                        messageInfo.senderID = Long.toString(senderId);
+                                        messageInfo.sendType = MyType.SendType.send;
+                                        mAdapter.insert(messageInfo);
+
+                                        realm.close();
+                                    }
+                                });
+                            }
+                        });
 
                         edtChat.setText("");
                     } else {
@@ -647,10 +712,10 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         }
     }
 
-    private ArrayList<StructMessageInfo> getChatList() {
+    /*private ArrayList<StructMessageInfo> getChatList() {
 
         ArrayList<StructMessageInfo> messageList = new ArrayList<>();
-        for (RealmChatHistory realmChatHistory : G.realm.where(RealmChatHistory.class).equalTo("roomId", roomId).findAll()) {
+        for (RealmChatHistory realmChatHistory : G.realm.where(RealmChatHistory.class).equalTo("roomId", mRoomId).findAll()) {
             StructMessageInfo structMessageInfo = new StructMessageInfo();
             structMessageInfo.messag = realmChatHistory.getRoomMessage().getMessage();
             if (realmChatHistory.getRoomMessage().getMessageType().equals("TEXT")) {
@@ -659,10 +724,10 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             messageList.add(structMessageInfo);
         }
         return messageList;
-    }
+    }*/
 
 
-    /*private ArrayList<StructMessageInfo> getChatList() {
+    private ArrayList<StructMessageInfo> getChatList() {
 
         ArrayList<StructMessageInfo> list = new ArrayList<>();
 
@@ -813,7 +878,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         list.add(c8);
 
         return list;
-    }*/
+    }
 
     @Override
     public void onMessageClick(View view, StructMessageInfo messageInfo) {

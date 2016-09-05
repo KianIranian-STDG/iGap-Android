@@ -10,7 +10,11 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 
 import com.iGap.helper.HelperFillLookUpClass;
+import com.iGap.interface_package.OnChatClearMessageResponse;
+import com.iGap.interface_package.OnChatDeleteMessageResponse;
+import com.iGap.interface_package.OnChatEditMessageResponse;
 import com.iGap.interface_package.OnChatGetRoom;
+import com.iGap.interface_package.OnChatUpdateStatusResponse;
 import com.iGap.interface_package.OnClientGetRoomListResponse;
 import com.iGap.interface_package.OnInfoCountryResponse;
 import com.iGap.interface_package.OnInfoTime;
@@ -120,6 +124,10 @@ public class G extends Application {
     public static OnSecuring onSecuring;
     public static OnChatGetRoom onChatGetRoom;
     public static OnReceiveChatMessage onReceiveChatMessage;
+    public static OnChatEditMessageResponse onChatEditMessageResponse;
+    public static OnChatClearMessageResponse onChatClearMessageResponse;
+    public static OnChatDeleteMessageResponse onChatDeleteMessageResponse;
+    public static OnChatUpdateStatusResponse onChatUpdateStatusResponse;
 
     // list of sr
     public static String[] serverPhoneNumbers = {"9372779537"};
@@ -173,6 +181,7 @@ public class G extends Application {
                 .build();
 
         realm = Realm.getInstance(realmConfig);
+        Realm.setDefaultConfiguration(realmConfig);
 
         String imageUser = Environment.getExternalStorageDirectory() + "/image_user";
 

@@ -1,6 +1,11 @@
 package com.iGap.response;
 
+import android.util.Log;
+
+import com.iGap.G;
 import com.iGap.proto.ProtoChatEditMessage;
+import com.iGap.proto.ProtoError;
+import com.iGap.proto.ProtoResponse;
 
 public class ChatEditMessageResponse extends MessageHandler {
 
@@ -10,24 +15,36 @@ public class ChatEditMessageResponse extends MessageHandler {
 
     public ChatEditMessageResponse(int actionId, Object protoClass, String identity) {
         super(actionId, protoClass, identity);
+        this.message = protoClass;
+        this.identity = identity;
+        this.actionId = actionId;
     }
 
 
     @Override
     public void handler() {
         ProtoChatEditMessage.ChatEditMessageResponse.Builder chatEditMessageResponse = (ProtoChatEditMessage.ChatEditMessageResponse.Builder) message;
-        chatEditMessageResponse.getRoomId();
-        chatEditMessageResponse.getMessageId();
-        chatEditMessageResponse.getMessageVersion();
-        chatEditMessageResponse.getMessage();
+
+        ProtoResponse.Response.Builder response = ProtoResponse.Response.newBuilder().mergeFrom(chatEditMessageResponse.getResponse());
+        Log.i("SOC", "ChatEditMessageResponse response.getId() : " + response.getId());
+        Log.i("SOC", "ChatEditMessageResponse response.getTimestamp() : " + response.getTimestamp());
+
+        G.onChatEditMessageResponse.onChatEditMessage(chatEditMessageResponse.getRoomId(), chatEditMessageResponse.getMessageId(), chatEditMessageResponse.getMessageVersion(), chatEditMessageResponse.getMessage(), chatEditMessageResponse.getResponse());
     }
 
     @Override
     public void timeOut() {
+        Log.i("SOC", "ChatEditMessageResponse timeout");
     }
 
     @Override
     public void error() {
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        int majorCode = errorResponse.getMajorCode();
+        int minorCode = errorResponse.getMinorCode();
+
+        Log.i("SOC", "ChatEditMessageResponse response.majorCode() : " + majorCode);
+        Log.i("SOC", "ChatEditMessageResponse response.minorCode() : " + minorCode);
     }
 }
 

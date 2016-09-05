@@ -1,12 +1,17 @@
 package com.iGap.response;
 
+import android.util.Log;
+
+import com.iGap.G;
 import com.iGap.proto.ProtoChatDeleteMessage;
+import com.iGap.proto.ProtoError;
+import com.iGap.proto.ProtoResponse;
 
 public class ChatDeleteMessageResponse extends MessageHandler {
 
-//    public int actionId;
-//    public Object message;
-//    public String identity;
+    public int actionId;
+    public Object message;
+    public String identity;
 
     public ChatDeleteMessageResponse(int actionId, Object protoClass, String identity) {
         super(actionId, protoClass, identity);
@@ -19,20 +24,28 @@ public class ChatDeleteMessageResponse extends MessageHandler {
 
     @Override
     public void handler() {
-
         ProtoChatDeleteMessage.ChatDeleteMessageResponse.Builder chatDeleteMessage = (ProtoChatDeleteMessage.ChatDeleteMessageResponse.Builder) message;
-        chatDeleteMessage.getRoomId();
-        chatDeleteMessage.getMessageId();
-        chatDeleteMessage.clearDeleteVersion();
 
+        ProtoResponse.Response.Builder response = ProtoResponse.Response.newBuilder().mergeFrom(chatDeleteMessage.getResponse());
+        Log.i("SOC", "ChatDeleteMessageResponse response.getId() : " + response.getId());
+        Log.i("SOC", "ChatDeleteMessageResponse response.getTimestamp() : " + response.getTimestamp());
+
+        G.onChatDeleteMessageResponse.onChatDeleteMessage(chatDeleteMessage.getDeleteVersion(), chatDeleteMessage.getMessageId(), chatDeleteMessage.getRoomId(), chatDeleteMessage.getResponse());
     }
 
     @Override
     public void timeOut() {
+        Log.i("SOC", "ChatDeleteMessageResponse timeout");
     }
 
     @Override
     public void error() {
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        int majorCode = errorResponse.getMajorCode();
+        int minorCode = errorResponse.getMinorCode();
+
+        Log.i("SOC", "ChatDeleteMessageResponse response.majorCode() : " + majorCode);
+        Log.i("SOC", "ChatDeleteMessageResponse response.minorCode() : " + minorCode);
     }
 }
 

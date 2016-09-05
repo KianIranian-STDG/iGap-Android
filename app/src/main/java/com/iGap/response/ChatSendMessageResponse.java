@@ -4,12 +4,17 @@ import android.util.Log;
 
 import com.iGap.G;
 import com.iGap.proto.ProtoChatSendMessage;
+import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmChatHistory;
+import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmUserInfo;
+import com.iGap.request.RequestClientGetRoom;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class ChatSendMessageResponse extends MessageHandler {
 
@@ -27,70 +32,96 @@ public class ChatSendMessageResponse extends MessageHandler {
 
 
     @Override
-    public void handler() { //TODO [Saeed Mozaffari] [2016-09-03 4:46 PM] - Eskandarpour if received first message from room add new room
-        //TODO [Saeed Mozaffari] [2016-09-04 9:22 AM] - if response is null message is not for me (should be message is for my another account). check it
+    public void handler() {
         G.realm = Realm.getInstance(G.realmConfig);
 
         final ProtoChatSendMessage.ChatSendMessageResponse.Builder chatSendMessageResponse = (ProtoChatSendMessage.ChatSendMessageResponse.Builder) message;
 
-        if (chatSendMessageResponse.getResponse() == null) { // i'm not sender
-
-        } else { // i'm sender
-
-        }
-
-        Log.i("MMM", "RoomId : " + chatSendMessageResponse.getRoomId());
-        Log.i("MMM", "RoomMessage : " + chatSendMessageResponse.getRoomMessage());
+        ProtoResponse.Response.Builder response = ProtoResponse.Response.newBuilder().mergeFrom(chatSendMessageResponse.getResponse());
+        Log.i("SOC", "ChatSendMessageResponse response.getId() : " + response.getId());
+        Log.i("SOC", "ChatSendMessageResponse response.getTimestamp() : " + response.getTimestamp());
 
         final ProtoGlobal.RoomMessage roomMessage = chatSendMessageResponse.getRoomMessage();
-        Log.i("MMM", "1");
+        final long userId = G.realm.where(RealmUserInfo.class).findFirst().getUserId();
+
         G.realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                Log.i("MMM", "2");
-                RealmChatHistory realmChatHistory = realm.createObject(RealmChatHistory.class);
-                Log.i("MMM", "3");
-                RealmRoomMessage realmRoom = realm.createObject(RealmRoomMessage.class);
+                // if first message received but the room doesn't exist, create new room
+                RealmRoom room = realm.where(RealmRoom.class).equalTo("id", chatSendMessageResponse.getRoomId()).findFirst();
+                if (room == null) {
+                    // make get room request
+                    new RequestClientGetRoom().clientGetRoom(chatSendMessageResponse.getRoomId());
+                }
 
-                realmRoom.setMessageId(roomMessage.getMessageId());
-                realmRoom.setMessageVersion(roomMessage.getMessageVersion());
-                realmRoom.setStatus(roomMessage.getStatus().toString());
-                realmRoom.setMessageType(roomMessage.getMessageType().toString());
-                realmRoom.setMessage(roomMessage.getMessage());
-                realmRoom.setAttachment(roomMessage.getAttachment());
-                realmRoom.setUserId(roomMessage.getUserId());
-                realmRoom.setLocation(roomMessage.getLocation().toString());
-                realmRoom.setLog(roomMessage.getLog().toString());
-                realmRoom.setEdited(roomMessage.getEdited());
-                realmRoom.setUpdateTime(roomMessage.getUpdateTime());
+                // because user may have more than one device, his another device should not be recipient
+                // but sender. so I check current userId with room message user id, and if not equals
+                // and response is null, so we sure recipient is another user
+                if (userId != roomMessage.getUserId() && chatSendMessageResponse.getResponse() == null) {
+                    // i'm the recipient
+                    RealmChatHistory realmChatHistory = realm.createObject(RealmChatHistory.class);
+                    RealmRoomMessage realmRoom = realm.createObject(RealmRoomMessage.class);
 
-                realmChatHistory.setRoomId(chatSendMessageResponse.getRoomId());
-                realmChatHistory.setRoomMessage(realmRoom);
-                Log.i("MMM", "4");
-                long realmUserId = G.realm.where(RealmUserInfo.class).findFirst().getUserId();
-                Log.i("MMM", "realmUserId : " + realmUserId);
-                Log.i("MMM", "roomMessage.getUserId() : " + roomMessage.getUserId());
-                G.onReceiveChatMessage.onReceiveChatMessage(roomMessage.getMessage(), roomMessage.getMessageType().toString(), chatSendMessageResponse);
-//                if (realmUserId != roomMessage.getUserId()) {
-//                    Log.i("MMM", "onReceiveChatMessage");
-//                    G.onReceiveChatMessage.onReceiveChatMessage(roomMessage.getMessage(), roomMessage.getMessageType().toString());
-//                }
-            }
+                    realmRoom.setMessageId(roomMessage.getMessageId());
+                    realmRoom.setMessageVersion(roomMessage.getMessageVersion());
+                    realmRoom.setStatus(roomMessage.getStatus().toString());
+                    realmRoom.setMessageType(roomMessage.getMessageType().toString());
+                    realmRoom.setMessage(roomMessage.getMessage());
+                    realmRoom.setAttachment(roomMessage.getAttachment());
+                    realmRoom.setUserId(roomMessage.getUserId());
+                    realmRoom.setLocation(roomMessage.getLocation().toString());
+                    realmRoom.setLog(roomMessage.getLog().toString());
+                    realmRoom.setEdited(roomMessage.getEdited());
+                    realmRoom.setUpdateTime(roomMessage.getUpdateTime());
+
+                    realmChatHistory.setRoomId(chatSendMessageResponse.getRoomId());
+                    realmChatHistory.setRoomMessage(realmRoom);
+                } else {
+                    // i'm the sender
+                    // update message fields into database
+                    RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class).equalTo("roomId", chatSendMessageResponse.getRoomId()).findAll();
+                    for (RealmChatHistory history : chatHistories) {
+                        RealmRoomMessage message = history.getRoomMessage();
+                        // find the message using identity and update it
+                        if (message.getMessageId() == Long.parseLong(identity)) {
+                            message.setMessageId(roomMessage.getMessageId());
+                            message.setMessageVersion(roomMessage.getMessageVersion());
+                            message.setStatus(roomMessage.getStatus().toString());
+                            message.setMessageType(roomMessage.getMessageType().toString());
+                            message.setMessage(roomMessage.getMessage());
+                            message.setAttachment(roomMessage.getAttachment());
+                            message.setUserId(roomMessage.getUserId());
+                            message.setLocation(roomMessage.getLocation().toString());
+                            message.setLog(roomMessage.getLog().toString());
+                            message.setEdited(roomMessage.getEdited());
+                            message.setUpdateTime(roomMessage.getUpdateTime());
+                        }
+                    }
+                }
+                // if response id == null and realmUserId == roomMessage.getUserId() ==> another account
+            } // if response id != null ==> i sender
         });
+
+        // invoke following callback when i'm not the sender, because I already done everything after sending message
+        if (userId != roomMessage.getUserId() && chatSendMessageResponse.getResponse() == null) {
+            G.onReceiveChatMessage.onReceiveChatMessage(roomMessage.getMessage(), roomMessage.getMessageType().toString(), chatSendMessageResponse);
+        }
 
         G.realm.close();
     }
 
     @Override
     public void error() {
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        int majorCode = errorResponse.getMajorCode();
+        int minorCode = errorResponse.getMinorCode();
 
+        Log.i("SOC", "ChatSendMessageResponse response.majorCode() : " + majorCode);
+        Log.i("SOC", "ChatSendMessageResponse response.minorCode() : " + minorCode);
+    }
+
+    @Override
+    public void timeOut() {
+        Log.i("SOC", "ChatSendMessageResponse timeout");
     }
 }
-
-//    @Override
-//    /**
-//     * @param ProtoChatClearMessage.ChatClearMessage protoObject
-//     */
-//    public void handler(int actionId, Class protoObject) {
-//
-//    }

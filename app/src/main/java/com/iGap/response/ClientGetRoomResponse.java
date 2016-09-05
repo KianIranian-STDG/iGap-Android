@@ -1,7 +1,14 @@
 package com.iGap.response;
 
+import android.util.Log;
+
 import com.iGap.helper.HelperRealm;
 import com.iGap.proto.ProtoClientGetRoom;
+import com.iGap.proto.ProtoError;
+import com.iGap.proto.ProtoResponse;
+import com.iGap.realm.RealmRoom;
+
+import io.realm.Realm;
 
 public class ClientGetRoomResponse extends MessageHandler {
 
@@ -20,17 +27,39 @@ public class ClientGetRoomResponse extends MessageHandler {
 
     @Override
     public void handler() {
-        ProtoClientGetRoom.ClientGetRoomResponse.Builder clientGetRoom = (ProtoClientGetRoom.ClientGetRoomResponse.Builder) message;
-        HelperRealm.convert(clientGetRoom.getRoom());
-        //TODO [Saeed Mozaffari] [2016-09-03 12:05 PM] - if room is new , update rooms list
+        final ProtoClientGetRoom.ClientGetRoomResponse.Builder clientGetRoom = (ProtoClientGetRoom.ClientGetRoomResponse.Builder) message;
+
+        ProtoResponse.Response.Builder response = ProtoResponse.Response.newBuilder().mergeFrom(clientGetRoom.getResponse());
+        Log.i("SOC", "ClientGetRoomResponse response.getId() : " + response.getId());
+        Log.i("SOC", "ClientGetRoomResponse response.getTimestamp() : " + response.getTimestamp());
+
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                // check if room doesn't exist, add room to database
+                RealmRoom room = realm.where(RealmRoom.class).equalTo("id", clientGetRoom.getRoom().getId()).findFirst();
+                if (room == null) {
+                    realm.copyToRealm(HelperRealm.convert(clientGetRoom.getRoom()));
+                }
+            }
+        });
+        realm.close();
     }
 
     @Override
     public void timeOut() {
+        Log.i("SOC", "ClientGetRoomResponse timeout");
     }
 
     @Override
     public void error() {
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        int majorCode = errorResponse.getMajorCode();
+        int minorCode = errorResponse.getMinorCode();
+
+        Log.i("SOC", "ClientGetRoomResponse response.majorCode() : " + majorCode);
+        Log.i("SOC", "ClientGetRoomResponse response.minorCode() : " + minorCode);
     }
 }
 

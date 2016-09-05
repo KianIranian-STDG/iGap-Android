@@ -11,8 +11,8 @@ import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.module.MyType;
 import com.iGap.module.OnComplete;
+import com.iGap.realm.enums.RoomType;
 
 /**
  * Created by android3 on 8/3/2016.
@@ -20,7 +20,7 @@ import com.iGap.module.OnComplete;
 public class MyDialog {
 
 
-    public static void showDialogMenuItemContacts(final Context context, final MyType.ChatType mType, boolean isMute, final OnComplete complete) {
+    public static void showDialogMenuItemContacts(final Context context, final RoomType mType, boolean isMute, final OnComplete complete) {
 
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -65,11 +65,11 @@ public class MyDialog {
             @Override
             public void onClick(View view) {
                 String str = "";
-                if (mType == MyType.ChatType.singleChat)
+                if (mType == RoomType.CHAT)
                     str = context.getString(R.string.chat);
-                else if (mType == MyType.ChatType.groupChat)
+                else if (mType == RoomType.GROUP)
                     str = context.getString(R.string.group);
-                else if (mType == MyType.ChatType.channel)
+                else if (mType == RoomType.CHANNEL)
                     str = context.getString(R.string.channel);
 
                 showDialogNotification(context, context.getString(R.string.do_you_want_delete_this) + str + " ?", complete, "txtDeleteChat");

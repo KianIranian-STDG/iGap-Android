@@ -7,9 +7,9 @@ import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.module.CircleImageView;
-import com.iGap.module.MyType;
 import com.iGap.module.OnComplete;
 import com.iGap.module.StructChatInfo;
+import com.iGap.realm.enums.RoomType;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 
@@ -59,13 +59,13 @@ public class ChatItem extends AbstractItem<ChatItem, ChatItem.ViewHolder> {
      * @param chatType chat type
      * @return String
      */
-    private String getStringChatIcon(MyType.ChatType chatType) {
+    private String getStringChatIcon(RoomType chatType) {
         switch (chatType) {
-            case singleChat:
+            case CHAT:
                 return G.context.getString(R.string.fa_user);
-            case channel:
+            case CHANNEL:
                 return G.context.getString(R.string.fa_bullhorn);
-            case groupChat:
+            case GROUP:
                 return G.context.getString(R.string.fa_group);
             default:
                 return null;
@@ -81,17 +81,17 @@ public class ChatItem extends AbstractItem<ChatItem, ChatItem.ViewHolder> {
         if (mInfo.imageSource.length() > 0) {
             holder.image.setImageResource(Integer.parseInt(mInfo.imageSource));
         } else {
-            holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), mInfo.contactName, ""));
+            holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), mInfo.chatTitle, ""));
         }
 
-        holder.chatIcon.setText(getStringChatIcon(mInfo.contactType));
-        if (mInfo.contactType == MyType.ChatType.singleChat) {
+        holder.chatIcon.setText(getStringChatIcon(mInfo.chatType));
+        if (mInfo.chatType == RoomType.CHAT) {
             holder.chatIcon.setVisibility(View.GONE);
         } else {
             holder.chatIcon.setVisibility(View.VISIBLE);
         }
 
-        holder.name.setText(mInfo.contactName);
+        holder.name.setText(mInfo.chatTitle);
         holder.lastMessage.setText(mInfo.lastmessage);
         holder.lastSeen.setText(mInfo.lastSeen);
 
