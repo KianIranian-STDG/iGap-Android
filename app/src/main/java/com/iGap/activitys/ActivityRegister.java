@@ -16,6 +16,7 @@ import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -34,6 +35,7 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AdapterDialog;
 import com.iGap.helper.HelperString;
+import com.iGap.interface_package.OnInfoCountryResponse;
 import com.iGap.interface_package.OnSmsReceive;
 import com.iGap.interface_package.OnUserLogin;
 import com.iGap.interface_package.OnUserRegistration;
@@ -47,6 +49,7 @@ import com.iGap.proto.ProtoRequest;
 import com.iGap.proto.ProtoUserRegister;
 import com.iGap.proto.ProtoUserVerify;
 import com.iGap.realm.RealmUserInfo;
+import com.iGap.request.RequestInfoCountry;
 import com.iGap.request.RequestQueue;
 import com.iGap.request.RequestUserLogin;
 import com.iGap.request.RequestWrapper;
@@ -139,15 +142,12 @@ public class ActivityRegister extends ActivityEnhanced {
 
         btnChoseCountry = (Button) findViewById(R.id.rg_btn_choseCountry);
 
-        int portaret = getResources().getConfiguration().orientation;
+        int portrait = getResources().getConfiguration().orientation;
 
-        if (portaret == 1) {//portrait{
-
+        if (portrait == 1) {
             txtAgreement_register = (TextView) findViewById(R.id.txtAgreement_register);
             txtAgreement_register.setMovementMethod(new ScrollingMovementMethod());
-
         }
-
 
 //==================================================================================================== read list of county from text file
 //        list of country
@@ -283,18 +283,31 @@ public class ActivityRegister extends ActivityEnhanced {
                     @Override
                     public void onClick(View v) {
 
-//                        G.onInfoCountryResponse = new OnInfoCountryResponse() {
-//                            @Override
-//                            public void onInfoCountryResponse(int callingCode, String name, String pattern, String regexR) {
-//                                edtCodeNumber.setText("+" + callingCode);
-//                                edtPhoneNumber.setMask(pattern.replace("X", "#").replace(" ", "-"));
-//                                regex = regexR;
-//                                Toast.makeText(G.context, "info country received", Toast.LENGTH_SHORT).show();
-//                            }
-//                        };
-//
-//                        new RequestInfoCountry().infoCountry(isoCode);
-//                        Toast.makeText(G.context, "waiting for get info country", Toast.LENGTH_SHORT).show();
+                        G.onInfoCountryResponse = new OnInfoCountryResponse() {
+                            @Override
+                            public void onInfoCountryResponse(final int callingCode, final String name, final String pattern, final String regexR) {
+                                G.handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        edtCodeNumber.setText("+" + callingCode);
+                                        edtPhoneNumber.setMask(pattern.replace("X", "#").replace(" ", "-"));
+                                        regex = regexR;
+                                        Log.i("SOC_INFO", "onInfoCountryResponse regex : " + regex);
+                                        btnStart.setEnabled(true);
+                                        Toast.makeText(G.context, "info country received", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+                        };
+
+                        btnStart.setEnabled(false);
+                        new RequestInfoCountry().infoCountry(isoCode);
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(G.context, "waiting for get info country", Toast.LENGTH_SHORT).show();
+                            }
+                        });
 
                         edtPhoneNumber.setText("");
                         dialogChooseCountry.dismiss();
@@ -314,9 +327,9 @@ public class ActivityRegister extends ActivityEnhanced {
             @Override
             public void onClick(View v) {
 
-//                if ((regex != null && edtPhoneNumber.getText().toString().replace("-", "").matches(regex)) || (regex == null && edtPhoneNumber.getText().toString().length() > 0)) {
-                if (edtPhoneNumber.getText().toString().length() > 0) {
-                    btnStart.setEnabled(false);
+                if (regex != null && edtPhoneNumber.getText().toString().replace("-", "").matches(regex)) {
+//                if (edtPhoneNumber.getText().toString().length() > 0) {
+
                     phoneNumber = edtPhoneNumber.getText().toString();
 
                     int portaret_landscope = getResources().getConfiguration().orientation;
@@ -394,56 +407,68 @@ public class ActivityRegister extends ActivityEnhanced {
     private void checkVerify() {
 
         setItem(); // invoke object
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        //                if (HelperCheckInternetConnection.hasActiveInternetConnection()) { //connection ok
+                        if (checkInternet()) { //connection ok
+                            btnStart.setEnabled(false);
+                            userRegister();
 
-        if (checkInternet()) { //connection ok
+                            countDownTimer = new CountDownTimer(1000 * 30, 1000) { // wait for verify sms
 
-            userRegister();
+                                TextView txtTimerLand;
 
-            countDownTimer = new CountDownTimer(1000 * 30, 1000) { // wait for verify sms
+                                public void onTick(long millisUntilFinished) {
 
-                TextView txtTimerLand;
+                                    int seconds = (int) ((millisUntilFinished) / 1000);
+                                    int minutes = seconds / 60;
+                                    seconds = seconds % 60;
 
-                public void onTick(long millisUntilFinished) {
+                                    int portrait_landscape = getResources().getConfiguration().orientation;
+                                    if (portrait_landscape == 1) {//portrait
+                                        txtTimer = (TextView) findViewById(R.id.rg_txt_verify_timer);
+                                        txtTimer.setVisibility(View.VISIBLE);
+                                        txtTimer.setText("" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
+                                    } else {
+                                        txtTimerLand = (TextView) dialogVerifyLandScape.findViewById(R.id.rg_txt_verify_timer_DialogLand);
+                                        txtTimer.setVisibility(View.VISIBLE);
+                                        txtTimerLand.setText("" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
+                                    }
 
-                    int seconds = (int) ((millisUntilFinished) / 1000);
-                    int minutes = seconds / 60;
-                    seconds = seconds % 60;
+                                }
 
-                    int portrait_landscape = getResources().getConfiguration().orientation;
-                    if (portrait_landscape == 1) {//portrait
-                        txtTimer = (TextView) findViewById(R.id.rg_txt_verify_timer);
-                        txtTimer.setVisibility(View.VISIBLE);
-                        txtTimer.setText("" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
-                    } else {
-                        txtTimerLand = (TextView) dialogVerifyLandScape.findViewById(R.id.rg_txt_verify_timer_DialogLand);
-                        txtTimer.setVisibility(View.VISIBLE);
-                        txtTimerLand.setText("" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
+                                public void onFinish() {
+                                    int portrait_landscape = getResources().getConfiguration().orientation;
+                                    if (portrait_landscape == 1) {//portrait
+                                        txtTimer.setText("00:00");
+                                        txtTimer.setVisibility(View.VISIBLE);
+                                    } else {
+                                        txtTimerLand.setText("00:00");
+                                        txtTimer.setVisibility(View.VISIBLE);
+                                    }
+                                    errorVerifySms(); // open rg_dialog for enter sms code
+                                }
+                            };
+
+                        } else { // connection error
+                            edtPhoneNumber.setEnabled(true);
+                            rg_prg_verify_connect.setVisibility(View.GONE);
+                            rg_img_verify_connect.setImageResource(R.mipmap.alert);
+                            rg_img_verify_connect.setColorFilter(getResources().getColor(R.color.rg_error_red), PorterDuff.Mode.SRC_ATOP);
+                            rg_img_verify_connect.setVisibility(View.VISIBLE);
+                            rg_txt_verify_connect.setTextColor(getResources().getColor(R.color.rg_error_red));
+                            rg_txt_verify_connect.setText("Please check your connection");
+                        }
                     }
+                });
+            }
+        });
+        thread.start();
 
-                }
-
-                public void onFinish() {
-                    int portrait_landscape = getResources().getConfiguration().orientation;
-                    if (portrait_landscape == 1) {//portrait
-                        txtTimer.setText("00:00");
-                        txtTimer.setVisibility(View.VISIBLE);
-                    } else {
-                        txtTimerLand.setText("00:00");
-                        txtTimer.setVisibility(View.VISIBLE);
-                    }
-                    errorVerifySms(); // open rg_dialog for enter sms code
-                }
-            };
-
-        } else { // connection error
-
-            rg_prg_verify_connect.setVisibility(View.GONE);
-            rg_img_verify_connect.setImageResource(R.mipmap.alert);
-            rg_img_verify_connect.setColorFilter(getResources().getColor(R.color.rg_error_red), PorterDuff.Mode.SRC_ATOP);
-            rg_img_verify_connect.setVisibility(View.VISIBLE);
-            rg_txt_verify_connect.setTextColor(getResources().getColor(R.color.rg_error_red));
-            rg_txt_verify_connect.setText("Please check your connection");
-        }
     }
 
     private void setItem() { //invoke object
