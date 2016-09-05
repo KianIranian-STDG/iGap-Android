@@ -20,7 +20,7 @@ import com.iGap.realm.enums.RoomType;
 public class MyDialog {
 
 
-    public static void showDialogMenuItemContacts(final Context context, final RoomType mType, boolean isMute, final OnComplete complete) {
+    public static void showDialogMenuItemRooms(final Context context, final RoomType mType, boolean isMute, final OnComplete complete) {
 
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);

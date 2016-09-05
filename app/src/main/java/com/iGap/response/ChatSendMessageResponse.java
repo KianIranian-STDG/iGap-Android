@@ -57,7 +57,7 @@ public class ChatSendMessageResponse extends MessageHandler {
                 // because user may have more than one device, his another device should not be recipient
                 // but sender. so I check current userId with room message user id, and if not equals
                 // and response is null, so we sure recipient is another user
-                if (userId != roomMessage.getUserId() && chatSendMessageResponse.getResponse() == null) {
+                if (userId != roomMessage.getUserId() && chatSendMessageResponse.getResponse().getId().isEmpty()) {
                     // i'm the recipient
                     RealmChatHistory realmChatHistory = realm.createObject(RealmChatHistory.class);
                     RealmRoomMessage realmRoom = realm.createObject(RealmRoomMessage.class);
@@ -83,7 +83,7 @@ public class ChatSendMessageResponse extends MessageHandler {
                     for (RealmChatHistory history : chatHistories) {
                         RealmRoomMessage message = history.getRoomMessage();
                         // find the message using identity and update it
-                        if (message.getMessageId() == Long.parseLong(identity)) {
+                        if (message != null && message.getMessageId() == Long.parseLong(identity)) {
                             message.setMessageId(roomMessage.getMessageId());
                             message.setMessageVersion(roomMessage.getMessageVersion());
                             message.setStatus(roomMessage.getStatus().toString());
@@ -107,7 +107,7 @@ public class ChatSendMessageResponse extends MessageHandler {
         });
 
         // invoke following callback when i'm not the sender, because I already done everything after sending message
-        if (userId != roomMessage.getUserId() && chatSendMessageResponse.getResponse() == null) {
+        if (userId != roomMessage.getUserId() && chatSendMessageResponse.getResponse().getId().isEmpty()) {
             G.onChatSendMessageResponse.onReceiveChatMessage(roomMessage.getMessage(), roomMessage.getMessageType().toString(), chatSendMessageResponse);
         }
 

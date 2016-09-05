@@ -37,7 +37,9 @@ import com.iGap.module.StructChatInfo;
 import com.iGap.module.Utils;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
+import com.iGap.realm.RealmChatHistory;
 import com.iGap.realm.RealmRoom;
+import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestClientGetRoomList;
@@ -289,10 +291,10 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                 if (ActivityMain.isMenuButtonAddShown) {
                     item.mComplete.complete(true, "closeMenuButton", "");
                 } else {
-                    MyDialog.showDialogMenuItemContacts(ActivityMain.this, item.mInfo.chatType, item.mInfo.muteNotification, new OnComplete() {
+                    MyDialog.showDialogMenuItemRooms(ActivityMain.this, item.mInfo.chatType, item.mInfo.muteNotification, new OnComplete() {
                         @Override
                         public void complete(boolean result, String messageOne, String MessageTow) {
-                            onSelectContactMenu(messageOne, position, item);
+                            onSelectRoomMenu(messageOne, position, item);
                         }
                     });
                 }
@@ -356,6 +358,26 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
 
     private void clearHistory(int position) {
         Log.e("fff", " txtClearHistory " + position);
+        final ChatItem chatInfo = mAdapter.getAdapterItem(position);
+        final String chatId = chatInfo.mInfo.chatId;
+
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmResults<RealmChatHistory> realmChatHistories = realm.where(RealmChatHistory.class).equalTo("roomId", Long.parseLong(chatId)).findAll();
+                for (RealmChatHistory chatHistory : realmChatHistories) {
+                    RealmRoomMessage roomMessage = chatHistory.getRoomMessage();
+                    if (roomMessage != null) {
+                        // delete chat history message
+                        chatHistory.getRoomMessage().deleteFromRealm();
+                    }
+                    // finally delete whole chat history
+                    chatHistory.deleteFromRealm();
+                }
+            }
+        });
+        realm.close();
     }
 
     private void deleteChat(int position) {
@@ -363,12 +385,12 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
     }
 
     /**
-     * on select contact menu
+     * on select room menu
      *
      * @param message  message text
      * @param position position dfdfdfdf
      */
-    private void onSelectContactMenu(String message, int position, ChatItem item) {
+    private void onSelectRoomMenu(String message, int position, ChatItem item) {
         switch (message) {
             case "txtMuteNotification":
                 muteNotification(position, item);
