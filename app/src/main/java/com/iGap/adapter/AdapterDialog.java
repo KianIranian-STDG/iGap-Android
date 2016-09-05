@@ -2,7 +2,6 @@ package com.iGap.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +23,7 @@ public class AdapterDialog extends BaseAdapter implements Filterable {
     ArrayList<StructCountry> mStringFilterList;
     ValueFilter valueFilter;
     public static int mSelectedVariation = -1;
+    public static boolean po = false;
 
     private RadioButton name_tv;
 
@@ -61,26 +61,36 @@ public class AdapterDialog extends BaseAdapter implements Filterable {
             name_tv.setText(structCountry.getName());
         }
 
-        name_tv.setChecked(position == mSelectedVariation);
+
+        name_tv.setChecked(countrylist.get(position).getId() == mSelectedVariation);
         name_tv.setTag(position);
         name_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 mSelectedVariation = (Integer) v.getTag();
-                ActivityRegister.positionRadioButton = mSelectedVariation;
-                notifyDataSetChanged();
 
+                ActivityRegister.positionRadioButton = countrylist.get(position).getId();
+                mSelectedVariation = countrylist.get(position).getId();
+                notifyDataSetChanged();
 
 //                ActivityRegister.dialogChooseCountry.dismiss();
 
                 ActivityRegister.edtCodeNumber.setText(("+ " + countrylist.get(position).getCountryCode()));
                 if (countrylist.get(position).getPhonePattetn() != null) {
-                    ActivityRegister.edtPhoneNumber.setMask((countrylist.get(position).getPhonePattetn().replace("X", "#").replace(" ", "-")));
+                    if (countrylist.get(position).getPhonePattetn().equals(" ")) {
+                        ActivityRegister.edtPhoneNumber.setMask("###-###-####");
+
+                    } else {
+
+                        ActivityRegister.edtPhoneNumber.setMask((countrylist.get(position).getPhonePattetn().replace("X", "#").replace(" ", "-")));
+                    }
+
+                } else {
+                    ActivityRegister.edtPhoneNumber.setMask("###-###-####");
                 }
                 ActivityRegister.btnChoseCountry.setText((countrylist.get(position).getName()));
                 ActivityRegister.isoCode = countrylist.get(position).getAbbreviation();
-                Log.i("XXX", "isoCode : " + ActivityRegister.isoCode);
             }
         });
 
@@ -106,6 +116,7 @@ public class AdapterDialog extends BaseAdapter implements Filterable {
                             .contains(constraint.toString().toUpperCase())) {
 
                         StructCountry structCountry = new StructCountry();
+                        structCountry.setId(mStringFilterList.get(i).getId());
                         structCountry.setName(mStringFilterList.get(i).getName());
                         structCountry.setCountryCode(mStringFilterList.get(i).getCountryCode());
                         structCountry.setPhonePattetn(mStringFilterList.get(i).getPhonePattetn());
@@ -115,6 +126,7 @@ public class AdapterDialog extends BaseAdapter implements Filterable {
                 }
                 results.count = filterList.size();
                 results.values = filterList;
+
             } else {
                 results.count = mStringFilterList.size();
                 results.values = mStringFilterList;

@@ -175,4 +175,9 @@
     <string name="chi_popup_shortcut">Add Shortcut</string>
     <string name="hint_search">Search…</string>
 
+    <string name="mh_popup_link">Links</string>
+    <string name="mh_popup_media">Media</string>
+    <string name="mh_popup_file">Files</string>
+    <string name="mh_popup_audio">Audio</string>
+
 </resources>

@@ -9,7 +9,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.view.LayoutInflater;
 
-import com.iGap.activitys.ActivityMain;
 import com.iGap.helper.HelperFillLookUpClass;
 import com.iGap.interface_package.OnChatGetRoom;
 import com.iGap.interface_package.OnClientGetRoomListResponse;
@@ -135,7 +134,7 @@ public class G extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        new ActivityMain().userLogin();
+//        new ActivityMain().userLogin();
         //new ActivityChat().receiveMessage();
         new File(DIR_APP).mkdirs();
         new File(DIR_IMAGES).mkdirs();

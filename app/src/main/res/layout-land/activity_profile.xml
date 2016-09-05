@@ -82,27 +82,15 @@
             android:layout_gravity="center"
             android:padding="@dimen/dp4">
 
-            <Button
-                android:id="@+id/pu_btn_giveImage"
-                android:layout_width="@dimen/dp70"
-                android:layout_height="@dimen/dp70"
-                android:layout_gravity="center"
-                android:background="@drawable/pu_circle_button_give_image"
-                android:gravity="center"
-                android:text="+"
-                android:paddingBottom="@dimen/dp4"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/sp48"
-                android:textStyle="normal" />
-
-            <de.hdodenhof.circleimageview.CircleImageView
+            <com.iGap.module.CircleImageView
                 android:id="@+id/pu_profile_circle_image"
                 android:layout_width="@dimen/dp70"
                 android:layout_height="@dimen/dp70"
-                android:layout_gravity="center"
-                android:visibility="gone"
-                app:civ_border_color="@color/start_background"
-                app:civ_border_width="2dp" />
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/pu_circle_button_give_image"
+                android:gravity="center"
+                android:src="@mipmap/plus_icon"
+                android:layout_marginTop="@dimen/dp12" />
 
         </RelativeLayout>
 
