@@ -1,6 +1,5 @@
 package com.iGap.response;
 
-import com.iGap.G;
 import com.iGap.proto.ProtoInfoCountry;
 
 public class InfoCountryResponse extends MessageHandler {
@@ -23,12 +22,11 @@ public class InfoCountryResponse extends MessageHandler {
 
         ProtoInfoCountry.InfoCountryResponse.Builder infoCountryResponse = (ProtoInfoCountry.InfoCountryResponse.Builder) message;
 
-        G.onInfoCountryResponse.onInfoCountryResponse(
-                infoCountryResponse.getCallingCode()
-                , infoCountryResponse.getName()
-                , infoCountryResponse.getPattern()
-                , infoCountryResponse.getRegex()
-                , infoCountryResponse.getResponse());
+//        G.onInfoCountryResponse.onInfoCountryResponse(
+//                infoCountryResponse.getCallingCode()
+//                , infoCountryResponse.getName()
+//                , infoCountryResponse.getPattern()
+//                , infoCountryResponse.getRegex());
 
     }
 

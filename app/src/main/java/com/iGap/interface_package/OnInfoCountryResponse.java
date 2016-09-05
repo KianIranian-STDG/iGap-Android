@@ -5,10 +5,8 @@
 
 package com.iGap.interface_package;
 
-import com.iGap.proto.ProtoResponse;
-
 public interface OnInfoCountryResponse {
 
-    void onInfoCountryResponse(int callingCode, String name, String pattern, String regex, ProtoResponse.Response response);
+    void onInfoCountryResponse(int callingCode, String name, String pattern, String regex);
 
 }
