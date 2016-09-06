@@ -43,8 +43,6 @@ public class ActivityProfile extends ActivityEnhanced {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        final Realm realm = Realm.getDefaultInstance();
-//
         if (!IsDeleteFile && G.imageFile.exists()) {
             G.imageFile.delete();
         }
@@ -66,7 +64,7 @@ public class ActivityProfile extends ActivityEnhanced {
         btnLetsGo.setOnClickListener(new View.OnClickListener() { // button for save data and go to next page
             @Override
             public void onClick(View view) {
-
+                Realm realm = Realm.getDefaultInstance();
                 final String nickName = edtNikName.getText().toString();
 
                 if (!nickName.equals("")) {
@@ -109,8 +107,6 @@ public class ActivityProfile extends ActivityEnhanced {
             btnSetImage.setImageBitmap(decodeBitmapProfile);
             btnSetImage.setBackgroundColor(getResources().getColor(android.R.color.transparent));
         }
-
-        realm.close();
     }
 
     //======================================================================================================dialog for choose image
