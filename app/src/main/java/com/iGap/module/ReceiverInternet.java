@@ -3,8 +3,8 @@ package com.iGap.module;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
+import com.iGap.G;
 import com.iGap.WebSocketClient;
 import com.iGap.helper.HelperCheckInternetConnection;
 
@@ -17,10 +17,13 @@ public class ReceiverInternet extends BroadcastReceiver {
             @Override
             public void run() {
                 if (HelperCheckInternetConnection.hasActiveInternetConnection()) {
-                    Log.i("III", "internet ok");
-                    WebSocketClient.getInstance();
+                    G.internetConnection = true;
+                    if (!G.socketConnectingOrConnected) {
+                        G.socketConnectingOrConnected = true;
+                        WebSocketClient.getInstance();
+                    }
                 } else {
-                    Log.i("III", "no internet");
+                    G.internetConnection = false;
                 }
             }
         });

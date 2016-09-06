@@ -75,6 +75,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         initFloatingButtonCreateNew();
         initDrawerMenu();
         initComponent();
+
     }
 
     FlowingView mFlowingView;
@@ -332,6 +333,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
             }
         });
 
+        loadLocalChatlist();
         getChatsList();
     }
 
@@ -409,43 +411,49 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                     }
                 });
                 // creating new struct for each room and add them to adapter
+
+                Realm realm = Realm.getDefaultInstance();
                 for (ProtoGlobal.Room room : roomList) {
-                    putChatToDatabase(room);
+                    if (realm.where(RealmRoom.class).equalTo("id", room.getId()).findFirst() == null) {
+                        putChatToDatabase(room);
 
-                    final ChatItem chatItem = new ChatItem();
-                    StructChatInfo info = new StructChatInfo();
-                    info.unreadMessag = room.getUnreadCount();
-                    info.chatId = Long.toString(room.getId());
-                    info.chatTitle = room.getTitle();
-                    switch (room.getType()) {
-                        case CHAT:
-                            info.chatType = RoomType.CHAT;
-                            info.memberCount = "1";
-                            break;
-                        case CHANNEL:
-                            info.chatType = RoomType.CHANNEL;
-                            info.memberCount = room.getChannelRoom().getParticipantsCountLabel();
-                            break;
-                        case GROUP:
-                            info.chatType = RoomType.GROUP;
-                            info.memberCount = room.getGroupRoom().getParticipantsCountLabel();
-                            break;
-                    }
-                    info.viewDistanceColor = room.getColor();
-                    info.lastSeen = Long.toString(System.currentTimeMillis()); // FIXME
-                    info.lastmessage = "lastMessage"; // FIXME
-                    info.muteNotification = false; // FIXME
-                    info.imageSource = ""; // FIXME
-
-                    // create item from info
-                    chatItem.setInfo(info);
-                    chatItem.setComplete(ActivityMain.this);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mAdapter.add(chatItem);
+                        final ChatItem chatItem = new ChatItem();
+                        StructChatInfo info = new StructChatInfo();
+                        info.unreadMessag = room.getUnreadCount();
+                        info.chatId = Long.toString(room.getId());
+                        info.chatTitle = room.getTitle();
+                        switch (room.getType()) {
+                            case CHAT:
+                                info.chatType = RoomType.CHAT;
+                                info.memberCount = "1";
+                                break;
+                            case CHANNEL:
+                                info.chatType = RoomType.CHANNEL;
+                                info.memberCount = room.getChannelRoom().getParticipantsCountLabel();
+                                break;
+                            case GROUP:
+                                info.chatType = RoomType.GROUP;
+                                info.memberCount = room.getGroupRoom().getParticipantsCountLabel();
+                                break;
                         }
-                    });
+                        info.viewDistanceColor = room.getColor();
+                        info.lastSeen = Long.toString(System.currentTimeMillis()); // FIXME
+                        info.lastmessage = "lastMessage"; // FIXME
+                        info.muteNotification = false; // FIXME
+                        info.imageSource = ""; // FIXME
+
+                        // create item from info
+                        chatItem.setInfo(info);
+                        chatItem.setComplete(ActivityMain.this);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mAdapter.add(chatItem);
+                            }
+                        });
+                    } else {
+                        Log.i("XXX", "Room Exist : " + room.getTitle());
+                    }
                 }
 
                 // FIXME clear later
@@ -551,6 +559,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                 mAdapter.add(new ChatItem().setInfo(c7).setComplete(ActivityMain.this));*/
             }
         };
+
 
         new RequestClientGetRoomList().clientGetRoomList();
 
@@ -707,6 +716,45 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         list.add(c7);
 
         return list;*/
+    }
+
+    private void loadLocalChatlist() {
+        for (RealmRoom realmRoom : G.realm.where(RealmRoom.class).findAll()) {
+
+            final ChatItem chatItem = new ChatItem();
+            StructChatInfo info = new StructChatInfo();
+            info.unreadMessag = realmRoom.getUnreadCount();
+            info.chatId = Long.toString(realmRoom.getId()); //TODO [Saeed Mozaffari] [2016-09-05 4:31 PM] - convert chat id to long
+            info.chatTitle = realmRoom.getTitle();
+            switch (realmRoom.getType()) {
+                case CHAT:
+                    info.chatType = RoomType.CHAT;
+                    info.memberCount = "1";
+                    break;
+                case CHANNEL:
+                    info.chatType = RoomType.CHANNEL;
+                    info.memberCount = realmRoom.getChannelRoom().getParticipantsCountLabel();
+                    break;
+                case GROUP:
+                    info.chatType = RoomType.GROUP;
+                    info.memberCount = realmRoom.getGroupRoom().getParticipantsCountLabel();
+                    break;
+            }
+            info.viewDistanceColor = realmRoom.getColor();
+            info.lastSeen = Long.toString(System.currentTimeMillis()); // FIXME
+            info.lastmessage = "lastMessage"; // FIXME
+            info.muteNotification = false; // FIXME
+            info.imageSource = ""; // FIXME
+
+            chatItem.setInfo(info);
+            chatItem.setComplete(ActivityMain.this);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mAdapter.add(chatItem);
+                }
+            });
+        }
     }
 
     @Override

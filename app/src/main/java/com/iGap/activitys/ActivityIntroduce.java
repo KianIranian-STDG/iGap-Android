@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
@@ -181,11 +180,8 @@ public class ActivityIntroduce extends ActivityEnhanced {
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
-//                        if (HelperCheckInternetConnection.hasActiveInternetConnection()) {
-                        if (true) {
-                            Log.i("III", "Connection OK");
+                        if (G.internetConnection) {
                             if (isoCode != null & body != null) {
-                                Log.i("III", "Info OK");
                                 Intent intent = new Intent(G.context, ActivityRegister.class);
                                 intent.putExtra("ISO_CODE", isoCode);
                                 intent.putExtra("CALLING_CODE", callingCode);
@@ -196,7 +192,6 @@ public class ActivityIntroduce extends ActivityEnhanced {
                                 startActivity(intent);
                                 finish();
                             } else {
-                                Log.i("III", "Info Failed");
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {

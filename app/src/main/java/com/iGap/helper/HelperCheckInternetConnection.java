@@ -25,7 +25,7 @@ public class HelperCheckInternetConnection {
                 HttpURLConnection urlConnection = (HttpURLConnection) (new URL("http://www.google.com").openConnection());
                 urlConnection.setRequestProperty("User-Agent", "Test");
                 urlConnection.setRequestProperty("Connection", "close");
-                urlConnection.setConnectTimeout(3000);
+                urlConnection.setConnectTimeout(20000);
 
                 urlConnection.connect();
 

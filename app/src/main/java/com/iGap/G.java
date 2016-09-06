@@ -9,6 +9,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.view.LayoutInflater;
 
+import com.iGap.helper.HelperCheckInternetConnection;
 import com.iGap.helper.HelperFillLookUpClass;
 import com.iGap.interface_package.OnChatDeleteMessageResponse;
 import com.iGap.interface_package.OnChatEditMessageResponse;
@@ -78,6 +79,8 @@ public class G extends Application {
     public static boolean isSecure = false;
     public static boolean allowForConnect = true;//TODO [Saeed Mozaffari] [2016-08-18 12:09 PM] - set allowForConnect to realm
     public static boolean userLogin = false;
+    public static boolean socketConnectingOrConnected = false;
+    public static boolean internetConnection = false;
 
     public static SecretKeySpec symmetricKey;
     public static String symmetricMethod;
@@ -90,8 +93,6 @@ public class G extends Application {
     public static int errorCount = 0;
     public static int timeoutCount = 0;
 
-
-    //mo
     public static Activity currentActivity;
     public static LayoutInflater inflater;
 
@@ -169,6 +170,7 @@ public class G extends Application {
         YEKAN_FARSI = Typeface.createFromAsset(context.getAssets(), "fonts/yekan.ttf");
         YEKAN_BOLD = Typeface.createFromAsset(context.getAssets(), "fonts/yekan_bold.ttf");
 
+        checkInternetConnection();
         HelperFillLookUpClass.fillLookUpClassArray();
         fillUnSecureList();
         WebSocketClient.getInstance();
@@ -227,6 +229,21 @@ public class G extends Application {
 
     private void fillUnSecureList() {
         unSecure.add("2");
+    }
+
+    private void checkInternetConnection() {
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (HelperCheckInternetConnection.hasActiveInternetConnection()) {
+                    G.internetConnection = true;
+                } else {
+                    G.internetConnection = false;
+                }
+            }
+        });
+        thread.start();
     }
 
 }

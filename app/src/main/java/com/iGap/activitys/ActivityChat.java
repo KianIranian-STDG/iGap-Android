@@ -734,12 +734,8 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     appBarLayout.setExpanded(true, true);
                 }
                 break;
-
         }
-
-
     }
-
 
     @Override
     public void onBackPressed() {

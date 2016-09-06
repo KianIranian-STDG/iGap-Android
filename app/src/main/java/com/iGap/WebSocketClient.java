@@ -98,7 +98,6 @@ public class WebSocketClient {
                 @Override
                 public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
                     Log.i("SOC_WebSocket", "onDisconnected");
-                    clearSocketConnection();
                     reconnect();
                     super.onDisconnected(websocket, serverCloseFrame, clientCloseFrame, closedByServer);
                 }
@@ -106,7 +105,7 @@ public class WebSocketClient {
                 @Override
                 public void onConnectError(WebSocket websocket, WebSocketException exception) throws Exception {
                     Log.i("SOC_WebSocket", "onConnectError");
-                    clearSocketConnection();
+                    reconnect();
                     super.onConnectError(websocket, exception);
                 }
 
@@ -134,7 +133,6 @@ public class WebSocketClient {
             Log.i("SOC_WebSocket", "iGap IOException iGap : " + e);
             e.printStackTrace();
         }
-
         final WebSocket finalWs = websocketFactory;
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -146,6 +144,7 @@ public class WebSocketClient {
                             finalWs.connect();
                         }
                     } catch (WebSocketException e) {
+                        reconnect();
                         Log.i("SOC_WebSocket", "WebSocketException : " + e);
                         e.printStackTrace();
                     }
@@ -214,6 +213,7 @@ public class WebSocketClient {
 
     private static void resetWebsocketInfo() {
         G.isSecure = false;
+        G.socketConnectingOrConnected = false;
         clearSocketConnection();
     }
 
@@ -241,15 +241,15 @@ public class WebSocketClient {
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
+                                Log.i("SOC", "I need 30001");
                                 if (G.symmetricKey == null) {
-                                    Log.i("SOC", "I need 30001");
                                     WebSocketClient.getInstance().sendText("i need 30001");
                                 }
                             }
                         });
                     } else {
-//                        WebSocketClient.getInstance().disconnect();
-//                        G.allowForConnect = false;
+                        G.allowForConnect = false;
+                        WebSocketClient.getInstance().disconnect();
                     }
                 }
             }

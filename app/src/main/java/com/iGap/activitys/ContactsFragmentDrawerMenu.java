@@ -71,6 +71,7 @@ public class ContactsFragmentDrawerMenu extends MenuFragment {
         fastAdapter.withOnClickListener(new FastAdapter.OnClickListener<ContactItem>() {
             @Override
             public boolean onClick(View v, IAdapter adapter, ContactItem item, int position) {
+                Log.i("XXX", "fastAdapter CLICK");
                 chatGetRoom(item.mContact.peerId);
                 return false;
             }

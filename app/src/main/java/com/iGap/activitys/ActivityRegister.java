@@ -377,6 +377,7 @@ public class ActivityRegister extends ActivityEnhanced {
                         dialogVerifyLandScape.setContentView(R.layout.rg_dialog_verify_land);
                         dialogVerifyLandScape.setCanceledOnTouchOutside(false);
                         dialogVerifyLandScape.show();
+
                         checkVerify();
                     }
                 } else {
@@ -407,17 +408,20 @@ public class ActivityRegister extends ActivityEnhanced {
     private void checkVerify() {
 
         setItem(); // invoke object
+
+        rg_prg_verify_connect.setVisibility(View.VISIBLE);
+
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        //                if (HelperCheckInternetConnection.hasActiveInternetConnection()) { //connection ok
-                        if (checkInternet()) { //connection ok
-                            btnStart.setEnabled(false);
-                            userRegister();
 
+                if (G.internetConnection) { //connection ok
+//                        if (checkInternet()) { //connection ok
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            userRegister();
+                            btnStart.setEnabled(false);
                             countDownTimer = new CountDownTimer(1000 * 30, 1000) { // wait for verify sms
 
                                 TextView txtTimerLand;
@@ -454,7 +458,13 @@ public class ActivityRegister extends ActivityEnhanced {
                                 }
                             };
 
-                        } else { // connection error
+                        }
+                    });
+
+                } else { // connection error
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
                             edtPhoneNumber.setEnabled(true);
                             rg_prg_verify_connect.setVisibility(View.GONE);
                             rg_img_verify_connect.setImageResource(R.mipmap.alert);
@@ -463,8 +473,8 @@ public class ActivityRegister extends ActivityEnhanced {
                             rg_txt_verify_connect.setTextColor(getResources().getColor(R.color.rg_error_red));
                             rg_txt_verify_connect.setText("Please check your connection");
                         }
-                    }
-                });
+                    });
+                }
             }
         });
         thread.start();
@@ -561,8 +571,6 @@ public class ActivityRegister extends ActivityEnhanced {
     }
 
     private void userRegister() {
-
-        rg_prg_verify_connect.setVisibility(View.VISIBLE);
 
         G.onUserRegistration = new OnUserRegistration() {
 

@@ -117,7 +117,6 @@ public class RequestQueue {
             RequestWrapper requestWrapper = entry.getValue();
             boolean delete = timeDifference(requestWrapper.getTime());
 
-
             if (delete) {
                 if (key.contains(".")) {
                     String randomId = key.split("\\.")[0];

@@ -1,6 +1,9 @@
 package com.iGap.response;
 
+import android.util.Log;
+
 import com.iGap.G;
+import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoUserProfileNickname;
 
 public class UserProfileNicknameResponse extends MessageHandler {
@@ -28,10 +31,19 @@ public class UserProfileNicknameResponse extends MessageHandler {
 
     @Override
     public void timeOut() {
+        Log.i("XXX", "UserProfileNicknameResponse timeOut");
     }
 
     @Override
     public void error() {
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        final int majorCode = errorResponse.getMajorCode();
+        final int minorCode = errorResponse.getMinorCode();
+
+        Log.i("XXX", "UserRegisterResponse majorCode : " + majorCode);
+        Log.i("XXX", "UserRegisterResponse minorCode : " + minorCode);
+
+        Log.i("XXX", "UserProfileNicknameResponse error");
     }
 }
 
