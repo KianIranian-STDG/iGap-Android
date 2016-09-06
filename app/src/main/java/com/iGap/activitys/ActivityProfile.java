@@ -42,6 +42,8 @@ public class ActivityProfile extends ActivityEnhanced {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        final Realm realm = Realm.getDefaultInstance();
 //
         if (!IsDeleteFile && G.imageFile.exists()) {
             G.imageFile.delete();
@@ -68,10 +70,10 @@ public class ActivityProfile extends ActivityEnhanced {
                 final String nickName = edtNikName.getText().toString();
 
                 if (!nickName.equals("")) {
-                    G.realm.executeTransaction(new Realm.Transaction() {
+                    realm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
-                            final RealmUserInfo realmUserInfo = G.realm.where(RealmUserInfo.class).findFirst();
+                            final RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
 
                             G.onUserProfileNickNameResponse = new OnUserProfileNickNameResponse() {
                                 @Override
@@ -107,6 +109,8 @@ public class ActivityProfile extends ActivityEnhanced {
             btnSetImage.setImageBitmap(decodeBitmapProfile);
             btnSetImage.setBackgroundColor(getResources().getColor(android.R.color.transparent));
         }
+
+        realm.close();
     }
 
     //======================================================================================================dialog for choose image

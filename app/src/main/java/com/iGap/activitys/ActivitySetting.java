@@ -22,11 +22,8 @@ import android.widget.Toast;
 
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.interface_package.OnUserLogin;
 import com.iGap.module.HelperDecodeFile;
 import com.iGap.realm.RealmUserInfo;
-import com.iGap.request.RequestUserContactsEdit;
-import com.iGap.request.RequestUserLogin;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
@@ -57,13 +54,15 @@ public class ActivitySetting extends ActivityEnhanced {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
+        final Realm realm = Realm.getDefaultInstance();
+
         final TextView txtNickNameTitle = (TextView) findViewById(R.id.ac_txt_nickname_title);
 
         edtNickName = (EditText) findViewById(R.id.st_edt_nikName);
         edtUserName = (EditText) findViewById(R.id.st_edt_userName);
         edtPhoneNumber = (EditText) findViewById(R.id.st_edt_phoneNumber);
 
-        RealmUserInfo realmUserInfo = G.realm.where(RealmUserInfo.class).findFirst();
+        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
         nickName = realmUserInfo.getNickName();
         userName = realmUserInfo.getUserName();
         phoneName = realmUserInfo.getPhoneNumber();
@@ -89,12 +88,12 @@ public class ActivitySetting extends ActivityEnhanced {
             @Override
             public void afterTextChanged(final Editable editable) {
 
-                G.realm.executeTransaction(new Realm.Transaction() {
+                realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
 
                         if (!editable.toString().equals("")) {
-                            RealmUserInfo userInfo = G.realm.where(RealmUserInfo.class).findFirst();
+                            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
                             userInfo.setNickName(editable.toString());
                             txtNickNameTitle.setText(nickName);
                         }
@@ -121,7 +120,7 @@ public class ActivitySetting extends ActivityEnhanced {
             @Override
             public void afterTextChanged(final Editable editable) {
 
-                G.realm.executeTransaction(new Realm.Transaction() {
+                realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
 
@@ -147,7 +146,7 @@ public class ActivitySetting extends ActivityEnhanced {
             @Override
             public void afterTextChanged(final Editable editable) {
 
-                G.realm.executeTransaction(new Realm.Transaction() {
+                realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
 
@@ -233,10 +232,10 @@ public class ActivitySetting extends ActivityEnhanced {
             decodeBitmapProfile = HelperDecodeFile.decodeFile(G.imageFile); //TODO [Saeed Mozaffari] [2016-08-30 9:43 AM] - (Saeed Mozaffari to Mr Mollareza) 1-user photo should decode for first time and reuse again and again , 2- read and write file from iGap directory
             circleImageView.setImageBitmap(decodeBitmapProfile);
 
-            G.realm.executeTransaction(new Realm.Transaction() {
+            realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
-                    RealmUserInfo realmUserInfo = G.realm.where(RealmUserInfo.class).findFirst();
+                    RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                     realmUserInfo.setAvatarPath(G.imageFile.toString());
                 }
             });
@@ -245,6 +244,8 @@ public class ActivitySetting extends ActivityEnhanced {
             circleImageView.setImageResource(R.mipmap.b);
 
         }
+
+        realm.close();
     }
 
     //dialog for choose pic from gallery or camera
@@ -305,11 +306,5 @@ public class ActivitySetting extends ActivityEnhanced {
             startActivity(intent);
             finish();
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        G.realm.close();
     }
 }

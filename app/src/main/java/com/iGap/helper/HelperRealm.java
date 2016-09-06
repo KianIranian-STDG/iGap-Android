@@ -1,6 +1,5 @@
 package com.iGap.helper;
 
-import com.iGap.G;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmChannelRoom;
 import com.iGap.realm.RealmChatHistory;
@@ -12,7 +11,6 @@ import com.iGap.realm.enums.ChannelChatRole;
 import com.iGap.realm.enums.GroupChatRole;
 import com.iGap.realm.enums.RoomType;
 
-import io.realm.Realm;
 import io.realm.RealmResults;
 
 /**
@@ -176,15 +174,5 @@ public final class HelperRealm {
             default:
                 return null;
         }
-    }
-
-    public static void updateMessageStatus(final long roomId, final long messageId, final String messageStatus) {
-        G.realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-//                RealmChatHistory realmChatHistory = realm.where(RealmChatHistory.class).equalTo("roomId", roomId).and.equalTo("messageId", messageId);
-//                realmChatHistory.getRoomMessage().setStatus(messageStatus);
-            }
-        });
     }
 }

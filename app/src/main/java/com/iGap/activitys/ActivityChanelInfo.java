@@ -58,7 +58,7 @@ public class ActivityChanelInfo extends ActivityEnhanced {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chanel_info);
-
+        final Realm realm = Realm.getDefaultInstance();
 
         // TODO: 9/3/2016 (molareza) this class need user id
 
@@ -72,7 +72,7 @@ public class ActivityChanelInfo extends ActivityEnhanced {
 
         }
 
-        RealmContacts realmUser = G.realm.where(RealmContacts.class)
+        RealmContacts realmUser = realm.where(RealmContacts.class)
                 .equalTo("id", userId)
                 .findFirst();
 
@@ -127,11 +127,11 @@ public class ActivityChanelInfo extends ActivityEnhanced {
                 // TODO: 9/3/2016 (molareze)  Should be stored within server or not
 
                 //change Nickname on realm
-                final RealmContacts realmUser = G.realm.where(RealmContacts.class)
+                final RealmContacts realmUser = realm.where(RealmContacts.class)
                         .equalTo("id", userId)
                         .findFirst();
 
-                G.realm.executeTransaction(new Realm.Transaction() {
+                realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
 
@@ -240,6 +240,8 @@ public class ActivityChanelInfo extends ActivityEnhanced {
 
             }
         });
+
+        realm.close();
 
     }
 

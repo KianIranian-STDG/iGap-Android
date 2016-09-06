@@ -749,7 +749,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         Realm realm = Realm.getDefaultInstance();
         long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
         ArrayList<StructMessageInfo> messageList = new ArrayList<>();
-        for (RealmChatHistory realmChatHistory : G.realm.where(RealmChatHistory.class).equalTo("roomId", mRoomId).findAll()) {
+        for (RealmChatHistory realmChatHistory : realm.where(RealmChatHistory.class).equalTo("roomId", mRoomId).findAll()) {
             RealmRoomMessage roomMessage = realmChatHistory.getRoomMessage();
             if (roomMessage != null) {
                 StructMessageInfo structMessageInfo = new StructMessageInfo();
@@ -769,6 +769,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 messageList.add(structMessageInfo);
             }
         }
+        realm.close();
         return messageList;
     }
 

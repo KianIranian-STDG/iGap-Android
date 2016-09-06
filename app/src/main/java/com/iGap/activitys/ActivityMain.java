@@ -86,8 +86,9 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                Realm realm = Realm.getDefaultInstance();
                 if (G.isSecure) {
-                    RealmUserInfo userInfo = G.realm.where(RealmUserInfo.class).findFirst();
+                    RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
                     if (!G.userLogin && userInfo != null) {
                         new RequestUserLogin().userLogin(userInfo.getToken());
                     } else {
@@ -96,6 +97,8 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                 } else {
                     userLogin();
                 }
+
+                realm.close();
             }
         }, 1000);
 
@@ -719,7 +722,8 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
     }
 
     private void loadLocalChatlist() {
-        for (RealmRoom realmRoom : G.realm.where(RealmRoom.class).findAll()) {
+        Realm realm = Realm.getDefaultInstance();
+        for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAll()) {
 
             final ChatItem chatItem = new ChatItem();
             StructChatInfo info = new StructChatInfo();
@@ -755,6 +759,8 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                 }
             });
         }
+
+        realm.close();
     }
 
     @Override

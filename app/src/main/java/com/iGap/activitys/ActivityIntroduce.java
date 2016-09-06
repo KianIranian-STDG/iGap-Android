@@ -29,6 +29,8 @@ import com.uncopt.android.widget.text.justify.JustifiedTextView;
 
 import java.util.Locale;
 
+import io.realm.Realm;
+
 public class ActivityIntroduce extends ActivityEnhanced {
 
     private ViewPager viewPager;
@@ -61,7 +63,8 @@ public class ActivityIntroduce extends ActivityEnhanced {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        RealmUserInfo userInfo = G.realm.where(RealmUserInfo.class).findFirst();
+        Realm realm = Realm.getDefaultInstance();
+        RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
         if (userInfo != null && userInfo.getUserRegistrationState()) { // user registered before
             Intent intent = new Intent(G.context, ActivityMain.class);
             startActivity(intent);
@@ -362,6 +365,8 @@ public class ActivityIntroduce extends ActivityEnhanced {
             }
         });
         animator.start();
+
+        realm.close();
     }
 
     private void getInfo() {

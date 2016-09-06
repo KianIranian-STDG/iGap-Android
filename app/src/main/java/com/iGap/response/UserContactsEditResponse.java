@@ -2,7 +2,6 @@ package com.iGap.response;
 
 import android.util.Log;
 
-import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoUserContactsEdit;
 
@@ -25,7 +24,7 @@ public class UserContactsEditResponse extends MessageHandler {
 
     @Override
     public void handler() {
-
+        Realm realm = Realm.getDefaultInstance();
         Log.i("XXX", "UserContactsEditResponse handler");
         ProtoUserContactsEdit.UserContactsEdit.Builder builder = (ProtoUserContactsEdit.UserContactsEdit.Builder) message;
 
@@ -33,14 +32,14 @@ public class UserContactsEditResponse extends MessageHandler {
         String first_name = builder.getFirstName();
         String last_name = builder.getLastName();
 
-        G.realm.executeTransaction(new Realm.Transaction() {
+        realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
 
             }
         });
 
-
+        realm.close();
     }
 
     @Override

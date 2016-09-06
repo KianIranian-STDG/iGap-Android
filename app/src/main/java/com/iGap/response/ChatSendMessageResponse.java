@@ -33,7 +33,7 @@ public class ChatSendMessageResponse extends MessageHandler {
 
     @Override
     public void handler() {
-        G.realm = Realm.getInstance(G.realmConfig);
+        Realm realm = Realm.getDefaultInstance();
 
         final ProtoChatSendMessage.ChatSendMessageResponse.Builder chatSendMessageResponse = (ProtoChatSendMessage.ChatSendMessageResponse.Builder) message;
 
@@ -42,9 +42,9 @@ public class ChatSendMessageResponse extends MessageHandler {
         Log.i("SOC", "ChatSendMessageResponse response.getTimestamp() : " + response.getTimestamp());
 
         final ProtoGlobal.RoomMessage roomMessage = chatSendMessageResponse.getRoomMessage();
-        final long userId = G.realm.where(RealmUserInfo.class).findFirst().getUserId();
+        final long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
 
-        G.realm.executeTransaction(new Realm.Transaction() {
+        realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 // if first message received but the room doesn't exist, create new room
@@ -107,10 +107,10 @@ public class ChatSendMessageResponse extends MessageHandler {
                         }
                     }
                 }
-            } // if response id != null ==> i sender
+            }
         });
 
-        G.realm.close();
+        realm.close();
     }
 
     @Override

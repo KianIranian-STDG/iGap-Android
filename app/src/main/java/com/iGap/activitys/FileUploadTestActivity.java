@@ -36,6 +36,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import io.realm.Realm;
+
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 8/28/2016.
  */
@@ -216,6 +218,7 @@ public class FileUploadTestActivity extends ActivityEnhanced implements OnFileUp
     }
 
     private void userLogin() {
+        Realm realm = Realm.getDefaultInstance();
         G.onUserLogin = new OnUserLogin() {
             @Override
             public void onLogin() {
@@ -233,10 +236,12 @@ public class FileUploadTestActivity extends ActivityEnhanced implements OnFileUp
             }
         };
 
-        RealmUserInfo userInfo = G.realm.where(RealmUserInfo.class).findFirst();
+        RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
         if (!G.userLogin && userInfo != null) { //  need login
             new RequestUserLogin().userLogin(userInfo.getToken());
         }
+
+        realm.close();
     }
 
     @Override

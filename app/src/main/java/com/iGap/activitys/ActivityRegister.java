@@ -708,8 +708,8 @@ public class ActivityRegister extends ActivityEnhanced {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-
-                        G.realm.executeTransaction(new Realm.Transaction() {
+                        Realm realm = Realm.getDefaultInstance();
+                        realm.executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
                                 RealmUserInfo userInfo = realm.createObject(RealmUserInfo.class);
@@ -732,6 +732,7 @@ public class ActivityRegister extends ActivityEnhanced {
                         } else {
                             className = ActivityMain.class;
                         }
+                        realm.close();
                         Intent intent = new Intent(G.context, className);
                         startActivity(intent);
                         finish();

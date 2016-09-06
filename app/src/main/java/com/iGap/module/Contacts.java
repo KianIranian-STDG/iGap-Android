@@ -27,9 +27,9 @@ public class Contacts {
      */
     public static List<StructContactInfo> retrieve(String filter) {
         ArrayList<StructContactInfo> items = new ArrayList<>();
+        Realm realm = Realm.getDefaultInstance();
 
         RealmResults<RealmContacts> contacts;
-        Realm realm = Realm.getDefaultInstance();
         if (filter == null) {
             contacts = realm.where(RealmContacts.class).findAll();
         } else {
@@ -38,7 +38,6 @@ public class Contacts {
                     .contains("display_name", filter)
                     .findAll();
         }
-        realm.close();
 
         String lastHeader = "";
         for (int i = 0; i < contacts.size(); i++) {
@@ -55,6 +54,7 @@ public class Contacts {
             lastHeader = header;
         }
 
+        realm.close();
         return items;
     }
 

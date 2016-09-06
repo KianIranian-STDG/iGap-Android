@@ -105,7 +105,6 @@ public class G extends Application {
     public static int COPY_BUFFER_SIZE = 1024;
 
     public static RealmConfiguration realmConfig;
-    public static Realm realm;
     public static UploaderUtil uploaderUtil = new UploaderUtil();
     public static ClearMessagesUtil clearMessagesUtil = new ClearMessagesUtil();
 
@@ -175,14 +174,13 @@ public class G extends Application {
         fillUnSecureList();
         WebSocketClient.getInstance();
 
-        realmConfig = new RealmConfiguration.Builder(getApplicationContext())
+        RealmConfiguration realmConfig = new RealmConfiguration.Builder(getApplicationContext())
                 .name("CountryListA.realm")
                 .schemaVersion(1)
                 .migration(new RealmMigrationClass())
                 .deleteRealmIfMigrationNeeded()
                 .build();
 
-        realm = Realm.getInstance(realmConfig);
         Realm.setDefaultConfiguration(realmConfig);
 
         String imageUser = Environment.getExternalStorageDirectory() + "/image_user";
@@ -209,12 +207,11 @@ public class G extends Application {
                 e.printStackTrace();
             }
         }
-        realm.close();
-
     }
 
     private void copyFromAsset() throws IOException {
         InputStream inputStream = getAssets().open("CountryListA.realm");
+        Realm realm = Realm.getDefaultInstance();
         String outFileName = realm.getPath();
         OutputStream outputStream = new FileOutputStream(outFileName);
         byte[] buffer = new byte[1024];
@@ -225,6 +222,7 @@ public class G extends Application {
         outputStream.flush();
         outputStream.close();
         inputStream.close();
+        realm.close();
     }
 
     private void fillUnSecureList() {
