@@ -97,7 +97,7 @@
                 android:layout_marginLeft="@dimen/dp4"
                 android:layout_marginRight="@dimen/dp4"
                 android:gravity="bottom"
-                android:text="@string/fa_check"
+                android:text="@string/fa_clock_o"
                 android:textColor="@color/green"
                 android:textSize="@dimen/sp16" />
 
