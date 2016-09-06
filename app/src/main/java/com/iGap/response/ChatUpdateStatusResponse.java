@@ -39,8 +39,11 @@ public class ChatUpdateStatusResponse extends MessageHandler {
                 // find message from database and update its status
                 RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", chatUpdateStatus.getMessageId()).findFirst();
                 if (roomMessage != null) {
+                    Log.i(ChatUpdateStatusResponse.class.getSimpleName(), "oftad > " + chatUpdateStatus.getStatus().toString());
                     roomMessage.setStatus(chatUpdateStatus.getStatus().toString());
-                    G.onChatUpdateStatusResponse.onChatUpdateStatus(chatUpdateStatus.getRoomId(), chatUpdateStatus.getMessageId(), chatUpdateStatus.getStatus(), chatUpdateStatus.getStatusVersion());
+                    realm.copyToRealmOrUpdate(roomMessage);
+
+                    G.chatUpdateStatusUtil.onChatUpdateStatus(chatUpdateStatus.getRoomId(), chatUpdateStatus.getMessageId(), chatUpdateStatus.getStatus(), chatUpdateStatus.getStatusVersion());
                 }
             }
         });

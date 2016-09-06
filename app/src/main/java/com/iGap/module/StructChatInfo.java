@@ -18,7 +18,7 @@ public class StructChatInfo {
     public RoomType chatType = RoomType.CHAT;
     public String chatTitle = "";
     public String lastmessage = "";
-    public String lastSeen = "";
+    public String lastSeen = Long.toString(System.currentTimeMillis());
     public int unreadMessag = 0;
     public String memberCount = "1";
 

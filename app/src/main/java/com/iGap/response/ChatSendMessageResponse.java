@@ -79,7 +79,11 @@ public class ChatSendMessageResponse extends MessageHandler {
 
                     realm.copyToRealm(realmChatHistory);
                     // invoke following callback when i'm not the sender, because I already done everything after sending message
-                    G.onChatSendMessageResponse.onReceiveChatMessage(roomMessage.getMessage(), roomMessage.getMessageType().toString(), chatSendMessageResponse);
+                    G.chatSendMessageUtil.onReceiveChatMessage(roomMessage.getMessage(), roomMessage.getMessageType().toString(), chatSendMessageResponse);
+
+                    // user has received the message, so I make a new delivered update status request
+                    G.chatUpdateStatusUtil.sendUpdateStatus(chatSendMessageResponse.getRoomId(), roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
+
                 } else {
                     // i'm the sender
                     // update message fields into database
@@ -102,7 +106,7 @@ public class ChatSendMessageResponse extends MessageHandler {
 
                             realm.copyToRealmOrUpdate(message);
                             // invoke following callback when I'm the sender and the message has updated
-                            G.onChatSendMessageResponse.onMessageUpdated(roomMessage.getMessageId(), roomMessage.getStatus(), identity, chatSendMessageResponse);
+                            G.chatSendMessageUtil.onMessageUpdated(roomMessage.getMessageId(), roomMessage.getStatus(), identity, chatSendMessageResponse);
                             break;
                         }
                     }

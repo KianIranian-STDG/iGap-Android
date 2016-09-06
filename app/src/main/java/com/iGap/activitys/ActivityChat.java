@@ -5,7 +5,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -42,6 +41,7 @@ import com.iGap.interface_package.OnChatEditMessageResponse;
 import com.iGap.interface_package.OnChatSendMessageResponse;
 import com.iGap.interface_package.OnChatUpdateStatusResponse;
 import com.iGap.interface_package.OnMessageClick;
+import com.iGap.module.ChatSendMessageUtil;
 import com.iGap.module.EmojiEditText;
 import com.iGap.module.EmojiPopup;
 import com.iGap.module.EmojiRecentsManager;
@@ -56,17 +56,16 @@ import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestChatDeleteMessage;
 import com.iGap.request.RequestChatEditMessage;
-import com.iGap.request.RequestChatSendMessage;
-import com.iGap.request.RequestChatUpdateStatus;
 
 import java.util.ArrayList;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 /**
  * Created by android3 on 8/5/2016.
  */
-public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, IRecentsLongClick, OnMessageClick, OnChatClearMessageResponse {
+public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, IRecentsLongClick, OnMessageClick, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse {
 
     private EmojiEditText edtChat;
     private Button btnSend;
@@ -89,7 +88,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     private ImageButton btnSmile;
 
     private AdapterChatMessage mAdapter;
-    private MyType.ChatType chatType;
+    private ProtoGlobal.Room.Type chatType;
     private String contactId;
     private boolean isMute = false;
     private boolean newChatRoom = false;
@@ -104,10 +103,28 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     private Button btnUp;
     private Button btnDown;
     private TextView txtChannelMute;
-
-    private AppBarLayout appBarLayout;
-
     private OnComplete complete;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        // when user receive message, I send update status as SENT to the message sender
+        // but imagine user is not in the room (or he is in another room) and received some messages
+        // when came back to the room with new messages, I make new update status request as SEEN to
+        // the message sender
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<RealmChatHistory> realmChatHistories = realm.where(RealmChatHistory.class).equalTo("roomId", mRoomId).findAll();
+        for (RealmChatHistory history : realmChatHistories) {
+            RealmRoomMessage realmRoomMessage = history.getRoomMessage();
+            if (realmRoomMessage != null) {
+                if (realmRoomMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.DELIVERED.toString())) {
+                    G.chatUpdateStatusUtil.sendUpdateStatus(mRoomId, realmRoomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+                }
+            }
+        }
+        realm.close();
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -118,10 +135,13 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
         Bundle bundle = getIntent().getExtras();  // get chat type and contact id and  finish activity if value equal null
         if (bundle != null) {
-//            chatType = (MyType.ChatType) bundle.getSerializable("ChatType"); //TODO [Saeed Mozaffari] [2016-09-03 12:10 PM] - change type to ProtoGlobal.Room.Type
             String type = bundle.getString("ChatType");
-            if (type.equals("CHAT")) {
-                chatType = MyType.ChatType.singleChat;
+            if (type.equals(ProtoGlobal.Room.Type.CHAT.toString())) {
+                chatType = ProtoGlobal.Room.Type.CHAT;
+            } else if (type.equals(ProtoGlobal.Room.Type.GROUP.toString())) {
+                chatType = ProtoGlobal.Room.Type.GROUP;
+            } else if (type.equals(ProtoGlobal.Room.Type.CHANNEL.toString())) {
+                chatType = ProtoGlobal.Room.Type.CHANNEL;
             }
             contactId = bundle.getString("ContactID");
             isMute = bundle.getBoolean("IsMute");
@@ -138,66 +158,14 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         initAppbarSelected();
         initCallbacks();
 
-        if (chatType == MyType.ChatType.channel && ownerShip == MyType.OwnerShip.member)
+        if (chatType == ProtoGlobal.Room.Type.CHANNEL && ownerShip == MyType.OwnerShip.member)
             initLayotChannelFooter();
 
     }
 
     public void initCallbacks() {
-        G.onChatSendMessageResponse = new OnChatSendMessageResponse() {
-            @Override
-            public void onMessageUpdated(final long messageId, final ProtoGlobal.RoomMessageStatus status, final String identity, ProtoChatSendMessage.ChatSendMessageResponse.Builder roomMessage) {
-                // I'm in the room
-                if (roomMessage.getRoomId() == mRoomId) {
-                    // update message status in telegram
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mAdapter.updateMessageIdAndStatus(messageId, identity, status);
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onReceiveChatMessage(String message, String messageType, final ProtoChatSendMessage.ChatSendMessageResponse.Builder roomMessage) {
-                Log.i(ActivityChat.class.getSimpleName(), "onReceiveChatMessage called");
-                // I'm in the room
-                if (roomMessage.getRoomId() == mRoomId) {
-                    Log.i(ActivityChat.class.getSimpleName(), "onReceiveChatMessage 1");
-                    // make update status to message sender that i've read his message
-                    new RequestChatUpdateStatus().updateStatus(roomMessage.getRoomId(), roomMessage.getRoomMessage().getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
-                } else {
-                    Log.i(ActivityChat.class.getSimpleName(), "onReceiveChatMessage 2");
-                    // I'm not in the room (or another room), so I just received the message (the message has delivered)
-                    new RequestChatUpdateStatus().updateStatus(roomMessage.getRoomId(), roomMessage.getRoomMessage().getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
-                }
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mAdapter.insert(HelperProtoBuilder.convert(roomMessage));
-
-                        int position = recyclerView.getAdapter().getItemCount();
-                        if (position > 0)
-                            recyclerView.scrollToPosition(position - 1);
-                    }
-                });
-            }
-        };
-
-        G.onChatUpdateStatusResponse = new OnChatUpdateStatusResponse() {
-            @Override
-            public void onChatUpdateStatus(long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, int statusVersion) {
-                Log.i(ActivityChat.class.getSimpleName(), "onChatUpdateStatus called");
-
-                // I'm in the room
-                if (mRoomId == roomId) {
-                    // so update the message status ina adapter
-                    mAdapter.updateMessageStatus(messageId, status);
-                }
-            }
-        };
+        G.chatSendMessageUtil.setOnChatSendMessageResponse(this);
+        G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
 
         G.onChatEditMessageResponse = new OnChatEditMessageResponse() {
             @Override
@@ -241,10 +209,14 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         };
     }
 
+    @Override
+    protected void onDestroy() {
+        // room id have to be set to default, otherwise I'm in the room always!
+        mRoomId = -1;
+        super.onDestroy();
+    }
+
     private void initComponent() {
-
-        appBarLayout = (AppBarLayout) findViewById(R.id.chl_appbar_main);
-
         Button btnBack = (Button) findViewById(R.id.chl_btn_back);
         btnBack.setTypeface(G.fontawesome);
 
@@ -256,7 +228,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
         txtLastSeen = (TextView) findViewById(R.id.chl_txt_last_seen);
 
-        if (chatType == MyType.ChatType.channel || chatType == MyType.ChatType.groupChat) {
+        if (chatType == ProtoGlobal.Room.Type.CHANNEL || chatType == ProtoGlobal.Room.Type.GROUP) {
             if (memberCount != null)
                 txtLastSeen.setText(memberCount + " member");
         } else {
@@ -371,12 +343,12 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     if (!message.isEmpty()) {
                         final String identity = Long.toString(System.currentTimeMillis());
 
-                        new RequestChatSendMessage()
+                        new ChatSendMessageUtil()
                                 .newBuilder(ProtoGlobal.RoomMessageType.TEXT, mRoomId)
                                 .message(message)
                                 .sendMessage(identity);
 
-                        realm.executeTransactionAsync(new Realm.Transaction() {
+                        realm.executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
                                 RealmChatHistory chatHistory = new RealmChatHistory();
@@ -392,25 +364,25 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                                 chatHistory.setRoomMessage(roomMessage);
                                 realm.copyToRealm(chatHistory);
                             }
-                        }, new Realm.Transaction.OnSuccess() {
-                            @Override
-                            public void onSuccess() {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        StructMessageInfo messageInfo = new StructMessageInfo();
-                                        messageInfo.messageText = message;
-                                        messageInfo.messageID = identity;
-                                        messageInfo.messageType = ProtoGlobal.RoomMessageType.TEXT;
-                                        messageInfo.senderID = Long.toString(senderId);
-                                        messageInfo.sendType = MyType.SendType.send;
-                                        mAdapter.insert(messageInfo);
-
-                                        realm.close();
-                                    }
-                                });
-                            }
                         });
+                        realm.close();
+
+                        StructMessageInfo messageInfo = new StructMessageInfo();
+                        messageInfo.messageText = message;
+                        messageInfo.messageID = identity;
+                        messageInfo.messageType = ProtoGlobal.RoomMessageType.TEXT;
+                        messageInfo.senderID = Long.toString(senderId);
+                        messageInfo.sendType = MyType.SendType.send;
+
+                        mAdapter.insert(messageInfo);
+
+
+                        recyclerView.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount());
+                            }
+                        }, 300);
 
                         edtChat.setText("");
                     } else {
@@ -672,8 +644,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 int position = recyclerView.getAdapter().getItemCount();
                 if (position > 0)
                     recyclerView.scrollToPosition(0);
-
-                appBarLayout.setExpanded(true, true);
             }
         });
 
@@ -731,7 +701,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                         btnReplaySelected.setVisibility(View.VISIBLE);
                 } else {
                     ll_AppBarSelected.setVisibility(View.GONE);
-                    appBarLayout.setExpanded(true, true);
                 }
                 break;
         }
@@ -960,5 +929,58 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     public void onChatClearMessage(long roomId, long clearId, ProtoResponse.Response response) {
         Log.i(ActivityChat.class.getSimpleName(), "onChatClearMessage called");
         // TODO
+    }
+
+    @Override
+    public void onMessageUpdated(final long messageId, final ProtoGlobal.RoomMessageStatus status, final String identity, ProtoChatSendMessage.ChatSendMessageResponse.Builder roomMessage) {
+        // I'm in the room
+        if (roomMessage.getRoomId() == mRoomId) {
+            // update message status in telegram
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mAdapter.updateMessageIdAndStatus(messageId, identity, status);
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onReceiveChatMessage(String message, String messageType, final ProtoChatSendMessage.ChatSendMessageResponse.Builder roomMessage) {
+        Log.i(ActivityChat.class.getSimpleName(), "onReceiveChatMessage called");
+        // I'm in the room
+        if (roomMessage.getRoomId() == mRoomId) {
+            // make update status to message sender that i've read his message
+            G.chatUpdateStatusUtil.sendUpdateStatus(roomMessage.getRoomId(), roomMessage.getRoomMessage().getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mAdapter.insert(HelperProtoBuilder.convert(roomMessage));
+                    recyclerView.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount());
+                        }
+                    }, 300);
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onChatUpdateStatus(long roomId, final long messageId, final ProtoGlobal.RoomMessageStatus status, int statusVersion) {
+        Log.i(ActivityChat.class.getSimpleName(), "onChatUpdateStatus called");
+
+        // I'm in the room
+        if (mRoomId == roomId) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    // so update the message status ina adapter
+                    mAdapter.updateMessageStatus(messageId, status);
+                    Log.i(ActivityChat.class.getSimpleName(), status.toString());
+                }
+            });
+        }
     }
 }

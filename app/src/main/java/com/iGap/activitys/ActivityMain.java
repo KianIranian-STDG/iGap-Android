@@ -2,6 +2,7 @@ package com.iGap.activitys;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -22,6 +23,8 @@ import com.iGap.helper.HelperRealm;
 import com.iGap.interface_package.IActionClick;
 import com.iGap.interface_package.IOpenDrawer;
 import com.iGap.interface_package.OnChatClearMessageResponse;
+import com.iGap.interface_package.OnChatSendMessageResponse;
+import com.iGap.interface_package.OnChatUpdateStatusResponse;
 import com.iGap.interface_package.OnClientGetRoomListResponse;
 import com.iGap.libs.floatingAddButton.ArcMenu;
 import com.iGap.libs.floatingAddButton.StateChangeListener;
@@ -32,6 +35,7 @@ import com.iGap.module.MyType;
 import com.iGap.module.OnComplete;
 import com.iGap.module.StructChatInfo;
 import com.iGap.module.Utils;
+import com.iGap.proto.ProtoChatSendMessage;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmChatHistory;
@@ -47,7 +51,7 @@ import java.util.List;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActionClick, OnComplete, OnChatClearMessageResponse {
+public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActionClick, OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse {
 
     private LeftDrawerLayout mLeftDrawerLayout;
     private RecyclerView recyclerView;
@@ -63,6 +67,8 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         setContentView(R.layout.activity_main);
 
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
+        G.chatSendMessageUtil.setOnChatSendMessageResponse(this);
+        G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
 
         initRecycleView();
         initFloatingButtonCreateNew();
@@ -320,6 +326,21 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         }
     }
 
+    // FIXME: 9/6/2016 [Alireza Eskandarpour Shoferi] not to be on handler, but for fixing securing for testing purposes
+    // TODO ghable pak kardan, request ro bear jaye jaee ke invoke kardi
+    private void testIsSecure() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (G.isSecure) {
+                    new RequestClientGetRoomList().clientGetRoomList();
+                } else {
+                    testIsSecure();
+                }
+            }
+        }, 1000);
+    }
+
     private void getChatsList() {
         G.onClientGetRoomListResponse = new OnClientGetRoomListResponse() {
             @Override
@@ -479,8 +500,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
             }
         };
 
-
-        new RequestClientGetRoomList().clientGetRoomList();
+        testIsSecure();
 
         /*ArrayList<StructChatInfo> list = new ArrayList<>();
 
@@ -822,5 +842,20 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
     @Override
     public void onChatClearMessage(final long roomId, long clearId, ProtoResponse.Response response) {
         Log.i(ActivityMain.class.getSimpleName(), "onChatClearMessage called");
+    }
+
+    @Override
+    public void onMessageUpdated(long messageId, ProtoGlobal.RoomMessageStatus status, String identity, ProtoChatSendMessage.ChatSendMessageResponse.Builder roomMessage) {
+        // TODO
+    }
+
+    @Override
+    public void onReceiveChatMessage(String message, String messageType, ProtoChatSendMessage.ChatSendMessageResponse.Builder roomMessage) {
+        // TODO
+    }
+
+    @Override
+    public void onChatUpdateStatus(long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, int statusVersion) {
+        // TODO
     }
 }

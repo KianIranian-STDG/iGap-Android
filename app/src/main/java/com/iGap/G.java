@@ -15,8 +15,6 @@ import com.iGap.helper.HelperFillLookUpClass;
 import com.iGap.interface_package.OnChatDeleteMessageResponse;
 import com.iGap.interface_package.OnChatEditMessageResponse;
 import com.iGap.interface_package.OnChatGetRoom;
-import com.iGap.interface_package.OnChatSendMessageResponse;
-import com.iGap.interface_package.OnChatUpdateStatusResponse;
 import com.iGap.interface_package.OnClientGetRoomListResponse;
 import com.iGap.interface_package.OnInfoCountryResponse;
 import com.iGap.interface_package.OnInfoTime;
@@ -32,6 +30,8 @@ import com.iGap.interface_package.OnUserProfileGenderResponse;
 import com.iGap.interface_package.OnUserProfileNickNameResponse;
 import com.iGap.interface_package.OnUserRegistration;
 import com.iGap.interface_package.OnUserVerification;
+import com.iGap.module.ChatSendMessageUtil;
+import com.iGap.module.ChatUpdateStatusUtil;
 import com.iGap.module.ClearMessagesUtil;
 import com.iGap.module.Contacts;
 import com.iGap.module.UploaderUtil;
@@ -112,6 +112,8 @@ public class G extends Application {
     public static RealmConfiguration realmConfig;
     public static UploaderUtil uploaderUtil = new UploaderUtil();
     public static ClearMessagesUtil clearMessagesUtil = new ClearMessagesUtil();
+    public static ChatSendMessageUtil chatSendMessageUtil = new ChatSendMessageUtil();
+    public static ChatUpdateStatusUtil chatUpdateStatusUtil = new ChatUpdateStatusUtil();
 
     public static OnReceiveInfoLocation onReceiveInfoLocation;
     public static OnUserRegistration onUserRegistration;
@@ -131,8 +133,6 @@ public class G extends Application {
     public static OnChatGetRoom onChatGetRoom;
     public static OnChatEditMessageResponse onChatEditMessageResponse;
     public static OnChatDeleteMessageResponse onChatDeleteMessageResponse;
-    public static OnChatUpdateStatusResponse onChatUpdateStatusResponse;
-    public static OnChatSendMessageResponse onChatSendMessageResponse;
 
     public static final String DIR_SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static final String DIR_APP = DIR_SDCARD + "/iGap";

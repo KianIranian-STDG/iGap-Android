@@ -38,7 +38,7 @@ public class AdapterChatMessage extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private ArrayList<StructMessageInfo> list;
     private Context context;
-    private MyType.ChatType chatType;
+    private ProtoGlobal.Room.Type chatType;
     private OnComplete complete;
     private OnMessageClick mOnMessageClick;
     private List<String> mSelectedMessagesIds = new ArrayList<>();
@@ -133,7 +133,7 @@ public class AdapterChatMessage extends RecyclerView.Adapter<RecyclerView.ViewHo
         notifyItemRangeInserted(0, messageInfos.size());
     }
 
-    public AdapterChatMessage(Context context, MyType.ChatType chatType, ArrayList<StructMessageInfo> list, OnComplete complete, OnMessageClick onMessageClick) {
+    public AdapterChatMessage(Context context, ProtoGlobal.Room.Type chatType, ArrayList<StructMessageInfo> list, OnComplete complete, OnMessageClick onMessageClick) {
         this.list = list;
         this.context = context;
         this.chatType = chatType;
@@ -180,7 +180,7 @@ public class AdapterChatMessage extends RecyclerView.Adapter<RecyclerView.ViewHo
             main = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_sub_layout_date_time, null);
             viewHolder = new holdrNoAction(main);
             return viewHolder;
-        } else if (chatType == MyType.ChatType.channel) {//inflate layout channel
+        } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {//inflate layout channel
             main = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_sub_layout_channel, null);
             RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             main.setLayoutParams(lp);
@@ -199,7 +199,7 @@ public class AdapterChatMessage extends RecyclerView.Adapter<RecyclerView.ViewHo
 
 
         // add layout forward message to layout
-        if (list.get(viewType).forwardMessageFrom.length() > 0 && chatType != MyType.ChatType.channel) {
+        if (list.get(viewType).forwardMessageFrom.length() > 0 && chatType != ProtoGlobal.Room.Type.CHANNEL) {
             main.findViewById(R.id.cslr_ll_forward).setVisibility(View.VISIBLE);
             TextView txtForwardMessage = (TextView) main.findViewById(R.id.cslr_txt_forward_from);
             txtForwardMessage.setText("Forward From " + list.get(viewType).forwardMessageFrom);
@@ -207,7 +207,7 @@ public class AdapterChatMessage extends RecyclerView.Adapter<RecyclerView.ViewHo
 
 
         // set layout mergin for singlechat
-        if (chatType == MyType.ChatType.singleChat) {
+        if (chatType == ProtoGlobal.Room.Type.CHAT) {
 
             if (list.get(viewType).sendType == MyType.SendType.recvive) {// gone avatar sernder message and set layout mergin
                 main.findViewById(R.id.cslr_imv_sender_picture).setVisibility(View.GONE);
@@ -221,17 +221,13 @@ public class AdapterChatMessage extends RecyclerView.Adapter<RecyclerView.ViewHo
                 LinearLayout.LayoutParams paramsa = (LinearLayout.LayoutParams) linearLayout.getLayoutParams();
                 paramsa.setMargins(0, 0, 0, 0);
                 linearLayout.setLayoutParams(paramsa);
-            } else if (list.get(viewType).sendType == MyType.SendType.send) {
-                // update message status
-                TextView messageStatus = (TextView) main.findViewById(R.id.cslr_txt_tic);
-                defineMessageStatus(list.get(viewType), messageStatus);
             }
         }
 
 
         LinearLayout frameLayout = (LinearLayout) main.findViewById(R.id.cslr_ll_content_main);// layout for add other layot in it
 
-        if (chatType != MyType.ChatType.channel)
+        if (chatType != ProtoGlobal.Room.Type.CHANNEL)
             if (list.get(viewType).sendType == MyType.SendType.send)
                 ((TextView) main.findViewById(R.id.cslr_txt_tic)).setTypeface(G.fontawesome);
 
@@ -281,7 +277,7 @@ public class AdapterChatMessage extends RecyclerView.Adapter<RecyclerView.ViewHo
                 frameLayout.addView(v);
                 ImageView imvSticker = (ImageView) v.findViewById(R.id.cslst_imv_sticker);
                 imvSticker.setImageResource(Integer.parseInt(list.get(viewType).filePath));
-                if (chatType == MyType.ChatType.channel)
+                if (chatType == ProtoGlobal.Room.Type.CHANNEL)
                     main.findViewById(R.id.cslch_ll_parent).setBackgroundColor(Color.TRANSPARENT);
                 else
                     main.findViewById(R.id.cslr_ll_frame).setBackgroundColor(Color.TRANSPARENT);
@@ -291,7 +287,7 @@ public class AdapterChatMessage extends RecyclerView.Adapter<RecyclerView.ViewHo
 
 
         //set background layout time in single chat or group chat
-        if (chatType != MyType.ChatType.channel) {
+        if (chatType != ProtoGlobal.Room.Type.CHANNEL) {
             if (((list.get(viewType).messageType == ProtoGlobal.RoomMessageType.IMAGE /*|| list.get(viewType).messageType == MyType.MessageType.gif*/)
                     && list.get(viewType).messageText == "") /*|| list.get(viewType).messageType == MyType.MessageType.sticker*/) {
 
@@ -307,12 +303,12 @@ public class AdapterChatMessage extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
 
 
-        if (chatType == MyType.ChatType.channel && list.get(viewType).sendType != MyType.SendType.timeLayout)
+        if (chatType == ProtoGlobal.Room.Type.CHANNEL && list.get(viewType).sendType != MyType.SendType.timeLayout)
             configureLayoutChannel(viewHolder, viewType);
 
 
         // set sender image in group chat
-        if (chatType == MyType.ChatType.groupChat) {
+        if (chatType == ProtoGlobal.Room.Type.GROUP) {
             if (list.get(viewType).sendType == MyType.SendType.recvive) {
                 if (list.get(viewType).senderAvatar.length() > 0) {
                     CircleImageView imvSenderAvatar = (CircleImageView) viewHolder.itemView.findViewById(R.id.cslr_imv_sender_picture);
@@ -327,11 +323,21 @@ public class AdapterChatMessage extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        // update message status
+        TextView messageStatus = (TextView) holder.itemView.findViewById(R.id.cslr_txt_tic);
+        if (messageStatus != null) {
+            defineMessageStatus(list.get(position), messageStatus);
+        }
+
+        // update message text
+        TextView messageText = (TextView) holder.itemView.findViewById(R.id.cslr_txt_message);
+        if (messageText != null) {
+            messageText.setText(list.get(position).messageText);
+        }
 
         if (list.get(position).isChange) {
             UpdateSomething(position, holder);
         }
-
     }
 
     @Override
@@ -759,8 +765,6 @@ public class AdapterChatMessage extends RecyclerView.Adapter<RecyclerView.ViewHo
 
 
     private void UpdateSomething(int position, RecyclerView.ViewHolder holder) {
-
-
         for (int i = 0; i < list.get(position).allChanges.size(); i++) {
 
             int whatUpdate = Integer.parseInt(list.get(position).allChanges.get(i));
