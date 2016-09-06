@@ -153,12 +153,14 @@ public class ContactsFragmentDrawerMenu extends MenuFragment {
                     G.currentActivity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            Realm realm = Realm.getDefaultInstance();
                             Intent intent = new Intent(G.context, ActivityChat.class);
                             intent.putExtra("NewChatRoom", true);
                             intent.putExtra("ChatType", ProtoGlobal.Room.Type.CHAT.toString());
                             intent.putExtra("LastSeen", realm.where(RealmContacts.class).equalTo("id", peerId).findFirst().getLast_seen());
                             intent.putExtra("RoomId", roomId);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            realm.close();
                             G.context.startActivity(intent);
                         }
                     });
