@@ -31,16 +31,16 @@ public class UserContactsGetListResponse extends MessageHandler {
         Log.i("XXX", "UserContactsGetListResponse handler message : " + message);
         final ProtoUserContactsGetList.UserContactsGetListResponse.Builder builder = (ProtoUserContactsGetList.UserContactsGetListResponse.Builder) message;
         builder.toString().length();
-        G.realm = Realm.getInstance(G.realmConfig);
-        G.realm.executeTransaction(new Realm.Transaction() {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
 
-                G.realm.delete(RealmContacts.class);
+                realm.delete(RealmContacts.class);
 
                 for (ProtoGlobal.RegisteredUser registerUser : builder.getRegisteredUserList()) {
                     Log.i("XXX", "UserContactsGetListResponse handler registerUser : " + registerUser);
-                    RealmContacts listResponse = G.realm.createObject(RealmContacts.class);
+                    RealmContacts listResponse = realm.createObject(RealmContacts.class);
                     listResponse.setId(registerUser.getId());
                     listResponse.setPhone(registerUser.getPhone());
                     listResponse.setFirst_name(registerUser.getFirstName());
@@ -56,7 +56,7 @@ public class UserContactsGetListResponse extends MessageHandler {
 
         G.onUserContactGetList.onContactGetList();
 
-        G.realm.close();
+        realm.close();
     }
 
     @Override

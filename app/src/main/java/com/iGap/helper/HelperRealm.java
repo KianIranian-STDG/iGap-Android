@@ -3,14 +3,17 @@ package com.iGap.helper;
 import com.iGap.G;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmChannelRoom;
+import com.iGap.realm.RealmChatHistory;
 import com.iGap.realm.RealmChatRoom;
 import com.iGap.realm.RealmGroupRoom;
 import com.iGap.realm.RealmRoom;
+import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.enums.ChannelChatRole;
 import com.iGap.realm.enums.GroupChatRole;
 import com.iGap.realm.enums.RoomType;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 /**
  * helper methods while working with Realm
@@ -19,6 +22,28 @@ import io.realm.Realm;
 public final class HelperRealm {
     private HelperRealm() throws InstantiationException {
         throw new InstantiationException("This class is not for instantiation.");
+    }
+
+    /**
+     * Realm doesn't support nested querying field
+     * find last message ID
+     *
+     * @param realmChatHistories RealmResults<RealmChatHistory>
+     * @return long last message ID
+     */
+    public static long findLastMessageId(RealmResults<RealmChatHistory> realmChatHistories) {
+        int lastUpdateTime = -1;
+        long lastMessageId = -1;
+        for (RealmChatHistory chatHistory : realmChatHistories) {
+            RealmRoomMessage roomMessage = chatHistory.getRoomMessage();
+            if (roomMessage != null) {
+                if (roomMessage.getUpdateTime() > lastUpdateTime) {
+                    lastUpdateTime = roomMessage.getUpdateTime();
+                    lastMessageId = roomMessage.getMessageId();
+                }
+            }
+        }
+        return lastMessageId;
     }
 
     /**

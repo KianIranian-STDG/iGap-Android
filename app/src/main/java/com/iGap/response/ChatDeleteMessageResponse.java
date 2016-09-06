@@ -40,12 +40,11 @@ public class ChatDeleteMessageResponse extends MessageHandler {
                 if (roomMessage != null) {
                     // delete message from database
                     roomMessage.deleteFromRealm();
+                    G.onChatDeleteMessageResponse.onChatDeleteMessage(chatDeleteMessage.getDeleteVersion(), chatDeleteMessage.getMessageId(), chatDeleteMessage.getRoomId(), chatDeleteMessage.getResponse());
                 }
             }
         });
         realm.close();
-
-        G.onChatDeleteMessageResponse.onChatDeleteMessage(chatDeleteMessage.getDeleteVersion(), chatDeleteMessage.getMessageId(), chatDeleteMessage.getRoomId(), chatDeleteMessage.getResponse());
     }
 
     @Override

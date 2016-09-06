@@ -40,11 +40,11 @@ public class ChatUpdateStatusResponse extends MessageHandler {
                 RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", chatUpdateStatus.getMessageId()).findFirst();
                 if (roomMessage != null) {
                     roomMessage.setStatus(chatUpdateStatus.getStatus().toString());
+                    G.onChatUpdateStatusResponse.onChatUpdateStatus(chatUpdateStatus.getRoomId(), chatUpdateStatus.getMessageId(), chatUpdateStatus.getStatus(), chatUpdateStatus.getStatusVersion());
                 }
             }
         });
-
-        G.onChatUpdateStatusResponse.onChatUpdateStatus(chatUpdateStatus.getRoomId(), chatUpdateStatus.getMessageId(), chatUpdateStatus.getStatus(), chatUpdateStatus.getStatusVersion());
+        realm.close();
     }
 
     @Override

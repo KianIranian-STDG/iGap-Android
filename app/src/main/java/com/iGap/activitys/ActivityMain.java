@@ -40,7 +40,6 @@ import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmChatHistory;
 import com.iGap.realm.RealmRoom;
-import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestClientGetRoomList;
@@ -364,42 +363,14 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         final ChatItem chatInfo = mAdapter.getAdapterItem(position);
         final String chatId = chatInfo.mInfo.chatId;
 
+        // make request for clearing messages
         Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmResults<RealmChatHistory> realmChatHistories = realm.where(RealmChatHistory.class).equalTo("roomId", Long.parseLong(chatId)).findAll();
-                long lastMessageId = findLastMessageId(realmChatHistories);
-                if (lastMessageId != -1) {
-                    G.clearMessagesUtil.clearMessages(Long.parseLong(chatId), lastMessageId);
-                }
-                for (RealmChatHistory chatHistory : realmChatHistories) {
-                    RealmRoomMessage roomMessage = chatHistory.getRoomMessage();
-                    if (roomMessage != null) {
-                        // delete chat history message
-                        chatHistory.getRoomMessage().deleteFromRealm();
-                    }
-                }
-                // finally delete whole chat history
-                realmChatHistories.deleteAllFromRealm();
-            }
-        });
-        realm.close();
-    }
-
-    private long findLastMessageId(RealmResults<RealmChatHistory> realmChatHistories) {
-        int lastUpdateTime = -1;
-        long lastMessageId = -1;
-        for (RealmChatHistory chatHistory : realmChatHistories) {
-            RealmRoomMessage roomMessage = chatHistory.getRoomMessage();
-            if (roomMessage != null) {
-                if (roomMessage.getUpdateTime() > lastUpdateTime) {
-                    lastUpdateTime = roomMessage.getUpdateTime();
-                    lastMessageId = roomMessage.getMessageId();
-                }
-            }
+        RealmResults<RealmChatHistory> realmChatHistories = realm.where(RealmChatHistory.class).equalTo("roomId", Long.parseLong(chatId)).findAll();
+        long lastMessageId = HelperRealm.findLastMessageId(realmChatHistories);
+        if (lastMessageId != -1) {
+            G.clearMessagesUtil.clearMessages(Long.parseLong(chatId), lastMessageId);
         }
-        return lastMessageId;
+        realm.close();
     }
 
     private void deleteChat(int position) {
@@ -880,8 +851,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
     }
 
     @Override
-    public void onChatClearMessage(long roomId, long clearId, ProtoResponse.Response response) {
+    public void onChatClearMessage(final long roomId, long clearId, ProtoResponse.Response response) {
         Log.i(ActivityMain.class.getSimpleName(), "onChatClearMessage called");
-        // TODO
     }
 }
