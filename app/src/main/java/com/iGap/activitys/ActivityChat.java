@@ -28,6 +28,7 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AdapterChatMessage;
 import com.iGap.helper.Emojione;
+import com.iGap.helper.HelperProtoBuilder;
 import com.iGap.interface_package.IEmojiBackspaceClick;
 import com.iGap.interface_package.IEmojiClickListener;
 import com.iGap.interface_package.IEmojiLongClickListener;
@@ -65,7 +66,7 @@ import io.realm.Realm;
 /**
  * Created by android3 on 8/5/2016.
  */
-public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, IRecentsLongClick, OnMessageClick {
+public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, IRecentsLongClick, OnMessageClick, OnChatClearMessageResponse {
 
     private EmojiEditText edtChat;
     private Button btnSend;
@@ -113,6 +114,8 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
+        G.clearMessagesUtil.setOnChatClearMessageResponse(this);
+
         Bundle bundle = getIntent().getExtras();  // get chat type and contact id and  finish activity if value equal null
         if (bundle != null) {
 //            chatType = (MyType.ChatType) bundle.getSerializable("ChatType"); //TODO [Saeed Mozaffari] [2016-09-03 12:10 PM] - change type to ProtoGlobal.Room.Type
@@ -157,7 +160,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             }
 
             @Override
-            public void onReceiveChatMessage(String message, String messageType, ProtoChatSendMessage.ChatSendMessageResponse.Builder roomMessage) {
+            public void onReceiveChatMessage(String message, String messageType, final ProtoChatSendMessage.ChatSendMessageResponse.Builder roomMessage) {
                 Log.i(ActivityChat.class.getSimpleName(), "onReceiveChatMessage called");
                 // I'm in the room
                 if (roomMessage.getRoomId() == mRoomId) {
@@ -170,13 +173,10 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     new RequestChatUpdateStatus().updateStatus(roomMessage.getRoomId(), roomMessage.getRoomMessage().getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
                 }
 
-                // FIXME: 9/5/2016 [Alireza Eskandarpour Shoferi] we shouldn't re-init adapter, that's a very bad workaround!
-                mAdapter = new AdapterChatMessage(ActivityChat.this, chatType, getChatList(), complete, ActivityChat.this);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        recyclerView.setAdapter(mAdapter);
-                        mAdapter.notifyDataSetChanged();
+                        mAdapter.insert(HelperProtoBuilder.convert(roomMessage));
 
                         int position = recyclerView.getAdapter().getItemCount();
                         if (position > 0)
@@ -213,14 +213,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                         }
                     });
                 }
-            }
-        };
-
-        G.onChatClearMessageResponse = new OnChatClearMessageResponse() {
-            @Override
-            public void onChatClearMessage(long roomId, long clearId, ProtoResponse.Response response) {
-                Log.i(ActivityMain.class.getSimpleName(), "onChatClearMessage called");
-                // TODO
             }
         };
 
@@ -409,7 +401,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                                         StructMessageInfo messageInfo = new StructMessageInfo();
                                         messageInfo.messageText = message;
                                         messageInfo.messageID = identity;
-                                        messageInfo.messageType = MyType.MessageType.message;
+                                        messageInfo.messageType = ProtoGlobal.RoomMessageType.TEXT;
                                         messageInfo.senderID = Long.toString(senderId);
                                         messageInfo.sendType = MyType.SendType.send;
                                         mAdapter.insert(messageInfo);
@@ -776,7 +768,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 }
                 // TODO: 9/5/2016 [Alireza Eskandarpour Shoferi] add timeLayouts to adapter
                 if (realmChatHistory.getRoomMessage().getMessageType().equals("TEXT")) {
-                    structMessageInfo.messageType = MyType.MessageType.message;
+                    structMessageInfo.messageType = ProtoGlobal.RoomMessageType.TEXT;
                 }
                 messageList.add(structMessageInfo);
             }
@@ -965,5 +957,11 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             // found is user trying to edit a message
             edtChat.setTag(messageInfo);
         }
+    }
+
+    @Override
+    public void onChatClearMessage(long roomId, long clearId, ProtoResponse.Response response) {
+        Log.i(ActivityChat.class.getSimpleName(), "onChatClearMessage called");
+        // TODO
     }
 }

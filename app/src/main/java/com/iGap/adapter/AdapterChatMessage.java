@@ -242,41 +242,41 @@ public class AdapterChatMessage extends RecyclerView.Adapter<RecyclerView.ViewHo
 
 
         // add item layout
-        switch (list.get(viewType).messageType.getValue()) {
-            case MyType.message:
+        switch (list.get(viewType).messageType) {
+            case TEXT:
                 viewHolder = new myHolder(main);
                 break;
-            case MyType.image:
+            case IMAGE:
                 v = inflater.inflate(R.layout.chat_sub_layout_image, parent, false);
                 frameLayout.addView(v);
                 viewHolder = new viewHolderImage(main);
                 configureViewHolderImage((viewHolderImage) viewHolder, viewType);
                 break;
-            case MyType.video:
+            case VIDEO:
                 v = inflater.inflate(R.layout.chat_sub_layout_video, parent, false);
                 frameLayout.addView(v);
                 viewHolder = new viewHolderVideo(main);
                 configureViewHolderVideo((viewHolderVideo) viewHolder, viewType);
                 break;
-            case MyType.files:
+            case FILE:
                 v = inflater.inflate(R.layout.chat_sub_layout_file, parent, false);
                 frameLayout.addView(v);
                 viewHolder = new viewHolderFile(main);
                 configureViewHolderFile((viewHolderFile) viewHolder, viewType);
                 break;
-            case MyType.audio:
+            case VOICE:
                 v = inflater.inflate(R.layout.chat_sub_layout_audio, parent, false);
                 frameLayout.addView(v);
                 viewHolder = new viewHolderAudio(main);
                 configureViewHolderAudio((viewHolderAudio) viewHolder, viewType);
                 break;
-            case MyType.gif:
+            /*case MyType.gif:
                 v = inflater.inflate(R.layout.chat_sub_layout_gif, parent, false);
                 frameLayout.addView(v);
                 viewHolder = new viewHolderGif(main);
                 configureViewHolderGif((viewHolderGif) viewHolder, viewType);
-                break;
-            case MyType.sticker:
+                break;*/
+            /*case MyType.sticker:
                 v = inflater.inflate(R.layout.chat_sub_layout_sticker, parent, false);
                 frameLayout.addView(v);
                 ImageView imvSticker = (ImageView) v.findViewById(R.id.cslst_imv_sticker);
@@ -286,14 +286,14 @@ public class AdapterChatMessage extends RecyclerView.Adapter<RecyclerView.ViewHo
                 else
                     main.findViewById(R.id.cslr_ll_frame).setBackgroundColor(Color.TRANSPARENT);
                 viewHolder = new myHolder(main);
-                break;
+                break;*/
         }
 
 
         //set background layout time in single chat or group chat
         if (chatType != MyType.ChatType.channel) {
-            if (((list.get(viewType).messageType == MyType.MessageType.image || list.get(viewType).messageType == MyType.MessageType.gif)
-                    && list.get(viewType).messageText == "") || list.get(viewType).messageType == MyType.MessageType.sticker) {
+            if (((list.get(viewType).messageType == ProtoGlobal.RoomMessageType.IMAGE /*|| list.get(viewType).messageType == MyType.MessageType.gif*/)
+                    && list.get(viewType).messageText == "") /*|| list.get(viewType).messageType == MyType.MessageType.sticker*/) {
 
                 LinearLayout layoutTime = (LinearLayout) main.findViewById(R.id.cslr_ll_time);
                 layoutTime.setBackgroundResource(R.drawable.recangle_gray_tranceparent);
@@ -542,16 +542,16 @@ public class AdapterChatMessage extends RecyclerView.Adapter<RecyclerView.ViewHo
         });
 
 
-        if (list.get(position).messageType == MyType.MessageType.image)
+        if (list.get(position).messageType == ProtoGlobal.RoomMessageType.IMAGE)
             holder.itemView.findViewById(R.id.cslr_ll_content_main).setPadding(0, 0, 0, 0);
 
 
-        if (list.get(position).messageType == MyType.MessageType.audio) {// gone btn elipse_v audio
+        if (list.get(position).messageType == ProtoGlobal.RoomMessageType.VOICE) {// gone btn elipse_v audio
             holder.itemView.findViewById(R.id.csla_btn_audio_menu).setVisibility(View.GONE);
-        } else if (list.get(position).messageType == MyType.MessageType.sticker) {// inivsible layout infor and menu in sticker
+        } /*else if (list.get(position).messageType == MyType.MessageType.sticker) {// inivsible layout infor and menu in sticker
             holder.itemView.findViewById(R.id.cslch_ll_info).setVisibility(View.INVISIBLE);
             holder.itemView.findViewById(R.id.cslch_btn_item_menu).setVisibility(View.INVISIBLE);
-        }
+        }*/
 
 
     }

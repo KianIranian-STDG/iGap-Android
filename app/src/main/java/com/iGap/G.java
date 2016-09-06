@@ -10,7 +10,6 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 
 import com.iGap.helper.HelperFillLookUpClass;
-import com.iGap.interface_package.OnChatClearMessageResponse;
 import com.iGap.interface_package.OnChatDeleteMessageResponse;
 import com.iGap.interface_package.OnChatEditMessageResponse;
 import com.iGap.interface_package.OnChatGetRoom;
@@ -31,6 +30,7 @@ import com.iGap.interface_package.OnUserProfileGenderResponse;
 import com.iGap.interface_package.OnUserProfileNickNameResponse;
 import com.iGap.interface_package.OnUserRegistration;
 import com.iGap.interface_package.OnUserVerification;
+import com.iGap.module.ClearMessagesUtil;
 import com.iGap.module.UploaderUtil;
 import com.iGap.realm.RealmMigrationClass;
 import com.iGap.request.RequestWrapper;
@@ -106,6 +106,7 @@ public class G extends Application {
     public static RealmConfiguration realmConfig;
     public static Realm realm;
     public static UploaderUtil uploaderUtil = new UploaderUtil();
+    public static ClearMessagesUtil clearMessagesUtil = new ClearMessagesUtil();
 
     public static OnReceiveInfoLocation onReceiveInfoLocation;
     public static OnUserRegistration onUserRegistration;
@@ -124,7 +125,6 @@ public class G extends Application {
     public static OnSecuring onSecuring;
     public static OnChatGetRoom onChatGetRoom;
     public static OnChatEditMessageResponse onChatEditMessageResponse;
-    public static OnChatClearMessageResponse onChatClearMessageResponse;
     public static OnChatDeleteMessageResponse onChatDeleteMessageResponse;
     public static OnChatUpdateStatusResponse onChatUpdateStatusResponse;
     public static OnChatSendMessageResponse onChatSendMessageResponse;

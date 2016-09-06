@@ -76,6 +76,10 @@ public class ChatSendMessageResponse extends MessageHandler {
 
                     realmChatHistory.setRoomId(chatSendMessageResponse.getRoomId());
                     realmChatHistory.setRoomMessage(realmRoom);
+
+                    realm.copyToRealm(realmChatHistory);
+                    // invoke following callback when i'm not the sender, because I already done everything after sending message
+                    G.onChatSendMessageResponse.onReceiveChatMessage(roomMessage.getMessage(), roomMessage.getMessageType().toString(), chatSendMessageResponse);
                 } else {
                     // i'm the sender
                     // update message fields into database
@@ -97,19 +101,14 @@ public class ChatSendMessageResponse extends MessageHandler {
                             message.setUpdateTime(roomMessage.getUpdateTime());
 
                             realm.copyToRealmOrUpdate(message);
+                            // invoke following callback when I'm the sender and the message has updated
                             G.onChatSendMessageResponse.onMessageUpdated(roomMessage.getMessageId(), roomMessage.getStatus(), identity, chatSendMessageResponse);
                             break;
                         }
                     }
                 }
-                // if response id == null and realmUserId == roomMessage.getUserId() ==> another account
             } // if response id != null ==> i sender
         });
-
-        // invoke following callback when i'm not the sender, because I already done everything after sending message
-        if (userId != roomMessage.getUserId() && chatSendMessageResponse.getResponse().getId().isEmpty()) {
-            G.onChatSendMessageResponse.onReceiveChatMessage(roomMessage.getMessage(), roomMessage.getMessageType().toString(), chatSendMessageResponse);
-        }
 
         G.realm.close();
     }

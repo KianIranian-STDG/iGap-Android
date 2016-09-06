@@ -20,7 +20,6 @@ public class ChatClearMessageResponse extends MessageHandler {
         this.actionId = actionId;
     }
 
-
     @Override
     public void handler() {
         ProtoChatClearMessage.ChatClearMessageResponse.Builder chatClearMessage = (ProtoChatClearMessage.ChatClearMessageResponse.Builder) message;
@@ -29,7 +28,7 @@ public class ChatClearMessageResponse extends MessageHandler {
         Log.i("SOC", "ChatClearMessageResponse response.getId() : " + response.getId());
         Log.i("SOC", "ChatClearMessageResponse response.getTimestamp() : " + response.getTimestamp());
 
-        G.onChatClearMessageResponse.onChatClearMessage(chatClearMessage.getRoomId(), chatClearMessage.getClearId(), chatClearMessage.getResponse());
+        G.clearMessagesUtil.onChatClearMessage(chatClearMessage.getRoomId(), chatClearMessage.getClearId(), chatClearMessage.getResponse());
     }
 
     @Override

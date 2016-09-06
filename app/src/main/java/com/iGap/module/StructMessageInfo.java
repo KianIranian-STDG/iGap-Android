@@ -24,7 +24,7 @@ public class StructMessageInfo {
 
     public String forwardMessageFrom = "";
 
-    public MyType.MessageType messageType = MyType.MessageType.none;
+    public ProtoGlobal.RoomMessageType messageType = ProtoGlobal.RoomMessageType.UNRECOGNIZED;
     public MyType.SendType sendType = MyType.SendType.send;
     public MyType.FileState fileState = MyType.FileState.notDownload;
 

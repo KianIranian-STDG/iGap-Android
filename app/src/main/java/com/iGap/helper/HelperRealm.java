@@ -16,7 +16,7 @@ import io.realm.Realm;
  * helper methods while working with Realm
  * note: when any field of classes was changed, update this helper.
  */
-public class HelperRealm {
+public final class HelperRealm {
     private HelperRealm() throws InstantiationException {
         throw new InstantiationException("This class is not for instantiation.");
     }

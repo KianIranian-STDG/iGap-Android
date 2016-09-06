@@ -7,7 +7,7 @@ public class RequestChatClearMessage {
 
     public void chatClearMessage(long roomId, long lastMessageId) {
 
-        ProtoChatClearMessage.ChatClearMessageResponse.Builder chatClearMessage = ProtoChatClearMessage.ChatClearMessageResponse.newBuilder();
+        ProtoChatClearMessage.ChatClearMessage.Builder chatClearMessage = ProtoChatClearMessage.ChatClearMessage.newBuilder();
         chatClearMessage.setRoomId(roomId);
         chatClearMessage.setClearId(lastMessageId);
 

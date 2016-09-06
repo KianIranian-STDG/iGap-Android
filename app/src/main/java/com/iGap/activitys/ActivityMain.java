@@ -21,6 +21,7 @@ import com.iGap.adapter.items.ChatItem;
 import com.iGap.helper.HelperRealm;
 import com.iGap.interface_package.IActionClick;
 import com.iGap.interface_package.IOpenDrawer;
+import com.iGap.interface_package.OnChatClearMessageResponse;
 import com.iGap.interface_package.OnClientGetRoomListResponse;
 import com.iGap.interface_package.OnUserContactGetList;
 import com.iGap.interface_package.OnUserContactImport;
@@ -54,7 +55,7 @@ import java.util.List;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActionClick, OnComplete {
+public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActionClick, OnComplete, OnChatClearMessageResponse {
 
     private LeftDrawerLayout mLeftDrawerLayout;
     private RecyclerView recyclerView;
@@ -68,6 +69,8 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        G.clearMessagesUtil.setOnChatClearMessageResponse(this);
 
         userLogin();
         initFloatingButtonCreateNew();
@@ -366,18 +369,37 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
             @Override
             public void execute(Realm realm) {
                 RealmResults<RealmChatHistory> realmChatHistories = realm.where(RealmChatHistory.class).equalTo("roomId", Long.parseLong(chatId)).findAll();
+                long lastMessageId = findLastMessageId(realmChatHistories);
+                if (lastMessageId != -1) {
+                    G.clearMessagesUtil.clearMessages(Long.parseLong(chatId), lastMessageId);
+                }
                 for (RealmChatHistory chatHistory : realmChatHistories) {
                     RealmRoomMessage roomMessage = chatHistory.getRoomMessage();
                     if (roomMessage != null) {
                         // delete chat history message
                         chatHistory.getRoomMessage().deleteFromRealm();
                     }
-                    // finally delete whole chat history
-                    chatHistory.deleteFromRealm();
                 }
+                // finally delete whole chat history
+                realmChatHistories.deleteAllFromRealm();
             }
         });
         realm.close();
+    }
+
+    private long findLastMessageId(RealmResults<RealmChatHistory> realmChatHistories) {
+        int lastUpdateTime = -1;
+        long lastMessageId = -1;
+        for (RealmChatHistory chatHistory : realmChatHistories) {
+            RealmRoomMessage roomMessage = chatHistory.getRoomMessage();
+            if (roomMessage != null) {
+                if (roomMessage.getUpdateTime() > lastUpdateTime) {
+                    lastUpdateTime = roomMessage.getUpdateTime();
+                    lastMessageId = roomMessage.getMessageId();
+                }
+            }
+        }
+        return lastMessageId;
     }
 
     private void deleteChat(int position) {
@@ -791,11 +813,11 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         if (mAdapter != null) {
             // check if new rooms exist, add to adapter
             final Realm realm = Realm.getDefaultInstance();
-            realm.executeTransactionAsync(new Realm.Transaction() {
+            realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
                     RealmResults<RealmRoom> rooms = realm.where(RealmRoom.class).findAll();
-                    for (RealmRoom room : rooms) {
+                    for (final RealmRoom room : rooms) {
                         boolean exists = false;
                         for (ChatItem chat : mAdapter.getAdapterItems()) {
                             if (room.getId() == Long.parseLong(chat.mInfo.chatId)) {
@@ -808,12 +830,8 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                         }
                     }
                 }
-            }, new Realm.Transaction.OnSuccess() {
-                @Override
-                public void onSuccess() {
-                    realm.close();
-                }
             });
+            realm.close();
         }
     }
 
@@ -859,5 +877,11 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         if (messageOne.equals("closeMenuButton")) {
             arcMenu.toggleMenu();
         }
+    }
+
+    @Override
+    public void onChatClearMessage(long roomId, long clearId, ProtoResponse.Response response) {
+        Log.i(ActivityMain.class.getSimpleName(), "onChatClearMessage called");
+        // TODO
     }
 }
