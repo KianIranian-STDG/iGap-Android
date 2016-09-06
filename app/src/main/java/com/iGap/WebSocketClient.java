@@ -74,7 +74,7 @@ public class WebSocketClient {
                 @Override
                 public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
                     Log.i("SOC_WebSocket", "onConnected");
-                    //checkFirstResponse();
+                    checkFirstResponse();
                     super.onConnected(websocket, headers);
                 }
 
@@ -91,7 +91,7 @@ public class WebSocketClient {
                 @Override
                 public void onError(WebSocket websocket, WebSocketException cause) throws Exception {
                     Log.i("SOC_WebSocket", "onError");
-                    clearSocketConnection();
+                    reconnect();
                     super.onError(websocket, cause);
                 }
 
@@ -206,15 +206,11 @@ public class WebSocketClient {
         }
     }
 
-
-    private static void clearSocketConnection() {
-        webSocketClient = null;
-    }
-
     private static void resetWebsocketInfo() {
+        webSocketClient = null;
         G.isSecure = false;
+        G.userLogin = false;
         G.socketConnectingOrConnected = false;
-        clearSocketConnection();
     }
 
     /**
