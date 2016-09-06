@@ -23,15 +23,11 @@ import com.iGap.interface_package.IActionClick;
 import com.iGap.interface_package.IOpenDrawer;
 import com.iGap.interface_package.OnChatClearMessageResponse;
 import com.iGap.interface_package.OnClientGetRoomListResponse;
-import com.iGap.interface_package.OnUserContactGetList;
-import com.iGap.interface_package.OnUserContactImport;
-import com.iGap.interface_package.OnUserLogin;
 import com.iGap.libs.floatingAddButton.ArcMenu;
 import com.iGap.libs.floatingAddButton.StateChangeListener;
 import com.iGap.libs.flowingdrawer.FlowingView;
 import com.iGap.libs.flowingdrawer.LeftDrawerLayout;
 import com.iGap.libs.flowingdrawer.ResizeWidthAnimation;
-import com.iGap.module.Contacts;
 import com.iGap.module.MyType;
 import com.iGap.module.OnComplete;
 import com.iGap.module.StructChatInfo;
@@ -40,11 +36,8 @@ import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmChatHistory;
 import com.iGap.realm.RealmRoom;
-import com.iGap.realm.RealmUserInfo;
 import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestClientGetRoomList;
-import com.iGap.request.RequestUserContactsGetList;
-import com.iGap.request.RequestUserLogin;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.adapters.FastItemAdapter;
@@ -71,88 +64,14 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
 
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
 
-        userLogin();
+        initRecycleView();
         initFloatingButtonCreateNew();
         initDrawerMenu();
         initComponent();
-
     }
 
     FlowingView mFlowingView;
     FragmentDrawerMenu mMenuFragment;
-
-    public void userLogin() {
-
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Realm realm = Realm.getDefaultInstance();
-                if (G.isSecure) {
-                    RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-                    if (!G.userLogin && userInfo != null) {
-                        new RequestUserLogin().userLogin(userInfo.getToken());
-                    } else {
-                        getChatList();
-                    }
-                } else {
-                    userLogin();
-                }
-
-                realm.close();
-            }
-        }, 1000);
-
-        G.onUserLogin = new OnUserLogin() {
-            @Override
-            public void onLogin() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        getChatList();
-                    }
-                });
-            }
-
-            @Override
-            public void onLoginError() {
-
-            }
-        };
-    }
-
-    private void getChatList() {
-        Toast.makeText(G.context, "User Login!", Toast.LENGTH_SHORT).show();
-        importContact();
-        initRecycleView();
-    }
-
-    private void importContact() {
-
-        G.onContactImport = new OnUserContactImport() {
-            @Override
-            public void onContactImport() {
-                getContactListFromServer();
-            }
-        };
-        Contacts.getListOfContact();
-    }
-
-    private void getContactListFromServer() {
-        G.onUserContactGetList = new OnUserContactGetList() {
-            @Override
-            public void onContactGetList() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(G.context, "Get Contact List!", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        };
-
-        new RequestUserContactsGetList().userContactGetList();
-    }
-
 
     /**
      * init floating menu drawer
@@ -200,7 +119,6 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("fff", "search");
             }
         });
 
@@ -336,7 +254,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
             }
         });
 
-        loadLocalChatlist();
+        loadLocalChatList();
         getChatsList();
     }
 
@@ -454,8 +372,6 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                                 mAdapter.add(chatItem);
                             }
                         });
-                    } else {
-                        Log.i("XXX", "Room Exist : " + room.getTitle());
                     }
                 }
 
@@ -721,10 +637,9 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         return list;*/
     }
 
-    private void loadLocalChatlist() {
+    private void loadLocalChatList() {
         Realm realm = Realm.getDefaultInstance();
         for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAll()) {
-
             final ChatItem chatItem = new ChatItem();
             StructChatInfo info = new StructChatInfo();
             info.unreadMessag = realmRoom.getUnreadCount();

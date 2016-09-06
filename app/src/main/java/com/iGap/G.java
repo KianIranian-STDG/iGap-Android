@@ -8,6 +8,7 @@ import android.graphics.Typeface;
 import android.os.Environment;
 import android.os.Handler;
 import android.view.LayoutInflater;
+import android.widget.Toast;
 
 import com.iGap.helper.HelperCheckInternetConnection;
 import com.iGap.helper.HelperFillLookUpClass;
@@ -32,8 +33,12 @@ import com.iGap.interface_package.OnUserProfileNickNameResponse;
 import com.iGap.interface_package.OnUserRegistration;
 import com.iGap.interface_package.OnUserVerification;
 import com.iGap.module.ClearMessagesUtil;
+import com.iGap.module.Contacts;
 import com.iGap.module.UploaderUtil;
 import com.iGap.realm.RealmMigrationClass;
+import com.iGap.realm.RealmUserInfo;
+import com.iGap.request.RequestUserContactsGetList;
+import com.iGap.request.RequestUserLogin;
 import com.iGap.request.RequestWrapper;
 
 import java.io.File;
@@ -129,9 +134,6 @@ public class G extends Application {
     public static OnChatUpdateStatusResponse onChatUpdateStatusResponse;
     public static OnChatSendMessageResponse onChatSendMessageResponse;
 
-    // list of sr
-    public static String[] serverPhoneNumbers = {"9372779537"};
-
     public static final String DIR_SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static final String DIR_APP = DIR_SDCARD + "/iGap";
     public static final String DIR_IMAGES = DIR_APP + "/images";
@@ -142,8 +144,6 @@ public class G extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-//        new ActivityMain().userLogin();
-        //new ActivityChat().receiveMessage();
         new File(DIR_APP).mkdirs();
         new File(DIR_IMAGES).mkdirs();
         new File(DIR_VIDEOS).mkdirs();
@@ -151,8 +151,14 @@ public class G extends Application {
 
         context = getApplicationContext();
         handler = new Handler();
-
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        checkInternetConnection();
+        HelperFillLookUpClass.fillLookUpClassArray();
+        fillUnSecureList();
+        fillSecuringInterface();
+        WebSocketClient.getInstance();
+        login();
 
         neuroplp = Typeface.createFromAsset(this.getAssets(), "fonts/neuropol.ttf");
         robotoBold = Typeface.createFromAsset(getAssets(), "fonts/RobotoBold.ttf");
@@ -169,12 +175,7 @@ public class G extends Application {
         YEKAN_FARSI = Typeface.createFromAsset(context.getAssets(), "fonts/yekan.ttf");
         YEKAN_BOLD = Typeface.createFromAsset(context.getAssets(), "fonts/yekan_bold.ttf");
 
-        checkInternetConnection();
-        HelperFillLookUpClass.fillLookUpClassArray();
-        fillUnSecureList();
-        WebSocketClient.getInstance();
-
-        RealmConfiguration realmConfig = new RealmConfiguration.Builder(getApplicationContext())
+        realmConfig = new RealmConfiguration.Builder(getApplicationContext())
                 .name("CountryListA.realm")
                 .schemaVersion(1)
                 .migration(new RealmMigrationClass())
@@ -244,4 +245,77 @@ public class G extends Application {
         thread.start();
     }
 
+    private void fillSecuringInterface() {
+        G.onSecuring = new OnSecuring() {
+            @Override
+            public void onSecure() {
+                login();
+            }
+        };
+    }
+
+    private void login() {
+
+        G.onUserLogin = new OnUserLogin() {
+            @Override
+            public void onLogin() {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(G.context, "User Login!", Toast.LENGTH_SHORT).show();
+                        importContact();
+                    }
+                });
+            }
+
+            @Override
+            public void onLoginError() {
+
+            }
+        };
+
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (G.isSecure) {
+                    Realm realm = Realm.getDefaultInstance();
+                    RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+                    if (!G.userLogin && userInfo != null && userInfo.getUserRegistrationState()) {
+                        new RequestUserLogin().userLogin(userInfo.getToken());
+                    }
+                    realm.close();
+                } else {
+                    login();
+                }
+            }
+        }, 1000);
+    }
+
+    private void importContact() {
+
+        G.onContactImport = new OnUserContactImport() {
+            @Override
+            public void onContactImport() {
+                getContactListFromServer();
+            }
+        };
+        Contacts.getListOfContact();
+    }
+
+    private void getContactListFromServer() {
+        G.onUserContactGetList = new OnUserContactGetList() {
+            @Override
+            public void onContactGetList() {
+
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(G.context, "Get Contact List!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        };
+
+        new RequestUserContactsGetList().userContactGetList();
+    }
 }
