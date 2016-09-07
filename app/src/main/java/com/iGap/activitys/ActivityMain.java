@@ -53,7 +53,7 @@ import io.realm.RealmResults;
 
 public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActionClick, OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse {
 
-    private LeftDrawerLayout mLeftDrawerLayout;
+    public static LeftDrawerLayout mLeftDrawerLayout;
     private RecyclerView recyclerView;
     private FastItemAdapter<ChatItem> mAdapter;
     private FloatingActionButton floatingActionButton;

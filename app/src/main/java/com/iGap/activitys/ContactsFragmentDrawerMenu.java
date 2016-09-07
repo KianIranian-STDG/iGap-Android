@@ -5,13 +5,12 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
@@ -77,23 +76,72 @@ public class ContactsFragmentDrawerMenu extends MenuFragment {
             }
         });
 
-        EditText searchView = (EditText) view.findViewById(R.id.edit_search);
-        searchView.addTextChangedListener(new TextWatcher() {
+        TextView txtMenu = (TextView) view.findViewById(R.id.menu_txtBack);
+        txtMenu.setTypeface(G.fontawesome);
+        txtMenu.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            public void onClick(View view) {
 
-            }
+            ActivityMain.mLeftDrawerLayout.closeDrawer();
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                itemAdapter.filter(editable);
             }
         });
+
+        final android.support.v7.widget.SearchView searchView = (android.support.v7.widget.SearchView) view.findViewById(R.id.menu_edtSearch);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+
+                itemAdapter.filter(newText);
+
+                return false;
+            }
+        });
+
+        searchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        final TextView menu_txt_titleToolbar = (TextView) view.findViewById(R.id.menu_txt_titleToolbar);
+        ViewGroup layout = (ViewGroup) view.findViewById(R.id.menu_layout);
+
+        layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                searchView.onActionViewExpanded();
+                searchView.setIconifiedByDefault(true);
+                menu_txt_titleToolbar.setVisibility(View.GONE);
+
+            }
+        });
+
+//        searchView.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable editable) {
+//                itemAdapter.filter(editable);
+//            }
+//        });
 
         //configure our fastAdapter
         //as we provide id's for the items we want the hasStableIds enabled to speed up things

@@ -1,0 +1,972 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.iGap.activitys.ActivitySettingNotification"
+    android:layoutDirection="ltr">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/st_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp60"
+        android:background="@color/toolbar_background"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        android:layoutDirection="ltr">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/stns_txt_back"
+                android:layout_width="@dimen/dp60"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/fa_chevron_left"
+                android:textColor="@color/whit_background"
+                android:textSize="@dimen/sp22" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/st_titleToolbar_page_Notification_and_sounds"
+                android:textColor="@color/whit_background"
+                android:textSize="@dimen/sp22"
+                android:textStyle="bold"
+                android:visibility="visible" />
+
+        </LinearLayout>
+    </android.support.v7.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/dp16"
+                android:paddingTop="@dimen/dp8"
+                android:visibility="visible">
+
+                <TextView
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingBottom="@dimen/dp20"
+                    android:text="@string/st_title_messageNotification"
+                    android:textColor="@color/green"
+                    android:textSize="@dimen/sp22"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/stns_layout_alert"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp60"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/dp16">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".5"
+                        android:text="@string/st_alert"
+                        android:textColor="@color/black_register"
+                        android:textSize="@dimen/sp18"
+                        android:textStyle="normal" />
+
+                    <ToggleButton
+                        android:id="@+id/stns_toggle_alert"
+                        android:layout_width="@dimen/dp40"
+                        android:layout_height="@dimen/dp40"
+                        android:background="@drawable/st_switch_button"
+                        android:paddingRight="@dimen/dp4"
+                        android:textOff=""
+                        android:textOn="" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/background_editText" />
+
+                <LinearLayout
+                    android:id="@+id/stns_layout_messagePreview"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp60"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/dp16">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".5"
+                        android:text="@string/st_auto_gif"
+                        android:textColor="@color/black_register"
+                        android:textSize="@dimen/sp18"
+                        android:textStyle="normal" />
+
+                    <ToggleButton
+                        android:id="@+id/stns_toggle_messagePreview"
+                        android:layout_width="@dimen/dp40"
+                        android:layout_height="@dimen/dp40"
+                        android:background="@drawable/st_switch_button"
+                        android:paddingRight="@dimen/dp4"
+                        android:textOff=""
+                        android:textOn="" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/background_editText" />
+
+                <LinearLayout
+                    android:id="@+id/stns_layout_ledColorMessage"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp60"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:padding="@dimen/dp16"
+                        android:text="@string/st_led_color"
+                        android:textColor="@color/black_register"
+                        android:textSize="@dimen/sp18"
+                        android:textStyle="normal" />
+
+                    <com.iGap.module.CircleImageView
+
+                        android:id="@+id/stns_img_ledColorMessage"
+                        android:layout_width="@dimen/dp24"
+                        android:layout_height="@dimen/dp24"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="@dimen/dp16"
+                        android:background="@drawable/pu_circle_button_give_image"
+                        android:gravity="center"
+                        app:civ_border_width="0dp" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/background_editText" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp60"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/dp16">
+
+                    <TextView
+                        android:id="@+id/st_txt_vibrate_message"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight=".6"
+                        android:gravity="center_vertical"
+                        android:text="@string/st_vibrate"
+                        android:textColor="@color/black_register"
+                        android:textSize="@dimen/sp18"
+                        android:textStyle="normal" />
+
+                    <TextView
+                        android:id="@+id/st_txt_vibrate_message_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight=".4"
+                        android:gravity="center_vertical|top"
+                        android:text="@string/st_sound"
+                        android:textColor="@color/cardview_dark_background"
+                        android:textSize="@dimen/sp14"
+                        android:textStyle="normal" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/background_editText" />
+
+                <LinearLayout
+                    android:id="@+id/st_layout_popupNotification_message"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp60"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/dp16">
+
+                    <TextView
+
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight=".6"
+                        android:gravity="center_vertical"
+                        android:text="@string/st_popupNotification"
+                        android:textColor="@color/black_register"
+                        android:textSize="@dimen/sp18"
+                        android:textStyle="normal" />
+
+                    <TextView
+                        android:id="@+id/st_txt_popupNotification_message_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight=".4"
+                        android:gravity="center_vertical|top"
+                        android:text="@string/st_sound"
+                        android:textColor="@color/cardview_dark_background"
+                        android:textSize="@dimen/sp14"
+                        android:textStyle="normal" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/background_editText" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp60"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/dp16">
+
+                    <TextView
+                        android:id="@+id/st_txt_sound"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight=".6"
+                        android:gravity="center_vertical"
+                        android:text="@string/st_sound"
+                        android:textColor="@color/black_register"
+                        android:textSize="@dimen/sp18"
+                        android:textStyle="normal" />
+
+                    <TextView
+                        android:id="@+id/st_txt_sound_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight=".4"
+                        android:gravity="center_vertical|top"
+                        android:text="@string/st_sound"
+                        android:textColor="@color/cardview_dark_background"
+                        android:textSize="@dimen/sp14"
+                        android:textStyle="normal" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/st_background2"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/dp16"
+                android:paddingTop="@dimen/dp8"
+                android:visibility="visible">
+
+                <TextView
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingBottom="@dimen/dp20"
+                    android:text="@string/st_title_groupNotification"
+                    android:textColor="@color/green"
+                    android:textSize="@dimen/sp22"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/stns_layout_alert_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp60"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/dp16">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".5"
+                        android:text="@string/st_alert"
+                        android:textColor="@color/black_register"
+                        android:textSize="@dimen/sp18"
+                        android:textStyle="normal" />
+
+                    <ToggleButton
+                        android:id="@+id/stns_toggle_alert_group"
+                        android:layout_width="@dimen/dp40"
+                        android:layout_height="@dimen/dp40"
+                        android:background="@drawable/st_switch_button"
+                        android:paddingRight="@dimen/dp4"
+                        android:textOff=""
+                        android:textOn="" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/background_editText" />
+
+                <LinearLayout
+                    android:id="@+id/stns_layout_messagePreview_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp60"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/dp16">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".5"
+                        android:text="@string/st_auto_gif"
+                        android:textColor="@color/black_register"
+                        android:textSize="@dimen/sp18"
+                        android:textStyle="normal" />
+
+                    <ToggleButton
+                        android:id="@+id/stns_toggle_messagePreview_group"
+                        android:layout_width="@dimen/dp40"
+                        android:layout_height="@dimen/dp40"
+                        android:background="@drawable/st_switch_button"
+                        android:paddingRight="@dimen/dp4"
+                        android:textOff=""
+                        android:textOn="" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/background_editText" />
+
+                <LinearLayout
+                    android:id="@+id/stns_layout_ledColor_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp60"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:padding="@dimen/dp16"
+                        android:text="@string/st_led_color"
+                        android:textColor="@color/black_register"
+                        android:textSize="@dimen/sp18"
+                        android:textStyle="normal" />
+
+                    <com.iGap.module.CircleImageView
+
+                        android:id="@+id/stns_img_ledColor_group"
+                        android:layout_width="@dimen/dp24"
+                        android:layout_height="@dimen/dp24"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="@dimen/dp16"
+                        android:background="@drawable/pu_circle_button_give_image"
+                        android:gravity="center"
+                        app:civ_border_width="0dp" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/background_editText" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp60"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/dp16">
+
+                    <TextView
+                        android:id="@+id/st_txt_vibrate_group"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight=".6"
+                        android:gravity="center_vertical"
+                        android:text="@string/st_vibrate"
+                        android:textColor="@color/black_register"
+                        android:textSize="@dimen/sp18"
+                        android:textStyle="normal" />
+
+                    <TextView
+                        android:id="@+id/st_txt_vibrate_group_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight=".4"
+                        android:gravity="center_vertical|top"
+                        android:text="@string/st_sound"
+                        android:textColor="@color/cardview_dark_background"
+                        android:textSize="@dimen/sp14"
+                        android:textStyle="normal" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/background_editText" />
+
+                <LinearLayout
+                    android:id="@+id/st_layout_popupNotification_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp60"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/dp16">
+
+                    <TextView
+
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight=".6"
+                        android:gravity="center_vertical"
+                        android:text="@string/st_popupNotification"
+                        android:textColor="@color/black_register"
+                        android:textSize="@dimen/sp18"
+                        android:textStyle="normal" />
+
+                    <TextView
+                        android:id="@+id/st_txt_popupNotification_group_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight=".4"
+                        android:gravity="center_vertical|top"
+                        android:text="@string/st_sound"
+                        android:textColor="@color/cardview_dark_background"
+                        android:textSize="@dimen/sp14"
+                        android:textStyle="normal" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/background_editText" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp60"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/dp16">
+
+                    <TextView
+                        android:id="@+id/st_txt_sound_group"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight=".6"
+                        android:gravity="center_vertical"
+                        android:text="@string/st_sound"
+                        android:textColor="@color/black_register"
+                        android:textSize="@dimen/sp18"
+                        android:textStyle="normal" />
+
+                    <TextView
+                        android:id="@+id/st_txt_sound_group_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight=".4"
+                        android:gravity="center_vertical|top"
+                        android:text="@string/st_sound"
+                        android:textColor="@color/cardview_dark_background"
+                        android:textSize="@dimen/sp14"
+                        android:textStyle="normal" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/dp16"
+                android:paddingTop="@dimen/dp8"
+                android:visibility="visible">
+
+                <TextView
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingBottom="@dimen/dp20"
+                    android:text="@string/st_title_in_app_notification"
+                    android:textColor="@color/green"
+                    android:textSize="@dimen/sp22"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/stns_layout_app_sound"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp60"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/dp16">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".5"
+                        android:text="@string/st_in_app_sound"
+                        android:textColor="@color/black_register"
+                        android:textSize="@dimen/sp18"
+                        android:textStyle="normal" />
+
+                    <ToggleButton
+                        android:id="@+id/stns_toggle_app_vibrat"
+                        android:layout_width="@dimen/dp40"
+                        android:layout_height="@dimen/dp40"
+                        android:background="@drawable/st_switch_button"
+                        android:paddingRight="@dimen/dp4"
+                        android:textOff=""
+                        android:textOn="" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/background_editText" />
+
+                <LinearLayout
+                    android:id="@+id/stns_layout_vibrate"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp60"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/dp16">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".5"
+                        android:text="@string/st_in_app_vibrate"
+                        android:textColor="@color/black_register"
+                        android:textSize="@dimen/sp18"
+                        android:textStyle="normal" />
+
+                    <ToggleButton
+                        android:id="@+id/stns_toggle_vibrate"
+                        android:layout_width="@dimen/dp40"
+                        android:layout_height="@dimen/dp40"
+                        android:background="@drawable/st_switch_button"
+                        android:paddingRight="@dimen/dp4"
+                        android:textOff=""
+                        android:textOn="" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/background_editText" />
+
+                <LinearLayout
+                    android:id="@+id/stns_layout_app_preview"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp60"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/dp16">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".5"
+                        android:text="@string/st_in_app_preview"
+                        android:textColor="@color/black_register"
+                        android:textSize="@dimen/sp18"
+                        android:textStyle="normal" />
+
+                    <ToggleButton
+                        android:id="@+id/stns_toggle_app_preview"
+                        android:layout_width="@dimen/dp40"
+                        android:layout_height="@dimen/dp40"
+                        android:background="@drawable/st_switch_button"
+                        android:paddingRight="@dimen/dp4"
+                        android:textOff=""
+                        android:textOn="" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/background_editText" />
+
+                <LinearLayout
+                    android:id="@+id/stns_layout_chat_sound"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp60"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/dp16">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".5"
+                        android:text="@string/st_in_chat_sound"
+                        android:textColor="@color/black_register"
+                        android:textSize="@dimen/sp18"
+                        android:textStyle="normal" />
+
+                    <ToggleButton
+                        android:id="@+id/stns_toggle_chat_sound"
+                        android:layout_width="@dimen/dp40"
+                        android:layout_height="@dimen/dp40"
+                        android:background="@drawable/st_switch_button"
+                        android:paddingRight="@dimen/dp4"
+                        android:textOff=""
+                        android:textOn="" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/st_background2"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/dp16"
+                android:paddingTop="@dimen/dp8"
+                android:visibility="visible">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingBottom="@dimen/dp20"
+                    android:text="@string/st_title_Events"
+                    android:textColor="@color/green"
+                    android:textSize="@dimen/sp22"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/stns_layout_Contact_joined"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp60"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/dp16">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".5"
+                        android:text="@string/st_Contact_joined_igap"
+                        android:textColor="@color/black_register"
+                        android:textSize="@dimen/sp18"
+                        android:textStyle="normal" />
+
+                    <ToggleButton
+                        android:id="@+id/stns_toggle_Contact_joined"
+                        android:layout_width="@dimen/dp40"
+                        android:layout_height="@dimen/dp40"
+                        android:background="@drawable/st_switch_button"
+                        android:paddingRight="@dimen/dp4"
+                        android:textOff=""
+                        android:textOn="" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/background_editText" />
+
+                <LinearLayout
+                    android:id="@+id/stns_layout_pinned_message"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp60"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/dp16">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".5"
+                        android:text="@string/st_pinned_message"
+                        android:textColor="@color/black_register"
+                        android:textSize="@dimen/sp18"
+                        android:textStyle="normal" />
+
+                    <ToggleButton
+                        android:id="@+id/stns_toggle_pinned_message"
+                        android:layout_width="@dimen/dp40"
+                        android:layout_height="@dimen/dp40"
+                        android:background="@drawable/st_switch_button"
+                        android:paddingRight="@dimen/dp4"
+                        android:textOff=""
+                        android:textOn="" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/dp16"
+                android:paddingTop="@dimen/dp8"
+                android:visibility="visible">
+
+                <TextView
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingBottom="@dimen/dp20"
+                    android:text="@string/st_title_other"
+                    android:textColor="@color/green"
+                    android:textSize="@dimen/sp22"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/stns_layout_keep_alive_service"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/dp16">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".5"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/st_keep_alive_service"
+                            android:textColor="@color/black_register"
+                            android:textSize="@dimen/sp18"
+                            android:textStyle="normal" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingEnd="@dimen/dp8"
+                            android:paddingRight="@dimen/dp8"
+                            android:paddingTop="@dimen/dp4"
+                            android:text="@string/st_text_keep_alive_service"
+                            android:textColor="@color/cardview_dark_background"
+                            android:textSize="@dimen/sp16"
+                            android:textStyle="normal" />
+
+                    </LinearLayout>
+
+                    <ToggleButton
+                        android:id="@+id/stns_toggle_keep_alive_service"
+                        android:layout_width="@dimen/dp40"
+                        android:layout_height="@dimen/dp40"
+                        android:background="@drawable/st_switch_button"
+                        android:paddingRight="@dimen/dp4"
+                        android:textOff=""
+                        android:textOn="" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/background_editText" />
+
+                <LinearLayout
+                    android:id="@+id/stns_layout_background_connection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/dp16">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".5"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/st_background_connection"
+                            android:textColor="@color/black_register"
+                            android:textSize="@dimen/sp18"
+                            android:textStyle="normal" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingEnd="@dimen/dp8"
+                            android:paddingRight="@dimen/dp8"
+                            android:paddingTop="@dimen/dp4"
+                            android:text="@string/st_text_background_connection"
+                            android:textColor="@color/cardview_dark_background"
+                            android:textSize="@dimen/sp16"
+                            android:textStyle="normal" />
+
+                    </LinearLayout>
+
+                    <ToggleButton
+                        android:id="@+id/stns_toggle_background_connection"
+                        android:layout_width="@dimen/dp40"
+                        android:layout_height="@dimen/dp40"
+                        android:background="@drawable/st_switch_button"
+                        android:paddingRight="@dimen/dp4"
+                        android:textOff=""
+                        android:textOn="" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/background_editText" />
+
+                <LinearLayout
+                    android:id="@+id/stns_layout_badge_countent"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp60"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/dp16">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".5"
+                        android:text="@string/st_badge_counter"
+                        android:textColor="@color/black_register"
+                        android:textSize="@dimen/sp18"
+                        android:textStyle="normal" />
+
+                    <ToggleButton
+                        android:id="@+id/stns_badge_counter"
+                        android:layout_width="@dimen/dp40"
+                        android:layout_height="@dimen/dp40"
+                        android:background="@drawable/st_switch_button"
+                        android:paddingRight="@dimen/dp4"
+                        android:textOff=""
+                        android:textOn="" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/background_editText" />
+
+                <LinearLayout
+                    android:id="@+id/st_layout_Repeat_Notifications"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp60"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/dp16">
+
+                    <TextView
+
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight=".6"
+                        android:gravity="center_vertical"
+                        android:text="@string/st_Repeat_Notifications"
+                        android:textColor="@color/black_register"
+                        android:textSize="@dimen/sp18"
+                        android:textStyle="normal" />
+
+                    <TextView
+                        android:id="@+id/st_txt_Repeat_Notifications"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight=".4"
+                        android:gravity="center_vertical|top"
+                        android:text="@string/st_sound"
+                        android:textColor="@color/cardview_dark_background"
+                        android:textSize="@dimen/sp14"
+                        android:textStyle="normal" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/st_background2"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/dp16"
+                android:paddingTop="@dimen/dp8"
+                android:visibility="visible">
+
+                <TextView
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingBottom="@dimen/dp20"
+                    android:text="@string/st_title_reset"
+                    android:textColor="@color/green"
+                    android:textSize="@dimen/sp22"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/st_layout_reset_all_notification"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp60"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/dp16">
+
+                    <TextView
+
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight=".6"
+                        android:gravity="center_vertical"
+                        android:text="@string/st_reset_all_notification"
+                        android:textColor="@color/black_register"
+                        android:textSize="@dimen/sp18"
+                        android:textStyle="normal" />
+
+                    <TextView
+                        android:id="@+id/st_txt_reset_all_notification"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight=".4"
+                        android:gravity="center_vertical|top"
+                        android:text="@string/st_text_reset_all_notification"
+                        android:textColor="@color/cardview_dark_background"
+                        android:textSize="@dimen/sp14"
+                        android:textStyle="normal" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

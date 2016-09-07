@@ -162,6 +162,58 @@
     <string name="st_nickname">Nickname:</string>
     <string name="st_phoneNumber">Phone Number:</string>
     <string name="st_title_info">Info</string>
+    <string name="st_title_notification_sounds">Notification and Sounds</string>
+    <string name="st_title_Clear_Cache">Clear Cache</string>
+    <string name="st_title_Privacy_Security">Privacy and Security</string>
+    <string name="st_title_message">Message</string>
+    <string name="st_title_message_textSize">Message Text Size</string>
+    <string name="st_stickers">Stickers</string>
+    <string name="st_chatBackground">Chat Background</string>
+    <string name="st_Enable_Animation">Enable Animation </string>
+    <string name="st_inApp_Browser">In_App Browser</string>
+    <string name="st_send_by_enter">Send By Enter</string>
+    <string name="st_title_Media">Media</string>
+    <string name="st_auto_download_data">Auto Download (cellular Data) </string>
+    <string name="st_auto_download_wifi">Auto Download (Wifi)</string>
+    <string name="st_auto_download_roaming">Auto Download (Roaming)</string>
+    <string name="st_auto_gif">AutoPlay GIFs</string>
+    <string name="st_save_to_gallery">Save to Gallery</string>
+    <string name="st_title_support">Support</string>
+    <string name="st_ask_question">Ask a Question</string>
+    <string name="st_igap_faq">iGap FAQ</string>
+    <string name="st_privacy_policy">Privacy Policy</string>
+    <string name="st_keepMedia">Keep Media</string>
+    <string name="st_dialog_content_keepMedia">Photo , video and other files from cloud chats that ypo have not accessed during this period
+        will be removed from this device to save disc space. \n all media will stayin the iGap cloud and can be reDownloaded if you need it again.
+    </string>
+    <string name="st_titleToolbar_page_Notification_and_sounds">Message notification</string>
+    <string name="st_title_messageNotification">Message notification</string>
+    <string name="st_alert">Alert</string>
+    <string name="st_messagePreview">Message Preview</string>
+    <string name="st_led_color">LED Color</string>
+    <string name="st_vibrate">Vibrate</string>
+    <string name="st_popupNotification">Popup Notification</string>
+    <string name="st_sound">Sound</string>
+    <string name="st_title_groupNotification">Group Notification</string>
+    <string name="st_title_in_app_notification">In-App notifications</string>
+    <string name="st_in_app_sound">In-App Sounds</string>
+    <string name="st_in_app_vibrate">In-App Vibrate</string>
+    <string name="st_in_app_preview">In-App Preview</string>
+    <string name="st_in_chat_sound">In_Chat Sounds </string>
+    <string name="st_title_Events">In_Chat Sounds </string>
+    <string name="st_Contact_joined_igap">Contact joined iGap</string>
+    <string name="st_pinned_message">Pinned Message</string>
+    <string name="st_title_other">Other</string>
+    <string name="st_text_keep_alive_service">Relaunch app when down by user or system. this will ensure app can show notification</string>
+    <string name="st_keep_alive_service">Keep-Alive Service</string>
+    <string name="st_background_connection">Background Connection</string>
+    <string name="st_text_background_connection">Keep a low impact background connection to iGap to receive notification. Enable for reliable notification  </string>
+    <string name="st_badge_counter">Pinned Message</string>
+    <string name="st_Repeat_Notifications">Pinned Message</string>
+    <string name="st_title_reset">Reset</string>
+    <string name="st_reset_all_notification">Reset All Notification</string>
+    <string name="st_text_reset_all_notification">Undo all custom notification settings for all your contacts and groups</string>
+
 
     <!--chanel_info-->
     <string name="chi_chanel_link">Chanel Link:</string>

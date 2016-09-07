@@ -2,11 +2,13 @@ package com.iGap.activitys;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.PopupMenu;
@@ -14,15 +16,21 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.GravityEnum;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.module.HelperDecodeFile;
+import com.iGap.module.SHP_SETTING;
 import com.iGap.realm.RealmUserInfo;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -30,10 +38,20 @@ import io.realm.Realm;
 
 public class ActivitySetting extends ActivityEnhanced {
 
-    private TextView txtBack, txtMenu;
+    private SharedPreferences sharedPreferences;
+    private int messageTextSize = 16;
+
+    private TextView txtBack, txtMenu, txtMessageTextSize, txtAutoDownloadData, txtAutoDownloadWifi, txtAutoDownloadRoaming, txtKeepMedia, txtLanguage;
     private ImageView imgMenu;
 
+    private int poRbDialogLangouage = -1;
+    private String textLanguage = "English";
+    private int poRbDialogTextSize = -1;
+
+    private ViewGroup ltMessageTextSize, ltLanguage, ltInAppBrowser, ltSentByEnter, ltEnableAnimation, ltAutoGifs, ltSaveToGallery;
     private EditText edtNickName, edtUserName, edtPhoneNumber;
+    private ToggleButton toggleSentByEnter, toggleEnableAnimation, toggleAutoGifs, toggleSaveToGallery, toggleInAppBrowser;
+
 
     private AppBarLayout appBarLayout;
 
@@ -49,10 +67,34 @@ public class ActivitySetting extends ActivityEnhanced {
     private String userName;
     private String phoneName;
 
+    public static int KEY_AD_DATA_PHOTO = -1;
+    public static int KEY_AD_DATA_VOICE_MESSAGE = -1;
+    public static int KEY_AD_DATA_VIDEO = -1;
+    public static int KEY_AD_DATA_FILE = -1;
+    public static int KEY_AD_DATA_MUSIC = -1;
+    public static int KEY_AD_DATA_GIF = -1;
+
+    public static int KEY_AD_WIFI_PHOTO = -1;
+    public static int KEY_AD_WIFI_VOICE_MESSAGE = -1;
+    public static int KEY_AD_WIFI_VIDEO = -1;
+    public static int KEY_AD_WIFI_FILE = -1;
+    public static int KEY_AD_WIFI_MUSIC = -1;
+    public static int KEY_AD_WIFI_GIF = -1;
+
+    public static int KEY_AD_ROAMING_PHOTO = -1;
+    public static int KEY_AD_ROAMING_VOICE_MESSAGE = -1;
+    public static int KEY_AD_ROAMING_VIDEO = -1;
+    public static int KEY_AD_ROAMING_FILE = -1;
+    public static int KEY_AD_ROAMING_MUSIC = -1;
+    public static int KEY_AD_ROAMINGN_GIF = -1;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
+
+        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
         final Realm realm = Realm.getDefaultInstance();
 
@@ -63,9 +105,12 @@ public class ActivitySetting extends ActivityEnhanced {
         edtPhoneNumber = (EditText) findViewById(R.id.st_edt_phoneNumber);
 
         RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-        nickName = realmUserInfo.getNickName();
-        userName = realmUserInfo.getUserName();
-        phoneName = realmUserInfo.getPhoneNumber();
+        if (realmUserInfo != null) {
+            nickName = realmUserInfo.getNickName();
+            userName = realmUserInfo.getUserName();
+            phoneName = realmUserInfo.getPhoneNumber();
+        }
+
 
         if (nickName != null) {
             edtNickName.setText(nickName);
@@ -88,6 +133,7 @@ public class ActivitySetting extends ActivityEnhanced {
             @Override
             public void afterTextChanged(final Editable editable) {
 
+
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
@@ -97,11 +143,8 @@ public class ActivitySetting extends ActivityEnhanced {
                             userInfo.setNickName(editable.toString());
                             txtNickNameTitle.setText(nickName);
                         }
-
                     }
                 });
-
-
             }
         });
 
@@ -126,8 +169,6 @@ public class ActivitySetting extends ActivityEnhanced {
 
                     }
                 });
-
-
             }
         });
 
@@ -139,8 +180,6 @@ public class ActivitySetting extends ActivityEnhanced {
 
             @Override
             public void onTextChanged(final CharSequence charSequence, int i, int i1, int i2) {
-
-
             }
 
             @Override
@@ -229,7 +268,7 @@ public class ActivitySetting extends ActivityEnhanced {
 
         circleImageView = (CircleImageView) findViewById(R.id.st_img_circleImage);
         if (G.imageFile.exists()) {
-            decodeBitmapProfile = HelperDecodeFile.decodeFile(G.imageFile); //TODO [Saeed Mozaffari] [2016-08-30 9:43 AM] - (Saeed Mozaffari to Mr Mollareza) 1-user photo should decode for first time and reuse again and again , 2- read and write file from iGap directory
+            decodeBitmapProfile = HelperDecodeFile.decodeFile(G.imageFile);
             circleImageView.setImageBitmap(decodeBitmapProfile);
 
             realm.executeTransaction(new Realm.Transaction() {
@@ -245,7 +284,460 @@ public class ActivitySetting extends ActivityEnhanced {
 
         }
 
+
+
+        textLanguage = sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, "English");
+        if (textLanguage.equals("English")) {
+            poRbDialogLangouage = 0;
+            Toast.makeText(ActivitySetting.this, "" + poRbDialogTextSize, Toast.LENGTH_SHORT).show();
+        } else if (textLanguage.equals("فارسی")) {
+            poRbDialogLangouage = 1;
+            Toast.makeText(ActivitySetting.this, "" + poRbDialogTextSize, Toast.LENGTH_SHORT).show();
+
+        } else if (textLanguage.equals("العربی")) {
+            poRbDialogLangouage = 2;
+            Toast.makeText(ActivitySetting.this, "" + poRbDialogTextSize, Toast.LENGTH_SHORT).show();
+
+        } else if (textLanguage.equals("Deutsch")) {
+            poRbDialogLangouage = 3;
+            Toast.makeText(ActivitySetting.this, "" + poRbDialogTextSize, Toast.LENGTH_SHORT).show();
+        }
+
+
+        txtLanguage = (TextView) findViewById(R.id.st_txt_language);
+        txtLanguage.setText(textLanguage);
+        ltLanguage = (ViewGroup) findViewById(R.id.st_layout_language);
+        ltLanguage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                new MaterialDialog.Builder(ActivitySetting.this)
+                        .title("Language")
+                        .titleGravity(GravityEnum.START)
+                        .titleColor(getResources().getColor(android.R.color.black))
+                        .items(R.array.language)
+                        .itemsCallbackSingleChoice(poRbDialogLangouage, new MaterialDialog.ListCallbackSingleChoice() {
+                            @Override
+                            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+
+                                txtLanguage.setText(text.toString());
+                                poRbDialogLangouage = which;
+                                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putString(SHP_SETTING.KEY_LANGUAGE, text.toString());
+                                editor.apply();
+                                return false;
+                            }
+                        })
+                        .positiveText("OK")
+                        .negativeText("CANCEL")
+                        .show();
+
+            }
+        });
+        poRbDialogTextSize = sharedPreferences.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 16) - 11;
+        txtMessageTextSize = (TextView) findViewById(R.id.st_txt_messageTextSize_number);
+        txtMessageTextSize.setText("" + sharedPreferences.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 16));
+
+        ltMessageTextSize = (ViewGroup) findViewById(R.id.st_layout_messageTextSize);
+        ltMessageTextSize.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new MaterialDialog.Builder(ActivitySetting.this)
+                        .title("Messages Text Size")
+                        .titleGravity(GravityEnum.START)
+                        .titleColor(getResources().getColor(android.R.color.black))
+                        .items(R.array.message_text_size)
+                        .itemsCallbackSingleChoice(poRbDialogTextSize, new MaterialDialog.ListCallbackSingleChoice() {
+                            @Override
+                            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+
+                                if (text != null) {
+                                    txtMessageTextSize.setText(text.toString().replace("(Hello)", "").trim());
+                                }
+                                poRbDialogTextSize = which;
+                                int size = Integer.parseInt(text.toString().replace("(Hello)", "").trim());
+                                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, size);
+                                editor.apply();
+
+                                return false;
+                            }
+                        })
+                        .positiveText("ok")
+                        .show();
+            }
+        });
+
+
+        ltInAppBrowser = (ViewGroup) findViewById(R.id.st_layout_inAppBrowser);
+        toggleInAppBrowser = (ToggleButton) findViewById(R.id.st_toggle_inAppBrowser);
+        int checkedInappBrowser = sharedPreferences.getInt(SHP_SETTING.KEY_IN_APP_BROWSER, 0);
+        if (checkedInappBrowser == 1) {
+            toggleInAppBrowser.setChecked(true);
+        } else {
+            toggleInAppBrowser.setChecked(false);
+        }
+
+
+        ltInAppBrowser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                if (toggleInAppBrowser.isChecked()) {
+                    toggleInAppBrowser.setChecked(false);
+                    editor.putInt(SHP_SETTING.KEY_IN_APP_BROWSER, 0);
+                    editor.apply();
+
+                } else {
+                    toggleInAppBrowser.setChecked(true);
+                    editor.putInt(SHP_SETTING.KEY_IN_APP_BROWSER, 1);
+                    editor.apply();
+                }
+            }
+        });
+
+
+        ltSentByEnter = (ViewGroup) findViewById(R.id.st_layout_sendEnter);
+        toggleSentByEnter = (ToggleButton) findViewById(R.id.st_toggle_sendEnter);
+        int checkedSendByEnter = sharedPreferences.getInt(SHP_SETTING.KEY_SEND_BT_ENTER, 0);
+        if (checkedSendByEnter == 1) {
+            toggleSentByEnter.setChecked(true);
+        } else {
+            toggleSentByEnter.setChecked(false);
+        }
+
+
+        ltSentByEnter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                if (toggleSentByEnter.isChecked()) {
+
+                    toggleSentByEnter.setChecked(false);
+                    editor.putInt(SHP_SETTING.KEY_SEND_BT_ENTER, 0);
+                    editor.apply();
+
+                } else {
+                    toggleSentByEnter.setChecked(true);
+                    editor.putInt(SHP_SETTING.KEY_SEND_BT_ENTER, 1);
+                    editor.apply();
+                }
+            }
+        });
+
+
+        txtKeepMedia = (TextView) findViewById(R.id.st_txt_keepMedia);
+        txtKeepMedia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                new MaterialDialog.Builder(ActivitySetting.this)
+                        .title(R.string.st_keepMedia)
+                        .content(R.string.st_dialog_content_keepMedia)
+                        .positiveText("ForEver")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                Toast.makeText(ActivitySetting.this, "ForEver", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .negativeText("1WEEk")
+                        .onNegative(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                Toast.makeText(ActivitySetting.this, "1WEEk", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .show();
+
+            }
+        });
+
+        KEY_AD_DATA_PHOTO = sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_PHOTO, -1);
+        KEY_AD_DATA_VOICE_MESSAGE = sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_VOICE_MESSAGE, -1);
+        KEY_AD_DATA_VIDEO = sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_VIDEO, -1);
+        KEY_AD_DATA_FILE = sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_FILE, -1);
+        KEY_AD_DATA_MUSIC = sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_MUSIC, -1);
+        KEY_AD_DATA_GIF = sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_GIF, -1);
+        txtAutoDownloadData = (TextView) findViewById(R.id.st_txt_autoDownloadData);
+        txtAutoDownloadData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                new MaterialDialog.Builder(ActivitySetting.this)
+                        .title(R.string.st_auto_download_data)
+                        .items(R.array.auto_download_data)
+                        .itemsCallbackMultiChoice(new Integer[]{KEY_AD_DATA_PHOTO
+                                , KEY_AD_DATA_VOICE_MESSAGE
+                                , KEY_AD_DATA_VIDEO
+                                , KEY_AD_DATA_FILE
+                                , KEY_AD_DATA_MUSIC
+                                , KEY_AD_DATA_GIF}, new MaterialDialog.ListCallbackMultiChoice() {
+                            @Override
+                            public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
+
+
+                                for (int i = 0; i < which.length; i++) {
+
+                                    if (which[i] == 0) {
+                                        KEY_AD_DATA_PHOTO = which[i];
+                                    } else if (which[i] == 1) {
+                                        KEY_AD_DATA_VOICE_MESSAGE = which[i];
+                                    } else if (which[i] == 2) {
+                                        KEY_AD_DATA_VIDEO = which[i];
+                                    } else if (which[i] == 3) {
+                                        KEY_AD_DATA_FILE = which[i];
+                                    } else if (which[i] == 4) {
+                                        KEY_AD_DATA_MUSIC = which[i];
+                                    } else if (which[i] == 5) {
+                                        KEY_AD_DATA_GIF = which[i];
+                                    }
+                                }
+
+                                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putInt(SHP_SETTING.KEY_AD_DATA_PHOTO, KEY_AD_DATA_PHOTO);
+                                editor.putInt(SHP_SETTING.KEY_AD_DATA_VOICE_MESSAGE, KEY_AD_DATA_VOICE_MESSAGE);
+                                editor.putInt(SHP_SETTING.KEY_AD_DATA_VIDEO, KEY_AD_DATA_VIDEO);
+                                editor.putInt(SHP_SETTING.KEY_AD_DATA_FILE, KEY_AD_DATA_FILE);
+                                editor.putInt(SHP_SETTING.KEY_AD_DATA_MUSIC, KEY_AD_DATA_MUSIC);
+                                editor.putInt(SHP_SETTING.KEY_AD_DATA_GIF, KEY_AD_DATA_GIF);
+                                editor.apply();
+
+
+                                return true;
+                            }
+                        })
+                        .positiveText("OK")
+                        .negativeText("CANCEL")
+                        .show();
+            }
+        });
+
+
+        KEY_AD_WIFI_PHOTO = sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_PHOTO, -1);
+        KEY_AD_WIFI_VOICE_MESSAGE = sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_VOICE_MESSAGE, -1);
+        KEY_AD_WIFI_VIDEO = sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_VIDEO, -1);
+        KEY_AD_WIFI_FILE = sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_FILE, -1);
+        KEY_AD_WIFI_MUSIC = sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_MUSIC, -1);
+        KEY_AD_WIFI_GIF = sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_GIF, -1);
+
+
+        txtAutoDownloadWifi = (TextView) findViewById(R.id.st_txt_autoDownloadWifi);
+        txtAutoDownloadWifi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new MaterialDialog.Builder(ActivitySetting.this)
+                        .title(R.string.st_auto_download_wifi)
+                        .items(R.array.auto_download_data)
+                        .itemsCallbackMultiChoice(new Integer[]{KEY_AD_WIFI_PHOTO
+                                , KEY_AD_WIFI_VOICE_MESSAGE
+                                , KEY_AD_WIFI_VIDEO
+                                , KEY_AD_WIFI_FILE
+                                , KEY_AD_WIFI_MUSIC
+                                , KEY_AD_WIFI_GIF}, new MaterialDialog.ListCallbackMultiChoice() {
+                            @Override
+                            public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
+
+//
+                                for (int i = 0; i < which.length; i++) {
+
+
+                                    if (which[i] == 0) {
+
+                                        KEY_AD_WIFI_PHOTO = which[i];
+                                    } else if (which[i] == 1) {
+                                        KEY_AD_WIFI_VOICE_MESSAGE = which[i];
+                                    } else if (which[i] == 2) {
+                                        KEY_AD_WIFI_VIDEO = which[i];
+                                    } else if (which[i] == 3) {
+                                        KEY_AD_WIFI_FILE = which[i];
+                                    } else if (which[i] == 4) {
+                                        KEY_AD_WIFI_MUSIC = which[i];
+                                    } else if (which[i] == 5) {
+                                        KEY_AD_WIFI_GIF = which[i];
+                                    }
+                                }
+
+                                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putInt(SHP_SETTING.KEY_AD_WIFI_PHOTO, KEY_AD_WIFI_PHOTO);
+                                editor.putInt(SHP_SETTING.KEY_AD_WIFI_VOICE_MESSAGE, KEY_AD_WIFI_VOICE_MESSAGE);
+                                editor.putInt(SHP_SETTING.KEY_AD_WIFI_VIDEO, KEY_AD_WIFI_VIDEO);
+                                editor.putInt(SHP_SETTING.KEY_AD_WIFI_FILE, KEY_AD_WIFI_FILE);
+                                editor.putInt(SHP_SETTING.KEY_AD_WIFI_MUSIC, KEY_AD_WIFI_MUSIC);
+                                editor.putInt(SHP_SETTING.KEY_AD_WIFI_GIF, KEY_AD_WIFI_GIF);
+                                editor.apply();
+
+                                return true;
+                            }
+                        })
+                        .positiveText("OK")
+                        .negativeText("CANCEL")
+                        .show();
+            }
+        });
+
+
+        KEY_AD_ROAMING_PHOTO = sharedPreferences.getInt(SHP_SETTING.KEY_AD_ROAMING_PHOTO, -1);
+        KEY_AD_ROAMING_VOICE_MESSAGE = sharedPreferences.getInt(SHP_SETTING.KEY_AD_ROAMING_VOICE_MESSAGE, -1);
+        KEY_AD_ROAMING_VIDEO = sharedPreferences.getInt(SHP_SETTING.KEY_AD_ROAMING_VIDEO, -1);
+        KEY_AD_ROAMING_FILE = sharedPreferences.getInt(SHP_SETTING.KEY_AD_ROAMING_FILE, -1);
+        KEY_AD_ROAMING_MUSIC = sharedPreferences.getInt(SHP_SETTING.KEY_AD_ROAMING_MUSIC, -1);
+        KEY_AD_ROAMINGN_GIF = sharedPreferences.getInt(SHP_SETTING.KEY_AD_ROAMING_GIF, -1);
+
+        txtAutoDownloadRoaming = (TextView) findViewById(R.id.st_txt_autoDownloadRoaming);
+        txtAutoDownloadRoaming.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new MaterialDialog.Builder(ActivitySetting.this)
+                        .title(R.string.st_auto_download_roaming)
+                        .items(R.array.auto_download_data)
+                        .itemsCallbackMultiChoice(new Integer[]{KEY_AD_ROAMING_PHOTO
+                                , KEY_AD_ROAMING_VOICE_MESSAGE
+                                , KEY_AD_ROAMING_VIDEO
+                                , KEY_AD_ROAMING_FILE
+                                , KEY_AD_ROAMING_MUSIC
+                                , KEY_AD_ROAMINGN_GIF}, new MaterialDialog.ListCallbackMultiChoice() {
+                            @Override
+                            public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
+
+//
+                                for (int i = 0; i < which.length; i++) {
+
+                                    if (which[i] == 0) {
+                                        KEY_AD_ROAMING_PHOTO = which[i];
+                                    } else if (which[i] == 1) {
+                                        KEY_AD_ROAMING_VOICE_MESSAGE = which[i];
+                                    } else if (which[i] == 2) {
+                                        KEY_AD_ROAMING_VIDEO = which[i];
+                                    } else if (which[i] == 3) {
+                                        KEY_AD_ROAMING_FILE = which[i];
+                                    } else if (which[i] == 4) {
+                                        KEY_AD_ROAMING_MUSIC = which[i];
+                                    } else if (which[i] == 5) {
+                                        KEY_AD_ROAMINGN_GIF = which[i];
+                                    }
+                                }
+
+                                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putInt(SHP_SETTING.KEY_AD_ROAMING_PHOTO, KEY_AD_ROAMING_PHOTO);
+                                editor.putInt(SHP_SETTING.KEY_AD_ROAMING_VOICE_MESSAGE, KEY_AD_ROAMING_VOICE_MESSAGE);
+                                editor.putInt(SHP_SETTING.KEY_AD_ROAMING_VIDEO, KEY_AD_ROAMING_VIDEO);
+                                editor.putInt(SHP_SETTING.KEY_AD_ROAMING_FILE, KEY_AD_ROAMING_FILE);
+                                editor.putInt(SHP_SETTING.KEY_AD_ROAMING_MUSIC, KEY_AD_ROAMING_MUSIC);
+                                editor.putInt(SHP_SETTING.KEY_AD_ROAMING_GIF, KEY_AD_ROAMINGN_GIF);
+                                editor.apply();
+
+                                return true;
+                            }
+                        })
+                        .positiveText("OK")
+                        .negativeText("CANCEL")
+                        .show();
+            }
+        });
+
+        ltEnableAnimation = (ViewGroup) findViewById(R.id.st_layout_enableAnimation);
+        toggleEnableAnimation = (ToggleButton) findViewById(R.id.st_toggle_enableAnimation);
+        int checkedEnableAnimation = sharedPreferences.getInt(SHP_SETTING.KEY_ENABLE_ANIMATION, 0);
+        if (checkedEnableAnimation == 1) {
+            toggleEnableAnimation.setChecked(true);
+        } else {
+            toggleEnableAnimation.setChecked(false);
+        }
+
+
+        ltEnableAnimation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                if (toggleEnableAnimation.isChecked()) {
+                    toggleEnableAnimation.setChecked(false);
+                    editor.putInt(SHP_SETTING.KEY_ENABLE_ANIMATION, 0);
+                    editor.apply();
+
+                } else {
+                    toggleEnableAnimation.setChecked(true);
+                    editor.putInt(SHP_SETTING.KEY_ENABLE_ANIMATION, 1);
+                    editor.apply();
+                }
+            }
+        });
+
+        ltAutoGifs = (ViewGroup) findViewById(R.id.st_layout_autoGif);
+        toggleAutoGifs = (ToggleButton) findViewById(R.id.st_toggle_autoGif);
+        int checkedAutoGif = sharedPreferences.getInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, 0);
+        if (checkedAutoGif == 1) {
+            toggleAutoGifs.setChecked(true);
+        } else {
+            toggleAutoGifs.setChecked(false);
+        }
+
+
+        ltAutoGifs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                if (toggleAutoGifs.isChecked()) {
+                    toggleAutoGifs.setChecked(false);
+                    editor.putInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, 0);
+                    editor.apply();
+
+                } else {
+                    toggleAutoGifs.setChecked(true);
+                    editor.putInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, 1);
+                    editor.apply();
+                }
+            }
+        });
+
+        ltSaveToGallery = (ViewGroup) findViewById(R.id.st_layout_saveGallery);
+        toggleSaveToGallery = (ToggleButton) findViewById(R.id.st_toggle_saveGallery);
+        int checkedSaveToGallery = sharedPreferences.getInt(SHP_SETTING.KEY_SAVE_TO_GALLERY, 0);
+        if (checkedSaveToGallery == 1) {
+            toggleSaveToGallery.setChecked(true);
+
+        } else {
+            toggleSaveToGallery.setChecked(false);
+        }
+
+
+        ltSaveToGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                if (toggleSaveToGallery.isChecked()) {
+
+                    toggleSaveToGallery.setChecked(false);
+
+                    editor.putInt(SHP_SETTING.KEY_SAVE_TO_GALLERY, 0);
+                    editor.apply();
+
+                } else {
+                    toggleSaveToGallery.setChecked(true);
+                    editor.putInt(SHP_SETTING.KEY_SAVE_TO_GALLERY, 1);
+                    editor.apply();
+                }
+            }
+        });
+
         realm.close();
+
     }
 
     //dialog for choose pic from gallery or camera
