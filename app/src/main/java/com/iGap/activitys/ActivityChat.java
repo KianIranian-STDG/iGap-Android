@@ -1,6 +1,7 @@
 package com.iGap.activitys;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
@@ -167,7 +168,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     chatType = ProtoGlobal.Room.Type.CHAT;
                     RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
                     chatPeerId = realmChatRoom.getPeerId();
-
+                    Log.i("XXX", "chatPeerId : " + chatPeerId);
                     RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo("id", chatPeerId).findFirst();
                     if (realmContacts != null) {
                         title = realmContacts.getDisplay_name();
@@ -180,7 +181,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                         color = realmRoom.getColor();
                         lastSeen = "iGap Messenger";
                     }
-
 
                 } else if (realmRoom.getType() == RoomType.GROUP) {
 
@@ -378,6 +378,12 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         imvUserPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (chatType == ProtoGlobal.Room.Type.CHAT && !lastSeen.equals("iGap Messenger")) {//TODO [Saeed Mozaffari] [2016-09-07 11:46 AM] -  !lastSeen.equals("iGap Messenger") ==> in if eshtebah ast
+                    Intent intent = new Intent(G.context, ActivityChanelInfo.class);
+                    intent.putExtra("peerId", chatPeerId);
+                    startActivity(intent);
+                }
+
             }
         });
 

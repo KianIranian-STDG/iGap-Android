@@ -28,7 +28,6 @@ public class UserContactsGetListResponse extends MessageHandler {
     @Override
     public void handler() {
 
-        Log.i("XXX", "UserContactsGetListResponse handler message : " + message);
         final ProtoUserContactsGetList.UserContactsGetListResponse.Builder builder = (ProtoUserContactsGetList.UserContactsGetListResponse.Builder) message;
         builder.toString().length();
         Realm realm = Realm.getDefaultInstance();
@@ -39,9 +38,9 @@ public class UserContactsGetListResponse extends MessageHandler {
                 realm.delete(RealmContacts.class);
 
                 for (ProtoGlobal.RegisteredUser registerUser : builder.getRegisteredUserList()) {
-                    Log.i("XXX", "UserContactsGetListResponse handler registerUser : " + registerUser);
                     RealmContacts listResponse = realm.createObject(RealmContacts.class);
                     listResponse.setId(registerUser.getId());
+                    listResponse.setUsername(registerUser.getUsername());
                     listResponse.setPhone(registerUser.getPhone());
                     listResponse.setFirst_name(registerUser.getFirstName());
                     listResponse.setLast_name(registerUser.getLastName());

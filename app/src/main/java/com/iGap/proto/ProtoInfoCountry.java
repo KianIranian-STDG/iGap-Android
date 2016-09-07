@@ -6,7 +6,6 @@ package com.iGap.proto;
 public final class ProtoInfoCountry {
   private ProtoInfoCountry() {
   }
-
   public static void registerAllExtensions(
           com.google.protobuf.ExtensionRegistryLite registry) {
   }
@@ -16,7 +15,6 @@ public final class ProtoInfoCountry {
     registerAllExtensions(
             (com.google.protobuf.ExtensionRegistryLite) registry);
   }
-
   public interface InfoCountryOrBuilder extends
           // @@protoc_insertion_point(interface_extends:proto.InfoCountry)
           com.google.protobuf.MessageOrBuilder {
@@ -25,12 +23,10 @@ public final class ProtoInfoCountry {
      * <code>optional .proto.Request request = 1;</code>
      */
     boolean hasRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     com.iGap.proto.ProtoRequest.Request getRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -40,14 +36,12 @@ public final class ProtoInfoCountry {
      * <code>optional string iso_code = 2;</code>
      */
     java.lang.String getIsoCode();
-
     /**
      * <code>optional string iso_code = 2;</code>
      */
     com.google.protobuf.ByteString
     getIsoCodeBytes();
   }
-
   /**
    * Protobuf type {@code proto.InfoCountry}
    */
@@ -59,7 +53,6 @@ public final class ProtoInfoCountry {
     private InfoCountry(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private InfoCountry() {
       isoCode_ = "";
     }
@@ -69,7 +62,6 @@ public final class ProtoInfoCountry {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-
     private InfoCountry(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -120,7 +112,6 @@ public final class ProtoInfoCountry {
         makeExtensionsImmutable();
       }
     }
-
     public static final com.google.protobuf.Descriptors.Descriptor
     getDescriptor() {
       return com.iGap.proto.ProtoInfoCountry.internal_static_proto_InfoCountry_descriptor;
@@ -135,21 +126,18 @@ public final class ProtoInfoCountry {
 
     public static final int REQUEST_FIELD_NUMBER = 1;
     private com.iGap.proto.ProtoRequest.Request request_;
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public boolean hasRequest() {
       return request_ != null;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public com.iGap.proto.ProtoRequest.Request getRequest() {
       return request_ == null ? com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -159,7 +147,6 @@ public final class ProtoInfoCountry {
 
     public static final int ISO_CODE_FIELD_NUMBER = 2;
     private volatile java.lang.Object isoCode_;
-
     /**
      * <code>optional string iso_code = 2;</code>
      */
@@ -175,7 +162,6 @@ public final class ProtoInfoCountry {
         return s;
       }
     }
-
     /**
      * <code>optional string iso_code = 2;</code>
      */
@@ -194,7 +180,6 @@ public final class ProtoInfoCountry {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -231,7 +216,6 @@ public final class ProtoInfoCountry {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -276,32 +260,27 @@ public final class ProtoInfoCountry {
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoInfoCountry.InfoCountry parseFrom(
             com.google.protobuf.ByteString data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoInfoCountry.InfoCountry parseFrom(byte[] data)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoInfoCountry.InfoCountry parseFrom(
             byte[] data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoInfoCountry.InfoCountry parseFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoInfoCountry.InfoCountry parseFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -309,13 +288,11 @@ public final class ProtoInfoCountry {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoInfoCountry.InfoCountry parseDelimitedFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoInfoCountry.InfoCountry parseDelimitedFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -323,14 +300,12 @@ public final class ProtoInfoCountry {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoInfoCountry.InfoCountry parseFrom(
             com.google.protobuf.CodedInputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoInfoCountry.InfoCountry parseFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -342,15 +317,12 @@ public final class ProtoInfoCountry {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoInfoCountry.InfoCountry prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
               ? new Builder() : new Builder().mergeFrom(this);
@@ -362,7 +334,6 @@ public final class ProtoInfoCountry {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.InfoCountry}
      */
@@ -392,13 +363,11 @@ public final class ProtoInfoCountry {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (requestBuilder_ == null) {
@@ -444,35 +413,29 @@ public final class ProtoInfoCountry {
       public Builder clone() {
         return (Builder) super.clone();
       }
-
       public Builder setField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.setField(field, value);
       }
-
       public Builder clearField(
               com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-
       public Builder clearOneof(
               com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-
       public Builder setRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-
       public Builder addRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoInfoCountry.InfoCountry) {
           return mergeFrom((com.iGap.proto.ProtoInfoCountry.InfoCountry) other);
@@ -520,14 +483,12 @@ public final class ProtoInfoCountry {
       private com.iGap.proto.ProtoRequest.Request request_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
               com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
       public boolean hasRequest() {
         return requestBuilder_ != null || request_ != null;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -538,7 +499,6 @@ public final class ProtoInfoCountry {
           return requestBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -555,7 +515,6 @@ public final class ProtoInfoCountry {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -570,7 +529,6 @@ public final class ProtoInfoCountry {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -589,7 +547,6 @@ public final class ProtoInfoCountry {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -604,7 +561,6 @@ public final class ProtoInfoCountry {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -613,7 +569,6 @@ public final class ProtoInfoCountry {
         onChanged();
         return getRequestFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -625,7 +580,6 @@ public final class ProtoInfoCountry {
                   com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -644,7 +598,6 @@ public final class ProtoInfoCountry {
       }
 
       private java.lang.Object isoCode_ = "";
-
       /**
        * <code>optional string iso_code = 2;</code>
        */
@@ -660,7 +613,6 @@ public final class ProtoInfoCountry {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string iso_code = 2;</code>
        */
@@ -677,7 +629,6 @@ public final class ProtoInfoCountry {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string iso_code = 2;</code>
        */
@@ -691,7 +642,6 @@ public final class ProtoInfoCountry {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string iso_code = 2;</code>
        */
@@ -701,7 +651,6 @@ public final class ProtoInfoCountry {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string iso_code = 2;</code>
        */
@@ -716,7 +665,6 @@ public final class ProtoInfoCountry {
         onChanged();
         return this;
       }
-
       public final Builder setUnknownFields(
               final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
@@ -733,7 +681,6 @@ public final class ProtoInfoCountry {
 
     // @@protoc_insertion_point(class_scope:proto.InfoCountry)
     private static final com.iGap.proto.ProtoInfoCountry.InfoCountry DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new com.iGap.proto.ProtoInfoCountry.InfoCountry();
     }
@@ -775,12 +722,10 @@ public final class ProtoInfoCountry {
      * <code>optional .proto.Response response = 1;</code>
      */
     boolean hasResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     com.iGap.proto.ProtoResponse.Response getResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -795,7 +740,6 @@ public final class ProtoInfoCountry {
      * <code>optional string name = 3;</code>
      */
     java.lang.String getName();
-
     /**
      * <code>optional string name = 3;</code>
      */
@@ -806,7 +750,6 @@ public final class ProtoInfoCountry {
      * <code>optional string pattern = 4;</code>
      */
     java.lang.String getPattern();
-
     /**
      * <code>optional string pattern = 4;</code>
      */
@@ -817,14 +760,12 @@ public final class ProtoInfoCountry {
      * <code>optional string regex = 5;</code>
      */
     java.lang.String getRegex();
-
     /**
      * <code>optional string regex = 5;</code>
      */
     com.google.protobuf.ByteString
     getRegexBytes();
   }
-
   /**
    * Protobuf type {@code proto.InfoCountryResponse}
    */
@@ -836,7 +777,6 @@ public final class ProtoInfoCountry {
     private InfoCountryResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private InfoCountryResponse() {
       callingCode_ = 0;
       name_ = "";
@@ -849,7 +789,6 @@ public final class ProtoInfoCountry {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-
     private InfoCountryResponse(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -917,7 +856,6 @@ public final class ProtoInfoCountry {
         makeExtensionsImmutable();
       }
     }
-
     public static final com.google.protobuf.Descriptors.Descriptor
     getDescriptor() {
       return com.iGap.proto.ProtoInfoCountry.internal_static_proto_InfoCountryResponse_descriptor;
@@ -932,21 +870,18 @@ public final class ProtoInfoCountry {
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
     private com.iGap.proto.ProtoResponse.Response response_;
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public boolean hasResponse() {
       return response_ != null;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public com.iGap.proto.ProtoResponse.Response getResponse() {
       return response_ == null ? com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -956,7 +891,6 @@ public final class ProtoInfoCountry {
 
     public static final int CALLING_CODE_FIELD_NUMBER = 2;
     private int callingCode_;
-
     /**
      * <code>optional uint32 calling_code = 2;</code>
      */
@@ -966,7 +900,6 @@ public final class ProtoInfoCountry {
 
     public static final int NAME_FIELD_NUMBER = 3;
     private volatile java.lang.Object name_;
-
     /**
      * <code>optional string name = 3;</code>
      */
@@ -982,7 +915,6 @@ public final class ProtoInfoCountry {
         return s;
       }
     }
-
     /**
      * <code>optional string name = 3;</code>
      */
@@ -1002,7 +934,6 @@ public final class ProtoInfoCountry {
 
     public static final int PATTERN_FIELD_NUMBER = 4;
     private volatile java.lang.Object pattern_;
-
     /**
      * <code>optional string pattern = 4;</code>
      */
@@ -1018,7 +949,6 @@ public final class ProtoInfoCountry {
         return s;
       }
     }
-
     /**
      * <code>optional string pattern = 4;</code>
      */
@@ -1038,7 +968,6 @@ public final class ProtoInfoCountry {
 
     public static final int REGEX_FIELD_NUMBER = 5;
     private volatile java.lang.Object regex_;
-
     /**
      * <code>optional string regex = 5;</code>
      */
@@ -1054,7 +983,6 @@ public final class ProtoInfoCountry {
         return s;
       }
     }
-
     /**
      * <code>optional string regex = 5;</code>
      */
@@ -1073,7 +1001,6 @@ public final class ProtoInfoCountry {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -1129,7 +1056,6 @@ public final class ProtoInfoCountry {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -1186,32 +1112,27 @@ public final class ProtoInfoCountry {
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoInfoCountry.InfoCountryResponse parseFrom(
             com.google.protobuf.ByteString data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoInfoCountry.InfoCountryResponse parseFrom(byte[] data)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoInfoCountry.InfoCountryResponse parseFrom(
             byte[] data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoInfoCountry.InfoCountryResponse parseFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoInfoCountry.InfoCountryResponse parseFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1219,13 +1140,11 @@ public final class ProtoInfoCountry {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoInfoCountry.InfoCountryResponse parseDelimitedFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoInfoCountry.InfoCountryResponse parseDelimitedFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1233,14 +1152,12 @@ public final class ProtoInfoCountry {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoInfoCountry.InfoCountryResponse parseFrom(
             com.google.protobuf.CodedInputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoInfoCountry.InfoCountryResponse parseFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1252,11 +1169,9 @@ public final class ProtoInfoCountry {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoInfoCountry.InfoCountryResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
@@ -1271,7 +1186,6 @@ public final class ProtoInfoCountry {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.InfoCountryResponse}
      */
@@ -1301,13 +1215,11 @@ public final class ProtoInfoCountry {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (responseBuilder_ == null) {
@@ -1362,35 +1274,29 @@ public final class ProtoInfoCountry {
       public Builder clone() {
         return (Builder) super.clone();
       }
-
       public Builder setField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.setField(field, value);
       }
-
       public Builder clearField(
               com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-
       public Builder clearOneof(
               com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-
       public Builder setRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-
       public Builder addRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoInfoCountry.InfoCountryResponse) {
           return mergeFrom((com.iGap.proto.ProtoInfoCountry.InfoCountryResponse) other);
@@ -1450,14 +1356,12 @@ public final class ProtoInfoCountry {
       private com.iGap.proto.ProtoResponse.Response response_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
               com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
       public boolean hasResponse() {
         return responseBuilder_ != null || response_ != null;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1468,7 +1372,6 @@ public final class ProtoInfoCountry {
           return responseBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1485,7 +1388,6 @@ public final class ProtoInfoCountry {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1500,7 +1402,6 @@ public final class ProtoInfoCountry {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1519,7 +1420,6 @@ public final class ProtoInfoCountry {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1534,7 +1434,6 @@ public final class ProtoInfoCountry {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1543,7 +1442,6 @@ public final class ProtoInfoCountry {
         onChanged();
         return getResponseFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1555,7 +1453,6 @@ public final class ProtoInfoCountry {
                   com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1574,14 +1471,12 @@ public final class ProtoInfoCountry {
       }
 
       private int callingCode_;
-
       /**
        * <code>optional uint32 calling_code = 2;</code>
        */
       public int getCallingCode() {
         return callingCode_;
       }
-
       /**
        * <code>optional uint32 calling_code = 2;</code>
        */
@@ -1591,7 +1486,6 @@ public final class ProtoInfoCountry {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional uint32 calling_code = 2;</code>
        */
@@ -1603,7 +1497,6 @@ public final class ProtoInfoCountry {
       }
 
       private java.lang.Object name_ = "";
-
       /**
        * <code>optional string name = 3;</code>
        */
@@ -1619,7 +1512,6 @@ public final class ProtoInfoCountry {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string name = 3;</code>
        */
@@ -1636,7 +1528,6 @@ public final class ProtoInfoCountry {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string name = 3;</code>
        */
@@ -1650,7 +1541,6 @@ public final class ProtoInfoCountry {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string name = 3;</code>
        */
@@ -1660,7 +1550,6 @@ public final class ProtoInfoCountry {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string name = 3;</code>
        */
@@ -1677,7 +1566,6 @@ public final class ProtoInfoCountry {
       }
 
       private java.lang.Object pattern_ = "";
-
       /**
        * <code>optional string pattern = 4;</code>
        */
@@ -1693,7 +1581,6 @@ public final class ProtoInfoCountry {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string pattern = 4;</code>
        */
@@ -1710,7 +1597,6 @@ public final class ProtoInfoCountry {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string pattern = 4;</code>
        */
@@ -1724,7 +1610,6 @@ public final class ProtoInfoCountry {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string pattern = 4;</code>
        */
@@ -1734,7 +1619,6 @@ public final class ProtoInfoCountry {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string pattern = 4;</code>
        */
@@ -1751,7 +1635,6 @@ public final class ProtoInfoCountry {
       }
 
       private java.lang.Object regex_ = "";
-
       /**
        * <code>optional string regex = 5;</code>
        */
@@ -1767,7 +1650,6 @@ public final class ProtoInfoCountry {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string regex = 5;</code>
        */
@@ -1784,7 +1666,6 @@ public final class ProtoInfoCountry {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string regex = 5;</code>
        */
@@ -1798,7 +1679,6 @@ public final class ProtoInfoCountry {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string regex = 5;</code>
        */
@@ -1808,7 +1688,6 @@ public final class ProtoInfoCountry {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string regex = 5;</code>
        */
@@ -1823,7 +1702,6 @@ public final class ProtoInfoCountry {
         onChanged();
         return this;
       }
-
       public final Builder setUnknownFields(
               final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
@@ -1840,7 +1718,6 @@ public final class ProtoInfoCountry {
 
     // @@protoc_insertion_point(class_scope:proto.InfoCountryResponse)
     private static final com.iGap.proto.ProtoInfoCountry.InfoCountryResponse DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new com.iGap.proto.ProtoInfoCountry.InfoCountryResponse();
     }
@@ -1892,7 +1769,6 @@ public final class ProtoInfoCountry {
 
   private static com.google.protobuf.Descriptors.FileDescriptor
           descriptor;
-
   static {
     java.lang.String[] descriptorData = {
             "\n\021InfoCountry.proto\022\005proto\032\rRequest.prot" +

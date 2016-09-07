@@ -39,7 +39,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
 
 public class ActivityChanelInfo extends ActivityEnhanced {
-    private int userId = 0;
+    private long userId = 0;
     private long phone = 912123456;
     private String displayName = "Alexander Smith";
     private String username = "Alexander Smith";
@@ -60,21 +60,10 @@ public class ActivityChanelInfo extends ActivityEnhanced {
         setContentView(R.layout.activity_chanel_info);
         final Realm realm = Realm.getDefaultInstance();
 
-        // TODO: 9/3/2016 (molareza) this class need user id
+        Bundle extras = getIntent().getExtras();
+        userId = extras.getLong("peerId");
 
-        try {
-            if (getIntent().getExtras() != null) {
-                userId = getIntent().getExtras().getInt("USER_ID");
-            }
-        } catch (NullPointerException e) {
-
-            e.getStackTrace();
-
-        }
-
-        RealmContacts realmUser = realm.where(RealmContacts.class)
-                .equalTo("id", userId)
-                .findFirst();
+        RealmContacts realmUser = realm.where(RealmContacts.class).equalTo("id", userId).findFirst();
 
         if (realmUser != null) {
             phone = realmUser.getPhone();
@@ -88,10 +77,8 @@ public class ActivityChanelInfo extends ActivityEnhanced {
         txtBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {// button back
-
                 startActivity(new Intent(ActivityChanelInfo.this, ActivityMain.class));
                 finish();
-
             }
         });
 
@@ -101,9 +88,7 @@ public class ActivityChanelInfo extends ActivityEnhanced {
         fab.setOnClickListener(new View.OnClickListener() { //fab button
             @Override
             public void onClick(View view) {
-
-                // TODO: 9/3/2016 (molareza) action for fab button
-
+                finish();
             }
         });
 
@@ -127,16 +112,12 @@ public class ActivityChanelInfo extends ActivityEnhanced {
                 // TODO: 9/3/2016 (molareze)  Should be stored within server or not
 
                 //change Nickname on realm
-                final RealmContacts realmUser = realm.where(RealmContacts.class)
-                        .equalTo("id", userId)
-                        .findFirst();
+                final RealmContacts realmUser = realm.where(RealmContacts.class).equalTo("id", userId).findFirst();
 
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-
                         realmUser.setDisplay_name(editable.toString());
-
                     }
                 });
 
@@ -216,7 +197,6 @@ public class ActivityChanelInfo extends ActivityEnhanced {
         txtBlockContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 showAlertDialog("Block This Contact?", "BLOCK", "CANCEL");
 
             }
@@ -331,7 +311,7 @@ public class ActivityChanelInfo extends ActivityEnhanced {
                             try {
                                 Intent phoneIntent = new Intent(Intent.ACTION_CALL);
                                 phoneIntent.setData(Uri.parse("tel:" + call));
-                                startActivity(phoneIntent);
+                                startActivity(phoneIntent); //TODO [Saeed Mozaffari] [2016-09-07 11:31 AM] - phone intent permission
 
                             } catch (Exception ex) {
 

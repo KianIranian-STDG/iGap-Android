@@ -6,7 +6,6 @@ package com.iGap.proto;
 public final class ProtoRequest {
   private ProtoRequest() {
   }
-
   public static void registerAllExtensions(
           com.google.protobuf.ExtensionRegistryLite registry) {
   }
@@ -16,7 +15,6 @@ public final class ProtoRequest {
     registerAllExtensions(
             (com.google.protobuf.ExtensionRegistryLite) registry);
   }
-
   public interface RequestOrBuilder extends
           // @@protoc_insertion_point(interface_extends:proto.Request)
           com.google.protobuf.MessageOrBuilder {
@@ -25,14 +23,12 @@ public final class ProtoRequest {
      * <code>optional string id = 1;</code>
      */
     java.lang.String getId();
-
     /**
      * <code>optional string id = 1;</code>
      */
     com.google.protobuf.ByteString
     getIdBytes();
   }
-
   /**
    * Protobuf type {@code proto.Request}
    */
@@ -44,7 +40,6 @@ public final class ProtoRequest {
     private Request(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private Request() {
       id_ = "";
     }
@@ -54,7 +49,6 @@ public final class ProtoRequest {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-
     private Request(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -92,7 +86,6 @@ public final class ProtoRequest {
         makeExtensionsImmutable();
       }
     }
-
     public static final com.google.protobuf.Descriptors.Descriptor
     getDescriptor() {
       return com.iGap.proto.ProtoRequest.internal_static_proto_Request_descriptor;
@@ -107,7 +100,6 @@ public final class ProtoRequest {
 
     public static final int ID_FIELD_NUMBER = 1;
     private volatile java.lang.Object id_;
-
     /**
      * <code>optional string id = 1;</code>
      */
@@ -123,7 +115,6 @@ public final class ProtoRequest {
         return s;
       }
     }
-
     /**
      * <code>optional string id = 1;</code>
      */
@@ -142,7 +133,6 @@ public final class ProtoRequest {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -172,7 +162,6 @@ public final class ProtoRequest {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -208,32 +197,27 @@ public final class ProtoRequest {
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoRequest.Request parseFrom(
             com.google.protobuf.ByteString data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoRequest.Request parseFrom(byte[] data)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoRequest.Request parseFrom(
             byte[] data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoRequest.Request parseFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoRequest.Request parseFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -241,13 +225,11 @@ public final class ProtoRequest {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoRequest.Request parseDelimitedFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoRequest.Request parseDelimitedFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -255,14 +237,12 @@ public final class ProtoRequest {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoRequest.Request parseFrom(
             com.google.protobuf.CodedInputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoRequest.Request parseFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -274,15 +254,12 @@ public final class ProtoRequest {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoRequest.Request prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
               ? new Builder() : new Builder().mergeFrom(this);
@@ -294,7 +271,6 @@ public final class ProtoRequest {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.Request}
      */
@@ -324,13 +300,11 @@ public final class ProtoRequest {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         id_ = "";
@@ -365,35 +339,29 @@ public final class ProtoRequest {
       public Builder clone() {
         return (Builder) super.clone();
       }
-
       public Builder setField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.setField(field, value);
       }
-
       public Builder clearField(
               com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-
       public Builder clearOneof(
               com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-
       public Builder setRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-
       public Builder addRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoRequest.Request) {
           return mergeFrom((com.iGap.proto.ProtoRequest.Request) other);
@@ -436,7 +404,6 @@ public final class ProtoRequest {
       }
 
       private java.lang.Object id_ = "";
-
       /**
        * <code>optional string id = 1;</code>
        */
@@ -452,7 +419,6 @@ public final class ProtoRequest {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string id = 1;</code>
        */
@@ -469,7 +435,6 @@ public final class ProtoRequest {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string id = 1;</code>
        */
@@ -483,7 +448,6 @@ public final class ProtoRequest {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string id = 1;</code>
        */
@@ -493,7 +457,6 @@ public final class ProtoRequest {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string id = 1;</code>
        */
@@ -508,7 +471,6 @@ public final class ProtoRequest {
         onChanged();
         return this;
       }
-
       public final Builder setUnknownFields(
               final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
@@ -525,7 +487,6 @@ public final class ProtoRequest {
 
     // @@protoc_insertion_point(class_scope:proto.Request)
     private static final com.iGap.proto.ProtoRequest.Request DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new com.iGap.proto.ProtoRequest.Request();
     }
@@ -572,7 +533,6 @@ public final class ProtoRequest {
 
   private static com.google.protobuf.Descriptors.FileDescriptor
           descriptor;
-
   static {
     java.lang.String[] descriptorData = {
             "\n\rRequest.proto\022\005proto\"\025\n\007Request\022\n\n\002id\030" +

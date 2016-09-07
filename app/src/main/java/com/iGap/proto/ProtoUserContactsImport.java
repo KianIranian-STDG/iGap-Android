@@ -6,7 +6,6 @@ package com.iGap.proto;
 public final class ProtoUserContactsImport {
   private ProtoUserContactsImport() {
   }
-
   public static void registerAllExtensions(
           com.google.protobuf.ExtensionRegistryLite registry) {
   }
@@ -16,7 +15,6 @@ public final class ProtoUserContactsImport {
     registerAllExtensions(
             (com.google.protobuf.ExtensionRegistryLite) registry);
   }
-
   public interface UserContactsImportOrBuilder extends
           // @@protoc_insertion_point(interface_extends:proto.UserContactsImport)
           com.google.protobuf.MessageOrBuilder {
@@ -25,12 +23,10 @@ public final class ProtoUserContactsImport {
      * <code>optional .proto.Request request = 1;</code>
      */
     boolean hasRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     com.iGap.proto.ProtoRequest.Request getRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -41,30 +37,25 @@ public final class ProtoUserContactsImport {
      */
     java.util.List<com.iGap.proto.ProtoUserContactsImport.UserContactsImport.Contact>
     getContactsList();
-
     /**
      * <code>repeated .proto.UserContactsImport.Contact contacts = 2;</code>
      */
     com.iGap.proto.ProtoUserContactsImport.UserContactsImport.Contact getContacts(int index);
-
     /**
      * <code>repeated .proto.UserContactsImport.Contact contacts = 2;</code>
      */
     int getContactsCount();
-
     /**
      * <code>repeated .proto.UserContactsImport.Contact contacts = 2;</code>
      */
     java.util.List<? extends com.iGap.proto.ProtoUserContactsImport.UserContactsImport.ContactOrBuilder>
     getContactsOrBuilderList();
-
     /**
      * <code>repeated .proto.UserContactsImport.Contact contacts = 2;</code>
      */
     com.iGap.proto.ProtoUserContactsImport.UserContactsImport.ContactOrBuilder getContactsOrBuilder(
             int index);
   }
-
   /**
    * Protobuf type {@code proto.UserContactsImport}
    */
@@ -76,7 +67,6 @@ public final class ProtoUserContactsImport {
     private UserContactsImport(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private UserContactsImport() {
       contacts_ = java.util.Collections.emptyList();
     }
@@ -86,7 +76,6 @@ public final class ProtoUserContactsImport {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-
     private UserContactsImport(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -143,7 +132,6 @@ public final class ProtoUserContactsImport {
         makeExtensionsImmutable();
       }
     }
-
     public static final com.google.protobuf.Descriptors.Descriptor
     getDescriptor() {
       return com.iGap.proto.ProtoUserContactsImport.internal_static_proto_UserContactsImport_descriptor;
@@ -164,7 +152,6 @@ public final class ProtoUserContactsImport {
        * <code>optional string phone = 1;</code>
        */
       java.lang.String getPhone();
-
       /**
        * <code>optional string phone = 1;</code>
        */
@@ -175,7 +162,6 @@ public final class ProtoUserContactsImport {
        * <code>optional string first_name = 2;</code>
        */
       java.lang.String getFirstName();
-
       /**
        * <code>optional string first_name = 2;</code>
        */
@@ -186,14 +172,12 @@ public final class ProtoUserContactsImport {
        * <code>optional string last_name = 3;</code>
        */
       java.lang.String getLastName();
-
       /**
        * <code>optional string last_name = 3;</code>
        */
       com.google.protobuf.ByteString
       getLastNameBytes();
     }
-
     /**
      * Protobuf type {@code proto.UserContactsImport.Contact}
      */
@@ -205,7 +189,6 @@ public final class ProtoUserContactsImport {
       private Contact(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
         super(builder);
       }
-
       private Contact() {
         phone_ = "";
         firstName_ = "";
@@ -217,7 +200,6 @@ public final class ProtoUserContactsImport {
       getUnknownFields() {
         return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
       }
-
       private Contact(
               com.google.protobuf.CodedInputStream input,
               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -267,7 +249,6 @@ public final class ProtoUserContactsImport {
           makeExtensionsImmutable();
         }
       }
-
       public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
         return com.iGap.proto.ProtoUserContactsImport.internal_static_proto_UserContactsImport_Contact_descriptor;
@@ -282,7 +263,6 @@ public final class ProtoUserContactsImport {
 
       public static final int PHONE_FIELD_NUMBER = 1;
       private volatile java.lang.Object phone_;
-
       /**
        * <code>optional string phone = 1;</code>
        */
@@ -298,7 +278,6 @@ public final class ProtoUserContactsImport {
           return s;
         }
       }
-
       /**
        * <code>optional string phone = 1;</code>
        */
@@ -318,7 +297,6 @@ public final class ProtoUserContactsImport {
 
       public static final int FIRST_NAME_FIELD_NUMBER = 2;
       private volatile java.lang.Object firstName_;
-
       /**
        * <code>optional string first_name = 2;</code>
        */
@@ -334,7 +312,6 @@ public final class ProtoUserContactsImport {
           return s;
         }
       }
-
       /**
        * <code>optional string first_name = 2;</code>
        */
@@ -354,7 +331,6 @@ public final class ProtoUserContactsImport {
 
       public static final int LAST_NAME_FIELD_NUMBER = 3;
       private volatile java.lang.Object lastName_;
-
       /**
        * <code>optional string last_name = 3;</code>
        */
@@ -370,7 +346,6 @@ public final class ProtoUserContactsImport {
           return s;
         }
       }
-
       /**
        * <code>optional string last_name = 3;</code>
        */
@@ -389,7 +364,6 @@ public final class ProtoUserContactsImport {
       }
 
       private byte memoizedIsInitialized = -1;
-
       public final boolean isInitialized() {
         byte isInitialized = memoizedIsInitialized;
         if (isInitialized == 1) return true;
@@ -431,7 +405,6 @@ public final class ProtoUserContactsImport {
       }
 
       private static final long serialVersionUID = 0L;
-
       @java.lang.Override
       public boolean equals(final java.lang.Object obj) {
         if (obj == this) {
@@ -475,32 +448,27 @@ public final class ProtoUserContactsImport {
               throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
       }
-
       public static com.iGap.proto.ProtoUserContactsImport.UserContactsImport.Contact parseFrom(
               com.google.protobuf.ByteString data,
               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
               throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
-
       public static com.iGap.proto.ProtoUserContactsImport.UserContactsImport.Contact parseFrom(byte[] data)
               throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
       }
-
       public static com.iGap.proto.ProtoUserContactsImport.UserContactsImport.Contact parseFrom(
               byte[] data,
               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
               throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
-
       public static com.iGap.proto.ProtoUserContactsImport.UserContactsImport.Contact parseFrom(java.io.InputStream input)
               throws java.io.IOException {
         return com.google.protobuf.GeneratedMessageV3
                 .parseWithIOException(PARSER, input);
       }
-
       public static com.iGap.proto.ProtoUserContactsImport.UserContactsImport.Contact parseFrom(
               java.io.InputStream input,
               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -508,13 +476,11 @@ public final class ProtoUserContactsImport {
         return com.google.protobuf.GeneratedMessageV3
                 .parseWithIOException(PARSER, input, extensionRegistry);
       }
-
       public static com.iGap.proto.ProtoUserContactsImport.UserContactsImport.Contact parseDelimitedFrom(java.io.InputStream input)
               throws java.io.IOException {
         return com.google.protobuf.GeneratedMessageV3
                 .parseDelimitedWithIOException(PARSER, input);
       }
-
       public static com.iGap.proto.ProtoUserContactsImport.UserContactsImport.Contact parseDelimitedFrom(
               java.io.InputStream input,
               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -522,14 +488,12 @@ public final class ProtoUserContactsImport {
         return com.google.protobuf.GeneratedMessageV3
                 .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
       }
-
       public static com.iGap.proto.ProtoUserContactsImport.UserContactsImport.Contact parseFrom(
               com.google.protobuf.CodedInputStream input)
               throws java.io.IOException {
         return com.google.protobuf.GeneratedMessageV3
                 .parseWithIOException(PARSER, input);
       }
-
       public static com.iGap.proto.ProtoUserContactsImport.UserContactsImport.Contact parseFrom(
               com.google.protobuf.CodedInputStream input,
               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -541,15 +505,12 @@ public final class ProtoUserContactsImport {
       public Builder newBuilderForType() {
         return newBuilder();
       }
-
       public static Builder newBuilder() {
         return DEFAULT_INSTANCE.toBuilder();
       }
-
       public static Builder newBuilder(com.iGap.proto.ProtoUserContactsImport.UserContactsImport.Contact prototype) {
         return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
       }
-
       public Builder toBuilder() {
         return this == DEFAULT_INSTANCE
                 ? new Builder() : new Builder().mergeFrom(this);
@@ -561,7 +522,6 @@ public final class ProtoUserContactsImport {
         Builder builder = new Builder(parent);
         return builder;
       }
-
       /**
        * Protobuf type {@code proto.UserContactsImport.Contact}
        */
@@ -591,13 +551,11 @@ public final class ProtoUserContactsImport {
           super(parent);
           maybeForceBuilderInitialization();
         }
-
         private void maybeForceBuilderInitialization() {
           if (com.google.protobuf.GeneratedMessageV3
                   .alwaysUseFieldBuilders) {
           }
         }
-
         public Builder clear() {
           super.clear();
           phone_ = "";
@@ -638,35 +596,29 @@ public final class ProtoUserContactsImport {
         public Builder clone() {
           return (Builder) super.clone();
         }
-
         public Builder setField(
                 com.google.protobuf.Descriptors.FieldDescriptor field,
                 Object value) {
           return (Builder) super.setField(field, value);
         }
-
         public Builder clearField(
                 com.google.protobuf.Descriptors.FieldDescriptor field) {
           return (Builder) super.clearField(field);
         }
-
         public Builder clearOneof(
                 com.google.protobuf.Descriptors.OneofDescriptor oneof) {
           return (Builder) super.clearOneof(oneof);
         }
-
         public Builder setRepeatedField(
                 com.google.protobuf.Descriptors.FieldDescriptor field,
                 int index, Object value) {
           return (Builder) super.setRepeatedField(field, index, value);
         }
-
         public Builder addRepeatedField(
                 com.google.protobuf.Descriptors.FieldDescriptor field,
                 Object value) {
           return (Builder) super.addRepeatedField(field, value);
         }
-
         public Builder mergeFrom(com.google.protobuf.Message other) {
           if (other instanceof com.iGap.proto.ProtoUserContactsImport.UserContactsImport.Contact) {
             return mergeFrom((com.iGap.proto.ProtoUserContactsImport.UserContactsImport.Contact) other);
@@ -718,7 +670,6 @@ public final class ProtoUserContactsImport {
         }
 
         private java.lang.Object phone_ = "";
-
         /**
          * <code>optional string phone = 1;</code>
          */
@@ -734,7 +685,6 @@ public final class ProtoUserContactsImport {
             return (java.lang.String) ref;
           }
         }
-
         /**
          * <code>optional string phone = 1;</code>
          */
@@ -751,7 +701,6 @@ public final class ProtoUserContactsImport {
             return (com.google.protobuf.ByteString) ref;
           }
         }
-
         /**
          * <code>optional string phone = 1;</code>
          */
@@ -765,7 +714,6 @@ public final class ProtoUserContactsImport {
           onChanged();
           return this;
         }
-
         /**
          * <code>optional string phone = 1;</code>
          */
@@ -775,7 +723,6 @@ public final class ProtoUserContactsImport {
           onChanged();
           return this;
         }
-
         /**
          * <code>optional string phone = 1;</code>
          */
@@ -792,7 +739,6 @@ public final class ProtoUserContactsImport {
         }
 
         private java.lang.Object firstName_ = "";
-
         /**
          * <code>optional string first_name = 2;</code>
          */
@@ -808,7 +754,6 @@ public final class ProtoUserContactsImport {
             return (java.lang.String) ref;
           }
         }
-
         /**
          * <code>optional string first_name = 2;</code>
          */
@@ -825,7 +770,6 @@ public final class ProtoUserContactsImport {
             return (com.google.protobuf.ByteString) ref;
           }
         }
-
         /**
          * <code>optional string first_name = 2;</code>
          */
@@ -839,7 +783,6 @@ public final class ProtoUserContactsImport {
           onChanged();
           return this;
         }
-
         /**
          * <code>optional string first_name = 2;</code>
          */
@@ -849,7 +792,6 @@ public final class ProtoUserContactsImport {
           onChanged();
           return this;
         }
-
         /**
          * <code>optional string first_name = 2;</code>
          */
@@ -866,7 +808,6 @@ public final class ProtoUserContactsImport {
         }
 
         private java.lang.Object lastName_ = "";
-
         /**
          * <code>optional string last_name = 3;</code>
          */
@@ -882,7 +823,6 @@ public final class ProtoUserContactsImport {
             return (java.lang.String) ref;
           }
         }
-
         /**
          * <code>optional string last_name = 3;</code>
          */
@@ -899,7 +839,6 @@ public final class ProtoUserContactsImport {
             return (com.google.protobuf.ByteString) ref;
           }
         }
-
         /**
          * <code>optional string last_name = 3;</code>
          */
@@ -913,7 +852,6 @@ public final class ProtoUserContactsImport {
           onChanged();
           return this;
         }
-
         /**
          * <code>optional string last_name = 3;</code>
          */
@@ -923,7 +861,6 @@ public final class ProtoUserContactsImport {
           onChanged();
           return this;
         }
-
         /**
          * <code>optional string last_name = 3;</code>
          */
@@ -938,7 +875,6 @@ public final class ProtoUserContactsImport {
           onChanged();
           return this;
         }
-
         public final Builder setUnknownFields(
                 final com.google.protobuf.UnknownFieldSet unknownFields) {
           return this;
@@ -955,7 +891,6 @@ public final class ProtoUserContactsImport {
 
       // @@protoc_insertion_point(class_scope:proto.UserContactsImport.Contact)
       private static final com.iGap.proto.ProtoUserContactsImport.UserContactsImport.Contact DEFAULT_INSTANCE;
-
       static {
         DEFAULT_INSTANCE = new com.iGap.proto.ProtoUserContactsImport.UserContactsImport.Contact();
       }
@@ -992,21 +927,18 @@ public final class ProtoUserContactsImport {
     private int bitField0_;
     public static final int REQUEST_FIELD_NUMBER = 1;
     private com.iGap.proto.ProtoRequest.Request request_;
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public boolean hasRequest() {
       return request_ != null;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public com.iGap.proto.ProtoRequest.Request getRequest() {
       return request_ == null ? com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -1016,14 +948,12 @@ public final class ProtoUserContactsImport {
 
     public static final int CONTACTS_FIELD_NUMBER = 2;
     private java.util.List<com.iGap.proto.ProtoUserContactsImport.UserContactsImport.Contact> contacts_;
-
     /**
      * <code>repeated .proto.UserContactsImport.Contact contacts = 2;</code>
      */
     public java.util.List<com.iGap.proto.ProtoUserContactsImport.UserContactsImport.Contact> getContactsList() {
       return contacts_;
     }
-
     /**
      * <code>repeated .proto.UserContactsImport.Contact contacts = 2;</code>
      */
@@ -1031,21 +961,18 @@ public final class ProtoUserContactsImport {
     getContactsOrBuilderList() {
       return contacts_;
     }
-
     /**
      * <code>repeated .proto.UserContactsImport.Contact contacts = 2;</code>
      */
     public int getContactsCount() {
       return contacts_.size();
     }
-
     /**
      * <code>repeated .proto.UserContactsImport.Contact contacts = 2;</code>
      */
     public com.iGap.proto.ProtoUserContactsImport.UserContactsImport.Contact getContacts(int index) {
       return contacts_.get(index);
     }
-
     /**
      * <code>repeated .proto.UserContactsImport.Contact contacts = 2;</code>
      */
@@ -1055,7 +982,6 @@ public final class ProtoUserContactsImport {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -1093,7 +1019,6 @@ public final class ProtoUserContactsImport {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -1140,32 +1065,27 @@ public final class ProtoUserContactsImport {
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoUserContactsImport.UserContactsImport parseFrom(
             com.google.protobuf.ByteString data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserContactsImport.UserContactsImport parseFrom(byte[] data)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoUserContactsImport.UserContactsImport parseFrom(
             byte[] data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserContactsImport.UserContactsImport parseFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoUserContactsImport.UserContactsImport parseFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1173,13 +1093,11 @@ public final class ProtoUserContactsImport {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserContactsImport.UserContactsImport parseDelimitedFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoUserContactsImport.UserContactsImport parseDelimitedFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1187,14 +1105,12 @@ public final class ProtoUserContactsImport {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserContactsImport.UserContactsImport parseFrom(
             com.google.protobuf.CodedInputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoUserContactsImport.UserContactsImport parseFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1206,15 +1122,12 @@ public final class ProtoUserContactsImport {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoUserContactsImport.UserContactsImport prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
               ? new Builder() : new Builder().mergeFrom(this);
@@ -1226,7 +1139,6 @@ public final class ProtoUserContactsImport {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.UserContactsImport}
      */
@@ -1256,14 +1168,12 @@ public final class ProtoUserContactsImport {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
           getContactsFieldBuilder();
         }
       }
-
       public Builder clear() {
         super.clear();
         if (requestBuilder_ == null) {
@@ -1324,35 +1234,29 @@ public final class ProtoUserContactsImport {
       public Builder clone() {
         return (Builder) super.clone();
       }
-
       public Builder setField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.setField(field, value);
       }
-
       public Builder clearField(
               com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-
       public Builder clearOneof(
               com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-
       public Builder setRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-
       public Builder addRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoUserContactsImport.UserContactsImport) {
           return mergeFrom((com.iGap.proto.ProtoUserContactsImport.UserContactsImport) other);
@@ -1418,20 +1322,17 @@ public final class ProtoUserContactsImport {
         }
         return this;
       }
-
       private int bitField0_;
 
       private com.iGap.proto.ProtoRequest.Request request_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
               com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
       public boolean hasRequest() {
         return requestBuilder_ != null || request_ != null;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -1442,7 +1343,6 @@ public final class ProtoUserContactsImport {
           return requestBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -1459,7 +1359,6 @@ public final class ProtoUserContactsImport {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -1474,7 +1373,6 @@ public final class ProtoUserContactsImport {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -1493,7 +1391,6 @@ public final class ProtoUserContactsImport {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -1508,7 +1405,6 @@ public final class ProtoUserContactsImport {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -1517,7 +1413,6 @@ public final class ProtoUserContactsImport {
         onChanged();
         return getRequestFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -1529,7 +1424,6 @@ public final class ProtoUserContactsImport {
                   com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -1549,7 +1443,6 @@ public final class ProtoUserContactsImport {
 
       private java.util.List<com.iGap.proto.ProtoUserContactsImport.UserContactsImport.Contact> contacts_ =
               java.util.Collections.emptyList();
-
       private void ensureContactsIsMutable() {
         if (!((bitField0_ & 0x00000002) == 0x00000002)) {
           contacts_ = new java.util.ArrayList<com.iGap.proto.ProtoUserContactsImport.UserContactsImport.Contact>(contacts_);
@@ -1570,7 +1463,6 @@ public final class ProtoUserContactsImport {
           return contactsBuilder_.getMessageList();
         }
       }
-
       /**
        * <code>repeated .proto.UserContactsImport.Contact contacts = 2;</code>
        */
@@ -1581,7 +1473,6 @@ public final class ProtoUserContactsImport {
           return contactsBuilder_.getCount();
         }
       }
-
       /**
        * <code>repeated .proto.UserContactsImport.Contact contacts = 2;</code>
        */
@@ -1592,7 +1483,6 @@ public final class ProtoUserContactsImport {
           return contactsBuilder_.getMessage(index);
         }
       }
-
       /**
        * <code>repeated .proto.UserContactsImport.Contact contacts = 2;</code>
        */
@@ -1610,7 +1500,6 @@ public final class ProtoUserContactsImport {
         }
         return this;
       }
-
       /**
        * <code>repeated .proto.UserContactsImport.Contact contacts = 2;</code>
        */
@@ -1625,7 +1514,6 @@ public final class ProtoUserContactsImport {
         }
         return this;
       }
-
       /**
        * <code>repeated .proto.UserContactsImport.Contact contacts = 2;</code>
        */
@@ -1642,7 +1530,6 @@ public final class ProtoUserContactsImport {
         }
         return this;
       }
-
       /**
        * <code>repeated .proto.UserContactsImport.Contact contacts = 2;</code>
        */
@@ -1660,7 +1547,6 @@ public final class ProtoUserContactsImport {
         }
         return this;
       }
-
       /**
        * <code>repeated .proto.UserContactsImport.Contact contacts = 2;</code>
        */
@@ -1675,7 +1561,6 @@ public final class ProtoUserContactsImport {
         }
         return this;
       }
-
       /**
        * <code>repeated .proto.UserContactsImport.Contact contacts = 2;</code>
        */
@@ -1690,7 +1575,6 @@ public final class ProtoUserContactsImport {
         }
         return this;
       }
-
       /**
        * <code>repeated .proto.UserContactsImport.Contact contacts = 2;</code>
        */
@@ -1706,7 +1590,6 @@ public final class ProtoUserContactsImport {
         }
         return this;
       }
-
       /**
        * <code>repeated .proto.UserContactsImport.Contact contacts = 2;</code>
        */
@@ -1720,7 +1603,6 @@ public final class ProtoUserContactsImport {
         }
         return this;
       }
-
       /**
        * <code>repeated .proto.UserContactsImport.Contact contacts = 2;</code>
        */
@@ -1734,7 +1616,6 @@ public final class ProtoUserContactsImport {
         }
         return this;
       }
-
       /**
        * <code>repeated .proto.UserContactsImport.Contact contacts = 2;</code>
        */
@@ -1742,7 +1623,6 @@ public final class ProtoUserContactsImport {
               int index) {
         return getContactsFieldBuilder().getBuilder(index);
       }
-
       /**
        * <code>repeated .proto.UserContactsImport.Contact contacts = 2;</code>
        */
@@ -1754,7 +1634,6 @@ public final class ProtoUserContactsImport {
           return contactsBuilder_.getMessageOrBuilder(index);
         }
       }
-
       /**
        * <code>repeated .proto.UserContactsImport.Contact contacts = 2;</code>
        */
@@ -1766,7 +1645,6 @@ public final class ProtoUserContactsImport {
           return java.util.Collections.unmodifiableList(contacts_);
         }
       }
-
       /**
        * <code>repeated .proto.UserContactsImport.Contact contacts = 2;</code>
        */
@@ -1774,7 +1652,6 @@ public final class ProtoUserContactsImport {
         return getContactsFieldBuilder().addBuilder(
                 com.iGap.proto.ProtoUserContactsImport.UserContactsImport.Contact.getDefaultInstance());
       }
-
       /**
        * <code>repeated .proto.UserContactsImport.Contact contacts = 2;</code>
        */
@@ -1783,7 +1660,6 @@ public final class ProtoUserContactsImport {
         return getContactsFieldBuilder().addBuilder(
                 index, com.iGap.proto.ProtoUserContactsImport.UserContactsImport.Contact.getDefaultInstance());
       }
-
       /**
        * <code>repeated .proto.UserContactsImport.Contact contacts = 2;</code>
        */
@@ -1791,7 +1667,6 @@ public final class ProtoUserContactsImport {
       getContactsBuilderList() {
         return getContactsFieldBuilder().getBuilderList();
       }
-
       private com.google.protobuf.RepeatedFieldBuilderV3<
               com.iGap.proto.ProtoUserContactsImport.UserContactsImport.Contact, com.iGap.proto.ProtoUserContactsImport.UserContactsImport.Contact.Builder, com.iGap.proto.ProtoUserContactsImport.UserContactsImport.ContactOrBuilder>
       getContactsFieldBuilder() {
@@ -1806,7 +1681,6 @@ public final class ProtoUserContactsImport {
         }
         return contactsBuilder_;
       }
-
       public final Builder setUnknownFields(
               final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
@@ -1823,7 +1697,6 @@ public final class ProtoUserContactsImport {
 
     // @@protoc_insertion_point(class_scope:proto.UserContactsImport)
     private static final com.iGap.proto.ProtoUserContactsImport.UserContactsImport DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new com.iGap.proto.ProtoUserContactsImport.UserContactsImport();
     }
@@ -1865,18 +1738,15 @@ public final class ProtoUserContactsImport {
      * <code>optional .proto.Response response = 1;</code>
      */
     boolean hasResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     com.iGap.proto.ProtoResponse.Response getResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     com.iGap.proto.ProtoResponse.ResponseOrBuilder getResponseOrBuilder();
   }
-
   /**
    * Protobuf type {@code proto.UserContactsImportResponse}
    */
@@ -1888,7 +1758,6 @@ public final class ProtoUserContactsImport {
     private UserContactsImportResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private UserContactsImportResponse() {
     }
 
@@ -1897,7 +1766,6 @@ public final class ProtoUserContactsImport {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-
     private UserContactsImportResponse(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1942,7 +1810,6 @@ public final class ProtoUserContactsImport {
         makeExtensionsImmutable();
       }
     }
-
     public static final com.google.protobuf.Descriptors.Descriptor
     getDescriptor() {
       return com.iGap.proto.ProtoUserContactsImport.internal_static_proto_UserContactsImportResponse_descriptor;
@@ -1957,21 +1824,18 @@ public final class ProtoUserContactsImport {
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
     private com.iGap.proto.ProtoResponse.Response response_;
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public boolean hasResponse() {
       return response_ != null;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public com.iGap.proto.ProtoResponse.Response getResponse() {
       return response_ == null ? com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -1980,7 +1844,6 @@ public final class ProtoUserContactsImport {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -2011,7 +1874,6 @@ public final class ProtoUserContactsImport {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -2052,32 +1914,27 @@ public final class ProtoUserContactsImport {
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoUserContactsImport.UserContactsImportResponse parseFrom(
             com.google.protobuf.ByteString data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserContactsImport.UserContactsImportResponse parseFrom(byte[] data)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoUserContactsImport.UserContactsImportResponse parseFrom(
             byte[] data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserContactsImport.UserContactsImportResponse parseFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoUserContactsImport.UserContactsImportResponse parseFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -2085,13 +1942,11 @@ public final class ProtoUserContactsImport {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserContactsImport.UserContactsImportResponse parseDelimitedFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoUserContactsImport.UserContactsImportResponse parseDelimitedFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -2099,14 +1954,12 @@ public final class ProtoUserContactsImport {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserContactsImport.UserContactsImportResponse parseFrom(
             com.google.protobuf.CodedInputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoUserContactsImport.UserContactsImportResponse parseFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -2118,15 +1971,12 @@ public final class ProtoUserContactsImport {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoUserContactsImport.UserContactsImportResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
               ? new Builder() : new Builder().mergeFrom(this);
@@ -2138,7 +1988,6 @@ public final class ProtoUserContactsImport {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.UserContactsImportResponse}
      */
@@ -2168,13 +2017,11 @@ public final class ProtoUserContactsImport {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (responseBuilder_ == null) {
@@ -2217,35 +2064,29 @@ public final class ProtoUserContactsImport {
       public Builder clone() {
         return (Builder) super.clone();
       }
-
       public Builder setField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.setField(field, value);
       }
-
       public Builder clearField(
               com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-
       public Builder clearOneof(
               com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-
       public Builder setRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-
       public Builder addRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoUserContactsImport.UserContactsImportResponse) {
           return mergeFrom((com.iGap.proto.ProtoUserContactsImport.UserContactsImportResponse) other);
@@ -2290,14 +2131,12 @@ public final class ProtoUserContactsImport {
       private com.iGap.proto.ProtoResponse.Response response_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
               com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
       public boolean hasResponse() {
         return responseBuilder_ != null || response_ != null;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -2308,7 +2147,6 @@ public final class ProtoUserContactsImport {
           return responseBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -2325,7 +2163,6 @@ public final class ProtoUserContactsImport {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -2340,7 +2177,6 @@ public final class ProtoUserContactsImport {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -2359,7 +2195,6 @@ public final class ProtoUserContactsImport {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -2374,7 +2209,6 @@ public final class ProtoUserContactsImport {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -2383,7 +2217,6 @@ public final class ProtoUserContactsImport {
         onChanged();
         return getResponseFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -2395,7 +2228,6 @@ public final class ProtoUserContactsImport {
                   com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -2412,7 +2244,6 @@ public final class ProtoUserContactsImport {
         }
         return responseBuilder_;
       }
-
       public final Builder setUnknownFields(
               final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
@@ -2429,7 +2260,6 @@ public final class ProtoUserContactsImport {
 
     // @@protoc_insertion_point(class_scope:proto.UserContactsImportResponse)
     private static final com.iGap.proto.ProtoUserContactsImport.UserContactsImportResponse DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new com.iGap.proto.ProtoUserContactsImport.UserContactsImportResponse();
     }
@@ -2486,7 +2316,6 @@ public final class ProtoUserContactsImport {
 
   private static com.google.protobuf.Descriptors.FileDescriptor
           descriptor;
-
   static {
     java.lang.String[] descriptorData = {
             "\n\030UserContactsImport.proto\022\005proto\032\rReque" +

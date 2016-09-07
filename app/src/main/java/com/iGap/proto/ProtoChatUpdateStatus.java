@@ -6,7 +6,6 @@ package com.iGap.proto;
 public final class ProtoChatUpdateStatus {
   private ProtoChatUpdateStatus() {
   }
-
   public static void registerAllExtensions(
           com.google.protobuf.ExtensionRegistryLite registry) {
   }
@@ -16,7 +15,6 @@ public final class ProtoChatUpdateStatus {
     registerAllExtensions(
             (com.google.protobuf.ExtensionRegistryLite) registry);
   }
-
   public interface ChatUpdateStatusOrBuilder extends
           // @@protoc_insertion_point(interface_extends:proto.ChatUpdateStatus)
           com.google.protobuf.MessageOrBuilder {
@@ -25,12 +23,10 @@ public final class ProtoChatUpdateStatus {
      * <code>optional .proto.Request request = 1;</code>
      */
     boolean hasRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     com.iGap.proto.ProtoRequest.Request getRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -50,13 +46,11 @@ public final class ProtoChatUpdateStatus {
      * <code>optional .proto.RoomMessageStatus status = 4;</code>
      */
     int getStatusValue();
-
     /**
      * <code>optional .proto.RoomMessageStatus status = 4;</code>
      */
     com.iGap.proto.ProtoGlobal.RoomMessageStatus getStatus();
   }
-
   /**
    * Protobuf type {@code proto.ChatUpdateStatus}
    */
@@ -68,7 +62,6 @@ public final class ProtoChatUpdateStatus {
     private ChatUpdateStatus(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private ChatUpdateStatus() {
       roomId_ = 0L;
       messageId_ = 0L;
@@ -80,7 +73,6 @@ public final class ProtoChatUpdateStatus {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-
     private ChatUpdateStatus(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -141,7 +133,6 @@ public final class ProtoChatUpdateStatus {
         makeExtensionsImmutable();
       }
     }
-
     public static final com.google.protobuf.Descriptors.Descriptor
     getDescriptor() {
       return com.iGap.proto.ProtoChatUpdateStatus.internal_static_proto_ChatUpdateStatus_descriptor;
@@ -156,21 +147,18 @@ public final class ProtoChatUpdateStatus {
 
     public static final int REQUEST_FIELD_NUMBER = 1;
     private com.iGap.proto.ProtoRequest.Request request_;
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public boolean hasRequest() {
       return request_ != null;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public com.iGap.proto.ProtoRequest.Request getRequest() {
       return request_ == null ? com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -180,7 +168,6 @@ public final class ProtoChatUpdateStatus {
 
     public static final int ROOM_ID_FIELD_NUMBER = 2;
     private long roomId_;
-
     /**
      * <code>optional uint64 room_id = 2;</code>
      */
@@ -190,7 +177,6 @@ public final class ProtoChatUpdateStatus {
 
     public static final int MESSAGE_ID_FIELD_NUMBER = 3;
     private long messageId_;
-
     /**
      * <code>optional uint64 message_id = 3;</code>
      */
@@ -200,14 +186,12 @@ public final class ProtoChatUpdateStatus {
 
     public static final int STATUS_FIELD_NUMBER = 4;
     private int status_;
-
     /**
      * <code>optional .proto.RoomMessageStatus status = 4;</code>
      */
     public int getStatusValue() {
       return status_;
     }
-
     /**
      * <code>optional .proto.RoomMessageStatus status = 4;</code>
      */
@@ -217,7 +201,6 @@ public final class ProtoChatUpdateStatus {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -269,7 +252,6 @@ public final class ProtoChatUpdateStatus {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -323,32 +305,27 @@ public final class ProtoChatUpdateStatus {
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatus parseFrom(
             com.google.protobuf.ByteString data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatus parseFrom(byte[] data)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatus parseFrom(
             byte[] data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatus parseFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatus parseFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -356,13 +333,11 @@ public final class ProtoChatUpdateStatus {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatus parseDelimitedFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatus parseDelimitedFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -370,14 +345,12 @@ public final class ProtoChatUpdateStatus {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatus parseFrom(
             com.google.protobuf.CodedInputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatus parseFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -389,15 +362,12 @@ public final class ProtoChatUpdateStatus {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatus prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
               ? new Builder() : new Builder().mergeFrom(this);
@@ -409,7 +379,6 @@ public final class ProtoChatUpdateStatus {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.ChatUpdateStatus}
      */
@@ -439,13 +408,11 @@ public final class ProtoChatUpdateStatus {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (requestBuilder_ == null) {
@@ -497,35 +464,29 @@ public final class ProtoChatUpdateStatus {
       public Builder clone() {
         return (Builder) super.clone();
       }
-
       public Builder setField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.setField(field, value);
       }
-
       public Builder clearField(
               com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-
       public Builder clearOneof(
               com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-
       public Builder setRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-
       public Builder addRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatus) {
           return mergeFrom((com.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatus) other);
@@ -578,14 +539,12 @@ public final class ProtoChatUpdateStatus {
       private com.iGap.proto.ProtoRequest.Request request_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
               com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
       public boolean hasRequest() {
         return requestBuilder_ != null || request_ != null;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -596,7 +555,6 @@ public final class ProtoChatUpdateStatus {
           return requestBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -613,7 +571,6 @@ public final class ProtoChatUpdateStatus {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -628,7 +585,6 @@ public final class ProtoChatUpdateStatus {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -647,7 +603,6 @@ public final class ProtoChatUpdateStatus {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -662,7 +617,6 @@ public final class ProtoChatUpdateStatus {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -671,7 +625,6 @@ public final class ProtoChatUpdateStatus {
         onChanged();
         return getRequestFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -683,7 +636,6 @@ public final class ProtoChatUpdateStatus {
                   com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -702,14 +654,12 @@ public final class ProtoChatUpdateStatus {
       }
 
       private long roomId_;
-
       /**
        * <code>optional uint64 room_id = 2;</code>
        */
       public long getRoomId() {
         return roomId_;
       }
-
       /**
        * <code>optional uint64 room_id = 2;</code>
        */
@@ -719,7 +669,6 @@ public final class ProtoChatUpdateStatus {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional uint64 room_id = 2;</code>
        */
@@ -731,14 +680,12 @@ public final class ProtoChatUpdateStatus {
       }
 
       private long messageId_;
-
       /**
        * <code>optional uint64 message_id = 3;</code>
        */
       public long getMessageId() {
         return messageId_;
       }
-
       /**
        * <code>optional uint64 message_id = 3;</code>
        */
@@ -748,7 +695,6 @@ public final class ProtoChatUpdateStatus {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional uint64 message_id = 3;</code>
        */
@@ -760,14 +706,12 @@ public final class ProtoChatUpdateStatus {
       }
 
       private int status_ = 0;
-
       /**
        * <code>optional .proto.RoomMessageStatus status = 4;</code>
        */
       public int getStatusValue() {
         return status_;
       }
-
       /**
        * <code>optional .proto.RoomMessageStatus status = 4;</code>
        */
@@ -776,7 +720,6 @@ public final class ProtoChatUpdateStatus {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional .proto.RoomMessageStatus status = 4;</code>
        */
@@ -784,7 +727,6 @@ public final class ProtoChatUpdateStatus {
         com.iGap.proto.ProtoGlobal.RoomMessageStatus result = com.iGap.proto.ProtoGlobal.RoomMessageStatus.valueOf(status_);
         return result == null ? com.iGap.proto.ProtoGlobal.RoomMessageStatus.UNRECOGNIZED : result;
       }
-
       /**
        * <code>optional .proto.RoomMessageStatus status = 4;</code>
        */
@@ -797,7 +739,6 @@ public final class ProtoChatUpdateStatus {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional .proto.RoomMessageStatus status = 4;</code>
        */
@@ -807,7 +748,6 @@ public final class ProtoChatUpdateStatus {
         onChanged();
         return this;
       }
-
       public final Builder setUnknownFields(
               final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
@@ -824,7 +764,6 @@ public final class ProtoChatUpdateStatus {
 
     // @@protoc_insertion_point(class_scope:proto.ChatUpdateStatus)
     private static final com.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatus DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new com.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatus();
     }
@@ -866,12 +805,10 @@ public final class ProtoChatUpdateStatus {
      * <code>optional .proto.Response response = 1;</code>
      */
     boolean hasResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     com.iGap.proto.ProtoResponse.Response getResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -891,7 +828,6 @@ public final class ProtoChatUpdateStatus {
      * <code>optional .proto.RoomMessageStatus status = 4;</code>
      */
     int getStatusValue();
-
     /**
      * <code>optional .proto.RoomMessageStatus status = 4;</code>
      */
@@ -902,7 +838,6 @@ public final class ProtoChatUpdateStatus {
      */
     int getStatusVersion();
   }
-
   /**
    * Protobuf type {@code proto.ChatUpdateStatusResponse}
    */
@@ -914,7 +849,6 @@ public final class ProtoChatUpdateStatus {
     private ChatUpdateStatusResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private ChatUpdateStatusResponse() {
       roomId_ = 0L;
       messageId_ = 0L;
@@ -927,7 +861,6 @@ public final class ProtoChatUpdateStatus {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-
     private ChatUpdateStatusResponse(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -993,7 +926,6 @@ public final class ProtoChatUpdateStatus {
         makeExtensionsImmutable();
       }
     }
-
     public static final com.google.protobuf.Descriptors.Descriptor
     getDescriptor() {
       return com.iGap.proto.ProtoChatUpdateStatus.internal_static_proto_ChatUpdateStatusResponse_descriptor;
@@ -1008,21 +940,18 @@ public final class ProtoChatUpdateStatus {
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
     private com.iGap.proto.ProtoResponse.Response response_;
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public boolean hasResponse() {
       return response_ != null;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public com.iGap.proto.ProtoResponse.Response getResponse() {
       return response_ == null ? com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -1032,7 +961,6 @@ public final class ProtoChatUpdateStatus {
 
     public static final int ROOM_ID_FIELD_NUMBER = 2;
     private long roomId_;
-
     /**
      * <code>optional uint64 room_id = 2;</code>
      */
@@ -1042,7 +970,6 @@ public final class ProtoChatUpdateStatus {
 
     public static final int MESSAGE_ID_FIELD_NUMBER = 3;
     private long messageId_;
-
     /**
      * <code>optional uint64 message_id = 3;</code>
      */
@@ -1052,14 +979,12 @@ public final class ProtoChatUpdateStatus {
 
     public static final int STATUS_FIELD_NUMBER = 4;
     private int status_;
-
     /**
      * <code>optional .proto.RoomMessageStatus status = 4;</code>
      */
     public int getStatusValue() {
       return status_;
     }
-
     /**
      * <code>optional .proto.RoomMessageStatus status = 4;</code>
      */
@@ -1070,7 +995,6 @@ public final class ProtoChatUpdateStatus {
 
     public static final int STATUS_VERSION_FIELD_NUMBER = 5;
     private int statusVersion_;
-
     /**
      * <code>optional uint32 status_version = 5;</code>
      */
@@ -1079,7 +1003,6 @@ public final class ProtoChatUpdateStatus {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -1138,7 +1061,6 @@ public final class ProtoChatUpdateStatus {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -1196,32 +1118,27 @@ public final class ProtoChatUpdateStatus {
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatusResponse parseFrom(
             com.google.protobuf.ByteString data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatusResponse parseFrom(byte[] data)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatusResponse parseFrom(
             byte[] data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatusResponse parseFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatusResponse parseFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1229,13 +1146,11 @@ public final class ProtoChatUpdateStatus {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatusResponse parseDelimitedFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatusResponse parseDelimitedFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1243,14 +1158,12 @@ public final class ProtoChatUpdateStatus {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatusResponse parseFrom(
             com.google.protobuf.CodedInputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatusResponse parseFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1262,11 +1175,9 @@ public final class ProtoChatUpdateStatus {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatusResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
@@ -1281,7 +1192,6 @@ public final class ProtoChatUpdateStatus {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.ChatUpdateStatusResponse}
      */
@@ -1311,13 +1221,11 @@ public final class ProtoChatUpdateStatus {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (responseBuilder_ == null) {
@@ -1372,35 +1280,29 @@ public final class ProtoChatUpdateStatus {
       public Builder clone() {
         return (Builder) super.clone();
       }
-
       public Builder setField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.setField(field, value);
       }
-
       public Builder clearField(
               com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-
       public Builder clearOneof(
               com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-
       public Builder setRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-
       public Builder addRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatusResponse) {
           return mergeFrom((com.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatusResponse) other);
@@ -1457,14 +1359,12 @@ public final class ProtoChatUpdateStatus {
       private com.iGap.proto.ProtoResponse.Response response_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
               com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
       public boolean hasResponse() {
         return responseBuilder_ != null || response_ != null;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1475,7 +1375,6 @@ public final class ProtoChatUpdateStatus {
           return responseBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1492,7 +1391,6 @@ public final class ProtoChatUpdateStatus {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1507,7 +1405,6 @@ public final class ProtoChatUpdateStatus {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1526,7 +1423,6 @@ public final class ProtoChatUpdateStatus {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1541,7 +1437,6 @@ public final class ProtoChatUpdateStatus {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1550,7 +1445,6 @@ public final class ProtoChatUpdateStatus {
         onChanged();
         return getResponseFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1562,7 +1456,6 @@ public final class ProtoChatUpdateStatus {
                   com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1581,14 +1474,12 @@ public final class ProtoChatUpdateStatus {
       }
 
       private long roomId_;
-
       /**
        * <code>optional uint64 room_id = 2;</code>
        */
       public long getRoomId() {
         return roomId_;
       }
-
       /**
        * <code>optional uint64 room_id = 2;</code>
        */
@@ -1598,7 +1489,6 @@ public final class ProtoChatUpdateStatus {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional uint64 room_id = 2;</code>
        */
@@ -1610,14 +1500,12 @@ public final class ProtoChatUpdateStatus {
       }
 
       private long messageId_;
-
       /**
        * <code>optional uint64 message_id = 3;</code>
        */
       public long getMessageId() {
         return messageId_;
       }
-
       /**
        * <code>optional uint64 message_id = 3;</code>
        */
@@ -1627,7 +1515,6 @@ public final class ProtoChatUpdateStatus {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional uint64 message_id = 3;</code>
        */
@@ -1639,14 +1526,12 @@ public final class ProtoChatUpdateStatus {
       }
 
       private int status_ = 0;
-
       /**
        * <code>optional .proto.RoomMessageStatus status = 4;</code>
        */
       public int getStatusValue() {
         return status_;
       }
-
       /**
        * <code>optional .proto.RoomMessageStatus status = 4;</code>
        */
@@ -1655,7 +1540,6 @@ public final class ProtoChatUpdateStatus {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional .proto.RoomMessageStatus status = 4;</code>
        */
@@ -1663,7 +1547,6 @@ public final class ProtoChatUpdateStatus {
         com.iGap.proto.ProtoGlobal.RoomMessageStatus result = com.iGap.proto.ProtoGlobal.RoomMessageStatus.valueOf(status_);
         return result == null ? com.iGap.proto.ProtoGlobal.RoomMessageStatus.UNRECOGNIZED : result;
       }
-
       /**
        * <code>optional .proto.RoomMessageStatus status = 4;</code>
        */
@@ -1676,7 +1559,6 @@ public final class ProtoChatUpdateStatus {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional .proto.RoomMessageStatus status = 4;</code>
        */
@@ -1688,14 +1570,12 @@ public final class ProtoChatUpdateStatus {
       }
 
       private int statusVersion_;
-
       /**
        * <code>optional uint32 status_version = 5;</code>
        */
       public int getStatusVersion() {
         return statusVersion_;
       }
-
       /**
        * <code>optional uint32 status_version = 5;</code>
        */
@@ -1705,7 +1585,6 @@ public final class ProtoChatUpdateStatus {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional uint32 status_version = 5;</code>
        */
@@ -1715,7 +1594,6 @@ public final class ProtoChatUpdateStatus {
         onChanged();
         return this;
       }
-
       public final Builder setUnknownFields(
               final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
@@ -1732,7 +1610,6 @@ public final class ProtoChatUpdateStatus {
 
     // @@protoc_insertion_point(class_scope:proto.ChatUpdateStatusResponse)
     private static final com.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatusResponse DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new com.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatusResponse();
     }
@@ -1784,7 +1661,6 @@ public final class ProtoChatUpdateStatus {
 
   private static com.google.protobuf.Descriptors.FileDescriptor
           descriptor;
-
   static {
     java.lang.String[] descriptorData = {
             "\n\026ChatUpdateStatus.proto\022\005proto\032\rRequest" +
@@ -1819,7 +1695,7 @@ public final class ProtoChatUpdateStatus {
     internal_static_proto_ChatUpdateStatus_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_proto_ChatUpdateStatus_descriptor,
-            new java.lang.String[]{"Request", "RoomId", "MessageId", "Status", });
+            new java.lang.String[]{"Request", "RoomId", "MessageId", "Status",});
     internal_static_proto_ChatUpdateStatusResponse_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_proto_ChatUpdateStatusResponse_fieldAccessorTable = new
