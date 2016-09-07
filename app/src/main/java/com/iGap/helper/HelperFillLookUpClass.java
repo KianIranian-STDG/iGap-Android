@@ -104,8 +104,8 @@ public class HelperFillLookUpClass {
         G.lookupMap.put(30601, "ProtoClientGetRoomList.ClientGetRoomListResponse");
         G.lookupMap.put(602, "Client.GetRoom");
         G.lookupMap.put(30602, "ProtoClientGetRoom.ClientGetRoomResponse");
-        G.lookupMap.put(603, "ClientGetRoom");
-        G.lookupMap.put(30603, "ProtoClientGetRoom.ClientGetRoomResponse");
+        G.lookupMap.put(603, "ClientGetRoomHistory");
+        G.lookupMap.put(30603, "ProtoClientGetRoomHistory.ClientGetRoomHistoryResponse");
 
         // FileUpload 7xx , 307xx
         G.lookupMap.put(700, "FileUploadOption");

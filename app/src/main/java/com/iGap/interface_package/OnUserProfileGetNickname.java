@@ -5,9 +5,7 @@
 
 package com.iGap.interface_package;
 
-import com.iGap.proto.ProtoResponse;
+public interface OnUserProfileGetNickname {
 
-public interface OnUserProfileEmailResponse {
-
-    void onUserProfileEmailResponse(String email, ProtoResponse.Response response);
+    void onUserProfileGetNickname(String nickname);
 }

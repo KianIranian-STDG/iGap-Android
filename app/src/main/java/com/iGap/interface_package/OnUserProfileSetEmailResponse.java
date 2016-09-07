@@ -5,10 +5,9 @@
 
 package com.iGap.interface_package;
 
-import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
 
-public interface OnUserProfileGenderResponse {
+public interface OnUserProfileSetEmailResponse {
 
-    void onUserProfileEmailResponse(ProtoGlobal.Gender gender, ProtoResponse.Response response);
+    void onUserProfileEmailResponse(String email, ProtoResponse.Response response);
 }

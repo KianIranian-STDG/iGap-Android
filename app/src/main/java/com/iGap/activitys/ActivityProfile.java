@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.interface_package.OnUserProfileNickNameResponse;
+import com.iGap.interface_package.OnUserProfileSetNickNameResponse;
 import com.iGap.module.HelperDecodeFile;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmUserInfo;
@@ -73,7 +73,7 @@ public class ActivityProfile extends ActivityEnhanced {
                         public void execute(Realm realm) {
                             final RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
 
-                            G.onUserProfileNickNameResponse = new OnUserProfileNickNameResponse() {
+                            G.onUserProfileNickNameResponse = new OnUserProfileSetNickNameResponse() {
                                 @Override
                                 public void onUserProfileNickNameResponse(final String nickName, ProtoResponse.Response response) {
                                     Intent intent = new Intent(G.context, ActivityMain.class);
