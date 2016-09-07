@@ -1,9 +1,9 @@
 package com.iGap.activitys;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +39,6 @@ public class FragmentDrawerMenu extends MenuFragment {
         View view = inflater.inflate(R.layout.layout_menu, container, false);
         initLayoutMenu(view);
 
-
         return setupReveal(view, true);
     }
 
@@ -53,8 +52,8 @@ public class FragmentDrawerMenu extends MenuFragment {
         TextView txtIconNewChat = (TextView) v.findViewById(R.id.lm_txt_icon_new_chat);
         txtIconNewChat.setTypeface(G.fontawesome);
 
-        TextView txtIconNewChannle = (TextView) v.findViewById(R.id.lm_txt_icon_channel);
-        txtIconNewChannle.setTypeface(G.fontawesome);
+        TextView txtIconNewChannel = (TextView) v.findViewById(R.id.lm_txt_icon_channel);
+        txtIconNewChannel.setTypeface(G.fontawesome);
 
         TextView txtIconContacts = (TextView) v.findViewById(R.id.lm_txt_icon_contacts);
         txtIconContacts.setTypeface(G.fontawesome);
@@ -68,21 +67,22 @@ public class FragmentDrawerMenu extends MenuFragment {
         TextView txtIconiGapFAQ = (TextView) v.findViewById(R.id.lm_txt_icon_igap_faq);
         txtIconiGapFAQ.setTypeface(G.fontawesome);
 
-
         LinearLayout layoutNewGroup = (LinearLayout) v.findViewById(R.id.lm_ll_new_group);
         layoutNewGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("ddd", "layoutNewGroup");
             }
         });
 
 
         LinearLayout layoutNewChat = (LinearLayout) v.findViewById(R.id.lm_ll_new_chat);
         layoutNewChat.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
-                Log.e("ddd", "layoutNewChat");
+                if (mActionClickListener != null) {
+                    mActionClickListener.onActionSearchClick();
+                }
             }
         });
 
@@ -91,7 +91,6 @@ public class FragmentDrawerMenu extends MenuFragment {
         layoutNewChannel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("ddd", "layoutNewChannel");
             }
         });
 
@@ -100,13 +99,11 @@ public class FragmentDrawerMenu extends MenuFragment {
         layoutContacts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("ddd", "layoutContacts");
 
                 // click on search action btn event
                 if (mActionClickListener != null) {
                     mActionClickListener.onActionSearchClick();
                 }
-
             }
         });
 
@@ -115,7 +112,6 @@ public class FragmentDrawerMenu extends MenuFragment {
         layoutInviteFriends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("ddd", "layoutInviteFriends");
             }
         });
 
@@ -124,7 +120,11 @@ public class FragmentDrawerMenu extends MenuFragment {
         layoutSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("ddd", "layoutSetting");
+
+                Intent intent = new Intent(G.context, ActivitySetting.class);
+                startActivity(intent);
+                ActivityMain.mLeftDrawerLayout.closeDrawer();
+
             }
         });
 
@@ -133,7 +133,6 @@ public class FragmentDrawerMenu extends MenuFragment {
         layoutiGapFAQ.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("ddd", "layoutiGapFAQ");
             }
         });
 

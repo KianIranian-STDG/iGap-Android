@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Environment;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.Toast;
 
@@ -158,7 +159,6 @@ public class G extends Application {
         fillUnSecureList();
         fillSecuringInterface();
         WebSocketClient.getInstance();
-        login();
 
         neuroplp = Typeface.createFromAsset(this.getAssets(), "fonts/neuropol.ttf");
         robotoBold = Typeface.createFromAsset(getAssets(), "fonts/RobotoBold.ttf");
@@ -176,7 +176,7 @@ public class G extends Application {
         YEKAN_BOLD = Typeface.createFromAsset(context.getAssets(), "fonts/yekan_bold.ttf");
 
         realmConfig = new RealmConfiguration.Builder(getApplicationContext())
-                .name("CountryListA.realm")
+                .name("iGapLocalDatabase.realm")
                 .schemaVersion(1)
                 .migration(new RealmMigrationClass())
                 .deleteRealmIfMigrationNeeded()
@@ -249,12 +249,13 @@ public class G extends Application {
         G.onSecuring = new OnSecuring() {
             @Override
             public void onSecure() {
+                Log.i("FFF", "Secure");
                 login();
             }
         };
     }
 
-    private void login() {
+    private void login() { //TODO [Saeed Mozaffari] [2016-09-07 10:24 AM] - mitonim karhaie ke hamishe bad az login bayad anjam beshe ro dar classe login response gharar bedim
 
         G.onUserLogin = new OnUserLogin() {
             @Override
@@ -262,6 +263,7 @@ public class G extends Application {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
+                        Log.i("FFF", "Login");
                         Toast.makeText(G.context, "User Login!", Toast.LENGTH_SHORT).show();
                         importContact();
                     }
@@ -278,8 +280,11 @@ public class G extends Application {
             @Override
             public void run() {
                 if (G.isSecure) {
+                    Log.i("FFF", "Login 1");
                     Realm realm = Realm.getDefaultInstance();
+                    Log.i("FFF", "Login 2");
                     RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+                    Log.i("FFF", "Login 3 userInfo : " + userInfo);
                     if (!G.userLogin && userInfo != null && userInfo.getUserRegistrationState()) {
                         new RequestUserLogin().userLogin(userInfo.getToken());
                     }
@@ -291,7 +296,7 @@ public class G extends Application {
         }, 1000);
     }
 
-    private void importContact() {
+    public static void importContact() {
 
         G.onContactImport = new OnUserContactImport() {
             @Override
@@ -302,7 +307,7 @@ public class G extends Application {
         Contacts.getListOfContact();
     }
 
-    private void getContactListFromServer() {
+    public static void getContactListFromServer() {
         G.onUserContactGetList = new OnUserContactGetList() {
             @Override
             public void onContactGetList() {

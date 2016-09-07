@@ -8,6 +8,7 @@ import com.iGap.G;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 
 /**
@@ -30,6 +31,8 @@ public class HelperCheckInternetConnection {
                 urlConnection.connect();
 
                 return (urlConnection.getResponseCode() == 200); // true
+            } catch (SocketTimeoutException e) {
+                hasActiveInternetConnection();
             } catch (IOException e) {
                 e.printStackTrace();
             }

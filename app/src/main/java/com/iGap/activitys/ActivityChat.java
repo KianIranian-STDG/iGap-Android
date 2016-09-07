@@ -51,9 +51,17 @@ import com.iGap.module.StructMessageInfo;
 import com.iGap.proto.ProtoChatSendMessage;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
+import com.iGap.realm.RealmChannelRoom;
 import com.iGap.realm.RealmChatHistory;
+import com.iGap.realm.RealmChatRoom;
+import com.iGap.realm.RealmContacts;
+import com.iGap.realm.RealmGroupRoom;
+import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmUserInfo;
+import com.iGap.realm.enums.ChannelChatRole;
+import com.iGap.realm.enums.GroupChatRole;
+import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestChatDeleteMessage;
 import com.iGap.request.RequestChatEditMessage;
 
@@ -62,9 +70,6 @@ import java.util.ArrayList;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-/**
- * Created by android3 on 8/5/2016.
- */
 public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, IRecentsLongClick, OnMessageClick, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse {
 
     private EmojiEditText edtChat;
@@ -89,21 +94,31 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
     private AdapterChatMessage mAdapter;
     private ProtoGlobal.Room.Type chatType;
-    private String contactId;
-    private boolean isMute = false;
-    private boolean newChatRoom = false;
-    private MyType.OwnerShip ownerShip;
 
-    private String contactName;
-    private String memberCount;
     private String lastSeen;
     private long mRoomId;
-
 
     private Button btnUp;
     private Button btnDown;
     private TextView txtChannelMute;
     private OnComplete complete;
+
+    //popular (chat , group , channel)
+    private String title;
+    private String initialize;
+    private String color;
+    private boolean isMute = false;
+
+    //chat
+    private long chatPeerId;
+
+    //group
+    private GroupChatRole groupRole;
+    private String groupParticipantsCountLabel;
+
+    //channel
+    private ChannelChatRole channelRole;
+    private String channelParticipantsCountLabel;
 
     @Override
     protected void onStart() {
@@ -133,32 +148,76 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
 
-        Bundle bundle = getIntent().getExtras();  // get chat type and contact id and  finish activity if value equal null
-        if (bundle != null) {
-            String type = bundle.getString("ChatType");
-            if (type.equals(ProtoGlobal.Room.Type.CHAT.toString())) {
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            mRoomId = extras.getLong("RoomId");
+
+            Realm realm = Realm.getDefaultInstance();
+
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", mRoomId).findFirst();
+
+            if (realmRoom != null) { // room exist
+
+                title = realmRoom.getTitle();
+                initialize = realmRoom.getInitials();
+                color = realmRoom.getColor();
+
+                if (realmRoom.getType() == RoomType.CHAT) {
+
+                    chatType = ProtoGlobal.Room.Type.CHAT;
+                    RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
+                    chatPeerId = realmChatRoom.getPeerId();
+
+                    RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo("id", chatPeerId).findFirst();
+                    if (realmContacts != null) {
+                        title = realmContacts.getDisplay_name();
+                        initialize = realmContacts.getInitials();
+                        color = realmContacts.getColor();
+                        lastSeen = Long.toString(realmContacts.getLast_seen());
+                    } else {
+                        title = realmRoom.getTitle();
+                        initialize = realmRoom.getInitials();
+                        color = realmRoom.getColor();
+                        lastSeen = "iGap Messenger";
+                    }
+
+
+                } else if (realmRoom.getType() == RoomType.GROUP) {
+
+                    chatType = ProtoGlobal.Room.Type.GROUP;
+                    RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+                    groupRole = realmGroupRoom.getRole();
+                    groupParticipantsCountLabel = realmGroupRoom.getParticipantsCountLabel();
+
+                } else if (realmRoom.getType() == RoomType.CHANNEL) {
+
+                    chatType = ProtoGlobal.Room.Type.CHANNEL;
+                    RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+                    channelRole = realmChannelRoom.getRole();
+                    channelParticipantsCountLabel = realmChannelRoom.getParticipantsCountLabel();
+
+                }
+            } else {
+
+                chatPeerId = extras.getLong("peerId");
                 chatType = ProtoGlobal.Room.Type.CHAT;
-            } else if (type.equals(ProtoGlobal.Room.Type.GROUP.toString())) {
-                chatType = ProtoGlobal.Room.Type.GROUP;
-            } else if (type.equals(ProtoGlobal.Room.Type.CHANNEL.toString())) {
-                chatType = ProtoGlobal.Room.Type.CHANNEL;
+                RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo("id", chatPeerId).findFirst();
+                title = realmContacts.getDisplay_name();
+                initialize = realmContacts.getInitials();
+                color = realmContacts.getColor();
+                lastSeen = Long.toString(realmContacts.getLast_seen());
+
             }
-            contactId = bundle.getString("ContactID");
-            isMute = bundle.getBoolean("IsMute");
-            ownerShip = (MyType.OwnerShip) bundle.getSerializable("OwnerShip");
-            contactName = bundle.getString("ContactName");
-            memberCount = bundle.getString("MemberCount");
-            lastSeen = Long.toString(bundle.getLong("LastSeen"));
-            mRoomId = bundle.getLong("RoomId");
-            newChatRoom = bundle.getBoolean("NewChatRoom");
-            Log.i("MMM", "roomId : " + mRoomId);
+
+            realm.close();
         }
+
 
         initComponent();
         initAppbarSelected();
         initCallbacks();
 
-        if (chatType == ProtoGlobal.Room.Type.CHANNEL && ownerShip == MyType.OwnerShip.member)
+        if (chatType == ProtoGlobal.Room.Type.CHANNEL && channelRole == ChannelChatRole.MEMBER)
             initLayotChannelFooter();
 
     }
@@ -222,18 +281,30 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
         txtName = (TextView) findViewById(R.id.chl_txt_name);
         txtName.setTypeface(G.arialBold);
-        if (contactName != null)
-            txtName.setText(contactName);
+        if (title != null)
+            txtName.setText(title);
 
 
         txtLastSeen = (TextView) findViewById(R.id.chl_txt_last_seen);
 
-        if (chatType == ProtoGlobal.Room.Type.CHANNEL || chatType == ProtoGlobal.Room.Type.GROUP) {
-            if (memberCount != null)
-                txtLastSeen.setText(memberCount + " member");
-        } else {
-            if (lastSeen != null)
+        if (chatType == ProtoGlobal.Room.Type.CHAT) {
+
+            if (lastSeen != null) {
                 txtLastSeen.setText(lastSeen);
+            }
+
+        } else if (chatType == ProtoGlobal.Room.Type.GROUP) {
+
+            if (groupParticipantsCountLabel != null) {
+                txtLastSeen.setText(groupParticipantsCountLabel + " member");
+            }
+
+        } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
+
+            if (channelParticipantsCountLabel != null) {
+                txtLastSeen.setText(channelParticipantsCountLabel + " member");
+            }
+
         }
 
         txt_mute = (TextView) findViewById(R.id.chl_txt_mute);

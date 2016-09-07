@@ -23,8 +23,9 @@ public class UserRegisterResponse extends MessageHandler {
 
     @Override
     public void handler() {
-        Log.i("SOC_RES", "UserRegisterResponse handler");
+        Log.i("SOC_RES", "UserRegisterResponse handler message : " + message);
         ProtoUserRegister.UserRegisterResponse.Builder builder = (ProtoUserRegister.UserRegisterResponse.Builder) message;
+        Log.i("SOC_RES", "SOC_RES 1");
         G.onUserRegistration.onRegister(builder.getUsername(), builder.getUserId(), builder.getMethod(), builder.getSmsNumberList(), builder.getVerifyCodeRegex());
     }
 

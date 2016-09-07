@@ -48,6 +48,7 @@ public class IncomingSms extends BroadcastReceiver {
                     String message = currentMessage.getDisplayMessageBody();
                     Log.i("SSS", "1 phoneNumber : " + phoneNumber + "  ||  message : " + message);
                     for (Long number : G.smsNumbers) {
+                        Log.i("SSS", "Server Number : " + number);
                         if (phoneNumber.contains(number.toString())) {
                             Log.i("SSS", "onSmsReceive start");
                             listener.onSmsReceive(message);

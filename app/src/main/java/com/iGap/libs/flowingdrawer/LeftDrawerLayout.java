@@ -252,8 +252,7 @@ public class LeftDrawerLayout extends ViewGroup {
 
     @Override
     protected void dispatchDraw(@NonNull Canvas canvas) {
-        PaintFlagsDrawFilter pfd = new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG | Paint
-                .FILTER_BITMAP_FLAG);
+        PaintFlagsDrawFilter pfd = new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
         canvas.setDrawFilter(pfd);
         final int count = getChildCount();
         for (int i = 0; i < count; i++) {

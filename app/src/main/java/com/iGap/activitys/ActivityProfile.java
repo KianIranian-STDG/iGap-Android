@@ -89,7 +89,7 @@ public class ActivityProfile extends ActivityEnhanced {
                             realmUserInfo.setNickName(nickName);
                         }
                     });
-
+                    realm.close();
                 } else {
                     runOnUiThread(new Runnable() {
                         @Override

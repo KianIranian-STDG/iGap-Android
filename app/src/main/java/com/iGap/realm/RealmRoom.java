@@ -16,6 +16,7 @@ public class RealmRoom extends RealmObject {
     private String initials;
     private String color;
     private int unread_count;
+    private boolean mute;
     private RealmChatRoom chat_room;
     private RealmGroupRoom group_room;
     private RealmChannelRoom channel_room;
@@ -66,6 +67,14 @@ public class RealmRoom extends RealmObject {
 
     public void setUnreadCount(int unread_count) {
         this.unread_count = unread_count;
+    }
+
+    public boolean getMute() {
+        return mute;
+    }
+
+    public void setMute(boolean mute) {
+        this.mute = mute;
     }
 
     public RealmChatRoom getChatRoom() {

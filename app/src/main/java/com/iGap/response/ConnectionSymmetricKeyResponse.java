@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.iGap.Config;
 import com.iGap.G;
+import com.iGap.WebSocketClient;
 import com.iGap.proto.ProtoConnectionSecuring;
 
 public class ConnectionSymmetricKeyResponse extends MessageHandler {
@@ -29,6 +30,11 @@ public class ConnectionSymmetricKeyResponse extends MessageHandler {
         int statusNumber = status.getNumber();
 
         if (statusNumber == Config.REJECT) {
+
+            G.allowForConnect = false;
+            WebSocketClient.getInstance().disconnect();
+            //TODO [Saeed Mozaffari] [2016-09-06 12:30 PM] - go to upgrade page
+            //TODO [Saeed Mozaffari] [2016-09-06 2:11 PM] - ijade methode joda baraye in halat . chon ye jaye dige ham bud
 
         } else if (statusNumber == Config.ACCEPT) {
             G.isSecure = true;

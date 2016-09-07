@@ -58,6 +58,7 @@ public final class HelperRealm {
         realmRoom.setTitle(room.getTitle());
         realmRoom.setType(convert(room.getType()));
         realmRoom.setUnreadCount(room.getUnreadCount());
+        realmRoom.setMute(false); //TODO [Saeed Mozaffari] [2016-09-07 9:59 AM] - agar mute ro az server gereftim be jaye false sabt mikonim
         switch (room.getType()) {
             case CHANNEL:
                 realmRoom.setType(RoomType.CHANNEL);

@@ -6,7 +6,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +19,6 @@ import com.iGap.interface_package.OnChatGetRoom;
 import com.iGap.libs.flowingdrawer.MenuFragment;
 import com.iGap.module.Contacts;
 import com.iGap.module.StructContactInfo;
-import com.iGap.proto.ProtoGlobal;
-import com.iGap.realm.RealmContacts;
 import com.iGap.realm.RealmRoom;
 import com.iGap.request.RequestChatGetRoom;
 import com.mikepenz.fastadapter.FastAdapter;
@@ -70,7 +67,6 @@ public class ContactsFragmentDrawerMenu extends MenuFragment {
         fastAdapter.withOnClickListener(new FastAdapter.OnClickListener<ContactItem>() {
             @Override
             public boolean onClick(View v, IAdapter adapter, ContactItem item, int position) {
-                Log.i("XXX", "fastAdapter CLICK");
                 chatGetRoom(item.mContact.peerId);
                 return false;
             }
@@ -182,19 +178,13 @@ public class ContactsFragmentDrawerMenu extends MenuFragment {
         final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("chat_room.peer_id", peerId).findFirst();
 
         if (realmRoom != null) {
-            Log.i("XXX", "Room Exist");
             Intent intent = new Intent(G.context, ActivityChat.class);
-            intent.putExtra("ChatID", realmRoom.getId());
-            intent.putExtra("ChatType", realmRoom.getType().toString());
-            intent.putExtra("NewChatRoom", false);
-            //intent.putExtra("IsMute", ); //TODO [Saeed Mozaffari] [2016-09-03 11:12 AM] - set IsMute in RealmRoom
-            intent.putExtra("LastSeen", realm.where(RealmContacts.class).equalTo("id", peerId).findFirst().getLast_seen());
             intent.putExtra("RoomId", realmRoom.getId());
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             G.context.startActivity(intent);
+            ActivityMain.mLeftDrawerLayout.closeDrawer();
 
         } else {
-            Log.i("XXX", "Create new Room");
             G.onChatGetRoom = new OnChatGetRoom() {
                 @Override
                 public void onChatGetRoom(final long roomId) {
@@ -203,13 +193,12 @@ public class ContactsFragmentDrawerMenu extends MenuFragment {
                         public void run() {
                             Realm realm = Realm.getDefaultInstance();
                             Intent intent = new Intent(G.context, ActivityChat.class);
-                            intent.putExtra("NewChatRoom", true);
-                            intent.putExtra("ChatType", ProtoGlobal.Room.Type.CHAT.toString());
-                            intent.putExtra("LastSeen", realm.where(RealmContacts.class).equalTo("id", peerId).findFirst().getLast_seen());
+                            intent.putExtra("peerId", peerId);
                             intent.putExtra("RoomId", roomId);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             realm.close();
                             G.context.startActivity(intent);
+                            ActivityMain.mLeftDrawerLayout.closeDrawer();
                         }
                     });
                 }
@@ -222,7 +211,7 @@ public class ContactsFragmentDrawerMenu extends MenuFragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        //add the values which need to be saved from the adapter to the bundel
+        //add the values which need to be saved from the adapter to the bundle
         outState = fastAdapter.saveInstanceState(outState);
         super.onSaveInstanceState(outState);
     }

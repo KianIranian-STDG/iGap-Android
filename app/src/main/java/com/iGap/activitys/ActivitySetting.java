@@ -219,10 +219,7 @@ public class ActivitySetting extends ActivityEnhanced {
         txtBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Intent intent = new Intent(ActivitySetting.this, ActivityMain.class);
-                startActivity(intent);
-
+                finish();
             }
         });
 
@@ -281,7 +278,6 @@ public class ActivitySetting extends ActivityEnhanced {
 
         } else {
             circleImageView.setImageResource(R.mipmap.b);
-
         }
 
 

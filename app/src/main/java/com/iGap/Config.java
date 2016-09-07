@@ -2,9 +2,7 @@ package com.iGap;
 
 public class Config {
 
-    public static String urlWebsocket = "ws://nano.igap.im:7755"; //6708 , 9999 , ws://nano.igap.im:7755 , ws://10.10.10.102:9999
-    //public static String urlWebsocket = "wss://secure.igap.im/socket/";
-    //public static final String urlWebsocket = "wss://echo.websocket.org";
+    public static String urlWebsocket = "ws://nano.igap.im:7755";
 
     public static final int ACCEPT = 1;
     public static final int REJECT = 0;

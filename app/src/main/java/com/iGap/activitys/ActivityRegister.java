@@ -552,7 +552,6 @@ public class ActivityRegister extends ActivityEnhanced {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userVerifyResponse();
                 userVerify(userName, edtEnterCodeVerify.getText().toString());
                 dialog.dismiss();
             }
@@ -562,6 +561,7 @@ public class ActivityRegister extends ActivityEnhanced {
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                userRegister();
                 edtPhoneNumber.setText("");
                 dialog.dismiss();
             }
@@ -581,9 +581,7 @@ public class ActivityRegister extends ActivityEnhanced {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-
                         txtTimer.setVisibility(View.VISIBLE);
-
                         userName = userNameR;
                         userId = userIdR;
                         G.smsNumbers = smsNumbersR;
@@ -640,7 +638,7 @@ public class ActivityRegister extends ActivityEnhanced {
         rg_prg_verify_generate.setVisibility(View.VISIBLE);
         rg_txt_verify_generate.setTextAppearance(G.context, R.style.RedHUGEText);
 
-        userVerifyResponse();
+        userVerifyResponse(verificationCode);
 
         G.handler.postDelayed(new Runnable() {
             @Override
@@ -662,14 +660,14 @@ public class ActivityRegister extends ActivityEnhanced {
         }, 4000);
     }
 
-    private void userVerifyResponse() {
+    private void userVerifyResponse(final String verificationCode) {
         G.onUserVerification = new OnUserVerification() {
             @Override
             public void onUserVerify(final String tokenR, final boolean newUserR) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        rg_txt_verify_sms.setText("Your login code is : 12345");
+                        rg_txt_verify_sms.setText("login code is : " + verificationCode);
                         rg_prg_verify_sms.setVisibility(View.GONE);
                         rg_img_verify_sms.setVisibility(View.VISIBLE);
                         rg_img_verify_sms.setImageResource(R.mipmap.check);
@@ -719,6 +717,7 @@ public class ActivityRegister extends ActivityEnhanced {
                                 userInfo.setPhoneNumber(phoneNumber);
                                 userInfo.setToken(token);
                                 userInfo.setUserRegistrationState(true);
+                                G.importContact();
                             }
                         });
 
