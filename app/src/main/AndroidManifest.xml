@@ -76,7 +76,7 @@
             android:theme="@style/AppTheme22" />
         <activity android:name=".activitys.ActivitySetting"></activity>
 
-        <activity android:name=".activitys.ActivityChanelInfo"></activity>
+        <activity android:name=".activitys.ActivityContactsProfile"></activity>
 
         <receiver android:name=".module.IncomingSms" />
         <receiver android:name="com.iGap.module.ReceiverInternet">

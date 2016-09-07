@@ -7,7 +7,7 @@ import com.iGap.proto.ProtoUserProfileEmail;
 public class RequestUserProfileEmail {
 
     public void setUserProfileEmail(String email) {
-        ProtoUserProfileEmail.UserProfileEmail.Builder userProfileEmail = ProtoUserProfileEmail.UserProfileEmail.newBuilder();
+        ProtoUserProfileEmail.UserProfileSetEmail.Builder userProfileEmail = ProtoUserProfileEmail.UserProfileSetEmail.newBuilder();
         userProfileEmail.setRequest(ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
         userProfileEmail.setEmail(email);
 

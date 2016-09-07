@@ -38,7 +38,7 @@ import java.util.ArrayList;
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
 
-public class ActivityChanelInfo extends ActivityEnhanced {
+public class ActivityContactsProfile extends ActivityEnhanced {
     private long userId = 0;
     private long phone = 912123456;
     private String displayName = "Alexander Smith";
@@ -57,7 +57,7 @@ public class ActivityChanelInfo extends ActivityEnhanced {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chanel_info);
+        setContentView(R.layout.activity_contacts_profile);
         final Realm realm = Realm.getDefaultInstance();
 
         Bundle extras = getIntent().getExtras();
@@ -77,7 +77,7 @@ public class ActivityChanelInfo extends ActivityEnhanced {
         txtBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {// button back
-                startActivity(new Intent(ActivityChanelInfo.this, ActivityMain.class));
+                startActivity(new Intent(ActivityContactsProfile.this, ActivityMain.class));
                 finish();
             }
         });
@@ -185,7 +185,7 @@ public class ActivityChanelInfo extends ActivityEnhanced {
             @Override
             public void onClick(View view) {
 
-//                startActivity(new Intent(ActivityChanelInfo.this , ActivitySharedMedia.class));
+//                startActivity(new Intent(ActivityContactsProfile.this , ActivitySharedMedia.class));
 //                finish();
 
                 // TODO: 9/3/2016 (molareza) go to MediaShared page
@@ -227,7 +227,7 @@ public class ActivityChanelInfo extends ActivityEnhanced {
 
     private void popUpMenu(final int layout, View v) {
 
-        PopupMenu popupMenu = new PopupMenu(ActivityChanelInfo.this, v, Gravity.BOTTOM);
+        PopupMenu popupMenu = new PopupMenu(ActivityContactsProfile.this, v, Gravity.BOTTOM);
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -238,16 +238,16 @@ public class ActivityChanelInfo extends ActivityEnhanced {
                         case R.id.chi_popUpMenu0:
 
                             // TODO: 9/3/2016 (molareza) popupMenu share
-                            Toast.makeText(ActivityChanelInfo.this, "1", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ActivityContactsProfile.this, "1", Toast.LENGTH_SHORT).show();
                             return true;
 
                         case R.id.chi_popUpMenu1:
                             // TODO: 9/3/2016 (molareza) popupMenu delete
-                            Toast.makeText(ActivityChanelInfo.this, "2", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ActivityContactsProfile.this, "2", Toast.LENGTH_SHORT).show();
                             return true;
                         case R.id.chi_popUpMenu2:
                             // TODO: 9/3/2016 (molareza) popupMenu add shortcut
-                            Toast.makeText(ActivityChanelInfo.this, "3", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ActivityContactsProfile.this, "3", Toast.LENGTH_SHORT).show();
                             return true;
                     }
 
@@ -302,7 +302,7 @@ public class ActivityChanelInfo extends ActivityEnhanced {
                             startActivity(intent);
 
 
-                            Toast.makeText(ActivityChanelInfo.this, "1", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ActivityContactsProfile.this, "1", Toast.LENGTH_SHORT).show();
                             return true;
 
                         case R.id.chi_popUpCall: // call to user
@@ -320,7 +320,7 @@ public class ActivityChanelInfo extends ActivityEnhanced {
                             }
 
 
-                            Toast.makeText(ActivityChanelInfo.this, "2", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ActivityContactsProfile.this, "2", Toast.LENGTH_SHORT).show();
                             return true;
 
                         case R.id.chi_popUpCopy: // copy phone number
@@ -332,7 +332,7 @@ public class ActivityChanelInfo extends ActivityEnhanced {
                             ClipData clip = ClipData.newPlainText("PHONE_NUMBER", copy);
                             clipboard.setPrimaryClip(clip);
 
-                            Toast.makeText(ActivityChanelInfo.this, "3", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ActivityContactsProfile.this, "3", Toast.LENGTH_SHORT).show();
                             return true;
                     }
                 }
@@ -347,7 +347,7 @@ public class ActivityChanelInfo extends ActivityEnhanced {
 
     private void showAlertDialog(String message, String positive, String negitive) { // alert dialog for block or clear user
 
-        final AlertDialog.Builder builder = new AlertDialog.Builder(ActivityChanelInfo.this);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(ActivityContactsProfile.this);
 
         builder.setMessage(message);
         builder.setPositiveButton(positive, new DialogInterface.OnClickListener() {

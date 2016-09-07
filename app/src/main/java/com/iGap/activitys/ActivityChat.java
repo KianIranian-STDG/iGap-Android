@@ -379,7 +379,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             @Override
             public void onClick(View view) {
                 if (chatType == ProtoGlobal.Room.Type.CHAT && !lastSeen.equals("iGap Messenger")) {//TODO [Saeed Mozaffari] [2016-09-07 11:46 AM] -  !lastSeen.equals("iGap Messenger") ==> in if eshtebah ast
-                    Intent intent = new Intent(G.context, ActivityChanelInfo.class);
+                    Intent intent = new Intent(G.context, ActivityContactsProfile.class);
                     intent.putExtra("peerId", chatPeerId);
                     startActivity(intent);
                 }

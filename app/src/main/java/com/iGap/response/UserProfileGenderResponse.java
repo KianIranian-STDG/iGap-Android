@@ -20,7 +20,7 @@ public class UserProfileGenderResponse extends MessageHandler {
 
     @Override
     public void handler() {
-        ProtoUserProfileGender.UserProfileGenderResponse.Builder userProfileGenderResponse = ProtoUserProfileGender.UserProfileGenderResponse.newBuilder();
+        ProtoUserProfileGender.UserProfileSetGenderResponse.Builder userProfileGenderResponse = ProtoUserProfileGender.UserProfileSetGenderResponse.newBuilder();
         G.onUserProfileGenderResponse.onUserProfileEmailResponse(userProfileGenderResponse.getGender(), userProfileGenderResponse.getResponse());
     }
 

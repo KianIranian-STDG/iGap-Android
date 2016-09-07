@@ -1,14 +1,11 @@
 package com.iGap.request;
 
-import com.iGap.helper.HelperString;
-import com.iGap.proto.ProtoRequest;
 import com.iGap.proto.ProtoUserProfileNickname;
 
 public class RequestUserProfileNickName {
 
     public void userProfileNickName(String nickName) {
-        ProtoUserProfileNickname.UserProfileNickname.Builder userProfileNickName = ProtoUserProfileNickname.UserProfileNickname.newBuilder();
-        userProfileNickName.setRequest(ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
+        ProtoUserProfileNickname.UserProfileSetNickname.Builder userProfileNickName = ProtoUserProfileNickname.UserProfileSetNickname.newBuilder();
         userProfileNickName.setNickname(nickName);
 
         RequestWrapper requestWrapper = new RequestWrapper(105, userProfileNickName);
