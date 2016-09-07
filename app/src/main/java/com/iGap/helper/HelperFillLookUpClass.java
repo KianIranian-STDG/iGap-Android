@@ -36,6 +36,14 @@ public class HelperFillLookUpClass {
         G.lookupMap.put(30108, "ProtoUserContactsDelete.UserContactsDeleteResponse");
         G.lookupMap.put(109, "UserContactsEdit");
         G.lookupMap.put(30109, "ProtoUserContactsEdit.UserContactsEditResponse");
+        G.lookupMap.put(110, "UserProfileGetEmail");
+        G.lookupMap.put(30110, "ProtoUserProfileGetEmail.UserProfileGetEmailResponse");
+        G.lookupMap.put(111, "UserProfileGetGender");
+        G.lookupMap.put(30111, "ProtoUserProfileGetGender.UserProfileGetGenderResponse");
+        G.lookupMap.put(112, "UserProfileGetNickname");
+        G.lookupMap.put(30112, "ProtoUserProfileGetNickname.UserProfileGetNicknameResponse");
+        G.lookupMap.put(113, "UserUsernameToId");
+        G.lookupMap.put(30113, "ProtoUserUsernameToId.UserUsernameToIdResponse");
 
         // Chat 2xx , 302xx
         G.lookupMap.put(200, "Chat.GetRoom");
@@ -50,6 +58,34 @@ public class HelperFillLookUpClass {
         G.lookupMap.put(30204, "ProtoChatDeleteMessage.ChatDeleteMessageResponse");
         G.lookupMap.put(205, "Chat.ClearMessage");
         G.lookupMap.put(30205, "ProtoChatClearMessage.ChatClearMessageResponse");
+        G.lookupMap.put(206, "ChatDelete");
+        G.lookupMap.put(30206, "ProtoChatDelete.ChatDeleteResponse");
+
+        // Group 3xx , 303xx
+        G.lookupMap.put(300, "GroupCreate");
+        G.lookupMap.put(30300, "ProtoGroupCreate.GroupCreateResponse");
+        G.lookupMap.put(301, "GroupAddMember");
+        G.lookupMap.put(30301, "ProtoGroupAddMember.GroupAddMemberResponse");
+        G.lookupMap.put(302, "GroupAddAdmin");
+        G.lookupMap.put(30302, "ProtoGroupAddAdmin.GroupAddAdminResponse");
+        G.lookupMap.put(303, "GroupAddModerator");
+        G.lookupMap.put(30303, "ProtoGroupAddModerator.GroupAddModeratorResponse");
+        G.lookupMap.put(304, "GroupClearMessage");
+        G.lookupMap.put(30304, "ProtoGroupClearMessage.GroupClearMessageResponse");
+        G.lookupMap.put(305, "GroupEdit");
+        G.lookupMap.put(30305, "ProtoGroupEdit.GroupEditResponse");
+        G.lookupMap.put(306, "GroupKickAdmin");
+        G.lookupMap.put(30306, "ProtoGroupKickAdmin.GroupKickAdminResponse");
+        G.lookupMap.put(307, "GroupKickMember");
+        G.lookupMap.put(30307, "ProtoGroupKickMember.GroupKickMemberResponse");
+        G.lookupMap.put(308, "GroupKickModerator");
+        G.lookupMap.put(30308, "ProtoGroupKickModerator.GroupKickModeratorResponse");
+        G.lookupMap.put(309, "GroupLeft");
+        G.lookupMap.put(30309, "ProtoGroupLeft.GroupLeftResponse");
+        G.lookupMap.put(310, "GroupSendMessage");
+        G.lookupMap.put(30310, "ProtoGroupSendMessage.GroupSendMessageResponse");
+        G.lookupMap.put(311, "GroupUpdateStatus");
+        G.lookupMap.put(30311, "ProtoGroupUpdateStatus.GroupUpdateStatusResponse");
 
         // Info 5xx , 305xx
         G.lookupMap.put(500, "Info.Location");
@@ -68,6 +104,8 @@ public class HelperFillLookUpClass {
         G.lookupMap.put(30601, "ProtoClientGetRoomList.ClientGetRoomListResponse");
         G.lookupMap.put(602, "Client.GetRoom");
         G.lookupMap.put(30602, "ProtoClientGetRoom.ClientGetRoomResponse");
+        G.lookupMap.put(603, "ClientGetRoom");
+        G.lookupMap.put(30603, "ProtoClientGetRoom.ClientGetRoomResponse");
 
         // FileUpload 7xx , 307xx
         G.lookupMap.put(700, "FileUploadOption");
