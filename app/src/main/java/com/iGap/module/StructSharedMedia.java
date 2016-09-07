@@ -10,12 +10,17 @@ import java.io.Serializable;
 public class StructSharedMedia implements Serializable {
 
     public boolean isSelected = false;
+    public boolean isDownloading = false;
+
     public ProtoGlobal.RoomMessageType messgeType = ProtoGlobal.RoomMessageType.IMAGE;
     public String tumpnail = "";
     public String filePath = "";
     public String fileUrl = "";
     public String fileName = "";
     public String fileTime = "";
+
+    public String fileInfo = "";
+
     public ProtoGlobal.Room.Type chatType = ProtoGlobal.Room.Type.CHAT;
     public String chatId = "";
 

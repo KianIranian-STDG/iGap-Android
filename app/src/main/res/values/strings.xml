@@ -29,6 +29,10 @@
     <string name="fa_long_arrow_right">&#xf178;</string>
     <string name="fa_chevron_down">&#xf078;</string>
     <string name="fa_chevron_up">&#xf077;</string>
+    <string name="fa_sort_desc">&#xf0dd;</string>
+    <string name="fa_arrow_down">&#xf063;</string>
+    <string name="fa_video_camera">&#xf03d;</string>
+    <string name="fa_pause">&#xf04c;</string>
 
     <string name="fa_cog">&#xf013;</string>
     <string name="fa_user_plus">&#xf234;</string>
@@ -235,17 +239,25 @@
     <string name="mh_popup_audio">Audio</string>
 
 
+    <string name="shared_media">Shared Media</string>
+    <string name="shared_files">Shared Files</string>
+    <string name="shared_links">Shared Links</string>
+    <string name="shared_music">Shared Music</string>
+
+    <string name="show_all_media">Show all Media</string>
+    <string name="save_to_gallery">Save to gallery</string>
+
+
     <string-array name="pop_up_shared_media">
-        <item>Media</item>
-        <item>Files</item>
-        <item>Links</item>
-        <item>Music</item>
+        <item>@string/shared_media</item>
+        <item>@string/shared_files</item>
+        <item>@string/shared_links</item>
+        <item>@string/shared_music</item>
     </string-array>
 
-
     <string-array name="pop_up_menu_show_image">
-        <item>Show all Media</item>
-        <item>Save to gallery</item>
+        <item>@string/show_all_media</item>
+        <item>@string/save_to_gallery</item>
     </string-array>
 
 

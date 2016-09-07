@@ -46,11 +46,11 @@
 
                 <TextView
                     android:id="@+id/asm_txt_sheared_media"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="@string/shared_media"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="Sheared Media"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/sp18" />
@@ -60,6 +60,7 @@
                     android:layout_width="@dimen/dp60"
                     android:layout_height="match_parent"
                     android:background="@null"
+                    android:paddingTop="@dimen/dp12"
                     android:text="@string/fa_ellipsis_v"
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/sp20" />
@@ -75,6 +76,72 @@
 
 
     </android.support.design.widget.AppBarLayout>
+
+
+    <LinearLayout
+        android:id="@+id/asm_ll_appbar_selelected"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="4dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp60"
+            android:background="@android:color/white"
+            android:orientation="horizontal">
+
+
+            <Button
+                android:id="@+id/asm_btn_close_layout"
+                android:layout_width="@dimen/dp48"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:paddingLeft="@dimen/dp12"
+                android:text="@string/fa_close"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/sp20" />
+
+            <TextView
+                android:id="@+id/asm_txt_number_of_selected"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="left|center"
+                android:padding="@dimen/dp8"
+                android:singleLine="true"
+                android:text="0"
+                android:textSize="@dimen/sp20" />
+
+            <Button
+                android:id="@+id/asm_btn_forward_selected"
+                android:layout_width="@dimen/dp60"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:text="@string/fa_long_arrow_right"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/sp20" />
+
+
+            <Button
+                android:id="@+id/asm_btn_delete_selected"
+                android:layout_width="@dimen/dp60"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:text="@string/fa_trash_o"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/sp20" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray"></View>
+
+    </LinearLayout>
 
 
 </android.support.design.widget.CoordinatorLayout>
