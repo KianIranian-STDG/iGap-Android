@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Environment;
 import android.os.Handler;
+import android.support.multidex.MultiDex;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.Toast;
@@ -144,6 +145,7 @@ public class G extends Application {
 
     @Override
     public void onCreate() {
+        MultiDex.install(getApplicationContext());
         super.onCreate();
         new File(DIR_APP).mkdirs();
         new File(DIR_IMAGES).mkdirs();
