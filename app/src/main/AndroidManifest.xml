@@ -8,14 +8,15 @@
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission android:name="android.permission.PERMISSION_GRANTED" />
-    //im not shore need orno
+    <uses-permission android:name="android.permission.PERMISSION_GRANTED" />//im not shore need or
+    no
     <!-- required for drawer contacts fragment -->
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
@@ -31,15 +32,30 @@
             android:name=".activitys.ActivityChat"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
+
+
+        <activity
+            android:name=".activitys.ActivityShearedMedia"
+            android:configChanges="keyboard|keyboardHidden|screenSize|locale">
+
+        </activity>
+
+
+        <activity
+            android:name=".activitys.ActivityShowImage"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale">
+
+        </activity>
+
         <activity
             android:name=".activitys.ActivityComment"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
+
         <activity
             android:name=".activitys.ActivityMain"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -50,8 +66,11 @@
         </activity>
         <activity
             android:name=".activitys.ActivityProfile"
-            android:configChanges="keyboard|keyboardHidden|screenSize|locale"></activity>
+            android:configChanges="keyboard|keyboardHidden|screenSize|locale">
+
+        </activity>
         <activity android:name=".activitys.ActivityCrop" />
+
         <activity
             android:name=".activitys.ActivityRegister"
             android:configChanges="keyboard|keyboardHidden|screenSize|locale"
@@ -59,15 +78,19 @@
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/AppTheme22" />
-        <activity android:name=".activitys.ActivitySetting">
-
-        </activity>
-
-        <receiver android:name=".module.IncomingSms" />
+        <activity android:name=".activitys.ActivitySetting"></activity>
 
         <activity android:name=".activitys.ActivityChanelInfo"></activity>
-        <activity android:name=".activitys.ActivitySettingNotification">
-        </activity>
+
+        <receiver android:name=".module.IncomingSms" />
+        <receiver android:name="com.iGap.module.ReceiverInternet">
+            <intent-filter>
+                <action android:name="android.net.wifi.STATE_CHANGE" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
     </application>
+
 
 </manifest>

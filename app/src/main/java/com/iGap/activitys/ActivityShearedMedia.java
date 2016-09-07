@@ -99,6 +99,10 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 int viewWidth = recyclerView.getMeasuredWidth();
                 float cardViewWidth = getResources().getDimension(R.dimen.dp120);
                 int newSpanCount = (int) Math.floor(viewWidth / cardViewWidth);
+
+                if (newSpanCount < 3)
+                    newSpanCount = 3;
+
                 spanItemCount = newSpanCount;
                 gLayoutManager.setSpanCount(newSpanCount);
                 gLayoutManager.requestLayout();
@@ -123,7 +127,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
         layoutParams.copyFrom(dialog.getWindow().getAttributes());
-        layoutParams.width = (int) getResources().getDimension(R.dimen.dp200);
+        layoutParams.width = (int) getResources().getDimension(R.dimen.dp160);
         layoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
         dialog.getWindow().setAttributes(layoutParams);
     }
@@ -134,45 +138,46 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         list = new ArrayList<>();
 
         StructSharedMedia item1 = new StructSharedMedia();
-        item1.time = "May 2016";
+        item1.fileTime = "May 2016";
         item1.messgeType = ProtoGlobal.RoomMessageType.TEXT;
         list.add(item1);
 
         StructSharedMedia item2 = new StructSharedMedia();
-        item2.picPath = R.mipmap.b + "";
+        item2.filePath = R.mipmap.b + "";
+        item2.fileName = "image 1";
+        item2.fileTime = " 2016/3/29  11:29";
         list.add(item2);
 
         StructSharedMedia item3 = new StructSharedMedia();
-        item3.picPath = R.mipmap.c + "";
+        item3.filePath = R.mipmap.c + "";
+        item3.fileName = "image 2";
+        item3.fileTime = " 2016/1/2  11:29";
         list.add(item3);
 
         StructSharedMedia item4 = new StructSharedMedia();
-        item4.picPath = R.mipmap.d + "";
+        item4.filePath = R.mipmap.d + "";
         list.add(item4);
 
+
         StructSharedMedia item5 = new StructSharedMedia();
-        item5.picPath = R.mipmap.e + "";
+        item5.filePath = R.mipmap.e + "";
         list.add(item5);
 
         StructSharedMedia item6 = new StructSharedMedia();
-        item6.picPath = R.mipmap.f + "";
+        item6.filePath = R.mipmap.f + "";
         list.add(item6);
 
+        list.add(item1);
+
         StructSharedMedia item7 = new StructSharedMedia();
-        item7.picPath = R.mipmap.a + "";
+        item7.filePath = R.mipmap.g + "";
         list.add(item7);
 
         StructSharedMedia item8 = new StructSharedMedia();
-        item8.picPath = R.mipmap.b + "";
+        item8.filePath = R.mipmap.h + "";
         list.add(item8);
 
 
-        list.add(item1);
-        list.add(item2);
-        list.add(item3);
-        list.add(item4);
-        list.add(item5);
-        list.add(item8);
     }
 
 

@@ -1,6 +1,7 @@
 package com.iGap.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.iGap.R;
+import com.iGap.activitys.ActivityShowImage;
 import com.iGap.module.StructSharedMedia;
 import com.iGap.proto.ProtoGlobal;
 
@@ -54,9 +56,9 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         if (getItemViewType(position) == Type_Header) {
-            ((MyHoldersTime) holder).txtTime.setText(list.get(position).time);
+            ((MyHoldersTime) holder).txtTime.setText(list.get(position).fileTime);
         } else {
-            ((MyHolders) holder).imvPicFile.setImageResource(Integer.parseInt(list.get(position).picPath));
+            ((MyHolders) holder).imvPicFile.setImageResource(Integer.parseInt(list.get(position).filePath));
         }
 
     }
@@ -89,6 +91,13 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
                 @Override
                 public void onClick(View view) {
                     Log.e("ddd", "item click  " + getPosition());
+
+                    if (list.get(getPosition()).messgeType == ProtoGlobal.RoomMessageType.IMAGE) {
+                        selectImage(getPosition());
+                    }
+
+
+
                 }
             });
         }
@@ -106,5 +115,63 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
+
+    //****************************************************************************************************************
+
+
+    public void selectImage(int position) {
+
+        String path = list.get(position).filePath;
+
+        showImage(path);
+
+
+//        if(path.length()>0){
+//            File file=new File(path);
+//            if(file.exists()){
+//                showImage(path);
+//            }else{
+//                downloadFile();
+//            }
+//        }
+//        else{
+//            downloadFile();
+//        }
+
+
+    }
+
+
+    private void downloadFile() {
+
+        // TODO: 9/6/2016   write download class
+
+    }
+
+    private void showImage(String filePath) {
+
+        ArrayList<StructSharedMedia> listPic = new ArrayList<>();
+
+        int selectedImage = -1;
+
+        for (int i = 0; i < list.size(); i++) {// get list image from list files
+            if (list.get(i).messgeType == ProtoGlobal.RoomMessageType.IMAGE)
+                listPic.add(list.get(i));
+        }
+
+
+        for (int i = 0; i < listPic.size(); i++) { // determin selected image in list image
+            if (listPic.get(i).filePath.equals(filePath)) {
+                selectedImage = i;
+                break;
+            }
+        }
+
+
+        Intent intent = new Intent(context, ActivityShowImage.class); // run activity show image k
+        intent.putExtra("listPic", listPic);
+        intent.putExtra("SelectedImage", selectedImage);
+        context.startActivity(intent);
+    }
 
 }

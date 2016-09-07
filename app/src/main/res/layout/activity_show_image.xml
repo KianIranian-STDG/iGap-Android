@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    android:layoutDirection="ltr">
+
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/asi_view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></android.support.v4.view.ViewPager>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp60"
+        android:background="#55000000"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/asi_btn_back"
+            android:layout_width="@dimen/dp60"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:text="@string/fa_chevron_left"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/sp20" />
+
+        <TextView
+            android:id="@+id/asi_txt_image_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="2 of 10"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/sp18" />
+
+        <Button
+            android:id="@+id/asi_btn_menu"
+            android:layout_width="@dimen/dp60"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:text="@string/fa_ellipsis_v"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/sp20" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#55000000"
+        android:layout_alignParentBottom="true"
+        android:paddingLeft="@dimen/dp32"
+        android:paddingBottom="@dimen/dp4"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp14"
+            android:textColor="@android:color/white"
+            android:text="image 232"
+            android:id="@+id/asi_txt_image_name" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp14"
+            android:textColor="@android:color/white"
+            android:text="2016/5/19 at 11:44"
+            android:id="@+id/asi_txt_image_date" />
+    </LinearLayout>
+
+
+</RelativeLayout>

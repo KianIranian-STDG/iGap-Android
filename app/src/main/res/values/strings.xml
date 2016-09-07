@@ -242,4 +242,11 @@
         <item>Music</item>
     </string-array>
 
+
+    <string-array name="pop_up_menu_show_image">
+        <item>Show all Media</item>
+        <item>Save to gallery</item>
+    </string-array>
+
+
 </resources>
