@@ -1,202 +1,14 @@
-package com.iGap.adapter;
-
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
-import com.iGap.G;
-import com.iGap.R;
-import com.iGap.activitys.ActivityComment;
-import com.iGap.interface_package.OnMessageClick;
-import com.iGap.module.CircleImageView;
-import com.iGap.module.GifMovieView;
-import com.iGap.module.MyType;
-import com.iGap.module.OnComplete;
-import com.iGap.module.StructMessageInfo;
-import com.iGap.proto.ProtoGlobal;
-
-import java.util.ArrayList;
-import java.util.List;
-
-/**
- * Created by android3 on 8/5/2016.
- */
+/*
 public class AdapterChatMessage extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
-    private ArrayList<StructMessageInfo> list;
-    private Context context;
-    private ProtoGlobal.Room.Type chatType;
-    private OnComplete complete;
-    private OnMessageClick mOnMessageClick;
-    private List<String> mSelectedMessagesIds = new ArrayList<>();
-
-    private boolean isSelectedMode = false;
-    private int numberOfSelected = 0;
-
-    /**
-     * use this method for adding and notifying
-     *
-     * @param messageInfo StructMessageInfo
-     */
-    public void insert(StructMessageInfo messageInfo) {
-        list.add(messageInfo);
-        notifyItemInserted(getItemCount());
-    }
-
-    /**
-     * update message status
-     *
-     * @param messageId message id
-     * @param status    ProtoGlobal.RoomMessageStatus
-     */
-    public void updateMessageStatus(long messageId, ProtoGlobal.RoomMessageStatus status) {
-        for (StructMessageInfo messageInfo : list) {
-            if (messageInfo.messageID.equals(Long.toString(messageId))) {
-                int pos = list.indexOf(messageInfo);
-                messageInfo.status = status.toString();
-                notifyItemChanged(pos);
-                break;
-            }
-        }
-    }
-
-    /**
-     * update message text
-     *
-     * @param messageId   message id
-     * @param updatedText new message text
-     */
-    public void updateMessageText(long messageId, String updatedText) {
-        for (StructMessageInfo messageInfo : list) {
-            if (messageInfo.messageID.equals(Long.toString(messageId))) {
-                int pos = list.indexOf(messageInfo);
-                messageInfo.messageText = updatedText;
-                notifyItemChanged(pos);
-                break;
-            }
-        }
-    }
-
-    public void removeMessage(long messageId) {
-        for (StructMessageInfo messageInfo : list) {
-            if (messageInfo.messageID.equals(Long.toString(messageId))) {
-                int pos = list.indexOf(messageInfo);
-                // remove from selected messages too
-                setIsSelectedItem(pos);
-                list.remove(pos);
-                notifyItemRemoved(pos);
-                break;
-            }
-        }
-    }
-
-    /**
-     * update message id and its status
-     *
-     * @param messageId new message id
-     * @param identity  old manually defined as identity id
-     * @param status    ProtoGlobal.RoomMessageStatus
-     */
-    public void updateMessageIdAndStatus(long messageId, String identity, ProtoGlobal.RoomMessageStatus status) {
-        for (StructMessageInfo messageInfo : list) {
-            if (messageInfo.messageID.equals(identity)) {
-                int pos = list.indexOf(messageInfo);
-                messageInfo.status = status.toString();
-                messageInfo.messageID = Long.toString(messageId);
-                notifyItemChanged(pos);
-                break;
-            }
-        }
-    }
-
-    public void clear() {
-        int count = list.size();
-        list.clear();
-        notifyItemRangeRemoved(0, count);
-    }
-
-    public void insert(ArrayList<StructMessageInfo> messageInfos) {
-        list.addAll(messageInfos);
-        notifyItemRangeInserted(0, messageInfos.size());
-    }
-
-    public AdapterChatMessage(Context context, ProtoGlobal.Room.Type chatType, ArrayList<StructMessageInfo> list, OnComplete complete, OnMessageClick onMessageClick) {
-        this.list = list;
-        this.context = context;
-        this.chatType = chatType;
-        this.complete = complete;
-        mOnMessageClick = onMessageClick;
-    }
-
-    private void defineMessageStatus(StructMessageInfo messageInfo, TextView view) {
-        CharSequence status = null;
-        switch (messageInfo.status) {
-            case "DELIVERED":
-                status = context.getResources().getString(R.string.fa_check);
-                break;
-            case "FAILED":
-                status = context.getResources().getString(R.string.fa_exclamation_triangle);
-                break;
-            case "SEEN":
-                status = context.getResources().getString(R.string.fa_check) + context.getResources().getString(R.string.fa_check);
-                break;
-            case "SENDING":
-                status = context.getResources().getString(R.string.fa_clock_o);
-                break;
-            case "SENT":
-                status = context.getResources().getString(R.string.fa_check);
-                break;
-            case "UNRECOGNIZED":
-                status = null; // FIXME: 9/5/2016 [Alireza Eskandarpour Shoferi] fill appreciate icon
-                break;
-        }
-
-        view.setText(status);
-    }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        RecyclerView.ViewHolder viewHolder = null;
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View v;
-        View main = null;
-
-        // inflate layout send or recive
-        if (list.get(viewType).sendType == MyType.SendType.timeLayout) {// inflate time layout
-            main = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_sub_layout_date_time, null);
-            viewHolder = new holdrNoAction(main);
-            return viewHolder;
-        } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {//inflate layout channel
+        if (chatType == ProtoGlobal.Room.Type.CHANNEL) {//inflate layout channel
             main = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_sub_layout_channel, null);
             RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             main.setLayoutParams(lp);
-        } else if (list.get(viewType).sendType == MyType.SendType.send) {// inflate layout send
-            main = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_sub_layout_send, null);
-        } else {//inflate layout recive
-            main = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_sub_layout_recive, null);
         }
-
-
-        if (list.get(viewType).messageText.length() > 0) {
-            TextView txtMessage = (TextView) main.findViewById(R.id.cslr_txt_message);
-            txtMessage.setVisibility(View.VISIBLE);
-            txtMessage.setText(list.get(viewType).messageText);
-        }
-
 
         // add layout forward message to layout
         if (list.get(viewType).forwardMessageFrom.length() > 0 && chatType != ProtoGlobal.Room.Type.CHANNEL) {
@@ -224,72 +36,15 @@ public class AdapterChatMessage extends RecyclerView.Adapter<RecyclerView.ViewHo
             }
         }
 
-
-        LinearLayout frameLayout = (LinearLayout) main.findViewById(R.id.cslr_ll_content_main);// layout for add other layot in it
-
-        if (chatType != ProtoGlobal.Room.Type.CHANNEL)
-            if (list.get(viewType).sendType == MyType.SendType.send)
-                ((TextView) main.findViewById(R.id.cslr_txt_tic)).setTypeface(G.fontawesome);
-
-
         //add layout replay to layout
         if (list.get(viewType).replayFrom.length() > 0)
             addLayoutReplay(inflater, frameLayout, viewType);
 
 
-        // add item layout
-        switch (list.get(viewType).messageType) {
-            case TEXT:
-                viewHolder = new myHolder(main);
-                break;
-            case IMAGE:
-                v = inflater.inflate(R.layout.chat_sub_layout_image, parent, false);
-                frameLayout.addView(v);
-                viewHolder = new viewHolderImage(main);
-                configureViewHolderImage((viewHolderImage) viewHolder, viewType);
-                break;
-            case VIDEO:
-                v = inflater.inflate(R.layout.chat_sub_layout_video, parent, false);
-                frameLayout.addView(v);
-                viewHolder = new viewHolderVideo(main);
-                configureViewHolderVideo((viewHolderVideo) viewHolder, viewType);
-                break;
-            case FILE:
-                v = inflater.inflate(R.layout.chat_sub_layout_file, parent, false);
-                frameLayout.addView(v);
-                viewHolder = new viewHolderFile(main);
-                configureViewHolderFile((viewHolderFile) viewHolder, viewType);
-                break;
-            case VOICE:
-                v = inflater.inflate(R.layout.chat_sub_layout_audio, parent, false);
-                frameLayout.addView(v);
-                viewHolder = new viewHolderAudio(main);
-                configureViewHolderAudio((viewHolderAudio) viewHolder, viewType);
-                break;
-            /*case MyType.gif:
-                v = inflater.inflate(R.layout.chat_sub_layout_gif, parent, false);
-                frameLayout.addView(v);
-                viewHolder = new viewHolderGif(main);
-                configureViewHolderGif((viewHolderGif) viewHolder, viewType);
-                break;*/
-            /*case MyType.sticker:
-                v = inflater.inflate(R.layout.chat_sub_layout_sticker, parent, false);
-                frameLayout.addView(v);
-                ImageView imvSticker = (ImageView) v.findViewById(R.id.cslst_imv_sticker);
-                imvSticker.setImageResource(Integer.parseInt(list.get(viewType).filePath));
-                if (chatType == ProtoGlobal.Room.Type.CHANNEL)
-                    main.findViewById(R.id.cslch_ll_parent).setBackgroundColor(Color.TRANSPARENT);
-                else
-                    main.findViewById(R.id.cslr_ll_frame).setBackgroundColor(Color.TRANSPARENT);
-                viewHolder = new myHolder(main);
-                break;*/
-        }
-
-
         //set background layout time in single chat or group chat
         if (chatType != ProtoGlobal.Room.Type.CHANNEL) {
-            if (((list.get(viewType).messageType == ProtoGlobal.RoomMessageType.IMAGE /*|| list.get(viewType).messageType == MyType.MessageType.gif*/)
-                    && list.get(viewType).messageText == "") /*|| list.get(viewType).messageType == MyType.MessageType.sticker*/) {
+            if (((list.get(viewType).messageType == ProtoGlobal.RoomMessageType.IMAGE)
+                    && list.get(viewType).messageText == "")) {
 
                 LinearLayout layoutTime = (LinearLayout) main.findViewById(R.id.cslr_ll_time);
                 layoutTime.setBackgroundResource(R.drawable.recangle_gray_tranceparent);
@@ -301,10 +56,6 @@ public class AdapterChatMessage extends RecyclerView.Adapter<RecyclerView.ViewHo
                 ((TextView) main.findViewById(R.id.cslr_txt_time)).setTextColor(Color.WHITE);
             }
         }
-
-
-        if (chatType == ProtoGlobal.Room.Type.CHANNEL && list.get(viewType).sendType != MyType.SendType.timeLayout)
-            configureLayoutChannel(viewHolder, viewType);
 
 
         // set sender image in group chat
@@ -319,45 +70,6 @@ public class AdapterChatMessage extends RecyclerView.Adapter<RecyclerView.ViewHo
 
 
         return viewHolder;
-    }
-
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        // update message status
-        TextView messageStatus = (TextView) holder.itemView.findViewById(R.id.cslr_txt_tic);
-        if (messageStatus != null) {
-            defineMessageStatus(list.get(position), messageStatus);
-        }
-
-        // update message text
-        TextView messageText = (TextView) holder.itemView.findViewById(R.id.cslr_txt_message);
-        if (messageText != null) {
-            messageText.setText(list.get(position).messageText);
-        }
-
-        if (list.get(position).isChange) {
-            UpdateSomething(position, holder);
-        }
-    }
-
-    @Override
-    public int getItemCount() {
-        return list.size();
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-
-        return position;
-    }
-
-    //***********************************************************************************************************
-
-    class holdrNoAction extends RecyclerView.ViewHolder {
-
-        public holdrNoAction(View itemView) {
-            super(itemView);
-        }
     }
 
     class myHolder extends RecyclerView.ViewHolder {
@@ -399,95 +111,8 @@ public class AdapterChatMessage extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
     }
 
-    class viewHolderFile extends myHolder {
-
-        public ImageView imvImageFile;
-        public ImageView imvStateFile;
-        public TextView txtFileName;
-        public TextView txtFileMimeType;
-        public TextView txtFileSize;
-
-        public viewHolderFile(View itemView) {
-            super(itemView);
-
-            imvImageFile = (ImageView) itemView.findViewById(R.id.cslf_imv_image_file);
-            imvStateFile = (ImageView) itemView.findViewById(R.id.cslf_imv_state_file);
-            txtFileName = (TextView) itemView.findViewById(R.id.cslf_txt_file_name);
-            txtFileMimeType = (TextView) itemView.findViewById(R.id.cslf_txt_file_mime_type);
-            txtFileSize = (TextView) itemView.findViewById(R.id.cslf_txt_file_size);
-        }
-    }
-
-    class viewHolderVideo extends myHolder {
-
-        public ImageView imvImageVideo;
-        public ImageButton imbPlayVideo;
-        public TextView txtVideoName;
-        public TextView txtVideoMimeType;
-        public TextView txtVideoInfo;
-
-        public viewHolderVideo(View itemView) {
-            super(itemView);
-
-            imvImageVideo = (ImageView) itemView.findViewById(R.id.cslv_imv_vido_image);
-            imbPlayVideo = (ImageButton) itemView.findViewById(R.id.cslv_btn_play_video);
-            txtVideoName = (TextView) itemView.findViewById(R.id.cslv_txt_video_name);
-            txtVideoMimeType = (TextView) itemView.findViewById(R.id.cslv_txt_video_mime_type);
-            txtVideoInfo = (TextView) itemView.findViewById(R.id.cslv_txt_vido_info);
-        }
-    }
-
-    class viewHolderAudio extends myHolder {
-
-        public ImageView imvStateAudio;
-        public TextView txtAudioName;
-        public TextView txtAudioMimeType;
-        public TextView txtAudioSize;
-        public Button btnAudioMenu;
-
-        public viewHolderAudio(View itemView) {
-            super(itemView);
-
-            imvStateAudio = (ImageView) itemView.findViewById(R.id.csla_imv_state_audio);
-            txtAudioName = (TextView) itemView.findViewById(R.id.csla_txt_audio_name);
-            txtAudioMimeType = (TextView) itemView.findViewById(R.id.csla_txt_audio_mime_type);
-            txtAudioSize = (TextView) itemView.findViewById(R.id.csla_txt_audio_size);
-
-            btnAudioMenu = (Button) itemView.findViewById(R.id.csla_btn_audio_menu);
-            btnAudioMenu.setTypeface(G.fontawesome);
-            btnAudioMenu.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Log.e("ddd", "click audio menu");
-                }
-            });
-        }
-    }
-
-    class viewHolderImage extends myHolder {
-
-        public ImageView imvPicture;
-
-        public viewHolderImage(View itemView) {
-            super(itemView);
-            imvPicture = (ImageView) itemView.findViewById(R.id.shli_imv_image);
-        }
-    }
-
-    class viewHolderGif extends myHolder {
-
-        public GifMovieView gifview;
-        public ImageButton btnPlay;
-
-        public viewHolderGif(View itemView) {
-            super(itemView);
-
-            gifview = (GifMovieView) itemView.findViewById(R.id.cslg_gifview);
-            btnPlay = (ImageButton) itemView.findViewById(R.id.cslg_btn_play);
-        }
-    }
-
-    //***********************************************************************************************************
+    /*/
+/***********************************************************************************************************
 
     private void configureLayoutChannel(RecyclerView.ViewHolder holder, final int position) {
 
@@ -549,116 +174,20 @@ public class AdapterChatMessage extends RecyclerView.Adapter<RecyclerView.ViewHo
 
 
         if (list.get(position).messageType == ProtoGlobal.RoomMessageType.IMAGE)
-            holder.itemView.findViewById(R.id.cslr_ll_content_main).setPadding(0, 0, 0, 0);
 
 
-        if (list.get(position).messageType == ProtoGlobal.RoomMessageType.VOICE) {// gone btn elipse_v audio
-            holder.itemView.findViewById(R.id.csla_btn_audio_menu).setVisibility(View.GONE);
-        } /*else if (list.get(position).messageType == MyType.MessageType.sticker) {// inivsible layout infor and menu in sticker
-            holder.itemView.findViewById(R.id.cslch_ll_info).setVisibility(View.INVISIBLE);
-            holder.itemView.findViewById(R.id.cslch_btn_item_menu).setVisibility(View.INVISIBLE);
-        }*/
-
-
-    }
-
-    private void configureViewHolderFile(viewHolderFile holder, int position) {
-
-
-    }
-
-    private void configureViewHolderVideo(final viewHolderVideo holder, int position) {
-
-        holder.itemView.findViewById(R.id.cslr_ll_content_main).setPadding(0, 0, 0, 0);
-
-        holder.txtVideoName.setText(list.get(position).fileName);
-        holder.txtVideoMimeType.setText(list.get(position).fileMime);
-        holder.txtVideoInfo.setText(list.get(position).fileInfo);
-
-        holder.imvImageVideo.setImageResource(Integer.parseInt(list.get(position).filePic));
-
-
-        MyType.FileState fs = list.get(position).fileState;
-
-        if (fs == MyType.FileState.notDownload || fs == MyType.FileState.downloading)// enabel or disable btn play video
-            holder.imbPlayVideo.setVisibility(View.GONE);
-        else
-            holder.imbPlayVideo.setVisibility(View.VISIBLE);
-
-        holder.imbPlayVideo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.e("ddd", " play video clicked");
+ if (list.get(position).messageType == ProtoGlobal.RoomMessageType.VOICE) {// gone btn elipse_v audio
+ holder.itemView.findViewById(R.id.csla_btn_audio_menu).setVisibility(View.GONE);
             }
-        });
 
 
     }
 
-    private void configureViewHolderAudio(viewHolderAudio holder, int position) {
-
-
-    }
-
-    private void configureViewHolderImage(final viewHolderImage holder, final int position) {
-        holder.imvPicture.setImageResource(Integer.parseInt(list.get(position).filePath));
-
-    }
-
-    private void configureViewHolderGif(final viewHolderGif holder, final int position) {
-
-        holder.gifview.setMovieResource(R.drawable.anim2);
-        holder.gifview.setPaused(true);
-
-        if (holder.gifview.isPaused())
-            holder.btnPlay.setVisibility(View.VISIBLE);
-        else holder.btnPlay.setVisibility(View.GONE);
-
-
-        holder.gifview.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (isSelectedMode) {
-                    setIsSelectedItem(position);
-                } else {
-                    holder.gifview.setPaused(true);
-                    holder.gifview.requestLayout();
-                    holder.btnPlay.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-
-        holder.gifview.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-
-                isSelectedMode = true;
-                setIsSelectedItem(position);
-
-                return true;
-            }
-        });
-
-        holder.btnPlay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Log.e("ddd", "btn gif click");
-
-                holder.gifview.setPaused(false);
-                holder.btnPlay.setVisibility(View.GONE);
-
-
-            }
-        });
-
-
-    }
-
-    /**
+ */
+/**
      * add layout replay to layout
-     */
+ *//*
+
     private void addLayoutReplay(LayoutInflater inflater, LinearLayout layout, final int position) {
         View v = inflater.inflate(R.layout.chat_sub_layout_replay, null, false);
         TextView txtReplayFrom = (TextView) v.findViewById(R.id.chslr_txt_replay_from);
@@ -679,112 +208,4 @@ public class AdapterChatMessage extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     }
 
-    //********************************************************************************************************
-    private void setIsSelectedItem(int position) {
-
-        list.get(position).isChange = true;
-        list.get(position).allChanges.add("1");
-
-        if (list.get(position).isSelected == false) {
-            list.get(position).isSelected = true;
-            numberOfSelected++;
-        } else {
-            list.get(position).isSelected = false;
-            numberOfSelected--;
-
-            if (numberOfSelected < 1) {
-                isSelectedMode = false;
-            }
-        }
-        notifyItemChanged(position);
-
-        if (complete != null) {
-            complete.complete(isSelectedMode, "1", numberOfSelected + "");
-        }
-
-        if (mSelectedMessagesIds.contains(list.get(position).messageID)) {
-            mSelectedMessagesIds.remove(list.get(position).messageID);
-        } else {
-            mSelectedMessagesIds.add(list.get(position).messageID);
-        }
-    }
-
-    public List<String> getSelectedMessages() {
-        return mSelectedMessagesIds;
-    }
-
-    /**
-     * reset all background color item in list
-     *
-     * @return
-     */
-    public boolean resetSelected() {
-
-        boolean result = isSelectedMode;
-
-        if (isSelectedMode == true) {
-            isSelectedMode = false;
-
-            for (int i = 0; i < list.size(); i++) {
-                if (list.get(i).isSelected) {
-                    list.get(i).isSelected = false;
-                    list.get(i).isChange = true;
-                    list.get(i).allChanges.add("1");
-                    notifyItemChanged(i);
-                    numberOfSelected--;
-                    if (numberOfSelected < 1)
-                        break;
-                }
-            }
-
-        }
-        complete.complete(false, "1", "0");//
-
-        return result;
-    }
-
-    /**
-     * set background color for evry item
-     *
-     * @param position
-     */
-    private void setBackGroundLayout(int position, RecyclerView.ViewHolder holder) {
-
-        int color;
-
-        if (list.get(position).isSelected) {
-            color = Color.parseColor("#99AADFF7");
-        } else {
-            color = Color.TRANSPARENT;
-        }
-
-        Drawable drawable = new ColorDrawable(color);
-        ((FrameLayout) holder.itemView.findViewById(R.id.cslr_ll_frame)).setForeground(drawable);
-        holder.itemView.setBackgroundColor(color);
-    }
-
-
-    private void UpdateSomething(int position, RecyclerView.ViewHolder holder) {
-        for (int i = 0; i < list.get(position).allChanges.size(); i++) {
-
-            int whatUpdate = Integer.parseInt(list.get(position).allChanges.get(i));
-
-            switch (whatUpdate) {
-
-                case 1: // update background layout
-                    if (list.get(position).sendType != MyType.SendType.timeLayout)
-                        setBackGroundLayout(position, holder);
-                    break;
-            }
-
-        }
-
-
-        list.get(position).isChange = false;
-        list.get(position).allChanges.clear();
-
-
-    }
-
-
-}
+}*/

@@ -22,4 +22,14 @@ public class StructChatInfo {
     public int unreadMessag = 0;
     public String memberCount = "1";
 
+    public String fileName = "";
+    public String fileMime = "";
+    public String fileSize = "";
+    public String filePath = "";
+
+    public String fileInfo = "";
+    public String filePic = "";
+
+    public MyType.FileState fileState = MyType.FileState.notDownload;
+
 }

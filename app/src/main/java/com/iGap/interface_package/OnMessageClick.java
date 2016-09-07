@@ -12,5 +12,5 @@ import com.iGap.module.StructMessageInfo;
  * when chat messages has clicked
  */
 public interface OnMessageClick {
-    void onMessageClick(View view, StructMessageInfo messageInfo);
+    void onMessageClick(View view, StructMessageInfo messageInfo, int position);
 }

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/chatSubLayoutTime"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/csldt_txt_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp12"
+        android:background="@drawable/recangle_gray_tranceparent"
+        android:paddingBottom="@dimen/dp4"
+        android:paddingLeft="@dimen/dp12"
+        android:paddingRight="@dimen/dp12"
+        android:paddingTop="@dimen/dp4"
+        android:singleLine="true"
+        android:text="21/2/2014"
+        android:textColor="@android:color/white" />
+</RelativeLayout>

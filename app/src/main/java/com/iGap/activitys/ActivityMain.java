@@ -877,9 +877,6 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         chatInfo.chatId = Long.toString(room.getId());
         chatInfo.chatTitle = room.getTitle();
         chatInfo.chatType = room.getType();
-        chatInfo.imageSource = "";
-        chatInfo.lastmessage = "lastMessage";
-        chatInfo.lastSeen = "lastSeen";
         switch (room.getType()) {
             case CHANNEL:
                 chatInfo.memberCount = room.getChannelRoom().getParticipantsCountLabel();

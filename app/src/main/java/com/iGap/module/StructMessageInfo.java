@@ -39,6 +39,7 @@ public class StructMessageInfo {
     public String fileInfo = "";
     public String filePic = "";
     public String filePath = "";
+    public long time;
 
 
 }

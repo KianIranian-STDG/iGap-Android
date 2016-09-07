@@ -93,4 +93,6 @@
     <color name="colorEmojiPopupCategoryBottomBorder">#e4e6e5</color>
     <color name="colorNavigationDrawerBgColor">#ffffff</color>
 
+    <color name="colorChatMessageSelectableItemBg">#99AADFF7</color>
+
 </resources>

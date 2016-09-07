@@ -26,7 +26,13 @@ import android.widget.Toast;
 
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.adapter.AdapterChatMessage;
+import com.iGap.adapter.ChatFastAdapter;
+import com.iGap.adapter.items.chat.AbstractChatItem;
+import com.iGap.adapter.items.chat.FileItem;
+import com.iGap.adapter.items.chat.ImageItem;
+import com.iGap.adapter.items.chat.MessageItem;
+import com.iGap.adapter.items.chat.VideoItem;
+import com.iGap.adapter.items.chat.VoiceItem;
 import com.iGap.helper.Emojione;
 import com.iGap.helper.HelperProtoBuilder;
 import com.iGap.interface_package.IEmojiBackspaceClick;
@@ -39,6 +45,7 @@ import com.iGap.interface_package.ISoftKeyboardOpenClose;
 import com.iGap.interface_package.OnChatClearMessageResponse;
 import com.iGap.interface_package.OnChatDeleteMessageResponse;
 import com.iGap.interface_package.OnChatEditMessageResponse;
+import com.iGap.interface_package.OnChatMessageSelectionChanged;
 import com.iGap.interface_package.OnChatSendMessageResponse;
 import com.iGap.interface_package.OnChatUpdateStatusResponse;
 import com.iGap.interface_package.OnMessageClick;
@@ -67,11 +74,15 @@ import com.iGap.request.RequestChatDeleteMessage;
 import com.iGap.request.RequestChatEditMessage;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, IRecentsLongClick, OnMessageClick, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse {
+/**
+ * Created by android3 on 8/5/2016.
+ */
+public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, IRecentsLongClick, OnMessageClick, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractChatItem> {
 
     private EmojiEditText edtChat;
     private Button btnSend;
@@ -85,6 +96,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     private Button btnDeleteSelected;
     private TextView txtNumberOfSelected;
     private LinearLayout ll_AppBarSelected;
+    private LinearLayout toolbar;
 
     private TextView txtName;
     private TextView txtLastSeen;
@@ -93,7 +105,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     private RecyclerView recyclerView;
     private ImageButton btnSmile;
 
-    private AdapterChatMessage mAdapter;
+    private ChatFastAdapter<AbstractChatItem> mAdapter;
     private ProtoGlobal.Room.Type chatType;
 
     private String lastSeen;
@@ -276,6 +288,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     }
 
     private void initComponent() {
+        toolbar = (LinearLayout) findViewById(R.id.toolbar);
         Button btnBack = (Button) findViewById(R.id.chl_btn_back);
         btnBack.setTypeface(G.fontawesome);
 
@@ -336,30 +349,41 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         btnMic = (Button) findViewById(R.id.chl_btn_mic);
         btnMic.setTypeface(G.fontawesome);
 
-
-        complete = new OnComplete() {
-            @Override
-            public void complete(boolean result, String messageOne, String MessageTow) {
-
-                int whatAction = 0;
-                String number = "0";
-
-                if (messageOne != null)
-                    if (messageOne.length() > 0)
-                        whatAction = Integer.parseInt(messageOne);
-
-                if (MessageTow != null)
-                    if (MessageTow.length() > 0)
-                        number = MessageTow;
-
-                callBack(result, whatAction, number);
-            }
-        };
-
         recyclerView = (RecyclerView) findViewById(R.id.chl_recycler_view_chat);
-        mAdapter = new AdapterChatMessage(ActivityChat.this, chatType, getChatList(), complete, this);
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(ActivityChat.this);
-        recyclerView.setLayoutManager(mLayoutManager);
+        // following lines make scrolling smoother
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setItemViewCacheSize(20);
+        recyclerView.setDrawingCacheEnabled(true);
+
+        mAdapter = new ChatFastAdapter<>(this, this);
+
+        long identifier = 100;
+        for (StructMessageInfo messageInfo : getChatList()) {
+            switch (messageInfo.messageType) {
+                case TEXT:
+                    mAdapter.add(new MessageItem().setMessage(messageInfo).withIdentifier(identifier));
+                    break;
+                case IMAGE:
+                case IMAGE_TEXT:
+                    mAdapter.add(new ImageItem().setMessage(messageInfo).withIdentifier(identifier));
+                    break;
+                case VIDEO:
+                case VIDEO_TEXT:
+                    mAdapter.add(new VideoItem().setMessage(messageInfo).withIdentifier(identifier));
+                    break;
+                case FILE:
+                case FILE_TEXT:
+                    mAdapter.add(new FileItem().setMessage(messageInfo).withIdentifier(identifier));
+                    break;
+                case VOICE:
+                case VOICE_TEXT:
+                    mAdapter.add(new VoiceItem().setMessage(messageInfo).withIdentifier(identifier));
+                    break;
+            }
+            identifier++;
+        }
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(ActivityChat.this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
 
@@ -451,8 +475,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                         messageInfo.senderID = Long.toString(senderId);
                         messageInfo.sendType = MyType.SendType.send;
 
-                        mAdapter.insert(messageInfo);
-
+                        mAdapter.add(new MessageItem().setMessage(messageInfo));
 
                         recyclerView.postDelayed(new Runnable() {
                             @Override
@@ -626,7 +649,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 }
             }
         });
-
     }
 
     private void changeEmojiButtonImageResource(@DrawableRes int drawableResourceId) {
@@ -651,7 +673,9 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         btnCloseAppBarSelected.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mAdapter.resetSelected();
+                mAdapter.deselect();
+                toolbar.setVisibility(View.VISIBLE);
+                ll_AppBarSelected.setVisibility(View.GONE);
             }
         });
 
@@ -689,8 +713,8 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             @Override
             public void onClick(View view) {
                 Log.e("ddd", "btnDeleteSelected");
-                for (String messageID : mAdapter.getSelectedMessages()) {
-                    new RequestChatDeleteMessage().chatDeleteMessage(mRoomId, Long.parseLong(messageID));
+                for (AbstractChatItem messageID : mAdapter.getSelectedItems()) {
+                    new RequestChatDeleteMessage().chatDeleteMessage(mRoomId, Long.parseLong(messageID.mMessage.messageID));
                 }
             }
         });
@@ -762,35 +786,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
     }
 
-    private void callBack(boolean result, int whatAction, String number) {
-
-        switch (whatAction) {
-
-            case 1://for show or gone layout appBar selected
-                if (result) {
-                    ll_AppBarSelected.setVisibility(View.VISIBLE);
-                    txtNumberOfSelected.setText(number);
-
-                    int x = Integer.parseInt(number);
-                    if (x > 1)
-                        btnReplaySelected.setVisibility(View.INVISIBLE);
-                    else
-                        btnReplaySelected.setVisibility(View.VISIBLE);
-                } else {
-                    ll_AppBarSelected.setVisibility(View.GONE);
-                }
-                break;
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-
-        if (!mAdapter.resetSelected()) {
-            super.onBackPressed();
-        }
-    }
-
     private ArrayList<StructMessageInfo> getChatList() {
         Realm realm = Realm.getDefaultInstance();
         long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
@@ -802,6 +797,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 structMessageInfo.messageText = roomMessage.getMessage();
                 structMessageInfo.status = roomMessage.getStatus();
                 structMessageInfo.messageID = Long.toString(roomMessage.getMessageId());
+                structMessageInfo.time = roomMessage.getUpdateTime();
                 structMessageInfo.senderID = Long.toString(roomMessage.getUserId());
                 if (roomMessage.getUserId() == userId) {
                     structMessageInfo.sendType = MyType.SendType.send;
@@ -990,7 +986,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     }*/
 
     @Override
-    public void onMessageClick(View view, StructMessageInfo messageInfo) {
+    public void onMessageClick(View view, StructMessageInfo messageInfo, int position) {
         Log.i(ActivityChat.class.getSimpleName(), "Message clicked");
         // put message text to EditText
         if (!messageInfo.messageText.isEmpty()) {
@@ -1032,7 +1028,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mAdapter.insert(HelperProtoBuilder.convert(roomMessage));
+                    mAdapter.add(new MessageItem().setMessage(HelperProtoBuilder.convert(roomMessage)));
                     recyclerView.postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -1058,6 +1054,28 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     Log.i(ActivityChat.class.getSimpleName(), status.toString());
                 }
             });
+        }
+    }
+
+    @Override
+    public void onChatMessageSelectionChanged(int selectedCount, Set<AbstractChatItem> selectedItems) {
+        Toast.makeText(ActivityChat.this, "selected: " + Integer.toString(selectedCount), Toast.LENGTH_SHORT).show();
+
+        if (selectedCount > 0) {
+            toolbar.setVisibility(View.GONE);
+
+            txtNumberOfSelected.setText(Integer.toString(selectedCount));
+
+            if (selectedCount > 1) {
+                btnReplaySelected.setVisibility(View.INVISIBLE);
+            } else {
+                btnReplaySelected.setVisibility(View.VISIBLE);
+            }
+
+            ll_AppBarSelected.setVisibility(View.VISIBLE);
+        } else {
+            toolbar.setVisibility(View.VISIBLE);
+            ll_AppBarSelected.setVisibility(View.GONE);
         }
     }
 }
