@@ -5,9 +5,13 @@ package com.iGap.helper;
  */
 
 import com.iGap.module.MyType;
+import com.iGap.module.StructChatInfo;
 import com.iGap.module.StructMessageInfo;
 import com.iGap.proto.ProtoChatSendMessage;
+import com.iGap.proto.ProtoClientGetRoom;
+import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmUserInfo;
+import com.iGap.realm.enums.RoomType;
 
 import io.realm.Realm;
 
@@ -35,5 +39,50 @@ public final class HelperProtoBuilder {
             messageInfo.sendType = MyType.SendType.recvive;
         }
         return messageInfo;
+    }
+
+    /**
+     * convert ProtoClientGetRoom.ClientGetRoomResponse.Builder to StructChatInfo
+     *
+     * @param builder ProtoClientGetRoom.ClientGetRoomResponse.Builder
+     * @return StructChatInfo
+     */
+    public static StructChatInfo convert(ProtoClientGetRoom.ClientGetRoomResponse.Builder builder) {
+        StructChatInfo chatInfo = new StructChatInfo();
+        chatInfo.chatId = Long.toString(builder.getRoom().getId());
+        chatInfo.chatTitle = builder.getRoom().getTitle();
+        chatInfo.chatType = convert(builder.getRoom().getType());
+        switch (builder.getRoom().getType()) {
+            case CHANNEL:
+                chatInfo.memberCount = builder.getRoom().getChannelRoom().getParticipantsCountLabel();
+                break;
+            case CHAT:
+                chatInfo.memberCount = "1";
+                break;
+            case GROUP:
+                chatInfo.memberCount = builder.getRoom().getGroupRoom().getParticipantsCountLabel();
+                break;
+        }
+        chatInfo.muteNotification = false;
+        chatInfo.ownerShip = MyType.OwnerShip.member;
+        chatInfo.unreadMessag = builder.getRoom().getUnreadCount();
+        chatInfo.viewDistanceColor = builder.getRoom().getColor();
+
+        return chatInfo;
+    }
+
+    public static RoomType convert(ProtoGlobal.Room.Type type) {
+        switch (type) {
+            case CHANNEL:
+                return RoomType.CHANNEL;
+            case CHAT:
+                return RoomType.CHAT;
+            case GROUP:
+                return RoomType.GROUP;
+            case UNRECOGNIZED:
+                return null;
+            default:
+                return null;
+        }
     }
 }

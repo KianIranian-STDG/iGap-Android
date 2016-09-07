@@ -18,6 +18,7 @@ import com.iGap.interface_package.OnChatDeleteMessageResponse;
 import com.iGap.interface_package.OnChatEditMessageResponse;
 import com.iGap.interface_package.OnChatGetRoom;
 import com.iGap.interface_package.OnClientGetRoomListResponse;
+import com.iGap.interface_package.OnClientGetRoomResponse;
 import com.iGap.interface_package.OnInfoCountryResponse;
 import com.iGap.interface_package.OnInfoTime;
 import com.iGap.interface_package.OnReceiveInfoLocation;
@@ -135,6 +136,7 @@ public class G extends Application {
     public static OnChatGetRoom onChatGetRoom;
     public static OnChatEditMessageResponse onChatEditMessageResponse;
     public static OnChatDeleteMessageResponse onChatDeleteMessageResponse;
+    public static OnClientGetRoomResponse onClientGetRoomResponse;
 
     public static final String DIR_SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static final String DIR_APP = DIR_SDCARD + "/iGap";

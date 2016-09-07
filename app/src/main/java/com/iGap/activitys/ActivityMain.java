@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.items.ChatItem;
+import com.iGap.helper.HelperProtoBuilder;
 import com.iGap.helper.HelperRealm;
 import com.iGap.interface_package.IActionClick;
 import com.iGap.interface_package.IOpenDrawer;
@@ -26,6 +27,7 @@ import com.iGap.interface_package.OnChatClearMessageResponse;
 import com.iGap.interface_package.OnChatSendMessageResponse;
 import com.iGap.interface_package.OnChatUpdateStatusResponse;
 import com.iGap.interface_package.OnClientGetRoomListResponse;
+import com.iGap.interface_package.OnClientGetRoomResponse;
 import com.iGap.libs.floatingAddButton.ArcMenu;
 import com.iGap.libs.floatingAddButton.StateChangeListener;
 import com.iGap.libs.flowingdrawer.FlowingView;
@@ -36,6 +38,7 @@ import com.iGap.module.OnComplete;
 import com.iGap.module.StructChatInfo;
 import com.iGap.module.Utils;
 import com.iGap.proto.ProtoChatSendMessage;
+import com.iGap.proto.ProtoClientGetRoom;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmChatHistory;
@@ -69,6 +72,21 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
         G.chatSendMessageUtil.setOnChatSendMessageResponse(this);
         G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
+        G.onClientGetRoomResponse = new OnClientGetRoomResponse() {
+            @Override
+            public void onClientGetRoomResponse(ProtoGlobal.Room room, final ProtoClientGetRoom.ClientGetRoomResponse.Builder builder) {
+                if (G.currentActivity == ActivityMain.this) {
+                    if (mAdapter != null) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mAdapter.add(new ChatItem().setInfo(HelperProtoBuilder.convert(builder)));
+                            }
+                        });
+                    }
+                }
+            }
+        };
 
         initRecycleView();
         initFloatingButtonCreateNew();
