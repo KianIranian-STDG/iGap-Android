@@ -20,7 +20,7 @@ import com.iGap.interface_package.OnUserProfileNickNameResponse;
 import com.iGap.module.HelperDecodeFile;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmUserInfo;
-import com.iGap.request.RequestUserProfileNickName;
+import com.iGap.request.RequestUserProfileSetNickname;
 
 import io.realm.Realm;
 
@@ -81,7 +81,7 @@ public class ActivityProfile extends ActivityEnhanced {
                                     finish();
                                 }
                             };
-                            new RequestUserProfileNickName().userProfileNickName(nickName);
+                            new RequestUserProfileSetNickname().userProfileNickName(nickName);
 
                             if (G.imageFile.exists()) {
                                 realmUserInfo.setAvatarPath(G.imageFile.toString());

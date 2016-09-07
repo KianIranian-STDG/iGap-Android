@@ -3,7 +3,7 @@ package com.iGap.request;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoUserProfileGender;
 
-public class RequestUserProfileGender {
+public class RequestUserProfileSetGender {
 
     public void setUserProfileGender(ProtoGlobal.Gender gender) {
 

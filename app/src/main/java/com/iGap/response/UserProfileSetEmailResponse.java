@@ -3,13 +3,13 @@ package com.iGap.response;
 import com.iGap.G;
 import com.iGap.proto.ProtoUserProfileEmail;
 
-public class UserProfileEmailResponse extends MessageHandler {
+public class UserProfileSetEmailResponse extends MessageHandler {
 
     public int actionId;
     public Object message;
     public String identity;
 
-    public UserProfileEmailResponse(int actionId, Object protoClass, String identity) {
+    public UserProfileSetEmailResponse(int actionId, Object protoClass, String identity) {
         super(actionId, protoClass, identity);
 
         this.message = protoClass;

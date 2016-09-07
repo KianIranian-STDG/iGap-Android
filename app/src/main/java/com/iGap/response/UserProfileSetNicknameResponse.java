@@ -6,13 +6,13 @@ import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoUserProfileNickname;
 
-public class UserProfileNicknameResponse extends MessageHandler {
+public class UserProfileSetNicknameResponse extends MessageHandler {
 
     public int actionId;
     public Object message;
     public String identity;
 
-    public UserProfileNicknameResponse(int actionId, Object protoClass, String identity) {
+    public UserProfileSetNicknameResponse(int actionId, Object protoClass, String identity) {
         super(actionId, protoClass, identity);
 
         this.message = protoClass;
@@ -31,7 +31,7 @@ public class UserProfileNicknameResponse extends MessageHandler {
 
     @Override
     public void timeOut() {
-        Log.i("XXX", "UserProfileNicknameResponse timeOut");
+        Log.i("XXX", "UserProfileSetNicknameResponse timeOut");
     }
 
     @Override
@@ -43,7 +43,7 @@ public class UserProfileNicknameResponse extends MessageHandler {
         Log.i("XXX", "UserRegisterResponse majorCode : " + majorCode);
         Log.i("XXX", "UserRegisterResponse minorCode : " + minorCode);
 
-        Log.i("XXX", "UserProfileNicknameResponse error");
+        Log.i("XXX", "UserProfileSetNicknameResponse error");
     }
 }
 

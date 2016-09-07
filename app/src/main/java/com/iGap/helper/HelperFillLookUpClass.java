@@ -22,12 +22,12 @@ public class HelperFillLookUpClass {
         G.lookupMap.put(30101, "ProtoUserVerify.UserVerifyResponse");
         G.lookupMap.put(102, "User.Login");
         G.lookupMap.put(30102, "ProtoUserLogin.UserLoginResponse");
-        G.lookupMap.put(103, "User.Profile.Email");
-        G.lookupMap.put(30103, "ProtoUserProfileEmail.UserProfileEmailResponse");
-        G.lookupMap.put(104, "User.Profile.Gender");
-        G.lookupMap.put(30104, "ProtoUserProfileGender.UserProfileGenderResponse");
-        G.lookupMap.put(105, "User.Profile.Nickname");
-        G.lookupMap.put(30105, "ProtoUserProfileNickname.UserProfileNicknameResponse");
+        G.lookupMap.put(103, "User.Profile.SetEmail");
+        G.lookupMap.put(30103, "ProtoUserProfileEmail.UserProfileSetEmailResponse");
+        G.lookupMap.put(104, "User.Profile.SetGender");
+        G.lookupMap.put(30104, "ProtoUserProfileGender.UserProfileSetGenderResponse");
+        G.lookupMap.put(105, "User.Profile.SetNickname");
+        G.lookupMap.put(30105, "ProtoUserProfileNickname.UserProfileSetNicknameResponse");
         G.lookupMap.put(106, "UserContactsImport");
         G.lookupMap.put(30106, "ProtoUserContactsImport.UserContactsImportResponse");
         G.lookupMap.put(107, "UserContactsGetList");

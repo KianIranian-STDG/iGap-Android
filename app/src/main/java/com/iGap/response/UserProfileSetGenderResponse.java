@@ -3,13 +3,13 @@ package com.iGap.response;
 import com.iGap.G;
 import com.iGap.proto.ProtoUserProfileGender;
 
-public class UserProfileGenderResponse extends MessageHandler {
+public class UserProfileSetGenderResponse extends MessageHandler {
 
     public int actionId;
     public Object message;
     public String identity;
 
-    public UserProfileGenderResponse(int actionId, Object protoClass, String identity) {
+    public UserProfileSetGenderResponse(int actionId, Object protoClass, String identity) {
         super(actionId, protoClass, identity);
 
         this.message = protoClass;

@@ -2,7 +2,7 @@ package com.iGap.request;
 
 import com.iGap.proto.ProtoUserProfileNickname;
 
-public class RequestUserProfileNickName {
+public class RequestUserProfileSetNickname {
 
     public void userProfileNickName(String nickName) {
         ProtoUserProfileNickname.UserProfileSetNickname.Builder userProfileNickName = ProtoUserProfileNickname.UserProfileSetNickname.newBuilder();
