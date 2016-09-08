@@ -30,7 +30,7 @@ public final class HelperRealm {
      * @return long last message ID
      */
     public static long findLastMessageId(RealmResults<RealmChatHistory> realmChatHistories) {
-        int lastUpdateTime = -1;
+        long lastUpdateTime = -1;
         long lastMessageId = -1;
         for (RealmChatHistory chatHistory : realmChatHistories) {
             RealmRoomMessage roomMessage = chatHistory.getRoomMessage();

@@ -1,5 +1,7 @@
 package com.iGap.realm;
 
+import android.text.format.DateUtils;
+
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -16,7 +18,7 @@ public class RealmRoomMessage extends RealmObject {
     private String location;
     private String log;
     private boolean edited;
-    private int updateTime;
+    private long updateTime;
 
     public long getMessageId() {
         return messageId;
@@ -106,11 +108,11 @@ public class RealmRoomMessage extends RealmObject {
         this.edited = edited;
     }
 
-    public int getUpdateTime() {
+    public long getUpdateTime() {
         return updateTime;
     }
 
     public void setUpdateTime(int updateTime) {
-        this.updateTime = updateTime;
+        this.updateTime = updateTime * DateUtils.SECOND_IN_MILLIS;
     }
 }
