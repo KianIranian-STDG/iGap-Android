@@ -143,8 +143,10 @@ public class ChatFastAdapter<Item extends AbstractChatItem> extends FastItemAdap
         // don't remove following casting because FrameLayout has setForeground() from API 1 but
         // View has it from API 23 and Lint doesn't get it correctly!
         if (!item.isSelected()) {
+            //noinspection RedundantCast
             ((FrameLayout) v).setForeground(new ColorDrawable(v.getResources().getColor(R.color.colorChatMessageSelectableItemBg)));
         } else {
+            //noinspection RedundantCast
             ((FrameLayout) v).setForeground(new ColorDrawable(Color.TRANSPARENT));
         }
         return false;

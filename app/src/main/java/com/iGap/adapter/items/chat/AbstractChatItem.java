@@ -48,6 +48,11 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
     public void bindView(VH holder, List payloads) {
         super.bindView(holder, payloads);
 
+        if (!isSelected() && ((FrameLayout) holder.itemView).getForeground() != null) {
+            //noinspection RedundantCast
+            ((FrameLayout) holder.itemView).setForeground(null);
+        }
+
         // only will be called when message layout is directional-base (e.g. single chat)
         if (mDirectionalBased) {
             if (mMessage.sendType == MyType.SendType.recvive) {
