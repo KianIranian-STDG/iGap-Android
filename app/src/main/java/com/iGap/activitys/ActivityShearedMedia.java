@@ -337,14 +337,14 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         StructSharedMedia item2 = new StructSharedMedia();
         item2.messgeType = ProtoGlobal.RoomMessageType.FILE;
-        item2.filePath = R.mipmap.b + "";
-        item2.fileName = "image 1";
+        item2.filePath = "lkjdf.png";
+        item2.fileName = "image";
         item2.fileInfo = " 2016/3/29  11:29";
         list.add(item2);
 
         StructSharedMedia item3 = new StructSharedMedia();
         item3.messgeType = ProtoGlobal.RoomMessageType.FILE;
-        item3.filePath = R.mipmap.c + "";
+        item3.filePath = "lkjdf.mp3";
         item3.fileName = "image 2";
         item3.fileInfo = " 2016/1/2  11:29";
         list.add(item3);
@@ -352,33 +352,32 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         StructSharedMedia item4 = new StructSharedMedia();
         item4.messgeType = ProtoGlobal.RoomMessageType.FILE;
         item4.fileInfo = "3:12";
-        item4.filePath = R.mipmap.d + "";
+        item4.filePath = "lkjdf.mp4";
         list.add(item4);
 
 
         StructSharedMedia item5 = new StructSharedMedia();
         item5.messgeType = ProtoGlobal.RoomMessageType.FILE;
         item5.fileInfo = "6:56";
-        item5.filePath = R.mipmap.e + "";
+        item5.filePath = "lkjdf.apk";
         list.add(item5);
 
         StructSharedMedia item6 = new StructSharedMedia();
         item6.messgeType = ProtoGlobal.RoomMessageType.FILE;
-        item6.filePath = R.mipmap.f + "";
+        item6.filePath = "lkjdf.html";
         list.add(item6);
 
         list.add(item1);
 
         StructSharedMedia item7 = new StructSharedMedia();
-        item7.filePath = R.mipmap.g + "";
+        item7.filePath = "lkjdf.pdf";
         item7.messgeType = ProtoGlobal.RoomMessageType.FILE;
         list.add(item7);
 
         StructSharedMedia item8 = new StructSharedMedia();
-        item8.filePath = R.mipmap.h + "";
+        item8.filePath = "lkjdf.xls";
         item8.messgeType = ProtoGlobal.RoomMessageType.FILE;
         list.add(item8);
-
 
     }
 

@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activitys.ActivityShowImage;
+import com.iGap.helper.HelperMimeType;
 import com.iGap.module.OnComplete;
 import com.iGap.module.StructSharedMedia;
 import com.iGap.proto.ProtoGlobal;
@@ -70,6 +71,9 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
         } else if (mediaType.equals(context.getString(R.string.shared_files))) {
             if (isHeader) {
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.shared_media_sub_layout_time, null);
+                RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                view.setLayoutParams(lp);
+                view.setBackgroundColor(Color.parseColor("#cccccc"));
                 viewHolder = new MyHoldersTime(view, position);
             } else {
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.shared_media_sub_layout_file, null);
@@ -100,7 +104,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
 
-        if (list.get(position).messgeType != ProtoGlobal.RoomMessageType.TEXT) {
+        if (list.get(position).messgeType != ProtoGlobal.RoomMessageType.TEXT) {// set blue back ground for selected file
             FrameLayout layout = (FrameLayout) holder.itemView.findViewById(R.id.smsl_fl_contain_main);
 
             if (list.get(position).isSelected) {
@@ -118,6 +122,8 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
             } else {
                 m.btnFileState.setText(context.getString(R.string.fa_arrow_down));
             }
+
+            //// TODO: 9/7/2016 nejati     get picture thumbnile if file image of video or music    use HelperMimeType
 
         }
 
@@ -200,21 +206,10 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
             super(itemView);
 
             imvPicFile = (ImageView) itemView.findViewById(R.id.smslf_imv_icon_file);
-            imvPicFile.setImageResource(Integer.parseInt(list.get(position).filePath));
+            imvPicFile.setImageBitmap(HelperMimeType.getMimePic(context, HelperMimeType.getMimeResource(list.get(position).filePath)));
 
             btnFileState = (Button) itemView.findViewById(R.id.smslf_btn_file_state);
             btnFileState.setTypeface(G.fontawesome);
-
-            btnFileState.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    if (list.get(position).isDownloading)
-                        stopDownload(position);
-                    else
-                        startDownload(position);
-                }
-            });
 
             TextView txtFileName = (TextView) itemView.findViewById(R.id.smslf_txt_file_name);
             txtFileName.setText(list.get(position).fileName);
@@ -260,6 +255,11 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
         if (list.get(position).messgeType == ProtoGlobal.RoomMessageType.IMAGE) {
             selectImage(position);
+        } else if (list.get(position).messgeType == ProtoGlobal.RoomMessageType.FILE) {
+            if (list.get(position).isDownloading)
+                stopDownload(position);
+            else
+                startDownload(position);
         }
 
     }
