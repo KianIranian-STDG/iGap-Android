@@ -194,7 +194,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                         title = realmRoom.getTitle();
                         initialize = realmRoom.getInitials();
                         color = realmRoom.getColor();
-                        lastSeen = "iGap Messenger";
+                        lastSeen = "last seen";
                     }
 
                 } else if (realmRoom.getType() == RoomType.GROUP) {
@@ -226,6 +226,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
             realm.close();
         }
+
 
         initComponent();
         initAppbarSelected();
@@ -416,7 +417,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         imvUserPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (chatType == ProtoGlobal.Room.Type.CHAT && !lastSeen.equals("iGap Messenger")) {//TODO [Saeed Mozaffari] [2016-09-07 11:46 AM] -  !lastSeen.equals("iGap Messenger") ==> in if eshtebah ast
+                if (chatType == ProtoGlobal.Room.Type.CHAT && chatPeerId != 134) {//TODO [Saeed Mozaffari] [2016-09-07 11:46 AM] -  in if eshtebah ast check for iGap message ==> chatPeerId == 134(alan baraye check kardane)
                     Intent intent = new Intent(G.context, ActivityContactsProfile.class);
                     intent.putExtra("peerId", chatPeerId);
                     startActivity(intent);
@@ -424,6 +425,9 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
             }
         });
+
+        //TODO [Saeed Mozaffari] [2016-09-07 5:12 PM] - if user have image set image otherwise set alphabet
+        imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
 
         btnMenu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1084,7 +1088,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     @Override
     public void onChatMessageSelectionChanged(int selectedCount, Set<AbstractChatItem> selectedItems) {
         Toast.makeText(ActivityChat.this, "selected: " + Integer.toString(selectedCount), Toast.LENGTH_SHORT).show();
-
         if (selectedCount > 0) {
             toolbar.setVisibility(View.GONE);
 

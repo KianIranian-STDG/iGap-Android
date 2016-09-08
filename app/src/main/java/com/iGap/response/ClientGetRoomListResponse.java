@@ -23,13 +23,15 @@ public class ClientGetRoomListResponse extends MessageHandler {
 
     @Override
     public void handler() {
+        Log.i("CCC", "ClientGetRoomListResponse message : " + message);
         ProtoClientGetRoomList.ClientGetRoomListResponse.Builder clientGetRoomListResponse = (ProtoClientGetRoomList.ClientGetRoomListResponse.Builder) message;
         G.onClientGetRoomListResponse.onClientGetRoomList(clientGetRoomListResponse.getRoomsList(), clientGetRoomListResponse.getResponse());
     }
 
     @Override
     public void timeOut() {
-        Log.i("SOC", "ClientGetRoomListResponse timeout");
+        Log.i("CCC", "ClientGetRoomListResponse timeout");
+
     }
 
     @Override
@@ -38,8 +40,8 @@ public class ClientGetRoomListResponse extends MessageHandler {
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
 
-        Log.i("SOC", "ClientGetRoomListResponse response.majorCode() : " + majorCode);
-        Log.i("SOC", "ClientGetRoomListResponse response.minorCode() : " + minorCode);
+        Log.i("CCC", "ClientGetRoomListResponse response.majorCode() : " + majorCode);
+        Log.i("CCC", "ClientGetRoomListResponse response.minorCode() : " + minorCode);
     }
 }
 

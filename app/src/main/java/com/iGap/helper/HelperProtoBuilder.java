@@ -70,7 +70,7 @@ public final class HelperProtoBuilder {
         chatInfo.muteNotification = false;
         chatInfo.ownerShip = MyType.OwnerShip.member;
         chatInfo.unreadMessag = builder.getRoom().getUnreadCount();
-        chatInfo.viewDistanceColor = builder.getRoom().getColor();
+        chatInfo.color = builder.getRoom().getColor();
 
         return chatInfo;
     }

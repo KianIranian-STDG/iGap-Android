@@ -14,13 +14,14 @@ public class StructChatInfo {
     public int whatChange = 0;
 
     public String imageSource = "";
-    public String viewDistanceColor = "";
+    public String color = "";
     public RoomType chatType = RoomType.CHAT;
     public String chatTitle = "";
     public String lastmessage = "";
     public String lastSeen = Long.toString(System.currentTimeMillis());
     public int unreadMessag = 0;
     public String memberCount = "1";
+    public String initials = "";
 
     public String fileName = "";
     public String fileMime = "";

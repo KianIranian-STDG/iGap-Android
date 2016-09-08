@@ -5,6 +5,7 @@ import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 
 import com.iGap.G;
 
@@ -75,15 +76,31 @@ public class HelperImageBackColor {
 
     public static Bitmap drawAlphabetOnPicture(int with, String text, String color) {
 
-        String alphabetName = getFirstAlphabetName(text);
+//        String alphabetName = getFirstAlphabetName(text);
+        String alphabetName = text;
 
         String mColor = "#f4f4f4";
+//
+//        if (color != "" && color != null) {
+//            mColor = color;
+//        }
 
-        if (color != "" && color != null)
-            mColor = color;
+        Log.i("CCC", "color : " + color);
+        Log.i("CCC", "text : " + text);
+
+        if (color == null || color.equals("")) {
+            color = "#7f7f7f";
+        }
+        if (text == null || text.equals("")) {
+            alphabetName = "?";
+        } else {
+            alphabetName = text.replace(" ", "");
+        }
+
 
         Bitmap bitmap = Bitmap.createBitmap(with, with, Bitmap.Config.ARGB_8888);
-        bitmap.eraseColor(Color.parseColor(getColor(alphabetName)));
+//        bitmap.eraseColor(Color.parseColor(getColor(alphabetName)));
+        bitmap.eraseColor(Color.parseColor(color));
 
         int fontsize = with / 3;
         Canvas cs = new Canvas(bitmap);

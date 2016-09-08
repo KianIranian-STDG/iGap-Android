@@ -44,6 +44,8 @@ public class ActivityContactsProfile extends ActivityEnhanced {
     private String displayName = "Alexander Smith";
     private String username = "Alexander Smith";
     private long lastSeen;
+    private String initials;
+    private String color;
 
     private AppBarLayout appBarLayout;
     private EditText edtNikName;
@@ -70,14 +72,18 @@ public class ActivityContactsProfile extends ActivityEnhanced {
             displayName = realmUser.getDisplay_name();
             username = realmUser.getUsername();
             lastSeen = realmUser.getLast_seen();
+            color = realmUser.getColor();
+            initials = realmUser.getInitials();
         }
 
         imgUser = (CircleImageView) findViewById(R.id.chi_img_circleImage);
+
+        imgUser.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imgUser.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+
         txtBack = (TextView) findViewById(R.id.chi_txt_back);
         txtBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {// button back
-                startActivity(new Intent(ActivityContactsProfile.this, ActivityMain.class));
                 finish();
             }
         });
@@ -311,7 +317,7 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                             try {
                                 Intent phoneIntent = new Intent(Intent.ACTION_CALL);
                                 phoneIntent.setData(Uri.parse("tel:" + call));
-                                startActivity(phoneIntent); //TODO [Saeed Mozaffari] [2016-09-07 11:31 AM] - phone intent permission
+                                //startActivity(phoneIntent); //TODO [Saeed Mozaffari] [2016-09-07 11:31 AM] - phone intent permission
 
                             } catch (Exception ex) {
 
