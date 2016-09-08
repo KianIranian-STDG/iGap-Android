@@ -15,6 +15,10 @@ import java.util.List;
 public class TimeItem extends AbstractChatItem<TimeItem, TimeItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
+    public TimeItem() {
+        super(false);
+    }
+
     @Override
     public int getType() {
         return R.id.chatSubLayoutTime;

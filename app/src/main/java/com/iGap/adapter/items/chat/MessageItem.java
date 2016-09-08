@@ -19,6 +19,10 @@ import java.util.List;
 public class MessageItem extends AbstractChatItem<MessageItem, MessageItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
+    public MessageItem() {
+        super(true);
+    }
+
     @Override
     public int getType() {
         return R.id.chatSubLayoutMessage;
@@ -34,7 +38,7 @@ public class MessageItem extends AbstractChatItem<MessageItem, MessageItem.ViewH
         super.bindView(holder, payloads);
 
         holder.cslr_txt_message.setText(mMessage.messageText);
-        holder.cslr_txt_time.setText(Long.toString(mMessage.time));
+        holder.cslr_txt_time.setText(formatTime());
 
         if (mMessage.sendType == MyType.SendType.send) {
             holder.cslr_txt_tic.setText(defineMessageStatus());

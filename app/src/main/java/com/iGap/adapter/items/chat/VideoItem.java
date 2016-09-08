@@ -22,6 +22,10 @@ import java.util.List;
 public class VideoItem extends AbstractChatItem<VideoItem, VideoItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
+    public VideoItem() {
+        super(true);
+    }
+
     @Override
     public int getType() {
         return R.id.chatSubLayoutVideo;
@@ -52,6 +56,7 @@ public class VideoItem extends AbstractChatItem<VideoItem, VideoItem.ViewHolder>
     public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
+        holder.cslr_txt_time.setText(formatTime());
         holder.cslv_txt_video_name.setText(mMessage.fileName);
         holder.cslv_txt_video_mime_type.setText(mMessage.fileMime);
         holder.cslv_txt_vido_info.setText(mMessage.fileInfo);

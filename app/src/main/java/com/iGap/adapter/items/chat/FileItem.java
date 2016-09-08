@@ -20,6 +20,10 @@ import java.util.List;
 public class FileItem extends AbstractChatItem<FileItem, FileItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
+    public FileItem() {
+        super(true);
+    }
+
     @Override
     public int getType() {
         return R.id.chatSubLayoutFile;
@@ -34,7 +38,7 @@ public class FileItem extends AbstractChatItem<FileItem, FileItem.ViewHolder> {
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        holder.cslr_txt_time.setText(Long.toString(mMessage.time));
+        holder.cslr_txt_time.setText(formatTime());
 
         if (!mMessage.messageText.isEmpty()) {
             holder.cslr_txt_message.setText(mMessage.messageText);

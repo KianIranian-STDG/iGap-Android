@@ -3,6 +3,7 @@ package com.iGap.adapter;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.view.View;
+import android.widget.FrameLayout;
 
 import com.iGap.R;
 import com.iGap.adapter.items.chat.AbstractChatItem;
@@ -63,8 +64,8 @@ public class ChatFastAdapter<Item extends AbstractChatItem> extends FastItemAdap
         withOnClickListener(new OnClickListener<Item>() {
             @Override
             public boolean onClick(View v, IAdapter<Item> adapter, Item item, int position) {
-                if (onMessageClickListener != null) {
-                    onMessageClickListener.onMessageClick(v, item.mMessage, position);
+                if (onMessageClick != null) {
+                    onMessageClick.onMessageClick(v, item.mMessage, position);
                 }
                 return false;
             }
@@ -121,10 +122,12 @@ public class ChatFastAdapter<Item extends AbstractChatItem> extends FastItemAdap
 
     @Override
     public boolean onLongClick(View v, IAdapter<Item> adapter, Item item, int position) {
+        // don't remove following casting because FrameLayout has setForeground() from API 1 but
+        // View has it from API 23 and Lint doesn't get it correctly!
         if (!item.isSelected()) {
-            v.setForeground(new ColorDrawable(v.getResources().getColor(R.color.colorChatMessageSelectableItemBg)));
+            ((FrameLayout) v).setForeground(new ColorDrawable(v.getResources().getColor(R.color.colorChatMessageSelectableItemBg)));
         } else {
-            v.setForeground(new ColorDrawable(Color.TRANSPARENT));
+            ((FrameLayout) v).setForeground(new ColorDrawable(Color.TRANSPARENT));
         }
         return false;
     }

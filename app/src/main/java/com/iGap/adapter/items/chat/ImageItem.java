@@ -20,6 +20,10 @@ import java.util.List;
 public class ImageItem extends AbstractChatItem<ImageItem, ImageItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
+    public ImageItem() {
+        super(true);
+    }
+
     @Override
     public int getType() {
         return R.id.chatSubLayoutImage;
@@ -35,7 +39,7 @@ public class ImageItem extends AbstractChatItem<ImageItem, ImageItem.ViewHolder>
         super.bindView(holder, payloads);
 
         holder.imvPicture.setImageResource(Integer.parseInt(mMessage.filePath));
-        holder.cslr_txt_time.setText(Long.toString(mMessage.time));
+        holder.cslr_txt_time.setText(formatTime());
 
         if (!mMessage.messageText.isEmpty()) {
             holder.cslr_txt_message.setText(mMessage.messageText);

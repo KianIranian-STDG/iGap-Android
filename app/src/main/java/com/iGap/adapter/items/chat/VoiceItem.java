@@ -22,6 +22,10 @@ import java.util.List;
 public class VoiceItem extends AbstractChatItem<VoiceItem, VoiceItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
+    public VoiceItem() {
+        super(true);
+    }
+
     @Override
     public int getType() {
         return R.id.chatSubLayoutVoice;
@@ -36,7 +40,7 @@ public class VoiceItem extends AbstractChatItem<VoiceItem, VoiceItem.ViewHolder>
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        holder.cslr_txt_time.setText(Long.toString(mMessage.time));
+        holder.cslr_txt_time.setText(formatTime());
 
         if (!mMessage.messageText.isEmpty()) {
             holder.cslr_txt_message.setText(mMessage.messageText);

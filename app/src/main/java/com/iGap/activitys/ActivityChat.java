@@ -28,6 +28,9 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.ChatFastAdapter;
 import com.iGap.adapter.items.chat.AbstractChatItem;
+import com.iGap.adapter.items.chat.ChannelImageItem;
+import com.iGap.adapter.items.chat.ChannelMessageItem;
+import com.iGap.adapter.items.chat.ChannelVideoItem;
 import com.iGap.adapter.items.chat.FileItem;
 import com.iGap.adapter.items.chat.ImageItem;
 import com.iGap.adapter.items.chat.MessageItem;
@@ -230,7 +233,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
         if (chatType == ProtoGlobal.Room.Type.CHANNEL && channelRole == ChannelChatRole.MEMBER)
             initLayotChannelFooter();
-
     }
 
     public void initCallbacks() {
@@ -359,16 +361,29 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         long identifier = 100;
         for (StructMessageInfo messageInfo : getChatList()) {
             switch (messageInfo.messageType) {
+                // TODO: 9/7/2016 [Alireza Eskandarpour Shoferi] add channel items
                 case TEXT:
-                    mAdapter.add(new MessageItem().setMessage(messageInfo).withIdentifier(identifier));
+                    if (chatType == ProtoGlobal.Room.Type.CHAT) {
+                        mAdapter.add(new MessageItem().setMessage(messageInfo).withIdentifier(identifier));
+                    } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
+                        mAdapter.add(new ChannelMessageItem().setMessage(messageInfo).withIdentifier(identifier));
+                    }
                     break;
                 case IMAGE:
                 case IMAGE_TEXT:
-                    mAdapter.add(new ImageItem().setMessage(messageInfo).withIdentifier(identifier));
+                    if (chatType == ProtoGlobal.Room.Type.CHAT) {
+                        mAdapter.add(new ImageItem().setMessage(messageInfo).withIdentifier(identifier));
+                    } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
+                        mAdapter.add(new ChannelImageItem().setMessage(messageInfo).withIdentifier(identifier));
+                    }
                     break;
                 case VIDEO:
                 case VIDEO_TEXT:
-                    mAdapter.add(new VideoItem().setMessage(messageInfo).withIdentifier(identifier));
+                    if (chatType == ProtoGlobal.Room.Type.CHAT) {
+                        mAdapter.add(new VideoItem().setMessage(messageInfo).withIdentifier(identifier));
+                    } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
+                        mAdapter.add(new ChannelVideoItem().setMessage(messageInfo).withIdentifier(identifier));
+                    }
                     break;
                 case FILE:
                 case FILE_TEXT:
@@ -471,6 +486,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                         messageInfo.messageText = message;
                         messageInfo.messageID = identity;
                         messageInfo.messageType = ProtoGlobal.RoomMessageType.TEXT;
+                        messageInfo.time = System.currentTimeMillis();
                         messageInfo.senderID = Long.toString(senderId);
                         messageInfo.sendType = MyType.SendType.send;
 

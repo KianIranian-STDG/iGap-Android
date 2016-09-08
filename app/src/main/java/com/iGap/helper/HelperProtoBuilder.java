@@ -31,6 +31,8 @@ public final class HelperProtoBuilder {
         messageInfo.status = builder.getRoomMessage().getStatus().toString();
         messageInfo.messageID = Long.toString(builder.getRoomMessage().getMessageId());
         messageInfo.messageType = builder.getRoomMessage().getMessageType();
+        // TODO: 9/8/2016 [Alireza Eskandarpour Shoferi] inja bayad createTime bezari ke felan server nemide.
+        messageInfo.time = builder.getRoomMessage().getUpdateTime();
         messageInfo.messageText = builder.getRoomMessage().getMessage();
         messageInfo.senderID = Long.toString(builder.getRoomMessage().getUserId());
         if (builder.getRoomMessage().getUserId() == userId) {
