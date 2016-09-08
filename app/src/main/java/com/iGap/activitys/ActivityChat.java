@@ -671,6 +671,15 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     }
 
     @Override
+    public void onBackPressed() {
+        if (mAdapter != null && mAdapter.getSelections().size() > 0) {
+            mAdapter.deselect();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
     public void onEmojiViewCreate(View view, EmojiPopup emojiPopup) {
 
     }

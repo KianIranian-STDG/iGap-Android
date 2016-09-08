@@ -121,6 +121,24 @@ public class ChatFastAdapter<Item extends AbstractChatItem> extends FastItemAdap
     }
 
     @Override
+    public void notifyAdapterItemRemoved(int position) {
+        super.notifyAdapterItemRemoved(position);
+
+        if (onChatMessageSelectionChanged != null) {
+            onChatMessageSelectionChanged.onChatMessageSelectionChanged(getSelectedItems().size(), getSelectedItems());
+        }
+    }
+
+    @Override
+    public void deselect() {
+        super.deselect();
+
+        if (onChatMessageSelectionChanged != null) {
+            onChatMessageSelectionChanged.onChatMessageSelectionChanged(getSelectedItems().size(), getSelectedItems());
+        }
+    }
+
+    @Override
     public boolean onLongClick(View v, IAdapter<Item> adapter, Item item, int position) {
         // don't remove following casting because FrameLayout has setForeground() from API 1 but
         // View has it from API 23 and Lint doesn't get it correctly!
