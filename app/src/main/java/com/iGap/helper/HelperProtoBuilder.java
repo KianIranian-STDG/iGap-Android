@@ -4,6 +4,8 @@ package com.iGap.helper;
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/6/2016.
  */
 
+import android.text.format.DateUtils;
+
 import com.iGap.module.MyType;
 import com.iGap.module.StructChatInfo;
 import com.iGap.module.StructMessageInfo;
@@ -32,7 +34,7 @@ public final class HelperProtoBuilder {
         messageInfo.messageID = Long.toString(builder.getRoomMessage().getMessageId());
         messageInfo.messageType = builder.getRoomMessage().getMessageType();
         // TODO: 9/8/2016 [Alireza Eskandarpour Shoferi] inja bayad createTime bezari ke felan server nemide.
-        messageInfo.time = builder.getRoomMessage().getUpdateTime();
+        messageInfo.time = builder.getRoomMessage().getUpdateTime() * DateUtils.SECOND_IN_MILLIS;
         messageInfo.messageText = builder.getRoomMessage().getMessage();
         messageInfo.senderID = Long.toString(builder.getRoomMessage().getUserId());
         if (builder.getRoomMessage().getUserId() == userId) {
