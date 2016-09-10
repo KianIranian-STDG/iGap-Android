@@ -16,6 +16,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.PopupMenu;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -105,7 +106,6 @@ public class ActivityContactsProfile extends ActivityEnhanced {
         layoutNickname.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 new MaterialDialog.Builder(ActivityContactsProfile.this)
                         .title("Username")
                         .positiveText("SAVE")
@@ -114,160 +114,165 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                            }
-                        })
-                        .negativeText("CANCEL")
-                        .onNegative(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                                // TODO: 9/3/2016 (molareze)  Should be stored within server or not
-
                                 //change Nickname on realm
                                 final RealmContacts realmUser = realm.where(RealmContacts.class).equalTo("id", userId).findFirst();
-
                                 realm.executeTransaction(new Realm.Transaction() {
                                     @Override
                                     public void execute(Realm realm) {
                                         realmUser.setDisplay_name(txtNickname.toString());
                                     }
                                 });
+                            }
+                        })
+                        .negativeText("CANCEL")
+                        .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT)
+                        .input("please Enter a NickName", txtUserName.getText().toString(), new MaterialDialog.InputCallback() {
+
+                            @Override
+                            public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
 
                             }
-                        });
+                        }).show();
 
-                txtLastSeen = (TextView) findViewById(R.id.chi_txt_lastSeen_title);
-                txtLastSeen.setText("Last seen at " + lastSeen);
+            }
+        });
+//        layoutNickname.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
 
-                txtUserName = (TextView) findViewById(R.id.chi_txt_userName);
-                txtUserName.setText(username);
 
-                txtPhoneNumber = (TextView) findViewById(R.id.chi_txt_phoneNumber);
-                txtPhoneNumber.setText("" + phone);
+        txtLastSeen = (TextView) findViewById(R.id.chi_txt_lastSeen_title);
+        txtLastSeen.setText("Last seen at " + lastSeen);
 
-                vgPhoneNumber = (ViewGroup) findViewById(R.id.chi_layout_phoneNumber);
-                vgSharedMedia = (ViewGroup) findViewById(R.id.chi_layout_SharedMedia);
+        txtUserName = (TextView) findViewById(R.id.chi_txt_userName);
+        txtUserName.setText(username);
 
-                titleToolbar = (TextView) findViewById(R.id.chi_txt_titleToolbar_DisplayName);
-                titleToolbar.setText("nickname");
+        txtPhoneNumber = (TextView) findViewById(R.id.chi_txt_phoneNumber);
+        txtPhoneNumber.setText("" + phone);
 
-                titleLastSeen = (TextView) findViewById(R.id.chi_txt_titleToolbar_LastSeen);
-                titleLastSeen.setText("Last Seen at " + lastSeen);
+        vgPhoneNumber = (ViewGroup) findViewById(R.id.chi_layout_phoneNumber);
+        vgSharedMedia = (ViewGroup) findViewById(R.id.chi_layout_SharedMedia);
 
-                appBarLayout = (AppBarLayout) findViewById(R.id.chi_appbar);
-                appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-                    @Override
-                    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+        titleToolbar = (TextView) findViewById(R.id.chi_txt_titleToolbar_DisplayName);
+        titleToolbar.setText("nickname");
 
-                        if (verticalOffset < -17) {
+        titleLastSeen = (TextView) findViewById(R.id.chi_txt_titleToolbar_LastSeen);
+        titleLastSeen.setText("Last Seen at " + lastSeen);
 
-                            titleToolbar.setVisibility(View.VISIBLE);
-                            titleToolbar.animate().alpha(1).setDuration(300);
-                            titleLastSeen.setVisibility(View.VISIBLE);
-                            titleLastSeen.animate().alpha(1).setDuration(300);
+        appBarLayout = (AppBarLayout) findViewById(R.id.chi_appbar);
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
 
-                        } else {
-                            titleToolbar.setVisibility(View.GONE);
-                            titleToolbar.animate().alpha(0).setDuration(500);
-                            titleLastSeen.setVisibility(View.GONE);
-                            titleLastSeen.animate().alpha(0).setDuration(500);
-                        }
-                    }
-                });
+                if (verticalOffset < -17) {
 
-                imgMenu = (ImageView) findViewById(R.id.chi_img_menuPopup);
-                imgMenu.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+                    titleToolbar.setVisibility(View.VISIBLE);
+                    titleToolbar.animate().alpha(1).setDuration(300);
+                    titleLastSeen.setVisibility(View.VISIBLE);
+                    titleLastSeen.animate().alpha(1).setDuration(300);
 
-                        popUpMenu(R.menu.chi_popup_menu, v);
-                    }
-                });
+                } else {
+                    titleToolbar.setVisibility(View.GONE);
+                    titleToolbar.animate().alpha(0).setDuration(500);
+                    titleLastSeen.setVisibility(View.GONE);
+                    titleLastSeen.animate().alpha(0).setDuration(500);
+                }
+            }
+        });
 
-                vgPhoneNumber.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+        imgMenu = (ImageView) findViewById(R.id.chi_img_menuPopup);
+        imgMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-                        popUpMenu(R.menu.chi_popup_phone_number, v);
-                    }
-                });
+                popUpMenu(R.menu.chi_popup_menu, v);
+            }
+        });
 
-                vgSharedMedia = (ViewGroup) findViewById(R.id.chi_layout_SharedMedia);
-                vgSharedMedia.setOnClickListener(new View.OnClickListener() {// go to the ActivityMediaChanel
-                    @Override
-                    public void onClick(View view) {
+        vgPhoneNumber.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                popUpMenu(R.menu.chi_popup_phone_number, v);
+            }
+        });
+
+        vgSharedMedia = (ViewGroup) findViewById(R.id.chi_layout_SharedMedia);
+        vgSharedMedia.setOnClickListener(new View.OnClickListener() {// go to the ActivityMediaChanel
+            @Override
+            public void onClick(View view) {
 
 //                startActivity(new Intent(ActivityContactsProfile.this , ActivitySharedMedia.class));
 //                finish();
 
-                        // TODO: 9/3/2016 (molareza) go to MediaShared page
-
-                    }
-                });
-
-                txtBlockContact = (TextView) findViewById(R.id.chi_txt_blockContact);
-                txtBlockContact.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        showAlertDialog("Block This Contact?", "BLOCK", "CANCEL");
-
-                    }
-                });
-
-                txtClearChat = (TextView) findViewById(R.id.chi_txt_clearChat);
-                txtClearChat.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        showAlertDialog("clear This chat?", "BLOCK", "CANCEL");
-                    }
-                });
-
-                txtNotifyAndSound = (TextView) findViewById(R.id.chi_txtNotifyAndSound);
-                txtNotifyAndSound.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        // TODO: 9/3/2016 (molareza) go to NotifyAndSound page
-
-
-                    }
-                });
-
-                realm.close();
+                // TODO: 9/3/2016 (molareza) go to MediaShared page
 
             }
+        });
 
-            private void popUpMenu(final int layout, View v) {
+        txtBlockContact = (TextView) findViewById(R.id.chi_txt_blockContact);
+        txtBlockContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showAlertDialog("Block This Contact?", "BLOCK", "CANCEL");
 
-                PopupMenu popupMenu = new PopupMenu(ActivityContactsProfile.this, v, Gravity.BOTTOM);
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
+            }
+        });
 
-                        if (layout == R.menu.chi_popup_menu) {
+        txtClearChat = (TextView) findViewById(R.id.chi_txt_clearChat);
+        txtClearChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showAlertDialog("clear This chat?", "ClEAR", "CANCEL");
+            }
+        });
 
-                            switch (item.getItemId()) {
-                                case R.id.chi_popUpMenu0:
+        txtNotifyAndSound = (TextView) findViewById(R.id.chi_txtNotifyAndSound);
+        txtNotifyAndSound.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-                                    // TODO: 9/3/2016 (molareza) popupMenu share
-                                    Toast.makeText(ActivityContactsProfile.this, "1", Toast.LENGTH_SHORT).show();
-                                    return true;
+                // TODO: 9/3/2016 (molareza) go to NotifyAndSound page
 
-                                case R.id.chi_popUpMenu1:
-                                    // TODO: 9/3/2016 (molareza) popupMenu delete
-                                    Toast.makeText(ActivityContactsProfile.this, "2", Toast.LENGTH_SHORT).show();
-                                    return true;
-                                case R.id.chi_popUpMenu2:
-                                    // TODO: 9/3/2016 (molareza) popupMenu add shortcut
-                                    Toast.makeText(ActivityContactsProfile.this, "3", Toast.LENGTH_SHORT).show();
-                                    return true;
-                            }
 
-                        } else if (layout == R.menu.chi_popup_phone_number) {
+            }
+        });
 
-                            switch (item.getItemId()) { // insert new user to = contact mobile
-                                case R.id.chi_popUpAddContact:
-                                    ArrayList<ContentValues> data = new ArrayList<ContentValues>();
+        realm.close();
+
+    }
+
+    private void popUpMenu(final int layout, View v) {
+
+        PopupMenu popupMenu = new PopupMenu(ActivityContactsProfile.this, v, Gravity.BOTTOM);
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+
+                if (layout == R.menu.chi_popup_menu) {
+
+                    switch (item.getItemId()) {
+                        case R.id.chi_popUpMenu0:
+
+                            // TODO: 9/3/2016 (molareza) popupMenu share
+                            Toast.makeText(ActivityContactsProfile.this, "1", Toast.LENGTH_SHORT).show();
+                            return true;
+
+                        case R.id.chi_popUpMenu1:
+                            // TODO: 9/3/2016 (molareza) popupMenu delete
+                            Toast.makeText(ActivityContactsProfile.this, "2", Toast.LENGTH_SHORT).show();
+                            return true;
+                        case R.id.chi_popUpMenu2:
+                            // TODO: 9/3/2016 (molareza) popupMenu add shortcut
+                            Toast.makeText(ActivityContactsProfile.this, "3", Toast.LENGTH_SHORT).show();
+                            return true;
+                    }
+
+                } else if (layout == R.menu.chi_popup_phone_number) {
+
+                    switch (item.getItemId()) { // insert new user to = contact mobile
+                        case R.id.chi_popUpAddContact:
+                            ArrayList<ContentValues> data = new ArrayList<ContentValues>();
 
 //                            ContentValues row1 = new ContentValues();
 //                            row1.put(ContactsContract.Contacts.Data.MIMETYPE, ContactsContract.CommonDataKinds.Organization.CONTENT_ITEM_TYPE);
@@ -279,10 +284,10 @@ public class ActivityContactsProfile extends ActivityEnhanced {
 //                            row2.put(ContactsContract.Contacts.DISPLAY_NAME, "am");
 //                            data.add(row2);
 //
-                                    ContentValues row3 = new ContentValues();
-                                    row3.put(ContactsContract.Contacts.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
-                                    row3.put(ContactsContract.CommonDataKinds.Phone.NUMBER, Long.parseLong(txtPhoneNumber.getText().toString()));
-                                    data.add(row3);
+                            ContentValues row3 = new ContentValues();
+                            row3.put(ContactsContract.Contacts.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
+                            row3.put(ContactsContract.CommonDataKinds.Phone.NUMBER, Long.parseLong(txtPhoneNumber.getText().toString()));
+                            data.add(row3);
 //
 ////                            ContentValues row4 = new ContentValues();
 ////                            row4.put(ContactsContract.Contacts.Data.MIMETYPE, ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE);
@@ -291,104 +296,105 @@ public class ActivityContactsProfile extends ActivityEnhanced {
 ////                            row4.put(ContactsContract.CommonDataKinds.Email.ADDRESS, "android@android.com");
 ////                            data.add(row4);
 //
-                                    ContentValues row5 = new ContentValues();
-                                    row5.put(ContactsContract.Contacts.Data.MIMETYPE, ContactsContract.CommonDataKinds.Nickname.CONTENT_ITEM_TYPE);
-                                    row5.put(ContactsContract.CommonDataKinds.Nickname.NAME, txtNickname.getText().toString());
-                                    data.add(row5);
+                            ContentValues row5 = new ContentValues();
+                            row5.put(ContactsContract.Contacts.Data.MIMETYPE, ContactsContract.CommonDataKinds.Nickname.CONTENT_ITEM_TYPE);
+                            row5.put(ContactsContract.CommonDataKinds.Nickname.NAME, txtNickname.getText().toString());
+                            data.add(row5);
 //
-                                    Bitmap bmImage = ((BitmapDrawable) imgUser.getDrawable()).getBitmap();
+                            Bitmap bmImage = ((BitmapDrawable) imgUser.getDrawable()).getBitmap();
 //                            Bitmap bmImage = BitmapFactory.decodeFile(G.imageFile.toString());
-                                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                                    bmImage.compress(Bitmap.CompressFormat.JPEG, 50, baos);
-                                    byte[] b = baos.toByteArray();
-                                    ContentValues row6 = new ContentValues();
-                                    row6.put(ContactsContract.Contacts.Data.MIMETYPE, ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE);
-                                    row6.put(ContactsContract.CommonDataKinds.Phone.DATA15, b);
-                                    data.add(row6);
+                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                            bmImage.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+                            byte[] b = baos.toByteArray();
+                            ContentValues row6 = new ContentValues();
+                            row6.put(ContactsContract.Contacts.Data.MIMETYPE, ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE);
+                            row6.put(ContactsContract.CommonDataKinds.Phone.DATA15, b);
+                            data.add(row6);
 
 
-                                    Intent intent = new Intent(Intent.ACTION_INSERT, ContactsContract.Contacts.CONTENT_URI);
-                                    intent.putExtra(ContactsContract.Intents.Insert.NAME, displayName);
-                                    intent.putExtra(ContactsContract.Intents.Insert.PHONE, phone);
-                                    intent.putParcelableArrayListExtra(ContactsContract.Intents.Insert.DATA, data);
-                                    startActivity(intent);
+                            Intent intent = new Intent(Intent.ACTION_INSERT, ContactsContract.Contacts.CONTENT_URI);
+                            intent.putExtra(ContactsContract.Intents.Insert.NAME, displayName);
+                            intent.putExtra(ContactsContract.Intents.Insert.PHONE, phone);
+                            intent.putParcelableArrayListExtra(ContactsContract.Intents.Insert.DATA, data);
+                            startActivity(intent);
 
 
-                                    Toast.makeText(ActivityContactsProfile.this, "1", Toast.LENGTH_SHORT).show();
-                                    return true;
+                            Toast.makeText(ActivityContactsProfile.this, "1", Toast.LENGTH_SHORT).show();
+                            return true;
 
-                                case R.id.chi_popUpCall: // call to user
+                        case R.id.chi_popUpCall: // call to user
 
-                                    long call = Long.parseLong(txtPhoneNumber.getText().toString());
-                                    try {
-                                        Intent phoneIntent = new Intent(Intent.ACTION_CALL);
-                                        phoneIntent.setData(Uri.parse("tel:" + call));
-                                        //startActivity(phoneIntent); //TODO [Saeed Mozaffari] [2016-09-07 11:31 AM] - phone intent permission
+                            long call = Long.parseLong(txtPhoneNumber.getText().toString());
+                            try {
+                                Intent phoneIntent = new Intent(Intent.ACTION_CALL);
+                                phoneIntent.setData(Uri.parse("tel:" + call));
+                                //startActivity(phoneIntent); //TODO [Saeed Mozaffari] [2016-09-07 11:31 AM] - phone intent permission
 
-                                    } catch (Exception ex) {
+                            } catch (Exception ex) {
 
-                                        ex.getStackTrace();
-                                        Log.i("TAG", "onMenuItemClick: " + ex.getMessage());
-                                    }
-
-
-                                    Toast.makeText(ActivityContactsProfile.this, "2", Toast.LENGTH_SHORT).show();
-                                    return true;
-
-                                case R.id.chi_popUpCopy: // copy phone number
-
-                                    String copy;
-                                    copy = txtPhoneNumber.getText().toString();
-
-                                    ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                                    ClipData clip = ClipData.newPlainText("PHONE_NUMBER", copy);
-                                    clipboard.setPrimaryClip(clip);
-
-                                    Toast.makeText(ActivityContactsProfile.this, "3", Toast.LENGTH_SHORT).show();
-                                    return true;
+                                ex.getStackTrace();
+                                Log.i("TAG", "onMenuItemClick: " + ex.getMessage());
                             }
-                        }
 
-                        return true;
+
+                            Toast.makeText(ActivityContactsProfile.this, "2", Toast.LENGTH_SHORT).show();
+                            return true;
+
+                        case R.id.chi_popUpCopy: // copy phone number
+
+                            String copy;
+                            copy = txtPhoneNumber.getText().toString();
+
+                            ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                            ClipData clip = ClipData.newPlainText("PHONE_NUMBER", copy);
+                            clipboard.setPrimaryClip(clip);
+
+                            Toast.makeText(ActivityContactsProfile.this, "3", Toast.LENGTH_SHORT).show();
+                            return true;
                     }
-                });
+                }
 
-                popupMenu.inflate(layout);
-                popupMenu.show();
-            }
-
-            private void showAlertDialog(String message, String positive, String negitive) { // alert dialog for block or clear user
-
-                final AlertDialog.Builder builder = new AlertDialog.Builder(ActivityContactsProfile.this);
-
-                builder.setMessage(message);
-                builder.setPositiveButton(positive, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                });
-
-                builder.setMessage(message);
-                builder.setNegativeButton(negitive, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                        dialogInterface.dismiss();
-                    }
-                });
-
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
-
-                Button nButton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-                nButton.setTextColor(getResources().getColor(R.color.toolbar_background));
-                nButton.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-                Button pButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-                pButton.setTextColor(getResources().getColor(R.color.toolbar_background));
-                pButton.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-
+                return true;
             }
         });
+
+        popupMenu.inflate(layout);
+        popupMenu.show();
     }
+
+    private void showAlertDialog(String message, String positive, String negitive) { // alert dialog for block or clear user
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(ActivityContactsProfile.this);
+
+        builder.setMessage(message);
+        builder.setPositiveButton(positive, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+
+        builder.setMessage(message);
+        builder.setNegativeButton(negitive, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                dialogInterface.dismiss();
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+        Button nButton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+        nButton.setTextColor(getResources().getColor(R.color.toolbar_background));
+        nButton.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+        Button pButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        pButton.setTextColor(getResources().getColor(R.color.toolbar_background));
+        pButton.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+
+    }
+
 }
+
+

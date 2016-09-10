@@ -115,6 +115,7 @@ public class ActivityProfile extends ActivityEnhanced {
         if (G.imageFile.exists()) {
             decodeBitmapProfile = HelperDecodeFile.decodeFile(G.imageFile);
             btnSetImage.setImageBitmap(decodeBitmapProfile);
+            btnSetImage.setPadding(0, 0, 0, 0);
             btnSetImage.setBackgroundColor(getResources().getColor(android.R.color.transparent));
         }
     }
