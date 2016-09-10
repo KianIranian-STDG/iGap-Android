@@ -26,14 +26,14 @@
             android:background="@android:color/white"
             android:orientation="horizontal">
 
-            <ImageButton
-                android:id="@+id/chl_btn_smile"
+
+            <ImageView
+                android:id="@+id/chl_imv_smile_button"
                 android:layout_width="@dimen/dp40"
-                android:layout_height="match_parent"
-                android:background="@null"
-                android:gravity="center"
-                android:src="@drawable/ic_emoticon"
-                android:textSize="@dimen/sp26" />
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/dp6"
+                android:paddingRight="@dimen/dp4"
+                android:src="@drawable/emoticon_with_happy_face" />
 
             <com.iGap.module.EmojiEditText
                 android:id="@+id/chl_edt_chat"
@@ -58,36 +58,33 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/chl_btn_send"
+                <ImageView
+                    android:id="@+id/chl_imv_send_button"
                     android:layout_width="@dimen/dp80"
-                    android:layout_height="match_parent"
-                    android:background="@null"
-                    android:gravity="center"
-                    android:text="@string/fa_send"
-                    android:textColor="@color/gray"
-                    android:textSize="@dimen/sp26"
-                    android:visibility="gone" />
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/dp32"
+                    android:visibility="gone"
+                    android:paddingRight="@dimen/dp20"
+                    android:src="@drawable/send_button_blue" />
 
-                <Button
-                    android:id="@+id/chl_btn_attach"
-                    android:layout_width="@dimen/dp40"
-                    android:layout_height="match_parent"
-                    android:background="@null"
-                    android:gravity="center"
-                    android:text="@string/fa_paperclip"
-                    android:textColor="@color/gray"
-                    android:textSize="@dimen/sp26" />
 
-                <Button
-                    android:id="@+id/chl_btn_mic"
+                <ImageView
+                    android:id="@+id/chl_imv_attach_button"
                     android:layout_width="@dimen/dp40"
-                    android:layout_height="match_parent"
-                    android:background="@null"
-                    android:gravity="center"
-                    android:text="@string/fa_microphone"
-                    android:textColor="@color/gray"
-                    android:textSize="@dimen/sp26" />
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/dp6"
+                    android:paddingRight="@dimen/dp4"
+                    android:src="@drawable/attachment_clip" />
+
+                <ImageView
+                    android:id="@+id/chl_imv_mic_button"
+                    android:layout_width="@dimen/dp40"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/dp6"
+                    android:paddingRight="@dimen/dp4"
+                    android:src="@drawable/microphone_of_voice" />
+
+
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

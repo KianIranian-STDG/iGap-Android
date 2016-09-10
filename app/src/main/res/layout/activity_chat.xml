@@ -32,15 +32,14 @@
             android:background="@color/green"
             android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/chl_btn_back"
-                android:layout_width="@dimen/dp60"
-                android:layout_height="match_parent"
-                android:background="@null"
-                android:gravity="center"
-                android:text="@string/fa_chevron_left"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/sp22" />
+            <ImageView
+                android:id="@+id/chl_imv_back_Button"
+                android:layout_width="@dimen/dp52"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/dp16"
+                android:paddingRight="@dimen/dp12"
+                android:src="@drawable/left_arrow_key" />
+
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -93,17 +92,18 @@
                 android:id="@+id/chl_imv_user_picture"
                 android:layout_width="@dimen/dp60"
                 android:layout_height="@dimen/dp60"
+                android:padding="@dimen/dp6"
                 android:src="@mipmap/h" />
 
-            <Button
-                android:id="@+id/chl_btn_menu"
-                android:layout_width="@dimen/dp60"
-                android:layout_height="match_parent"
-                android:background="@null"
-                android:gravity="center"
-                android:text="@string/fa_ellipsis_v"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/sp26" />
+            <ImageView
+                android:id="@+id/chl_imv_menu_button"
+                android:layout_width="@dimen/dp52"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/dp16"
+                android:paddingRight="@dimen/dp12"
+                android:src="@drawable/show_more_button_with_three_dots" />
+
+
         </LinearLayout>
 
         <LinearLayout

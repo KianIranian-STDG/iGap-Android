@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:viewportWidth="408"
+    android:viewportHeight="408"
+    android:width="408dp"
+    android:height="408dp">
+    <path
+        android:pathData="M204 102c28.05 0 51 -22.95 51 -51 0 -28.05 -22.95 -51 -51 -51 -28.05 0 -51 22.95 -51 51 0 28.05 22.95 51 51 51zm0 51c-28.05 0 -51 22.95 -51 51 0 28.05 22.95 51 51 51 28.05 0 51 -22.95 51 -51 0 -28.05 -22.95 -51 -51 -51zm0 153c-28.05 0 -51 22.95 -51 51 0 28.05 22.95 51 51 51 28.05 0 51 -22.95 51 -51 0 -28.05 -22.95 -51 -51 -51z"
+        android:fillColor="#ffffff" />
+</vector>
