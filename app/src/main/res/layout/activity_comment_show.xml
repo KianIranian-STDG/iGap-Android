@@ -59,7 +59,8 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:singleLine="true"
-                        android:text="23 Comment"
+                        android:text="23 Comments"
+                        android:textStyle="bold"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/sp18" />
@@ -171,12 +172,12 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/gray" />
+            android:background="#d1d1d1" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp48"
-            android:background="@android:color/white"
+            android:background="@color/gray_f2"
             android:orientation="horizontal">
 
             <ImageButton
@@ -188,7 +189,7 @@
                 android:gravity="center"
                 android:padding="@dimen/dp4"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_emoticon" />
+                android:src="@drawable/emoticon_with_happy_face" />
 
             <com.iGap.module.EmojiEditText
                 android:id="@+id/acs_edt_chat"
@@ -197,7 +198,7 @@
                 android:layout_weight="1"
                 android:paddingLeft="@dimen/dp6"
                 android:background="@null"
-                android:hint="           Type Message"
+                android:hint="   Type Message"
                 android:maxLines="4"
                 android:paddingRight="@dimen/dp4"
                 android:textColorHint="@color/gray" />
@@ -205,12 +206,11 @@
 
             <Button
                 android:id="@+id/acs_btn_send"
-                android:layout_width="@dimen/dp80"
-                android:layout_height="match_parent"
-                android:background="@null"
+                android:layout_width="@dimen/dp40"
+                android:layout_height="@dimen/dp36"
+                android:background="@drawable/send_button_gray"
                 android:gravity="center"
-                android:text="@string/fa_send"
-                android:textColor="@color/gray"
+                android:layout_gravity="center"
                 android:textSize="@dimen/sp26"
                 android:visibility="visible" />
 

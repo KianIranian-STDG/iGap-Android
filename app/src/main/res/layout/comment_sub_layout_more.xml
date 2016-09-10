@@ -11,9 +11,9 @@
         android:padding="@dimen/dp4"
         android:textSize="@dimen/sp16"
         android:gravity="center"
-        android:background="#dddddd"
+        android:background="#f1f1f1"
         android:layout_marginBottom="@dimen/dp20"
-        android:text="more ...."
+        android:text="more ..."
         android:id="@+id/cslmo_txt_more" />
 
 </LinearLayout>

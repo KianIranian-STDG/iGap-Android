@@ -8,6 +8,11 @@
     <color name="red">#f23131</color>
     <color name="green">#31bdb6</color>
 
+    <color name="gray_9d">#9d9d9d</color>
+    <color name="gray_9e">#9e9e9e</color>
+    <color name="gray_f2">#f2f2f2</color>
+    <color name="gray_4c">#4c4c4c</color>
+
     //mo
     <!--toolbar-->
 

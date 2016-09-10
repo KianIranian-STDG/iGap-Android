@@ -83,6 +83,7 @@
     <com.iGap.libs.floatingAddButton.ArcMenu
         android:id="@+id/ac_arc_button_add"
         android:layout_width="wrap_content"
+        android:layout_margin="@dimen/dp8"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         app:menu_color="@color/green"
