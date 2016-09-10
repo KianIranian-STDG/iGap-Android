@@ -5,11 +5,22 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <!--<TextView-->
+        <!--android:id="@+id/int_txt_skip"-->
+        <!--android:layout_width="75dp"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_marginRight="@dimen/dp16"-->
+        <!--android:gravity="bottom|right"-->
+        <!--android:paddingBottom="@dimen/dp4"-->
+        <!--android:text="SKIP"-->
+        <!--android:layout_marginBottom="@dimen/dp4"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:clickable="true"-->
+        <!--android:textColor="@color/toolbar_background"-->
+        <!--android:textSize="@dimen/dp16" />-->
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/int_viewPager_introduce"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+   <!---->
 
     <android.support.percent.PercentRelativeLayout
         android:id="@+id/int_layout_0"
@@ -300,7 +311,6 @@
                 android:textColor="@color/text_line2_lc__dark"
                 android:textSize="@dimen/sp16"
                 android:visibility="gone" />
-
         </LinearLayout>
         <!--page 4-->
         <!--page 5-->
@@ -325,7 +335,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/dp4"
                 android:gravity="center"
                 android:lineSpacingExtra="@dimen/dp4"
                 android:paddingLeft="@dimen/dp28"
@@ -335,22 +344,11 @@
                 android:textSize="@dimen/sp14"
                 android:visibility="gone" />
 
-            <Button
-                android:id="@+id/int_btnStart"
-                android:layout_width="@dimen/dp200"
-                android:layout_height="@dimen/dp32"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/dp4"
-                android:background="@drawable/int_button_interduce"
-                android:gravity="center"
-                android:text="@string/btn_start_page5"
-                android:textColor="@color/txt_start_page5"
-                android:textSize="@dimen/sp16"
-                android:visibility="gone" />
         </LinearLayout>
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/int_layoutParentCircleImage"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_below="@+id/int_layout_1"
@@ -359,11 +357,43 @@
         <com.iGap.module.CustomCircleImage
             android:id="@+id/int_circleButton_introduce"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp28"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="@dimen/dp12"
-            android:foregroundGravity="top" />
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="@dimen/dp12" />
     </RelativeLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/int_viewPager_introduce"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <Button
+        android:id="@+id/int_btnStart"
+        android:layout_width="@dimen/dp200"
+        android:layout_height="@dimen/dp28"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/dp8"
+        android:background="@drawable/int_button_interduce"
+        android:gravity="center"
+        android:text="@string/btn_start_page5"
+        android:textColor="@color/txt_start_page5"
+        android:textSize="@dimen/sp16"
+        android:visibility="gone"
+        android:layout_above="@+id/int_layoutParentCircleImage"/>
+
+    <TextView
+        android:id="@+id/int_txt_skip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SKIP"
+        android:textColor="@color/toolbar_background"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="@dimen/dp8"
+        android:layout_marginRight="@dimen/dp8"
+        android:textSize="@dimen/sp18"
+        />
 
 
 </android.support.percent.PercentRelativeLayout>

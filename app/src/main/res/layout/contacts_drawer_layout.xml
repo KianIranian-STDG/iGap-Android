@@ -15,19 +15,6 @@
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp">
 
-            <!--<TextView-->
-            <!--android:id="@+id/st_txt_titleToolbar"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_centerInParent="true"-->
-            <!--android:gravity="center"-->
-            <!--android:text="@string/st_titleToolbar"-->
-            <!--android:textColor="@color/whit_background"-->
-            <!--android:textSize="@dimen/sp22"-->
-            <!--android:textStyle="bold"-->
-            <!--android:visibility="visible" />-->
-
-
         <TextView
             android:id="@+id/menu_txtBack"
             android:layout_width="@dimen/dp60"
@@ -72,27 +59,6 @@
                         android:queryHint="Search...." />
                 </LinearLayout>
     </android.support.v7.widget.Toolbar>
-    <!--<EditText-->
-    <!--android:id="@+id/edit_search"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="@dimen/dp32"-->
-    <!--android:layout_alignParentTop="true"-->
-    <!--android:layout_marginBottom="@dimen/dp6"-->
-    <!--android:layout_marginEnd="@dimen/dp32"-->
-    <!--android:layout_marginLeft="@dimen/dp32"-->
-    <!--android:layout_marginRight="@dimen/dp32"-->
-    <!--android:layout_marginStart="@dimen/dp32"-->
-    <!--android:layout_marginTop="@dimen/dp6"-->
-    <!--android:background="@drawable/press_button_stroke"-->
-    <!--android:gravity="center"-->
-    <!--android:hint="@string/hint_search"-->
-    <!--android:imeOptions="actionSearch"-->
-    <!--android:inputType="textPersonName"-->
-    <!--android:paddingEnd="@dimen/dp16"-->
-    <!--android:paddingLeft="@dimen/dp16"-->
-    <!--android:paddingRight="@dimen/dp16"-->
-    <!--android:paddingStart="@dimen/dp16"-->
-    <!--android:textColor="@android:color/black" />-->
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"

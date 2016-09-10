@@ -10,8 +10,6 @@
 
     <style name="Widget.GifMoviewView" parent="@android:style/Widget"></style>
 
-    //mo
-
     <style name="AppTheme22" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/toolbar_background</item>
@@ -54,13 +52,12 @@
 
 
     <style name="MySearch" parent="android:Theme.Holo.Light.DarkActionBar" >
-        <item name="android:editTextColor">@color/whit_background</item>
+        <item name="android:editTextColor">@color/black_register</item>
         <item name="android:textColorHint">@color/text_verify</item>
-        <item name="colorAccent">@color/whit_background</item>
-        <item name="android:tint">@color/whit_background</item>
+        <item name="colorAccent">@color/toolbar_background</item>
+        <item name="android:tint">@color/border_editText</item>
         <item name="android:gravity">right</item>
-        <item name="android:textColor">@color/whit_background</item>
-        <item name="android:layout_gravity">right</item>
+        <item name="android:textColor">@color/text_verify</item>
 
     </style>
 

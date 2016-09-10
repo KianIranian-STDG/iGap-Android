@@ -1,106 +1,98 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rg_layoutRoot_dialog"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/rg_whit_background"
     android:orientation="vertical"
-    android:id="@+id/rg_layoutRoot_dialog">
+    android:layoutDirection="ltr">
 
     <!-- Pretty hint text, and maxLines -->
 
-    <LinearLayout
-        android:id="@+id/rg_layout_search_chooseCountry"
+    <RelativeLayout
+        android:id="@+id/se_layoutParent"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp60"
-        android:background="@color/toolbar_background"
-        android:orientation="horizontal"
-        android:layoutDirection="ltr">
+        android:layout_height="@dimen/dp60">
+
+        <android.support.v7.widget.SearchView
+            android:id="@+id/rg_edtSearch_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:theme="@style/MySearch"
+            android:clickable="true"
+            app:submitBackground="@color/red"
+            />
 
         <TextView
             android:id="@+id/rg_txt_titleToolbar"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight=".85"
-            android:gravity="center"
-            android:text="Choose a Country"
-            android:paddingLeft="@dimen/dp48"
-            android:textColor="@color/rg_whit_background"
-            android:textSize="@dimen/sp18"
-            android:textStyle="bold" />
+            android:text="SearchView"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp24"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/sp20"
+            android:textStyle="bold"/>
 
-        <android.support.v7.widget.SearchView
-            android:imeOptions="actionSearch"
-            android:layoutDirection="rtl"
-            android:id="@+id/rg_edtSearch_toolbar"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight=".15"
-            android:iconifiedByDefault="false"
-            android:padding="2dp"
-            app:queryHint=""
-            app:searchHintIcon="@null"
-            android:theme="@style/MySearch"
-            android:queryHint="Search...." />
+    </RelativeLayout>
 
-    </LinearLayout>
 
     <View
+        android:id="@+id/rg_borderButton"
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/toolbar_background" />
+        android:layout_height="1dp"
+        android:background="@color/background_editText"
+        android:visibility="gone"/>
 
     <ListView
+
         android:id="@+id/lstContent"
         android:layout_width="fill_parent"
         android:layout_height="0dip"
         android:layout_weight="1"
         android:background="@color/structCountry"
         android:choiceMode="singleChoice"
+        android:divider="@color/rg_background_editText"
         android:fadeScrollbars="false"
         android:scrollbarSize="@dimen/dp4"
-        android:dividerHeight="1dp"
-        android:divider="@color/rg_background_editText"
         android:scrollbarThumbVertical="@color/rg_start_background" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/rg_whit_background" />
+        android:background="@color/background_editText" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
+        android:layout_height="@dimen/dp52"
+        android:gravity="right"
+        android:padding="@dimen/dp8"
         android:orientation="horizontal"
-        android:background="@color/toolbar_background">
+        android:layoutDirection="ltr">
 
-        <!--<Button-->
-        <!--android:id="@+id/rg_btn_cancelDialog"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="@dimen/dp52"-->
-        <!--android:layout_weight="1"-->
-        <!--android:background="@android:color/transparent"-->
-        <!--android:text="CANCEL"-->
-        <!--android:textColor="@color/whit_background"-->
-        <!--android:textStyle="bold"-->
-        <!--android:textSize="@dimen/sp16"-->
-        <!--/>-->
+        <TextView
+            android:id="@+id/rg_txt_cancelDialog"
+            android:layout_width="@dimen/dp60"
+            android:layout_height="@dimen/dp36"
+            android:background="@android:color/transparent"
+            android:text="CANCEL"
+            android:gravity="center"
+            android:textColor="@color/toolbar_background"
+            android:textSize="@dimen/sp14"
+            android:textStyle="bold" />
 
-        <!--<View-->
-        <!--android:layout_width="2dp"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:background="@color/whit_background"-->
-        <!--/>-->
-
-        <Button
-            android:textColor="@color/rg_whit_background"
-            android:id="@+id/rg_btn_okDialog"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/dp52"
-            android:layout_weight="1"
+        <TextView
+            android:id="@+id/rg_txt_okDialog"
+            android:layout_width="@dimen/dp60"
+            android:layout_height="@dimen/dp36"
             android:background="@android:color/transparent"
             android:text="OK"
-            android:textSize="@dimen/sp20"
+            android:layout_marginLeft="@dimen/dp8"
+            android:gravity="center"
+            android:textColor="@color/toolbar_background"
+            android:textSize="@dimen/sp14"
             android:textStyle="bold" />
 
     </LinearLayout>

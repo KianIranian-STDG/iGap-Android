@@ -42,4 +42,18 @@
         <item>GIF</item>
 
     </string-array>
+
+    <string-array name="message">
+        <item>Reply</item>
+        <item>Copy</item>
+        <item>Save to download</item>
+        <item>Share</item>
+        <item>Forward</item>
+        <item>Delete</item>
+    </string-array>
+
+    <string-array name="profile">
+        <item>From Gallery</item>
+        <item>From Camera</item>
+    </string-array>
 </resources>

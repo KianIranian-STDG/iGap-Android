@@ -125,7 +125,7 @@
     <string name="pu_title_profileUser">YOUR INFORMATION</string>
     <string name="pu_desc_profileUser">Enter your name and add a profile picture.</string>
     <string name="pu_addPhoto_profileUser">Profile Picture</string>
-    <string name="pu_nikname_profileUser">Nike Name</string>
+    <string name="pu_nikname_profileUser">Nickname</string>
 
 
     <!--REGISTER PAGE-->

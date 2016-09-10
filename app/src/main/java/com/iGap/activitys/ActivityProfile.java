@@ -1,6 +1,5 @@
 package com.iGap.activitys;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -8,12 +7,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.interface_package.OnUserProfileSetNickNameResponse;
@@ -26,7 +25,7 @@ import io.realm.Realm;
 
 public class ActivityProfile extends ActivityEnhanced {
 
-    private TextView txtTitle;
+    private TextView txtTitle ,txtTitlInformation, txtDesc , txtAddPhoto;
     private Button btnLetsGo;
     private com.iGap.module.CircleImageView btnSetImage;
     private int myResultCodeCamera = 1;
@@ -35,6 +34,7 @@ public class ActivityProfile extends ActivityEnhanced {
     private Uri uriIntent;
     private String pathImageUser;
     public static boolean IsDeleteFile;
+
 
     public static Bitmap decodeBitmapProfile = null;
 
@@ -46,6 +46,15 @@ public class ActivityProfile extends ActivityEnhanced {
         if (!IsDeleteFile && G.imageFile.exists()) {
             G.imageFile.delete();
         }
+
+        txtTitlInformation = (TextView) findViewById(R.id.pu_txt_title_information);
+        txtTitlInformation.setTypeface(G.arialBold);
+        txtDesc = (TextView) findViewById(R.id.pu_txt_title_desc);
+        txtDesc.setTypeface(G.arial);
+        txtAddPhoto = (TextView) findViewById(R.id.pu_txt_addPhoto);
+        txtAddPhoto.setTypeface(G.arial);
+
+        txtTitle = (TextView) findViewById(R.id.rg_txt_titleToolbar);
 
         txtTitle = (TextView) findViewById(R.id.pu_titleToolbar);
         txtTitle.setTypeface(G.FONT_IGAP);
@@ -59,8 +68,10 @@ public class ActivityProfile extends ActivityEnhanced {
         });
 
         edtNikName = (EditText) findViewById(R.id.pu_edt_nikeName); // edit Text for NikName //TODO [Saeed Mozaffari] [2016-08-30 10:12 AM] - (Saeed Mozaffari to Mr Mollareza) disable enter for edt
+        edtNikName.setTypeface(G.arial);
 
         btnLetsGo = (Button) findViewById(R.id.pu_btn_letsGo);
+        btnLetsGo.setTypeface(G.arial);
         btnLetsGo.setOnClickListener(new View.OnClickListener() { // button for save data and go to next page
             @Override
             public void onClick(View view) {
@@ -98,7 +109,6 @@ public class ActivityProfile extends ActivityEnhanced {
                         }
                     });
                 }
-
             }
         });
 
@@ -112,38 +122,37 @@ public class ActivityProfile extends ActivityEnhanced {
     //======================================================================================================dialog for choose image
     private void startDialog() {
 
-        final Dialog dialog = new Dialog(ActivityProfile.this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        new MaterialDialog.Builder(this)
+                .title("Choose Picture")
+                .negativeText("CANCEL")
+                .items(R.array.profile)
+                .itemsCallback(new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-        dialog.setContentView(R.layout.dialog_profile);
-        TextView picCamera = (TextView) dialog.findViewById(R.id.pu_layout_dialog_picCamera);
-        picCamera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
+                        if (text.toString().equals("From Camera")){
 
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    uriIntent = Uri.fromFile(G.imageFile);
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
-                    startActivityForResult(intent, myResultCodeCamera);
-                    dialog.dismiss();
+                                    if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
 
-                } else {
-                    Toast.makeText(ActivityProfile.this, "Please check your Camera", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+                                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                        uriIntent = Uri.fromFile(G.imageFile);
+                                        intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
+                                        startActivityForResult(intent, myResultCodeCamera);
+                                        dialog.dismiss();
 
-        TextView picGallery = (TextView) dialog.findViewById(R.id.pu_layout_dialog_picGallery);
-        picGallery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent, myResultCodeGallery);
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
+                                    } else {
+                                        Toast.makeText(ActivityProfile.this, "Please check your Camera", Toast.LENGTH_SHORT).show();
+                                    }
+
+                        }else {
+                            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                            startActivityForResult(intent, myResultCodeGallery);
+                            dialog.dismiss();
+                        }
+
+                    }
+                })
+                .show();
     }
 
     //======================================================================================================result from camera , gallery and crop

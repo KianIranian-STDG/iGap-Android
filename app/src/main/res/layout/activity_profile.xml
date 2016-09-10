@@ -35,9 +35,11 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layoutDirection="ltr">
 
         <TextView
+            android:id="@+id/pu_txt_title_information"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp16"
@@ -57,6 +59,7 @@
             android:background="@color/line2_background" />
 
         <TextView
+            android:id="@+id/pu_txt_title_desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp52"
@@ -84,7 +87,8 @@
             android:layout_marginTop="@dimen/dp12"
             android:background="@drawable/pu_circle_button_give_image"
             android:gravity="center"
-            android:src="@mipmap/plus_icon"
+            android:padding="@dimen/dp32"
+            android:src="@mipmap/plus"
             app:civ_border_width="0dp" />
 
 
@@ -99,7 +103,7 @@
             android:gravity="center"
             android:text="@string/pu_addPhoto_profileUser"
             android:textColor="@color/text_dark_verify"
-            android:textSize="@dimen/sp18" />
+            android:textSize="@dimen/sp16" />
 
 
     </LinearLayout>
@@ -117,14 +121,13 @@
             android:id="@+id/pu_edt_nikeName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dp8"
             android:background="@android:color/transparent"
             android:gravity="center"
             android:hint="@string/pu_nikname_profileUser"
             android:lines="1"
             android:maxLength="20"
             android:maxLines="1"
-            android:singleLine="false"
+            android:singleLine="true"
             android:textColor="@color/black_register"
             android:textColorHint="@color/pu_edtHintText"
             android:textSize="@dimen/sp22" />
@@ -158,6 +161,7 @@
             android:background="@drawable/pu_background_button_start_register"
             android:gravity="center"
             android:text="Lets Go"
+            android:textSize="@dimen/sp16"
             android:textAllCaps="false"
             android:textColor="@color/whit_background" />
 

@@ -5,47 +5,28 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp60"
-        android:gravity="center"
-        android:padding="@dimen/dp8"
-        android:text="Set a Profile Photo"
-        android:textStyle="bold"
-        android:textSize="@dimen/sp20"
-        android:textColor="@color/toolbar_background" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/toolbar_background" />
 
     <TextView
         android:id="@+id/pu_layout_dialog_picGallery"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="@dimen/dp16"
+        android:gravity="start"
         android:text="From Gallery"
-        android:textSize="@dimen/dp16"
-        android:textStyle="bold"
-        android:textColor="@color/text_dark_verify" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/background_editText" />
+        android:textSize="@dimen/sp16"
+        android:textStyle="normal"
+        android:textColor="@color/cardview_dark_background" />
 
     <TextView
         android:id="@+id/pu_layout_dialog_picCamera"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="@dimen/dp16"
-        android:text="Take Now"
-        android:textStyle="bold"
-        android:textSize="@dimen/dp16"
-        android:textColor="@color/text_dark_verify" />
+        android:gravity="start"
+        android:layout_marginTop="@dimen/dp16"
+        android:text="From Camera"
+        android:textStyle="normal"
+        android:textSize="@dimen/sp16"
+        android:textColor="@color/cardview_dark_background" />
 
 
 </LinearLayout>

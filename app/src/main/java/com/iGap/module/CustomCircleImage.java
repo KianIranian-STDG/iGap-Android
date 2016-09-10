@@ -21,9 +21,10 @@ public class CustomCircleImage extends ImageView {
     private int circleWidth;
     private int current;
     private int position;
-    private static final int CIRCLE_RADIUS = (int) G.context.getResources().getDimension(R.dimen.dp16);
+    private static final int CIRCLE_RADIUS = (int) G.context.getResources().getDimension(R.dimen.dp12);
     private static final int CIRCLE_SPACE = (int) G.context.getResources().getDimension(R.dimen.dp16);
     private float offsetX;
+    private float tt = G.context.getResources().getDimension(R.dimen.dp16);
 
 
     public CustomCircleImage(Context context) {
@@ -84,12 +85,11 @@ public class CustomCircleImage extends ImageView {
         for (int i = 0; i < count; i++) {
 
 
-            canvas.drawCircle(offsetX + i * (CIRCLE_RADIUS + CIRCLE_SPACE), 20, CIRCLE_RADIUS / 2, strokePain);
+            canvas.drawCircle(offsetX + i * (CIRCLE_RADIUS + CIRCLE_SPACE), tt, CIRCLE_RADIUS / 2, strokePain);
             boolean fillCheck = false;
             if (i == position) {
                 fiiPain.setAlpha((int) ((1.0f - percent) * 255));
                 fillCheck = true;
-
             }
 
             if (percent > 0) {
@@ -101,7 +101,7 @@ public class CustomCircleImage extends ImageView {
             }
 
             if (fillCheck) {
-                canvas.drawCircle(offsetX + i * (CIRCLE_RADIUS + CIRCLE_SPACE), 20, CIRCLE_RADIUS / 2, fiiPain);
+                canvas.drawCircle(offsetX + i * (CIRCLE_RADIUS + CIRCLE_SPACE), tt, CIRCLE_RADIUS / 2, fiiPain);
             }
         }
     }

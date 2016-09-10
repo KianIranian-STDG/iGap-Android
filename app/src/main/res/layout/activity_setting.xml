@@ -160,13 +160,15 @@
                     android:textSize="@dimen/sp18"
                     android:textStyle="bold" />
 
-                <EditText
-                    android:id="@+id/st_edt_nikName"
+                <TextView
+                    android:id="@+id/st_txt_nikName"
                     android:layout_width="@dimen/dp200"
                     android:layout_height="@dimen/dp40"
                     android:maxLength="25"
                     android:text="Alexander Smith"
                     android:textSize="@dimen/sp18"
+                    android:textColor="@android:color/black"
+                    android:gravity="center_vertical"
                     android:theme="@style/Setting_editText" />
 
                 <TextView
@@ -180,13 +182,15 @@
                     android:textSize="@dimen/sp18"
                     android:textStyle="bold" />
 
-                <EditText
-                    android:id="@+id/st_edt_userName"
+                <TextView
+                    android:id="@+id/st_txt_userName"
                     android:layout_width="@dimen/dp200"
                     android:layout_height="@dimen/dp40"
                     android:maxLength="25"
                     android:text="Alexander Smith:"
                     android:textSize="@dimen/sp18"
+                    android:textColor="@android:color/black"
+                    android:gravity="center_vertical"
                     android:theme="@style/Setting_editText" />
 
                 <TextView
@@ -200,8 +204,8 @@
                     android:textSize="@dimen/sp18"
                     android:textStyle="bold" />
 
-                <EditText
-                    android:id="@+id/st_edt_phoneNumber"
+                <TextView
+                    android:id="@+id/st_txt_phoneNumber"
                     android:layout_width="@dimen/dp200"
                     android:layout_height="@dimen/dp40"
                     android:background="@null"
@@ -209,6 +213,8 @@
                     android:maxLength="11"
                     android:text="09121234567"
                     android:textSize="@dimen/sp18"
+                    android:textColor="@android:color/black"
+                    android:gravity="center_vertical"
                     android:theme="@style/Setting_editText" />
 
             </LinearLayout>
@@ -356,7 +362,7 @@
                         android:id="@+id/st_txt_messageTextSize_number"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight=".5"
+                        android:layout_weight=".15"
                         android:gravity="right"
                         android:paddingLeft="@dimen/dp16"
                         android:paddingRight="@dimen/dp16"
@@ -364,8 +370,6 @@
                         android:textColor="@color/toolbar_background"
                         android:textSize="@dimen/sp18"
                         android:textStyle="normal" />
-
-
                 </LinearLayout>
 
                 <View

@@ -1,5 +1,6 @@
 package com.iGap.activitys;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -9,6 +10,7 @@ import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import com.iGap.G;
@@ -18,6 +20,7 @@ import com.iGap.adapter.items.ContactItem;
 import com.iGap.interface_package.OnChatGetRoom;
 import com.iGap.libs.flowingdrawer.MenuFragment;
 import com.iGap.module.Contacts;
+import com.iGap.module.SoftKeyboard;
 import com.iGap.module.StructContactInfo;
 import com.iGap.realm.RealmRoom;
 import com.iGap.request.RequestChatGetRoom;
@@ -83,11 +86,11 @@ public class ContactsFragmentDrawerMenu extends MenuFragment {
             }
         });
 
+        final TextView menu_txt_titleToolbar = (TextView) view.findViewById(R.id.menu_txt_titleToolbar);
         final android.support.v7.widget.SearchView searchView = (android.support.v7.widget.SearchView) view.findViewById(R.id.menu_edtSearch);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-
 
                 return false;
             }
@@ -104,23 +107,73 @@ public class ContactsFragmentDrawerMenu extends MenuFragment {
         searchView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                menu_txt_titleToolbar.setVisibility(View.GONE);
 
             }
         });
 
-        final TextView menu_txt_titleToolbar = (TextView) view.findViewById(R.id.menu_txt_titleToolbar);
+        final ViewGroup root = (ViewGroup) view.findViewById(R.id.menu_parent_layout);
+        InputMethodManager im = (InputMethodManager) G.context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        SoftKeyboard softKeyboard = new SoftKeyboard(root, im);
+        softKeyboard.setSoftKeyboardCallback(new SoftKeyboard.SoftKeyboardChanged() {
+            @Override
+            public void onSoftKeyboardHide() {
+
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (searchView.getQuery().toString().length() > 0) {
+                            searchView.setIconified(false);
+                            menu_txt_titleToolbar.setVisibility(View.GONE);
+                        } else {
+
+                            searchView.setIconified(true);
+                            menu_txt_titleToolbar.setVisibility(View.VISIBLE);
+
+                        }
+
+                    }
+                });
+            }
+
+            @Override
+            public void onSoftKeyboardShow() {
+
+
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        menu_txt_titleToolbar.setVisibility(View.GONE);
+                    }
+                });
+            }
+        });
+
+
         ViewGroup layout = (ViewGroup) view.findViewById(R.id.menu_layout);
 
         layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                searchView.onActionViewExpanded();
-                searchView.setIconifiedByDefault(true);
+//                searchView.onActionViewExpanded();
+                searchView.setIconified(false);
                 menu_txt_titleToolbar.setVisibility(View.GONE);
 
             }
         });
+
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() { // close SearchView and show title again
+            @Override
+            public boolean onClose() {
+
+                menu_txt_titleToolbar.setVisibility(View.VISIBLE);
+
+                return false;
+            }
+        });
+
+
 
 //        searchView.addTextChangedListener(new TextWatcher() {
 //            @Override

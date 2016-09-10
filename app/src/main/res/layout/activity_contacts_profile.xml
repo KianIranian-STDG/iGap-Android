@@ -2,7 +2,8 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layoutDirection="ltr">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/chi_appbar"
@@ -160,25 +161,37 @@
                     android:textSize="@dimen/sp22"
                     android:textStyle="bold" />
 
-                <TextView
+
+                <LinearLayout
+                    android:id="@+id/chi_layout_nickname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="@dimen/dp4"
-                    android:paddingStart="@dimen/dp4"
-                    android:text="@string/st_nickname"
-                    android:textColor="@color/st_title_s"
-                    android:textSize="@dimen/sp18"
-                    android:textStyle="bold" />
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="@dimen/dp4"
+                        android:paddingStart="@dimen/dp4"
+                        android:text="@string/st_nickname"
+                        android:textColor="@color/st_title_s"
+                        android:textSize="@dimen/sp18"
+                        android:textStyle="bold" />
 
 
-                <EditText
-                    android:id="@+id/chi_edt_nikName"
-                    android:layout_width="@dimen/dp200"
-                    android:layout_height="@dimen/dp40"
-                    android:maxLength="25"
-                    android:text="Alexander Smith"
-                    android:textSize="@dimen/sp18"
-                    android:theme="@style/Setting_editText" />
+                    <TextView
+                        android:id="@+id/chi_txt_nikName"
+                        android:layout_width="@dimen/dp200"
+                        android:layout_height="@dimen/dp40"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/dp4"
+                        android:paddingStart="@dimen/dp4"
+                        android:text="Alexander Smith"
+                        android:textSize="@dimen/sp18"
+                        android:textColor="@android:color/black"
+                        android:theme="@style/Setting_editText" />
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"

@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:paddingLeft="@dimen/dp24"
     android:divider="@null">
 
     <RadioButton
@@ -11,7 +12,6 @@
         android:layout_height="@dimen/dp52"
         android:layout_gravity="center_horizontal"
         android:layout_marginLeft="@dimen/dp12"
-        android:paddingLeft="@dimen/dp20"
         android:text="New RadioButton"
         android:checked="false"
 

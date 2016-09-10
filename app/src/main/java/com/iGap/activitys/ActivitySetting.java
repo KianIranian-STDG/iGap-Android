@@ -12,13 +12,11 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.PopupMenu;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.text.InputType;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,7 +47,7 @@ public class ActivitySetting extends ActivityEnhanced {
     private int poRbDialogTextSize = -1;
 
     private ViewGroup ltMessageTextSize, ltLanguage, ltInAppBrowser, ltSentByEnter, ltEnableAnimation, ltAutoGifs, ltSaveToGallery;
-    private EditText edtNickName, edtUserName, edtPhoneNumber;
+    private TextView txtNickName, txtUserName, txtPhoneNumber;
     private ToggleButton toggleSentByEnter, toggleEnableAnimation, toggleAutoGifs, toggleSaveToGallery, toggleInAppBrowser;
 
 
@@ -100,9 +98,9 @@ public class ActivitySetting extends ActivityEnhanced {
 
         final TextView txtNickNameTitle = (TextView) findViewById(R.id.ac_txt_nickname_title);
 
-        edtNickName = (EditText) findViewById(R.id.st_edt_nikName);
-        edtUserName = (EditText) findViewById(R.id.st_edt_userName);
-        edtPhoneNumber = (EditText) findViewById(R.id.st_edt_phoneNumber);
+        txtNickName = (TextView) findViewById(R.id.st_txt_nikName);
+        txtUserName = (TextView) findViewById(R.id.st_txt_userName);
+        txtPhoneNumber = (TextView) findViewById(R.id.st_txt_phoneNumber);
 
         RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
         if (realmUserInfo != null) {
@@ -113,87 +111,183 @@ public class ActivitySetting extends ActivityEnhanced {
 
 
         if (nickName != null) {
-            edtNickName.setText(nickName);
+            txtNickName.setText(nickName);
             txtNickNameTitle.setText(nickName);
         }
-        if (userName != null) edtUserName.setText(userName);
-        if (phoneName != null) edtPhoneNumber.setText(phoneName);
+        if (userName != null) txtUserName.setText(userName);
+        if (phoneName != null) txtPhoneNumber.setText(phoneName);
 
-        edtNickName.addTextChangedListener(new TextWatcher() {
+        txtNickName.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            public void onClick(View view) {
 
-            }
+                new MaterialDialog.Builder(ActivitySetting.this)
+                        .title("Username")
+                        .positiveText("SAVE")
+                        .widgetColor(getResources().getColor(R.color.toolbar_background))
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                            }
+                        })
+                        .negativeText("CANCEL")
+                        .onNegative(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-            }
+                            }
+                        })
+                        .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT)
+                        .input("please Enter a NickName",txtNickName.getText().toString(), new MaterialDialog.InputCallback() {
+                            @Override
+                            public void onInput(MaterialDialog dialog, CharSequence input) {
+                                // Do something
+                            }
+                        }).show();
 
-            @Override
-            public void afterTextChanged(final Editable editable) {
-
-
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-
-                        if (!editable.toString().equals("")) {
-                            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-                            userInfo.setNickName(editable.toString());
-                            txtNickNameTitle.setText(nickName);
-                        }
-                    }
-                });
-            }
-        });
-
-        edtUserName.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-
-            }
-
-            @Override
-            public void afterTextChanged(final Editable editable) {
-
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-
-                    }
-                });
             }
         });
 
-        edtPhoneNumber.addTextChangedListener(new TextWatcher() {
+        txtUserName.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            public void onClick(View view) {
 
-            }
+                new MaterialDialog.Builder(ActivitySetting.this)
+                        .title("Username")
+                        .positiveText("SAVE")
+                        .widgetColor(getResources().getColor(R.color.toolbar_background))
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-            @Override
-            public void onTextChanged(final CharSequence charSequence, int i, int i1, int i2) {
-            }
+                            }
+                        })
+                        .negativeText("CANCEL")
+                        .onNegative(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-            @Override
-            public void afterTextChanged(final Editable editable) {
-
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-
-                    }
-                });
+                            }
+                        })
+                        .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT)
+                        .input("please Enter a NickName",txtUserName.getText().toString(), new MaterialDialog.InputCallback() {
+                            @Override
+                            public void onInput(MaterialDialog dialog, CharSequence input) {
+                                // Do something
+                            }
+                        }).show();
 
             }
         });
+
+        txtPhoneNumber.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                new MaterialDialog.Builder(ActivitySetting.this)
+                        .title("Username")
+                        .positiveText("SAVE")
+                        .widgetColor(getResources().getColor(R.color.toolbar_background))
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                            }
+                        })
+                        .negativeText("CANCEL")
+                        .onNegative(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                            }
+                        })
+                        .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT)
+                        .input("please Enter a NickName",txtPhoneNumber.getText().toString(), new MaterialDialog.InputCallback() {
+                            @Override
+                            public void onInput(MaterialDialog dialog, CharSequence input) {
+                                // Do something
+                            }
+                        }).show();
+
+            }
+        });
+
+
+//        txtNickName.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(final Editable editable) {
+//
+//
+//                realm.executeTransaction(new Realm.Transaction() {
+//                    @Override
+//                    public void execute(Realm realm) {
+//
+//                        if (!editable.toString().equals("")) {
+//                            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+//                            userInfo.setNickName(editable.toString());
+//                            txtNickNameTitle.setText(nickName);
+//                        }
+//                    }
+//                });
+//            }
+//        });
+
+//        txtUserName.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(final Editable editable) {
+//
+//                realm.executeTransaction(new Realm.Transaction() {
+//                    @Override
+//                    public void execute(Realm realm) {
+//
+//                    }
+//                });
+//            }
+//        });
+
+//        txtPhoneNumber.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(final CharSequence charSequence, int i, int i1, int i2) {
+//            }
+//
+//            @Override
+//            public void afterTextChanged(final Editable editable) {
+//
+//                realm.executeTransaction(new Realm.Transaction() {
+//                    @Override
+//                    public void execute(Realm realm) {
+//
+//                    }
+//                });
+//
+//            }
+//        });
 
         appBarLayout = (AppBarLayout) findViewById(R.id.st_appbar);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {

@@ -37,6 +37,7 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/pu_txt_title_information"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp8"
@@ -56,6 +57,7 @@
             android:background="@color/line2_background" />
 
         <TextView
+            android:id="@+id/pu_txt_title_desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp52"
@@ -89,6 +91,7 @@
                 android:layout_gravity="center_horizontal"
                 android:background="@drawable/pu_circle_button_give_image"
                 android:gravity="center"
+                android:padding="@dimen/dp16"
                 android:src="@mipmap/plus_icon"
                 android:layout_marginTop="@dimen/dp12" />
 

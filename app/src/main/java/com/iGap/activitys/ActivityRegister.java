@@ -23,11 +23,13 @@ import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -71,9 +73,9 @@ public class ActivityRegister extends ActivityEnhanced {
 
     public static MaskedEditText edtPhoneNumber;
 
-    private TextView txtAgreement_register, txtTitleToolbar;
+    private TextView txtAgreement_register, txtTitleToolbar , txtTitleRegister,txtDesc , txtTitleAgreement;
     private ProgressBar rg_prg_verify_connect, rg_prg_verify_sms, rg_prg_verify_generate, rg_prg_verify_register;
-    private TextView rg_txt_verify_connect, rg_txt_verify_sms, rg_txt_verify_generate, rg_txt_verify_register, txtTimer;
+    private TextView rg_txt_verify_connect, rg_txt_verify_sms, rg_txt_verify_generate, rg_txt_verify_register, txtTimer ;
     private ImageView rg_img_verify_connect, rg_img_verify_sms, rg_img_verify_generate, rg_img_verify_register;
     private ViewGroup layout_agreement;
     private ViewGroup layout_verify;
@@ -110,6 +112,15 @@ public class ActivityRegister extends ActivityEnhanced {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        int getHeight = G.context.getResources().getDisplayMetrics().heightPixels;
+
+        txtTitleRegister = (TextView) findViewById(R.id.rg_txt_title_register);
+        txtTitleRegister.setTypeface(G.arial);
+        txtDesc = (TextView) findViewById(R.id.rg_txt_text_descRegister);
+        txtDesc.setTypeface(G.arial);
+        txtTitleAgreement = (TextView) findViewById(R.id.rg_txt_title_agreement);
+        txtTitleAgreement.setTypeface(G.arial);
+
         txtTitleToolbar = (TextView) findViewById(R.id.rg_txt_titleToolbar);
         txtTitleToolbar.setTypeface(G.FONT_IGAP);
 
@@ -141,12 +152,14 @@ public class ActivityRegister extends ActivityEnhanced {
         layout_verify = (ViewGroup) findViewById(R.id.rg_layout_verify_and_agreement);
 
         btnChoseCountry = (Button) findViewById(R.id.rg_btn_choseCountry);
+        btnChoseCountry.setTypeface(G.arial);
 
         int portrait = getResources().getConfiguration().orientation;
 
         if (portrait == 1) {
             txtAgreement_register = (TextView) findViewById(R.id.txtAgreement_register);
             txtAgreement_register.setMovementMethod(new ScrollingMovementMethod());
+            txtAgreement_register.setTypeface(G.arial);
         }
 
 //==================================================================================================== read list of county from text file
@@ -196,14 +209,13 @@ public class ActivityRegister extends ActivityEnhanced {
             public void onClick(View v) {
 
                 dialogChooseCountry = new Dialog(ActivityRegister.this);
-
                 dialogChooseCountry.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialogChooseCountry.setContentView(R.layout.rg_dialog);
 
                 int setWidth = (int) (getResources().getDisplayMetrics().widthPixels * 0.9);
                 int setHeight = (int) (getResources().getDisplayMetrics().heightPixels * 0.9);
                 dialogChooseCountry.getWindow().setLayout(setWidth, setHeight);
-
+//
                 final TextView txtTitle = (TextView) dialogChooseCountry.findViewById(R.id.rg_txt_titleToolbar);
                 edtSearchView = (SearchView) dialogChooseCountry.findViewById(R.id.rg_edtSearch_toolbar);
 
@@ -211,9 +223,20 @@ public class ActivityRegister extends ActivityEnhanced {
                     @Override
                     public void onClick(View view) {
 
-                        edtSearchView.onActionViewExpanded();
+                        edtSearchView.setIconified(false);
+//                        edtSearchView.onActionViewExpanded();
                         edtSearchView.setIconifiedByDefault(true);
                         txtTitle.setVisibility(View.GONE);
+                    }
+                });
+
+                edtSearchView.setOnCloseListener(new SearchView.OnCloseListener() { // close SearchView and show title again
+                    @Override
+                    public boolean onClose() {
+
+                        txtTitle.setVisibility(View.VISIBLE);
+
+                        return false;
                     }
                 });
 
@@ -227,11 +250,14 @@ public class ActivityRegister extends ActivityEnhanced {
                             @Override
                             public void run() {
                                 if (edtSearchView.getQuery().toString().length() > 0) {
-                                    edtSearchView.onActionViewExpanded();
+
+                                    edtSearchView.setIconified(false);
+//                                    edtSearchView.onActionViewExpanded();
                                     txtTitle.setVisibility(View.GONE);
                                 } else {
 
-                                    edtSearchView.onActionViewCollapsed();
+                                    edtSearchView.setIconified(true);
+//                                    edtSearchView.onActionViewCollapsed();
                                     txtTitle.setVisibility(View.VISIBLE);
 
                                 }
@@ -259,6 +285,26 @@ public class ActivityRegister extends ActivityEnhanced {
                 adapterDialog = new AdapterDialog(ActivityRegister.this, items);
                 listView.setAdapter(adapterDialog);
 
+                final View border = (View) dialogChooseCountry.findViewById(R.id.rg_borderButton);
+                listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+                    @Override
+                    public void onScrollStateChanged(AbsListView absListView, int i) {
+
+                    }
+
+                    @Override
+                    public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+
+                        if (i > 0) {
+                            border.setVisibility(View.VISIBLE);
+                        } else {
+                            border.setVisibility(View.GONE);
+
+                        }
+
+                    }
+                });
+
                 AdapterDialog.mSelectedVariation = positionRadioButton;
 
                 adapterDialog.notifyDataSetChanged();
@@ -278,7 +324,17 @@ public class ActivityRegister extends ActivityEnhanced {
                     }
                 });
 
-                Button btnOk = (Button) dialogChooseCountry.findViewById(R.id.rg_btn_okDialog);
+                TextView btnCancel = (TextView) dialogChooseCountry.findViewById(R.id.rg_txt_cancelDialog);
+                btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        dialogChooseCountry.dismiss();
+
+                    }
+                });
+
+                TextView btnOk = (TextView) dialogChooseCountry.findViewById(R.id.rg_txt_okDialog);
                 btnOk.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -314,7 +370,12 @@ public class ActivityRegister extends ActivityEnhanced {
                     }
                 });
 
+//                dialogChooseCountry.show();
+
+
                 dialogChooseCountry.show();
+
+
             }
         });
 
@@ -323,6 +384,7 @@ public class ActivityRegister extends ActivityEnhanced {
         final Animation trans_x_in = AnimationUtils.loadAnimation(G.context, R.anim.rg_tansiton_y_in);
         final Animation trans_x_out = AnimationUtils.loadAnimation(G.context, R.anim.rg_tansiton_y_out);
         btnStart = (Button) findViewById(R.id.rg_btn_start); //check phone and internet connection
+        btnStart.setTypeface(G.arial);
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -402,6 +464,29 @@ public class ActivityRegister extends ActivityEnhanced {
                 txtAgreement_register.setText(Html.fromHtml(body));
             }
         }
+
+        int portrait_landscape = getResources().getConfiguration().orientation;
+        if (portrait_landscape == 1) {//portrait
+
+            if (getHeight > 480) {
+
+                int marginLeft = (int) getResources().getDimension(R.dimen.dp32);
+                int marginRight = (int) getResources().getDimension(R.dimen.dp32);
+                int marginTop = (int) getResources().getDimension(R.dimen.dp36);
+                int marginBottom = (int) getResources().getDimension(R.dimen.dp20);
+
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) btnChoseCountry.getLayoutParams();
+                params.setMargins(marginLeft, marginTop, marginRight, marginBottom); //left, top, right, bottom
+                btnChoseCountry.setLayoutParams(params);
+
+                RelativeLayout.LayoutParams params2 = (RelativeLayout.LayoutParams) btnStart.getLayoutParams();
+                params2.setMargins(marginLeft, marginTop, marginRight, marginBottom); //left, top, right, bottom
+                btnStart.setLayoutParams(params2);
+            }
+
+        }
+
+
     }
 
     //======= process verify : check internet and sms

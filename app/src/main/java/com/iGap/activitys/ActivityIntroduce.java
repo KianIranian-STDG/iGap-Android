@@ -47,7 +47,8 @@ public class ActivityIntroduce extends ActivityEnhanced {
 
     private ImageView logoIgap, logoSecurity, logoChat, transfer, boy;
 
-    private TextView txt_i_p1_l1, txt_p1_l1, txt_p1_l2, txt_p1_l3, txt_p2_l1, txt_p2_l2, txt_p3_l1, txt_p3_l2, txt_p4_l1, txt_p4_l2, txt_p5_l1, txt_p5_l2;
+    private TextView txt_i_p1_l1, txt_p1_l1, txt_p1_l2, txt_p1_l3, txt_p2_l1, txt_p2_l2, txt_p3_l1, txt_p3_l2, txt_p4_l1, txt_p4_l2
+            , txt_p5_l1, txt_p5_l2 , txtSkip;
 
     private Button btnStart;
 
@@ -88,6 +89,9 @@ public class ActivityIntroduce extends ActivityEnhanced {
         if (circleButton != null) {
             circleButton.circleButtonCount(5);
         }
+
+        txtSkip = (TextView) findViewById(R.id.int_txt_skip);
+
 
         logoIgap = (ImageView) findViewById(R.id.int_img_logo_introduce);
         txt_p1_l1 = (TextView) findViewById(R.id.int_txt_p1_l1);
@@ -218,6 +222,49 @@ public class ActivityIntroduce extends ActivityEnhanced {
         });
 
 
+        txtSkip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (G.internetConnection) {
+                            if (isoCode != null & body != null) {
+                                Intent intent = new Intent(G.context, ActivityRegister.class);
+                                intent.putExtra("ISO_CODE", isoCode);
+                                intent.putExtra("CALLING_CODE", callingCode);
+                                intent.putExtra("COUNTRY_NAME", countryName);
+                                intent.putExtra("PATTERN", pattern);
+                                intent.putExtra("REGEX", regex);
+                                intent.putExtra("TERMS_BODY", body);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(G.context, "waiting fot get info", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                getInfo();
+                            }
+                        } else {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(G.context, "check your internet connection", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    }
+                });
+                thread.start();
+
+            }
+        });
+
+
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(final int position, final float positionOffset, final int positionOffsetPixels) { //set animation for all page
@@ -227,6 +274,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
                 switch (position) {
 
                     case 0:
+                        txtSkip.bringToFront();
                         if (positionOffset == 0) {
 
                             isOne1 = true;
@@ -245,7 +293,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
                         break;
 
                     case 1:
-
+                        txtSkip.bringToFront();
                         if (positionOffset == 0) {
                             isOne0 = true;
                             isOne2 = true;
@@ -270,7 +318,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
                         }
                         break;
                     case 2:
-
+                        txtSkip.bringToFront();
                         if (positionOffset == 0) {
                             isOne1 = true;
                             isOne3 = true;
@@ -292,6 +340,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
                         }
                         break;
                     case 3:
+                        txtSkip.bringToFront();
                         if (positionOffset == 0) {
                             isOne2 = true;
                             isOne4 = true;
@@ -313,6 +362,10 @@ public class ActivityIntroduce extends ActivityEnhanced {
                         }
                         break;
                     case 4:
+                        txtSkip.bringToFront();
+                        btnStart.bringToFront();
+                        btnStart.getParent().requestLayout();
+
                         if (positionOffset == 0) {
                             isOne3 = true;
 

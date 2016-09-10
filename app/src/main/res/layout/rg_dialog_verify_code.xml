@@ -12,8 +12,9 @@
         android:text="Phone Verification"
         android:textSize="@dimen/sp22"
         android:textStyle="bold"
-        android:paddingLeft="@dimen/dp12"
-        android:paddingRight="@dimen/dp12"
+
+        android:paddingLeft="@dimen/dp24"
+        android:paddingRight="@dimen/dp24"
         android:textColor="@color/toolbar_background" />
 
 
@@ -22,11 +23,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/dp16"
+
         android:gravity="start"
         android:lineSpacingExtra="0dp"
-        android:paddingLeft="@dimen/dp12"
-        android:paddingRight="@dimen/dp12"
+        android:paddingLeft="@dimen/dp24"
+        android:paddingRight="@dimen/dp24"
         android:text="@string/rg_verify_dialog_enter_code"
         android:textColor="@color/rg_border_editText"
         android:textSize="@dimen/sp14" />
@@ -42,7 +43,7 @@
         android:paddingBottom="@dimen/dp20"
         android:layout_marginBottom="@dimen/dp12"
         android:layout_marginRight="@dimen/dp20"
-        android:layout_marginLeft="@dimen/dp20"
+        android:layout_marginLeft="@dimen/dp24"
         android:layout_marginTop="@dimen/dp24"
         android:hint="Enter Verify Code Please"
         android:textSize="@dimen/sp16"
@@ -52,35 +53,37 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp60"
+        android:layout_height="@dimen/dp52"
+        android:gravity="right"
+        android:padding="@dimen/dp8"
         android:orientation="horizontal"
-        android:gravity="center"
         android:layoutDirection="ltr">
-
 
         <TextView
             android:id="@+id/rg_btn_dialog_okVerifyCode"
-            android:layout_width="0dp"
-            android:layout_weight=".6"
-            android:layout_height="@dimen/dp60"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp36"
+            android:background="@android:color/transparent"
             android:text="@string/rg_verify_dialog_resend_code"
-            android:textAllCaps="false"
-            android:gravity="center_vertical|right"
-            android:textStyle="bold"
-            android:textColor="@color/toolbar_background" />
+            android:gravity="center"
+            android:textColor="@color/toolbar_background"
+            android:textSize="@dimen/sp14"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/rg_btn_cancelVerifyCode"
-            android:layout_width="0dp"
-            android:layout_weight=".4"
-            android:layout_height="@dimen/dp60"
+            android:layout_width="@dimen/dp60"
+            android:layout_height="@dimen/dp36"
+            android:background="@android:color/transparent"
             android:text="@string/rg_verify_dialog_try_code"
-            android:textAllCaps="false"
-            android:textStyle="bold"
+            android:layout_marginLeft="@dimen/dp8"
             android:gravity="center"
-            android:textColor="@color/toolbar_background" />
-
+            android:textColor="@color/toolbar_background"
+            android:textSize="@dimen/sp14"
+            android:textStyle="bold" />
 
     </LinearLayout>
+
+
 
 </LinearLayout>
