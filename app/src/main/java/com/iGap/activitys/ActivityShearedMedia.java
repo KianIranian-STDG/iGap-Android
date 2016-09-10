@@ -199,7 +199,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         layoutParams.width = (int) getResources().getDimension(R.dimen.dp180);
         layoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
 
-
         dialog.getWindow().setAttributes(layoutParams);
     }
 

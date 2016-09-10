@@ -56,4 +56,8 @@
         <item>From Gallery</item>
         <item>From Camera</item>
     </string-array>
+
+    <string-array name="st_popup">
+        <item>Log Out</item>
+    </string-array>
 </resources>

@@ -99,7 +99,6 @@ public class ActivityContactsProfile extends ActivityEnhanced {
             }
         });
 
-
         txtNickname = (TextView) findViewById(R.id.chi_txt_nikName);//set nickname
 
         layoutNickname = (ViewGroup) findViewById(R.id.chi_layout_nickname);
@@ -107,7 +106,7 @@ public class ActivityContactsProfile extends ActivityEnhanced {
             @Override
             public void onClick(View view) {
                 new MaterialDialog.Builder(ActivityContactsProfile.this)
-                        .title("Username")
+                        .title("Nickname")
                         .positiveText("SAVE")
                         .alwaysCallInputCallback()
                         .widgetColor(getResources().getColor(R.color.toolbar_background))
@@ -127,7 +126,7 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                         })
                         .negativeText("CANCEL")
                         .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT)
-                        .input("please Enter a NickName", txtUserName.getText().toString(), new MaterialDialog.InputCallback() {
+                        .input("please Enter a NickName", txtNickname.getText().toString(), new MaterialDialog.InputCallback() {
                             @Override
                             public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
 

@@ -2,11 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/album_overflow_rename"
-        android:icon="@mipmap/alert"
-        android:title="@string/st_popupMenu_toolbar_rename" />
-
-    <item
         android:id="@+id/st_logOut"
         android:icon="@mipmap/cross"
         android:title="@string/st_popupMenu_toolbar_more" />

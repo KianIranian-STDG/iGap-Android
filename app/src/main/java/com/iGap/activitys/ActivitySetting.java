@@ -5,20 +5,20 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.widget.PopupMenu;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -310,50 +310,72 @@ public class ActivitySetting extends ActivityEnhanced {
             @Override
             public void onClick(View v) {
 
-                PopupMenu popupMenu = new PopupMenu(ActivitySetting.this, v, Gravity.TOP);
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
 
-                        switch (item.getItemId()) {
+                MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this)
+                        .items(R.array.st_popup)
+                        .contentColor(Color.BLACK)
+                        .itemsCallback(new MaterialDialog.ListCallback() {
+                            @Override
+                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                            case R.id.album_overflow_rename:
-                                Toast.makeText(ActivitySetting.this, "1", Toast.LENGTH_SHORT).show();
-                                return true;
-
-                            case R.id.st_logOut:
-
-                                new MaterialDialog.Builder(ActivitySetting.this)
-                                        .title("iGap")
-                                        .positiveText("LOGOUT")
-                                        .negativeText("CANCEL")
-                                        .content(R.string.st_popup_logout)
-                                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                            @Override
-                                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                                                final RealmResults<RealmUserInfo> result = realm.where(RealmUserInfo.class).findAll();
-                                                realm.executeTransaction(new Realm.Transaction() {
+                                switch (which) {
+                                    case 0:
+                                        new MaterialDialog.Builder(ActivitySetting.this)
+                                                .title("iGap")
+                                                .positiveText("LOGOUT")
+                                                .negativeText("CANCEL")
+                                                .content(R.string.st_popup_logout)
+                                                .onPositive(new MaterialDialog.SingleButtonCallback() {
                                                     @Override
-                                                    public void execute(Realm realm) {
-                                                        result.deleteAllFromRealm();
+                                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                                                        final RealmResults<RealmUserInfo> result = realm.where(RealmUserInfo.class).findAll();
+                                                        realm.executeTransaction(new Realm.Transaction() {
+                                                            @Override
+                                                            public void execute(Realm realm) {
+                                                                result.deleteAllFromRealm();
+                                                            }
+                                                        });
+
+                                                        startActivity(new Intent(ActivitySetting.this, ActivityIntroduce.class));
+                                                        finish();
                                                     }
-                                                });
+                                                }).show();
+                                        break;
 
-                                                startActivity(new Intent(ActivitySetting.this, ActivityIntroduce.class));
-                                            }
-                                        }).show();
+                                }
 
-                                Toast.makeText(ActivitySetting.this, "2", Toast.LENGTH_SHORT).show();
-                                return true;
-                        }
-                        return true;
-                    }
-                });
 
-                popupMenu.inflate(R.menu.sc_popup_menu);
-                popupMenu.setGravity(Gravity.TOP);
-                popupMenu.show();
+                            }
+                        }).show();
+
+                WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+                layoutParams.copyFrom(dialog.getWindow().getAttributes());
+                layoutParams.width = (int) getResources().getDimension(R.dimen.dp180);
+                layoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
+
+                dialog.getWindow().setAttributes(layoutParams);
+
+//                PopupMenu popupMenu = new PopupMenu(ActivitySetting.this, v, Gravity.TOP | Gravity.RIGHT);
+//                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+//                    @Override
+//                    public boolean onMenuItemClick(MenuItem item) {
+//
+//                        switch (item.getItemId()) {
+//
+//                            case R.id.st_logOut:
+//
+//                                Toast.makeText(ActivitySetting.this, "2", Toast.LENGTH_SHORT).show();
+//                                return true;
+//                        }
+//                        return true;
+//                    }
+//                });
+//
+//
+//                popupMenu.inflate(R.menu.sc_popup_menu);
+//                popupMenu.setGravity(Gravity.TOP | Gravity.RIGHT);
+//                popupMenu.show();
             }
         });
 
