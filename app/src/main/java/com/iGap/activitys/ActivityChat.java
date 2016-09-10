@@ -28,9 +28,11 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.ChatFastAdapter;
 import com.iGap.adapter.items.chat.AbstractChatItem;
+import com.iGap.adapter.items.chat.ChannelFileItem;
 import com.iGap.adapter.items.chat.ChannelImageItem;
 import com.iGap.adapter.items.chat.ChannelMessageItem;
 import com.iGap.adapter.items.chat.ChannelVideoItem;
+import com.iGap.adapter.items.chat.ChannelVoiceItem;
 import com.iGap.adapter.items.chat.FileItem;
 import com.iGap.adapter.items.chat.ImageItem;
 import com.iGap.adapter.items.chat.MessageItem;
@@ -388,11 +390,19 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     break;
                 case FILE:
                 case FILE_TEXT:
-                    mAdapter.add(new FileItem().setMessage(messageInfo).withIdentifier(identifier));
+                    if (chatType == ProtoGlobal.Room.Type.CHAT) {
+                        mAdapter.add(new FileItem().setMessage(messageInfo).withIdentifier(identifier));
+                    } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
+                        mAdapter.add(new ChannelFileItem().setMessage(messageInfo).withIdentifier(identifier));
+                    }
                     break;
                 case VOICE:
                 case VOICE_TEXT:
-                    mAdapter.add(new VoiceItem().setMessage(messageInfo).withIdentifier(identifier));
+                    if (chatType == ProtoGlobal.Room.Type.CHAT) {
+                        mAdapter.add(new VoiceItem().setMessage(messageInfo).withIdentifier(identifier));
+                    } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
+                        mAdapter.add(new ChannelVoiceItem().setMessage(messageInfo).withIdentifier(identifier));
+                    }
                     break;
             }
             identifier++;

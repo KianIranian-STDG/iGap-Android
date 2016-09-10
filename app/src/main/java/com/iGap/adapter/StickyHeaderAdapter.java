@@ -21,7 +21,7 @@ public class StickyHeaderAdapter extends AbstractAdapter implements StickyRecycl
 
         //we want a separate header per first letter of our items
         if (item instanceof ContactItem && ((ContactItem) item).mContact != null) {
-            return ((ContactItem) item).mContact.displayName.charAt(0);
+            return ((ContactItem) item).mContact.displayName.toUpperCase().charAt(0);
         }
         return -1;
     }
@@ -41,7 +41,7 @@ public class StickyHeaderAdapter extends AbstractAdapter implements StickyRecycl
         IItem item = getItem(position);
         if (item instanceof ContactItem && ((ContactItem) item).mContact != null) {
             //based on the position we set the headers text
-            textView.setText(String.valueOf(((ContactItem) item).mContact.displayName.charAt(0)));
+            textView.setText(String.valueOf(((ContactItem) item).mContact.displayName.toUpperCase().charAt(0)));
         }
     }
 
