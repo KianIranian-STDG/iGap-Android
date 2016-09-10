@@ -99,7 +99,6 @@ public class FragmentDrawerMenu extends MenuFragment {
         layoutContacts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 // click on search action btn event
                 if (mActionClickListener != null) {
                     mActionClickListener.onActionSearchClick();

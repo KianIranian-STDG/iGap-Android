@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cslr_ll_forward"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:visibility="gone">
+
+    <TextView
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/dp4"
+        android:text="Forward message"
+        android:textSize="@dimen/sp14" />
+
+    <TextView
+        android:id="@+id/cslr_txt_forward_from"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/dp8"
+        android:text=""
+        android:textSize="@dimen/sp14" />
+</LinearLayout>

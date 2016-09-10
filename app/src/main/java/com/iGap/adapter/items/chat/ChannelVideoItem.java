@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -89,7 +88,6 @@ public class ChannelVideoItem extends AbstractChatItem<ChannelVideoItem, Channel
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
         protected LinearLayout cslch_ll_parent;
-        protected FrameLayout cslr_ll_frame;
         protected LinearLayout cslr_ll_content_main;
         protected TextView cslr_txt_message;
         protected Button cslch_btn_item_menu;
@@ -112,12 +110,18 @@ public class ChannelVideoItem extends AbstractChatItem<ChannelVideoItem, Channel
         protected TextView cslv_txt_video_name;
         protected TextView cslv_txt_video_mime_type;
         protected TextView cslv_txt_vido_info;
+        protected ImageView chslr_imv_icon_replay;
+        protected View chslr_v_vertical_line;
+        protected ImageView chslr_imv_replay_pic;
+        protected TextView chslr_txt_replay_from;
+        protected TextView chslr_txt_replay_message;
+        protected LinearLayout cslr_ll_forward;
+        protected TextView cslr_txt_forward_from;
 
         public ViewHolder(View view) {
             super(view);
 
             cslch_ll_parent = (LinearLayout) view.findViewById(R.id.cslch_ll_parent);
-            cslr_ll_frame = (FrameLayout) view.findViewById(R.id.cslr_ll_frame);
             cslr_ll_content_main = (LinearLayout) view.findViewById(R.id.cslr_ll_content_main);
             cslr_txt_message = (TextView) view.findViewById(R.id.cslr_txt_message);
             cslch_btn_item_menu = (Button) view.findViewById(R.id.cslch_btn_item_menu);
@@ -140,6 +144,14 @@ public class ChannelVideoItem extends AbstractChatItem<ChannelVideoItem, Channel
             cslv_txt_video_name = (TextView) view.findViewById(R.id.cslv_txt_video_name);
             cslv_txt_video_mime_type = (TextView) view.findViewById(R.id.cslv_txt_video_mime_type);
             cslv_txt_vido_info = (TextView) view.findViewById(R.id.cslv_txt_vido_info);
+            cslr_ll_forward = (LinearLayout) view.findViewById(R.id.cslr_ll_forward);
+            cslr_txt_forward_from = (TextView) view.findViewById(R.id.cslr_txt_forward_from);
+
+            chslr_imv_icon_replay = (ImageView) view.findViewById(R.id.chslr_imv_icon_replay);
+            chslr_v_vertical_line = view.findViewById(R.id.chslr_v_vertical_line);
+            chslr_imv_replay_pic = (ImageView) view.findViewById(R.id.chslr_imv_replay_pic);
+            chslr_txt_replay_from = (TextView) view.findViewById(R.id.chslr_txt_replay_from);
+            chslr_txt_replay_message = (TextView) view.findViewById(R.id.chslr_txt_replay_message);
 
             cslch_txt_image_like.setTypeface(G.fontawesome);
             cslch_txt_image_unlike.setTypeface(G.fontawesome);

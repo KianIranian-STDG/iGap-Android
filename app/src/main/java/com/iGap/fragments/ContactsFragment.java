@@ -1,8 +1,10 @@
-package com.iGap.activitys;
+package com.iGap.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,10 +17,11 @@ import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.activitys.ActivityChat;
+import com.iGap.activitys.ActivityMain;
 import com.iGap.adapter.StickyHeaderAdapter;
 import com.iGap.adapter.items.ContactItem;
 import com.iGap.interface_package.OnChatGetRoom;
-import com.iGap.libs.flowingdrawer.MenuFragment;
 import com.iGap.module.Contacts;
 import com.iGap.module.SoftKeyboard;
 import com.iGap.module.StructContactInfo;
@@ -33,27 +36,33 @@ import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import io.realm.Realm;
 
-
-public class ContactsFragmentDrawerMenu extends MenuFragment {
-
+/**
+ * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/8/2016.
+ */
+public class ContactsFragment extends Fragment implements Comparator<StructContactInfo> {
     private FastAdapter fastAdapter;
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.contacts_drawer_layout, container, false);
+    public static ContactsFragment newInstance() {
+        return new ContactsFragment();
+    }
 
-        return setupReveal(view, false);
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.layout_fragment_contacts, container, false);
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //create our FastAdapter
+//create our FastAdapter
         fastAdapter = new FastAdapter();
         fastAdapter.withSelectable(true);
 
@@ -80,9 +89,8 @@ public class ContactsFragmentDrawerMenu extends MenuFragment {
         txtMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-            ActivityMain.mLeftDrawerLayout.closeDrawer();
-
+                // close and remove fragment from stack
+                getActivity().getSupportFragmentManager().popBackStack();
             }
         });
 
@@ -208,6 +216,7 @@ public class ContactsFragmentDrawerMenu extends MenuFragment {
 
         List<IItem> items = new ArrayList<>();
         List<StructContactInfo> contacts = Contacts.retrieve(null);
+        Collections.sort(contacts, this);
         for (StructContactInfo contact : contacts) {
             items.add(new ContactItem().setContact(contact).withIdentifier(100 + contacts.indexOf(contact)));
         }
@@ -267,5 +276,10 @@ public class ContactsFragmentDrawerMenu extends MenuFragment {
         //add the values which need to be saved from the adapter to the bundle
         outState = fastAdapter.saveInstanceState(outState);
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public int compare(StructContactInfo contactInfo, StructContactInfo t1) {
+        return contactInfo.displayName.equalsIgnoreCase(t1.displayName) ? 1 : 0;
     }
 }

@@ -246,6 +246,7 @@
 
     <string name="show_all_media">Show all Media</string>
     <string name="save_to_gallery">Save to gallery</string>
+    <string name="select_room">Select Room</string>
 
 
     <string-array name="pop_up_shared_media">

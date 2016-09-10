@@ -3,18 +3,20 @@ package com.iGap.adapter.items.chat;
 import android.support.annotation.CallSuper;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.module.MyType;
 import com.iGap.module.StructMessageInfo;
+import com.iGap.module.TimeUtils;
 import com.mikepenz.fastadapter.items.AbstractItem;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/6/2016.
@@ -22,7 +24,6 @@ import java.util.Locale;
 public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH extends RecyclerView.ViewHolder> extends AbstractItem<Item, VH> {
     public StructMessageInfo mMessage;
     public boolean mDirectionalBased = true;
-    private Calendar mCalendar = Calendar.getInstance();
 
     public AbstractChatItem(boolean directionalBased) {
         this.mDirectionalBased = directionalBased;
@@ -39,8 +40,7 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
      * @return String
      */
     protected String formatTime() {
-        mCalendar.setTimeInMillis(mMessage.time);
-        return new SimpleDateFormat(G.CHAT_MESSAGE_TIME, Locale.US).format(mCalendar.getTime());
+        return TimeUtils.toLocal(mMessage.time, G.CHAT_MESSAGE_TIME);
     }
 
     @Override
@@ -48,6 +48,7 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
     public void bindView(VH holder, List payloads) {
         super.bindView(holder, payloads);
 
+        //noinspection RedundantCast
         if (!isSelected() && ((FrameLayout) holder.itemView).getForeground() != null) {
             //noinspection RedundantCast
             ((FrameLayout) holder.itemView).setForeground(null);
@@ -61,6 +62,45 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
                 updateLayoutForSend(holder);
             }
         }
+
+        setReplayMessage(holder);
+        setForwardMessage(holder);
+    }
+
+    @CallSuper
+    protected void setReplayMessage(VH holder) {
+        // set replay container visible if message was replayed, otherwise, gone it
+        LinearLayout replayContainer = (LinearLayout) holder.itemView.findViewById(R.id.replayLayout);
+        if (replayContainer != null) {
+            if (!mMessage.replayFrom.isEmpty()) {
+                if (!mMessage.replayPicturePath.isEmpty()) {
+                    holder.itemView.findViewById(R.id.chslr_imv_replay_pic).setVisibility(View.VISIBLE);
+                    ((ImageView) holder.itemView.findViewById(R.id.chslr_imv_replay_pic)).setImageResource(Integer.parseInt(mMessage.replayPicturePath));
+                } else {
+                    holder.itemView.findViewById(R.id.chslr_imv_replay_pic).setVisibility(View.GONE);
+                }
+
+                ((TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_from)).setText(mMessage.replayFrom);
+                ((TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_message)).setText(mMessage.replayMessage);
+                replayContainer.setVisibility(View.VISIBLE);
+            } else {
+                replayContainer.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    @CallSuper
+    protected void setForwardMessage(VH holder) {
+        // set forward container visible if message was forwarded, otherwise, gone it
+        LinearLayout forwardContainer = (LinearLayout) holder.itemView.findViewById(R.id.cslr_ll_forward);
+        if (forwardContainer != null) {
+            if (!mMessage.forwardMessageFrom.isEmpty()) {
+                forwardContainer.setVisibility(View.VISIBLE);
+                ((TextView) forwardContainer.findViewById(R.id.cslr_txt_forward_from)).setText(mMessage.forwardMessageFrom);
+            } else {
+                forwardContainer.setVisibility(View.GONE);
+            }
+        }
     }
 
     @Override
@@ -70,12 +110,12 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
 
     @CallSuper
     protected void updateLayoutForReceive(VH holder) {
-        ((FrameLayout.LayoutParams) holder.itemView.findViewById(R.id.cslr_ll_frame).getLayoutParams()).gravity = Gravity.START;
+        ((FrameLayout.LayoutParams) holder.itemView.findViewById(R.id.mainContainer).getLayoutParams()).gravity = Gravity.START;
     }
 
     @CallSuper
     protected void updateLayoutForSend(VH holder) {
-        ((FrameLayout.LayoutParams) holder.itemView.findViewById(R.id.cslr_ll_frame).getLayoutParams()).gravity = Gravity.END;
+        ((FrameLayout.LayoutParams) holder.itemView.findViewById(R.id.mainContainer).getLayoutParams()).gravity = Gravity.END;
     }
 
     protected CharSequence defineMessageStatus() {

@@ -8,10 +8,9 @@ import com.iGap.realm.enums.RoomType;
  */
 public class StructChatInfo {
 
-    public String chatId = "";
+    public long chatId;
     public boolean muteNotification = false;
     public MyType.OwnerShip ownerShip = MyType.OwnerShip.member;
-    public int whatChange = 0;
 
     public String imageSource = "";
     public String color = "";
@@ -32,5 +31,4 @@ public class StructChatInfo {
     public String filePic = "";
 
     public MyType.FileState fileState = MyType.FileState.notDownload;
-
 }

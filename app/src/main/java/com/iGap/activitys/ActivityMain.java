@@ -10,15 +10,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.Animation;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.items.ChatItem;
+import com.iGap.fragments.ContactsFragment;
 import com.iGap.helper.HelperProtoBuilder;
 import com.iGap.helper.HelperRealm;
 import com.iGap.interface_package.IActionClick;
@@ -32,7 +31,6 @@ import com.iGap.libs.floatingAddButton.ArcMenu;
 import com.iGap.libs.floatingAddButton.StateChangeListener;
 import com.iGap.libs.flowingdrawer.FlowingView;
 import com.iGap.libs.flowingdrawer.LeftDrawerLayout;
-import com.iGap.libs.flowingdrawer.ResizeWidthAnimation;
 import com.iGap.module.MyType;
 import com.iGap.module.OnComplete;
 import com.iGap.module.StructChatInfo;
@@ -118,19 +116,9 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         mMenuFragment.setMaxActivityWidth(Utils.getWindowWidth(this));
         mLeftDrawerLayout.setFluidView(mFlowingView);
         mLeftDrawerLayout.setMenuFragment(mMenuFragment);
-
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-            }
-        }).start();
-
     }
 
     private void initComponent() {
-
         Button btnMenu = (Button) findViewById(R.id.cl_btn_menu);
         btnMenu.setTypeface(G.fontawesome);
 
@@ -183,7 +171,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                 isMenuButtonAddShown = true;
 
                 if (!mLeftDrawerLayout.isShownMenu()) {
-                    mLeftDrawerLayout.toggle(Utils.getWindowWidth(ActivityMain.this));
+                    mLeftDrawerLayout.toggle(Utils.dpToPx(getApplicationContext(), R.dimen.dp280));
                 }
             }
         });
@@ -214,7 +202,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                     item.mComplete.complete(true, "closeMenuButton", "");
                 } else {
                     Intent intent = new Intent(ActivityMain.this, ActivityChat.class);
-                    intent.putExtra("RoomId", Long.parseLong(item.mInfo.chatId));
+                    intent.putExtra("RoomId", item.mInfo.chatId);
                     startActivity(intent);
                 }
                 return false;
@@ -296,14 +284,14 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
     private void clearHistory(int position) {
         Log.e("fff", " txtClearHistory " + position);
         final ChatItem chatInfo = mAdapter.getAdapterItem(position);
-        final String chatId = chatInfo.mInfo.chatId;
+        final long chatId = chatInfo.mInfo.chatId;
 
         // make request for clearing messages
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmChatHistory> realmChatHistories = realm.where(RealmChatHistory.class).equalTo("roomId", Long.parseLong(chatId)).findAll();
+        RealmResults<RealmChatHistory> realmChatHistories = realm.where(RealmChatHistory.class).equalTo("roomId", chatId).findAll();
         long lastMessageId = HelperRealm.findLastMessageId(realmChatHistories);
         if (lastMessageId != -1) {
-            G.clearMessagesUtil.clearMessages(Long.parseLong(chatId), lastMessageId);
+            G.clearMessagesUtil.clearMessages(chatId, lastMessageId);
         }
         realm.close();
     }
@@ -369,7 +357,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                                 final ChatItem chatItem = new ChatItem();
                                 StructChatInfo info = new StructChatInfo();
                                 info.unreadMessag = room.getUnreadCount();
-                                info.chatId = Long.toString(room.getId());
+                                info.chatId = room.getId();
                                 info.chatTitle = room.getTitle();
                                 info.initials = room.getInitials();
                                 switch (room.getType()) {
@@ -719,7 +707,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
             final ChatItem chatItem = new ChatItem();
             StructChatInfo info = new StructChatInfo();
             info.unreadMessag = realmRoom.getUnreadCount();
-            info.chatId = Long.toString(realmRoom.getId()); //TODO [Saeed Mozaffari] [2016-09-05 4:31 PM] - convert chat id to long
+            info.chatId = realmRoom.getId();
             info.chatTitle = realmRoom.getTitle();
             info.initials = realmRoom.getInitials();
             switch (realmRoom.getType()) {
@@ -766,19 +754,12 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
 
     @Override
     public void onOpenDrawer(boolean fullWidth) {
-        if (fullWidth) {
-            // replace new menu fragment
-            FragmentManager fm = getSupportFragmentManager();
-            ContactsFragmentDrawerMenu sc;
-            fm.beginTransaction().replace(R.id.id_container_menu, sc = new ContactsFragmentDrawerMenu()).commit();
-            sc.setOpenDrawerListener(ActivityMain.this);
-            sc.setMaxActivityWidth(Utils.getWindowWidth(ActivityMain.this));
-            mLeftDrawerLayout.setMenuFragment(sc);
-        }
+        Log.i(ActivityMain.class.getSimpleName(), "onOpenDrawer");
     }
 
     @Override
     public void onCloseDrawer() {
+        Log.i(ActivityMain.class.getSimpleName(), "onCloseDrawer");
         mFlowingView.downing();
         FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction().replace(R.id.id_container_menu, mMenuFragment = new FragmentDrawerMenu()).commit();
@@ -790,36 +771,9 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
 
     @Override
     public void onActionSearchClick() {
-        RelativeLayout parent = (RelativeLayout) mFlowingView.getParent();
-
-        ResizeWidthAnimation anim = new ResizeWidthAnimation(parent, Utils.getWindowWidth(this));
-        anim.setDuration(500);
-        anim.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                int windowWidth = Utils.getWindowWidth(ActivityMain.this);
-                mFlowingView.invalidate(windowWidth);
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                // replace new menu fragment
-                int windowWidth = Utils.getWindowWidth(ActivityMain.this);
-                FragmentManager fm = getSupportFragmentManager();
-                ContactsFragmentDrawerMenu sc;
-                fm.beginTransaction().replace(R.id.id_container_menu, sc = new ContactsFragmentDrawerMenu()).commit();
-                sc.setOpenDrawerListener(ActivityMain.this);
-                sc.setMaxActivityWidth(windowWidth);
-                mLeftDrawerLayout.setMenuFragment(sc);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-
-        parent.startAnimation(anim);
+        // close drawer and replace contacts fragment with main activity layout
+        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, ContactsFragment.newInstance()).commit();
+        mLeftDrawerLayout.closeDrawer();
     }
 
     @Override
@@ -837,7 +791,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                     for (final RealmRoom room : rooms) {
                         boolean exists = false;
                         for (ChatItem chat : mAdapter.getAdapterItems()) {
-                            if (room.getId() == Long.parseLong(chat.mInfo.chatId)) {
+                            if (room.getId() == chat.mInfo.chatId) {
                                 exists = true;
                                 break;
                             }
@@ -861,7 +815,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
     private ChatItem convertToChatItem(RealmRoom room) {
         ChatItem chatItem = new ChatItem();
         StructChatInfo chatInfo = new StructChatInfo();
-        chatInfo.chatId = Long.toString(room.getId());
+        chatInfo.chatId = room.getId();
         chatInfo.chatTitle = room.getTitle();
         chatInfo.chatType = room.getType();
         switch (room.getType()) {

@@ -27,6 +27,7 @@ public class LeftDrawerLayout extends ViewGroup {
      */
     private static final int MIN_FLING_VELOCITY = 400; // dips per second
     private boolean mReplace;
+    private boolean mSupportPullToEnd = false;
 
     /**
      * drawer离父容器右边的最小外边距
@@ -88,8 +89,10 @@ public class LeftDrawerLayout extends ViewGroup {
             @Override
             public void onEdgeDragStarted(int edgeFlags, int pointerId) {
                 // change left menu view to support pull to end
-                mLeftMenuView.getLayoutParams().width = mActivityWidth;
-                mLeftMenuView.requestLayout();
+                if (mSupportPullToEnd) {
+                    mLeftMenuView.getLayoutParams().width = mActivityWidth;
+                    mLeftMenuView.requestLayout();
+                }
                 mHelper.captureChildView(mLeftMenuView, pointerId);
             }
 

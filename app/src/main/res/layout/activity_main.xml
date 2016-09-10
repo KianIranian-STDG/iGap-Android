@@ -1,34 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.iGap.libs.flowingdrawer.LeftDrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/id_drawerlayout"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragmentContainer"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clipChildren="false">
+    android:layout_height="match_parent">
 
-    <include layout="@layout/activity_contact" />
-
-    <RelativeLayout
-        android:id="@+id/linearLayout"
+    <com.iGap.libs.flowingdrawer.LeftDrawerLayout
+        android:id="@+id/id_drawerlayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:clipChildren="false">
 
-        <com.iGap.libs.flowingdrawer.FlowingView
-            android:id="@+id/sv"
-            android:background="@color/drawerColorWhite"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+        <include layout="@layout/activity_contact" />
 
-        <FrameLayout
-            android:id="@+id/id_container_menu"
+        <RelativeLayout
+            android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/drawerColorWhite"
-            android:layout_alignParentLeft="true"/>
+            android:orientation="vertical">
 
+            <com.iGap.libs.flowingdrawer.FlowingView
+                android:id="@+id/sv"
+                android:layout_width="@dimen/dp280"
+                android:layout_height="match_parent"
+                android:background="@color/drawerColorWhite" />
 
-    </RelativeLayout>
+            <FrameLayout
+                android:id="@+id/id_container_menu"
+                android:layout_width="@dimen/dp280"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:background="@color/drawerColorWhite" />
 
+        </RelativeLayout>
 
-</com.iGap.libs.flowingdrawer.LeftDrawerLayout>
-
+    </com.iGap.libs.flowingdrawer.LeftDrawerLayout>
+</RelativeLayout>

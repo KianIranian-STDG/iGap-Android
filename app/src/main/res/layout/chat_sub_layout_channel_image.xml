@@ -17,12 +17,17 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <FrameLayout
-            android:id="@+id/cslr_ll_frame"
+        <LinearLayout
+            android:id="@+id/mainContainer"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:orientation="vertical"
             android:minHeight="@dimen/dp260">
+
+            <include
+                android:id="@+id/replayLayout"
+                layout="@layout/chat_sub_layout_replay" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -36,6 +41,10 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:paddingLeft="@dimen/dp20">
+
+                    <include
+                        layout="@layout/chat_sub_layout_forward"
+                        android:id="@+id/cslr_ll_forward" />
 
                     <ImageView
                         android:id="@+id/shli_imv_image"
@@ -71,7 +80,7 @@
                 android:text="@string/fa_ellipsis_v"
                 android:textColor="#b7b3b3"
                 android:textSize="@dimen/sp26" />
-        </FrameLayout>
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/cslch_ll_info"

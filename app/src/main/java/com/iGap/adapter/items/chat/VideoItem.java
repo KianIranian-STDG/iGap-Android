@@ -3,7 +3,6 @@ package com.iGap.adapter.items.chat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -80,8 +79,6 @@ public class VideoItem extends AbstractChatItem<VideoItem, VideoItem.ViewHolder>
         if (mMessage.sendType == MyType.SendType.send) {
             holder.cslr_txt_tic.setText(defineMessageStatus());
         }
-
-        // TODO: 9/6/2016 [Alireza Eskandarpour Shoferi] check if message was a replay, update layout
     }
 
     @Override
@@ -96,7 +93,7 @@ public class VideoItem extends AbstractChatItem<VideoItem, VideoItem.ViewHolder>
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
-        protected FrameLayout cslr_ll_frame;
+        protected LinearLayout cslr_ll_frame;
         protected LinearLayout cslr_ll_content_main;
         protected LinearLayout cslr_ll_forward;
         protected TextView cslr_txt_forward_from;
@@ -114,7 +111,7 @@ public class VideoItem extends AbstractChatItem<VideoItem, VideoItem.ViewHolder>
             super(view);
 
             cslr_txt_message = (TextView) view.findViewById(R.id.cslr_txt_message);
-            cslr_ll_frame = (FrameLayout) view.findViewById(R.id.cslr_ll_frame);
+            cslr_ll_frame = (LinearLayout) view.findViewById(R.id.mainContainer);
             cslr_ll_content_main = (LinearLayout) view.findViewById(R.id.cslr_ll_content_main);
             cslr_ll_forward = (LinearLayout) view.findViewById(R.id.cslr_ll_forward);
             cslr_txt_forward_from = (TextView) view.findViewById(R.id.cslr_txt_forward_from);
