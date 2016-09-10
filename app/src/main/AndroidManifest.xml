@@ -79,14 +79,15 @@
             android:theme="@style/AppTheme22" />
         <activity android:name=".activitys.ActivitySetting">
 
-        </activity>
-
-        <activity android:name=".activitys.ActivityContactsProfile">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+
+        </activity>
+
+        <activity android:name=".activitys.ActivityContactsProfile">
 
         </activity>
         <receiver android:name=".module.IncomingSms" />

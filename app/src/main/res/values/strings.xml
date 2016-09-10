@@ -159,7 +159,7 @@
 
     <!--setting-->
     <string name="st_popupMenu_toolbar_rename">rename</string>
-    <string name="st_popupMenu_toolbar_more">more</string>
+    <string name="st_popupMenu_toolbar_more">Log Out</string>
     <string name="st_titleToolbar">Settings</string>
     <string name="st_title_general">General</string>
     <string name="st_username">UserName:</string>
@@ -217,6 +217,7 @@
     <string name="st_title_reset">Reset</string>
     <string name="st_reset_all_notification">Reset All Notification</string>
     <string name="st_text_reset_all_notification">Undo all custom notification settings for all your contacts and groups</string>
+    <string name="st_popup_logout">Undo all custom notification settings for all your contacts and groups</string>
 
 
     <!--chanel_info-->

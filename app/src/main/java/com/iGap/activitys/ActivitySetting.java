@@ -14,6 +14,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.PopupMenu;
 import android.text.InputType;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,7 @@ import com.iGap.realm.RealmUserInfo;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class ActivitySetting extends ActivityEnhanced {
 
@@ -308,7 +310,7 @@ public class ActivitySetting extends ActivityEnhanced {
             @Override
             public void onClick(View v) {
 
-                PopupMenu popupMenu = new PopupMenu(ActivitySetting.this, v);
+                PopupMenu popupMenu = new PopupMenu(ActivitySetting.this, v, Gravity.TOP);
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
@@ -319,7 +321,29 @@ public class ActivitySetting extends ActivityEnhanced {
                                 Toast.makeText(ActivitySetting.this, "1", Toast.LENGTH_SHORT).show();
                                 return true;
 
-                            case R.id.album_overflow_lock:
+                            case R.id.st_logOut:
+
+                                new MaterialDialog.Builder(ActivitySetting.this)
+                                        .title("iGap")
+                                        .positiveText("LOGOUT")
+                                        .negativeText("CANCEL")
+                                        .content(R.string.st_popup_logout)
+                                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                            @Override
+                                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                                                final RealmResults<RealmUserInfo> result = realm.where(RealmUserInfo.class).findAll();
+                                                realm.executeTransaction(new Realm.Transaction() {
+                                                    @Override
+                                                    public void execute(Realm realm) {
+                                                        result.deleteAllFromRealm();
+                                                    }
+                                                });
+
+                                                startActivity(new Intent(ActivitySetting.this, ActivityIntroduce.class));
+                                            }
+                                        }).show();
+
                                 Toast.makeText(ActivitySetting.this, "2", Toast.LENGTH_SHORT).show();
                                 return true;
                         }
@@ -328,6 +352,7 @@ public class ActivitySetting extends ActivityEnhanced {
                 });
 
                 popupMenu.inflate(R.menu.sc_popup_menu);
+                popupMenu.setGravity(Gravity.TOP);
                 popupMenu.show();
             }
         });
