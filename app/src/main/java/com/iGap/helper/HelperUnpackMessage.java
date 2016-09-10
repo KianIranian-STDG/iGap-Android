@@ -106,7 +106,7 @@ public class HelperUnpackMessage {
                         String indexString = responseId.split("\\.")[1];
                         int index = Integer.parseInt(indexString);
 
-                        Object responseClass = instanceResponseClass(actionId, protoObject, G.requestQueueMap.get(randomId).identity, null);
+                        Object responseClass = instanceResponseClass(actionId, protoObject, G.requestQueueMap.get(responseId).identity, null);
 
                         ArrayList<Object> objectValues = G.requestQueueRelationMap.get(randomId);
                         objectValues.set(index, responseClass);
@@ -133,8 +133,10 @@ public class HelperUnpackMessage {
                                 Field fieldIdentity = object.getClass().getDeclaredField("identity");
                                 int currentActionId = fieldActionId.getInt(object);
                                 Object currentMessage = fieldMessage.get(object);
-                                String currentIdentity = fieldIdentity.get(object).toString();
-
+                                String currentIdentity = null;
+                                if (fieldIdentity.get(object) != null) {
+                                    currentIdentity = fieldIdentity.get(object).toString();
+                                }
                                 instanceResponseClass(currentActionId, currentMessage, currentIdentity, "handler");
                             }
                         }
