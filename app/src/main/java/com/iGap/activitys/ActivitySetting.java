@@ -125,6 +125,7 @@ public class ActivitySetting extends ActivityEnhanced {
                 MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this)
                         .title("Nickname")
                         .positiveText("SAVE")
+                        .alwaysCallInputCallback()
                         .widgetColor(getResources().getColor(R.color.toolbar_background))
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
@@ -134,26 +135,22 @@ public class ActivitySetting extends ActivityEnhanced {
                             }
                         })
                         .negativeText("CANCEL")
-                        .onNegative(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-
-                            }
-                        })
                         .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT)
-
                         .input("please Enter a NickName", txtNickName.getText().toString(), new MaterialDialog.InputCallback() {
                             @Override
                             public void onInput(MaterialDialog dialog, CharSequence input) {
                                 // Do something
 
-                                dialog.getInputEditText();
-                                Log.i("ZZCC", "onInput: " + dialog.getInputEditText());
                                 View positive = dialog.getActionButton(DialogAction.POSITIVE);
-                                positive.setClickable(false);
-                                positive.setAlpha(0.5f);
-                                Toast.makeText(ActivitySetting.this, "" + input, Toast.LENGTH_SHORT).show();
+
+                                if (!input.toString().equals(txtNickName.getText().toString())) {
+
+                                    positive.setClickable(true);
+                                    positive.setAlpha(1.0f);
+                                } else {
+                                    positive.setClickable(false);
+                                    positive.setAlpha(0.5f);
+                                }
 
                             }
 
@@ -179,12 +176,6 @@ public class ActivitySetting extends ActivityEnhanced {
                             }
                         })
                         .negativeText("CANCEL")
-                        .onNegative(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                            }
-                        })
                         .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT)
                         .input("please Enter a NickName", txtUserName.getText().toString(), new MaterialDialog.InputCallback() {
                             @Override
@@ -192,28 +183,18 @@ public class ActivitySetting extends ActivityEnhanced {
                                 // Do something
                                 View positive = dialog.getActionButton(DialogAction.POSITIVE);
 
-
                                 if (!input.toString().equals(txtUserName.getText().toString())) {
 
                                     positive.setClickable(true);
                                     positive.setAlpha(1.0f);
-                                    Log.i("ZZCC", "true: " + input.toString());
                                 } else {
                                     positive.setClickable(false);
                                     positive.setAlpha(0.5f);
-                                    Log.i("ZZCC", "false: " + input.toString());
                                 }
-
-
-                                // Toast.makeText(ActivitySetting.this, "" + input.toString(), Toast.LENGTH_SHORT).show();
 
                             }
 
                         }).show();
-
-//
-
-
             }
         });
 

@@ -109,6 +109,7 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                 new MaterialDialog.Builder(ActivityContactsProfile.this)
                         .title("Username")
                         .positiveText("SAVE")
+                        .alwaysCallInputCallback()
                         .widgetColor(getResources().getColor(R.color.toolbar_background))
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
@@ -127,9 +128,19 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                         .negativeText("CANCEL")
                         .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT)
                         .input("please Enter a NickName", txtUserName.getText().toString(), new MaterialDialog.InputCallback() {
-
                             @Override
                             public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+
+                                View positive = dialog.getActionButton(DialogAction.POSITIVE);
+
+                                if (!input.toString().equals(txtNickname.getText().toString())) {
+
+                                    positive.setClickable(true);
+                                    positive.setAlpha(1.0f);
+                                } else {
+                                    positive.setClickable(false);
+                                    positive.setAlpha(0.5f);
+                                }
 
                             }
                         }).show();
