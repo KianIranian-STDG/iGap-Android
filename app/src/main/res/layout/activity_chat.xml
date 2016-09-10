@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/layout_attach_file"
         android:layout_below="@+id/toolbarContainer"
-        android:scrollbars="vertical"
+        android:scrollbars="none"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <LinearLayout

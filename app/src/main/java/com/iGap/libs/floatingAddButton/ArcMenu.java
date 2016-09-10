@@ -344,7 +344,7 @@ public class ArcMenu extends FrameLayout {
             animationCollection.add(ObjectAnimator.ofFloat(view, "scaleY", 1, 0));
             animationCollection.add(ObjectAnimator.ofFloat(view, "alpha", 1, 0));
 
-            rotateAnimationCollection.add(ObjectAnimator.ofFloat(view, "rotation", 0, 360));
+            //  rotateAnimationCollection.add(ObjectAnimator.ofFloat(view, "rotation", 0, 360));
         }
 
         animatorSet.playTogether(animationCollection);

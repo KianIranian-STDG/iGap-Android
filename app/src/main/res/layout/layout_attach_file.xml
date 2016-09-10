@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
+    <android.support.v7.widget.ViewStubCompat
+        android:id="@+id/replayLayoutStub"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:id="@+id/chl_ll_attach"
@@ -35,12 +39,12 @@
                 android:id="@+id/chl_edt_chat"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:background="@null"
                 android:layout_weight="1"
+                android:background="@null"
                 android:hint="      Type Message"
-                android:textColorHint="@color/gray"
                 android:maxLines="4"
-                android:paddingRight="@dimen/dp4" />
+                android:paddingRight="@dimen/dp4"
+                android:textColorHint="@color/gray" />
 
             <View
                 android:layout_width="1dp"
@@ -85,10 +89,6 @@
                     android:textColor="@color/gray"
                     android:textSize="@dimen/sp26" />
             </LinearLayout>
-
         </LinearLayout>
-
     </LinearLayout>
-
-
 </LinearLayout>

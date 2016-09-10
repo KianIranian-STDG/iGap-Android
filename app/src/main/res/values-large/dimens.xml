@@ -27,6 +27,7 @@
     <dimen name="dp8">12dp</dimen>
     <dimen name="dp12">18dp</dimen>
     <dimen name="dp16">24dp</dimen>
+    <dimen name="dp18">27dp</dimen>
     <dimen name="dp20">30dp</dimen>
     <dimen name="dp24">36dp</dimen>
     <dimen name="dp28">42dp</dimen>

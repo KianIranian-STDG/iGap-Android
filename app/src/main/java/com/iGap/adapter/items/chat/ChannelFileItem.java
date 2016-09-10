@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -59,8 +58,6 @@ public class ChannelFileItem extends AbstractChatItem<ChannelFileItem, ChannelFi
                 view.getContext().startActivity(intent);
             }
         });
-
-        // TODO: 9/6/2016 [Alireza Eskandarpour Shoferi] check if message was a replay, update layout
     }
 
     @Override
@@ -76,7 +73,6 @@ public class ChannelFileItem extends AbstractChatItem<ChannelFileItem, ChannelFi
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
         protected LinearLayout cslch_ll_parent;
-        protected FrameLayout cslr_ll_frame;
         protected LinearLayout cslr_ll_content_main;
         protected TextView cslr_txt_message;
         protected Button cslch_btn_item_menu;
@@ -101,12 +97,16 @@ public class ChannelFileItem extends AbstractChatItem<ChannelFileItem, ChannelFi
         protected TextView cslf_txt_file_name;
         protected TextView cslf_txt_file_mime_type;
         protected TextView cslf_txt_file_size;
+        protected ImageView chslr_imv_icon_replay;
+        protected View chslr_v_vertical_line;
+        protected ImageView chslr_imv_replay_pic;
+        protected TextView chslr_txt_replay_from;
+        protected TextView chslr_txt_replay_message;
 
         public ViewHolder(View view) {
             super(view);
 
             cslch_ll_parent = (LinearLayout) view.findViewById(R.id.cslch_ll_parent);
-            cslr_ll_frame = (FrameLayout) view.findViewById(R.id.cslr_ll_frame);
             cslr_ll_content_main = (LinearLayout) view.findViewById(R.id.cslr_ll_content_main);
             cslr_txt_message = (TextView) view.findViewById(R.id.cslr_txt_message);
             cslch_btn_item_menu = (Button) view.findViewById(R.id.cslch_btn_item_menu);
@@ -131,6 +131,12 @@ public class ChannelFileItem extends AbstractChatItem<ChannelFileItem, ChannelFi
             cslf_txt_file_name = (TextView) view.findViewById(R.id.cslf_txt_file_name);
             cslf_txt_file_mime_type = (TextView) view.findViewById(R.id.cslf_txt_file_mime_type);
             cslf_txt_file_size = (TextView) view.findViewById(R.id.cslf_txt_file_size);
+
+            chslr_imv_icon_replay = (ImageView) view.findViewById(R.id.chslr_imv_icon_replay);
+            chslr_v_vertical_line = view.findViewById(R.id.chslr_v_vertical_line);
+            chslr_imv_replay_pic = (ImageView) view.findViewById(R.id.chslr_imv_replay_pic);
+            chslr_txt_replay_from = (TextView) view.findViewById(R.id.chslr_txt_replay_from);
+            chslr_txt_replay_message = (TextView) view.findViewById(R.id.chslr_txt_replay_message);
 
             cslch_txt_image_like.setTypeface(G.fontawesome);
             cslch_txt_image_unlike.setTypeface(G.fontawesome);

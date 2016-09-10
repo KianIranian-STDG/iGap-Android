@@ -24,7 +24,7 @@
         android:label="@string/app_name"
         android:largeHeap="true"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        android:theme="@style/AppTheme">
         <activity
             android:name=".activitys.ActivityChat"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
@@ -60,8 +60,10 @@
         <activity
             android:name=".activitys.ActivityIntroduce"
             android:configChanges="keyboard|keyboardHidden|screenSize|locale">
-
-
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".activitys.ActivityProfile"
@@ -79,17 +81,13 @@
             android:theme="@style/AppTheme22" />
         <activity android:name=".activitys.ActivitySetting">
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-
         </activity>
 
-        <activity android:name=".activitys.ActivityContactsProfile">
+        <activity android:name=".activitys.ActivityContactsProfile"></activity>
+        <activity
+            android:name=".activitys.ActivitySelectChat"
+            android:label="@string/select_room" />
 
-        </activity>
         <receiver android:name=".module.IncomingSms" />
         <receiver android:name="com.iGap.module.ReceiverInternet">
             <intent-filter>

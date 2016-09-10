@@ -18,12 +18,17 @@
         android:background="@android:color/white"
         android:orientation="horizontal">
 
-        <FrameLayout
-            android:id="@+id/cslr_ll_frame"
+        <LinearLayout
+            android:id="@+id/mainContainer"
             android:layout_width="0dp"
+            android:orientation="vertical"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:minHeight="@dimen/dp260">
+
+            <include
+                android:id="@+id/replayLayout"
+                layout="@layout/chat_sub_layout_replay" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -44,28 +49,9 @@
                         android:orientation="vertical">
 
 
-                        <LinearLayout
-                            android:id="@+id/cslr_ll_forward"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:visibility="gone">
-
-                            <TextView
-
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Forward message"
-                                android:textSize="@dimen/sp14" />
-
-                            <TextView
-                                android:id="@+id/cslr_txt_forward_from"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingBottom="@dimen/dp8"
-                                android:text=""
-                                android:textSize="@dimen/sp14" />
-                        </LinearLayout>
+                        <include
+                            layout="@layout/chat_sub_layout_forward"
+                            android:id="@+id/cslr_ll_forward" />
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -175,7 +161,7 @@
                 android:text="@string/fa_ellipsis_v"
                 android:textColor="#b7b3b3"
                 android:textSize="@dimen/sp26" />
-        </FrameLayout>
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/cslch_ll_info"

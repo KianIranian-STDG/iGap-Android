@@ -53,7 +53,7 @@ public final class HelperProtoBuilder {
      */
     public static StructChatInfo convert(ProtoClientGetRoom.ClientGetRoomResponse.Builder builder) {
         StructChatInfo chatInfo = new StructChatInfo();
-        chatInfo.chatId = Long.toString(builder.getRoom().getId());
+        chatInfo.chatId = builder.getRoom().getId();
         chatInfo.chatTitle = builder.getRoom().getTitle();
         chatInfo.chatType = convert(builder.getRoom().getType());
         switch (builder.getRoom().getType()) {

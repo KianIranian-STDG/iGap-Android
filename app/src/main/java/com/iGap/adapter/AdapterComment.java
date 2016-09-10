@@ -7,6 +7,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,7 +69,8 @@ public class AdapterComment extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
 
             SpannableString s = new SpannableString(list.get(position).senderName + ": " + list.get(position).message);
-            s.setSpan(new ForegroundColorSpan(Color.parseColor("#37B8CC")), 0, list.get(position).senderName.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            s.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.green)), 0, list.get(position).senderName.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            s.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, list.get(position).senderName.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             txtMessage.setText(s);
 
 
@@ -179,6 +181,7 @@ public class AdapterComment extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             SpannableString s = new SpannableString(infoReplay.senderName + ": " + infoReplay.message);
             s.setSpan(new ForegroundColorSpan(Color.parseColor("#37B8CC")), 0, infoReplay.senderName.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            s.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, infoReplay.senderName.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             txtMessageReplay.setText(s);
 
 

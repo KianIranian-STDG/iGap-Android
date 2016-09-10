@@ -1,7 +1,6 @@
 package com.iGap.activitys;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
@@ -174,7 +173,6 @@ public class ActivityComment extends ActivityEnhanced implements IEmojiViewCreat
 
 
         btnSend = (Button) findViewById(R.id.acs_btn_send);
-        btnSend.setTypeface(G.fontawesome);
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -198,7 +196,7 @@ public class ActivityComment extends ActivityEnhanced implements IEmojiViewCreat
             @Override
             public void onDismiss() {
                 // if the emoji popup is dismissed, change emoji image resource to smiley icon
-                changeEmojiButtonImageResource(R.drawable.ic_emoticon);
+                changeEmojiButtonImageResource(R.drawable.emoticon_with_happy_face);
             }
         });
         emojiPopup.setEmojiStickerClickListener(new IEmojiStickerClick() {
@@ -311,9 +309,9 @@ public class ActivityComment extends ActivityEnhanced implements IEmojiViewCreat
             public void afterTextChanged(Editable editable) {
 
                 if (edtChat.getText().length() > 0 && mAdapter.replayCommentNumber >= 0) {
-                    btnSend.setTextColor(Color.BLUE);
+                    btnSend.setBackgroundDrawable(getResources().getDrawable(R.drawable.send_button_blue));
                 } else {
-                    btnSend.setTextColor(Color.GRAY);
+                    btnSend.setBackgroundDrawable(getResources().getDrawable(R.drawable.send_button_gray));
 
                 }
 
@@ -386,11 +384,11 @@ public class ActivityComment extends ActivityEnhanced implements IEmojiViewCreat
             if (visible) {
                 subLayoutReplay.setVisibility(View.VISIBLE);
                 if (edtChat.getText().length() > 0) {
-                    btnSend.setTextColor(Color.BLUE);
+                    btnSend.setBackgroundDrawable(getResources().getDrawable(R.drawable.send_button_blue));
                 }
             } else {
                 subLayoutReplay.setVisibility(View.GONE);
-                btnSend.setTextColor(Color.GRAY);
+                btnSend.setBackgroundDrawable(getResources().getDrawable(R.drawable.send_button_gray));
             }
 
 

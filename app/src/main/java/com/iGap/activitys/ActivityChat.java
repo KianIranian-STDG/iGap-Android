@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.ViewStubCompat;
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
@@ -59,7 +60,6 @@ import com.iGap.module.EmojiEditText;
 import com.iGap.module.EmojiPopup;
 import com.iGap.module.EmojiRecentsManager;
 import com.iGap.module.MyType;
-import com.iGap.module.OnComplete;
 import com.iGap.module.StructMessageInfo;
 import com.iGap.proto.ProtoChatSendMessage;
 import com.iGap.proto.ProtoGlobal;
@@ -119,7 +119,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     private Button btnUp;
     private Button btnDown;
     private TextView txtChannelMute;
-    private OnComplete complete;
 
     //popular (chat , group , channel)
     private String title;
@@ -236,6 +235,18 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
         if (chatType == ProtoGlobal.Room.Type.CHANNEL && channelRole == ChannelChatRole.MEMBER)
             initLayotChannelFooter();
+
+        if (getIntent() != null && getIntent().getExtras() != null && getIntent().getExtras().getParcelableArrayList(ActivitySelectChat.ARG_FORWARD_MESSAGE) != null) {
+            ArrayList<StructMessageInfo> messageInfos = getIntent().getExtras().getParcelableArrayList(ActivitySelectChat.ARG_FORWARD_MESSAGE);
+
+            for (StructMessageInfo messageInfo : messageInfos) {
+                sendForwardedMessage(messageInfo);
+            }
+        }
+    }
+
+    private void sendForwardedMessage(StructMessageInfo messageInfo) {
+        // TODO: 9/10/2016 [Alireza Eskandarpour Shoferi] vaghti kare forward server anjam shod, injaro por kon
     }
 
     public void initCallbacks() {
@@ -364,7 +375,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         long identifier = 100;
         for (StructMessageInfo messageInfo : getChatList()) {
             switch (messageInfo.messageType) {
-                // TODO: 9/7/2016 [Alireza Eskandarpour Shoferi] add channel items
+                // TODO: 9/7/2016 [Alireza Eskandarpour Shoferi] add group items
                 case TEXT:
                     if (chatType == ProtoGlobal.Room.Type.CHAT) {
                         mAdapter.add(new MessageItem().setMessage(messageInfo).withIdentifier(identifier));
@@ -489,6 +500,15 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                                 roomMessage.setMessageId(Long.parseLong(identity));
                                 roomMessage.setUserId(senderId);
                                 roomMessage.setUpdateTime((int) System.currentTimeMillis());
+
+                                // user wants to replay to a message
+                                if (mReplayLayout != null && mReplayLayout.getTag() instanceof StructMessageInfo) {
+                                    // TODO: 9/10/2016 [Alireza Eskandarpour Shoferi] after server done creating replay, uncomment following lines
+                                    /*messageInfo.replayFrom = ((StructMessageInfo) mReplayLayout.getTag()).senderName;
+                                    messageInfo.replayMessage = ((StructMessageInfo) mReplayLayout.getTag()).messageText;
+                                    messageInfo.replayPicturePath = ((StructMessageInfo) mReplayLayout.getTag()).filePic;*/
+                                }
+
                                 chatHistory.setRoomId(mRoomId);
                                 chatHistory.setRoomMessage(roomMessage);
                                 realm.copyToRealm(chatHistory);
@@ -503,6 +523,12 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                         messageInfo.time = System.currentTimeMillis();
                         messageInfo.senderID = Long.toString(senderId);
                         messageInfo.sendType = MyType.SendType.send;
+                        // user wants to replay to a message
+                        if (mReplayLayout != null && mReplayLayout.getTag() instanceof StructMessageInfo) {
+                            messageInfo.replayFrom = ((StructMessageInfo) mReplayLayout.getTag()).senderName;
+                            messageInfo.replayMessage = ((StructMessageInfo) mReplayLayout.getTag()).messageText;
+                            messageInfo.replayPicturePath = ((StructMessageInfo) mReplayLayout.getTag()).filePic;
+                        }
 
                         mAdapter.add(new MessageItem().setMessage(messageInfo));
 
@@ -693,6 +719,26 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         }
     }
 
+    private LinearLayout mReplayLayout;
+
+    private void inflateReplayLayoutIntoStub(AbstractChatItem chatItem) {
+        if (findViewById(R.id.replayLayoutAboveEditText) == null) {
+            ViewStubCompat stubView = (ViewStubCompat) findViewById(R.id.replayLayoutStub);
+            stubView.setInflatedId(R.id.replayLayoutAboveEditText);
+            stubView.setLayoutResource(R.layout.layout_chat_replay);
+            stubView.inflate();
+
+            inflateReplayLayoutIntoStub(chatItem);
+        } else {
+            mReplayLayout = (LinearLayout) findViewById(R.id.replayLayoutAboveEditText);
+            mReplayLayout.setVisibility(View.VISIBLE);
+            TextView replayTo = (TextView) mReplayLayout.findViewById(R.id.replayTo);
+            replayTo.setText(chatItem.mMessage.messageText);
+            // I set tag to retrieve it later when sending message
+            mReplayLayout.setTag(chatItem);
+        }
+    }
+
     @Override
     public void onEmojiViewCreate(View view, EmojiPopup emojiPopup) {
 
@@ -702,6 +748,13 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     public boolean onRecentsLongClick(View view, EmojiRecentsManager recentsManager) {
         // TODO useful for clearing recents
         return false;
+    }
+
+    private Intent makeIntentForForwardMessages(ArrayList<StructMessageInfo> messageInfos) {
+        Intent intent = new Intent(ActivityChat.this, ActivitySelectChat.class);
+        intent.putParcelableArrayListExtra(ActivitySelectChat.ARG_FORWARD_MESSAGE, messageInfos);
+
+        return intent;
     }
 
     private void initAppbarSelected() {
@@ -714,6 +767,10 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 mAdapter.deselect();
                 toolbar.setVisibility(View.VISIBLE);
                 ll_AppBarSelected.setVisibility(View.GONE);
+                // gone replay layout
+                if (mReplayLayout != null) {
+                    mReplayLayout.setVisibility(View.GONE);
+                }
             }
         });
 
@@ -723,6 +780,13 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             @Override
             public void onClick(View view) {
                 Log.e("ddd", "btnReplaySelected");
+                if (mAdapter != null) {
+                    Set<AbstractChatItem> messages = mAdapter.getSelectedItems();
+                    // replay works if only one message selected
+                    if (messages.size() > 0 && messages.size() <= 1) {
+                        inflateReplayLayoutIntoStub(messages.iterator().next());
+                    }
+                }
             }
         });
 
@@ -742,6 +806,10 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             @Override
             public void onClick(View view) {
                 Log.e("ddd", "btnForwardSelected");
+                // forward selected messages to room list for selecting room
+                if (mAdapter != null && mAdapter.getSelectedItems().size() > 0) {
+                    startActivity(makeIntentForForwardMessages(getMessageStructFromSelectedItems()));
+                }
             }
         });
 
@@ -763,6 +831,14 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
         ll_AppBarSelected = (LinearLayout) findViewById(R.id.chl_ll_appbar_selelected);
 
+    }
+
+    private ArrayList<StructMessageInfo> getMessageStructFromSelectedItems() {
+        ArrayList<StructMessageInfo> messageInfos = new ArrayList<>(mAdapter.getSelectedItems().size());
+        for (AbstractChatItem item : mAdapter.getSelectedItems()) {
+            messageInfos.add(item.mMessage);
+        }
+        return messageInfos;
     }
 
     private void initLayotChannelFooter() {

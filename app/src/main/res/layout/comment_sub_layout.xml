@@ -6,6 +6,11 @@
     android:orientation="vertical">
 
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#e1dfdf" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,7 +27,7 @@
 
             <View
                 android:id="@+id/csl_vertical_line_gray"
-                android:layout_width="1px"
+                android:layout_width="2px"
                 android:layout_height="match_parent"
                 android:background="#e1dfdf" />
 
@@ -30,7 +35,11 @@
                 android:id="@+id/csl_img_comment_sender_picture"
                 android:layout_width="@dimen/dp48"
                 android:layout_height="@dimen/dp48"
-                android:layout_margin="@dimen/dp8"
+                android:layout_marginTop="@dimen/dp12"
+                android:layout_marginBottom="@dimen/dp12"
+                android:layout_marginLeft="@dimen/dp16"
+                android:layout_marginRight="@dimen/dp16"
+
                 android:src="@mipmap/c" />
 
 
@@ -38,13 +47,14 @@
                 android:id="@+id/csl_txt_message"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp12"
+                android:layout_marginTop="@dimen/dp18"
                 android:layout_weight="1"
                 android:ellipsize="end"
                 android:maxLines="2"
+                android:textColor="@color/gray_4c"
                 android:paddingBottom="@dimen/dp8"
                 android:text="New Text"
-                android:textSize="@dimen/sp16" />
+                android:textSize="@dimen/sp14" />
 
 
             <LinearLayout
@@ -59,8 +69,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
-                    android:text="agu 23"
-                    android:textSize="@dimen/sp14" />
+                    android:text="Agu 23"
+                    android:textColor="@color/gray_9d"
+                    android:textSize="@dimen/sp10" />
 
                 <TextView
                     android:id="@+id/csl_txt_clock"
@@ -68,8 +79,9 @@
                     android:layout_height="wrap_content"
                     android:paddingBottom="@dimen/dp8"
                     android:singleLine="true"
+                    android:textColor="@color/gray_9d"
                     android:text="23:14"
-                    android:textSize="@dimen/sp14" />
+                    android:textSize="@dimen/sp10" />
             </LinearLayout>
 
 
