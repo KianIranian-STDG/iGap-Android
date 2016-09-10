@@ -60,8 +60,10 @@
         <activity
             android:name=".activitys.ActivityIntroduce"
             android:configChanges="keyboard|keyboardHidden|screenSize|locale">
-
-
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".activitys.ActivityProfile"
@@ -81,15 +83,11 @@
 
         </activity>
 
-        <activity android:name=".activitys.ActivityContactsProfile">
+        <activity android:name=".activitys.ActivityContactsProfile"></activity>
+        <activity
+            android:name=".activitys.ActivitySelectChat"
+            android:label="@string/select_room" />
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-        </activity>
-        <activity android:name=".activitys.ActivitySelectChat" android:label="@string/select_room" />
         <receiver android:name=".module.IncomingSms" />
         <receiver android:name="com.iGap.module.ReceiverInternet">
             <intent-filter>
