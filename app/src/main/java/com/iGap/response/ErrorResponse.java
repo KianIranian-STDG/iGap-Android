@@ -31,6 +31,11 @@ public class ErrorResponse extends MessageHandler {
 
     @Override
     public void error() {
-
+        Log.i("SOC", "1ErrorResponse");
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        double majorCode = errorResponse.getMajorCode();
+        double minorCode = errorResponse.getMinorCode();
+        Log.i("SOC", "1majorCode : " + majorCode);
+        Log.i("SOC", "1minorCode : " + minorCode);
     }
 }

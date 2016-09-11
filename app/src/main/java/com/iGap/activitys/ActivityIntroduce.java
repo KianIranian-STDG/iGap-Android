@@ -58,7 +58,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
 
     private JustifiedTextView justifiedTextView;
 
-    private String isoCode = null, countryName, pattern, regex, body = null;
+    private String isoCode = "", countryName = "", pattern = "", regex = "", body = null;
     private int callingCode;
 
 
@@ -367,7 +367,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
             @Override
             public void run() {
                 if (G.internetConnection) {
-                    if (isoCode != null & (body != null || !locationFound) & enableRegistration) {
+                    if (body != null & enableRegistration & (!isoCode.equals("") || !locationFound)) {
                         enableRegistration = false;
                         Intent intent = new Intent(G.context, ActivityRegister.class);
                         intent.putExtra("ISO_CODE", isoCode);

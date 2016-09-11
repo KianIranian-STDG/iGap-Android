@@ -73,9 +73,9 @@ public class ActivityRegister extends ActivityEnhanced {
 
     public static MaskedEditText edtPhoneNumber;
 
-    private TextView txtAgreement_register, txtTitleToolbar , txtTitleRegister,txtDesc , txtTitleAgreement;
+    private TextView txtAgreement_register, txtTitleToolbar, txtTitleRegister, txtDesc, txtTitleAgreement;
     private ProgressBar rg_prg_verify_connect, rg_prg_verify_sms, rg_prg_verify_generate, rg_prg_verify_register;
-    private TextView rg_txt_verify_connect, rg_txt_verify_sms, rg_txt_verify_generate, rg_txt_verify_register, txtTimer ;
+    private TextView rg_txt_verify_connect, rg_txt_verify_sms, rg_txt_verify_generate, rg_txt_verify_register, txtTimer;
     private ImageView rg_img_verify_connect, rg_img_verify_sms, rg_img_verify_generate, rg_img_verify_register;
     private ViewGroup layout_agreement;
     private ViewGroup layout_verify;
@@ -389,8 +389,7 @@ public class ActivityRegister extends ActivityEnhanced {
             @Override
             public void onClick(View v) {
 
-                if (regex != null && edtPhoneNumber.getText().toString().replace("-", "").matches(regex)) {
-//                if (edtPhoneNumber.getText().toString().length() > 0) {
+                if (edtPhoneNumber.getText().toString().length() > 0 && !regex.equals("") && edtPhoneNumber.getText().toString().replace("-", "").matches(regex)) {
 
                     phoneNumber = edtPhoneNumber.getText().toString();
 
@@ -455,7 +454,7 @@ public class ActivityRegister extends ActivityEnhanced {
             edtCodeNumber.setText("+" + extras.getInt("CALLING_CODE"));
             btnChoseCountry.setText(extras.getString("COUNTRY_NAME"));
             String pattern = extras.getString("PATTERN");
-            if (pattern != null) {
+            if (!pattern.equals("")) {
                 edtPhoneNumber.setMask(pattern.replace("X", "#").replace(" ", "-"));
             }
             regex = extras.getString("REGEX");
@@ -463,6 +462,7 @@ public class ActivityRegister extends ActivityEnhanced {
             if (body != null & txtAgreement_register != null) { //TODO [Saeed Mozaffari] [2016-09-01 9:28 AM] - txtAgreement_register !=null is wrong. change it
                 txtAgreement_register.setText(Html.fromHtml(body));
             }
+
         }
 
         int portrait_landscape = getResources().getConfiguration().orientation;

@@ -288,7 +288,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
     }
 
 
-    private void muteNotification(final int position, final ChatItem item) {
+    private void muteNotification(final ChatItem item) {
         Realm realm = Realm.getDefaultInstance();
 
         item.mInfo.muteNotification = !item.mInfo.muteNotification;
@@ -298,13 +298,13 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                 realm.where(RealmRoom.class).equalTo("id", item.getInfo().chatId).findFirst().setMute(item.mInfo.muteNotification);
             }
         });
-        mAdapter.notifyAdapterItemChanged(position);
+        mAdapter.notifyAdapterItemChanged(mAdapter.getAdapterPosition(item));
 
         realm.close();
     }
 
-    private void clearHistory(int position, ChatItem item) {
-        final ChatItem chatInfo = mAdapter.getAdapterItem(position);
+    private void clearHistory(ChatItem item) {
+        final ChatItem chatInfo = mAdapter.getAdapterItem(mAdapter.getPosition(item));
         final long chatId = chatInfo.mInfo.chatId;
 
         // make request for clearing messages
@@ -317,12 +317,27 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         realm.close();
     }
 
-    private void deleteChat(final int position, final ChatItem item) {
+    private void deleteChat(final ChatItem item) {
         G.onChatDelete = new OnChatDelete() {
             @Override
             public void onChatDelete(long roomId) {
                 Log.i("RRR", "onChatDelete 1");
-                mAdapter.remove(mAdapter.getPosition(item));
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapter.remove(mAdapter.getPosition(item));
+                        Realm realm = Realm.getDefaultInstance();
+                        realm.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                realm.where(RealmRoom.class).equalTo("id", item.getInfo().chatId).findFirst().deleteFromRealm();
+                                realm.where(RealmChatHistory.class).equalTo("roomId", item.getInfo().chatId).findAll().deleteAllFromRealm();
+                            }
+                        });
+                        realm.close();
+                    }
+                });
+
                 Log.i("RRR", "onChatDelete 2");
 
 //                for (ChatItem chatItem : mAdapter.getAdapterItems()) {
@@ -349,13 +364,13 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
     private void onSelectRoomMenu(String message, int position, ChatItem item) {
         switch (message) {
             case "txtMuteNotification":
-                muteNotification(position, item);
+                muteNotification(item);
                 break;
             case "txtClearHistory":
-                clearHistory(position, item);
+                clearHistory(item);
                 break;
             case "txtDeleteChat":
-                deleteChat(position, item);
+                deleteChat(item);
                 break;
         }
     }
