@@ -13,7 +13,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.text.InputType;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,9 +28,12 @@ import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.interface_package.OnUserProfileSetNickNameResponse;
 import com.iGap.module.HelperDecodeFile;
 import com.iGap.module.SHP_SETTING;
+import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmUserInfo;
+import com.iGap.request.RequestUserProfileSetNickname;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
@@ -133,6 +135,23 @@ public class ActivitySetting extends ActivityEnhanced {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
+                                G.onUserProfileSetNickNameResponse = new OnUserProfileSetNickNameResponse() {
+                                    @Override
+                                    public void onUserProfileNickNameResponse(final String nickName, ProtoResponse.Response response) {
+
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Realm realm1 = Realm.getDefaultInstance();
+                                                realm1.where(RealmUserInfo.class).findFirst().setNickName(nickName);
+                                                realm1.close();
+                                                txtNickName.setText(nickName);
+                                            }
+                                        });
+                                    }
+                                };
+
+                                new RequestUserProfileSetNickname().userProfileNickName(txtNickName.getText().toString());
 
                             }
                         })
@@ -157,7 +176,6 @@ public class ActivitySetting extends ActivityEnhanced {
                             }
 
                         }).show();
-                Log.i("ZZCC", "onInput: " + dialog.getInputEditText());
 
             }
         });
@@ -174,6 +192,8 @@ public class ActivitySetting extends ActivityEnhanced {
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                                //TODO [Saeed Mozaffari] [2016-09-10 3:51 PM] - waiting for proto
 
                             }
                         })
@@ -199,81 +219,6 @@ public class ActivitySetting extends ActivityEnhanced {
                         }).show();
             }
         });
-
-//        txtNickName.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//
-//            }
-//
-//            @Override
-//            public void afterTextChanged(final Editable editable) {
-//
-//
-//                realm.executeTransaction(new Realm.Transaction() {
-//                    @Override
-//                    public void execute(Realm realm) {
-//
-//                        if (!editable.toString().equals("")) {
-//                            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-//                            userInfo.setNickName(editable.toString());
-//                            txtNickNameTitle.setText(nickName);
-//                        }
-//                    }
-//                });
-//            }
-//        });
-
-//        txtUserName.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//
-//            }
-//
-//            @Override
-//            public void afterTextChanged(final Editable editable) {
-//
-//                realm.executeTransaction(new Realm.Transaction() {
-//                    @Override
-//                    public void execute(Realm realm) {
-//
-//                    }
-//                });
-//            }
-//        });
-
-//        txtPhoneNumber.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(final CharSequence charSequence, int i, int i1, int i2) {
-//            }
-//
-//            @Override
-//            public void afterTextChanged(final Editable editable) {
-//
-//                realm.executeTransaction(new Realm.Transaction() {
-//                    @Override
-//                    public void execute(Realm realm) {
-//
-//                    }
-//                });
-//
-//            }
-//        });
 
         appBarLayout = (AppBarLayout) findViewById(R.id.st_appbar);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
@@ -401,28 +346,21 @@ public class ActivitySetting extends ActivityEnhanced {
                 }
             });
 
-        } else {
-            circleImageView.setImageResource(R.mipmap.b);
+        } else {//TODO [Saeed Mozaffari] [2016-09-10 4:22 PM] - waiting for proto , for get initials and color
+            circleImageView.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp60), "H", "#7f7f7f"));
         }
 
 
         textLanguage = sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, "English");
         if (textLanguage.equals("English")) {
             poRbDialogLangouage = 0;
-            Toast.makeText(ActivitySetting.this, "" + poRbDialogTextSize, Toast.LENGTH_SHORT).show();
         } else if (textLanguage.equals("فارسی")) {
             poRbDialogLangouage = 1;
-            Toast.makeText(ActivitySetting.this, "" + poRbDialogTextSize, Toast.LENGTH_SHORT).show();
-
         } else if (textLanguage.equals("العربی")) {
             poRbDialogLangouage = 2;
-            Toast.makeText(ActivitySetting.this, "" + poRbDialogTextSize, Toast.LENGTH_SHORT).show();
-
         } else if (textLanguage.equals("Deutsch")) {
             poRbDialogLangouage = 3;
-            Toast.makeText(ActivitySetting.this, "" + poRbDialogTextSize, Toast.LENGTH_SHORT).show();
         }
-
 
         txtLanguage = (TextView) findViewById(R.id.st_txt_language);
         txtLanguage.setText(textLanguage);
@@ -565,14 +503,12 @@ public class ActivitySetting extends ActivityEnhanced {
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                Toast.makeText(ActivitySetting.this, "ForEver", Toast.LENGTH_SHORT).show();
                             }
                         })
                         .negativeText("1WEEk")
                         .onNegative(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                Toast.makeText(ActivitySetting.this, "1WEEk", Toast.LENGTH_SHORT).show();
                             }
                         })
                         .show();

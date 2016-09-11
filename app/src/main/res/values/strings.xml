@@ -164,6 +164,7 @@
     <string name="st_title_general">General</string>
     <string name="st_username">UserName:</string>
     <string name="st_nickname">Nickname:</string>
+    <string name="st_contactName">Contact Name:</string>
     <string name="st_phoneNumber">Phone Number:</string>
     <string name="st_title_info">Info</string>
     <string name="st_title_notification_sounds">Notification and Sounds</string>

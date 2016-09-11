@@ -21,7 +21,7 @@ public class UserProfileSetEmailResponse extends MessageHandler {
     @Override
     public void handler() {
         ProtoUserProfileEmail.UserProfileSetEmailResponse.Builder userProfileEmail = (ProtoUserProfileEmail.UserProfileSetEmailResponse.Builder) message;
-        G.onUserProfileEmailResponse.onUserProfileEmailResponse(userProfileEmail.getEmail(), userProfileEmail.getResponse());
+        G.onUserProfileSetEmailResponse.onUserProfileEmailResponse(userProfileEmail.getEmail(), userProfileEmail.getResponse());
     }
 
     @Override

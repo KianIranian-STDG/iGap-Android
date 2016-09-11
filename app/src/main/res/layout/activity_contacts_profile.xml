@@ -173,7 +173,7 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="@dimen/dp4"
                         android:paddingStart="@dimen/dp4"
-                        android:text="@string/st_nickname"
+                        android:text="@string/st_contactName"
                         android:textColor="@color/st_title_s"
                         android:textSize="@dimen/sp18"
                         android:textStyle="bold" />

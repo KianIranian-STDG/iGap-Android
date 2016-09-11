@@ -51,7 +51,7 @@
     </style>
 
 
-    <style name="MySearch" parent="android:Theme.Holo.Light.DarkActionBar" >
+    <style name="MySearch" parent="android:Theme.Holo.Light.DarkActionBar">
         <item name="android:editTextColor">@color/black_register</item>
         <item name="android:textColorHint">@color/text_verify</item>
         <item name="colorAccent">@color/toolbar_background</item>

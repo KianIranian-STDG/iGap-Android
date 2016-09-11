@@ -81,7 +81,6 @@ public class ChatItem extends AbstractItem<ChatItem, ChatItem.ViewHolder> {
         if (mInfo.imageSource.length() > 0) {
             holder.image.setImageResource(Integer.parseInt(mInfo.imageSource));
         } else {
-//            holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), mInfo.chatTitle, ""));
             holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), mInfo.initials, mInfo.color));
         }
 

@@ -31,6 +31,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.interface_package.OnUserContactEdit;
 import com.iGap.realm.RealmContacts;
 
 import java.io.ByteArrayOutputStream;
@@ -113,6 +114,13 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                                G.onUserContactEdit = new OnUserContactEdit() {
+                                    @Override
+                                    public void onContactEdit() {
+
+                                    }
+                                };
 
                                 //change Nickname on realm
                                 final RealmContacts realmUser = realm.where(RealmContacts.class).equalTo("id", userId).findFirst();

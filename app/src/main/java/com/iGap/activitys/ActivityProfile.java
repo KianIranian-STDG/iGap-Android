@@ -84,7 +84,7 @@ public class ActivityProfile extends ActivityEnhanced {
                         public void execute(Realm realm) {
                             final RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
 
-                            G.onUserProfileNickNameResponse = new OnUserProfileSetNickNameResponse() {
+                            G.onUserProfileSetNickNameResponse = new OnUserProfileSetNickNameResponse() {
                                 @Override
                                 public void onUserProfileNickNameResponse(final String nickName, ProtoResponse.Response response) {
                                     Intent intent = new Intent(G.context, ActivityMain.class);
