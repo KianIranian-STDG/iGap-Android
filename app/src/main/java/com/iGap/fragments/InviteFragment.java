@@ -40,11 +40,11 @@ import java.util.List;
 
 import io.realm.Realm;
 
-public class ContactsFragment extends Fragment {
+public class InviteFragment extends Fragment {
     private FastAdapter fastAdapter;
 
-    public static ContactsFragment newInstance() {
-        return new ContactsFragment();
+    public static InviteFragment newInstance() {
+        return new InviteFragment();
     }
 
     @Nullable
@@ -88,7 +88,7 @@ public class ContactsFragment extends Fragment {
         final TextView menu_txt_titleToolbar = (TextView) view.findViewById(R.id.menu_txt_titleToolbar);
         menu_txt_titleToolbar.setText(title);
 
-        final android.support.v7.widget.SearchView searchView = (android.support.v7.widget.SearchView) view.findViewById(R.id.menu_edtSearch);
+        final SearchView searchView = (SearchView) view.findViewById(R.id.menu_edtSearch);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {

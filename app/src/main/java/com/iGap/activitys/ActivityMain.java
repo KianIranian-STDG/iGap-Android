@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,6 +24,7 @@ import com.iGap.helper.HelperRealm;
 import com.iGap.interface_package.IActionClick;
 import com.iGap.interface_package.IOpenDrawer;
 import com.iGap.interface_package.OnChatClearMessageResponse;
+import com.iGap.interface_package.OnChatDelete;
 import com.iGap.interface_package.OnChatSendMessageResponse;
 import com.iGap.interface_package.OnChatUpdateStatusResponse;
 import com.iGap.interface_package.OnClientGetRoomListResponse;
@@ -42,6 +44,7 @@ import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmChatHistory;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.enums.RoomType;
+import com.iGap.request.RequestChatDelete;
 import com.iGap.request.RequestClientGetRoomList;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
@@ -149,7 +152,6 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
 
         arcMenu = (ArcMenu) findViewById(R.id.ac_arc_button_add);
 
-
         arcMenu.setStateChangeListener(new StateChangeListener() {
             @Override
             public void onMenuOpened() {
@@ -168,11 +170,20 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         btnStartNewChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                isMenuButtonAddShown = true;
 
-                if (!mLeftDrawerLayout.isShownMenu()) {
-                    mLeftDrawerLayout.toggle(Utils.dpToPx(getApplicationContext(), R.dimen.dp280));
-                }
+                Fragment fragment = ContactsFragment.newInstance();
+                Bundle bundle = new Bundle();
+                bundle.putString("TITLE", "New Chat");
+                fragment.setArguments(bundle);
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
+
+                arcMenu.toggleMenu();
+
+//                isMenuButtonAddShown = true;
+//
+//                if (!mLeftDrawerLayout.isShownMenu()) {
+//                    mLeftDrawerLayout.toggle(Utils.dpToPx(getApplicationContext(), R.dimen.dp280));
+//                }
             }
         });
 
@@ -180,6 +191,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         btnCreateNewGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                arcMenu.toggleMenu();
             }
         });
 
@@ -187,6 +199,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         btnCreateNewChannel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                arcMenu.toggleMenu();
             }
         });
 
@@ -275,14 +288,22 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
     }
 
 
-    private void muteNotification(int position, ChatItem item) {
-        Log.e("fff", " txtMuteNotification " + position);
+    private void muteNotification(final int position, final ChatItem item) {
+        Realm realm = Realm.getDefaultInstance();
 
         item.mInfo.muteNotification = !item.mInfo.muteNotification;
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.where(RealmRoom.class).equalTo("id", item.getInfo().chatId).findFirst().setMute(item.mInfo.muteNotification);
+            }
+        });
+        mAdapter.notifyAdapterItemChanged(position);
+
+        realm.close();
     }
 
-    private void clearHistory(int position) {
-        Log.e("fff", " txtClearHistory " + position);
+    private void clearHistory(int position, ChatItem item) {
         final ChatItem chatInfo = mAdapter.getAdapterItem(position);
         final long chatId = chatInfo.mInfo.chatId;
 
@@ -296,8 +317,27 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         realm.close();
     }
 
-    private void deleteChat(int position) {
-        Log.e("fff", " txtDeleteChat " + position);
+    private void deleteChat(final int position, final ChatItem item) {
+        G.onChatDelete = new OnChatDelete() {
+            @Override
+            public void onChatDelete(long roomId) {
+                Log.i("RRR", "onChatDelete 1");
+                mAdapter.remove(mAdapter.getPosition(item));
+                Log.i("RRR", "onChatDelete 2");
+
+//                for (ChatItem chatItem : mAdapter.getAdapterItems()) {
+//                    Log.i("RRR", "onChatDelete 2");
+//                    if (chatItem.getInfo().chatId == roomId) {
+//                        Log.i("RRR", "onChatDelete 3");
+//                        mAdapter.remove(position);
+//                        Log.i("RRR", "onChatDelete 4");
+//                        break;
+//                    }
+//                }
+            }
+        };
+        Log.i("RRR", "onChatDelete 0 start delete");
+        new RequestChatDelete().chatDelete(item.getInfo().chatId);
     }
 
     /**
@@ -312,10 +352,10 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                 muteNotification(position, item);
                 break;
             case "txtClearHistory":
-                clearHistory(position);
+                clearHistory(position, item);
                 break;
             case "txtDeleteChat":
-                deleteChat(position);
+                deleteChat(position, item);
                 break;
         }
     }
@@ -772,7 +812,11 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
     @Override
     public void onActionSearchClick() {
         // close drawer and replace contacts fragment with main activity layout
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, ContactsFragment.newInstance()).commit();
+        Fragment fragment = ContactsFragment.newInstance();
+        Bundle bundle = new Bundle();
+        bundle.putString("TITLE", "Contacts");
+        fragment.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
         mLeftDrawerLayout.closeDrawer();
     }
 

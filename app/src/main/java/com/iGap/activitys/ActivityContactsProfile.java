@@ -32,6 +32,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.interface_package.OnUserContactEdit;
+import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmContacts;
 
 import java.io.ByteArrayOutputStream;
@@ -48,6 +49,9 @@ public class ActivityContactsProfile extends ActivityEnhanced {
     private long lastSeen;
     private String initials;
     private String color;
+    private String enterFrom;
+
+    private boolean showNumber = true;
 
     private AppBarLayout appBarLayout;
 
@@ -66,6 +70,7 @@ public class ActivityContactsProfile extends ActivityEnhanced {
 
         Bundle extras = getIntent().getExtras();
         userId = extras.getLong("peerId");
+        enterFrom = extras.getString("enterFrom");
 
         RealmContacts realmUser = realm.where(RealmContacts.class).equalTo("id", userId).findFirst();
 
@@ -76,6 +81,11 @@ public class ActivityContactsProfile extends ActivityEnhanced {
             lastSeen = realmUser.getLast_seen();
             color = realmUser.getColor();
             initials = realmUser.getInitials();
+        }
+
+        RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo("phone", phone).findFirst();
+        if (realmContacts == null && enterFrom.equals(ProtoGlobal.Room.Type.GROUP.toString())) {
+            showNumber = false;
         }
 
         imgUser = (CircleImageView) findViewById(R.id.chi_img_circleImage);
@@ -169,6 +179,10 @@ public class ActivityContactsProfile extends ActivityEnhanced {
         txtPhoneNumber.setText("" + phone);
 
         vgPhoneNumber = (ViewGroup) findViewById(R.id.chi_layout_phoneNumber);
+        if (!showNumber) {
+            vgPhoneNumber.setVisibility(View.GONE);
+        }
+
         vgSharedMedia = (ViewGroup) findViewById(R.id.chi_layout_SharedMedia);
 
         titleToolbar = (TextView) findViewById(R.id.chi_txt_titleToolbar_DisplayName);

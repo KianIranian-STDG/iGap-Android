@@ -37,6 +37,11 @@ public class ChatItem extends AbstractItem<ChatItem, ChatItem.ViewHolder> {
         return this;
     }
 
+    public StructChatInfo getInfo() {
+        return mInfo;
+    }
+
+
     @Override
     public int getType() {
         return 0;

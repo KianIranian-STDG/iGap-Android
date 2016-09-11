@@ -44,11 +44,13 @@ public class ActivityIntroduce extends ActivityEnhanced {
     private boolean isOne2 = true;
     private boolean isOne3 = true;
     private boolean isOne4 = true;
+    private boolean locationFound;
+    private boolean registrationTry;
+    private boolean enableRegistration = true;
 
     private ImageView logoIgap, logoSecurity, logoChat, transfer, boy;
 
-    private TextView txt_i_p1_l1, txt_p1_l1, txt_p1_l2, txt_p1_l3, txt_p2_l1, txt_p2_l2, txt_p3_l1, txt_p3_l2, txt_p4_l1, txt_p4_l2
-            , txt_p5_l1, txt_p5_l2 , txtSkip;
+    private TextView txt_i_p1_l1, txt_p1_l1, txt_p1_l2, txt_p1_l3, txt_p2_l1, txt_p2_l2, txt_p3_l1, txt_p3_l2, txt_p4_l1, txt_p4_l2, txt_p5_l1, txt_p5_l2, txtSkip;
 
     private Button btnStart;
 
@@ -75,7 +77,13 @@ public class ActivityIntroduce extends ActivityEnhanced {
 
         setContentView(R.layout.activity_introduce);
 
-        getInfo();
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getInfo();
+            }
+        }, 30000);
+
 
         layout_test = (ViewGroup) findViewById(R.id.int_layout_test);
 
@@ -183,41 +191,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (G.internetConnection) {
-                            if (isoCode != null & body != null) {
-                                Intent intent = new Intent(G.context, ActivityRegister.class);
-                                intent.putExtra("ISO_CODE", isoCode);
-                                intent.putExtra("CALLING_CODE", callingCode);
-                                intent.putExtra("COUNTRY_NAME", countryName);
-                                intent.putExtra("PATTERN", pattern);
-                                intent.putExtra("REGEX", regex);
-                                intent.putExtra("TERMS_BODY", body);
-                                startActivity(intent);
-                                finish();
-                            } else {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(G.context, "waiting fot get info", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                                getInfo();
-                            }
-                        } else {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(G.context, "check your internet connection", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
-                    }
-                });
-                thread.start();
+                startRegistration();
             }
         });
 
@@ -225,42 +199,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
         txtSkip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (G.internetConnection) {
-                            if (isoCode != null & body != null) {
-                                Intent intent = new Intent(G.context, ActivityRegister.class);
-                                intent.putExtra("ISO_CODE", isoCode);
-                                intent.putExtra("CALLING_CODE", callingCode);
-                                intent.putExtra("COUNTRY_NAME", countryName);
-                                intent.putExtra("PATTERN", pattern);
-                                intent.putExtra("REGEX", regex);
-                                intent.putExtra("TERMS_BODY", body);
-                                startActivity(intent);
-                                finish();
-                            } else {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(G.context, "waiting fot get info", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                                getInfo();
-                            }
-                        } else {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(G.context, "check your internet connection", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
-                    }
-                });
-                thread.start();
-
+                startRegistration();
             }
         });
 
@@ -422,13 +361,52 @@ public class ActivityIntroduce extends ActivityEnhanced {
         realm.close();
     }
 
+    private void startRegistration() {
+        registrationTry = true;
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (G.internetConnection) {
+                    if (isoCode != null & (body != null || !locationFound) & enableRegistration) {
+                        enableRegistration = false;
+                        Intent intent = new Intent(G.context, ActivityRegister.class);
+                        intent.putExtra("ISO_CODE", isoCode);
+                        intent.putExtra("CALLING_CODE", callingCode);
+                        intent.putExtra("COUNTRY_NAME", countryName);
+                        intent.putExtra("PATTERN", pattern);
+                        intent.putExtra("REGEX", regex);
+                        intent.putExtra("TERMS_BODY", body);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(G.context, "waiting fot get info", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        getInfo();
+                    }
+                } else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(G.context, "check your internet connection", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        });
+        thread.start();
+    }
+
     private void getInfo() {
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (G.isSecure) {
                     getTermsOfServiceBody();
-                    getInfoLocation();
+                    //getInfoLocation();
                 } else {
                     getInfo();
                 }
@@ -441,11 +419,26 @@ public class ActivityIntroduce extends ActivityEnhanced {
         G.onReceiveInfoLocation = new OnReceiveInfoLocation() {
             @Override
             public void onReceive(String isoCodeR, final int callingCodeR, final String countryNameR, String patternR, String regexR) {
+                locationFound = true;
                 isoCode = isoCodeR;
                 callingCode = callingCodeR;
                 countryName = countryNameR;
                 pattern = patternR;
                 regex = regexR;
+                autoRegistration();
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+                if (majorCode == 500 && minorCode == 1) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            locationFound = false;
+                            Toast.makeText(G.context, "Location Not Found", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             }
         };
 
@@ -458,10 +451,24 @@ public class ActivityIntroduce extends ActivityEnhanced {
             @Override
             public void onReceivePageInfo(final String bodyR) {
                 body = bodyR;
+                getInfoLocation();
             }
         };
 
         new RequestInfoPage().infoPage("TOS");
+    }
+
+    private void autoRegistration() { // if before user try for registration now after get data automatically go to registration page
+        if (registrationTry & enableRegistration) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    locationFound = false;
+                    Toast.makeText(G.context, "autoRegistration", Toast.LENGTH_SHORT).show();
+                }
+            });
+            startRegistration();
+        }
     }
 
     private void animationInPage1(final ImageView logo, final ViewGroup txt1, final TextView txt2, final TextView txt3) {

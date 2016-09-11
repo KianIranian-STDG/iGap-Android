@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.iGap.helper.HelperCheckInternetConnection;
 import com.iGap.helper.HelperFillLookUpClass;
+import com.iGap.interface_package.OnChatDelete;
 import com.iGap.interface_package.OnChatDeleteMessageResponse;
 import com.iGap.interface_package.OnChatEditMessageResponse;
 import com.iGap.interface_package.OnChatGetRoom;
@@ -153,6 +154,7 @@ public class G extends Application {
     public static OnChatGetRoom onChatGetRoom;
     public static OnChatEditMessageResponse onChatEditMessageResponse;
     public static OnChatDeleteMessageResponse onChatDeleteMessageResponse;
+    public static OnChatDelete onChatDelete;
     public static OnUserUsernameToId onUserUsernameToId;
     public static OnUserProfileGetEmail onUserProfileGetEmail;
     public static OnUserProfileGetGender onUserProfileGetGender;

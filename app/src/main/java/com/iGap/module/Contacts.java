@@ -31,12 +31,12 @@ public class Contacts {
 
         RealmResults<RealmContacts> contacts;
         if (filter == null) {
-            contacts = realm.where(RealmContacts.class).findAll();
+            contacts = realm.where(RealmContacts.class).findAllSorted("display_name");
         } else {
             contacts = realm
                     .where(RealmContacts.class)
                     .contains("display_name", filter)
-                    .findAll();
+                    .findAllSorted("display_name");
         }
 
         String lastHeader = "";

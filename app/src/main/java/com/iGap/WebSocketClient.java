@@ -1,6 +1,7 @@
 package com.iGap;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import com.iGap.response.HandleResponse;
 import com.neovisionaries.ws.client.WebSocket;
@@ -74,10 +75,15 @@ public class WebSocketClient {
                 @Override
                 public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
                     Log.i("SOC_WebSocket", "onConnected");
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(G.context, "Connect", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                     checkFirstResponse();
                     super.onConnected(websocket, headers);
                 }
-
 
                 @Override
                 public void onBinaryMessage(WebSocket websocket, final byte[] binary) throws Exception {
@@ -196,6 +202,12 @@ public class WebSocketClient {
     private static void reconnect() {
 
         if (G.allowForConnect) {
+            G.handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(G.context, "Disconnect", Toast.LENGTH_SHORT).show();
+                }
+            });
             resetWebsocketInfo();
             G.handler.postDelayed(new Runnable() {
                 @Override

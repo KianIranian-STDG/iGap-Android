@@ -112,9 +112,7 @@ public class FragmentDrawerMenu extends MenuFragment {
 
             @Override
             public void onClick(View view) {
-                if (mActionClickListener != null) {
-                    mActionClickListener.onActionSearchClick();
-                }
+
             }
         });
 

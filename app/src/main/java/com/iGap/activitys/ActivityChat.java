@@ -436,9 +436,10 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         imvUserPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (chatType == ProtoGlobal.Room.Type.CHAT && chatPeerId != 134) {//TODO [Saeed Mozaffari] [2016-09-07 11:46 AM] -  in if eshtebah ast check for iGap message ==> chatPeerId == 134(alan baraye check kardane)
+                if (chatType == ProtoGlobal.Room.Type.CHAT && chatPeerId != 134) {//TODO [Saeed Mozaffari] [2016-09-07 11:46 AM] -  in if eshtebah ast check for iGap message ==> chatPeerId == 134(alan baraye check kardane) , waiting for userDetail proto
                     Intent intent = new Intent(G.context, ActivityContactsProfile.class);
                     intent.putExtra("peerId", chatPeerId);
+                    intent.putExtra("enterFrom", ProtoGlobal.Room.Type.CHAT.toString());
                     startActivity(intent);
                 }
 
