@@ -90,8 +90,8 @@
 
             <com.iGap.module.CircleImageView
                 android:id="@+id/chl_imv_user_picture"
-                android:layout_width="@dimen/dp60"
-                android:layout_height="@dimen/dp60"
+                android:layout_width="@dimen/dp52"
+                android:layout_height="@dimen/dp52"
                 android:padding="@dimen/dp6"
                 android:src="@mipmap/h" />
 

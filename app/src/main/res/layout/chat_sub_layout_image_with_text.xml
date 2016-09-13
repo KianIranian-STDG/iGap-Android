@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/chatSubLayoutImageWithText"
+    android:id="@+id/chatSubLayoutImage"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layoutDirection="ltr"
@@ -46,9 +46,10 @@
 
                 </LinearLayout>
 
-                <FrameLayout
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
                     <ImageView
                         android:id="@+id/shli_imv_image"
@@ -59,44 +60,49 @@
                         android:scaleType="centerCrop"
                         android:src="@mipmap/c" />
 
-                    <RelativeLayout
+                    <TextView
+                        android:id="@+id/cslr_txt_message"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="bottom|right">
+                        android:layout_gravity="right"
+                        android:maxWidth="@dimen/dp300"
+                        android:paddingRight="@dimen/dp4"
+                        android:paddingTop="@dimen/dp4"
+                        android:text="TEST TEXT"
+                        android:textColor="@android:color/black"
+                        android:textSize="@dimen/sp16" />
 
-                        <LinearLayout
-                            android:id="@+id/cslr_ll_time"
+                    <LinearLayout
+                        android:id="@+id/cslr_ll_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|right"
+                        android:layout_marginRight="@dimen/dp4"
+                        android:gravity="bottom|left"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/dp4">
+
+                        <TextView
+                            android:id="@+id/cslr_txt_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="bottom|right"
+                            android:text="10:21"
+                            android:textColor="@android:color/black"
+                            android:textSize="@dimen/sp12" />
+
+                        <TextView
+                            android:id="@+id/cslr_txt_tic"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="@dimen/dp4"
                             android:layout_marginRight="@dimen/dp4"
-                            android:background="@android:color/black"
-                            android:gravity="bottom|left"
-                            android:orientation="horizontal"
-                            android:padding="@dimen/dp4">
+                            android:gravity="bottom"
+                            android:text="@string/fa_clock_o"
+                            android:textColor="@color/green"
+                            android:textSize="@dimen/sp16" />
 
-                            <TextView
-                                android:id="@+id/cslr_txt_time"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="10:21"
-                                android:textColor="@android:color/white"
-                                android:textSize="@dimen/sp12" />
-
-                            <TextView
-                                android:id="@+id/cslr_txt_tic"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:layout_marginLeft="@dimen/dp4"
-                                android:layout_marginRight="@dimen/dp4"
-                                android:gravity="bottom"
-                                android:text="@string/fa_clock_o"
-                                android:textColor="@color/green"
-                                android:textSize="@dimen/sp16" />
-
-                        </LinearLayout>
-                    </RelativeLayout>
-                </FrameLayout>
+                    </LinearLayout>
+                </LinearLayout>
 
             </LinearLayout>
 

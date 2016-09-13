@@ -36,8 +36,10 @@ import com.iGap.adapter.items.chat.ChannelVideoItem;
 import com.iGap.adapter.items.chat.ChannelVoiceItem;
 import com.iGap.adapter.items.chat.FileItem;
 import com.iGap.adapter.items.chat.ImageItem;
+import com.iGap.adapter.items.chat.ImageWithTextItem;
 import com.iGap.adapter.items.chat.MessageItem;
 import com.iGap.adapter.items.chat.VideoItem;
+import com.iGap.adapter.items.chat.VideoWithTextItem;
 import com.iGap.adapter.items.chat.VoiceItem;
 import com.iGap.helper.Emojione;
 import com.iGap.helper.HelperProtoBuilder;
@@ -396,17 +398,29 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     }
                     break;
                 case IMAGE:
-                case IMAGE_TEXT:
                     if (chatType == ProtoGlobal.Room.Type.CHAT) {
                         mAdapter.add(new ImageItem().setMessage(messageInfo).withIdentifier(identifier));
                     } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
                         mAdapter.add(new ChannelImageItem().setMessage(messageInfo).withIdentifier(identifier));
                     }
                     break;
+                case IMAGE_TEXT:
+                    if (chatType == ProtoGlobal.Room.Type.CHAT) {
+                        mAdapter.add(new ImageWithTextItem().setMessage(messageInfo).withIdentifier(identifier));
+                    } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
+                        mAdapter.add(new ChannelImageItem().setMessage(messageInfo).withIdentifier(identifier));
+                    }
+                    break;
                 case VIDEO:
-                case VIDEO_TEXT:
                     if (chatType == ProtoGlobal.Room.Type.CHAT) {
                         mAdapter.add(new VideoItem().setMessage(messageInfo).withIdentifier(identifier));
+                    } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
+                        mAdapter.add(new ChannelVideoItem().setMessage(messageInfo).withIdentifier(identifier));
+                    }
+                    break;
+                case VIDEO_TEXT:
+                    if (chatType == ProtoGlobal.Room.Type.CHAT) {
+                        mAdapter.add(new VideoWithTextItem().setMessage(messageInfo).withIdentifier(identifier));
                     } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
                         mAdapter.add(new ChannelVideoItem().setMessage(messageInfo).withIdentifier(identifier));
                     }

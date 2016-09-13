@@ -115,6 +115,7 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
         ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).setMargins(5, 5, 50, 5);
 
         holder.itemView.findViewById(R.id.cslr_imv_sender_picture).setVisibility(View.VISIBLE);
+        holder.itemView.findViewById(R.id.mainContainer).setBackgroundResource(R.drawable.rectangle_round_gray);
     }
 
     @CallSuper
@@ -125,6 +126,7 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
         holder.itemView.findViewById(R.id.mainContainer).setPadding(4, 4, 4, 4);
         holder.itemView.findViewById(R.id.cslr_imv_sender_picture).setVisibility(View.GONE);
         ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).setMargins(50, 5, 5, 5);
+        holder.itemView.findViewById(R.id.mainContainer).setBackgroundResource(R.drawable.rectangle_round_white);
     }
 
     protected CharSequence defineMessageStatus() {

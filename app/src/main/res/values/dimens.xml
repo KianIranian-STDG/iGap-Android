@@ -26,6 +26,8 @@
     <dimen name="sp44">44sp</dimen>
     <dimen name="sp48">48sp</dimen>
 
+    <dimen name="dp25">25dp</dimen>
+
     <dimen name="dp4">4dp</dimen>
     <dimen name="dp6">6dp</dimen>
     <dimen name="dp8">8dp</dimen>

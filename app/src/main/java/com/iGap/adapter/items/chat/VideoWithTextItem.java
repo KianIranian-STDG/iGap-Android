@@ -18,21 +18,21 @@ import java.util.List;
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/2016.
  */
-public class VideoItem extends AbstractChatItem<VideoItem, VideoItem.ViewHolder> {
+public class VideoWithTextItem extends AbstractChatItem<VideoWithTextItem, VideoWithTextItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
-    public VideoItem() {
+    public VideoWithTextItem() {
         super(true);
     }
 
     @Override
     public int getType() {
-        return R.id.chatSubLayoutVideo;
+        return R.id.chatSubLayoutVideoWithText;
     }
 
     @Override
     public int getLayoutRes() {
-        return R.layout.chat_sub_layout_video;
+        return R.layout.chat_sub_layout_video_with_text;
     }
 
     @Override
@@ -67,6 +67,13 @@ public class VideoItem extends AbstractChatItem<VideoItem, VideoItem.ViewHolder>
             holder.cslv_btn_play_video.setVisibility(View.VISIBLE);
         }
 
+        if (!mMessage.messageText.isEmpty()) {
+            holder.cslr_txt_message.setText(mMessage.messageText);
+            holder.cslr_txt_message.setVisibility(View.VISIBLE);
+        } else {
+            holder.cslr_txt_message.setVisibility(View.GONE);
+        }
+
         if (mMessage.sendType == MyType.SendType.send) {
             holder.cslr_txt_tic.setText(defineMessageStatus());
         }
@@ -96,10 +103,12 @@ public class VideoItem extends AbstractChatItem<VideoItem, VideoItem.ViewHolder>
         protected TextView cslv_txt_video_name;
         protected TextView cslv_txt_video_mime_type;
         protected TextView cslv_txt_vido_info;
+        protected TextView cslr_txt_message;
 
         public ViewHolder(View view) {
             super(view);
 
+            cslr_txt_message = (TextView) view.findViewById(R.id.cslr_txt_message);
             cslr_ll_frame = (LinearLayout) view.findViewById(R.id.mainContainer);
             cslr_ll_content_main = (LinearLayout) view.findViewById(R.id.cslr_ll_content_main);
             cslr_ll_forward = (LinearLayout) view.findViewById(R.id.cslr_ll_forward);

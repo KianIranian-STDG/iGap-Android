@@ -17,11 +17,12 @@
             android:id="@+id/mainContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingStart="@dimen/dp28"
             android:layout_marginLeft="@dimen/dp28"
+            android:background="@drawable/rectangle_round_white"
             android:gravity="right"
             android:orientation="vertical"
-            android:paddingLeft="@dimen/dp28">
+            android:paddingLeft="@dimen/dp28"
+            android:paddingStart="@dimen/dp28">
 
             <include
                 android:id="@+id/replayLayout"
@@ -47,52 +48,57 @@
                         android:orientation="vertical">
 
                         <include
-                            layout="@layout/chat_sub_layout_forward"
-                            android:id="@+id/cslr_ll_forward" />
+                            android:id="@+id/cslr_ll_forward"
+                            layout="@layout/chat_sub_layout_forward" />
 
                     </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/cslr_txt_message"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/dp20"
                         android:maxWidth="@dimen/dp300"
-                        android:paddingRight="@dimen/dp4"
-                        android:text="TEST TEXT"
-                        android:textColor="@android:color/black"
-                        android:textSize="@dimen/sp16" />
+                        android:orientation="horizontal">
 
-                </LinearLayout>
+                        <TextView
+                            android:id="@+id/cslr_txt_message"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:gravity="left"
+                            android:paddingRight="@dimen/dp4"
+                            android:text="TEST TEXT"
+                            android:textColor="@android:color/black"
+                            android:textSize="@dimen/sp16" />
 
-                <LinearLayout
-                    android:id="@+id/cslr_ll_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|right"
-                    android:gravity="bottom|left"
-                    android:orientation="horizontal">
+                        <LinearLayout
+                            android:id="@+id/cslr_ll_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom|right"
+                            android:gravity="right"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/cslr_txt_time"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="10:21 PM"
+                                android:textColor="@android:color/black"
+                                android:textSize="@dimen/sp12" />
+
+                            <TextView
+                                android:id="@+id/cslr_txt_tic"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/dp4"
+                                android:layout_marginRight="@dimen/dp4"
+                                android:text="@string/fa_clock_o"
+                                android:textColor="@color/green"
+                                android:textSize="@dimen/sp12" />
 
 
-                    <TextView
-                        android:id="@+id/cslr_txt_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="10:21"
-                        android:textColor="@android:color/black"
-                        android:textSize="@dimen/sp12" />
-
-                    <TextView
-                        android:id="@+id/cslr_txt_tic"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="@dimen/dp4"
-                        android:layout_marginRight="@dimen/dp4"
-                        android:gravity="bottom"
-                        android:text="@string/fa_clock_o"
-                        android:textColor="@color/green"
-                        android:textSize="@dimen/sp16" />
-
+                        </LinearLayout>
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -102,8 +108,8 @@
         <com.iGap.module.CircleImageView
             android:id="@+id/cslr_imv_sender_picture"
             android:layout_width="@dimen/dp52"
-            android:src="@mipmap/b"
-            android:layout_height="@dimen/dp52" />
+            android:layout_height="@dimen/dp52"
+            android:src="@mipmap/b" />
 
     </FrameLayout>
 

@@ -16,21 +16,21 @@ import java.util.List;
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/2016.
  */
-public class ImageItem extends AbstractChatItem<ImageItem, ImageItem.ViewHolder> {
+public class ImageWithTextItem extends AbstractChatItem<ImageWithTextItem, ImageWithTextItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
-    public ImageItem() {
+    public ImageWithTextItem() {
         super(true);
     }
 
     @Override
     public int getType() {
-        return R.id.chatSubLayoutImage;
+        return R.id.chatSubLayoutImageWithText;
     }
 
     @Override
     public int getLayoutRes() {
-        return R.layout.chat_sub_layout_image;
+        return R.layout.chat_sub_layout_image_with_text;
     }
 
     @Override
@@ -39,6 +39,8 @@ public class ImageItem extends AbstractChatItem<ImageItem, ImageItem.ViewHolder>
 
         holder.imvPicture.setImageResource(Integer.parseInt(mMessage.filePath));
         holder.cslr_txt_time.setText(formatTime());
+
+        holder.cslr_txt_message.setText(mMessage.messageText);
 
         if (mMessage.sendType == MyType.SendType.send) {
             holder.cslr_txt_tic.setText(defineMessageStatus());
@@ -79,6 +81,7 @@ public class ImageItem extends AbstractChatItem<ImageItem, ImageItem.ViewHolder>
         protected LinearLayout cslr_ll_time;
         protected TextView cslr_txt_time;
         protected TextView cslr_txt_tic;
+        protected TextView cslr_txt_message;
 
         protected ImageView chslr_imv_icon_replay;
         protected View chslr_v_vertical_line;
@@ -89,6 +92,7 @@ public class ImageItem extends AbstractChatItem<ImageItem, ImageItem.ViewHolder>
         public ViewHolder(View view) {
             super(view);
 
+            cslr_txt_message = (TextView) view.findViewById(R.id.cslr_txt_message);
             cslr_ll_frame = (LinearLayout) view.findViewById(R.id.mainContainer);
             cslr_ll_content_main = (LinearLayout) view.findViewById(R.id.cslr_ll_content_main);
             cslr_ll_forward = (LinearLayout) view.findViewById(R.id.cslr_ll_forward);
