@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/6/2016.
  */
-public class ChatFastAdapter<Item extends AbstractChatItem> extends FastItemAdapter<Item> implements FastAdapter.OnLongClickListener<Item> {
+public class ChatMessagesFastAdapter<Item extends AbstractChatItem> extends FastItemAdapter<Item> implements FastAdapter.OnLongClickListener<Item> {
     private OnChatMessageSelectionChanged<Item> onChatMessageSelectionChanged;
     private OnMessageClick onMessageClick;
 
@@ -41,7 +41,7 @@ public class ChatFastAdapter<Item extends AbstractChatItem> extends FastItemAdap
         }
     }
 
-    public ChatFastAdapter(OnChatMessageSelectionChanged<Item> OnChatMessageSelectionChangedListener, final OnMessageClick onMessageClickListener) {
+    public ChatMessagesFastAdapter(OnChatMessageSelectionChanged<Item> OnChatMessageSelectionChangedListener, final OnMessageClick onMessageClickListener) {
         onChatMessageSelectionChanged = OnChatMessageSelectionChangedListener;
         onMessageClick = onMessageClickListener;
 

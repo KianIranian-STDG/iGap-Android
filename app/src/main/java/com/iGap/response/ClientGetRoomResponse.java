@@ -1,5 +1,6 @@
 package com.iGap.response;
 
+import android.text.format.DateUtils;
 import android.util.Log;
 
 import com.iGap.G;
@@ -8,6 +9,7 @@ import com.iGap.proto.ProtoClientGetRoom;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmRoom;
+import com.iGap.realm.RealmRoomMessage;
 
 import io.realm.Realm;
 
@@ -41,12 +43,32 @@ public class ClientGetRoomResponse extends MessageHandler {
                 // check if room doesn't exist, add room to database
                 RealmRoom room = realm.where(RealmRoom.class).equalTo("id", clientGetRoom.getRoom().getId()).findFirst();
                 if (room == null) {
-                    realm.copyToRealm(HelperRealm.convert(clientGetRoom.getRoom()));
-                    G.onClientGetRoomResponse.onClientGetRoomResponse(clientGetRoom.getRoom(), clientGetRoom);
+                    realm.copyToRealmOrUpdate(HelperRealm.convert(clientGetRoom.getRoom()));
                 }
             }
         });
+
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmRoom room = realm.where(RealmRoom.class).equalTo("id", clientGetRoom.getRoom().getId()).findFirst();
+                // update last message sent/received in room table
+                if (room != null) {
+                    RealmRoomMessage roomMessage = HelperRealm.getLastMessage(room.getId());
+                    if (room.getLastMessageTime() < roomMessage.getUpdateTime()) {
+                        room.setUnreadCount(room.getUnreadCount() + 1);
+                        room.setLastMessageId(roomMessage.getMessageId());
+                        room.setLastMessageTime((int) (roomMessage.getUpdateTime() / DateUtils.SECOND_IN_MILLIS));
+
+                        realm.copyToRealmOrUpdate(room);
+                    }
+                }
+            }
+        });
+
         realm.close();
+
+        G.onClientGetRoomResponse.onClientGetRoomResponse(clientGetRoom.getRoom(), clientGetRoom);
     }
 
     @Override

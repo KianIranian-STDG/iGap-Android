@@ -24,9 +24,10 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.adapter.ChatFastAdapter;
+import com.iGap.adapter.ChatMessagesFastAdapter;
 import com.iGap.adapter.items.chat.AbstractChatItem;
 import com.iGap.adapter.items.chat.ChannelFileItem;
 import com.iGap.adapter.items.chat.ChannelImageItem;
@@ -109,7 +110,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     private RecyclerView recyclerView;
     private ImageView imvSmileButton;
 
-    private ChatFastAdapter<AbstractChatItem> mAdapter;
+    private ChatMessagesFastAdapter<AbstractChatItem> mAdapter;
     private ProtoGlobal.Room.Type chatType;
 
     private String lastSeen;
@@ -154,6 +155,19 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 }
             }
         }
+
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmRoom room = realm.where(RealmRoom.class).equalTo("id", mRoomId).findFirst();
+                if (room != null) {
+                    room.setUnreadCount(0);
+
+                    realm.copyToRealmOrUpdate(room);
+                }
+            }
+        });
+
         realm.close();
     }
 
@@ -170,7 +184,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
             Realm realm = Realm.getDefaultInstance();
 
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", mRoomId).findFirst();
+            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", mRoomId).findFirst();
 
             if (realmRoom != null) { // room exist
 
@@ -368,7 +382,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         recyclerView.setItemViewCacheSize(20);
         recyclerView.setDrawingCacheEnabled(true);
 
-        mAdapter = new ChatFastAdapter<>(this, this);
+        mAdapter = new ChatMessagesFastAdapter<>(this, this);
 
         long identifier = 100;
         for (StructMessageInfo messageInfo : getChatList()) {
@@ -540,6 +554,11 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                         }, 300);
 
                         edtChat.setText("");
+
+                        // if replay layout is visible, gone it
+                        if (mReplayLayout != null) {
+                            mReplayLayout.setVisibility(View.GONE);
+                        }
                     } else {
                         Toast.makeText(G.context, "Please Write Your Messge!", Toast.LENGTH_LONG).show();
                     }
@@ -785,6 +804,11 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     // replay works if only one message selected
                     if (messages.size() > 0 && messages.size() <= 1) {
                         inflateReplayLayoutIntoStub(messages.iterator().next());
+
+                        ll_AppBarSelected.setVisibility(View.GONE);
+                        toolbar.setVisibility(View.VISIBLE);
+
+                        mAdapter.deselect();
                     }
                 }
             }
@@ -1088,16 +1112,31 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
        }
    */
     @Override
-    public void onMessageClick(View view, StructMessageInfo messageInfo, int position) {
+    public void onMessageClick(View view, final StructMessageInfo messageInfo, int position) {
         Log.i(ActivityChat.class.getSimpleName(), "Message clicked");
-        // put message text to EditText
-        if (!messageInfo.messageText.isEmpty()) {
-            edtChat.setText(messageInfo.messageText);
-            edtChat.setSelection(0, edtChat.getText().length());
-            // put message object to edtChat's tag to obtain it later and
-            // found is user trying to edit a message
-            edtChat.setTag(messageInfo);
-        }
+
+        new MaterialDialog.Builder(this)
+                .title("Message")
+                .negativeText("CANCEL")
+                .items(R.array.message)
+                .itemsCallback(new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        switch (which) {
+                            case 6: // edit message
+                                // put message text to EditText
+                                if (!messageInfo.messageText.isEmpty()) {
+                                    edtChat.setText(messageInfo.messageText);
+                                    edtChat.setSelection(0, edtChat.getText().length());
+                                    // put message object to edtChat's tag to obtain it later and
+                                    // found is user trying to edit a message
+                                    edtChat.setTag(messageInfo);
+                                }
+                                break;
+                        }
+                    }
+                })
+                .show();
     }
 
     @Override
@@ -1125,6 +1164,19 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         Log.i(ActivityChat.class.getSimpleName(), "onReceiveChatMessage called");
         // I'm in the room
         if (roomMessage.getRoomId() == mRoomId) {
+            // I'm in the room, so unread messages count is 0. it means, I read all messages
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmRoom room = realm.where(RealmRoom.class).equalTo("id", mRoomId).findFirst();
+                    if (room != null) {
+                        room.setUnreadCount(0);
+                        realm.copyToRealmOrUpdate(room);
+                    }
+                }
+            });
+            realm.close();
             // make update status to message sender that i've read his message
             G.chatUpdateStatusUtil.sendUpdateStatus(roomMessage.getRoomId(), roomMessage.getRoomMessage().getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
             runOnUiThread(new Runnable() {
@@ -1139,6 +1191,20 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     }, 300);
                 }
             });
+        } else {
+            // I'm not in the room, but I have to add 1 to unread messages count
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmRoom room = realm.where(RealmRoom.class).equalTo("id", mRoomId).findFirst();
+                    if (room != null) {
+                        room.setUnreadCount(room.getUnreadCount() + 1);
+                        realm.copyToRealmOrUpdate(room);
+                    }
+                }
+            });
+            realm.close();
         }
     }
 

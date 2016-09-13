@@ -11,6 +11,7 @@ import com.iGap.realm.enums.ChannelChatRole;
 import com.iGap.realm.enums.GroupChatRole;
 import com.iGap.realm.enums.RoomType;
 
+import io.realm.Realm;
 import io.realm.RealmResults;
 
 /**
@@ -75,6 +76,27 @@ public final class HelperRealm {
         }
 
         return realmRoom;
+    }
+
+    public static RealmRoomMessage getLastMessage(long roomId) {
+        Realm realm = Realm.getDefaultInstance();
+
+        RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class).equalTo("roomId", roomId).findAll();
+        long lastMessageId = 0;
+        long lastMessageTime = 0;
+        for (RealmChatHistory chatHistory : chatHistories) {
+            RealmRoomMessage roomMessage = chatHistory.getRoomMessage();
+            if (roomMessage != null) {
+                if (roomMessage.getUpdateTime() >= lastMessageTime) {
+                    lastMessageId = roomMessage.getMessageId();
+                }
+            }
+        }
+
+        RealmRoomMessage lastMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", lastMessageId).findFirst();
+        realm.close();
+
+        return lastMessage;
     }
 
     /**

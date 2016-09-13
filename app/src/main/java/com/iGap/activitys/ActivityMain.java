@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.adapter.ChatsFastAdapter;
 import com.iGap.adapter.items.ChatItem;
 import com.iGap.fragments.ContactsFragment;
 import com.iGap.helper.HelperProtoBuilder;
@@ -43,12 +44,12 @@ import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmChatHistory;
 import com.iGap.realm.RealmRoom;
+import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestChatDelete;
 import com.iGap.request.RequestClientGetRoomList;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
-import com.mikepenz.fastadapter.adapters.FastItemAdapter;
 
 import java.util.List;
 
@@ -59,7 +60,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
 
     public static LeftDrawerLayout mLeftDrawerLayout;
     private RecyclerView recyclerView;
-    private FastItemAdapter<ChatItem> mAdapter;
+    private ChatsFastAdapter<ChatItem> mAdapter;
     private FloatingActionButton floatingActionButton;
     private ArcMenu arcMenu;
 
@@ -207,7 +208,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
 
     private void initRecycleView() {
         recyclerView = (RecyclerView) findViewById(R.id.cl_recycler_view_contact);
-        mAdapter = new FastItemAdapter<>();
+        mAdapter = new ChatsFastAdapter<>();
         mAdapter.withOnClickListener(new FastAdapter.OnClickListener<ChatItem>() {
             @Override
             public boolean onClick(View v, IAdapter<ChatItem> adapter, ChatItem item, int position) {
@@ -411,7 +412,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
 
                                 final ChatItem chatItem = new ChatItem();
                                 StructChatInfo info = new StructChatInfo();
-                                info.unreadMessag = room.getUnreadCount();
+                                info.unreadMessagesCount = room.getUnreadCount();
                                 info.chatId = room.getId();
                                 info.chatTitle = room.getTitle();
                                 info.initials = room.getInitials();
@@ -430,8 +431,6 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                                         break;
                                 }
                                 info.color = room.getColor();
-                                info.lastSeen = Long.toString(System.currentTimeMillis()); // FIXME
-                                info.lastmessage = "lastMessage"; // FIXME
                                 info.muteNotification = false; // FIXME
                                 info.imageSource = ""; // FIXME
 
@@ -455,26 +454,26 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                         // fake data set
 
 //                        StructChatInfo a = new StructChatInfo();
-//                        a.unreadMessag = 5256;
+//                        a.unreadMessagesCount = 5256;
 //                        a.chatId = "123";
 //                        a.chatTitle = "mehdi hosiny";
 //                        a.chatType = RoomType.GROUP;
 //                        a.color = "#ff3131";
 //                        a.memberCount = 122 + "";
-//                        a.lastSeen = "10:21";
+//                        a.lastMessageTime = "10:21";
 //                        a.lastmessage = "how are you jhjh hjh jhhhh";
 //                        a.muteNotification = true;
 //                        a.imageSource = "";
 //                        mAdapter.add(new ChatItem().setInfo(a).setComplete(ActivityMain.this));
 //
 //                        StructChatInfo a1 = new StructChatInfo();
-//                        a1.unreadMessag = 5256;
+//                        a1.unreadMessagesCount = 5256;
 //                        a1.chatId = "123";
 //                        a1.chatTitle = "mehdi hosiny";
 //                        a1.chatType = RoomType.GROUP;
 //                        a1.color = "#ff3131";
 //                        a1.memberCount = 122 + "";
-//                        a1.lastSeen = "10:21";
+//                        a1.lastMessageTime = "10:21";
 //                        a1.lastmessage = "how are you jhjh hjh jhhhh";
 //                        a1.muteNotification = true;
 //                        a1.imageSource = "";
@@ -482,13 +481,13 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
 //
 //
 //                        StructChatInfo a2 = new StructChatInfo();
-//                        a2.unreadMessag = 5256;
+//                        a2.unreadMessagesCount = 5256;
 //                        a2.chatId = "123";
 //                        a2.chatTitle = "mehdi hosiny";
 //                        a2.chatType = RoomType.GROUP;
 //                        a2.color = "#ff3131";
 //                        a2.memberCount = 122 + "";
-//                        a2.lastSeen = "10:21";
+//                        a2.lastMessageTime = "10:21";
 //                        a2.lastmessage = "how are you jhjh hjh jhhhh";
 //                        a2.muteNotification = true;
 //                        a2.imageSource = "";
@@ -496,25 +495,25 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
 //
 //                        //===
 //                        StructChatInfo c = new StructChatInfo();
-//                        c.unreadMessag = 5256;
+//                        c.unreadMessagesCount = 5256;
 //                        c.chatId = "123";
 //                        c.chatTitle = "mehdi hosiny";
 //                        c.chatType = RoomType.GROUP;
 //                        c.color = "#ff3131";
 //                        c.memberCount = 122 + "";
-//                        c.lastSeen = "10:21";
+//                        c.lastMessageTime = "10:21";
 //                        c.lastmessage = "how are you jhjh hjh jhhhh";
 //                        c.muteNotification = true;
 //                        c.imageSource = "";
 //                        mAdapter.add(new ChatItem().setInfo(c).setComplete(ActivityMain.this));
 //
 //                        StructChatInfo c1 = new StructChatInfo();
-//                        c1.unreadMessag = 325515;
+//                        c1.unreadMessagesCount = 325515;
 //                        c1.chatId = "123";
 //                        c1.chatTitle = "Valerie";
 //                        c1.chatType = RoomType.CHAT;
 //                        c1.color = "#5c9dff";
-//                        c1.lastSeen = "10:21";
+//                        c1.lastMessageTime = "10:21";
 //                        c1.lastmessage = "Valeri is typing...";
 //                        c1.muteNotification = false;
 //                        c1.imageSource = "";
@@ -522,25 +521,25 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
 //
 //
 //                        StructChatInfo c2 = new StructChatInfo();
-//                        c2.unreadMessag = 823;
+//                        c2.unreadMessagesCount = 823;
 //                        c2.chatId = "123";
 //                        c2.chatTitle = "ali";
 //                        c2.memberCount = "12k";
 //                        c2.chatType = RoomType.CHANNEL;
 //                        c2.color = "#f1d900";
-//                        c2.lastSeen = "2:45";
+//                        c2.lastMessageTime = "2:45";
 //                        c2.lastmessage = "where are you";
 //                        c2.muteNotification = false;
 //                        c2.imageSource = R.mipmap.d + "";
 //                        mAdapter.add(new ChatItem().setInfo(c2).setComplete(ActivityMain.this));
 //
 //                        StructChatInfo c3 = new StructChatInfo();
-//                        c3.unreadMessag = 65;
+//                        c3.unreadMessagesCount = 65;
 //                        c3.chatId = "123";
 //                        c3.chatTitle = "hiwa";
 //                        c3.chatType = RoomType.CHAT;
 //                        c3.color = "#f75cff";
-//                        c3.lastSeen = "21:45";
+//                        c3.lastMessageTime = "21:45";
 //                        c3.lastmessage = "iz typing how are you";
 //                        c3.muteNotification = true;
 //                        c3.imageSource = R.mipmap.h + "";
@@ -548,48 +547,48 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
 //
 //
 //                        StructChatInfo c4 = new StructChatInfo();
-//                        c4.unreadMessag = 0;
+//                        c4.unreadMessagesCount = 0;
 //                        c4.chatId = "123";
 //                        c4.chatTitle = "has";
 //                        c4.chatType = RoomType.GROUP;
 //                        c4.color = "#4fb559";
-//                        c4.lastSeen = "21:30";
+//                        c4.lastMessageTime = "21:30";
 //                        c4.lastmessage = "go to link";
 //                        c4.muteNotification = false;
 //                        c4.imageSource = "";
 //                        mAdapter.add(new ChatItem().setInfo(c4).setComplete(ActivityMain.this));
 //
 //                        StructChatInfo c5 = new StructChatInfo();
-//                        c5.unreadMessag = 50;
+//                        c5.unreadMessagesCount = 50;
 //                        c5.chatId = "123";
 //                        c5.chatTitle = "has";
 //                        c5.chatType = RoomType.CHANNEL;
 //                        c5.color = "#f26d7d";
-//                        c5.lastSeen = "21:30";
+//                        c5.lastMessageTime = "21:30";
 //                        c5.lastmessage = "go to link";
 //                        c5.muteNotification = false;
 //                        c5.imageSource = R.mipmap.e + "";
 //                        mAdapter.add(new ChatItem().setInfo(c5).setComplete(ActivityMain.this));
 //
 //                        StructChatInfo c6 = new StructChatInfo();
-//                        c6.unreadMessag = 0;
+//                        c6.unreadMessagesCount = 0;
 //                        c6.chatId = "123";
 //                        c6.chatTitle = "hasan";
 //                        c6.chatType = RoomType.GROUP;
 //                        c6.color = "#ff8a00";
-//                        c6.lastSeen = "21:30";
+//                        c6.lastMessageTime = "21:30";
 //                        c6.lastmessage = "go to link";
 //                        c6.muteNotification = false;
 //                        c6.imageSource = R.mipmap.c + "";
 //                        mAdapter.add(new ChatItem().setInfo(c6).setComplete(ActivityMain.this));
 //
 //                        StructChatInfo c7 = new StructChatInfo();
-//                        c7.unreadMessag = 55;
+//                        c7.unreadMessagesCount = 55;
 //                        c7.chatId = "123";
 //                        c7.chatTitle = "sorosh";
 //                        c7.chatType = RoomType.CHAT;
 //                        c7.color = "#47dfff";
-//                        c7.lastSeen = "21:30";
+//                        c7.lastMessageTime = "21:30";
 //                        c7.lastmessage = "go to link";
 //                        c7.muteNotification = false;
 //                        c7.imageSource = R.mipmap.g + "";
@@ -604,13 +603,13 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         /*ArrayList<StructChatInfo> list = new ArrayList<>();
 
         StructChatInfo c = new StructChatInfo();
-        c.unreadMessag = 5256;
+        c.unreadMessagesCount = 5256;
         c.chatId = "user";
         c.chatTitle = "mehdi hosiny";
         c.chatType = MyType.ChatType.groupChat;
         c.color = "#ff3131";
         c.memberCount = 122 + "";
-        c.lastSeen = "10:21";
+        c.lastMessageTime = "10:21";
         c.lastmessage = "how are you jhjh hjh jhhhh";
         c.muteNotification = true;
         c.imageSource = "";
@@ -618,12 +617,12 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
 
 
         StructChatInfo c1 = new StructChatInfo();
-        c1.unreadMessag = 325515;
+        c1.unreadMessagesCount = 325515;
         c1.chatId = "user1";
         c1.chatTitle = "Valerie";
         c1.chatType = MyType.ChatType.singleChat;
         c1.color = "#5c9dff";
-        c1.lastSeen = "10:21";
+        c1.lastMessageTime = "10:21";
         c1.lastmessage = "Valeri is typing...";
         c1.muteNotification = false;
         c1.imageSource = "";
@@ -631,25 +630,25 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
 
 
         StructChatInfo c2 = new StructChatInfo();
-        c2.unreadMessag = 823;
+        c2.unreadMessagesCount = 823;
         c2.chatId = "user2";
         c2.chatTitle = "ali";
         c2.memberCount = "12k";
         c2.chatType = MyType.ChatType.channel;
         c2.color = "#f1d900";
-        c2.lastSeen = "2:45";
+        c2.lastMessageTime = "2:45";
         c2.lastmessage = "where are you";
         c2.muteNotification = false;
         c2.imageSource = R.mipmap.d + "";
         list.add(c2);
 
         StructChatInfo c3 = new StructChatInfo();
-        c3.unreadMessag = 65;
+        c3.unreadMessagesCount = 65;
         c3.chatId = "user3";
         c3.chatTitle = "hiwa";
         c3.chatType = MyType.ChatType.singleChat;
         c3.color = "#f75cff";
-        c3.lastSeen = "21:45";
+        c3.lastMessageTime = "21:45";
         c3.lastmessage = "iz typing how are you";
         c3.muteNotification = true;
         c3.imageSource = R.mipmap.h + "";
@@ -657,48 +656,48 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
 
 
         StructChatInfo c4 = new StructChatInfo();
-        c4.unreadMessag = 0;
+        c4.unreadMessagesCount = 0;
         c4.chatId = "user4";
         c4.chatTitle = "has";
         c4.chatType = MyType.ChatType.groupChat;
         c4.color = "#4fb559";
-        c4.lastSeen = "21:30";
+        c4.lastMessageTime = "21:30";
         c4.lastmessage = "go to link";
         c4.muteNotification = false;
         c4.imageSource = "";
         list.add(c4);
 
         StructChatInfo c5 = new StructChatInfo();
-        c5.unreadMessag = 50;
+        c5.unreadMessagesCount = 50;
         c5.chatId = "user5";
         c5.chatTitle = "has";
         c5.chatType = MyType.ChatType.channel;
         c5.color = "#f26d7d";
-        c5.lastSeen = "21:30";
+        c5.lastMessageTime = "21:30";
         c5.lastmessage = "go to link";
         c5.muteNotification = false;
         c5.imageSource = R.mipmap.e + "";
         list.add(c5);
 
         StructChatInfo c6 = new StructChatInfo();
-        c6.unreadMessag = 0;
+        c6.unreadMessagesCount = 0;
         c6.chatId = "user6";
         c6.chatTitle = "hasan";
         c6.chatType = MyType.ChatType.groupChat;
         c6.color = "#ff8a00";
-        c6.lastSeen = "21:30";
+        c6.lastMessageTime = "21:30";
         c6.lastmessage = "go to link";
         c6.muteNotification = false;
         c6.imageSource = R.mipmap.c + "";
         list.add(c6);
 
         StructChatInfo c7 = new StructChatInfo();
-        c7.unreadMessag = 55;
+        c7.unreadMessagesCount = 55;
         c7.chatId = "user7";
         c7.chatTitle = "sorosh";
         c7.chatType = MyType.ChatType.singleChat;
         c7.color = "#47dfff";
-        c7.lastSeen = "21:30";
+        c7.lastMessageTime = "21:30";
         c7.lastmessage = "go to link";
         c7.muteNotification = false;
         c7.imageSource = R.mipmap.g + "";
@@ -761,7 +760,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAll()) {
             final ChatItem chatItem = new ChatItem();
             StructChatInfo info = new StructChatInfo();
-            info.unreadMessag = realmRoom.getUnreadCount();
+            info.unreadMessagesCount = realmRoom.getUnreadCount();
             info.chatId = realmRoom.getId();
             info.chatTitle = realmRoom.getTitle();
             info.initials = realmRoom.getInitials();
@@ -780,8 +779,11 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                     break;
             }
             info.color = realmRoom.getColor();
-            info.lastSeen = Long.toString(System.currentTimeMillis()); // FIXME
-            info.lastmessage = "lastMessage"; // FIXME
+            RealmRoomMessage lastMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", realmRoom.getLastMessageId()).findFirst();
+            if (lastMessage != null) {
+                info.lastMessageTime = lastMessage.getUpdateTime();
+                info.lastmessage = lastMessage.getMessage();
+            }
             info.muteNotification = realmRoom.getMute(); // FIXME
             info.imageSource = ""; // FIXME
 
@@ -839,6 +841,8 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
     protected void onResume() {
         super.onResume();
 
+        G.chatSendMessageUtil.setOnChatSendMessageResponse(this);
+
         // adapter may be null because it's initializing async
         if (mAdapter != null) {
             // check if new rooms exist, add to adapter
@@ -856,11 +860,23 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                             }
                         }
                         if (!exists) {
-                            mAdapter.add(convertToChatItem(room));
+                            mAdapter.add(convertToChatItem(room.getId()));
                         }
                     }
                 }
             });
+
+            // update last message on resume
+            for (ChatItem chat : mAdapter.getAdapterItems()) {
+                RealmRoom room = realm.where(RealmRoom.class).equalTo("id", chat.mInfo.chatId).findFirst();
+                if (room != null) {
+                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", room.getLastMessageId()).findFirst();
+                    if (roomMessage != null) {
+                        mAdapter.updateChat(room.getId(), convertToChatItem(room.getId()));
+                    }
+                }
+            }
+
             realm.close();
         }
     }
@@ -868,14 +884,21 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
     /**
      * convert RealmRoom to ChatItem. needed for adding items to adapter.
      *
-     * @param room RealmRoom
+     * @param roomId room id
      * @return ChatItem
      */
-    private ChatItem convertToChatItem(RealmRoom room) {
+    private ChatItem convertToChatItem(long roomId) {
+        Realm realm = Realm.getDefaultInstance();
+        RealmRoom room = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
         ChatItem chatItem = new ChatItem();
         StructChatInfo chatInfo = new StructChatInfo();
         chatInfo.chatId = room.getId();
         chatInfo.chatTitle = room.getTitle();
+        RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", room.getLastMessageId()).findFirst();
+        if (roomMessage != null) {
+            chatInfo.lastMessageTime = roomMessage.getUpdateTime();
+            chatInfo.lastmessage = roomMessage.getMessage();
+        }
         chatInfo.chatType = room.getType();
         switch (room.getType()) {
             case CHANNEL:
@@ -890,11 +913,13 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         }
         chatInfo.muteNotification = false;
         chatInfo.ownerShip = MyType.OwnerShip.member;
-        chatInfo.unreadMessag = room.getUnreadCount();
+        chatInfo.unreadMessagesCount = room.getUnreadCount();
         chatInfo.color = room.getColor();
 
         chatItem.mInfo = chatInfo;
         chatItem.mComplete = ActivityMain.this;
+
+        realm.close();
 
         return chatItem;
     }
@@ -917,8 +942,30 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
     }
 
     @Override
-    public void onReceiveChatMessage(String message, String messageType, ProtoChatSendMessage.ChatSendMessageResponse.Builder roomMessage) {
-        // TODO
+    public void onReceiveChatMessage(String message, String messageType, final ProtoChatSendMessage.ChatSendMessageResponse.Builder roomMessage) {
+        // I'm not in the room, so I have to add 1 to the unread messages count
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                final RealmRoom room = realm.where(RealmRoom.class).equalTo("id", roomMessage.getRoomId()).findFirst();
+                if (room != null) {
+                    final int updatedUnreadCount = room.getUnreadCount() + 1;
+                    room.setUnreadCount(updatedUnreadCount);
+                    realm.copyToRealmOrUpdate(room);
+                }
+            }
+        });
+        realm.close();
+
+        if (mAdapter != null) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mAdapter.updateChat(roomMessage.getRoomId(), convertToChatItem(roomMessage.getRoomId()));
+                }
+            });
+        }
     }
 
     @Override

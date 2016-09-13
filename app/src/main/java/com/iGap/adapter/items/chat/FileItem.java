@@ -56,7 +56,6 @@ public class FileItem extends AbstractChatItem<FileItem, FileItem.ViewHolder> {
         super.updateLayoutForReceive(holder);
 
         holder.cslr_txt_tic.setVisibility(View.GONE);
-        holder.cslr_ll_frame.setBackgroundResource(R.drawable.rectangle_round_gray);
     }
 
     @Override
@@ -64,7 +63,6 @@ public class FileItem extends AbstractChatItem<FileItem, FileItem.ViewHolder> {
         super.updateLayoutForSend(holder);
 
         holder.cslr_txt_tic.setVisibility(View.VISIBLE);
-        holder.cslr_ll_frame.setBackgroundResource(R.drawable.rectangle_round_white);
     }
 
     @Override

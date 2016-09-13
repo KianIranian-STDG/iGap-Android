@@ -1,5 +1,6 @@
 package com.iGap.response;
 
+import android.text.format.DateUtils;
 import android.util.Log;
 
 import com.iGap.G;
@@ -52,6 +53,14 @@ public class ChatSendMessageResponse extends MessageHandler {
                 if (room == null) {
                     // make get room request
                     new RequestClientGetRoom().clientGetRoom(chatSendMessageResponse.getRoomId());
+                } else {
+                    // update last message sent/received in room table
+                    if (room.getLastMessageTime() < roomMessage.getUpdateTime() * DateUtils.SECOND_IN_MILLIS) {
+                        room.setLastMessageId(roomMessage.getMessageId());
+                        room.setLastMessageTime(roomMessage.getUpdateTime());
+
+                        realm.copyToRealmOrUpdate(room);
+                    }
                 }
 
                 // because user may have more than one device, his another device should not be recipient
@@ -60,29 +69,24 @@ public class ChatSendMessageResponse extends MessageHandler {
                 if (userId != roomMessage.getUserId() && chatSendMessageResponse.getResponse().getId().isEmpty()) {
                     // i'm the recipient
                     RealmChatHistory realmChatHistory = realm.createObject(RealmChatHistory.class);
-                    RealmRoomMessage realmRoom = realm.createObject(RealmRoomMessage.class);
+                    RealmRoomMessage realmRoomMessage = realm.createObject(RealmRoomMessage.class);
 
-                    realmRoom.setMessageId(roomMessage.getMessageId());
-                    realmRoom.setMessageVersion(roomMessage.getMessageVersion());
-                    realmRoom.setStatus(roomMessage.getStatus().toString());
-                    realmRoom.setMessageType(roomMessage.getMessageType().toString());
-                    realmRoom.setMessage(roomMessage.getMessage());
-                    realmRoom.setAttachment(roomMessage.getAttachment());
-                    realmRoom.setUserId(roomMessage.getUserId());
-                    realmRoom.setLocation(roomMessage.getLocation().toString());
-                    realmRoom.setLog(roomMessage.getLog().toString());
-                    realmRoom.setEdited(roomMessage.getEdited());
-                    realmRoom.setUpdateTime(roomMessage.getUpdateTime());
+                    realmRoomMessage.setMessageId(roomMessage.getMessageId());
+                    realmRoomMessage.setMessageVersion(roomMessage.getMessageVersion());
+                    realmRoomMessage.setStatus(roomMessage.getStatus().toString());
+                    realmRoomMessage.setMessageType(roomMessage.getMessageType().toString());
+                    realmRoomMessage.setMessage(roomMessage.getMessage());
+                    realmRoomMessage.setAttachment(roomMessage.getAttachment());
+                    realmRoomMessage.setUserId(roomMessage.getUserId());
+                    realmRoomMessage.setLocation(roomMessage.getLocation().toString());
+                    realmRoomMessage.setLog(roomMessage.getLog().toString());
+                    realmRoomMessage.setEdited(roomMessage.getEdited());
+                    realmRoomMessage.setUpdateTime(roomMessage.getUpdateTime());
 
                     realmChatHistory.setRoomId(chatSendMessageResponse.getRoomId());
-                    realmChatHistory.setRoomMessage(realmRoom);
+                    realmChatHistory.setRoomMessage(realmRoomMessage);
 
                     realm.copyToRealm(realmChatHistory);
-                    // invoke following callback when i'm not the sender, because I already done everything after sending message
-                    G.chatSendMessageUtil.onReceiveChatMessage(roomMessage.getMessage(), roomMessage.getMessageType().toString(), chatSendMessageResponse);
-
-                    // user has received the message, so I make a new delivered update status request
-                    G.chatUpdateStatusUtil.sendUpdateStatus(chatSendMessageResponse.getRoomId(), roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
 
                 } else {
                     // i'm the sender
@@ -105,14 +109,25 @@ public class ChatSendMessageResponse extends MessageHandler {
                             message.setUpdateTime(roomMessage.getUpdateTime());
 
                             realm.copyToRealmOrUpdate(message);
-                            // invoke following callback when I'm the sender and the message has updated
-                            G.chatSendMessageUtil.onMessageUpdated(roomMessage.getMessageId(), roomMessage.getStatus(), identity, chatSendMessageResponse);
                             break;
                         }
                     }
                 }
             }
         });
+
+        if (userId != roomMessage.getUserId() && chatSendMessageResponse.getResponse().getId().isEmpty()) {
+            // invoke following callback when i'm not the sender, because I already done everything after sending message
+            if (realm.where(RealmRoom.class).equalTo("id", chatSendMessageResponse.getRoomId()).findFirst() != null) {
+                G.chatSendMessageUtil.onReceiveChatMessage(roomMessage.getMessage(), roomMessage.getMessageType().toString(), chatSendMessageResponse);
+            }
+
+            // user has received the message, so I make a new delivered update status request
+            G.chatUpdateStatusUtil.sendUpdateStatus(chatSendMessageResponse.getRoomId(), roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
+        } else {
+            // invoke following callback when I'm the sender and the message has updated
+            G.chatSendMessageUtil.onMessageUpdated(roomMessage.getMessageId(), roomMessage.getStatus(), identity, chatSendMessageResponse);
+        }
 
         realm.close();
     }

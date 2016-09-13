@@ -9,6 +9,7 @@ import com.iGap.R;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.OnComplete;
 import com.iGap.module.StructChatInfo;
+import com.iGap.module.TimeUtils;
 import com.iGap.realm.enums.RoomType;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
@@ -81,7 +82,7 @@ public class ChatItem extends AbstractItem<ChatItem, ChatItem.ViewHolder> {
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        // TODO fill
+        holder.lastMessage.setText(mInfo.lastmessage);
 
         if (mInfo.imageSource.length() > 0) {
             holder.image.setImageResource(Integer.parseInt(mInfo.imageSource));
@@ -98,17 +99,13 @@ public class ChatItem extends AbstractItem<ChatItem, ChatItem.ViewHolder> {
 
         holder.name.setText(mInfo.chatTitle);
         holder.lastMessage.setText(mInfo.lastmessage);
-        holder.lastSeen.setText(mInfo.lastSeen);
+        holder.lastSeen.setText(TimeUtils.toLocal(mInfo.lastMessageTime, G.CHAT_MESSAGE_TIME));
 
-        int unread = mInfo.unreadMessag;
-        if (unread < 1) {
-            holder.unreadMessage.setVisibility(View.INVISIBLE);
+        if (mInfo.unreadMessagesCount < 1) {
+            holder.unreadMessage.setVisibility(View.GONE);
         } else {
             holder.unreadMessage.setVisibility(View.VISIBLE);
-//            if(unread>99)
-//               holder.unreadMessage.setText("+99");
-//            else
-            holder.unreadMessage.setText(unread + "");
+            holder.unreadMessage.setText(Integer.toString(mInfo.unreadMessagesCount));
 
             if (mInfo.muteNotification) {
                 holder.unreadMessage.setBackgroundResource(R.drawable.oval_gray);

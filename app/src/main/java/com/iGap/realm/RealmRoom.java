@@ -1,5 +1,7 @@
 package com.iGap.realm;
 
+import android.text.format.DateUtils;
+
 import com.iGap.realm.enums.RoomType;
 
 import io.realm.RealmObject;
@@ -20,6 +22,24 @@ public class RealmRoom extends RealmObject {
     private RealmChatRoom chat_room;
     private RealmGroupRoom group_room;
     private RealmChannelRoom channel_room;
+    private long lastMessageId;
+    private long lastMessageTime;
+
+    public long getLastMessageTime() {
+        return lastMessageTime;
+    }
+
+    public void setLastMessageTime(int lastMessageTime) {
+        this.lastMessageTime = lastMessageTime * DateUtils.SECOND_IN_MILLIS;
+    }
+
+    public long getLastMessageId() {
+        return lastMessageId;
+    }
+
+    public void setLastMessageId(long lastMessageId) {
+        this.lastMessageId = lastMessageId;
+    }
 
     public long getId() {
         return id;
