@@ -13,6 +13,10 @@
     <color name="gray_f2">#f2f2f2</color>
     <color name="gray_4c">#4c4c4c</color>
 
+    <color name="am_iconFab_white">#fff</color>
+    <color name="am_iconFab_black">#000</color>
+
+
     //mo
     <!--toolbar-->
 

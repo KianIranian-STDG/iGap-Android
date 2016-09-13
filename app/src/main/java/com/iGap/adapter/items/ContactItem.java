@@ -2,7 +2,6 @@ package com.iGap.adapter.items;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.iGap.R;
 import com.iGap.module.CircleImageView;
@@ -69,7 +68,7 @@ public class ContactItem extends AbstractItem<ContactItem, ContactItem.ViewHolde
         protected CircleImageView image;
         protected CustomTextViewMedium title;
         protected CustomTextViewMedium subtitle;
-        protected ImageView topLine;
+        protected View topLine;
 
         public ViewHolder(View view) {
             super(view);
@@ -77,7 +76,7 @@ public class ContactItem extends AbstractItem<ContactItem, ContactItem.ViewHolde
             image = (CircleImageView) view.findViewById(R.id.imageView);
             title = (CustomTextViewMedium) view.findViewById(R.id.title);
             subtitle = (CustomTextViewMedium) view.findViewById(R.id.subtitle);
-            topLine = (ImageView) view.findViewById(R.id.topLine);
+            topLine = (View) view.findViewById(R.id.topLine);
         }
     }
 }

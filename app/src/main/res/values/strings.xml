@@ -43,8 +43,15 @@
     <string name="fa_arrow_down">&#xf063;</string>
     <string name="fa_video_camera">&#xf03d;</string>
     <string name="fa_pause">&#xf04c;</string>
-
+    <string name="fa_repeat">&#xf01e;</string>
+    <string name="save">&#xf0c7;</string>
+    <string name="fa_external_link">&#xf054;</string>
+    <string name="fa_eraser">&#xf12d;</string>
+    <string name="eyedropper">&#xf1fb;</string>
     <string name="fa_cog">&#xf013;</string>
+    <string name="fa_picture">&#xf03e;</string>
+    <string name="fa_camera">&#xf083;</string>
+    <string name="paint">&#xf1fc;</string>
     <string name="fa_user_plus">&#xf234;</string>
     <string name="fa_lock">&#xf023;</string>
     <string name="fa_question_circle">&#xf059;</string>
@@ -64,6 +71,25 @@
     <string name="no">No</string>
     <string name="ok">Ok</string>
 
+
+    <string name="am_camera">camera</string>
+    <string name="am_music">music</string>
+    <string name="am_paint">paint</string>
+    <string name="am_picture">picture</string>
+    <string name="am_document">document</string>
+    <string name="am_location">location</string>
+    <string name="am_video">video</string>
+    <string name="am_file">file</string>
+    <string name="am_contact">contact</string>
+
+
+    <string name="just_wait_en">Just Wait</string>
+    <string name="device_dosenot_camera_en">This device does not have a camera</string>
+    <string name="do_you_want_to_turn_on_gps">your Gps is Off do you want to turn On Gps</string>
+    <string name="picture_is_saved_en">Picture Saved</string>
+    <string name="select_picture_en">Select Picture</string>
+    <string name="cannot_load_data_en">Can\'t Load Data</string>
+    <string name="do_you_want_exit">do you want to exit</string>
 
     //mo
 

@@ -66,7 +66,6 @@ public class HelperMimeType {
         return x;
     }
 
-
     public static Bitmap getMimePic(Context context, Integer src) {
 
         Bitmap bitmap = null;
@@ -80,10 +79,6 @@ public class HelperMimeType {
     }
 
 
-    /**
-     * return Thumbnail bitmap from file path image
-     */
-
     public void LoadImageTumpnail(ImageView imageView, String path) {
 
         new LoadImageToImageView(imageView, path).execute();
@@ -95,6 +90,9 @@ public class HelperMimeType {
     }
 
 
+    /**
+     * return Thumbnail bitmap from file path image
+     */
     class LoadImageToImageView extends AsyncTask<Object, Void, Bitmap> {
 
         private ImageView imv;
@@ -132,11 +130,9 @@ public class HelperMimeType {
 
     }
 
-
     /**
      * return Thumbnail bitmap from file path video
      */
-
     class getVideoThumbnail extends AsyncTask<Object, Void, Bitmap> {
 
         private ImageView imv;

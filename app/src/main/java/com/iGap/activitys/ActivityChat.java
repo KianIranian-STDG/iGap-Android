@@ -1,11 +1,15 @@
 package com.iGap.activitys;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -57,12 +61,14 @@ import com.iGap.interface_package.OnChatMessageSelectionChanged;
 import com.iGap.interface_package.OnChatSendMessageResponse;
 import com.iGap.interface_package.OnChatUpdateStatusResponse;
 import com.iGap.interface_package.OnMessageClick;
+import com.iGap.module.AttachFile;
 import com.iGap.module.ChatSendMessageUtil;
 import com.iGap.module.EmojiEditText;
 import com.iGap.module.EmojiPopup;
 import com.iGap.module.EmojiRecentsManager;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.MyType;
+import com.iGap.module.OnComplete;
 import com.iGap.module.StructMessageInfo;
 import com.iGap.proto.ProtoChatSendMessage;
 import com.iGap.proto.ProtoGlobal;
@@ -80,6 +86,11 @@ import com.iGap.realm.enums.GroupChatRole;
 import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestChatDeleteMessage;
 import com.iGap.request.RequestChatEditMessage;
+import com.nightonke.boommenu.BoomMenuButton;
+import com.nightonke.boommenu.Types.BoomType;
+import com.nightonke.boommenu.Types.ButtonType;
+import com.nightonke.boommenu.Types.PlaceType;
+import com.nightonke.boommenu.Util;
 
 import java.util.ArrayList;
 import java.util.Set;
@@ -113,6 +124,12 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     private RecyclerView recyclerView;
     private MaterialDesignTextView imvSmileButton;
 
+    AttachFile attachFile;
+    private LocationManager locationManager;
+    private OnComplete complete;
+
+
+    private ChatFastAdapter<AbstractChatItem> mAdapter;
     private ChatMessagesFastAdapter<AbstractChatItem> mAdapter;
     private ProtoGlobal.Room.Type chatType;
 
@@ -178,6 +195,17 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        attachFile = new AttachFile(this);
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        initAttach();
+        complete = new OnComplete() {
+            @Override
+            public void complete(boolean result, String messageOne, String MessageTow) {
+
+                Log.e("ddd", messageOne);
+            }
+        };
 
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
 
@@ -585,6 +613,8 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         imvAttachFileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
             }
         });
 
@@ -751,6 +781,151 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         } else {
             super.onBackPressed();
         }
+    }
+
+
+    private void initAttach() {
+
+
+        BoomMenuButton boomMenuButton = (BoomMenuButton) findViewById(R.id.am_boom);
+
+
+        Drawable[] subButtonDrawables = new Drawable[3];
+        int[] drawablesResource = new int[]{
+                R.mipmap.am_camera,
+                R.mipmap.am_music,
+                R.mipmap.am_paint,
+                R.mipmap.am_picture,
+                R.mipmap.am_document,
+                R.mipmap.am_location,
+                R.mipmap.am_video,
+                R.mipmap.am_file,
+                R.mipmap.am_contact
+        };
+        for (int i = 0; i < 3; i++)
+            subButtonDrawables[i] = ContextCompat.getDrawable(G.context, drawablesResource[i]);
+
+        int[][] subButtonColors = new int[3][2];
+        for (int i = 0; i < 3; i++) {
+            subButtonColors[i][1] = ContextCompat.getColor(G.context, R.color.start_background);
+            subButtonColors[i][0] = Util.getInstance().getPressedColor(subButtonColors[i][1]);
+        }
+
+
+        BoomMenuButton.Builder bb = new BoomMenuButton.Builder();
+
+        bb.addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_camera), subButtonColors[0], getResources().getString(R.string.am_camera))
+                .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_picture), subButtonColors[0], getResources().getString(R.string.am_picture))
+                .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_video), subButtonColors[0], getResources().getString(R.string.am_video))
+                .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_music), subButtonColors[0], getResources().getString(R.string.am_music))
+                .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_document), subButtonColors[0], getResources().getString(R.string.am_document))
+                .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_file), subButtonColors[0], getResources().getString(R.string.am_file))
+                .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_paint), subButtonColors[0], getResources().getString(R.string.am_paint))
+                .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_location), subButtonColors[0], getResources().getString(R.string.am_location))
+                .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_contact), subButtonColors[0], getResources().getString(R.string.am_contact))
+                .autoDismiss(true)
+                .cancelable(true)
+                .boomButtonShadow(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2))
+                .subButtonTextColor(ContextCompat.getColor(G.context, R.color.am_iconFab_black))
+                .button(ButtonType.CIRCLE)
+                .boom(BoomType.PARABOLA)
+                .place(PlaceType.CIRCLE_9_1)
+                .subButtonTextColor(ContextCompat.getColor(G.context, R.color.colorAccent))
+                .subButtonsShadow(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2))
+                .init(boomMenuButton);
+        boomMenuButton.setTextViewColor(getResources().getColor(R.color.am_iconFab_black));
+
+
+        boomMenuButton.setOnSubButtonClickListener(new BoomMenuButton.OnSubButtonClickListener() {
+            @Override
+            public void onClick(int buttonIndex) {
+
+                Log.i("TAG123", "onClick: " + buttonIndex);
+
+                switch (buttonIndex) {
+
+                    case 0:
+                        attachFile.requestTakePicture();
+                        break;
+                    case 1:
+                        attachFile.requestOpenGallery();
+                        break;
+                    case 2:
+                        attachFile.requestVideoCapture();
+                        break;
+                    case 3:
+                        attachFile.requestPickAudio();
+                        break;
+                    case 4:
+                        Log.i("TAG12", "onClick: " + buttonIndex);
+                        break;
+                    case 5:
+                        attachFile.requestPickFile();
+                        break;
+                    case 6:
+                        attachFile.requestPaint();
+                        break;
+                    case 7:
+                        attachFile.requestGetPosition(complete);
+                        break;
+                    case 8:
+                        attachFile.requestPickContact();
+                        break;
+
+                }
+            }
+        });
+
+        boomMenuButton.setTextViewColor(ContextCompat.getColor(G.context, R.color.am_iconFab_black));
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == AttachFile.request_code_position && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            attachFile.requestGetPosition(complete);
+        }
+
+        if (resultCode == Activity.RESULT_CANCELED) {
+
+            Log.e("ddd", "result cancel");
+
+        } else if (resultCode == Activity.RESULT_OK) {
+
+            Log.e("ddd", "result ok");
+
+            switch (requestCode) {
+
+                case AttachFile.request_code_TAKE_PICTURE:
+                    Log.e("ddd", attachFile.imagePath + "     image path");
+                    break;
+                case AttachFile.request_code_media_from_gallary:
+                    Log.e("ddd", AttachFile.getFilePathFromUri(data.getData()) + "    gallary file path");
+                    break;
+                case AttachFile.request_code_VIDEO_CAPTURED:
+                    Log.e("ddd", AttachFile.getFilePathFromUri(data.getData()) + "    video capture path");
+                    break;
+                case AttachFile.request_code_pic_audi:
+                    Log.e("ddd", AttachFile.getFilePathFromUri(data.getData()) + "    audio  path");
+                    break;
+                case AttachFile.request_code_pic_file:
+                    Log.e("ddd", data.getData() + "    pic file path");
+                    break;
+                case AttachFile.request_code_contact_phone:
+                    Log.e("ddd", data.getData() + "   contact phone");
+                    break;
+                case AttachFile.request_code_paint:
+                    Log.e("ddd", data.getData() + "   pain path");
+                    break;
+
+            }
+
+
+        }
+
+
     }
 
     private LinearLayout mReplayLayout;

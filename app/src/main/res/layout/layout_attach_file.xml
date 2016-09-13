@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <android.support.v7.widget.ViewStubCompat
@@ -45,6 +46,15 @@
                 android:maxLines="4"
                 android:paddingRight="@dimen/dp4"
                 android:textColorHint="@color/gray" />
+
+
+            <com.nightonke.boommenu.BoomMenuButton
+                android:id="@+id/am_boom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:boom_inActionBar="false"
+                app:boom_button_color="@android:color/transparent"
+                app:boom_button_pressed_color="@android:color/transparent" />
 
             <View
                 android:layout_width="1dp"

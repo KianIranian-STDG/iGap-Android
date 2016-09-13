@@ -4,18 +4,18 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:paddingEnd="@dimen/dp28"
-    android:paddingLeft="@dimen/dp28"
+    android:paddingLeft="@dimen/dp52"
     android:paddingRight="@dimen/dp28"
-    android:paddingStart="@dimen/dp28">
+    android:paddingStart="@dimen/dp52">
 
-    <ImageView
+
+    <View
         android:id="@+id/topLine"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="1px"
+        android:background="@color/gray"
         android:layout_marginLeft="@dimen/dp8"
-        android:layout_marginStart="@dimen/dp8"
-        android:contentDescription="@null"
-        android:src="@drawable/item_divider_horizontal" />
+        android:layout_marginStart="@dimen/dp8" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -59,4 +59,5 @@
                 android:textColor="#bbbbbb" />
         </RelativeLayout>
     </LinearLayout>
+
 </LinearLayout>
