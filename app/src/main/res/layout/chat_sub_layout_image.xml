@@ -92,7 +92,7 @@
                                 android:gravity="bottom"
                                 android:text="@string/md_clock_with_white_face"
                                 android:textColor="@color/green"
-                                style="@style/ChatMessages.Tick" />
+                                style="@style/ChatMessages.MaterialDesignTextView.Tick" />
 
                         </LinearLayout>
                     </RelativeLayout>

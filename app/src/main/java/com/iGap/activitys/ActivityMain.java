@@ -270,7 +270,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         });
 
         loadLocalChatList();
-        getChatsList();
+        //getChatsList();
     }
 
     /**

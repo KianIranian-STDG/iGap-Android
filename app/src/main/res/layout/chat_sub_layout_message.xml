@@ -58,13 +58,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:maxWidth="@dimen/dp300"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/cslr_txt_message"
-                            android:layout_width="0dp"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="2"
                             android:gravity="right"
                             android:paddingRight="@dimen/dp4"
                             android:text="SAMPLE TEXT"
@@ -73,7 +72,7 @@
 
                         <LinearLayout
                             android:id="@+id/cslr_ll_time"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="right"
                             android:gravity="right"
@@ -81,7 +80,7 @@
 
                             <TextView
                                 android:id="@+id/cslr_txt_time"
-                                style="@style/ChatMessages.Time"
+                                style="@style/ChatMessages.MaterialDesignTextView.Time"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="10:21 PM"
@@ -95,7 +94,7 @@
                                 android:layout_marginRight="@dimen/dp4"
                                 android:text="@string/md_clock_with_white_face"
                                 android:textColor="@color/green"
-                                style="@style/ChatMessages.Tick" />
+                                style="@style/ChatMessages.MaterialDesignTextView.Tick" />
 
 
                         </LinearLayout>

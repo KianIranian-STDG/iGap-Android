@@ -94,8 +94,8 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
     private EmojiEditText edtChat;
     private MaterialDesignTextView imvSendButton;
-    private ImageView imvAttachFileButton;
-    private ImageView imvMicButton;
+    private MaterialDesignTextView imvAttachFileButton;
+    private MaterialDesignTextView imvMicButton;
 
     private Button btnCloseAppBarSelected;
     private Button btnReplaySelected;
@@ -373,10 +373,10 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         imvSendButton = (MaterialDesignTextView) findViewById(R.id.chl_imv_send_button);
 
 
-        imvAttachFileButton = (ImageView) findViewById(R.id.chl_imv_attach_button);
+        imvAttachFileButton = (MaterialDesignTextView) findViewById(R.id.chl_imv_attach_button);
 
 
-        imvMicButton = (ImageView) findViewById(R.id.chl_imv_mic_button);
+        imvMicButton = (MaterialDesignTextView) findViewById(R.id.chl_imv_mic_button);
 
 
         recyclerView = (RecyclerView) findViewById(R.id.chl_recycler_view_chat);

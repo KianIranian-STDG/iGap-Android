@@ -80,12 +80,18 @@
 
     <style name="ChatMessages" />
 
-    <style name="ChatMessages.Time">
+    <style name="ChatMessages.MaterialDesignTextView" />
+
+    <style name="ChatMessages.MaterialDesignTextView.Time">
         <item name="android:textColor">@color/colorChatMessageTime</item>
     </style>
 
-    <style name="ChatMessages.Tick">
-        <item name="android:textSize">@dimen/sp20</item>
+    <style name="ChatMessages.MaterialDesignTextView.Tick">
+        <item name="android:textSize">@dimen/sp16</item>
+    </style>
+
+    <style name="ChatMessages.MaterialDesignTextView.BottomIcon">
+        <item name="android:textSize">@dimen/sp22</item>
     </style>
 
 </resources>

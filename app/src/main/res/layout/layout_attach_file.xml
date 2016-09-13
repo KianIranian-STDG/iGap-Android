@@ -23,16 +23,16 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp48"
+            android:gravity="center"
             android:background="@android:color/white"
             android:orientation="horizontal">
 
             <com.iGap.module.MaterialDesignTextView
                 android:id="@+id/chl_imv_smile_button"
+                style="@style/ChatMessages.MaterialDesignTextView.BottomIcon"
                 android:layout_width="@dimen/dp40"
                 android:layout_height="wrap_content"
-                android:antialias="true"
-                android:paddingLeft="@dimen/dp6"
-                android:paddingRight="@dimen/dp4"
+                android:padding="@dimen/dp8"
                 android:text="@string/md_emoticon_with_happy_face" />
 
             <com.iGap.module.EmojiEditText
@@ -56,34 +56,35 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:gravity="center"
                 android:orientation="horizontal">
 
                 <com.iGap.module.MaterialDesignTextView
-                    android:layout_width="@dimen/dp80"
-                    android:paddingLeft="@dimen/dp32"
-                    android:paddingRight="@dimen/dp20"
                     android:id="@+id/chl_imv_send_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="@dimen/dp8"
                     android:text="@string/md_send_button"
-                    android:visibility="gone"
-                    android:layout_height="wrap_content" />
+                    android:visibility="gone" />
 
-
-                <ImageView
+                <com.iGap.module.MaterialDesignTextView
                     android:id="@+id/chl_imv_attach_button"
-                    android:layout_width="@dimen/dp40"
+                    style="@style/ChatMessages.MaterialDesignTextView.BottomIcon"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="@dimen/dp6"
-                    android:paddingRight="@dimen/dp4"
-                    android:rotation="130"
-                    android:src="@drawable/attachment_clip" />
+                    android:layout_weight="1"
+                    android:padding="@dimen/dp8"
+                    android:text="@string/md_attachment_clip" />
 
-                <ImageView
+                <com.iGap.module.MaterialDesignTextView
                     android:id="@+id/chl_imv_mic_button"
-                    android:layout_width="@dimen/dp40"
+                    style="@style/ChatMessages.MaterialDesignTextView.BottomIcon"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="@dimen/dp6"
-                    android:paddingRight="@dimen/dp4"
-                    android:src="@drawable/microphone_of_voice" />
+                    android:layout_weight="1"
+                    android:padding="@dimen/dp8"
+                    android:text="@string/md_voice_message_microphone_button" />
 
 
             </LinearLayout>

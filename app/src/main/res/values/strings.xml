@@ -8,6 +8,8 @@
     <string name="md_emoticon_with_happy_face">\uf172</string>
     <string name="md_black_keyboard_with_white_keys">\uf119</string>
     <string name="md_send_button">\uf23d</string>
+    <string name="md_attachment_clip">\uf10c</string>
+    <string name="md_voice_message_microphone_button">\uf293</string>
 
     <string name="fa_menu_bar">&#xf0c9;</string>
     <string name="fa_bell_slash_o">&#xf1f7;</string>
