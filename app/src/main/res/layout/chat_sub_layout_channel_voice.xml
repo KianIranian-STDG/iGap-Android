@@ -18,17 +18,13 @@
         android:background="@android:color/white"
         android:orientation="horizontal">
 
-        <LinearLayout
+        <FrameLayout
             android:id="@+id/mainContainer"
             android:layout_width="0dp"
             android:orientation="vertical"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:minHeight="@dimen/dp260">
-
-            <include
-                android:id="@+id/replayLayout"
-                layout="@layout/chat_sub_layout_replay" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -121,15 +117,6 @@
 
                             </LinearLayout>
 
-                            <Button
-                                android:id="@+id/csla_btn_audio_menu"
-                                android:layout_width="@dimen/dp40"
-                                android:layout_height="match_parent"
-                                android:background="@null"
-                                android:gravity="center"
-                                android:text="@string/fa_ellipsis_v"
-                                android:textSize="@dimen/sp26" />
-
 
                         </LinearLayout>
 
@@ -161,7 +148,7 @@
                 android:text="@string/fa_ellipsis_v"
                 android:textColor="#b7b3b3"
                 android:textSize="@dimen/sp26" />
-        </LinearLayout>
+        </FrameLayout>
 
         <LinearLayout
             android:id="@+id/cslch_ll_info"

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/chatSubLayoutMessage"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/chatSubLayoutMessage"
     android:layout_margin="@dimen/dp8"
     android:layoutDirection="ltr"
     card_view:cardCornerRadius="@dimen/dp8"
@@ -13,21 +13,18 @@
     <LinearLayout
         android:id="@+id/cslch_ll_parent"
         android:layout_width="match_parent"
-        android:background="@android:color/white"
         android:layout_height="wrap_content"
+        android:background="@android:color/white"
         android:orientation="horizontal">
 
-        <LinearLayout
+        <FrameLayout
             android:id="@+id/mainContainer"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical"
-            android:minHeight="@dimen/dp260">
+            android:minHeight="@dimen/dp260"
+            android:orientation="vertical">
 
-            <include
-                android:id="@+id/replayLayout"
-                layout="@layout/chat_sub_layout_replay" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -39,16 +36,15 @@
                     android:id="@+id/cslr_ll_content_main"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:paddingLeft="@dimen/dp20">
+                    android:orientation="vertical">
 
                     <include
-                        layout="@layout/chat_sub_layout_forward"
-                        android:id="@+id/cslr_ll_forward" />
+                        android:id="@+id/cslr_ll_forward"
+                        layout="@layout/chat_sub_layout_forward" />
 
                     <ImageView
                         android:id="@+id/shli_imv_image"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:adjustViewBounds="true"
                         android:maxHeight="@dimen/dp360"
@@ -80,7 +76,8 @@
                 android:text="@string/fa_ellipsis_v"
                 android:textColor="#b7b3b3"
                 android:textSize="@dimen/sp26" />
-        </LinearLayout>
+
+        </FrameLayout>
 
         <LinearLayout
             android:id="@+id/cslch_ll_info"

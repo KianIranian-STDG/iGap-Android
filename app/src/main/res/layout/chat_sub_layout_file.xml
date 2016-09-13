@@ -7,160 +7,174 @@
     android:orientation="horizontal"
     android:padding="@dimen/dp4">
 
-    <LinearLayout
-        android:id="@+id/mainContainer"
+    <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:orientation="vertical"
-        android:background="@drawable/rectangle_round_white"
-        android:padding="@dimen/dp4">
-
-        <include
-            android:id="@+id/replayLayout"
-            layout="@layout/chat_sub_layout_replay" />
+        android:layout_gravity="right">
 
         <LinearLayout
+            android:id="@+id/mainContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingStart="@dimen/dp28"
+            android:paddingLeft="@dimen/dp28"
+            android:layout_marginLeft="@dimen/dp28"
+            android:background="@drawable/rectangle_round_white"
             android:orientation="vertical">
 
+            <include
+                android:id="@+id/replayLayout"
+                layout="@layout/chat_sub_layout_replay" />
+
             <LinearLayout
-                android:id="@+id/cslr_ll_content_main"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <include
-                    layout="@layout/chat_sub_layout_forward"
-                    android:id="@+id/cslr_ll_forward" />
+                <LinearLayout
+                    android:id="@+id/cslr_ll_content_main"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <include
+                        android:id="@+id/cslr_ll_forward"
+                        layout="@layout/chat_sub_layout_forward" />
 
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layoutDirection="ltr"
-                android:minWidth="@dimen/dp140"
-                android:orientation="horizontal">
-
-
-                <FrameLayout
-                    android:layout_width="@dimen/dp88"
-                    android:layout_height="@dimen/dp88">
-
-                    <ImageView
-                        android:id="@+id/cslf_imv_image_file"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:padding="@dimen/dp4"
-                        android:src="@mipmap/doc_blue" />
-
-                    <ImageView
-                        android:id="@+id/cslf_imv_state_file"
-                        android:layout_width="@dimen/dp32"
-                        android:layout_height="@dimen/dp32"
-                        android:layout_gravity="center"
-                        android:src="@mipmap/file_b_load_s" />
-                </FrameLayout>
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp4"
-                    android:orientation="vertical"
-                    android:paddingRight="@dimen/dp12">
+                    android:layoutDirection="ltr"
+                    android:minWidth="@dimen/dp140"
+                    android:orientation="horizontal">
+
+
+                    <FrameLayout
+                        android:layout_width="@dimen/dp88"
+                        android:layout_height="@dimen/dp88">
+
+                        <ImageView
+                            android:id="@+id/cslf_imv_image_file"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="@dimen/dp4"
+                            android:src="@mipmap/doc_blue" />
+
+                        <ImageView
+                            android:id="@+id/cslf_imv_state_file"
+                            android:layout_width="@dimen/dp32"
+                            android:layout_height="@dimen/dp32"
+                            android:layout_gravity="center"
+                            android:src="@mipmap/file_b_load_s" />
+                    </FrameLayout>
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp12"
-                        android:orientation="horizontal">
+                        android:layout_marginLeft="@dimen/dp4"
+                        android:orientation="vertical"
+                        android:paddingRight="@dimen/dp12">
 
-                        <TextView
-                            android:id="@+id/cslf_txt_file_name"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:maxWidth="@dimen/dp200"
-                            android:singleLine="true"
-                            android:text="file media golha "
-                            android:textColor="@android:color/black"
-                            android:textSize="@dimen/sp16" />
-
-                        <TextView
-                            android:id="@+id/cslf_txt_file_mime_type"
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:maxWidth="@dimen/dp88"
-                            android:singleLine="true"
-                            android:text=".mp4"
-                            android:textColor="@android:color/black"
-                            android:textSize="@dimen/sp16" />
-                    </LinearLayout>
+                            android:layout_marginTop="@dimen/dp12"
+                            android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/cslf_txt_file_size"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp4"
-                        android:maxWidth="@dimen/dp200"
-                        android:singleLine="true"
-                        android:text="3.2 mb"
-                        android:textColor="@android:color/black"
-                        android:textSize="@dimen/sp14" />
+                            <TextView
+                                android:id="@+id/cslf_txt_file_name"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:maxWidth="@dimen/dp200"
+                                android:singleLine="true"
+                                android:text="file media golha "
+                                android:textColor="@android:color/black"
+                                android:textSize="@dimen/sp16" />
+
+                            <TextView
+                                android:id="@+id/cslf_txt_file_mime_type"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:maxWidth="@dimen/dp88"
+                                android:singleLine="true"
+                                android:text=".mp4"
+                                android:textColor="@android:color/black"
+                                android:textSize="@dimen/sp16" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/cslf_txt_file_size"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dp4"
+                            android:maxWidth="@dimen/dp200"
+                            android:singleLine="true"
+                            android:text="3.2 mb"
+                            android:textColor="@android:color/black"
+                            android:textSize="@dimen/sp14" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
+                <TextView
+                    android:id="@+id/cslr_txt_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginBottom="@dimen/dp20"
+                    android:maxWidth="@dimen/dp300"
+                    android:paddingRight="@dimen/dp4"
+                    android:paddingTop="@dimen/dp4"
+                    android:text="TEST TEXT"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/sp16" />
+
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/cslr_txt_message"
+            <LinearLayout
+                android:id="@+id/cslr_ll_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_marginBottom="@dimen/dp20"
-                android:maxWidth="@dimen/dp300"
-                android:paddingRight="@dimen/dp4"
-                android:paddingTop="@dimen/dp4"
-                android:text="TEST TEXT"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/sp16" />
+                android:layout_gravity="bottom|right"
+                android:gravity="bottom|left"
+                android:orientation="horizontal">
+
+
+                <TextView
+                    android:id="@+id/cslr_txt_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="10:21"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/sp12" />
+
+                <TextView
+                    android:id="@+id/cslr_txt_tic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dp4"
+                    android:layout_marginRight="@dimen/dp4"
+                    android:gravity="bottom"
+                    android:text="@string/fa_clock_o"
+                    android:textColor="@color/green"
+                    android:textSize="@dimen/sp16" />
+
+
+            </LinearLayout>
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/cslr_ll_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|right"
-            android:gravity="bottom|left"
-            android:orientation="horizontal">
+        <com.iGap.module.CircleImageView
+            android:id="@+id/cslr_imv_sender_picture"
+            android:layout_width="@dimen/dp52"
+            android:src="@mipmap/b"
+            android:layout_height="@dimen/dp52" />
 
-
-            <TextView
-                android:id="@+id/cslr_txt_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="10:21"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/sp12" />
-
-            <TextView
-                android:id="@+id/cslr_txt_tic"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/dp4"
-                android:layout_marginRight="@dimen/dp4"
-                android:gravity="bottom"
-                android:text="@string/fa_clock_o"
-                android:textColor="@color/green"
-                android:textSize="@dimen/sp16" />
-
-
-        </LinearLayout>
-
-    </LinearLayout>
+    </FrameLayout>
 
 </FrameLayout>

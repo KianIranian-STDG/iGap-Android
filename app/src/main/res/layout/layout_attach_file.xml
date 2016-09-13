@@ -32,6 +32,7 @@
                 android:layout_width="@dimen/dp40"
                 android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/dp6"
+                android:antialias="true"
                 android:paddingRight="@dimen/dp4"
                 android:src="@drawable/emoticon_with_happy_face" />
 
@@ -73,6 +74,7 @@
                     android:layout_width="@dimen/dp40"
                     android:layout_height="wrap_content"
                     android:paddingLeft="@dimen/dp6"
+                    android:rotation="130"
                     android:paddingRight="@dimen/dp4"
                     android:src="@drawable/attachment_clip" />
 

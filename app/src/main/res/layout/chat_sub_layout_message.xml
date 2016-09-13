@@ -7,87 +7,105 @@
     android:orientation="horizontal"
     android:padding="@dimen/dp4">
 
-    <LinearLayout
-        android:id="@+id/mainContainer"
+
+    <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="right"
-        android:orientation="vertical">
+        android:layout_gravity="right">
 
-        <include
-            android:id="@+id/replayLayout"
-            layout="@layout/chat_sub_layout_replay" />
-
-        <FrameLayout
-            android:id="@+id/cslr_ll_frame"
+        <LinearLayout
+            android:id="@+id/mainContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/replayLayout"
-            android:background="@drawable/rectangle_round_white"
-            android:padding="@dimen/dp4">
+            android:paddingStart="@dimen/dp28"
+            android:layout_marginLeft="@dimen/dp28"
+            android:gravity="right"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/dp28">
 
-            <LinearLayout
+            <include
+                android:id="@+id/replayLayout"
+                layout="@layout/chat_sub_layout_replay" />
+
+            <FrameLayout
+                android:id="@+id/cslr_ll_frame"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_below="@+id/replayLayout"
+
+                android:padding="@dimen/dp4">
 
                 <LinearLayout
-                    android:id="@+id/cslr_ll_content_main"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <include
-                        layout="@layout/chat_sub_layout_forward"
-                        android:id="@+id/cslr_ll_forward" />
+                    <LinearLayout
+                        android:id="@+id/cslr_ll_content_main"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <include
+                            layout="@layout/chat_sub_layout_forward"
+                            android:id="@+id/cslr_ll_forward" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/cslr_txt_message"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/dp20"
+                        android:maxWidth="@dimen/dp300"
+                        android:paddingRight="@dimen/dp4"
+                        android:text="TEST TEXT"
+                        android:textColor="@android:color/black"
+                        android:textSize="@dimen/sp16" />
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/cslr_txt_message"
+                <LinearLayout
+                    android:id="@+id/cslr_ll_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/dp20"
-                    android:maxWidth="@dimen/dp300"
-                    android:paddingRight="@dimen/dp4"
-                    android:text="TEST TEXT"
-                    android:textColor="@android:color/black"
-                    android:textSize="@dimen/sp16" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/cslr_ll_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|right"
-                android:gravity="bottom|left"
-                android:orientation="horizontal">
+                    android:layout_gravity="bottom|right"
+                    android:gravity="bottom|left"
+                    android:orientation="horizontal">
 
 
-                <TextView
-                    android:id="@+id/cslr_txt_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="10:21"
-                    android:textColor="@android:color/black"
-                    android:textSize="@dimen/sp12" />
+                    <TextView
+                        android:id="@+id/cslr_txt_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="10:21"
+                        android:textColor="@android:color/black"
+                        android:textSize="@dimen/sp12" />
 
-                <TextView
-                    android:id="@+id/cslr_txt_tic"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/dp4"
-                    android:layout_marginRight="@dimen/dp4"
-                    android:gravity="bottom"
-                    android:text="@string/fa_clock_o"
-                    android:textColor="@color/green"
-                    android:textSize="@dimen/sp16" />
+                    <TextView
+                        android:id="@+id/cslr_txt_tic"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/dp4"
+                        android:layout_marginRight="@dimen/dp4"
+                        android:gravity="bottom"
+                        android:text="@string/fa_clock_o"
+                        android:textColor="@color/green"
+                        android:textSize="@dimen/sp16" />
 
 
-            </LinearLayout>
+                </LinearLayout>
 
-        </FrameLayout>
-    </LinearLayout>
+            </FrameLayout>
+        </LinearLayout>
+
+        <com.iGap.module.CircleImageView
+            android:id="@+id/cslr_imv_sender_picture"
+            android:layout_width="@dimen/dp52"
+            android:src="@mipmap/b"
+            android:layout_height="@dimen/dp52" />
+
+    </FrameLayout>
+
 
 </FrameLayout>

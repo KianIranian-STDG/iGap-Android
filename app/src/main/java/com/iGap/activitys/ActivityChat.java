@@ -930,175 +930,163 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     }
 
 
-    /*private ArrayList<StructMessageInfo> getChatList() {
+    /*   private ArrayList<StructMessageInfo> getChatList() {
 
-        ArrayList<StructMessageInfo> list = new ArrayList<>();
+           ArrayList<StructMessageInfo> list = new ArrayList<>();
 
-        StructMessageInfo c = new StructMessageInfo();
-        c.messageType = MyType.MessageType.image;
-        c.sendType = MyType.SendType.send;
-        c.status = ProtoGlobal.RoomMessageStatus.SENDING;
-        c.senderAvatar = R.mipmap.a + "";
-        c.messageID = "123";
-        c.filePath = R.mipmap.a + "";
-        c.messageText = "where are you  going hgf hgf hgf hgf  good good";
-        c.channelLink = "@igap";
-        c.seen = "122k";
-        list.add(c);
+           StructMessageInfo c = new StructMessageInfo();
+           c.messageType = ProtoGlobal.RoomMessageType.IMAGE_TEXT;
+           c.sendType = MyType.SendType.send;
+           c.status = ProtoGlobal.RoomMessageStatus.SENDING.toString();
+           c.senderAvatar = R.mipmap.a + "";
+           c.messageID = "123";
+           c.filePath = R.mipmap.a + "";
+           c.messageText = "where are you  going hgf hgf hgf hgf  good good";
+           c.channelLink = "@igap";
+           list.add(c);
 
 
-        StructMessageInfo c9 = new StructMessageInfo();
-        c9.messageType = MyType.MessageType.files;
-        c9.forwardMessageFrom = "ali";
-        c9.replayFrom = "ali";
-        c9.status = ProtoGlobal.RoomMessageStatus.DELIVERED;
-        c9.messageID = "123";
-        c9.replayMessage = "where are you djkdj kjf kdj";
-        c9.sendType = MyType.SendType.send;
-        c9.senderAvatar = R.mipmap.a + "";
-        list.add(c9);
+           StructMessageInfo c9 = new StructMessageInfo();
+           c9.messageType = ProtoGlobal.RoomMessageType.FILE;
+           c9.forwardMessageFrom = "ali";
+           c9.replayFrom = "ali";
+           c9.status = ProtoGlobal.RoomMessageStatus.DELIVERED.toString();
+           c9.messageID = "123";
+           c9.replayMessage = "where are you djkdj kjf kdj";
+           c9.sendType = MyType.SendType.send;
+           c9.senderAvatar = R.mipmap.a + "";
+           list.add(c9);
 
-        StructMessageInfo c10 = new StructMessageInfo();
-        c10.messageType = MyType.MessageType.files;
-        c10.forwardMessageFrom = "hasan";
-        c10.replayFrom = "mehdi";
-        c10.status = ProtoGlobal.RoomMessageStatus.FAILED;
-        c10.messageID = "123";
-        c10.replayMessage = "i am fine";
-        c10.replayPicturePath = " fd";
-        c10.sendType = MyType.SendType.recvive;
-        c10.senderAvatar = R.mipmap.a + "";
-        list.add(c10);
+           StructMessageInfo c10 = new StructMessageInfo();
+           c10.messageType = ProtoGlobal.RoomMessageType.FILE;
+           c10.forwardMessageFrom = "hasan";
+           c10.replayFrom = "mehdi";
+           c10.status = ProtoGlobal.RoomMessageStatus.FAILED.toString();
+           c10.messageID = "123";
+           c10.replayMessage = "i am fine";
+           c10.replayPicturePath = " fd";
+           c10.sendType = MyType.SendType.recvive;
+           c10.senderAvatar = R.mipmap.a + "";
+           list.add(c10);
 
-        StructMessageInfo c12 = new StructMessageInfo();
-        c12.messageType = MyType.MessageType.gif;
-        c12.status = ProtoGlobal.RoomMessageStatus.SEEN;
-        c12.messageID = "123";
-        c12.sendType = MyType.SendType.send;
-        list.add(c12);
 
-        StructMessageInfo c16 = new StructMessageInfo();
-        c16.sendType = MyType.SendType.timeLayout;
-        c16.status = ProtoGlobal.RoomMessageStatus.SENT;
-        c16.messageID = "123";
-        list.add(c16);
 
-        StructMessageInfo c13 = new StructMessageInfo();
-        c13.messageType = MyType.MessageType.audio;
-        c13.status = ProtoGlobal.RoomMessageStatus.SENT;
-        c13.messageID = "123";
-        c13.sendType = MyType.SendType.send;
-        list.add(c13);
+           StructMessageInfo c16 = new StructMessageInfo();
+           c16.sendType = MyType.SendType.timeLayout;
+           c16.status = ProtoGlobal.RoomMessageStatus.FAILED.toString();
+           c16.messageID = "123";
+           list.add(c16);
 
-        StructMessageInfo c14 = new StructMessageInfo();
-        c14.messageType = MyType.MessageType.audio;
-        c14.status = ProtoGlobal.RoomMessageStatus.SEEN;
-        c14.messageID = "123";
-        c14.sendType = MyType.SendType.recvive;
-        c14.messageText = "بهترین موسیقی منتخب" +
-                "\n" + " how are you fghg hgfh fhgf hgf hgf hgf hgf fjhg jhg jhgjhg jhgjh";
-        c14.senderAvatar = R.mipmap.a + "";
-        list.add(c14);
+           StructMessageInfo c13 = new StructMessageInfo();
+           c13.messageType = ProtoGlobal.RoomMessageType.VOICE;
+           c13.status = ProtoGlobal.RoomMessageStatus.SENT.toString();
+           c13.messageID = "123";
+           c13.sendType = MyType.SendType.send;
+           list.add(c13);
 
-        StructMessageInfo c15 = new StructMessageInfo();
-        c15.messageType = MyType.MessageType.sticker;
-        c15.sendType = MyType.SendType.recvive;
-        c15.status = ProtoGlobal.RoomMessageStatus.SEEN;
-        c15.messageID = "123";
-        c15.filePath = R.mipmap.sd + "";
-        list.add(c15);
+           StructMessageInfo c14 = new StructMessageInfo();
+           c14.messageType =ProtoGlobal.RoomMessageType.VOICE;
+           c14.status = ProtoGlobal.RoomMessageStatus.SEEN.toString();
+           c14.messageID = "123";
+           c14.sendType = MyType.SendType.recvive;
+           c14.messageText = "بهترین موسیقی منتخب" +
+                   "\n" + " how are you fghg hgfh fhgf hgf hgf hgf hgf fjhg jhg jhgjhg jhgjh";
+           c14.senderAvatar = R.mipmap.a + "";
+           list.add(c14);
 
-        StructMessageInfo c11 = new StructMessageInfo();
-        c11.messageType = MyType.MessageType.files;
-        c11.sendType = MyType.SendType.recvive;
-        c11.messageID = "123";
-        c11.status = ProtoGlobal.RoomMessageStatus.SEEN;
-        c11.senderAvatar = R.mipmap.a + "";
-        list.add(c11);
 
-        StructMessageInfo c1 = new StructMessageInfo();
-        c1.messageType = MyType.MessageType.message;
-        c1.status = ProtoGlobal.RoomMessageStatus.SEEN;
-        c1.messageID = "123";
-        c1.messageText = "how";
-        c1.sendType = MyType.SendType.send;
-        c1.senderAvatar = R.mipmap.b + "";
-        c1.messageID = "123";
-        list.add(c1);
 
-        StructMessageInfo c2 = new StructMessageInfo();
-        c2.messageType = MyType.MessageType.message;
-        c2.status = ProtoGlobal.RoomMessageStatus.SEEN;
-        c2.senderAvatar = R.mipmap.c + "";
-        c2.messageText = "i am fine";
-        c2.messageID = "123";
-        c2.forwardMessageFrom = "Android cade";
-        c2.sendType = MyType.SendType.recvive;
-        list.add(c2);
+           StructMessageInfo c11 = new StructMessageInfo();
+           c11.messageType = ProtoGlobal.RoomMessageType.FILE;
+           c11.sendType = MyType.SendType.recvive;
+           c11.messageID = "123";
+           c11.status = ProtoGlobal.RoomMessageStatus.SEEN.toString();
+           c11.senderAvatar = R.mipmap.a + "";
+           list.add(c11);
 
-        StructMessageInfo c3 = new StructMessageInfo();
-        c3.messageType = MyType.MessageType.video;
-        c3.messageText = "where are you  going hgf hgf hgf hgf  good good";
-        c3.sendType = MyType.SendType.send;
-        c3.fileName = "good video";
-        c3.status = ProtoGlobal.RoomMessageStatus.SEEN;
-        c3.fileMime = ".mpv";
-        c3.messageID = "123";
-        c3.fileState = MyType.FileState.notUpload;
-        c3.fileInfo = "3:20 (2.4 MB)";
-        c3.filePic = R.mipmap.a + "";
-        list.add(c3);
+           StructMessageInfo c1 = new StructMessageInfo();
+           c1.messageType = ProtoGlobal.RoomMessageType.TEXT;
+           c1.status = ProtoGlobal.RoomMessageStatus.SEEN.toString();
+           c1.messageID = "123";
+           c1.messageText = "how";
+           c1.sendType = MyType.SendType.send;
+           c1.senderAvatar = R.mipmap.b + "";
+           c1.messageID = "123";
+           list.add(c1);
 
-        StructMessageInfo c4 = new StructMessageInfo();
-        c4.messageType = MyType.MessageType.image;
-        c4.forwardMessageFrom = "ali";
-        c4.messageText = "the good picture for all the word";
-        c4.status = ProtoGlobal.RoomMessageStatus.SEEN;
-        c4.sendType = MyType.SendType.recvive;
-        c4.messageID = "123";
-        c4.senderAvatar = R.mipmap.d + "";
-        c4.filePath = R.mipmap.c + "";
-        list.add(c4);
+           StructMessageInfo c2 = new StructMessageInfo();
+           c2.messageType = ProtoGlobal.RoomMessageType.TEXT;
+           c2.status = ProtoGlobal.RoomMessageStatus.SEEN.toString();
+           c2.senderAvatar = R.mipmap.c + "";
+           c2.messageText = "i am fine";
+           c2.messageID = "123";
+           c2.forwardMessageFrom = "Android cade";
+           c2.sendType = MyType.SendType.recvive;
+           list.add(c2);
 
-        StructMessageInfo c5 = new StructMessageInfo();
-        c5.messageType = MyType.MessageType.image;
-        c5.forwardMessageFrom = "ali";
-        c5.sendType = MyType.SendType.send;
-        c5.status = ProtoGlobal.RoomMessageStatus.SEEN;
-        c5.senderAvatar = R.mipmap.e + "";
-        c5.messageID = "123";
-        c5.filePath = R.mipmap.e + "";
-        list.add(c5);
+           StructMessageInfo c3 = new StructMessageInfo();
+           c3.messageType = ProtoGlobal.RoomMessageType.VIDEO_TEXT;
+           c3.messageText = "where are you  going hgf hgf hgf hgf  good good";
+           c3.sendType = MyType.SendType.send;
+           c3.fileName = "good video";
+           c3.status = ProtoGlobal.RoomMessageStatus.SEEN.toString();
+           c3.fileMime = ".mpv";
+           c3.messageID = "123";
+           c3.fileState = MyType.FileState.notUpload;
+           c3.fileInfo = "3:20 (2.4 MB)";
+           c3.filePic = R.mipmap.a + "";
+           list.add(c3);
 
-        StructMessageInfo c6 = new StructMessageInfo();
-        c6.messageType = MyType.MessageType.image;
-        c6.sendType = MyType.SendType.recvive;
-        c6.messageID = "123";
-        c6.status = ProtoGlobal.RoomMessageStatus.SEEN;
-        c6.senderAvatar = R.mipmap.f + "";
-        c6.filePath = R.mipmap.f + "";
-        list.add(c6);
+           StructMessageInfo c4 = new StructMessageInfo();
+           c4.messageType =ProtoGlobal.RoomMessageType.IMAGE_TEXT;
+           c4.forwardMessageFrom = "ali";
+           c4.messageText = "the good picture for all the word";
+           c4.status = ProtoGlobal.RoomMessageStatus.SEEN.toString();
+           c4.sendType = MyType.SendType.recvive;
+           c4.messageID = "123";
+           c4.senderAvatar = R.mipmap.d + "";
+           c4.filePath = R.mipmap.c + "";
+           list.add(c4);
 
-        StructMessageInfo c7 = new StructMessageInfo();
-        c7.messageType = MyType.MessageType.image;
-        c7.sendType = MyType.SendType.recvive;
-        c7.messageID = "123";
-        c7.status = ProtoGlobal.RoomMessageStatus.SEEN;
-        c7.senderAvatar = R.mipmap.g + "";
-        c7.filePath = R.mipmap.g + "";
-        list.add(c7);
+           StructMessageInfo c5 = new StructMessageInfo();
+           c5.messageType = ProtoGlobal.RoomMessageType.IMAGE;
+           c5.forwardMessageFrom = "ali";
+           c5.sendType = MyType.SendType.send;
+           c5.status = ProtoGlobal.RoomMessageStatus.SEEN.toString();
+           c5.senderAvatar = R.mipmap.e + "";
+           c5.messageID = "123";
+           c5.filePath = R.mipmap.e + "";
+           list.add(c5);
 
-        StructMessageInfo c8 = new StructMessageInfo();
-        c8.messageType = MyType.MessageType.image;
-        c8.messageID = "123";
-        c8.status = ProtoGlobal.RoomMessageStatus.SEEN;
-        c8.sendType = MyType.SendType.send;
-        c8.filePath = R.mipmap.h + "";
-        list.add(c8);
+           StructMessageInfo c6 = new StructMessageInfo();
+           c6.messageType = ProtoGlobal.RoomMessageType.IMAGE;
+           c6.sendType = MyType.SendType.recvive;
+           c6.messageID = "123";
+           c6.status = ProtoGlobal.RoomMessageStatus.SEEN.toString();
+           c6.senderAvatar = R.mipmap.f + "";
+           c6.filePath = R.mipmap.f + "";
+           list.add(c6);
 
-        return list;
-    }*/
+           StructMessageInfo c7 = new StructMessageInfo();
+           c7.messageType = ProtoGlobal.RoomMessageType.IMAGE;
+           c7.sendType = MyType.SendType.recvive;
+           c7.messageID = "123";
+           c7.status = ProtoGlobal.RoomMessageStatus.SEEN.toString();
+           c7.senderAvatar = R.mipmap.g + "";
+           c7.filePath = R.mipmap.g + "";
+           list.add(c7);
 
+           StructMessageInfo c8 = new StructMessageInfo();
+           c8.messageType = ProtoGlobal.RoomMessageType.IMAGE;
+           c8.messageID = "123";
+           c8.status = ProtoGlobal.RoomMessageStatus.SENDING.toString();
+           c8.sendType = MyType.SendType.send;
+           c8.filePath = R.mipmap.h + "";
+           list.add(c8);
+
+           return list;
+       }
+   */
     @Override
     public void onMessageClick(View view, StructMessageInfo messageInfo, int position) {
         Log.i(ActivityChat.class.getSimpleName(), "Message clicked");

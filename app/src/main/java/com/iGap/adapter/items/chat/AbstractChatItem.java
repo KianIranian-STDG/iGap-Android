@@ -110,12 +110,21 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
 
     @CallSuper
     protected void updateLayoutForReceive(VH holder) {
-        ((FrameLayout.LayoutParams) holder.itemView.findViewById(R.id.mainContainer).getLayoutParams()).gravity = Gravity.START;
+        FrameLayout frameLayout = (FrameLayout) holder.itemView.findViewById(R.id.mainContainer).getParent();
+        ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).gravity = Gravity.START;
+        ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).setMargins(5, 5, 50, 5);
+
+        holder.itemView.findViewById(R.id.cslr_imv_sender_picture).setVisibility(View.VISIBLE);
     }
 
     @CallSuper
     protected void updateLayoutForSend(VH holder) {
-        ((FrameLayout.LayoutParams) holder.itemView.findViewById(R.id.mainContainer).getLayoutParams()).gravity = Gravity.END;
+        FrameLayout frameLayout = (FrameLayout) holder.itemView.findViewById(R.id.mainContainer).getParent();
+        ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).gravity = Gravity.END;
+
+        holder.itemView.findViewById(R.id.mainContainer).setPadding(4, 4, 4, 4);
+        holder.itemView.findViewById(R.id.cslr_imv_sender_picture).setVisibility(View.GONE);
+        ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).setMargins(50, 5, 5, 5);
     }
 
     protected CharSequence defineMessageStatus() {

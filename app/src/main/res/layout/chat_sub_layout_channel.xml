@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/dp8"
-
     android:layoutDirection="ltr"
     card_view:cardCornerRadius="@dimen/dp8"
     card_view:cardUseCompatPadding="true">
@@ -49,10 +48,10 @@
                     android:paddingLeft="@dimen/dp20"
                     android:paddingRight="@dimen/dp4"
                     android:paddingTop="@dimen/dp16"
-                    android:text=""
+                    android:text="dddddddd"
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/sp16"
-                    android:visibility="gone" />
+                    android:visibility="visible" />
 
             </LinearLayout>
 
@@ -65,6 +64,7 @@
                 android:text="@string/fa_ellipsis_v"
                 android:textColor="#b7b3b3"
                 android:textSize="@dimen/sp26" />
+
         </FrameLayout>
 
         <LinearLayout

@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/dp8"
-
     android:layoutDirection="ltr"
     card_view:cardCornerRadius="@dimen/dp8"
     card_view:cardUseCompatPadding="true">
@@ -18,7 +17,8 @@
         android:background="@android:color/white"
         android:orientation="horizontal">
 
-        <LinearLayout
+
+        <FrameLayout
             android:id="@+id/mainContainer"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -26,9 +26,7 @@
             android:orientation="vertical"
             android:minHeight="@dimen/dp260">
 
-            <include
-                android:id="@+id/replayLayout"
-                layout="@layout/chat_sub_layout_replay" />
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -157,7 +155,7 @@
                 android:text="@string/fa_ellipsis_v"
                 android:textColor="#b7b3b3"
                 android:textSize="@dimen/sp26" />
-        </LinearLayout>
+        </FrameLayout>
 
         <LinearLayout
             android:id="@+id/cslch_ll_info"
