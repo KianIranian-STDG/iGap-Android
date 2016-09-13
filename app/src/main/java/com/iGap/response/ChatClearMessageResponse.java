@@ -47,11 +47,11 @@ public class ChatClearMessageResponse extends MessageHandler {
                 }
                 // finally delete whole chat history
                 realmChatHistories.deleteAllFromRealm();
-
-                G.clearMessagesUtil.onChatClearMessage(chatClearMessage.getRoomId(), chatClearMessage.getClearId(), chatClearMessage.getResponse());
             }
         });
         realm.close();
+
+        G.clearMessagesUtil.onChatClearMessage(chatClearMessage.getRoomId(), chatClearMessage.getClearId(), chatClearMessage.getResponse());
     }
 
     @Override

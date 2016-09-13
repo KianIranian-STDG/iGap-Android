@@ -55,6 +55,7 @@ import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActionClick, OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse {
 
@@ -757,7 +758,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
 
     private void loadLocalChatList() {
         Realm realm = Realm.getDefaultInstance();
-        for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAll()) {
+        for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAllSorted("lastMessageTime", Sort.DESCENDING)) {
             final ChatItem chatItem = new ChatItem();
             StructChatInfo info = new StructChatInfo();
             info.unreadMessagesCount = realmRoom.getUnreadCount();
@@ -841,41 +842,24 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
     protected void onResume() {
         super.onResume();
 
+        G.clearMessagesUtil.setOnChatClearMessageResponse(this);
         G.chatSendMessageUtil.setOnChatSendMessageResponse(this);
+        G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
 
         // adapter may be null because it's initializing async
         if (mAdapter != null) {
+            mAdapter.clear();
             // check if new rooms exist, add to adapter
             final Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
-                    RealmResults<RealmRoom> rooms = realm.where(RealmRoom.class).findAll();
+                    RealmResults<RealmRoom> rooms = realm.where(RealmRoom.class).findAllSorted("lastMessageTime", Sort.DESCENDING);
                     for (final RealmRoom room : rooms) {
-                        boolean exists = false;
-                        for (ChatItem chat : mAdapter.getAdapterItems()) {
-                            if (room.getId() == chat.mInfo.chatId) {
-                                exists = true;
-                                break;
-                            }
-                        }
-                        if (!exists) {
-                            mAdapter.add(convertToChatItem(room.getId()));
-                        }
+                        mAdapter.add(convertToChatItem(room.getId()));
                     }
                 }
             });
-
-            // update last message on resume
-            for (ChatItem chat : mAdapter.getAdapterItems()) {
-                RealmRoom room = realm.where(RealmRoom.class).equalTo("id", chat.mInfo.chatId).findFirst();
-                if (room != null) {
-                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", room.getLastMessageId()).findFirst();
-                    if (roomMessage != null) {
-                        mAdapter.updateChat(room.getId(), convertToChatItem(room.getId()));
-                    }
-                }
-            }
 
             realm.close();
         }
@@ -932,8 +916,17 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
     }
 
     @Override
-    public void onChatClearMessage(final long roomId, long clearId, ProtoResponse.Response response) {
+    public void onChatClearMessage(final long roomId, long clearId, final ProtoResponse.Response response) {
         Log.i(ActivityMain.class.getSimpleName(), "onChatClearMessage called");
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (mAdapter != null) {
+                    mAdapter.updateChat(roomId, convertToChatItem(roomId));
+                }
+            }
+        });
     }
 
     @Override
@@ -962,7 +955,19 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mAdapter.updateChat(roomMessage.getRoomId(), convertToChatItem(roomMessage.getRoomId()));
+                    // mAdapter.updateChat(roomMessage.getRoomId(), convertToChatItem(roomMessage.getRoomId()));
+                    mAdapter.clear();
+                    // check if new rooms exist, add to adapter
+                    final Realm realm = Realm.getDefaultInstance();
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            RealmResults<RealmRoom> rooms = realm.where(RealmRoom.class).findAllSorted("lastMessageTime", Sort.DESCENDING);
+                            for (final RealmRoom room : rooms) {
+                                mAdapter.add(convertToChatItem(room.getId()));
+                            }
+                        }
+                    });
                 }
             });
         }
