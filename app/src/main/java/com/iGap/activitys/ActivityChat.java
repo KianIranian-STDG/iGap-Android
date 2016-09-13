@@ -129,7 +129,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     private OnComplete complete;
 
 
-    private ChatFastAdapter<AbstractChatItem> mAdapter;
     private ChatMessagesFastAdapter<AbstractChatItem> mAdapter;
     private ProtoGlobal.Room.Type chatType;
 
