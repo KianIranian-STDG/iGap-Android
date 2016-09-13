@@ -8,8 +8,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.iGap.G;
 import com.iGap.R;
+import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.MyType;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 
@@ -49,7 +49,7 @@ public class VoiceItem extends AbstractChatItem<VoiceItem, VoiceItem.ViewHolder>
         }
 
         if (mMessage.sendType == MyType.SendType.send) {
-            holder.cslr_txt_tic.setText(defineMessageStatus());
+            updateMessageStatus(holder.cslr_txt_tic);
         }
     }
 
@@ -85,7 +85,7 @@ public class VoiceItem extends AbstractChatItem<VoiceItem, VoiceItem.ViewHolder>
         protected TextView cslr_txt_forward_from;
         protected LinearLayout cslr_ll_time;
         protected TextView cslr_txt_time;
-        protected TextView cslr_txt_tic;
+        protected MaterialDesignTextView cslr_txt_tic;
         protected ImageView csla_imv_state_audio;
         protected TextView csla_txt_audio_name;
         protected TextView csla_txt_audio_mime_type;
@@ -109,7 +109,7 @@ public class VoiceItem extends AbstractChatItem<VoiceItem, VoiceItem.ViewHolder>
             cslr_txt_forward_from = (TextView) view.findViewById(R.id.cslr_txt_forward_from);
             cslr_ll_time = (LinearLayout) view.findViewById(R.id.cslr_ll_time);
             cslr_txt_time = (TextView) view.findViewById(R.id.cslr_txt_time);
-            cslr_txt_tic = (TextView) view.findViewById(R.id.cslr_txt_tic);
+            cslr_txt_tic = (MaterialDesignTextView) view.findViewById(R.id.cslr_txt_tic);
             csla_imv_state_audio = (ImageView) view.findViewById(R.id.csla_imv_state_audio);
             csla_txt_audio_name = (TextView) view.findViewById(R.id.csla_txt_audio_name);
             csla_txt_audio_mime_type = (TextView) view.findViewById(R.id.csla_txt_audio_mime_type);
@@ -122,7 +122,6 @@ public class VoiceItem extends AbstractChatItem<VoiceItem, VoiceItem.ViewHolder>
             chslr_txt_replay_from = (TextView) view.findViewById(R.id.chslr_txt_replay_from);
             chslr_txt_replay_message = (TextView) view.findViewById(R.id.chslr_txt_replay_message);
 
-            cslr_txt_tic.setTypeface(G.fontawesome);
             csla_btn_audio_menu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

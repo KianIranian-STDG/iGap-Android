@@ -1,5 +1,6 @@
 package com.iGap.adapter.items.chat;
 
+import android.graphics.Color;
 import android.support.annotation.CallSuper;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -129,29 +130,28 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
         holder.itemView.findViewById(R.id.mainContainer).setBackgroundResource(R.drawable.rectangle_round_white);
     }
 
-    protected CharSequence defineMessageStatus() {
-        CharSequence status = null;
+    protected void updateMessageStatus(TextView view) {
         switch (mMessage.status) {
             case "DELIVERED":
-                status = G.context.getResources().getString(R.string.fa_check);
+                view.setTextColor(view.getContext().getResources().getColor(R.color.green));
+                view.setText(G.context.getResources().getString(R.string.md_check_symbol));
                 break;
             case "FAILED":
-                status = G.context.getResources().getString(R.string.fa_exclamation_triangle);
+                view.setTextColor(Color.RED);
+                view.setText(G.context.getResources().getString(R.string.md_cancel_button));
                 break;
             case "SEEN":
-                status = G.context.getResources().getString(R.string.fa_check) + G.context.getResources().getString(R.string.fa_check);
+                view.setTextColor(view.getContext().getResources().getColor(R.color.green));
+                view.setText(G.context.getResources().getString(R.string.md_double_tick_indicator));
                 break;
             case "SENDING":
-                status = G.context.getResources().getString(R.string.fa_clock_o);
+                view.setTextColor(view.getContext().getResources().getColor(R.color.green));
+                view.setText(G.context.getResources().getString(R.string.md_clock_with_white_face));
                 break;
             case "SENT":
-                status = G.context.getResources().getString(R.string.fa_check);
-                break;
-            case "UNRECOGNIZED":
-                status = null; // TODO: 9/8/2016 [Alireza Eskandarpour Shoferi] fill appreciate icon
+                view.setTextColor(Color.GRAY);
+                view.setText(G.context.getResources().getString(R.string.md_check_symbol));
                 break;
         }
-
-        return status;
     }
 }

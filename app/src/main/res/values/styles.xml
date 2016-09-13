@@ -78,4 +78,14 @@
         <item name="android:background">?android:attr/selectableItemBackground</item>
     </style>
 
+    <style name="ChatMessages" />
+
+    <style name="ChatMessages.Time">
+        <item name="android:textColor">@color/colorChatMessageTime</item>
+    </style>
+
+    <style name="ChatMessages.Tick">
+        <item name="android:textSize">@dimen/sp20</item>
+    </style>
+
 </resources>

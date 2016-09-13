@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -61,6 +61,7 @@ import com.iGap.module.ChatSendMessageUtil;
 import com.iGap.module.EmojiEditText;
 import com.iGap.module.EmojiPopup;
 import com.iGap.module.EmojiRecentsManager;
+import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.MyType;
 import com.iGap.module.StructMessageInfo;
 import com.iGap.proto.ProtoChatSendMessage;
@@ -92,7 +93,7 @@ import io.realm.RealmResults;
 public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, IRecentsLongClick, OnMessageClick, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractChatItem> {
 
     private EmojiEditText edtChat;
-    private ImageView imvSendButton;
+    private MaterialDesignTextView imvSendButton;
     private ImageView imvAttachFileButton;
     private ImageView imvMicButton;
 
@@ -110,7 +111,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     private TextView txt_mute;
     private ImageView imvUserPicture;
     private RecyclerView recyclerView;
-    private ImageView imvSmileButton;
+    private MaterialDesignTextView imvSmileButton;
 
     private ChatMessagesFastAdapter<AbstractChatItem> mAdapter;
     private ProtoGlobal.Room.Type chatType;
@@ -363,13 +364,13 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         ImageView imvMenuButton = (ImageView) findViewById(R.id.chl_imv_menu_button);
 
 
-        imvSmileButton = (ImageView) findViewById(R.id.chl_imv_smile_button);
+        imvSmileButton = (MaterialDesignTextView) findViewById(R.id.chl_imv_smile_button);
 
         edtChat = (EmojiEditText) findViewById(R.id.chl_edt_chat);
         edtChat.requestFocus();
 
 
-        imvSendButton = (ImageView) findViewById(R.id.chl_imv_send_button);
+        imvSendButton = (MaterialDesignTextView) findViewById(R.id.chl_imv_send_button);
 
 
         imvAttachFileButton = (ImageView) findViewById(R.id.chl_imv_attach_button);
@@ -606,7 +607,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             @Override
             public void onDismiss() {
                 // if the emoji popup is dismissed, change emoji image resource to smiley icon
-                changeEmojiButtonImageResource(R.drawable.emoticon_with_happy_face);
+                changeEmojiButtonImageResource(R.string.md_emoticon_with_happy_face);
             }
         });
         emojiPopup.setEmojiStickerClickListener(new IEmojiStickerClick() {
@@ -675,7 +676,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     // if keyboard is visible, simply show the emoji popup
                     if (emojiPopup.isKeyboardOpen()) {
                         emojiPopup.showAtBottom();
-                        changeEmojiButtonImageResource(R.drawable.black_keyboard_with_white_keys);
+                        changeEmojiButtonImageResource(R.string.md_black_keyboard_with_white_keys);
                     }
                     // else, open the text keyboard first and immediately after that show the emoji popup
                     else {
@@ -687,7 +688,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         inputMethodManager.showSoftInput(edtChat, InputMethodManager.SHOW_IMPLICIT);
 
-                        changeEmojiButtonImageResource(R.drawable.black_keyboard_with_white_keys);
+                        changeEmojiButtonImageResource(R.string.md_black_keyboard_with_white_keys);
                     }
                 }
                 // if popup is showing, simply dismiss it to show the underlying keyboard
@@ -739,8 +740,8 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         });
     }
 
-    private void changeEmojiButtonImageResource(@DrawableRes int drawableResourceId) {
-        imvSmileButton.setImageResource(drawableResourceId);
+    private void changeEmojiButtonImageResource(@StringRes int drawableResourceId) {
+        imvSmileButton.setText(drawableResourceId);
     }
 
     @Override

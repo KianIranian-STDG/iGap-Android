@@ -26,15 +26,14 @@
             android:background="@android:color/white"
             android:orientation="horizontal">
 
-
-            <ImageView
+            <com.iGap.module.MaterialDesignTextView
                 android:id="@+id/chl_imv_smile_button"
                 android:layout_width="@dimen/dp40"
                 android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/dp6"
                 android:antialias="true"
+                android:paddingLeft="@dimen/dp6"
                 android:paddingRight="@dimen/dp4"
-                android:src="@drawable/emoticon_with_happy_face" />
+                android:text="@string/md_emoticon_with_happy_face" />
 
             <com.iGap.module.EmojiEditText
                 android:id="@+id/chl_edt_chat"
@@ -59,14 +58,14 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
-                <ImageView
-                    android:id="@+id/chl_imv_send_button"
+                <com.iGap.module.MaterialDesignTextView
                     android:layout_width="@dimen/dp80"
-                    android:layout_height="wrap_content"
                     android:paddingLeft="@dimen/dp32"
-                    android:visibility="gone"
                     android:paddingRight="@dimen/dp20"
-                    android:src="@drawable/send_button_blue" />
+                    android:id="@+id/chl_imv_send_button"
+                    android:text="@string/md_send_button"
+                    android:visibility="gone"
+                    android:layout_height="wrap_content" />
 
 
                 <ImageView
@@ -74,8 +73,8 @@
                     android:layout_width="@dimen/dp40"
                     android:layout_height="wrap_content"
                     android:paddingLeft="@dimen/dp6"
-                    android:rotation="130"
                     android:paddingRight="@dimen/dp4"
+                    android:rotation="130"
                     android:src="@drawable/attachment_clip" />
 
                 <ImageView

@@ -7,6 +7,7 @@ import com.iGap.proto.ProtoChatClearMessage;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmChatHistory;
+import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomMessage;
 
 import io.realm.Realm;
@@ -44,6 +45,15 @@ public class ChatClearMessageResponse extends MessageHandler {
                         // delete chat history message
                         chatHistory.getRoomMessage().deleteFromRealm();
                     }
+                }
+
+                RealmRoom room = realm.where(RealmRoom.class).equalTo("id", chatClearMessage.getRoomId()).findFirst();
+                if (room != null) {
+                    room.setUnreadCount(0);
+                    room.setLastMessageId(0);
+                    room.setLastMessageTime(0);
+
+                    realm.copyToRealmOrUpdate(room);
                 }
                 // finally delete whole chat history
                 realmChatHistories.deleteAllFromRealm();

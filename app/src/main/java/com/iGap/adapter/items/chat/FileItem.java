@@ -6,8 +6,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.iGap.G;
 import com.iGap.R;
+import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.MyType;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 
@@ -47,7 +47,7 @@ public class FileItem extends AbstractChatItem<FileItem, FileItem.ViewHolder> {
         }
 
         if (mMessage.sendType == MyType.SendType.send) {
-            holder.cslr_txt_tic.setText(defineMessageStatus());
+            updateMessageStatus(holder.cslr_txt_tic);
         }
     }
 
@@ -83,7 +83,7 @@ public class FileItem extends AbstractChatItem<FileItem, FileItem.ViewHolder> {
         protected TextView cslr_txt_forward_from;
         protected LinearLayout cslr_ll_time;
         protected TextView cslr_txt_time;
-        protected TextView cslr_txt_tic;
+        protected MaterialDesignTextView cslr_txt_tic;
         protected ImageView cslf_imv_image_file;
         protected ImageView cslf_imv_state_file;
         protected TextView cslf_txt_file_name;
@@ -107,7 +107,7 @@ public class FileItem extends AbstractChatItem<FileItem, FileItem.ViewHolder> {
             cslr_txt_forward_from = (TextView) view.findViewById(R.id.cslr_txt_forward_from);
             cslr_ll_time = (LinearLayout) view.findViewById(R.id.cslr_ll_time);
             cslr_txt_time = (TextView) view.findViewById(R.id.cslr_txt_time);
-            cslr_txt_tic = (TextView) view.findViewById(R.id.cslr_txt_tic);
+            cslr_txt_tic = (MaterialDesignTextView) view.findViewById(R.id.cslr_txt_tic);
             cslf_imv_image_file = (ImageView) view.findViewById(R.id.cslf_imv_image_file);
             cslf_imv_state_file = (ImageView) view.findViewById(R.id.cslf_imv_state_file);
             cslf_txt_file_name = (TextView) view.findViewById(R.id.cslf_txt_file_name);
@@ -119,8 +119,6 @@ public class FileItem extends AbstractChatItem<FileItem, FileItem.ViewHolder> {
             chslr_imv_replay_pic = (ImageView) view.findViewById(R.id.chslr_imv_replay_pic);
             chslr_txt_replay_from = (TextView) view.findViewById(R.id.chslr_txt_replay_from);
             chslr_txt_replay_message = (TextView) view.findViewById(R.id.chslr_txt_replay_message);
-
-            cslr_txt_tic.setTypeface(G.fontawesome);
         }
     }
 }

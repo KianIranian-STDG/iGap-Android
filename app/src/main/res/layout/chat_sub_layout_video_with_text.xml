@@ -146,19 +146,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="10:21"
-                    android:textColor="@android:color/black"
+                    style="@style/ChatMessages.Time"
                     android:textSize="@dimen/sp12" />
 
-                <TextView
+                <com.iGap.module.MaterialDesignTextView
                     android:id="@+id/cslr_txt_tic"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/dp4"
                     android:layout_marginRight="@dimen/dp4"
                     android:gravity="bottom"
-                    android:text="@string/fa_clock_o"
+                    android:text="@string/md_clock_with_white_face"
                     android:textColor="@color/green"
-                    android:textSize="@dimen/sp16" />
+                    style="@style/ChatMessages.Tick" />
 
 
             </LinearLayout>

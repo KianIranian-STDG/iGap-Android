@@ -8,8 +8,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.iGap.G;
 import com.iGap.R;
+import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.MyType;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 
@@ -75,7 +75,7 @@ public class VideoWithTextItem extends AbstractChatItem<VideoWithTextItem, Video
         }
 
         if (mMessage.sendType == MyType.SendType.send) {
-            holder.cslr_txt_tic.setText(defineMessageStatus());
+            updateMessageStatus(holder.cslr_txt_tic);
         }
     }
 
@@ -97,7 +97,7 @@ public class VideoWithTextItem extends AbstractChatItem<VideoWithTextItem, Video
         protected TextView cslr_txt_forward_from;
         protected LinearLayout cslr_ll_time;
         protected TextView cslr_txt_time;
-        protected TextView cslr_txt_tic;
+        protected MaterialDesignTextView cslr_txt_tic;
         protected ImageView cslv_imv_vido_image;
         protected ImageButton cslv_btn_play_video;
         protected TextView cslv_txt_video_name;
@@ -115,7 +115,7 @@ public class VideoWithTextItem extends AbstractChatItem<VideoWithTextItem, Video
             cslr_txt_forward_from = (TextView) view.findViewById(R.id.cslr_txt_forward_from);
             cslr_ll_time = (LinearLayout) view.findViewById(R.id.cslr_ll_time);
             cslr_txt_time = (TextView) view.findViewById(R.id.cslr_txt_time);
-            cslr_txt_tic = (TextView) view.findViewById(R.id.cslr_txt_tic);
+            cslr_txt_tic = (MaterialDesignTextView) view.findViewById(R.id.cslr_txt_tic);
             cslv_imv_vido_image = (ImageView) view.findViewById(R.id.cslv_imv_vido_image);
             cslv_btn_play_video = (ImageButton) view.findViewById(R.id.cslv_btn_play_video);
             cslv_txt_video_name = (TextView) view.findViewById(R.id.cslv_txt_video_name);
@@ -128,8 +128,6 @@ public class VideoWithTextItem extends AbstractChatItem<VideoWithTextItem, Video
                     Log.e("ddd", " play video clicked");
                 }
             });
-
-            cslr_txt_tic.setTypeface(G.fontawesome);
         }
     }
 }

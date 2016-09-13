@@ -1,6 +1,14 @@
 <resources>
     <string name="app_name">iGap</string>
 
+    <string name="md_cancel_button">\uf136</string>
+    <string name="md_clock_with_white_face">\uf14e</string>
+    <string name="md_check_symbol">\uf143</string>
+    <string name="md_double_tick_indicator">\uf166</string>
+    <string name="md_emoticon_with_happy_face">\uf172</string>
+    <string name="md_black_keyboard_with_white_keys">\uf119</string>
+    <string name="md_send_button">\uf23d</string>
+
     <string name="fa_menu_bar">&#xf0c9;</string>
     <string name="fa_bell_slash_o">&#xf1f7;</string>
     <string name="fa_bullhorn">&#xf0a1;</string>

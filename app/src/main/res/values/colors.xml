@@ -100,4 +100,6 @@
 
     <color name="colorChatMessageSelectableItemBg">#99AADFF7</color>
 
+    <color name="colorChatMessageTime">#737373</color>
+
 </resources>
