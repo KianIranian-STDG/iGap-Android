@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.iGap.R;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.MyType;
+import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 
 import java.util.List;
@@ -21,8 +22,8 @@ import java.util.List;
 public class VideoItem extends AbstractChatItem<VideoItem, VideoItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
-    public VideoItem() {
-        super(true);
+    public VideoItem(ProtoGlobal.Room.Type type) {
+        super(true, type);
     }
 
     @Override

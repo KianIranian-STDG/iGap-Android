@@ -15,6 +15,7 @@ import com.iGap.R;
 import com.iGap.module.MyType;
 import com.iGap.module.StructMessageInfo;
 import com.iGap.module.TimeUtils;
+import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.items.AbstractItem;
 
 import java.util.List;
@@ -24,10 +25,12 @@ import java.util.List;
  */
 public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH extends RecyclerView.ViewHolder> extends AbstractItem<Item, VH> {
     public StructMessageInfo mMessage;
-    public boolean mDirectionalBased = true;
+    public boolean directionalBased = true;
+    public ProtoGlobal.Room.Type type;
 
-    public AbstractChatItem(boolean directionalBased) {
-        this.mDirectionalBased = directionalBased;
+    public AbstractChatItem(boolean directionalBased, ProtoGlobal.Room.Type type) {
+        this.directionalBased = directionalBased;
+        this.type = type;
     }
 
     public AbstractChatItem setMessage(StructMessageInfo message) {
@@ -56,12 +59,19 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
         }
 
         // only will be called when message layout is directional-base (e.g. single chat)
-        if (mDirectionalBased) {
+        if (directionalBased) {
             if (mMessage.sendType == MyType.SendType.recvive) {
                 updateLayoutForReceive(holder);
             } else if (mMessage.sendType == MyType.SendType.send) {
                 updateLayoutForSend(holder);
             }
+        }
+
+        // display user avatar only if chat type is GROUP
+        if (type == ProtoGlobal.Room.Type.GROUP) {
+            holder.itemView.findViewById(R.id.cslr_imv_sender_picture).setVisibility(View.VISIBLE);
+        } else {
+            holder.itemView.findViewById(R.id.cslr_imv_sender_picture).setVisibility(View.GONE);
         }
 
         setReplayMessage(holder);

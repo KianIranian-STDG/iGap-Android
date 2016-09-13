@@ -30,7 +30,7 @@
             <com.iGap.module.MaterialDesignTextView
                 android:id="@+id/chl_imv_smile_button"
                 style="@style/ChatMessages.MaterialDesignTextView.BottomIcon"
-                android:layout_width="@dimen/dp40"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/dp8"
                 android:text="@string/md_emoticon_with_happy_face" />
@@ -76,6 +76,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:padding="@dimen/dp8"
+                    android:rotation="135"
                     android:text="@string/md_attachment_clip" />
 
                 <com.iGap.module.MaterialDesignTextView

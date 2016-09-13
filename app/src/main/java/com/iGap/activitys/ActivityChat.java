@@ -393,53 +393,53 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 // TODO: 9/7/2016 [Alireza Eskandarpour Shoferi] add group items
                 case TEXT:
                     if (chatType == ProtoGlobal.Room.Type.CHAT) {
-                        mAdapter.add(new MessageItem().setMessage(messageInfo).withIdentifier(identifier));
+                        mAdapter.add(new MessageItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                     } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
-                        mAdapter.add(new ChannelMessageItem().setMessage(messageInfo).withIdentifier(identifier));
+                        mAdapter.add(new ChannelMessageItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                     }
                     break;
                 case IMAGE:
                     if (chatType == ProtoGlobal.Room.Type.CHAT) {
-                        mAdapter.add(new ImageItem().setMessage(messageInfo).withIdentifier(identifier));
+                        mAdapter.add(new ImageItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                     } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
-                        mAdapter.add(new ChannelImageItem().setMessage(messageInfo).withIdentifier(identifier));
+                        mAdapter.add(new ChannelImageItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                     }
                     break;
                 case IMAGE_TEXT:
                     if (chatType == ProtoGlobal.Room.Type.CHAT) {
-                        mAdapter.add(new ImageWithTextItem().setMessage(messageInfo).withIdentifier(identifier));
+                        mAdapter.add(new ImageWithTextItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                     } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
-                        mAdapter.add(new ChannelImageItem().setMessage(messageInfo).withIdentifier(identifier));
+                        mAdapter.add(new ChannelImageItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                     }
                     break;
                 case VIDEO:
                     if (chatType == ProtoGlobal.Room.Type.CHAT) {
-                        mAdapter.add(new VideoItem().setMessage(messageInfo).withIdentifier(identifier));
+                        mAdapter.add(new VideoItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                     } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
-                        mAdapter.add(new ChannelVideoItem().setMessage(messageInfo).withIdentifier(identifier));
+                        mAdapter.add(new ChannelVideoItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                     }
                     break;
                 case VIDEO_TEXT:
                     if (chatType == ProtoGlobal.Room.Type.CHAT) {
-                        mAdapter.add(new VideoWithTextItem().setMessage(messageInfo).withIdentifier(identifier));
+                        mAdapter.add(new VideoWithTextItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                     } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
-                        mAdapter.add(new ChannelVideoItem().setMessage(messageInfo).withIdentifier(identifier));
+                        mAdapter.add(new ChannelVideoItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                     }
                     break;
                 case FILE:
                 case FILE_TEXT:
                     if (chatType == ProtoGlobal.Room.Type.CHAT) {
-                        mAdapter.add(new FileItem().setMessage(messageInfo).withIdentifier(identifier));
+                        mAdapter.add(new FileItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                     } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
-                        mAdapter.add(new ChannelFileItem().setMessage(messageInfo).withIdentifier(identifier));
+                        mAdapter.add(new ChannelFileItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                     }
                     break;
                 case VOICE:
                 case VOICE_TEXT:
                     if (chatType == ProtoGlobal.Room.Type.CHAT) {
-                        mAdapter.add(new VoiceItem().setMessage(messageInfo).withIdentifier(identifier));
+                        mAdapter.add(new VoiceItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                     } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
-                        mAdapter.add(new ChannelVoiceItem().setMessage(messageInfo).withIdentifier(identifier));
+                        mAdapter.add(new ChannelVoiceItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                     }
                     break;
             }
@@ -559,7 +559,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                             messageInfo.replayPicturePath = ((StructMessageInfo) mReplayLayout.getTag()).filePic;
                         }
 
-                        mAdapter.add(new MessageItem().setMessage(messageInfo));
+                        mAdapter.add(new MessageItem(chatType).setMessage(messageInfo));
 
                         recyclerView.postDelayed(new Runnable() {
                             @Override
@@ -1197,7 +1197,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mAdapter.add(new MessageItem().setMessage(HelperProtoBuilder.convert(roomMessage)));
+                    mAdapter.add(new MessageItem(chatType).setMessage(HelperProtoBuilder.convert(roomMessage)));
                     recyclerView.postDelayed(new Runnable() {
                         @Override
                         public void run() {

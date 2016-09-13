@@ -14,6 +14,7 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activitys.ActivityComment;
 import com.iGap.module.MyType;
+import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 
 import java.util.List;
@@ -24,8 +25,8 @@ import java.util.List;
 public class ChannelVideoItem extends AbstractChatItem<ChannelVideoItem, ChannelVideoItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
-    public ChannelVideoItem() {
-        super(false);
+    public ChannelVideoItem(ProtoGlobal.Room.Type type) {
+        super(false, type);
     }
 
     @Override

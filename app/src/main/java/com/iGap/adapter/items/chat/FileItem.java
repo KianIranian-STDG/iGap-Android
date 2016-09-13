@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.iGap.R;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.MyType;
+import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 
 import java.util.List;
@@ -19,8 +20,8 @@ import java.util.List;
 public class FileItem extends AbstractChatItem<FileItem, FileItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
-    public FileItem() {
-        super(true);
+    public FileItem(ProtoGlobal.Room.Type type) {
+        super(true, type);
     }
 
     @Override
