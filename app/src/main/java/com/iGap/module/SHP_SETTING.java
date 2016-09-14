@@ -35,6 +35,40 @@ public class SHP_SETTING {
     public static final String KEY_AD_ROAMING_MUSIC = "ROAMING_MUSIC";
     public static final String KEY_AD_ROAMING_GIF = "ROAMING_GIF";
 
+    // ========================================================================================== notification and sound
+
+
+    public static final String KEY_STNS_ALERT_MESSAGE = "STNS_ALERT_MESSAGE";
+    public static final String KEY_STNS_MESSAGE_PREVIEW_MESSAGE = "STNS_MESSAGE_PREVIEW_MESSAGE";
+    public static final String KEY_STNS_ALERT_GROUP = "STNS_ALERT_MESSAGE";
+    public static final String KEY_STNS_MESSAGE_PREVIEW_GROUP = "STNS_MESSAGE_PREVIEW_GROUP";
+
+    public static final String KEY_STNS_APP_SOUND = "STNS_APP_SOUND";
+    public static final String KEY_STNS_APP_VIBRATE = "STNS_APP_VIBRATE";
+    public static final String KEY_STNS_APP_PREVIEW = "STNS_APP_PREVIEW";
+    public static final String KEY_STNS_CHAT_SOUND = "STNS_CHAT_SOUND";
+
+    public static final String KEY_STNS_CONTACT_JOINED = "STNS_CONTACT_JOINED";
+    public static final String KEY_STNS_PINNED_MESSAGE = "STNS_PINNED_MESSAGE";
+
+    public static final String KEY_STNS_KEEP_ALIVE_SERVICE = "STNS_KEEP_ALIVE_SERVICE";
+    public static final String KEY_STNS_BACKGROUND_CONNECTION = "STNS_BACKGROUND_CONNECTION";
+    public static final String KEY_STNS_BADGE_CONTENT = "STNS_BADGE_CONTENT";
+
+    public static final String KEY_STNS_VIBRATE_MESSAGE = "STNS_VIBRATE_MESSAGE";
+    public static final String KEY_STNS_POPUP_NOTIFICATION_MESSAGE = "STNS_POPUP_NOTIFICATION_MESSAGE";
+    public static final String KEY_STNS_VIBRATE_GROUP = "STNS_VIBRATE_GROUP";
+    public static final String KEY_STNS_POPUP_NOTIFICATION_GROUP = "STNS_POPUP_NOTIFICATION_GROUP";
+    public static final String KEY_STNS_REPEAT_NOTIFICATION = "STNS_REPEAT_NOTIFICATION";
+
+    public static final String KEY_STNS_LED_COLOR_MESSAGE = "STNS_LED_COLOR_MESSAGE";
+    public static final String KEY_STNS_LED_COLOR_GROUP = "STNS_LED_COLOR_GROUP";
+
+    public static final String KEY_STNS_SOUND_MESSAGE = "STNS_SOUND_MESSAGE";
+    public static final String KEY_STNS_SOUND_MESSAGE_POSITION = "STNS_SOUND_MESSAGE_POSITION";
+    public static final String KEY_STNS_SOUND_GROUP = "STNS_SOUND_GROUP";
+    public static final String KEY_STNS_SOUND_GROUP_POSITION = "STNS_SOUND_GROUP_POSITION";
+
 }
 
 

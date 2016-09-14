@@ -146,9 +146,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="0dp"
+                android:layout_marginTop="-5dp"
                 android:orientation="horizontal"
-                android:visibility="invisible">
+                android:visibility="gone">
 
 
                 <TextView
@@ -179,15 +179,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="-5dp"
-                android:gravity="center"
+                android:layout_marginTop="-2dp"
+                android:gravity="top"
                 android:lineSpacingExtra="@dimen/dp4"
                 android:paddingLeft="@dimen/dp28"
                 android:paddingRight="@dimen/dp28"
                 android:text="@string/text_line_2_introduce_page1"
                 android:textColor="@color/text_line2_lc__dark"
                 android:textSize="@dimen/sp14"
-                android:visibility="invisible" />
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/int_txt_p1_l3"
@@ -202,7 +202,7 @@
                 android:text="@string/text_line_3_introduce_page1"
                 android:textColor="@color/text_line2_lc__dark"
                 android:textSize="@dimen/sp16"
-                android:visibility="invisible" />
+                android:visibility="gone" />
         </LinearLayout>
         <!--page 1-->
 
@@ -359,7 +359,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
-            android:layout_marginLeft="@dimen/dp12" />
+            android:layout_marginLeft="@dimen/dp28" />
     </RelativeLayout>
 
     <android.support.v4.view.ViewPager
@@ -390,9 +390,9 @@
         android:textColor="@color/toolbar_background"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_marginBottom="@dimen/dp8"
+        android:layout_marginBottom="@dimen/dp4"
         android:layout_marginRight="@dimen/dp8"
-        android:textSize="@dimen/sp18"
+        android:textSize="@dimen/sp16"
         />
 
 

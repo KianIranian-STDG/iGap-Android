@@ -27,7 +27,7 @@
             android:id="@+id/rg_txt_titleToolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="SearchView"
+            android:text="Select Country"
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/dp24"
             android:maxLines="1"

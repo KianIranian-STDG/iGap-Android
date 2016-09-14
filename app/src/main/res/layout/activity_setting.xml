@@ -2,8 +2,7 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layoutDirection="ltr">
+    android:layout_height="match_parent">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/st_appbar"
@@ -138,7 +137,7 @@
                 android:paddingLeft="@dimen/dp16"
                 android:paddingRight="@dimen/dp16"
                 android:paddingTop="@dimen/dp8"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -225,7 +224,7 @@
                 android:layout_marginTop="@dimen/dp8"
                 android:background="@color/st_background2"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="visible">
 
 
                 <TextView
@@ -247,9 +246,7 @@
                     android:id="@+id/st_txt_notifyAndSound"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp60"
-                    android:paddingBottom="@dimen/dp16"
-                    android:paddingLeft="@dimen/dp16"
-                    android:paddingRight="@dimen/dp16"
+                    android:padding="@dimen/dp16"
                     android:text="@string/st_title_notification_sounds"
                     android:textColor="@color/black_register"
                     android:textSize="@dimen/sp18"
@@ -293,15 +290,34 @@
                     android:layout_height="1dp"
                     android:background="@color/background_editText" />
 
-                <TextView
-                    android:id="@+id/st_txt_clearCache"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp60"
-                    android:padding="@dimen/dp16"
-                    android:text="@string/st_title_Clear_Cache"
-                    android:textColor="@color/black_register"
-                    android:textSize="@dimen/sp18"
-                    android:textStyle="normal" />
+                    android:layout_height="wrap_content"
+                    android:id="@+id/st_layout_clearCache">
+
+                    <TextView
+
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp60"
+                        android:padding="@dimen/dp16"
+                        android:text="@string/st_title_Clear_Cache"
+                        android:textColor="@color/black_register"
+                        android:textSize="@dimen/sp18"
+                        android:textStyle="normal" />
+
+                    <TextView
+                        android:id="@+id/st_txt_clearCache"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/dp60"
+                        android:text="0 KB"
+                        android:layout_alignParentRight="true"
+                        android:paddingRight="@dimen/dp28"
+                        android:gravity="center"
+                        android:textColor="@color/toolbar_background"
+                        android:textSize="@dimen/sp18"
+                        android:textStyle="normal" />
+
+                </RelativeLayout>
 
                 <View
                     android:layout_width="match_parent"

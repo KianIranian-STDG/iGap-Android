@@ -1,16 +1,6 @@
 <resources>
     <string name="app_name">iGap</string>
 
-    <string name="md_cancel_button">\uf136</string>
-    <string name="md_clock_with_white_face">\uf14e</string>
-    <string name="md_check_symbol">\uf143</string>
-    <string name="md_double_tick_indicator">\uf166</string>
-    <string name="md_emoticon_with_happy_face">\uf172</string>
-    <string name="md_black_keyboard_with_white_keys">\uf119</string>
-    <string name="md_send_button">\uf23d</string>
-    <string name="md_attachment_clip">\uf10c</string>
-    <string name="md_voice_message_microphone_button">\uf293</string>
-
     <string name="fa_menu_bar">&#xf0c9;</string>
     <string name="fa_bell_slash_o">&#xf1f7;</string>
     <string name="fa_bullhorn">&#xf0a1;</string>
@@ -43,15 +33,8 @@
     <string name="fa_arrow_down">&#xf063;</string>
     <string name="fa_video_camera">&#xf03d;</string>
     <string name="fa_pause">&#xf04c;</string>
-    <string name="fa_repeat">&#xf01e;</string>
-    <string name="save">&#xf0c7;</string>
-    <string name="fa_external_link">&#xf054;</string>
-    <string name="fa_eraser">&#xf12d;</string>
-    <string name="eyedropper">&#xf1fb;</string>
+
     <string name="fa_cog">&#xf013;</string>
-    <string name="fa_picture">&#xf03e;</string>
-    <string name="fa_camera">&#xf083;</string>
-    <string name="paint">&#xf1fc;</string>
     <string name="fa_user_plus">&#xf234;</string>
     <string name="fa_lock">&#xf023;</string>
     <string name="fa_question_circle">&#xf059;</string>
@@ -71,25 +54,6 @@
     <string name="no">No</string>
     <string name="ok">Ok</string>
 
-
-    <string name="am_camera">camera</string>
-    <string name="am_music">music</string>
-    <string name="am_paint">paint</string>
-    <string name="am_picture">picture</string>
-    <string name="am_document">document</string>
-    <string name="am_location">location</string>
-    <string name="am_video">video</string>
-    <string name="am_file">file</string>
-    <string name="am_contact">contact</string>
-
-
-    <string name="just_wait_en">Just Wait</string>
-    <string name="device_dosenot_camera_en">This device does not have a camera</string>
-    <string name="do_you_want_to_turn_on_gps">your Gps is Off do you want to turn On Gps</string>
-    <string name="picture_is_saved_en">Picture Saved</string>
-    <string name="select_picture_en">Select Picture</string>
-    <string name="cannot_load_data_en">Can\'t Load Data</string>
-    <string name="do_you_want_exit">do you want to exit</string>
 
     //mo
 
@@ -152,9 +116,9 @@
     <string name="text_line_1_introduce_page5">EVERYTHING FOR FREE!</string>
 
 
-    <string name="text_line_2_introduce_page5">
+    -<string name="text_line_2_introduce_page5">
 
-<![CDATA[ Not to bore you no more! <br /> iGap is all Free. Create your own world just now! ]]>
+-<![CDATA[ Not to bore you no more! <br /> iGap is all Free. Create your own world just now! ]]>
 </string>
 
     //profile user
@@ -200,10 +164,9 @@
     <string name="st_title_general">General</string>
     <string name="st_username">UserName:</string>
     <string name="st_nickname">Nickname:</string>
-    <string name="st_contactName">Contact Name:</string>
     <string name="st_phoneNumber">Phone Number:</string>
     <string name="st_title_info">Info</string>
-    <string name="st_title_notification_sounds">Notification and Sounds</string>
+    <string name="st_title_notification_sounds">صدا و اعلانات</string>
     <string name="st_title_Clear_Cache">Clear Cache</string>
     <string name="st_title_Privacy_Security">Privacy and Security</string>
     <string name="st_title_message">Message</string>
@@ -252,7 +215,7 @@
     <string name="st_badge_counter">Pinned Message</string>
     <string name="st_Repeat_Notifications">Pinned Message</string>
     <string name="st_title_reset">Reset</string>
-    <string name="st_reset_all_notification">Reset All Notification</string>
+    <string name="st_reset_all_notification">پاک کردن</string>
     <string name="st_text_reset_all_notification">Undo all custom notification settings for all your contacts and groups</string>
     <string name="st_popup_logout">Are you sure you want to log out? \n Note that you can seamLessly use iGap on all your devices at once. \n Remember,logging out kills all your Secret Chats.</string>
 

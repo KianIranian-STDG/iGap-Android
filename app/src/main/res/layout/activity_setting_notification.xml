@@ -156,16 +156,15 @@
                         android:textSize="@dimen/sp18"
                         android:textStyle="normal" />
 
-                    <com.iGap.module.CircleImageView
 
+                    <ImageView
                         android:id="@+id/stns_img_ledColorMessage"
                         android:layout_width="@dimen/dp24"
                         android:layout_height="@dimen/dp24"
                         android:layout_gravity="center_vertical"
                         android:layout_marginRight="@dimen/dp16"
-                        android:background="@drawable/pu_circle_button_give_image"
-                        android:gravity="center"
-                        app:civ_border_width="0dp" />
+                        android:background="@color/toolbar_background"
+                        android:gravity="center" />
 
                 </LinearLayout>
 
@@ -175,13 +174,13 @@
                     android:background="@color/background_editText" />
 
                 <LinearLayout
+                    android:id="@+id/stns_layout_vibrate_message"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp60"
                     android:orientation="vertical"
                     android:paddingLeft="@dimen/dp16">
 
                     <TextView
-                        android:id="@+id/st_txt_vibrate_message"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight=".6"
@@ -192,7 +191,7 @@
                         android:textStyle="normal" />
 
                     <TextView
-                        android:id="@+id/st_txt_vibrate_message_text"
+                        android:id="@+id/stns_txt_vibrate_message_text"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight=".4"
@@ -210,7 +209,7 @@
                     android:background="@color/background_editText" />
 
                 <LinearLayout
-                    android:id="@+id/st_layout_popupNotification_message"
+                    android:id="@+id/stns_layout_popupNotification_message"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp60"
                     android:orientation="vertical"
@@ -228,7 +227,7 @@
                         android:textStyle="normal" />
 
                     <TextView
-                        android:id="@+id/st_txt_popupNotification_message_text"
+                        android:id="@+id/stns_txt_popupNotification_message_text"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight=".4"
@@ -246,13 +245,13 @@
                     android:background="@color/background_editText" />
 
                 <LinearLayout
+                    android:id="@+id/stns_layout_sound_message"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp60"
                     android:orientation="vertical"
                     android:paddingLeft="@dimen/dp16">
 
                     <TextView
-                        android:id="@+id/st_txt_sound"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight=".6"
@@ -263,7 +262,7 @@
                         android:textStyle="normal" />
 
                     <TextView
-                        android:id="@+id/st_txt_sound_text"
+                        android:id="@+id/stns_txt_sound_text"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight=".4"
@@ -277,6 +276,8 @@
 
             </LinearLayout>
 
+
+            <!--group-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -380,7 +381,7 @@
                         android:textSize="@dimen/sp18"
                         android:textStyle="normal" />
 
-                    <com.iGap.module.CircleImageView
+                    <ImageView
 
                         android:id="@+id/stns_img_ledColor_group"
                         android:layout_width="@dimen/dp24"
@@ -388,8 +389,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginRight="@dimen/dp16"
                         android:background="@drawable/pu_circle_button_give_image"
-                        android:gravity="center"
-                        app:civ_border_width="0dp" />
+                        android:gravity="center" />
 
                 </LinearLayout>
 
@@ -399,13 +399,13 @@
                     android:background="@color/background_editText" />
 
                 <LinearLayout
+                    android:id="@+id/stns_layout_vibrate_group"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp60"
                     android:orientation="vertical"
                     android:paddingLeft="@dimen/dp16">
 
                     <TextView
-                        android:id="@+id/st_txt_vibrate_group"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight=".6"
@@ -416,7 +416,7 @@
                         android:textStyle="normal" />
 
                     <TextView
-                        android:id="@+id/st_txt_vibrate_group_text"
+                        android:id="@+id/stns_txt_vibrate_group_text"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight=".4"
@@ -434,14 +434,13 @@
                     android:background="@color/background_editText" />
 
                 <LinearLayout
-                    android:id="@+id/st_layout_popupNotification_group"
+                    android:id="@+id/stns_layout_popupNotification_group"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp60"
                     android:orientation="vertical"
                     android:paddingLeft="@dimen/dp16">
 
                     <TextView
-
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight=".6"
@@ -452,7 +451,7 @@
                         android:textStyle="normal" />
 
                     <TextView
-                        android:id="@+id/st_txt_popupNotification_group_text"
+                        android:id="@+id/stns_txt_popupNotification_group_text"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight=".4"
@@ -470,13 +469,13 @@
                     android:background="@color/background_editText" />
 
                 <LinearLayout
+                    android:id="@+id/stns_layout_sound_group"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp60"
                     android:orientation="vertical"
                     android:paddingLeft="@dimen/dp16">
 
                     <TextView
-                        android:id="@+id/st_txt_sound_group"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight=".6"
@@ -487,7 +486,7 @@
                         android:textStyle="normal" />
 
                     <TextView
-                        android:id="@+id/st_txt_sound_group_text"
+                        android:id="@+id/stns_txt_sound_group_text"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight=".4"
@@ -501,6 +500,7 @@
             </LinearLayout>
 
 
+            <!--in app notification-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -539,7 +539,7 @@
                         android:textStyle="normal" />
 
                     <ToggleButton
-                        android:id="@+id/stns_toggle_app_vibrat"
+                        android:id="@+id/stns_toggle_app_sound"
                         android:layout_width="@dimen/dp40"
                         android:layout_height="@dimen/dp40"
                         android:background="@drawable/st_switch_button"
@@ -555,7 +555,7 @@
                     android:background="@color/background_editText" />
 
                 <LinearLayout
-                    android:id="@+id/stns_layout_vibrate"
+                    android:id="@+id/stns_layout_app_vibrate"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp60"
                     android:gravity="center_vertical"
@@ -572,7 +572,7 @@
                         android:textStyle="normal" />
 
                     <ToggleButton
-                        android:id="@+id/stns_toggle_vibrate"
+                        android:id="@+id/stns_toggle_app_vibrate"
                         android:layout_width="@dimen/dp40"
                         android:layout_height="@dimen/dp40"
                         android:background="@drawable/st_switch_button"
@@ -939,15 +939,14 @@
                 <LinearLayout
                     android:id="@+id/st_layout_reset_all_notification"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp60"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:paddingLeft="@dimen/dp16">
 
                     <TextView
 
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight=".6"
+                        android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:text="@string/st_reset_all_notification"
                         android:textColor="@color/black_register"
@@ -957,8 +956,7 @@
                     <TextView
                         android:id="@+id/st_txt_reset_all_notification"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight=".4"
+                        android:layout_height="wrap_content"
                         android:gravity="center_vertical|top"
                         android:text="@string/st_text_reset_all_notification"
                         android:textColor="@color/cardview_dark_background"

@@ -88,6 +88,7 @@ public class G extends Application {
     public static Typeface verdana;
     public static Typeface VerdanaBold;
     public static Typeface fontawesome;
+    public static Typeface test;
 
     public static Context context;
     public static Handler handler;
@@ -179,6 +180,8 @@ public class G extends Application {
     public static final String DIR_IMAGES = DIR_APP + "/images";
     public static final String DIR_VIDEOS = DIR_APP + "/videos";
     public static final String DIR_AUDIOS = DIR_APP + "/audios";
+    public static final String DIR_DOCUMENT = DIR_APP + "/document";
+    public static final String DIR_SOUND_NOTIFICATION = DIR_APP + "/sound";
 
     public static final String CHAT_MESSAGE_TIME = "H:mm";
 
@@ -191,6 +194,8 @@ public class G extends Application {
         new File(DIR_IMAGES).mkdirs();
         new File(DIR_VIDEOS).mkdirs();
         new File(DIR_AUDIOS).mkdirs();
+        new File(DIR_DOCUMENT).mkdirs();
+        new File(DIR_SOUND_NOTIFICATION).mkdirs();
 
         context = getApplicationContext();
         handler = new Handler();
@@ -211,6 +216,7 @@ public class G extends Application {
         verdana = Typeface.createFromAsset(this.getAssets(), "fonts/Verdana.ttf");
         VerdanaBold = Typeface.createFromAsset(this.getAssets(), "fonts/VerdanaBold.ttf");
         fontawesome = Typeface.createFromAsset(this.getAssets(), "fonts/fontawesome.ttf");
+        test = Typeface.createFromAsset(this.getAssets(), "fonts/Flaticon.ttf");
 
         HELETICBLK_TITR = Typeface.createFromAsset(context.getAssets(), "fonts/ar.ttf");
         ARIAL_TEXT = Typeface.createFromAsset(context.getAssets(), "fonts/arial.ttf");

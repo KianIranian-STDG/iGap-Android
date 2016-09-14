@@ -61,4 +61,59 @@
     <string-array name="st_popup">
         <item>Log Out</item>
     </string-array>
+
+    <string-array name="vibrate">
+        <item>Disable</item>
+        <item>Default</item>
+        <item>Short</item>
+        <item>Long</item>
+        <item>Only if silent</item>
+    </string-array>
+
+    <string-array name="popup_Notification">
+        <item>No popup</item>
+        <item>Only when screen "on"</item>
+        <item>Only when screen "off"</item>
+        <item>Always show popup</item>
+    </string-array>
+
+    <string-array name="repeat_notification">
+        <item>Off</item>
+        <item>5 minutes</item>
+        <item>10 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>2 hours</item>
+        <item>4 hours</item>
+    </string-array>
+
+    <string-array name="sound_message">
+        <item>Default Notification tone</item>
+        <item>None</item>
+        <item>Adm Sound success</item>
+        <item>Arrow</item>
+        <item>Bongo</item>
+        <item>Car Lock</item>
+        <item>Cascade</item>
+        <item>Clever</item>
+        <item>Crystal Drop</item>
+        <item>Cuckoo</item>
+        <item>Doorbell</item>
+        <item>Facebook Pop</item>
+        <item>Hangouts Message</item>
+        <item>Joyful</item>
+        <item>Lavender</item>
+        <item>Letter</item>
+        <item>Microwave Think Alike</item>
+        <item>Music Box</item>
+        <item>Old Bicycle</item>
+        <item>Outlook Calender</item>
+        <item>Outlook Email</item>
+        <item>Shine</item>
+        <item>step</item>
+        <item>Sunrise</item>
+        <item>Whisper</item>>
+        <item>Whistle</item>>
+    </string-array>
+
 </resources>
