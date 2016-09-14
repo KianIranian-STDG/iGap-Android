@@ -67,6 +67,13 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
             }
         }
 
+        // display 'edited' indicator beside message time if message was edited
+        if (mMessage.isEdited) {
+            holder.itemView.findViewById(R.id.txtEditedIndicator).setVisibility(View.VISIBLE);
+        } else {
+            holder.itemView.findViewById(R.id.txtEditedIndicator).setVisibility(View.GONE);
+        }
+
         // display user avatar only if chat type is GROUP
         if (type == ProtoGlobal.Room.Type.GROUP) {
             holder.itemView.findViewById(R.id.cslr_imv_sender_picture).setVisibility(View.VISIBLE);

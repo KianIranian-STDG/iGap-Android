@@ -1,5 +1,7 @@
 package com.iGap.activitys;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -108,6 +110,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     private EmojiEditText edtChat;
     private MaterialDesignTextView imvSendButton;
     private MaterialDesignTextView imvAttachFileButton;
+    private LinearLayout layoutAttachBottom;
     private MaterialDesignTextView imvMicButton;
 
     private Button btnCloseAppBarSelected;
@@ -351,6 +354,10 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         toolbar = (LinearLayout) findViewById(R.id.toolbar);
         ImageView imvBackButton = (ImageView) findViewById(R.id.chl_imv_back_Button);
 
+        Realm realm = Realm.getDefaultInstance();
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", mRoomId).findFirst();
+        findViewById(R.id.imgMutedRoom).setVisibility(realmRoom.getMute() ? View.VISIBLE : View.GONE);
+        realm.close();
 
         txtName = (TextView) findViewById(R.id.chl_txt_name);
         txtName.setTypeface(G.arialBold);
@@ -403,6 +410,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
 
         imvAttachFileButton = (MaterialDesignTextView) findViewById(R.id.chl_imv_attach_button);
+        layoutAttachBottom = (LinearLayout) findViewById(R.id.layoutAttachBottom);
 
 
         imvMicButton = (MaterialDesignTextView) findViewById(R.id.chl_imv_mic_button);
@@ -749,17 +757,37 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
             @Override
             public void afterTextChanged(Editable editable) {
-
                 if (edtChat.getText().length() > 0) {
-                    imvAttachFileButton.setVisibility(View.GONE);
-                    imvMicButton.setVisibility(View.GONE);
-                    imvSendButton.setVisibility(View.VISIBLE);
+                    layoutAttachBottom.animate().alpha(0F).setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            layoutAttachBottom.setVisibility(View.GONE);
+                        }
+                    }).start();
+                    imvSendButton.animate().alpha(1F).setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            imvSendButton.setVisibility(View.VISIBLE);
+                        }
+                    }).start();
                 } else {
-                    imvSendButton.setVisibility(View.GONE);
-                    imvAttachFileButton.setVisibility(View.VISIBLE);
-                    imvMicButton.setVisibility(View.VISIBLE);
+                    layoutAttachBottom.animate().alpha(1F).setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            layoutAttachBottom.setVisibility(View.VISIBLE);
+                        }
+                    }).start();
+                    imvSendButton.animate().alpha(0F).setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            imvSendButton.setVisibility(View.GONE);
+                        }
+                    }).start();
                 }
-
 
                 // android emojione doesn't support common space unicode
                 // to support space character, a new unicode will be replaced.
@@ -1133,6 +1161,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 structMessageInfo.messageID = Long.toString(roomMessage.getMessageId());
                 structMessageInfo.time = roomMessage.getUpdateTime();
                 structMessageInfo.senderID = Long.toString(roomMessage.getUserId());
+                structMessageInfo.isEdited = roomMessage.isEdited();
                 if (roomMessage.getUserId() == userId) {
                     structMessageInfo.sendType = MyType.SendType.send;
                 } else if (roomMessage.getUserId() != userId) {

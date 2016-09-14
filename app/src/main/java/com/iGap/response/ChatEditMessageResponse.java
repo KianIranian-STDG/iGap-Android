@@ -39,6 +39,7 @@ public class ChatEditMessageResponse extends MessageHandler {
                 if (roomMessage != null) {
                     // update message text in database
                     roomMessage.setMessage(chatEditMessageResponse.getMessage());
+                    roomMessage.setEdited(true);
 
                     G.onChatEditMessageResponse.onChatEditMessage(chatEditMessageResponse.getRoomId(), chatEditMessageResponse.getMessageId(), chatEditMessageResponse.getMessageVersion(), chatEditMessageResponse.getMessage(), chatEditMessageResponse.getResponse());
                 }

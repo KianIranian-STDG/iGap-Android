@@ -17,11 +17,9 @@
             android:id="@+id/mainContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp28"
+            android:padding="@dimen/dp4"
             android:background="@drawable/rectangle_round_white"
-            android:orientation="vertical"
-            android:paddingLeft="@dimen/dp28"
-            android:paddingStart="@dimen/dp28">
+            android:orientation="vertical">
 
             <include
                 android:id="@+id/replayLayout"

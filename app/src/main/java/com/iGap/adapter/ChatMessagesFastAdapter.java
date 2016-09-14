@@ -35,6 +35,7 @@ public class ChatMessagesFastAdapter<Item extends AbstractChatItem> extends Fast
             if (messageInfo.mMessage.messageID.equals(Long.toString(messageId))) {
                 int pos = items.indexOf(messageInfo);
                 messageInfo.mMessage.messageText = updatedText;
+                messageInfo.mMessage.isEdited = true;
                 set(pos, messageInfo);
                 break;
             }

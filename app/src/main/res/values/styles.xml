@@ -82,8 +82,9 @@
 
     <style name="ChatMessages.MaterialDesignTextView" />
 
-    <style name="ChatMessages.MaterialDesignTextView.Time">
+    <style name="ChatMessages.Time">
         <item name="android:textColor">@color/colorChatMessageTime</item>
+        <item name="android:textSize">@dimen/sp12</item>
     </style>
 
     <style name="ChatMessages.MaterialDesignTextView.Tick">

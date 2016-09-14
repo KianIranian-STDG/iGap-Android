@@ -18,6 +18,8 @@ public class StructMessageInfo implements Parcelable {
     public String senderName = "";
     public String senderID = "";
 
+    public boolean isEdited = false;
+
     public String status = ProtoGlobal.RoomMessageStatus.SENDING.toString();
     public String channelLink = "";
     public String initials;
