@@ -472,15 +472,23 @@ public class ActivityRegister extends ActivityEnhanced {
 
                 int marginLeft = (int) getResources().getDimension(R.dimen.dp32);
                 int marginRight = (int) getResources().getDimension(R.dimen.dp32);
-                int marginTop = (int) getResources().getDimension(R.dimen.dp36);
-                int marginBottom = (int) getResources().getDimension(R.dimen.dp20);
+                int marginTopStart = (int) getResources().getDimension(R.dimen.dp20);
+                int marginTopChooseCountry = 0;
+                int marginBottomChooseCountry = (int) getResources().getDimension(R.dimen.dp8);
+                int marginBottomStart = 0;
 
                 RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) btnChoseCountry.getLayoutParams();
-                params.setMargins(marginLeft, marginTop, marginRight, marginBottom); //left, top, right, bottom
+                params.setMargins(marginLeft, marginTopChooseCountry, marginRight, marginBottomChooseCountry); //left, top, right, bottom
                 btnChoseCountry.setLayoutParams(params);
+//
+//                ViewGroup relativeLayout = (ViewGroup) findViewById(R.id.rg_layout_center);
+//                LinearLayout.LayoutParams params3 = (LinearLayout.LayoutParams) relativeLayout.getLayoutParams();
+//                params3.setMargins(marginLeft, marginTopChooseCountry, marginRight, marginRight); //left, top, right, bottom
+//                relativeLayout.setLayoutParams(params3);
+
 
                 RelativeLayout.LayoutParams params2 = (RelativeLayout.LayoutParams) btnStart.getLayoutParams();
-                params2.setMargins(marginLeft, marginTop, marginRight, marginBottom); //left, top, right, bottom
+                params2.setMargins(marginLeft, marginTopStart, marginRight, marginBottomStart); //left, top, right, bottom
                 btnStart.setLayoutParams(params2);
             }
 
@@ -674,6 +682,9 @@ public class ActivityRegister extends ActivityEnhanced {
                         if (methodValue == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SMS) {//verification with sms
 
                         } else if (methodValue == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SOCKET) {//verification with socket
+
+                            errorVerifySms(); // open rg_dialog for enter sms code
+
 
                         } else if (methodValue == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SMS_SOCKET) {//verification with sms and socket
 

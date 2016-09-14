@@ -4,8 +4,9 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -13,12 +14,15 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.text.InputType;
-import android.view.Gravity;
+import android.util.DisplayMetrics;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
+import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -35,26 +39,32 @@ import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestUserProfileSetNickname;
 
+import java.io.File;
+import java.text.DecimalFormat;
+import java.util.Locale;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
-import io.realm.RealmResults;
 
 public class ActivitySetting extends ActivityEnhanced {
 
     private SharedPreferences sharedPreferences;
     private int messageTextSize = 16;
 
-    private TextView txtBack, txtMenu, txtMessageTextSize, txtAutoDownloadData, txtAutoDownloadWifi, txtAutoDownloadRoaming, txtKeepMedia, txtLanguage;
+    private TextView txtBack, txtMenu, txtMessageTextSize, txtAutoDownloadData, txtAutoDownloadWifi,
+            txtAutoDownloadRoaming, txtKeepMedia, txtLanguage, txtSizeClearCach;
     private ImageView imgMenu;
+
+    private RelativeLayout ltClearCache;
+
 
     private int poRbDialogLangouage = -1;
     private String textLanguage = "English";
     private int poRbDialogTextSize = -1;
 
     private ViewGroup ltMessageTextSize, ltLanguage, ltInAppBrowser, ltSentByEnter, ltEnableAnimation, ltAutoGifs, ltSaveToGallery;
-    private TextView txtNickName, txtUserName, txtPhoneNumber;
+    private TextView txtNickName, txtUserName, txtPhoneNumber, txtNotifyAndSound;
     private ToggleButton toggleSentByEnter, toggleEnableAnimation, toggleAutoGifs, toggleSaveToGallery, toggleInAppBrowser;
-
 
     private AppBarLayout appBarLayout;
 
@@ -100,7 +110,6 @@ public class ActivitySetting extends ActivityEnhanced {
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
         final Realm realm = Realm.getDefaultInstance();
-
         final TextView txtNickNameTitle = (TextView) findViewById(R.id.ac_txt_nickname_title);
 
         txtNickName = (TextView) findViewById(R.id.st_txt_nikName);
@@ -184,7 +193,7 @@ public class ActivitySetting extends ActivityEnhanced {
             @Override
             public void onClick(View view) {
 
-                MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this)
+                new MaterialDialog.Builder(ActivitySetting.this)
                         .title("Username")
                         .positiveText("SAVE")
                         .alwaysCallInputCallback()// callback input change evrTime
@@ -256,71 +265,71 @@ public class ActivitySetting extends ActivityEnhanced {
             public void onClick(View v) {
 
 
-                MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this)
-                        .items(R.array.st_popup)
-                        .contentColor(Color.BLACK)
-                        .itemsCallback(new MaterialDialog.ListCallback() {
-                            @Override
-                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-
-                                switch (which) {
-                                    case 0:
-                                        new MaterialDialog.Builder(ActivitySetting.this)
-                                                .title("iGap")
-                                                .positiveText("LOGOUT")
-                                                .negativeText("CANCEL")
-                                                .content(R.string.st_popup_logout)
-                                                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                                    @Override
-                                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                                                        final RealmResults<RealmUserInfo> result = realm.where(RealmUserInfo.class).findAll();
-                                                        realm.executeTransaction(new Realm.Transaction() {
-                                                            @Override
-                                                            public void execute(Realm realm) {
-                                                                result.deleteAllFromRealm();
-                                                            }
-                                                        });
-
-                                                        startActivity(new Intent(ActivitySetting.this, ActivityIntroduce.class));
-                                                        finish();
-                                                    }
-                                                }).show();
-                                        break;
-
-                                }
-
-
-                            }
-                        }).show();
-
-                WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-                layoutParams.copyFrom(dialog.getWindow().getAttributes());
-                layoutParams.width = (int) getResources().getDimension(R.dimen.dp180);
-                layoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
-
-                dialog.getWindow().setAttributes(layoutParams);
-
-//                PopupMenu popupMenu = new PopupMenu(ActivitySetting.this, v, Gravity.TOP | Gravity.RIGHT);
-//                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-//                    @Override
-//                    public boolean onMenuItemClick(MenuItem item) {
+//                MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this)
+//                        .items(R.array.st_popup)
+//                        .contentColor(Color.BLACK)
+//                        .itemsCallback(new MaterialDialog.ListCallback() {
+//                            @Override
+//                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 //
-//                        switch (item.getItemId()) {
+//                                switch (which) {
+//                                    case 0:
+//                                        new MaterialDialog.Builder(ActivitySetting.this)
+//                                                .title("iGap")
+//                                                .positiveText("LOGOUT")
+//                                                .negativeText("CANCEL")
+//                                                .content(R.string.st_popup_logout)
+//                                                .onPositive(new MaterialDialog.SingleButtonCallback() {
+//                                                    @Override
+//                                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 //
-//                            case R.id.st_logOut:
+//                                                        final RealmResults<RealmUserInfo> result = realm.where(RealmUserInfo.class).findAll();
+//                                                        realm.executeTransaction(new Realm.Transaction() {
+//                                                            @Override
+//                                                            public void execute(Realm realm) {
+//                                                                result.deleteAllFromRealm();
+//                                                            }
+//                                                        });
 //
-//                                Toast.makeText(ActivitySetting.this, "2", Toast.LENGTH_SHORT).show();
-//                                return true;
-//                        }
-//                        return true;
-//                    }
-//                });
+//                                                        startActivity(new Intent(ActivitySetting.this, ActivityIntroduce.class));
+//                                                        finish();
+//                                                    }
+//                                                }).show();
+//                                        break;
+//
+//                                }
 //
 //
-//                popupMenu.inflate(R.menu.sc_popup_menu);
-//                popupMenu.setGravity(Gravity.TOP | Gravity.RIGHT);
-//                popupMenu.show();
+//                            }
+//                        }).show();
+//
+//                WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+//                layoutParams.copyFrom(dialog.getWindow().getAttributes());
+//                layoutParams.width = (int) getResources().getDimension(R.dimen.dp180);
+//                layoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
+//
+//                dialog.getWindow().setAttributes(layoutParams);
+
+                PopupMenu popupMenu = new PopupMenu(ActivitySetting.this, v);
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+
+                        switch (item.getItemId()) {
+
+                            case R.id.st_logOut:
+
+                                Toast.makeText(ActivitySetting.this, "2", Toast.LENGTH_SHORT).show();
+                                return true;
+                        }
+                        return true;
+                    }
+                });
+
+
+                popupMenu.inflate(R.menu.sc_popup_menu);
+                popupMenu.show();
+
             }
         });
 
@@ -384,15 +393,104 @@ public class ActivitySetting extends ActivityEnhanced {
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
                                 editor.putString(SHP_SETTING.KEY_LANGUAGE, text.toString());
                                 editor.apply();
+
+                                switch (which) {
+                                    case 0:
+                                        setLocale("en");
+                                        break;
+                                    case 1:
+                                        setLocale("fa");
+
+                                        break;
+                                    case 2:
+                                        setLocale("ar");
+
+                                        break;
+                                    case 3:
+                                        setLocale("nl");
+                                        break;
+                                }
+
                                 return false;
                             }
                         })
                         .positiveText("OK")
                         .negativeText("CANCEL")
                         .show();
-
             }
         });
+
+        final long sizeFolderPhoto = getFolderSize(new File(G.DIR_IMAGES));
+        final long sizeFolderVideo = getFolderSize(new File(G.DIR_VIDEOS));
+        final long sizeFolderDocument = getFolderSize(new File(G.DIR_DOCUMENT));
+
+        final long total = sizeFolderPhoto + sizeFolderVideo + sizeFolderDocument;
+
+        txtSizeClearCach = (TextView) findViewById(R.id.st_txt_clearCache);
+        txtSizeClearCach.setText(formatFileSize(total));
+
+        ltClearCache = (RelativeLayout) findViewById(R.id.st_layout_clearCache);
+        ltClearCache.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                boolean wrapInScrollView = true;
+                final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this)
+                        .title("Clear Cash")
+                        .customView(R.layout.st_dialog_clear_cach, wrapInScrollView)
+                        .positiveText("CLEAR CASH")
+                        .show();
+
+                View view = dialog.getCustomView();
+
+                final File filePhoto = new File(G.DIR_IMAGES);
+                assert view != null;
+                TextView photo = (TextView) view.findViewById(R.id.st_txt_sizeFolder_photo);
+                photo.setText(formatFileSize(sizeFolderPhoto));
+
+                final CheckBox checkBoxPhoto = (CheckBox) view.findViewById(R.id.st_checkBox_photo);
+                final File fileVideo = new File(G.DIR_VIDEOS);
+                TextView video = (TextView) view.findViewById(R.id.st_txt_sizeFolder_video);
+                video.setText(formatFileSize(sizeFolderVideo));
+
+                final CheckBox checkBoxVideo = (CheckBox) view.findViewById(R.id.st_checkBox_video_dialogClearCash);
+
+                final File fileDocument = new File(G.DIR_DOCUMENT);
+                TextView document = (TextView) view.findViewById(R.id.st_txt_sizeFolder_document_dialogClearCash);
+                document.setText(formatFileSize(sizeFolderDocument));
+
+                final CheckBox checkBoxDocument = (CheckBox) view.findViewById(R.id.st_checkBox_document_dialogClearCash);
+
+                dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        if (checkBoxPhoto.isChecked()) {
+                            for (File file : filePhoto.listFiles())
+                                if (!file.isDirectory())
+                                    file.delete();
+                        }
+                        if (checkBoxVideo.isChecked()) {
+                            for (File file : fileVideo.listFiles())
+                                if (!file.isDirectory())
+                                    file.delete();
+                        }
+                        if (checkBoxDocument.isChecked()) {
+                            for (File file : fileDocument.listFiles())
+                                if (!file.isDirectory())
+                                    file.delete();
+                        }
+                        long afterClearSizeFolderPhoto = getFolderSize(new File(G.DIR_IMAGES));
+                        long afterClearSizeFolderVideo = getFolderSize(new File(G.DIR_VIDEOS));
+                        long afterClearSizeFolderDocument = getFolderSize(new File(G.DIR_DOCUMENT));
+                        long afterClearTotal = afterClearSizeFolderPhoto + afterClearSizeFolderVideo + afterClearSizeFolderDocument;
+                        txtSizeClearCach.setText(formatFileSize(afterClearTotal));
+                        dialog.dismiss();
+                    }
+                });
+            }
+        });
+
         poRbDialogTextSize = sharedPreferences.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 16) - 11;
         txtMessageTextSize = (TextView) findViewById(R.id.st_txt_messageTextSize_number);
         txtMessageTextSize.setText("" + sharedPreferences.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 16));
@@ -455,6 +553,16 @@ public class ActivitySetting extends ActivityEnhanced {
                     editor.putInt(SHP_SETTING.KEY_IN_APP_BROWSER, 1);
                     editor.apply();
                 }
+            }
+        });
+
+
+        txtNotifyAndSound = (TextView) findViewById(R.id.st_txt_notifyAndSound);
+        txtNotifyAndSound.setTypeface(G.test);
+        txtNotifyAndSound.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(ActivitySetting.this, ActivitySettingNotification.class));
             }
         });
 
@@ -854,5 +962,57 @@ public class ActivitySetting extends ActivityEnhanced {
             startActivity(intent);
             finish();
         }
+    }
+
+    // change language
+    public void setLocale(String lang) {
+
+        Locale myLocale = new Locale(lang);
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.locale = myLocale;
+        res.updateConfiguration(conf, dm);
+        Intent refresh = new Intent(this, ActivitySetting.class);
+        startActivity(refresh);
+        finish();
+    }
+
+    public static long getFolderSize(File dir) {
+        long size = 0;
+        for (File file : dir.listFiles()) {
+            if (file.isFile()) {
+                System.out.println(file.getName() + " " + file.length());
+                size += file.length();
+            } else
+                size += getFolderSize(file);
+        }
+        return size;
+    }
+
+    public static String formatFileSize(long size) {
+        String hrSize = null;
+
+        double b = size;
+        double k = size / 1024.0;
+        double m = ((size / 1024.0) / 1024.0);
+        double g = (((size / 1024.0) / 1024.0) / 1024.0);
+        double t = ((((size / 1024.0) / 1024.0) / 1024.0) / 1024.0);
+
+        DecimalFormat dec = new DecimalFormat("0.0");
+
+        if (t > 1) {
+            hrSize = dec.format(t).concat(" TB");
+        } else if (g > 1) {
+            hrSize = dec.format(g).concat(" GB");
+        } else if (m > 1) {
+            hrSize = dec.format(m).concat(" MB");
+        } else if (k > 1) {
+            hrSize = dec.format(k).concat(" KB");
+        } else {
+            hrSize = dec.format(b).concat(" Bytes");
+        }
+
+        return hrSize;
     }
 }
