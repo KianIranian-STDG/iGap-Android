@@ -7,9 +7,11 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
@@ -24,8 +26,12 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -132,6 +138,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     AttachFile attachFile;
     private LocationManager locationManager;
     private OnComplete complete;
+    BoomMenuButton boomMenuButton;
 
 
     private ChatMessagesFastAdapter<AbstractChatItem> mAdapter;
@@ -623,13 +630,14 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             @Override
             public void onClick(View view) {
 
-
+                boomMenuButton.boom();
             }
         });
 
         imvMicButton.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
+
                 return false;
             }
         });
@@ -816,7 +824,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     private void initAttach() {
 
 
-        BoomMenuButton boomMenuButton = (BoomMenuButton) findViewById(R.id.am_boom);
+        boomMenuButton = (BoomMenuButton) findViewById(R.id.am_boom);
 
 
         Drawable[] subButtonDrawables = new Drawable[3];
@@ -908,6 +916,34 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         boomMenuButton.setTextViewColor(ContextCompat.getColor(G.context, R.color.am_iconFab_black));
 
     }
+
+    private void changStatusBarColor(String color) {
+
+        if (Build.VERSION.SDK_INT >= 21) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(Color.parseColor(color));
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Window w = getWindow();
+            w.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            //status bar height
+            int statusBarHeight = 0;
+            int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+            if (resourceId > 0) {
+                statusBarHeight = getResources().getDimensionPixelSize(resourceId);
+            }
+            if (statusBarHeight > 0) {
+                View view1 = new View(ActivityChat.this);
+                view1.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                view1.getLayoutParams().height = statusBarHeight;
+                ((ViewGroup) w.getDecorView()).addView(view1);
+                view1.setBackgroundColor(Color.parseColor(color));
+            }
+        }
+
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

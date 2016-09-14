@@ -68,7 +68,10 @@
         <activity
             android:name=".activitys.ActivityIntroduce"
             android:configChanges="keyboard|keyboardHidden|screenSize|locale">
-
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".activitys.ActivityProfile"
@@ -87,10 +90,6 @@
             android:configChanges="keyboard|keyboardHidden|screenSize|locale"
             android:windowSoftInputMode="adjustPan|adjustResize">
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
 
         </activity>
         <activity
