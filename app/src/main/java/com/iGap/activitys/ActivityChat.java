@@ -1396,6 +1396,8 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 }
             });
         } else {
+            // user has received the message, so I make a new delivered update status request
+            G.chatUpdateStatusUtil.sendUpdateStatus(roomMessage.getRoomId(), roomMessage.getRoomMessage().getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
             // I'm not in the room, but I have to add 1 to unread messages count
             Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {

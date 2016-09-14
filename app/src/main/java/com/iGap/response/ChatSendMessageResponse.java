@@ -116,10 +116,6 @@ public class ChatSendMessageResponse extends MessageHandler {
             if (realm.where(RealmRoom.class).equalTo("id", chatSendMessageResponse.getRoomId()).findFirst() != null) {
                 G.chatSendMessageUtil.onReceiveChatMessage(roomMessage.getMessage(), roomMessage.getMessageType().toString(), chatSendMessageResponse);
             }
-
-            // user has received the message, so I make a new delivered update status request
-            //TODO [Saeed Mozaffari] [2016-09-13 5:36 PM] - clear comment
-            //G.chatUpdateStatusUtil.sendUpdateStatus(chatSendMessageResponse.getRoomId(), roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
         } else {
             // invoke following callback when I'm the sender and the message has updated
             G.chatSendMessageUtil.onMessageUpdated(roomMessage.getMessageId(), roomMessage.getStatus(), identity, chatSendMessageResponse);

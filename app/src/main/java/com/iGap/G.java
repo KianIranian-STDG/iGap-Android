@@ -180,7 +180,7 @@ public class G extends Application {
     public static final String DIR_VIDEOS = DIR_APP + "/videos";
     public static final String DIR_AUDIOS = DIR_APP + "/audios";
 
-    public static final String CHAT_MESSAGE_TIME = "h:mm a";
+    public static final String CHAT_MESSAGE_TIME = "H:mm";
 
 
     @Override
