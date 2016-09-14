@@ -1,6 +1,8 @@
 package com.iGap.activitys;
 
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
@@ -169,9 +171,9 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         for (RealmChatHistory history : realmChatHistories) {
             RealmRoomMessage realmRoomMessage = history.getRoomMessage();
             if (realmRoomMessage != null) {
-                if (realmRoomMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.DELIVERED.toString())) {
-                    G.chatUpdateStatusUtil.sendUpdateStatus(mRoomId, realmRoomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
-                }
+                //if (realmRoomMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.DELIVERED.toString())) {//TODO [Saeed Mozaffari] [2016-09-13 5:44 PM] - clear comment
+                G.chatUpdateStatusUtil.sendUpdateStatus(mRoomId, realmRoomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+                //}
             }
         }
 
@@ -1008,7 +1010,12 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         btnCopySelected.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("ddd", "btnCopySelected");
+
+                for (AbstractChatItem messageID : mAdapter.getSelectedItems()) {////TODO [Saeed Mozaffari] [2016-09-13 6:39 PM] - code is wrong
+                    ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText("Copied Text", messageID.mMessage.messageID);
+                    clipboard.setPrimaryClip(clip);
+                }
             }
         });
 
@@ -1312,6 +1319,14 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     @Override
                     public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         switch (which) {
+                            case 1: // edit message
+                                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                                ClipData clip = ClipData.newPlainText("Copied Text", messageInfo.messageText);
+                                clipboard.setPrimaryClip(clip);
+                                break;
+                            case 5: // edit message
+                                new RequestChatDeleteMessage().chatDeleteMessage(mRoomId, Long.parseLong(messageInfo.messageID));
+                                break;
                             case 6: // edit message
                                 // put message text to EditText
                                 if (!messageInfo.messageText.isEmpty()) {

@@ -58,6 +58,7 @@ public final class HelperProtoBuilder {
         chatInfo.chatId = builder.getRoom().getId();
         chatInfo.chatTitle = builder.getRoom().getTitle();
         chatInfo.chatType = convert(builder.getRoom().getType());
+        chatInfo.initials = builder.getRoom().getInitials();
         switch (builder.getRoom().getType()) {
             case CHANNEL:
                 chatInfo.memberCount = builder.getRoom().getChannelRoom().getParticipantsCountLabel();

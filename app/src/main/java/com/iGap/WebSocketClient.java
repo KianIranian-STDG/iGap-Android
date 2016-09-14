@@ -205,7 +205,7 @@ public class WebSocketClient {
             G.handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(G.context, "Disconnect", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(G.context, "Disconnect", Toast.LENGTH_SHORT).show();
                 }
             });
             resetWebsocketInfo();

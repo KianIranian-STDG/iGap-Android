@@ -20,6 +20,7 @@ public class StructMessageInfo implements Parcelable {
 
     public String status = ProtoGlobal.RoomMessageStatus.SENDING.toString();
     public String channelLink = "";
+    public String initials;
 
     public boolean isChange = false;
     public ArrayList<String> allChanges = new ArrayList<>();

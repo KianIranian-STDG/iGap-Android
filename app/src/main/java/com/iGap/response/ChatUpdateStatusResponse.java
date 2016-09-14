@@ -31,6 +31,7 @@ public class ChatUpdateStatusResponse extends MessageHandler {
         ProtoResponse.Response.Builder response = ProtoResponse.Response.newBuilder().mergeFrom(chatUpdateStatus.getResponse());
         Log.i("SOC", "ChatUpdateStatusResponse response.getId() : " + response.getId());
         Log.i("SOC", "ChatUpdateStatusResponse response.getTimestamp() : " + response.getTimestamp());
+        Log.i("MMM", "ChatSendMessageResponse chatUpdateStatus : " + chatUpdateStatus.getStatus());
 
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {

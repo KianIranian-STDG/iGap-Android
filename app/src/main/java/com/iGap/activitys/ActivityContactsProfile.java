@@ -111,6 +111,12 @@ public class ActivityContactsProfile extends ActivityEnhanced {
         });
 
         txtNickname = (TextView) findViewById(R.id.chi_txt_nikName);//set nickname
+        if (displayName != null && !displayName.equals("")) {
+            txtNickname.setText(displayName);
+        } else {
+            txtNickname.setText("info not exist");
+        }
+
 
         layoutNickname = (ViewGroup) findViewById(R.id.chi_layout_nickname);
         layoutNickname.setOnClickListener(new View.OnClickListener() {

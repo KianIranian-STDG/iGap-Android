@@ -77,13 +77,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
 
         setContentView(R.layout.activity_introduce);
 
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                getInfo();
-            }
-        }, 30000);
-
+        getInfo();
 
         layout_test = (ViewGroup) findViewById(R.id.int_layout_test);
 

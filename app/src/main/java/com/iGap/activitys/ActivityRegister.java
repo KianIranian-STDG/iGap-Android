@@ -507,7 +507,7 @@ public class ActivityRegister extends ActivityEnhanced {
                         public void run() {
                             userRegister();
                             btnStart.setEnabled(false);
-                            countDownTimer = new CountDownTimer(1000 * 30, 1000) { // wait for verify sms
+                            countDownTimer = new CountDownTimer(1000 * 60, 1000) { // wait for verify sms
 
                                 TextView txtTimerLand;
 

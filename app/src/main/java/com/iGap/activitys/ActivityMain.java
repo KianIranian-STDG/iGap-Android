@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.ChatsFastAdapter;
@@ -30,6 +31,7 @@ import com.iGap.interface_package.OnChatSendMessageResponse;
 import com.iGap.interface_package.OnChatUpdateStatusResponse;
 import com.iGap.interface_package.OnClientGetRoomListResponse;
 import com.iGap.interface_package.OnClientGetRoomResponse;
+import com.iGap.interface_package.OnConnectionChangeState;
 import com.iGap.libs.floatingAddButton.ArcMenu;
 import com.iGap.libs.floatingAddButton.StateChangeListener;
 import com.iGap.libs.flowingdrawer.FlowingView;
@@ -130,8 +132,35 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         Button btnSearch = (Button) findViewById(R.id.cl_btn_search);
         btnSearch.setTypeface(G.fontawesome);
 
-        TextView txtIgap = (TextView) findViewById(R.id.cl_txt_igap);
+        final TextView txtIgap = (TextView) findViewById(R.id.cl_txt_igap);
         txtIgap.setTypeface(G.neuroplp);
+
+        if (G.connectionState == Config.ConnectionState.WAITING_FOR_NETWORK) {
+            txtIgap.setText("Waiting For Network");
+        } else if (G.connectionState == Config.ConnectionState.CONNECTING) {
+            txtIgap.setText("Connecting");
+        } else if (G.connectionState == Config.ConnectionState.UPDATING) {
+            txtIgap.setText("Updating");
+        } else {
+            txtIgap.setText("iGap");
+        }
+
+        G.onConnectionChangeState = new OnConnectionChangeState() {
+            @Override
+            public void onChangeState(Config.ConnectionState connectionState) {
+
+                if (connectionState == Config.ConnectionState.WAITING_FOR_NETWORK) {
+                    txtIgap.setText("Waiting For Network");
+                } else if (connectionState == Config.ConnectionState.CONNECTING) {
+                    txtIgap.setText("Connecting");
+                } else if (connectionState == Config.ConnectionState.UPDATING) {
+                    txtIgap.setText("Updating");
+                } else {
+                    txtIgap.setText("iGap");
+                }
+            }
+        };
+
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -765,6 +794,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
             info.chatId = realmRoom.getId();
             info.chatTitle = realmRoom.getTitle();
             info.initials = realmRoom.getInitials();
+            Log.i("XXX", "Local initials : " + realmRoom.getInitials());
             switch (realmRoom.getType()) {
                 case CHAT:
                     info.chatType = RoomType.CHAT;
@@ -878,6 +908,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         StructChatInfo chatInfo = new StructChatInfo();
         chatInfo.chatId = room.getId();
         chatInfo.chatTitle = room.getTitle();
+        chatInfo.initials = room.getInitials();
         RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", room.getLastMessageId()).findFirst();
         if (roomMessage != null) {
             chatInfo.lastMessageTime = roomMessage.getUpdateTime();

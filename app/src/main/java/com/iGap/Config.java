@@ -11,4 +11,9 @@ public class Config {
     public static final int TIME_OUT_MS = 10000;
     public static final int LOOKUP_MAP_RESPONSE_OFFSET = 30000;
 
+
+    public enum ConnectionState {
+        WAITING_FOR_NETWORK, CONNECTING, UPDATING, IGAP
+    }
+
 }

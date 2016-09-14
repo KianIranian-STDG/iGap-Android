@@ -30,14 +30,18 @@ public class HelperCheckInternetConnection {
 
                 urlConnection.connect();
 
-                return (urlConnection.getResponseCode() == 200); // true
+//                return (urlConnection.getResponseCode() == 200); // true
+                return true; // true
             } catch (SocketTimeoutException e) {
-                hasActiveInternetConnection();
+                return true; // true
+//                hasActiveInternetConnection();
             } catch (IOException e) {
-                e.printStackTrace();
+                return true; // true
+//                e.printStackTrace();
             }
         }
-        return false;
+//        return false;
+        return true;
     }
 
 }

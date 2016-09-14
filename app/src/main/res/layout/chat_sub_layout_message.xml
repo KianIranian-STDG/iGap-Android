@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/chatSubLayoutMessage"
     android:layout_width="match_parent"
@@ -17,12 +18,12 @@
             android:id="@+id/mainContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp28"
+            android:layout_marginLeft="5dp"
             android:background="@drawable/rectangle_round_white"
             android:gravity="right"
             android:orientation="vertical"
-            android:paddingLeft="@dimen/dp28"
-            android:paddingStart="@dimen/dp28">
+            android:paddingLeft="5dp"
+            android:paddingStart="5dp">
 
             <include
                 android:id="@+id/replayLayout"
@@ -88,13 +89,13 @@
 
                             <com.iGap.module.MaterialDesignTextView
                                 android:id="@+id/cslr_txt_tic"
+                                style="@style/ChatMessages.MaterialDesignTextView.Tick"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/dp4"
                                 android:layout_marginRight="@dimen/dp4"
                                 android:text="@string/md_clock_with_white_face"
-                                android:textColor="@color/green"
-                                style="@style/ChatMessages.MaterialDesignTextView.Tick" />
+                                android:textColor="@color/green" />
 
 
                         </LinearLayout>

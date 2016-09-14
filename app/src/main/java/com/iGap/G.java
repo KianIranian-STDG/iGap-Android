@@ -20,6 +20,7 @@ import com.iGap.interface_package.OnChatEditMessageResponse;
 import com.iGap.interface_package.OnChatGetRoom;
 import com.iGap.interface_package.OnClientGetRoomListResponse;
 import com.iGap.interface_package.OnClientGetRoomResponse;
+import com.iGap.interface_package.OnConnectionChangeState;
 import com.iGap.interface_package.OnGroupAddAdmin;
 import com.iGap.interface_package.OnGroupAddMember;
 import com.iGap.interface_package.OnGroupAddModerator;
@@ -134,6 +135,9 @@ public class G extends Application {
     public static ChatSendMessageUtil chatSendMessageUtil = new ChatSendMessageUtil();
     public static ChatUpdateStatusUtil chatUpdateStatusUtil = new ChatUpdateStatusUtil();
 
+    public static Config.ConnectionState connectionState;
+
+    public static OnConnectionChangeState onConnectionChangeState;
     public static OnReceiveInfoLocation onReceiveInfoLocation;
     public static OnUserRegistration onUserRegistration;
     public static OnUserVerification onUserVerification;

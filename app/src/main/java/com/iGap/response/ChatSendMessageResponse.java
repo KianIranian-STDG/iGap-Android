@@ -7,7 +7,6 @@ import com.iGap.G;
 import com.iGap.proto.ProtoChatSendMessage;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGlobal;
-import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmChatHistory;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomMessage;
@@ -37,10 +36,6 @@ public class ChatSendMessageResponse extends MessageHandler {
         Realm realm = Realm.getDefaultInstance();
 
         final ProtoChatSendMessage.ChatSendMessageResponse.Builder chatSendMessageResponse = (ProtoChatSendMessage.ChatSendMessageResponse.Builder) message;
-
-        ProtoResponse.Response.Builder response = ProtoResponse.Response.newBuilder().mergeFrom(chatSendMessageResponse.getResponse());
-        Log.i("SOC", "ChatSendMessageResponse response.getId() : " + response.getId());
-        Log.i("SOC", "ChatSendMessageResponse response.getTimestamp() : " + response.getTimestamp());
 
         final ProtoGlobal.RoomMessage roomMessage = chatSendMessageResponse.getRoomMessage();
         final long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
@@ -123,7 +118,8 @@ public class ChatSendMessageResponse extends MessageHandler {
             }
 
             // user has received the message, so I make a new delivered update status request
-            G.chatUpdateStatusUtil.sendUpdateStatus(chatSendMessageResponse.getRoomId(), roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
+            //TODO [Saeed Mozaffari] [2016-09-13 5:36 PM] - clear comment
+            //G.chatUpdateStatusUtil.sendUpdateStatus(chatSendMessageResponse.getRoomId(), roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
         } else {
             // invoke following callback when I'm the sender and the message has updated
             G.chatSendMessageUtil.onMessageUpdated(roomMessage.getMessageId(), roomMessage.getStatus(), identity, chatSendMessageResponse);
