@@ -1415,7 +1415,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
         Realm realm = Realm.getDefaultInstance();
         // if user clicked on any message which he wasn't its sender, remove edit item option
-        if (messageInfo.senderID.equalsIgnoreCase(Long.toString(realm.where(RealmUserInfo.class).findFirst().getUserId()))) {
+        if (!messageInfo.senderID.equalsIgnoreCase(Long.toString(realm.where(RealmUserInfo.class).findFirst().getUserId()))) {
             items.remove(getString(R.string.edit_item_dialog));
         }
         realm.close();
@@ -1423,7 +1423,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         new MaterialDialog.Builder(this)
                 .title("Message")
                 .negativeText("CANCEL")
-                .items(itemsRes)
+                .items(items)
                 .itemsCallback(new MaterialDialog.ListCallback() {
                     @Override
                     public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
