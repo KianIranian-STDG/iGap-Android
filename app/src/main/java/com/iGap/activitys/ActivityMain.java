@@ -467,7 +467,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                                         break;
                                 }
                                 info.color = room.getColor();
-                                info.muteNotification = false; // FIXME
+                                info.muteNotification = false; // TODO: 9/14/2016 [Alireza Eskandarpour Shoferi] vaghti server mute ro implement kard inja get kon
                                 info.imageSource = ""; // FIXME
 
                                 // create item from info
@@ -932,7 +932,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                 chatInfo.memberCount = room.getGroupRoom().getParticipantsCountLabel();
                 break;
         }
-        chatInfo.muteNotification = false;
+        chatInfo.muteNotification = room.getMute();
         chatInfo.ownerShip = MyType.OwnerShip.member;
         chatInfo.unreadMessagesCount = room.getUnreadCount();
         chatInfo.color = room.getColor();
