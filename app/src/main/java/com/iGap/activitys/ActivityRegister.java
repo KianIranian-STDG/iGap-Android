@@ -508,7 +508,7 @@ public class ActivityRegister extends ActivityEnhanced {
             @Override
             public void run() {
 
-                if (G.internetConnection) { //connection ok
+                if (G.socketConnection) { //connection ok
 //                        if (checkInternet()) { //connection ok
                     runOnUiThread(new Runnable() {
                         @Override

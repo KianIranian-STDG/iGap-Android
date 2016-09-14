@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.Toast;
 
-import com.iGap.helper.HelperCheckInternetConnection;
 import com.iGap.helper.HelperFillLookUpClass;
 import com.iGap.interface_package.OnChatDelete;
 import com.iGap.interface_package.OnChatDeleteMessageResponse;
@@ -105,8 +104,7 @@ public class G extends Application {
     public static boolean isSecure = false;
     public static boolean allowForConnect = true;//TODO [Saeed Mozaffari] [2016-08-18 12:09 PM] - set allowForConnect to realm
     public static boolean userLogin = false;
-    public static boolean socketConnectingOrConnected = false;
-    public static boolean internetConnection = false;
+    public static boolean socketConnection = false;
 
     public static SecretKeySpec symmetricKey;
     public static String symmetricMethod;
@@ -202,7 +200,6 @@ public class G extends Application {
         handler = new Handler();
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        checkInternetConnection();
         HelperFillLookUpClass.fillLookUpClassArray();
         fillUnSecureList();
         fillSecuringInterface();
@@ -277,21 +274,6 @@ public class G extends Application {
 
     private void fillUnSecureList() {
         unSecure.add("2");
-    }
-
-    private void checkInternetConnection() {
-
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (HelperCheckInternetConnection.hasActiveInternetConnection()) {
-                    G.internetConnection = true;
-                } else {
-                    G.internetConnection = false;
-                }
-            }
-        });
-        thread.start();
     }
 
     private void fillSecuringInterface() {

@@ -1,8 +1,8 @@
 package com.iGap;
 
 import android.util.Log;
-import android.widget.Toast;
 
+import com.iGap.helper.HelperConnectionState;
 import com.iGap.response.HandleResponse;
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
@@ -75,12 +75,8 @@ public class WebSocketClient {
                 @Override
                 public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
                     Log.i("SOC_WebSocket", "onConnected");
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(G.context, "Connect", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    G.socketConnection = true;
+                    HelperConnectionState.connectionState(Config.ConnectionState.CONNECTING);
                     checkFirstResponse();
                     super.onConnected(websocket, headers);
                 }
@@ -146,7 +142,8 @@ public class WebSocketClient {
                 if (G.allowForConnect) {
                     try {
                         Log.i("SOC_WebSocket", "Connecting");
-                        if (finalWs != null) {
+                        if (finalWs != null && webSocketClient == null) {
+                            HelperConnectionState.connectionState(Config.ConnectionState.CONNECTING);
                             finalWs.connect();
                         }
                     } catch (WebSocketException e) {
@@ -169,11 +166,12 @@ public class WebSocketClient {
      */
 
     public static WebSocket getInstance() { //TODO [Saeed Mozaffari] [2016-09-05 11:16 AM] - avoid multiple instance , hint : synchronize
-
         if (webSocketClient == null) {
+            HelperConnectionState.connectionState(Config.ConnectionState.CONNECTING);
             webSocketClient = createSocketConnection();
         } else {
             if (!webSocketClient.isOpen()) {
+                HelperConnectionState.connectionState(Config.ConnectionState.CONNECTING);
                 webSocketClient = createSocketConnection();
             } else {
                 return webSocketClient;
@@ -200,14 +198,8 @@ public class WebSocketClient {
      */
 
     private static void reconnect() {
-
+        HelperConnectionState.connectionState(Config.ConnectionState.CONNECTING);
         if (G.allowForConnect) {
-            G.handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    //Toast.makeText(G.context, "Disconnect", Toast.LENGTH_SHORT).show();
-                }
-            });
             resetWebsocketInfo();
             G.handler.postDelayed(new Runnable() {
                 @Override
@@ -222,7 +214,6 @@ public class WebSocketClient {
         webSocketClient = null;
         G.isSecure = false;
         G.userLogin = false;
-        G.socketConnectingOrConnected = false;
     }
 
     /**

@@ -360,7 +360,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                if (G.internetConnection) {
+                if (G.socketConnection) {
                     if (body != null & enableRegistration & (!isoCode.equals("") || !locationFound)) {
                         enableRegistration = false;
                         Intent intent = new Intent(G.context, ActivityRegister.class);

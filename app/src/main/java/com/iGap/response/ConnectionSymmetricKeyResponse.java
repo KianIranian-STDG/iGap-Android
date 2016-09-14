@@ -5,6 +5,7 @@ import android.util.Log;
 import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.WebSocketClient;
+import com.iGap.helper.HelperConnectionState;
 import com.iGap.proto.ProtoConnectionSecuring;
 
 public class ConnectionSymmetricKeyResponse extends MessageHandler {
@@ -37,6 +38,7 @@ public class ConnectionSymmetricKeyResponse extends MessageHandler {
             //TODO [Saeed Mozaffari] [2016-09-06 2:11 PM] - ijade methode joda baraye in halat . chon ye jaye dige ham bud
 
         } else if (statusNumber == Config.ACCEPT) {
+            HelperConnectionState.connectionState(Config.ConnectionState.IGAP);
             G.isSecure = true;
 
             G.ivSize = builder.getSymmetricIvSize();
