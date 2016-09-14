@@ -18,7 +18,6 @@ import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activitys.ActivityChat;
-import com.iGap.activitys.ActivityMain;
 import com.iGap.adapter.StickyHeaderAdapter;
 import com.iGap.adapter.items.ContactItem;
 import com.iGap.interface_package.OnChatGetRoom;
@@ -228,7 +227,7 @@ public class ContactsFragment extends Fragment {
             intent.putExtra("RoomId", realmRoom.getId());
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             G.context.startActivity(intent);
-            ActivityMain.mLeftDrawerLayout.closeDrawer();
+            getActivity().getFragmentManager().popBackStack();
 
         } else {
             G.onChatGetRoom = new OnChatGetRoom() {
@@ -244,7 +243,7 @@ public class ContactsFragment extends Fragment {
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             realm.close();
                             G.context.startActivity(intent);
-                            ActivityMain.mLeftDrawerLayout.closeDrawer();
+                            getActivity().getFragmentManager().popBackStack();
                         }
                     });
                 }

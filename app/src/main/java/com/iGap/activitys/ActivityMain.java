@@ -154,17 +154,23 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
 
         G.onConnectionChangeState = new OnConnectionChangeState() {
             @Override
-            public void onChangeState(Config.ConnectionState connectionState) {
+            public void onChangeState(final Config.ConnectionState connectionState) {
                 Log.i("XXX", "onChangeState  : " + connectionState.toString());
-                if (connectionState == Config.ConnectionState.WAITING_FOR_NETWORK) {
-                    txtIgap.setText("Waiting For Network");
-                } else if (connectionState == Config.ConnectionState.CONNECTING) {
-                    txtIgap.setText("Connecting");
-                } else if (connectionState == Config.ConnectionState.UPDATING) {
-                    txtIgap.setText("Updating");
-                } else {
-                    txtIgap.setText("iGap");
-                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (connectionState == Config.ConnectionState.WAITING_FOR_NETWORK) {
+                            txtIgap.setText("Waiting For Network");
+                        } else if (connectionState == Config.ConnectionState.CONNECTING) {
+                            txtIgap.setText("Connecting");
+                        } else if (connectionState == Config.ConnectionState.UPDATING) {
+                            txtIgap.setText("Updating");
+                        } else {
+                            txtIgap.setText("iGap");
+                        }
+                    }
+                });
+
             }
         };
 
