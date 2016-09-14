@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         android:clipChildren="false">
 
-        <include layout="@layout/activity_contact" />
+        <include layout="@layout/activity_main_rooms" />
 
         <RelativeLayout
             android:id="@+id/linearLayout"

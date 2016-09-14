@@ -68,6 +68,10 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
             }
         }
 
+        if (mMessage.sendType == MyType.SendType.send) {
+            updateMessageStatus((TextView) holder.itemView.findViewById(R.id.cslr_txt_tic));
+        }
+
         // display 'edited' indicator beside message time if message was edited
         if (mMessage.isEdited) {
             holder.itemView.findViewById(R.id.txtEditedIndicator).setVisibility(View.VISIBLE);
@@ -77,10 +81,14 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
 
         // display user avatar only if chat type is GROUP
         if (type == ProtoGlobal.Room.Type.GROUP) {
-            holder.itemView.findViewById(R.id.cslr_imv_sender_picture).setVisibility(View.VISIBLE);
+            // TODO: 9/14/2016 [Alireza Eskandarpour Shoferi] set avatar
+            holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.VISIBLE);
         } else {
-            holder.itemView.findViewById(R.id.cslr_imv_sender_picture).setVisibility(View.GONE);
+            holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.GONE);
         }
+
+        // set message time
+        ((TextView) holder.itemView.findViewById(R.id.cslr_txt_time)).setText(formatTime());
 
         setReplayMessage(holder);
         setForwardMessage(holder);
@@ -129,27 +137,30 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
 
     @CallSuper
     protected void updateLayoutForReceive(VH holder) {
-        FrameLayout frameLayout = (FrameLayout) holder.itemView.findViewById(R.id.mainContainer).getParent();
+        LinearLayout frameLayout = (LinearLayout) holder.itemView.findViewById(R.id.mainContainer);
         ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).gravity = Gravity.START;
 
-        holder.itemView.findViewById(R.id.cslr_imv_sender_picture).setVisibility(View.VISIBLE);
-        holder.itemView.findViewById(R.id.mainContainer).setBackgroundResource(R.drawable.rectangle_round_gray);
+        holder.itemView.findViewById(R.id.contentContainer).setBackgroundResource(R.drawable.rectangle_round_gray);
         // add main layout margin to prevent getting match parent completely
-        ((FrameLayout.LayoutParams) ((FrameLayout) holder.itemView).getChildAt(0).getLayoutParams()).leftMargin = 0;
-        ((FrameLayout.LayoutParams) ((FrameLayout) holder.itemView).getChildAt(0).getLayoutParams()).rightMargin = Utils.dpToPx(holder.itemView.getContext(), R.dimen.dp28);
+        ((FrameLayout.LayoutParams) holder.itemView.findViewById(R.id.mainContainer).getLayoutParams()).leftMargin = 0;
+        ((FrameLayout.LayoutParams) holder.itemView.findViewById(R.id.mainContainer).getLayoutParams()).rightMargin = Utils.dpToPx(holder.itemView.getContext(), R.dimen.dp28);
+
+        // gone message status
+        holder.itemView.findViewById(R.id.cslr_txt_tic).setVisibility(View.GONE);
     }
 
     @CallSuper
     protected void updateLayoutForSend(VH holder) {
-        FrameLayout frameLayout = (FrameLayout) holder.itemView.findViewById(R.id.mainContainer).getParent();
+        LinearLayout frameLayout = (LinearLayout) holder.itemView.findViewById(R.id.mainContainer);
         ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).gravity = Gravity.END;
 
-        holder.itemView.findViewById(R.id.mainContainer).setPadding(4, 4, 4, 4);
-        holder.itemView.findViewById(R.id.cslr_imv_sender_picture).setVisibility(View.GONE);
-        holder.itemView.findViewById(R.id.mainContainer).setBackgroundResource(R.drawable.rectangle_round_white);
+        holder.itemView.findViewById(R.id.contentContainer).setBackgroundResource(R.drawable.rectangle_round_white);
         // add main layout margin to prevent getting match parent completely
-        ((FrameLayout.LayoutParams) ((FrameLayout) holder.itemView).getChildAt(0).getLayoutParams()).rightMargin = 0;
-        ((FrameLayout.LayoutParams) ((FrameLayout) holder.itemView).getChildAt(0).getLayoutParams()).leftMargin = Utils.dpToPx(holder.itemView.getContext(), R.dimen.dp28);
+        ((FrameLayout.LayoutParams) holder.itemView.findViewById(R.id.mainContainer).getLayoutParams()).leftMargin = Utils.dpToPx(holder.itemView.getContext(), R.dimen.dp28);
+        ((FrameLayout.LayoutParams) holder.itemView.findViewById(R.id.mainContainer).getLayoutParams()).rightMargin = 0;
+
+        // visible message status
+        holder.itemView.findViewById(R.id.cslr_txt_tic).setVisibility(View.VISIBLE);
     }
 
     protected void updateMessageStatus(TextView view) {
@@ -173,7 +184,7 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
             case "SENDING":
                 view.setTextColor(view.getContext().getResources().getColor(R.color.green));
                 view.setText(G.context.getResources().getString(R.string.md_clock_with_white_face));
-                view.setTextSize(16F);
+                view.setTextSize(13F);
                 break;
             case "SENT":
                 view.setTextColor(view.getContext().getResources().getColor(R.color.green));

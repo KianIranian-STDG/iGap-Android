@@ -1,31 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.iGap.module.NotTouchableCoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:fitsSystemWindows="true"
-    android:layoutDirection="ltr"
-    android:orientation="vertical">
-
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/cl_recycler_view_contact"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/white"
-        android:scrollbars="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="false"
+    android:layoutDirection="ltr">
 
     <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
         <LinearLayout
-
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="?attr/actionBarSize"
             android:fitsSystemWindows="true"
             android:orientation="vertical"
             app:elevation="8dp"
@@ -36,6 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp60"
                 android:background="@color/green"
+                android:fitsSystemWindows="true"
                 android:orientation="horizontal">
 
                 <Button
@@ -77,9 +68,15 @@
                 android:background="#34a49f"></View>
         </LinearLayout>
 
-
     </android.support.design.widget.AppBarLayout>
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/cl_recycler_view_contact"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never">
+
+    </android.support.v7.widget.RecyclerView>
 
     <com.iGap.libs.floatingAddButton.ArcMenu
         android:id="@+id/ac_arc_button_add"
@@ -113,6 +110,4 @@
             app:backgroundTint="@color/green" />
 
     </com.iGap.libs.floatingAddButton.ArcMenu>
-
-
-</android.support.design.widget.CoordinatorLayout>
+</com.iGap.module.NotTouchableCoordinatorLayout>

@@ -3,6 +3,7 @@ package com.iGap.activitys;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -39,6 +40,7 @@ import com.iGap.libs.flowingdrawer.FlowingView;
 import com.iGap.libs.flowingdrawer.LeftDrawerLayout;
 import com.iGap.module.MyType;
 import com.iGap.module.OnComplete;
+import com.iGap.module.ShouldScrolledBehavior;
 import com.iGap.module.StructChatInfo;
 import com.iGap.module.Utils;
 import com.iGap.proto.ProtoChatSendMessage;
@@ -287,8 +289,12 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                 return true;
             }
         });
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(ActivityMain.this);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(ActivityMain.this);
         recyclerView.setLayoutManager(mLayoutManager);
+        // set behavior to RecyclerView
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) recyclerView.getLayoutParams();
+        params.setBehavior(new ShouldScrolledBehavior(mLayoutManager, mAdapter));
+        recyclerView.setLayoutParams(params);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
 

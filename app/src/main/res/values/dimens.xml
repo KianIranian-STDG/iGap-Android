@@ -7,6 +7,8 @@
     <dimen name="emojiPopupIconSize">24sp</dimen>
     <dimen name="keyboard_height">250dp</dimen>
 
+    <dimen name="chatMessageBoxPadding">@dimen/dp8</dimen>
+
     <dimen name="sp8">8sp</dimen>
     <dimen name="sp10">10sp</dimen>
     <dimen name="sp12">12sp</dimen>

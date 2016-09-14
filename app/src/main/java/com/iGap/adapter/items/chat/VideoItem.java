@@ -5,11 +5,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.iGap.R;
-import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.MyType;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
@@ -37,24 +35,9 @@ public class VideoItem extends AbstractChatItem<VideoItem, VideoItem.ViewHolder>
     }
 
     @Override
-    protected void updateLayoutForReceive(ViewHolder holder) {
-        super.updateLayoutForReceive(holder);
-
-        holder.cslr_txt_tic.setVisibility(View.GONE);
-    }
-
-    @Override
-    protected void updateLayoutForSend(ViewHolder holder) {
-        super.updateLayoutForSend(holder);
-
-        holder.cslr_txt_tic.setVisibility(View.VISIBLE);
-    }
-
-    @Override
     public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        holder.cslr_txt_time.setText(formatTime());
         holder.cslv_txt_video_name.setText(mMessage.fileName);
         holder.cslv_txt_video_mime_type.setText(mMessage.fileMime);
         holder.cslv_txt_vido_info.setText(mMessage.fileInfo);
@@ -66,10 +49,6 @@ public class VideoItem extends AbstractChatItem<VideoItem, VideoItem.ViewHolder>
             holder.cslv_btn_play_video.setVisibility(View.GONE);
         } else {
             holder.cslv_btn_play_video.setVisibility(View.VISIBLE);
-        }
-
-        if (mMessage.sendType == MyType.SendType.send) {
-            updateMessageStatus(holder.cslr_txt_tic);
         }
     }
 
@@ -85,13 +64,6 @@ public class VideoItem extends AbstractChatItem<VideoItem, VideoItem.ViewHolder>
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
-        protected LinearLayout cslr_ll_frame;
-        protected LinearLayout cslr_ll_content_main;
-        protected LinearLayout cslr_ll_forward;
-        protected TextView cslr_txt_forward_from;
-        protected LinearLayout cslr_ll_time;
-        protected TextView cslr_txt_time;
-        protected MaterialDesignTextView cslr_txt_tic;
         protected ImageView cslv_imv_vido_image;
         protected ImageButton cslv_btn_play_video;
         protected TextView cslv_txt_video_name;
@@ -101,13 +73,6 @@ public class VideoItem extends AbstractChatItem<VideoItem, VideoItem.ViewHolder>
         public ViewHolder(View view) {
             super(view);
 
-            cslr_ll_frame = (LinearLayout) view.findViewById(R.id.mainContainer);
-            cslr_ll_content_main = (LinearLayout) view.findViewById(R.id.cslr_ll_content_main);
-            cslr_ll_forward = (LinearLayout) view.findViewById(R.id.cslr_ll_forward);
-            cslr_txt_forward_from = (TextView) view.findViewById(R.id.cslr_txt_forward_from);
-            cslr_ll_time = (LinearLayout) view.findViewById(R.id.cslr_ll_time);
-            cslr_txt_time = (TextView) view.findViewById(R.id.cslr_txt_time);
-            cslr_txt_tic = (MaterialDesignTextView) view.findViewById(R.id.cslr_txt_tic);
             cslv_imv_vido_image = (ImageView) view.findViewById(R.id.cslv_imv_vido_image);
             cslv_btn_play_video = (ImageButton) view.findViewById(R.id.cslv_btn_play_video);
             cslv_txt_video_name = (TextView) view.findViewById(R.id.cslv_txt_video_name);

@@ -1,148 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/chatSubLayoutVideoWithText"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layoutDirection="ltr"
-    android:orientation="horizontal"
-    android:padding="@dimen/dp4">
+    android:maxWidth="@dimen/dp300"
+    android:padding="@dimen/chatMessageBoxPadding">
 
-
-    <FrameLayout
+    <LinearLayout
+        android:id="@+id/mainContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right">
+        android:orientation="horizontal"
+        tools:ignore="UselessParent">
+
+        <com.iGap.module.CircleImageView
+            android:id="@+id/messageSenderAvatar"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="@dimen/dp52"
+            android:layout_marginRight="@dimen/dp8"
+            android:src="@mipmap/b" />
 
         <LinearLayout
-            android:id="@+id/mainContainer"
+            android:id="@+id/contentContainer"
             android:layout_width="wrap_content"
-            android:orientation="vertical"
-            android:padding="@dimen/dp4"
             android:layout_height="wrap_content"
-            android:background="@drawable/rectangle_round_white">
+            android:background="@drawable/rectangle_round_white"
+            android:orientation="vertical"
+            android:padding="@dimen/dp6">
 
             <include
                 android:id="@+id/replayLayout"
                 layout="@layout/chat_sub_layout_replay" />
 
+            <include
+                android:id="@+id/cslr_ll_forward"
+                layout="@layout/chat_sub_layout_forward" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/cslv_imv_vido_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxHeight="@dimen/dp360"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/sd" />
+
+                <ImageButton
+                    android:id="@+id/cslv_btn_play_video"
+                    android:layout_width="@dimen/dp40"
+                    android:layout_height="@dimen/dp40"
+                    android:layout_gravity="center"
+                    android:background="@null"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/play" />
+
+            </FrameLayout>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
-                <LinearLayout
-                    android:id="@+id/cslr_ll_content_main"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/cslv_txt_video_name"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:maxWidth="@dimen/dp200"
+                    android:singleLine="true"
+                    android:text="cslv_txt_video_name"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/sp16" />
 
-                    <include
-                        layout="@layout/chat_sub_layout_forward"
-                        android:id="@+id/cslr_ll_forward" />
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/cslv_txt_video_mime_type"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <ImageView
-                            android:id="@+id/cslv_imv_vido_image"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:adjustViewBounds="true"
-                            android:maxHeight="@dimen/dp360"
-                            android:scaleType="centerCrop"
-                            android:src="@mipmap/sd" />
-
-                        <ImageButton
-                            android:id="@+id/cslv_btn_play_video"
-                            android:layout_width="@dimen/dp40"
-                            android:layout_height="@dimen/dp40"
-                            android:layout_gravity="center"
-                            android:background="@null"
-                            android:scaleType="centerCrop"
-                            android:src="@mipmap/play" />
-
-                    </FrameLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp6"
-                        android:orientation="vertical"
-                        android:paddingLeft="@dimen/dp20">
-
-                        <com.iGap.module.EmojiTextView
-                            android:id="@+id/cslr_txt_message"
-                            android:layout_width="match_parent"
-                            android:layout_gravity="right"
-                            android:layout_height="wrap_content"
-                            android:maxWidth="@dimen/dp300"
-                            android:paddingRight="@dimen/dp4"
-                            android:paddingTop="@dimen/dp4"
-                            android:text="TEST TEXT"
-                            android:textColor="@android:color/black"
-                            android:textSize="@dimen/sp16" />
-
-                        <include
-                            android:id="@+id/cslr_ll_time"
-                            layout="@layout/chat_sub_layout_messages_time" />
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:id="@+id/cslv_txt_video_name"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:maxWidth="@dimen/dp200"
-                                android:singleLine="true"
-                                android:text=""
-                                android:textColor="@android:color/black"
-                                android:textSize="@dimen/sp16" />
-
-                            <TextView
-                                android:id="@+id/cslv_txt_video_mime_type"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:maxWidth="@dimen/dp88"
-                                android:singleLine="true"
-                                android:text=""
-                                android:textColor="@android:color/black"
-                                android:textSize="@dimen/sp16" />
-                        </LinearLayout>
-
-                        <TextView
-                            android:id="@+id/cslv_txt_vido_info"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:singleLine="true"
-                            android:text=""
-                            android:textColor="@color/gray"
-                            android:textSize="@dimen/sp12" />
-                    </LinearLayout>
-                </LinearLayout>
-
+                    android:maxWidth="@dimen/dp88"
+                    android:singleLine="true"
+                    android:text="cslv_txt_video_mime_type"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/sp16" />
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/cslv_txt_vido_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="cslv_txt_vido_info"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/sp12" />
+
+            <com.iGap.module.EmojiTextView
+                android:id="@+id/messageText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="SAMPLE TEXT"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/sp16" />
+
+            <include
+                android:id="@+id/cslr_ll_time"
+                layout="@layout/chat_sub_layout_messages_time" />
         </LinearLayout>
-
-        <com.iGap.module.CircleImageView
-            android:id="@+id/cslr_imv_sender_picture"
-            android:layout_width="@dimen/dp52"
-            android:src="@mipmap/b"
-            android:layout_height="@dimen/dp52" />
-
-    </FrameLayout>
-
-
+    </LinearLayout>
 </FrameLayout>

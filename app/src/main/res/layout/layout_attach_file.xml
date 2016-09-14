@@ -47,16 +47,6 @@
                 android:paddingRight="@dimen/dp4"
                 android:textColorHint="@color/gray" />
 
-
-
-
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/dp4"
-                android:layout_marginTop="@dimen/dp4"
-                android:background="@color/gray" />
-
             <com.iGap.module.MaterialDesignTextView
                 android:id="@+id/chl_imv_send_button"
                 style="@style/ChatMessages.MaterialDesignTextView.BottomIcon"
@@ -67,12 +57,12 @@
                 android:visibility="gone" />
 
             <LinearLayout
+                android:id="@+id/layoutAttachBottom"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:id="@+id/layoutAttachBottom"
-                android:visibility="visible"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="visible">
 
                 <com.iGap.module.MaterialDesignTextView
                     android:id="@+id/chl_imv_attach_button"

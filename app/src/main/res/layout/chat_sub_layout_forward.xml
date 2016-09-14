@@ -3,22 +3,34 @@
     android:id="@+id/cslr_ll_forward"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:visibility="gone">
+    android:layout_marginBottom="@dimen/dp4"
+    android:orientation="vertical"
+    android:visibility="visible">
 
     <TextView
-
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/dp4"
-        android:text="Forward message"
+        android:text="Forwarded message"
         android:textSize="@dimen/sp14" />
 
-    <TextView
-        android:id="@+id/cslr_txt_forward_from"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/dp8"
-        android:text=""
-        android:textSize="@dimen/sp14" />
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp4"
+            android:text="From"
+            android:textSize="@dimen/sp14" />
+
+        <TextView
+            android:id="@+id/cslr_txt_forward_from"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SAMPLE TEXT"
+            android:textSize="@dimen/sp14" />
+    </LinearLayout>
 </LinearLayout>

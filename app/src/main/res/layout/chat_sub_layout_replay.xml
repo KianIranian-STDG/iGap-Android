@@ -9,17 +9,15 @@
     android:padding="@dimen/dp4">
 
     <ImageView
-    android:id="@+id/chslr_imv_icon_replay"
-    android:layout_width="@dimen/dp40"
-    android:layout_height="@dimen/dp40"
-    android:layout_marginLeft="@dimen/dp8"
-    android:padding="@dimen/dp4"
-    android:adjustViewBounds="true"
-    android:src="@mipmap/reply"
-    android:visibility="visible" />
+        android:layout_width="@dimen/dp40"
+        android:layout_height="@dimen/dp40"
+        android:layout_marginLeft="@dimen/dp8"
+        android:adjustViewBounds="true"
+        android:padding="@dimen/dp4"
+        android:src="@mipmap/reply"
+        android:visibility="visible" />
 
     <View
-        android:id="@+id/chslr_v_vertical_line"
         android:layout_width="3dp"
         android:layout_height="@dimen/dp40"
         android:layout_marginLeft="@dimen/dp8"
@@ -30,16 +28,16 @@
         android:id="@+id/chslr_imv_replay_pic"
         android:layout_width="@dimen/dp40"
         android:layout_height="@dimen/dp40"
-        android:adjustViewBounds="true"
         android:layout_marginLeft="@dimen/dp8"
+        android:adjustViewBounds="true"
         android:src="@mipmap/d"
         android:visibility="gone" />
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
         android:layout_marginLeft="@dimen/dp8"
+        android:layout_weight="1"
         android:gravity="left|center"
         android:orientation="vertical">
 

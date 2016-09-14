@@ -62,7 +62,7 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/cslr_txt_message"
+                    android:id="@+id/messageText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/dp20"
@@ -100,7 +100,7 @@
         </FrameLayout>
 
         <com.iGap.module.CircleImageView
-            android:id="@+id/cslr_imv_sender_picture"
+            android:id="@+id/messageSenderAvatar"
             android:layout_width="@dimen/dp52"
             android:layout_height="@dimen/dp52" />
 

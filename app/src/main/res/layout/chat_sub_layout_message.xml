@@ -1,90 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/chatSubLayoutMessage"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layoutDirection="ltr"
-    android:orientation="horizontal"
-    android:padding="@dimen/dp4">
+    android:maxWidth="@dimen/dp300"
+    android:padding="@dimen/chatMessageBoxPadding">
 
-
-    <FrameLayout
+    <LinearLayout
+        android:id="@+id/mainContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right">
+        android:orientation="horizontal"
+        tools:ignore="UselessParent">
+
+        <com.iGap.module.CircleImageView
+            android:id="@+id/messageSenderAvatar"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="@dimen/dp52"
+            android:layout_marginRight="@dimen/dp8"
+            android:src="@mipmap/b" />
 
         <LinearLayout
-            android:id="@+id/mainContainer"
+            android:id="@+id/contentContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/rectangle_round_white"
-            android:gravity="right"
             android:orientation="vertical"
-            android:padding="@dimen/dp4">
+            android:padding="@dimen/dp6">
 
             <include
                 android:id="@+id/replayLayout"
                 layout="@layout/chat_sub_layout_replay" />
 
-            <FrameLayout
-                android:id="@+id/cslr_ll_frame"
+            <include
+                android:id="@+id/cslr_ll_forward"
+                layout="@layout/chat_sub_layout_forward" />
+
+            <com.iGap.module.EmojiTextView
+                android:id="@+id/messageText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/replayLayout"
-                android:padding="@dimen/dp4">
+                android:gravity="left"
+                android:text="SAMPLE TEXT"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/sp16" />
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:id="@+id/cslr_ll_content_main"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <include
-                            android:id="@+id/cslr_ll_forward"
-                            layout="@layout/chat_sub_layout_forward" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:maxWidth="@dimen/dp300"
-                        android:orientation="vertical">
-
-                        <com.iGap.module.EmojiTextView
-                            android:id="@+id/cslr_txt_message"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="left"
-                            android:paddingRight="@dimen/dp4"
-                            android:text="SAMPLE TEXT"
-                            android:textColor="@android:color/black"
-                            android:textSize="@dimen/sp16" />
-
-                        <include
-                            android:id="@+id/cslr_ll_time"
-                            layout="@layout/chat_sub_layout_messages_time" />
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </FrameLayout>
+            <include
+                android:id="@+id/cslr_ll_time"
+                layout="@layout/chat_sub_layout_messages_time" />
         </LinearLayout>
-
-        <com.iGap.module.CircleImageView
-            android:id="@+id/cslr_imv_sender_picture"
-            android:layout_width="@dimen/dp52"
-            android:layout_height="@dimen/dp52"
-            android:src="@mipmap/b" />
-
-    </FrameLayout>
-
-
+    </LinearLayout>
 </FrameLayout>
