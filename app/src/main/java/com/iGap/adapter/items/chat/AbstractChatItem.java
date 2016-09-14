@@ -15,6 +15,7 @@ import com.iGap.R;
 import com.iGap.module.MyType;
 import com.iGap.module.StructMessageInfo;
 import com.iGap.module.TimeUtils;
+import com.iGap.module.Utils;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.items.AbstractItem;
 
@@ -133,6 +134,9 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
 
         holder.itemView.findViewById(R.id.cslr_imv_sender_picture).setVisibility(View.VISIBLE);
         holder.itemView.findViewById(R.id.mainContainer).setBackgroundResource(R.drawable.rectangle_round_gray);
+        // add main layout margin to prevent getting match parent completely
+        ((FrameLayout.LayoutParams) ((FrameLayout) holder.itemView).getChildAt(0).getLayoutParams()).leftMargin = 0;
+        ((FrameLayout.LayoutParams) ((FrameLayout) holder.itemView).getChildAt(0).getLayoutParams()).rightMargin = Utils.dpToPx(holder.itemView.getContext(), R.dimen.dp28);
     }
 
     @CallSuper
@@ -143,9 +147,13 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
         holder.itemView.findViewById(R.id.mainContainer).setPadding(4, 4, 4, 4);
         holder.itemView.findViewById(R.id.cslr_imv_sender_picture).setVisibility(View.GONE);
         holder.itemView.findViewById(R.id.mainContainer).setBackgroundResource(R.drawable.rectangle_round_white);
+        // add main layout margin to prevent getting match parent completely
+        ((FrameLayout.LayoutParams) ((FrameLayout) holder.itemView).getChildAt(0).getLayoutParams()).rightMargin = 0;
+        ((FrameLayout.LayoutParams) ((FrameLayout) holder.itemView).getChildAt(0).getLayoutParams()).leftMargin = Utils.dpToPx(holder.itemView.getContext(), R.dimen.dp28);
     }
 
     protected void updateMessageStatus(TextView view) {
+        // TODO: 9/14/2016 [Alireza Eskandarpour Shoferi] icons font MaterialDesign yeksan design nashodan vase hamin man dasti size ro barabar kardam
         switch (mMessage.status) {
             case "DELIVERED":
                 view.setTextColor(view.getContext().getResources().getColor(R.color.green));

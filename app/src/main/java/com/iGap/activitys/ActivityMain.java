@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -238,6 +239,11 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
 
     private void initRecycleView() {
         recyclerView = (RecyclerView) findViewById(R.id.cl_recycler_view_contact);
+        // remove notifying fancy animation
+        RecyclerView.ItemAnimator animator = recyclerView.getItemAnimator();
+        if (animator instanceof SimpleItemAnimator) {
+            ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
+        }
         mAdapter = new ChatsFastAdapter<>();
         mAdapter.withOnClickListener(new FastAdapter.OnClickListener<ChatItem>() {
             @Override
@@ -299,7 +305,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         });
 
         loadLocalChatList();
-        //getChatsList();
+        getChatsList();
     }
 
     /**

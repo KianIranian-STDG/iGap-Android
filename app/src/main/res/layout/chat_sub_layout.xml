@@ -63,7 +63,7 @@
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/sp14" />
 
-                    <TextView
+                    <com.iGap.module.EmojiTextView
                         android:id="@+id/cs_txt_contact_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -86,14 +86,13 @@
 
                 </LinearLayout>
 
-
-                <TextView
+                <com.iGap.module.EmojiTextView
                     android:id="@+id/cs_txt_last_message"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
                     android:singleLine="true"
-                    android:text="last message"
+                    android:text="LAST MESSAGE"
                     android:textColor="#FF616161"
                     android:textSize="@dimen/sp14" />
             </LinearLayout>

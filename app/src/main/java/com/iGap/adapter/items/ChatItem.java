@@ -7,6 +7,7 @@ import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.module.CircleImageView;
+import com.iGap.module.EmojiTextView;
 import com.iGap.module.OnComplete;
 import com.iGap.module.StructChatInfo;
 import com.iGap.module.TimeUtils;
@@ -135,9 +136,9 @@ public class ChatItem extends AbstractItem<ChatItem, ChatItem.ViewHolder> {
         protected CircleImageView image;
         protected View distanceColor;
         protected TextView chatIcon;
-        protected TextView name;
+        protected EmojiTextView name;
         protected TextView mute;
-        protected TextView lastMessage;
+        protected EmojiTextView lastMessage;
         protected TextView lastSeen;
         protected TextView unreadMessage;
 
@@ -147,8 +148,8 @@ public class ChatItem extends AbstractItem<ChatItem, ChatItem.ViewHolder> {
             image = (CircleImageView) view.findViewById(R.id.cs_img_contact_picture);
             distanceColor = view.findViewById(R.id.cs_view_distance_color);
             chatIcon = (TextView) view.findViewById(R.id.cs_txt_contact_icon);
-            name = (TextView) view.findViewById(R.id.cs_txt_contact_name);
-            lastMessage = (TextView) view.findViewById(R.id.cs_txt_last_message);
+            name = (EmojiTextView) view.findViewById(R.id.cs_txt_contact_name);
+            lastMessage = (EmojiTextView) view.findViewById(R.id.cs_txt_last_message);
             lastSeen = (TextView) view.findViewById(R.id.cs_txt_contact_time);
             unreadMessage = (TextView) view.findViewById(R.id.cs_txt_unread_message);
             mute = (TextView) view.findViewById(R.id.cs_txt_mute);

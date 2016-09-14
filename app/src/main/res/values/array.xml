@@ -43,14 +43,38 @@
 
     </string-array>
 
-    <string-array name="message">
-        <item>Reply</item>
-        <item>Copy</item>
-        <item>Save to download</item>
-        <item>Share</item>
-        <item>Forward</item>
-        <item>Delete</item>
-        <item>Edit</item>
+    <string-array name="textMessageDialogItems">
+        <item>@string/replay_item_dialog</item>
+        <item>@string/copy_item_dialog</item>
+        <item>@string/share_item_dialog</item>
+        <item>@string/forward_item_dialog</item>
+        <item>@string/delete_item_dialog</item>
+        <item>@string/edit_item_dialog</item>
+    </string-array>
+
+    <string-array name="fileTextMessageDialogItems">
+        <item>@string/replay_item_dialog</item>
+        <item>@string/copy_item_dialog</item>
+        <item>@string/saveToDownload_item_dialog</item>
+        <item>@string/share_item_dialog</item>
+        <item>@string/forward_item_dialog</item>
+        <item>@string/delete_item_dialog</item>
+        <item>@string/edit_item_dialog</item>
+    </string-array>
+
+    <string-array name="fileMessageDialogItems">
+        <item>@string/replay_item_dialog</item>
+        <item>@string/saveToDownload_item_dialog</item>
+        <item>@string/share_item_dialog</item>
+        <item>@string/forward_item_dialog</item>
+        <item>@string/delete_item_dialog</item>
+    </string-array>
+
+    <string-array name="otherMessageDialogItems">
+        <item>@string/replay_item_dialog</item>
+        <item>@string/share_item_dialog</item>
+        <item>@string/forward_item_dialog</item>
+        <item>@string/delete_item_dialog</item>
     </string-array>
 
     <string-array name="profile">
@@ -116,4 +140,11 @@
         <item>Whistle</item>>
     </string-array>
 
+    <string name="replay_item_dialog">Replay</string>
+    <string name="copy_item_dialog">Copy</string>
+    <string name="share_item_dialog">Share</string>
+    <string name="forward_item_dialog">Forward</string>
+    <string name="delete_item_dialog">Delete</string>
+    <string name="saveToDownload_item_dialog">Save to Download</string>
+    <string name="edit_item_dialog">Edit</string>
 </resources>

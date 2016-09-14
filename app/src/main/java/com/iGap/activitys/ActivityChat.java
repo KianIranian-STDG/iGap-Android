@@ -13,12 +13,14 @@ import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.ArrayRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.support.v7.widget.ViewStubCompat;
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
@@ -103,6 +105,9 @@ import com.nightonke.boommenu.Types.PlaceType;
 import com.nightonke.boommenu.Util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import io.realm.Realm;
@@ -424,6 +429,11 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
 
         recyclerView = (RecyclerView) findViewById(R.id.chl_recycler_view_chat);
+        // remove notifying fancy animation
+        RecyclerView.ItemAnimator animator = recyclerView.getItemAnimator();
+        if (animator instanceof SimpleItemAnimator) {
+            ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
+        }
         // following lines make scrolling smoother
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemViewCacheSize(20);
@@ -1376,32 +1386,66 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     public void onMessageClick(View view, final StructMessageInfo messageInfo, int position) {
         Log.i(ActivityChat.class.getSimpleName(), "Message clicked");
 
+        @ArrayRes
+        int itemsRes = 0;
+        switch (messageInfo.messageType) {
+            case TEXT:
+                itemsRes = R.array.textMessageDialogItems;
+                break;
+            case FILE_TEXT:
+            case IMAGE_TEXT:
+            case VIDEO_TEXT:
+            case VOICE_TEXT:
+                itemsRes = R.array.fileTextMessageDialogItems;
+                break;
+            case FILE:
+            case IMAGE:
+            case VIDEO:
+            case VOICE:
+                itemsRes = R.array.fileMessageDialogItems;
+                break;
+            case LOCATION:
+            case LOG:
+                itemsRes = R.array.otherMessageDialogItems;
+                break;
+        }
+
+        // Arrays.asList returns fixed size, doing like this fixes remove object UnsupportedOperationException exception
+        List<String> items = new LinkedList<>(Arrays.asList(getResources().getStringArray(itemsRes)));
+
+        Realm realm = Realm.getDefaultInstance();
+        // if user clicked on any message which he wasn't its sender, remove edit item option
+        if (messageInfo.senderID.equalsIgnoreCase(Long.toString(realm.where(RealmUserInfo.class).findFirst().getUserId()))) {
+            items.remove(getString(R.string.edit_item_dialog));
+        }
+        realm.close();
+
         new MaterialDialog.Builder(this)
                 .title("Message")
                 .negativeText("CANCEL")
-                .items(R.array.message)
+                .items(itemsRes)
                 .itemsCallback(new MaterialDialog.ListCallback() {
                     @Override
                     public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                        switch (which) {
-                            case 1: // edit message
-                                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                                ClipData clip = ClipData.newPlainText("Copied Text", messageInfo.messageText);
-                                clipboard.setPrimaryClip(clip);
-                                break;
-                            case 5: // edit message
-                                new RequestChatDeleteMessage().chatDeleteMessage(mRoomId, Long.parseLong(messageInfo.messageID));
-                                break;
-                            case 6: // edit message
-                                // put message text to EditText
-                                if (!messageInfo.messageText.isEmpty()) {
-                                    edtChat.setText(messageInfo.messageText);
-                                    edtChat.setSelection(0, edtChat.getText().length());
-                                    // put message object to edtChat's tag to obtain it later and
-                                    // found is user trying to edit a message
-                                    edtChat.setTag(messageInfo);
-                                }
-                                break;
+                        // TODO: 9/14/2016 [Alireza Eskandarpour Shoferi] implement other items
+                        if (text.toString().equalsIgnoreCase(getString(R.string.copy_item_dialog))) {
+                            // copy message
+                            ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                            ClipData clip = ClipData.newPlainText("Copied Text", messageInfo.messageText);
+                            clipboard.setPrimaryClip(clip);
+                        } else if (text.toString().equalsIgnoreCase(getString(R.string.delete_item_dialog))) {
+                            // delete message
+                            new RequestChatDeleteMessage().chatDeleteMessage(mRoomId, Long.parseLong(messageInfo.messageID));
+                        } else if (text.toString().equalsIgnoreCase(getString(R.string.edit_item_dialog))) {
+                            // edit message
+                            // put message text to EditText
+                            if (!messageInfo.messageText.isEmpty()) {
+                                edtChat.setText(messageInfo.messageText);
+                                edtChat.setSelection(0, edtChat.getText().length());
+                                // put message object to edtChat's tag to obtain it later and
+                                // found is user trying to edit a message
+                                edtChat.setTag(messageInfo);
+                            }
                         }
                     }
                 })
