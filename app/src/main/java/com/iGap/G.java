@@ -184,6 +184,7 @@ public class G extends Application {
     public static final String DIR_SOUND_NOTIFICATION = DIR_APP + "/sound";
 
     public static final String CHAT_MESSAGE_TIME = "H:mm";
+    public static final String ROOM_LAST_MESSAGE_TIME = "h:mm a";
 
 
     @Override

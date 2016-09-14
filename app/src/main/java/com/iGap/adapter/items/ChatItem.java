@@ -101,7 +101,7 @@ public class ChatItem extends AbstractItem<ChatItem, ChatItem.ViewHolder> {
         holder.name.setText(mInfo.chatTitle);
         holder.lastMessage.setText(mInfo.lastmessage);
         if (mInfo.lastMessageTime != 0) {
-            holder.lastSeen.setText(TimeUtils.toLocal(mInfo.lastMessageTime, G.CHAT_MESSAGE_TIME));
+            holder.lastSeen.setText(TimeUtils.toLocal(mInfo.lastMessageTime, G.ROOM_LAST_MESSAGE_TIME));
             holder.lastSeen.setVisibility(View.VISIBLE);
         } else {
             holder.lastSeen.setVisibility(View.GONE);
