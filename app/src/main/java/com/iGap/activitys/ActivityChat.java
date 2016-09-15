@@ -108,6 +108,7 @@ import java.util.List;
 import java.util.Set;
 
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
 /**
@@ -178,30 +179,42 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         // but imagine user is not in the room (or he is in another room) and received some messages
         // when came back to the room with new messages, I make new update status request as SEEN to
         // the message sender
-        Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmChatHistory> realmChatHistories = realm.where(RealmChatHistory.class).equalTo("roomId", mRoomId).findAll();
-        for (RealmChatHistory history : realmChatHistories) {
-            RealmRoomMessage realmRoomMessage = history.getRoomMessage();
-            if (realmRoomMessage != null) {
-                //if (realmRoomMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.DELIVERED.toString())) {//TODO [Saeed Mozaffari] [2016-09-13 5:44 PM] - clear comment
-                G.chatUpdateStatusUtil.sendUpdateStatus(mRoomId, realmRoomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
-                //}
-            }
-        }
+        final Realm chatHistoriesRealm = Realm.getDefaultInstance();
+        final RealmResults<RealmChatHistory> realmChatHistories = chatHistoriesRealm.where(RealmChatHistory.class).equalTo("roomId", mRoomId).findAllAsync();
+        realmChatHistories.addChangeListener(new RealmChangeListener<RealmResults<RealmChatHistory>>() {
+            @Override
+            public void onChange(RealmResults<RealmChatHistory> element) {
+                for (RealmChatHistory history : element) {
+                    RealmRoomMessage realmRoomMessage = history.getRoomMessage();
+                    if (realmRoomMessage != null) {
+                        //if (realmRoomMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.DELIVERED.toString())) {//TODO [Saeed Mozaffari] [2016-09-13 5:44 PM] - clear comment
+                        G.chatUpdateStatusUtil.sendUpdateStatus(mRoomId, realmRoomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+                        //}
+                    }
+                }
 
-        realm.executeTransaction(new Realm.Transaction() {
+                element.removeChangeListeners();
+
+                chatHistoriesRealm.close();
+            }
+        });
+
+        final Realm updateUnreadCountRealm = Realm.getDefaultInstance();
+        updateUnreadCountRealm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 RealmRoom room = realm.where(RealmRoom.class).equalTo("id", mRoomId).findFirst();
                 if (room != null) {
                     room.setUnreadCount(0);
-
                     realm.copyToRealmOrUpdate(room);
                 }
             }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                updateUnreadCountRealm.close();
+            }
         });
-
-        realm.close();
     }
 
     @Override
