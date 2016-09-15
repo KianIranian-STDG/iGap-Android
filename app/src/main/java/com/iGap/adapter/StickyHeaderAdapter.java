@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import com.iGap.R;
 import com.iGap.adapter.items.ContactItem;
+import com.iGap.adapter.items.ContactItemNotRegister;
 import com.iGap.module.CustomTextViewMedium;
 import com.mikepenz.fastadapter.AbstractAdapter;
 import com.mikepenz.fastadapter.IItem;
@@ -22,7 +23,10 @@ public class StickyHeaderAdapter extends AbstractAdapter implements StickyRecycl
         //we want a separate header per first letter of our items
         if (item instanceof ContactItem && ((ContactItem) item).mContact != null) {
             return ((ContactItem) item).mContact.displayName.toUpperCase().charAt(0);
+        } else if (item instanceof ContactItemNotRegister && ((ContactItemNotRegister) item).mContact != null) {
+            return ((ContactItemNotRegister) item).mContact.displayName.toUpperCase().charAt(0);
         }
+
         return -1;
     }
 
@@ -42,6 +46,9 @@ public class StickyHeaderAdapter extends AbstractAdapter implements StickyRecycl
         if (item instanceof ContactItem && ((ContactItem) item).mContact != null) {
             //based on the position we set the headers text
             textView.setText(String.valueOf(((ContactItem) item).mContact.displayName.toUpperCase().charAt(0)));
+        } else if (item instanceof ContactItemNotRegister && ((ContactItemNotRegister) item).mContact != null) {
+            //based on the position we set the headers text
+            textView.setText(String.valueOf(((ContactItemNotRegister) item).mContact.displayName.toUpperCase().charAt(0)));
         }
     }
 

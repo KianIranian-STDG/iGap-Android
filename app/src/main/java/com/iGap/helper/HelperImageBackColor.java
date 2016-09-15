@@ -124,7 +124,7 @@ public class HelperImageBackColor {
      * @param name
      * @return
      */
-    private static String getFirstAlphabetName(String name) {
+    public static String getFirstAlphabetName(String name) {
         name = name.trim();
         String[] splited = name.split("\\s+");
 

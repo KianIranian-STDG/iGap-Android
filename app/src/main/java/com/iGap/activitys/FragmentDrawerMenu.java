@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.fragments.ContactFragmentNotRegister;
 import com.iGap.interface_package.IActionClick;
 import com.iGap.libs.flowingdrawer.MenuFragment;
 import com.iGap.module.HelperDecodeFile;
@@ -141,6 +143,15 @@ public class FragmentDrawerMenu extends MenuFragment {
         layoutInviteFriends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                Fragment fragment = ContactFragmentNotRegister.newInstance();
+                Bundle bundle = new Bundle();
+                bundle.putString("TITLE", G.context.getString(R.string.invite_friend));
+                fragment.setArguments(bundle);
+                getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
+                ActivityMain.mLeftDrawerLayout.closeDrawer();
+
+
             }
         });
 

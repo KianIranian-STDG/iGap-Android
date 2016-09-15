@@ -1,7 +1,6 @@
 package com.iGap.fragments;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,6 +8,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,16 +17,11 @@ import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.activitys.ActivityChat;
-import com.iGap.activitys.ActivityMain;
 import com.iGap.adapter.StickyHeaderAdapter;
-import com.iGap.adapter.items.ContactItem;
-import com.iGap.interface_package.OnChatGetRoom;
+import com.iGap.adapter.items.ContactItemNotRegister;
 import com.iGap.module.Contacts;
 import com.iGap.module.SoftKeyboard;
 import com.iGap.module.StructContactInfo;
-import com.iGap.realm.RealmRoom;
-import com.iGap.request.RequestChatGetRoom;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItem;
@@ -38,19 +33,18 @@ import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.realm.Realm;
-
-public class InviteFragment extends Fragment {
+public class ContactFragmentNotRegister extends Fragment {
     private FastAdapter fastAdapter;
 
-    public static InviteFragment newInstance() {
-        return new InviteFragment();
+
+    public static ContactFragmentNotRegister newInstance() {
+        return new ContactFragmentNotRegister();
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.layout_fragment_contacts, container, false);
+        return inflater.inflate(R.layout.fragment_contacts, container, false);
     }
 
     @Override
@@ -61,7 +55,9 @@ public class InviteFragment extends Fragment {
         String title = null;
         if (bundle != null) {
             title = bundle.getString("TITLE");
+
         }
+
 
         //create our FastAdapter
         fastAdapter = new FastAdapter();
@@ -71,16 +67,19 @@ public class InviteFragment extends Fragment {
         final StickyHeaderAdapter stickyHeaderAdapter = new StickyHeaderAdapter();
         final HeaderAdapter headerAdapter = new HeaderAdapter();
         final ItemAdapter itemAdapter = new ItemAdapter();
-        itemAdapter.withFilterPredicate(new IItemAdapter.Predicate<ContactItem>() {
+        itemAdapter.withFilterPredicate(new IItemAdapter.Predicate<ContactItemNotRegister>() {
             @Override
-            public boolean filter(ContactItem item, CharSequence constraint) {
+            public boolean filter(ContactItemNotRegister item, CharSequence constraint) {
                 return !item.mContact.displayName.toLowerCase().startsWith(String.valueOf(constraint).toLowerCase());
             }
         });
-        fastAdapter.withOnClickListener(new FastAdapter.OnClickListener<ContactItem>() {
+        fastAdapter.withOnClickListener(new FastAdapter.OnClickListener<ContactItemNotRegister>() {
             @Override
-            public boolean onClick(View v, IAdapter adapter, ContactItem item, int position) {
-                chatGetRoom(item.mContact.peerId);
+            public boolean onClick(View v, IAdapter adapter, ContactItemNotRegister item, int position) {
+
+                Log.e("dddd", " invite click  " + position);
+                // TODO: 9/14/2016 nejati     send sms for invite friend
+
                 return false;
             }
         });
@@ -88,7 +87,7 @@ public class InviteFragment extends Fragment {
         final TextView menu_txt_titleToolbar = (TextView) view.findViewById(R.id.menu_txt_titleToolbar);
         menu_txt_titleToolbar.setText(title);
 
-        final SearchView searchView = (SearchView) view.findViewById(R.id.menu_edtSearch);
+        final android.support.v7.widget.SearchView searchView = (android.support.v7.widget.SearchView) view.findViewById(R.id.menu_edtSearch);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -200,9 +199,11 @@ public class InviteFragment extends Fragment {
         rv.addItemDecoration(decoration);
 
         List<IItem> items = new ArrayList<>();
-        List<StructContactInfo> contacts = Contacts.retrieve(null);
+        List<StructContactInfo> contacts = Contacts.getInviteFriendList();
+        ;
+
         for (StructContactInfo contact : contacts) {
-            items.add(new ContactItem().setContact(contact).withIdentifier(100 + contacts.indexOf(contact)));
+            items.add(new ContactItemNotRegister().setContact(contact).withIdentifier(100 + contacts.indexOf(contact)));
         }
         itemAdapter.add(items);
 
@@ -218,42 +219,6 @@ public class InviteFragment extends Fragment {
         fastAdapter.withSavedInstanceState(savedInstanceState);
     }
 
-    private void chatGetRoom(final long peerId) {
-
-        final Realm realm = Realm.getDefaultInstance();
-        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("chat_room.peer_id", peerId).findFirst();
-
-        if (realmRoom != null) {
-            Intent intent = new Intent(G.context, ActivityChat.class);
-            intent.putExtra("RoomId", realmRoom.getId());
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            G.context.startActivity(intent);
-            ActivityMain.mLeftDrawerLayout.closeDrawer();
-
-        } else {
-            G.onChatGetRoom = new OnChatGetRoom() {
-                @Override
-                public void onChatGetRoom(final long roomId) {
-                    G.currentActivity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Realm realm = Realm.getDefaultInstance();
-                            Intent intent = new Intent(G.context, ActivityChat.class);
-                            intent.putExtra("peerId", peerId);
-                            intent.putExtra("RoomId", roomId);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            realm.close();
-                            G.context.startActivity(intent);
-                            ActivityMain.mLeftDrawerLayout.closeDrawer();
-                        }
-                    });
-                }
-            };
-
-            new RequestChatGetRoom().chatGetRoom(peerId);
-        }
-        realm.close();
-    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {

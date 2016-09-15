@@ -8,11 +8,15 @@ public class StructContactInfo {
     public boolean isHeader;
     public String displayName;
     public String status;
+    public boolean isSelected;
+    public String phone;
 
-    public StructContactInfo(long peerId, String displayName, String status, boolean isHeader) {
+    public StructContactInfo(long peerId, String displayName, String status, boolean isHeader, boolean isSelected, String phone) {
         this.peerId = peerId;
         this.isHeader = isHeader;
         this.displayName = displayName;
         this.status = status;
+        this.isSelected = isSelected;
+        this.phone = phone;
     }
 }

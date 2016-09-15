@@ -6,6 +6,7 @@ import android.provider.ContactsContract;
 
 import com.iGap.G;
 import com.iGap.realm.RealmContacts;
+import com.iGap.realm.RealmInviteFriend;
 import com.iGap.request.RequestUserContactImport;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+
 
 /**
  * work with saved contacts in database
@@ -47,9 +49,9 @@ public class Contacts {
             // new header exists
             if (lastHeader.isEmpty() || (!lastHeader.isEmpty() && !header.isEmpty() && lastHeader.toLowerCase().charAt(0) != header.toLowerCase().charAt(0))) {
                 // TODO: 9/5/2016 [Alireza Eskandarpour Shoferi] implement contact last seen
-                items.add(new StructContactInfo(peerId, header, "", true));
+                items.add(new StructContactInfo(peerId, header, "", true, false, ""));
             } else {
-                items.add(new StructContactInfo(peerId, header, "", false));
+                items.add(new StructContactInfo(peerId, header, "", false, false, ""));
             }
             lastHeader = header;
         }
@@ -123,5 +125,88 @@ public class Contacts {
         listContact.contactImport(resultContactList);
 
         return resultContactList;
+    }
+
+
+    public static void FillRealmInviteFriend() {
+
+        final ArrayList<StructListOfContact> contactList = getListOfContact();
+        final int size = contactList.size();
+
+        if (size > 0) {
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    realm.delete(RealmInviteFriend.class);  // delete all item in invite friend database
+                    for (int i = 0; i < size; i++) {
+                        RealmInviteFriend item = realm.createObject(RealmInviteFriend.class);
+                        item.setDisplayName(contactList.get(i).getDisplayName());
+                        item.setFirstName(contactList.get(i).getFirstName());
+                        item.setLastName(contactList.get(i).getLastName());
+                        item.setPhone(contactList.get(i).getPhone());
+                    }
+                }
+            });
+
+            //*****************************************************************************************************
+
+            final RealmResults<RealmContacts> results = realm.where(RealmContacts.class).findAll();
+            if (results != null) {
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        for (int i = 0; i < results.size(); i++) {
+                            Long phone = results.get(i).getPhone();
+                            String str = phone.toString();
+                            if (str.length() > 10)
+                                str = str.substring(str.length() - 10, str.length());
+                            realm.where(RealmInviteFriend.class).contains("phone", str).findAll().deleteAllFromRealm();
+                        }
+                    }
+                });
+            }
+
+            realm.close();
+        } else {
+            // you can delete all item in realm contact  if there was no item
+        }
+
+    }
+
+    public static ArrayList<StructContactInfo> getInviteFriendList() {
+
+        ArrayList<StructContactInfo> list = new ArrayList<>();
+
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<RealmInviteFriend> results = realm.where(RealmInviteFriend.class).findAll();
+
+        if (results != null) {
+            String lastHeader = "";
+
+            for (int i = 0; i < results.size(); i++) {
+                String header = results.get(i).getDisplayName();
+
+                StructContactInfo item;
+
+
+                // new header exists
+                if (lastHeader.isEmpty() || (!lastHeader.isEmpty() && !header.isEmpty() && lastHeader.toLowerCase().charAt(0) != header.toLowerCase().charAt(0))) {
+                    item = new StructContactInfo(0, results.get(i).getDisplayName(), "", true, false, results.get(i).getPhone());
+                } else {
+                    item = new StructContactInfo(0, results.get(i).getDisplayName(), "", false, false, results.get(i).getPhone());
+                }
+                lastHeader = header;
+
+                list.add(item);
+
+
+            }
+        }
+
+
+        realm.close();
+
+        return list;
     }
 }
