@@ -7,11 +7,9 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.ArrayRes;
 import android.support.annotation.Nullable;
@@ -28,12 +26,8 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -940,65 +934,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
     }
 
-    private void changStatusBarColor(String color) {
-
-        if (Build.VERSION.SDK_INT >= 21) {
-            Window window = getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(Color.parseColor(color));
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            Window w = getWindow();
-            w.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            //status bar height
-            int statusBarHeight = 0;
-            int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-            if (resourceId > 0) {
-                statusBarHeight = getResources().getDimensionPixelSize(resourceId);
-            }
-            if (statusBarHeight > 0) {
-                View view1 = new View(ActivityChat.this);
-                view1.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                view1.getLayoutParams().height = statusBarHeight;
-                ((ViewGroup) w.getDecorView()).addView(view1);
-                view1.setBackgroundColor(Color.parseColor(color));
-            }
-        }
-
-    }
-
-    private StructMessageInfo buildStructForImage(long messageId, String filePath, MyType.FileState fileState) {
-        return buildStruct(messageId, null, 0, null, null, filePath, null, fileState, ProtoGlobal.RoomMessageType.IMAGE);
-    }
-
-    private StructMessageInfo buildStructForVideo(long messageId, String fileInfo, long fileSize, String fileMime, String fileName, String filePic, String filePath, MyType.FileState fileState) {
-        return buildStruct(messageId, fileInfo, fileSize, fileMime, fileName, filePath, filePic, fileState, ProtoGlobal.RoomMessageType.VIDEO);
-    }
-
-    private StructMessageInfo buildStructForFile(long messageId, String fileInfo, long fileSize, String fileMime, String fileName, String filePic, String filePath, MyType.FileState fileState) {
-        return buildStruct(messageId, fileInfo, fileSize, fileMime, fileName, filePath, filePic, fileState, ProtoGlobal.RoomMessageType.FILE);
-    }
-
-    private StructMessageInfo buildStruct(long messageId, String fileInfo, long fileSize, String fileMime, String fileName, String filePath, String filePic, MyType.FileState fileState, ProtoGlobal.RoomMessageType messageType) {
-        StructMessageInfo messageInfo = new StructMessageInfo();
-        messageInfo.time = System.currentTimeMillis();
-        messageInfo.sendType = MyType.SendType.send;
-        messageInfo.messageID = Long.toString(messageId);
-        messageInfo.fileInfo = fileInfo;
-        messageInfo.fileMime = fileMime;
-        messageInfo.fileName = fileName;
-        messageInfo.filePath = filePath;
-        messageInfo.filePic = filePic;
-        messageInfo.fileState = fileState;
-        messageInfo.fileSize = fileSize;
-        messageInfo.messageType = messageType;
-        Realm realm = Realm.getDefaultInstance();
-        messageInfo.senderID = Long.toString(realm.where(RealmUserInfo.class).findFirst().getUserId());
-
-        return messageInfo;
-    }
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -1016,18 +951,20 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             Log.e("ddd", "result ok");
             // TODO: 9/15/2016 [Alireza Eskandarpour Shoferi] null haye paeen bayad por shavand va hamintor 0 ha
             long messageId = System.currentTimeMillis();
+            Realm realm = Realm.getDefaultInstance();
+            long senderID = realm.where(RealmUserInfo.class).findFirst().getUserId();
             switch (requestCode) {
 
                 case AttachFile.request_code_TAKE_PICTURE:
-                    mAdapter.add(new ImageItem(chatType).setMessage(buildStructForImage(messageId, AttachFile.imagePath, MyType.FileState.uploading)));
+                    mAdapter.add(new ImageItem(chatType).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.IMAGE, MyType.SendType.send, MyType.FileState.uploading, AttachFile.imagePath, System.currentTimeMillis())));
                     Log.e("ddd", AttachFile.imagePath + "     image path");
                     break;
                 case AttachFile.request_code_media_from_gallary:
-                    mAdapter.add(new ImageItem(chatType).setMessage(buildStructForImage(messageId, AttachFile.getFilePathFromUri(data.getData()), MyType.FileState.uploading)));
+                    mAdapter.add(new ImageItem(chatType).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.IMAGE, MyType.SendType.send, MyType.FileState.uploading, AttachFile.getFilePathFromUri(data.getData()), System.currentTimeMillis())));
                     Log.e("ddd", AttachFile.getFilePathFromUri(data.getData()) + "    gallary file path");
                     break;
                 case AttachFile.request_code_VIDEO_CAPTURED:
-                    mAdapter.add(new VideoItem(chatType).setMessage(buildStructForVideo(messageId, null, 0, null, null, null, AttachFile.imagePath, MyType.FileState.uploading)));
+                    mAdapter.add(new VideoItem(chatType).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.VIDEO, MyType.SendType.send, MyType.FileState.uploading, null, null, null, null, AttachFile.getFilePathFromUri(data.getData()), 0, System.currentTimeMillis())));
                     Log.e("ddd", AttachFile.getFilePathFromUri(data.getData()) + "    video capture path");
                     break;
                 case AttachFile.request_code_pic_audi:
@@ -1035,7 +972,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     Log.e("ddd", AttachFile.getFilePathFromUri(data.getData()) + "    audio  path");
                     break;
                 case AttachFile.request_code_pic_file:
-                    mAdapter.add(new FileItem(chatType).setMessage(buildStructForFile(messageId, null, 0, null, null, null, AttachFile.imagePath, MyType.FileState.uploading)));
+                    mAdapter.add(new FileItem(chatType).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.FILE, MyType.SendType.send, MyType.FileState.uploading, null, null, null, data.getData().getPath(), 0, System.currentTimeMillis())));
                     Log.e("ddd", data.getData() + "    pic file path");
                     break;
                 case AttachFile.request_code_contact_phone:
@@ -1043,10 +980,11 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     Log.e("ddd", data.getData() + "   contact phone");
                     break;
                 case AttachFile.request_code_paint:
-                    mAdapter.add(new ImageItem(chatType).setMessage(buildStructForImage(messageId, data.getData().getPath(), MyType.FileState.uploading)));
+                    mAdapter.add(new ImageItem(chatType).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.IMAGE, MyType.SendType.send, MyType.FileState.uploading, data.getData().getPath(), System.currentTimeMillis())));
                     Log.e("ddd", data.getData() + "   pain path");
                     break;
             }
+            realm.close();
         }
     }
 
@@ -1271,164 +1209,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         return messageList;
     }
 
-
-    /*   private ArrayList<StructMessageInfo> getChatList() {
-
-           ArrayList<StructMessageInfo> list = new ArrayList<>();
-
-           StructMessageInfo c = new StructMessageInfo();
-           c.messageType = ProtoGlobal.RoomMessageType.IMAGE_TEXT;
-           c.sendType = MyType.SendType.send;
-           c.status = ProtoGlobal.RoomMessageStatus.SENDING.toString();
-           c.senderAvatar = R.mipmap.a + "";
-           c.messageID = "123";
-           c.filePath = R.mipmap.a + "";
-           c.messageText = "where are you  going hgf hgf hgf hgf  good good";
-           c.channelLink = "@igap";
-           list.add(c);
-
-
-           StructMessageInfo c9 = new StructMessageInfo();
-           c9.messageType = ProtoGlobal.RoomMessageType.FILE;
-           c9.forwardMessageFrom = "ali";
-           c9.replayFrom = "ali";
-           c9.status = ProtoGlobal.RoomMessageStatus.DELIVERED.toString();
-           c9.messageID = "123";
-           c9.replayMessage = "where are you djkdj kjf kdj";
-           c9.sendType = MyType.SendType.send;
-           c9.senderAvatar = R.mipmap.a + "";
-           list.add(c9);
-
-           StructMessageInfo c10 = new StructMessageInfo();
-           c10.messageType = ProtoGlobal.RoomMessageType.FILE;
-           c10.forwardMessageFrom = "hasan";
-           c10.replayFrom = "mehdi";
-           c10.status = ProtoGlobal.RoomMessageStatus.FAILED.toString();
-           c10.messageID = "123";
-           c10.replayMessage = "i am fine";
-           c10.replayPicturePath = " fd";
-           c10.sendType = MyType.SendType.recvive;
-           c10.senderAvatar = R.mipmap.a + "";
-           list.add(c10);
-
-
-
-           StructMessageInfo c16 = new StructMessageInfo();
-           c16.sendType = MyType.SendType.timeLayout;
-           c16.status = ProtoGlobal.RoomMessageStatus.FAILED.toString();
-           c16.messageID = "123";
-           list.add(c16);
-
-           StructMessageInfo c13 = new StructMessageInfo();
-           c13.messageType = ProtoGlobal.RoomMessageType.VOICE;
-           c13.status = ProtoGlobal.RoomMessageStatus.SENT.toString();
-           c13.messageID = "123";
-           c13.sendType = MyType.SendType.send;
-           list.add(c13);
-
-           StructMessageInfo c14 = new StructMessageInfo();
-           c14.messageType =ProtoGlobal.RoomMessageType.VOICE;
-           c14.status = ProtoGlobal.RoomMessageStatus.SEEN.toString();
-           c14.messageID = "123";
-           c14.sendType = MyType.SendType.recvive;
-           c14.messageText = "بهترین موسیقی منتخب" +
-                   "\n" + " how are you fghg hgfh fhgf hgf hgf hgf hgf fjhg jhg jhgjhg jhgjh";
-           c14.senderAvatar = R.mipmap.a + "";
-           list.add(c14);
-
-
-
-           StructMessageInfo c11 = new StructMessageInfo();
-           c11.messageType = ProtoGlobal.RoomMessageType.FILE;
-           c11.sendType = MyType.SendType.recvive;
-           c11.messageID = "123";
-           c11.status = ProtoGlobal.RoomMessageStatus.SEEN.toString();
-           c11.senderAvatar = R.mipmap.a + "";
-           list.add(c11);
-
-           StructMessageInfo c1 = new StructMessageInfo();
-           c1.messageType = ProtoGlobal.RoomMessageType.TEXT;
-           c1.status = ProtoGlobal.RoomMessageStatus.SEEN.toString();
-           c1.messageID = "123";
-           c1.messageText = "how";
-           c1.sendType = MyType.SendType.send;
-           c1.senderAvatar = R.mipmap.b + "";
-           c1.messageID = "123";
-           list.add(c1);
-
-           StructMessageInfo c2 = new StructMessageInfo();
-           c2.messageType = ProtoGlobal.RoomMessageType.TEXT;
-           c2.status = ProtoGlobal.RoomMessageStatus.SEEN.toString();
-           c2.senderAvatar = R.mipmap.c + "";
-           c2.messageText = "i am fine";
-           c2.messageID = "123";
-           c2.forwardMessageFrom = "Android cade";
-           c2.sendType = MyType.SendType.recvive;
-           list.add(c2);
-
-           StructMessageInfo c3 = new StructMessageInfo();
-           c3.messageType = ProtoGlobal.RoomMessageType.VIDEO_TEXT;
-           c3.messageText = "where are you  going hgf hgf hgf hgf  good good";
-           c3.sendType = MyType.SendType.send;
-           c3.fileName = "good video";
-           c3.status = ProtoGlobal.RoomMessageStatus.SEEN.toString();
-           c3.fileMime = ".mpv";
-           c3.messageID = "123";
-           c3.fileState = MyType.FileState.notUpload;
-           c3.fileInfo = "3:20 (2.4 MB)";
-           c3.filePic = R.mipmap.a + "";
-           list.add(c3);
-
-           StructMessageInfo c4 = new StructMessageInfo();
-           c4.messageType =ProtoGlobal.RoomMessageType.IMAGE_TEXT;
-           c4.forwardMessageFrom = "ali";
-           c4.messageText = "the good picture for all the word";
-           c4.status = ProtoGlobal.RoomMessageStatus.SEEN.toString();
-           c4.sendType = MyType.SendType.recvive;
-           c4.messageID = "123";
-           c4.senderAvatar = R.mipmap.d + "";
-           c4.filePath = R.mipmap.c + "";
-           list.add(c4);
-
-           StructMessageInfo c5 = new StructMessageInfo();
-           c5.messageType = ProtoGlobal.RoomMessageType.IMAGE;
-           c5.forwardMessageFrom = "ali";
-           c5.sendType = MyType.SendType.send;
-           c5.status = ProtoGlobal.RoomMessageStatus.SEEN.toString();
-           c5.senderAvatar = R.mipmap.e + "";
-           c5.messageID = "123";
-           c5.filePath = R.mipmap.e + "";
-           list.add(c5);
-
-           StructMessageInfo c6 = new StructMessageInfo();
-           c6.messageType = ProtoGlobal.RoomMessageType.IMAGE;
-           c6.sendType = MyType.SendType.recvive;
-           c6.messageID = "123";
-           c6.status = ProtoGlobal.RoomMessageStatus.SEEN.toString();
-           c6.senderAvatar = R.mipmap.f + "";
-           c6.filePath = R.mipmap.f + "";
-           list.add(c6);
-
-           StructMessageInfo c7 = new StructMessageInfo();
-           c7.messageType = ProtoGlobal.RoomMessageType.IMAGE;
-           c7.sendType = MyType.SendType.recvive;
-           c7.messageID = "123";
-           c7.status = ProtoGlobal.RoomMessageStatus.SEEN.toString();
-           c7.senderAvatar = R.mipmap.g + "";
-           c7.filePath = R.mipmap.g + "";
-           list.add(c7);
-
-           StructMessageInfo c8 = new StructMessageInfo();
-           c8.messageType = ProtoGlobal.RoomMessageType.IMAGE;
-           c8.messageID = "123";
-           c8.status = ProtoGlobal.RoomMessageStatus.SENDING.toString();
-           c8.sendType = MyType.SendType.send;
-           c8.filePath = R.mipmap.h + "";
-           list.add(c8);
-
-           return list;
-       }
-   */
     @Override
     public void onMessageClick(View view, final StructMessageInfo messageInfo, int position) {
         Log.i(ActivityChat.class.getSimpleName(), "Message clicked");

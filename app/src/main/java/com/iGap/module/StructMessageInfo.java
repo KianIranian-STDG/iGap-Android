@@ -5,13 +5,53 @@ import android.os.Parcelable;
 
 import com.iGap.proto.ProtoGlobal;
 
-import java.util.ArrayList;
-
 /**
  * chat message struct info
  * used for chat messages
  */
 public class StructMessageInfo implements Parcelable {
+
+    public StructMessageInfo(String messageID, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, MyType.FileState fileState, String fileName, String fileMime, String fileInfo, String filePic, String filePath, long fileSize, long time) {
+        this.messageID = messageID;
+        this.senderID = senderID;
+        this.status = status;
+        this.messageType = messageType;
+        this.sendType = sendType;
+        this.fileState = fileState;
+        this.fileName = fileName;
+        this.fileMime = fileMime;
+        this.fileInfo = fileInfo;
+        this.filePic = filePic;
+        this.filePath = filePath;
+        this.fileSize = fileSize;
+        this.time = time;
+    }
+
+    public StructMessageInfo(String messageID, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, MyType.FileState fileState, String fileName, String fileMime, String filePic, String filePath, long fileSize, long time) {
+        this.messageID = messageID;
+        this.senderID = senderID;
+        this.status = status;
+        this.messageType = messageType;
+        this.sendType = sendType;
+        this.fileState = fileState;
+        this.fileName = fileName;
+        this.fileMime = fileMime;
+        this.filePic = filePic;
+        this.filePath = filePath;
+        this.time = time;
+        this.fileSize = fileSize;
+    }
+
+    public StructMessageInfo(String messageID, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, MyType.FileState fileState, String filePath, long time) {
+        this.messageID = messageID;
+        this.senderID = senderID;
+        this.status = status;
+        this.messageType = messageType;
+        this.sendType = sendType;
+        this.fileState = fileState;
+        this.filePath = filePath;
+        this.time = time;
+    }
 
     public String messageID = "1";
 
@@ -26,10 +66,6 @@ public class StructMessageInfo implements Parcelable {
     public String status = ProtoGlobal.RoomMessageStatus.SENDING.toString();
     public String channelLink = "";
     public String initials;
-
-    public boolean isChange = false;
-    public ArrayList<String> allChanges = new ArrayList<>();
-    public boolean isSelected = false;
 
     public String forwardMessageFrom = "";
 
@@ -52,6 +88,8 @@ public class StructMessageInfo implements Parcelable {
 
     public long time;
 
+    public StructMessageInfo() {
+    }
 
     @Override
     public int describeContents() {
@@ -64,11 +102,11 @@ public class StructMessageInfo implements Parcelable {
         dest.writeString(this.senderAvatar);
         dest.writeString(this.senderName);
         dest.writeString(this.senderID);
+        dest.writeString(this.senderColor);
+        dest.writeByte(this.isEdited ? (byte) 1 : (byte) 0);
         dest.writeString(this.status);
         dest.writeString(this.channelLink);
-        dest.writeByte(this.isChange ? (byte) 1 : (byte) 0);
-        dest.writeStringList(this.allChanges);
-        dest.writeByte(this.isSelected ? (byte) 1 : (byte) 0);
+        dest.writeString(this.initials);
         dest.writeString(this.forwardMessageFrom);
         dest.writeInt(this.messageType == null ? -1 : this.messageType.ordinal());
         dest.writeInt(this.sendType == null ? -1 : this.sendType.ordinal());
@@ -82,10 +120,8 @@ public class StructMessageInfo implements Parcelable {
         dest.writeString(this.fileInfo);
         dest.writeString(this.filePic);
         dest.writeString(this.filePath);
+        dest.writeLong(this.fileSize);
         dest.writeLong(this.time);
-    }
-
-    public StructMessageInfo() {
     }
 
     protected StructMessageInfo(Parcel in) {
@@ -93,11 +129,11 @@ public class StructMessageInfo implements Parcelable {
         this.senderAvatar = in.readString();
         this.senderName = in.readString();
         this.senderID = in.readString();
+        this.senderColor = in.readString();
+        this.isEdited = in.readByte() != 0;
         this.status = in.readString();
         this.channelLink = in.readString();
-        this.isChange = in.readByte() != 0;
-        this.allChanges = in.createStringArrayList();
-        this.isSelected = in.readByte() != 0;
+        this.initials = in.readString();
         this.forwardMessageFrom = in.readString();
         int tmpMessageType = in.readInt();
         this.messageType = tmpMessageType == -1 ? null : ProtoGlobal.RoomMessageType.values()[tmpMessageType];
@@ -114,6 +150,7 @@ public class StructMessageInfo implements Parcelable {
         this.fileInfo = in.readString();
         this.filePic = in.readString();
         this.filePath = in.readString();
+        this.fileSize = in.readLong();
         this.time = in.readLong();
     }
 
