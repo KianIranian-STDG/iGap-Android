@@ -164,7 +164,8 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
 
         holder.itemView.findViewById(R.id.contentContainer).setBackgroundResource(R.drawable.rectangle_round_gray);
         // add main layout margin to prevent getting match parent completely
-        ((FrameLayout.LayoutParams) holder.itemView.findViewById(R.id.mainContainer).getLayoutParams()).leftMargin = 0;
+        // set to mainContainer not itemView because of selecting item foreground
+        ((FrameLayout.LayoutParams) holder.itemView.findViewById(R.id.mainContainer).getLayoutParams()).leftMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp8);
         ((FrameLayout.LayoutParams) holder.itemView.findViewById(R.id.mainContainer).getLayoutParams()).rightMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp28);
 
         // gone message status
@@ -178,8 +179,9 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
 
         holder.itemView.findViewById(R.id.contentContainer).setBackgroundResource(R.drawable.rectangle_round_white);
         // add main layout margin to prevent getting match parent completely
+        // set to mainContainer not itemView because of selecting item foreground
         ((FrameLayout.LayoutParams) holder.itemView.findViewById(R.id.mainContainer).getLayoutParams()).leftMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp28);
-        ((FrameLayout.LayoutParams) holder.itemView.findViewById(R.id.mainContainer).getLayoutParams()).rightMargin = 0;
+        ((FrameLayout.LayoutParams) holder.itemView.findViewById(R.id.mainContainer).getLayoutParams()).rightMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp8);
 
         // visible message status
         holder.itemView.findViewById(R.id.cslr_txt_tic).setVisibility(View.VISIBLE);
