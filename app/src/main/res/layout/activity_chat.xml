@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@mipmap/cats"
-    android:layoutDirection="ltr"
-    android:orientation="vertical">
+    android:layoutDirection="ltr">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/chl_recycler_view_chat"
@@ -13,11 +12,13 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/layout_attach_file"
         android:layout_below="@+id/toolbarContainer"
+        android:overScrollMode="never"
         android:scrollbars="none"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    </android.support.v7.widget.RecyclerView>
 
     <LinearLayout
-
         android:id="@+id/toolbarContainer"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp60"

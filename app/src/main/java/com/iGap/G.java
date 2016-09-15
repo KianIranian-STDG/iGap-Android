@@ -59,6 +59,10 @@ import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestUserContactsGetList;
 import com.iGap.request.RequestUserLogin;
 import com.iGap.request.RequestWrapper;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -128,7 +132,6 @@ public class G extends Application {
     public static File imageFile;
     public static int COPY_BUFFER_SIZE = 1024;
 
-    public static RealmConfiguration realmConfig;
     public static UploaderUtil uploaderUtil = new UploaderUtil();
     public static ClearMessagesUtil clearMessagesUtil = new ClearMessagesUtil();
     public static ChatSendMessageUtil chatSendMessageUtil = new ChatSendMessageUtil();
@@ -221,14 +224,23 @@ public class G extends Application {
         YEKAN_FARSI = Typeface.createFromAsset(context.getAssets(), "fonts/yekan.ttf");
         YEKAN_BOLD = Typeface.createFromAsset(context.getAssets(), "fonts/yekan_bold.ttf");
 
-        realmConfig = new RealmConfiguration.Builder(getApplicationContext())
+        Realm.setDefaultConfiguration(new RealmConfiguration.Builder(getApplicationContext())
                 .name("iGapLocalDatabase.realm")
                 .schemaVersion(1)
                 .migration(new RealmMigrationClass())
                 .deleteRealmIfMigrationNeeded()
-                .build();
+                .build());
 
-        Realm.setDefaultConfiguration(realmConfig);
+        // Create global configuration and initialize ImageLoader with this config
+        // https://github.com/nostra13/Android-Universal-Image-Loader/wiki/Configuration
+        // https://github.com/nostra13/Android-Universal-Image-Loader/wiki/Display-Options
+        // https://github.com/nostra13/Android-Universal-Image-Loader/wiki/Useful-Info
+        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .displayer(new FadeInBitmapDisplayer(500))
+                .build();
+        ImageLoader.getInstance().init(new ImageLoaderConfiguration.Builder(this).defaultDisplayImageOptions(defaultOptions).build());
 
         String imageUser = Environment.getExternalStorageDirectory() + "/image_user";
 

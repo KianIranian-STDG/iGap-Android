@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.iGap.R;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
@@ -34,6 +35,14 @@ public class FileItem extends AbstractChatItem<FileItem, FileItem.ViewHolder> {
     @Override
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
+
+        ImageLoader.getInstance().displayImage(suitablePath(mMessage.filePic), holder.cslf_imv_image_file);
+
+        // TODO: 9/15/2016 [Alireza Eskandarpour Shoferi] implement fileState
+
+        holder.cslf_txt_file_name.setText(mMessage.fileName);
+        holder.cslf_txt_file_mime_type.setText(mMessage.fileMime);
+        holder.cslf_txt_file_size.setText(Long.toString(mMessage.fileSize));
 
         if (!mMessage.messageText.isEmpty()) {
             holder.cslr_txt_message.setText(mMessage.messageText);
@@ -71,6 +80,13 @@ public class FileItem extends AbstractChatItem<FileItem, FileItem.ViewHolder> {
             cslf_txt_file_name = (TextView) view.findViewById(R.id.cslf_txt_file_name);
             cslf_txt_file_mime_type = (TextView) view.findViewById(R.id.cslf_txt_file_mime_type);
             cslf_txt_file_size = (TextView) view.findViewById(R.id.cslf_txt_file_size);
+
+            cslf_imv_state_file.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // TODO: 9/15/2016 [Alireza Eskandarpour Shoferi] fill
+                }
+            });
         }
     }
 }

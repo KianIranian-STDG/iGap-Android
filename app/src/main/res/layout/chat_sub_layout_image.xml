@@ -63,8 +63,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom|right"
-                        android:layout_marginRight="@dimen/dp4"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginRight="2dp"
                         android:background="@drawable/bg_message_image_time"
+                        android:gravity="center"
                         android:orientation="horizontal"
                         android:padding="@dimen/dp4">
 
@@ -80,10 +82,9 @@
                             android:id="@+id/cslr_txt_tic"
                             style="@style/ChatMessages.MaterialDesignTextView.Tick"
                             android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/dp4"
                             android:layout_marginRight="@dimen/dp4"
-                            android:gravity="bottom"
                             android:text="@string/md_clock_with_white_face"
                             android:textColor="@color/green" />
 

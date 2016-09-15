@@ -81,6 +81,7 @@ import com.iGap.module.EmojiRecentsManager;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.MyType;
 import com.iGap.module.OnComplete;
+import com.iGap.module.RecyclerViewPauseOnScrollListener;
 import com.iGap.module.StructMessageInfo;
 import com.iGap.proto.ProtoChatSendMessage;
 import com.iGap.proto.ProtoGlobal;
@@ -103,6 +104,7 @@ import com.nightonke.boommenu.Types.BoomType;
 import com.nightonke.boommenu.Types.ButtonType;
 import com.nightonke.boommenu.Types.PlaceType;
 import com.nightonke.boommenu.Util;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -429,6 +431,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
 
         recyclerView = (RecyclerView) findViewById(R.id.chl_recycler_view_chat);
+        recyclerView.addOnScrollListener(new RecyclerViewPauseOnScrollListener(ImageLoader.getInstance(), false, true));
         // remove notifying fancy animation
         RecyclerView.ItemAnimator animator = recyclerView.getItemAnimator();
         if (animator instanceof SimpleItemAnimator) {
@@ -954,6 +957,37 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
     }
 
+    private StructMessageInfo buildStructForImage(long messageId, String filePath, MyType.FileState fileState) {
+        return buildStruct(messageId, null, 0, null, null, filePath, null, fileState, ProtoGlobal.RoomMessageType.IMAGE);
+    }
+
+    private StructMessageInfo buildStructForVideo(long messageId, String fileInfo, long fileSize, String fileMime, String fileName, String filePic, String filePath, MyType.FileState fileState) {
+        return buildStruct(messageId, fileInfo, fileSize, fileMime, fileName, filePath, filePic, fileState, ProtoGlobal.RoomMessageType.VIDEO);
+    }
+
+    private StructMessageInfo buildStructForFile(long messageId, String fileInfo, long fileSize, String fileMime, String fileName, String filePic, String filePath, MyType.FileState fileState) {
+        return buildStruct(messageId, fileInfo, fileSize, fileMime, fileName, filePath, filePic, fileState, ProtoGlobal.RoomMessageType.FILE);
+    }
+
+    private StructMessageInfo buildStruct(long messageId, String fileInfo, long fileSize, String fileMime, String fileName, String filePath, String filePic, MyType.FileState fileState, ProtoGlobal.RoomMessageType messageType) {
+        StructMessageInfo messageInfo = new StructMessageInfo();
+        messageInfo.time = System.currentTimeMillis();
+        messageInfo.sendType = MyType.SendType.send;
+        messageInfo.messageID = Long.toString(messageId);
+        messageInfo.fileInfo = fileInfo;
+        messageInfo.fileMime = fileMime;
+        messageInfo.fileName = fileName;
+        messageInfo.filePath = filePath;
+        messageInfo.filePic = filePic;
+        messageInfo.fileState = fileState;
+        messageInfo.fileSize = fileSize;
+        messageInfo.messageType = messageType;
+        Realm realm = Realm.getDefaultInstance();
+        messageInfo.senderID = Long.toString(realm.where(RealmUserInfo.class).findFirst().getUserId());
+
+        return messageInfo;
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -970,37 +1004,41 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         } else if (resultCode == Activity.RESULT_OK) {
 
             Log.e("ddd", "result ok");
-
+            // TODO: 9/15/2016 [Alireza Eskandarpour Shoferi] null haye paeen bayad por shavand va hamintor 0 ha
+            long messageId = System.currentTimeMillis();
             switch (requestCode) {
 
                 case AttachFile.request_code_TAKE_PICTURE:
-                    Log.e("ddd", attachFile.imagePath + "     image path");
+                    mAdapter.add(new ImageItem(chatType).setMessage(buildStructForImage(messageId, AttachFile.imagePath, MyType.FileState.uploading)));
+                    Log.e("ddd", AttachFile.imagePath + "     image path");
                     break;
                 case AttachFile.request_code_media_from_gallary:
+                    mAdapter.add(new ImageItem(chatType).setMessage(buildStructForImage(messageId, AttachFile.getFilePathFromUri(data.getData()), MyType.FileState.uploading)));
                     Log.e("ddd", AttachFile.getFilePathFromUri(data.getData()) + "    gallary file path");
                     break;
                 case AttachFile.request_code_VIDEO_CAPTURED:
+                    mAdapter.add(new VideoItem(chatType).setMessage(buildStructForVideo(messageId, null, 0, null, null, null, AttachFile.imagePath, MyType.FileState.uploading)));
                     Log.e("ddd", AttachFile.getFilePathFromUri(data.getData()) + "    video capture path");
                     break;
                 case AttachFile.request_code_pic_audi:
+                    // TODO
                     Log.e("ddd", AttachFile.getFilePathFromUri(data.getData()) + "    audio  path");
                     break;
                 case AttachFile.request_code_pic_file:
+                    // TODO
+                    mAdapter.add(new FileItem(chatType).setMessage(buildStructForFile(messageId, null, 0, null, null, null, AttachFile.imagePath, MyType.FileState.uploading)));
                     Log.e("ddd", data.getData() + "    pic file path");
                     break;
                 case AttachFile.request_code_contact_phone:
+                    // TODO
                     Log.e("ddd", data.getData() + "   contact phone");
                     break;
                 case AttachFile.request_code_paint:
+                    mAdapter.add(new ImageItem(chatType).setMessage(buildStructForImage(messageId, data.getData().getPath(), MyType.FileState.uploading)));
                     Log.e("ddd", data.getData() + "   pain path");
                     break;
-
             }
-
-
         }
-
-
     }
 
     private LinearLayout mReplayLayout;

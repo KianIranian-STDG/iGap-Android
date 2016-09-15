@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import com.iGap.R;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class ImageItem extends AbstractChatItem<ImageItem, ImageItem.ViewHolder>
     public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        holder.imvPicture.setImageResource(Integer.parseInt(mMessage.filePath));
+        ImageLoader.getInstance().displayImage(suitablePath(mMessage.filePath), holder.imvPicture);
     }
 
     @Override

@@ -45,6 +45,8 @@ public class StructMessageInfo implements Parcelable {
     public String fileInfo = "";
     public String filePic = "";
     public String filePath = "";
+    public long fileSize;
+
     public long time;
 
 

@@ -1,6 +1,7 @@
 package com.iGap.adapter.items.chat;
 
 import android.graphics.Color;
+import android.net.Uri;
 import android.support.annotation.CallSuper;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -19,6 +20,7 @@ import com.iGap.module.Utils;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.items.AbstractItem;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -37,6 +39,14 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
     public AbstractChatItem setMessage(StructMessageInfo message) {
         this.mMessage = message;
         return this;
+    }
+
+    protected String suitablePath(String path) {
+        if (path.matches("\\w+?://")) {
+            return path;
+        } else {
+            return Uri.fromFile(new File(path)).toString();
+        }
     }
 
     /**
@@ -73,10 +83,12 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
         }
 
         // display 'edited' indicator beside message time if message was edited
-        if (mMessage.isEdited) {
-            holder.itemView.findViewById(R.id.txtEditedIndicator).setVisibility(View.VISIBLE);
-        } else {
-            holder.itemView.findViewById(R.id.txtEditedIndicator).setVisibility(View.GONE);
+        if (holder.itemView.findViewById(R.id.txtEditedIndicator) != null) {
+            if (mMessage.isEdited) {
+                holder.itemView.findViewById(R.id.txtEditedIndicator).setVisibility(View.VISIBLE);
+            } else {
+                holder.itemView.findViewById(R.id.txtEditedIndicator).setVisibility(View.GONE);
+            }
         }
 
         // display user avatar only if chat type is GROUP
