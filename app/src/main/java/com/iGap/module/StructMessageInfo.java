@@ -14,9 +14,12 @@ import java.util.ArrayList;
 public class StructMessageInfo implements Parcelable {
 
     public String messageID = "1";
-    public String senderAvatar = "";  // this use for show avater in group
+
+    public String senderAvatar = "";  // useful for displaying avatar in group chat type
     public String senderName = "";
     public String senderID = "";
+    // TODO: 9/15/2016 [Alireza Eskandarpour Shoferi] need sender avatar bg color
+    public String senderColor = "";
 
     public boolean isEdited = false;
 

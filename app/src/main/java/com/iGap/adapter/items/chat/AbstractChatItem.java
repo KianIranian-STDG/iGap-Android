@@ -18,6 +18,7 @@ import com.iGap.module.StructMessageInfo;
 import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.items.AbstractItem;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
 import java.util.List;
@@ -40,6 +41,12 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
         return this;
     }
 
+    /**
+     * return suitable path for using with UIL
+     *
+     * @param path String path
+     * @return correct local path/passed path
+     */
     protected String suitablePath(String path) {
         if (path.matches("\\w+?://")) {
             return path;
@@ -92,7 +99,11 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
 
         // display user avatar only if chat type is GROUP
         if (type == ProtoGlobal.Room.Type.GROUP) {
-            // TODO: 9/14/2016 [Alireza Eskandarpour Shoferi] set avatar
+            if (!mMessage.senderAvatar.isEmpty()) {
+                ImageLoader.getInstance().displayImage(suitablePath(mMessage.senderAvatar), (ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar));
+            } else {
+                ((ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar)).setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), mMessage.initials, mMessage.senderColor));
+            }
             holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.VISIBLE);
         } else {
             holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.GONE);
@@ -174,6 +185,11 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
         holder.itemView.findViewById(R.id.cslr_txt_tic).setVisibility(View.VISIBLE);
     }
 
+    /**
+     * update message status automatically
+     *
+     * @param view TextView message status
+     */
     protected void updateMessageStatus(TextView view) {
         // icons font MaterialDesign yeksan design nashodan vase hamin man dasti size ro barabar kardam
         switch (mMessage.status) {
