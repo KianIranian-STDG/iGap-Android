@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.iGap.R;
-import com.iGap.module.Utils;
 import com.nineoldandroids.view.ViewHelper;
 
 
@@ -108,7 +107,7 @@ public class LeftDrawerLayout extends ViewGroup {
                     mFlowingView.resetContent();
                 } else {
                     if (offset >= 0.5f && offset < 0.7f) {
-                        openHalfDrawer(Utils.dpToPx(context, R.dimen.dp280));
+                        openHalfDrawer((int) context.getResources().getDimension(R.dimen.dp280));
                     }
                 }
                 invalidate();

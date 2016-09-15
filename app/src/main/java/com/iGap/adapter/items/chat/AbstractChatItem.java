@@ -16,7 +16,6 @@ import com.iGap.R;
 import com.iGap.module.MyType;
 import com.iGap.module.StructMessageInfo;
 import com.iGap.module.TimeUtils;
-import com.iGap.module.Utils;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.items.AbstractItem;
 
@@ -155,7 +154,7 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
         holder.itemView.findViewById(R.id.contentContainer).setBackgroundResource(R.drawable.rectangle_round_gray);
         // add main layout margin to prevent getting match parent completely
         ((FrameLayout.LayoutParams) holder.itemView.findViewById(R.id.mainContainer).getLayoutParams()).leftMargin = 0;
-        ((FrameLayout.LayoutParams) holder.itemView.findViewById(R.id.mainContainer).getLayoutParams()).rightMargin = Utils.dpToPx(holder.itemView.getContext(), R.dimen.dp28);
+        ((FrameLayout.LayoutParams) holder.itemView.findViewById(R.id.mainContainer).getLayoutParams()).rightMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp28);
 
         // gone message status
         holder.itemView.findViewById(R.id.cslr_txt_tic).setVisibility(View.GONE);
@@ -168,7 +167,7 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
 
         holder.itemView.findViewById(R.id.contentContainer).setBackgroundResource(R.drawable.rectangle_round_white);
         // add main layout margin to prevent getting match parent completely
-        ((FrameLayout.LayoutParams) holder.itemView.findViewById(R.id.mainContainer).getLayoutParams()).leftMargin = Utils.dpToPx(holder.itemView.getContext(), R.dimen.dp28);
+        ((FrameLayout.LayoutParams) holder.itemView.findViewById(R.id.mainContainer).getLayoutParams()).leftMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp28);
         ((FrameLayout.LayoutParams) holder.itemView.findViewById(R.id.mainContainer).getLayoutParams()).rightMargin = 0;
 
         // visible message status
@@ -176,7 +175,7 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
     }
 
     protected void updateMessageStatus(TextView view) {
-        // TODO: 9/14/2016 [Alireza Eskandarpour Shoferi] icons font MaterialDesign yeksan design nashodan vase hamin man dasti size ro barabar kardam
+        // icons font MaterialDesign yeksan design nashodan vase hamin man dasti size ro barabar kardam
         switch (mMessage.status) {
             case "DELIVERED":
                 view.setTextColor(view.getContext().getResources().getColor(R.color.green));

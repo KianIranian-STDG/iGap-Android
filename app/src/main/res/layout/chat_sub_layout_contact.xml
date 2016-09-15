@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/chatSubLayoutContact"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layoutDirection="ltr"
+    android:maxWidth="@dimen/dp300"
+    android:padding="@dimen/chatMessageBoxPadding">
+
+    <LinearLayout
+        android:id="@+id/mainContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        tools:ignore="UselessParent">
+
+        <com.iGap.module.CircleImageView
+            android:id="@+id/messageSenderAvatar"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="@dimen/dp52"
+            android:layout_marginRight="@dimen/dp8"
+            android:src="@mipmap/b" />
+
+        <LinearLayout
+            android:id="@+id/contentContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rectangle_round_white"
+            android:orientation="vertical"
+            android:padding="@dimen/dp6">
+
+            <include
+                android:id="@+id/replayLayout"
+                layout="@layout/chat_sub_layout_replay" />
+
+            <include
+                android:id="@+id/cslr_ll_forward"
+                layout="@layout/chat_sub_layout_forward" />
+
+            <!--TODO implement contact view-->
+
+            <include
+                android:id="@+id/cslr_ll_time"
+                layout="@layout/chat_sub_layout_messages_time" />
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

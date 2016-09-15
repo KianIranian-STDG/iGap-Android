@@ -186,7 +186,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         btnMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mLeftDrawerLayout.toggle(Utils.dpToPx(getApplicationContext(), R.dimen.dp280));
+                mLeftDrawerLayout.toggle((int) getResources().getDimension(R.dimen.dp280));
             }
         });
 

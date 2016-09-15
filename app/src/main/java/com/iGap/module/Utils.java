@@ -2,15 +2,10 @@ package com.iGap.module;
 
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Point;
-import android.support.annotation.DimenRes;
-import android.util.DisplayMetrics;
 import android.view.Display;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
@@ -30,12 +25,6 @@ public final class Utils {
         return size.x;
     }
 
-    public static int dpToPx(Context context, @DimenRes int res) {
-        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-        int dp = (int) (context.getResources().getDimension(res) / displayMetrics.density);
-        return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
-    }
-
     /**
      * get n bytes from file, starts from beginning
      *
@@ -51,13 +40,6 @@ public final class Utils {
         ByteBuffer byteBuffer = ByteBuffer.allocate(bytesCount);
         fileChannel.read(byteBuffer);
         return byteBuffer.array();
-        /*byte[] bytes = new byte[bytesCount];
-        BufferedInputStream buf = new BufferedInputStream(new FileInputStream(new File(filePath)));
-        while (buf.available() > 0) {
-            buf.read(bytes, 0, bytesCount);
-        }
-        buf.close();
-        return bytes;*/
     }
 
     /**
@@ -75,12 +57,6 @@ public final class Utils {
         ByteBuffer byteBuffer = ByteBuffer.allocate(bytesCount);
         fileChannel.read(byteBuffer);
         return byteBuffer.array();
-        /*byte[] bytes = new byte[bytesCount];
-        RandomAccessFile fileInputStream = new RandomAccessFile(new File(filePath), "r");
-        fileInputStream.seek(fileInputStream.length() - bytes.length);
-        fileInputStream.read(bytes, 0, bytes.length);
-        fileInputStream.close();
-        return bytes;*/
     }
 
     /**
@@ -99,12 +75,6 @@ public final class Utils {
         ByteBuffer byteBuffer = ByteBuffer.allocate(bytesCount);
         fileChannel.read(byteBuffer);
         return byteBuffer.array();
-        /*byte[] bytes = new byte[bytesCount];
-        RandomAccessFile buf = new RandomAccessFile(new File(filePath),"r");
-        buf.seek(offset);
-        buf.read(bytes, 0, bytes.length);
-        buf.close();
-        return bytes;*/
     }
 
     /**
@@ -142,11 +112,15 @@ public final class Utils {
      * @throws IOException
      */
     public static byte[] fileToBytes(File file) throws IOException {
-        int size = (int) file.length();
+        FileChannel fileChannel = new RandomAccessFile(file, "r").getChannel();
+        ByteBuffer byteBuffer = ByteBuffer.allocate((int) file.length());
+        fileChannel.read(byteBuffer);
+        return byteBuffer.array();
+   /*     int size = (int) file.length();
         byte[] bytes = new byte[size];
         BufferedInputStream buf = new BufferedInputStream(new FileInputStream(file));
         buf.read(bytes, 0, bytes.length);
         buf.close();
-        return bytes;
+        return bytes;*/
     }
 }

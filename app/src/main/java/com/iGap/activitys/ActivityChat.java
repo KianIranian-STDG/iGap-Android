@@ -53,6 +53,7 @@ import com.iGap.adapter.items.chat.ChannelVoiceItem;
 import com.iGap.adapter.items.chat.FileItem;
 import com.iGap.adapter.items.chat.ImageItem;
 import com.iGap.adapter.items.chat.ImageWithTextItem;
+import com.iGap.adapter.items.chat.LocationItem;
 import com.iGap.adapter.items.chat.MessageItem;
 import com.iGap.adapter.items.chat.VideoItem;
 import com.iGap.adapter.items.chat.VideoWithTextItem;
@@ -483,6 +484,14 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                         mAdapter.add(new ChannelVideoItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                     }
                     break;
+                case LOCATION:
+                    // TODO: 9/15/2016 [Alireza Eskandarpour Shoferi] fill
+                    if (chatType == ProtoGlobal.Room.Type.CHAT) {
+                        mAdapter.add(new LocationItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                    } /*else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
+                        mAdapter.add(new ChannelVideoItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                    }*/
+                    break;
                 case FILE:
                 case FILE_TEXT:
                     if (chatType == ProtoGlobal.Room.Type.CHAT) {
@@ -499,6 +508,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                         mAdapter.add(new ChannelVoiceItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                     }
                     break;
+                // TODO: 9/15/2016 [Alireza Eskandarpour Shoferi] implement new message types (contact, audio)
             }
             identifier++;
         }
@@ -1021,16 +1031,15 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     Log.e("ddd", AttachFile.getFilePathFromUri(data.getData()) + "    video capture path");
                     break;
                 case AttachFile.request_code_pic_audi:
-                    // TODO
+                    // TODO: 9/15/2016 [Alireza Eskandarpour Shoferi] implement
                     Log.e("ddd", AttachFile.getFilePathFromUri(data.getData()) + "    audio  path");
                     break;
                 case AttachFile.request_code_pic_file:
-                    // TODO
                     mAdapter.add(new FileItem(chatType).setMessage(buildStructForFile(messageId, null, 0, null, null, null, AttachFile.imagePath, MyType.FileState.uploading)));
                     Log.e("ddd", data.getData() + "    pic file path");
                     break;
                 case AttachFile.request_code_contact_phone:
-                    // TODO
+                    // TODO: 9/15/2016 [Alireza Eskandarpour Shoferi] implement
                     Log.e("ddd", data.getData() + "   contact phone");
                     break;
                 case AttachFile.request_code_paint:
