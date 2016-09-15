@@ -39,11 +39,11 @@ import java.util.List;
 
 import io.realm.Realm;
 
-public class ContactsFragment extends Fragment {
+public class RegisteredContactsFragment extends Fragment {
     private FastAdapter fastAdapter;
 
-    public static ContactsFragment newInstance() {
-        return new ContactsFragment();
+    public static RegisteredContactsFragment newInstance() {
+        return new RegisteredContactsFragment();
     }
 
     @Nullable

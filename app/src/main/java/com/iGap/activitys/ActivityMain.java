@@ -22,7 +22,7 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.ChatsFastAdapter;
 import com.iGap.adapter.items.ChatItem;
-import com.iGap.fragments.ContactsFragment;
+import com.iGap.fragments.RegisteredContactsFragment;
 import com.iGap.helper.HelperProtoBuilder;
 import com.iGap.helper.HelperRealm;
 import com.iGap.interface_package.IActionClick;
@@ -217,7 +217,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
             @Override
             public void onClick(View view) {
 
-                Fragment fragment = ContactsFragment.newInstance();
+                Fragment fragment = RegisteredContactsFragment.newInstance();
                 Bundle bundle = new Bundle();
                 bundle.putString("TITLE", "New Chat");
                 fragment.setArguments(bundle);
@@ -884,7 +884,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
     @Override
     public void onActionSearchClick() {
         // close drawer and replace contacts fragment with main activity layout
-        Fragment fragment = ContactsFragment.newInstance();
+        Fragment fragment = RegisteredContactsFragment.newInstance();
         Bundle bundle = new Bundle();
         bundle.putString("TITLE", "Contacts");
         fragment.setArguments(bundle);

@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.fragments.ContactFragmentNotRegister;
+import com.iGap.fragments.NotRegisteredContactsFragment;
 import com.iGap.interface_package.IActionClick;
 import com.iGap.libs.flowingdrawer.MenuFragment;
 import com.iGap.module.HelperDecodeFile;
@@ -144,7 +144,7 @@ public class FragmentDrawerMenu extends MenuFragment {
             @Override
             public void onClick(View view) {
 
-                Fragment fragment = ContactFragmentNotRegister.newInstance();
+                Fragment fragment = NotRegisteredContactsFragment.newInstance();
                 Bundle bundle = new Bundle();
                 bundle.putString("TITLE", G.context.getString(R.string.invite_friend));
                 fragment.setArguments(bundle);

@@ -33,12 +33,12 @@ import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContactFragmentNotRegister extends Fragment {
+public class NotRegisteredContactsFragment extends Fragment {
     private FastAdapter fastAdapter;
 
 
-    public static ContactFragmentNotRegister newInstance() {
-        return new ContactFragmentNotRegister();
+    public static NotRegisteredContactsFragment newInstance() {
+        return new NotRegisteredContactsFragment();
     }
 
     @Nullable
