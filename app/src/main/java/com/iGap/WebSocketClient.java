@@ -142,7 +142,7 @@ public class WebSocketClient {
                 if (G.allowForConnect) {
                     try {
                         Log.i("SOC_WebSocket", "Connecting");
-                        if (finalWs != null && webSocketClient == null) {
+                        if (finalWs != null) {
                             HelperConnectionState.connectionState(Config.ConnectionState.CONNECTING);
                             finalWs.connect();
                         }

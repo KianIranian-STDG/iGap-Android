@@ -23,6 +23,7 @@ import android.support.v7.widget.ViewStubCompat;
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -63,6 +64,7 @@ import com.iGap.interface_package.ISoftKeyboardOpenClose;
 import com.iGap.interface_package.OnChatClearMessageResponse;
 import com.iGap.interface_package.OnChatDeleteMessageResponse;
 import com.iGap.interface_package.OnChatEditMessageResponse;
+import com.iGap.interface_package.OnChatMessageRemove;
 import com.iGap.interface_package.OnChatMessageSelectionChanged;
 import com.iGap.interface_package.OnChatSendMessageResponse;
 import com.iGap.interface_package.OnChatUpdateStatusResponse;
@@ -113,7 +115,7 @@ import io.realm.RealmResults;
 /**
  * Created by android3 on 8/5/2016.
  */
-public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, IRecentsLongClick, OnMessageClick, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractChatItem> {
+public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, IRecentsLongClick, OnMessageClick, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractChatItem>, OnChatMessageRemove {
 
     private EmojiEditText edtChat;
     private MaterialDesignTextView imvSendButton;
@@ -449,7 +451,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         recyclerView.setItemViewCacheSize(20);
         recyclerView.setDrawingCacheEnabled(true);
 
-        mAdapter = new ChatMessagesFastAdapter<>(this, this);
+        mAdapter = new ChatMessagesFastAdapter<>(this, this, this);
 
         long identifier = 100;
         for (StructMessageInfo messageInfo : getChatList()) {
@@ -1414,6 +1416,33 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         } else {
             toolbar.setVisibility(View.VISIBLE);
             ll_AppBarSelected.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void onPreChatMessageRemove(final StructMessageInfo messageInfo, int position) {
+        if (mAdapter.getAdapterItemCount() > 1 && position == mAdapter.getAdapterItemCount() - 1) {
+            // if was last message removed
+            // update room last message
+            final Realm realm = Realm.getDefaultInstance();
+            realm.executeTransactionAsync(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", mRoomId).findFirst();
+                    AbstractChatItem lastMessageBeforeDeleted = mAdapter.getAdapterItem(mAdapter.getAdapterItemCount() - 1);
+                    if (lastMessageBeforeDeleted != null) {
+                        realmRoom.setLastMessageId(Long.parseLong(lastMessageBeforeDeleted.mMessage.messageID));
+                        realmRoom.setLastMessageTime((int) (lastMessageBeforeDeleted.mMessage.time / DateUtils.SECOND_IN_MILLIS));
+
+                        realm.copyToRealmOrUpdate(realmRoom);
+                    }
+                }
+            }, new Realm.Transaction.OnSuccess() {
+                @Override
+                public void onSuccess() {
+                    realm.close();
+                }
+            });
         }
     }
 }

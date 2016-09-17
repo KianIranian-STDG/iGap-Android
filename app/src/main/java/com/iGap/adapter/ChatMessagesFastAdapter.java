@@ -7,6 +7,7 @@ import android.widget.FrameLayout;
 
 import com.iGap.R;
 import com.iGap.adapter.items.chat.AbstractChatItem;
+import com.iGap.interface_package.OnChatMessageRemove;
 import com.iGap.interface_package.OnChatMessageSelectionChanged;
 import com.iGap.interface_package.OnMessageClick;
 import com.iGap.proto.ProtoGlobal;
@@ -22,6 +23,17 @@ import java.util.List;
 public class ChatMessagesFastAdapter<Item extends AbstractChatItem> extends FastItemAdapter<Item> implements FastAdapter.OnLongClickListener<Item> {
     private OnChatMessageSelectionChanged<Item> onChatMessageSelectionChanged;
     private OnMessageClick onMessageClick;
+    private OnChatMessageRemove onChatMessageRemove;
+
+    private OnLongClickListener longClickListener = new OnLongClickListener<Item>() {
+        @Override
+        public boolean onLongClick(View v, IAdapter<Item> adapter, Item item, int position) {
+            if (onChatMessageSelectionChanged != null) {
+                onChatMessageSelectionChanged.onChatMessageSelectionChanged(getSelectedItems().size(), getSelectedItems());
+            }
+            return true;
+        }
+    };
 
     /**
      * update message text
@@ -42,9 +54,10 @@ public class ChatMessagesFastAdapter<Item extends AbstractChatItem> extends Fast
         }
     }
 
-    public ChatMessagesFastAdapter(OnChatMessageSelectionChanged<Item> OnChatMessageSelectionChangedListener, final OnMessageClick onMessageClickListener) {
+    public ChatMessagesFastAdapter(OnChatMessageSelectionChanged<Item> OnChatMessageSelectionChangedListener, final OnMessageClick onMessageClickListener, final OnChatMessageRemove chatMessageRemoveListener) {
         onChatMessageSelectionChanged = OnChatMessageSelectionChangedListener;
         onMessageClick = onMessageClickListener;
+        onChatMessageRemove = chatMessageRemoveListener;
 
         // as we provide id's for the items we want the hasStableIds enabled to speed up things
         setHasStableIds(true);
@@ -53,21 +66,20 @@ public class ChatMessagesFastAdapter<Item extends AbstractChatItem> extends Fast
         withMultiSelect(true);
         withSelectOnLongClick(true);
         withOnPreLongClickListener(this);
-        withOnLongClickListener(new OnLongClickListener<Item>() {
-            @Override
-            public boolean onLongClick(View v, IAdapter<Item> adapter, Item item, int position) {
-                if (onChatMessageSelectionChanged != null) {
-                    onChatMessageSelectionChanged.onChatMessageSelectionChanged(getSelectedItems().size(), getSelectedItems());
-                }
-                return true;
-            }
-        });
+        withOnLongClickListener(longClickListener);
         withOnClickListener(new OnClickListener<Item>() {
             @Override
             public boolean onClick(View v, IAdapter<Item> adapter, Item item, int position) {
-                if (onMessageClick != null) {
-                    onMessageClick.onMessageClick(v, item.mMessage, position);
-                }
+                if (getSelectedItems().size() == 0) {
+                    if (onMessageClick != null) {
+                        onMessageClick.onMessageClick(v, item.mMessage, position);
+                    }
+                } /*else {
+                    select(position);
+                    onLongClick(v, adapter, item, position);
+                    longClickListener.onLongClick(v, adapter, item, position);
+                }*/
+                // TODO: 9/17/2016 [Alireza Eskandarpour Shoferi] implement
                 return false;
             }
         });
@@ -77,7 +89,11 @@ public class ChatMessagesFastAdapter<Item extends AbstractChatItem> extends Fast
         List<Item> items = getAdapterItems();
         for (Item messageInfo : items) {
             if (messageInfo.mMessage.messageID.equals(Long.toString(messageId))) {
-                remove(items.indexOf(messageInfo));
+                int pos = items.indexOf(messageInfo);
+                if (onChatMessageRemove != null) {
+                    onChatMessageRemove.onPreChatMessageRemove(messageInfo.mMessage, pos);
+                }
+                remove(pos);
                 break;
             }
         }
