@@ -74,6 +74,7 @@ import com.iGap.module.ChatSendMessageUtil;
 import com.iGap.module.EmojiEditText;
 import com.iGap.module.EmojiPopup;
 import com.iGap.module.EmojiRecentsManager;
+import com.iGap.module.FileUtils;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.MyType;
 import com.iGap.module.OnComplete;
@@ -102,6 +103,7 @@ import com.nightonke.boommenu.Types.PlaceType;
 import com.nightonke.boommenu.Util;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -973,7 +975,10 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     Log.e("ddd", AttachFile.getFilePathFromUri(data.getData()) + "    gallary file path");
                     break;
                 case AttachFile.request_code_VIDEO_CAPTURED:
-                    mAdapter.add(new VideoItem(chatType).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.VIDEO, MyType.SendType.send, MyType.FileState.uploading, null, null, null, null, AttachFile.getFilePathFromUri(data.getData()), 0, System.currentTimeMillis())));
+                    File videoFile = new File(AttachFile.getFilePathFromUri(data.getData()));
+                    String videoFileName = videoFile.getName();
+                    String videoFileMime = FileUtils.getMimeType(videoFile);
+                    mAdapter.add(new VideoItem(chatType).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.VIDEO, MyType.SendType.send, MyType.FileState.uploading, videoFileName, videoFileMime, AttachFile.getFilePathFromUri(data.getData()), AttachFile.getFilePathFromUri(data.getData()), videoFile.length(), System.currentTimeMillis())));
                     Log.e("ddd", AttachFile.getFilePathFromUri(data.getData()) + "    video capture path");
                     break;
                 case AttachFile.request_code_pic_audi:
@@ -981,7 +986,10 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     Log.e("ddd", AttachFile.getFilePathFromUri(data.getData()) + "    audio  path");
                     break;
                 case AttachFile.request_code_pic_file:
-                    mAdapter.add(new FileItem(chatType).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.FILE, MyType.SendType.send, MyType.FileState.uploading, null, null, null, data.getData().getPath(), 0, System.currentTimeMillis())));
+                    File fileFile = new File(data.getData().getPath());
+                    String fileFileName = fileFile.getName();
+                    String fileFileMime = FileUtils.getMimeType(fileFile);
+                    mAdapter.add(new FileItem(chatType).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.FILE, MyType.SendType.send, MyType.FileState.uploading, fileFileName, fileFileMime, data.getData().getPath(), data.getData().getPath(), fileFile.length(), System.currentTimeMillis())));
                     Log.e("ddd", data.getData() + "    pic file path");
                     break;
                 case AttachFile.request_code_contact_phone:

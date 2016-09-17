@@ -16,22 +16,6 @@ import io.realm.Realm;
  */
 public class StructMessageInfo implements Parcelable {
 
-    public StructMessageInfo(String messageID, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, MyType.FileState fileState, String fileName, String fileMime, String fileInfo, String filePic, String filePath, long fileSize, long time) {
-        this.messageID = messageID;
-        this.senderID = senderID;
-        this.status = status;
-        this.messageType = messageType;
-        this.sendType = sendType;
-        this.fileState = fileState;
-        this.fileName = fileName;
-        this.fileMime = fileMime;
-        this.fileInfo = fileInfo;
-        this.filePic = filePic;
-        this.filePath = filePath;
-        this.fileSize = fileSize;
-        this.time = time;
-    }
-
     public StructMessageInfo(String messageID, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, MyType.FileState fileState, String fileName, String fileMime, String filePic, String filePath, long fileSize, long time) {
         this.messageID = messageID;
         this.senderID = senderID;
@@ -43,8 +27,8 @@ public class StructMessageInfo implements Parcelable {
         this.fileMime = fileMime;
         this.filePic = filePic;
         this.filePath = filePath;
-        this.time = time;
         this.fileSize = fileSize;
+        this.time = time;
     }
 
     public StructMessageInfo(String messageID, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, MyType.FileState fileState, String filePath, long time) {
@@ -86,7 +70,6 @@ public class StructMessageInfo implements Parcelable {
 
     public String fileName = "";
     public String fileMime = "";
-    public String fileInfo = "";
     public String filePic = "";
     public String filePath = "";
     public long fileSize;
@@ -122,7 +105,6 @@ public class StructMessageInfo implements Parcelable {
         dest.writeString(this.messageText);
         dest.writeString(this.fileName);
         dest.writeString(this.fileMime);
-        dest.writeString(this.fileInfo);
         dest.writeString(this.filePic);
         dest.writeString(this.filePath);
         dest.writeLong(this.fileSize);
@@ -152,7 +134,6 @@ public class StructMessageInfo implements Parcelable {
         this.messageText = in.readString();
         this.fileName = in.readString();
         this.fileMime = in.readString();
-        this.fileInfo = in.readString();
         this.filePic = in.readString();
         this.filePath = in.readString();
         this.fileSize = in.readLong();
