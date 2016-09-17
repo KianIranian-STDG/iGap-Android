@@ -49,8 +49,7 @@
                     android:layout_height="wrap_content"
                     android:adjustViewBounds="true"
                     android:maxHeight="@dimen/dp360"
-                    android:scaleType="centerCrop"
-                    android:src="@mipmap/c" />
+                    android:scaleType="centerCrop"/>
 
                 <RelativeLayout
                     android:layout_width="wrap_content"

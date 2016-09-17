@@ -634,12 +634,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
                         mAdapter.add(new MessageItem(chatType).setMessage(messageInfo));
 
-                        recyclerView.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount());
-                            }
-                        }, 300);
+                        scrollToEnd();
 
                         edtChat.setText("");
 
@@ -997,12 +992,14 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     break;
             }
             realm.close();
+
+            scrollToEnd();
         }
     }
 
     private LinearLayout mReplayLayout;
 
-    private void inflateReplayLayoutIntoStub(AbstractChatItem chatItem) {
+    private void inflateReplayLayoutIntoStub(StructMessageInfo chatItem) {
         if (findViewById(R.id.replayLayoutAboveEditText) == null) {
             ViewStubCompat stubView = (ViewStubCompat) findViewById(R.id.replayLayoutStub);
             stubView.setInflatedId(R.id.replayLayoutAboveEditText);
@@ -1014,7 +1011,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             mReplayLayout = (LinearLayout) findViewById(R.id.replayLayoutAboveEditText);
             mReplayLayout.setVisibility(View.VISIBLE);
             TextView replayTo = (TextView) mReplayLayout.findViewById(R.id.replayTo);
-            replayTo.setText(chatItem.mMessage.messageText);
+            replayTo.setText(chatItem.messageText);
             // I set tag to retrieve it later when sending message
             mReplayLayout.setTag(chatItem);
         }
@@ -1036,6 +1033,26 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         intent.putParcelableArrayListExtra(ActivitySelectChat.ARG_FORWARD_MESSAGE, messageInfos);
 
         return intent;
+    }
+
+    private Intent makeIntentForForwardMessages(StructMessageInfo messageInfos) {
+        ArrayList<StructMessageInfo> infos = new ArrayList<>();
+        infos.add(messageInfos);
+
+        return makeIntentForForwardMessages(infos);
+    }
+
+    private void replay(StructMessageInfo item) {
+        if (mAdapter != null) {
+            Set<AbstractChatItem> messages = mAdapter.getSelectedItems();
+            // replay works if only one message selected
+            inflateReplayLayoutIntoStub(item == null ? messages.iterator().next().mMessage : item);
+
+            ll_AppBarSelected.setVisibility(View.GONE);
+            toolbar.setVisibility(View.VISIBLE);
+
+            mAdapter.deselect();
+        }
     }
 
     private void initAppbarSelected() {
@@ -1061,18 +1078,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             @Override
             public void onClick(View view) {
                 Log.e("ddd", "btnReplaySelected");
-                if (mAdapter != null) {
-                    Set<AbstractChatItem> messages = mAdapter.getSelectedItems();
-                    // replay works if only one message selected
-                    if (messages.size() > 0 && messages.size() <= 1) {
-                        inflateReplayLayoutIntoStub(messages.iterator().next());
-
-                        ll_AppBarSelected.setVisibility(View.GONE);
-                        toolbar.setVisibility(View.VISIBLE);
-
-                        mAdapter.deselect();
-                    }
-                }
+                replay(null);
             }
         });
 
@@ -1285,6 +1291,13 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                                 // found is user trying to edit a message
                                 edtChat.setTag(messageInfo);
                             }
+                        } else if (text.toString().equalsIgnoreCase(getString(R.string.replay_item_dialog))) {
+                            replay(messageInfo);
+                        } else if (text.toString().equalsIgnoreCase(getString(R.string.forward_item_dialog))) {
+                            // forward selected messages to room list for selecting room
+                            if (mAdapter != null) {
+                                startActivity(makeIntentForForwardMessages(messageInfo));
+                            }
                         }
                     }
                 })
@@ -1335,12 +1348,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 @Override
                 public void run() {
                     mAdapter.add(new MessageItem(chatType).setMessage(StructMessageInfo.convert(roomMessage)));
-                    recyclerView.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount());
-                        }
-                    }, 300);
+                    scrollToEnd();
                 }
             });
         } else {
@@ -1360,6 +1368,15 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             });
             realm.close();
         }
+    }
+
+    private void scrollToEnd() {
+        recyclerView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount());
+            }
+        }, 300);
     }
 
     @Override

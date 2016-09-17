@@ -46,8 +46,7 @@
                 android:layout_marginBottom="@dimen/dp4"
                 android:adjustViewBounds="true"
                 android:maxHeight="@dimen/dp360"
-                android:scaleType="centerCrop"
-                android:src="@mipmap/c" />
+                android:scaleType="centerCrop"/>
 
             <com.iGap.module.EmojiTextView
                 android:id="@+id/messageText"
