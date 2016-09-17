@@ -711,23 +711,26 @@ public class ActivityRegister extends ActivityEnhanced {
     }
 
     private void requestRegister() {
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                phoneNumber = phoneNumber.replace("-", "");
-                ProtoUserRegister.UserRegister.Builder builder = ProtoUserRegister.UserRegister.newBuilder();
-                builder.setCountryCode(isoCode);
-                builder.setPhoneNumber(Long.parseLong(phoneNumber));
-                builder.setRequest(ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
-                RequestWrapper requestWrapper = new RequestWrapper(100, builder);
 
-                try {
-                    RequestQueue.sendRequest(requestWrapper);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, 2000);
+        phoneNumber = phoneNumber.replace("-", "");
+        ProtoUserRegister.UserRegister.Builder builder = ProtoUserRegister.UserRegister.newBuilder();
+        builder.setCountryCode(isoCode);
+        builder.setPhoneNumber(Long.parseLong(phoneNumber));
+        builder.setRequest(ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
+        RequestWrapper requestWrapper = new RequestWrapper(100, builder);
+
+        try {
+            RequestQueue.sendRequest(requestWrapper);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+//        G.handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//            }
+//        }, 2000);
     }
 
     private void userVerify(final String userName, final String verificationCode) {
@@ -736,24 +739,26 @@ public class ActivityRegister extends ActivityEnhanced {
 
         userVerifyResponse(verificationCode);
 
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                ProtoUserVerify.UserVerify.Builder userVerify = ProtoUserVerify.UserVerify.newBuilder();
-                userVerify.setCode(Integer.parseInt(verificationCode));
-                userVerify.setUsername(userName);
-                userVerify.setDevice(getResources().getBoolean(R.bool.isTablet) ? "Tablet" : "Mobile");
-                userVerify.setOsName("android");
-                userVerify.setOsVersion(Integer.toString(android.os.Build.VERSION.SDK_INT));
+        ProtoUserVerify.UserVerify.Builder userVerify = ProtoUserVerify.UserVerify.newBuilder();
+        userVerify.setCode(Integer.parseInt(verificationCode));
+        userVerify.setUsername(userName);
+        userVerify.setDevice(getResources().getBoolean(R.bool.isTablet) ? "Tablet" : "Mobile");
+        userVerify.setOsName("android");
+        userVerify.setOsVersion(Integer.toString(android.os.Build.VERSION.SDK_INT));
 
-                RequestWrapper requestWrapper = new RequestWrapper(101, userVerify);
-                try {
-                    RequestQueue.sendRequest(requestWrapper);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, 4000);
+        RequestWrapper requestWrapper = new RequestWrapper(101, userVerify);
+        try {
+            RequestQueue.sendRequest(requestWrapper);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+//        G.handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//            }
+//        }, 4000);
     }
 
     private void userVerifyResponse(final String verificationCode) {
@@ -763,7 +768,7 @@ public class ActivityRegister extends ActivityEnhanced {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        rg_txt_verify_sms.setText("login code is : " + verificationCode);
+                        rg_txt_verify_sms.setText("Your login code is : " + verificationCode);
                         rg_prg_verify_sms.setVisibility(View.GONE);
                         rg_img_verify_sms.setVisibility(View.VISIBLE);
                         rg_img_verify_sms.setImageResource(R.mipmap.check);
@@ -844,12 +849,13 @@ public class ActivityRegister extends ActivityEnhanced {
     }
 
     private void requestLogin() {
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                new RequestUserLogin().userLogin(token);
-            }
-        }, 2000);
+        new RequestUserLogin().userLogin(token);
+//        G.handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//            }
+//        }, 2000);
     }
 
     private void receiveVerifySms(String message) {

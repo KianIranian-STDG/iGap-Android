@@ -47,6 +47,7 @@ import com.iGap.proto.ProtoClientGetRoom;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmChatHistory;
+import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.enums.RoomType;
@@ -337,7 +338,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                realm.copyToRealmOrUpdate(RealmRoom.convert(room));
+                realm.copyToRealmOrUpdate(RealmRoom.convert(room, realm));
             }
         });
         realm.close();
@@ -378,7 +379,6 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         G.onChatDelete = new OnChatDelete() {
             @Override
             public void onChatDelete(long roomId) {
-                Log.i("RRR", "onChatDelete 1");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -389,23 +389,12 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                             public void execute(Realm realm) {
                                 realm.where(RealmRoom.class).equalTo("id", item.getInfo().chatId).findFirst().deleteFromRealm();
                                 realm.where(RealmChatHistory.class).equalTo("roomId", item.getInfo().chatId).findAll().deleteAllFromRealm();
+                                realm.where(RealmClientCondition.class).equalTo("roomId", item.getInfo().chatId).findFirst().deleteFromRealm();
                             }
                         });
                         realm.close();
                     }
                 });
-
-                Log.i("RRR", "onChatDelete 2");
-
-//                for (ChatItem chatItem : mAdapter.getAdapterItems()) {
-//                    Log.i("RRR", "onChatDelete 2");
-//                    if (chatItem.getInfo().chatId == roomId) {
-//                        Log.i("RRR", "onChatDelete 3");
-//                        mAdapter.remove(position);
-//                        Log.i("RRR", "onChatDelete 4");
-//                        break;
-//                    }
-//                }
             }
         };
         Log.i("RRR", "onChatDelete 0 start delete");
@@ -491,9 +480,6 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                                 info.imageSource = ""; // FIXME
 
                                 // create item from info
-
-                                Log.i("XXX", "UserContactsGetListResponse setInitials : " + room.getInitials());
-                                Log.i("XXX", "UserContactsGetListResponse setColor : " + room.getColor());
 
                                 chatItem.setInfo(info);
                                 chatItem.setComplete(ActivityMain.this);

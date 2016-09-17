@@ -212,6 +212,7 @@ public class WebSocketClient {
 
     private static void resetWebsocketInfo() {
         webSocketClient = null;
+        G.symmetricKey = null;
         G.isSecure = false;
         G.userLogin = false;
     }
@@ -240,8 +241,8 @@ public class WebSocketClient {
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                Log.i("SOC", "I need 30001");
                                 if (G.symmetricKey == null) {
+                                    Log.i("SOC", "I need 30001");
                                     WebSocketClient.getInstance().sendText("i need 30001");
                                 }
                             }

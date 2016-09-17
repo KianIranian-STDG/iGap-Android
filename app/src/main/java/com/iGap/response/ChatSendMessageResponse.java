@@ -8,6 +8,7 @@ import com.iGap.proto.ProtoChatSendMessage;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmChatHistory;
+import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmUserInfo;
@@ -43,6 +44,13 @@ public class ChatSendMessageResponse extends MessageHandler {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
+                // set info for clientCondition
+                RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", chatSendMessageResponse.getRoomId()).findFirst();
+                if (realmClientCondition != null) {
+                    realmClientCondition.setMessageVersion(roomMessage.getMessageVersion());
+                    realmClientCondition.setStatusVersion(roomMessage.getStatusVersion());
+                }
+
                 // if first message received but the room doesn't exist, create new room
                 RealmRoom room = realm.where(RealmRoom.class).equalTo("id", chatSendMessageResponse.getRoomId()).findFirst();
                 if (room == null) {

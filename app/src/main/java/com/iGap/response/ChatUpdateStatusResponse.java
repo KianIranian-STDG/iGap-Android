@@ -25,7 +25,7 @@ public class ChatUpdateStatusResponse extends MessageHandler {
 
 
     @Override
-    public void handler() {
+    public void handler() { //TODO [Saeed Mozaffari] [2016-09-17 4:05 PM] - FORCE for remove seen from client condition
         final ProtoChatUpdateStatus.ChatUpdateStatusResponse.Builder chatUpdateStatus = (ProtoChatUpdateStatus.ChatUpdateStatusResponse.Builder) message;
 
         ProtoResponse.Response.Builder response = ProtoResponse.Response.newBuilder().mergeFrom(chatUpdateStatus.getResponse());

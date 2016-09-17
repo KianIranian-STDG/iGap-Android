@@ -5,8 +5,8 @@ import android.util.Log;
 import com.iGap.G;
 import com.iGap.proto.ProtoChatEditMessage;
 import com.iGap.proto.ProtoError;
-import com.iGap.proto.ProtoResponse;
-import com.iGap.realm.RealmRoomMessage;
+import com.iGap.realm.RealmClientCondition;
+import com.iGap.realm.RealmOfflineEdited;
 
 import io.realm.Realm;
 
@@ -27,22 +27,31 @@ public class ChatEditMessageResponse extends MessageHandler {
     public void handler() {
         final ProtoChatEditMessage.ChatEditMessageResponse.Builder chatEditMessageResponse = (ProtoChatEditMessage.ChatEditMessageResponse.Builder) message;
 
-        ProtoResponse.Response.Builder response = ProtoResponse.Response.newBuilder().mergeFrom(chatEditMessageResponse.getResponse());
-        Log.i("SOC", "ChatEditMessageResponse response.getId() : " + response.getId());
-        Log.i("SOC", "ChatEditMessageResponse response.getTimestamp() : " + response.getTimestamp());
-
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", chatEditMessageResponse.getMessageId()).findFirst();
-                if (roomMessage != null) {
-                    // update message text in database
-                    roomMessage.setMessage(chatEditMessageResponse.getMessage());
-                    roomMessage.setEdited(true);
 
-                    G.onChatEditMessageResponse.onChatEditMessage(chatEditMessageResponse.getRoomId(), chatEditMessageResponse.getMessageId(), chatEditMessageResponse.getMessageVersion(), chatEditMessageResponse.getMessage(), chatEditMessageResponse.getResponse());
+                // set info for clientCondition
+                RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", chatEditMessageResponse.getRoomId()).findFirst();
+                if (realmClientCondition != null) {//TODO [Saeed Mozaffari] [2016-09-17 3:18 PM] - FORCE - client condition checking
+                    realmClientCondition.setMessageVersion(chatEditMessageResponse.getMessageVersion());
+                    for (RealmOfflineEdited realmOfflineEdited : realmClientCondition.getOfflineEdited()) { // contains
+                        if (realmOfflineEdited.getMessageId() == chatEditMessageResponse.getMessageId()) {
+                            realmOfflineEdited.deleteFromRealm();
+                        }
+                    }
                 }
+
+//                RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", chatEditMessageResponse.getMessageId()).findFirst();
+//                if (roomMessage != null) {
+//                    // update message text in database
+//                    roomMessage.setMessage(chatEditMessageResponse.getMessage());
+//                    roomMessage.setEdited(true);
+//
+//                    G.onChatEditMessageResponse.onChatEditMessage(chatEditMessageResponse.getRoomId(), chatEditMessageResponse.getMessageId(), chatEditMessageResponse.getMessageVersion(), chatEditMessageResponse.getMessage(), chatEditMessageResponse.getResponse());
+//                }
+                G.onChatEditMessageResponse.onChatEditMessage(chatEditMessageResponse.getRoomId(), chatEditMessageResponse.getMessageId(), chatEditMessageResponse.getMessageVersion(), chatEditMessageResponse.getMessage(), chatEditMessageResponse.getResponse());
             }
         });
         realm.close();
