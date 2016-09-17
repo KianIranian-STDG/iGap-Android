@@ -347,7 +347,7 @@ public class G extends Application {
                 getContactListFromServer();
             }
         };
-        Contacts.getListOfContact();
+        Contacts.getListOfContact(true);
     }
 
     public static void getContactListFromServer() {

@@ -60,7 +60,7 @@ public class Contacts {
         return items;
     }
 
-    public static ArrayList<StructListOfContact> getListOfContact() { //get List Of Contact
+    public static ArrayList<StructListOfContact> getListOfContact(boolean sendToServer) { //get List Of Contact
 
         ArrayList<StructListOfContact> contactList = new ArrayList<>();
         ContentResolver cr = G.context.getContentResolver();
@@ -121,8 +121,11 @@ public class Contacts {
                 resultContactList.add(itemContact);
             }
         }
-        RequestUserContactImport listContact = new RequestUserContactImport();
-        listContact.contactImport(resultContactList);
+
+        if (sendToServer) {
+            RequestUserContactImport listContact = new RequestUserContactImport();
+            listContact.contactImport(resultContactList);
+        }
 
         return resultContactList;
     }
@@ -130,7 +133,7 @@ public class Contacts {
 
     public static void FillRealmInviteFriend() {
 
-        final ArrayList<StructListOfContact> contactList = getListOfContact();
+        final ArrayList<StructListOfContact> contactList = getListOfContact(false);
         final int size = contactList.size();
 
         if (size > 0) {

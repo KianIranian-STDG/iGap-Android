@@ -36,6 +36,7 @@ import com.iGap.libs.floatingAddButton.ArcMenu;
 import com.iGap.libs.floatingAddButton.StateChangeListener;
 import com.iGap.libs.flowingdrawer.FlowingView;
 import com.iGap.libs.flowingdrawer.LeftDrawerLayout;
+import com.iGap.module.Contacts;
 import com.iGap.module.MyType;
 import com.iGap.module.OnComplete;
 import com.iGap.module.ShouldScrolledBehavior;
@@ -98,6 +99,8 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         initFloatingButtonCreateNew();
         initDrawerMenu();
         initComponent();
+
+        Contacts.FillRealmInviteFriend();
     }
 
     FlowingView mFlowingView;

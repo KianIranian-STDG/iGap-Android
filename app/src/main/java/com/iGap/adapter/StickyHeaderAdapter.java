@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.iGap.R;
+import com.iGap.adapter.items.ContactItamGroup;
 import com.iGap.adapter.items.ContactItem;
 import com.iGap.adapter.items.ContactItemNotRegister;
 import com.iGap.module.CustomTextViewMedium;
@@ -25,8 +26,9 @@ public class StickyHeaderAdapter extends AbstractAdapter implements StickyRecycl
             return ((ContactItem) item).mContact.displayName.toUpperCase().charAt(0);
         } else if (item instanceof ContactItemNotRegister && ((ContactItemNotRegister) item).mContact != null) {
             return ((ContactItemNotRegister) item).mContact.displayName.toUpperCase().charAt(0);
+        } else if (item instanceof ContactItamGroup && ((ContactItamGroup) item).mContact != null) {
+            return ((ContactItamGroup) item).mContact.displayName.toUpperCase().charAt(0);
         }
-
         return -1;
     }
 
@@ -49,7 +51,11 @@ public class StickyHeaderAdapter extends AbstractAdapter implements StickyRecycl
         } else if (item instanceof ContactItemNotRegister && ((ContactItemNotRegister) item).mContact != null) {
             //based on the position we set the headers text
             textView.setText(String.valueOf(((ContactItemNotRegister) item).mContact.displayName.toUpperCase().charAt(0)));
+        } else if (item instanceof ContactItamGroup && ((ContactItamGroup) item).mContact != null) {
+            //based on the position we set the headers text
+            textView.setText(String.valueOf(((ContactItamGroup) item).mContact.displayName.toUpperCase().charAt(0)));
         }
+
     }
 
     /**

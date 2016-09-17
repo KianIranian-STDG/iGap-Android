@@ -1,0 +1,219 @@
+package com.iGap.fragments;
+
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import com.iGap.G;
+import com.iGap.R;
+import com.iGap.adapter.StickyHeaderAdapter;
+import com.iGap.adapter.items.ContactItamGroup;
+import com.iGap.module.Contacts;
+import com.iGap.module.StructContactInfo;
+import com.mikepenz.fastadapter.FastAdapter;
+import com.mikepenz.fastadapter.IAdapter;
+import com.mikepenz.fastadapter.IItem;
+import com.mikepenz.fastadapter.IItemAdapter;
+import com.mikepenz.fastadapter.adapters.HeaderAdapter;
+import com.mikepenz.fastadapter.adapters.ItemAdapter;
+import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class ContactGroupFragment extends Fragment {
+    private FastAdapter fastAdapter;
+    private TextView txtStatus;
+    private TextView txtNumberOfMember;
+    private EditText edtSearch;
+    private String textString = "";
+
+    private int sizeTextEdittext = 0;
+    private List<StructContactInfo> contacts;
+
+    public static ContactGroupFragment newInstance() {
+        return new ContactGroupFragment();
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_contact_group, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+
+        txtStatus = (TextView) view.findViewById(R.id.fcg_txt_status);
+        txtNumberOfMember = (TextView) view.findViewById(R.id.fcg_txt_number_of_member);
+        edtSearch = (EditText) view.findViewById(R.id.fcg_edt_search);
+
+
+        Button btnBack = (Button) view.findViewById(R.id.fcg_btn_back);
+        btnBack.setTypeface(G.fontawesome);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().getSupportFragmentManager().popBackStack();
+            }
+        });
+
+        Button btnDone = (Button) view.findViewById(R.id.fcg_btn_done);
+        btnDone.setTypeface(G.fontawesome);
+        btnDone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                // TODO: 9/17/2016 get selected list and go to the othe page
+
+            }
+        });
+
+        //create our FastAdapter
+        fastAdapter = new FastAdapter();
+        fastAdapter.withSelectable(true);
+
+        //create our adapters
+        final StickyHeaderAdapter stickyHeaderAdapter = new StickyHeaderAdapter();
+        final HeaderAdapter headerAdapter = new HeaderAdapter();
+        final ItemAdapter itemAdapter = new ItemAdapter();
+        itemAdapter.withFilterPredicate(new IItemAdapter.Predicate<ContactItamGroup>() {
+            @Override
+            public boolean filter(ContactItamGroup item, CharSequence constraint) {
+                return !item.mContact.displayName.toLowerCase().startsWith(String.valueOf(constraint).toLowerCase());
+            }
+        });
+        fastAdapter.withOnClickListener(new FastAdapter.OnClickListener<ContactItamGroup>() {
+            @Override
+            public boolean onClick(View v, IAdapter adapter, ContactItamGroup item, int position) {
+
+                item.mContact.isSelected = !item.mContact.isSelected;
+                fastAdapter.notifyItemChanged(position);
+
+                refreshView();
+
+                return false;
+            }
+        });
+
+
+        edtSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                if (charSequence.length() > sizeTextEdittext) {
+                    String s = edtSearch.getText().toString().substring(sizeTextEdittext, charSequence.length());
+                    itemAdapter.filter(s);
+                } else {
+                    itemAdapter.filter("");
+
+                }
+
+                edtSearch.setSelection(edtSearch.getText().length());
+                //  fastAdapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+
+            }
+        });
+
+
+        edtSearch.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+                if ((keyCode == KeyEvent.KEYCODE_DEL)) {
+                    if (edtSearch.getText().length() <= sizeTextEdittext) {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+        });
+
+
+        //configure our fastAdapter
+        //as we provide id's for the items we want the hasStableIds enabled to speed up things
+        fastAdapter.setHasStableIds(true);
+
+        //get our recyclerView and do basic setup
+        RecyclerView rv = (RecyclerView) view.findViewById(R.id.fcg_recycler_view_add_item_to_group);
+        rv.setLayoutManager(new LinearLayoutManager(getContext()));
+        rv.setItemAnimator(new DefaultItemAnimator());
+        rv.setAdapter(stickyHeaderAdapter.wrap(itemAdapter.wrap(headerAdapter.wrap(fastAdapter))));
+
+        //this adds the Sticky Headers within our list
+        final StickyRecyclerHeadersDecoration decoration = new StickyRecyclerHeadersDecoration(stickyHeaderAdapter);
+        rv.addItemDecoration(decoration);
+
+        List<IItem> items = new ArrayList<>();
+        contacts = Contacts.retrieve(null);
+
+
+        for (StructContactInfo contact : contacts) {
+            items.add(new ContactItamGroup().setContact(contact).withIdentifier(100 + contacts.indexOf(contact)));
+        }
+        itemAdapter.add(items);
+
+        //so the headers are aware of changes
+        stickyHeaderAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                decoration.invalidateHeaders();
+            }
+        });
+
+        //restore selections (this has to be done after the items were added
+        fastAdapter.withSavedInstanceState(savedInstanceState);
+    }
+
+
+    private void refreshView() {
+
+        int selectedNumber = 0;
+        textString = "";
+
+        for (int i = 0; i < contacts.size(); i++) {
+            if (contacts.get(i).isSelected) {
+                selectedNumber++;
+                textString += contacts.get(i).displayName + ",";
+            }
+        }
+
+        txtNumberOfMember.setText(selectedNumber + " / 5000 member");
+        sizeTextEdittext = textString.length();
+        edtSearch.setText(textString);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        //add the values which need to be saved from the adapter to the bundle
+        outState = fastAdapter.saveInstanceState(outState);
+        super.onSaveInstanceState(outState);
+    }
+
+}

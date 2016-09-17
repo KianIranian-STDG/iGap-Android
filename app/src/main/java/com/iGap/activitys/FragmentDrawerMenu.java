@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.fragments.ContactGroupFragment;
 import com.iGap.fragments.NotRegisteredContactsFragment;
 import com.iGap.interface_package.IActionClick;
 import com.iGap.libs.flowingdrawer.MenuFragment;
@@ -105,6 +106,11 @@ public class FragmentDrawerMenu extends MenuFragment {
         layoutNewGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                Fragment fragment = ContactGroupFragment.newInstance();
+                getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
+                ActivityMain.mLeftDrawerLayout.closeDrawer();
+
             }
         });
 

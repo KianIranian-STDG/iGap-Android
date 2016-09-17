@@ -3,6 +3,7 @@ package com.iGap.response;
 import android.util.Log;
 
 import com.iGap.G;
+import com.iGap.module.Contacts;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoUserContactsGetList;
@@ -56,6 +57,8 @@ public class UserContactsGetListResponse extends MessageHandler {
         G.onUserContactGetList.onContactGetList();
 
         realm.close();
+
+        Contacts.FillRealmInviteFriend();
     }
 
     @Override
