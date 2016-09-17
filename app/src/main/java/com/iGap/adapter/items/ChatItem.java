@@ -155,8 +155,6 @@ public class ChatItem extends AbstractItem<ChatItem, ChatItem.ViewHolder> {
             mute = (TextView) view.findViewById(R.id.cs_txt_mute);
 
             chatIcon.setTypeface(G.fontawesome);
-            name.setTypeface(G.arialBold);
-            lastMessage.setTypeface(G.arial);
             mute.setTypeface(G.fontawesome);
             lastSeen.setTypeface(G.arial);
             unreadMessage.setTypeface(G.arial);
