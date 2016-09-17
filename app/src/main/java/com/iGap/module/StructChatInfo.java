@@ -1,6 +1,11 @@
 package com.iGap.module;
 
+import com.iGap.proto.ProtoClientGetRoom;
+import com.iGap.realm.RealmRoom;
+import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.enums.RoomType;
+
+import io.realm.Realm;
 
 /**
  * chat struct info
@@ -31,4 +36,45 @@ public class StructChatInfo {
     public String filePic = "";
 
     public MyType.FileState fileState = MyType.FileState.notDownload;
+
+    /**
+     * convert ProtoClientGetRoom.ClientGetRoomResponse.Builder to StructChatInfo
+     *
+     * @param builder ProtoClientGetRoom.ClientGetRoomResponse.Builder
+     * @return StructChatInfo
+     */
+    public static StructChatInfo convert(ProtoClientGetRoom.ClientGetRoomResponse.Builder builder) {
+        StructChatInfo chatInfo = new StructChatInfo();
+        chatInfo.chatId = builder.getRoom().getId();
+        chatInfo.chatTitle = builder.getRoom().getTitle();
+        chatInfo.chatType = RoomType.convert(builder.getRoom().getType());
+        chatInfo.initials = builder.getRoom().getInitials();
+        switch (builder.getRoom().getType()) {
+            case CHANNEL:
+                chatInfo.memberCount = builder.getRoom().getChannelRoom().getParticipantsCountLabel();
+                break;
+            case CHAT:
+                chatInfo.memberCount = "1";
+                break;
+            case GROUP:
+                chatInfo.memberCount = builder.getRoom().getGroupRoom().getParticipantsCountLabel();
+                break;
+        }
+        chatInfo.muteNotification = false;
+        chatInfo.ownerShip = MyType.OwnerShip.member;
+        chatInfo.color = builder.getRoom().getColor();
+        Realm realm = Realm.getDefaultInstance();
+        RealmRoom room = realm.where(RealmRoom.class).equalTo("id", builder.getRoom().getId()).findFirst();
+        if (room != null) {
+            RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", room.getLastMessageId()).findFirst();
+            if (roomMessage != null) {
+                chatInfo.lastMessageTime = roomMessage.getUpdateTime();
+                chatInfo.lastmessage = roomMessage.getMessage();
+                chatInfo.unreadMessagesCount = room.getUnreadCount();
+            }
+        }
+        realm.close();
+
+        return chatInfo;
+    }
 }

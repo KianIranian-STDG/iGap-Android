@@ -43,7 +43,7 @@ public class ClientGetRoomResponse extends MessageHandler {
                 // check if room doesn't exist, add room to database
                 RealmRoom room = realm.where(RealmRoom.class).equalTo("id", clientGetRoom.getRoom().getId()).findFirst();
                 if (room == null) {
-                    realm.copyToRealmOrUpdate(HelperRealm.convert(clientGetRoom.getRoom()));
+                    realm.copyToRealmOrUpdate(RealmRoom.convert(clientGetRoom.getRoom()));
                 }
             }
         });

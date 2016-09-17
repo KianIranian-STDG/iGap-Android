@@ -1,5 +1,6 @@
 package com.iGap.realm;
 
+import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.enums.GroupChatRole;
 
 import io.realm.RealmObject;
@@ -34,5 +35,19 @@ public class RealmGroupRoom extends RealmObject {
 
     public void setLeft(boolean left) {
         this.left = left;
+    }
+
+    /**
+     * convert ProtoGlobal.GroupRoom to RealmGroupRoom
+     *
+     * @param room ProtoGlobal.GroupRoom
+     * @return RealmGroupRoom
+     */
+    public static RealmGroupRoom convert(ProtoGlobal.GroupRoom room) {
+        RealmGroupRoom realmGroupRoom = new RealmGroupRoom();
+        realmGroupRoom.setParticipantsCountLabel(room.getParticipantsCountLabel());
+        realmGroupRoom.setLeft(room.getLeft());
+        realmGroupRoom.setRole(GroupChatRole.convert(room.getRole()));
+        return realmGroupRoom;
     }
 }

@@ -2,8 +2,13 @@ package com.iGap.module;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.format.DateUtils;
 
+import com.iGap.proto.ProtoChatSendMessage;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.realm.RealmUserInfo;
+
+import io.realm.Realm;
 
 /**
  * chat message struct info
@@ -165,4 +170,23 @@ public class StructMessageInfo implements Parcelable {
             return new StructMessageInfo[size];
         }
     };
+
+    public static StructMessageInfo convert(ProtoChatSendMessage.ChatSendMessageResponse.Builder builder) {
+        Realm realm = Realm.getDefaultInstance();
+        long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
+        StructMessageInfo messageInfo = new StructMessageInfo();
+        messageInfo.status = builder.getRoomMessage().getStatus().toString();
+        messageInfo.messageID = Long.toString(builder.getRoomMessage().getMessageId());
+        messageInfo.messageType = builder.getRoomMessage().getMessageType();
+        // TODO: 9/8/2016 [Alireza Eskandarpour Shoferi] inja bayad createTime bezari ke felan server nemide.
+        messageInfo.time = builder.getRoomMessage().getUpdateTime() * DateUtils.SECOND_IN_MILLIS;
+        messageInfo.messageText = builder.getRoomMessage().getMessage();
+        messageInfo.senderID = Long.toString(builder.getRoomMessage().getUserId());
+        if (builder.getRoomMessage().getUserId() == userId) {
+            messageInfo.sendType = MyType.SendType.send;
+        } else if (builder.getRoomMessage().getUserId() != userId) {
+            messageInfo.sendType = MyType.SendType.recvive;
+        }
+        return messageInfo;
+    }
 }

@@ -53,7 +53,6 @@ import com.iGap.adapter.items.chat.VideoItem;
 import com.iGap.adapter.items.chat.VideoWithTextItem;
 import com.iGap.adapter.items.chat.VoiceItem;
 import com.iGap.helper.Emojione;
-import com.iGap.helper.HelperProtoBuilder;
 import com.iGap.interface_package.IEmojiBackspaceClick;
 import com.iGap.interface_package.IEmojiClickListener;
 import com.iGap.interface_package.IEmojiLongClickListener;
@@ -1335,7 +1334,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mAdapter.add(new MessageItem(chatType).setMessage(HelperProtoBuilder.convert(roomMessage)));
+                    mAdapter.add(new MessageItem(chatType).setMessage(StructMessageInfo.convert(roomMessage)));
                     recyclerView.postDelayed(new Runnable() {
                         @Override
                         public void run() {

@@ -182,9 +182,9 @@ public class ActivityRegister extends ActivityEnhanced {
             structCountry.setName(listItem[2]);
 
             if (listItem.length > 3) {
-                structCountry.setPhonePattetn(listItem[3]);
+                structCountry.setPhonePattern(listItem[3]);
             } else {
-                structCountry.setPhonePattetn(" ");
+                structCountry.setPhonePattern(" ");
             }
 
             structCountryArrayList.add(structCountry);
@@ -199,7 +199,7 @@ public class ActivityRegister extends ActivityEnhanced {
             item.setId(i);
             item.setName(structCountryArrayList.get(i).getName());
             item.setCountryCode(structCountryArrayList.get(i).getCountryCode());
-            item.setPhonePattetn(structCountryArrayList.get(i).getPhonePattetn());
+            item.setPhonePattern(structCountryArrayList.get(i).getPhonePattern());
             item.setAbbreviation(structCountryArrayList.get(i).getAbbreviation());
             items.add(item);
         }

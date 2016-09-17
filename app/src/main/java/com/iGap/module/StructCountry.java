@@ -5,7 +5,7 @@ public class StructCountry {
     int id;
     int flag;
     String name;
-    String phonePattetn;
+    String phonePattern;
     String abbreviation;
     String countryCode;
 
@@ -25,12 +25,12 @@ public class StructCountry {
         this.name = name;
     }
 
-    public String getPhonePattetn() {
-        return phonePattetn;
+    public String getPhonePattern() {
+        return phonePattern;
     }
 
-    public void setPhonePattetn(String phonePattetn) {
-        this.phonePattetn = phonePattetn;
+    public void setPhonePattern(String phonePattern) {
+        this.phonePattern = phonePattern;
     }
 
     public String getAbbreviation() {

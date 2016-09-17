@@ -23,8 +23,6 @@ import com.iGap.R;
 import com.iGap.adapter.ChatsFastAdapter;
 import com.iGap.adapter.items.ChatItem;
 import com.iGap.fragments.RegisteredContactsFragment;
-import com.iGap.helper.HelperProtoBuilder;
-import com.iGap.helper.HelperRealm;
 import com.iGap.interface_package.IActionClick;
 import com.iGap.interface_package.IOpenDrawer;
 import com.iGap.interface_package.OnChatClearMessageResponse;
@@ -88,7 +86,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                mAdapter.add(new ChatItem().setInfo(HelperProtoBuilder.convert(builder)));
+                                mAdapter.add(new ChatItem().setInfo(StructChatInfo.convert(builder)));
                             }
                         });
                     }
@@ -336,7 +334,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                realm.copyToRealmOrUpdate(HelperRealm.convert(room));
+                realm.copyToRealmOrUpdate(RealmRoom.convert(room));
             }
         });
         realm.close();
@@ -365,7 +363,8 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         // make request for clearing messages
         Realm realm = Realm.getDefaultInstance();
         RealmResults<RealmChatHistory> realmChatHistories = realm.where(RealmChatHistory.class).equalTo("roomId", chatId).findAll();
-        long lastMessageId = HelperRealm.findLastMessageId(realmChatHistories);
+        // FIXME: 9/15/2016 [Alireza Eskandarpour Shoferi] get last message ID when server done its job
+        long lastMessageId = -1;
         if (lastMessageId != -1) {
             G.clearMessagesUtil.clearMessages(chatId, lastMessageId);
         }

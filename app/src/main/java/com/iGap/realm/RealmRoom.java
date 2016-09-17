@@ -2,6 +2,7 @@ package com.iGap.realm;
 
 import android.text.format.DateUtils;
 
+import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.enums.RoomType;
 
 import io.realm.RealmObject;
@@ -119,5 +120,38 @@ public class RealmRoom extends RealmObject {
 
     public void setChannelRoom(RealmChannelRoom channel_room) {
         this.channel_room = channel_room;
+    }
+
+    /**
+     * convert ProtoGlobal.Room to RealmRoom for saving into database
+     *
+     * @param room ProtoGlobal.Room
+     * @return RealmRoom
+     */
+    public static RealmRoom convert(ProtoGlobal.Room room) {
+        RealmRoom realmRoom = new RealmRoom();
+        realmRoom.setColor(room.getColor());
+        realmRoom.setId(room.getId());
+        realmRoom.setInitials(room.getInitials());
+        realmRoom.setTitle(room.getTitle());
+        realmRoom.setType(RoomType.convert(room.getType()));
+        realmRoom.setUnreadCount(room.getUnreadCount());
+        realmRoom.setMute(false); //TODO [Saeed Mozaffari] [2016-09-07 9:59 AM] - agar mute ro az server gereftim be jaye false sabt mikonim
+        switch (room.getType()) {
+            case CHANNEL:
+                realmRoom.setType(RoomType.CHANNEL);
+                realmRoom.setChannelRoom(RealmChannelRoom.convert(room.getChannelRoom()));
+                break;
+            case CHAT:
+                realmRoom.setType(RoomType.CHAT);
+                realmRoom.setChatRoom(RealmChatRoom.convert(room.getChatRoom()));
+                break;
+            case GROUP:
+                realmRoom.setType(RoomType.GROUP);
+                realmRoom.setGroupRoom(RealmGroupRoom.convert(room.getGroupRoom()));
+                break;
+        }
+
+        return realmRoom;
     }
 }

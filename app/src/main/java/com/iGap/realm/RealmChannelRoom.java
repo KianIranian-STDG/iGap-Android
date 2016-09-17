@@ -1,5 +1,6 @@
 package com.iGap.realm;
 
+import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.enums.ChannelChatRole;
 
 import io.realm.RealmObject;
@@ -25,5 +26,18 @@ public class RealmChannelRoom extends RealmObject {
 
     public void setParticipantsCountLabel(String participants_count_label) {
         this.participants_count_label = participants_count_label;
+    }
+
+    /**
+     * convert ProtoGlobal.ChannelRoom to RealmChannelRoom
+     *
+     * @param room ProtoGlobal.ChannelRoom
+     * @return RealmChannelRoom
+     */
+    public static RealmChannelRoom convert(ProtoGlobal.ChannelRoom room) {
+        RealmChannelRoom realmChannelRoom = new RealmChannelRoom();
+        realmChannelRoom.setParticipantsCountLabel(room.getParticipantsCountLabel());
+        realmChannelRoom.setRole(ChannelChatRole.convert(room.getRole()));
+        return realmChannelRoom;
     }
 }

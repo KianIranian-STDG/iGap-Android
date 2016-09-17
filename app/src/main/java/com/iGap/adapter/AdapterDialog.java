@@ -75,13 +75,13 @@ public class AdapterDialog extends BaseAdapter implements Filterable {
                 notifyDataSetChanged();
 
                 ActivityRegister.edtCodeNumber.setText(("+ " + countrylist.get(position).getCountryCode()));
-                if (countrylist.get(position).getPhonePattetn() != null) {
-                    if (countrylist.get(position).getPhonePattetn().equals(" ")) {
+                if (countrylist.get(position).getPhonePattern() != null) {
+                    if (countrylist.get(position).getPhonePattern().equals(" ")) {
                         ActivityRegister.edtPhoneNumber.setMask("###-###-####");
 
                     } else {
 
-                        ActivityRegister.edtPhoneNumber.setMask((countrylist.get(position).getPhonePattetn().replace("X", "#").replace(" ", "-")));
+                        ActivityRegister.edtPhoneNumber.setMask((countrylist.get(position).getPhonePattern().replace("X", "#").replace(" ", "-")));
                     }
 
                 } else {
@@ -117,7 +117,7 @@ public class AdapterDialog extends BaseAdapter implements Filterable {
                         structCountry.setId(mStringFilterList.get(i).getId());
                         structCountry.setName(mStringFilterList.get(i).getName());
                         structCountry.setCountryCode(mStringFilterList.get(i).getCountryCode());
-                        structCountry.setPhonePattetn(mStringFilterList.get(i).getPhonePattetn());
+                        structCountry.setPhonePattern(mStringFilterList.get(i).getPhonePattern());
                         structCountry.setAbbreviation(mStringFilterList.get(i).getAbbreviation());
                         filterList.add(structCountry);
                     }
