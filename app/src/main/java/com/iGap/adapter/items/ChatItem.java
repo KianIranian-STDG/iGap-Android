@@ -158,6 +158,8 @@ public class ChatItem extends AbstractItem<ChatItem, ChatItem.ViewHolder> {
             mute.setTypeface(G.fontawesome);
             lastSeen.setTypeface(G.arial);
             unreadMessage.setTypeface(G.arial);
+            name.setTypeface(G.arialBold);
+            lastMessage.setTypeface(G.arial);
         }
     }
 }
