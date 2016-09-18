@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.Path;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -16,11 +15,11 @@ import com.nineoldandroids.animation.ObjectAnimator;
 
 public class RevealLayout extends FrameLayout {
 
-    private static final int DEFAULT_DURATION = 600;
     private Path mClipPath;
     private float mClipRadius = 0;
     private int mClipCenterX, mClipCenterY = 0;
     private Animator mAnimator;
+    private static final int DEFAULT_DURATION = 600;
     private boolean mIsContentShown = true;
 
     public RevealLayout(Context context) {
@@ -116,7 +115,7 @@ public class RevealLayout extends FrameLayout {
         if (x < 0 || x > getWidth() || y < 0 || y > getHeight()) {
             throw new RuntimeException("Center point out of range or call method when View is not initialed yet.");
         }
-        Log.e("ddd", x + "   " + y + "   " + getWidth() + "   " + getHeight());
+
         mClipCenterX = x;
         mClipCenterY = y;
         float maxRadius = getMaxRadius(x, y);

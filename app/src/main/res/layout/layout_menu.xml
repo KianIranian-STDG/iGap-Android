@@ -3,12 +3,12 @@
     android:layout_width="match_parent"
     android:layoutDirection="ltr"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
     android:orientation="vertical">
 
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
+        android:scrollbars="none"
         android:layout_height="wrap_content">
 
         <LinearLayout
@@ -23,8 +23,10 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginRight="@dimen/dp8"
                     android:adjustViewBounds="true"
-                    android:src="@drawable/contacts_header" />
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/contacts_header2" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -67,6 +69,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/dp8"
+                android:gravity="left"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -75,12 +79,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/dp6"
-                    android:layout_marginTop="@dimen/dp4"
+                    android:layout_marginTop="@dimen/dp16"
                     android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/lm_txt_icon_group"
                         android:layout_width="wrap_content"
+                        android:minWidth="@dimen/dp32"
                         android:layout_height="wrap_content"
                         android:padding="@dimen/dp8"
                         android:text="@string/fa_group"
@@ -92,6 +97,7 @@
                         android:layout_height="wrap_content"
                         android:padding="@dimen/dp8"
                         android:text="New Group"
+                        android:textColor="@color/cardview_dark_background"
                         android:textSize="@dimen/dp16" />
 
                 </LinearLayout>
@@ -109,6 +115,7 @@
                         android:id="@+id/lm_txt_icon_new_chat"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:minWidth="@dimen/dp32"
                         android:padding="@dimen/dp8"
                         android:text="@string/fa_lock"
                         android:textSize="@dimen/dp16" />
@@ -119,6 +126,7 @@
                         android:layout_height="wrap_content"
                         android:padding="@dimen/dp8"
                         android:text="New Chat"
+                        android:textColor="@color/cardview_dark_background"
                         android:textSize="@dimen/dp16" />
 
                 </LinearLayout>
@@ -137,6 +145,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="@dimen/dp8"
+                        android:minWidth="@dimen/dp32"
                         android:text="@string/fa_bullhorn"
                         android:textSize="@dimen/dp16" />
 
@@ -146,6 +155,7 @@
                         android:layout_height="wrap_content"
                         android:padding="@dimen/dp8"
                         android:text="New Channel"
+                        android:textColor="@color/cardview_dark_background"
                         android:textSize="@dimen/dp16" />
 
                 </LinearLayout>
@@ -171,6 +181,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="@dimen/dp8"
+                        android:minWidth="@dimen/dp32"
                         android:text="@string/fa_user"
                         android:textSize="@dimen/dp16" />
 
@@ -179,6 +190,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="@dimen/dp8"
+                        android:textColor="@color/cardview_dark_background"
                         android:text="Contacts"
                         android:textSize="@dimen/dp16" />
 
@@ -199,6 +211,7 @@
                         android:layout_height="wrap_content"
                         android:padding="@dimen/dp8"
                         android:text="@string/fa_user_plus"
+                        android:minWidth="@dimen/dp32"
                         android:textSize="@dimen/dp16" />
 
                     <TextView
@@ -206,6 +219,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="@dimen/dp8"
+                        android:textColor="@color/cardview_dark_background"
                         android:text="Invite Friends"
                         android:textSize="@dimen/dp16" />
 
@@ -225,6 +239,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="@dimen/dp8"
+                        android:minWidth="@dimen/dp32"
                         android:text="@string/fa_cog"
                         android:textSize="@dimen/dp16" />
 
@@ -233,6 +248,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="@dimen/dp8"
+                        android:textColor="@color/cardview_dark_background"
                         android:text="Settings"
                         android:textSize="@dimen/dp16" />
 
@@ -252,6 +268,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="@dimen/dp8"
+                        android:minWidth="@dimen/dp32"
                         android:text="@string/fa_question_circle"
                         android:textSize="@dimen/dp16" />
 
@@ -260,6 +277,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="@dimen/dp8"
+                        android:textColor="@color/cardview_dark_background"
                         android:text="iGap FAQ"
                         android:textSize="@dimen/dp16" />
 

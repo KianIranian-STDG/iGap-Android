@@ -22,9 +22,8 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.ChatsFastAdapter;
 import com.iGap.adapter.items.ChatItem;
+import com.iGap.fragments.ContactGroupFragment;
 import com.iGap.fragments.RegisteredContactsFragment;
-import com.iGap.interface_package.IActionClick;
-import com.iGap.interface_package.IOpenDrawer;
 import com.iGap.interface_package.OnChatClearMessageResponse;
 import com.iGap.interface_package.OnChatDelete;
 import com.iGap.interface_package.OnChatSendMessageResponse;
@@ -41,7 +40,6 @@ import com.iGap.module.MyType;
 import com.iGap.module.OnComplete;
 import com.iGap.module.ShouldScrolledBehavior;
 import com.iGap.module.StructChatInfo;
-import com.iGap.module.Utils;
 import com.iGap.proto.ProtoChatSendMessage;
 import com.iGap.proto.ProtoClientGetRoom;
 import com.iGap.proto.ProtoGlobal;
@@ -62,12 +60,11 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
-public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActionClick, OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse {
+public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse {
 
     public static LeftDrawerLayout mLeftDrawerLayout;
     private RecyclerView recyclerView;
     private ChatsFastAdapter<ChatItem> mAdapter;
-    private FloatingActionButton floatingActionButton;
     private ArcMenu arcMenu;
 
     public static boolean isMenuButtonAddShown = false;
@@ -104,8 +101,6 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         Contacts.FillRealmInviteFriend();
     }
 
-    FlowingView mFlowingView;
-    FragmentDrawerMenu mMenuFragment;
 
     /**
      * init floating menu drawer
@@ -113,19 +108,13 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
     private void initDrawerMenu() {
 
         mLeftDrawerLayout = (LeftDrawerLayout) findViewById(R.id.id_drawerlayout);
-        mLeftDrawerLayout.setActivityWidth(Utils.getWindowWidth(this));
-
-        mFlowingView = (FlowingView) findViewById(R.id.sv);
-
+        FlowingView mFlowingView = (FlowingView) findViewById(R.id.sv);
         FragmentManager fm = getSupportFragmentManager();
-
-        mMenuFragment = (FragmentDrawerMenu) fm.findFragmentById(R.id.id_container_menu);
+        FragmentDrawerMenu mMenuFragment = (FragmentDrawerMenu) fm.findFragmentById(R.id.id_container_menu);
         if (mMenuFragment == null) {
             fm.beginTransaction().add(R.id.id_container_menu, mMenuFragment = new FragmentDrawerMenu()).commit();
         }
-        mMenuFragment.setOpenDrawerListener(this);
-        mMenuFragment.setActionClickListener(this);
-        mMenuFragment.setMaxActivityWidth(Utils.getWindowWidth(this));
+
         mLeftDrawerLayout.setFluidView(mFlowingView);
         mLeftDrawerLayout.setMenuFragment(mMenuFragment);
     }
@@ -188,7 +177,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         btnMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mLeftDrawerLayout.toggle((int) getResources().getDimension(R.dimen.dp280));
+                mLeftDrawerLayout.toggle();
             }
         });
 
@@ -229,9 +218,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
 
 //                isMenuButtonAddShown = true;
 //
-//                if (!mLeftDrawerLayout.isShownMenu()) {
-//                    mLeftDrawerLayout.toggle(Utils.dpToPx(getApplicationContext(), R.dimen.dp280));
-//                }
+
             }
         });
 
@@ -239,6 +226,11 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         btnCreateNewGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                Fragment fragment = ContactGroupFragment.newInstance();
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
+                mLeftDrawerLayout.closeDrawer();
+
                 arcMenu.toggleMenu();
             }
         });
@@ -852,33 +844,7 @@ public class ActivityMain extends ActivityEnhanced implements IOpenDrawer, IActi
         }
     }
 
-    @Override
-    public void onOpenDrawer(boolean fullWidth) {
-        Log.i(ActivityMain.class.getSimpleName(), "onOpenDrawer");
-    }
 
-    @Override
-    public void onCloseDrawer() {
-        Log.i(ActivityMain.class.getSimpleName(), "onCloseDrawer");
-        mFlowingView.downing();
-        FragmentManager fm = getSupportFragmentManager();
-        fm.beginTransaction().replace(R.id.id_container_menu, mMenuFragment = new FragmentDrawerMenu()).commit();
-        mMenuFragment.setActionClickListener(this);
-        mMenuFragment.setOpenDrawerListener(this);
-        mMenuFragment.setMaxActivityWidth(Utils.getWindowWidth(this));
-        mLeftDrawerLayout.setMenuFragment(mMenuFragment);
-    }
-
-    @Override
-    public void onActionSearchClick() {
-        // close drawer and replace contacts fragment with main activity layout
-        Fragment fragment = RegisteredContactsFragment.newInstance();
-        Bundle bundle = new Bundle();
-        bundle.putString("TITLE", "Contacts");
-        fragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
-        mLeftDrawerLayout.closeDrawer();
-    }
 
     @Override
     protected void onResume() {

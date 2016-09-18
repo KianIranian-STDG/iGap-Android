@@ -147,7 +147,7 @@ public class Contacts {
                         item.setDisplayName(contactList.get(i).getDisplayName());
                         item.setFirstName(contactList.get(i).getFirstName());
                         item.setLastName(contactList.get(i).getLastName());
-                        item.setPhone(contactList.get(i).getPhone());
+                        item.setPhone(contactList.get(i).getPhone().replaceAll(" ", ""));
                     }
                 }
             });
@@ -161,9 +161,11 @@ public class Contacts {
                     public void execute(Realm realm) {
                         for (int i = 0; i < results.size(); i++) {
                             Long phone = results.get(i).getPhone();
-                            String str = phone.toString();
-                            if (str.length() > 10)
+                            String str = phone.toString().replaceAll(" ", "");
+                            if (str.length() > 10) {
                                 str = str.substring(str.length() - 10, str.length());
+                            }
+
                             realm.where(RealmInviteFriend.class).contains("phone", str).findAll().deleteAllFromRealm();
                         }
                     }
@@ -182,7 +184,7 @@ public class Contacts {
         ArrayList<StructContactInfo> list = new ArrayList<>();
 
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmInviteFriend> results = realm.where(RealmInviteFriend.class).findAll();
+        RealmResults<RealmInviteFriend> results = realm.where(RealmInviteFriend.class).findAllSorted("displayName");
 
         if (results != null) {
             String lastHeader = "";

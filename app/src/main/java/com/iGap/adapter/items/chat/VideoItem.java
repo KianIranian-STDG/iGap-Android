@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.iGap.R;
+import com.iGap.helper.HelperMimeType;
 import com.iGap.module.MyType;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
@@ -40,9 +41,11 @@ public class VideoItem extends AbstractChatItem<VideoItem, VideoItem.ViewHolder>
 
         holder.cslv_txt_video_name.setText(mMessage.fileName);
         holder.cslv_txt_video_mime_type.setText(mMessage.fileMime);
-        holder.cslv_txt_vido_info.setText(mMessage.fileInfo);
+        holder.cslv_txt_vido_size.setText(Long.toString(mMessage.fileSize));
 
         holder.cslv_imv_vido_image.setImageResource(Integer.parseInt(mMessage.filePic));
+
+        new HelperMimeType().LoadVideoTumpnail(holder.cslv_imv_vido_image, mMessage.filePic);
 
         if (mMessage.fileState == MyType.FileState.notDownload || mMessage.fileState == MyType.FileState.downloading)// enable or disable btn play video
         {
@@ -68,7 +71,7 @@ public class VideoItem extends AbstractChatItem<VideoItem, VideoItem.ViewHolder>
         protected ImageButton cslv_btn_play_video;
         protected TextView cslv_txt_video_name;
         protected TextView cslv_txt_video_mime_type;
-        protected TextView cslv_txt_vido_info;
+        protected TextView cslv_txt_vido_size;
 
         public ViewHolder(View view) {
             super(view);
@@ -77,7 +80,7 @@ public class VideoItem extends AbstractChatItem<VideoItem, VideoItem.ViewHolder>
             cslv_btn_play_video = (ImageButton) view.findViewById(R.id.cslv_btn_play_video);
             cslv_txt_video_name = (TextView) view.findViewById(R.id.cslv_txt_video_name);
             cslv_txt_video_mime_type = (TextView) view.findViewById(R.id.cslv_txt_video_mime_type);
-            cslv_txt_vido_info = (TextView) view.findViewById(R.id.cslv_txt_vido_info);
+            cslv_txt_vido_size = (TextView) view.findViewById(R.id.cslv_txt_video_size);
 
             cslv_btn_play_video.setOnClickListener(new View.OnClickListener() {
                 @Override

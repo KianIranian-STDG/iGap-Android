@@ -11,8 +11,8 @@
 
         <com.iGap.module.CircleImageView
             android:id="@+id/cs_img_contact_picture"
-            android:layout_width="@dimen/dp60"
-            android:layout_height="@dimen/dp60"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="@dimen/dp52"
             android:layout_gravity="center" />
     </FrameLayout>
 
@@ -132,7 +132,7 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1px"
+            android:layout_height="1dp"
             android:background="#e1dfdf" />
 
     </LinearLayout>

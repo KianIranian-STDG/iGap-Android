@@ -3,7 +3,7 @@ package com.iGap.libs.flowingdrawer;
 import android.view.animation.Interpolator;
 
 
-public class BakedBezierInterpolator implements Interpolator {
+class BakedBezierInterpolator implements Interpolator {
 
     /**
      * Lookup table values.
@@ -12,7 +12,7 @@ public class BakedBezierInterpolator implements Interpolator {
      * P1 (0.4, 0)
      * P2 (0.2, 1.0)
      * P3 (1.0, 1.0)
-     * <p>
+     *
      * Values sampled with x at regular intervals between 0 and 1.
      */
     private static final float[] VALUES = new float[]{

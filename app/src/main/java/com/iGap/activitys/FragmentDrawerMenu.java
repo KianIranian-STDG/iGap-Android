@@ -17,7 +17,7 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.fragments.ContactGroupFragment;
 import com.iGap.fragments.NotRegisteredContactsFragment;
-import com.iGap.interface_package.IActionClick;
+import com.iGap.fragments.RegisteredContactsFragment;
 import com.iGap.libs.flowingdrawer.MenuFragment;
 import com.iGap.module.HelperDecodeFile;
 import com.iGap.realm.RealmUserInfo;
@@ -28,7 +28,7 @@ import io.realm.Realm;
 public class FragmentDrawerMenu extends MenuFragment {
 
     Context context;
-    private IActionClick mActionClickListener;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,10 +37,6 @@ public class FragmentDrawerMenu extends MenuFragment {
     }
 
 
-    public void setActionClickListener(IActionClick listener) {
-        this.mActionClickListener = listener;
-    }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -48,7 +44,7 @@ public class FragmentDrawerMenu extends MenuFragment {
         View view = inflater.inflate(R.layout.layout_menu, container, false);
         initLayoutMenu(view);
 
-        return setupReveal(view, true);
+        return setupReveal(view);
     }
 
 
@@ -85,7 +81,7 @@ public class FragmentDrawerMenu extends MenuFragment {
         ImageView imgUserPhoto = (ImageView) v.findViewById(R.id.lm_imv_user_picture);
 
         TextView txtUserName = (TextView) v.findViewById(R.id.lm_txt_user_name);
-        txtUserName.setTypeface(G.fontawesome);
+        txtUserName.setTypeface(G.arialBold);
 
         TextView txtPhoneNumber = (TextView) v.findViewById(R.id.lm_txt_phone_number);
         txtPhoneNumber.setTypeface(G.fontawesome);
@@ -121,6 +117,13 @@ public class FragmentDrawerMenu extends MenuFragment {
             @Override
             public void onClick(View view) {
 
+                Fragment fragment = RegisteredContactsFragment.newInstance();
+                Bundle bundle = new Bundle();
+                bundle.putString("TITLE", "New Chat");
+                fragment.setArguments(bundle);
+                getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
+
+                ActivityMain.mLeftDrawerLayout.closeDrawer();
             }
         });
 
@@ -137,10 +140,12 @@ public class FragmentDrawerMenu extends MenuFragment {
         layoutContacts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // click on search action btn event
-                if (mActionClickListener != null) {
-                    mActionClickListener.onActionSearchClick();
-                }
+                Fragment fragment = RegisteredContactsFragment.newInstance();
+                Bundle bundle = new Bundle();
+                bundle.putString("TITLE", "Contacts");
+                fragment.setArguments(bundle);
+                getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
+                ActivityMain.mLeftDrawerLayout.closeDrawer();
             }
         });
 
