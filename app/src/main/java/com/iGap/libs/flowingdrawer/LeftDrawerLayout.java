@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.iGap.R;
 import com.nineoldandroids.view.ViewHelper;
 
 
@@ -25,21 +24,11 @@ public class LeftDrawerLayout extends ViewGroup {
      * Minimum velocity that will be detected as a fling
      */
     private static final int MIN_FLING_VELOCITY = 400; // dips per second
-    private boolean mReplace;
-    private boolean mSupportPullToEnd = false;
 
     /**
      * drawer离父容器右边的最小外边距
      */
     private int mMinDrawerMargin;
-
-    public void openHalfDrawer(int halfWidth) {
-        mLeftMenuOnScrren = 1.0f;
-        pointY = getHeight() / 2;
-        mLeftMenuView.getLayoutParams().width = halfWidth;
-        mLeftMenuView.requestLayout();
-        mHelper.smoothSlideViewTo(mLeftMenuView, 0, mLeftMenuView.getTop());
-    }
 
     private View mLeftMenuView;
     private ViewGroup mContentView;
@@ -60,13 +49,24 @@ public class LeftDrawerLayout extends ViewGroup {
     private ImageView mBg;
 
     private int rightMargin;
-    private int mActivityWidth;
 
-    public void setActivityWidth(int i) {
-        this.mActivityWidth = i;
+
+    public void setFluidView(FlowingView mFlowingView) {
+        this.mFlowingView = mFlowingView;
+        mFlowingView.setRightMargin(rightMargin);
+        ViewCompat.setLayerType(this, ViewCompat.LAYER_TYPE_NONE, null);
+        final int childCount = getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            ViewCompat.setLayerType(getChildAt(i), ViewCompat.LAYER_TYPE_NONE,
+                    null);
+        }
     }
 
-    public LeftDrawerLayout(final Context context, AttributeSet attrs) {
+    public void setMenuFragment(MenuFragment mMenuFragment) {
+        mFlowingView.setMenuFragment(mMenuFragment);
+    }
+
+    public LeftDrawerLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         //setup drawer's minMargin
@@ -87,11 +87,6 @@ public class LeftDrawerLayout extends ViewGroup {
 
             @Override
             public void onEdgeDragStarted(int edgeFlags, int pointerId) {
-                // change left menu view to support pull to end
-                if (mSupportPullToEnd) {
-                    mLeftMenuView.getLayoutParams().width = mActivityWidth;
-                    mLeftMenuView.requestLayout();
-                }
                 mHelper.captureChildView(mLeftMenuView, pointerId);
             }
 
@@ -105,10 +100,6 @@ public class LeftDrawerLayout extends ViewGroup {
                 if (!openMark) {
                     releasing = true;
                     mFlowingView.resetContent();
-                } else {
-                    if (offset >= 0.5f && offset < 0.7f) {
-                        openHalfDrawer((int) context.getResources().getDimension(R.dimen.dp280));
-                    }
                 }
                 invalidate();
             }
@@ -158,21 +149,6 @@ public class LeftDrawerLayout extends ViewGroup {
         mHelper.setEdgeTrackingEnabled(ViewDragHelper.EDGE_LEFT);
         //设置minVelocity
         mHelper.setMinVelocity(minVel);
-    }
-
-    public void setFluidView(FlowingView mFlowingView) {
-        this.mFlowingView = mFlowingView;
-        mFlowingView.setRightMargin(rightMargin);
-        ViewCompat.setLayerType(this, ViewCompat.LAYER_TYPE_NONE, null);
-        final int childCount = getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            ViewCompat.setLayerType(getChildAt(i), ViewCompat.LAYER_TYPE_NONE,
-                    null);
-        }
-    }
-
-    public void setMenuFragment(MenuFragment mMenuFragment) {
-        mFlowingView.setMenuFragment(mMenuFragment);
     }
 
     @Override
@@ -254,7 +230,8 @@ public class LeftDrawerLayout extends ViewGroup {
 
     @Override
     protected void dispatchDraw(@NonNull Canvas canvas) {
-        PaintFlagsDrawFilter pfd = new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
+        PaintFlagsDrawFilter pfd = new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG | Paint
+                .FILTER_BITMAP_FLAG);
         canvas.setDrawFilter(pfd);
         final int count = getChildCount();
         for (int i = 0; i < count; i++) {
@@ -270,11 +247,11 @@ public class LeftDrawerLayout extends ViewGroup {
     }
 
 
-    public void toggle(int openHalfWidth) {
+    public void toggle() {
         if (isShownMenu()) {
             closeDrawer();
         } else {
-            openHalfDrawer(openHalfWidth);
+            openDrawer();
         }
     }
 
@@ -285,8 +262,15 @@ public class LeftDrawerLayout extends ViewGroup {
         releasing = true;
         mFlowingView.resetContent();
         mHelper.smoothSlideViewTo(menuView, -menuView.getWidth(), menuView.getTop());
-        mLeftMenuView.getLayoutParams().width = 0;
-        mLeftMenuView.requestLayout();
+        postInvalidate();
+    }
+
+    public void openDrawer() {
+        View menuView = mLeftMenuView;
+        mLeftMenuOnScrren = 1.0f;
+        pointY = getHeight() / 2;
+        mHelper.smoothSlideViewTo(menuView, 0, menuView.getTop());
+        postInvalidate();
     }
 
     @Override

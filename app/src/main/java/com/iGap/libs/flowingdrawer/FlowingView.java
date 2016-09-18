@@ -15,6 +15,7 @@ import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ValueAnimator;
 
 
+
 public class FlowingView extends View {
 
     private Paint mPaint;
@@ -37,6 +38,13 @@ public class FlowingView extends View {
 
     private int rightMargin;
 
+    public enum Status {
+        NONE,
+        STATUS_SMOOTH_UP,
+        STATUS_UP,
+        STATUS_DOWN,
+    }
+
     public FlowingView(Context context) {
         super(context);
         init();
@@ -53,16 +61,17 @@ public class FlowingView extends View {
         init();
     }
 
+    private void init() {
+        mPaint = new Paint();
+        mPaint.setAntiAlias(true);
+        mPaint.setColor(getResources().getColor(R.color.white));
+    }
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public FlowingView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
-    private void init() {
-        mPaint = new Paint();
-        mPaint.setAntiAlias(true);
-        mPaint.setColor(getResources().getColor(R.color.colorNavigationDrawerBgColor));
-    }
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -107,12 +116,6 @@ public class FlowingView extends View {
         valueAnimator.setDuration(500);
         valueAnimator.setInterpolator(new OvershootInterpolator(4f));
         valueAnimator.start();
-    }
-
-    public void invalidate(int maxWidth) {
-        currentPointX = maxWidth;
-        autoUppingX = maxWidth;
-        invalidate();
     }
 
     private void drawBG(Canvas canvas) {
@@ -166,9 +169,11 @@ public class FlowingView extends View {
 
     }
 
+
     public boolean isStartAuto(float x) {
         return x >= getWidth() / 2;
     }
+
 
     public void autoUpping(float x) {
         mStatus = Status.STATUS_SMOOTH_UP;
@@ -201,7 +206,6 @@ public class FlowingView extends View {
     public boolean isupping() {
         return isupping;
     }
-
     public void resetContent() {
         showContent = true;
         isupping = false;
@@ -214,19 +218,13 @@ public class FlowingView extends View {
         isupping = false;
     }
 
+
     public void setMenuFragment(MenuFragment mMenuFragment) {
         this.mMenuFragment = mMenuFragment;
     }
 
     public void setRightMargin(int rightMargin) {
         this.rightMargin = rightMargin;
-    }
-
-    public enum Status {
-        NONE,
-        STATUS_SMOOTH_UP,
-        STATUS_UP,
-        STATUS_DOWN,
     }
 
 }

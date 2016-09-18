@@ -40,8 +40,9 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:padding="@dimen/dp8">
+                    android:paddingTop="@dimen/dp8"
+                    android:paddingLeft="@dimen/dp8"
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/fcg_txt_status"
