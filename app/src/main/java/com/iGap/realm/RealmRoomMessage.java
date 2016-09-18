@@ -12,7 +12,7 @@ public class RealmRoomMessage extends RealmObject {
     private String status;
     private int statusVersion;
     private String messageType;
-    private String message;
+    private String message = "hello";
     private String attachment;
     private long userId;
     private String location;

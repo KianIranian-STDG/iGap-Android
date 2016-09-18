@@ -71,7 +71,17 @@ public class ChatSendMessageResponse extends MessageHandler {
                 // and response is null, so we sure recipient is another user
                 if (userId != roomMessage.getUserId() && chatSendMessageResponse.getResponse().getId().isEmpty()) {
                     // i'm the recipient
-                    RealmChatHistory realmChatHistory = realm.createObject(RealmChatHistory.class);
+
+                    //RealmChatHistory realmChatHistory = realm.createObject(RealmChatHistory.class);
+
+                    RealmChatHistory realmChatHistory = new RealmChatHistory();
+
+                    int autoIncrement = 0;
+                    if (realm.where(RealmChatHistory.class).max("id") != null) {
+                        autoIncrement = realm.where(RealmChatHistory.class).max("id").intValue() + 1;
+                    }
+                    realmChatHistory.setId(autoIncrement);
+
                     RealmRoomMessage realmRoomMessage = realm.createObject(RealmRoomMessage.class);
 
                     realmRoomMessage.setMessageId(roomMessage.getMessageId());

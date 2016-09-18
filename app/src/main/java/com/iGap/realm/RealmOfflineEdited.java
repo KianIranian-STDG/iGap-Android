@@ -9,8 +9,18 @@ import io.realm.annotations.PrimaryKey;
 public class RealmOfflineEdited extends RealmObject {
 
     @PrimaryKey
+    private long id;
+
     private long messageId;
     private String message;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public long getMessageId() {
         return messageId;
