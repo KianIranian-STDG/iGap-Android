@@ -6,13 +6,16 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.fragments.ContactGroupFragment;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.HelperDecodeFile;
 import com.iGap.module.MaterialDesignTextView;
@@ -25,6 +28,7 @@ public class ActivityNewGroup extends ActivityEnhanced {
     private int myResultCodeGallery = 0;
     private Uri uriIntent;
     public static Bitmap decodeBitmapProfile = null;
+    private TextView txtNextStep, txtCancel;
 
     private EditText edtGroupName, edtDescription;
 
@@ -33,14 +37,18 @@ public class ActivityNewGroup extends ActivityEnhanced {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_group);
 
+        //=======================back on toolbar
         txtBack = (MaterialDesignTextView) findViewById(R.id.stng_txt_back);
         txtBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
+                startActivity(new Intent(ActivityNewGroup.this, ActivityMain.class));
+                finish();
             }
         });
 
+        //=======================set image for group
         imgCircleImageView = (CircleImageView) findViewById(R.id.stng_profile_circle_image);
         imgCircleImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,13 +95,50 @@ public class ActivityNewGroup extends ActivityEnhanced {
             imgCircleImageView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
         }
 
-
+        //=======================name of group
         edtGroupName = (EditText) findViewById(R.id.stng_edt_newGroup);
+
+        //=======================description group
         edtDescription = (EditText) findViewById(R.id.stng_edt_description);
 
 
+        //=======================button next step
+        txtNextStep = (TextView) findViewById(R.id.ng_txt_nextStep);
+        txtNextStep.setTypeface(G.arial);
+        txtNextStep.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (G.IMAGE_GROUP.exists()) {
+                    if (edtDescription.getText().toString().length() > 0) {
+                        if (edtGroupName.getText().toString().length() > 0) {
+                            Fragment fragment = ContactGroupFragment.newInstance();
+                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.ng_fragmentContainer, fragment).commit();
+                            ActivityMain.mLeftDrawerLayout.closeDrawer();
+                        } else {
+                            Toast.makeText(ActivityNewGroup.this, "Please Description tour Group", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(ActivityNewGroup.this, "Please Enter Your Name Group", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+        //=======================button cancel
+        txtCancel = (TextView) findViewById(R.id.ng_txt_cancel);
+        txtCancel.setTypeface(G.arial);
+        txtCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(ActivityNewGroup.this, ActivityMain.class));
+                finish();
+            }
+        });
+
     }
 
+
+    //=======================result for picture
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

@@ -22,7 +22,6 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.ChatsFastAdapter;
 import com.iGap.adapter.items.ChatItem;
-import com.iGap.fragments.ContactGroupFragment;
 import com.iGap.fragments.RegisteredContactsFragment;
 import com.iGap.interface_package.OnChatClearMessageResponse;
 import com.iGap.interface_package.OnChatDelete;
@@ -226,10 +225,13 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             @Override
             public void onClick(View view) {
 
-                Fragment fragment = ContactGroupFragment.newInstance();
-                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
-                mLeftDrawerLayout.closeDrawer();
+//                Fragment fragment = ContactGroupFragment.newInstance();
+//                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
+//                mLeftDrawerLayout.closeDrawer();
 
+
+                startActivity(new Intent(ActivityMain.this, ActivityNewGroup.class));
+                finish();
                 arcMenu.toggleMenu();
             }
         });

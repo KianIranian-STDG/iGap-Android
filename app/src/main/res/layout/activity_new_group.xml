@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ng_fragmentContainer"
     tools:context="com.iGap.activitys.ActivityNewGroup">
 
 
@@ -49,35 +50,58 @@
         android:id="@+id/stng_profile_circle_image"
         android:layout_width="@dimen/dp105"
         android:layout_height="@dimen/dp105"
+        android:layout_below="@id/stng_backgroundToolbar"
+        android:layout_centerInParent="true"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/dp12"
         android:background="@drawable/pu_circle_button_give_image"
         android:gravity="center"
         android:padding="@dimen/dp32"
         android:src="@mipmap/plus"
-        app:civ_border_width="0dp"
-        android:layout_below="@id/stng_backgroundToolbar"
-        android:layout_centerInParent="true" />
+        app:civ_border_width="0dp" />
 
     <EditText
+        android:id="@+id/stng_edt_newGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/stng_edt_newGroup"
         android:layout_below="@+id/stng_profile_circle_image"
-        android:layout_marginTop="@dimen/dp16"
         android:layout_marginLeft="@dimen/dp20"
         android:layout_marginRight="@dimen/dp140"
+        android:layout_marginTop="@dimen/dp16"
         android:hint="Group Name" />
 
     <EditText
+        android:id="@+id/stng_edt_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/stng_edt_description"
         android:layout_below="@+id/stng_edt_newGroup"
-        android:layout_marginTop="@dimen/dp24"
         android:layout_marginLeft="@dimen/dp20"
         android:layout_marginRight="@dimen/dp20"
+        android:layout_marginTop="@dimen/dp24"
         android:hint="Group Name" />
 
+    <TextView
+        android:id="@+id/ng_txt_nextStep"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stng_edt_description"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="@dimen/dp52"
+        android:layout_marginRight="@dimen/dp20"
+        android:text="NEXT STEP"
+        android:textSize="@dimen/dp16"
+        android:textColor="@color/toolbar_background" />
+
+    <TextView
+        android:id="@+id/ng_txt_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/ng_txt_nextStep"
+        android:layout_marginTop="@dimen/dp52"
+        android:layout_below="@+id/stng_edt_description"
+        android:layout_marginRight="@dimen/dp20"
+        android:text="CANCEL"
+        android:textSize="@dimen/dp16"
+        android:textColor="@color/toolbar_background" />
 
 </RelativeLayout>
