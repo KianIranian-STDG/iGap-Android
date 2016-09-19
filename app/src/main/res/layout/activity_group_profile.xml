@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:id="@+id/fragmentContainer_group_profile"
     android:layout_height="match_parent"
-    android:layoutDirection="ltr"
-    android:orientation="vertical">
+    android:layoutDirection="ltr">
 
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fillViewport="true"
         android:scrollbars="none">
 
         <LinearLayout
@@ -183,9 +184,9 @@
                     <com.iGap.module.CircleImageView
                         android:id="@+id/agp_imv_add_member"
                         android:layout_width="@dimen/dp52"
+                        android:scaleType="centerCrop"
                         android:layout_height="@dimen/dp52"
-                        android:background="@color/green"
-                        android:src="@mipmap/plus_icon" />
+                        android:src="@mipmap/add_chat_background2" />
 
                     <TextView
                         android:id="@+id/agp_txt_str_add_new_member"
@@ -202,7 +203,7 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/agp_recycler_view_group_member"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:scrollbars="vertical"
                     android:visibility="visible"
                     app:layout_behavior="@string/appbar_scrolling_view_behavior" />
@@ -259,10 +260,12 @@
                 android:textSize="@dimen/sp16" />
 
         </LinearLayout>
+
+
     </ScrollView>
 
 
-</LinearLayout>
+</RelativeLayout>
 
 
 

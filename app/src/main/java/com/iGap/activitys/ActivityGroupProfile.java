@@ -2,14 +2,37 @@ package com.iGap.activitys;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.adapter.items.ContatItemGroupProfile;
+import com.iGap.fragments.ContactGroupFragment;
 import com.iGap.module.CircleImageView;
+import com.iGap.module.Contacts;
+import com.iGap.module.CustomTextViewMedium;
+import com.iGap.module.StructContactInfo;
+import com.mikepenz.fastadapter.AbstractAdapter;
+import com.mikepenz.fastadapter.FastAdapter;
+import com.mikepenz.fastadapter.IAdapter;
+import com.mikepenz.fastadapter.IItem;
+import com.mikepenz.fastadapter.IItemAdapter;
+import com.mikepenz.fastadapter.adapters.HeaderAdapter;
+import com.mikepenz.fastadapter.adapters.ItemAdapter;
+import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
+import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by android3 on 9/18/2016.
@@ -17,12 +40,22 @@ import com.iGap.module.CircleImageView;
 public class ActivityGroupProfile extends ActivityEnhanced {
 
 
-    CircleImageView imvGroupAvatar;
-    TextView txtGroupNameTitle;
-    TextView txtGroupName;
-    TextView txtNumberOfSharedMedia;
-    TextView txtMemberNumber;
-    TextView txtMore;
+    private CircleImageView imvGroupAvatar;
+    private TextView txtGroupNameTitle;
+    private TextView txtGroupName;
+    private TextView txtNumberOfSharedMedia;
+    private TextView txtMemberNumber;
+    private TextView txtMore;
+
+    private FastAdapter fastAdapter;
+
+    private int numberOfloadItem = 5;
+
+    List<StructContactInfo> contacts;
+    List<IItem> items;
+    ItemAdapter itemAdapter;
+    RecyclerView recyclerView;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,7 +99,25 @@ public class ActivityGroupProfile extends ActivityEnhanced {
         txtMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("ddd", "more clicked");
+
+                int count = items.size();
+                int listSize = contacts.size();
+
+                for (int i = count; i < listSize && i < count + numberOfloadItem; i++) {
+                    items.add(new ContatItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
+                }
+
+                itemAdapter.clear();
+                itemAdapter.add(items);
+
+
+                if (items.size() >= listSize)
+                    txtMore.setVisibility(View.GONE);
+
+
+                int viewHeight = (int) (getResources().getDimension(R.dimen.dp68) * items.size()); // TODO: 9/19/2016 get real size later nejati
+                recyclerView.getLayoutParams().height = viewHeight;
+
             }
         });
 
@@ -75,7 +126,10 @@ public class ActivityGroupProfile extends ActivityEnhanced {
         imvAddMember.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("ddd", "add member clicked");
+
+                Fragment fragment = ContactGroupFragment.newInstance();
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
+                        R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer_group_profile, fragment).commit();
             }
         });
 
@@ -106,6 +160,145 @@ public class ActivityGroupProfile extends ActivityEnhanced {
     private void initRecycleView() {
 
 
+        //create our FastAdapter
+        fastAdapter = new FastAdapter();
+        fastAdapter.withSelectable(true);
+
+        //create our adapters
+        final StickyHeaderAdapter stickyHeaderAdapter = new StickyHeaderAdapter();
+        final HeaderAdapter headerAdapter = new HeaderAdapter();
+        itemAdapter = new ItemAdapter();
+        itemAdapter.withFilterPredicate(new IItemAdapter.Predicate<ContatItemGroupProfile>() {
+            @Override
+            public boolean filter(ContatItemGroupProfile item, CharSequence constraint) {
+                return !item.mContact.displayName.toLowerCase().startsWith(String.valueOf(constraint).toLowerCase());
+            }
+        });
+        fastAdapter.withOnClickListener(new FastAdapter.OnClickListener<ContatItemGroupProfile>() {
+            @Override
+            public boolean onClick(View v, IAdapter adapter, ContatItemGroupProfile item, int position) {
+
+                Log.e("dddd", " invite click  " + position);
+                // TODO: 9/14/2016 nejati     go into clicked user page
+
+                return false;
+            }
+        });
+
+
+        fastAdapter.setHasStableIds(true);
+
+        //get our recyclerView and do basic setup
+        recyclerView = (RecyclerView) findViewById(R.id.agp_recycler_view_group_member);
+        recyclerView.setLayoutManager(new LinearLayoutManager(ActivityGroupProfile.this));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(stickyHeaderAdapter.wrap(itemAdapter.wrap(headerAdapter.wrap(fastAdapter))));
+
+        recyclerView.setNestedScrollingEnabled(false);
+
+        //this adds the Sticky Headers within our list
+        final StickyRecyclerHeadersDecoration decoration = new StickyRecyclerHeadersDecoration(stickyHeaderAdapter);
+        recyclerView.addItemDecoration(decoration);
+
+        items = new ArrayList<>();
+        contacts = Contacts.retrieve(null);
+
+
+        int listSize = contacts.size();
+
+        for (int i = 0; i < listSize && i < 3; i++) {
+
+            items.add(new ContatItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
+        }
+
+
+        if (listSize < 4)
+            txtMore.setVisibility(View.GONE);
+
+
+        itemAdapter.add(items);
+
+
+        //so the headers are aware of changes
+        stickyHeaderAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                decoration.invalidateHeaders();
+            }
+        });
+
+
+    }
+
+
+    public class StickyHeaderAdapter extends AbstractAdapter implements StickyRecyclerHeadersAdapter {
+        @Override
+        public long getHeaderId(int position) {
+            IItem item = getItem(position);
+
+//            ContatItemGroupProfile ci=(ContatItemGroupProfile)item;
+//            if(ci!=null){
+//                return ci.mContact.displayName.toUpperCase().charAt(0);
+//            }
+
+
+            return -1;
+        }
+
+        @Override
+        public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
+            //we create the view for the header
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_header_item, parent, false);
+            return new RecyclerView.ViewHolder(view) {
+            };
+        }
+
+        @Override
+        public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
+            CustomTextViewMedium textView = (CustomTextViewMedium) holder.itemView;
+
+            IItem item = getItem(position);
+            if (((ContatItemGroupProfile) item).mContact != null) {
+                //based on the position we set the headers text
+                textView.setText(String.valueOf(((ContatItemGroupProfile) item).mContact.displayName.toUpperCase().charAt(0)));
+            }
+
+        }
+
+        /**
+         * REQUIRED FOR THE FastAdapter. Set order to < 0 to tell the FastAdapter he can ignore this one.
+         *
+         * @return int
+         */
+        @Override
+        public int getOrder() {
+            return -100;
+        }
+
+        @Override
+        public int getAdapterItemCount() {
+            return 0;
+        }
+
+        @Override
+        public List<IItem> getAdapterItems() {
+            return null;
+        }
+
+        @Override
+        public IItem getAdapterItem(int position) {
+            return null;
+        }
+
+        @Override
+        public int getAdapterPosition(IItem item) {
+            return -1;
+        }
+
+        @Override
+        public int getGlobalPosition(int position) {
+            return -1;
+        }
     }
 
 
