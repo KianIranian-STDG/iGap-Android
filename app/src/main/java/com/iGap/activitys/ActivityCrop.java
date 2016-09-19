@@ -18,9 +18,9 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 
 public class ActivityCrop extends ActivityEnhanced {
 
-    private ImageView imgPic, imgCrop, imgAgreeImage;
+    private ImageView imgPic;
     private Uri resultUri;
-    private TextView txtCancel, txtSet;
+    private TextView txtCancel, txtSet, txtCrop, txtAgreeImage;
 
     private String page;
     private String type;
@@ -33,7 +33,7 @@ public class ActivityCrop extends ActivityEnhanced {
 
         imgPic = (ImageView) findViewById(R.id.pu_img_imageBefore);
 
-        imgAgreeImage = (ImageView) findViewById(R.id.pu_img_agreeImage);
+        txtAgreeImage = (TextView) findViewById(R.id.pu_txt_agreeImage);
 
         txtCancel = (TextView) findViewById(R.id.pu_txt_cancel_crop);
         txtSet = (TextView) findViewById(R.id.pu_txt_set_crop);
@@ -49,8 +49,8 @@ public class ActivityCrop extends ActivityEnhanced {
             imgPic.setImageURI(resultUri);
         }
 
-        imgCrop = (ImageView) findViewById(R.id.pu_img_crop);
-        imgCrop.setOnClickListener(new View.OnClickListener() {
+        txtCrop = (TextView) findViewById(R.id.pu_txt_crop);
+        txtCrop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 CropImage.activity(resultUri).setGuidelines(CropImageView.Guidelines.ON)
@@ -60,17 +60,19 @@ public class ActivityCrop extends ActivityEnhanced {
                         .setBorderCornerLength(50)
                         .setBorderCornerOffset(0)
                         .setAllowCounterRotation(true)
-                        .setBorderCornerThickness(10.0f)
+                        .setBorderCornerThickness(8.0f)
                         .setShowCropOverlay(true)
-                        .setScaleType(CropImageView.ScaleType.CENTER_INSIDE)
+                        .setAspectRatio(1, 1)
+                        .setFixAspectRatio(true)
                         .setBorderCornerColor(getResources().getColor(R.color.whit_background))
                         .setBackgroundColor(getResources().getColor(R.color.ou_background_crop))
+                        .setScaleType(CropImageView.ScaleType.FIT_CENTER)
                         .start(ActivityCrop.this);
             }
         });
 
 
-        imgAgreeImage.setOnClickListener(new View.OnClickListener() {
+        txtAgreeImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -85,6 +87,10 @@ public class ActivityCrop extends ActivityEnhanced {
                     } else if (page.equals("setting")) {
 
                         Intent intent = new Intent(ActivityCrop.this, ActivitySetting.class);
+                        startActivity(intent);
+                        finish();
+                    } else if (page.equals("NEW_GROUP")) {
+                        Intent intent = new Intent(ActivityCrop.this, ActivityNewGroup.class);
                         startActivity(intent);
                         finish();
                     }
@@ -110,18 +116,29 @@ public class ActivityCrop extends ActivityEnhanced {
                         startActivity(intent);
                         finish();
 
+                    } else if (page.equals("NEW_GROUP")) {
+                        Intent intent = new Intent(ActivityCrop.this, ActivityNewGroup.class);
+                        startActivity(intent);
+                        finish();
                     }
                 }
             }
         });
+
         txtSet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 if (resultUri != null && type.equals("crop") || type.equals("gallery")) {
                     pathImageUser = getRealPathFromURI(resultUri);
-                    if (G.imageFile.exists()) G.imageFile.delete();// if file exists delete
-                    HelperCopyFile.copyFile(pathImageUser, G.imageFile.toString());
+                    if (page.equals("NEW_GROUP")) {
+                        if (G.IMAGE_GROUP.exists()) G.imageFile.delete();// if file exists delete
+                        HelperCopyFile.copyFile(pathImageUser, G.IMAGE_GROUP.toString());
+                    } else {
+                        if (G.imageFile.exists()) G.imageFile.delete();// if file exists delete
+                        HelperCopyFile.copyFile(pathImageUser, G.imageFile.toString());
+                    }
+
                 }
                 if (page != null) {
                     if (page.equals("profile")) {
@@ -133,13 +150,19 @@ public class ActivityCrop extends ActivityEnhanced {
 
                     } else if (page.equals("setting")) {
                         Intent intent = new Intent(ActivityCrop.this, ActivitySetting.class);
-                        ActivityProfile.IsDeleteFile = true;
+
+                        startActivity(intent);
+                        finish();
+                    } else if (page.equals("NEW_GROUP")) {
+                        Intent intent = new Intent(ActivityCrop.this, ActivityNewGroup.class);
                         startActivity(intent);
                         finish();
                     }
                 }
             }
         });
+
+
     }
 
     //======================================================================================================// result from crop
@@ -179,4 +202,6 @@ public class ActivityCrop extends ActivityEnhanced {
         }
         return result;
     }
+
+
 }

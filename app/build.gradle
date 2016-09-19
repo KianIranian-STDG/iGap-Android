@@ -35,9 +35,10 @@ dependencies {
     compile 'com.vicmikhailau:MaskedEditText:1.1.1'
     compile 'com.uncopt:android.justified:1.0'
     compile 'de.hdodenhof:circleimageview:2.1.0'
-    compile 'com.theartofdev.edmodo:android-image-cropper:2.3.+'
+    compile 'com.theartofdev.edmodo:android-image-cropper:2.3.1'
     compile 'com.android.support:percent:24.2.1'
     compile 'com.nightonke:boommenu:1.0.9'
+
     compile('com.mikepenz:fastadapter:1.8.2@aar') {
         transitive = true
     }

@@ -89,7 +89,11 @@ public class AdapterDialog extends BaseAdapter implements Filterable {
                 }
                 ActivityRegister.btnChoseCountry.setText((countrylist.get(position).getName()));
                 ActivityRegister.isoCode = countrylist.get(position).getAbbreviation();
+
+                ActivityRegister.dialogChooseCountry.dismiss();
             }
+
+
         });
 
         return convertView;

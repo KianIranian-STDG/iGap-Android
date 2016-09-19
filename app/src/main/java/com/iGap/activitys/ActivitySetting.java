@@ -1,6 +1,5 @@
 package com.iGap.activitys;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -18,7 +17,6 @@ import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -32,6 +30,7 @@ import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.helper.HelperImageBackColor;
 import com.iGap.interface_package.OnUserProfileSetNickNameResponse;
 import com.iGap.module.HelperDecodeFile;
 import com.iGap.module.SHP_SETTING;
@@ -51,7 +50,7 @@ public class ActivitySetting extends ActivityEnhanced {
     private SharedPreferences sharedPreferences;
     private int messageTextSize = 16;
 
-    private TextView txtBack, txtMenu, txtMessageTextSize, txtAutoDownloadData, txtAutoDownloadWifi,
+    private TextView txtBack, txtMenu, txtMessageTextSize, txtAutoDownloadData, txtAutoDownloadWifi, txtChatBackground,
             txtAutoDownloadRoaming, txtKeepMedia, txtLanguage, txtSizeClearCach;
     private ImageView imgMenu;
 
@@ -63,7 +62,7 @@ public class ActivitySetting extends ActivityEnhanced {
     private int poRbDialogTextSize = -1;
 
     private ViewGroup ltMessageTextSize, ltLanguage, ltInAppBrowser, ltSentByEnter, ltEnableAnimation, ltAutoGifs, ltSaveToGallery;
-    private TextView txtNickName, txtUserName, txtPhoneNumber, txtNotifyAndSound;
+    private TextView txtNickName, txtUserName, txtPhoneNumber, txtNotifyAndSound, txtFaq, txtPrivacyPolicy;
     private ToggleButton toggleSentByEnter, toggleEnableAnimation, toggleAutoGifs, toggleSaveToGallery, toggleInAppBrowser;
 
     private AppBarLayout appBarLayout;
@@ -338,7 +337,11 @@ public class ActivitySetting extends ActivityEnhanced {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startDialog();
+                if (!G.imageFile.exists()) {
+                    startDialog(R.array.profile);
+                } else {
+                    startDialog(R.array.profile_delete);
+                }
             }
         });
 
@@ -356,7 +359,10 @@ public class ActivitySetting extends ActivityEnhanced {
             });
 
         } else {//TODO [Saeed Mozaffari] [2016-09-10 4:22 PM] - waiting for proto , for get initials and color
-            circleImageView.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp60), "H", "#7f7f7f"));
+//            circleImageView.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp60), "H", "#7f7f7f"));
+            String name = HelperImageBackColor.getFirstAlphabetName(txtNickName.getText().toString());
+            circleImageView.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp100), name, HelperImageBackColor.getColor(name)));
+
         }
 
 
@@ -434,6 +440,10 @@ public class ActivitySetting extends ActivityEnhanced {
             @Override
             public void onClick(View v) {
 
+                final long sizeFolderPhotoDialog = getFolderSize(new File(G.DIR_IMAGES));
+                final long sizeFolderVideoDialog = getFolderSize(new File(G.DIR_VIDEOS));
+                final long sizeFolderDocumentDialog = getFolderSize(new File(G.DIR_DOCUMENT));
+
                 boolean wrapInScrollView = true;
                 final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this)
                         .title("Clear Cash")
@@ -446,18 +456,18 @@ public class ActivitySetting extends ActivityEnhanced {
                 final File filePhoto = new File(G.DIR_IMAGES);
                 assert view != null;
                 TextView photo = (TextView) view.findViewById(R.id.st_txt_sizeFolder_photo);
-                photo.setText(formatFileSize(sizeFolderPhoto));
+                photo.setText(formatFileSize(sizeFolderPhotoDialog));
 
                 final CheckBox checkBoxPhoto = (CheckBox) view.findViewById(R.id.st_checkBox_photo);
                 final File fileVideo = new File(G.DIR_VIDEOS);
                 TextView video = (TextView) view.findViewById(R.id.st_txt_sizeFolder_video);
-                video.setText(formatFileSize(sizeFolderVideo));
+                video.setText(formatFileSize(sizeFolderVideoDialog));
 
                 final CheckBox checkBoxVideo = (CheckBox) view.findViewById(R.id.st_checkBox_video_dialogClearCash);
 
                 final File fileDocument = new File(G.DIR_DOCUMENT);
                 TextView document = (TextView) view.findViewById(R.id.st_txt_sizeFolder_document_dialogClearCash);
-                document.setText(formatFileSize(sizeFolderDocument));
+                document.setText(formatFileSize(sizeFolderDocumentDialog));
 
                 final CheckBox checkBoxDocument = (CheckBox) view.findViewById(R.id.st_checkBox_document_dialogClearCash);
 
@@ -523,6 +533,15 @@ public class ActivitySetting extends ActivityEnhanced {
                         })
                         .positiveText("ok")
                         .show();
+            }
+        });
+
+        txtChatBackground = (TextView) findViewById(R.id.st_txt_chatBackground);
+        txtChatBackground.setTypeface(G.arial);
+        txtChatBackground.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(ActivitySetting.this, ActivityChatBackground.class));
             }
         });
 
@@ -900,44 +919,71 @@ public class ActivitySetting extends ActivityEnhanced {
             }
         });
 
+        txtPrivacyPolicy = (TextView) findViewById(R.id.st_txt_privacy_policy);
+        txtPrivacyPolicy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ActivitySetting.this, ActivityWebView.class);
+                intent.putExtra("PATH", "Policy");
+                startActivity(intent);
+
+            }
+        });
+
+        txtFaq = (TextView) findViewById(R.id.st_txt_faq);
+        txtFaq.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ActivitySetting.this, ActivityWebView.class);
+                intent.putExtra("PATH", "FAQ");
+                startActivity(intent);
+            }
+        });
+
         realm.close();
 
     }
 
     //dialog for choose pic from gallery or camera
-    private void startDialog() {
-        final Dialog dialog = new Dialog(ActivitySetting.this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+    private void startDialog(int r) {
 
-        dialog.setContentView(R.layout.dialog_profile);
-        TextView picCamera = (TextView) dialog.findViewById(R.id.pu_layout_dialog_picCamera);
-        picCamera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
+        new MaterialDialog.Builder(this)
+                .title("Choose Picture")
+                .negativeText("CANCEL")
+                .items(r)
+                .itemsCallback(new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    uriIntent = Uri.fromFile(G.imageFile);
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
-                    startActivityForResult(intent, myResultCodeCamera);
-                    dialog.dismiss();
+                        if (text.toString().equals("From Camera")) {
 
-                } else {
-                    Toast.makeText(ActivitySetting.this, "Please check your Camera", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+                            if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
 
-        TextView picGallery = (TextView) dialog.findViewById(R.id.pu_layout_dialog_picGallery);
-        picGallery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent, myResultCodeGallery);
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
+                                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                uriIntent = Uri.fromFile(G.imageFile);
+                                intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
+                                startActivityForResult(intent, myResultCodeCamera);
+                                dialog.dismiss();
+
+                            } else {
+                                Toast.makeText(ActivitySetting.this, "Please check your Camera", Toast.LENGTH_SHORT).show();
+                            }
+
+                        } else if (text.toString().equals("Delete photo")) {
+                            G.imageFile.delete();
+                            String name = HelperImageBackColor.getFirstAlphabetName(txtNickName.getText().toString());
+                            circleImageView.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp100), name, HelperImageBackColor.getColor(name)));
+
+
+                        } else {
+                            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                            startActivityForResult(intent, myResultCodeGallery);
+                            dialog.dismiss();
+                        }
+
+                    }
+                })
+                .show();
     }
 
     //=====================================================================================result from camera , gallery and crop

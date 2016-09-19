@@ -9,7 +9,6 @@
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -32,84 +31,68 @@
             android:name=".activitys.ActivityChat"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
-
-
         <activity
             android:name=".activitys.ActivityShearedMedia"
-            android:configChanges="keyboard|keyboardHidden|screenSize|locale">
-
-        </activity>
-
+            android:configChanges="keyboard|keyboardHidden|screenSize|locale"></activity>
         <activity
             android:name=".activitys.ActivityPaint"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"></activity>
-
-
         <activity
             android:name=".activitys.ActivityShowImage"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale">
-
-        </activity>
-
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"></activity>
         <activity
             android:name=".activitys.ActivityExplorer"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale">
-
-        </activity>
-
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"></activity>
         <activity
             android:name=".activitys.ActivityComment"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
-
         <activity
             android:name=".activitys.ActivityMain"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"></activity>
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
         <activity
             android:name=".activitys.ActivityIntroduce"
             android:configChanges="keyboard|keyboardHidden|screenSize|locale">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <activity
             android:name=".activitys.ActivityProfile"
-            android:configChanges="keyboard|keyboardHidden|screenSize|locale">
-
-
-        </activity>
-        <activity android:name=".activitys.ActivityCrop" />
-
-        <activity android:name=".activitys.ActivitySettingNotification">
-
-        </activity>
-
+            android:configChanges="keyboard|keyboardHidden|screenSize|locale"
+            android:windowSoftInputMode="adjustPan"></activity>
+        <activity android:name=".activitys.ActivityCrop"></activity>
+        <activity android:name=".activitys.ActivitySettingNotification"></activity>
         <activity
             android:name=".activitys.ActivityRegister"
             android:configChanges="keyboard|keyboardHidden|screenSize|locale"
-            android:windowSoftInputMode="adjustPan|adjustResize">
-        </activity>
+            android:windowSoftInputMode="adjustPan"></activity>
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/AppTheme22" />
-
         <activity android:name=".activitys.ActivitySetting">
 
         </activity>
-
-        <activity android:name=".activitys.ActivityContactsProfile"></activity>
+        <activity android:name=".activitys.ActivityContactsProfile" />
         <activity
             android:name=".activitys.ActivitySelectChat"
             android:label="@string/select_room" />
 
         <receiver android:name=".module.IncomingSms" />
-        <receiver android:name="com.iGap.module.ReceiverInternet">
+        <receiver android:name=".module.ReceiverInternet">
             <intent-filter>
                 <action android:name="android.net.wifi.STATE_CHANGE" />
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
 
+        <activity android:name=".activitys.ActivityChatBackground"></activity>
+        <activity android:name=".activitys.ActivityWebView"></activity>
+        <activity android:name=".activitys.ActivityNewGroup">
+
+        </activity>
     </application>
 
 </manifest>

@@ -10,6 +10,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+
         <android.support.v7.widget.Toolbar
             android:id="@+id/pu_toolbarRegister"
             android:layout_width="match_parent"
@@ -18,40 +19,60 @@
             app:contentInsetLeft="0dp"
             app:contentInsetStart="0dp">
 
-            <LinearLayout
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <ImageView
-                    android:id="@+id/pu_img_agreeImage"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/dp40"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight=".18"
-                    android:paddingLeft="@dimen/dp8"
-                    android:src="@mipmap/back_arrow"
-                    android:tint="@color/whit_background" />
+                <android.support.v7.widget.SearchView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:theme="@style/MySearch"
+                    android:id="@+id/stfaq_searchView"
+                    android:visibility="gone" />
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:id="@+id/stfaq_allLayout_toolbar"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight=".6" />
+                    android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_gravity="center"
-                    android:id="@+id/pu_img_crop"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/dp28"
-                    android:layout_weight="0.10"
-                    android:gravity="center"
-                    android:layout_marginRight="@dimen/dp24"
-                    android:scaleType="centerInside"
-                    android:src="@mipmap/crop"
-                    android:textColor="@color/whit_background"
-                    android:tint="@color/whit_background" />
-            </LinearLayout>
+
+                    <com.iGap.module.MaterialDesignTextView
+                        android:id="@+id/pu_txt_agreeImage"
+                        android:layout_width="@dimen/dp60"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="@string/md_back_arrow"
+                        android:textColor="@color/whit_background"
+                        android:textSize="@dimen/sp22" />
+
+                    <TextView
+                        android:id="@+id/stfaq_txt_titleToolbar"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="left|center_vertical"
+                        android:textColor="@color/whit_background"
+                        android:textSize="@dimen/sp16"
+                        android:textStyle="bold"
+                        android:visibility="visible" />
+
+
+                    <com.iGap.module.MaterialDesignTextView
+                        android:id="@+id/pu_txt_crop"
+                        android:layout_width="@dimen/dp60"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="right"
+                        android:gravity="center"
+                        android:text="@string/md_crop_button"
+                        android:textColor="@color/whit_background"
+                        android:textSize="@dimen/sp22" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
         </android.support.v7.widget.Toolbar>
-
 
         <ImageView
             android:id="@+id/pu_img_imageBefore"

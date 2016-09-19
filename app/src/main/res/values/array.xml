@@ -82,6 +82,12 @@
         <item>From Camera</item>
     </string-array>
 
+    <string-array name="profile_delete">
+        <item>From Gallery</item>
+        <item>From Camera</item>
+        <item>Delete photo</item>
+    </string-array>
+
     <string-array name="st_popup">
         <item>Log Out</item>
     </string-array>

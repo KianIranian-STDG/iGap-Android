@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -122,7 +123,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
                 }
             }
         });
-        int ledColorMessage = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_LED_COLOR_MESSAGE, 0);
+        int ledColorMessage = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_LED_COLOR_MESSAGE, -8257792);
         imgLedMessage = (ImageView) findViewById(R.id.stns_img_ledColorMessage);
         imgLedMessage.setBackgroundColor(ledColorMessage);
         ltLedColorMessage = (ViewGroup) findViewById(R.id.stns_layout_ledColorMessage);
@@ -167,6 +168,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
                         dialog.dismiss();
                         imgLedMessage.setBackgroundColor(picker.getColor());
                         editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_MESSAGE, picker.getColor());
+                        Log.i("VVCCVV", "onClick: " + picker.getColor());
                         editor.apply();
                     }
                 });
@@ -177,6 +179,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
         });
 
         txtVibrateMessage = (TextView) findViewById(R.id.stns_txt_vibrate_message_text);
+        txtVibrateMessage.setTypeface(G.arial);
         String vibrateMessage = sharedPreferences.getString(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, "Default");
         txtVibrateMessage.setText(vibrateMessage);
         ltVibrate_message = (ViewGroup) findViewById(R.id.stns_layout_vibrate_message);
@@ -228,6 +231,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
         });
 
         txtPopupNotification = (TextView) findViewById(R.id.stns_txt_popupNotification_message_text);
+        txtPopupNotification.setTypeface(G.arial);
         String popupNotification = sharedPreferences.getString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, "Default");
         txtPopupNotification.setText(popupNotification);
         ltPopupNotification = (ViewGroup) findViewById(R.id.stns_layout_popupNotification_message);
@@ -275,6 +279,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
 
         poRbDialogSoundMessage = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_MESSAGE_POSITION, 3);
         txtSoundMessage = (TextView) findViewById(R.id.stns_txt_sound_text);
+        txtSoundMessage.setTypeface(G.arial);
         String soundMessage = sharedPreferences.getString(SHP_SETTING.KEY_STNS_SOUND_MESSAGE, "Arrow");
         txtSoundMessage.setText(soundMessage);
         ltSoundMessage = (ViewGroup) findViewById(R.id.stns_layout_sound_message);
@@ -340,6 +345,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
 
 
         tgMessagePreview_group = (ToggleButton) findViewById(R.id.stns_toggle_messagePreview_group);
+        tgMessagePreview_group.setTypeface(G.arial);
         int preview_group = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_MESSAGE, 1);
         if (preview_group == 1) {
             tgMessagePreview_group.setChecked(true);
@@ -422,6 +428,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
 
 
         txtVibrateGroup = (TextView) findViewById(R.id.stns_txt_vibrate_group_text);
+        txtVibrateGroup.setTypeface(G.arial);
         String vibrateGroup = sharedPreferences.getString(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, "Default");
         txtVibrateGroup.setText(vibrateGroup);
         ltVibrateGroup = (ViewGroup) findViewById(R.id.stns_layout_vibrate_group);
@@ -472,6 +479,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
         });
 
         txtPopupNotificationGroup = (TextView) findViewById(R.id.stns_txt_popupNotification_group_text);
+        txtPopupNotificationGroup.setTypeface(G.arial);
         String popupNotificationGroup = sharedPreferences.getString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, "Default1");
         txtPopupNotificationGroup.setText(popupNotificationGroup);
         ltPopupNotificationGroup = (ViewGroup) findViewById(R.id.stns_layout_popupNotification_group);
@@ -519,6 +527,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
 
         poRbDialogSoundGroup = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, 3);
         txtSoundGroup = (TextView) findViewById(R.id.stns_txt_sound_group_text);
+        txtSoundGroup.setTypeface(G.arial);
         String soundGroup = sharedPreferences.getString(SHP_SETTING.KEY_STNS_SOUND_GROUP, "Arrow");
         txtSoundGroup.setText(soundGroup);
         ltSoundGroup = (ViewGroup) findViewById(R.id.stns_layout_sound_group);
@@ -806,6 +815,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
         });
 
         txtRepeat_Notifications = (TextView) findViewById(R.id.st_txt_Repeat_Notifications);
+        txtRepeat_Notifications.setTypeface(G.arial);
         String repeat_Notifications = sharedPreferences.getString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION, "Off");
         txtRepeat_Notifications.setText(repeat_Notifications);
         ltRepeat_Notifications = (ViewGroup) findViewById(R.id.st_layout_Repeat_Notifications);
@@ -893,10 +903,12 @@ public class ActivitySettingNotification extends AppCompatActivity {
                 editor.putInt(SHP_SETTING.KEY_STNS_BACKGROUND_CONNECTION, 1);
                 editor.putInt(SHP_SETTING.KEY_STNS_BADGE_CONTENT, 1);
                 editor.putString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION, "1 hour");
-                Toast.makeText(ActivitySettingNotification.this, "ltReset_all_notification", Toast.LENGTH_SHORT).show();
+                editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_MESSAGE, -8257792);
+                editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, -8257792);
                 editor.apply();
-
                 Toast.makeText(ActivitySettingNotification.this, "Reset All Notification", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(ActivitySettingNotification.this, ActivitySettingNotification.class));
+                finish();
             }
         });
     }

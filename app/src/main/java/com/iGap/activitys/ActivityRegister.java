@@ -11,6 +11,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.SearchView;
 import android.text.Editable;
 import android.text.Html;
@@ -33,6 +34,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AdapterDialog;
@@ -370,9 +373,6 @@ public class ActivityRegister extends ActivityEnhanced {
                     }
                 });
 
-//                dialogChooseCountry.show();
-
-
                 dialogChooseCountry.show();
 
 
@@ -391,56 +391,77 @@ public class ActivityRegister extends ActivityEnhanced {
 
                 if (edtPhoneNumber.getText().toString().length() > 0 && !regex.equals("") && edtPhoneNumber.getText().toString().replace("-", "").matches(regex)) {
 
+
                     phoneNumber = edtPhoneNumber.getText().toString();
 
-                    int portaret_landscope = getResources().getConfiguration().orientation;
+                    MaterialDialog dialog = new MaterialDialog.Builder(ActivityRegister.this)
+                            .customView(R.layout.rg_mdialog_text, true)
+                            .positiveText("OK")
+                            .negativeText("EDIT")
+                            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                    if (portaret_landscope == 1) {//portrait
-                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                        txtAgreement_register = (TextView) findViewById(R.id.txtAgreement_register);
-                        txtAgreement_register.setMovementMethod(new ScrollingMovementMethod());
+                                    int portaret_landscope = getResources().getConfiguration().orientation;
 
-                        layout_agreement.setVisibility(View.GONE);
-                        layout_agreement.startAnimation(trans_x_out);
-                        G.handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
+                                    if (portaret_landscope == 1) {//portrait
+                                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                                        txtAgreement_register = (TextView) findViewById(R.id.txtAgreement_register);
+                                        txtAgreement_register.setMovementMethod(new ScrollingMovementMethod());
 
-                                btnChoseCountry.setEnabled(false);
-                                btnChoseCountry.setTextColor(getResources().getColor(R.color.rg_border_editText));
-                                edtPhoneNumber.setEnabled(false);
-                                edtPhoneNumber.setTextColor(getResources().getColor(R.color.rg_border_editText));
+                                        layout_agreement.setVisibility(View.GONE);
+                                        layout_agreement.startAnimation(trans_x_out);
+                                        G.handler.postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
 
-                                edtCodeNumber.setEnabled(false);
-                                edtCodeNumber.setTextColor(getResources().getColor(R.color.rg_border_editText));
+                                                btnChoseCountry.setEnabled(false);
+                                                btnChoseCountry.setTextColor(getResources().getColor(R.color.rg_border_editText));
+                                                edtPhoneNumber.setEnabled(false);
+                                                edtPhoneNumber.setTextColor(getResources().getColor(R.color.rg_border_editText));
 
-                                layout_verify.setVisibility(View.VISIBLE);
-                                layout_verify.startAnimation(trans_x_in);
+                                                edtCodeNumber.setEnabled(false);
+                                                edtCodeNumber.setTextColor(getResources().getColor(R.color.rg_border_editText));
 
-                                checkVerify();
+                                                layout_verify.setVisibility(View.VISIBLE);
+                                                layout_verify.startAnimation(trans_x_in);
 
-                            }
-                        }, 600);
-                    } else {
+                                                checkVerify();
+
+                                            }
+                                        }, 600);
+                                    } else {
 
 
-                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
 
-                        dialogVerifyLandScape = new Dialog(ActivityRegister.this);
+                                        dialogVerifyLandScape = new Dialog(ActivityRegister.this);
 
-                        btnChoseCountry.setTextColor(getResources().getColor(R.color.rg_background_editText));
-                        btnChoseCountry.setEnabled(false);
-                        edtPhoneNumber.setTextColor(getResources().getColor(R.color.rg_background_editText));
-                        edtPhoneNumber.setEnabled(false);
+                                        btnChoseCountry.setTextColor(getResources().getColor(R.color.rg_background_editText));
+                                        btnChoseCountry.setEnabled(false);
+                                        edtPhoneNumber.setTextColor(getResources().getColor(R.color.rg_background_editText));
+                                        edtPhoneNumber.setEnabled(false);
 
-                        dialogVerifyLandScape.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                        dialogVerifyLandScape.setContentView(R.layout.rg_dialog_verify_land);
-                        dialogVerifyLandScape.setCanceledOnTouchOutside(false);
-                        dialogVerifyLandScape.show();
+                                        dialogVerifyLandScape.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                        dialogVerifyLandScape.setContentView(R.layout.rg_dialog_verify_land);
+                                        dialogVerifyLandScape.setCanceledOnTouchOutside(false);
+                                        dialogVerifyLandScape.show();
 
-                        checkVerify();
-                    }
+                                        checkVerify();
+                                    }
+
+                                }
+                            })
+                            .build();
+
+
+                    View view = dialog.getCustomView();
+                    assert view != null;
+                    TextView phone = (TextView) view.findViewById(R.id.rg_dialog_txt_number);
+                    phone.setText(edtPhoneNumber.getText().toString());
+                    dialog.show();
+
                 } else {
                     Toast.makeText(ActivityRegister.this, "Please Enter your Phone Number", Toast.LENGTH_SHORT).show();
                 }
@@ -481,10 +502,10 @@ public class ActivityRegister extends ActivityEnhanced {
                 params.setMargins(marginLeft, marginTopChooseCountry, marginRight, marginBottomChooseCountry); //left, top, right, bottom
                 btnChoseCountry.setLayoutParams(params);
 //
-//                ViewGroup relativeLayout = (ViewGroup) findViewById(R.id.rg_layout_center);
-//                LinearLayout.LayoutParams params3 = (LinearLayout.LayoutParams) relativeLayout.getLayoutParams();
-//                params3.setMargins(marginLeft, marginTopChooseCountry, marginRight, marginRight); //left, top, right, bottom
-//                relativeLayout.setLayoutParams(params3);
+//                ViewGroup li = (ViewGroup) findViewById(R.id.rg_layout_center);
+//                RelativeLayout.LayoutParams params3 = (RelativeLayout.LayoutParams) li.getLayoutParams();
+//                params3.setMargins(marginLeft, marginTopChooseCountry, marginRight, 400); //left, top, right, bottom
+//                li.setLayoutParams(params3);
 
 
                 RelativeLayout.LayoutParams params2 = (RelativeLayout.LayoutParams) btnStart.getLayoutParams();

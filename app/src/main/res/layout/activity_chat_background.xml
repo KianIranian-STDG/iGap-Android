@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activitys.ActivityChatBackground">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/stcb_backgroundToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp60"
+        android:background="@color/toolbar_background"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        app:layout_collapseMode="pin">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/st_txt_titleToolbar"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:text="@string/st_title_Background"
+                android:textColor="@color/whit_background"
+                android:textSize="@dimen/sp22"
+                android:textStyle="bold"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/stcb_txt_back"
+                android:layout_width="@dimen/dp60"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:gravity="center"
+                android:text="@string/fa_chevron_left"
+                android:textColor="@color/whit_background"
+                android:textSize="@dimen/sp22" />
+
+            <com.iGap.module.MaterialDesignTextView
+                android:id="@+id/stcb_txt_set"
+                android:layout_width="@dimen/dp60"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:gravity="center"
+                android:text="@string/md_check_symbol"
+                android:textColor="@color/whit_background"
+                android:textSize="@dimen/sp22" />
+
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rcvContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/stcb_backgroundToolbar" />
+</RelativeLayout>

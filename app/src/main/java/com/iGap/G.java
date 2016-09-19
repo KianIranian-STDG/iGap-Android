@@ -132,6 +132,9 @@ public class G extends Application {
     public static File imageFile;
     public static int COPY_BUFFER_SIZE = 1024;
 
+    public static final String FAQ = "http://www.digikala.com";
+    public static final String POLICY = "http://www.digikala.com";
+
     public static UploaderUtil uploaderUtil = new UploaderUtil();
     public static ClearMessagesUtil clearMessagesUtil = new ClearMessagesUtil();
     public static ChatSendMessageUtil chatSendMessageUtil = new ChatSendMessageUtil();
@@ -183,6 +186,12 @@ public class G extends Application {
     public static final String DIR_AUDIOS = DIR_APP + "/audios";
     public static final String DIR_DOCUMENT = DIR_APP + "/document";
     public static final String DIR_SOUND_NOTIFICATION = DIR_APP + "/sound";
+    public static final String DIR_CHAT_BACKGROUND = DIR_APP + "/chat_background";
+    public static final String DIR_NEW_GROUP = DIR_APP + "/.new_group";
+
+    public static File chatBackground;
+    public static File IMAGE_GROUP;
+
 
     public static final String CHAT_MESSAGE_TIME = "H:mm";
     public static final String ROOM_LAST_MESSAGE_TIME = "h:mm a";
@@ -198,6 +207,11 @@ public class G extends Application {
         new File(DIR_AUDIOS).mkdirs();
         new File(DIR_DOCUMENT).mkdirs();
         new File(DIR_SOUND_NOTIFICATION).mkdirs();
+        new File(DIR_CHAT_BACKGROUND).mkdirs();
+        new File(DIR_NEW_GROUP).mkdirs();
+
+        chatBackground = new File(DIR_CHAT_BACKGROUND, "addChatBackground.jpg");
+        IMAGE_GROUP = new File(G.DIR_NEW_GROUP, "image_new_group.png");
 
         context = getApplicationContext();
         handler = new Handler();

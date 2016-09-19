@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.iGap.activitys.ActivityNewGroup">
+
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/stng_backgroundToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp60"
+        android:background="@color/toolbar_background"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        app:layout_collapseMode="pin">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/stng_txt_titleToolbar"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:text="Bew Group"
+                android:textColor="@color/whit_background"
+                android:textSize="@dimen/sp22"
+                android:textStyle="bold"
+                android:visibility="visible" />
+
+            <com.iGap.module.MaterialDesignTextView
+                android:id="@+id/stng_txt_back"
+                android:layout_width="@dimen/dp60"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:gravity="center"
+                android:text="@string/md_back_arrow"
+                android:textColor="@color/whit_background"
+                android:textSize="@dimen/sp22" />
+
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
+
+    <com.iGap.module.CircleImageView
+        android:id="@+id/stng_profile_circle_image"
+        android:layout_width="@dimen/dp105"
+        android:layout_height="@dimen/dp105"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/dp12"
+        android:background="@drawable/pu_circle_button_give_image"
+        android:gravity="center"
+        android:padding="@dimen/dp32"
+        android:src="@mipmap/plus"
+        app:civ_border_width="0dp"
+        android:layout_below="@id/stng_backgroundToolbar"
+        android:layout_centerInParent="true" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/stng_edt_newGroup"
+        android:layout_below="@+id/stng_profile_circle_image"
+        android:layout_marginTop="@dimen/dp16"
+        android:layout_marginLeft="@dimen/dp20"
+        android:layout_marginRight="@dimen/dp140"
+        android:hint="Group Name" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/stng_edt_description"
+        android:layout_below="@+id/stng_edt_newGroup"
+        android:layout_marginTop="@dimen/dp24"
+        android:layout_marginLeft="@dimen/dp20"
+        android:layout_marginRight="@dimen/dp20"
+        android:hint="Group Name" />
+
+
+</RelativeLayout>

@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:background="@color/whit_background"
     android:orientation="vertical"
-    android:layoutDirection="ltr">
+    android:layoutDirection="ltr"
+    android:id="@+id/pu_lt_parent">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/pu_toolbarRegister"
@@ -122,7 +123,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:gravity="center"
             android:hint="@string/pu_nikname_profileUser"
             android:lines="1"
             android:maxLength="20"
@@ -130,7 +130,10 @@
             android:singleLine="true"
             android:textColor="@color/black_register"
             android:textColorHint="@color/pu_edtHintText"
-            android:textSize="@dimen/sp22" />
+            android:textSize="@dimen/sp22"
+            android:layout_marginLeft="@dimen/dp52"
+            android:gravity="center_horizontal"
+            android:layout_marginRight="@dimen/dp52" />
 
 
         <View
