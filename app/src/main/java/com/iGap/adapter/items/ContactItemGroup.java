@@ -18,11 +18,11 @@ import java.util.List;
 /**
  * Contact item used with FastAdapter for Navigation drawer contacts fragment.
  */
-public class ContactItamGroup extends AbstractItem<ContactItamGroup, ContactItamGroup.ViewHolder> {
+public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItemGroup.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
     public StructContactInfo mContact;
 
-    public ContactItamGroup setContact(StructContactInfo contact) {
+    public ContactItemGroup setContact(StructContactInfo contact) {
         this.mContact = contact;
         return this;
     }

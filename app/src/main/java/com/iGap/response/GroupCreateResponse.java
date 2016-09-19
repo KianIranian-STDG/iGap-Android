@@ -1,5 +1,8 @@
 package com.iGap.response;
 
+import android.util.Log;
+
+import com.iGap.G;
 import com.iGap.proto.ProtoGroupCreate;
 
 public class GroupCreateResponse extends MessageHandler {
@@ -20,13 +23,13 @@ public class GroupCreateResponse extends MessageHandler {
     @Override
     public void handler() {
 
+        Log.i("XXX", "GroupCreateResponse handler : " + message);
         ProtoGroupCreate.GroupCreateResponse.Builder builder = (ProtoGroupCreate.GroupCreateResponse.Builder) message;
-        builder.getRoomId();
-
+        G.onGroupCreate.onGroupCreate(builder.getRoomId());
     }
 
     @Override
     public void error() {
-
+        Log.i("XXX", "GroupCreateResponse error : " + message);
     }
 }

@@ -1,5 +1,7 @@
 package com.iGap.response;
 
+import android.util.Log;
+
 import com.google.protobuf.ByteString;
 import com.iGap.AESCrypt;
 import com.iGap.G;
@@ -33,13 +35,14 @@ public class ConnectionSecuringResponse extends MessageHandler {
 
     @Override
     public void handler() {
+        Log.i("SOC_RECONNECT", "ConnectionSecuringResponse handler : " + message);
         ProtoConnectionSecuring.ConnectionSecuringResponse.Builder builder = (ProtoConnectionSecuring.ConnectionSecuringResponse.Builder) message;
 
         String publicKey = builder.getPublicKey();
         int symmetricKeyLength = builder.getSymmetricKeyLength();
 
         String key = HelperString.generateKey(symmetricKeyLength);
-
+        Log.i("SOC_RECONNECT", "ConnectionSecuringResponse 1 G.symmetricKey : " + G.symmetricKey);
         if (G.symmetricKey != null) {
             return;
         }
@@ -55,6 +58,7 @@ public class ConnectionSecuringResponse extends MessageHandler {
             e.printStackTrace();
         }
 
+        Log.i("SOC_RECONNECT", "ConnectionSecuringResponse 2 ");
         ProtoConnectionSecuring.ConnectionSymmetricKey.Builder connectionSymmetricKey = ProtoConnectionSecuring.ConnectionSymmetricKey.newBuilder();
         connectionSymmetricKey.setSymmetricKey(ByteString.copyFrom(encryption));
         RequestWrapper requestWrapper = new RequestWrapper(2, connectionSymmetricKey);

@@ -1,5 +1,9 @@
 package com.iGap.response;
 
+import android.util.Log;
+
+import com.iGap.G;
+
 public class GroupAddMemberResponse extends MessageHandler {
 
     public int actionId;
@@ -18,10 +22,13 @@ public class GroupAddMemberResponse extends MessageHandler {
     @Override
     public void handler() {
 
+        G.onGroupAddMember.onGroupAddMember();
+
+        Log.i("XXX", "GroupAddMemberResponse handler : " + message);
     }
 
     @Override
     public void error() {
-
+        Log.i("XXX", "GroupAddMemberResponse Error : " + message);
     }
 }

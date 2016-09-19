@@ -16,9 +16,15 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.fragments.ContactGroupFragment;
+import com.iGap.interface_package.OnClientGetRoomResponse;
+import com.iGap.interface_package.OnGroupCreate;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.HelperDecodeFile;
 import com.iGap.module.MaterialDesignTextView;
+import com.iGap.proto.ProtoClientGetRoom;
+import com.iGap.proto.ProtoGlobal;
+import com.iGap.request.RequestClientGetRoom;
+import com.iGap.request.RequestGroupCreate;
 
 public class ActivityNewGroup extends ActivityEnhanced {
 
@@ -109,19 +115,20 @@ public class ActivityNewGroup extends ActivityEnhanced {
             @Override
             public void onClick(View view) {
 
-                if (G.IMAGE_GROUP.exists()) {
-                    if (edtDescription.getText().toString().length() > 0) {
-                        if (edtGroupName.getText().toString().length() > 0) {
-                            Fragment fragment = ContactGroupFragment.newInstance();
-                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.ng_fragmentContainer, fragment).commit();
-                            ActivityMain.mLeftDrawerLayout.closeDrawer();
-                        } else {
-                            Toast.makeText(ActivityNewGroup.this, "Please Description tour Group", Toast.LENGTH_SHORT).show();
-                        }
+
+//                if (G.IMAGE_GROUP.exists()) {
+                if (edtDescription.getText().toString().length() > 0) {
+                    if (edtGroupName.getText().toString().length() > 0) {
+
+                        createGroup();
+
                     } else {
-                        Toast.makeText(ActivityNewGroup.this, "Please Enter Your Name Group", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ActivityNewGroup.this, "Please Description tour Group", Toast.LENGTH_SHORT).show();
                     }
+                } else {
+                    Toast.makeText(ActivityNewGroup.this, "Please Enter Your Name Group", Toast.LENGTH_SHORT).show();
                 }
+//                }
             }
         });
         //=======================button cancel
@@ -135,6 +142,36 @@ public class ActivityNewGroup extends ActivityEnhanced {
             }
         });
 
+    }
+
+    private void createGroup() {
+        G.onGroupCreate = new OnGroupCreate() {
+            @Override
+            public void onGroupCreate(long roomId) {
+                getRoom(roomId);
+            }
+        };
+
+        new RequestGroupCreate().groupCreate(edtGroupName.getText().toString(), edtDescription.getText().toString());
+    }
+
+    private void getRoom(final long roomId) {
+
+        G.onClientGetRoomResponse = new OnClientGetRoomResponse() {
+            @Override
+            public void onClientGetRoomResponse(ProtoGlobal.Room room, ProtoClientGetRoom.ClientGetRoomResponse.Builder builder) {
+                getFragmentManager().popBackStack();
+                Fragment fragment = ContactGroupFragment.newInstance();
+                Bundle bundle = new Bundle();
+                bundle.putLong("RoomId", roomId);
+                fragment.setArguments(bundle);
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.ng_fragmentContainer, fragment).commit();
+                ActivityMain.mLeftDrawerLayout.closeDrawer();
+                finish();
+            }
+        };
+
+        new RequestClientGetRoom().clientGetRoom(roomId);
     }
 
 

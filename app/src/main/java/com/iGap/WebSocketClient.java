@@ -117,19 +117,6 @@ public class WebSocketClient {
                     super.onMessageError(websocket, cause, frames);
                 }
 
-                @Override
-                public void onTextMessage(WebSocket websocket, String text) throws Exception {
-                    Log.i("SOC_WebSocket", "onTextMessage : " + text);
-                    super.onTextMessage(websocket, text);
-                }
-
-                @Override
-                public void onTextMessageError(WebSocket websocket, WebSocketException cause, byte[] data) throws Exception {
-                    Log.i("SOC_WebSocket", "onTextMessageError");
-                    super.onTextMessageError(websocket, cause, data);
-                }
-
-
             });
         } catch (IOException e) {
             Log.i("SOC_WebSocket", "iGap IOException iGap : " + e);

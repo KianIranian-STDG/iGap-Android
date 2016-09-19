@@ -42,7 +42,8 @@
                     android:layout_weight="1"
                     android:paddingTop="@dimen/dp8"
                     android:paddingLeft="@dimen/dp8"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:gravity="center">
 
                     <TextView
                         android:id="@+id/fcg_txt_status"
@@ -54,19 +55,19 @@
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/sp18"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/fcg_txt_number_of_member"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp4"
                         android:gravity="left"
                         android:singleLine="true"
-                        android:text="10/5000 member"
+                        android:text="0/5000 member"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="@android:color/white"
-                        android:textSize="@dimen/sp14"
+                        android:textSize="@dimen/sp18"
                         android:textStyle="bold" />
 
                 </LinearLayout>

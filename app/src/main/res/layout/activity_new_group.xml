@@ -27,7 +27,7 @@
                 android:layout_height="match_parent"
                 android:layout_centerInParent="true"
                 android:gravity="center"
-                android:text="Bew Group"
+                android:text="New Group"
                 android:textColor="@color/whit_background"
                 android:textSize="@dimen/sp22"
                 android:textStyle="bold"
@@ -78,7 +78,7 @@
         android:layout_marginLeft="@dimen/dp20"
         android:layout_marginRight="@dimen/dp20"
         android:layout_marginTop="@dimen/dp24"
-        android:hint="Group Name" />
+        android:hint="Description" />
 
     <TextView
         android:id="@+id/ng_txt_nextStep"
