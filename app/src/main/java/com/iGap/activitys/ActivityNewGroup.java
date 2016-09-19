@@ -7,7 +7,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.text.InputType;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +20,7 @@ import com.iGap.R;
 import com.iGap.fragments.ContactGroupFragment;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.HelperDecodeFile;
+import com.iGap.module.LinedEditText;
 import com.iGap.module.MaterialDesignTextView;
 
 public class ActivityNewGroup extends ActivityEnhanced {
@@ -28,17 +31,21 @@ public class ActivityNewGroup extends ActivityEnhanced {
     private int myResultCodeGallery = 0;
     private Uri uriIntent;
     public static Bitmap decodeBitmapProfile = null;
-    private TextView txtNextStep, txtCancel;
+    private TextView txtNextStep, txtCancel, txtTitleToolbar;
 
-    private EditText edtGroupName, edtDescription;
+    private EditText edtGroupName;
+    private LinedEditText edtDescription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_group);
 
+        txtTitleToolbar = (TextView) findViewById(R.id.ng_txt_titleToolbar);
+        txtTitleToolbar.setTypeface(G.arial);
+
         //=======================back on toolbar
-        txtBack = (MaterialDesignTextView) findViewById(R.id.stng_txt_back);
+        txtBack = (MaterialDesignTextView) findViewById(R.id.ng_txt_back);
         txtBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -47,9 +54,8 @@ public class ActivityNewGroup extends ActivityEnhanced {
                 finish();
             }
         });
-
         //=======================set image for group
-        imgCircleImageView = (CircleImageView) findViewById(R.id.stng_profile_circle_image);
+        imgCircleImageView = (CircleImageView) findViewById(R.id.ng_profile_circle_image);
         imgCircleImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -65,7 +71,6 @@ public class ActivityNewGroup extends ActivityEnhanced {
                                 if (text.toString().equals("From Camera")) {
 
                                     if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
-
 
                                         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                                         uriIntent = Uri.fromFile(G.IMAGE_GROUP);
@@ -83,8 +88,7 @@ public class ActivityNewGroup extends ActivityEnhanced {
                                     dialog.dismiss();
                                 }
                             }
-                        })
-                        .show();
+                        }).show();
             }
         });
 
@@ -96,12 +100,17 @@ public class ActivityNewGroup extends ActivityEnhanced {
         }
 
         //=======================name of group
-        edtGroupName = (EditText) findViewById(R.id.stng_edt_newGroup);
-
+        edtGroupName = (EditText) findViewById(R.id.ng_edt_newGroup);
+        edtGroupName.setTypeface(G.arial);
         //=======================description group
-        edtDescription = (EditText) findViewById(R.id.stng_edt_description);
+        edtDescription = (LinedEditText) findViewById(R.id.ng_edt_description);
 
-
+        edtDescription.setTypeface(G.arial);
+        edtDescription.setSingleLine(false);
+        edtDescription.setImeOptions(EditorInfo.IME_FLAG_NO_ENTER_ACTION);
+        edtDescription.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        edtDescription.setLines(4);
+        edtDescription.setMaxLines(4);
         //=======================button next step
         txtNextStep = (TextView) findViewById(R.id.ng_txt_nextStep);
         txtNextStep.setTypeface(G.arial);
@@ -134,10 +143,7 @@ public class ActivityNewGroup extends ActivityEnhanced {
                 finish();
             }
         });
-
     }
-
-
     //=======================result for picture
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

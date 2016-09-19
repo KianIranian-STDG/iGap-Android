@@ -3,6 +3,7 @@ package com.iGap.activitys;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -19,11 +20,13 @@ import android.support.v7.widget.PopupMenu;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,6 +64,8 @@ public class ActivityContactsProfile extends ActivityEnhanced {
     private ImageView imgMenu;
 
     private FloatingActionButton fab;
+    private PopupWindow popupWindow;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -218,12 +223,72 @@ public class ActivityContactsProfile extends ActivityEnhanced {
             }
         });
 
+        final int screenWidth = (int) (getResources().getDisplayMetrics().widthPixels / 1.7);
         imgMenu = (ImageView) findViewById(R.id.chi_img_menuPopup);
         imgMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                popUpMenu(R.menu.chi_popup_menu, v);
+                LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                final View popupView = layoutInflater.inflate(R.layout.popup_window, null);
+                popupWindow = new PopupWindow(popupView, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+                popupWindow.setBackgroundDrawable(new BitmapDrawable());
+                popupWindow.setOutsideTouchable(true);
+
+                if (popupWindow.isOutsideTouchable()) {
+                    popupWindow.dismiss();
+                    Log.i("CCVVBB", "rr: ");
+                }
+                popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                    @Override
+                    public void onDismiss() {
+                        //TODO do sth here on dismiss
+                    }
+                });
+
+                popupWindow.setAnimationStyle(android.R.style.Animation_InputMethod);
+                popupWindow.showAtLocation(popupView, Gravity.RIGHT | Gravity.TOP, 10, 30);
+                popupWindow.showAsDropDown(v);
+
+
+                TextView txtSearch = (TextView) popupView.findViewById(R.id.popup_txtItem1);
+                txtSearch.setTypeface(G.arial);
+                txtSearch.setText("Share");
+                txtSearch.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        Toast.makeText(ActivityContactsProfile.this, "1", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+                TextView txtClearHistory = (TextView) popupView.findViewById(R.id.popup_txtItem2);
+                txtClearHistory.setTypeface(G.arial);
+                txtClearHistory.setText("Delete");
+                txtClearHistory.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        Toast.makeText(ActivityContactsProfile.this, "2", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+                TextView txtDeleteChat = (TextView) popupView.findViewById(R.id.popup_txtItem3);
+                txtDeleteChat.setTypeface(G.arial);
+                txtDeleteChat.setText("Add Shortcut");
+                txtDeleteChat.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        Toast.makeText(ActivityContactsProfile.this, "3", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                TextView txtMutNotification = (TextView) popupView.findViewById(R.id.popup_txtItem4);
+                txtMutNotification.setVisibility(View.GONE);
+
             }
         });
 

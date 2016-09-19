@@ -7,6 +7,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
@@ -25,8 +26,11 @@ import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -173,6 +177,8 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     //channel
     private ChannelChatRole channelRole;
     private String channelParticipantsCountLabel;
+
+    private PopupWindow popupWindow;
 
     @Override
     protected void onStart() {
@@ -419,10 +425,85 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             txt_mute.setVisibility(View.VISIBLE);
         }
 
-
         imvUserPicture = (ImageView) findViewById(R.id.chl_imv_user_picture);
 
+        final int screenWidth = (int) (getResources().getDisplayMetrics().widthPixels / 1.7);
         ImageView imvMenuButton = (ImageView) findViewById(R.id.chl_imv_menu_button);
+        imvMenuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                final View popupView = layoutInflater.inflate(R.layout.popup_window, null);
+                popupWindow = new PopupWindow(popupView, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+                popupWindow.setBackgroundDrawable(new BitmapDrawable());
+                popupWindow.setOutsideTouchable(true);
+
+                if (popupWindow.isOutsideTouchable()) {
+                    popupWindow.dismiss();
+                    Log.i("CCVVBB", "rr: ");
+                }
+                popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                    @Override
+                    public void onDismiss() {
+                        //TODO do sth here on dismiss
+                    }
+                });
+
+                popupWindow.setAnimationStyle(android.R.style.Animation_InputMethod);
+                popupWindow.showAtLocation(popupView, Gravity.RIGHT | Gravity.TOP, 10, 30);
+                popupWindow.showAsDropDown(v);
+
+
+                TextView txtSearch = (TextView) popupView.findViewById(R.id.popup_txtItem1);
+                txtSearch.setTypeface(G.arial);
+                txtSearch.setText("Search");
+                txtSearch.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        Toast.makeText(ActivityChat.this, "1", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+                TextView txtClearHistory = (TextView) popupView.findViewById(R.id.popup_txtItem2);
+                txtClearHistory.setTypeface(G.arial);
+                txtClearHistory.setText("Clear History");
+                txtClearHistory.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        Toast.makeText(ActivityChat.this, "2", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+                TextView txtDeleteChat = (TextView) popupView.findViewById(R.id.popup_txtItem3);
+                txtDeleteChat.setTypeface(G.arial);
+                txtDeleteChat.setText("Delete Chat");
+                txtDeleteChat.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        Toast.makeText(ActivityChat.this, "3", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+                TextView txtMutNotification = (TextView) popupView.findViewById(R.id.popup_txtItem4);
+                txtMutNotification.setTypeface(G.arial);
+                txtMutNotification.setText("Mut Notification");
+                txtMutNotification.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        Toast.makeText(ActivityChat.this, "4", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+            }
+        });
 
 
         imvSmileButton = (MaterialDesignTextView) findViewById(R.id.chl_imv_smile_button);
@@ -554,13 +635,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
         //TODO [Saeed Mozaffari] [2016-09-07 5:12 PM] - if user have image set image otherwise set alphabet
         imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
-
-        imvMenuButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.e("ddd", "btn click");
-            }
-        });
 
         imvSendButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.fragments.NotRegisteredContactsFragment;
 import com.iGap.fragments.RegisteredContactsFragment;
 import com.iGap.libs.flowingdrawer.MenuFragment;
 import com.iGap.module.HelperDecodeFile;
@@ -156,11 +155,17 @@ public class FragmentDrawerMenu extends MenuFragment {
             @Override
             public void onClick(View view) {
 
-                Fragment fragment = NotRegisteredContactsFragment.newInstance();
-                Bundle bundle = new Bundle();
-                bundle.putString("TITLE", G.context.getString(R.string.invite_friend));
-                fragment.setArguments(bundle);
-                getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
+//                Fragment fragment = NotRegisteredContactsFragment.newInstance();
+//                Bundle bundle = new Bundle();
+//                bundle.putString("TITLE", G.context.getString(R.string.invite_friend));
+//                fragment.setArguments(bundle);
+//                getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
+
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "Hey Join iGap : https://www.igap.im/iGap.apk");
+                sendIntent.setType("text/plain");
+                startActivity(sendIntent);
                 ActivityMain.mLeftDrawerLayout.closeDrawer();
 
 
