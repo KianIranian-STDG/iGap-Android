@@ -99,7 +99,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         Contacts.FillRealmInviteFriend();
     }
 
-
     /**
      * init floating menu drawer
      */

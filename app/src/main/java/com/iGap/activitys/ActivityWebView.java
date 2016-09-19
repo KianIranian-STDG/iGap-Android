@@ -113,7 +113,6 @@ public class ActivityWebView extends ActivityEnhanced {
                 final View popupView = layoutInflater.inflate(R.layout.popup_faq, null);
 
                 popupWindow = new PopupWindow(popupView, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-
                 popupWindow.setBackgroundDrawable(new BitmapDrawable());
                 popupWindow.setOutsideTouchable(true);
 
