@@ -78,7 +78,7 @@ public class ContactGroupFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                // TODO: 9/17/2016 get selected list and go to the othe page
+                getSelectedLiset();
 
             }
         });
@@ -208,6 +208,21 @@ public class ContactGroupFragment extends Fragment {
         sizeTextEdittext = textString.length();
         edtSearch.setText(textString);
     }
+
+
+    private ArrayList<Long> getSelectedLiset() {
+
+        ArrayList<Long> list = new ArrayList<>();
+
+        for (int i = 0; i < contacts.size(); i++) {
+            if (contacts.get(i).isSelected) {
+                list.add(contacts.get(i).peerId);
+            }
+        }
+
+        return list;
+    }
+
 
     @Override
     public void onSaveInstanceState(Bundle outState) {

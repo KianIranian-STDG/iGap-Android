@@ -43,7 +43,7 @@
                     android:orientation="vertical">
 
                     <com.iGap.module.CircleImageView
-                        android:id="@+id/agp_imv_group_picture"
+                        android:id="@+id/agp_imv_group_avatar"
                         android:layout_width="@dimen/dp100"
                         android:layout_height="@dimen/dp100"
                         android:src="@mipmap/back_chat2" />
@@ -204,7 +204,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scrollbars="vertical"
+                    android:visibility="visible"
                     app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+                <TextView
+                    android:id="@+id/agp_txt_more"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="@dimen/dp12"
+                    android:text="more..."
+                    android:textSize="@dimen/sp16" />
 
 
             </LinearLayout>
@@ -226,10 +236,10 @@
                 android:id="@+id/agp_txt_str_notification_and_sound"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/dp18"
-                android:paddingTop="@dimen/dp4"
                 android:gravity="left"
+                android:paddingBottom="@dimen/dp18"
                 android:paddingLeft="@dimen/dp16"
+                android:paddingTop="@dimen/dp4"
                 android:singleLine="true"
                 android:text="Notificaion and Sound"
                 android:textColor="@android:color/black"
@@ -239,10 +249,10 @@
                 android:id="@+id/agp_txt_str_delete_and_leave_group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/dp18"
                 android:gravity="left"
-                android:paddingTop="@dimen/dp4"
+                android:paddingBottom="@dimen/dp18"
                 android:paddingLeft="@dimen/dp16"
+                android:paddingTop="@dimen/dp4"
                 android:singleLine="true"
                 android:text="Delete and Leave Group"
                 android:textColor="@android:color/black"

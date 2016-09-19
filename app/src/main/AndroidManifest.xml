@@ -44,6 +44,9 @@
             android:name=".activitys.ActivityExplorer"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"></activity>
         <activity
+            android:name=".activitys.ActivityGroupProfile"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"></activity>
+        <activity
             android:name=".activitys.ActivityComment"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
         <activity
