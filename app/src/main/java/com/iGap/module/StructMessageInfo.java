@@ -6,6 +6,7 @@ import android.text.format.DateUtils;
 
 import com.iGap.proto.ProtoChatSendMessage;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmUserInfo;
 
 import io.realm.Realm;
@@ -75,6 +76,10 @@ public class StructMessageInfo implements Parcelable {
     public long fileSize;
 
     public long time;
+
+    public boolean isTimeMessage() {
+        return senderID == null;
+    }
 
     public StructMessageInfo() {
     }
@@ -166,6 +171,25 @@ public class StructMessageInfo implements Parcelable {
         if (builder.getRoomMessage().getUserId() == userId) {
             messageInfo.sendType = MyType.SendType.send;
         } else if (builder.getRoomMessage().getUserId() != userId) {
+            messageInfo.sendType = MyType.SendType.recvive;
+        }
+        return messageInfo;
+    }
+
+    public static StructMessageInfo convert(RealmRoomMessage roomMessage) {
+        Realm realm = Realm.getDefaultInstance();
+        long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
+        StructMessageInfo messageInfo = new StructMessageInfo();
+        messageInfo.status = roomMessage.getStatus().toString();
+        messageInfo.messageID = Long.toString(roomMessage.getMessageId());
+        messageInfo.messageType = ProtoGlobal.RoomMessageType.valueOf(roomMessage.getMessageType());
+        // TODO: 9/8/2016 [Alireza Eskandarpour Shoferi] inja bayad createTime bezari ke felan server nemide.
+        messageInfo.time = roomMessage.getUpdateTime() * DateUtils.SECOND_IN_MILLIS;
+        messageInfo.messageText = roomMessage.getMessage();
+        messageInfo.senderID = Long.toString(roomMessage.getUserId());
+        if (roomMessage.getUserId() == userId) {
+            messageInfo.sendType = MyType.SendType.send;
+        } else if (roomMessage.getUserId() != userId) {
             messageInfo.sendType = MyType.SendType.recvive;
         }
         return messageInfo;
