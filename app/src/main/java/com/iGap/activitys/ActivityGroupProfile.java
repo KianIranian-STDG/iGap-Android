@@ -1,7 +1,12 @@
 package com.iGap.activitys;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,11 +17,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.items.ContatItemGroupProfile;
 import com.iGap.fragments.ContactGroupFragment;
+import com.iGap.module.AttachFile;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.Contacts;
 import com.iGap.module.CustomTextViewMedium;
@@ -46,8 +54,8 @@ public class ActivityGroupProfile extends ActivityEnhanced {
     private TextView txtNumberOfSharedMedia;
     private TextView txtMemberNumber;
     private TextView txtMore;
-
-    private FastAdapter fastAdapter;
+    private AppBarLayout appBarLayout;
+    private FloatingActionButton fab;
 
     private int numberOfloadItem = 5;
 
@@ -55,6 +63,9 @@ public class ActivityGroupProfile extends ActivityEnhanced {
     List<IItem> items;
     ItemAdapter itemAdapter;
     RecyclerView recyclerView;
+    private FastAdapter fastAdapter;
+
+    AttachFile attachFile;
 
 
     @Override
@@ -63,6 +74,8 @@ public class ActivityGroupProfile extends ActivityEnhanced {
         setContentView(R.layout.activity_group_profile);
 
         initComponent();
+
+        attachFile = new AttachFile(this);
 
     }
 
@@ -95,6 +108,41 @@ public class ActivityGroupProfile extends ActivityEnhanced {
         txtMemberNumber = (TextView) findViewById(R.id.agp_txt_number_of_shared_media);
 
 
+        appBarLayout = (AppBarLayout) findViewById(R.id.agp_appbar);
+
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+
+                TextView titleToolbar = (TextView) findViewById(R.id.agp_txt_titleToolbar);
+                if (verticalOffset < -appBarLayout.getTotalScrollRange() / 4) {
+
+                    titleToolbar.animate().alpha(1).setDuration(300);
+                    titleToolbar.setVisibility(View.VISIBLE);
+
+                } else {
+                    titleToolbar.animate().alpha(0).setDuration(500);
+                    titleToolbar.setVisibility(View.GONE);
+                }
+            }
+        });
+
+
+        fab = (FloatingActionButton) findViewById(R.id.agp_fab_setPic);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!G.imageFile.exists()) {
+                    startDialog(R.array.profile);
+                } else {
+                    startDialog(R.array.profile_delete);
+                }
+            }
+        });
+
+
+
+
         txtMore = (TextView) findViewById(R.id.agp_txt_more);
         txtMore.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,13 +158,8 @@ public class ActivityGroupProfile extends ActivityEnhanced {
                 itemAdapter.clear();
                 itemAdapter.add(items);
 
-
                 if (items.size() >= listSize)
                     txtMore.setVisibility(View.GONE);
-
-
-                int viewHeight = (int) (getResources().getDimension(R.dimen.dp68) * items.size()); // TODO: 9/19/2016 get real size later nejati
-                recyclerView.getLayoutParams().height = viewHeight;
 
             }
         });
@@ -229,6 +272,63 @@ public class ActivityGroupProfile extends ActivityEnhanced {
 
 
     }
+
+
+    //dialog for choose pic from gallery or camera
+    private void startDialog(int r) {
+
+        new MaterialDialog.Builder(this)
+                .title("Choose Picture")
+                .negativeText("CANCEL")
+                .items(r)
+                .itemsCallback(new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+
+                        if (text.toString().equals("From Camera")) {
+
+                            if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
+
+                                attachFile.requestTakePicture();
+
+                                dialog.dismiss();
+
+                            } else {
+                                Toast.makeText(ActivityGroupProfile.this, "Please check your Camera", Toast.LENGTH_SHORT).show();
+                            }
+
+                        } else if (text.toString().equals("Delete photo")) {
+                            // TODO: 9/20/2016  delete  group image
+
+                        } else {
+                            attachFile.requestOpenGalleryForImage();
+                        }
+
+                    }
+                })
+                .show();
+    }
+
+    //=====================================================================================result from camera , gallery and crop
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case AttachFile.request_code_TAKE_PICTURE:
+                    Log.e("ddd", AttachFile.imagePath + "     image path");
+                    break;
+                case AttachFile.request_code_media_from_gallary:
+                    Log.e("ddd", AttachFile.getFilePathFromUri(data.getData()) + "    gallary file path");
+                    break;
+
+            }
+
+        }
+
+    }
+
 
 
     public class StickyHeaderAdapter extends AbstractAdapter implements StickyRecyclerHeadersAdapter {
