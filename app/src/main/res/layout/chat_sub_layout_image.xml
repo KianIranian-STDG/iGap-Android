@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/chatSubLayoutImage"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layoutDirection="ltr"
-    android:maxWidth="@dimen/dp300"
-    android:layout_marginBottom="@dimen/dp4">
+             xmlns:tools="http://schemas.android.com/tools"
+             android:id="@+id/chatSubLayoutImage"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layoutDirection="ltr"
+             android:textDirection="firstStrong"
+             android:maxWidth="@dimen/dp300"
+             android:layout_marginBottom="@dimen/dp4">
 
     <LinearLayout
         android:id="@+id/mainContainer"

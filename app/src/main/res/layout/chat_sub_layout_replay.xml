@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="@dimen/dp48"
-    android:layout_marginBottom="@dimen/dp8"
-    android:gravity="left|center"
-    android:layoutDirection="ltr"
-    android:orientation="horizontal"
-    android:padding="@dimen/dp4">
+              android:layout_width="wrap_content"
+              android:layout_height="@dimen/dp48"
+              android:layout_marginBottom="@dimen/dp8"
+              android:gravity="left|center"
+              android:layoutDirection="ltr"
+              android:textDirection="firstStrong"
+              android:orientation="horizontal"
+              android:padding="@dimen/dp4">
 
     <ImageView
         android:layout_width="@dimen/dp40"
