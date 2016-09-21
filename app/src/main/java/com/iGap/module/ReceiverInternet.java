@@ -15,7 +15,10 @@ public class ReceiverInternet extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (HelperCheckInternetConnection.hasNetwork()) {
-            WebSocketClient.getInstance();
+            if (G.canRunReceiver) {
+                G.canRunReceiver = false;
+                WebSocketClient.getInstance();
+            }
         } else {
             HelperConnectionState.connectionState(Config.ConnectionState.WAITING_FOR_NETWORK);
             G.socketConnection = false;

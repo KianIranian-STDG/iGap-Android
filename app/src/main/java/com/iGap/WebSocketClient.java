@@ -2,6 +2,7 @@ package com.iGap;
 
 import android.util.Log;
 
+import com.iGap.helper.HelperCheckInternetConnection;
 import com.iGap.helper.HelperConnectionState;
 import com.iGap.response.HandleResponse;
 import com.neovisionaries.ws.client.WebSocket;
@@ -21,6 +22,7 @@ public class WebSocketClient {
 
     private static WebSocket webSocketClient;
     private static WebSocket webSocketFileUpload;
+    private static int count = 0;
 
     private static WebSocket createFileUploadConnection(String fileSocketAddress) {
         WebSocket webSocketFile = null;
@@ -128,8 +130,8 @@ public class WebSocketClient {
             public void run() {
                 if (G.allowForConnect) {
                     try {
-                        Log.i("SOC_WebSocket", "Connecting");
                         if (finalWs != null) {
+                            Log.i("SOC_WebSocket", "Connecting");
                             HelperConnectionState.connectionState(Config.ConnectionState.CONNECTING);
                             finalWs.connect();
                         }
@@ -186,7 +188,7 @@ public class WebSocketClient {
 
     private static void reconnect() {
         HelperConnectionState.connectionState(Config.ConnectionState.CONNECTING);
-        if (G.allowForConnect) {
+        if (G.allowForConnect && HelperCheckInternetConnection.hasNetwork()) {
             resetWebsocketInfo();
             G.handler.postDelayed(new Runnable() {
                 @Override
@@ -198,6 +200,9 @@ public class WebSocketClient {
     }
 
     private static void resetWebsocketInfo() {
+        count = 0;
+        G.canRunReceiver = true;
+        G.symmetricKey = null;
         webSocketClient = null;
         G.isSecure = false;
         G.userLogin = false;
@@ -213,8 +218,8 @@ public class WebSocketClient {
             @Override
             public void run() {
 
-                int count = 0;
-                while (G.symmetricKey == null) {
+
+                while (G.symmetricKey == null && G.socketConnection) {
 
                     if (count < 3) {
                         count++;
@@ -227,8 +232,8 @@ public class WebSocketClient {
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                Log.i("SOC", "I need 30001");
-                                if (G.symmetricKey == null) {
+                                if (G.symmetricKey == null && G.socketConnection) {
+                                    Log.i("SOC", "I need 30001");
                                     WebSocketClient.getInstance().sendText("i need 30001");
                                 }
                             }

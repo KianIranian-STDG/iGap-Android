@@ -110,6 +110,7 @@ public class G extends Application {
     public static boolean allowForConnect = true;//TODO [Saeed Mozaffari] [2016-08-18 12:09 PM] - set allowForConnect to realm
     public static boolean userLogin = false;
     public static boolean socketConnection = false;
+    public static boolean canRunReceiver = false;
 
     public static SecretKeySpec symmetricKey;
     public static String symmetricMethod;
