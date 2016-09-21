@@ -835,6 +835,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             if (lastMessage != null) {
                 info.lastMessageTime = lastMessage.getUpdateTime();
                 info.lastmessage = lastMessage.getMessage();
+                info.lastMessageSenderIsMe = lastMessage.isSenderMe();
                 info.lastMessageStatus = lastMessage.getStatus();
             }
             info.muteNotification = realmRoom.getMute(); // FIXME
@@ -861,7 +862,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             super.onBackPressed();
         }
     }
-
 
 
     @Override
@@ -910,6 +910,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             chatInfo.lastMessageTime = roomMessage.getUpdateTime();
             chatInfo.lastmessage = roomMessage.getMessage();
             chatInfo.lastMessageStatus = roomMessage.getStatus();
+            chatInfo.lastMessageSenderIsMe = roomMessage.isSenderMe();
         }
         chatInfo.chatType = room.getType();
         switch (room.getType()) {

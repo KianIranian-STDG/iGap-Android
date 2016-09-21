@@ -101,7 +101,24 @@ public class ChatItem extends AbstractItem<ChatItem, ChatItem.ViewHolder> {
         }
 
         holder.name.setText(mInfo.chatTitle);
-        holder.lastMessage.setText(mInfo.lastmessage);
+
+        if (!mInfo.lastmessage.isEmpty()) {
+            holder.lastMessage.setText(mInfo.lastmessage);
+            holder.lastMessage.setVisibility(View.VISIBLE);
+
+            if (mInfo.lastMessageSenderIsMe) {
+                AbstractChatItem.updateMessageStatus(holder.messageStatus, mInfo.lastMessageStatus);
+
+                holder.messageStatus.setVisibility(View.VISIBLE);
+            } else {
+                holder.messageStatus.setVisibility(View.GONE);
+            }
+        } else {
+            holder.lastMessage.setVisibility(View.GONE);
+            holder.messageStatus.setVisibility(View.GONE);
+        }
+
+
         if (mInfo.lastMessageTime != 0) {
             holder.lastSeen.setText(TimeUtils.toLocal(mInfo.lastMessageTime, G.ROOM_LAST_MESSAGE_TIME));
             holder.lastSeen.setVisibility(View.VISIBLE);
@@ -111,16 +128,10 @@ public class ChatItem extends AbstractItem<ChatItem, ChatItem.ViewHolder> {
 
         if (mInfo.unreadMessagesCount < 1) {
             holder.unreadMessage.setVisibility(View.GONE);
-            holder.lastMessage.setVisibility(View.GONE);
-            holder.messageStatus.setVisibility(View.GONE);
         } else {
             holder.unreadMessage.setVisibility(View.VISIBLE);
-            holder.lastMessage.setVisibility(View.VISIBLE);
-            holder.messageStatus.setVisibility(View.VISIBLE);
 
             holder.unreadMessage.setText(Integer.toString(mInfo.unreadMessagesCount));
-
-            AbstractChatItem.updateMessageStatus(holder.messageStatus, mInfo.lastMessageStatus);
 
             if (mInfo.muteNotification) {
                 holder.unreadMessage.setBackgroundResource(R.drawable.oval_gray);

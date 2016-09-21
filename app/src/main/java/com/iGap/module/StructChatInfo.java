@@ -23,6 +23,7 @@ public class StructChatInfo {
     public String chatTitle = "";
     public String lastmessage = "";
     public long lastMessageTime;
+    public boolean lastMessageSenderIsMe;
     public int unreadMessagesCount = 0;
     public String memberCount = "1";
     public String initials = "";
