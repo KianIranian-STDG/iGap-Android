@@ -224,13 +224,10 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             @Override
             public void onClick(View view) {
 
-//                Fragment fragment = ContactGroupFragment.newInstance();
-//                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
-//                mLeftDrawerLayout.closeDrawer();
 
-
-                startActivity(new Intent(ActivityMain.this, ActivityNewGroup.class));
-                finish();
+                Intent intent = new Intent(ActivityMain.this, ActivityNewGroup.class);
+                intent.putExtra("TYPE", "NewGroup");
+                startActivity(intent);
                 arcMenu.toggleMenu();
             }
         });
@@ -239,6 +236,11 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         btnCreateNewChannel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                Intent intent = new Intent(ActivityMain.this, ActivityNewGroup.class);
+                intent.putExtra("TYPE", "NewChanel");
+                startActivity(intent);
+
                 arcMenu.toggleMenu();
             }
         });

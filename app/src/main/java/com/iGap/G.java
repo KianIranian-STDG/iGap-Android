@@ -79,6 +79,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 public class G extends Application {
 
@@ -187,10 +188,12 @@ public class G extends Application {
     public static final String DIR_DOCUMENT = DIR_APP + "/document";
     public static final String DIR_SOUND_NOTIFICATION = DIR_APP + "/sound";
     public static final String DIR_CHAT_BACKGROUND = DIR_APP + "/chat_background";
-    public static final String DIR_NEW_GROUP = DIR_APP + "/.new_group";
+    public static final String DIR_NEW_GROUP = DIR_APP + "/new_group";
+    public static final String DIR_NEW_CHANEL = DIR_APP + "/new_chanel";
 
     public static File chatBackground;
-    public static File IMAGE_GROUP;
+    public static File IMAGE_NEW_GROUP;
+    public static File IMAGE_NEW_CHANEL;
 
 
     public static final String CHAT_MESSAGE_TIME = "H:mm";
@@ -199,6 +202,13 @@ public class G extends Application {
 
     @Override
     public void onCreate() {
+
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath("fonts/arial.ttf")
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        );
+
         MultiDex.install(getApplicationContext());
         super.onCreate();
         new File(DIR_APP).mkdirs();
@@ -209,9 +219,11 @@ public class G extends Application {
         new File(DIR_SOUND_NOTIFICATION).mkdirs();
         new File(DIR_CHAT_BACKGROUND).mkdirs();
         new File(DIR_NEW_GROUP).mkdirs();
+        new File(DIR_NEW_CHANEL).mkdirs();
 
         chatBackground = new File(DIR_CHAT_BACKGROUND, "addChatBackground.jpg");
-        IMAGE_GROUP = new File(G.DIR_NEW_GROUP, "image_new_group.png");
+        IMAGE_NEW_GROUP = new File(G.DIR_NEW_GROUP, "image_new_group.png");
+        IMAGE_NEW_CHANEL = new File(G.DIR_NEW_CHANEL, "image_new_chanel.png");
 
         context = getApplicationContext();
         handler = new Handler();

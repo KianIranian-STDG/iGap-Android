@@ -100,12 +100,9 @@ public class FragmentDrawerMenu extends MenuFragment {
         layoutNewGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-//                Fragment fragment = ContactGroupFragment.newInstance();
-//                getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
-//                ActivityMain.mLeftDrawerLayout.closeDrawer();
-
-                G.currentActivity.startActivity(new Intent(G.currentActivity, ActivityNewGroup.class));
+                Intent intent = new Intent(G.currentActivity, ActivityNewGroup.class);
+                intent.putExtra("TYPE", "NewGroup");
+                G.currentActivity.startActivity(intent);
                 ActivityMain.mLeftDrawerLayout.closeDrawer();
             }
         });
@@ -132,6 +129,11 @@ public class FragmentDrawerMenu extends MenuFragment {
         layoutNewChannel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                Intent intent = new Intent(G.currentActivity, ActivityNewGroup.class);
+                intent.putExtra("TYPE", "NewChanel");
+                G.currentActivity.startActivity(intent);
+                ActivityMain.mLeftDrawerLayout.closeDrawer();
             }
         });
 
@@ -154,12 +156,6 @@ public class FragmentDrawerMenu extends MenuFragment {
         layoutInviteFriends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-//                Fragment fragment = NotRegisteredContactsFragment.newInstance();
-//                Bundle bundle = new Bundle();
-//                bundle.putString("TITLE", G.context.getString(R.string.invite_friend));
-//                fragment.setArguments(bundle);
-//                getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
 
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);

@@ -1,5 +1,6 @@
 package com.iGap.activitys;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -16,6 +17,8 @@ import com.iGap.module.HelperCopyFile;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 public class ActivityCrop extends ActivityEnhanced {
 
     private ImageView imgPic;
@@ -25,6 +28,11 @@ public class ActivityCrop extends ActivityEnhanced {
     private String page;
     private String type;
     private String pathImageUser;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,8 +97,14 @@ public class ActivityCrop extends ActivityEnhanced {
                         Intent intent = new Intent(ActivityCrop.this, ActivitySetting.class);
                         startActivity(intent);
                         finish();
-                    } else if (page.equals("NEW_GROUP")) {
+                    } else if (page.equals("NewGroup")) {
                         Intent intent = new Intent(ActivityCrop.this, ActivityNewGroup.class);
+                        intent.putExtra("TYPE", "NewGroup");
+                        startActivity(intent);
+                        finish();
+                    } else if (page.equals("NewChanel")) {
+                        Intent intent = new Intent(ActivityCrop.this, ActivityNewGroup.class);
+                        intent.putExtra("TYPE", "NewChanel");
                         startActivity(intent);
                         finish();
                     }
@@ -116,8 +130,14 @@ public class ActivityCrop extends ActivityEnhanced {
                         startActivity(intent);
                         finish();
 
-                    } else if (page.equals("NEW_GROUP")) {
+                    } else if (page.equals("NewGroup")) {
                         Intent intent = new Intent(ActivityCrop.this, ActivityNewGroup.class);
+                        intent.putExtra("TYPE", "NewGroup");
+                        startActivity(intent);
+                        finish();
+                    } else if (page.equals("NewChanel")) {
+                        Intent intent = new Intent(ActivityCrop.this, ActivityNewGroup.class);
+                        intent.putExtra("TYPE", "NewChanel");
                         startActivity(intent);
                         finish();
                     }
@@ -131,9 +151,14 @@ public class ActivityCrop extends ActivityEnhanced {
 
                 if (resultUri != null && type.equals("crop") || type.equals("gallery")) {
                     pathImageUser = getRealPathFromURI(resultUri);
-                    if (page.equals("NEW_GROUP")) {
-                        if (G.IMAGE_GROUP.exists()) G.imageFile.delete();// if file exists delete
-                        HelperCopyFile.copyFile(pathImageUser, G.IMAGE_GROUP.toString());
+                    if (page.equals("NewGroup")) {
+                        if (G.IMAGE_NEW_GROUP.exists())
+                            G.imageFile.delete();// if file exists delete
+                        HelperCopyFile.copyFile(pathImageUser, G.IMAGE_NEW_GROUP.toString());
+                    } else if (page.equals("NewChanel")) {
+                        if (G.IMAGE_NEW_GROUP.exists())
+                            G.imageFile.delete();// if file exists delete
+                        HelperCopyFile.copyFile(pathImageUser, G.IMAGE_NEW_CHANEL.toString());
                     } else {
                         if (G.imageFile.exists()) G.imageFile.delete();// if file exists delete
                         HelperCopyFile.copyFile(pathImageUser, G.imageFile.toString());
@@ -150,11 +175,16 @@ public class ActivityCrop extends ActivityEnhanced {
 
                     } else if (page.equals("setting")) {
                         Intent intent = new Intent(ActivityCrop.this, ActivitySetting.class);
-
                         startActivity(intent);
                         finish();
-                    } else if (page.equals("NEW_GROUP")) {
+                    } else if (page.equals("NewGroup")) {
                         Intent intent = new Intent(ActivityCrop.this, ActivityNewGroup.class);
+                        intent.putExtra("TYPE", "NewGroup");
+                        startActivity(intent);
+                        finish();
+                    } else if (page.equals("NewChanel")) {
+                        Intent intent = new Intent(ActivityCrop.this, ActivityNewGroup.class);
+                        intent.putExtra("TYPE", "NewChanel");
                         startActivity(intent);
                         finish();
                     }

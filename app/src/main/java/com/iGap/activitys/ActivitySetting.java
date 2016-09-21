@@ -1,5 +1,6 @@
 package com.iGap.activitys;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -44,6 +45,7 @@ import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivitySetting extends ActivityEnhanced {
 
@@ -100,11 +102,16 @@ public class ActivitySetting extends ActivityEnhanced {
     public static int KEY_AD_ROAMING_MUSIC = -1;
     public static int KEY_AD_ROAMINGN_GIF = -1;
 
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
+
 
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 

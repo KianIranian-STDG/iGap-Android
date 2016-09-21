@@ -1,5 +1,6 @@
 package com.iGap.activitys;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -29,6 +30,10 @@ import com.iGap.proto.ProtoGlobal;
 import com.iGap.request.RequestClientGetRoom;
 import com.iGap.request.RequestGroupCreate;
 
+import java.io.File;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 public class ActivityNewGroup extends ActivityEnhanced {
 
     private MaterialDesignTextView txtBack;
@@ -38,25 +43,48 @@ public class ActivityNewGroup extends ActivityEnhanced {
     private Uri uriIntent;
     public static Bitmap decodeBitmapProfile = null;
     private TextView txtNextStep, txtCancel, txtTitleToolbar;
+    private String prefix = "NewGroup";
+    private String path;
 
     private EditText edtGroupName;
     private LinedEditText edtDescription;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_group);
 
+
+        if (getIntent().getExtras() != null) {
+            Bundle bundle = getIntent().getExtras();
+            prefix = bundle.getString("TYPE");
+        }
+
         txtTitleToolbar = (TextView) findViewById(R.id.ng_txt_titleToolbar);
         txtTitleToolbar.setTypeface(G.arial);
+        if (prefix.equals("NewChanel")) {
+            txtTitleToolbar.setText("New Chanel");
+        } else {
+            txtTitleToolbar.setText("New Group");
+        }
 
         //=======================back on toolbar
+
+
         txtBack = (MaterialDesignTextView) findViewById(R.id.ng_txt_back);
         txtBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                startActivity(new Intent(ActivityNewGroup.this, ActivityMain.class));
+                if (G.IMAGE_NEW_GROUP.exists()) {
+                    G.IMAGE_NEW_GROUP.delete();
+                } else {
+                    G.IMAGE_NEW_CHANEL.delete();
+                }
                 finish();
             }
         });
@@ -79,7 +107,12 @@ public class ActivityNewGroup extends ActivityEnhanced {
                                     if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
 
                                         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                        uriIntent = Uri.fromFile(G.IMAGE_GROUP);
+                                        if (prefix.equals("NewChanel")) {
+                                            uriIntent = Uri.fromFile(G.IMAGE_NEW_CHANEL);
+                                        } else {
+                                            uriIntent = Uri.fromFile(G.IMAGE_NEW_GROUP);
+                                        }
+
                                         intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
                                         startActivityForResult(intent, myResultCodeCamera);
                                         dialog.dismiss();
@@ -98,8 +131,19 @@ public class ActivityNewGroup extends ActivityEnhanced {
             }
         });
 
-        if (G.IMAGE_GROUP.exists()) {
-            decodeBitmapProfile = HelperDecodeFile.decodeFile(G.IMAGE_GROUP);
+        if (prefix.equals("NewChanel")) {
+            path = G.DIR_NEW_CHANEL;
+        } else {
+            path = G.DIR_NEW_GROUP;
+        }
+
+        if (G.IMAGE_NEW_GROUP.exists()) {
+            decodeBitmapProfile = HelperDecodeFile.decodeFile(G.IMAGE_NEW_GROUP);
+            imgCircleImageView.setImageBitmap(decodeBitmapProfile);
+            imgCircleImageView.setPadding(0, 0, 0, 0);
+            imgCircleImageView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+        } else if (G.IMAGE_NEW_CHANEL.exists()) {
+            decodeBitmapProfile = HelperDecodeFile.decodeFile(G.IMAGE_NEW_CHANEL);
             imgCircleImageView.setImageBitmap(decodeBitmapProfile);
             imgCircleImageView.setPadding(0, 0, 0, 0);
             imgCircleImageView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
@@ -107,7 +151,13 @@ public class ActivityNewGroup extends ActivityEnhanced {
 
         //=======================name of group
         edtGroupName = (EditText) findViewById(R.id.ng_edt_newGroup);
-        edtGroupName.setTypeface(G.arial);
+        if (prefix.equals("NewChanel")) {
+            edtGroupName.setHint("New Chanel");
+        } else {
+            edtGroupName.setHint("New Group");
+        }
+
+//        edtGroupName.setTypeface(G.arial);
         //=======================description group
         edtDescription = (LinedEditText) findViewById(R.id.ng_edt_description);
 
@@ -118,24 +168,44 @@ public class ActivityNewGroup extends ActivityEnhanced {
         edtDescription.setLines(4);
         edtDescription.setMaxLines(4);
         //=======================button next step
+
         txtNextStep = (TextView) findViewById(R.id.ng_txt_nextStep);
         txtNextStep.setTypeface(G.arial);
         txtNextStep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
+                if (imgCircleImageView != null) {
+                    if (edtDescription.getText().toString().length() > 0) {
+                        if (edtGroupName.getText().toString().length() > 0) {
+                            boolean success;
+                            String newName = edtGroupName.getText().toString().replace(" ", "_");
+                            File file2 = new File(path, prefix + "_" + newName + Math.random() * 10000 + 1 + ".png");
+                            if (prefix.equals("NewChanel")) {
+                                success = G.IMAGE_NEW_CHANEL.renameTo(file2);
+                            } else {
+                                success = G.IMAGE_NEW_GROUP.renameTo(file2);
+                            }
 
-//                if (G.IMAGE_GROUP.exists()) {
-                if (edtDescription.getText().toString().length() > 0) {
-                    if (edtGroupName.getText().toString().length() > 0) {
+                            if (success) {
 
-                        createGroup();
-
+                                if (prefix.equals("NewChanel")) {
+                                    startActivity(new Intent(ActivityNewGroup.this, ActivityNewChanelFinish.class));
+                                    finish();
+                                } else {
+                                    createGroup();
+                                    Fragment fragment = ContactGroupFragment.newInstance();
+                                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.ng_fragmentContainer, fragment).commit();
+                                    ActivityMain.mLeftDrawerLayout.closeDrawer();
+                                    finish();
+                                }
+                            }
+                        } else {
+                            Toast.makeText(ActivityNewGroup.this, "Please Description tour Group", Toast.LENGTH_SHORT).show();
+                        }
                     } else {
-                        Toast.makeText(ActivityNewGroup.this, "Please Description tour Group", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ActivityNewGroup.this, "Please Enter Your Name Group", Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    Toast.makeText(ActivityNewGroup.this, "Please Enter Your Name Group", Toast.LENGTH_SHORT).show();
                 }
 //                }
             }
@@ -146,7 +216,11 @@ public class ActivityNewGroup extends ActivityEnhanced {
         txtCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(ActivityNewGroup.this, ActivityMain.class));
+                if (G.IMAGE_NEW_GROUP.exists()) {
+                    G.IMAGE_NEW_GROUP.delete();
+                } else {
+                    G.IMAGE_NEW_CHANEL.delete();
+                }
                 finish();
             }
         });
@@ -193,7 +267,7 @@ public class ActivityNewGroup extends ActivityEnhanced {
             Intent intent = new Intent(ActivityNewGroup.this, ActivityCrop.class);
             intent.putExtra("IMAGE_CAMERA", uriIntent.toString());
             intent.putExtra("TYPE", "camera");
-            intent.putExtra("PAGE", "NEW_GROUP");
+            intent.putExtra("PAGE", prefix);
             startActivity(intent);
             finish();
 
@@ -201,7 +275,7 @@ public class ActivityNewGroup extends ActivityEnhanced {
             Intent intent = new Intent(ActivityNewGroup.this, ActivityCrop.class);
             intent.putExtra("IMAGE_CAMERA", data.getData().toString());
             intent.putExtra("TYPE", "gallery");
-            intent.putExtra("PAGE", "NEW_GROUP");
+            intent.putExtra("PAGE", prefix);
             startActivity(intent);
             finish();
         }

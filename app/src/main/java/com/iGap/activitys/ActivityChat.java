@@ -307,7 +307,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             realm.close();
         }
 
-
         initComponent();
         initAppbarSelected();
         initCallbacks();

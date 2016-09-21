@@ -96,7 +96,6 @@ public class ActivityGroupProfile extends ActivityEnhanced {
         btnMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("ddd", "menu clicked");
             }
         });
 

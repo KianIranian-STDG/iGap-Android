@@ -88,6 +88,9 @@
                 android:layout_marginLeft="@dimen/dp20"
                 android:layout_marginRight="@dimen/dp20"
                 android:layout_marginTop="@dimen/dp24"
+                android:maxLines="4"
+                android:maxLength="500"
+                android:minLines="3"
                 android:background="@android:color/transparent"
                 android:hint="Description" />
 
@@ -101,6 +104,7 @@
                 android:layout_marginRight="@dimen/dp20"
                 android:layout_marginTop="@dimen/dp52"
                 android:text="NEXT STEP"
+                android:singleLine="false"
                 android:textColor="@color/toolbar_background"
                 android:textSize="@dimen/dp16"
                 android:textStyle="bold" />

@@ -21,7 +21,6 @@
     <style name="FabButton">
         <item name="colorAccent">@android:color/white</item>
     </style>
-    st_BeforeCollapse
 
     <style name="st_BeforeCollapse">
         <item name="android:textSize">@dimen/sp18</item>

@@ -1,9 +1,11 @@
 package com.iGap.module;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.EditText;
 
@@ -15,67 +17,85 @@ import com.iGap.R;
  */
 public class LinedEditText extends EditText {
 
-//    private Rect mRect;
-//    private Paint mPaint;
-//
-//    // we need this constructor for LayoutInflater
-//    public LinedEditText(Context context, AttributeSet attrs) {
-//        super(context, attrs);
-//
-//        mRect = new Rect();
-//        mPaint = new Paint();
-//        mPaint.setStyle(Paint.Style.STROKE);
-//        mPaint.setColor(0x800000FF);
-//    }
-//
-//    @Override
-//    protected void onDraw(Canvas canvas) {
-//        int count = getLineCount();
-//        Rect r = mRect;
-//        Paint paint = mPaint;
-//
-//        for (int i = 0; i < count; i++) {
-//            int baseline = getLineBounds(i, r);
-//            canvas.drawLine(r.left, baseline + 1, r.right, baseline + 1, paint);
-//        }
-//
-//        super.onDraw(canvas);
-//    }
+    // the vertical offset scaling factor (10% of the height of the text)
+    private static final float VERTICAL_OFFSET_SCALING_FACTOR = 0.1f;
 
+    // the paint we will use to draw the lines
+    private Paint dashedLinePaint;
 
-    private Rect mRect;
-    private Paint mPaint;
+    // a reusable rect object
+    private Rect reuseableRect;
 
-    // we need this constructor for LayoutInflater
+    int initialCount = 0;
+
+    public LinedEditText(Context context) {
+        super(context);
+        init();
+        setMaxLines(4);
+    }
     public LinedEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
-
-        mRect = new Rect();
-        mPaint = new Paint();
-        mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        mPaint.setColor(G.context.getResources().getColor(R.color.toolbar_background)); //SET YOUR OWN COLOR HERE
+        init();
+        setMaxLines(4);
     }
 
+    public LinedEditText(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+        init();
+        setMaxLines(4);
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    private void init() {
+
+        // instantiate the rect
+        reuseableRect = new Rect();
+
+        // instantiate the paint
+        dashedLinePaint = new Paint();
+        dashedLinePaint.setColor(G.context.getResources().getColor(R.color.toolbar_background));
+        dashedLinePaint.setStyle(Paint.Style.STROKE);
+        initialCount = getMinLines();
+        setLines(initialCount);
+    }
     @Override
     protected void onDraw(Canvas canvas) {
-        //int count = getLineCount();
 
+        // get the height of the view
         int height = getHeight();
-        int line_height = getLineHeight();
 
-        int count = height / line_height;
+        // get the height of each line (not subtracting one from the line height makes lines uneven)
+        int lineHeight = getLineHeight() - 1;
 
-        if (getLineCount() > count)
-            count = getLineCount();//for long text with scrolling
+        // set the vertical offset basef off of the view width
+        int verticalOffset = (int) (lineHeight * VERTICAL_OFFSET_SCALING_FACTOR);
 
-        Rect r = mRect;
-        Paint paint = mPaint;
-        int baseline = getLineBounds(0, r);//first line
+        // the number of lines equals the height divided by the line height
+        int numberOfLines = height / lineHeight * 2;
 
-        for (int i = 0; i < count; i++) {
+        // if there are more lines than what appear on screen
+        if (getLineCount() > numberOfLines) {
 
-            canvas.drawLine(r.left, baseline + 1, r.right, baseline + 1, paint);
-            baseline += getLineHeight();//next line
+            // set the number of lines to the line count
+            numberOfLines = getLineCount();
+        }
+
+        // get the baseline for the first line
+        int baseline = getLineBounds(0, reuseableRect);
+
+        // for each line
+        for (int i = 0; i < numberOfLines; i++) {
+
+            // draw the line
+            canvas.drawLine(
+                    reuseableRect.left,             // left
+                    baseline + verticalOffset,      // top
+                    reuseableRect.right,            // right
+                    baseline + verticalOffset,      // bottom
+                    dashedLinePaint);               // paint instance
+
+            // get the baseline for the next line
+            baseline += lineHeight;
         }
 
         super.onDraw(canvas);
