@@ -1,18 +1,26 @@
 package com.iGap.activitys;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.view.AsyncLayoutInflater;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.iGap.G;
@@ -32,8 +40,6 @@ import com.iGap.request.RequestUserLogin;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import io.realm.Realm;
@@ -50,6 +56,23 @@ public class FileUploadTestActivity extends ActivityEnhanced implements OnFileUp
 
     // selected files (paths)
     private CopyOnWriteArrayList<FileUploadStructure> mSelectedFiles = new CopyOnWriteArrayList<>();
+    private CheckBox logAll;
+    private CheckBox logSectional;
+    private CheckBox logFinally;
+    private CheckBox logFileDetails;
+    private TextView ofuTxt;
+    private TextView gnbTxt;
+    private TextView rTxt;
+
+    public class LogStruct {
+        public CharSequence message;
+        public LogType logType;
+
+        public LogStruct(CharSequence message, LogType logType) {
+            this.message = message;
+            this.logType = logType;
+        }
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,30 +95,37 @@ public class FileUploadTestActivity extends ActivityEnhanced implements OnFileUp
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("image/*");
+                intent.setType("*/*");
                 startActivityForResult(intent, PICK_FILE_REQUEST_CODE);
             }
         });
 
         progressBarsLayout = (LinearLayout) findViewById(R.id.progressViews);
+        logAll = (CheckBox) findViewById(R.id.logAll);
+        logSectional = (CheckBox) findViewById(R.id.logSectional);
+        logFinally = (CheckBox) findViewById(R.id.logFinally);
+        logFileDetails = (CheckBox) findViewById(R.id.logFileDetails);
+
+        ofuTxt = (TextView) findViewById(R.id.ofuTxt);
+        gnbTxt = (TextView) findViewById(R.id.gnbTxt);
+        rTxt = (TextView) findViewById(R.id.rTxt);
 
         //init upload files button
         Button uploadFilesButton = (Button) findViewById(R.id.uploadFiles);
         uploadFilesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateLogs("NOTE: TIMES ARE IN MILLISECONDS");
-
                 for (FileUploadStructure fileUploadStructure : mSelectedFiles) {
                     // add progress bar
                     addProgressBar(fileUploadStructure.fileHash);
 
-                    updateLogs("*** UPLOADING STARTED ***");
-                    updateLogs("FILE NAME: " + fileUploadStructure.fileName);
-                    updateLogs("FILE SIZE: " + Long.toString(fileUploadStructure.fileSize));
-                    updateLogs("FILE HASH: " + fileUploadStructure.fileHash);
+                    updateLogs("*** UPLOADING STARTED ***", "", LogType.FILE_DETAILS);
+                    updateLogs("FILE NAME:", fileUploadStructure.fileName, LogType.FILE_DETAILS);
+                    updateLogs("FILE SIZE:", Long.toString(fileUploadStructure.fileSize), LogType.FILE_DETAILS);
+                    updateLogs("FILE HASH:", fileUploadStructure.fileHash, LogType.FILE_DETAILS);
 
                     // start uploading
+                    fileUploadStructure.uploadStartTime = System.currentTimeMillis();
                     G.uploaderUtil.startUploading(fileUploadStructure.fileSize, fileUploadStructure.fileHash);
                 }
             }
@@ -111,6 +141,7 @@ public class FileUploadTestActivity extends ActivityEnhanced implements OnFileUp
                 }
                 mSelectedFiles.clear();
                 progressBarsLayout.removeAllViews();
+                findViewById(R.id.minsSection).setVisibility(View.INVISIBLE);
             }
         });
 
@@ -122,15 +153,66 @@ public class FileUploadTestActivity extends ActivityEnhanced implements OnFileUp
                 if (adapter != null) {
                     adapter.clear();
                 }
+
+                findViewById(R.id.minsSection).setVisibility(View.INVISIBLE);
             }
         });
 
         // init logs view and its adapter
-        List<String> messages = new ArrayList<>();
-        adapter = new FileUploadTestAdapter(messages);
+        adapter = new FileUploadTestAdapter();
         logs = (RecyclerView) findViewById(R.id.logs);
         logs.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         logs.setAdapter(adapter);
+
+        logAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    adapter.showLogType(LogType.ALL);
+
+                    logSectional.setChecked(false);
+                    logFinally.setChecked(false);
+                    logFileDetails.setChecked(false);
+                }
+            }
+        });
+        logAll.setChecked(true);
+        logSectional.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    adapter.showLogType(LogType.SECTIONAL);
+
+                    logAll.setChecked(false);
+                    logFinally.setChecked(false);
+                    logFileDetails.setChecked(false);
+                }
+            }
+        });
+        logFinally.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    adapter.showLogType(LogType.FINALLY);
+
+                    logAll.setChecked(false);
+                    logSectional.setChecked(false);
+                    logFileDetails.setChecked(false);
+                }
+            }
+        });
+        logFileDetails.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    adapter.showLogType(LogType.FILE_DETAILS);
+
+                    logAll.setChecked(false);
+                    logSectional.setChecked(false);
+                    logFinally.setChecked(false);
+                }
+            }
+        });
     }
 
     /**
@@ -181,12 +263,19 @@ public class FileUploadTestActivity extends ActivityEnhanced implements OnFileUp
             File file = new File(filePath);
             String fileName = file.getName();
             long fileSize = file.length();
-            String fileHash = Utils.getFileHash(file, true);
-            mSelectedFiles.add(new FileUploadStructure(fileName, fileSize, filePath, fileHash));
 
+            FileUploadStructure fileUploadStructure = new FileUploadStructure(fileName, fileSize, filePath);
+            fileUploadStructure.openFile(filePath);
+
+            long fileHashStarted = System.currentTimeMillis();
+            String fileHash = Utils.getFileHash(fileUploadStructure, true);
             if (adapter != null) {
-                updateLogs("FILE SELECTED: " + fileName);
+                updateLogs("FILE SELECTED:", fileName, LogType.ALL);
+                updateLogs("ELAPSED FOR HASHING:", Long.toString(System.currentTimeMillis() - fileHashStarted), LogType.ALL);
             }
+            fileUploadStructure.setFileHash(fileHash);
+
+            mSelectedFiles.add(fileUploadStructure);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -194,9 +283,22 @@ public class FileUploadTestActivity extends ActivityEnhanced implements OnFileUp
         }
     }
 
-    private void updateLogs(String message) {
+    public enum LogType {
+        ALL, SECTIONAL, FINALLY, FILE_DETAILS
+    }
+
+    private void updateLogs(String subject, String message, LogType logType) {
         if (adapter != null) {
-            adapter.insert(message);
+            // make subject bold and colorized
+            SpannableStringBuilder stringBuilder = new SpannableStringBuilder(subject);
+            stringBuilder.append(" ");
+            stringBuilder.append(message);
+            ForegroundColorSpan colorSpan = new ForegroundColorSpan(Color.RED);
+            StyleSpan styleSpan = new StyleSpan(android.graphics.Typeface.BOLD);
+            stringBuilder.setSpan(colorSpan, 0, subject.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            stringBuilder.setSpan(styleSpan, 0, subject.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+
+            adapter.insert(new LogStruct(stringBuilder, logType));
             logs.smoothScrollToPosition(adapter.getItemCount());
         }
     }
@@ -246,22 +348,46 @@ public class FileUploadTestActivity extends ActivityEnhanced implements OnFileUp
 
     @Override
     public void onFileUploadComplete(final String fileHashAsIdentity, ProtoResponse.Response response) {
+        final FileUploadStructure fileUploadStructure = getSelectedFile(fileHashAsIdentity);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                updateLogs("CALLED (onFileUploadComplete) FOR HASH:", fileHashAsIdentity, LogType.ALL);
+
+                updateLogs("ELAPSED TILL UPLOAD COMPLETED:", Long.toString(System.currentTimeMillis() - fileUploadStructure.uploadStartTime), LogType.FINALLY);
+                updateLogs("ELAPSED FOR MAKING BYTES:", Long.toString(fileUploadStructure.getNBytesTime), LogType.FINALLY);
+                updateLogs("ELAPSED FOR REQUESTING:", Long.toString(fileUploadStructure.sendRequestsTime), LogType.FINALLY);
+                updateLogs("ELAPSED INSIDE ON_FILE_UPLOAD:", Long.toString(fileUploadStructure.elapsedInOnFileUpload), LogType.FINALLY);
+
+                int avgOFU = adapter.average(FileUploadTestAdapter.AverageType.OFU);
+                int avgGNB = adapter.average(FileUploadTestAdapter.AverageType.GNB);
+                int avgR = adapter.average(FileUploadTestAdapter.AverageType.R);
+
+                ofuTxt.setText("OFU: " + avgOFU);
+                gnbTxt.setText("GNB: " + avgGNB);
+                rTxt.setText("R: " + avgR);
+                findViewById(R.id.minsSection).setVisibility(View.VISIBLE);
+            }
+        });
+
         // remove from selected files to prevent calling this method multiple times
         // multiple calling may occurs because of the server
         try {
-            removeFromSelectedFiles(fileHashAsIdentity);
+            // FIXME: 9/19/2016 [Alireza Eskandarpour Shoferi] uncomment plz
+            //removeFromSelectedFiles(fileHashAsIdentity);
         } catch (Exception e) {
             Log.i("BreakPoint", e.getMessage());
             e.printStackTrace();
         }
 
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                updateLogs("CALLED: onFileUploadComplete, " + Long.toString(System.currentTimeMillis()));
-                updateLogs("FOR HASH: " + fileHashAsIdentity);
+        // close file into structure
+        try {
+            if (fileUploadStructure != null) {
+                fileUploadStructure.closeFile();
             }
-        });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -284,7 +410,7 @@ public class FileUploadTestActivity extends ActivityEnhanced implements OnFileUp
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                updateLogs("CALLED: onFileUploadInitResponse, " + Long.toString(System.currentTimeMillis()));
+                updateLogs("CALLED: onFileUploadInitResponse, ", Long.toString(System.currentTimeMillis()), LogType.ALL);
             }
         });
         // token needed for requesting upload
@@ -295,7 +421,7 @@ public class FileUploadTestActivity extends ActivityEnhanced implements OnFileUp
         // not already uploaded
         if (progress != 100.0) {
             try {
-                byte[] bytes = Utils.getNBytesFromOffset(fileUploadStructure.filePath, (int) offset, limit);
+                byte[] bytes = Utils.getNBytesFromOffset(fileUploadStructure, (int) offset, limit);
                 // make third request for first time
                 new RequestFileUpload().fileUpload(token, offset, bytes, fileHashAsIdentity);
             } catch (IOException e) {
@@ -337,15 +463,15 @@ public class FileUploadTestActivity extends ActivityEnhanced implements OnFileUp
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                updateLogs("CALLED: onFileUploadOptionResponse, " + Long.toString(System.currentTimeMillis()));
+                updateLogs("CALLED: onFileUploadOptionResponse, ", Long.toString(System.currentTimeMillis()), LogType.ALL);
             }
         });
 
         try {
             FileUploadStructure fileUploadStructure = getSelectedFile(fileHashAsIdentity);
             // getting bytes from file as server said
-            byte[] bytesFromFirst = Utils.getBytesFromStart(fileUploadStructure.filePath, firstBytesLimit);
-            byte[] bytesFromLast = Utils.getBytesFromEnd(fileUploadStructure.filePath, lastBytesLimit);
+            byte[] bytesFromFirst = Utils.getBytesFromStart(fileUploadStructure, firstBytesLimit);
+            byte[] bytesFromLast = Utils.getBytesFromEnd(fileUploadStructure, lastBytesLimit);
             // make second request
             new RequestFileUploadInit().fileUploadInit(bytesFromFirst, bytesFromLast, fileUploadStructure.fileSize, fileHashAsIdentity, fileUploadStructure.fileName);
         } catch (IOException e) {
@@ -356,11 +482,11 @@ public class FileUploadTestActivity extends ActivityEnhanced implements OnFileUp
 
     @Override
     public void onFileUpload(final double progress, long nextOffset, int nextLimit, String fileHashAsIdentity, ProtoResponse.Response response) {
+        final long startOnFileUploadTime = System.currentTimeMillis();
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                updateLogs("CALLED: onFileUploadResponse, " + Long.toString(System.currentTimeMillis()));
-                updateLogs("PROGRESS: " + Double.toString(progress));
+                updateLogs("PROGRESS:", Double.toString(progress), LogType.ALL);
             }
         });
 
@@ -378,11 +504,32 @@ public class FileUploadTestActivity extends ActivityEnhanced implements OnFileUp
                 Log.i("BreakPoint", fileHashAsIdentity + " > 100 nist");
                 FileUploadStructure fileUploadStructure = getSelectedFile(fileHashAsIdentity);
                 Log.i("BreakPoint", fileHashAsIdentity + " > fileUploadStructure");
-                byte[] bytes = Utils.getNBytesFromOffset(fileUploadStructure.filePath, (int) nextOffset, nextLimit);
+                final long startGetNBytesTime = System.currentTimeMillis();
+                byte[] bytes = Utils.getNBytesFromOffset(fileUploadStructure, (int) nextOffset, nextLimit);
+
+                fileUploadStructure.getNBytesTime += System.currentTimeMillis() - startGetNBytesTime;
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateLogs("ELAPSED FOR GETTING N BYTES:", Long.toString(System.currentTimeMillis() - startGetNBytesTime), LogType.SECTIONAL);
+                    }
+                });
                 Log.i("BreakPoint", fileHashAsIdentity + " > after bytes");
                 // make request till uploading has finished
+                final long startSendReqTime = System.currentTimeMillis();
+
                 new RequestFileUpload().fileUpload(fileUploadStructure.token, nextOffset, bytes, fileHashAsIdentity);
+                fileUploadStructure.sendRequestsTime += System.currentTimeMillis() - startSendReqTime;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateLogs("ELAPSED FOR REQUESTING:", Long.toString(System.currentTimeMillis() - startSendReqTime), LogType.SECTIONAL);
+                    }
+                });
                 Log.i("BreakPoint", fileHashAsIdentity + " > after fileUpload request");
+
+                fileUploadStructure.elapsedInOnFileUpload += System.currentTimeMillis() - startOnFileUploadTime;
             } else {
                 if (isFileExistInList(fileHashAsIdentity)) {
                     // handle when the file has already uploaded
@@ -392,7 +539,7 @@ public class FileUploadTestActivity extends ActivityEnhanced implements OnFileUp
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    //updateLogs("FIRST START TILL NOW: " + Long.toString(System.currentTimeMillis() - WebSocketClient.firstTime));
+                    updateLogs("ELAPSED IN ON_FILE_UPLOAD:", Long.toString(System.currentTimeMillis() - startOnFileUploadTime), LogType.SECTIONAL);
                 }
             });
         } catch (IOException e) {

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.iGap.R;
+import com.iGap.activitys.FileUploadTestActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,19 +16,45 @@ import java.util.List;
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 8/31/2016.
  */
 public class FileUploadTestAdapter extends RecyclerView.Adapter<FileUploadTestAdapter.ViewHolder> {
-    private List<String> messages = new ArrayList<>();
+    private List<FileUploadTestActivity.LogStruct> messages = new ArrayList<>();
+    private FileUploadTestActivity.LogType logType;
 
-    public FileUploadTestAdapter(List<String> messages) {
-        this.messages = messages;
-    }
-
-    public void insert(String msg) {
+    public void insert(FileUploadTestActivity.LogStruct msg) {
         messages.add(msg);
         notifyDataSetChanged();
     }
 
     public void clear() {
         messages.clear();
+        notifyDataSetChanged();
+    }
+
+    public enum AverageType {
+        OFU, GNB, R
+    }
+
+    public int average(AverageType type) {
+        int count = 0;
+        int numTotal = 0;
+
+        for (FileUploadTestActivity.LogStruct logStruct : messages) {
+            if (type == AverageType.OFU && logStruct.message.toString().contains("ELAPSED IN ON_FILE_UPLOAD")) {
+                numTotal += Integer.parseInt(logStruct.message.subSequence("ELAPSED IN ON_FILE_UPLOAD".length() + 2, logStruct.message.length()).toString());
+                count++;
+            } else if (type == AverageType.GNB && logStruct.message.toString().contains("ELAPSED FOR GETTING N BYTES")) {
+                numTotal += Integer.parseInt(logStruct.message.subSequence("ELAPSED FOR GETTING N BYTES".length() + 2, logStruct.message.length()).toString());
+                count++;
+            } else if (type == AverageType.R && logStruct.message.toString().contains("ELAPSED FOR REQUESTING")) {
+                numTotal += Integer.parseInt(logStruct.message.subSequence("ELAPSED FOR REQUESTING".length() + 2, logStruct.message.length()).toString());
+                count++;
+            }
+        }
+
+        return count == 0 ? 0 : numTotal / count;
+    }
+
+    public void showLogType(FileUploadTestActivity.LogType logType) {
+        this.logType = logType;
         notifyDataSetChanged();
     }
 
@@ -38,7 +65,11 @@ public class FileUploadTestAdapter extends RecyclerView.Adapter<FileUploadTestAd
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.message.setText(messages.get(position));
+        if (logType == FileUploadTestActivity.LogType.ALL || messages.get(position).logType == logType) {
+            holder.message.setText(messages.get(position).message);
+        } else {
+            holder.message.setVisibility(View.GONE);
+        }
     }
 
     @Override

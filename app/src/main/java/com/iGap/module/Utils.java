@@ -5,11 +5,8 @@ import android.app.Activity;
 import android.graphics.Point;
 import android.view.Display;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -28,66 +25,81 @@ public final class Utils {
     /**
      * get n bytes from file, starts from beginning
      *
-     * @param filePath   file path
-     * @param bytesCount total bytes
+     * @param uploadStructure FileUploadStructure
+     * @param bytesCount      total bytes
      * @return bytes
      * @throws IOException
      */
-    public static byte[] getBytesFromStart(String filePath, int bytesCount) throws IOException {
+    public static byte[] getBytesFromStart(FileUploadStructure uploadStructure, int bytesCount) throws IOException {
         // FileChannel has better performance than BufferedInputStream
-        FileChannel fileChannel = new RandomAccessFile(new File(filePath), "r").getChannel();
-        fileChannel.position(0);
+        uploadStructure.fileChannel.position(0);
         ByteBuffer byteBuffer = ByteBuffer.allocate(bytesCount);
-        fileChannel.read(byteBuffer);
-        return byteBuffer.array();
+        uploadStructure.fileChannel.read(byteBuffer);
+
+        byteBuffer.flip();
+
+        if (byteBuffer.hasArray()) {
+            return byteBuffer.array();
+        }
+        return null;
     }
 
     /**
      * get n bytes from file, starts from end
      *
-     * @param filePath   file path
-     * @param bytesCount total bytes
+     * @param uploadStructure FileUploadStructure
+     * @param bytesCount      total bytes
      * @return bytes
      * @throws IOException
      */
-    public static byte[] getBytesFromEnd(String filePath, int bytesCount) throws IOException {
+    public static byte[] getBytesFromEnd(FileUploadStructure uploadStructure, int bytesCount) throws IOException {
         // FileChannel has better performance than RandomAccessFile
-        FileChannel fileChannel = new RandomAccessFile(new File(filePath), "r").getChannel();
-        fileChannel.position(fileChannel.size() - bytesCount);
+        uploadStructure.fileChannel.position(uploadStructure.fileChannel.size() - bytesCount);
         ByteBuffer byteBuffer = ByteBuffer.allocate(bytesCount);
-        fileChannel.read(byteBuffer);
-        return byteBuffer.array();
+        uploadStructure.fileChannel.read(byteBuffer);
+
+        byteBuffer.flip();
+
+        if (byteBuffer.hasArray()) {
+            return byteBuffer.array();
+        }
+        return null;
     }
 
     /**
      * get n bytes from specified offset
      *
-     * @param filePath   file path
-     * @param offset     start reading from
-     * @param bytesCount total reading bytes
+     * @param uploadStructure FileUploadStructure
+     * @param offset          start reading from
+     * @param bytesCount      total reading bytes
      * @return bytes
      * @throws IOException
      */
-    public static byte[] getNBytesFromOffset(String filePath, int offset, int bytesCount) throws IOException {
+    public static byte[] getNBytesFromOffset(FileUploadStructure uploadStructure, int offset, int bytesCount) throws IOException {
         // FileChannel has better performance than RandomAccessFile
-        FileChannel fileChannel = new RandomAccessFile(new File(filePath), "r").getChannel();
-        fileChannel.position(offset);
+        uploadStructure.fileChannel.position(offset);
         ByteBuffer byteBuffer = ByteBuffer.allocate(bytesCount);
-        fileChannel.read(byteBuffer);
-        return byteBuffer.array();
+        uploadStructure.fileChannel.read(byteBuffer);
+
+        byteBuffer.flip();
+
+        if (byteBuffer.hasArray()) {
+            return byteBuffer.array();
+        }
+        return null;
     }
 
     /**
      * get SHA-256 from file
      * note: our server needs 32 bytes, so always pass true as second parameter.
      *
-     * @param file             File
+     * @param uploadStructure  FileUploadStructure
      * @param convertTo32Bytes by default the output is 64 bytes, if you want to convert output to 32 bytes, pass true
      */
-    public static String getFileHash(File file, boolean convertTo32Bytes) throws NoSuchAlgorithmException, IOException {
+    public static String getFileHash(FileUploadStructure uploadStructure, boolean convertTo32Bytes) throws NoSuchAlgorithmException, IOException {
         try {
             MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
-            byte[] fileBytes = fileToBytes(file);
+            byte[] fileBytes = fileToBytes(uploadStructure);
             byte[] fileHash = sha256.digest(fileBytes);
             StringBuilder sb = new StringBuilder();
             for (byte b : fileHash) {
@@ -107,20 +119,19 @@ public final class Utils {
     /**
      * return file to bytes
      *
-     * @param file File
+     * @param uploadStructure FileUploadStructure
      * @return bytes
      * @throws IOException
      */
-    public static byte[] fileToBytes(File file) throws IOException {
-        FileChannel fileChannel = new RandomAccessFile(file, "r").getChannel();
-        ByteBuffer byteBuffer = ByteBuffer.allocate((int) file.length());
-        fileChannel.read(byteBuffer);
-        return byteBuffer.array();
-   /*     int size = (int) file.length();
-        byte[] bytes = new byte[size];
-        BufferedInputStream buf = new BufferedInputStream(new FileInputStream(file));
-        buf.read(bytes, 0, bytes.length);
-        buf.close();
-        return bytes;*/
+    public static byte[] fileToBytes(FileUploadStructure uploadStructure) throws IOException {
+        ByteBuffer byteBuffer = ByteBuffer.allocate((int) uploadStructure.fileSize);
+        uploadStructure.fileChannel.read(byteBuffer);
+
+        byteBuffer.flip();
+
+        if (byteBuffer.hasArray()) {
+            return byteBuffer.array();
+        }
+        return null;
     }
 }
