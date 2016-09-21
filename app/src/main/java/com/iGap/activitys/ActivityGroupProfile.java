@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
@@ -177,6 +178,29 @@ public class ActivityGroupProfile extends ActivityEnhanced {
 
 
         initRecycleView();
+
+
+        TextView txtSetAdmin = (TextView) findViewById(R.id.agp_txt_set_admin);
+        txtSetAdmin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.e("ddd", "txtSetAdmin clicked");
+            }
+        });
+
+
+        final ToggleButton toggleButton = (ToggleButton) findViewById(R.id.agp_toggle_member_can_add_member);
+        toggleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (toggleButton.isChecked()) {
+                    Log.e("ddd", "toggle button on");
+                } else {
+                    Log.e("ddd", "toggle button off");
+                }
+            }
+        });
+
 
         TextView txtNotification = (TextView) findViewById(R.id.agp_txt_str_notification_and_sound);
         txtNotification.setOnClickListener(new View.OnClickListener() {
