@@ -43,7 +43,7 @@
                         android:id="@+id/agp_imv_group_avatar"
                         android:layout_width="@dimen/dp100"
                         android:layout_height="@dimen/dp100"
-                        android:src="@mipmap/back_chat2" />
+                        android:src="@mipmap/back_chat3"/>
 
 
                     <TextView
