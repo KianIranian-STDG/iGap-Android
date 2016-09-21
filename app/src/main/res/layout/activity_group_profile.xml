@@ -1,47 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
     android:id="@+id/fragmentContainer_group_profile"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layoutDirection="ltr">
 
 
-    <ScrollView
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fillViewport="true"
-        android:scrollbars="none">
+        android:layout_height="match_parent">
 
-        <LinearLayout
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/agp_appbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="@dimen/dp140"
+            android:background="@color/toolbar_background"
+            android:fitsSystemWindows="true"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-
-            <LinearLayout
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:id="@+id/agp_collapse"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp140"
-                android:background="@color/green"
-                android:orientation="horizontal">
+                android:layout_height="match_parent"
+                app:contentScrim="@color/toolbar_background"
+                app:expandedTitleMarginBottom="32dp"
+                app:expandedTitleMarginEnd="64dp"
+                app:expandedTitleMarginStart="48dp"
+                app:expandedTitleTextAppearance="@android:color/transparent"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-                <Button
-                    android:id="@+id/agp_btn_back"
-                    android:layout_width="@dimen/dp60"
-                    android:layout_height="match_parent"
-                    android:background="@null"
-                    android:gravity="center|top"
-                    android:paddingTop="@dimen/dp12"
-                    android:text="@string/fa_chevron_left"
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/sp22" />
 
                 <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:paddingTop="@dimen/dp8"
+                    app:layout_collapseMode="parallax">
 
                     <com.iGap.module.CircleImageView
                         android:id="@+id/agp_imv_group_avatar"
@@ -62,210 +58,274 @@
 
                 </LinearLayout>
 
-                <Button
-                    android:id="@+id/agp_btn_menu"
-                    android:layout_width="@dimen/dp60"
-                    android:layout_height="match_parent"
-                    android:background="@null"
-                    android:gravity="center|top"
-                    android:paddingTop="@dimen/dp12"
-                    android:text="@string/fa_ellipsis_v"
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/sp26" />
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="left"
-                android:orientation="vertical"
-                android:paddingLeft="@dimen/dp16">
-
-
-                <TextView
-                    android:id="@+id/agp_txt_str_info"
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/agp_toolbar"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:padding="@dimen/dp8"
-                    android:text="INFO"
-                    android:textColor="@color/green"
-                    android:textSize="@dimen/sp18"
-                    android:textStyle="bold" />
+                    android:layout_height="@dimen/dp60"
+                    app:contentInsetLeft="0dp"
+                    app:contentInsetStart="0dp"
+                    app:layout_collapseMode="pin">
 
-                <TextView
-                    android:id="@+id/agp_txt_str_group_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:text="group name : "
-                    android:textSize="@dimen/sp16" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/agp_txt_group_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="@dimen/dp18"
-                    android:paddingTop="@dimen/dp4"
-                    android:singleLine="true"
-                    android:text="family group"
-                    android:textColor="@android:color/black"
-                    android:textSize="@dimen/sp16" />
+                        <Button
+                            android:id="@+id/agp_btn_back"
+                            android:layout_width="@dimen/dp60"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentLeft="true"
+                            android:background="@null"
+                            android:gravity="center|top"
+                            android:paddingTop="@dimen/dp12"
+                            android:text="@string/fa_chevron_left"
+                            android:textColor="@android:color/white"
+                            android:textSize="@dimen/sp22" />
 
-                <TextView
-                    android:id="@+id/agp_txt_str_shared_media"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:text="sheared media :"
-                    android:textSize="@dimen/sp16" />
+                        <TextView
+                            android:id="@+id/agp_txt_titleToolbar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_centerInParent="true"
+                            android:gravity="center"
+                            android:text="Group Profile"
+                            android:textColor="@color/whit_background"
+                            android:textSize="@dimen/sp22"
+                            android:textStyle="bold"
+                            android:visibility="gone" />
 
-                <TextView
-                    android:id="@+id/agp_txt_number_of_shared_media"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="@dimen/dp18"
-                    android:paddingTop="@dimen/dp4"
-                    android:singleLine="true"
-                    android:text="12"
-                    android:textColor="@android:color/black"
-                    android:textSize="@dimen/sp16" />
+                        <Button
+                            android:id="@+id/agp_btn_menu"
+                            android:layout_width="@dimen/dp60"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentRight="true"
+                            android:background="@null"
+                            android:gravity="center|top"
+                            android:paddingTop="@dimen/dp12"
+                            android:text="@string/fa_ellipsis_v"
+                            android:textColor="@android:color/white"
+                            android:textSize="@dimen/sp26" />
 
-                <TextView
-                    android:id="@+id/agp_txt_str_member"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:text="Members : "
-                    android:textSize="@dimen/sp16" />
+                    </RelativeLayout>
+                </android.support.v7.widget.Toolbar>
 
-                <TextView
-                    android:id="@+id/agp_txt_member_number"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="@dimen/dp18"
-                    android:paddingTop="@dimen/dp4"
-                    android:singleLine="true"
-                    android:text="4"
-                    android:textColor="@android:color/black"
-                    android:textSize="@dimen/sp16" />
+            </android.support.design.widget.CollapsingToolbarLayout>
 
+        </android.support.design.widget.AppBarLayout>
 
-            </LinearLayout>
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true"
+            android:scrollbars="none"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/gray_f2"
-                android:gravity="left"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/agp_txt_str_members_filed"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:padding="@dimen/dp8"
-                    android:text="Members"
-                    android:textColor="@color/green"
-                    android:textSize="@dimen/sp18"
-                    android:textStyle="bold" />
-
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="left|center"
-                    android:orientation="horizontal"
-                    android:paddingBottom="@dimen/dp12"
+                    android:gravity="left"
+                    android:orientation="vertical"
                     android:paddingLeft="@dimen/dp16">
 
-                    <com.iGap.module.CircleImageView
-                        android:id="@+id/agp_imv_add_member"
-                        android:layout_width="@dimen/dp52"
-                        android:scaleType="centerCrop"
-                        android:layout_height="@dimen/dp52"
-                        android:src="@mipmap/add_chat_background2" />
 
                     <TextView
-                        android:id="@+id/agp_txt_str_add_new_member"
+                        android:id="@+id/agp_txt_str_info"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center"
                         android:padding="@dimen/dp8"
-                        android:text="Add New Member"
+                        android:text="INFO"
+                        android:textColor="@color/green"
+                        android:textSize="@dimen/sp18"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/agp_txt_str_group_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:text="group name : "
+                        android:textSize="@dimen/sp16" />
+
+                    <TextView
+                        android:id="@+id/agp_txt_group_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="@dimen/dp18"
+                        android:paddingTop="@dimen/dp4"
+                        android:singleLine="true"
+                        android:text="family group"
+                        android:textColor="@android:color/black"
+                        android:textSize="@dimen/sp16" />
+
+                    <TextView
+                        android:id="@+id/agp_txt_str_shared_media"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:text="sheared media :"
+                        android:textSize="@dimen/sp16" />
+
+                    <TextView
+                        android:id="@+id/agp_txt_number_of_shared_media"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="@dimen/dp18"
+                        android:paddingTop="@dimen/dp4"
+                        android:singleLine="true"
+                        android:text="12"
+                        android:textColor="@android:color/black"
+                        android:textSize="@dimen/sp16" />
+
+                    <TextView
+                        android:id="@+id/agp_txt_str_member"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:text="Members : "
+                        android:textSize="@dimen/sp16" />
+
+                    <TextView
+                        android:id="@+id/agp_txt_member_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="@dimen/dp18"
+                        android:paddingTop="@dimen/dp4"
+                        android:singleLine="true"
+                        android:text="4"
+                        android:textColor="@android:color/black"
+                        android:textSize="@dimen/sp16" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/gray_f2"
+                    android:gravity="left"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/agp_txt_str_members_filed"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="@dimen/dp8"
+                        android:text="Members"
+                        android:textColor="@color/green"
+                        android:textSize="@dimen/sp18"
+                        android:textStyle="bold" />
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left|center"
+                        android:orientation="horizontal"
+                        android:paddingBottom="@dimen/dp12"
+                        android:paddingLeft="@dimen/dp16">
+
+                        <com.iGap.module.CircleImageView
+                            android:id="@+id/agp_imv_add_member"
+                            android:layout_width="@dimen/dp52"
+                            android:layout_height="@dimen/dp52"
+                            android:scaleType="centerCrop"
+                            android:src="@mipmap/add_chat_background2" />
+
+                        <TextView
+                            android:id="@+id/agp_txt_str_add_new_member"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/dp8"
+                            android:text="Add New Member"
+                            android:textSize="@dimen/sp16" />
+
+
+                    </LinearLayout>
+
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/agp_recycler_view_group_member"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:scrollbars="vertical"
+                        android:visibility="visible"
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+                    <TextView
+                        android:id="@+id/agp_txt_more"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="@dimen/dp12"
+                        android:text="more..."
                         android:textSize="@dimen/sp16" />
 
 
                 </LinearLayout>
 
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/agp_recycler_view_group_member"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:scrollbars="vertical"
-                    android:visibility="visible"
-                    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
                 <TextView
-                    android:id="@+id/agp_txt_more"
+                    android:id="@+id/agp_txt_str_setting"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:padding="@dimen/dp12"
-                    android:text="more..."
+                    android:text="Settings"
+                    android:textColor="@color/green"
+                    android:textSize="@dimen/sp18"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:id="@+id/agp_txt_str_notification_and_sound"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:paddingBottom="@dimen/dp18"
+                    android:paddingLeft="@dimen/dp16"
+                    android:paddingTop="@dimen/dp4"
+                    android:singleLine="true"
+                    android:text="Notificaion and Sound"
+                    android:textColor="@android:color/black"
                     android:textSize="@dimen/sp16" />
 
+                <TextView
+                    android:id="@+id/agp_txt_str_delete_and_leave_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:paddingBottom="@dimen/dp18"
+                    android:paddingLeft="@dimen/dp16"
+                    android:paddingTop="@dimen/dp4"
+                    android:singleLine="true"
+                    android:text="Delete and Leave Group"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/sp16" />
 
             </LinearLayout>
 
 
-            <TextView
-                android:id="@+id/agp_txt_str_setting"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="@dimen/dp12"
-                android:text="Settings"
-                android:textColor="@color/green"
-                android:textSize="@dimen/sp18"
-                android:textStyle="bold" />
+        </android.support.v4.widget.NestedScrollView>
 
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/agp_fab_setPic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp20"
+            android:clickable="true"
+            android:src="@mipmap/pu_camera"
+            android:theme="@style/FabButton"
+            android:tint="@color/gray"
+            app:layout_anchor="@+id/agp_appbar"
+            app:layout_anchorGravity="bottom|right|end" />
 
-            <TextView
-                android:id="@+id/agp_txt_str_notification_and_sound"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="left"
-                android:paddingBottom="@dimen/dp18"
-                android:paddingLeft="@dimen/dp16"
-                android:paddingTop="@dimen/dp4"
-                android:singleLine="true"
-                android:text="Notificaion and Sound"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/sp16" />
-
-            <TextView
-                android:id="@+id/agp_txt_str_delete_and_leave_group"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="left"
-                android:paddingBottom="@dimen/dp18"
-                android:paddingLeft="@dimen/dp16"
-                android:paddingTop="@dimen/dp4"
-                android:singleLine="true"
-                android:text="Delete and Leave Group"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/sp16" />
-
-        </LinearLayout>
-
-
-    </ScrollView>
-
+    </android.support.design.widget.CoordinatorLayout>
 
 </RelativeLayout>
-
-
-
