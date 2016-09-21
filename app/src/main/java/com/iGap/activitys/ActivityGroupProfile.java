@@ -30,6 +30,10 @@ import com.iGap.module.CircleImageView;
 import com.iGap.module.Contacts;
 import com.iGap.module.CustomTextViewMedium;
 import com.iGap.module.StructContactInfo;
+import com.iGap.realm.RealmGroupRoom;
+import com.iGap.realm.RealmMember;
+import com.iGap.realm.RealmRoom;
+import com.iGap.realm.enums.GroupChatRole;
 import com.mikepenz.fastadapter.AbstractAdapter;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
@@ -42,6 +46,9 @@ import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmList;
 
 /**
  * Created by android3 on 9/18/2016.
@@ -58,7 +65,7 @@ public class ActivityGroupProfile extends ActivityEnhanced {
     private AppBarLayout appBarLayout;
     private FloatingActionButton fab;
 
-    private int numberOfloadItem = 5;
+    private int numberUploadItem = 5;
 
     List<StructContactInfo> contacts;
     List<IItem> items;
@@ -68,16 +75,39 @@ public class ActivityGroupProfile extends ActivityEnhanced {
 
     AttachFile attachFile;
 
+    private long roomId;
+    private String title;
+    private String initials;
+    private String color;
+    private GroupChatRole role;
+    private String participantsCountLabel;
+    private RealmList<RealmMember> members;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_profile);
 
+        Bundle extras = getIntent().getExtras();
+        roomId = extras.getLong("RoomId");
+
+        Realm realm = Realm.getDefaultInstance();
+
+        //group info
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+        RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+        title = realmRoom.getTitle();
+        initials = realmRoom.getInitials();
+        color = realmRoom.getColor();
+        role = realmGroupRoom.getRole();
+        participantsCountLabel = realmGroupRoom.getParticipantsCountLabel();
+        members = realmGroupRoom.getMembers();
+
+        realm.close();
+
         initComponent();
-
         attachFile = new AttachFile(this);
-
     }
 
 
@@ -106,8 +136,6 @@ public class ActivityGroupProfile extends ActivityEnhanced {
         txtGroupName = (TextView) findViewById(R.id.agp_txt_group_name);
         txtNumberOfSharedMedia = (TextView) findViewById(R.id.agp_txt_number_of_shared_media);
         txtMemberNumber = (TextView) findViewById(R.id.agp_txt_number_of_shared_media);
-
-
         appBarLayout = (AppBarLayout) findViewById(R.id.agp_appbar);
 
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
@@ -141,8 +169,6 @@ public class ActivityGroupProfile extends ActivityEnhanced {
         });
 
 
-
-
         txtMore = (TextView) findViewById(R.id.agp_txt_more);
         txtMore.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,7 +177,7 @@ public class ActivityGroupProfile extends ActivityEnhanced {
                 int count = items.size();
                 int listSize = contacts.size();
 
-                for (int i = count; i < listSize && i < count + numberOfloadItem; i++) {
+                for (int i = count; i < listSize && i < count + numberUploadItem; i++) {
                     items.add(new ContatItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
                 }
 
@@ -175,10 +201,6 @@ public class ActivityGroupProfile extends ActivityEnhanced {
                         R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer_group_profile, fragment).commit();
             }
         });
-
-
-        initRecycleView();
-
 
         TextView txtSetAdmin = (TextView) findViewById(R.id.agp_txt_set_admin);
         txtSetAdmin.setOnClickListener(new View.OnClickListener() {
@@ -219,12 +241,25 @@ public class ActivityGroupProfile extends ActivityEnhanced {
             }
         });
 
+        imvGroupAvatar.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvGroupAvatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+        txtMemberNumber.setText(participantsCountLabel);
 
+        if (role == GroupChatRole.MEMBER) {
+
+
+        }
+
+        initRecycleView();
     }
 
 
     private void initRecycleView() {
 
+        //TODO [Saeed Mozaffari] [2016-09-21 11:47 AM] - show list with this info
+        for (RealmMember member : members) {
+            member.getRole();
+            member.getPeerId();
+        }
 
         //create our FastAdapter
         fastAdapter = new FastAdapter();
@@ -351,7 +386,6 @@ public class ActivityGroupProfile extends ActivityEnhanced {
         }
 
     }
-
 
 
     public class StickyHeaderAdapter extends AbstractAdapter implements StickyRecyclerHeadersAdapter {

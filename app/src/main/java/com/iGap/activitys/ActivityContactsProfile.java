@@ -89,6 +89,8 @@ public class ActivityContactsProfile extends ActivityEnhanced {
         }
 
         RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo("phone", phone).findFirst();
+
+        // agar ba click roye karbar dar safheye goruh vared in ghesmat shodim va karbar dar list contact haye ma vojud nadasht shomareye karbar namyesh dade nemishavad
         if (realmContacts == null && enterFrom.equals(ProtoGlobal.Room.Type.GROUP.toString())) {
             showNumber = false;
         }
