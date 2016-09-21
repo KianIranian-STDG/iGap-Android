@@ -85,7 +85,7 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
         }
 
         if (mMessage.sendType == MyType.SendType.send) {
-            updateMessageStatus((TextView) holder.itemView.findViewById(R.id.cslr_txt_tic));
+            updateMessageStatus((TextView) holder.itemView.findViewById(R.id.cslr_txt_tic),mMessage.status);
         }
 
         // display 'edited' indicator beside message time if message was edited
@@ -192,9 +192,9 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
      *
      * @param view TextView message status
      */
-    protected void updateMessageStatus(TextView view) {
+    public static void updateMessageStatus(TextView view, String status) {
         // icons font MaterialDesign yeksan design nashodan vase hamin man dasti size ro barabar kardam
-        switch (mMessage.status) {
+        switch (status) {
             case "DELIVERED":
                 view.setTextColor(view.getContext().getResources().getColor(R.color.green));
                 view.setText(G.context.getResources().getString(R.string.md_check_symbol));

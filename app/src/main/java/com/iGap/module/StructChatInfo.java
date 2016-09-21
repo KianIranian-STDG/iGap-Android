@@ -26,6 +26,7 @@ public class StructChatInfo {
     public int unreadMessagesCount = 0;
     public String memberCount = "1";
     public String initials = "";
+    public String lastMessageStatus;
 
     public String fileName = "";
     public String fileMime = "";
@@ -71,6 +72,7 @@ public class StructChatInfo {
                 chatInfo.lastMessageTime = roomMessage.getUpdateTime();
                 chatInfo.lastmessage = roomMessage.getMessage();
                 chatInfo.unreadMessagesCount = room.getUnreadCount();
+                chatInfo.lastMessageStatus = roomMessage.getStatus();
             }
         }
         realm.close();

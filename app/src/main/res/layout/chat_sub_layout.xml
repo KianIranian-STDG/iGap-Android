@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/dp68"
-    android:layoutDirection="ltr">
+              android:layout_width="match_parent"
+              android:layout_height="@dimen/dp68"
+              android:layoutDirection="ltr">
 
 
     <FrameLayout
@@ -13,7 +13,7 @@
             android:id="@+id/cs_img_contact_picture"
             android:layout_width="@dimen/dp52"
             android:layout_height="@dimen/dp52"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"/>
     </FrameLayout>
 
     <View
@@ -23,7 +23,7 @@
         android:background="#f1f265"
 
 
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -61,7 +61,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="@dimen/dp4"
                         android:textColor="@android:color/black"
-                        android:textSize="@dimen/sp14" />
+                        android:textSize="@dimen/sp14"/>
 
                     <com.iGap.module.EmojiTextView
                         android:id="@+id/cs_txt_contact_name"
@@ -72,7 +72,7 @@
                         android:text="naddddddd"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/sp16"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"/>
 
                     <TextView
                         android:id="@+id/cs_txt_mute"
@@ -81,7 +81,7 @@
                         android:layout_marginLeft="@dimen/dp4"
                         android:text="@string/fa_bell_slash_o"
                         android:textColor="@color/gray"
-                        android:textSize="@dimen/sp14" />
+                        android:textSize="@dimen/sp14"/>
 
 
                 </LinearLayout>
@@ -94,7 +94,7 @@
                     android:singleLine="true"
                     android:text="LAST MESSAGE"
                     android:textColor="#FF616161"
-                    android:textSize="@dimen/sp14" />
+                    android:textSize="@dimen/sp14"/>
             </LinearLayout>
 
             <LinearLayout
@@ -104,14 +104,30 @@
                 android:gravity="top|center"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/cs_txt_contact_time"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:text="time"
-                    android:textColor="@color/gray"
-                    android:textSize="@dimen/sp12" />
+                    android:orientation="horizontal">
+
+                    <com.iGap.module.MaterialDesignTextView
+                        android:id="@+id/cslr_txt_tic"
+                        style="@style/ChatMessages.MaterialDesignTextView.Tick"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/dp4"
+                        android:text="@string/md_clock_with_white_face"/>
+
+                    <TextView
+                        android:id="@+id/cs_txt_contact_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:text="time"
+                        android:textColor="@color/gray"
+                        android:textSize="@dimen/sp12"/>
+
+
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/cs_txt_unread_message"
@@ -125,7 +141,7 @@
                     android:singleLine="true"
                     android:text="1"
                     android:textColor="@android:color/white"
-                    android:textSize="@dimen/sp12" />
+                    android:textSize="@dimen/sp12"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -133,7 +149,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#e1dfdf" />
+            android:background="#e1dfdf"/>
 
     </LinearLayout>
 

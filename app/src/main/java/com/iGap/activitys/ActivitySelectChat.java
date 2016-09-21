@@ -109,6 +109,7 @@ public class ActivitySelectChat extends ActivityEnhanced {
             if (lastMessage != null){
                 info.lastMessageTime = lastMessage.getUpdateTime();
                 info.lastmessage = lastMessage.getMessage();
+                info.lastMessageStatus = lastMessage.getStatus();
             }
             info.muteNotification = realmRoom.getMute(); // FIXME
             info.imageSource = ""; // FIXME

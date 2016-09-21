@@ -835,6 +835,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             if (lastMessage != null) {
                 info.lastMessageTime = lastMessage.getUpdateTime();
                 info.lastmessage = lastMessage.getMessage();
+                info.lastMessageStatus = lastMessage.getStatus();
             }
             info.muteNotification = realmRoom.getMute(); // FIXME
             info.imageSource = ""; // FIXME
@@ -908,6 +909,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         if (roomMessage != null) {
             chatInfo.lastMessageTime = roomMessage.getUpdateTime();
             chatInfo.lastmessage = roomMessage.getMessage();
+            chatInfo.lastMessageStatus = roomMessage.getStatus();
         }
         chatInfo.chatType = room.getType();
         switch (room.getType()) {
@@ -981,19 +983,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    // mAdapter.updateChat(roomMessage.getRoomId(), convertToChatItem(roomMessage.getRoomId()));
-                    mAdapter.clear();
-                    // check if new rooms exist, add to adapter
-                    final Realm realm = Realm.getDefaultInstance();
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            RealmResults<RealmRoom> rooms = realm.where(RealmRoom.class).findAllSorted("lastMessageTime", Sort.DESCENDING);
-                            for (final RealmRoom room : rooms) {
-                                mAdapter.add(convertToChatItem(room.getId()));
-                            }
-                        }
-                    });
+                    mAdapter.updateChat(roomMessage.getRoomId(), convertToChatItem(roomMessage.getRoomId()));
                 }
             });
         }

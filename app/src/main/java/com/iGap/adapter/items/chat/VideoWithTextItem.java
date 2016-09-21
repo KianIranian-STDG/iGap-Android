@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.iGap.R;
 import com.iGap.helper.HelperMimeType;
 import com.iGap.module.MyType;
+import com.iGap.module.Utils;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 
@@ -41,7 +42,7 @@ public class VideoWithTextItem extends AbstractChatItem<VideoWithTextItem, Video
 
         holder.cslv_txt_video_name.setText(mMessage.fileName);
         holder.cslv_txt_video_mime_type.setText(mMessage.fileMime);
-        holder.cslv_txt_vido_size.setText(Long.toString(mMessage.fileSize));
+        holder.cslv_txt_vido_size.setText(Utils.humanReadableByteCount(mMessage.fileSize, true));
 
         new HelperMimeType().LoadVideoTumpnail(holder.cslv_imv_vido_image, mMessage.filePic);
 

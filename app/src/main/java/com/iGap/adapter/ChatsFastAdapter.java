@@ -19,7 +19,8 @@ public class ChatsFastAdapter<Item extends ChatItem> extends FastItemAdapter<Ite
         for (Item chat : items) {
             if (chat.mInfo.chatId == chatId) {
                 int pos = items.indexOf(chat);
-                set(pos, item);
+                remove(pos);
+                add(0, item);
                 break;
             }
         }

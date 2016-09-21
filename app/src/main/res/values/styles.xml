@@ -69,7 +69,7 @@
         <item name="android:background">@color/colorEmojiPopupBackground</item>
     </style>
 
-    <style name="NavigationDrawer" />
+    <style name="NavigationDrawer"/>
 
     <style name="NavigationDrawer.Item">
         <item name="android:clickable">true</item>
@@ -77,9 +77,9 @@
         <item name="android:background">?android:attr/selectableItemBackground</item>
     </style>
 
-    <style name="ChatMessages" />
+    <style name="ChatMessages"/>
 
-    <style name="ChatMessages.MaterialDesignTextView" />
+    <style name="ChatMessages.MaterialDesignTextView"/>
 
     <style name="ChatMessages.Time">
         <item name="android:textColor">@color/colorChatMessageTime</item>
@@ -92,6 +92,10 @@
 
     <style name="ChatMessages.MaterialDesignTextView.BottomIcon">
         <item name="android:textSize">@dimen/sp22</item>
+    </style>
+
+    <style name="ChatMessages.MaterialDesignTextView.BottomIcon.SendBtn" parent="ChatMessages.MaterialDesignTextView.BottomIcon">
+        <item name="android:textColor">@color/green</item>
     </style>
 
 </resources>

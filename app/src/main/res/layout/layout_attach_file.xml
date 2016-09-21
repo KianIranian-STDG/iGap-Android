@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
     <android.support.v7.widget.ViewStubCompat
         android:id="@+id/replayLayoutStub"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"/>
 
     <LinearLayout
         android:id="@+id/chl_ll_attach"
@@ -19,7 +19,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/gray" />
+            android:background="@color/gray"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -34,7 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/dp8"
-                android:text="@string/md_emoticon_with_happy_face" />
+                android:text="@string/md_emoticon_with_happy_face"/>
 
             <com.iGap.module.EmojiEditText
                 android:id="@+id/chl_edt_chat"
@@ -45,16 +45,16 @@
                 android:hint="Type Message"
                 android:maxLines="4"
                 android:paddingRight="@dimen/dp4"
-                android:textColorHint="@color/gray" />
+                android:textColorHint="@color/gray"/>
 
             <com.iGap.module.MaterialDesignTextView
                 android:id="@+id/chl_imv_send_button"
-                style="@style/ChatMessages.MaterialDesignTextView.BottomIcon"
+                style="@style/ChatMessages.MaterialDesignTextView.BottomIcon.SendBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/dp8"
                 android:text="@string/md_send_button"
-                android:visibility="gone" />
+                android:visibility="gone"/>
 
             <LinearLayout
                 android:id="@+id/layoutAttachBottom"
@@ -72,7 +72,7 @@
                     android:layout_weight="1"
                     android:padding="@dimen/dp8"
                     android:rotation="135"
-                    android:text="@string/md_attachment_clip" />
+                    android:text="@string/md_attachment_clip"/>
 
                 <com.nightonke.boommenu.BoomMenuButton
                     android:id="@+id/am_boom"
@@ -81,7 +81,7 @@
                     android:visibility="gone"
                     app:boom_button_color="@android:color/transparent"
                     app:boom_button_pressed_color="@android:color/transparent"
-                    app:boom_inActionBar="false" />
+                    app:boom_inActionBar="false"/>
 
                 <com.iGap.module.MaterialDesignTextView
                     android:id="@+id/chl_imv_mic_button"
@@ -90,7 +90,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:padding="@dimen/dp8"
-                    android:text="@string/md_voice_message_microphone_button" />
+                    android:text="@string/md_voice_message_microphone_button"/>
 
 
             </LinearLayout>

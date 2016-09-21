@@ -6,8 +6,10 @@ import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.adapter.items.chat.AbstractChatItem;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.EmojiTextView;
+import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.OnComplete;
 import com.iGap.module.StructChatInfo;
 import com.iGap.module.TimeUtils;
@@ -109,9 +111,16 @@ public class ChatItem extends AbstractItem<ChatItem, ChatItem.ViewHolder> {
 
         if (mInfo.unreadMessagesCount < 1) {
             holder.unreadMessage.setVisibility(View.GONE);
+            holder.lastMessage.setVisibility(View.GONE);
+            holder.messageStatus.setVisibility(View.GONE);
         } else {
             holder.unreadMessage.setVisibility(View.VISIBLE);
+            holder.lastMessage.setVisibility(View.VISIBLE);
+            holder.messageStatus.setVisibility(View.VISIBLE);
+
             holder.unreadMessage.setText(Integer.toString(mInfo.unreadMessagesCount));
+
+            AbstractChatItem.updateMessageStatus(holder.messageStatus, mInfo.lastMessageStatus);
 
             if (mInfo.muteNotification) {
                 holder.unreadMessage.setBackgroundResource(R.drawable.oval_gray);
@@ -141,6 +150,7 @@ public class ChatItem extends AbstractItem<ChatItem, ChatItem.ViewHolder> {
         protected EmojiTextView lastMessage;
         protected TextView lastSeen;
         protected TextView unreadMessage;
+        protected MaterialDesignTextView messageStatus;
 
         public ViewHolder(View view) {
             super(view);
@@ -153,13 +163,12 @@ public class ChatItem extends AbstractItem<ChatItem, ChatItem.ViewHolder> {
             lastSeen = (TextView) view.findViewById(R.id.cs_txt_contact_time);
             unreadMessage = (TextView) view.findViewById(R.id.cs_txt_unread_message);
             mute = (TextView) view.findViewById(R.id.cs_txt_mute);
+            messageStatus = (MaterialDesignTextView) view.findViewById(R.id.cslr_txt_tic);
 
             chatIcon.setTypeface(G.fontawesome);
             mute.setTypeface(G.fontawesome);
             lastSeen.setTypeface(G.arial);
             unreadMessage.setTypeface(G.arial);
-            name.setTypeface(G.arialBold);
-            lastMessage.setTypeface(G.arial);
         }
     }
 }
