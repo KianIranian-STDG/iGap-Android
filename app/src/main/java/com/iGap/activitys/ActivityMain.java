@@ -3,17 +3,17 @@ package com.iGap.activitys;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SimpleItemAnimator;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +35,7 @@ import com.iGap.libs.floatingAddButton.StateChangeListener;
 import com.iGap.libs.flowingdrawer.FlowingView;
 import com.iGap.libs.flowingdrawer.LeftDrawerLayout;
 import com.iGap.module.Contacts;
+import com.iGap.module.MyAppBarLayout;
 import com.iGap.module.MyType;
 import com.iGap.module.OnComplete;
 import com.iGap.module.ShouldScrolledBehavior;
@@ -250,10 +251,8 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     private void initRecycleView() {
         recyclerView = (RecyclerView) findViewById(R.id.cl_recycler_view_contact);
         // remove notifying fancy animation
-        RecyclerView.ItemAnimator animator = recyclerView.getItemAnimator();
-        if (animator instanceof SimpleItemAnimator) {
-            ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
-        }
+        recyclerView.setItemAnimator(null);
+        recyclerView.setHasFixedSize(true);
         mAdapter = new ChatsFastAdapter<>();
         mAdapter.withOnClickListener(new FastAdapter.OnClickListener<ChatItem>() {
             @Override
@@ -291,8 +290,24 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) recyclerView.getLayoutParams();
         params.setBehavior(new ShouldScrolledBehavior(mLayoutManager, mAdapter));
         recyclerView.setLayoutParams(params);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
+
+        MyAppBarLayout appBarLayout = (MyAppBarLayout) findViewById(R.id.appBarLayout);
+        final LinearLayout toolbar = (LinearLayout) findViewById(R.id.toolbar);
+        appBarLayout.addOnMoveListener(new MyAppBarLayout.OnMoveListener() {
+            @Override
+            public void onAppBarLayoutMove(AppBarLayout appBarLayout, int verticalOffset, boolean moveUp) {
+                if (moveUp) {
+                    if (toolbar.getAlpha() != 0F) {
+                        toolbar.animate().setDuration(150).alpha(0F).start();
+                    }
+                } else {
+                    if (toolbar.getAlpha() != 1F) {
+                        toolbar.animate().setDuration(150).alpha(1F).start();
+                    }
+                }
+            }
+        });
 
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {

@@ -1,11 +1,15 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="BaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/green</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/green</item>
         <item name="colorAccent">@color/green</item>
+    </style>
+
+    <style name="AppTheme" parent="BaseTheme">
+
     </style>
 
     <style name="Widget.GifMoviewView" parent="@android:style/Widget"></style>

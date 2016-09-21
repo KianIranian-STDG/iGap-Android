@@ -3,11 +3,9 @@ package com.iGap.module;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.mikepenz.fastadapter.IItem;
 import com.mikepenz.fastadapter.adapters.FastItemAdapter;
 
 /**
@@ -16,9 +14,9 @@ import com.mikepenz.fastadapter.adapters.FastItemAdapter;
  */
 public class ShouldScrolledBehavior extends AppBarLayout.ScrollingViewBehavior {
     private LinearLayoutManager mLayoutManager;
-    private FastItemAdapter<? extends IItem<?, ? extends RecyclerView.ViewHolder>> mAdapter;
+    private FastItemAdapter mAdapter;
 
-    public ShouldScrolledBehavior(LinearLayoutManager layoutManager, FastItemAdapter<? extends IItem<?, ? extends RecyclerView.ViewHolder>> adapter) {
+    public ShouldScrolledBehavior(LinearLayoutManager layoutManager, FastItemAdapter adapter) {
         super();
         this.mLayoutManager = layoutManager;
         this.mAdapter = adapter;
@@ -26,7 +24,7 @@ public class ShouldScrolledBehavior extends AppBarLayout.ScrollingViewBehavior {
 
     @Override
     public boolean onInterceptTouchEvent(CoordinatorLayout parent, View child, MotionEvent ev) {
-        return !shouldScrolled();
+        return shouldScrolled();
     }
 
     public boolean shouldScrolled() {

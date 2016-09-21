@@ -1,32 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.iGap.module.NotTouchableCoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.iGap.module.NotTouchableCoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="false"
-    android:layoutDirection="ltr">
+    android:fitsSystemWindows="true">
 
-    <android.support.design.widget.AppBarLayout
+    <com.iGap.module.MyAppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+        app:popupTheme="@style/ThemeOverlay.AppCompat">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:fitsSystemWindows="true"
             android:orientation="vertical"
-            app:elevation="8dp"
             app:layout_scrollFlags="scroll|enterAlways">
 
             <LinearLayout
 
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp60"
                 android:background="@color/green"
-                android:fitsSystemWindows="true"
                 android:orientation="horizontal">
 
                 <Button
@@ -36,7 +33,7 @@
                     android:background="@null"
                     android:text="@string/fa_menu_bar"
                     android:textColor="@android:color/white"
-                    android:textSize="@dimen/sp20" />
+                    android:textSize="@dimen/sp20"/>
 
                 <TextView
                     android:id="@+id/cl_txt_igap"
@@ -48,7 +45,7 @@
                     android:text="@string/igap"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@android:color/white"
-                    android:textSize="@dimen/sp18" />
+                    android:textSize="@dimen/sp18"/>
 
                 <Button
                     android:id="@+id/cl_btn_search"
@@ -57,7 +54,7 @@
                     android:background="@null"
                     android:text="@string/fa_search"
                     android:textColor="@android:color/white"
-                    android:textSize="@dimen/sp20" />
+                    android:textSize="@dimen/sp20"/>
 
 
             </LinearLayout>
@@ -68,12 +65,12 @@
                 android:background="#34a49f"></View>
         </LinearLayout>
 
-    </android.support.design.widget.AppBarLayout>
+    </com.iGap.module.MyAppBarLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/cl_recycler_view_contact"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:overScrollMode="never">
 
     </android.support.v7.widget.RecyclerView>
@@ -93,21 +90,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/single_chat"
-            app:backgroundTint="@color/green" />
+            app:backgroundTint="@color/green"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/ac_fab_crate_new_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/group_chat"
-            app:backgroundTint="@color/green" />
+            app:backgroundTint="@color/green"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/ac_fab_crate_new_channel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/channel_white"
-            app:backgroundTint="@color/green" />
+            app:backgroundTint="@color/green"/>
 
     </com.iGap.libs.floatingAddButton.ArcMenu>
 </com.iGap.module.NotTouchableCoordinatorLayout>

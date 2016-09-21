@@ -15,8 +15,8 @@ import android.os.Bundle;
 import android.support.annotation.ArrayRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ViewStubCompat;
@@ -35,6 +35,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -82,6 +83,7 @@ import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.MyType;
 import com.iGap.module.OnComplete;
 import com.iGap.module.RecyclerViewPauseOnScrollListener;
+import com.iGap.module.ShouldScrolledBehavior;
 import com.iGap.module.StructMessageInfo;
 import com.iGap.proto.ProtoChatSendMessage;
 import com.iGap.proto.ProtoGlobal;
@@ -309,7 +311,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         initComponent();
         initAppbarSelected();
         initCallbacks();
-
         if (chatType == ProtoGlobal.Room.Type.CHANNEL && channelRole == ChannelChatRole.MEMBER)
             initLayotChannelFooter();
 
@@ -602,8 +603,11 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         LinearLayoutManager layoutManager = new LinearLayoutManager(ActivityChat.this);
         // make start messages from bottom, this is exatly what Telegram and other messengers do for their messages list
         layoutManager.setStackFromEnd(true);
+        // set behavior to RecyclerView
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) recyclerView.getLayoutParams();
+        params.setBehavior(new ShouldScrolledBehavior(layoutManager, mAdapter));
+        recyclerView.setLayoutParams(params);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
 
         int position = recyclerView.getAdapter().getItemCount();
@@ -1228,7 +1232,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
 
         LinearLayout layoutAttach = (LinearLayout) findViewById(R.id.chl_ll_attach);
-        LinearLayout layoutChannelFooter = (LinearLayout) findViewById(R.id.chl_ll_channel_footer);
+        RelativeLayout layoutChannelFooter = (RelativeLayout) findViewById(R.id.chl_ll_channel_footer);
 
         layoutAttach.setVisibility(View.GONE);
         layoutChannelFooter.setVisibility(View.VISIBLE);
