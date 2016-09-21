@@ -19,7 +19,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SimpleItemAnimator;
 import android.support.v7.widget.ViewStubCompat;
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
@@ -523,11 +522,8 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
         recyclerView = (RecyclerView) findViewById(R.id.chl_recycler_view_chat);
         recyclerView.addOnScrollListener(new RecyclerViewPauseOnScrollListener(ImageLoader.getInstance(), false, true));
-        // remove notifying fancy animation
-        RecyclerView.ItemAnimator animator = recyclerView.getItemAnimator();
-        if (animator instanceof SimpleItemAnimator) {
-            ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
-        }
+        // remove blinking for updates on items
+        recyclerView.setItemAnimator(null);
         // following lines make scrolling smoother
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemViewCacheSize(20);
@@ -603,7 +599,10 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             identifier++;
         }
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(ActivityChat.this));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(ActivityChat.this);
+        // make start messages from bottom, this is exatly what Telegram and other messengers do for their messages list
+        layoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
 

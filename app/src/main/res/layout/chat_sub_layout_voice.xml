@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/chatSubLayoutVoice"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layoutDirection="ltr"
-    android:maxWidth="@dimen/dp300"
-    android:layout_marginBottom="@dimen/dp4">
+             xmlns:tools="http://schemas.android.com/tools"
+             android:id="@+id/chatSubLayoutVoice"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_marginBottom="@dimen/dp4"
+             android:layoutDirection="ltr"
+             android:maxWidth="@dimen/dp300"
+             android:textDirection="firstStrong">
 
     <LinearLayout
         android:id="@+id/mainContainer"
@@ -21,7 +22,7 @@
             android:layout_width="@dimen/dp52"
             android:layout_height="@dimen/dp52"
             android:layout_marginRight="@dimen/dp8"
-            android:src="@mipmap/b" />
+            android:src="@mipmap/b"/>
 
         <LinearLayout
             android:id="@+id/contentContainer"
@@ -33,11 +34,11 @@
 
             <include
                 android:id="@+id/replayLayout"
-                layout="@layout/chat_sub_layout_replay" />
+                layout="@layout/chat_sub_layout_replay"/>
 
             <include
                 android:id="@+id/cslr_ll_forward"
-                layout="@layout/chat_sub_layout_forward" />
+                layout="@layout/chat_sub_layout_forward"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -56,7 +57,7 @@
                         android:layout_width="@dimen/dp40"
                         android:layout_height="@dimen/dp40"
                         android:layout_gravity="center"
-                        android:src="@mipmap/play" />
+                        android:src="@mipmap/play"/>
 
                 </FrameLayout>
 
@@ -81,7 +82,7 @@
                             android:singleLine="true"
                             android:text="music golha "
                             android:textColor="@android:color/black"
-                            android:textSize="@dimen/sp16" />
+                            android:textSize="@dimen/sp16"/>
 
                         <TextView
                             android:id="@+id/csla_txt_audio_mime_type"
@@ -91,7 +92,7 @@
                             android:singleLine="true"
                             android:text=".mp3"
                             android:textColor="@android:color/black"
-                            android:textSize="@dimen/sp16" />
+                            android:textSize="@dimen/sp16"/>
                     </LinearLayout>
 
                     <TextView
@@ -103,7 +104,7 @@
                         android:singleLine="true"
                         android:text="1.8 mb"
                         android:textColor="@android:color/black"
-                        android:textSize="@dimen/sp14" />
+                        android:textSize="@dimen/sp14"/>
 
                 </LinearLayout>
 
@@ -114,7 +115,7 @@
                     android:background="@null"
                     android:gravity="center"
                     android:text="@string/fa_ellipsis_v"
-                    android:textSize="@dimen/sp26" />
+                    android:textSize="@dimen/sp26"/>
 
             </LinearLayout>
 
@@ -125,11 +126,11 @@
                 android:gravity="left"
                 android:text="SAMPLE TEXT"
                 android:textColor="@android:color/black"
-                android:textSize="@dimen/sp16" />
+                android:textSize="@dimen/sp16"/>
 
             <include
                 android:id="@+id/cslr_ll_time"
-                layout="@layout/chat_sub_layout_messages_time" />
+                layout="@layout/chat_sub_layout_messages_time"/>
         </LinearLayout>
     </LinearLayout>
 </FrameLayout>
