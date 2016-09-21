@@ -626,6 +626,10 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     intent.putExtra("peerId", chatPeerId);
                     intent.putExtra("enterFrom", ProtoGlobal.Room.Type.CHAT.toString());
                     startActivity(intent);
+                } else if (chatType == ProtoGlobal.Room.Type.GROUP) {
+                    Intent intent = new Intent(G.context, ActivityGroupProfile.class);
+                    intent.putExtra("RoomId", mRoomId);
+                    startActivity(intent);
                 }
 
             }

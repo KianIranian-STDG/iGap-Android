@@ -154,7 +154,7 @@ public class WebSocketClient {
      * @return webSocketConnection
      */
 
-    public static WebSocket getInstance() { //TODO [Saeed Mozaffari] [2016-09-05 11:16 AM] - avoid multiple instance , hint : synchronize
+    public static WebSocket getInstance() {
         if (webSocketClient == null) {
             HelperConnectionState.connectionState(Config.ConnectionState.CONNECTING);
             webSocketClient = createSocketConnection();
@@ -196,6 +196,8 @@ public class WebSocketClient {
                     WebSocketClient.getInstance();
                 }
             }, 1000);
+        } else {
+            Log.i("SOC_WebSocket", "No Network");
         }
     }
 
@@ -217,7 +219,6 @@ public class WebSocketClient {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-
 
                 while (G.symmetricKey == null && G.socketConnection) {
 
