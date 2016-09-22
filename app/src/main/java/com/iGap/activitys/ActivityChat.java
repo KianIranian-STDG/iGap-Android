@@ -192,63 +192,50 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         realmChatHistories.addChangeListener(new RealmChangeListener<RealmResults<RealmChatHistory>>() {
             @Override
             public void onChange(final RealmResults<RealmChatHistory> element) {
-
                 //TODO [Saeed Mozaffari] [2016-09-18 5:07 PM] - do this when receive message
-
-                final RealmClientCondition realmClientCondition = chatHistoriesRealm.where(RealmClientCondition.class).equalTo("roomId", mRoomId).findFirst();
-
-                final RealmList<RealmOfflineSeen> newListOfflineSeen = new RealmList<>();
-                final RealmList<RealmOfflineSeen> oldListOfflineSeen = realmClientCondition.getOfflineSeen();
-                final ArrayList<Long> offlineSeenId = new ArrayList<>();
 
                 //TODO [Saeed Mozaffari] [2016-09-18 4:37 PM] - add old to new ==> here (also for delete and edit)
 
                 //Start ClientCondition OfflineSeen //TODO [Saeed Mozaffari] [2016-09-17 4:01 PM] - FORCE check this code
-                Realm realm = Realm.getDefaultInstance();
-                realm.executeTransaction(new Realm.Transaction() {
+                chatHistoriesRealm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
+                        final RealmClientCondition realmClientCondition = chatHistoriesRealm.where(RealmClientCondition.class).equalTo("roomId", mRoomId).findFirst();
+
+                        final ArrayList<Long> offlineSeenId = new ArrayList<>();
 
                         for (RealmChatHistory history : element) {
                             final RealmRoomMessage realmRoomMessage = history.getRoomMessage();
                             if (realmRoomMessage != null) {
-                                //if (realmRoomMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.DELIVERED.toString())) {
+                                if (realmRoomMessage.getUserId() != realm.where(RealmUserInfo.class).findFirst().getUserId() && !realmRoomMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
 
                                 //TODO [Saeed Mozaffari] [2016-09-18 4:50 PM] - Need realm.copyToRealmOrUpdate(realmRoomMessage); or No ???
                                 realmRoomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
 
-                                RealmOfflineSeen realmOfflineSeen = new RealmOfflineSeen();
-                                int autoIncrement = 0;
-                                if (realm.where(RealmOfflineSeen.class).max("id") != null) {
-                                    autoIncrement = realm.where(RealmOfflineSeen.class).max("id").intValue() + 1;
-                                }
-                                realmOfflineSeen.setId(autoIncrement);
+                                    RealmOfflineSeen realmOfflineSeen = realm.createObject(RealmOfflineSeen.class);
+                                    realmOfflineSeen.setId(System.currentTimeMillis());
                                 realmOfflineSeen.setOfflineSeen(realmRoomMessage.getMessageId());
-                                realmOfflineSeen = realm.copyToRealm(realmOfflineSeen);
+                                    realm.copyToRealmOrUpdate(realmOfflineSeen);
 
-                                newListOfflineSeen.add(realmOfflineSeen);
+                                    Log.i(RealmClientCondition.class.getSimpleName(), "before size: " + realmClientCondition.getOfflineSeen().size());
+
+                                    realmClientCondition.getOfflineSeen().add(realmOfflineSeen);
+
+                                    Log.i(RealmClientCondition.class.getSimpleName(), "after size: " + realmClientCondition.getOfflineSeen().size());
 
                                 offlineSeenId.add(realmRoomMessage.getMessageId());
 
-                                // }
+                                }
                             }
                         }
 
-                        for (RealmOfflineSeen seenItem : oldListOfflineSeen) {
-                            newListOfflineSeen.add(seenItem);
+                        for (long seenId : offlineSeenId) {
+                            G.chatUpdateStatusUtil.sendUpdateStatus(mRoomId, seenId, ProtoGlobal.RoomMessageStatus.SEEN);
                         }
-
-                        realmClientCondition.setOfflineSeen(newListOfflineSeen);
                     }
                 });
-                realm.close();
-
-                for (long seenId : offlineSeenId) {
-                    G.chatUpdateStatusUtil.sendUpdateStatus(mRoomId, seenId, ProtoGlobal.RoomMessageStatus.SEEN);
-                }
 
                 element.removeChangeListeners();
-
                 chatHistoriesRealm.close();
             }
         });
