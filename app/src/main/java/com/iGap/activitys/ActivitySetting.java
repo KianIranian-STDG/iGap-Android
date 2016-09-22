@@ -584,7 +584,7 @@ public class ActivitySetting extends ActivityEnhanced {
 
 
         txtNotifyAndSound = (TextView) findViewById(R.id.st_txt_notifyAndSound);
-        txtNotifyAndSound.setTypeface(G.test);
+        txtNotifyAndSound.setTypeface(G.flaticon);
         txtNotifyAndSound.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

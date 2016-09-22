@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
@@ -194,10 +195,10 @@ public class ActivityNewGroup extends ActivityEnhanced {
                                     finish();
                                 } else {
                                     createGroup();
-                                    Fragment fragment = ContactGroupFragment.newInstance();
-                                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.ng_fragmentContainer, fragment).commit();
-                                    ActivityMain.mLeftDrawerLayout.closeDrawer();
-                                    finish();
+//                                    Fragment fragment = ContactGroupFragment.newInstance();
+//                                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.ng_fragmentContainer, fragment).commit();
+//                                    ActivityMain.mLeftDrawerLayout.closeDrawer();
+//                                    finish();
                                 }
                             }
                         } else {
@@ -243,6 +244,7 @@ public class ActivityNewGroup extends ActivityEnhanced {
             @Override
             public void onClientGetRoomResponse(ProtoGlobal.Room room, ProtoClientGetRoom.ClientGetRoomResponse.Builder builder) {
                 getFragmentManager().popBackStack();
+                Log.e("ddd", "ContactGroupFragment");
                 Fragment fragment = ContactGroupFragment.newInstance();
                 Bundle bundle = new Bundle();
                 bundle.putLong("RoomId", roomId);

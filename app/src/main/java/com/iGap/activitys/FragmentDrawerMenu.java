@@ -59,7 +59,7 @@ public class FragmentDrawerMenu extends MenuFragment {
         txtIconNewChannel.setTypeface(G.fontawesome);
 
         TextView txtIconContacts = (TextView) v.findViewById(R.id.lm_txt_icon_contacts);
-        txtIconContacts.setTypeface(G.fontawesome);
+        txtIconContacts.setTypeface(G.flaticon);
 
         TextView txtIconInviteFriends = (TextView) v.findViewById(R.id.lm_txt_icon_invite_friends);
         txtIconInviteFriends.setTypeface(G.fontawesome);

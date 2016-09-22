@@ -19,6 +19,7 @@
     <string name="md_round_info_button">\uf223</string>
     <string name="md_back_arrow">\uf1be</string>
     <string name="md_crop_button">\uf15e</string>
+    <string name="md_user_inside_bubble_speech">\uf289</string>
 
     <string name="fa_menu_bar">&#xf0c9;</string>
     <string name="fa_bell_slash_o">&#xf1f7;</string>

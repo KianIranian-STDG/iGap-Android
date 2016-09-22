@@ -24,16 +24,22 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.items.ContatItemGroupProfile;
-import com.iGap.fragments.ContactGroupFragment;
+import com.iGap.fragments.ShowCustomList;
+import com.iGap.interface_package.OnGroupAddMember;
+import com.iGap.interface_package.OnSelectedList;
 import com.iGap.module.AttachFile;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.Contacts;
 import com.iGap.module.CustomTextViewMedium;
 import com.iGap.module.StructContactInfo;
+import com.iGap.proto.ProtoGlobal;
+import com.iGap.realm.RealmContacts;
 import com.iGap.realm.RealmGroupRoom;
 import com.iGap.realm.RealmMember;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.enums.GroupChatRole;
+import com.iGap.request.RequestGroupAddAdmin;
+import com.iGap.request.RequestGroupAddMember;
 import com.mikepenz.fastadapter.AbstractAdapter;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
@@ -83,6 +89,9 @@ public class ActivityGroupProfile extends ActivityEnhanced {
     private String participantsCountLabel;
     private RealmList<RealmMember> members;
 
+    private int countAddMemberResponse = 0;
+    private int countAddMemberRequest = 0;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -109,7 +118,6 @@ public class ActivityGroupProfile extends ActivityEnhanced {
         initComponent();
         attachFile = new AttachFile(this);
     }
-
 
     private void initComponent() {
 
@@ -196,17 +204,45 @@ public class ActivityGroupProfile extends ActivityEnhanced {
             @Override
             public void onClick(View view) {
 
-                Fragment fragment = ContactGroupFragment.newInstance();
+                Fragment fragment = ShowCustomList.newInstance(Contacts.retrieve(null), new OnSelectedList() {
+                    @Override
+                    public void getSelectedList(boolean result, String message, ArrayList<StructContactInfo> list) {
+
+                        addMemberToGroup(list);
+
+                        // reset activity
+                        finish();
+                        startActivity(getIntent());
+                    }
+                });
+
                 getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
                         R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer_group_profile, fragment).commit();
             }
         });
 
+
         TextView txtSetAdmin = (TextView) findViewById(R.id.agp_txt_set_admin);
         txtSetAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("ddd", "txtSetAdmin clicked");
+                Fragment fragment = ShowCustomList.newInstance(contacts, new OnSelectedList() {
+                    @Override
+                    public void getSelectedList(boolean result, String message, ArrayList<StructContactInfo> list) {
+
+                        for (int i = 0; i < list.size(); i++) {
+                            new RequestGroupAddAdmin().groupAddAdmin(roomId, list.get(i).peerId);
+
+
+                            Log.e("ddd", list.get(i).peerId + "");
+                        }
+
+
+                    }
+                });
+
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
+                        R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer_group_profile, fragment).commit();
             }
         });
 
@@ -252,14 +288,7 @@ public class ActivityGroupProfile extends ActivityEnhanced {
         initRecycleView();
     }
 
-
     private void initRecycleView() {
-
-        //TODO [Saeed Mozaffari] [2016-09-21 11:47 AM] - show list with this info
-        for (RealmMember member : members) {
-            member.getRole();
-            member.getPeerId();
-        }
 
         //create our FastAdapter
         fastAdapter = new FastAdapter();
@@ -302,7 +331,9 @@ public class ActivityGroupProfile extends ActivityEnhanced {
         recyclerView.addItemDecoration(decoration);
 
         items = new ArrayList<>();
-        contacts = Contacts.retrieve(null);
+
+
+        fillItem();
 
 
         int listSize = contacts.size();
@@ -328,6 +359,87 @@ public class ActivityGroupProfile extends ActivityEnhanced {
             }
         });
 
+
+    }
+
+
+    private void addMemberToGroup(final ArrayList<StructContactInfo> list) {
+
+
+        countAddMemberResponse = 0;
+        countAddMemberRequest = list.size();
+
+
+        G.onGroupAddMember = new OnGroupAddMember() {
+            @Override
+            public void onGroupAddMember() {
+                countAddMemberResponse++;
+                Log.i("XXX", "countAddMemberResponse : " + countAddMemberResponse);
+                Log.i("XXX", "countAddMemberRequest : " + countAddMemberRequest);
+                if (countAddMemberResponse >= countAddMemberRequest) {
+
+                }
+            }
+        };
+
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                final RealmList<RealmMember> members = new RealmList<>();
+                for (int i = 0; i < list.size(); i++) {
+                    long peerId = list.get(i).peerId;
+                    //add member to realm
+                    RealmMember realmMember = new RealmMember();
+                    int autoIncrement = 0;
+                    if (realm.where(RealmMember.class).max("id") != null) {
+                        autoIncrement = realm.where(RealmMember.class).max("id").intValue() + 1;
+                    }
+                    realmMember.setId(autoIncrement);
+                    realmMember.setPeerId(peerId);
+                    realmMember.setRole(ProtoGlobal.GroupRoom.Role.MEMBER.toString());
+                    realmMember = realm.copyToRealm(realmMember);
+
+                    members.add(realmMember);
+
+                    //request for add member
+                    new RequestGroupAddMember().groupAddMemeber(roomId, peerId, 0, ProtoGlobal.GroupRoom.Role.MEMBER);
+                }
+
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+
+                for (RealmMember member : realmRoom.getGroupRoom().getMembers()) {
+                    members.add(member);
+                }
+
+                realmRoom.getGroupRoom().setMembers(members);
+            }
+        });
+        realm.close();
+
+
+    }
+
+    private void fillItem() {
+
+        contacts = new ArrayList<>();
+
+        Realm realm = Realm.getDefaultInstance();
+
+        for (RealmMember member : members) {
+            String role = member.getRole();
+            long id = member.getPeerId();
+
+            RealmContacts rc = realm.where(RealmContacts.class).equalTo("id", id).findFirst();
+
+            if (rc != null) {
+                contacts.add(new StructContactInfo(rc.getId(), rc.getDisplay_name() + "  " + role, rc.getStatus(), false, false, rc.getPhone() + ""));
+            }
+
+
+        }
+
+        realm.close();
 
     }
 

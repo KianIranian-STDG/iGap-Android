@@ -67,7 +67,7 @@ public class ArcMenu extends FrameLayout {
         mDrawable = attr.getDrawable(R.styleable.ArcMenu_menu_scr);
         mColorStateList = attr.getColorStateList(R.styleable.ArcMenu_menu_color);
         mFinalRadius = attr.getDimension(R.styleable.ArcMenu_menu_radius, resources.getDimension(R.dimen.dp100));
-        mElevation = attr.getDimension(R.styleable.ArcMenu_menu_elevation, resources.getDimension(R.dimen.dp4));
+        mElevation = attr.getDimension(R.styleable.ArcMenu_menu_elevation, resources.getDimension(R.dimen.dp8));
         mMenuSideEnum = MenuSideEnum.fromId(attr.getInt(R.styleable.ArcMenu_menu_open, 0));
         mAnimationTime = attr.getInteger(R.styleable.ArcMenu_menu_animation_time, ANIMATION_TIME);
         mCurrentRadius = 0;

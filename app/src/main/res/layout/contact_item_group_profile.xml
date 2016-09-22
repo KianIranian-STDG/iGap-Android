@@ -68,7 +68,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="4"
+                android:text=""
                 android:textSize="@dimen/dp16"
                 android:id="@+id/cigp_txt_nomber_of_shared_media" />
         </LinearLayout>

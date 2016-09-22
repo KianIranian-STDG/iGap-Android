@@ -1,6 +1,5 @@
 package com.iGap.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,7 +8,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,16 +18,10 @@ import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.activitys.ActivityChat;
 import com.iGap.adapter.StickyHeaderAdapter;
 import com.iGap.adapter.items.ContactItemGroup;
-import com.iGap.interface_package.OnGroupAddMember;
-import com.iGap.module.Contacts;
+import com.iGap.interface_package.OnSelectedList;
 import com.iGap.module.StructContactInfo;
-import com.iGap.proto.ProtoGlobal;
-import com.iGap.realm.RealmMember;
-import com.iGap.realm.RealmRoom;
-import com.iGap.request.RequestGroupAddMember;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItem;
@@ -41,26 +33,21 @@ import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.realm.Realm;
-import io.realm.RealmList;
-
-public class ContactGroupFragment extends Fragment {
+public class ShowCustomList extends Fragment {
     private FastAdapter fastAdapter;
     private TextView txtStatus;
     private TextView txtNumberOfMember;
     private EditText edtSearch;
     private String textString = "";
 
-
-    private long roomId;
-    private int countAddMemberResponse = 0;
-    private int countAddMemberRequest = 0;
-
     private int sizeTextEdittext = 0;
-    private List<StructContactInfo> contacts;
+    private static List<StructContactInfo> contacts;
+    private static OnSelectedList onSelectedList;
 
-    public static ContactGroupFragment newInstance() {
-        return new ContactGroupFragment();
+    public static ShowCustomList newInstance(List<StructContactInfo> list, OnSelectedList onSelectedListResult) {
+        onSelectedList = onSelectedListResult;
+        contacts = list;
+        return new ShowCustomList();
     }
 
     @Nullable
@@ -69,15 +56,10 @@ public class ContactGroupFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_contact_group, container, false);
     }
 
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        Bundle bundle = this.getArguments();
-        if (bundle != null) {
-            roomId = bundle.getLong("RoomId");
-        }
-
 
         txtStatus = (TextView) view.findViewById(R.id.fcg_txt_status);
         txtNumberOfMember = (TextView) view.findViewById(R.id.fcg_txt_number_of_member);
@@ -99,60 +81,11 @@ public class ContactGroupFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                G.onGroupAddMember = new OnGroupAddMember() {
-                    @Override
-                    public void onGroupAddMember() {
-                        countAddMemberResponse++;
-                        Log.i("XXX", "countAddMemberResponse : " + countAddMemberResponse);
-                        Log.i("XXX", "countAddMemberRequest : " + countAddMemberRequest);
-                        if (countAddMemberResponse >= countAddMemberRequest) {
+                if (onSelectedList != null) {
+                    onSelectedList.getSelectedList(true, "", getSelectedList());
+                }
 
-
-                            Intent intent = new Intent(G.context, ActivityChat.class);
-                            intent.putExtra("RoomId", roomId);
-                            startActivity(intent);
-                            getActivity().getFragmentManager().popBackStack();
-
-
-
-                        }
-                    }
-                };
-
-                Realm realm = Realm.getDefaultInstance();
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        final RealmList<RealmMember> members = new RealmList<>();
-                        for (long peerId : getSelectedList()) {
-
-                            //add member to realm
-                            RealmMember realmMember = new RealmMember();
-                            int autoIncrement = 0;
-                            if (realm.where(RealmMember.class).max("id") != null) {
-                                autoIncrement = realm.where(RealmMember.class).max("id").intValue() + 1;
-                            }
-                            realmMember.setId(autoIncrement);
-                            realmMember.setPeerId(peerId);
-                            realmMember.setRole(ProtoGlobal.GroupRoom.Role.MEMBER.toString());
-                            realmMember = realm.copyToRealm(realmMember);
-
-                            members.add(realmMember);
-
-                            //request for add member
-                            new RequestGroupAddMember().groupAddMemeber(roomId, peerId, 0, ProtoGlobal.GroupRoom.Role.MEMBER);
-                        }
-
-                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
-
-                        for (RealmMember member : realmRoom.getGroupRoom().getMembers()) {
-                            members.add(member);
-                        }
-
-                        realmRoom.getGroupRoom().setMembers(members);
-                    }
-                });
-                realm.close();
+                getActivity().getSupportFragmentManager().popBackStack();
 
             }
         });
@@ -245,7 +178,6 @@ public class ContactGroupFragment extends Fragment {
         rv.addItemDecoration(decoration);
 
         List<IItem> items = new ArrayList<>();
-        contacts = Contacts.retrieve(null);
 
 
         for (StructContactInfo contact : contacts) {
@@ -271,27 +203,28 @@ public class ContactGroupFragment extends Fragment {
         int selectedNumber = 0;
         textString = "";
 
-        for (int i = 0; i < contacts.size(); i++) {
+        int size = contacts.size();
+
+        for (int i = 0; i < size; i++) {
             if (contacts.get(i).isSelected) {
                 selectedNumber++;
                 textString += contacts.get(i).displayName + ",";
             }
         }
 
-        txtNumberOfMember.setText(selectedNumber + " / 5000 member");
+        txtNumberOfMember.setText(selectedNumber + " / " + size);
         sizeTextEdittext = textString.length();
         edtSearch.setText(textString);
     }
 
 
-    private ArrayList<Long> getSelectedList() {
+    private ArrayList<StructContactInfo> getSelectedList() {
 
-        ArrayList<Long> list = new ArrayList<>();
+        ArrayList<StructContactInfo> list = new ArrayList<>();
 
         for (int i = 0; i < contacts.size(); i++) {
             if (contacts.get(i).isSelected) {
-                countAddMemberRequest++;
-                list.add(contacts.get(i).peerId);
+                list.add(contacts.get(i));
             }
         }
 
