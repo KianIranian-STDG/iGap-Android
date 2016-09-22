@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.AttrRes;
@@ -67,7 +68,7 @@ public class ArcMenu extends FrameLayout {
         mDrawable = attr.getDrawable(R.styleable.ArcMenu_menu_scr);
         mColorStateList = attr.getColorStateList(R.styleable.ArcMenu_menu_color);
         mFinalRadius = attr.getDimension(R.styleable.ArcMenu_menu_radius, resources.getDimension(R.dimen.dp100));
-        mElevation = attr.getDimension(R.styleable.ArcMenu_menu_elevation, resources.getDimension(R.dimen.dp8));
+        mElevation = attr.getDimension(R.styleable.ArcMenu_menu_elevation, resources.getDimension(R.dimen.dp12));
         mMenuSideEnum = MenuSideEnum.fromId(attr.getInt(R.styleable.ArcMenu_menu_open, 0));
         mAnimationTime = attr.getInteger(R.styleable.ArcMenu_menu_animation_time, ANIMATION_TIME);
         mCurrentRadius = 0;
@@ -90,7 +91,7 @@ public class ArcMenu extends FrameLayout {
         else
             mQuadrantAngle = NEGATIVE_QUADRANT;
 
-        menuMargin = 0;//attr.getDimensionPixelSize(R.styleable.ArcMenu_menu_margin, resources.getDimensionPixelSize(R.dimen.dp4));
+        menuMargin = attr.getDimensionPixelSize(R.styleable.ArcMenu_menu_margin, resources.getDimensionPixelSize(R.dimen.dp8));
 
     }
 
@@ -113,8 +114,11 @@ public class ArcMenu extends FrameLayout {
         fabMenu.setOnClickListener(mMenuClickListener);
         fabMenu.setRippleColor(mRippleColor);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             fabMenu.setElevation(mElevation);
+            fabMenu.setStateListAnimator(null);
+        }
+
 
         addView(fabMenu);
     }
@@ -294,6 +298,14 @@ public class ArcMenu extends FrameLayout {
 
                 Log.e("ddd", "open");
                 fabMenu.setRotation(45);
+
+                fabMenu.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#2caaa3")));
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    fabMenu.setElevation(0);
+                }
+
+
             }
 
             @Override
@@ -355,6 +367,13 @@ public class ArcMenu extends FrameLayout {
                 Log.e("ddd", "close");
 
                 fabMenu.setRotation(0);
+                fabMenu.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    fabMenu.setElevation(mElevation);
+                }
+
+
             }
 
             @Override

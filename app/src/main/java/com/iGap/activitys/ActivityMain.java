@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -119,10 +120,10 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
     private void initComponent() {
         Button btnMenu = (Button) findViewById(R.id.cl_btn_menu);
-        btnMenu.setTypeface(G.fontawesome);
+        btnMenu.setTypeface(G.flaticon);
 
         Button btnSearch = (Button) findViewById(R.id.cl_btn_search);
-        btnSearch.setTypeface(G.fontawesome);
+        btnSearch.setTypeface(G.flaticon);
 
         final TextView txtIgap = (TextView) findViewById(R.id.cl_txt_igap);
         txtIgap.setTypeface(G.neuroplp);
@@ -353,6 +354,11 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         realm.close();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        mLeftDrawerLayout.toggle();
+        return false;
+    }
 
     private void muteNotification(final ChatItem item) {
         Realm realm = Realm.getDefaultInstance();

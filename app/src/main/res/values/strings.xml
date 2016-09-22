@@ -20,6 +20,14 @@
     <string name="md_back_arrow">\uf1be</string>
     <string name="md_crop_button">\uf15e</string>
     <string name="md_user_inside_bubble_speech">\uf289</string>
+    <string name="md_add_user_button">\uf106</string>
+    <string name="md_user_account_box">\uf287</string>
+    <string name="md_user_shape">\uf28b</string>
+    <string name="md_users_social_symbol">\uf28c</string>
+    <string name="md_settings_cogwheel_button">\uf243</string>
+    <string name="md_help_round_button">\uf1b0</string>
+    <string name="md_menu_button">\uf1db</string>
+    <string name="md_searching_magnifying_glass">\uf23a</string>
 
     <string name="fa_menu_bar">&#xf0c9;</string>
     <string name="fa_bell_slash_o">&#xf1f7;</string>

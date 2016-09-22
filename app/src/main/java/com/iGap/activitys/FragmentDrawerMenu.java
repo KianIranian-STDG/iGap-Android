@@ -50,10 +50,10 @@ public class FragmentDrawerMenu extends MenuFragment {
 
         // init icon
         TextView txtIconNewGroup = (TextView) v.findViewById(R.id.lm_txt_icon_group);
-        txtIconNewGroup.setTypeface(G.fontawesome);
+        txtIconNewGroup.setTypeface(G.flaticon);
 
         TextView txtIconNewChat = (TextView) v.findViewById(R.id.lm_txt_icon_new_chat);
-        txtIconNewChat.setTypeface(G.fontawesome);
+        txtIconNewChat.setTypeface(G.flaticon);
 
         TextView txtIconNewChannel = (TextView) v.findViewById(R.id.lm_txt_icon_channel);
         txtIconNewChannel.setTypeface(G.fontawesome);
@@ -62,13 +62,13 @@ public class FragmentDrawerMenu extends MenuFragment {
         txtIconContacts.setTypeface(G.flaticon);
 
         TextView txtIconInviteFriends = (TextView) v.findViewById(R.id.lm_txt_icon_invite_friends);
-        txtIconInviteFriends.setTypeface(G.fontawesome);
+        txtIconInviteFriends.setTypeface(G.flaticon);
 
         TextView txtIconSetting = (TextView) v.findViewById(R.id.lm_txt_icon_setting);
-        txtIconSetting.setTypeface(G.fontawesome);
+        txtIconSetting.setTypeface(G.flaticon);
 
         TextView txtIconiGapFAQ = (TextView) v.findViewById(R.id.lm_txt_icon_igap_faq);
-        txtIconiGapFAQ.setTypeface(G.fontawesome);
+        txtIconiGapFAQ.setTypeface(G.flaticon);
 
         Realm realm = Realm.getDefaultInstance();
         RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();

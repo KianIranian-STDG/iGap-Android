@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:layoutDirection="ltr">
 
-
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -43,7 +42,7 @@
                         android:id="@+id/agp_imv_group_avatar"
                         android:layout_width="@dimen/dp100"
                         android:layout_height="@dimen/dp100"
-                        android:src="@mipmap/back_chat3"/>
+                        android:src="@mipmap/back_chat3" />
 
 
                     <TextView
@@ -301,8 +300,8 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1px"
-                    android:layout_marginTop="@dimen/dp12"
                     android:layout_marginBottom="@dimen/dp4"
+                    android:layout_marginTop="@dimen/dp12"
                     android:background="@color/gray" />
 
 
@@ -315,8 +314,8 @@
                     <TextView
                         android:id="@+id/agp_txt_member_can_add_new_member"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:gravity="left"
                         android:paddingBottom="@dimen/dp4"
                         android:paddingLeft="@dimen/dp16"
@@ -341,8 +340,8 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1px"
-                    android:layout_marginTop="@dimen/dp4"
                     android:layout_marginBottom="@dimen/dp12"
+                    android:layout_marginTop="@dimen/dp4"
                     android:background="@color/gray" />
 
 
@@ -362,8 +361,8 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1px"
-                    android:layout_marginTop="@dimen/dp12"
                     android:layout_marginBottom="@dimen/dp12"
+                    android:layout_marginTop="@dimen/dp12"
                     android:background="@color/gray" />
 
                 <TextView
