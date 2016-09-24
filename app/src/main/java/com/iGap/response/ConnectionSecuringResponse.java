@@ -41,11 +41,13 @@ public class ConnectionSecuringResponse extends MessageHandler {
         String publicKey = builder.getPublicKey();
         int symmetricKeyLength = builder.getSymmetricKeyLength();
 
+        Log.i("SOC_RECONNECT", "ConnectionSecuringResponse 1");
         String key = HelperString.generateKey(symmetricKeyLength);
         Log.i("SOC_RECONNECT", "ConnectionSecuringResponse 1 G.symmetricKey : " + G.symmetricKey);
         if (G.symmetricKey != null) {
             return;
         }
+        Log.i("SOC_RECONNECT", "ConnectionSecuringResponse 3");
 
         G.symmetricKey = HelperString.generateSymmetricKey(key);
 
@@ -61,6 +63,7 @@ public class ConnectionSecuringResponse extends MessageHandler {
         Log.i("SOC_RECONNECT", "ConnectionSecuringResponse 2 ");
         ProtoConnectionSecuring.ConnectionSymmetricKey.Builder connectionSymmetricKey = ProtoConnectionSecuring.ConnectionSymmetricKey.newBuilder();
         connectionSymmetricKey.setSymmetricKey(ByteString.copyFrom(encryption));
+        Log.i("SOC_RECONNECT", "ConnectionSecuringResponse 5");
         RequestWrapper requestWrapper = new RequestWrapper(2, connectionSymmetricKey);
         try {
             RequestQueue.sendRequest(requestWrapper);

@@ -6,6 +6,8 @@ import com.iGap.G;
 import com.iGap.proto.ProtoChatUpdateStatus;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoResponse;
+import com.iGap.realm.RealmClientCondition;
+import com.iGap.realm.RealmOfflineSeen;
 import com.iGap.realm.RealmRoomMessage;
 
 import io.realm.Realm;
@@ -25,26 +27,43 @@ public class ChatUpdateStatusResponse extends MessageHandler {
 
 
     @Override
-    public void handler() {
+    public void handler() { //TODO [Saeed Mozaffari] [2016-09-17 4:05 PM] - FORCE for remove seen from client condition
         final ProtoChatUpdateStatus.ChatUpdateStatusResponse.Builder chatUpdateStatus = (ProtoChatUpdateStatus.ChatUpdateStatusResponse.Builder) message;
 
-        ProtoResponse.Response.Builder response = ProtoResponse.Response.newBuilder().mergeFrom(chatUpdateStatus.getResponse());
-        Log.i("SOC", "ChatUpdateStatusResponse response.getId() : " + response.getId());
-        Log.i("SOC", "ChatUpdateStatusResponse response.getTimestamp() : " + response.getTimestamp());
-        Log.i("MMM", "ChatSendMessageResponse chatUpdateStatus : " + chatUpdateStatus.getStatus());
+        final ProtoResponse.Response.Builder response = ProtoResponse.Response.newBuilder().mergeFrom(chatUpdateStatus.getResponse());
+        Log.i("SOC_CONDITION", "ChatUpdateStatusResponse response.getId() : " + response.getId());
+        Log.i("SOC_CONDITION", "ChatUpdateStatusResponse response.getTimestamp() : " + response.getTimestamp());
+        Log.i("SOC_CONDITION", "ChatSendMessageResponse chatUpdateStatus : " + chatUpdateStatus.getStatus());
 
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                // find message from database and update its status
-                RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", chatUpdateStatus.getMessageId()).findFirst();
-                if (roomMessage != null) {
-                    Log.i(ChatUpdateStatusResponse.class.getSimpleName(), "oftad > " + chatUpdateStatus.getStatus().toString());
-                    roomMessage.setStatus(chatUpdateStatus.getStatus().toString());
-                    realm.copyToRealmOrUpdate(roomMessage);
+                if (!response.getId().isEmpty()) { // I'm sender
 
-                    G.chatUpdateStatusUtil.onChatUpdateStatus(chatUpdateStatus.getRoomId(), chatUpdateStatus.getMessageId(), chatUpdateStatus.getStatus(), chatUpdateStatus.getStatusVersion());
+                    RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", chatUpdateStatus.getRoomId()).findFirst();
+
+                    for (RealmOfflineSeen realmOfflineSeen : realmClientCondition.getOfflineSeen()) { // can do this with contains ?
+                        if (realmOfflineSeen.getOfflineSeen() == chatUpdateStatus.getMessageId()) {
+                            Log.i("SOC_CONDITION", "realmOfflineSeen 1 : " + realmOfflineSeen);
+                            realmOfflineSeen.deleteFromRealm();
+                            Log.i("SOC_CONDITION", "realmOfflineSeen 2 : " + realmOfflineSeen);
+                        }
+                    }
+
+                } else { // I'm recipient
+
+                    // find message from database and update its status
+                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", chatUpdateStatus.getMessageId()).findFirst();
+                    Log.i("SOC_CONDITION", "I'm recipient 1");
+                    if (roomMessage != null) {
+                        Log.i(ChatUpdateStatusResponse.class.getSimpleName(), "oftad > " + chatUpdateStatus.getStatus().toString());
+                        roomMessage.setStatus(chatUpdateStatus.getStatus().toString());
+                        realm.copyToRealmOrUpdate(roomMessage);
+                        Log.i("SOC_CONDITION", "I'm recipient ");
+                        G.chatUpdateStatusUtil.onChatUpdateStatus(chatUpdateStatus.getRoomId(), chatUpdateStatus.getMessageId(), chatUpdateStatus.getStatus(), chatUpdateStatus.getStatusVersion());
+                    }
+
                 }
             }
         });

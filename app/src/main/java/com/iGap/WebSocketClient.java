@@ -188,7 +188,7 @@ public class WebSocketClient {
 
     private static void reconnect() {
         HelperConnectionState.connectionState(Config.ConnectionState.CONNECTING);
-        if (G.allowForConnect && HelperCheckInternetConnection.hasNetwork()) {
+        if (G.allowForConnect) {
             resetWebsocketInfo();
             G.handler.postDelayed(new Runnable() {
                 @Override

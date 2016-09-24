@@ -227,7 +227,7 @@ public class RegisteredContactsFragment extends Fragment {
             intent.putExtra("RoomId", realmRoom.getId());
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             G.context.startActivity(intent);
-            getActivity().getFragmentManager().popBackStack();
+            getActivity().getSupportFragmentManager().popBackStack();
 
         } else {
             G.onChatGetRoom = new OnChatGetRoom() {
@@ -243,7 +243,7 @@ public class RegisteredContactsFragment extends Fragment {
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             realm.close();
                             G.context.startActivity(intent);
-                            getActivity().getFragmentManager().popBackStack();
+                            getActivity().getSupportFragmentManager().popBackStack();
                         }
                     });
                 }

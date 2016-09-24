@@ -8,6 +8,7 @@ import com.iGap.proto.ProtoChatSendMessage;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmChatHistory;
+import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmUserInfo;
@@ -43,6 +44,13 @@ public class ChatSendMessageResponse extends MessageHandler {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
+                // set info for clientCondition
+                RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", chatSendMessageResponse.getRoomId()).findFirst();
+                if (realmClientCondition != null) {
+                    realmClientCondition.setMessageVersion(roomMessage.getMessageVersion());
+                    realmClientCondition.setStatusVersion(roomMessage.getStatusVersion());
+                }
+
                 // if first message received but the room doesn't exist, create new room
                 RealmRoom room = realm.where(RealmRoom.class).equalTo("id", chatSendMessageResponse.getRoomId()).findFirst();
                 if (room == null) {
@@ -63,7 +71,17 @@ public class ChatSendMessageResponse extends MessageHandler {
                 // and response is null, so we sure recipient is another user
                 if (userId != roomMessage.getUserId() && chatSendMessageResponse.getResponse().getId().isEmpty()) {
                     // i'm the recipient
-                    RealmChatHistory realmChatHistory = realm.createObject(RealmChatHistory.class);
+
+                    //RealmChatHistory realmChatHistory = realm.createObject(RealmChatHistory.class);
+
+                    RealmChatHistory realmChatHistory = new RealmChatHistory();
+
+                    int autoIncrement = 0;
+                    if (realm.where(RealmChatHistory.class).max("id") != null) {
+                        autoIncrement = realm.where(RealmChatHistory.class).max("id").intValue() + 1;
+                    }
+                    realmChatHistory.setId(autoIncrement);
+
                     RealmRoomMessage realmRoomMessage = realm.createObject(RealmRoomMessage.class);
 
                     realmRoomMessage.setMessageId(roomMessage.getMessageId());

@@ -5,6 +5,7 @@ import android.text.format.DateUtils;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.enums.RoomType;
 
+import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -128,7 +129,8 @@ public class RealmRoom extends RealmObject {
      * @param room ProtoGlobal.Room
      * @return RealmRoom
      */
-    public static RealmRoom convert(ProtoGlobal.Room room) {
+    public static RealmRoom convert(ProtoGlobal.Room room, Realm realm) {
+        putChatToClientCondition(room, realm);
         RealmRoom realmRoom = new RealmRoom();
         realmRoom.setColor(room.getColor());
         realmRoom.setId(room.getId());
@@ -153,5 +155,10 @@ public class RealmRoom extends RealmObject {
         }
 
         return realmRoom;
+    }
+
+    private static void putChatToClientCondition(final ProtoGlobal.Room room, Realm realm) {
+        RealmClientCondition realmClientCondition = realm.createObject(RealmClientCondition.class);
+        realmClientCondition.setRoomId(room.getId());
     }
 }

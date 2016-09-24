@@ -1,13 +1,23 @@
 package com.iGap.realm;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 public class RealmChatHistory extends RealmObject {
 
-//    @PrimaryKey private long id;
+    @PrimaryKey
+    private long id;
 
     private long roomId;
     private RealmRoomMessage roomMessage;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public RealmRoomMessage getRoomMessage() {
         return roomMessage;
