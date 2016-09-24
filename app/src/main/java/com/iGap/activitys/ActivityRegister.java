@@ -123,6 +123,13 @@ public class ActivityRegister extends ActivityEnhanced {
         btnChoseCountry = (Button) findViewById(R.id.rg_btn_choseCountry);
         btnChoseCountry.setTypeface(G.arial);
         edtPhoneNumber = (MaskedEditText) findViewById(R.id.rg_edt_PhoneNumber);
+
+        int portrait = getResources().getConfiguration().orientation;
+        if (portrait == 1) {
+            txtAgreement_register = (TextView) findViewById(R.id.txtAgreement_register);
+            txtAgreement_register.setMovementMethod(new ScrollingMovementMethod());
+            txtAgreement_register.setTypeface(G.arial);
+        }
         if (savedInstanceState != null) {
             // Restore value of members from saved state
             edtCodeNumber.setText(savedInstanceState.getString(KEY_SAVE_CODENUMBER));
@@ -180,19 +187,11 @@ public class ActivityRegister extends ActivityEnhanced {
             }
         });
 
-
         layout_agreement = (ViewGroup) findViewById(R.id.rg_layout_agreement);
         layout_verify = (ViewGroup) findViewById(R.id.rg_layout_verify_and_agreement);
 
 
 
-        int portrait = getResources().getConfiguration().orientation;
-
-        if (portrait == 1) {
-            txtAgreement_register = (TextView) findViewById(R.id.txtAgreement_register);
-            txtAgreement_register.setMovementMethod(new ScrollingMovementMethod());
-            txtAgreement_register.setTypeface(G.arial);
-        }
 
 //==================================================================================================== read list of county from text file
 //        list of country
