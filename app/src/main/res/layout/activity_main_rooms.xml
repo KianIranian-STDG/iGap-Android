@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.iGap.module.NotTouchableCoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:background="@android:color/white"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+                                               xmlns:app="http://schemas.android.com/apk/res-auto"
+                                               android:layout_width="match_parent"
+                                               android:layout_height="match_parent"
+                                               android:background="@android:color/white"
+                                               android:fitsSystemWindows="true">
 
     <com.iGap.module.MyAppBarLayout
         android:id="@+id/appBarLayout"
@@ -34,7 +34,7 @@
                     android:paddingBottom="@dimen/dp4"
                     android:text="@string/md_menu_button"
                     android:textColor="@android:color/white"
-                    android:textSize="@dimen/sp20" />
+                    android:textSize="@dimen/sp20"/>
 
                 <TextView
                     android:id="@+id/cl_txt_igap"
@@ -47,7 +47,7 @@
                     android:text="@string/igap"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@android:color/white"
-                    android:textSize="@dimen/sp20" />
+                    android:textSize="@dimen/sp20"/>
 
                 <Button
                     android:id="@+id/cl_btn_search"
@@ -58,7 +58,7 @@
 
                     android:text="@string/md_searching_magnifying_glass"
                     android:textColor="@android:color/white"
-                    android:textSize="@dimen/sp20" />
+                    android:textSize="@dimen/sp20"/>
 
 
             </LinearLayout>
@@ -66,7 +66,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#34a49f"></View>
+                android:background="#34a49f"/>
         </LinearLayout>
 
     </com.iGap.module.MyAppBarLayout>
@@ -74,7 +74,6 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/cl_recycler_view_contact"
         android:layout_width="match_parent"
-        android:paddingTop="@dimen/dp4"
         android:layout_height="wrap_content"
         android:overScrollMode="never">
 
@@ -95,21 +94,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/single_chat"
-            app:backgroundTint="@color/green" />
+            app:backgroundTint="@color/green"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/ac_fab_crate_new_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/group_chat"
-            app:backgroundTint="@color/green" />
+            app:backgroundTint="@color/green"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/ac_fab_crate_new_channel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/channel_white"
-            app:backgroundTint="@color/green" />
+            app:backgroundTint="@color/green"/>
 
     </com.iGap.libs.floatingAddButton.ArcMenu>
 </com.iGap.module.NotTouchableCoordinatorLayout>
