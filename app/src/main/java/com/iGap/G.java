@@ -204,6 +204,8 @@ public class G extends Application {
 
     @Override
     public void onCreate() {
+        MultiDex.install(getApplicationContext());
+        super.onCreate();
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath("fonts/arial.ttf")
@@ -211,8 +213,6 @@ public class G extends Application {
                 .build()
         );
 
-        MultiDex.install(getApplicationContext());
-        super.onCreate();
         new File(DIR_APP).mkdirs();
         new File(DIR_IMAGES).mkdirs();
         new File(DIR_VIDEOS).mkdirs();

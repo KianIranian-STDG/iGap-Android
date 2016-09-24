@@ -12,6 +12,10 @@
 
     </style>
 
+    <style name="AppThemeTranslucent" parent="BaseTheme">
+
+    </style>
+
     <style name="Widget.GifMoviewView" parent="@android:style/Widget"></style>
 
     <style name="AppTheme22" parent="Theme.AppCompat.Light.DarkActionBar">

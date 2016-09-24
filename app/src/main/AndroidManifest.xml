@@ -51,6 +51,7 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
         <activity
             android:name=".activitys.ActivityMain"
+            android:theme="@style/AppThemeTranslucent"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale">
 
             <!-- this part add app logo to list of share -->
