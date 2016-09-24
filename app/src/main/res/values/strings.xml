@@ -309,6 +309,8 @@
     <string name="save_to_gallery">Save to gallery</string>
     <string name="select_room">Select Room</string>
     <string name="edited">Edited</string>
+    <string name="today">Today</string>
+    <string name="yesterday">Yesterday</string>
 
     <string-array name="pop_up_shared_media">
         <item>@string/shared_media</item>

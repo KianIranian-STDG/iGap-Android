@@ -54,6 +54,7 @@ import com.iGap.adapter.items.chat.ImageItem;
 import com.iGap.adapter.items.chat.ImageWithTextItem;
 import com.iGap.adapter.items.chat.LocationItem;
 import com.iGap.adapter.items.chat.MessageItem;
+import com.iGap.adapter.items.chat.TimeItem;
 import com.iGap.adapter.items.chat.VideoItem;
 import com.iGap.adapter.items.chat.VideoWithTextItem;
 import com.iGap.adapter.items.chat.VoiceItem;
@@ -84,7 +85,9 @@ import com.iGap.module.MyType;
 import com.iGap.module.OnComplete;
 import com.iGap.module.RecyclerViewPauseOnScrollListener;
 import com.iGap.module.ShouldScrolledBehavior;
+import com.iGap.module.SortMessages;
 import com.iGap.module.StructMessageInfo;
+import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoChatSendMessage;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
@@ -115,6 +118,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -260,10 +265,14 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         });
     }
 
+    private Calendar lastDateCalendar = Calendar.getInstance();
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        lastDateCalendar.clear();
 
         attachFile = new AttachFile(this);
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -551,69 +560,74 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
         long identifier = 100;
         for (StructMessageInfo messageInfo : getChatList()) {
-            switch (messageInfo.messageType) {
-                // TODO: 9/7/2016 [Alireza Eskandarpour Shoferi] add group items
-                case TEXT:
-                    if (chatType == ProtoGlobal.Room.Type.CHAT) {
-                        mAdapter.add(new MessageItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
-                    } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
-                        mAdapter.add(new ChannelMessageItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
-                    }
-                    break;
-                case IMAGE:
-                    if (chatType == ProtoGlobal.Room.Type.CHAT) {
-                        mAdapter.add(new ImageItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
-                    } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
-                        mAdapter.add(new ChannelImageItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
-                    }
-                    break;
-                case IMAGE_TEXT:
-                    if (chatType == ProtoGlobal.Room.Type.CHAT) {
-                        mAdapter.add(new ImageWithTextItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
-                    } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
-                        mAdapter.add(new ChannelImageItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
-                    }
-                    break;
-                case VIDEO:
-                    if (chatType == ProtoGlobal.Room.Type.CHAT) {
-                        mAdapter.add(new VideoItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
-                    } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
-                        mAdapter.add(new ChannelVideoItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
-                    }
-                    break;
-                case VIDEO_TEXT:
-                    if (chatType == ProtoGlobal.Room.Type.CHAT) {
-                        mAdapter.add(new VideoWithTextItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
-                    } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
-                        mAdapter.add(new ChannelVideoItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
-                    }
-                    break;
-                case LOCATION:
-                    // TODO: 9/15/2016 [Alireza Eskandarpour Shoferi] fill
-                    if (chatType == ProtoGlobal.Room.Type.CHAT) {
-                        mAdapter.add(new LocationItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
-                    } /*else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
+            if (!messageInfo.senderID.equalsIgnoreCase("-1")) {
+                switch (messageInfo.messageType) {
+                    // TODO: 9/7/2016 [Alireza Eskandarpour Shoferi] add group items
+                    case TEXT:
+                        if (chatType == ProtoGlobal.Room.Type.CHAT) {
+                            mAdapter.add(new MessageItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                        } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
+                            mAdapter.add(new ChannelMessageItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                        }
+                        break;
+                    case IMAGE:
+                        if (chatType == ProtoGlobal.Room.Type.CHAT) {
+                            mAdapter.add(new ImageItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                        } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
+                            mAdapter.add(new ChannelImageItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                        }
+                        break;
+                    case IMAGE_TEXT:
+                        if (chatType == ProtoGlobal.Room.Type.CHAT) {
+                            mAdapter.add(new ImageWithTextItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                        } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
+                            mAdapter.add(new ChannelImageItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                        }
+                        break;
+                    case VIDEO:
+                        if (chatType == ProtoGlobal.Room.Type.CHAT) {
+                            mAdapter.add(new VideoItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                        } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
+                            mAdapter.add(new ChannelVideoItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                        }
+                        break;
+                    case VIDEO_TEXT:
+                        if (chatType == ProtoGlobal.Room.Type.CHAT) {
+                            mAdapter.add(new VideoWithTextItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                        } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
+                            mAdapter.add(new ChannelVideoItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                        }
+                        break;
+                    case LOCATION:
+                        // TODO: 9/15/2016 [Alireza Eskandarpour Shoferi] fill
+                        if (chatType == ProtoGlobal.Room.Type.CHAT) {
+                            mAdapter.add(new LocationItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                        } /*else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
                         mAdapter.add(new ChannelVideoItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                     }*/
-                    break;
-                case FILE:
-                case FILE_TEXT:
-                    if (chatType == ProtoGlobal.Room.Type.CHAT) {
-                        mAdapter.add(new FileItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
-                    } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
-                        mAdapter.add(new ChannelFileItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
-                    }
-                    break;
-                case VOICE:
-                case VOICE_TEXT:
-                    if (chatType == ProtoGlobal.Room.Type.CHAT) {
-                        mAdapter.add(new VoiceItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
-                    } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
-                        mAdapter.add(new ChannelVoiceItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
-                    }
-                    break;
-                // TODO: 9/15/2016 [Alireza Eskandarpour Shoferi] implement new message types (contact, audio)
+                        break;
+                    case FILE:
+                    case FILE_TEXT:
+                        if (chatType == ProtoGlobal.Room.Type.CHAT) {
+                            mAdapter.add(new FileItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                        } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
+                            mAdapter.add(new ChannelFileItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                        }
+                        break;
+                    case VOICE:
+                    case VOICE_TEXT:
+                        if (chatType == ProtoGlobal.Room.Type.CHAT) {
+                            mAdapter.add(new VoiceItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                        } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
+                            mAdapter.add(new ChannelVoiceItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                        }
+                        break;
+                    // TODO: 9/15/2016 [Alireza Eskandarpour Shoferi] implement new message types (contact, audio)
+                }
+            } else {
+                mAdapter.add(new TimeItem().setMessage(messageInfo).withIdentifier(identifier));
             }
+
             identifier++;
         }
 
@@ -1406,32 +1420,63 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     private ArrayList<StructMessageInfo> getChatList() {
         Realm realm = Realm.getDefaultInstance();
         long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
-        ArrayList<StructMessageInfo> messageList = new ArrayList<>();
+        ArrayList<RealmRoomMessage> realmRoomMessages = new ArrayList<>();
+        // get all RealmRoomMessages
         for (RealmChatHistory realmChatHistory : realm.where(RealmChatHistory.class).equalTo("roomId", mRoomId).findAll()) {
             RealmRoomMessage roomMessage = realmChatHistory.getRoomMessage();
             if (roomMessage != null) {
-                StructMessageInfo structMessageInfo = new StructMessageInfo();
-                structMessageInfo.messageText = roomMessage.getMessage();
-                structMessageInfo.status = roomMessage.getStatus();
-                structMessageInfo.messageID = Long.toString(roomMessage.getMessageId());
-                structMessageInfo.time = roomMessage.getUpdateTime();
-                structMessageInfo.senderID = Long.toString(roomMessage.getUserId());
-                structMessageInfo.isEdited = roomMessage.isEdited();
-                if (roomMessage.getUserId() == userId) {
-                    structMessageInfo.sendType = MyType.SendType.send;
-                } else if (roomMessage.getUserId() != userId) {
-                    structMessageInfo.sendType = MyType.SendType.recvive;
-                }
-                // TODO: 9/5/2016 [Alireza Eskandarpour Shoferi] add timeLayouts to adapter
-                if (realmChatHistory.getRoomMessage().getMessageType().equals("TEXT")) {
-                    structMessageInfo.messageType = ProtoGlobal.RoomMessageType.TEXT;
-                }
-                messageList.add(structMessageInfo);
+                realmRoomMessages.add(roomMessage);
             }
         }
+
+        Collections.sort(realmRoomMessages, SortMessages.ASC);
+
+        List<RealmRoomMessage> lastResultMessages = new ArrayList<>();
+
+        for (RealmRoomMessage message : realmRoomMessages) {
+
+            String time = getTimeSettingMessage(message.getUpdateTime());
+            if (time != null) {
+                RealmRoomMessage timeMessage = new RealmRoomMessage();
+                timeMessage.setMessageId(System.currentTimeMillis());
+                // -1 means time message
+                timeMessage.setUserId(-1);
+                timeMessage.setUpdateTime((int) (message.getUpdateTime()) - 1);
+                timeMessage.setMessage(time);
+                lastResultMessages.add(timeMessage);
+            }
+
+            lastResultMessages.add(message);
+        }
+
+        Collections.sort(lastResultMessages, SortMessages.DESC);
+
         realm.close();
-        return messageList;
+
+        ArrayList<StructMessageInfo> messageInfos = new ArrayList<>();
+        for (RealmRoomMessage realmRoomMessage : lastResultMessages) {
+            messageInfos.add(StructMessageInfo.convert(realmRoomMessage));
+        }
+
+        return messageInfos;
     }
+
+    private String getTimeSettingMessage(long comingDate) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(comingDate);
+
+        calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+
+        long diff = Math.abs(calendar.getTimeInMillis() - lastDateCalendar.getTimeInMillis());
+
+        if (diff + 1000 > DateUtils.DAY_IN_MILLIS) {
+            lastDateCalendar.setTimeInMillis(calendar.getTimeInMillis());
+            return TimeUtils.getChatSettingsTimeAgo(this, calendar.getTime());
+        }
+
+        return null;
+    }
+
 
     @Override
     public void onMessageClick(View view, final StructMessageInfo messageInfo, int position) {
