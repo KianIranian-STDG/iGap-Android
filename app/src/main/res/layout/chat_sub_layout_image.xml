@@ -5,7 +5,6 @@
              android:id="@+id/chatSubLayoutImage"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
-             android:layoutDirection="ltr"
              android:textDirection="firstStrong"
              android:maxWidth="@dimen/dp300"
              android:layout_marginBottom="@dimen/dp4">

@@ -6,7 +6,6 @@
              android:layout_width="match_parent"
              android:textDirection="firstStrong"
              android:layout_height="wrap_content"
-             android:layoutDirection="ltr"
              android:maxWidth="@dimen/dp300"
              android:layout_marginBottom="@dimen/dp4">
 

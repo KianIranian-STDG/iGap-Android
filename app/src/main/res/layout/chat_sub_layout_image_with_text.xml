@@ -5,7 +5,6 @@
              android:id="@+id/chatSubLayoutImageWithText"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
-             android:layoutDirection="ltr"
              android:textDirection="firstStrong"
              android:maxWidth="@dimen/dp300"
              android:layout_marginBottom="@dimen/dp4">
@@ -51,12 +50,9 @@
 
             <com.iGap.module.EmojiTextView
                 android:id="@+id/messageText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="left"
+                style="@style/ChatMessages.EmojiTextView"
                 android:text="SAMPLE TEXT"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/sp16" />
+                android:textColor="@android:color/black"/>
 
             <include
                 android:id="@+id/cslr_ll_time"

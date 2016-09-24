@@ -67,6 +67,7 @@
                         android:layout_height="wrap_content"
                         android:maxWidth="@dimen/dp160"
                         android:singleLine="true"
+                        android:paddingBottom="2dp"
                         android:text="naddddddd"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/sp16"
@@ -86,9 +87,9 @@
 
                 <com.iGap.module.EmojiTextView
                     android:id="@+id/cs_txt_last_message"
+                    android:paddingBottom="2dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="3dp"
                     android:singleLine="true"
                     android:text="LAST MESSAGE"
                     android:textColor="#FF616161"
@@ -96,9 +97,9 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="@dimen/dp68"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="top|center"
+                android:gravity="top|center_horizontal"
                 android:orientation="vertical">
 
                 <LinearLayout

@@ -5,7 +5,6 @@
     android:id="@+id/chatSubLayoutAudio"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layoutDirection="ltr"
     android:maxWidth="@dimen/dp300"
     android:padding="@dimen/chatMessageBoxPadding">
 

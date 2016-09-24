@@ -198,27 +198,27 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
             case "DELIVERED":
                 view.setTextColor(view.getContext().getResources().getColor(R.color.green));
                 view.setText(G.context.getResources().getString(R.string.md_check_symbol));
-                view.setTextSize(13F);
+                view.setTextSize(12F);
                 break;
             case "FAILED":
                 view.setTextColor(Color.RED);
                 view.setText(G.context.getResources().getString(R.string.md_cancel_button));
-                view.setTextSize(16F);
+                view.setTextSize(15F);
                 break;
             case "SEEN":
                 view.setTextColor(view.getContext().getResources().getColor(R.color.green));
                 view.setText(G.context.getResources().getString(R.string.md_double_tick_indicator));
-                view.setTextSize(16F);
+                view.setTextSize(15F);
                 break;
             case "SENDING":
                 view.setTextColor(view.getContext().getResources().getColor(R.color.green));
                 view.setText(G.context.getResources().getString(R.string.md_clock_with_white_face));
-                view.setTextSize(13F);
+                view.setTextSize(12F);
                 break;
             case "SENT":
                 view.setTextColor(view.getContext().getResources().getColor(R.color.green));
                 view.setText(G.context.getResources().getString(R.string.md_check_symbol));
-                view.setTextSize(13F);
+                view.setTextSize(12F);
                 break;
         }
     }

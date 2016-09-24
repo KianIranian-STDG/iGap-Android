@@ -4,10 +4,9 @@
               android:layout_height="@dimen/dp48"
               android:layout_marginBottom="@dimen/dp8"
               android:gravity="left|center"
-              android:layoutDirection="ltr"
-              android:textDirection="firstStrong"
               android:orientation="horizontal"
-              android:padding="@dimen/dp4">
+              android:padding="@dimen/dp4"
+              android:textDirection="firstStrong">
 
     <ImageView
         android:layout_width="@dimen/dp40"
@@ -16,13 +15,13 @@
         android:adjustViewBounds="true"
         android:padding="@dimen/dp4"
         android:src="@mipmap/reply"
-        android:visibility="visible" />
+        android:visibility="visible"/>
 
     <View
         android:layout_width="3dp"
         android:layout_height="@dimen/dp40"
         android:layout_marginLeft="@dimen/dp8"
-        android:background="@color/green" />
+        android:background="@color/green"/>
 
 
     <ImageView
@@ -32,7 +31,7 @@
         android:layout_marginLeft="@dimen/dp8"
         android:adjustViewBounds="true"
         android:src="@mipmap/d"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
     <LinearLayout
         android:layout_width="0dp"
@@ -42,25 +41,24 @@
         android:gravity="left|center"
         android:orientation="vertical">
 
-        <TextView
+        <com.iGap.module.EmojiTextView
             android:id="@+id/chslr_txt_replay_from"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/ChatMessages.EmojiTextView"
             android:maxWidth="@dimen/dp280"
             android:singleLine="true"
-            android:text="New Text"
+            android:text="SAMPLE TEXT"
             android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/sp14" />
+            android:textSize="@dimen/sp14"/>
 
-        <TextView
+        <com.iGap.module.EmojiTextView
             android:id="@+id/chslr_txt_replay_message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/ChatMessages.EmojiTextView"
             android:layout_marginTop="@dimen/dp4"
             android:maxWidth="@dimen/dp280"
             android:singleLine="true"
-            android:text="New Text"
-            android:textSize="@dimen/sp14" />
+            android:text="SAMPLE TEXT"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/sp14"/>
     </LinearLayout>
 
 
