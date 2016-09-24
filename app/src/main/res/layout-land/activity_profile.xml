@@ -89,11 +89,11 @@
                 android:layout_width="@dimen/dp70"
                 android:layout_height="@dimen/dp70"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/dp12"
                 android:background="@drawable/pu_circle_button_give_image"
                 android:gravity="center"
                 android:padding="@dimen/dp16"
-                android:src="@mipmap/plus_icon"
-                android:layout_marginTop="@dimen/dp12" />
+                android:src="@mipmap/plus_icon" />
 
         </RelativeLayout>
 
@@ -114,38 +114,44 @@
 
     </LinearLayout>
 
-    <LinearLayout
+
+    <RelativeLayout
+        android:id="@+id/mainLayout"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginLeft="@dimen/dp110"
-        android:layout_marginRight="@dimen/dp110"
-        android:layout_weight=".1"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true"
+        android:layout_marginLeft="@dimen/dp52"
+        android:layout_marginRight="@dimen/dp52">
 
-        <EditText
-            android:id="@+id/pu_edt_nikeName"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/pu_txtInput_nikeName"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:gravity="center"
-            android:hint="@string/pu_nikname_profileUser"
-            android:textColor="@color/black_register"
-            android:textColorHint="@color/pu_edtHintText"
-            android:singleLine="true"
-            android:lines="1"
-            android:maxLines="1"
-            android:maxLength="20"
-            android:textSize="@dimen/sp18" />
+            android:layout_height="wrap_content">
 
+            <EditText
+                android:id="@+id/pu_edt_nikeName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:gravity="start"
+                android:hint="@string/pu_nikname_profileUser"
+                android:lines="1"
+                android:maxLength="20"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/black_register"
+                android:textColorHint="@color/pu_edtHintText"
+                android:textSize="@dimen/sp18" />
 
+        </android.support.design.widget.TextInputLayout>
         <View
             android:id="@+id/pu_line_below_editText"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/border_editText" />
-
-    </LinearLayout>
+            android:background="@color/border_editText"
+            android:layout_below="@+id/pu_txtInput_nikeName" />
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -161,8 +167,8 @@
             android:layout_gravity="center"
             android:background="@drawable/pu_background_button_start_register"
             android:gravity="center"
-            android:textAllCaps="false"
             android:text="Lets Go"
+            android:textAllCaps="false"
             android:textColor="@color/whit_background" />
 
     </RelativeLayout>

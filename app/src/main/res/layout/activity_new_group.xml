@@ -5,8 +5,8 @@
     android:id="@+id/ng_fragmentContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.iGap.activitys.ActivityNewGroup"
-    android:layoutDirection="ltr">
+    android:layoutDirection="ltr"
+    tools:context="com.iGap.activitys.ActivityNewGroup">
 
 
     <android.support.v7.widget.Toolbar
@@ -36,6 +36,7 @@
 
             <com.iGap.module.MaterialDesignTextView
                 android:id="@+id/ng_txt_back"
+                fontPath="fonts/Flaticon.ttf"
                 android:layout_width="@dimen/dp60"
                 android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
@@ -70,41 +71,52 @@
                 android:src="@mipmap/plus"
                 app:civ_border_width="0dp" />
 
-            <EditText
-                android:id="@+id/ng_edt_newGroup"
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/ng_txtInput_newGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/ng_profile_circle_image"
                 android:layout_marginLeft="@dimen/dp20"
                 android:layout_marginRight="@dimen/dp140"
-                android:layout_marginTop="@dimen/dp16"
-                android:hint="Group Name" />
+                android:layout_below="@+id/ng_profile_circle_image">
 
-            <com.iGap.module.LinedEditText
-                android:id="@+id/ng_edt_description"
+                <EditText
+                    android:id="@+id/ng_edt_newGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp8" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/ng_txtInput_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/ng_edt_newGroup"
-                android:layout_marginLeft="@dimen/dp20"
-                android:layout_marginRight="@dimen/dp20"
-                android:layout_marginTop="@dimen/dp24"
-                android:maxLines="4"
-                android:maxLength="500"
-                android:minLines="3"
-                android:background="@android:color/transparent"
-                android:hint="Description" />
+                android:layout_below="@+id/ng_txtInput_newGroup"
+                android:hint="Description">
 
+                <com.iGap.module.LinedEditText
+                    android:id="@+id/ng_edt_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp120"
+                    android:layout_marginLeft="@dimen/dp20"
+                    android:layout_marginRight="@dimen/dp20"
+                    android:background="@android:color/transparent"
+                    android:maxLength="500"
+                    android:maxLines="4"
+                    android:paddingTop="0dp" />
+
+            </android.support.design.widget.TextInputLayout>
 
             <TextView
                 android:id="@+id/ng_txt_nextStep"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_below="@+id/ng_edt_description"
+                android:layout_below="@+id/ng_txtInput_description"
                 android:layout_marginRight="@dimen/dp20"
-                android:layout_marginTop="@dimen/dp52"
-                android:text="NEXT STEP"
+                android:layout_marginTop="@dimen/dp12"
                 android:singleLine="false"
+                android:text="NEXT STEP"
                 android:textColor="@color/toolbar_background"
                 android:textSize="@dimen/dp16"
                 android:textStyle="bold" />
@@ -113,9 +125,9 @@
                 android:id="@+id/ng_txt_cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/ng_edt_description"
+                android:layout_below="@+id/ng_txtInput_description"
                 android:layout_marginRight="@dimen/dp20"
-                android:layout_marginTop="@dimen/dp52"
+                android:layout_marginTop="@dimen/dp12"
                 android:layout_toLeftOf="@+id/ng_txt_nextStep"
                 android:text="CANCEL"
                 android:textColor="@color/toolbar_background"

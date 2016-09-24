@@ -91,7 +91,7 @@ public class ActivityRegister extends ActivityEnhanced {
     private String regexFetchCodeVerification;
 
     private long userId;
-
+    public static TextView btnOk;
     private boolean newUser;
 
     ArrayList<StructCountry> structCountryArrayList = new ArrayList();  //Array List for Store List of StructCountry Object
@@ -110,10 +110,44 @@ public class ActivityRegister extends ActivityEnhanced {
 
     private Dialog dialog;
 
+    static final String KEY_SAVE_CODENUMBER = "SAVE_CODENUMBER";
+    static final String KEY_SAVE_PHONENUMBER_MASK = "SAVE_PHONENUMBER_MASK";
+    static final String KEY_SAVE_PHONENUMBER_NUMBER = "SAVE_PHONENUMBER_NUMBER";
+    static final String KEY_SAVE_NAMECOUNTRY = "SAVE_NAMECOUNTRY";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        edtCodeNumber = (EditText) findViewById(R.id.rg_edt_CodeNumber);
+        btnChoseCountry = (Button) findViewById(R.id.rg_btn_choseCountry);
+        btnChoseCountry.setTypeface(G.arial);
+        edtPhoneNumber = (MaskedEditText) findViewById(R.id.rg_edt_PhoneNumber);
+        if (savedInstanceState != null) {
+            // Restore value of members from saved state
+            edtCodeNumber.setText(savedInstanceState.getString(KEY_SAVE_CODENUMBER));
+            edtPhoneNumber.setMask(savedInstanceState.getString(KEY_SAVE_PHONENUMBER_MASK));
+            edtPhoneNumber.setText(savedInstanceState.getString(KEY_SAVE_PHONENUMBER_NUMBER));
+            btnChoseCountry.setText(savedInstanceState.getString(KEY_SAVE_NAMECOUNTRY));
+
+        } else {
+            Bundle extras = getIntent().getExtras();
+            if (extras != null) {
+                isoCode = extras.getString("ISO_CODE");
+                edtCodeNumber.setText("+" + extras.getInt("CALLING_CODE"));
+                btnChoseCountry.setText(extras.getString("COUNTRY_NAME"));
+                String pattern = extras.getString("PATTERN");
+                if (!pattern.equals("")) {
+                    edtPhoneNumber.setMask(pattern.replace("X", "#").replace(" ", "-"));
+                }
+                regex = extras.getString("REGEX");
+                String body = extras.getString("TERMS_BODY");
+                if (body != null & txtAgreement_register != null) { //TODO [Saeed Mozaffari] [2016-09-01 9:28 AM] - txtAgreement_register !=null is wrong. change it
+                    txtAgreement_register.setText(Html.fromHtml(body));
+                }
+
+            }
+        }
 
         int getHeight = G.context.getResources().getDisplayMetrics().heightPixels;
 
@@ -127,19 +161,16 @@ public class ActivityRegister extends ActivityEnhanced {
         txtTitleToolbar = (TextView) findViewById(R.id.rg_txt_titleToolbar);
         txtTitleToolbar.setTypeface(G.FONT_IGAP);
 
-        edtPhoneNumber = (MaskedEditText) findViewById(R.id.rg_edt_PhoneNumber);
+
         edtPhoneNumber.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-
             }
-
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().equals("0")) {
@@ -149,13 +180,11 @@ public class ActivityRegister extends ActivityEnhanced {
             }
         });
 
-        edtCodeNumber = (EditText) findViewById(R.id.rg_edt_CodeNumber);
 
         layout_agreement = (ViewGroup) findViewById(R.id.rg_layout_agreement);
         layout_verify = (ViewGroup) findViewById(R.id.rg_layout_verify_and_agreement);
 
-        btnChoseCountry = (Button) findViewById(R.id.rg_btn_choseCountry);
-        btnChoseCountry.setTypeface(G.arial);
+
 
         int portrait = getResources().getConfiguration().orientation;
 
@@ -304,7 +333,6 @@ public class ActivityRegister extends ActivityEnhanced {
                             border.setVisibility(View.GONE);
 
                         }
-
                     }
                 });
 
@@ -327,17 +355,17 @@ public class ActivityRegister extends ActivityEnhanced {
                     }
                 });
 
-                TextView btnCancel = (TextView) dialogChooseCountry.findViewById(R.id.rg_txt_cancelDialog);
-                btnCancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+//                TextView btnCancel = (TextView) dialogChooseCountry.findViewById(R.id.rg_txt_cancelDialog);
+//                btnCancel.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//
+//                        dialogChooseCountry.dismiss();
+//
+//                    }
+//                });
 
-                        dialogChooseCountry.dismiss();
-
-                    }
-                });
-
-                TextView btnOk = (TextView) dialogChooseCountry.findViewById(R.id.rg_txt_okDialog);
+                btnOk = (TextView) dialogChooseCountry.findViewById(R.id.rg_txt_okDialog);
                 btnOk.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -469,22 +497,6 @@ public class ActivityRegister extends ActivityEnhanced {
         });
         // enable scroll text view
 
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            isoCode = extras.getString("ISO_CODE");
-            edtCodeNumber.setText("+" + extras.getInt("CALLING_CODE"));
-            btnChoseCountry.setText(extras.getString("COUNTRY_NAME"));
-            String pattern = extras.getString("PATTERN");
-            if (!pattern.equals("")) {
-                edtPhoneNumber.setMask(pattern.replace("X", "#").replace(" ", "-"));
-            }
-            regex = extras.getString("REGEX");
-            String body = extras.getString("TERMS_BODY");
-            if (body != null & txtAgreement_register != null) { //TODO [Saeed Mozaffari] [2016-09-01 9:28 AM] - txtAgreement_register !=null is wrong. change it
-                txtAgreement_register.setText(Html.fromHtml(body));
-            }
-
-        }
 
         int portrait_landscape = getResources().getConfiguration().orientation;
         if (portrait_landscape == 1) {//portrait
@@ -556,7 +568,6 @@ public class ActivityRegister extends ActivityEnhanced {
                                         txtTimer.setVisibility(View.VISIBLE);
                                         txtTimerLand.setText("" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
                                     }
-
                                 }
 
                                 public void onFinish() {
@@ -946,5 +957,15 @@ public class ActivityRegister extends ActivityEnhanced {
                 receiveVerifySms("Your login code is : 12345 This code can be used to login to your account.");
             }
         }, 4000);
+    }
+
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save the user's current game state
+        savedInstanceState.putString(KEY_SAVE_CODENUMBER, edtCodeNumber.getText().toString());
+        savedInstanceState.putString(KEY_SAVE_PHONENUMBER_MASK, edtPhoneNumber.getMask());
+        savedInstanceState.putString(KEY_SAVE_PHONENUMBER_NUMBER, edtPhoneNumber.getText().toString());
+        savedInstanceState.putString(KEY_SAVE_NAMECOUNTRY, btnChoseCountry.getText().toString());
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
     }
 }

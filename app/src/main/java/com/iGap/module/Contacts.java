@@ -121,16 +121,12 @@ public class Contacts {
                 resultContactList.add(itemContact);
             }
         }
-
         if (sendToServer) {
             RequestUserContactImport listContact = new RequestUserContactImport();
             listContact.contactImport(resultContactList);
         }
-
         return resultContactList;
     }
-
-
     public static void FillRealmInviteFriend() {
 
         final ArrayList<StructListOfContact> contactList = getListOfContact(false);
@@ -171,14 +167,11 @@ public class Contacts {
                     }
                 });
             }
-
             realm.close();
         } else {
             // you can delete all item in realm contact  if there was no item
         }
-
     }
-
     public static ArrayList<StructContactInfo> getInviteFriendList() {
 
         ArrayList<StructContactInfo> list = new ArrayList<>();
@@ -204,12 +197,8 @@ public class Contacts {
                 lastHeader = header;
 
                 list.add(item);
-
-
             }
         }
-
-
         realm.close();
 
         return list;

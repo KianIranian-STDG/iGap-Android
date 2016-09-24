@@ -117,6 +117,12 @@
         <item>4 hours</item>
     </string-array>
 
+    <string-array name="phone_profile_chanel">
+        <item>Add to Contact</item>
+        <item>Call</item>
+        <item>Copy</item>
+    </string-array>
+
     <string-array name="sound_message">
         <item>Default Notification tone</item>
         <item>None</item>

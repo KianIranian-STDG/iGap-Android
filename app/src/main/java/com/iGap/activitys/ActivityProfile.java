@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.design.widget.TextInputLayout;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,7 +26,7 @@ import io.realm.Realm;
 
 public class ActivityProfile extends ActivityEnhanced {
 
-    private TextView txtTitle ,txtTitlInformation, txtDesc , txtAddPhoto;
+    private TextView txtTitle, txtTitlInformation, txtDesc, txtAddPhoto;
     private Button btnLetsGo;
     private com.iGap.module.CircleImageView btnSetImage;
     private int myResultCodeCamera = 1;
@@ -47,6 +48,7 @@ public class ActivityProfile extends ActivityEnhanced {
             G.imageFile.delete();
         }
 
+
         txtTitlInformation = (TextView) findViewById(R.id.pu_txt_title_information);
         txtTitlInformation.setTypeface(G.arialBold);
         txtDesc = (TextView) findViewById(R.id.pu_txt_title_desc);
@@ -67,9 +69,11 @@ public class ActivityProfile extends ActivityEnhanced {
             }
         });
 
-        edtNikName = (EditText) findViewById(R.id.pu_edt_nikeName); // edit Text for NikName //TODO [Saeed Mozaffari] [2016-08-30 10:12 AM] - (Saeed Mozaffari to Mr Mollareza) disable enter for edt
-        edtNikName.setTypeface(G.arial);
+        TextInputLayout txtInputNickName = (TextInputLayout) findViewById(R.id.pu_txtInput_nikeName);
+//        txtInputNickName.setHint("Nickname");
 
+        edtNikName = (EditText) findViewById(R.id.pu_edt_nikeName); // edit Text for NikName
+        edtNikName.setTypeface(G.arial);
         btnLetsGo = (Button) findViewById(R.id.pu_btn_letsGo);
         btnLetsGo.setTypeface(G.arial);
         btnLetsGo.setOnClickListener(new View.OnClickListener() { // button for save data and go to next page
@@ -131,21 +135,21 @@ public class ActivityProfile extends ActivityEnhanced {
                     @Override
                     public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                        if (text.toString().equals("From Camera")){
+                        if (text.toString().equals("From Camera")) {
 
-                                    if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
+                            if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
 
-                                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                        uriIntent = Uri.fromFile(G.imageFile);
-                                        intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
-                                        startActivityForResult(intent, myResultCodeCamera);
-                                        dialog.dismiss();
+                                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                uriIntent = Uri.fromFile(G.imageFile);
+                                intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
+                                startActivityForResult(intent, myResultCodeCamera);
+                                dialog.dismiss();
 
-                                    } else {
-                                        Toast.makeText(ActivityProfile.this, "Please check your Camera", Toast.LENGTH_SHORT).show();
-                                    }
+                            } else {
+                                Toast.makeText(ActivityProfile.this, "Please check your Camera", Toast.LENGTH_SHORT).show();
+                            }
 
-                        }else {
+                        } else {
                             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                             startActivityForResult(intent, myResultCodeGallery);
                             dialog.dismiss();
@@ -179,4 +183,6 @@ public class ActivityProfile extends ActivityEnhanced {
             finish();
         }
     }
+
+
 }

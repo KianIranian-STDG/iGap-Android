@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
@@ -61,7 +62,8 @@ public class ActivityIntroduce extends ActivityEnhanced {
     private String isoCode = "", countryName = "", pattern = "", regex = "", body = null;
     private int callingCode;
 
-
+    static final String KEY_SAVE = "SAVE";
+    static int ONETIME = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +79,16 @@ public class ActivityIntroduce extends ActivityEnhanced {
 
         setContentView(R.layout.activity_introduce);
 
-        getInfo();
+        if (savedInstanceState != null) {
+            // Restore value of members from saved state
+            ONETIME = savedInstanceState.getInt(KEY_SAVE);
+            if (ONETIME != 1) {
+                getInfo();
+            }
+        } else {
+            getInfo();
+        }
+
 
         layout_test = (ViewGroup) findViewById(R.id.int_layout_test);
 
@@ -401,6 +412,8 @@ public class ActivityIntroduce extends ActivityEnhanced {
                 if (G.isSecure) {
                     getTermsOfServiceBody();
                     //getInfoLocation();
+                    ONETIME = 1;
+                    Log.i("CCVVBBXX", "run: ");
                 } else {
                     getInfo();
                 }
@@ -982,5 +995,12 @@ public class ActivityIntroduce extends ActivityEnhanced {
 
 
         }
+    }
+
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save the user's current game state
+        savedInstanceState.putInt(KEY_SAVE, ONETIME);
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
     }
 }

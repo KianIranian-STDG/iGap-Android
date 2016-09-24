@@ -70,6 +70,7 @@ public class AdapterDialog extends BaseAdapter implements Filterable {
 
                 mSelectedVariation = (Integer) v.getTag();
 
+
                 ActivityRegister.positionRadioButton = countrylist.get(position).getId();
                 mSelectedVariation = countrylist.get(position).getId();
                 notifyDataSetChanged();
@@ -89,7 +90,7 @@ public class AdapterDialog extends BaseAdapter implements Filterable {
                 }
                 ActivityRegister.btnChoseCountry.setText((countrylist.get(position).getName()));
                 ActivityRegister.isoCode = countrylist.get(position).getAbbreviation();
-
+                ActivityRegister.btnOk.performClick();
                 ActivityRegister.dialogChooseCountry.dismiss();
             }
 

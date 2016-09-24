@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/pu_lt_parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/whit_background"
-    android:orientation="vertical"
     android:layoutDirection="ltr"
-    android:id="@+id/pu_lt_parent">
+    android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/pu_toolbarRegister"
@@ -36,8 +36,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layoutDirection="ltr">
+        android:layoutDirection="ltr"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/pu_txt_title_information"
@@ -109,45 +109,58 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="@dimen/dp20"
-        android:layout_weight=".13"
-        android:gravity="center"
-        android:orientation="vertical">
+    <!--<LinearLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:layout_gravity="bottom"-->
+    <!--android:layout_marginBottom="@dimen/dp20"-->
+    <!--android:layout_weight=".13"-->
+    <!--android:gravity="center"-->
+    <!--android:orientation="vertical">-->
 
-        <EditText
-            android:id="@+id/pu_edt_nikeName"
+    <RelativeLayout
+        android:id="@+id/mainLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true">
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/pu_txtInput_nikeName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:hint="@string/pu_nikname_profileUser"
-            android:lines="1"
-            android:maxLength="20"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:textColor="@color/black_register"
-            android:textColorHint="@color/pu_edtHintText"
-            android:textSize="@dimen/sp22"
             android:layout_marginLeft="@dimen/dp52"
-            android:gravity="center_horizontal"
-            android:layout_marginRight="@dimen/dp52" />
+            android:layout_marginRight="@dimen/dp52">
 
+            <EditText
+                android:id="@+id/pu_edt_nikeName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:gravity="center_horizontal"
+                android:hint="@string/pu_nikname_profileUser"
+                android:lines="1"
+                android:maxLength="20"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/black_register"
+                android:textColorHint="@color/pu_edtHintText"
+                android:textSize="@dimen/sp22" />
+        </android.support.design.widget.TextInputLayout>
+    </RelativeLayout>
 
-        <View
-            android:id="@+id/pu_line_below_editText"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginBottom="@dimen/dp32"
-            android:layout_marginLeft="@dimen/dp52"
-            android:layout_marginRight="@dimen/dp52"
-            android:background="@color/border_editText"
+    <View
+        android:id="@+id/pu_line_below_editText"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="@dimen/dp32"
+        android:layout_marginLeft="@dimen/dp52"
+        android:layout_marginRight="@dimen/dp52"
+        android:background="@color/border_editText"
 
-            />
+        />
 
-    </LinearLayout>
+    <!--</LinearLayout>-->
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -164,9 +177,9 @@
             android:background="@drawable/pu_background_button_start_register"
             android:gravity="center"
             android:text="Lets Go"
-            android:textSize="@dimen/sp16"
             android:textAllCaps="false"
-            android:textColor="@color/whit_background" />
+            android:textColor="@color/whit_background"
+            android:textSize="@dimen/sp16" />
 
     </RelativeLayout>
 

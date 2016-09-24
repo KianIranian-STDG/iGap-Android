@@ -332,7 +332,6 @@ public class ActivitySetting extends ActivityEnhanced {
                     }
                 });
 
-
                 popupMenu.inflate(R.menu.sc_popup_menu);
                 popupMenu.show();
 
@@ -371,7 +370,6 @@ public class ActivitySetting extends ActivityEnhanced {
             circleImageView.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp100), name, HelperImageBackColor.getColor(name)));
 
         }
-
 
         textLanguage = sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, "English");
         if (textLanguage.equals("English")) {

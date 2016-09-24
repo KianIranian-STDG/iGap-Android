@@ -42,7 +42,6 @@ public class MaterialDesignTextView extends AppCompatTextView {
 
     private void init(Context context) {
         setTypeface(FontCache.get("fonts/Flaticon.ttf", context));
-
         setText(getText());
     }
 

@@ -3,10 +3,12 @@ package com.iGap.activitys;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.text.InputType;
 import android.util.Log;
@@ -75,7 +77,6 @@ public class ActivityNewGroup extends ActivityEnhanced {
         }
 
         //=======================back on toolbar
-
 
         txtBack = (MaterialDesignTextView) findViewById(R.id.ng_txt_back);
         txtBack.setOnClickListener(new View.OnClickListener() {
@@ -151,11 +152,15 @@ public class ActivityNewGroup extends ActivityEnhanced {
         }
 
         //=======================name of group
+        TextInputLayout txtInputNewGroup = (TextInputLayout) findViewById(R.id.ng_txtInput_newGroup);
+
         edtGroupName = (EditText) findViewById(R.id.ng_edt_newGroup);
         if (prefix.equals("NewChanel")) {
-            edtGroupName.setHint("New Chanel");
+//            edtGroupName.setHint("New Chanel");
+            txtInputNewGroup.setHint("New Chanel");
         } else {
-            edtGroupName.setHint("New Group");
+//            edtGroupName.setHint("New Group");
+            txtInputNewGroup.setHint("New Group");
         }
 
 //        edtGroupName.setTypeface(G.arial);
@@ -281,5 +286,11 @@ public class ActivityNewGroup extends ActivityEnhanced {
             startActivity(intent);
             finish();
         }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Toast.makeText(ActivityNewGroup.this, "ddd", Toast.LENGTH_SHORT).show();
     }
 }

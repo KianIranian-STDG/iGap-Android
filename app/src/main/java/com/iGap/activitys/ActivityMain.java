@@ -24,6 +24,7 @@ import com.iGap.R;
 import com.iGap.adapter.ChatsFastAdapter;
 import com.iGap.adapter.items.ChatItem;
 import com.iGap.fragments.RegisteredContactsFragment;
+import com.iGap.helper.ServiceContact;
 import com.iGap.interface_package.OnChatClearMessageResponse;
 import com.iGap.interface_package.OnChatDelete;
 import com.iGap.interface_package.OnChatSendMessageResponse;
@@ -961,6 +962,8 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
             realm.close();
         }
+
+        startService(new Intent(this, ServiceContact.class));
     }
 
     /**

@@ -37,12 +37,14 @@ public class LinedEditText extends EditText {
         super(context, attrs);
         init();
         setMaxLines(4);
+
     }
 
     public LinedEditText(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init();
         setMaxLines(4);
+
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)

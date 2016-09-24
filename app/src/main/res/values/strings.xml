@@ -81,7 +81,7 @@
     <string name="group">group</string>
     <string name="channel">channel</string>
     <string name="do_you_want_delete_this">"do you want delete this "</string>
-    <string name="igap">iGAP</string>
+    <string name="igap">iGap</string>
     <string name="clear_history">Clear history</string>
     <string name="delete_chat">Delete Chat</string>
     <string name="cancel">Cancel</string>
@@ -187,7 +187,7 @@
     <!--REGISTER PAGE-->
     <string name="rg_title_register">Registration</string>
     <string name="rg_your_country">YOUR COUNTRY</string>
-    <string name="rg_confirm_text_register">Please confirm your structCountry code end enter your phone number</string>
+    <string name="rg_confirm_text_register">Please confirm your Country code end enter your phone number</string>
     <string name="rg_phone_number">PHONE NUMBER</string>
     <string name="rg_verify">Verify your phone number to connect to IGap</string>
     <string name="rg_copy_right_rooyekhat">power by rooyekhat</string>
@@ -321,6 +321,12 @@
         <item>@string/show_all_media</item>
         <item>@string/save_to_gallery</item>
     </string-array>
+
+
+    <string name="test">
+        will likely mark this as an error despite being correct. You may want to add 91211111 will likely mark this as an error despite being correct. You may want to add
+        will http://www.likely.com mark this as an error despite being correct. You may want to add @gmail will likely mark this as an error despite being correct. You may want to add
+    </string>
 
 
 </resources>
