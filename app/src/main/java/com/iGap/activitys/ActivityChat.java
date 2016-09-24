@@ -1214,10 +1214,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                         // get offline delete list , add new deleted list and update in client condition , then send request for delete message to server
                         RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", mRoomId).findFirst();
 
-                        RealmList<RealmOfflineDelete> offlineDeleteRealmList = new RealmList<>();
-                        RealmList<RealmOfflineDelete> oldOfflineDeleteRealmList = realmClientCondition.getOfflineDeleted();
-                        ArrayList<Long> deletedMessageId = new ArrayList<>();
-
                         for (final AbstractChatItem messageID : mAdapter.getSelectedItems()) {
                             RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", Long.parseLong(messageID.mMessage.messageID)).findFirst();
                             if (roomMessage != null) {
@@ -1225,18 +1221,12 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                                 roomMessage.deleteFromRealm();
                             }
 
-                            RealmOfflineDelete realmOfflineDelete = new RealmOfflineDelete();
-                            int autoIncrement = 0;
-                            if (realm.where(RealmOfflineDelete.class).max("id") != null) {
-                                autoIncrement = realm.where(RealmOfflineDelete.class).max("id").intValue() + 1;
-                            }
-                            realmOfflineDelete.setId(autoIncrement);
+                            RealmOfflineDelete realmOfflineDelete = realm.createObject(RealmOfflineDelete.class);
+                            realmOfflineDelete.setId(System.currentTimeMillis());
                             realmOfflineDelete.setOfflineDelete(Long.parseLong(messageID.mMessage.messageID));
-                            realmOfflineDelete = realm.copyToRealm(realmOfflineDelete);
 
-                            deletedMessageId.add(Long.parseLong(messageID.mMessage.messageID));
+                            realmClientCondition.getOfflineDeleted().add(realmOfflineDelete);
 
-                            offlineDeleteRealmList.add(realmOfflineDelete);
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -1251,15 +1241,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                                     }
                                 }
                             });
-                        }
-
-                        for (RealmOfflineDelete realmOff : oldOfflineDeleteRealmList) {
-                            offlineDeleteRealmList.add(realmOff);
-                        }
-                        realmClientCondition.setOfflineDeleted(offlineDeleteRealmList);
-
-                        for (long messageID : deletedMessageId) {
-                            new RequestChatDeleteMessage().chatDeleteMessage(mRoomId, messageID);
+                            new RequestChatDeleteMessage().chatDeleteMessage(mRoomId, Long.parseLong(messageID.mMessage.messageID));
                         }
                     }
                 });
@@ -1512,7 +1494,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         // I'm in the room
         if (roomMessage.getRoomId() == mRoomId) {
             // I'm in the room, so unread messages count is 0. it means, I read all messages
-            Realm realm = Realm.getDefaultInstance();
+            final Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -1523,9 +1505,43 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     }
                 }
             });
+
+            // when user receive message, I send update status as SENT to the message sender
+            // but imagine user is not in the room (or he is in another room) and received some messages
+            // when came back to the room with new messages, I make new update status request as SEEN to
+            // the message sender
+            final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", roomMessage.getRoomMessage().getMessageId()).findFirst();
+            //Start ClientCondition OfflineSeen
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", mRoomId).findFirst();
+
+                    if (realmRoomMessage != null) {
+                        if (!realmRoomMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
+                            realmRoomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
+
+                            RealmOfflineSeen realmOfflineSeen = realm.createObject(RealmOfflineSeen.class);
+                            realmOfflineSeen.setId(System.currentTimeMillis());
+                            realmOfflineSeen.setOfflineSeen(realmRoomMessage.getMessageId());
+                            realm.copyToRealmOrUpdate(realmOfflineSeen);
+
+                            Log.i(RealmClientCondition.class.getSimpleName(), "before size: " + realmClientCondition.getOfflineSeen().size());
+
+                            realmClientCondition.getOfflineSeen().add(realmOfflineSeen);
+
+                            Log.i(RealmClientCondition.class.getSimpleName(), "after size: " + realmClientCondition.getOfflineSeen().size());
+                        }
+                    }
+
+                    // make update status to message sender that i've read his message
+                    G.chatUpdateStatusUtil.sendUpdateStatus(roomMessage.getRoomId(), roomMessage.getRoomMessage().getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+                }
+            });
+
             realm.close();
-            // make update status to message sender that i've read his message
-            G.chatUpdateStatusUtil.sendUpdateStatus(roomMessage.getRoomId(), roomMessage.getRoomMessage().getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+
+
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
