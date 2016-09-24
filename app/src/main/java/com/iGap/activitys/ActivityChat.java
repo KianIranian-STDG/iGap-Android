@@ -192,11 +192,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         realmChatHistories.addChangeListener(new RealmChangeListener<RealmResults<RealmChatHistory>>() {
             @Override
             public void onChange(final RealmResults<RealmChatHistory> element) {
-                //TODO [Saeed Mozaffari] [2016-09-18 5:07 PM] - do this when receive message
-
-                //TODO [Saeed Mozaffari] [2016-09-18 4:37 PM] - add old to new ==> here (also for delete and edit)
-
-                //Start ClientCondition OfflineSeen //TODO [Saeed Mozaffari] [2016-09-17 4:01 PM] - FORCE check this code
+                //Start ClientCondition OfflineSeen
                 chatHistoriesRealm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
@@ -209,12 +205,11 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                             if (realmRoomMessage != null) {
                                 if (realmRoomMessage.getUserId() != realm.where(RealmUserInfo.class).findFirst().getUserId() && !realmRoomMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
 
-                                //TODO [Saeed Mozaffari] [2016-09-18 4:50 PM] - Need realm.copyToRealmOrUpdate(realmRoomMessage); or No ???
-                                realmRoomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
+                                    realmRoomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
 
                                     RealmOfflineSeen realmOfflineSeen = realm.createObject(RealmOfflineSeen.class);
                                     realmOfflineSeen.setId(System.currentTimeMillis());
-                                realmOfflineSeen.setOfflineSeen(realmRoomMessage.getMessageId());
+                                    realmOfflineSeen.setOfflineSeen(realmRoomMessage.getMessageId());
                                     realm.copyToRealmOrUpdate(realmOfflineSeen);
 
                                     Log.i(RealmClientCondition.class.getSimpleName(), "before size: " + realmClientCondition.getOfflineSeen().size());
@@ -223,7 +218,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
                                     Log.i(RealmClientCondition.class.getSimpleName(), "after size: " + realmClientCondition.getOfflineSeen().size());
 
-                                offlineSeenId.add(realmRoomMessage.getMessageId());
+                                    offlineSeenId.add(realmRoomMessage.getMessageId());
 
                                 }
                             }
@@ -384,23 +379,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             @Override
             public void onChatDeleteMessage(long deleteVersion, final long messageId, long roomId, ProtoResponse.Response response) {
                 Log.i(ActivityMain.class.getSimpleName(), "onChatDeleteMessage called");
-
-//                if (mRoomId == roomId) {
-//                    runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            // remove deleted message from adapter
-//                            mAdapter.removeMessage(messageId);
-//
-//                            // remove tag from edtChat if the message has deleted
-//                            if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
-//                                if (Long.toString(messageId).equals(((StructMessageInfo) edtChat.getTag()).messageID)) {
-//                                    edtChat.setTag(null);
-//                                }
-//                            }
-//                        }
-//                    });
-//                }
             }
         };
     }
@@ -1445,8 +1423,46 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                             ClipData clip = ClipData.newPlainText("Copied Text", messageInfo.messageText);
                             clipboard.setPrimaryClip(clip);
                         } else if (text.toString().equalsIgnoreCase(getString(R.string.delete_item_dialog))) {
-                            // delete message
-                            new RequestChatDeleteMessage().chatDeleteMessage(mRoomId, Long.parseLong(messageInfo.messageID));
+                            final Realm realmCondition = Realm.getDefaultInstance();
+                            final RealmClientCondition realmClientCondition = realmCondition.where(RealmClientCondition.class).equalTo("roomId", mRoomId).findFirstAsync();
+                            realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
+                                @Override
+                                public void onChange(final RealmClientCondition element) {
+                                    realmCondition.executeTransaction(new Realm.Transaction() {
+                                        @Override
+                                        public void execute(Realm realm) {
+                                            if (element != null) {
+                                                if (realmCondition.where(RealmOfflineDelete.class).equalTo("offlineDelete", Long.parseLong(messageInfo.messageID)).findFirst() == null) {
+                                                    RealmOfflineDelete realmOfflineDelete = realmCondition.createObject(RealmOfflineDelete.class);
+                                                    realmOfflineDelete.setId(System.currentTimeMillis());
+                                                    realmOfflineDelete.setOfflineDelete(Long.parseLong(messageInfo.messageID));
+                                                    element.getOfflineDeleted().add(realmOfflineDelete);
+
+                                                    runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            // remove deleted message from adapter
+                                                            mAdapter.removeMessage(Long.parseLong(messageInfo.messageID));
+
+                                                            // remove tag from edtChat if the message has deleted
+                                                            if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
+                                                                if (Long.toString(Long.parseLong(messageInfo.messageID)).equals(((StructMessageInfo) edtChat.getTag()).messageID)) {
+                                                                    edtChat.setTag(null);
+                                                                }
+                                                            }
+                                                        }
+                                                    });
+                                                    // delete message
+                                                    new RequestChatDeleteMessage().chatDeleteMessage(mRoomId, Long.parseLong(messageInfo.messageID));
+                                                }
+                                                element.removeChangeListeners();
+                                            }
+                                        }
+                                    });
+
+                                    realmCondition.close();
+                                }
+                            });
                         } else if (text.toString().equalsIgnoreCase(getString(R.string.edit_item_dialog))) {
                             // edit message
                             // put message text to EditText
