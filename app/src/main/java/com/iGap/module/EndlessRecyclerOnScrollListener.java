@@ -12,21 +12,21 @@ import com.mikepenz.fastadapter.adapters.FastItemAdapter;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public abstract class EndlessRecyclerOnScrollListener extends RecyclerViewPauseOnScrollListener {
     private int mPreviousTotal = 0;
     private boolean mLoading = true;
-    private int mCurrentPage = 1;
+    private int mCurrentPage = 0;
     private FastItemAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
-    private int mTotalItemsInPages = 2;
+    private int mTotalItemsInPages = 50;
     private int mVisibleThreshold = -1;
     private OrientationHelper mOrientationHelper;
     private boolean mIsOrientationHelperVertical;
     private int mFirstVisibleItem, mVisibleItemCount, mTotalItemCount;
     private List<RealmRoomMessage> mMessagesList = new ArrayList<>();
+    private boolean mAlreadyCalledOnNoMore;
 
     public EndlessRecyclerOnScrollListener(List<RealmRoomMessage> messageList, FastItemAdapter adapter, ImageLoader imageLoader, boolean pauseOnScroll, boolean pauseOnSettling) {
         super(imageLoader, pauseOnScroll, pauseOnSettling);
@@ -66,13 +66,16 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerViewPauseO
 
         Log.i(EndlessRecyclerOnScrollListener.class.getSimpleName(), (mLayoutManager.findFirstVisibleItemPosition() - mVisibleThreshold) + "");
         if (!mLoading && mLayoutManager.findFirstVisibleItemPosition() - mVisibleThreshold <= 0) {
-            // reached top
-            Log.i(EndlessRecyclerOnScrollListener.class.getSimpleName(), "reaching top");
             mCurrentPage++;
 
             onLoadMore(this, mCurrentPage);
 
             mLoading = true;
+        } else {
+            if (mAdapter.getAdapterItemCount() == mMessagesList.size() && !mAlreadyCalledOnNoMore) {
+                onNoMore(this);
+                mAlreadyCalledOnNoMore = true;
+            }
         }
     }
 
@@ -88,23 +91,23 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerViewPauseO
 
     public abstract void onLoadMore(EndlessRecyclerOnScrollListener listener, int page);
 
+    public abstract void onNoMore(EndlessRecyclerOnScrollListener listener);
+
     public List<RealmRoomMessage> loadMore(int page) {
         int startFrom = page * mTotalItemsInPages;
         List<RealmRoomMessage> messages = new ArrayList<>();
 
-        // +addSettingMessagesCount because of not counting add setting messages
-        for (int i = startFrom, addSettingMessagesCount = 0; i < (startFrom) + mTotalItemsInPages + addSettingMessagesCount; i++) {
+        // +timeMessagesAddedCount because of not counting time messages
+        for (int i = startFrom, timeMessagesAddedCount = 0; i < (startFrom) + mTotalItemsInPages + timeMessagesAddedCount; i++) {
             if (i < mMessagesList.size()) {
                 messages.add(mMessagesList.get(i));
                 if (mMessagesList.get(i).isOnlyTime()) {
-                    addSettingMessagesCount++;
+                    timeMessagesAddedCount++;
                 }
             } else {
                 break;
             }
         }
-
-        Collections.sort(messages, SortMessages.ASC);
 
         return messages;
     }

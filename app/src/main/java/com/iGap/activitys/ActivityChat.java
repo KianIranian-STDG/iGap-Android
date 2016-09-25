@@ -407,7 +407,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     private void switchAddItem(ArrayList<StructMessageInfo> messageInfos, boolean addTop) {
         long identifier = 100;
         for (StructMessageInfo messageInfo : messageInfos) {
-            if (!messageInfo.senderID.equalsIgnoreCase("-1")) {
+            if (!messageInfo.isTimeMessage()) {
                 switch (messageInfo.messageType) {
                     // TODO: 9/7/2016 [Alireza Eskandarpour Shoferi] add group items
                     case TEXT:
@@ -695,7 +695,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
         mAdapter = new ChatMessagesFastAdapter<>(this, this, this);
 
-        switchAddItem(getChatList(), false);
+        switchAddItem(getChatList(), true);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(ActivityChat.this);
         // make start messages from bottom, this is exatly what Telegram and other messengers do for their messages list
@@ -1500,14 +1500,14 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
         for (RealmRoomMessage message : realmRoomMessages) {
 
-            String time = getTimeSettingMessage(message.getUpdateTime());
-            if (time != null) {
+            String timeString = getTimeSettingMessage(message.getUpdateTime());
+            if (timeString != null) {
                 RealmRoomMessage timeMessage = new RealmRoomMessage();
                 timeMessage.setMessageId(System.currentTimeMillis());
                 // -1 means time message
                 timeMessage.setUserId(-1);
-                timeMessage.setUpdateTime((int) (message.getUpdateTime()) - 1);
-                timeMessage.setMessage(time);
+                timeMessage.setUpdateTime((int) ((message.getUpdateTime() / DateUtils.SECOND_IN_MILLIS) - 1L));
+                timeMessage.setMessage(timeString);
                 timeMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT.toString());
                 lastResultMessages.add(timeMessage);
             }
@@ -1527,6 +1527,11 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     StructMessageInfo messageInfo = StructMessageInfo.convert(roomMessage);
                     switchAddItem(new ArrayList<>(Arrays.asList(messageInfo)), true);
                 }
+            }
+
+            @Override
+            public void onNoMore(EndlessRecyclerOnScrollListener listener) {
+
             }
         };
 
