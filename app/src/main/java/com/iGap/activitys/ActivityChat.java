@@ -609,7 +609,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     }
                     break;
                 case VOICE:
-                case VOICE_TEXT:
+                case AUDIO_TEXT:
                     if (chatType != ProtoGlobal.Room.Type.CHANNEL) {
                         mAdapter.add(new VoiceItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                     } else {
