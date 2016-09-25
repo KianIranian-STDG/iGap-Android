@@ -22,6 +22,7 @@ public class FileUploadStructure {
     public String token;
     public FileChannel fileChannel;
     public RandomAccessFile randomAccessFile;
+    public long messageId;
     // FIXME: 9/19/2016 [Alireza Eskandarpour Shoferi] for test purposes
     public long uploadStartTime;
     public long getNBytesTime;
@@ -39,6 +40,13 @@ public class FileUploadStructure {
         this.fileName = fileName;
         this.fileSize = fileSize;
         this.filePath = filePath;
+    }
+
+    public FileUploadStructure(String fileName, long fileSize, String filePath, long messageId) {
+        this.fileName = fileName;
+        this.fileSize = fileSize;
+        this.filePath = filePath;
+        this.messageId = messageId;
     }
 
     public void setFileHash(String fileHash) {

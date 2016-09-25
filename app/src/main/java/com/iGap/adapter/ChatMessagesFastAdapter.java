@@ -35,12 +35,6 @@ public class ChatMessagesFastAdapter<Item extends AbstractChatItem> extends Fast
         }
     };
 
-    public void insertItemsAtTop(List<Item> messages) {
-        if (messages.size() > 0) {
-            add(0, messages);
-        }
-    }
-
     /**
      * update message text
      *
@@ -58,6 +52,38 @@ public class ChatMessagesFastAdapter<Item extends AbstractChatItem> extends Fast
                 break;
             }
         }
+    }
+
+    /**
+     * update progress while file uploading
+     * NOTE: it needs rewriting, because currently updates whole item view not just the progress (almost)
+     *
+     * @param fileIdentity
+     * @param progress
+     */
+    public void updateProgress(String fileIdentity, int progress) {
+        Item item = getItemByFileIdentity(fileIdentity);
+        if (item != null) {
+            int pos = getAdapterItems().indexOf(item);
+            item.mMessage.uploadProgress = progress;
+            set(pos, item);
+        }
+    }
+
+    /**
+     * get item by its file hash
+     * useful for finding item which tries to upload something
+     *
+     * @param fileIdentity String
+     * @return Item
+     */
+    public Item getItemByFileIdentity(String fileIdentity) {
+        for (Item item : getAdapterItems()) {
+            if (item.mMessage.needsUpload() && item.mMessage.fileHash.equalsIgnoreCase(fileIdentity)) {
+                return item;
+            }
+        }
+        return null;
     }
 
     public ChatMessagesFastAdapter(OnChatMessageSelectionChanged<Item> OnChatMessageSelectionChangedListener, final OnMessageClick onMessageClickListener, final OnChatMessageRemove chatMessageRemoveListener) {
@@ -117,6 +143,18 @@ public class ChatMessagesFastAdapter<Item extends AbstractChatItem> extends Fast
             if (messageInfo.mMessage.messageID.equals(Long.toString(messageId))) {
                 int pos = items.indexOf(messageInfo);
                 messageInfo.mMessage.status = status.toString();
+                set(pos, messageInfo);
+                break;
+            }
+        }
+    }
+
+    public void updateItemFileHash(long messageId, String fileHash) {
+        List<Item> items = getAdapterItems();
+        for (Item messageInfo : items) {
+            if (messageInfo.mMessage.messageID.equals(Long.toString(messageId))) {
+                int pos = items.indexOf(messageInfo);
+                messageInfo.mMessage.fileHash = fileHash;
                 set(pos, messageInfo);
                 break;
             }

@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.iGap.G;
@@ -39,6 +40,17 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
     public AbstractChatItem setMessage(StructMessageInfo message) {
         this.mMessage = message;
         return this;
+    }
+
+    /**
+     * automatically update progress if layout has one
+     *
+     * @param holder VH
+     */
+    public void updateProgressIfNeeded(VH holder) {
+        if (mMessage.needsUpload()) {
+            ((ProgressBar) holder.itemView.findViewById(R.id.progress)).setProgress(mMessage.uploadProgress);
+        }
     }
 
     /**
@@ -123,6 +135,8 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
 
         setReplayMessage(holder);
         setForwardMessage(holder);
+
+        updateProgressIfNeeded(holder);
     }
 
     @CallSuper

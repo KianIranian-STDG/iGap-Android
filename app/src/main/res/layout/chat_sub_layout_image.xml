@@ -5,9 +5,9 @@
              android:id="@+id/chatSubLayoutImage"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
-             android:textDirection="firstStrong"
+             android:layout_marginBottom="@dimen/dp4"
              android:maxWidth="@dimen/dp300"
-             android:layout_marginBottom="@dimen/dp4">
+             android:textDirection="firstStrong">
 
     <LinearLayout
         android:id="@+id/mainContainer"
@@ -21,7 +21,7 @@
             android:layout_width="@dimen/dp52"
             android:layout_height="@dimen/dp52"
             android:layout_marginRight="@dimen/dp8"
-            android:src="@mipmap/b" />
+            android:src="@mipmap/b"/>
 
         <LinearLayout
             android:id="@+id/contentContainer"
@@ -33,11 +33,11 @@
 
             <include
                 android:id="@+id/replayLayout"
-                layout="@layout/chat_sub_layout_replay" />
+                layout="@layout/chat_sub_layout_replay"/>
 
             <include
                 android:id="@+id/cslr_ll_forward"
-                layout="@layout/chat_sub_layout_forward" />
+                layout="@layout/chat_sub_layout_forward"/>
 
             <FrameLayout
                 android:layout_width="wrap_content"
@@ -50,6 +50,13 @@
                     android:adjustViewBounds="true"
                     android:maxHeight="@dimen/dp360"
                     android:scaleType="centerCrop"/>
+
+                <include
+                    android:id="@+id/progress"
+                    layout="@layout/test_progress_item"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"/>
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -75,7 +82,7 @@
                             android:layout_height="wrap_content"
                             android:text="10:21"
                             android:textColor="@android:color/white"
-                            android:textSize="@dimen/sp12" />
+                            android:textSize="@dimen/sp12"/>
 
                         <com.iGap.module.MaterialDesignTextView
                             android:id="@+id/cslr_txt_tic"
@@ -85,7 +92,7 @@
                             android:layout_marginLeft="@dimen/dp4"
                             android:layout_marginRight="@dimen/dp4"
                             android:text="@string/md_clock_with_white_face"
-                            android:textColor="@color/green" />
+                            android:textColor="@color/green"/>
 
                     </LinearLayout>
                 </RelativeLayout>

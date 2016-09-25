@@ -11,6 +11,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.ArrayRes;
 import android.support.annotation.Nullable;
@@ -73,6 +74,7 @@ import com.iGap.interface_package.OnChatMessageRemove;
 import com.iGap.interface_package.OnChatMessageSelectionChanged;
 import com.iGap.interface_package.OnChatSendMessageResponse;
 import com.iGap.interface_package.OnChatUpdateStatusResponse;
+import com.iGap.interface_package.OnFileUpload;
 import com.iGap.interface_package.OnGroupChatSendMessageResponse;
 import com.iGap.interface_package.OnMessageClick;
 import com.iGap.module.AttachFile;
@@ -81,6 +83,7 @@ import com.iGap.module.EmojiEditText;
 import com.iGap.module.EmojiPopup;
 import com.iGap.module.EmojiRecentsManager;
 import com.iGap.module.EndlessRecyclerOnScrollListener;
+import com.iGap.module.FileUploadStructure;
 import com.iGap.module.FileUtils;
 import com.iGap.module.GroupChatSendMessageUtil;
 import com.iGap.module.MaterialDesignTextView;
@@ -90,6 +93,7 @@ import com.iGap.module.ShouldScrolledBehavior;
 import com.iGap.module.SortMessages;
 import com.iGap.module.StructMessageInfo;
 import com.iGap.module.TimeUtils;
+import com.iGap.module.Utils;
 import com.iGap.proto.ProtoChatSendMessage;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoGroupSendMessage;
@@ -111,6 +115,8 @@ import com.iGap.realm.enums.GroupChatRole;
 import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestChatDeleteMessage;
 import com.iGap.request.RequestChatEditMessage;
+import com.iGap.request.RequestFileUpload;
+import com.iGap.request.RequestFileUploadInit;
 import com.nightonke.boommenu.BoomMenuButton;
 import com.nightonke.boommenu.Types.BoomType;
 import com.nightonke.boommenu.Types.ButtonType;
@@ -119,6 +125,8 @@ import com.nightonke.boommenu.Util;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -126,6 +134,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
@@ -135,7 +144,7 @@ import io.realm.RealmResults;
 /**
  * Created by android3 on 8/5/2016.
  */
-public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, IRecentsLongClick, OnMessageClick, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractChatItem>, OnChatMessageRemove, OnGroupChatSendMessageResponse {
+public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, IRecentsLongClick, OnMessageClick, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractChatItem>, OnChatMessageRemove, OnGroupChatSendMessageResponse, OnFileUpload {
 
     private EmojiEditText edtChat;
     private MaterialDesignTextView imvSendButton;
@@ -292,6 +301,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         };
 
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
+        G.uploaderUtil.setActivityCallbacks(this);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -1196,8 +1206,40 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         });
 
         boomMenuButton.setTextViewColor(ContextCompat.getColor(G.context, R.color.am_iconFab_black));
-
     }
+
+    private AsyncTask<Object, FileUploadStructure, FileUploadStructure> mPrepareForUpload = new AsyncTask<Object, FileUploadStructure, FileUploadStructure>() {
+        @Override
+        protected FileUploadStructure doInBackground(Object... params) {
+            try {
+                String filePath = (String) params[0];
+                long messageId = (long) params[1];
+                File file = new File(filePath);
+                String fileName = file.getName();
+                long fileSize = file.length();
+                FileUploadStructure fileUploadStructure = new FileUploadStructure(fileName, fileSize, filePath, messageId);
+                fileUploadStructure.openFile(filePath);
+
+                String fileHash = Utils.getFileHash(fileUploadStructure, true);
+                fileUploadStructure.setFileHash(fileHash);
+
+                return fileUploadStructure;
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(FileUploadStructure result) {
+            super.onPostExecute(result);
+            mSelectedFiles.add(result);
+            mAdapter.updateItemFileHash(result.messageId, result.fileHash);
+            G.uploaderUtil.startUploading(result.fileSize, result.fileHash);
+        }
+    };
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -1212,9 +1254,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             Log.e("ddd", "result cancel");
 
         } else if (resultCode == Activity.RESULT_OK) {
-
             Log.e("ddd", "result ok");
-            // TODO: 9/15/2016 [Alireza Eskandarpour Shoferi] null haye paeen bayad por shavand va hamintor 0 ha
             long messageId = System.currentTimeMillis();
             Realm realm = Realm.getDefaultInstance();
             long senderID = realm.where(RealmUserInfo.class).findFirst().getUserId();
@@ -1226,13 +1266,14 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     break;
                 case AttachFile.request_code_media_from_gallary:
                     mAdapter.add(new ImageItem(chatType).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.IMAGE, MyType.SendType.send, MyType.FileState.uploading, AttachFile.getFilePathFromUri(data.getData()), System.currentTimeMillis())));
+                    mPrepareForUpload.execute(AttachFile.getFilePathFromUri(data.getData()), messageId);
                     Log.e("ddd", AttachFile.getFilePathFromUri(data.getData()) + "    gallary file path");
                     break;
                 case AttachFile.request_code_VIDEO_CAPTURED:
                     File videoFile = new File(AttachFile.getFilePathFromUri(data.getData()));
                     String videoFileName = videoFile.getName();
                     String videoFileMime = FileUtils.getMimeType(videoFile);
-                    mAdapter.add(new VideoItem(chatType).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.VIDEO, MyType.SendType.send, MyType.FileState.uploading, videoFileName, videoFileMime, AttachFile.getFilePathFromUri(data.getData()), AttachFile.getFilePathFromUri(data.getData()), videoFile.length(), System.currentTimeMillis())));
+                    mAdapter.add(new VideoItem(chatType).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.VIDEO, MyType.SendType.send, MyType.FileState.uploading, videoFileName, videoFileMime, AttachFile.getFilePathFromUri(data.getData()), AttachFile.getFilePathFromUri(data.getData()), videoFile.length(), null, System.currentTimeMillis())));
                     Log.e("ddd", AttachFile.getFilePathFromUri(data.getData()) + "    video capture path");
                     break;
                 case AttachFile.request_code_pic_audi:
@@ -1243,7 +1284,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     File fileFile = new File(data.getData().getPath());
                     String fileFileName = fileFile.getName();
                     String fileFileMime = FileUtils.getMimeType(fileFile);
-                    mAdapter.add(new FileItem(chatType).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.FILE, MyType.SendType.send, MyType.FileState.uploading, fileFileName, fileFileMime, data.getData().getPath(), data.getData().getPath(), fileFile.length(), System.currentTimeMillis())));
+                    mAdapter.add(new FileItem(chatType).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.FILE, MyType.SendType.send, MyType.FileState.uploading, fileFileName, fileFileMime, data.getData().getPath(), data.getData().getPath(), fileFile.length(), null, System.currentTimeMillis())));
                     Log.e("ddd", data.getData() + "    pic file path");
                     break;
                 case AttachFile.request_code_contact_phone:
@@ -1873,4 +1914,171 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     public void onReceiveChatMessage(String message, String messageType, ProtoGroupSendMessage.GroupSendMessageResponse.Builder roomMessage) {
         // TODO: 9/25/2016 [Alireza Eskandarpour Shoferi] implement
     }
+
+    /**
+     * get file with hash string
+     *
+     * @param fileHash file hash
+     * @return FileUploadStructure
+     */
+    @Nullable
+    private FileUploadStructure getSelectedFile(String fileHash) {
+        for (FileUploadStructure structure : mSelectedFiles) {
+            if (structure.fileHash.equalsIgnoreCase(fileHash)) {
+                return structure;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public void OnFileUploadOption(int firstBytesLimit, int lastBytesLimit, int maxConnection, String fileHashAsIdentity, ProtoResponse.Response response) {
+        try {
+            FileUploadStructure fileUploadStructure = getSelectedFile(fileHashAsIdentity);
+            // getting bytes from file as server said
+            byte[] bytesFromFirst = Utils.getBytesFromStart(fileUploadStructure, firstBytesLimit);
+            byte[] bytesFromLast = Utils.getBytesFromEnd(fileUploadStructure, lastBytesLimit);
+            // make second request
+            new RequestFileUploadInit().fileUploadInit(bytesFromFirst, bytesFromLast, fileUploadStructure.fileSize, fileHashAsIdentity, fileUploadStructure.fileName);
+        } catch (IOException e) {
+            Log.i("BreakPoint", e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void OnFileUploadInit(String token, final double progress, long offset, int limit, final String fileHashAsIdentity, ProtoResponse.Response response) {
+        // token needed for requesting upload
+        // updating structure with new token
+        FileUploadStructure fileUploadStructure = getSelectedFile(fileHashAsIdentity);
+        fileUploadStructure.token = token;
+
+        // not already uploaded
+        if (progress != 100.0) {
+            try {
+                byte[] bytes = Utils.getNBytesFromOffset(fileUploadStructure, (int) offset, limit);
+                // make third request for first time
+                new RequestFileUpload().fileUpload(token, offset, bytes, fileHashAsIdentity);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // update progress
+                        mAdapter.updateProgress(fileHashAsIdentity, (int) progress);
+                    }
+                });
+
+                if (isFileExistInList(fileHashAsIdentity)) {
+                    // handle when the file has already uploaded
+                    onFileUploadComplete(fileHashAsIdentity, response);
+                }
+            } catch (Exception e) {
+                Log.i("BreakPoint", e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * does file exist in the list
+     * useful for preventing from calling onFileUploadComplete() multiple for a file
+     *
+     * @param fileHash file hash
+     * @return boolean
+     */
+    private boolean isFileExistInList(String fileHash) {
+        for (FileUploadStructure fileUploadStructure : mSelectedFiles) {
+            if (fileUploadStructure.fileHash.equalsIgnoreCase(fileHash)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void onFileUpload(final double progress, long nextOffset, int nextLimit, final String fileHashAsIdentity, ProtoResponse.Response response) {
+        final long startOnFileUploadTime = System.currentTimeMillis();
+
+        // for specific views, tags must be set with files hashes
+        // get the view which has provided hash string
+        // then do anything you want to do wit that view
+
+        try {
+            // update progress
+            Log.i("SOC", "************************************ fileHashAsIdentity : " + fileHashAsIdentity + "  ||  progress : " + progress);
+            Log.i("BreakPoint", fileHashAsIdentity + " > bad az update progress");
+
+            if (progress != 100.0) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapter.updateProgress(fileHashAsIdentity, (int) progress);
+                    }
+                });
+
+                Log.i("BreakPoint", fileHashAsIdentity + " > 100 nist");
+                FileUploadStructure fileUploadStructure = getSelectedFile(fileHashAsIdentity);
+                Log.i("BreakPoint", fileHashAsIdentity + " > fileUploadStructure");
+                final long startGetNBytesTime = System.currentTimeMillis();
+                byte[] bytes = Utils.getNBytesFromOffset(fileUploadStructure, (int) nextOffset, nextLimit);
+
+                fileUploadStructure.getNBytesTime += System.currentTimeMillis() - startGetNBytesTime;
+
+                Log.i("BreakPoint", fileHashAsIdentity + " > after bytes");
+                // make request till uploading has finished
+                final long startSendReqTime = System.currentTimeMillis();
+
+                new RequestFileUpload().fileUpload(fileUploadStructure.token, nextOffset, bytes, fileHashAsIdentity);
+                fileUploadStructure.sendRequestsTime += System.currentTimeMillis() - startSendReqTime;
+                Log.i("BreakPoint", fileHashAsIdentity + " > after fileUpload request");
+
+                fileUploadStructure.elapsedInOnFileUpload += System.currentTimeMillis() - startOnFileUploadTime;
+            } else {
+                if (isFileExistInList(fileHashAsIdentity)) {
+                    // handle when the file has already uploaded
+                    onFileUploadComplete(fileHashAsIdentity, response);
+                }
+            }
+        } catch (IOException e) {
+            Log.i("BreakPoint", e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onFileUploadComplete(final String fileHashAsIdentity, ProtoResponse.Response response) {
+        final FileUploadStructure fileUploadStructure = getSelectedFile(fileHashAsIdentity);
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mAdapter.updateProgress(fileHashAsIdentity, 100);
+            }
+        });
+
+        // remove from selected files to prevent calling this method multiple times
+        // multiple calling may occurs because of the server
+        try {
+            // FIXME: 9/19/2016 [Alireza Eskandarpour Shoferi] uncomment plz
+            //removeFromSelectedFiles(fileHashAsIdentity);
+        } catch (Exception e) {
+            Log.i("BreakPoint", e.getMessage());
+            e.printStackTrace();
+        }
+
+        // close file into structure
+        try {
+            if (fileUploadStructure != null) {
+                fileUploadStructure.closeFile();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // selected files (paths)
+    private CopyOnWriteArrayList<FileUploadStructure> mSelectedFiles = new CopyOnWriteArrayList<>();
 }

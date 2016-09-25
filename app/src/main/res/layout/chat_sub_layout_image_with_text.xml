@@ -5,9 +5,9 @@
              android:id="@+id/chatSubLayoutImageWithText"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
-             android:textDirection="firstStrong"
+             android:layout_marginBottom="@dimen/dp4"
              android:maxWidth="@dimen/dp300"
-             android:layout_marginBottom="@dimen/dp4">
+             android:textDirection="firstStrong">
 
     <LinearLayout
         android:id="@+id/mainContainer"
@@ -21,7 +21,7 @@
             android:layout_width="@dimen/dp52"
             android:layout_height="@dimen/dp52"
             android:layout_marginRight="@dimen/dp8"
-            android:src="@mipmap/b" />
+            android:src="@mipmap/b"/>
 
         <LinearLayout
             android:id="@+id/contentContainer"
@@ -33,20 +33,32 @@
 
             <include
                 android:id="@+id/replayLayout"
-                layout="@layout/chat_sub_layout_replay" />
+                layout="@layout/chat_sub_layout_replay"/>
 
             <include
                 android:id="@+id/cslr_ll_forward"
-                layout="@layout/chat_sub_layout_forward" />
+                layout="@layout/chat_sub_layout_forward"/>
 
-            <ImageView
-                android:id="@+id/shli_imv_image"
+            <FrameLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dp4"
-                android:adjustViewBounds="true"
-                android:maxHeight="@dimen/dp360"
-                android:scaleType="centerCrop"/>
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/shli_imv_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dp4"
+                    android:adjustViewBounds="true"
+                    android:maxHeight="@dimen/dp360"
+                    android:scaleType="centerCrop"/>
+
+                <include
+                    android:id="@+id/progress"
+                    layout="@layout/test_progress_item"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"/>
+            </FrameLayout>
 
             <com.iGap.module.EmojiTextView
                 android:id="@+id/messageText"
@@ -56,7 +68,7 @@
 
             <include
                 android:id="@+id/cslr_ll_time"
-                layout="@layout/chat_sub_layout_messages_time" />
+                layout="@layout/chat_sub_layout_messages_time"/>
         </LinearLayout>
     </LinearLayout>
 </FrameLayout>

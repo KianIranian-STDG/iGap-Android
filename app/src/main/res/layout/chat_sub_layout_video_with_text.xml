@@ -60,6 +60,13 @@
                     android:scaleType="centerCrop"
                     android:src="@mipmap/play" />
 
+                <include
+                    android:id="@+id/progress"
+                    layout="@layout/test_progress_item"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"/>
+
             </FrameLayout>
 
             <LinearLayout

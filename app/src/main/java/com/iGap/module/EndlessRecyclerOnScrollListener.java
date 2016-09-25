@@ -4,7 +4,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnScrollListener;
-import android.util.Log;
 import android.view.View;
 
 import com.iGap.realm.RealmRoomMessage;
@@ -64,7 +63,6 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerViewPauseO
             }
         }
 
-        Log.i(EndlessRecyclerOnScrollListener.class.getSimpleName(), (mLayoutManager.findFirstVisibleItemPosition() - mVisibleThreshold) + "");
         if (!mLoading && mLayoutManager.findFirstVisibleItemPosition() - mVisibleThreshold <= 0) {
             mCurrentPage++;
 

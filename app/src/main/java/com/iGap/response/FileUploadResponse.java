@@ -24,7 +24,6 @@ public class FileUploadResponse extends MessageHandler {
 
     @Override
     public void handler() {
-
         ProtoFileUpload.FileUploadResponse.Builder fileUploadResponse = (ProtoFileUpload.FileUploadResponse.Builder) message;
 
         ProtoResponse.Response.Builder response = ProtoResponse.Response.newBuilder().mergeFrom(fileUploadResponse.getResponse());
