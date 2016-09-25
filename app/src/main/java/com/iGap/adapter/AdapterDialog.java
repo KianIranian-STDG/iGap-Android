@@ -61,7 +61,6 @@ public class AdapterDialog extends BaseAdapter implements Filterable {
             name_tv.setText(structCountry.getName());
         }
 
-
         name_tv.setChecked(countrylist.get(position).getId() == mSelectedVariation);
         name_tv.setTag(position);
         name_tv.setOnClickListener(new View.OnClickListener() {
@@ -69,7 +68,6 @@ public class AdapterDialog extends BaseAdapter implements Filterable {
             public void onClick(View v) {
 
                 mSelectedVariation = (Integer) v.getTag();
-
 
                 ActivityRegister.positionRadioButton = countrylist.get(position).getId();
                 mSelectedVariation = countrylist.get(position).getId();

@@ -59,7 +59,6 @@ public class ActivityWebView extends ActivityEnhanced {
 
                 startActivity(new Intent(ActivityWebView.this, ActivitySetting.class));
                 finish();
-
             }
         });
 
@@ -135,7 +134,6 @@ public class ActivityWebView extends ActivityEnhanced {
                     @Override
                     public void onClick(View v) {
                         popupWindow.dismiss();
-
                         allLayoutToolbar.setVisibility(View.GONE);
                         searchView.setVisibility(View.VISIBLE);
                         searchView.setIconified(false);
@@ -148,7 +146,6 @@ public class ActivityWebView extends ActivityEnhanced {
                             @Override
                             public boolean onQueryTextChange(String newText) {
 
-
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                                     webView.findAllAsync(newText);
                                 } else {
@@ -158,7 +155,6 @@ public class ActivityWebView extends ActivityEnhanced {
                                 return false;
                             }
                         });
-
                         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
                             @Override
                             public boolean onClose() {
@@ -168,8 +164,6 @@ public class ActivityWebView extends ActivityEnhanced {
                                 return false;
                             }
                         });
-
-
                     }
                 });
                 TextView openChrome = (TextView) popupView.findViewById(R.id.popup_faq_openChrome);

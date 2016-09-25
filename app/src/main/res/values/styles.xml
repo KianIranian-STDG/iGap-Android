@@ -75,6 +75,16 @@
 
     </style>
 
+    <style name="SearchViewToolbar" parent="android:Theme.Holo.Light.DarkActionBar">
+        <item name="android:editTextColor">@color/white</item>
+        <item name="android:textColorHint">@color/white</item>
+        <item name="colorAccent">@color/white</item>
+        <item name="android:tint">@color/white</item>
+        <item name="android:gravity">right</item>
+        <item name="android:textColor">@color/white</item>
+
+    </style>
+
     <style name="EmojiPopupAnimation">
         <item name="android:windowEnterAnimation">@anim/popup_enter</item>
         <item name="android:windowExitAnimation">@anim/popup_exit</item>

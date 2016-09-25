@@ -333,7 +333,7 @@ public class FileUploadTestActivity extends ActivityEnhanced implements OnFileUp
             }
 
             @Override
-            public void onLoginError() {
+            public void onLoginError(int majorCode, int minorCode) {
 
             }
         };

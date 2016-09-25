@@ -345,7 +345,7 @@ public class G extends Application {
             }
 
             @Override
-            public void onLoginError() {
+            public void onLoginError(int majorCode, int minorCode) {
 
             }
         };

@@ -10,10 +10,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -58,6 +60,7 @@ import com.iGap.request.RequestChatDelete;
 import com.iGap.request.RequestClientGetRoomList;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
+import com.mikepenz.fastadapter.IItemAdapter;
 
 import java.util.List;
 
@@ -72,6 +75,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     private RecyclerView recyclerView;
     private ChatsFastAdapter<ChatItem> mAdapter;
     private ArcMenu arcMenu;
+    private SearchView btnSearch;
 
     public static boolean isMenuButtonAddShown = false;
 
@@ -100,10 +104,10 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             }
         };
 
+        initComponent();
         initRecycleView();
         initFloatingButtonCreateNew();
         initDrawerMenu();
-        initComponent();
 
         Contacts.FillRealmInviteFriend();
     }
@@ -129,8 +133,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         Button btnMenu = (Button) findViewById(R.id.cl_btn_menu);
         btnMenu.setTypeface(G.flaticon);
 
-        Button btnSearch = (Button) findViewById(R.id.cl_btn_search);
-        btnSearch.setTypeface(G.flaticon);
+        btnSearch = (SearchView) findViewById(R.id.cl_btn_search);
 
         final TextView txtIgap = (TextView) findViewById(R.id.cl_txt_igap);
         txtIgap.setTypeface(G.neuroplp);
@@ -174,11 +177,19 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         };
 
 
-        btnSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-            }
-        });
+        if (btnSearch != null) {
+            btnSearch.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+
+                    if (b) {
+                        txtIgap.setVisibility(View.GONE);
+                    } else {
+                        txtIgap.setVisibility(View.VISIBLE);
+                    }
+                }
+            });
+        }
 
         btnMenu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -187,7 +198,8 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             }
         });
 
-
+        EditText searchBox = ((EditText) btnSearch.findViewById(android.support.v7.appcompat.R.id.search_src_text));
+        searchBox.setTextColor(getResources().getColor(R.color.white));
     }
 
     private void initFloatingButtonCreateNew() {
@@ -339,6 +351,30 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                         arcMenu.fabMenu.show();
                     }
                 }
+            }
+        });
+
+        mAdapter.withFilterPredicate(new IItemAdapter.Predicate<ChatItem>() {
+            @Override
+            public boolean filter(ChatItem item, CharSequence constraint) {
+                //return true if we should filter it out
+                //return false to keep it
+                return !item.mInfo.chatTitle.startsWith(String.valueOf(constraint));
+            }
+        });
+        btnSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+
+                mAdapter.filter(s);
+                mAdapter.notifyDataSetChanged();
+                return false;
             }
         });
 

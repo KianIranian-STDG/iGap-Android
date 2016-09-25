@@ -178,6 +178,7 @@ public class ActivityRegister extends ActivityEnhanced {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
+
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().equals("0")) {
@@ -189,8 +190,6 @@ public class ActivityRegister extends ActivityEnhanced {
 
         layout_agreement = (ViewGroup) findViewById(R.id.rg_layout_agreement);
         layout_verify = (ViewGroup) findViewById(R.id.rg_layout_verify_and_agreement);
-
-
 
 
 //==================================================================================================== read list of county from text file
@@ -383,6 +382,18 @@ public class ActivityRegister extends ActivityEnhanced {
                                         Toast.makeText(G.context, "info country received", Toast.LENGTH_SHORT).show();
                                     }
                                 });
+                            }
+
+                            @Override
+                            public void onError(int majorCode, int minorCode) {
+                                if (majorCode == 501 && minorCode == 1) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            // TODO: 9/25/2016 Error 501 - INFO_COUNTRY_BAD_PAYLOAD
+                                        }
+                                    });
+                                }
                             }
                         };
 
@@ -676,8 +687,13 @@ public class ActivityRegister extends ActivityEnhanced {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userVerify(userName, edtEnterCodeVerify.getText().toString());
-                dialog.dismiss();
+
+                if (!edtEnterCodeVerify.getText().toString().equals("")) {
+                    userVerify(userName, edtEnterCodeVerify.getText().toString());
+                    dialog.dismiss();
+                } else {
+                    Toast.makeText(ActivityRegister.this, "Please Enter Code", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -733,8 +749,56 @@ public class ActivityRegister extends ActivityEnhanced {
             }
 
             @Override
-            public void onRegisterError() {
-                requestRegister();
+            public void onRegisterError(int majorCode, int minorCode) {
+
+                if (majorCode == 100 && minorCode == 1) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // TODO: 9/25/2016  Error 100 - USER_REGISTER_BAD_PAYLOAD
+                            //Invalid countryCode
+                        }
+                    });
+                } else if (majorCode == 100 && minorCode == 2) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // TODO: 9/25/2016  Error 100 - USER_REGISTER_BAD_PAYLOAD
+                            //Invalid phoneNumber
+                            requestRegister();
+                        }
+                    });
+                } else if (majorCode == 101) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // TODO: 9/25/2016  Error 101 - USER_REGISTER_INTERNAL_SERVER_ERROR
+                            //Invalid phoneNumber
+                            requestRegister();
+                        }
+                    });
+                } else if (majorCode == 135) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // TODO: 9/25/2016  Error 135 - USER_REGISTER_BLOCKED_USER
+                        }
+                    });
+                } else if (majorCode == 136) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // TODO: 9/25/2016  Error 136 - USER_REGISTER_MAX_TRY_LOCK
+                        }
+                    });
+                } else if (majorCode == 137) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // TODO: 9/25/2016  Error 137 - USER_REGISTER_MAX_SEND_LOCK
+                        }
+                    });
+                }
             }
         };
 
@@ -768,8 +832,8 @@ public class ActivityRegister extends ActivityEnhanced {
         rg_prg_verify_generate.setVisibility(View.VISIBLE);
         rg_txt_verify_generate.setTextAppearance(G.context, R.style.RedHUGEText);
 
-        userVerifyResponse(verificationCode);
 
+        userVerifyResponse(verificationCode);
         ProtoUserVerify.UserVerify.Builder userVerify = ProtoUserVerify.UserVerify.newBuilder();
         userVerify.setCode(Integer.parseInt(verificationCode));
         userVerify.setUsername(userName);
@@ -784,12 +848,14 @@ public class ActivityRegister extends ActivityEnhanced {
             e.printStackTrace();
         }
 
+
 //        G.handler.postDelayed(new Runnable() {
 //            @Override
 //            public void run() {
 //
 //            }
 //        }, 4000);
+
     }
 
     private void userVerifyResponse(final String verificationCode) {
@@ -818,13 +884,106 @@ public class ActivityRegister extends ActivityEnhanced {
             }
 
             @Override
-            public void onUserVerifyError() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        errorVerifySms();
-                    }
-                });
+            public void onUserVerifyError(int majorCode, int minorCode) {
+
+
+                if (majorCode == 102 && minorCode == 1) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            errorVerifySms();
+                            countDownTimer.cancel();
+                        }
+                    });
+                } else if (majorCode == 102 && minorCode == 2) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // TODO: 9/25/2016 Invalid username
+                        }
+                    });
+                } else if (majorCode == 102 && minorCode == 3) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // TODO: 9/25/2016 Invalid device
+                        }
+                    });
+                } else if (majorCode == 102 && minorCode == 4) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // TODO: 9/25/2016 Invalid osName
+                        }
+                    });
+                } else if (majorCode == 102 && minorCode == 5) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // TODO: 9/25/2016 Invalid osVersion
+                        }
+                    });
+                } else if (majorCode == 103) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // TODO: 9/25/2016 Error 103 - USER_VERIFY_INTERNAL_SERVER_ERROR
+                        }
+                    });
+                } else if (majorCode == 104) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // There is no registered user with given username
+                            // TODO: 9/25/2016 Error 104 - USER_VERIFY_USER_NOT_FOUND
+
+
+                        }
+                    });
+                } else if (majorCode == 105) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // User is blocked , You cannot verify the user
+                            // TODO: 9/25/2016 Error 105 - USER_VERIFY_BLOCKED_USER
+
+                            Toast.makeText(ActivityRegister.this, "This Number is Block", Toast.LENGTH_SHORT).show();
+
+
+                        }
+                    });
+                } else if (majorCode == 106) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // Verification code is invalid
+                            // TODO: 9/25/2016 Error 106 - USER_VERIFY_INVALID_CODE
+                            errorVerifySms();
+
+
+                        }
+                    });
+                } else if (majorCode == 107) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // There is no registered user with given username
+                            // TODO: 9/25/2016 Error 107 - USER_VERIFY_EXPIRED_CODE
+
+
+                        }
+                    });
+                } else if (majorCode == 108) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // Verification code is locked for a while due to too many tries
+                            // TODO: 9/25/2016 Error 108 - USER_VERIFY_MAX_TRY_LOCK
+
+
+                        }
+                    });
+                }
             }
         };
     }
@@ -872,11 +1031,45 @@ public class ActivityRegister extends ActivityEnhanced {
             }
 
             @Override
-            public void onLoginError() {
-                requestLogin();
+            public void onLoginError(int majorCode, int minorCode) {
+                if (majorCode == 109 && minorCode == 1) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            // TODO: 9/25/2016 Error 109 - USER_LOGIN_BAD_PAYLOAD
+                        }
+                    });
+                } else if (majorCode == 110) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            // TODO: 9/25/2016 Error 110 - USER_LOGIN_INTERNAL_SERVER_ERROR
+                        }
+                    });
+                } else if (majorCode == 111 && minorCode == 4) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            // TODO: 9/25/2016 USER_LOGIN_FAILED
+                        }
+                    });
+                } else if (majorCode == 111) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            requestLogin();
+                        }
+                    });
+                }
             }
         };
+
         requestLogin();
+
     }
 
     private void requestLogin() {

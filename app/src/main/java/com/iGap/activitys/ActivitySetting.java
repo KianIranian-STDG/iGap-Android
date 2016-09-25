@@ -228,7 +228,6 @@ public class ActivitySetting extends ActivityEnhanced {
                                     positive.setClickable(false);
                                     positive.setAlpha(0.5f);
                                 }
-
                             }
 
                         }).show();

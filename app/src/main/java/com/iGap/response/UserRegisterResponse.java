@@ -45,6 +45,6 @@ public class UserRegisterResponse extends MessageHandler {
             }
         });
 
-        G.onUserRegistration.onRegisterError();
+        G.onUserRegistration.onRegisterError(majorCode, minorCode);
     }
 }

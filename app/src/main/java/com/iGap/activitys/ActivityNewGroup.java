@@ -181,38 +181,37 @@ public class ActivityNewGroup extends ActivityEnhanced {
             @Override
             public void onClick(View view) {
 
-                if (imgCircleImageView != null) {
-                    if (edtDescription.getText().toString().length() > 0) {
-                        if (edtGroupName.getText().toString().length() > 0) {
-                            boolean success;
-                            String newName = edtGroupName.getText().toString().replace(" ", "_");
-                            File file2 = new File(path, prefix + "_" + newName + Math.random() * 10000 + 1 + ".png");
+                if (edtDescription.getText().toString().length() > 0) {
+                    if (edtGroupName.getText().toString().length() > 0) {
+                        boolean success;
+                        String newName = edtGroupName.getText().toString().replace(" ", "_");
+                        File file2 = new File(path, prefix + "_" + newName + Math.random() * 10000 + 1 + ".png");
+                        if (prefix.equals("NewChanel")) {
+                            success = G.IMAGE_NEW_CHANEL.renameTo(file2);
+                        } else {
+                            success = G.IMAGE_NEW_GROUP.renameTo(file2);
+                        }
+
+                        if (success) {
+
                             if (prefix.equals("NewChanel")) {
-                                success = G.IMAGE_NEW_CHANEL.renameTo(file2);
+                                startActivity(new Intent(ActivityNewGroup.this, ActivityNewChanelFinish.class));
+                                finish();
                             } else {
-                                success = G.IMAGE_NEW_GROUP.renameTo(file2);
-                            }
-
-                            if (success) {
-
-                                if (prefix.equals("NewChanel")) {
-                                    startActivity(new Intent(ActivityNewGroup.this, ActivityNewChanelFinish.class));
-                                    finish();
-                                } else {
-                                    createGroup();
+                                createGroup();
 //                                    Fragment fragment = ContactGroupFragment.newInstance();
 //                                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.ng_fragmentContainer, fragment).commit();
 //                                    ActivityMain.mLeftDrawerLayout.closeDrawer();
 //                                    finish();
-                                }
                             }
-                        } else {
-                            Toast.makeText(ActivityNewGroup.this, "Please Description tour Group", Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Toast.makeText(ActivityNewGroup.this, "Please Enter Your Name Group", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ActivityNewGroup.this, "Please Description tour Group", Toast.LENGTH_SHORT).show();
                     }
+                } else {
+                    Toast.makeText(ActivityNewGroup.this, "Please Enter Your Name Group", Toast.LENGTH_SHORT).show();
                 }
+
 //                }
             }
         });

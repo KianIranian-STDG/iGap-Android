@@ -8,6 +8,6 @@ public interface OnUserRegistration {
 
     void onRegister(String userName, long userId, ProtoUserRegister.UserRegisterResponse.Method methodValue, List<Long> smsNumbers, String regex);
 
-    void onRegisterError();
+    void onRegisterError(int majorCode, int minorCode);
 
 }

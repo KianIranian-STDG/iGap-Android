@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
@@ -413,7 +412,6 @@ public class ActivityIntroduce extends ActivityEnhanced {
                     getTermsOfServiceBody();
                     //getInfoLocation();
                     ONETIME = 1;
-                    Log.i("CCVVBBXX", "run: ");
                 } else {
                     getInfo();
                 }
@@ -455,12 +453,36 @@ public class ActivityIntroduce extends ActivityEnhanced {
     private void getTermsOfServiceBody() {
 
         G.onReceivePageInfoTOS = new OnReceivePageInfoTOS() {
+
+
             @Override
             public void onReceivePageInfo(final String bodyR) {
                 body = bodyR;
                 getInfoLocation();
             }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+                if (majorCode == 502 && minorCode == 1) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+//                            locationFound = false;
+//                            Toast.makeText(G.context, "Location Not Found", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else if (majorCode == 503) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+//                            locationFound = false;
+//                            Toast.makeText(G.context, "Location Not Found", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
         };
+
 
         new RequestInfoPage().infoPage("TOS");
     }

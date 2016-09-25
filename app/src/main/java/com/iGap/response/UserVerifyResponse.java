@@ -1,6 +1,9 @@
 package com.iGap.response;
 
+import android.util.Log;
+
 import com.iGap.G;
+import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoUserVerify;
 
 public class UserVerifyResponse extends MessageHandler {
@@ -29,6 +32,13 @@ public class UserVerifyResponse extends MessageHandler {
 
     @Override
     public void error() {
-        G.onUserVerification.onUserVerifyError();
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        int majorCode = errorResponse.getMajorCode();
+        int minorCode = errorResponse.getMinorCode();
+
+        Log.i("SOC_RES", "UserVerifyResponse majorCode : " + majorCode);
+        Log.i("SOC_RES", "UserVerifyResponse minorCode : " + minorCode);
+
+        G.onUserVerification.onUserVerifyError(majorCode, minorCode);
     }
 }
