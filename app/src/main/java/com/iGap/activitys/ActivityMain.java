@@ -32,6 +32,7 @@ import com.iGap.interface_package.OnChatUpdateStatusResponse;
 import com.iGap.interface_package.OnClientGetRoomListResponse;
 import com.iGap.interface_package.OnClientGetRoomResponse;
 import com.iGap.interface_package.OnConnectionChangeState;
+import com.iGap.interface_package.OnGroupChatSendMessageResponse;
 import com.iGap.libs.floatingAddButton.ArcMenu;
 import com.iGap.libs.floatingAddButton.StateChangeListener;
 import com.iGap.libs.flowingdrawer.FlowingView;
@@ -45,6 +46,7 @@ import com.iGap.module.StructChatInfo;
 import com.iGap.proto.ProtoChatSendMessage;
 import com.iGap.proto.ProtoClientGetRoom;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.proto.ProtoGroupSendMessage;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmChatHistory;
 import com.iGap.realm.RealmClientCondition;
@@ -64,7 +66,7 @@ import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
-public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse {
+public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnGroupChatSendMessageResponse {
 
     public static LeftDrawerLayout mLeftDrawerLayout;
     private RecyclerView recyclerView;
@@ -80,6 +82,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
         G.chatSendMessageUtil.setOnChatSendMessageResponse(this);
+        G.groupChatSendMessageUtil.setOnChatSendMessageResponse(this);
         G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
         G.onClientGetRoomResponse = new OnClientGetRoomResponse() {
             @Override
@@ -944,6 +947,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
         G.chatSendMessageUtil.setOnChatSendMessageResponse(this);
+        G.groupChatSendMessageUtil.setOnChatSendMessageResponse(this);
         G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
 
         // adapter may be null because it's initializing async
@@ -1060,5 +1064,15 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     @Override
     public void onChatUpdateStatus(long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, int statusVersion) {
         // TODO
+    }
+
+    @Override
+    public void onMessageUpdated(long messageId, ProtoGlobal.RoomMessageStatus status, String identity, ProtoGroupSendMessage.GroupSendMessageResponse.Builder roomMessage) {
+        // TODO: 9/25/2016 [Alireza Eskandarpour Shoferi] implement
+    }
+
+    @Override
+    public void onReceiveChatMessage(String message, String messageType, ProtoGroupSendMessage.GroupSendMessageResponse.Builder roomMessage) {
+        // TODO: 9/25/2016 [Alireza Eskandarpour Shoferi] implement
     }
 }

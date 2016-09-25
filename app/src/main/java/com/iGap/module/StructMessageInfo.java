@@ -32,6 +32,15 @@ public class StructMessageInfo implements Parcelable {
         this.time = time;
     }
 
+    public boolean isSenderMe() {
+        Realm realm = Realm.getDefaultInstance();
+        try {
+            return Long.parseLong(senderID) == realm.where(RealmUserInfo.class).findFirst().getUserId();
+        } finally {
+            realm.close();
+        }
+    }
+
     public StructMessageInfo(String messageID, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, MyType.FileState fileState, String filePath, long time) {
         this.messageID = messageID;
         this.senderID = senderID;
