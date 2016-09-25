@@ -16,7 +16,13 @@ package com.iGap.module;
  * limitations under the License.
  */
 
+import android.content.Context;
+
+import com.iGap.R;
+
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 public final class TimeUtils {
@@ -34,5 +40,41 @@ public final class TimeUtils {
      */
     public static String toLocal(long unixTime, String format) {
         return new SimpleDateFormat(format, Locale.US).format(unixTime);
+    }
+
+    private static Calendar getYesterdayCalendar() {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -1);
+        return cal;
+    }
+
+    public static String getChatSettingsTimeAgo(Context context, Date comingDate) {
+        Calendar current = Calendar.getInstance();
+        Calendar date = Calendar.getInstance();
+        date.setTime(comingDate);
+
+        long now = current.getTimeInMillis();
+        long time = date.getTimeInMillis();
+
+        if (time <= 0) {
+            return null;
+        }
+
+        if ((time > now)) {
+            if (time - now > 10000) {
+                return String.format("%1$s %2$s", new SimpleDateFormat("MMMM", Locale.getDefault()).format(date.getTimeInMillis()), date.get(Calendar.DAY_OF_MONTH));
+            }
+        }
+
+        String output;
+        if (current.get(Calendar.DAY_OF_MONTH) == date.get(Calendar.DAY_OF_MONTH)) {
+            output = context.getString(R.string.today);
+        } else if (getYesterdayCalendar().get(Calendar.DAY_OF_MONTH) == date.get(Calendar.DAY_OF_MONTH)) {
+            output = context.getString(R.string.yesterday);
+        } else {
+            output = String.format("%1$s %2$s", new SimpleDateFormat("MMMM", Locale.getDefault()).format(date.getTimeInMillis()), date.get(Calendar.DAY_OF_MONTH));
+        }
+
+        return output;
     }
 }

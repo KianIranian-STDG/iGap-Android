@@ -111,11 +111,15 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
                 holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.GONE);
             }
         } else {
-            holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.GONE);
+            if (!mMessage.isTimeMessage()) {
+                holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.GONE);
+            }
         }
 
         // set message time
-        ((TextView) holder.itemView.findViewById(R.id.cslr_txt_time)).setText(formatTime());
+        if (holder.itemView.findViewById(R.id.cslr_txt_time) != null) {
+            ((TextView) holder.itemView.findViewById(R.id.cslr_txt_time)).setText(formatTime());
+        }
 
         setReplayMessage(holder);
         setForwardMessage(holder);

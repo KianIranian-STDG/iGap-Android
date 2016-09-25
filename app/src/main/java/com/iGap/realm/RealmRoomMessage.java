@@ -125,4 +125,8 @@ public class RealmRoomMessage extends RealmObject {
             realm.close();
         }
     }
+
+    public boolean isOnlyTime() {
+        return userId == -1;
+    }
 }

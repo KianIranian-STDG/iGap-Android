@@ -34,7 +34,7 @@ public class TimeItem extends AbstractChatItem<TimeItem, TimeItem.ViewHolder> {
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        holder.csldt_txt_time.setText(Long.toString(mMessage.time));
+        holder.text.setText(mMessage.messageText);
     }
 
     @Override
@@ -49,12 +49,12 @@ public class TimeItem extends AbstractChatItem<TimeItem, TimeItem.ViewHolder> {
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
-        protected TextView csldt_txt_time;
+        protected TextView text;
 
         public ViewHolder(View view) {
             super(view);
 
-            csldt_txt_time = (TextView) view.findViewById(R.id.csldt_txt_time);
+            text = (TextView) view.findViewById(R.id.text);
         }
     }
 }

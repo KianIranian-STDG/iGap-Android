@@ -60,6 +60,10 @@ public class StructMessageInfo implements Parcelable {
     // TODO: 9/15/2016 [Alireza Eskandarpour Shoferi] need sender avatar bg color
     public String senderColor = "";
 
+    public boolean isTimeMessage() {
+        return senderID.equalsIgnoreCase("-1");
+    }
+
     public boolean isEdited = false;
 
     public String status = ProtoGlobal.RoomMessageStatus.SENDING.toString();
@@ -85,10 +89,6 @@ public class StructMessageInfo implements Parcelable {
     public long fileSize;
 
     public long time;
-
-    public boolean isTimeMessage() {
-        return senderID == null;
-    }
 
     public StructMessageInfo() {
     }
@@ -189,11 +189,11 @@ public class StructMessageInfo implements Parcelable {
         Realm realm = Realm.getDefaultInstance();
         long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
         StructMessageInfo messageInfo = new StructMessageInfo();
-        messageInfo.status = roomMessage.getStatus().toString();
+        messageInfo.status = roomMessage.getStatus();
         messageInfo.messageID = Long.toString(roomMessage.getMessageId());
+        messageInfo.isEdited = roomMessage.isEdited();
         messageInfo.messageType = ProtoGlobal.RoomMessageType.valueOf(roomMessage.getMessageType());
-        // TODO: 9/8/2016 [Alireza Eskandarpour Shoferi] inja bayad createTime bezari ke felan server nemide.
-        messageInfo.time = roomMessage.getUpdateTime() * DateUtils.SECOND_IN_MILLIS;
+        messageInfo.time = roomMessage.getUpdateTime();
         messageInfo.messageText = roomMessage.getMessage();
         messageInfo.senderID = Long.toString(roomMessage.getUserId());
         if (roomMessage.getUserId() == userId) {
