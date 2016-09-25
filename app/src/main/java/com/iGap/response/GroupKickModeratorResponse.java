@@ -1,5 +1,6 @@
 package com.iGap.response;
 
+import com.iGap.G;
 import com.iGap.proto.ProtoGroupKickModerator;
 
 public class GroupKickModeratorResponse extends MessageHandler {
@@ -23,6 +24,8 @@ public class GroupKickModeratorResponse extends MessageHandler {
         ProtoGroupKickModerator.GroupKickModeratorResponse.Builder builder = (ProtoGroupKickModerator.GroupKickModeratorResponse.Builder) message;
         builder.getRoomId();
         builder.getMemberId();
+
+        G.onGroupKickModerator.onGroupKickModerator(builder.getRoomId(), builder.getMemberId());
 
     }
 

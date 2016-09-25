@@ -40,8 +40,8 @@
 
                     <com.iGap.module.CircleImageView
                         android:id="@+id/agp_imv_group_avatar"
-                        android:layout_width="@dimen/dp100"
-                        android:layout_height="@dimen/dp100"
+                        android:layout_width="@dimen/dp88"
+                        android:layout_height="@dimen/dp88"
                         android:src="@mipmap/back_chat3" />
 
 
@@ -50,7 +50,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:singleLine="true"
-                        android:text="family group"
+                        android:text=""
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/sp18" />
@@ -144,65 +144,138 @@
                         android:textSize="@dimen/sp18"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/agp_txt_str_group_name"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:singleLine="true"
-                        android:text="group name : "
-                        android:textSize="@dimen/sp16" />
+                        android:gravity="left"
+                        android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/agp_txt_group_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingBottom="@dimen/dp18"
-                        android:paddingTop="@dimen/dp4"
-                        android:singleLine="true"
-                        android:text="family group"
-                        android:textColor="@android:color/black"
-                        android:textSize="@dimen/sp16" />
 
-                    <TextView
-                        android:id="@+id/agp_txt_str_shared_media"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:singleLine="true"
-                        android:text="sheared media :"
-                        android:textSize="@dimen/sp16" />
+                        <LinearLayout
+                            android:id="@+id/agp_ll_group_name"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/agp_txt_number_of_shared_media"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingBottom="@dimen/dp18"
-                        android:paddingTop="@dimen/dp4"
-                        android:singleLine="true"
-                        android:text="12"
-                        android:textColor="@android:color/black"
-                        android:textSize="@dimen/sp16" />
+                            <TextView
+                                android:id="@+id/agp_txt_str_group_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:singleLine="true"
+                                android:text="group name : "
+                                android:textSize="@dimen/sp16" />
 
-                    <TextView
-                        android:id="@+id/agp_txt_str_member"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:singleLine="true"
-                        android:text="Members : "
-                        android:textSize="@dimen/sp16" />
+                            <TextView
+                                android:id="@+id/agp_txt_group_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingBottom="@dimen/dp18"
+                                android:paddingTop="@dimen/dp4"
+                                android:singleLine="true"
+                                android:text=""
+                                android:textColor="@android:color/black"
+                                android:textSize="@dimen/sp16" />
 
-                    <TextView
-                        android:id="@+id/agp_txt_member_number"
-                        android:layout_width="wrap_content"
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/agp_ll_sheared_media"
+                            android:layout_width="@dimen/dp140"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/agp_txt_str_shared_media"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:singleLine="true"
+                                android:text="sheared media :"
+                                android:textSize="@dimen/sp16" />
+
+                            <TextView
+                                android:id="@+id/agp_txt_number_of_shared_media"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingBottom="@dimen/dp18"
+                                android:paddingTop="@dimen/dp4"
+                                android:singleLine="true"
+                                android:text="12"
+                                android:textColor="@android:color/black"
+                                android:textSize="@dimen/sp16" />
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingBottom="@dimen/dp18"
-                        android:paddingTop="@dimen/dp4"
-                        android:singleLine="true"
-                        android:text="4"
-                        android:textColor="@android:color/black"
-                        android:textSize="@dimen/sp16" />
+                        android:gravity="left"
+                        android:orientation="horizontal">
+
+
+                        <LinearLayout
+                            android:id="@+id/agp_ll_group_description"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/agp_txt_str_group_description"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:singleLine="true"
+                                android:text="group description : "
+                                android:textSize="@dimen/sp16" />
+
+                            <TextView
+                                android:id="@+id/agp_txt_group_description"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingBottom="@dimen/dp18"
+                                android:paddingTop="@dimen/dp4"
+                                android:singleLine="true"
+                                android:text="family group"
+                                android:textColor="@android:color/black"
+                                android:textSize="@dimen/sp16" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="@dimen/dp140"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/agp_txt_str_member"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:singleLine="true"
+                                android:text="Members : "
+                                android:textSize="@dimen/sp16" />
+
+                            <TextView
+                                android:id="@+id/agp_txt_member_number"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingBottom="@dimen/dp18"
+                                android:paddingTop="@dimen/dp4"
+                                android:singleLine="true"
+                                android:text=""
+                                android:textColor="@android:color/black"
+                                android:textSize="@dimen/sp16" />
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
 
 
                 </LinearLayout>
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -294,6 +367,26 @@
                     android:paddingTop="@dimen/dp4"
                     android:singleLine="true"
                     android:text="Set Admin"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/sp16" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_marginBottom="@dimen/dp4"
+                    android:layout_marginTop="@dimen/dp12"
+                    android:background="@color/gray" />
+
+                <TextView
+                    android:id="@+id/agp_txt_add_modereator"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:paddingBottom="@dimen/dp4"
+                    android:paddingLeft="@dimen/dp16"
+                    android:paddingTop="@dimen/dp4"
+                    android:singleLine="true"
+                    android:text="Set Modereator"
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/sp16" />
 

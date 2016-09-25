@@ -14,6 +14,7 @@ public class RealmGroupRoom extends RealmObject {
     private String participants_count_label;
     private boolean left;
     private RealmList<RealmMember> members;
+    private String description;
 
     public GroupChatRole getRole() {
         return (role != null) ? GroupChatRole.valueOf(role) : null;
@@ -45,6 +46,14 @@ public class RealmGroupRoom extends RealmObject {
 
     public void setMembers(RealmList<RealmMember> members) {
         this.members = members;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     /**

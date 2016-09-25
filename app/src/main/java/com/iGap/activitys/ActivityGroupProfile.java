@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -11,21 +12,31 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.items.ContatItemGroupProfile;
 import com.iGap.fragments.ShowCustomList;
+import com.iGap.interface_package.OnGroupAddAdmin;
 import com.iGap.interface_package.OnGroupAddMember;
+import com.iGap.interface_package.OnGroupAddModerator;
+import com.iGap.interface_package.OnGroupEdit;
+import com.iGap.interface_package.OnGroupKickAdmin;
+import com.iGap.interface_package.OnGroupKickMember;
+import com.iGap.interface_package.OnGroupKickModerator;
+import com.iGap.interface_package.OnGroupLeft;
 import com.iGap.interface_package.OnSelectedList;
 import com.iGap.module.AttachFile;
 import com.iGap.module.CircleImageView;
@@ -33,6 +44,7 @@ import com.iGap.module.Contacts;
 import com.iGap.module.CustomTextViewMedium;
 import com.iGap.module.StructContactInfo;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.realm.RealmChatHistory;
 import com.iGap.realm.RealmContacts;
 import com.iGap.realm.RealmGroupRoom;
 import com.iGap.realm.RealmMember;
@@ -40,6 +52,12 @@ import com.iGap.realm.RealmRoom;
 import com.iGap.realm.enums.GroupChatRole;
 import com.iGap.request.RequestGroupAddAdmin;
 import com.iGap.request.RequestGroupAddMember;
+import com.iGap.request.RequestGroupAddModerator;
+import com.iGap.request.RequestGroupEdit;
+import com.iGap.request.RequestGroupKickAdmin;
+import com.iGap.request.RequestGroupKickMember;
+import com.iGap.request.RequestGroupKickModerator;
+import com.iGap.request.RequestGroupLeft;
 import com.mikepenz.fastadapter.AbstractAdapter;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
@@ -65,11 +83,14 @@ public class ActivityGroupProfile extends ActivityEnhanced {
     private CircleImageView imvGroupAvatar;
     private TextView txtGroupNameTitle;
     private TextView txtGroupName;
+    private TextView txtGroupDescription;
     private TextView txtNumberOfSharedMedia;
     private TextView txtMemberNumber;
     private TextView txtMore;
     private AppBarLayout appBarLayout;
     private FloatingActionButton fab;
+
+    private String tmp = "";
 
     private int numberUploadItem = 5;
 
@@ -83,6 +104,7 @@ public class ActivityGroupProfile extends ActivityEnhanced {
 
     private long roomId;
     private String title;
+    private String description;
     private String initials;
     private String color;
     private GroupChatRole role;
@@ -112,6 +134,7 @@ public class ActivityGroupProfile extends ActivityEnhanced {
         role = realmGroupRoom.getRole();
         participantsCountLabel = realmGroupRoom.getParticipantsCountLabel();
         members = realmGroupRoom.getMembers();
+        description = realmGroupRoom.getDescription();
 
         realm.close();
 
@@ -140,11 +163,47 @@ public class ActivityGroupProfile extends ActivityEnhanced {
 
 
         imvGroupAvatar = (CircleImageView) findViewById(R.id.agp_imv_group_avatar);
+
         txtGroupNameTitle = (TextView) findViewById(R.id.agp_txt_group_name_title);
+        txtGroupNameTitle.setText(title);
+
         txtGroupName = (TextView) findViewById(R.id.agp_txt_group_name);
+        txtGroupName.setText(title);
+
+        txtGroupDescription = (TextView) findViewById(R.id.agp_txt_group_description);
+        txtGroupDescription.setText(description);
+
         txtNumberOfSharedMedia = (TextView) findViewById(R.id.agp_txt_number_of_shared_media);
-        txtMemberNumber = (TextView) findViewById(R.id.agp_txt_number_of_shared_media);
+        txtMemberNumber = (TextView) findViewById(R.id.agp_txt_member_number);
         appBarLayout = (AppBarLayout) findViewById(R.id.agp_appbar);
+
+
+        LinearLayout llGroupName = (LinearLayout) findViewById(R.id.agp_ll_group_name);
+        llGroupName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ChangeGroupName();
+            }
+        });
+
+        LinearLayout llGroupDescription = (LinearLayout) findViewById(R.id.agp_ll_group_description);
+        llGroupDescription.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ChangeGroupDescription();
+            }
+        });
+
+
+        LinearLayout llSharedMedia = (LinearLayout) findViewById(R.id.agp_ll_sheared_media);
+        llSharedMedia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Log.e("ddd", "shared media click");
+
+            }
+        });
 
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
@@ -169,9 +228,9 @@ public class ActivityGroupProfile extends ActivityEnhanced {
             @Override
             public void onClick(View view) {
                 if (!G.imageFile.exists()) {
-                    startDialog(R.array.profile);
+                    startDialogSelectPicture(R.array.profile);
                 } else {
-                    startDialog(R.array.profile_delete);
+                    startDialogSelectPicture(R.array.profile_delete);
                 }
             }
         });
@@ -204,20 +263,8 @@ public class ActivityGroupProfile extends ActivityEnhanced {
             @Override
             public void onClick(View view) {
 
-                Fragment fragment = ShowCustomList.newInstance(Contacts.retrieve(null), new OnSelectedList() {
-                    @Override
-                    public void getSelectedList(boolean result, String message, ArrayList<StructContactInfo> list) {
+                addMemberToGroup();
 
-                        addMemberToGroup(list);
-
-                        // reset activity
-                        finish();
-                        startActivity(getIntent());
-                    }
-                });
-
-                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
-                        R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer_group_profile, fragment).commit();
             }
         });
 
@@ -226,26 +273,21 @@ public class ActivityGroupProfile extends ActivityEnhanced {
         txtSetAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Fragment fragment = ShowCustomList.newInstance(contacts, new OnSelectedList() {
-                    @Override
-                    public void getSelectedList(boolean result, String message, ArrayList<StructContactInfo> list) {
 
-                        for (int i = 0; i < list.size(); i++) {
-                            new RequestGroupAddAdmin().groupAddAdmin(roomId, list.get(i).peerId);
+                setMemberRoleToAdmin();
 
-
-                            Log.e("ddd", list.get(i).peerId + "");
-                        }
-
-
-                    }
-                });
-
-                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
-                        R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer_group_profile, fragment).commit();
             }
         });
 
+
+        TextView txtAddModereator = (TextView) findViewById(R.id.agp_txt_add_modereator);
+        txtAddModereator.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                setMemberRoleToModerator();
+            }
+        });
 
         final ToggleButton toggleButton = (ToggleButton) findViewById(R.id.agp_toggle_member_can_add_member);
         toggleButton.setOnClickListener(new View.OnClickListener() {
@@ -273,7 +315,7 @@ public class ActivityGroupProfile extends ActivityEnhanced {
         txtDeleteGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("ddd", "txtDeleteGroup");
+                groupLeft();
             }
         });
 
@@ -315,6 +357,21 @@ public class ActivityGroupProfile extends ActivityEnhanced {
             }
         });
 
+        fastAdapter.withOnLongClickListener(new FastAdapter.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v, IAdapter adapter, IItem item, int position) {
+
+                if (contacts.get(position).role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+                    kickMember(contacts.get(position).peerId);
+                } else if (contacts.get(position).role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
+                    kickAdmin(contacts.get(position).peerId);
+                } else if (contacts.get(position).role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
+                    kickModerator(contacts.get(position).peerId);
+                }
+
+                return true;
+            }
+        });
 
         fastAdapter.setHasStableIds(true);
 
@@ -338,8 +395,10 @@ public class ActivityGroupProfile extends ActivityEnhanced {
 
         int listSize = contacts.size();
 
-        for (int i = 0; i < listSize && i < 3; i++) {
+        txtMemberNumber.setText(listSize + "");
 
+
+        for (int i = 0; i < listSize && i < 3; i++) {
             items.add(new ContatItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
         }
 
@@ -362,67 +421,10 @@ public class ActivityGroupProfile extends ActivityEnhanced {
 
     }
 
-
-    private void addMemberToGroup(final ArrayList<StructContactInfo> list) {
-
-
-        countAddMemberResponse = 0;
-        countAddMemberRequest = list.size();
-
-
-        G.onGroupAddMember = new OnGroupAddMember() {
-            @Override
-            public void onGroupAddMember() {
-                countAddMemberResponse++;
-                Log.i("XXX", "countAddMemberResponse : " + countAddMemberResponse);
-                Log.i("XXX", "countAddMemberRequest : " + countAddMemberRequest);
-                if (countAddMemberResponse >= countAddMemberRequest) {
-
-                }
-            }
-        };
-
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                final RealmList<RealmMember> members = new RealmList<>();
-                for (int i = 0; i < list.size(); i++) {
-                    long peerId = list.get(i).peerId;
-                    //add member to realm
-                    RealmMember realmMember = new RealmMember();
-                    int autoIncrement = 0;
-                    if (realm.where(RealmMember.class).max("id") != null) {
-                        autoIncrement = realm.where(RealmMember.class).max("id").intValue() + 1;
-                    }
-                    realmMember.setId(autoIncrement);
-                    realmMember.setPeerId(peerId);
-                    realmMember.setRole(ProtoGlobal.GroupRoom.Role.MEMBER.toString());
-                    realmMember = realm.copyToRealm(realmMember);
-
-                    members.add(realmMember);
-
-                    //request for add member
-                    new RequestGroupAddMember().groupAddMemeber(roomId, peerId, 0, ProtoGlobal.GroupRoom.Role.MEMBER);
-                }
-
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
-
-                for (RealmMember member : realmRoom.getGroupRoom().getMembers()) {
-                    members.add(member);
-                }
-
-                realmRoom.getGroupRoom().setMembers(members);
-            }
-        });
-        realm.close();
-
-
-    }
-
     private void fillItem() {
 
         contacts = new ArrayList<>();
+
 
         Realm realm = Realm.getDefaultInstance();
 
@@ -433,7 +435,11 @@ public class ActivityGroupProfile extends ActivityEnhanced {
             RealmContacts rc = realm.where(RealmContacts.class).equalTo("id", id).findFirst();
 
             if (rc != null) {
-                contacts.add(new StructContactInfo(rc.getId(), rc.getDisplay_name() + "  " + role, rc.getStatus(), false, false, rc.getPhone() + ""));
+
+                StructContactInfo s = new StructContactInfo(rc.getId(), rc.getDisplay_name(), rc.getStatus(), false, false, rc.getPhone() + "");
+                s.role = role;
+
+                contacts.add(s);
             }
 
 
@@ -443,43 +449,6 @@ public class ActivityGroupProfile extends ActivityEnhanced {
 
     }
 
-
-    //dialog for choose pic from gallery or camera
-    private void startDialog(int r) {
-
-        new MaterialDialog.Builder(this)
-                .title("Choose Picture")
-                .negativeText("CANCEL")
-                .items(r)
-                .itemsCallback(new MaterialDialog.ListCallback() {
-                    @Override
-                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-
-                        if (text.toString().equals("From Camera")) {
-
-                            if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
-
-                                attachFile.requestTakePicture();
-
-                                dialog.dismiss();
-
-                            } else {
-                                Toast.makeText(ActivityGroupProfile.this, "Please check your Camera", Toast.LENGTH_SHORT).show();
-                            }
-
-                        } else if (text.toString().equals("Delete photo")) {
-                            // TODO: 9/20/2016  delete  group image
-
-                        } else {
-                            attachFile.requestOpenGalleryForImage();
-                        }
-
-                    }
-                })
-                .show();
-    }
-
-    //=====================================================================================result from camera , gallery and crop
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -498,7 +467,6 @@ public class ActivityGroupProfile extends ActivityEnhanced {
         }
 
     }
-
 
     public class StickyHeaderAdapter extends AbstractAdapter implements StickyRecyclerHeadersAdapter {
         @Override
@@ -568,6 +536,601 @@ public class ActivityGroupProfile extends ActivityEnhanced {
         public int getGlobalPosition(int position) {
             return -1;
         }
+    }
+
+    //***********************************************************************************************************************
+
+    //dialog for choose pic from gallery or camera
+    private void startDialogSelectPicture(int r) {
+
+        new MaterialDialog.Builder(this)
+                .title("Choose Picture")
+                .negativeText("CANCEL")
+                .items(r)
+                .itemsCallback(new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+
+                        if (text.toString().equals("From Camera")) {
+
+                            if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
+
+                                attachFile.requestTakePicture();
+
+                                dialog.dismiss();
+
+                            } else {
+                                Toast.makeText(ActivityGroupProfile.this, "Please check your Camera", Toast.LENGTH_SHORT).show();
+                            }
+
+                        } else if (text.toString().equals("Delete photo")) {
+                            // TODO: 9/20/2016  delete  group image
+
+                        } else {
+                            attachFile.requestOpenGalleryForImage();
+                        }
+
+                    }
+                })
+                .show();
+    }
+
+    private void addMemberToGroup() {
+
+        Fragment fragment = ShowCustomList.newInstance(Contacts.retrieve(null), new OnSelectedList() {
+            @Override
+            public void getSelectedList(boolean result, String message, final ArrayList<StructContactInfo> list) {
+
+
+                countAddMemberResponse = 0;
+                countAddMemberRequest = list.size();
+
+                G.onGroupAddMember = new OnGroupAddMember() {
+                    @Override
+                    public void onGroupAddMember() {
+                        countAddMemberResponse++;
+
+                        if (countAddMemberResponse >= countAddMemberRequest) {
+
+                            for (int i = 0; i < list.size(); i++) {
+                                contacts.add(list.get(i));
+                            }
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    txtMemberNumber.setText(contacts.size() + "");
+                                    int count = items.size();
+                                    final int listSize = contacts.size();
+                                    for (int i = count; i < listSize; i++) {
+                                        items.add(new ContatItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
+                                    }
+                                    itemAdapter.clear();
+                                    itemAdapter.add(items);
+                                    txtMore.setVisibility(View.GONE);
+
+                                }
+                            });
+
+                        }
+                    }
+                };
+
+                Realm realm = Realm.getDefaultInstance();
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        final RealmList<RealmMember> members = new RealmList<>();
+                        for (int i = 0; i < list.size(); i++) {
+                            long peerId = list.get(i).peerId;
+                            //add member to realm
+                            RealmMember realmMember = new RealmMember();
+                            int autoIncrement = 0;
+                            if (realm.where(RealmMember.class).max("id") != null) {
+                                autoIncrement = realm.where(RealmMember.class).max("id").intValue() + 1;
+                            }
+                            realmMember.setId(autoIncrement);
+                            realmMember.setPeerId(peerId);
+                            realmMember.setRole(ProtoGlobal.GroupRoom.Role.MEMBER.toString());
+                            realmMember = realm.copyToRealm(realmMember);
+
+                            members.add(realmMember);
+
+                            //request for add member
+                            new RequestGroupAddMember().groupAddMemeber(roomId, peerId, 0, ProtoGlobal.GroupRoom.Role.MEMBER);
+                        }
+
+                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+
+                        for (RealmMember member : realmRoom.getGroupRoom().getMembers()) {
+                            members.add(member);
+                        }
+
+                        realmRoom.getGroupRoom().setMembers(members);
+                    }
+                });
+
+                realm.close();
+
+            }
+        });
+
+        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
+                R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer_group_profile, fragment).commit();
+
+
+    }
+
+    private void ChangeGroupName() {
+
+        MaterialDialog dialog = new MaterialDialog.Builder(ActivityGroupProfile.this)
+                .title("Group Name")
+                .positiveText("SAVE")
+                .alwaysCallInputCallback()
+                .widgetColor(getResources().getColor(R.color.toolbar_background))
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                        G.onGroupEdit = new OnGroupEdit() {
+                            @Override
+                            public void onGroupEdit(final long roomId, final String name, final String description) {
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+
+                                        Realm realm = Realm.getDefaultInstance();
+                                        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+
+                                        realm.executeTransaction(new Realm.Transaction() {
+                                            @Override
+                                            public void execute(Realm realm) {
+                                                if (realmRoom != null) {
+                                                    realmRoom.setTitle(name);
+
+                                                    title = name;
+                                                    txtGroupNameTitle.setText(name);
+                                                    txtGroupName.setText(name);
+                                                }
+
+                                                realm.close();
+
+                                            }
+                                        });
+
+
+                                    }
+                                });
+
+
+                            }
+                        };
+
+                        new RequestGroupEdit().groupEdit(roomId, tmp, txtGroupDescription.getText().toString());
+
+
+                    }
+                })
+                .negativeText("CANCEL")
+                .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT)
+                .input("please Enter Group Name", txtGroupName.getText().toString(), new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(MaterialDialog dialog, CharSequence input) {
+                        // Do something
+
+                        View positive = dialog.getActionButton(DialogAction.POSITIVE);
+                        tmp = input.toString();
+                        if (!input.toString().equals(txtGroupName.getText().toString())) {
+
+                            positive.setClickable(true);
+                            positive.setAlpha(1.0f);
+                        } else {
+                            positive.setClickable(false);
+                            positive.setAlpha(0.5f);
+                        }
+
+                    }
+
+                }).show();
+    }
+
+    private void ChangeGroupDescription() {
+        MaterialDialog dialog = new MaterialDialog.Builder(ActivityGroupProfile.this)
+                .title("Group Descripton")
+                .positiveText("SAVE")
+                .alwaysCallInputCallback()
+                .widgetColor(getResources().getColor(R.color.toolbar_background))
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+
+                        G.onGroupEdit = new OnGroupEdit() {
+                            @Override
+                            public void onGroupEdit(final long roomId, final String name, final String descriptions) {
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Realm realm = Realm.getDefaultInstance();
+                                        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+                                        realm.executeTransaction(new Realm.Transaction() {
+                                            @Override
+                                            public void execute(Realm realm) {
+                                                if (realmRoom != null) {
+                                                    RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+                                                    realmGroupRoom.setDescription(descriptions);
+
+                                                    description = descriptions;
+                                                    txtGroupDescription.setText(descriptions);
+                                                }
+
+                                                realm.close();
+
+                                            }
+                                        });
+
+
+                                    }
+                                });
+
+
+                            }
+                        };
+
+                        new RequestGroupEdit().groupEdit(roomId, txtGroupName.getText().toString(), tmp);
+
+
+                    }
+                })
+                .negativeText("CANCEL")
+                .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT)
+                .input("please Enter Group Description", txtGroupDescription.getText().toString(), new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(MaterialDialog dialog, CharSequence input) {
+                        // Do something
+
+                        View positive = dialog.getActionButton(DialogAction.POSITIVE);
+                        tmp = input.toString();
+                        if (!input.toString().equals(txtGroupDescription.getText().toString())) {
+
+                            positive.setClickable(true);
+                            positive.setAlpha(1.0f);
+                        } else {
+                            positive.setClickable(false);
+                            positive.setAlpha(0.5f);
+                        }
+
+                    }
+
+                }).show();
+
+    }
+
+    private void groupLeft() {
+
+        new MaterialDialog.Builder(ActivityGroupProfile.this)
+                .content("do you want to delete this group ")
+                .positiveText(R.string.ok)
+                .negativeText(R.string.cancel)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                        G.onGroupLeft = new OnGroupLeft() {
+                            @Override
+                            public void onGroupLeft(final long roomId, long memberId) {
+
+                                Realm realm = Realm.getDefaultInstance();
+
+                                realm.executeTransaction(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm realm) {
+
+                                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+                                        if (realmRoom != null) {
+                                            realmRoom.deleteFromRealm();
+                                        }
+
+                                        RealmChatHistory realmChatHistory = realm.where(RealmChatHistory.class).equalTo("roomId", roomId).findFirst();
+                                        if (realmChatHistory != null) {
+                                            realmChatHistory.deleteFromRealm();
+                                        }
+
+                                        //ToDO  delete client condition
+
+                                    }
+                                });
+
+                                realm.close();
+
+                                ActivityGroupProfile.this.finish();
+
+                                if (ActivityChat.activityChat != null)
+                                    ActivityChat.activityChat.finish();
+
+                            }
+                        };
+
+                        new RequestGroupLeft().groupLeft(roomId);
+
+                    }
+                })
+                .show();
+    }
+
+
+    /**
+     * if user was admin set  role to member
+     *
+     * @param memberID
+     */
+    private void kickAdmin(final long memberID) {
+
+        new MaterialDialog.Builder(ActivityGroupProfile.this)
+                .content("do you want to set admin role to member")
+                .positiveText(R.string.ok)
+                .negativeText(R.string.cancel)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                        G.onGroupKickAdmin = new OnGroupKickAdmin() {
+                            @Override
+                            public void onGroupKickAdmin(long roomId, long memberId) {
+                                Realm realm = Realm.getDefaultInstance();
+                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+                                if (realmRoom != null) {
+                                    RealmList<RealmMember> realmMembers = realmRoom.getGroupRoom().getMembers();
+                                    for (final RealmMember member : realmMembers) {
+                                        if (member.getPeerId() == memberId) {
+                                            realm.executeTransaction(new Realm.Transaction() {
+                                                @Override
+                                                public void execute(Realm realm) {
+                                                    member.setRole(ProtoGlobal.GroupRoom.Role.MEMBER.toString());
+                                                }
+                                            });
+
+                                            for (int i = 0; i < contacts.size(); i++) {
+                                                if (contacts.get(i).peerId == member.getPeerId()) {
+                                                    contacts.get(i).role = member.getRole().toString();
+                                                    final int finalI = i;
+                                                    runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            IItem item = (new ContatItemGroupProfile().setContact(contacts.get(finalI)).withIdentifier(100 + contacts.indexOf(contacts.get(finalI))));
+                                                            itemAdapter.set(finalI, item);
+                                                        }
+                                                    });
+
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                                realm.close();
+                            }
+                        };
+
+                        new RequestGroupKickAdmin().groupKickAdmin(roomId, memberID);
+
+                    }
+                })
+                .show();
+
+
+    }
+
+    /**
+     * delete this member from list of member group
+     *
+     * @param memberID
+     */
+    private void kickMember(final long memberID) {
+
+        new MaterialDialog.Builder(ActivityGroupProfile.this)
+                .content("do you want to kick this member ")
+                .positiveText(R.string.ok)
+                .negativeText(R.string.cancel)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        G.onGroupKickMember = new OnGroupKickMember() {
+                            @Override
+                            public void onGroupKickMember(long roomId, final long memberId) {
+                                Realm realm = Realm.getDefaultInstance();
+                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+                                if (realmRoom != null) {
+                                    final RealmList<RealmMember> realmMembers = realmRoom.getGroupRoom().getMembers();
+                                    realm.executeTransaction(new Realm.Transaction() {
+                                        @Override
+                                        public void execute(Realm realm) {
+                                            for (int i = 0; i < realmMembers.size(); i++) {
+                                                RealmMember member = realmMembers.get(i);
+                                                if (member.getPeerId() == memberId) {
+                                                    member.deleteFromRealm();          //delete member from database
+
+                                                    runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            for (int j = 0; j < contacts.size(); j++) {
+                                                                if (contacts.get(j).peerId == memberId) {
+                                                                    contacts.remove(j);
+                                                                    itemAdapter.remove(j);
+                                                                }
+                                                            }
+
+                                                            txtMemberNumber.setText(contacts.size() + "");
+
+                                                        }
+                                                    });
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    });
+                                }
+
+                                realm.close();
+                            }
+                        };
+
+                        new RequestGroupKickMember().groupKickMember(roomId, memberID);
+                    }
+                })
+                .show();
+
+
+    }
+
+    private void kickModerator(final long memberID) {
+
+
+        new MaterialDialog.Builder(ActivityGroupProfile.this)
+                .content("do you want to set modereator role to member")
+                .positiveText(R.string.ok)
+                .negativeText(R.string.cancel)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                        G.onGroupKickModerator = new OnGroupKickModerator() {
+                            @Override
+                            public void onGroupKickModerator(long roomId, long memberId) {
+                                Realm realm = Realm.getDefaultInstance();
+                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+                                if (realmRoom != null) {
+                                    RealmList<RealmMember> realmMembers = realmRoom.getGroupRoom().getMembers();
+                                    for (final RealmMember member : realmMembers) {
+                                        if (member.getPeerId() == memberId) {
+                                            realm.executeTransaction(new Realm.Transaction() {
+                                                @Override
+                                                public void execute(Realm realm) {
+                                                    member.setRole(ProtoGlobal.GroupRoom.Role.MEMBER.toString());
+                                                }
+                                            });
+
+                                            for (int i = 0; i < contacts.size(); i++) {
+                                                if (contacts.get(i).peerId == member.getPeerId()) {
+                                                    contacts.get(i).role = member.getRole().toString();
+                                                    final int finalI = i;
+                                                    runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            IItem item = (new ContatItemGroupProfile().setContact(contacts.get(finalI)).withIdentifier(100 + contacts.indexOf(contacts.get(finalI))));
+                                                            itemAdapter.set(finalI, item);
+                                                        }
+                                                    });
+
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                                realm.close();
+
+
+                            }
+                        };
+
+                        new RequestGroupKickModerator().groupKickModerator(roomId, memberID);
+
+                    }
+                })
+                .show();
+
+    }
+
+    private void setMemberRoleToModerator() {
+
+        Fragment fragment = ShowCustomList.newInstance(contacts, new OnSelectedList() {
+            @Override
+            public void getSelectedList(boolean result, String message, final ArrayList<StructContactInfo> list) {
+
+                G.onGroupAddModerator = new OnGroupAddModerator() {
+                    @Override
+                    public void onGroupAddModerator(long roomId, final long memberId) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                for (int i = 0; i < contacts.size(); i++) {
+                                    if (contacts.get(i).peerId == memberId) {
+                                        contacts.get(i).role = ProtoGlobal.GroupRoom.Role.MODERATOR.toString();
+
+                                        if (i < itemAdapter.getAdapterItemCount()) {
+                                            IItem item = (new ContatItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
+                                            itemAdapter.set(i, item);
+                                        }
+                                        break;
+                                    }
+                                }
+
+                            }
+                        });
+                    }
+                };
+
+
+                for (int i = 0; i < list.size(); i++) {
+                    new RequestGroupAddModerator().groupAddModerator(roomId, list.get(i).peerId);
+                }
+            }
+        });
+
+        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
+                R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer_group_profile, fragment).commit();
+
+
+    }
+
+    private void setMemberRoleToAdmin() {
+
+        Fragment fragment = ShowCustomList.newInstance(contacts, new OnSelectedList() {
+            @Override
+            public void getSelectedList(boolean result, String message, ArrayList<StructContactInfo> list) {
+
+
+                G.onGroupAddAdmin = new OnGroupAddAdmin() {
+                    @Override
+                    public void onGroupAddAdmin(long roomId, final long memberId) {
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                for (int i = 0; i < contacts.size(); i++) {
+                                    if (contacts.get(i).peerId == memberId) {
+                                        contacts.get(i).role = ProtoGlobal.GroupRoom.Role.ADMIN.toString();
+
+                                        if (i < itemAdapter.getAdapterItemCount()) {
+                                            IItem item = (new ContatItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
+                                            itemAdapter.set(i, item);
+                                        }
+
+                                        break;
+                                    }
+                                }
+                            }
+                        });
+                    }
+                };
+
+
+                for (int i = 0; i < list.size(); i++) {
+                    new RequestGroupAddAdmin().groupAddAdmin(roomId, list.get(i).peerId);
+                }
+
+
+            }
+        });
+
+        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
+                R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer_group_profile, fragment).commit();
+
     }
 
 

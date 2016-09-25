@@ -1,5 +1,8 @@
 package com.iGap.response;
 
+import android.util.Log;
+
+import com.iGap.G;
 import com.iGap.proto.ProtoGroupKickAdmin;
 
 public class GroupKickAdminResponse extends MessageHandler {
@@ -24,10 +27,21 @@ public class GroupKickAdminResponse extends MessageHandler {
         builder.getRoomId();
         builder.getMemberId();
 
+        G.onGroupKickAdmin.onGroupKickAdmin(builder.getRoomId(), builder.getMemberId());
+
+        Log.e("ddd", "hhhhhhhhhh      " + builder.getRoomId() + "   " + builder.getMemberId());
+
     }
 
     @Override
     public void error() {
+        Log.e("ddd", "hhhhhhhhhh      erore      " + message);
+    }
 
+    @Override
+    public void timeOut() {
+
+        Log.e("ddd", "hhhhhhhhhh      timout      " + message);
+        super.timeOut();
     }
 }

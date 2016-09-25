@@ -1,5 +1,6 @@
 package com.iGap.response;
 
+import com.iGap.G;
 import com.iGap.proto.ProtoGroupLeft;
 
 public class GroupLeftResponse extends MessageHandler {
@@ -23,6 +24,8 @@ public class GroupLeftResponse extends MessageHandler {
         ProtoGroupLeft.GroupLeftResponse.Builder builder = (ProtoGroupLeft.GroupLeftResponse.Builder) message;
         builder.getRoomId();
         builder.getMemberId();
+
+        G.onGroupLeft.onGroupLeft(builder.getRoomId(), builder.getMemberId());
 
     }
 

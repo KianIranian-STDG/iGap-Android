@@ -2,6 +2,7 @@ package com.iGap.response;
 
 import android.util.Log;
 
+import com.iGap.G;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoGroupAddAdmin;
 import com.iGap.realm.RealmGroupRoom;
@@ -43,7 +44,7 @@ public class GroupAddAdminResponse extends MessageHandler {
             @Override
             public void execute(Realm realm) {
 
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("roomId", builder.getRoomId()).findFirst();
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", builder.getRoomId()).findFirst();
                 RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
                 RealmList<RealmMember> realmMemberRealmList = realmGroupRoom.getMembers();
 
@@ -56,6 +57,8 @@ public class GroupAddAdminResponse extends MessageHandler {
 
         realm.close();
 
+
+        G.onGroupAddAdmin.onGroupAddAdmin(builder.getRoomId(), builder.getMemberId());
 
     }
 

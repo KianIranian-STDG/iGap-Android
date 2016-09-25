@@ -47,6 +47,11 @@ public class ShowCustomList extends Fragment {
     public static ShowCustomList newInstance(List<StructContactInfo> list, OnSelectedList onSelectedListResult) {
         onSelectedList = onSelectedListResult;
         contacts = list;
+
+        for (int i = 0; i < contacts.size(); i++) {
+            contacts.get(i).isSelected = false;
+        }
+
         return new ShowCustomList();
     }
 

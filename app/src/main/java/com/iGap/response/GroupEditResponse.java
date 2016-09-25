@@ -1,5 +1,6 @@
 package com.iGap.response;
 
+import com.iGap.G;
 import com.iGap.proto.ProtoGroupEdit;
 
 public class GroupEditResponse extends MessageHandler {
@@ -24,6 +25,10 @@ public class GroupEditResponse extends MessageHandler {
         builder.getRoomId();
         builder.getName();
         builder.getDescription();
+
+        G.onGroupEdit.onGroupEdit(builder.getRoomId(), builder.getName(), builder.getDescription());
+
+
 
     }
 

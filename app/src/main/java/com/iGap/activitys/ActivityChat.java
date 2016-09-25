@@ -164,6 +164,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     private OnComplete complete;
     BoomMenuButton boomMenuButton;
 
+    public static ActivityChat activityChat;
 
     private ChatMessagesFastAdapter<AbstractChatItem> mAdapter;
     private ProtoGlobal.Room.Type chatType;
@@ -275,6 +276,8 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
+        activityChat = this;
+        
         lastDateCalendar.clear();
 
         attachFile = new AttachFile(this);
