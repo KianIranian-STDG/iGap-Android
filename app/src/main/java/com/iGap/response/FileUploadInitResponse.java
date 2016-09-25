@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
-import com.iGap.proto.ProtoFileUpload;
+import com.iGap.proto.ProtoFileUploadInit;
 import com.iGap.proto.ProtoResponse;
 
 public class FileUploadInitResponse extends MessageHandler {
@@ -24,12 +24,12 @@ public class FileUploadInitResponse extends MessageHandler {
     @Override
     public void handler() {
 
-        ProtoFileUpload.FileUploadInitResponse.Builder fileUploadInitResponse = (ProtoFileUpload.FileUploadInitResponse.Builder) message;
+        ProtoFileUploadInit.FileUploadInitResponse.Builder fileUploadInitResponse = (ProtoFileUploadInit.FileUploadInitResponse.Builder) message;
 
         ProtoResponse.Response.Builder response = ProtoResponse.Response.newBuilder().mergeFrom(fileUploadInitResponse.getResponse());
         Log.i("SOC", "FileUploadInitResponse response.getId() : " + response.getId());
         Log.i("SOC", "FileUploadInitResponse response.getTimestamp() : " + response.getTimestamp());
-        G.uploaderUtil.OnFileUploadInit(fileUploadInitResponse.getToken(), fileUploadInitResponse.getProgress(), fileUploadInitResponse.getOffset(), fileUploadInitResponse.getLimit(), fileUploadInitResponse.getServer(), this.identity, fileUploadInitResponse.getResponse());
+        G.uploaderUtil.OnFileUploadInit(fileUploadInitResponse.getToken(), fileUploadInitResponse.getProgress(), fileUploadInitResponse.getOffset(), fileUploadInitResponse.getLimit(), this.identity, fileUploadInitResponse.getResponse());
     }
 
     @Override

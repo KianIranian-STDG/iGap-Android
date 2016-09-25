@@ -1442,7 +1442,7 @@ public final class ProtoInfoLocation {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         isoCode_ = value;
         onChanged();
         return this;
@@ -1465,7 +1465,7 @@ public final class ProtoInfoLocation {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         isoCode_ = value;
         onChanged();
         return this;
@@ -1537,7 +1537,7 @@ public final class ProtoInfoLocation {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         name_ = value;
         onChanged();
         return this;
@@ -1560,7 +1560,7 @@ public final class ProtoInfoLocation {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         name_ = value;
         onChanged();
         return this;
@@ -1606,7 +1606,7 @@ public final class ProtoInfoLocation {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         pattern_ = value;
         onChanged();
         return this;
@@ -1629,7 +1629,7 @@ public final class ProtoInfoLocation {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         pattern_ = value;
         onChanged();
         return this;
@@ -1675,7 +1675,7 @@ public final class ProtoInfoLocation {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         regex_ = value;
         onChanged();
         return this;
@@ -1698,7 +1698,7 @@ public final class ProtoInfoLocation {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         regex_ = value;
         onChanged();
         return this;

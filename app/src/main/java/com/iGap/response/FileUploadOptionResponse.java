@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
-import com.iGap.proto.ProtoFileUpload;
+import com.iGap.proto.ProtoFileUploadOption;
 import com.iGap.proto.ProtoResponse;
 
 public class FileUploadOptionResponse extends MessageHandler {
@@ -24,7 +24,7 @@ public class FileUploadOptionResponse extends MessageHandler {
     @Override
     public void handler() {
 
-        ProtoFileUpload.FileUploadOptionResponse.Builder fileUploadOptionResponse = (ProtoFileUpload.FileUploadOptionResponse.Builder) message;
+        ProtoFileUploadOption.FileUploadOptionResponse.Builder fileUploadOptionResponse = (ProtoFileUploadOption.FileUploadOptionResponse.Builder) message;
 
         ProtoResponse.Response.Builder response = ProtoResponse.Response.newBuilder().mergeFrom(fileUploadOptionResponse.getResponse());
         Log.i("SOC", "FileUploadOptionResponse response.getId() : " + response.getId());

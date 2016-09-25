@@ -701,7 +701,7 @@ public final class ProtoUserRegister {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         countryCode_ = value;
         onChanged();
         return this;
@@ -724,7 +724,7 @@ public final class ProtoUserRegister {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         countryCode_ = value;
         onChanged();
         return this;
@@ -1813,7 +1813,7 @@ public final class ProtoUserRegister {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         username_ = value;
         onChanged();
         return this;
@@ -1836,7 +1836,7 @@ public final class ProtoUserRegister {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         username_ = value;
         onChanged();
         return this;
@@ -2044,7 +2044,7 @@ public final class ProtoUserRegister {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         verifyCodeRegex_ = value;
         onChanged();
         return this;
@@ -2067,7 +2067,7 @@ public final class ProtoUserRegister {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         verifyCodeRegex_ = value;
         onChanged();
         return this;

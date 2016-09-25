@@ -480,7 +480,7 @@ public final class ProtoResponse {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         id_ = value;
         onChanged();
         return this;
@@ -503,7 +503,7 @@ public final class ProtoResponse {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         id_ = value;
         onChanged();
         return this;

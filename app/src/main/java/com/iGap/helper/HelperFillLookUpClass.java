@@ -109,9 +109,9 @@ public class HelperFillLookUpClass {
 
         // FileUpload 7xx , 307xx
         G.lookupMap.put(700, "FileUploadOption");
-        G.lookupMap.put(30700, "ProtoFileUpload.FileUploadOptionResponse");
+        G.lookupMap.put(30700, "ProtoFileUploadOption.FileUploadOptionResponse");
         G.lookupMap.put(701, "FileUploadInit");
-        G.lookupMap.put(30701, "ProtoFileUpload.FileUploadInitResponse");
+        G.lookupMap.put(30701, "ProtoFileUploadInit.FileUploadInitResponse");
         G.lookupMap.put(702, "FileUpload");
         G.lookupMap.put(30702, "ProtoFileUpload.FileUploadResponse");
     }

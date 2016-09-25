@@ -443,7 +443,7 @@ public final class ProtoRequest {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         id_ = value;
         onChanged();
         return this;
@@ -466,7 +466,7 @@ public final class ProtoRequest {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         id_ = value;
         onChanged();
         return this;

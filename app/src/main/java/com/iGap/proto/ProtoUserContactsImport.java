@@ -709,7 +709,7 @@ public final class ProtoUserContactsImport {
           if (value == null) {
             throw new NullPointerException();
           }
-
+  
           phone_ = value;
           onChanged();
           return this;
@@ -732,7 +732,7 @@ public final class ProtoUserContactsImport {
             throw new NullPointerException();
           }
           checkByteStringIsUtf8(value);
-
+          
           phone_ = value;
           onChanged();
           return this;
@@ -778,7 +778,7 @@ public final class ProtoUserContactsImport {
           if (value == null) {
             throw new NullPointerException();
           }
-
+  
           firstName_ = value;
           onChanged();
           return this;
@@ -801,7 +801,7 @@ public final class ProtoUserContactsImport {
             throw new NullPointerException();
           }
           checkByteStringIsUtf8(value);
-
+          
           firstName_ = value;
           onChanged();
           return this;
@@ -847,7 +847,7 @@ public final class ProtoUserContactsImport {
           if (value == null) {
             throw new NullPointerException();
           }
-
+  
           lastName_ = value;
           onChanged();
           return this;
@@ -870,7 +870,7 @@ public final class ProtoUserContactsImport {
             throw new NullPointerException();
           }
           checkByteStringIsUtf8(value);
-
+          
           lastName_ = value;
           onChanged();
           return this;

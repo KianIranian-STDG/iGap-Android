@@ -605,7 +605,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     }
                     break;
                 case VOICE:
-                case VOICE_TEXT:
+                case AUDIO_TEXT:
                     if (chatType == ProtoGlobal.Room.Type.CHAT) {
                         mAdapter.add(new VoiceItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                     } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
@@ -1446,7 +1446,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             case FILE_TEXT:
             case IMAGE_TEXT:
             case VIDEO_TEXT:
-            case VOICE_TEXT:
+            case AUDIO_TEXT:
                 itemsRes = R.array.fileTextMessageDialogItems;
                 break;
             case FILE:

@@ -29,8 +29,8 @@ public class UploaderUtil implements OnFileUpload {
     }
 
     @Override
-    public void OnFileUploadInit(String token, double progress, long offset, int limit, String server, String fileHashAsIdentity, ProtoResponse.Response response) {
-        activityCallbacks.OnFileUploadInit(token, progress, offset, limit, server, fileHashAsIdentity, response);
+    public void OnFileUploadInit(String token, double progress, long offset, int limit, String fileHashAsIdentity, ProtoResponse.Response response) {
+        activityCallbacks.OnFileUploadInit(token, progress, offset, limit, fileHashAsIdentity, response);
     }
 
     @Override

@@ -89,7 +89,7 @@ public class ChatSendMessageResponse extends MessageHandler {
                     realmRoomMessage.setStatus(roomMessage.getStatus().toString());
                     realmRoomMessage.setMessageType(roomMessage.getMessageType().toString());
                     realmRoomMessage.setMessage(roomMessage.getMessage());
-                    realmRoomMessage.setAttachment(roomMessage.getAttachment());
+                    //realmRoomMessage.setAttachment(roomMessage.getAttachment()); // //TODO [Saeed Mozaffari] [2016-09-25 12:05 PM] - clear comment
                     realmRoomMessage.setUserId(roomMessage.getUserId());
                     realmRoomMessage.setLocation(roomMessage.getLocation().toString());
                     realmRoomMessage.setLog(roomMessage.getLog().toString());
@@ -114,7 +114,7 @@ public class ChatSendMessageResponse extends MessageHandler {
                             message.setStatus(roomMessage.getStatus().toString());
                             message.setMessageType(roomMessage.getMessageType().toString());
                             message.setMessage(roomMessage.getMessage());
-                            message.setAttachment(roomMessage.getAttachment());
+                            //message.setAttachment(roomMessage.getAttachment()); //TODO [Saeed Mozaffari] [2016-09-25 12:06 PM] - Clear Comment
                             message.setUserId(roomMessage.getUserId());
                             message.setLocation(roomMessage.getLocation().toString());
                             message.setLog(roomMessage.getLog().toString());

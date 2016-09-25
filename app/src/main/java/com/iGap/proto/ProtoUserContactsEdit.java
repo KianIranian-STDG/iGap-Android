@@ -770,7 +770,7 @@ public final class ProtoUserContactsEdit {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         firstName_ = value;
         onChanged();
         return this;
@@ -793,7 +793,7 @@ public final class ProtoUserContactsEdit {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         firstName_ = value;
         onChanged();
         return this;
@@ -839,7 +839,7 @@ public final class ProtoUserContactsEdit {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         lastName_ = value;
         onChanged();
         return this;
@@ -862,7 +862,7 @@ public final class ProtoUserContactsEdit {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         lastName_ = value;
         onChanged();
         return this;
@@ -1671,7 +1671,7 @@ public final class ProtoUserContactsEdit {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         firstName_ = value;
         onChanged();
         return this;
@@ -1694,7 +1694,7 @@ public final class ProtoUserContactsEdit {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         firstName_ = value;
         onChanged();
         return this;
@@ -1740,7 +1740,7 @@ public final class ProtoUserContactsEdit {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         lastName_ = value;
         onChanged();
         return this;
@@ -1763,7 +1763,7 @@ public final class ProtoUserContactsEdit {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         lastName_ = value;
         onChanged();
         return this;

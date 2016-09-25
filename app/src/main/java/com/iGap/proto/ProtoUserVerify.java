@@ -904,7 +904,7 @@ public final class ProtoUserVerify {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         username_ = value;
         onChanged();
         return this;
@@ -927,7 +927,7 @@ public final class ProtoUserVerify {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         username_ = value;
         onChanged();
         return this;
@@ -973,7 +973,7 @@ public final class ProtoUserVerify {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         device_ = value;
         onChanged();
         return this;
@@ -996,7 +996,7 @@ public final class ProtoUserVerify {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         device_ = value;
         onChanged();
         return this;
@@ -1042,7 +1042,7 @@ public final class ProtoUserVerify {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         osName_ = value;
         onChanged();
         return this;
@@ -1065,7 +1065,7 @@ public final class ProtoUserVerify {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         osName_ = value;
         onChanged();
         return this;
@@ -1111,7 +1111,7 @@ public final class ProtoUserVerify {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         osVersion_ = value;
         onChanged();
         return this;
@@ -1134,7 +1134,7 @@ public final class ProtoUserVerify {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         osVersion_ = value;
         onChanged();
         return this;
@@ -1849,7 +1849,7 @@ public final class ProtoUserVerify {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         token_ = value;
         onChanged();
         return this;
@@ -1872,7 +1872,7 @@ public final class ProtoUserVerify {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         token_ = value;
         onChanged();
         return this;

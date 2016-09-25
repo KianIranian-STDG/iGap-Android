@@ -765,7 +765,7 @@ public final class ProtoChatEditMessage {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         message_ = value;
         onChanged();
         return this;
@@ -788,7 +788,7 @@ public final class ProtoChatEditMessage {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         message_ = value;
         onChanged();
         return this;
@@ -1656,7 +1656,7 @@ public final class ProtoChatEditMessage {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         message_ = value;
         onChanged();
         return this;
@@ -1679,7 +1679,7 @@ public final class ProtoChatEditMessage {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         message_ = value;
         onChanged();
         return this;

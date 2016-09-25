@@ -637,7 +637,7 @@ public final class ProtoUserLogin {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         token_ = value;
         onChanged();
         return this;
@@ -660,7 +660,7 @@ public final class ProtoUserLogin {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         token_ = value;
         onChanged();
         return this;

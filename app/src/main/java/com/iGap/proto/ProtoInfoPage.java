@@ -637,7 +637,7 @@ public final class ProtoInfoPage {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         id_ = value;
         onChanged();
         return this;
@@ -660,7 +660,7 @@ public final class ProtoInfoPage {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         id_ = value;
         onChanged();
         return this;
@@ -1337,7 +1337,7 @@ public final class ProtoInfoPage {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         body_ = value;
         onChanged();
         return this;
@@ -1360,7 +1360,7 @@ public final class ProtoInfoPage {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         body_ = value;
         onChanged();
         return this;

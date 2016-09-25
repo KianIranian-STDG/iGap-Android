@@ -675,7 +675,7 @@ public final class ProtoConnectionSecuring {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         publicKey_ = value;
         onChanged();
         return this;
@@ -698,7 +698,7 @@ public final class ProtoConnectionSecuring {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         publicKey_ = value;
         onChanged();
         return this;
@@ -1344,7 +1344,7 @@ public final class ProtoConnectionSecuring {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         symmetricKey_ = value;
         onChanged();
         return this;
@@ -2259,7 +2259,7 @@ public final class ProtoConnectionSecuring {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         symmetricMethod_ = value;
         onChanged();
         return this;
@@ -2282,7 +2282,7 @@ public final class ProtoConnectionSecuring {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         symmetricMethod_ = value;
         onChanged();
         return this;

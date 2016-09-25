@@ -406,7 +406,7 @@ public class FileUploadTestActivity extends ActivityEnhanced implements OnFileUp
     }
 
     @Override
-    public void OnFileUploadInit(String token, double progress, long offset, int limit, String server, String fileHashAsIdentity, ProtoResponse.Response response) {
+    public void OnFileUploadInit(String token, double progress, long offset, int limit, String fileHashAsIdentity, ProtoResponse.Response response) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
