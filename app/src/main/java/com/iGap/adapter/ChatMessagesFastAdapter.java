@@ -35,6 +35,12 @@ public class ChatMessagesFastAdapter<Item extends AbstractChatItem> extends Fast
         }
     };
 
+    public void insertItemsAtTop(List<Item> messages) {
+        if (messages.size() > 0) {
+            add(0, messages);
+        }
+    }
+
     /**
      * update message text
      *
