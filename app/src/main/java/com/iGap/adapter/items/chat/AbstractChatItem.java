@@ -85,7 +85,7 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
         }
 
         if (mMessage.sendType == MyType.SendType.send) {
-            updateMessageStatus((TextView) holder.itemView.findViewById(R.id.cslr_txt_tic),mMessage.status);
+            updateMessageStatus((TextView) holder.itemView.findViewById(R.id.cslr_txt_tic), mMessage.status);
         }
 
         // display 'edited' indicator beside message time if message was edited
@@ -99,12 +99,17 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
 
         // display user avatar only if chat type is GROUP
         if (type == ProtoGlobal.Room.Type.GROUP) {
-            if (!mMessage.senderAvatar.isEmpty()) {
-                ImageLoader.getInstance().displayImage(suitablePath(mMessage.senderAvatar), (ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar));
+            if (!mMessage.isSenderMe()) {
+                holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.VISIBLE);
+
+                if (!mMessage.senderAvatar.isEmpty()) {
+                    ImageLoader.getInstance().displayImage(suitablePath(mMessage.senderAvatar), (ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar));
+                } else {
+                    ((ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar)).setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), mMessage.initials, mMessage.senderColor));
+                }
             } else {
-                ((ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar)).setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), mMessage.initials, mMessage.senderColor));
+                holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.GONE);
             }
-            holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.VISIBLE);
         } else {
             holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.GONE);
         }

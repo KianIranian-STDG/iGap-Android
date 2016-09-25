@@ -53,6 +53,7 @@ import com.iGap.module.ChatSendMessageUtil;
 import com.iGap.module.ChatUpdateStatusUtil;
 import com.iGap.module.ClearMessagesUtil;
 import com.iGap.module.Contacts;
+import com.iGap.module.GroupChatSendMessageUtil;
 import com.iGap.module.UploaderUtil;
 import com.iGap.realm.RealmMigrationClass;
 import com.iGap.realm.RealmUserInfo;
@@ -141,6 +142,7 @@ public class G extends Application {
     public static UploaderUtil uploaderUtil = new UploaderUtil();
     public static ClearMessagesUtil clearMessagesUtil = new ClearMessagesUtil();
     public static ChatSendMessageUtil chatSendMessageUtil = new ChatSendMessageUtil();
+    public static GroupChatSendMessageUtil groupChatSendMessageUtil = new GroupChatSendMessageUtil();
     public static ChatUpdateStatusUtil chatUpdateStatusUtil = new ChatUpdateStatusUtil();
 
     public static Config.ConnectionState connectionState;

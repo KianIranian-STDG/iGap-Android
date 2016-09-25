@@ -72,6 +72,7 @@ import com.iGap.interface_package.OnChatMessageRemove;
 import com.iGap.interface_package.OnChatMessageSelectionChanged;
 import com.iGap.interface_package.OnChatSendMessageResponse;
 import com.iGap.interface_package.OnChatUpdateStatusResponse;
+import com.iGap.interface_package.OnGroupChatSendMessageResponse;
 import com.iGap.interface_package.OnMessageClick;
 import com.iGap.module.AttachFile;
 import com.iGap.module.ChatSendMessageUtil;
@@ -79,6 +80,7 @@ import com.iGap.module.EmojiEditText;
 import com.iGap.module.EmojiPopup;
 import com.iGap.module.EmojiRecentsManager;
 import com.iGap.module.FileUtils;
+import com.iGap.module.GroupChatSendMessageUtil;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.MyType;
 import com.iGap.module.OnComplete;
@@ -87,6 +89,7 @@ import com.iGap.module.ShouldScrolledBehavior;
 import com.iGap.module.StructMessageInfo;
 import com.iGap.proto.ProtoChatSendMessage;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.proto.ProtoGroupSendMessage;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmChannelRoom;
 import com.iGap.realm.RealmChatHistory;
@@ -127,7 +130,7 @@ import io.realm.RealmResults;
 /**
  * Created by android3 on 8/5/2016.
  */
-public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, IRecentsLongClick, OnMessageClick, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractChatItem>, OnChatMessageRemove {
+public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, IRecentsLongClick, OnMessageClick, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractChatItem>, OnChatMessageRemove, OnGroupChatSendMessageResponse {
 
     private EmojiEditText edtChat;
     private MaterialDesignTextView imvSendButton;
@@ -361,6 +364,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
     public void initCallbacks() {
         G.chatSendMessageUtil.setOnChatSendMessageResponse(this);
+        G.groupChatSendMessageUtil.setOnChatSendMessageResponse(this);
         G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
 
         G.onChatEditMessageResponse = new OnChatEditMessageResponse() {
@@ -554,61 +558,61 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             switch (messageInfo.messageType) {
                 // TODO: 9/7/2016 [Alireza Eskandarpour Shoferi] add group items
                 case TEXT:
-                    if (chatType == ProtoGlobal.Room.Type.CHAT) {
+                    if (chatType != ProtoGlobal.Room.Type.CHANNEL) {
                         mAdapter.add(new MessageItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
-                    } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
+                    } else {
                         mAdapter.add(new ChannelMessageItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                     }
                     break;
                 case IMAGE:
-                    if (chatType == ProtoGlobal.Room.Type.CHAT) {
+                    if (chatType != ProtoGlobal.Room.Type.CHANNEL) {
                         mAdapter.add(new ImageItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
-                    } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
+                    } else {
                         mAdapter.add(new ChannelImageItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                     }
                     break;
                 case IMAGE_TEXT:
-                    if (chatType == ProtoGlobal.Room.Type.CHAT) {
+                    if (chatType != ProtoGlobal.Room.Type.CHANNEL) {
                         mAdapter.add(new ImageWithTextItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
-                    } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
+                    } else {
                         mAdapter.add(new ChannelImageItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                     }
                     break;
                 case VIDEO:
-                    if (chatType == ProtoGlobal.Room.Type.CHAT) {
+                    if (chatType != ProtoGlobal.Room.Type.CHANNEL) {
                         mAdapter.add(new VideoItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
-                    } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
+                    } else {
                         mAdapter.add(new ChannelVideoItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                     }
                     break;
                 case VIDEO_TEXT:
-                    if (chatType == ProtoGlobal.Room.Type.CHAT) {
+                    if (chatType != ProtoGlobal.Room.Type.CHANNEL) {
                         mAdapter.add(new VideoWithTextItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
-                    } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
+                    } else {
                         mAdapter.add(new ChannelVideoItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                     }
                     break;
                 case LOCATION:
                     // TODO: 9/15/2016 [Alireza Eskandarpour Shoferi] fill
-                    if (chatType == ProtoGlobal.Room.Type.CHAT) {
+                    if (chatType != ProtoGlobal.Room.Type.CHANNEL) {
                         mAdapter.add(new LocationItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
-                    } /*else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
+                    } /*else {
                         mAdapter.add(new ChannelVideoItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                     }*/
                     break;
                 case FILE:
                 case FILE_TEXT:
-                    if (chatType == ProtoGlobal.Room.Type.CHAT) {
+                    if (chatType != ProtoGlobal.Room.Type.CHANNEL) {
                         mAdapter.add(new FileItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
-                    } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
+                    } else {
                         mAdapter.add(new ChannelFileItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                     }
                     break;
                 case VOICE:
-                case AUDIO_TEXT:
-                    if (chatType == ProtoGlobal.Room.Type.CHAT) {
+                case VOICE_TEXT:
+                    if (chatType != ProtoGlobal.Room.Type.CHANNEL) {
                         mAdapter.add(new VoiceItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
-                    } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
+                    } else {
                         mAdapter.add(new ChannelVoiceItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                     }
                     break;
@@ -743,10 +747,17 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     if (!message.isEmpty()) {
                         final String identity = Long.toString(System.currentTimeMillis());
 
-                        new ChatSendMessageUtil()
-                                .newBuilder(ProtoGlobal.RoomMessageType.TEXT, mRoomId)
-                                .message(message)
-                                .sendMessage(identity);
+                        if (chatType == ProtoGlobal.Room.Type.CHAT) {
+                            new ChatSendMessageUtil()
+                                    .newBuilder(ProtoGlobal.RoomMessageType.TEXT, mRoomId)
+                                    .message(message)
+                                    .sendMessage(identity);
+                        } else if (chatType == ProtoGlobal.Room.Type.GROUP) {
+                            new GroupChatSendMessageUtil()
+                                    .newBuilder(ProtoGlobal.RoomMessageType.TEXT, mRoomId)
+                                    .message(message)
+                                    .sendMessage(identity);
+                        }
 
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override
@@ -1720,5 +1731,15 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 }
             });
         }
+    }
+
+    @Override
+    public void onMessageUpdated(long messageId, ProtoGlobal.RoomMessageStatus status, String identity, ProtoGroupSendMessage.GroupSendMessageResponse.Builder roomMessage) {
+        // TODO: 9/25/2016 [Alireza Eskandarpour Shoferi] implement
+    }
+
+    @Override
+    public void onReceiveChatMessage(String message, String messageType, ProtoGroupSendMessage.GroupSendMessageResponse.Builder roomMessage) {
+        // TODO: 9/25/2016 [Alireza Eskandarpour Shoferi] implement
     }
 }
