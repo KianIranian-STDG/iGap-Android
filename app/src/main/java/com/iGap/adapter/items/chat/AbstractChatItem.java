@@ -112,7 +112,9 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
         }
 
         // set message time
-        ((TextView) holder.itemView.findViewById(R.id.cslr_txt_time)).setText(formatTime());
+        if (holder.itemView.findViewById(R.id.cslr_txt_time) != null) {
+            ((TextView) holder.itemView.findViewById(R.id.cslr_txt_time)).setText(formatTime());
+        }
 
         setReplayMessage(holder);
         setForwardMessage(holder);

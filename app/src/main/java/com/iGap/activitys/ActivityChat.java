@@ -514,7 +514,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                         }
                         break;
                     case VOICE:
-                    case VOICE_TEXT:
                         if (chatType == ProtoGlobal.Room.Type.CHAT) {
                             if (!addTop) {
                                 mAdapter.add(new VoiceItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
@@ -1486,7 +1485,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
     private ArrayList<StructMessageInfo> getChatList() {
         Realm realm = Realm.getDefaultInstance();
-        long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
         ArrayList<RealmRoomMessage> realmRoomMessages = new ArrayList<>();
         // get all RealmRoomMessages
         for (RealmChatHistory realmChatHistory : realm.where(RealmChatHistory.class).equalTo("roomId", mRoomId).findAll()) {
@@ -1572,7 +1570,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             case FILE_TEXT:
             case IMAGE_TEXT:
             case VIDEO_TEXT:
-            case VOICE_TEXT:
                 itemsRes = R.array.fileTextMessageDialogItems;
                 break;
             case FILE:
