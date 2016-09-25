@@ -302,6 +302,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         appBarLayout.addOnMoveListener(new MyAppBarLayout.OnMoveListener() {
             @Override
             public void onAppBarLayoutMove(AppBarLayout appBarLayout, int verticalOffset, boolean moveUp) {
+                toolbar.clearAnimation();
                 if (moveUp) {
                     if (toolbar.getAlpha() != 0F) {
                         toolbar.animate().setDuration(150).alpha(0F).start();
