@@ -85,7 +85,7 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
         }
 
         if (mMessage.sendType == MyType.SendType.send) {
-            updateMessageStatus((TextView) holder.itemView.findViewById(R.id.cslr_txt_tic),mMessage.status);
+            updateMessageStatus((TextView) holder.itemView.findViewById(R.id.cslr_txt_tic), mMessage.status);
         }
 
         // display 'edited' indicator beside message time if message was edited
@@ -106,7 +106,9 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
             }
             holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.VISIBLE);
         } else {
-            holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.GONE);
+            if (!mMessage.isTimeMessage()) {
+                holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.GONE);
+            }
         }
 
         // set message time

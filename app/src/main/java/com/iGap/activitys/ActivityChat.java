@@ -1510,6 +1510,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 timeMessage.setUserId(-1);
                 timeMessage.setUpdateTime((int) (message.getUpdateTime()) - 1);
                 timeMessage.setMessage(time);
+                timeMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT.toString());
                 lastResultMessages.add(timeMessage);
             }
 

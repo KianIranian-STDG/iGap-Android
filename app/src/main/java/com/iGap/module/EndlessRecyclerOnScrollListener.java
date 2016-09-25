@@ -21,7 +21,7 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerViewPauseO
     private int mCurrentPage = 1;
     private FastItemAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
-    private int mTotalItemsInPages = 100;
+    private int mTotalItemsInPages = 2;
     private int mVisibleThreshold = -1;
     private OrientationHelper mOrientationHelper;
     private boolean mIsOrientationHelperVertical;
@@ -47,14 +47,12 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerViewPauseO
             this.mLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
         }
 
-        int footerItemCount = mAdapter != null ? mAdapter.getAdapterItemCount() : 0;
-
         if (mVisibleThreshold == -1) {
-            mVisibleThreshold = findLastVisibleItemPosition(recyclerView) - findFirstVisibleItemPosition(recyclerView) - footerItemCount;
+            mVisibleThreshold = findLastVisibleItemPosition(recyclerView) - findFirstVisibleItemPosition(recyclerView);
         }
 
-        mVisibleItemCount = recyclerView.getChildCount() - footerItemCount;
-        mTotalItemCount = mLayoutManager.getItemCount() - footerItemCount;
+        mVisibleItemCount = recyclerView.getChildCount();
+        mTotalItemCount = mLayoutManager.getItemCount();
         mFirstVisibleItem = findFirstVisibleItemPosition(recyclerView);
 
         mTotalItemCount = mAdapter.getItemCount();
@@ -66,6 +64,7 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerViewPauseO
             }
         }
 
+        Log.i(EndlessRecyclerOnScrollListener.class.getSimpleName(), (mLayoutManager.findFirstVisibleItemPosition() - mVisibleThreshold) + "");
         if (!mLoading && mLayoutManager.findFirstVisibleItemPosition() - mVisibleThreshold <= 0) {
             // reached top
             Log.i(EndlessRecyclerOnScrollListener.class.getSimpleName(), "reaching top");

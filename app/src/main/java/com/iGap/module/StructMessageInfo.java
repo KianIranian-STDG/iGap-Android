@@ -51,6 +51,10 @@ public class StructMessageInfo implements Parcelable {
     // TODO: 9/15/2016 [Alireza Eskandarpour Shoferi] need sender avatar bg color
     public String senderColor = "";
 
+    public boolean isTimeMessage() {
+        return senderID.equalsIgnoreCase("-1");
+    }
+
     public boolean isEdited = false;
 
     public String status = ProtoGlobal.RoomMessageStatus.SENDING.toString();
@@ -76,10 +80,6 @@ public class StructMessageInfo implements Parcelable {
     public long fileSize;
 
     public long time;
-
-    public boolean isTimeMessage() {
-        return senderID == null;
-    }
 
     public StructMessageInfo() {
     }
