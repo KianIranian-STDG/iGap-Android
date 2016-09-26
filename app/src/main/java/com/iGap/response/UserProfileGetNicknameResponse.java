@@ -1,5 +1,6 @@
 package com.iGap.response;
 
+import com.iGap.G;
 import com.iGap.proto.ProtoUserProfileGetNickname;
 
 public class UserProfileGetNicknameResponse extends MessageHandler {
@@ -21,7 +22,7 @@ public class UserProfileGetNicknameResponse extends MessageHandler {
     public void handler() {
 
         ProtoUserProfileGetNickname.UserProfileGetNicknameResponse.Builder builder = (ProtoUserProfileGetNickname.UserProfileGetNicknameResponse.Builder) message;
-        builder.getNickname();
+        G.onUserProfileGetNickname.onUserProfileGetNickname(builder.getNickname());
     }
 
     @Override

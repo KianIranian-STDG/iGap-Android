@@ -45,6 +45,7 @@ import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
+import io.realm.RealmResults;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivitySetting extends ActivityEnhanced {
@@ -157,8 +158,15 @@ public class ActivitySetting extends ActivityEnhanced {
                                         runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
+
                                                 Realm realm1 = Realm.getDefaultInstance();
-                                                realm1.where(RealmUserInfo.class).findFirst().setNickName(nickName);
+                                                realm1.executeTransaction(new Realm.Transaction() {
+                                                    @Override
+                                                    public void execute(Realm realm) {
+                                                        realm.where(RealmUserInfo.class).findFirst().setNickName(nickName);
+                                                    }
+                                                });
+
                                                 realm1.close();
                                                 txtNickName.setText(nickName);
                                             }
@@ -270,51 +278,6 @@ public class ActivitySetting extends ActivityEnhanced {
             public void onClick(View v) {
 
 
-//                MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this)
-//                        .items(R.array.st_popup)
-//                        .contentColor(Color.BLACK)
-//                        .itemsCallback(new MaterialDialog.ListCallback() {
-//                            @Override
-//                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-//
-//                                switch (which) {
-//                                    case 0:
-//                                        new MaterialDialog.Builder(ActivitySetting.this)
-//                                                .title("iGap")
-//                                                .positiveText("LOGOUT")
-//                                                .negativeText("CANCEL")
-//                                                .content(R.string.st_popup_logout)
-//                                                .onPositive(new MaterialDialog.SingleButtonCallback() {
-//                                                    @Override
-//                                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-//
-//                                                        final RealmResults<RealmUserInfo> result = realm.where(RealmUserInfo.class).findAll();
-//                                                        realm.executeTransaction(new Realm.Transaction() {
-//                                                            @Override
-//                                                            public void execute(Realm realm) {
-//                                                                result.deleteAllFromRealm();
-//                                                            }
-//                                                        });
-//
-//                                                        startActivity(new Intent(ActivitySetting.this, ActivityIntroduce.class));
-//                                                        finish();
-//                                                    }
-//                                                }).show();
-//                                        break;
-//
-//                                }
-//
-//
-//                            }
-//                        }).show();
-//
-//                WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-//                layoutParams.copyFrom(dialog.getWindow().getAttributes());
-//                layoutParams.width = (int) getResources().getDimension(R.dimen.dp180);
-//                layoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
-//
-//                dialog.getWindow().setAttributes(layoutParams);
-
                 PopupMenu popupMenu = new PopupMenu(ActivitySetting.this, v);
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
@@ -324,7 +287,28 @@ public class ActivitySetting extends ActivityEnhanced {
 
                             case R.id.st_logOut:
 
-                                Toast.makeText(ActivitySetting.this, "2", Toast.LENGTH_SHORT).show();
+                                new MaterialDialog.Builder(ActivitySetting.this)
+                                        .title("iGap")
+                                        .positiveText("LOGOUT")
+                                        .negativeText("CANCEL")
+                                        .content(R.string.st_popup_logout)
+                                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                            @Override
+                                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                                                final RealmResults<RealmUserInfo> result = realm.where(RealmUserInfo.class).findAll();
+                                                realm.executeTransaction(new Realm.Transaction() {
+                                                    @Override
+                                                    public void execute(Realm realm) {
+                                                        result.deleteAllFromRealm();
+                                                    }
+                                                });
+
+                                                startActivity(new Intent(ActivitySetting.this, ActivityIntroduce.class));
+                                                finish();
+                                            }
+                                        }).show();
+
                                 return true;
                         }
                         return true;

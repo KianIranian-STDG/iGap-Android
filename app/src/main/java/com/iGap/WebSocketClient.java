@@ -2,7 +2,6 @@ package com.iGap;
 
 import android.util.Log;
 
-import com.iGap.helper.HelperCheckInternetConnection;
 import com.iGap.helper.HelperConnectionState;
 import com.iGap.response.HandleResponse;
 import com.neovisionaries.ws.client.WebSocket;
@@ -136,7 +135,7 @@ public class WebSocketClient {
                             finalWs.connect();
                         }
                     } catch (WebSocketException e) {
-                        reconnect();
+                        //reconnect();
                         Log.i("SOC_WebSocket", "WebSocketException : " + e);
                         e.printStackTrace();
                     }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -47,8 +48,8 @@ public class ActivitySelectChat extends ActivityEnhanced {
         Button btnMenu = (Button) findViewById(R.id.cl_btn_menu);
         btnMenu.setTypeface(G.fontawesome);
 
-        Button btnSearch = (Button) findViewById(R.id.cl_btn_search);
-        btnSearch.setTypeface(G.fontawesome);
+        SearchView btnSearch = (SearchView) findViewById(R.id.cl_btn_search);
+        //btnSearch.setTypeface(G.fontawesome);
 
         TextView txtIgap = (TextView) findViewById(R.id.cl_txt_igap);
         txtIgap.setTypeface(G.neuroplp);
@@ -106,7 +107,7 @@ public class ActivitySelectChat extends ActivityEnhanced {
             }
             info.color = realmRoom.getColor();
             RealmRoomMessage lastMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", realmRoom.getLastMessageId()).findFirst();
-            if (lastMessage != null){
+            if (lastMessage != null) {
                 info.lastMessageTime = lastMessage.getUpdateTime();
                 info.lastmessage = lastMessage.getMessage();
                 info.lastMessageStatus = lastMessage.getStatus();

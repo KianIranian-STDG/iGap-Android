@@ -359,7 +359,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             public boolean filter(ChatItem item, CharSequence constraint) {
                 //return true if we should filter it out
                 //return false to keep it
-                return !item.mInfo.chatTitle.startsWith(String.valueOf(constraint));
+                return !item.mInfo.chatTitle.toLowerCase().startsWith(String.valueOf(constraint).toLowerCase());
             }
         });
         btnSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
