@@ -7,6 +7,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -29,6 +30,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -89,11 +91,13 @@ import com.iGap.module.GroupChatSendMessageUtil;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.MyType;
 import com.iGap.module.OnComplete;
+import com.iGap.module.SHP_SETTING;
 import com.iGap.module.ShouldScrolledBehavior;
 import com.iGap.module.SortMessages;
 import com.iGap.module.StructMessageInfo;
 import com.iGap.module.TimeUtils;
 import com.iGap.module.Utils;
+import com.iGap.module.VoiceRecord;
 import com.iGap.proto.ProtoChatSendMessage;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoGroupSendMessage;
@@ -172,6 +176,10 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     private LocationManager locationManager;
     private OnComplete complete;
     BoomMenuButton boomMenuButton;
+    private View viewAttachFile;
+    private View viewMicRecorder;
+    private VoiceRecord voiceRecord;
+    private boolean sendByEnter = false;
 
     public static ActivityChat activityChat;
 
@@ -286,7 +294,32 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         setContentView(R.layout.activity_chat);
 
         activityChat = this;
-        
+
+        // get sendByEnter action from setting value
+        SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        int checkedSendByEnter = sharedPreferences.getInt(SHP_SETTING.KEY_SEND_BT_ENTER, 0);
+        if (checkedSendByEnter == 1) {
+            sendByEnter = true;
+        } else {
+            sendByEnter = false;
+        }
+
+
+        String backGroundPath = sharedPreferences.getString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "");
+        if (backGroundPath.length() > 0) {
+
+            File f = new File(backGroundPath);
+            if (f.exists()) {
+                Drawable d = Drawable.createFromPath(f.getAbsolutePath());
+                View chat = findViewById(R.id.ac_ll_parent);
+                chat.setBackgroundDrawable(d);
+            }
+        }
+
+        viewAttachFile = findViewById(R.id.layout_attach_file);
+        viewMicRecorder = findViewById(R.id.layout_mic_recorde);
+        voiceRecord = new VoiceRecord(this, viewMicRecorder, viewAttachFile);
+
         lastDateCalendar.clear();
 
         attachFile = new AttachFile(this);
@@ -930,7 +963,12 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             @Override
             public boolean onLongClick(View view) {
 
-                return false;
+                voiceRecord.setItemTag("ivVoice");
+                viewAttachFile.setVisibility(View.GONE);
+                viewMicRecorder.setVisibility(View.VISIBLE);
+                voiceRecord.startVoiceRecord();
+
+                return true;
             }
         });
 
@@ -1052,7 +1090,14 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            public void onTextChanged(CharSequence text, int i, int i1, int i2) {
+
+                // if in the seeting page send by enter is on message send by enter key
+                if (text.toString().endsWith(System.getProperty("line.separator"))) {
+                    if (sendByEnter)
+                        imvSendButton.performClick();
+                }
+
             }
 
             @Override
@@ -1112,6 +1157,14 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         }
     }
 
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+
+        voiceRecord.dispatchTouchEvent(event);
+
+        return super.dispatchTouchEvent(event);
+    }
 
     private void initAttach() {
 

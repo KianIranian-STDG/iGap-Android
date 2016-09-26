@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.iGap.module.NotTouchableCoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.iGap.module.NotTouchableCoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ac_ll_parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@mipmap/back_chat3"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    android:layoutDirection="ltr">
 
     <com.iGap.module.MyAppBarLayout
         android:id="@+id/appBarLayout"
@@ -33,7 +34,7 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="@dimen/dp16"
                     android:paddingRight="@dimen/dp12"
-                    android:src="@drawable/left_arrow_key"/>
+                    android:src="@drawable/left_arrow_key" />
 
 
                 <LinearLayout
@@ -58,7 +59,7 @@
                             android:text="@string/fa_bell_slash_o"
                             android:textColor="@android:color/white"
                             android:textSize="@dimen/sp14"
-                            android:visibility="gone"/>
+                            android:visibility="gone" />
 
                         <TextView
                             android:id="@+id/chl_txt_name"
@@ -68,7 +69,7 @@
                             android:singleLine="true"
                             android:text="New Text"
                             android:textColor="@android:color/white"
-                            android:textSize="@dimen/sp16"/>
+                            android:textSize="@dimen/sp16" />
 
                         <com.iGap.module.MaterialDesignTextView
                             android:id="@+id/imgMutedRoom"
@@ -76,7 +77,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/md_flaticon_volume_off_indicator"
                             android:textColor="@android:color/darker_gray"
-                            android:visibility="gone"/>
+                            android:visibility="gone" />
                     </LinearLayout>
 
                     <TextView
@@ -86,7 +87,7 @@
                         android:singleLine="true"
                         android:text="New Text"
                         android:textColor="@android:color/white"
-                        android:textSize="@dimen/sp12"/>
+                        android:textSize="@dimen/sp12" />
 
                 </LinearLayout>
 
@@ -95,7 +96,7 @@
                     android:layout_width="@dimen/dp68"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/dp4"
-                    android:src="@mipmap/h"/>
+                    android:src="@mipmap/h" />
 
                 <ImageView
                     android:id="@+id/chl_imv_menu_button"
@@ -103,7 +104,7 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="@dimen/dp16"
                     android:paddingRight="@dimen/dp12"
-                    android:src="@drawable/show_more_button_with_three_dots"/>
+                    android:src="@drawable/show_more_button_with_three_dots" />
 
 
             </LinearLayout>
@@ -132,7 +133,7 @@
                         android:paddingLeft="@dimen/dp12"
                         android:text="@string/fa_close"
                         android:textColor="@color/gray"
-                        android:textSize="@dimen/sp20"/>
+                        android:textSize="@dimen/sp20" />
 
                     <TextView
                         android:id="@+id/chl_txt_number_of_selected"
@@ -144,7 +145,7 @@
                         android:minWidth="@dimen/dp40"
                         android:singleLine="true"
                         android:text="0"
-                        android:textSize="@dimen/sp20"/>
+                        android:textSize="@dimen/sp20" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -160,7 +161,7 @@
                             android:background="@null"
                             android:text="@string/fa_mail_replay"
                             android:textColor="@color/gray"
-                            android:textSize="@dimen/sp20"/>
+                            android:textSize="@dimen/sp20" />
 
                         <Button
                             android:id="@+id/chl_btn_copy_selected"
@@ -169,7 +170,7 @@
                             android:background="@null"
                             android:text="@string/fa_files_o"
                             android:textColor="@color/gray"
-                            android:textSize="@dimen/sp20"/>
+                            android:textSize="@dimen/sp20" />
 
                         <Button
                             android:id="@+id/chl_btn_forward_selected"
@@ -178,7 +179,7 @@
                             android:background="@null"
                             android:text="@string/fa_long_arrow_right"
                             android:textColor="@color/gray"
-                            android:textSize="@dimen/sp20"/>
+                            android:textSize="@dimen/sp20" />
                     </LinearLayout>
 
                     <Button
@@ -188,7 +189,7 @@
                         android:background="@null"
                         android:text="@string/fa_trash_o"
                         android:textColor="@color/gray"
-                        android:textSize="@dimen/sp20"/>
+                        android:textSize="@dimen/sp20" />
 
 
                 </LinearLayout>
@@ -212,18 +213,26 @@
         android:id="@+id/chl_recycler_view_chat"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="@dimen/dp12"
-        android:paddingBottom="@dimen/dp48"
         android:overScrollMode="never"
+        android:paddingBottom="@dimen/dp48"
+        android:paddingTop="@dimen/dp12"
         android:scrollbars="none">
 
     </android.support.v7.widget.RecyclerView>
 
     <include
+        android:id="@+id/layout_mic_recorde"
+        layout="@layout/layout_mic_record"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom" />
+
+
+    <include
         android:id="@+id/layout_attach_file"
         layout="@layout/layout_attach_file"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
 
     <RelativeLayout
@@ -237,7 +246,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/gray"/>
+            android:background="@color/gray" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -254,7 +263,7 @@
                 android:gravity="center"
                 android:text="@string/fa_chevron_up"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/sp20"/>
+                android:textSize="@dimen/sp20" />
 
 
             <TextView
@@ -265,7 +274,7 @@
                 android:gravity="center"
                 android:text="Mute"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/sp20"/>
+                android:textSize="@dimen/sp20" />
 
             <Button
                 android:id="@+id/chl_btn_down"
@@ -275,7 +284,7 @@
                 android:gravity="center"
                 android:text="@string/fa_chevron_down"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/sp20"/>
+                android:textSize="@dimen/sp20" />
         </LinearLayout>
 
     </RelativeLayout>
