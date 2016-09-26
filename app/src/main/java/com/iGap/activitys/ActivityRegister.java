@@ -2,13 +2,10 @@ package com.iGap.activitys;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.graphics.PorterDuff;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
@@ -654,19 +651,7 @@ public class ActivityRegister extends ActivityEnhanced {
         }
     }
 
-    private boolean checkInternet() { //check internet //TODO [Saeed Mozaffari] [2016-08-24 10:27 AM] -this check internet method
-
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-
-        if (networkInfo == null) {
-            return true;
-        } else {
-            return true;
-        }
-    }
-
-    //=================================================================================================== error verify sms and open rg_dialog for enter sms code
+    // error verify sms and open rg_dialog for enter sms code
     private void errorVerifySms() { //when don't receive sms and open rg_dialog for enter code
 
         rg_prg_verify_sms.setVisibility(View.GONE);
@@ -820,18 +805,11 @@ public class ActivityRegister extends ActivityEnhanced {
             e.printStackTrace();
         }
 
-//        G.handler.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//
-//            }
-//        }, 2000);
     }
 
     private void userVerify(final String userName, final String verificationCode) {
         rg_prg_verify_generate.setVisibility(View.VISIBLE);
         rg_txt_verify_generate.setTextAppearance(G.context, R.style.RedHUGEText);
-
 
         userVerifyResponse(verificationCode);
         ProtoUserVerify.UserVerify.Builder userVerify = ProtoUserVerify.UserVerify.newBuilder();
@@ -847,14 +825,6 @@ public class ActivityRegister extends ActivityEnhanced {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-
-
-//        G.handler.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//
-//            }
-//        }, 4000);
 
     }
 

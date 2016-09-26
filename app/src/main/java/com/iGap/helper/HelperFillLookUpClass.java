@@ -114,6 +114,12 @@ public class HelperFillLookUpClass {
         G.lookupMap.put(30701, "ProtoFileUploadInit.FileUploadInitResponse");
         G.lookupMap.put(702, "FileUpload");
         G.lookupMap.put(30702, "ProtoFileUpload.FileUploadResponse");
+        G.lookupMap.put(703, "FileUploadStatus");
+        G.lookupMap.put(30703, "ProtoFileUploadStatus.FileUploadStatusResponse");
+        G.lookupMap.put(704, "FileInfo");
+        G.lookupMap.put(30704, "ProtoFileInfo.FileInfoResponse");
+        G.lookupMap.put(705, "FileDownload");
+        G.lookupMap.put(30705, "ProtoFileDownload.FileDownloadResponse");
     }
 
 }

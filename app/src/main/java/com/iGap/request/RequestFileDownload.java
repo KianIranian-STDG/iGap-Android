@@ -1,0 +1,21 @@
+package com.iGap.request;
+
+import com.iGap.proto.ProtoFileDownload;
+
+public class RequestFileDownload {
+
+    public void download(String token, long offset, int maxLimit) {
+        ProtoFileDownload.FileDownload.Builder builder = ProtoFileDownload.FileDownload.newBuilder();
+        builder.setToken(token);
+        builder.setOffset(offset);
+        builder.setMaxLimit(maxLimit);
+
+        RequestWrapper requestWrapper = new RequestWrapper(705, builder);
+        try {
+            RequestQueue.sendRequest(requestWrapper);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+}

@@ -177,7 +177,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         };
 
 
-        if (btnSearch != null) {
+        if (btnSearch != null) { //TODO [Saeed Mozaffari] [2016-09-26 10:40 AM] - need back icon
             btnSearch.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
