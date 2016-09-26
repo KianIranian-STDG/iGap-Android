@@ -18,9 +18,9 @@ public class UploaderUtil implements OnFileUpload {
         this.activityCallbacks = activityCallbacks;
     }
 
-    public void startUploading(long fileSize, String fileHash) {
+    public void startUploading(long fileSize, String identity) {
         // make first request
-        new RequestFileUploadOption().fileUploadOption(fileSize, fileHash);
+        new RequestFileUploadOption().fileUploadOption(fileSize, identity);
     }
 
     @Override

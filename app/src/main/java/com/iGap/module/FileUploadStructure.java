@@ -4,6 +4,8 @@ package com.iGap.module;
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 8/30/2016.
  */
 
+import com.iGap.proto.ProtoGlobal;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -18,18 +20,20 @@ public class FileUploadStructure {
     public String fileName;
     public long fileSize;
     public String filePath;
-    public String fileHash;
+    public byte[] fileHash;
     public String token;
     public FileChannel fileChannel;
     public RandomAccessFile randomAccessFile;
     public long messageId;
+    public ProtoGlobal.RoomMessageType messageType;
+    public long roomId;
     // FIXME: 9/19/2016 [Alireza Eskandarpour Shoferi] for test purposes
     public long uploadStartTime;
     public long getNBytesTime;
     public long sendRequestsTime;
     public long elapsedInOnFileUpload;
 
-    public FileUploadStructure(String fileName, long fileSize, String filePath, String fileHash) {
+    public FileUploadStructure(String fileName, long fileSize, String filePath, byte[] fileHash) {
         this.fileName = fileName;
         this.fileSize = fileSize;
         this.filePath = filePath;
@@ -42,14 +46,16 @@ public class FileUploadStructure {
         this.filePath = filePath;
     }
 
-    public FileUploadStructure(String fileName, long fileSize, String filePath, long messageId) {
+    public FileUploadStructure(String fileName, long fileSize, String filePath, long messageId, ProtoGlobal.RoomMessageType messageType, long roomId) {
         this.fileName = fileName;
         this.fileSize = fileSize;
         this.filePath = filePath;
         this.messageId = messageId;
+        this.messageType = messageType;
+        this.roomId = roomId;
     }
 
-    public void setFileHash(String fileHash) {
+    public void setFileHash(byte[] fileHash) {
         this.fileHash = fileHash;
     }
 

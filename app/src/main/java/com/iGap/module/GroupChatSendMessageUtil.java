@@ -3,7 +3,7 @@ package com.iGap.module;
 import com.iGap.interface_package.OnGroupChatSendMessageResponse;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoGroupSendMessage;
-import com.iGap.request.RequestGroupSendMessage;
+import com.iGap.request.RequestChatSendMessage;
 
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/5/2016.
@@ -30,6 +30,11 @@ public class GroupChatSendMessageUtil implements OnGroupChatSendMessageResponse 
         return this;
     }
 
+    public GroupChatSendMessageUtil contact(ProtoGlobal.RoomMessageContact value) {
+        chatSendMessage.setContact(value);
+        return this;
+    }
+
     public GroupChatSendMessageUtil attachment(String value) {
         chatSendMessage.setAttachment(value);
         return this;
@@ -50,8 +55,8 @@ public class GroupChatSendMessageUtil implements OnGroupChatSendMessageResponse 
     }
 
     public void sendMessage(String fakeMessageIdAsIdentity) {
-        new RequestGroupSendMessage().newBuilder(ProtoGlobal.RoomMessageType.TEXT, chatSendMessage.getRoomId())
-                .message(chatSendMessage.getMessage()).sendMessage(fakeMessageIdAsIdentity);
+        new RequestChatSendMessage().newBuilder(chatSendMessage.getMessageType(), chatSendMessage.getRoomId())
+                .message(chatSendMessage.getMessage()).attachment(chatSendMessage.getAttachment()).location(chatSendMessage.getLocation()).log(chatSendMessage.getLog()).sendMessage(fakeMessageIdAsIdentity);
     }
 
     @Override

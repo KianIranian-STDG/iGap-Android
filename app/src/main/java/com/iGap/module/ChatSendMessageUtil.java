@@ -35,6 +35,11 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
         return this;
     }
 
+    public ChatSendMessageUtil contact(ProtoGlobal.RoomMessageContact value) {
+        chatSendMessage.setContact(value);
+        return this;
+    }
+
     public ChatSendMessageUtil location(ProtoGlobal.RoomMessageLocation value) {
         chatSendMessage.setLocation(value);
         return this;
@@ -50,8 +55,8 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
     }
 
     public void sendMessage(String fakeMessageIdAsIdentity) {
-        new RequestChatSendMessage().newBuilder(ProtoGlobal.RoomMessageType.TEXT, chatSendMessage.getRoomId())
-                .message(chatSendMessage.getMessage()).sendMessage(fakeMessageIdAsIdentity);
+        new RequestChatSendMessage().newBuilder(chatSendMessage.getMessageType(), chatSendMessage.getRoomId())
+                .message(chatSendMessage.getMessage()).attachment(chatSendMessage.getAttachment()).location(chatSendMessage.getLocation()).log(chatSendMessage.getLog()).sendMessage(fakeMessageIdAsIdentity);
     }
 
     @Override

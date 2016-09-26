@@ -2,6 +2,8 @@ package com.iGap.realm;
 
 import android.text.format.DateUtils;
 
+import com.iGap.proto.ProtoGlobal;
+
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -14,12 +16,12 @@ public class RealmRoomMessage extends RealmObject {
     private int statusVersion;
     private String messageType;
     private String message = "hello";
-    private String attachment;
     private long userId;
     private String location;
     private String log;
     private boolean edited;
     private long updateTime;
+    private RealmMessageAttachment attachment;
 
     public long getMessageId() {
         return messageId;
@@ -67,14 +69,6 @@ public class RealmRoomMessage extends RealmObject {
 
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    public String getAttachment() {
-        return attachment;
-    }
-
-    public void setAttachment(String attachment) {
-        this.attachment = attachment;
     }
 
     public long getUserId() {
@@ -129,4 +123,50 @@ public class RealmRoomMessage extends RealmObject {
     public boolean isOnlyTime() {
         return userId == -1;
     }
+
+    public RealmMessageAttachment getAttachment() {
+        return attachment;
+    }
+
+    public void setAttachment(long messageId, ProtoGlobal.File attachment) {
+        Realm realm = Realm.getDefaultInstance();
+        RealmMessageAttachment realmMessageAttachment = realm.createObject(RealmMessageAttachment.class);
+        realmMessageAttachment.setMessageId(messageId);
+        realmMessageAttachment.setCacheId(attachment.getCacheId());
+        realmMessageAttachment.setDuration(attachment.getDuration());
+        realmMessageAttachment.setHeight(attachment.getHeight());
+        realmMessageAttachment.setName(attachment.getName());
+        realmMessageAttachment.setSize(attachment.getSize());
+        realmMessageAttachment.setToken(attachment.getToken());
+        realmMessageAttachment.setWidth(attachment.getWidth());
+        this.attachment = realmMessageAttachment;
+        realm.close();
+    }
+
+    public void setAttachmentForLocalPath(final long messageId, final String localPath) {
+        Realm realm = Realm.getDefaultInstance();
+        if (attachment == null) {
+            RealmMessageAttachment realmMessageAttachment = realm.createObject(RealmMessageAttachment.class);
+            realmMessageAttachment.setMessageId(messageId);
+            realmMessageAttachment.setLocalPath(localPath);
+            attachment = realmMessageAttachment;
+        } else {
+            attachment.setLocalPath(localPath);
+        }
+        realm.close();
+    }
+
+    public void setAttachmentForToken(final long messageId, final String token) {
+        Realm realm = Realm.getDefaultInstance();
+        if (attachment == null) {
+            RealmMessageAttachment realmMessageAttachment = realm.createObject(RealmMessageAttachment.class);
+            realmMessageAttachment.setMessageId(messageId);
+            realmMessageAttachment.setToken(token);
+            attachment = realmMessageAttachment;
+        } else {
+            attachment.setToken(token);
+        }
+        realm.close();
+    }
+
 }

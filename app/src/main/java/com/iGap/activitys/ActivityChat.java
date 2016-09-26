@@ -14,6 +14,7 @@ import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.ArrayRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
@@ -77,6 +78,7 @@ import com.iGap.interface_package.OnChatMessageSelectionChanged;
 import com.iGap.interface_package.OnChatSendMessageResponse;
 import com.iGap.interface_package.OnChatUpdateStatusResponse;
 import com.iGap.interface_package.OnFileUpload;
+import com.iGap.interface_package.OnFileUploadStatusResponse;
 import com.iGap.interface_package.OnGroupChatSendMessageResponse;
 import com.iGap.interface_package.OnMessageClick;
 import com.iGap.module.AttachFile;
@@ -99,6 +101,7 @@ import com.iGap.module.TimeUtils;
 import com.iGap.module.Utils;
 import com.iGap.module.VoiceRecord;
 import com.iGap.proto.ProtoChatSendMessage;
+import com.iGap.proto.ProtoFileUploadStatus;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoGroupSendMessage;
 import com.iGap.proto.ProtoResponse;
@@ -121,6 +124,7 @@ import com.iGap.request.RequestChatDeleteMessage;
 import com.iGap.request.RequestChatEditMessage;
 import com.iGap.request.RequestFileUpload;
 import com.iGap.request.RequestFileUploadInit;
+import com.iGap.request.RequestFileUploadStatus;
 import com.nightonke.boommenu.BoomMenuButton;
 import com.nightonke.boommenu.Types.BoomType;
 import com.nightonke.boommenu.Types.ButtonType;
@@ -142,13 +146,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
-import io.realm.RealmList;
 import io.realm.RealmResults;
 
 /**
  * Created by android3 on 8/5/2016.
  */
-public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, IRecentsLongClick, OnMessageClick, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractChatItem>, OnChatMessageRemove, OnGroupChatSendMessageResponse, OnFileUpload {
+public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, IRecentsLongClick, OnMessageClick, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractChatItem>, OnChatMessageRemove, OnGroupChatSendMessageResponse, OnFileUpload, OnFileUploadStatusResponse {
 
     private EmojiEditText edtChat;
     private MaterialDesignTextView imvSendButton;
@@ -335,6 +338,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
         G.uploaderUtil.setActivityCallbacks(this);
+        G.onFileUploadStatusResponse = this;
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -451,6 +455,10 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     protected void onDestroy() {
         // room id have to be set to default, otherwise I'm in the room always!
         mRoomId = -1;
+        if (mPrepareForUpload != null && !mPrepareForUpload.isCancelled()) {
+            mPrepareForUpload.cancel(true);
+        }
+
         super.onDestroy();
     }
 
@@ -459,7 +467,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         for (StructMessageInfo messageInfo : messageInfos) {
             if (!messageInfo.isTimeMessage()) {
                 switch (messageInfo.messageType) {
-                    // TODO: 9/7/2016 [Alireza Eskandarpour Shoferi] add group items
                     case TEXT:
                         if (chatType == ProtoGlobal.Room.Type.CHAT) {
                             if (!addTop) {
@@ -812,31 +819,13 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
                                 RealmClientCondition realmClientCondition = realm1.where(RealmClientCondition.class).equalTo("roomId", mRoomId).findFirst();
 
-                                RealmList<RealmOfflineEdited> newListOfflineEdited = new RealmList<>();
-                                RealmList<RealmOfflineEdited> oldListOfflineEdited = realmClientCondition.getOfflineEdited();
-
-                                Log.i("SOC_CONDITION", "Edit 1");
-
-                                RealmOfflineEdited realmOfflineEdited = new RealmOfflineEdited();
-                                int autoIncrement = 0;
-                                if (realm.where(RealmOfflineEdited.class).max("id") != null) {
-                                    autoIncrement = realm.where(RealmOfflineEdited.class).max("id").intValue() + 1;
-                                }
-                                realmOfflineEdited.setId(autoIncrement);
+                                RealmOfflineEdited realmOfflineEdited = realm.createObject(RealmOfflineEdited.class);
+                                realmOfflineEdited.setId(System.currentTimeMillis());
                                 realmOfflineEdited.setMessageId(Long.parseLong(messageInfo.messageID));
                                 realmOfflineEdited.setMessage(messageInfo.messageText);
                                 realmOfflineEdited = realm.copyToRealm(realmOfflineEdited);
 
-                                Log.i("SOC_CONDITION", "Edit 2");
-
-                                newListOfflineEdited.add(realmOfflineEdited);
-
-                                for (RealmOfflineEdited edited : oldListOfflineEdited) {
-                                    newListOfflineEdited.add(edited);
-                                }
-
-                                Log.i("SOC_CONDITION", "Edit 3");
-                                realmClientCondition.setOfflineEdited(newListOfflineEdited);
+                                realmClientCondition.getOfflineEdited().add(realmOfflineEdited);
 
                                 if (roomMessage != null) {
                                     // update message text in database
@@ -873,6 +862,44 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     if (!message.isEmpty()) {
                         final String identity = Long.toString(System.currentTimeMillis());
 
+                        realm.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                RealmChatHistory chatHistory = realm.createObject(RealmChatHistory.class);
+                                RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class);
+
+                                roomMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT.toString());
+                                roomMessage.setMessage(message);
+                                roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
+                                roomMessage.setMessageId(Long.parseLong(identity));
+                                roomMessage.setUserId(senderId);
+                                roomMessage.setUpdateTime((int) (System.currentTimeMillis() / DateUtils.SECOND_IN_MILLIS));
+
+                                // user wants to replay to a message
+                                if (mReplayLayout != null && mReplayLayout.getTag() instanceof StructMessageInfo) {
+                                    // TODO: 9/10/2016 [Alireza Eskandarpour Shoferi] after server done creating replay, uncomment following lines
+                                    /*messageInfo.replayFrom = ((StructMessageInfo) mReplayLayout.getTag()).senderName;
+                                    messageInfo.replayMessage = ((StructMessageInfo) mReplayLayout.getTag()).messageText;
+                                    messageInfo.replayPicturePath = ((StructMessageInfo) mReplayLayout.getTag()).filePic;*/
+                                }
+
+                                chatHistory.setId(System.currentTimeMillis());
+                                chatHistory.setRoomId(mRoomId);
+                                chatHistory.setRoomMessage(roomMessage);
+                            }
+                        });
+
+                        RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", Long.parseLong(identity)).findFirst();
+                        realm.close();
+                        // user wants to replay to a message
+                        if (mReplayLayout != null && mReplayLayout.getTag() instanceof StructMessageInfo) {
+                            mAdapter.add(new MessageItem(chatType).setMessage(StructMessageInfo.convert(roomMessage, ((StructMessageInfo) mReplayLayout.getTag()).senderName, ((StructMessageInfo) mReplayLayout.getTag()).messageText, ((StructMessageInfo) mReplayLayout.getTag()).filePic)));
+                        } else {
+                            mAdapter.add(new MessageItem(chatType).setMessage(StructMessageInfo.convert(roomMessage)));
+                        }
+
+                        scrollToEnd();
+
                         if (chatType == ProtoGlobal.Room.Type.CHAT) {
                             new ChatSendMessageUtil()
                                     .newBuilder(ProtoGlobal.RoomMessageType.TEXT, mRoomId)
@@ -884,58 +911,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                                     .message(message)
                                     .sendMessage(identity);
                         }
-
-                        realm.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                RealmChatHistory chatHistory = new RealmChatHistory();
-                                RealmRoomMessage roomMessage = new RealmRoomMessage();
-
-                                roomMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT.toString());
-                                roomMessage.setMessage(message);
-                                roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
-                                roomMessage.setMessageId(Long.parseLong(identity));
-                                roomMessage.setUserId(senderId);
-                                roomMessage.setUpdateTime((int) System.currentTimeMillis());
-
-                                // user wants to replay to a message
-                                if (mReplayLayout != null && mReplayLayout.getTag() instanceof StructMessageInfo) {
-                                    // TODO: 9/10/2016 [Alireza Eskandarpour Shoferi] after server done creating replay, uncomment following lines
-                                    /*messageInfo.replayFrom = ((StructMessageInfo) mReplayLayout.getTag()).senderName;
-                                    messageInfo.replayMessage = ((StructMessageInfo) mReplayLayout.getTag()).messageText;
-                                    messageInfo.replayPicturePath = ((StructMessageInfo) mReplayLayout.getTag()).filePic;*/
-                                }
-
-                                int autoIncrement = 0;
-                                if (realm.where(RealmChatHistory.class).max("id") != null) {
-                                    autoIncrement = realm.where(RealmChatHistory.class).max("id").intValue() + 1;
-                                }
-
-                                chatHistory.setId(autoIncrement);
-                                chatHistory.setRoomId(mRoomId);
-                                chatHistory.setRoomMessage(roomMessage);
-                                realm.copyToRealm(chatHistory);
-                            }
-                        });
-                        realm.close();
-
-                        StructMessageInfo messageInfo = new StructMessageInfo();
-                        messageInfo.messageText = message;
-                        messageInfo.messageID = identity;
-                        messageInfo.messageType = ProtoGlobal.RoomMessageType.TEXT;
-                        messageInfo.time = System.currentTimeMillis();
-                        messageInfo.senderID = Long.toString(senderId);
-                        messageInfo.sendType = MyType.SendType.send;
-                        // user wants to replay to a message
-                        if (mReplayLayout != null && mReplayLayout.getTag() instanceof StructMessageInfo) {
-                            messageInfo.replayFrom = ((StructMessageInfo) mReplayLayout.getTag()).senderName;
-                            messageInfo.replayMessage = ((StructMessageInfo) mReplayLayout.getTag()).messageText;
-                            messageInfo.replayPicturePath = ((StructMessageInfo) mReplayLayout.getTag()).filePic;
-                        }
-
-                        mAdapter.add(new MessageItem(chatType).setMessage(messageInfo));
-
-                        scrollToEnd();
 
                         edtChat.setText("");
 
@@ -1267,13 +1242,14 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             try {
                 String filePath = (String) params[0];
                 long messageId = (long) params[1];
+                ProtoGlobal.RoomMessageType messageType = (ProtoGlobal.RoomMessageType) params[2];
                 File file = new File(filePath);
                 String fileName = file.getName();
                 long fileSize = file.length();
-                FileUploadStructure fileUploadStructure = new FileUploadStructure(fileName, fileSize, filePath, messageId);
+                FileUploadStructure fileUploadStructure = new FileUploadStructure(fileName, fileSize, filePath, messageId, messageType, mRoomId);
                 fileUploadStructure.openFile(filePath);
 
-                String fileHash = Utils.getFileHash(fileUploadStructure, true);
+                byte[] fileHash = Utils.getFileHash(fileUploadStructure);
                 fileUploadStructure.setFileHash(fileHash);
 
                 return fileUploadStructure;
@@ -1290,9 +1266,13 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             super.onPostExecute(result);
             mSelectedFiles.add(result);
             mAdapter.updateItemFileHash(result.messageId, result.fileHash);
-            G.uploaderUtil.startUploading(result.fileSize, result.fileHash);
+            G.uploaderUtil.startUploading(result.fileSize, Long.toString(result.messageId));
         }
     };
+
+    private boolean userTriesReplay() {
+        return mReplayLayout != null && mReplayLayout.getTag() instanceof StructMessageInfo;
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -1308,48 +1288,113 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
         } else if (resultCode == Activity.RESULT_OK) {
             Log.e("ddd", "result ok");
-            long messageId = System.currentTimeMillis();
+            final long messageId = System.currentTimeMillis();
+            String filePath = null;
+            final long updateTime = System.currentTimeMillis();
+            ProtoGlobal.RoomMessageType messageType = null;
             Realm realm = Realm.getDefaultInstance();
-            long senderID = realm.where(RealmUserInfo.class).findFirst().getUserId();
-            switch (requestCode) {
+            final long senderID = realm.where(RealmUserInfo.class).findFirst().getUserId();
 
+            switch (requestCode) {
                 case AttachFile.request_code_TAKE_PICTURE:
-                    mAdapter.add(new ImageItem(chatType).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.IMAGE, MyType.SendType.send, MyType.FileState.uploading, AttachFile.imagePath, System.currentTimeMillis())));
-                    Log.e("ddd", AttachFile.imagePath + "     image path");
+                    filePath = AttachFile.imagePath;
+                    messageType = ProtoGlobal.RoomMessageType.IMAGE;
+                    // user wants to replay to a message
+                    if (userTriesReplay()) {
+                        mAdapter.add(new ImageItem(chatType).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.IMAGE, MyType.SendType.send, MyType.FileState.uploading, filePath, updateTime, ((StructMessageInfo) mReplayLayout.getTag()))));
+                    } else {
+                        mAdapter.add(new ImageItem(chatType).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.IMAGE, MyType.SendType.send, MyType.FileState.uploading, filePath, updateTime)));
+                    }
+                    Log.e("ddd", filePath + "     image path");
                     break;
                 case AttachFile.request_code_media_from_gallary:
-                    mAdapter.add(new ImageItem(chatType).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.IMAGE, MyType.SendType.send, MyType.FileState.uploading, AttachFile.getFilePathFromUri(data.getData()), System.currentTimeMillis())));
-                    mPrepareForUpload.execute(AttachFile.getFilePathFromUri(data.getData()), messageId);
-                    Log.e("ddd", AttachFile.getFilePathFromUri(data.getData()) + "    gallary file path");
+                    filePath = AttachFile.getFilePathFromUri(data.getData());
+                    messageType = ProtoGlobal.RoomMessageType.IMAGE;
+                    if (userTriesReplay()) {
+                        mAdapter.add(new ImageItem(chatType).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.IMAGE, MyType.SendType.send, MyType.FileState.uploading, filePath, updateTime, ((StructMessageInfo) mReplayLayout.getTag()))));
+
+                    } else {
+                        mAdapter.add(new ImageItem(chatType).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.IMAGE, MyType.SendType.send, MyType.FileState.uploading, filePath, updateTime)));
+                    }
+                    Log.e("ddd", filePath + "    gallary file path");
                     break;
                 case AttachFile.request_code_VIDEO_CAPTURED:
-                    File videoFile = new File(AttachFile.getFilePathFromUri(data.getData()));
+                    filePath = AttachFile.getFilePathFromUri(data.getData());
+                    messageType = ProtoGlobal.RoomMessageType.VIDEO;
+                    File videoFile = new File(filePath);
                     String videoFileName = videoFile.getName();
                     String videoFileMime = FileUtils.getMimeType(videoFile);
-                    mAdapter.add(new VideoItem(chatType).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.VIDEO, MyType.SendType.send, MyType.FileState.uploading, videoFileName, videoFileMime, AttachFile.getFilePathFromUri(data.getData()), AttachFile.getFilePathFromUri(data.getData()), videoFile.length(), null, System.currentTimeMillis())));
+                    if (userTriesReplay()) {
+                        mAdapter.add(new VideoItem(chatType).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.VIDEO, MyType.SendType.send, MyType.FileState.uploading, videoFileName, videoFileMime, filePath, filePath, videoFile.length(), null, updateTime, ((StructMessageInfo) mReplayLayout.getTag()))));
+                    } else {
+                        mAdapter.add(new VideoItem(chatType).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.VIDEO, MyType.SendType.send, MyType.FileState.uploading, videoFileName, videoFileMime, filePath, filePath, videoFile.length(), null, updateTime)));
+                    }
                     Log.e("ddd", AttachFile.getFilePathFromUri(data.getData()) + "    video capture path");
                     break;
                 case AttachFile.request_code_pic_audi:
+                    filePath = AttachFile.getFilePathFromUri(data.getData());
+                    messageType = ProtoGlobal.RoomMessageType.AUDIO;
                     // TODO: 9/15/2016 [Alireza Eskandarpour Shoferi] implement
-                    Log.e("ddd", AttachFile.getFilePathFromUri(data.getData()) + "    audio  path");
+                    Log.e("ddd", filePath + "    audio  path");
                     break;
                 case AttachFile.request_code_pic_file:
-                    File fileFile = new File(data.getData().getPath());
+                    filePath = data.getData().getPath();
+                    messageType = ProtoGlobal.RoomMessageType.FILE;
+                    File fileFile = new File(filePath);
                     String fileFileName = fileFile.getName();
                     String fileFileMime = FileUtils.getMimeType(fileFile);
-                    mAdapter.add(new FileItem(chatType).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.FILE, MyType.SendType.send, MyType.FileState.uploading, fileFileName, fileFileMime, data.getData().getPath(), data.getData().getPath(), fileFile.length(), null, System.currentTimeMillis())));
+                    if (userTriesReplay()) {
+                        mAdapter.add(new FileItem(chatType).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.FILE, MyType.SendType.send, MyType.FileState.uploading, fileFileName, fileFileMime, filePath, filePath, fileFile.length(), null, updateTime, ((StructMessageInfo) mReplayLayout.getTag()))));
+                    } else {
+                        mAdapter.add(new FileItem(chatType).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.FILE, MyType.SendType.send, MyType.FileState.uploading, fileFileName, fileFileMime, filePath, filePath, fileFile.length(), null, updateTime)));
+                    }
                     Log.e("ddd", data.getData() + "    pic file path");
                     break;
                 case AttachFile.request_code_contact_phone:
+                    filePath = data.getData().getPath();
+                    messageType = ProtoGlobal.RoomMessageType.CONTACT;
                     // TODO: 9/15/2016 [Alireza Eskandarpour Shoferi] implement
-                    Log.e("ddd", data.getData() + "   contact phone");
+                    Log.e("ddd", filePath + "   contact phone");
                     break;
                 case AttachFile.request_code_paint:
-                    mAdapter.add(new ImageItem(chatType).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.IMAGE, MyType.SendType.send, MyType.FileState.uploading, data.getData().getPath(), System.currentTimeMillis())));
-                    Log.e("ddd", data.getData() + "   pain path");
+                    filePath = data.getData().getPath();
+                    messageType = ProtoGlobal.RoomMessageType.IMAGE;
+                    if (userTriesReplay()) {
+                        mAdapter.add(new ImageItem(chatType).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.IMAGE, MyType.SendType.send, MyType.FileState.uploading, filePath, updateTime, ((StructMessageInfo) mReplayLayout.getTag()))));
+                    } else {
+                        mAdapter.add(new ImageItem(chatType).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.IMAGE, MyType.SendType.send, MyType.FileState.uploading, filePath, updateTime)));
+                    }
+                    Log.e("ddd", filePath + "   pain path");
                     break;
             }
+
+            final ProtoGlobal.RoomMessageType finalMessageType = messageType;
+            final String finalFilePath = filePath;
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmChatHistory chatHistory = realm.createObject(RealmChatHistory.class);
+                    RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class);
+
+                    roomMessage.setMessageType(finalMessageType.toString());
+                    roomMessage.setMessage(null);
+                    roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
+                    roomMessage.setAttachmentForLocalPath(messageId, finalFilePath);
+                    roomMessage.setMessageId(messageId);
+                    roomMessage.setUserId(senderID);
+                    roomMessage.setUpdateTime((int) (updateTime / DateUtils.SECOND_IN_MILLIS));
+
+                    // TODO: 9/26/2016 [Alireza Eskandarpour Shoferi] user may wants to send a file in response to a message as replay, so after server done creating replay and forward options, modify this section and sending message as well.
+
+                    chatHistory.setId(System.currentTimeMillis());
+                    chatHistory.setRoomId(mRoomId);
+                    chatHistory.setRoomMessage(roomMessage);
+                }
+            });
+
             realm.close();
+
+            mPrepareForUpload.execute(filePath, messageId, messageType);
 
             scrollToEnd();
         }
@@ -1607,7 +1652,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         List<RealmRoomMessage> lastResultMessages = new ArrayList<>();
 
         for (RealmRoomMessage message : realmRoomMessages) {
-
             String timeString = getTimeSettingMessage(message.getUpdateTime());
             if (timeString != null) {
                 RealmRoomMessage timeMessage = new RealmRoomMessage();
@@ -1971,13 +2015,13 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     /**
      * get file with hash string
      *
-     * @param fileHash file hash
+     * @param identity file hash
      * @return FileUploadStructure
      */
     @Nullable
-    private FileUploadStructure getSelectedFile(String fileHash) {
+    private FileUploadStructure getSelectedFile(String identity) {
         for (FileUploadStructure structure : mSelectedFiles) {
-            if (structure.fileHash.equalsIgnoreCase(fileHash)) {
+            if (structure.messageId == Long.parseLong(identity)) {
                 return structure;
             }
         }
@@ -1992,7 +2036,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             byte[] bytesFromFirst = Utils.getBytesFromStart(fileUploadStructure, firstBytesLimit);
             byte[] bytesFromLast = Utils.getBytesFromEnd(fileUploadStructure, lastBytesLimit);
             // make second request
-            new RequestFileUploadInit().fileUploadInit(bytesFromFirst, bytesFromLast, fileUploadStructure.fileSize, fileHashAsIdentity, fileUploadStructure.fileName);
+            new RequestFileUploadInit().fileUploadInit(bytesFromFirst, bytesFromLast, fileUploadStructure.fileSize, fileUploadStructure.fileHash, Long.toString(fileUploadStructure.messageId), fileUploadStructure.fileName);
         } catch (IOException e) {
             Log.i("BreakPoint", e.getMessage());
             e.printStackTrace();
@@ -2000,10 +2044,10 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     }
 
     @Override
-    public void OnFileUploadInit(String token, final double progress, long offset, int limit, final String fileHashAsIdentity, ProtoResponse.Response response) {
+    public void OnFileUploadInit(String token, final double progress, long offset, int limit, final String identity, ProtoResponse.Response response) {
         // token needed for requesting upload
         // updating structure with new token
-        FileUploadStructure fileUploadStructure = getSelectedFile(fileHashAsIdentity);
+        FileUploadStructure fileUploadStructure = getSelectedFile(identity);
         fileUploadStructure.token = token;
 
         // not already uploaded
@@ -2011,7 +2055,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             try {
                 byte[] bytes = Utils.getNBytesFromOffset(fileUploadStructure, (int) offset, limit);
                 // make third request for first time
-                new RequestFileUpload().fileUpload(token, offset, bytes, fileHashAsIdentity);
+                new RequestFileUpload().fileUpload(token, offset, bytes, identity);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -2021,13 +2065,13 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     @Override
                     public void run() {
                         // update progress
-                        mAdapter.updateProgress(fileHashAsIdentity, (int) progress);
+                        mAdapter.updateProgress(identity.getBytes(), (int) progress);
                     }
                 });
 
-                if (isFileExistInList(fileHashAsIdentity)) {
+                if (isFileExistInList(identity.getBytes())) {
                     // handle when the file has already uploaded
-                    onFileUploadComplete(fileHashAsIdentity, response);
+                    onFileUploadComplete(identity, response);
                 }
             } catch (Exception e) {
                 Log.i("BreakPoint", e.getMessage());
@@ -2042,9 +2086,9 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
      * @param fileHash file hash
      * @return boolean
      */
-    private boolean isFileExistInList(String fileHash) {
+    private boolean isFileExistInList(byte[] fileHash) {
         for (FileUploadStructure fileUploadStructure : mSelectedFiles) {
-            if (fileUploadStructure.fileHash.equalsIgnoreCase(fileHash)) {
+            if (fileUploadStructure.fileHash == fileHash) {
                 return true;
             }
         }
@@ -2052,7 +2096,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     }
 
     @Override
-    public void onFileUpload(final double progress, long nextOffset, int nextLimit, final String fileHashAsIdentity, ProtoResponse.Response response) {
+    public void onFileUpload(final double progress, long nextOffset, int nextLimit, final String identity, ProtoResponse.Response response) {
         final long startOnFileUploadTime = System.currentTimeMillis();
 
         // for specific views, tags must be set with files hashes
@@ -2061,38 +2105,38 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
         try {
             // update progress
-            Log.i("SOC", "************************************ fileHashAsIdentity : " + fileHashAsIdentity + "  ||  progress : " + progress);
-            Log.i("BreakPoint", fileHashAsIdentity + " > bad az update progress");
+            Log.i("SOC", "************************************ identity : " + identity + "  ||  progress : " + progress);
+            Log.i("BreakPoint", identity + " > bad az update progress");
 
             if (progress != 100.0) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mAdapter.updateProgress(fileHashAsIdentity, (int) progress);
+                        mAdapter.updateProgress(identity.getBytes(), (int) progress);
                     }
                 });
 
-                Log.i("BreakPoint", fileHashAsIdentity + " > 100 nist");
-                FileUploadStructure fileUploadStructure = getSelectedFile(fileHashAsIdentity);
-                Log.i("BreakPoint", fileHashAsIdentity + " > fileUploadStructure");
+                Log.i("BreakPoint", identity + " > 100 nist");
+                FileUploadStructure fileUploadStructure = getSelectedFile(identity);
+                Log.i("BreakPoint", identity + " > fileUploadStructure");
                 final long startGetNBytesTime = System.currentTimeMillis();
                 byte[] bytes = Utils.getNBytesFromOffset(fileUploadStructure, (int) nextOffset, nextLimit);
 
                 fileUploadStructure.getNBytesTime += System.currentTimeMillis() - startGetNBytesTime;
 
-                Log.i("BreakPoint", fileHashAsIdentity + " > after bytes");
+                Log.i("BreakPoint", identity + " > after bytes");
                 // make request till uploading has finished
                 final long startSendReqTime = System.currentTimeMillis();
 
-                new RequestFileUpload().fileUpload(fileUploadStructure.token, nextOffset, bytes, fileHashAsIdentity);
+                new RequestFileUpload().fileUpload(fileUploadStructure.token, nextOffset, bytes, identity);
                 fileUploadStructure.sendRequestsTime += System.currentTimeMillis() - startSendReqTime;
-                Log.i("BreakPoint", fileHashAsIdentity + " > after fileUpload request");
+                Log.i("BreakPoint", identity + " > after fileUpload request");
 
                 fileUploadStructure.elapsedInOnFileUpload += System.currentTimeMillis() - startOnFileUploadTime;
             } else {
-                if (isFileExistInList(fileHashAsIdentity)) {
+                if (isFileExistInList(identity.getBytes())) {
                     // handle when the file has already uploaded
-                    onFileUploadComplete(fileHashAsIdentity, response);
+                    onFileUploadComplete(identity, response);
                 }
             }
         } catch (IOException e) {
@@ -2105,33 +2149,75 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     public void onFileUploadComplete(final String fileHashAsIdentity, ProtoResponse.Response response) {
         final FileUploadStructure fileUploadStructure = getSelectedFile(fileHashAsIdentity);
 
-        runOnUiThread(new Runnable() {
+        new RequestFileUploadStatus().fileUploadStatus(fileUploadStructure.token, fileHashAsIdentity);
+
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
             @Override
-            public void run() {
-                mAdapter.updateProgress(fileHashAsIdentity, 100);
+            public void execute(Realm realm) {
+                RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", fileUploadStructure.messageId).findFirst();
+                if (roomMessage != null) {
+                    roomMessage.setAttachmentForToken(fileUploadStructure.messageId, fileUploadStructure.token);
+                }
             }
         });
-
-        // remove from selected files to prevent calling this method multiple times
-        // multiple calling may occurs because of the server
-        try {
-            // FIXME: 9/19/2016 [Alireza Eskandarpour Shoferi] uncomment plz
-            //removeFromSelectedFiles(fileHashAsIdentity);
-        } catch (Exception e) {
-            Log.i("BreakPoint", e.getMessage());
-            e.printStackTrace();
-        }
-
-        // close file into structure
-        try {
-            if (fileUploadStructure != null) {
-                fileUploadStructure.closeFile();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        realm.close();
     }
 
     // selected files (paths)
     private CopyOnWriteArrayList<FileUploadStructure> mSelectedFiles = new CopyOnWriteArrayList<>();
+
+    @Override
+    public void onFileUploadStatus(ProtoFileUploadStatus.FileUploadStatusResponse.Status status, double progress, int recheckDelayMS, final String fileHashAsIdentity, ProtoResponse.Response response) {
+        final FileUploadStructure fileUploadStructure = getSelectedFile(fileHashAsIdentity);
+        if (status == ProtoFileUploadStatus.FileUploadStatusResponse.Status.PROCESSED && progress == 100D) {
+            if (chatType == ProtoGlobal.Room.Type.CHAT) {
+                new ChatSendMessageUtil()
+                        .newBuilder(fileUploadStructure.messageType, fileUploadStructure.roomId)
+                        .attachment(fileUploadStructure.token)
+                        .sendMessage(Long.toString(fileUploadStructure.messageId));
+            } else if (chatType == ProtoGlobal.Room.Type.GROUP) {
+                new GroupChatSendMessageUtil()
+                        .newBuilder(fileUploadStructure.messageType, fileUploadStructure.roomId)
+                        .attachment(fileUploadStructure.token)
+                        .sendMessage(Long.toString(fileUploadStructure.messageId));
+            }
+            // TODO: 9/26/2016 [Alireza Eskandarpour Shoferi] send request for channel
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mAdapter.updateProgress(fileHashAsIdentity.getBytes(), 100);
+                }
+            });
+
+            // remove from selected files to prevent calling this method multiple times
+            // multiple calling may occurs because of the server
+            try {
+                // FIXME: 9/19/2016 [Alireza Eskandarpour Shoferi] uncomment plz
+                //removeFromSelectedFiles(fileHashAsIdentity);
+            } catch (Exception e) {
+                Log.i("BreakPoint", e.getMessage());
+                e.printStackTrace();
+            }
+
+            // close file into structure
+            try {
+                if (fileUploadStructure != null) {
+                    fileUploadStructure.closeFile();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else if (status == ProtoFileUploadStatus.FileUploadStatusResponse.Status.PROCESSING) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    new RequestFileUploadStatus().fileUploadStatus(fileUploadStructure.token, fileHashAsIdentity);
+                }
+            }, recheckDelayMS);
+        } else {
+            G.uploaderUtil.startUploading(fileUploadStructure.fileSize, Long.toString(fileUploadStructure.messageId));
+        }
+    }
 }

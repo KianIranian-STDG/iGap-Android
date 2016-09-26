@@ -122,11 +122,11 @@ public class FileUploadTestActivity extends ActivityEnhanced implements OnFileUp
                     updateLogs("*** UPLOADING STARTED ***", "", LogType.FILE_DETAILS);
                     updateLogs("FILE NAME:", fileUploadStructure.fileName, LogType.FILE_DETAILS);
                     updateLogs("FILE SIZE:", Long.toString(fileUploadStructure.fileSize), LogType.FILE_DETAILS);
-                    updateLogs("FILE HASH:", fileUploadStructure.fileHash, LogType.FILE_DETAILS);
+                    updateLogs("FILE HASH:", new String(fileUploadStructure.fileHash), LogType.FILE_DETAILS);
 
                     // start uploading
                     fileUploadStructure.uploadStartTime = System.currentTimeMillis();
-                    G.uploaderUtil.startUploading(fileUploadStructure.fileSize, fileUploadStructure.fileHash);
+                    G.uploaderUtil.startUploading(fileUploadStructure.fileSize, Long.toString(fileUploadStructure.messageId));
                 }
             }
         });
@@ -221,7 +221,7 @@ public class FileUploadTestActivity extends ActivityEnhanced implements OnFileUp
      * @param fileHash file hash
      * @return ProgressBar
      */
-    private void addProgressBar(final String fileHash) {
+    private void addProgressBar(final byte[] fileHash) {
         new AsyncLayoutInflater(getApplicationContext()).inflate(R.layout.test_progress_item, null, new AsyncLayoutInflater.OnInflateFinishedListener() {
             @Override
             public void onInflateFinished(View view, int resid, ViewGroup parent) {
@@ -268,7 +268,7 @@ public class FileUploadTestActivity extends ActivityEnhanced implements OnFileUp
             fileUploadStructure.openFile(filePath);
 
             long fileHashStarted = System.currentTimeMillis();
-            String fileHash = Utils.getFileHash(fileUploadStructure, true);
+            byte[] fileHash = Utils.getFileHash(fileUploadStructure);
             if (adapter != null) {
                 updateLogs("FILE SELECTED:", fileName, LogType.ALL);
                 updateLogs("ELAPSED FOR HASHING:", Long.toString(System.currentTimeMillis() - fileHashStarted), LogType.ALL);
@@ -310,9 +310,9 @@ public class FileUploadTestActivity extends ActivityEnhanced implements OnFileUp
      * @return FileUploadStructure
      */
     @Nullable
-    private FileUploadStructure getSelectedFile(String fileHash) {
+    private FileUploadStructure getSelectedFile(byte[] fileHash) {
         for (FileUploadStructure structure : mSelectedFiles) {
-            if (structure.fileHash.equalsIgnoreCase(fileHash)) {
+            if (structure.fileHash == fileHash) {
                 return structure;
             }
         }
@@ -348,7 +348,7 @@ public class FileUploadTestActivity extends ActivityEnhanced implements OnFileUp
 
     @Override
     public void onFileUploadComplete(final String fileHashAsIdentity, ProtoResponse.Response response) {
-        final FileUploadStructure fileUploadStructure = getSelectedFile(fileHashAsIdentity);
+        final FileUploadStructure fileUploadStructure = getSelectedFile(fileHashAsIdentity.getBytes());
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -395,9 +395,9 @@ public class FileUploadTestActivity extends ActivityEnhanced implements OnFileUp
      *
      * @param fileHash file hash
      */
-    private boolean removeFromSelectedFiles(String fileHash) {
+    private boolean removeFromSelectedFiles(byte[] fileHash) {
         for (FileUploadStructure fileUploadStructure : mSelectedFiles) {
-            if (fileUploadStructure.fileHash.equalsIgnoreCase(fileHash)) {
+            if (fileUploadStructure.fileHash == fileHash) {
                 mSelectedFiles.remove(fileUploadStructure);
                 return true;
             }
@@ -406,7 +406,7 @@ public class FileUploadTestActivity extends ActivityEnhanced implements OnFileUp
     }
 
     @Override
-    public void OnFileUploadInit(String token, double progress, long offset, int limit, String fileHashAsIdentity, ProtoResponse.Response response) {
+    public void OnFileUploadInit(String token, double progress, long offset, int limit, String identity, ProtoResponse.Response response) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -415,7 +415,7 @@ public class FileUploadTestActivity extends ActivityEnhanced implements OnFileUp
         });
         // token needed for requesting upload
         // updating structure with new token
-        FileUploadStructure fileUploadStructure = getSelectedFile(fileHashAsIdentity);
+        FileUploadStructure fileUploadStructure = getSelectedFile(identity.getBytes());
         fileUploadStructure.token = token;
 
         // not already uploaded
@@ -423,18 +423,18 @@ public class FileUploadTestActivity extends ActivityEnhanced implements OnFileUp
             try {
                 byte[] bytes = Utils.getNBytesFromOffset(fileUploadStructure, (int) offset, limit);
                 // make third request for first time
-                new RequestFileUpload().fileUpload(token, offset, bytes, fileHashAsIdentity);
+                new RequestFileUpload().fileUpload(token, offset, bytes, identity);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else {
             try {
                 // update progress
-                updateProgressView(fileHashAsIdentity, (int) progress);
+                updateProgressView(identity, (int) progress);
 
-                if (isFileExistInList(fileHashAsIdentity)) {
+                if (isFileExistInList(identity.getBytes())) {
                     // handle when the file has already uploaded
-                    onFileUploadComplete(fileHashAsIdentity, response);
+                    onFileUploadComplete(identity, response);
                 }
             } catch (Exception e) {
                 Log.i("BreakPoint", e.getMessage());
@@ -449,9 +449,9 @@ public class FileUploadTestActivity extends ActivityEnhanced implements OnFileUp
      * @param fileHash file hash
      * @return boolean
      */
-    private boolean isFileExistInList(String fileHash) {
+    private boolean isFileExistInList(byte[] fileHash) {
         for (FileUploadStructure fileUploadStructure : mSelectedFiles) {
-            if (fileUploadStructure.fileHash.equalsIgnoreCase(fileHash)) {
+            if (fileUploadStructure.fileHash == fileHash) {
                 return true;
             }
         }
@@ -468,12 +468,12 @@ public class FileUploadTestActivity extends ActivityEnhanced implements OnFileUp
         });
 
         try {
-            FileUploadStructure fileUploadStructure = getSelectedFile(fileHashAsIdentity);
+            FileUploadStructure fileUploadStructure = getSelectedFile(fileHashAsIdentity.getBytes());
             // getting bytes from file as server said
             byte[] bytesFromFirst = Utils.getBytesFromStart(fileUploadStructure, firstBytesLimit);
             byte[] bytesFromLast = Utils.getBytesFromEnd(fileUploadStructure, lastBytesLimit);
             // make second request
-            new RequestFileUploadInit().fileUploadInit(bytesFromFirst, bytesFromLast, fileUploadStructure.fileSize, fileHashAsIdentity, fileUploadStructure.fileName);
+            new RequestFileUploadInit().fileUploadInit(bytesFromFirst, bytesFromLast, fileUploadStructure.fileSize, fileUploadStructure.fileHash, Long.toString(fileUploadStructure.messageId), fileUploadStructure.fileName);
         } catch (IOException e) {
             Log.i("BreakPoint", e.getMessage());
             e.printStackTrace();
@@ -481,7 +481,7 @@ public class FileUploadTestActivity extends ActivityEnhanced implements OnFileUp
     }
 
     @Override
-    public void onFileUpload(final double progress, long nextOffset, int nextLimit, String fileHashAsIdentity, ProtoResponse.Response response) {
+    public void onFileUpload(final double progress, long nextOffset, int nextLimit, String identity, ProtoResponse.Response response) {
         final long startOnFileUploadTime = System.currentTimeMillis();
         runOnUiThread(new Runnable() {
             @Override
@@ -496,14 +496,14 @@ public class FileUploadTestActivity extends ActivityEnhanced implements OnFileUp
 
         try {
             // update progress
-            Log.i("SOC", "************************************ fileHashAsIdentity : " + fileHashAsIdentity + "  ||  progress : " + progress);
-            updateProgressView(fileHashAsIdentity, (int) progress);
-            Log.i("BreakPoint", fileHashAsIdentity + " > bad az update progress");
+            Log.i("SOC", "************************************ identity : " + identity + "  ||  progress : " + progress);
+            updateProgressView(identity, (int) progress);
+            Log.i("BreakPoint", identity + " > bad az update progress");
 
             if (progress != 100.0) {
-                Log.i("BreakPoint", fileHashAsIdentity + " > 100 nist");
-                FileUploadStructure fileUploadStructure = getSelectedFile(fileHashAsIdentity);
-                Log.i("BreakPoint", fileHashAsIdentity + " > fileUploadStructure");
+                Log.i("BreakPoint", identity + " > 100 nist");
+                FileUploadStructure fileUploadStructure = getSelectedFile(identity.getBytes());
+                Log.i("BreakPoint", identity + " > fileUploadStructure");
                 final long startGetNBytesTime = System.currentTimeMillis();
                 byte[] bytes = Utils.getNBytesFromOffset(fileUploadStructure, (int) nextOffset, nextLimit);
 
@@ -515,11 +515,11 @@ public class FileUploadTestActivity extends ActivityEnhanced implements OnFileUp
                         updateLogs("ELAPSED FOR GETTING N BYTES:", Long.toString(System.currentTimeMillis() - startGetNBytesTime), LogType.SECTIONAL);
                     }
                 });
-                Log.i("BreakPoint", fileHashAsIdentity + " > after bytes");
+                Log.i("BreakPoint", identity + " > after bytes");
                 // make request till uploading has finished
                 final long startSendReqTime = System.currentTimeMillis();
 
-                new RequestFileUpload().fileUpload(fileUploadStructure.token, nextOffset, bytes, fileHashAsIdentity);
+                new RequestFileUpload().fileUpload(fileUploadStructure.token, nextOffset, bytes, identity);
                 fileUploadStructure.sendRequestsTime += System.currentTimeMillis() - startSendReqTime;
                 runOnUiThread(new Runnable() {
                     @Override
@@ -527,13 +527,13 @@ public class FileUploadTestActivity extends ActivityEnhanced implements OnFileUp
                         updateLogs("ELAPSED FOR REQUESTING:", Long.toString(System.currentTimeMillis() - startSendReqTime), LogType.SECTIONAL);
                     }
                 });
-                Log.i("BreakPoint", fileHashAsIdentity + " > after fileUpload request");
+                Log.i("BreakPoint", identity + " > after fileUpload request");
 
                 fileUploadStructure.elapsedInOnFileUpload += System.currentTimeMillis() - startOnFileUploadTime;
             } else {
-                if (isFileExistInList(fileHashAsIdentity)) {
+                if (isFileExistInList(identity.getBytes())) {
                     // handle when the file has already uploaded
-                    onFileUploadComplete(fileHashAsIdentity, response);
+                    onFileUploadComplete(identity, response);
                 }
             }
             runOnUiThread(new Runnable() {

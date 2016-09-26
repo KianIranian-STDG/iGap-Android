@@ -61,9 +61,9 @@ public class ChatMessagesFastAdapter<Item extends AbstractChatItem> extends Fast
      * @param fileIdentity
      * @param progress
      */
-    public void updateProgress(String fileIdentity, int progress) {
+    public void updateProgress(byte[] fileIdentity, int progress) {
         Item item = getItemByFileIdentity(fileIdentity);
-        if (item != null) {
+        if (item != null && item.mMessage.uploadProgress < progress) {
             int pos = getAdapterItems().indexOf(item);
             item.mMessage.uploadProgress = progress;
             set(pos, item);
@@ -77,9 +77,9 @@ public class ChatMessagesFastAdapter<Item extends AbstractChatItem> extends Fast
      * @param fileIdentity String
      * @return Item
      */
-    public Item getItemByFileIdentity(String fileIdentity) {
+    public Item getItemByFileIdentity(byte[] fileIdentity) {
         for (Item item : getAdapterItems()) {
-            if (item.mMessage.needsUpload() && item.mMessage.fileHash.equalsIgnoreCase(fileIdentity)) {
+            if (item.mMessage.needsUpload() && item.mMessage.fileHash == fileIdentity) {
                 return item;
             }
         }
@@ -149,7 +149,7 @@ public class ChatMessagesFastAdapter<Item extends AbstractChatItem> extends Fast
         }
     }
 
-    public void updateItemFileHash(long messageId, String fileHash) {
+    public void updateItemFileHash(long messageId, byte[] fileHash) {
         List<Item> items = getAdapterItems();
         for (Item messageInfo : items) {
             if (messageInfo.mMessage.messageID.equals(Long.toString(messageId))) {

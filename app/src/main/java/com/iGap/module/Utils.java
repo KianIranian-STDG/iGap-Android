@@ -104,22 +104,12 @@ public final class Utils {
      * note: our server needs 32 bytes, so always pass true as second parameter.
      *
      * @param uploadStructure  FileUploadStructure
-     * @param convertTo32Bytes by default the output is 64 bytes, if you want to convert output to 32 bytes, pass true
      */
-    public static String getFileHash(FileUploadStructure uploadStructure, boolean convertTo32Bytes) throws NoSuchAlgorithmException, IOException {
+    public static byte[] getFileHash(FileUploadStructure uploadStructure) throws NoSuchAlgorithmException, IOException {
         try {
             MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
             byte[] fileBytes = fileToBytes(uploadStructure);
-            byte[] fileHash = sha256.digest(fileBytes);
-            StringBuilder sb = new StringBuilder();
-            for (byte b : fileHash) {
-                if (convertTo32Bytes) {
-                    sb.append(Integer.toString(((b & 0xff) + 0x100) / 8, 16).substring(1));
-                } else {
-                    sb.append(Integer.toString(((b & 0xff) + 0x100), 16).substring(1));
-                }
-            }
-            return sb.toString();
+            return sha256.digest(fileBytes);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }

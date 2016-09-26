@@ -74,13 +74,8 @@ public class ChatSendMessageResponse extends MessageHandler {
 
                     //RealmChatHistory realmChatHistory = realm.createObject(RealmChatHistory.class);
 
-                    RealmChatHistory realmChatHistory = new RealmChatHistory();
-
-                    int autoIncrement = 0;
-                    if (realm.where(RealmChatHistory.class).max("id") != null) {
-                        autoIncrement = realm.where(RealmChatHistory.class).max("id").intValue() + 1;
-                    }
-                    realmChatHistory.setId(autoIncrement);
+                    RealmChatHistory realmChatHistory = realm.createObject(RealmChatHistory.class);
+                    realmChatHistory.setId(System.currentTimeMillis());
 
                     RealmRoomMessage realmRoomMessage = realm.createObject(RealmRoomMessage.class);
 
@@ -89,7 +84,8 @@ public class ChatSendMessageResponse extends MessageHandler {
                     realmRoomMessage.setStatus(roomMessage.getStatus().toString());
                     realmRoomMessage.setMessageType(roomMessage.getMessageType().toString());
                     realmRoomMessage.setMessage(roomMessage.getMessage());
-                    //realmRoomMessage.setAttachment(roomMessage.getAttachment()); // //TODO [Saeed Mozaffari] [2016-09-25 12:05 PM] - clear comment
+
+                    realmRoomMessage.setAttachment(roomMessage.getMessageId(), roomMessage.getAttachment());
                     realmRoomMessage.setUserId(roomMessage.getUserId());
                     realmRoomMessage.setLocation(roomMessage.getLocation().toString());
                     realmRoomMessage.setLog(roomMessage.getLog().toString());

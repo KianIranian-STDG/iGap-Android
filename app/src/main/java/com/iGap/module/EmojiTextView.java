@@ -48,6 +48,6 @@ public class EmojiTextView extends AppCompatTextView {
 
     @Override
     public void setText(CharSequence text, BufferType type) {
-        super.setText(Emojione.shortnameToUnicode(text.toString(), false), type);
+        super.setText(text != null ? Emojione.shortnameToUnicode(text.toString(), false) : text, type);
     }
 }

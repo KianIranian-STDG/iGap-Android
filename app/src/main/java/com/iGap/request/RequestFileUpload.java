@@ -7,7 +7,7 @@ import com.iGap.proto.ProtoRequest;
 
 public class RequestFileUpload {
 
-    public void fileUpload(String token, long offset, byte[] bytes, String fileHashAsIdentity) {
+    public void fileUpload(String token, long offset, byte[] bytes, String identity) {
 
         ProtoFileUpload.FileUpload.Builder fileUploadInit = ProtoFileUpload.FileUpload.newBuilder();
         fileUploadInit.setRequest(ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
@@ -15,7 +15,7 @@ public class RequestFileUpload {
         fileUploadInit.setOffset(offset);
         fileUploadInit.setBytes(ByteString.copyFrom(bytes));
 
-        RequestWrapper requestWrapper = new RequestWrapper(702, fileUploadInit, fileHashAsIdentity);
+        RequestWrapper requestWrapper = new RequestWrapper(702, fileUploadInit, identity);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

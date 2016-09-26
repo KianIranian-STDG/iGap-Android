@@ -17,7 +17,7 @@ import io.realm.Realm;
  */
 public class StructMessageInfo implements Parcelable {
 
-    public StructMessageInfo(String messageID, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, MyType.FileState fileState, String fileName, String fileMime, String filePic, String filePath, long fileSize, String fileHash, long time) {
+    public StructMessageInfo(String messageID, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, MyType.FileState fileState, String fileName, String fileMime, String filePic, String filePath, long fileSize, byte[] fileHash, long time) {
         this.messageID = messageID;
         this.senderID = senderID;
         this.status = status;
@@ -31,6 +31,25 @@ public class StructMessageInfo implements Parcelable {
         this.fileSize = fileSize;
         this.fileHash = fileHash;
         this.time = time;
+    }
+
+    public StructMessageInfo(String messageID, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, MyType.FileState fileState, String fileName, String fileMime, String filePic, String filePath, long fileSize, byte[] fileHash, long time, StructMessageInfo replayObject) {
+        this.messageID = messageID;
+        this.senderID = senderID;
+        this.status = status;
+        this.messageType = messageType;
+        this.sendType = sendType;
+        this.fileState = fileState;
+        this.fileName = fileName;
+        this.fileMime = fileMime;
+        this.filePic = filePic;
+        this.filePath = filePath;
+        this.fileSize = fileSize;
+        this.fileHash = fileHash;
+        this.time = time;
+        this.replayFrom = replayObject.senderName;
+        this.replayMessage = replayObject.messageText;
+        this.replayPicturePath = replayObject.filePic;
     }
 
     public boolean isSenderMe() {
@@ -51,6 +70,20 @@ public class StructMessageInfo implements Parcelable {
         this.fileState = fileState;
         this.filePath = filePath;
         this.time = time;
+    }
+
+    public StructMessageInfo(String messageID, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, MyType.FileState fileState, String filePath, long time, StructMessageInfo replayObject) {
+        this.messageID = messageID;
+        this.senderID = senderID;
+        this.status = status;
+        this.messageType = messageType;
+        this.sendType = sendType;
+        this.fileState = fileState;
+        this.filePath = filePath;
+        this.time = time;
+        this.replayFrom = replayObject.senderName;
+        this.replayMessage = replayObject.messageText;
+        this.replayPicturePath = replayObject.filePic;
     }
 
     public String messageID = "1";
@@ -89,7 +122,7 @@ public class StructMessageInfo implements Parcelable {
     public String filePath = "";
     public long fileSize;
     // used for uploading process and getting item from adapter by file hash
-    public String fileHash;
+    public byte[] fileHash;
     public int uploadProgress;
 
     public long time;
@@ -139,6 +172,28 @@ public class StructMessageInfo implements Parcelable {
         return messageInfo;
     }
 
+    public static StructMessageInfo convert(RealmRoomMessage roomMessage, String replaySenderName, String replaySenderMessage, String replayFilePic) {
+        Realm realm = Realm.getDefaultInstance();
+        long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
+        StructMessageInfo messageInfo = new StructMessageInfo();
+        messageInfo.status = roomMessage.getStatus();
+        messageInfo.messageID = Long.toString(roomMessage.getMessageId());
+        messageInfo.isEdited = roomMessage.isEdited();
+        messageInfo.messageType = ProtoGlobal.RoomMessageType.valueOf(roomMessage.getMessageType());
+        messageInfo.time = roomMessage.getUpdateTime();
+        messageInfo.messageText = roomMessage.getMessage();
+        messageInfo.senderID = Long.toString(roomMessage.getUserId());
+        messageInfo.replayFrom = replaySenderName;
+        messageInfo.replayPicturePath = replayFilePic;
+        messageInfo.replayMessage = replaySenderMessage;
+        if (roomMessage.getUserId() == userId) {
+            messageInfo.sendType = MyType.SendType.send;
+        } else if (roomMessage.getUserId() != userId) {
+            messageInfo.sendType = MyType.SendType.recvive;
+        }
+        return messageInfo;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -168,7 +223,7 @@ public class StructMessageInfo implements Parcelable {
         dest.writeString(this.filePic);
         dest.writeString(this.filePath);
         dest.writeLong(this.fileSize);
-        dest.writeString(this.fileHash);
+        dest.writeByteArray(this.fileHash);
         dest.writeInt(this.uploadProgress);
         dest.writeLong(this.time);
     }
@@ -199,7 +254,7 @@ public class StructMessageInfo implements Parcelable {
         this.filePic = in.readString();
         this.filePath = in.readString();
         this.fileSize = in.readLong();
-        this.fileHash = in.readString();
+        this.fileHash = in.createByteArray();
         this.uploadProgress = in.readInt();
         this.time = in.readLong();
     }

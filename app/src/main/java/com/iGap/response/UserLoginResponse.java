@@ -32,6 +32,7 @@ public class UserLoginResponse extends MessageHandler {
 
     @Override
     public void timeOut() {
+        Log.i("SOC", "timeOut");
     }
 
     @Override
