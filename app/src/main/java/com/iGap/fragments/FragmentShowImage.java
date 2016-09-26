@@ -1,7 +1,11 @@
-package com.iGap.activitys;
+package com.iGap.fragments;
 
+import android.app.Fragment;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -19,12 +23,13 @@ import com.iGap.R;
 import com.iGap.module.StructSharedMedia;
 import com.iGap.module.TouchImageView;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
  * Created by android3 on 9/5/2016.
  */
-public class ActivityShowImage extends ActivityEnhanced {
+public class FragmentShowImage extends Fragment {
 
     private TextView txtImageNumber;
     private TextView txtImageName;
@@ -36,28 +41,37 @@ public class ActivityShowImage extends ActivityEnhanced {
     private int selectedFile = 0;
     private int listSize = 0;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
-        getIntentData(getIntent().getExtras());
-
-        setContentView(R.layout.activity_show_image);
-
-        initComponent();
-
+    public static FragmentShowImage newInstance() {
+        return new FragmentShowImage();
     }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.activity_show_image, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        getIntentData(this.getArguments());
+
+        initComponent(view);
+    }
+
 
     private void getIntentData(Bundle bundle) {
 
         if (bundle != null) { // get a list of image
-            list = (ArrayList<StructSharedMedia>) getIntent().getSerializableExtra("listPic");
+            list = (ArrayList<StructSharedMedia>) bundle.getSerializable("listPic");
             if (list == null) {
-                finish();
+                getActivity().getFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
                 return;
             }
             if (list.size() < 1) {
-                finish();
+                getActivity().getFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
                 return;
             }
 
@@ -66,24 +80,28 @@ public class ActivityShowImage extends ActivityEnhanced {
                 selectedFile = si;
 
         } else {
-            finish();
+            getActivity().getFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
             return;
         }
     }
 
-    private void initComponent() {
+    private void initComponent(View view) {
 
-        Button btnBack = (Button) findViewById(R.id.asi_btn_back);
+        Button btnBack = (Button) view.findViewById(R.id.asi_btn_back);
         btnBack.setTypeface(G.fontawesome);
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                Log.e("ddd", "close");
+
+                getActivity().getFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
+
+
             }
         });
 
 
-        Button btnMenu = (Button) findViewById(R.id.asi_btn_menu);
+        Button btnMenu = (Button) view.findViewById(R.id.asi_btn_menu);
         btnMenu.setTypeface(G.fontawesome);
         btnMenu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,10 +110,11 @@ public class ActivityShowImage extends ActivityEnhanced {
             }
         });
 
+        viewPager = (ViewPager) view.findViewById(R.id.asi_view_pager);
 
-        txtImageNumber = (TextView) findViewById(R.id.asi_txt_image_number);
-        txtImageName = (TextView) findViewById(R.id.asi_txt_image_name);
-        txtImageDate = (TextView) findViewById(R.id.asi_txt_image_date);
+        txtImageNumber = (TextView) view.findViewById(R.id.asi_txt_image_number);
+        txtImageName = (TextView) view.findViewById(R.id.asi_txt_image_name);
+        txtImageDate = (TextView) view.findViewById(R.id.asi_txt_image_date);
 
 
         initViewPager();
@@ -107,7 +126,7 @@ public class ActivityShowImage extends ActivityEnhanced {
 
     private void initViewPager() {
 
-        viewPager = (ViewPager) findViewById(R.id.asi_view_pager);
+
         AdapterViewPager mAdapter = new AdapterViewPager();
         viewPager.setAdapter(mAdapter);
         listSize = list.size();
@@ -157,7 +176,7 @@ public class ActivityShowImage extends ActivityEnhanced {
         @Override
         public Object instantiateItem(View container, int position) {
 
-            LayoutInflater inflater = LayoutInflater.from(ActivityShowImage.this);
+            LayoutInflater inflater = LayoutInflater.from(getActivity());
             ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.show_image_sub_layout, (ViewGroup) container, false);
 
 
@@ -165,7 +184,12 @@ public class ActivityShowImage extends ActivityEnhanced {
 
             //TODO     nejati         if file not exsit download it and than show it
 
-            touchImageView.setImageResource(Integer.parseInt(list.get(position).filePath));
+
+            File imgFile = new File(list.get(position).filePath);
+            if (imgFile.exists()) {
+                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                touchImageView.setImageBitmap(myBitmap);
+            }
 
 
             ((ViewGroup) container).addView(layout);
@@ -184,7 +208,7 @@ public class ActivityShowImage extends ActivityEnhanced {
 
     public void popUpMenuShowImage() {
 
-        MaterialDialog dialog = new MaterialDialog.Builder(this)
+        MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
                 .items(R.array.pop_up_menu_show_image)
                 .contentColor(Color.BLACK)
                 .itemsCallback(new MaterialDialog.ListCallback() {

@@ -38,9 +38,7 @@
         <activity
             android:name=".activitys.ActivityPaint"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
-        <activity
-            android:name=".activitys.ActivityShowImage"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
+
         <activity
             android:name=".activitys.ActivityExplorer"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />

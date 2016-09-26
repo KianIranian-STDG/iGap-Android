@@ -1,9 +1,11 @@
 package com.iGap.adapter;
 
+import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,7 +18,7 @@ import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.activitys.ActivityShowImage;
+import com.iGap.fragments.FragmentShowImage;
 import com.iGap.helper.HelperMimeType;
 import com.iGap.module.OnComplete;
 import com.iGap.module.StructSharedMedia;
@@ -126,7 +128,6 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
             //// TODO: 9/7/2016 nejati     get picture thumbnile if file image of video or music    use HelperMimeType
 
         }
-
 
 
     }
@@ -360,10 +361,15 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
         }
 
 
-        Intent intent = new Intent(context, ActivityShowImage.class); // run activity show image k
-        intent.putExtra("listPic", listPic);
-        intent.putExtra("SelectedImage", selectedImage);
-        context.startActivity(intent);
+        Fragment fragment = FragmentShowImage.newInstance();
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("listPic", listPic);
+        bundle.putInt("SelectedImage", selectedImage);
+        fragment.setArguments(bundle);
+
+        ((Activity) context).getFragmentManager().beginTransaction().replace(R.id.asm_ll_parent, fragment).commit();
+
     }
 
 }
