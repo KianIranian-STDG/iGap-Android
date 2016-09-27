@@ -153,6 +153,9 @@ import io.realm.RealmResults;
  */
 public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, IRecentsLongClick, OnMessageClick, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractChatItem>, OnChatMessageRemove, OnGroupChatSendMessageResponse, OnFileUpload, OnFileUploadStatusResponse {
 
+    private RelativeLayout parentLayout;
+    private SharedPreferences sharedPreferences;
+
     private EmojiEditText edtChat;
     private MaterialDesignTextView imvSendButton;
     private MaterialDesignTextView imvAttachFileButton;
@@ -249,17 +252,12 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                                     realm.copyToRealmOrUpdate(realmOfflineSeen);
 
                                     Log.i(RealmClientCondition.class.getSimpleName(), "before size: " + realmClientCondition.getOfflineSeen().size());
-
                                     realmClientCondition.getOfflineSeen().add(realmOfflineSeen);
-
                                     Log.i(RealmClientCondition.class.getSimpleName(), "after size: " + realmClientCondition.getOfflineSeen().size());
-
                                     offlineSeenId.add(realmRoomMessage.getMessageId());
-
                                 }
                             }
                         }
-
                         for (long seenId : offlineSeenId) {
                             G.chatUpdateStatusUtil.sendUpdateStatus(mRoomId, seenId, ProtoGlobal.RoomMessageStatus.SEEN);
                         }
@@ -373,7 +371,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     }
 
                 } else if (realmRoom.getType() == RoomType.GROUP) {
-
                     chatType = ProtoGlobal.Room.Type.GROUP;
                     RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
                     groupRole = realmGroupRoom.getRole();
@@ -385,10 +382,8 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
                     channelRole = realmChannelRoom.getRole();
                     channelParticipantsCountLabel = realmChannelRoom.getParticipantsCountLabel();
-
                 }
             } else {
-
                 chatPeerId = extras.getLong("peerId");
                 chatType = ProtoGlobal.Room.Type.CHAT;
                 RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo("id", chatPeerId).findFirst();
@@ -398,10 +393,8 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 lastSeen = Long.toString(realmContacts.getLast_seen());
 
             }
-
             realm.close();
         }
-
         initComponent();
         initAppbarSelected();
         initCallbacks();

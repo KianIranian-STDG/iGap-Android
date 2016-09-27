@@ -95,6 +95,29 @@ public class ActivityProfile extends ActivityEnhanced {
                                     startActivity(intent);
                                     finish();
                                 }
+
+                                @Override
+                                public void onUserProfileNickNameError(int majorCode, int minorCode) {
+
+                                    if (majorCode == 112 && minorCode == 1) {
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                // TODO: 9/25/2016 Error 112 - USER_PROFILE_SET_NICKNAME_BAD_PAYLOAD
+                                                //Invalid nickname
+                                                Toast.makeText(ActivityProfile.this, "Invalid nickname. Please change nickname", Toast.LENGTH_SHORT).show();
+
+                                            }
+                                        });
+                                    } else if (majorCode == 113) {
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                // TODO: 9/25/2016 Error 113 - USER_PROFILE_SET_NICKNAME_INTERNAL_SERVER_ERROR
+                                            }
+                                        });
+                                    }
+                                }
                             };
                             new RequestUserProfileSetNickname().userProfileNickName(nickName);
 

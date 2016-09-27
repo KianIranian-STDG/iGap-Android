@@ -172,6 +172,11 @@ public class ActivitySetting extends ActivityEnhanced {
                                             }
                                         });
                                     }
+
+                                    @Override
+                                    public void onUserProfileNickNameError(int majorCode, int minorCode) {
+
+                                    }
                                 };
 
                                 new RequestUserProfileSetNickname().userProfileNickName(txtNickName.getText().toString());

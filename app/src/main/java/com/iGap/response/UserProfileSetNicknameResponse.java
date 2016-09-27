@@ -44,6 +44,8 @@ public class UserProfileSetNicknameResponse extends MessageHandler {
         Log.i("XXX", "UserRegisterResponse minorCode : " + minorCode);
 
         Log.i("XXX", "UserProfileSetNicknameResponse error");
+
+        G.onUserProfileSetNickNameResponse.onUserProfileNickNameError(majorCode, minorCode);
     }
 }
 

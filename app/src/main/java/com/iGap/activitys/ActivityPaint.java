@@ -195,10 +195,7 @@ public class ActivityPaint extends Activity {
                     paintColor = color;
                     setPaintColor();
                 }
-
             }
-
-
             @Override
             public void Confirmation(Boolean result) {
 

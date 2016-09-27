@@ -1,5 +1,6 @@
 package com.iGap.activitys;
 
+import android.app.Fragment;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentValues;
@@ -34,11 +35,14 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.fragments.FragmentShowImage;
 import com.iGap.interface_package.OnUserContactEdit;
+import com.iGap.module.StructSharedMedia;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmContacts;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -96,8 +100,27 @@ public class ActivityContactsProfile extends ActivityEnhanced {
         }
 
         imgUser = (CircleImageView) findViewById(R.id.chi_img_circleImage);
+        imgUser.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imgUser.getContext().getResources().getDimension(R.dimen.dp100), initials, color));
 
-        imgUser.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imgUser.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+        imgUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                File file = new File(G.DIR_ALL_IMAGE_USER + "/" + username);
+                if (!file.exists()) {
+                    file.mkdirs();
+                }
+                Fragment fragment = FragmentShowImage.newInstance();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("listPic", setItem(file));
+                bundle.putInt("SelectedImage", 0);
+                fragment.setArguments(bundle);
+
+                ActivityContactsProfile.this.getFragmentManager().beginTransaction().replace(R.id.chi_layoutParent, fragment).commit();
+
+                Log.i("AASSDD", "onClick: ");
+            }
+        });
 
         txtBack = (TextView) findViewById(R.id.chi_txt_back);
         txtBack.setOnClickListener(new View.OnClickListener() {
@@ -498,6 +521,23 @@ public class ActivityContactsProfile extends ActivityEnhanced {
         pButton.setTextColor(getResources().getColor(R.color.toolbar_background));
         pButton.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
 
+    }
+
+    public ArrayList<StructSharedMedia> setItem(File f) {
+
+        ArrayList<StructSharedMedia> items = new ArrayList<>();
+//        File addFile = new File(G.DIR_ALL_IMAGE_USER);
+        File file[] = f.listFiles();
+        for (int i = 0; i < file.length; i++) {
+            if (!file[i].getPath().equals(G.chatBackground.toString())) {
+                StructSharedMedia item = new StructSharedMedia();
+                item.filePath = file[i].getPath();
+                items.add(item);
+            }
+        }
+
+        Log.e("ddd", items.size() + "        gggggggggggggggggg");
+        return items;
     }
 
 }

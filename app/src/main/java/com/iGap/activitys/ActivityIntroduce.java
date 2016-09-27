@@ -67,6 +67,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         Realm realm = Realm.getDefaultInstance();
         RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
         if (userInfo != null && userInfo.getUserRegistrationState()) { // user registered before
@@ -77,7 +78,6 @@ public class ActivityIntroduce extends ActivityEnhanced {
         }
 
         setContentView(R.layout.activity_introduce);
-
         if (savedInstanceState != null) {
             // Restore value of members from saved state
             ONETIME = savedInstanceState.getInt(KEY_SAVE);

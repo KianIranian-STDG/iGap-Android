@@ -9,4 +9,6 @@ public interface OnChatDelete {
 
     void onChatDelete(long roomId);
 
+    void onChatDeleteError(int majorCode, int minorCode);
+
 }

@@ -3,6 +3,7 @@ package com.iGap.adapter;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.widget.RecyclerView;
@@ -36,7 +37,6 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
     private ViewHolderItem imageItem = null;
     private ViewHolderImage imageHolder = null;
 
-
     public AdapterChatBackground(List<StructAdapterBackground> items) {
         this.items = items;
     }
@@ -45,43 +45,35 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         RecyclerView.ViewHolder viewHolder;
-
         if (viewType == 0) {
-
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_background_choose, parent, false);
             viewHolder = new ViewHolderImage(view);
-
         } else {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_background_image, parent, false);
             viewHolder = new ViewHolderItem(view);
-
         }
         return viewHolder;
     }
-
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         final StructAdapterBackground item = items.get(position);
 
         imageLoader = ImageLoader.getInstance();
+        if (selected_position == (position) && selected_position != 0) {
 
-//        if (selected_position == getItemViewType(position) && selected_position != 0  ) {
-//
-//            imageItem = (ViewHolderItem) holder;
-//            imageItem.itemView.setBackgroundColor(G.context.getResources().getColor(R.color.toolbar_background));
-//            imageItem.itemView.setPadding(3, 3, 3, 3);
-//
-//        } else if (position !=0){
-//            imageItem = (ViewHolderItem) holder;
-//            imageItem.itemView.setBackgroundColor(Color.TRANSPARENT);
-//        }
+            imageItem = (ViewHolderItem) holder;
+            imageItem.itemView.setBackgroundColor(G.context.getResources().getColor(R.color.toolbar_background));
+            imageItem.itemView.setPadding(3, 3, 3, 3);
 
-        if (getItemViewType(position) == 0 && imageHolder == null) {
-
+        } else if (position != 0) {
+            imageItem = (ViewHolderItem) holder;
+            imageItem.itemView.setBackgroundColor(Color.TRANSPARENT);
+        }
+        if ((position) == 0 && imageHolder == null) {
 
             imageHolder = (ViewHolderImage) holder;
 
-        } else if (getItemViewType(position) == 1 && G.chatBackground != null) {
+        } else if ((position) == 1 && G.chatBackground != null) {
 
             imageItem = (ViewHolderItem) holder;
             Bitmap bmp = imageLoader.loadImageSync("file://" + G.chatBackground);
@@ -92,17 +84,11 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
             Bitmap bmp = imageLoader.loadImageSync("file://" + item.getPathImage());
             imageItem.img.setImageBitmap(bmp);
         }
-
-        //======select
-
-
     }
-
     @Override
     public int getItemViewType(int position) {
         return position;
     }
-
     @Override
     public int getItemCount() {
         return items.size();
@@ -111,10 +97,8 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
     public class ViewHolderImage extends RecyclerView.ViewHolder {
 
         private ImageView imageView;
-
         public ViewHolderImage(View itemView) {
             super(itemView);
-
             imageView = (ImageView) itemView.findViewById(R.id.imgBackgroundImage);
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -135,7 +119,6 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
                                             intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
                                             G.currentActivity.startActivityForResult(intent, myResultCodeCamera);
                                             dialog.dismiss();
-
                                         } else {
                                             Toast.makeText(G.currentActivity, "Please check your Camera", Toast.LENGTH_SHORT).show();
                                         }
@@ -151,7 +134,6 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
             });
         }
     }
-
     public class ViewHolderItem extends RecyclerView.ViewHolder {
 
         private ImageView img;
@@ -177,5 +159,4 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
 
         }
     }
-
 }

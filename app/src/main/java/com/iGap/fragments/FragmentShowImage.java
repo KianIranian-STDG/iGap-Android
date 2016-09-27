@@ -133,8 +133,8 @@ public class FragmentShowImage extends Fragment {
         viewPager.setCurrentItem(selectedFile);
 
         txtImageNumber.setText(selectedFile + 1 + " of " + listSize);
-        txtImageName.setText(list.get(selectedFile).fileName);
-        txtImageDate.setText(list.get(selectedFile).fileTime);
+//        txtImageName.setText(list.get(selectedFile).fileName);
+//        txtImageDate.setText(list.get(selectedFile).fileTime);
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -148,7 +148,6 @@ public class FragmentShowImage extends Fragment {
                 txtImageNumber.setText(position + 1 + " of " + listSize);
                 txtImageName.setText(list.get(position).fileName);
                 txtImageDate.setText(list.get(position).fileTime);
-
             }
 
             @Override
@@ -156,8 +155,6 @@ public class FragmentShowImage extends Fragment {
 
             }
         });
-
-
     }
 
     private class AdapterViewPager extends PagerAdapter {
@@ -196,7 +193,6 @@ public class FragmentShowImage extends Fragment {
 
             return layout;
         }
-
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {

@@ -1,6 +1,5 @@
 package com.iGap.fragments;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,10 +8,11 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.iGap.G;
@@ -22,7 +22,6 @@ import com.iGap.adapter.StickyHeaderAdapter;
 import com.iGap.adapter.items.ContactItem;
 import com.iGap.interface_package.OnChatGetRoom;
 import com.iGap.module.Contacts;
-import com.iGap.module.SoftKeyboard;
 import com.iGap.module.StructContactInfo;
 import com.iGap.realm.RealmRoom;
 import com.iGap.request.RequestChatGetRoom;
@@ -41,17 +40,17 @@ import io.realm.Realm;
 
 public class RegisteredContactsFragment extends Fragment {
     private FastAdapter fastAdapter;
+    private SearchView searchView;
+    private TextView menu_txt_titleToolbar;
 
     public static RegisteredContactsFragment newInstance() {
         return new RegisteredContactsFragment();
     }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_contacts, container, false);
     }
-
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -61,7 +60,6 @@ public class RegisteredContactsFragment extends Fragment {
         if (bundle != null) {
             title = bundle.getString("TITLE");
         }
-
         //create our FastAdapter
         fastAdapter = new FastAdapter();
         fastAdapter.withSelectable(true);
@@ -83,71 +81,83 @@ public class RegisteredContactsFragment extends Fragment {
                 return false;
             }
         });
-
-        final TextView menu_txt_titleToolbar = (TextView) view.findViewById(R.id.menu_txt_titleToolbar);
+        menu_txt_titleToolbar = (TextView) view.findViewById(R.id.menu_txt_titleToolbar);
         menu_txt_titleToolbar.setText(title);
 
-        final android.support.v7.widget.SearchView searchView = (android.support.v7.widget.SearchView) view.findViewById(R.id.menu_edtSearch);
+        searchView = (android.support.v7.widget.SearchView) view.findViewById(R.id.menu_edtSearch);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-
                 return false;
             }
-
             @Override
             public boolean onQueryTextChange(String newText) {
-
                 itemAdapter.filter(newText);
-
                 return false;
             }
         });
-
-        searchView.setOnClickListener(new View.OnClickListener() {
+//        RelativeLayout layout = (RelativeLayout) view.findViewById(R.id.menu_layout);
+//        layout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+////                searchView.onActionViewExpanded();
+//                searchView.setIconified(false);
+//                menu_txt_titleToolbar.setVisibility(View.GONE);
+//                Log.i("AASSAA", "2: "+menu_txt_titleToolbar );
+//            }
+//        });
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onClick(View view) {
-                menu_txt_titleToolbar.setVisibility(View.GONE);
-
+            public void onFocusChange(View view, boolean b) {
+                if (b && menu_txt_titleToolbar.getVisibility() == View.VISIBLE) {
+                    menu_txt_titleToolbar.setVisibility(View.GONE);
+                    Log.i("AASSAA", "0: ");
+                }
             }
         });
 
-        final ViewGroup root = (ViewGroup) view.findViewById(R.id.menu_parent_layout);
-        InputMethodManager im = (InputMethodManager) G.context.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        final SoftKeyboard softKeyboard = new SoftKeyboard(root, im);
-        softKeyboard.setSoftKeyboardCallback(new SoftKeyboard.SoftKeyboardChanged() {
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
-            public void onSoftKeyboardHide() {
-
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (searchView.getQuery().toString().length() > 0) {
-                            searchView.setIconified(false);
-                            menu_txt_titleToolbar.setVisibility(View.GONE);
-                        } else {
-
-                            searchView.setIconified(true);
-                            menu_txt_titleToolbar.setVisibility(View.VISIBLE);
-
-                        }
-
-                    }
-                });
-            }
-
-            @Override
-            public void onSoftKeyboardShow() {
-
-
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        menu_txt_titleToolbar.setVisibility(View.GONE);
-                    }
-                });
+            public boolean onClose() {
+                menu_txt_titleToolbar.setVisibility(View.VISIBLE);
+                return false;
             }
         });
+//        ViewGroup root = (ViewGroup) view.findViewById(R.id.menu_parent_layout);
+//        InputMethodManager im = (InputMethodManager) G.context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+//        final SoftKeyboard softKeyboard = new SoftKeyboard(root, im);
+//        softKeyboard.setSoftKeyboardCallback(new SoftKeyboard.SoftKeyboardChanged() {
+//            @Override
+//            public void onSoftKeyboardHide() {
+//                G.handler.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        if (searchView.getQuery().toString().length() > 0) {
+//                            searchView.setIconified(false);
+//                            menu_txt_titleToolbar.setVisibility(View.GONE);
+//                            Log.i("AASSAA", "3: "+menu_txt_titleToolbar );
+//                        } else {
+//                            searchView.setIconified(true);
+//                            menu_txt_titleToolbar.setVisibility(View.VISIBLE);
+//                            Log.i("AASSAA", "4: "+menu_txt_titleToolbar );
+//                        }
+//                    }
+//                });
+//            }
+//            @Override
+//            public void onSoftKeyboardShow() {
+//                G.handler.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        menu_txt_titleToolbar.setVisibility(View.GONE);
+//                        Log.i("AASSAA", "5: "+menu_txt_titleToolbar );
+//                    }
+//                });
+//            }
+//        });
+
+        final EditText searchBox = ((EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text));
+        searchBox.setTextColor(getResources().getColor(R.color.white));
 
         TextView txtMenu = (TextView) view.findViewById(R.id.menu_txtBack);
         txtMenu.setTypeface(G.fontawesome);
@@ -155,35 +165,12 @@ public class RegisteredContactsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 // close and remove fragment from stack
-                softKeyboard.closeSoftKeyboard();
+                if (!searchView.isIconified()) {
+                    searchView.onActionViewCollapsed();
+                }
                 getActivity().getSupportFragmentManager().popBackStack();
             }
         });
-
-
-        ViewGroup layout = (ViewGroup) view.findViewById(R.id.menu_layout);
-
-        layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-//                searchView.onActionViewExpanded();
-                searchView.setIconified(false);
-                menu_txt_titleToolbar.setVisibility(View.GONE);
-
-            }
-        });
-
-        searchView.setOnCloseListener(new SearchView.OnCloseListener() { // close SearchView and show title again
-            @Override
-            public boolean onClose() {
-
-                menu_txt_titleToolbar.setVisibility(View.VISIBLE);
-
-                return false;
-            }
-        });
-
         //configure our fastAdapter
         //as we provide id's for the items we want the hasStableIds enabled to speed up things
         fastAdapter.setHasStableIds(true);

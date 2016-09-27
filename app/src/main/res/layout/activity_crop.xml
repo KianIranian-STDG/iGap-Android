@@ -45,7 +45,8 @@
                         android:gravity="center"
                         android:text="@string/md_back_arrow"
                         android:textColor="@color/whit_background"
-                        android:textSize="@dimen/sp22" />
+                        android:textSize="@dimen/sp22"
+                        fontPath="fonts/Flaticon.ttf" />
 
                     <TextView
                         android:id="@+id/stfaq_txt_titleToolbar"
@@ -67,7 +68,8 @@
                         android:gravity="center"
                         android:text="@string/md_crop_button"
                         android:textColor="@color/whit_background"
-                        android:textSize="@dimen/sp22" />
+                        android:textSize="@dimen/sp22"
+                        fontPath="fonts/Flaticon.ttf" />
 
                 </LinearLayout>
 

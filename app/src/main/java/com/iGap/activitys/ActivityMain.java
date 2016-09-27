@@ -103,15 +103,23 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                 }
             }
         };
-
         initComponent();
         initRecycleView();
         initFloatingButtonCreateNew();
         initDrawerMenu();
 
         Contacts.FillRealmInviteFriend();
-    }
 
+
+        //*******************add count badgeIcon
+//        int badgeCount = 15;
+//        ShortcutBadger.applyCount(G.context, badgeCount);
+
+
+        //*******************remove count badgeIcon
+//        ShortcutBadger.removeCount(context);
+
+    }
     /**
      * init floating menu drawer
      */
@@ -153,7 +161,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             Log.i("XXX", "G.connectionState is null");
         }
 
-
         G.onConnectionChangeState = new OnConnectionChangeState() {
             @Override
             public void onChangeState(final Config.ConnectionState connectionState) {
@@ -172,10 +179,16 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                         }
                     }
                 });
-
             }
         };
+        btnSearch.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                txtIgap.setVisibility(View.VISIBLE);
 
+                return false;
+            }
+        });
 
         if (btnSearch != null) { //TODO [Saeed Mozaffari] [2016-09-26 10:40 AM] - need back icon
             btnSearch.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
@@ -184,22 +197,20 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
                     if (b) {
                         txtIgap.setVisibility(View.GONE);
-                    } else {
-                        txtIgap.setVisibility(View.VISIBLE);
                     }
                 }
             });
         }
 
+
+        EditText searchBox = ((EditText) btnSearch.findViewById(android.support.v7.appcompat.R.id.search_src_text));
+        searchBox.setTextColor(getResources().getColor(R.color.white));
         btnMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mLeftDrawerLayout.toggle();
             }
         });
-
-        EditText searchBox = ((EditText) btnSearch.findViewById(android.support.v7.appcompat.R.id.search_src_text));
-        searchBox.setTextColor(getResources().getColor(R.color.white));
     }
 
     private void initFloatingButtonCreateNew() {
@@ -353,7 +364,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                 }
             }
         });
-
         mAdapter.withFilterPredicate(new IItemAdapter.Predicate<ChatItem>() {
             @Override
             public boolean filter(ChatItem item, CharSequence constraint) {
@@ -483,6 +493,39 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             @Override
             public void onChatDelete(long roomId) {
                 Log.i(ActivityMain.class.getSimpleName(), "chat delete response > " + roomId);
+            }
+
+            @Override
+            public void onChatDeleteError(int majorCode, int minorCode) {
+
+                if (majorCode == 218 && minorCode == 1) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // TODO: 9/25/2016 Error 218 - CHAT_DELETE_BAD_PAYLOAD
+                            //Invalid roomId
+
+                        }
+                    });
+                } else if (majorCode == 219) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // TODO: 9/25/2016 Error 219 - CHAT_DELETE_INTERNAL_SERVER_ERROR
+                            //Invalid roomId
+
+                        }
+                    });
+                } else if (majorCode == 220) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // TODO: 9/25/2016 Error 220 - CHAT_DELETE_FORBIDDEN
+                            //Invalid roomId
+
+                        }
+                    });
+                }
             }
         };
         Log.i("RRR", "onChatDelete 0 start delete");
