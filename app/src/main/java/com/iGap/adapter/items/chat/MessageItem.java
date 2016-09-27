@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
+import com.iGap.G;
 import com.iGap.R;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
@@ -55,6 +56,7 @@ public class MessageItem extends AbstractChatItem<MessageItem, MessageItem.ViewH
             super(view);
 
             messageText = (TextView) view.findViewById(R.id.messageText);
+            messageText.setTextSize(G.userTextSize);
         }
     }
 }

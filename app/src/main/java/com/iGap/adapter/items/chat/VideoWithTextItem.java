@@ -7,6 +7,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.iGap.G;
 import com.iGap.R;
 import com.iGap.helper.HelperMimeType;
 import com.iGap.module.MyType;
@@ -79,6 +80,7 @@ public class VideoWithTextItem extends AbstractChatItem<VideoWithTextItem, Video
             super(view);
 
             cslr_txt_message = (TextView) view.findViewById(R.id.messageText);
+            cslr_txt_message.setTextSize(G.userTextSize);
             cslv_imv_vido_image = (ImageView) view.findViewById(R.id.cslv_imv_vido_image);
             cslv_btn_play_video = (ImageButton) view.findViewById(R.id.cslv_btn_play_video);
             cslv_txt_video_name = (TextView) view.findViewById(R.id.cslv_txt_video_name);

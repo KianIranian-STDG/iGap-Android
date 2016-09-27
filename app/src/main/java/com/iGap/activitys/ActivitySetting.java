@@ -516,6 +516,8 @@ public class ActivitySetting extends ActivityEnhanced {
                                 editor.putInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, size);
                                 editor.apply();
 
+                                G.setUserTextSize();
+
                                 return false;
                             }
                         })

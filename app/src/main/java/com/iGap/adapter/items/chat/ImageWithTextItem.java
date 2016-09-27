@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.iGap.G;
 import com.iGap.R;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
@@ -60,6 +61,7 @@ public class ImageWithTextItem extends AbstractChatItem<ImageWithTextItem, Image
 
             imvPicture = (ImageView) view.findViewById(R.id.shli_imv_image);
             messageText = (TextView) view.findViewById(R.id.messageText);
+            messageText.setTextSize(G.userTextSize);
         }
     }
 }

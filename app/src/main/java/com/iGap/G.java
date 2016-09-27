@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Environment;
 import android.os.Handler;
@@ -55,6 +56,7 @@ import com.iGap.module.ChatUpdateStatusUtil;
 import com.iGap.module.ClearMessagesUtil;
 import com.iGap.module.Contacts;
 import com.iGap.module.GroupChatSendMessageUtil;
+import com.iGap.module.SHP_SETTING;
 import com.iGap.module.UploaderUtil;
 import com.iGap.realm.RealmMigrationClass;
 import com.iGap.realm.RealmUserInfo;
@@ -125,6 +127,7 @@ public class G extends Application {
     public static int handlerCount = 0;
     public static int errorCount = 0;
     public static int timeoutCount = 0;
+    public static int userTextSize = 0;
 
     public static Activity currentActivity;
     public static LayoutInflater inflater;
@@ -298,6 +301,34 @@ public class G extends Application {
                 e.printStackTrace();
             }
         }
+
+        setUserTextSize();
+
+    }
+
+
+    public static void setUserTextSize() {
+
+        SharedPreferences sharedPreferencesSetting = context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        userTextSize = sharedPreferencesSetting.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 16);
+
+        int screenLayout = context.getResources().getConfiguration().screenLayout;
+        screenLayout &= Configuration.SCREENLAYOUT_SIZE_MASK;
+
+        switch (screenLayout) {
+            case Configuration.SCREENLAYOUT_SIZE_SMALL:
+                userTextSize = (userTextSize * 3) / 4;
+                break;
+            case Configuration.SCREENLAYOUT_SIZE_NORMAL:
+                break;
+            case Configuration.SCREENLAYOUT_SIZE_LARGE:
+                userTextSize = (userTextSize * 3) / 2;
+                break;
+            case Configuration.SCREENLAYOUT_SIZE_XLARGE:// or 4
+                userTextSize *= 2;
+        }
+
+
     }
 
     private void copyFromAsset() throws IOException {

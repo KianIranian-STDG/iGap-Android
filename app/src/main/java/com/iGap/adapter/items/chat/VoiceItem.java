@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.iGap.G;
 import com.iGap.R;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
@@ -68,6 +69,7 @@ public class VoiceItem extends AbstractChatItem<VoiceItem, VoiceItem.ViewHolder>
             super(view);
 
             cslr_txt_message = (TextView) view.findViewById(R.id.messageText);
+            cslr_txt_message.setTextSize(G.userTextSize);
             csla_imv_state_audio = (ImageView) view.findViewById(R.id.csla_imv_state_audio);
             csla_txt_audio_name = (TextView) view.findViewById(R.id.csla_txt_audio_name);
             csla_txt_audio_mime_type = (TextView) view.findViewById(R.id.csla_txt_audio_mime_type);

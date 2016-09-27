@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.iGap.G;
 import com.iGap.R;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
@@ -75,6 +76,7 @@ public class FileItem extends AbstractChatItem<FileItem, FileItem.ViewHolder> {
             super(view);
 
             cslr_txt_message = (TextView) view.findViewById(R.id.messageText);
+            cslr_txt_message.setTextSize(G.userTextSize);
             cslf_imv_image_file = (ImageView) view.findViewById(R.id.cslf_imv_image_file);
             cslf_imv_state_file = (ImageView) view.findViewById(R.id.cslf_imv_state_file);
             cslf_txt_file_name = (TextView) view.findViewById(R.id.cslf_txt_file_name);
