@@ -878,13 +878,15 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                         });
 
                         RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", Long.parseLong(identity)).findFirst();
-                        realm.close();
+
                         // user wants to replay to a message
                         if (mReplayLayout != null && mReplayLayout.getTag() instanceof StructMessageInfo) {
                             mAdapter.add(new MessageItem(chatType).setMessage(StructMessageInfo.convert(roomMessage, ((StructMessageInfo) mReplayLayout.getTag()).senderName, ((StructMessageInfo) mReplayLayout.getTag()).messageText, ((StructMessageInfo) mReplayLayout.getTag()).filePic)));
                         } else {
                             mAdapter.add(new MessageItem(chatType).setMessage(StructMessageInfo.convert(roomMessage)));
                         }
+
+                        realm.close();
 
                         scrollToEnd();
 
