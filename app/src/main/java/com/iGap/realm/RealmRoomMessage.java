@@ -129,18 +129,30 @@ public class RealmRoomMessage extends RealmObject {
     }
 
     public void setAttachment(long messageId, ProtoGlobal.File attachment) {
-        Realm realm = Realm.getDefaultInstance();
-        RealmMessageAttachment realmMessageAttachment = realm.createObject(RealmMessageAttachment.class);
-        realmMessageAttachment.setMessageId(messageId);
-        realmMessageAttachment.setCacheId(attachment.getCacheId());
-        realmMessageAttachment.setDuration(attachment.getDuration());
-        realmMessageAttachment.setHeight(attachment.getHeight());
-        realmMessageAttachment.setName(attachment.getName());
-        realmMessageAttachment.setSize(attachment.getSize());
-        realmMessageAttachment.setToken(attachment.getToken());
-        realmMessageAttachment.setWidth(attachment.getWidth());
-        this.attachment = realmMessageAttachment;
-        realm.close();
+        if (!attachment.getToken().isEmpty()){
+            if (this.attachment == null) {
+                Realm realm = Realm.getDefaultInstance();
+                RealmMessageAttachment realmMessageAttachment = realm.createObject(RealmMessageAttachment.class);
+                realmMessageAttachment.setMessageId(messageId);
+                realmMessageAttachment.setCacheId(attachment.getCacheId());
+                realmMessageAttachment.setDuration(attachment.getDuration());
+                realmMessageAttachment.setHeight(attachment.getHeight());
+                realmMessageAttachment.setName(attachment.getName());
+                realmMessageAttachment.setSize(attachment.getSize());
+                realmMessageAttachment.setToken(attachment.getToken());
+                realmMessageAttachment.setWidth(attachment.getWidth());
+                this.attachment = realmMessageAttachment;
+                realm.close();
+            } else {
+                this.attachment.setCacheId(attachment.getCacheId());
+                this.attachment.setDuration(attachment.getDuration());
+                this.attachment.setHeight(attachment.getHeight());
+                this.attachment.setName(attachment.getName());
+                this.attachment.setSize(attachment.getSize());
+                this.attachment.setToken(attachment.getToken());
+                this.attachment.setWidth(attachment.getWidth());
+            }
+        }
     }
 
     public void setAttachmentForLocalPath(final long messageId, final String localPath) {

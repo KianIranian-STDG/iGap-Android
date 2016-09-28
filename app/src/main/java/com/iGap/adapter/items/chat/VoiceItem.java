@@ -38,7 +38,7 @@ public class VoiceItem extends AbstractChatItem<VoiceItem, VoiceItem.ViewHolder>
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        if (!mMessage.messageText.isEmpty()) {
+        if (mMessage.messageText != null && !mMessage.messageText.isEmpty()) {
             holder.cslr_txt_message.setText(mMessage.messageText);
             holder.cslr_txt_message.setVisibility(View.VISIBLE);
         } else {

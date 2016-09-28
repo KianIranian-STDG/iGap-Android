@@ -1258,7 +1258,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         protected void onPostExecute(FileUploadStructure result) {
             super.onPostExecute(result);
             mSelectedFiles.add(result);
-            mAdapter.updateItemFileHash(result.messageId, result.fileHash);
             G.uploaderUtil.startUploading(result.fileSize, Long.toString(result.messageId));
         }
     };
@@ -2058,11 +2057,11 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     @Override
                     public void run() {
                         // update progress
-                        mAdapter.updateProgress(identity.getBytes(), (int) progress);
+                        mAdapter.updateProgress(Long.parseLong(identity), (int) progress);
                     }
                 });
 
-                if (isFileExistInList(identity.getBytes())) {
+                if (isFileExistInList(Long.parseLong(identity))) {
                     // handle when the file has already uploaded
                     onFileUploadComplete(identity, response);
                 }
@@ -2076,12 +2075,12 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
      * does file exist in the list
      * useful for preventing from calling onFileUploadComplete() multiple for a file
      *
-     * @param fileHash file hash
+     * @param messageId file hash
      * @return boolean
      */
-    private boolean isFileExistInList(byte[] fileHash) {
+    private boolean isFileExistInList(long messageId) {
         for (FileUploadStructure fileUploadStructure : mSelectedFiles) {
-            if (fileUploadStructure.fileHash == fileHash) {
+            if (fileUploadStructure.messageId == messageId) {
                 return true;
             }
         }
@@ -2105,7 +2104,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mAdapter.updateProgress(identity.getBytes(), (int) progress);
+                        mAdapter.updateProgress(Long.parseLong(identity), (int) progress);
                     }
                 });
 
@@ -2127,7 +2126,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
                 fileUploadStructure.elapsedInOnFileUpload += System.currentTimeMillis() - startOnFileUploadTime;
             } else {
-                if (isFileExistInList(identity.getBytes())) {
+                if (isFileExistInList(Long.parseLong(identity))) {
                     // handle when the file has already uploaded
                     onFileUploadComplete(identity, response);
                 }
@@ -2143,26 +2142,14 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         final FileUploadStructure fileUploadStructure = getSelectedFile(fileHashAsIdentity);
 
         new RequestFileUploadStatus().fileUploadStatus(fileUploadStructure.token, fileHashAsIdentity);
-
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", fileUploadStructure.messageId).findFirst();
-                if (roomMessage != null) {
-                    roomMessage.setAttachmentForToken(fileUploadStructure.messageId, fileUploadStructure.token);
-                }
-            }
-        });
-        realm.close();
     }
 
     // selected files (paths)
     private CopyOnWriteArrayList<FileUploadStructure> mSelectedFiles = new CopyOnWriteArrayList<>();
 
     @Override
-    public void onFileUploadStatus(ProtoFileUploadStatus.FileUploadStatusResponse.Status status, double progress, int recheckDelayMS, final String fileHashAsIdentity, ProtoResponse.Response response) {
-        final FileUploadStructure fileUploadStructure = getSelectedFile(fileHashAsIdentity);
+    public void onFileUploadStatus(ProtoFileUploadStatus.FileUploadStatusResponse.Status status, double progress, int recheckDelayMS, final String identity, ProtoResponse.Response response) {
+        final FileUploadStructure fileUploadStructure = getSelectedFile(identity);
         if (status == ProtoFileUploadStatus.FileUploadStatusResponse.Status.PROCESSED && progress == 100D) {
             if (chatType == ProtoGlobal.Room.Type.CHAT) {
                 new ChatSendMessageUtil()
@@ -2180,7 +2167,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mAdapter.updateProgress(fileHashAsIdentity.getBytes(), 100);
+                    mAdapter.updateProgress(Long.parseLong(identity), 100);
                 }
             });
 
@@ -2188,7 +2175,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             // multiple calling may occurs because of the server
             try {
                 // FIXME: 9/19/2016 [Alireza Eskandarpour Shoferi] uncomment plz
-                //removeFromSelectedFiles(fileHashAsIdentity);
+                //removeFromSelectedFiles(identity);
             } catch (Exception e) {
                 Log.i("BreakPoint", e.getMessage());
                 e.printStackTrace();
@@ -2206,7 +2193,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    new RequestFileUploadStatus().fileUploadStatus(fileUploadStructure.token, fileHashAsIdentity);
+                    new RequestFileUploadStatus().fileUploadStatus(fileUploadStructure.token, identity);
                 }
             }, recheckDelayMS);
         } else {

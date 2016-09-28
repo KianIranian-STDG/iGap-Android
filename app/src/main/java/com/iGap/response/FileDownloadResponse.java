@@ -22,7 +22,6 @@ public class FileDownloadResponse extends MessageHandler {
 
     @Override
     public void handler() {
-
         ProtoFileDownload.FileDownloadResponse.Builder builder = (ProtoFileDownload.FileDownloadResponse.Builder) message;
         builder.getBytes();
 

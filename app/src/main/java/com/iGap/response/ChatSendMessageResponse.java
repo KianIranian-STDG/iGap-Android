@@ -110,7 +110,7 @@ public class ChatSendMessageResponse extends MessageHandler {
                             message.setStatus(roomMessage.getStatus().toString());
                             message.setMessageType(roomMessage.getMessageType().toString());
                             message.setMessage(roomMessage.getMessage());
-                            //message.setAttachment(roomMessage.getAttachment()); //TODO [Saeed Mozaffari] [2016-09-25 12:06 PM] - Clear Comment
+                            message.setAttachment(roomMessage.getMessageId(), roomMessage.getAttachment());
                             message.setUserId(roomMessage.getUserId());
                             message.setLocation(roomMessage.getLocation().toString());
                             message.setLog(roomMessage.getLog().toString());

@@ -44,9 +44,12 @@ public class VideoItem extends AbstractChatItem<VideoItem, VideoItem.ViewHolder>
         holder.cslv_txt_video_mime_type.setText(mMessage.fileMime);
         holder.cslv_txt_vido_size.setText(Utils.humanReadableByteCount(mMessage.fileSize, true));
 
-        holder.cslv_imv_vido_image.setImageResource(Integer.parseInt(mMessage.filePic));
-
-        new HelperMimeType().LoadVideoTumpnail(holder.cslv_imv_vido_image, mMessage.filePic);
+        if (mMessage.attachment.existsOnLocal()) {
+            new HelperMimeType().LoadVideoTumpnail(holder.cslv_imv_vido_image, mMessage.attachment.localPath);
+        } else {
+            // TODO: 9/28/2016 [Alireza Eskandarpour Shoferi] request to download file and set progress, then update localPath field
+            // behtare dokme download dashte bashe ke click kard, download kone, niaz be UI darim
+        }
 
         if (mMessage.fileState == MyType.FileState.notDownload || mMessage.fileState == MyType.FileState.downloading)// enable or disable btn play video
         {

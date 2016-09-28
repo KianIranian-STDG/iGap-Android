@@ -306,6 +306,8 @@ public class G extends Application {
 
         setUserTextSize();
 
+        new RequestClientCondition().clientCondition();
+
     }
 
 

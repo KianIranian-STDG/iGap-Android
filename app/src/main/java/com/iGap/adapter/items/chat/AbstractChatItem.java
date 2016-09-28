@@ -48,8 +48,16 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
      * @param holder VH
      */
     public void updateProgressIfNeeded(VH holder) {
-        if (mMessage.needsUpload()) {
-            ((ProgressBar) holder.itemView.findViewById(R.id.progress)).setProgress(mMessage.uploadProgress);
+        if (mMessage.hasAttachment()) {
+            if (mMessage.uploadProgress != 100) {
+                if (holder.itemView.findViewById(R.id.progress) != null) {
+                    ((ProgressBar) holder.itemView.findViewById(R.id.progress)).setProgress(mMessage.uploadProgress);
+                }
+            } else {
+                if (holder.itemView.findViewById(R.id.progress) != null) {
+                    holder.itemView.findViewById(R.id.progress).setVisibility(View.GONE);
+                }
+            }
         }
     }
 

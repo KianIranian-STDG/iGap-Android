@@ -28,6 +28,12 @@ public class StructMessageInfo implements Parcelable {
         this.fileMime = fileMime;
         this.filePic = filePic;
         this.filePath = filePath;
+        if (this.attachment != null) {
+            this.attachment.localPath = filePath;
+        } else {
+            this.attachment = new StructMessageAttachment();
+            this.attachment.localPath = filePath;
+        }
         this.fileSize = fileSize;
         this.fileHash = fileHash;
         this.time = time;
@@ -44,6 +50,12 @@ public class StructMessageInfo implements Parcelable {
         this.fileMime = fileMime;
         this.filePic = filePic;
         this.filePath = filePath;
+        if (this.attachment != null) {
+            this.attachment.localPath = filePath;
+        } else {
+            this.attachment = new StructMessageAttachment();
+            this.attachment.localPath = filePath;
+        }
         this.fileSize = fileSize;
         this.fileHash = fileHash;
         this.time = time;
@@ -69,6 +81,12 @@ public class StructMessageInfo implements Parcelable {
         this.sendType = sendType;
         this.fileState = fileState;
         this.filePath = filePath;
+        if (this.attachment != null) {
+            this.attachment.localPath = filePath;
+        } else {
+            this.attachment = new StructMessageAttachment();
+            this.attachment.localPath = filePath;
+        }
         this.time = time;
     }
 
@@ -80,6 +98,12 @@ public class StructMessageInfo implements Parcelable {
         this.sendType = sendType;
         this.fileState = fileState;
         this.filePath = filePath;
+        if (this.attachment != null) {
+            this.attachment.localPath = filePath;
+        } else {
+            this.attachment = new StructMessageAttachment();
+            this.attachment.localPath = filePath;
+        }
         this.time = time;
         this.replayFrom = replayObject.senderName;
         this.replayMessage = replayObject.messageText;
@@ -124,11 +148,20 @@ public class StructMessageInfo implements Parcelable {
     // used for uploading process and getting item from adapter by file hash
     public byte[] fileHash;
     public int uploadProgress;
+    public StructMessageAttachment attachment;
+
+    public StructMessageAttachment getAttachment() {
+        return attachment;
+    }
+
+    public void setAttachment(StructMessageAttachment attachment) {
+        this.attachment = attachment;
+    }
 
     public long time;
 
-    public boolean needsUpload() {
-        return fileHash != null;
+    public boolean hasAttachment() {
+        return attachment != null;
     }
 
     public StructMessageInfo() {
@@ -141,10 +174,11 @@ public class StructMessageInfo implements Parcelable {
         messageInfo.status = builder.getRoomMessage().getStatus().toString();
         messageInfo.messageID = Long.toString(builder.getRoomMessage().getMessageId());
         messageInfo.messageType = builder.getRoomMessage().getMessageType();
-        // TODO: 9/8/2016 [Alireza Eskandarpour Shoferi] inja bayad createTime bezari ke felan server nemide.
         messageInfo.time = builder.getRoomMessage().getUpdateTime() * DateUtils.SECOND_IN_MILLIS;
         messageInfo.messageText = builder.getRoomMessage().getMessage();
         messageInfo.senderID = Long.toString(builder.getRoomMessage().getUserId());
+        messageInfo.attachment = StructMessageAttachment.convert(builder.getRoomMessage().getAttachment());
+        messageInfo.uploadProgress = messageInfo.attachment.token != null && !messageInfo.attachment.token.isEmpty() ? 100 : 0;
         if (builder.getRoomMessage().getUserId() == userId) {
             messageInfo.sendType = MyType.SendType.send;
         } else if (builder.getRoomMessage().getUserId() != userId) {
@@ -162,6 +196,10 @@ public class StructMessageInfo implements Parcelable {
         messageInfo.isEdited = roomMessage.isEdited();
         messageInfo.messageType = ProtoGlobal.RoomMessageType.valueOf(roomMessage.getMessageType());
         messageInfo.time = roomMessage.getUpdateTime();
+        if (roomMessage.getAttachment() != null) {
+            messageInfo.attachment = StructMessageAttachment.convert(roomMessage.getAttachment());
+            messageInfo.uploadProgress = messageInfo.attachment.token != null && !messageInfo.attachment.token.isEmpty() ? 100 : 0;
+        }
         messageInfo.messageText = roomMessage.getMessage();
         messageInfo.senderID = Long.toString(roomMessage.getUserId());
         if (roomMessage.getUserId() == userId) {
@@ -184,6 +222,10 @@ public class StructMessageInfo implements Parcelable {
         messageInfo.messageText = roomMessage.getMessage();
         messageInfo.senderID = Long.toString(roomMessage.getUserId());
         messageInfo.replayFrom = replaySenderName;
+        if (roomMessage.getAttachment() != null) {
+            messageInfo.attachment = StructMessageAttachment.convert(roomMessage.getAttachment());
+            messageInfo.uploadProgress = messageInfo.attachment.token != null && !messageInfo.attachment.token.isEmpty() ? 100 : 0;
+        }
         messageInfo.replayPicturePath = replayFilePic;
         messageInfo.replayMessage = replaySenderMessage;
         if (roomMessage.getUserId() == userId) {
@@ -225,6 +267,7 @@ public class StructMessageInfo implements Parcelable {
         dest.writeLong(this.fileSize);
         dest.writeByteArray(this.fileHash);
         dest.writeInt(this.uploadProgress);
+        dest.writeParcelable(this.attachment, flags);
         dest.writeLong(this.time);
     }
 
@@ -256,6 +299,7 @@ public class StructMessageInfo implements Parcelable {
         this.fileSize = in.readLong();
         this.fileHash = in.createByteArray();
         this.uploadProgress = in.readInt();
+        this.attachment = in.readParcelable(StructMessageAttachment.class.getClassLoader());
         this.time = in.readLong();
     }
 

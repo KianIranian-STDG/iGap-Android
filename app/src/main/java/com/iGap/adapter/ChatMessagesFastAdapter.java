@@ -58,11 +58,11 @@ public class ChatMessagesFastAdapter<Item extends AbstractChatItem> extends Fast
      * update progress while file uploading
      * NOTE: it needs rewriting, because currently updates whole item view not just the progress (almost)
      *
-     * @param fileIdentity
+     * @param messageId
      * @param progress
      */
-    public void updateProgress(byte[] fileIdentity, int progress) {
-        Item item = getItemByFileIdentity(fileIdentity);
+    public void updateProgress(long messageId, int progress) {
+        Item item = getItemByFileIdentity(messageId);
         if (item != null && item.mMessage.uploadProgress < progress) {
             int pos = getAdapterItems().indexOf(item);
             item.mMessage.uploadProgress = progress;
@@ -74,12 +74,12 @@ public class ChatMessagesFastAdapter<Item extends AbstractChatItem> extends Fast
      * get item by its file hash
      * useful for finding item which tries to upload something
      *
-     * @param fileIdentity String
+     * @param messageId String
      * @return Item
      */
-    public Item getItemByFileIdentity(byte[] fileIdentity) {
+    public Item getItemByFileIdentity(long messageId) {
         for (Item item : getAdapterItems()) {
-            if (item.mMessage.needsUpload() && item.mMessage.fileHash == fileIdentity) {
+            if (item.mMessage.messageID.equalsIgnoreCase(Long.toString(messageId))) {
                 return item;
             }
         }
@@ -149,7 +149,7 @@ public class ChatMessagesFastAdapter<Item extends AbstractChatItem> extends Fast
         }
     }
 
-    public void updateItemFileHash(long messageId, byte[] fileHash) {
+    /*public void updateItemFileHash(long messageId, byte[] fileHash) {
         List<Item> items = getAdapterItems();
         for (Item messageInfo : items) {
             if (messageInfo.mMessage.messageID.equals(Long.toString(messageId))) {
@@ -159,7 +159,7 @@ public class ChatMessagesFastAdapter<Item extends AbstractChatItem> extends Fast
                 break;
             }
         }
-    }
+    }*/
 
     /**
      * update message id and its status
