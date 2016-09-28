@@ -443,9 +443,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     protected void onDestroy() {
         // room id have to be set to default, otherwise I'm in the room always!
         mRoomId = -1;
-        if (mPrepareForUpload != null && !mPrepareForUpload.isCancelled()) {
-            mPrepareForUpload.cancel(true);
-        }
 
         super.onDestroy();
     }
@@ -1219,39 +1216,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         boomMenuButton.setTextViewColor(ContextCompat.getColor(G.context, R.color.am_iconFab_black));
     }
 
-    private AsyncTask<Object, FileUploadStructure, FileUploadStructure> mPrepareForUpload = new AsyncTask<Object, FileUploadStructure, FileUploadStructure>() {
-        @Override
-        protected FileUploadStructure doInBackground(Object... params) {
-            try {
-                String filePath = (String) params[0];
-                long messageId = (long) params[1];
-                ProtoGlobal.RoomMessageType messageType = (ProtoGlobal.RoomMessageType) params[2];
-                File file = new File(filePath);
-                String fileName = file.getName();
-                long fileSize = file.length();
-                FileUploadStructure fileUploadStructure = new FileUploadStructure(fileName, fileSize, filePath, messageId, messageType, mRoomId);
-                fileUploadStructure.openFile(filePath);
-
-                byte[] fileHash = Utils.getFileHash(fileUploadStructure);
-                fileUploadStructure.setFileHash(fileHash);
-
-                return fileUploadStructure;
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(FileUploadStructure result) {
-            super.onPostExecute(result);
-            mSelectedFiles.add(result);
-            G.uploaderUtil.startUploading(result.fileSize, Long.toString(result.messageId));
-        }
-    };
-
     private boolean userTriesReplay() {
         return mReplayLayout != null && mReplayLayout.getTag() instanceof StructMessageInfo;
     }
@@ -1376,7 +1340,38 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
             realm.close();
 
-            mPrepareForUpload.execute(filePath, messageId, messageType);
+            new AsyncTask<Object, FileUploadStructure, FileUploadStructure>() {
+                @Override
+                protected FileUploadStructure doInBackground(Object... params) {
+                    try {
+                        String filePath = (String) params[0];
+                        long messageId = (long) params[1];
+                        ProtoGlobal.RoomMessageType messageType = (ProtoGlobal.RoomMessageType) params[2];
+                        File file = new File(filePath);
+                        String fileName = file.getName();
+                        long fileSize = file.length();
+                        FileUploadStructure fileUploadStructure = new FileUploadStructure(fileName, fileSize, filePath, messageId, messageType, mRoomId);
+                        fileUploadStructure.openFile(filePath);
+
+                        byte[] fileHash = Utils.getFileHash(fileUploadStructure);
+                        fileUploadStructure.setFileHash(fileHash);
+
+                        return fileUploadStructure;
+                    } catch (NoSuchAlgorithmException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(FileUploadStructure result) {
+                    super.onPostExecute(result);
+                    mSelectedFiles.add(result);
+                    G.uploaderUtil.startUploading(result.fileSize, Long.toString(result.messageId));
+                }
+            }.execute(filePath, messageId, messageType);
 
             scrollToEnd();
         }
