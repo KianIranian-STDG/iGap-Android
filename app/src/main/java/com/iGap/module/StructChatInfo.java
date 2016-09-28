@@ -27,7 +27,8 @@ public class StructChatInfo {
     public int unreadMessagesCount = 0;
     public String memberCount = "1";
     public String initials = "";
-    public String lastMessageStatus;
+    public String lastMessageStatus = "";
+    public String description = "";
 
     public String fileName = "";
     public String fileMime = "";

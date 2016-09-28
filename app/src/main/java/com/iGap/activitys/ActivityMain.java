@@ -612,47 +612,48 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
                         // creating new struct for each room and add them to adapter
 
-                        Realm realm = Realm.getDefaultInstance();
+
+                        mAdapter.clear();
+
                         for (final ProtoGlobal.Room room : roomList) { //TODO [Saeed Mozaffari] [2016-09-07 9:56 AM] - manage mute state
-                            if (realm.where(RealmRoom.class).equalTo("id", room.getId()).findFirst() == null) {
-                                putChatToDatabase(room);
 
-                                final ChatItem chatItem = new ChatItem();
-                                StructChatInfo info = new StructChatInfo();
-                                info.unreadMessagesCount = room.getUnreadCount();
-                                info.chatId = room.getId();
-                                info.chatTitle = room.getTitle();
-                                info.initials = room.getInitials();
-                                switch (room.getType()) {
-                                    case CHAT:
-                                        info.chatType = RoomType.CHAT;
-                                        info.memberCount = "1";
-                                        break;
-                                    case CHANNEL:
-                                        info.chatType = RoomType.CHANNEL;
-                                        info.memberCount = room.getChannelRoom().getParticipantsCountLabel();
-                                        break;
-                                    case GROUP:
-                                        info.chatType = RoomType.GROUP;
-                                        info.memberCount = room.getGroupRoom().getParticipantsCountLabel();
-                                        break;
-                                }
-                                info.color = room.getColor();
-                                info.muteNotification = false; // TODO: 9/14/2016 [Alireza Eskandarpour Shoferi] vaghti server mute ro implement kard inja get kon
-                                info.imageSource = ""; // FIXME
+                            putChatToDatabase(room);
 
-                                // create item from info
-
-                                chatItem.setInfo(info);
-                                chatItem.setComplete(ActivityMain.this);
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        mAdapter.add(chatItem);
-                                    }
-                                });
+                            final ChatItem chatItem = new ChatItem();
+                            StructChatInfo info = new StructChatInfo();
+                            info.unreadMessagesCount = room.getUnreadCount();
+                            info.chatId = room.getId();
+                            info.chatTitle = room.getTitle();
+                            info.initials = room.getInitials();
+                            switch (room.getType()) {
+                                case CHAT:
+                                    info.chatType = RoomType.CHAT;
+                                    info.memberCount = "1";
+                                    break;
+                                case CHANNEL:
+                                    info.chatType = RoomType.CHANNEL;
+                                    info.memberCount = room.getChannelRoom().getParticipantsCountLabel();
+                                    break;
+                                case GROUP:
+                                    info.chatType = RoomType.GROUP;
+                                    info.memberCount = room.getGroupRoom().getParticipantsCountLabel();
+                                    info.description = room.getGroupRoom().getDescription();
+                                    break;
                             }
+
+                            info.lastmessage = room.getLastMessage().getMessage();
+                            info.color = room.getColor();
+                            info.muteNotification = false; // TODO: 9/14/2016 [Alireza Eskandarpour Shoferi] vaghti server mute ro implement kard inja get kon
+                            info.imageSource = ""; // FIXME
+
+                            // create item from info
+
+                            chatItem.setInfo(info);
+                            chatItem.setComplete(ActivityMain.this);
+
+
                         }
+                        loadLocalChatList();
 
                         // FIXME clear later
                         // fake data set

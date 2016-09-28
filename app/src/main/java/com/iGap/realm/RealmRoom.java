@@ -26,6 +26,7 @@ public class RealmRoom extends RealmObject {
     private RealmChannelRoom channel_room;
     private long lastMessageId;
     private long lastMessageTime;
+    private String lastMessage;
 
     public long getLastMessageTime() {
         return lastMessageTime;
@@ -123,6 +124,14 @@ public class RealmRoom extends RealmObject {
         this.channel_room = channel_room;
     }
 
+    public String getLastMessage() {
+        return lastMessage;
+    }
+
+    public void setLastMessage(String lastMessage) {
+        this.lastMessage = lastMessage;
+    }
+
     /**
      * convert ProtoGlobal.Room to RealmRoom for saving into database
      *
@@ -151,14 +160,21 @@ public class RealmRoom extends RealmObject {
             case GROUP:
                 realmRoom.setType(RoomType.GROUP);
                 realmRoom.setGroupRoom(RealmGroupRoom.convert(room.getGroupRoom()));
+                realmRoom.getGroupRoom().setDescription(room.getGroupRoom().getDescription());
                 break;
         }
+        realmRoom.setLastMessageTime(room.getLastMessage().getUpdateTime());
+        realmRoom.setLastMessage(room.getLastMessage().getMessage());
+        realmRoom.setLastMessageId(room.getLastMessage().getMessageId());
 
         return realmRoom;
     }
 
     private static void putChatToClientCondition(final ProtoGlobal.Room room, Realm realm) {
-        RealmClientCondition realmClientCondition = realm.createObject(RealmClientCondition.class);
-        realmClientCondition.setRoomId(room.getId());
+
+        if (realm.where(RealmClientCondition.class).equalTo("roomId", room.getId()).findFirst() == null) {
+            RealmClientCondition realmClientCondition = realm.createObject(RealmClientCondition.class);
+            realmClientCondition.setRoomId(room.getId());
+        }
     }
 }
