@@ -243,7 +243,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                                     realmRoomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
 
                                     RealmOfflineSeen realmOfflineSeen = realm.createObject(RealmOfflineSeen.class);
-                                    realmOfflineSeen.setId(System.currentTimeMillis());
+                                    realmOfflineSeen.setId(System.nanoTime());
                                     realmOfflineSeen.setOfflineSeen(realmRoomMessage.getMessageId());
                                     realm.copyToRealmOrUpdate(realmOfflineSeen);
 
@@ -808,7 +808,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                                 RealmClientCondition realmClientCondition = realm1.where(RealmClientCondition.class).equalTo("roomId", mRoomId).findFirst();
 
                                 RealmOfflineEdited realmOfflineEdited = realm.createObject(RealmOfflineEdited.class);
-                                realmOfflineEdited.setId(System.currentTimeMillis());
+                                realmOfflineEdited.setId(System.nanoTime());
                                 realmOfflineEdited.setMessageId(Long.parseLong(messageInfo.messageID));
                                 realmOfflineEdited.setMessage(messageInfo.messageText);
                                 realmOfflineEdited = realm.copyToRealm(realmOfflineEdited);
@@ -1517,7 +1517,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                             }
 
                             RealmOfflineDelete realmOfflineDelete = realm.createObject(RealmOfflineDelete.class);
-                            realmOfflineDelete.setId(System.currentTimeMillis());
+                            realmOfflineDelete.setId(System.nanoTime());
                             realmOfflineDelete.setOfflineDelete(Long.parseLong(messageID.mMessage.messageID));
 
                             realmClientCondition.getOfflineDeleted().add(realmOfflineDelete);
@@ -1758,7 +1758,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                                             if (element != null) {
                                                 if (realmCondition.where(RealmOfflineDelete.class).equalTo("offlineDelete", Long.parseLong(messageInfo.messageID)).findFirst() == null) {
                                                     RealmOfflineDelete realmOfflineDelete = realmCondition.createObject(RealmOfflineDelete.class);
-                                                    realmOfflineDelete.setId(System.currentTimeMillis());
+                                                    realmOfflineDelete.setId(System.nanoTime());
                                                     realmOfflineDelete.setOfflineDelete(Long.parseLong(messageInfo.messageID));
                                                     element.getOfflineDeleted().add(realmOfflineDelete);
 
@@ -1938,7 +1938,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                             realmRoomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
 
                             RealmOfflineSeen realmOfflineSeen = realm.createObject(RealmOfflineSeen.class);
-                            realmOfflineSeen.setId(System.currentTimeMillis());
+                            realmOfflineSeen.setId(System.nanoTime());
                             realmOfflineSeen.setOfflineSeen(realmRoomMessage.getMessageId());
                             realm.copyToRealmOrUpdate(realmOfflineSeen);
 

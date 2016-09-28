@@ -536,7 +536,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                     public void execute(final Realm realm) {
                         if (realm.where(RealmOfflineDelete.class).equalTo("offlineDelete", item.getInfo().chatId).findFirst() == null) {
                             RealmOfflineDelete realmOfflineDelete = realm.createObject(RealmOfflineDelete.class);
-                            realmOfflineDelete.setId(System.currentTimeMillis());
+                            realmOfflineDelete.setId(System.nanoTime());
                             realmOfflineDelete.setOfflineDelete(item.getInfo().chatId);
 
                             element.getOfflineDeleted().add(realmOfflineDelete);
