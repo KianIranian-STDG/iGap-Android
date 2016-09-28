@@ -37,25 +37,29 @@ public class GroupAddModeratorResponse extends MessageHandler {
 
 
         Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
 
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", builder.getRoomId()).findFirst();
-                RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-                RealmList<RealmMember> realmMemberRealmList = realmGroupRoom.getMembers();
+        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", builder.getRoomId()).findFirst();
 
-                for (RealmMember member : realmMemberRealmList) {
-                    if (member.getPeerId() == builder.getMemberId())
-                        member.setRole(ProtoGlobal.GroupRoom.Role.MODERATOR.toString());
+        if (realmRoom != null) {
+
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+                    RealmList<RealmMember> realmMemberRealmList = realmGroupRoom.getMembers();
+
+                    for (RealmMember member : realmMemberRealmList) {
+                        if (member.getPeerId() == builder.getMemberId()) {
+                            member.setRole(ProtoGlobal.GroupRoom.Role.MODERATOR.toString());
+                            G.onGroupAddModerator.onGroupAddModerator(builder.getRoomId(), builder.getMemberId());
+                            break;
+                        }
+                    }
                 }
-            }
-        });
-
+            });
+        }
         realm.close();
 
-
-        G.onGroupAddModerator.onGroupAddModerator(builder.getRoomId(), builder.getMemberId());
 
     }
 

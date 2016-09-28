@@ -2,6 +2,11 @@ package com.iGap.response;
 
 import com.iGap.G;
 import com.iGap.proto.ProtoGroupLeft;
+import com.iGap.realm.RealmChatHistory;
+import com.iGap.realm.RealmClientCondition;
+import com.iGap.realm.RealmRoom;
+
+import io.realm.Realm;
 
 public class GroupLeftResponse extends MessageHandler {
 
@@ -22,10 +27,38 @@ public class GroupLeftResponse extends MessageHandler {
     public void handler() {
 
         ProtoGroupLeft.GroupLeftResponse.Builder builder = (ProtoGroupLeft.GroupLeftResponse.Builder) message;
-        builder.getRoomId();
-        builder.getMemberId();
+        final long roomId = builder.getRoomId();
+        final long memberId = builder.getMemberId();
 
-        G.onGroupLeft.onGroupLeft(builder.getRoomId(), builder.getMemberId());
+
+        Realm realm = Realm.getDefaultInstance();
+
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+                if (realmRoom != null) {
+                    realmRoom.deleteFromRealm();
+
+                    G.onGroupLeft.onGroupLeft(roomId, memberId);
+                }
+
+                RealmChatHistory realmChatHistory = realm.where(RealmChatHistory.class).equalTo("roomId", roomId).findFirst();
+                if (realmChatHistory != null) {
+                    realmChatHistory.deleteFromRealm();
+                }
+
+                RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", roomId).findFirst();
+                if (realmClientCondition != null) {
+                    realmClientCondition.deleteFromRealm();
+                }
+
+            }
+        });
+
+        realm.close();
+
 
     }
 

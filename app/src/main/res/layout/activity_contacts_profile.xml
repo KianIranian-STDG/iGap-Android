@@ -35,9 +35,9 @@
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/chi_img_circleImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight=".9"
+                    android:layout_width="@dimen/dp88"
+                    android:layout_height="@dimen/dp88"
+                    android:layout_gravity="center"
                     android:src="@mipmap/b" />
 
                 <TextView
@@ -188,8 +188,8 @@
                         android:paddingLeft="@dimen/dp4"
                         android:paddingStart="@dimen/dp4"
                         android:text="Alexander Smith"
-                        android:textSize="@dimen/sp18"
                         android:textColor="@android:color/black"
+                        android:textSize="@dimen/sp18"
                         android:theme="@style/Setting_editText" />
 
                 </LinearLayout>

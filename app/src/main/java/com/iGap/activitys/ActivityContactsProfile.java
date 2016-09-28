@@ -36,10 +36,13 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.fragments.FragmentShowImage;
+import com.iGap.interface_package.OnChatGetRoom;
 import com.iGap.interface_package.OnUserContactEdit;
 import com.iGap.module.StructSharedMedia;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmContacts;
+import com.iGap.realm.RealmRoom;
+import com.iGap.request.RequestChatGetRoom;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -136,7 +139,50 @@ public class ActivityContactsProfile extends ActivityEnhanced {
         fab.setOnClickListener(new View.OnClickListener() { //fab button
             @Override
             public void onClick(View view) {
-                finish();
+
+                if (enterFrom.equals(ProtoGlobal.Room.Type.GROUP.toString())) {
+
+                    final Realm realm = Realm.getDefaultInstance();
+                    final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("chat_room.peer_id", userId).findFirst();
+
+                    if (realmRoom != null) {
+                        Intent intent = new Intent(G.context, ActivityChat.class);
+                        intent.putExtra("RoomId", realmRoom.getId());
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        G.context.startActivity(intent);
+                        finish();
+
+                    } else {
+                        G.onChatGetRoom = new OnChatGetRoom() {
+                            @Override
+                            public void onChatGetRoom(final long roomId) {
+                                G.currentActivity.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Realm realm = Realm.getDefaultInstance();
+                                        Intent intent = new Intent(G.context, ActivityChat.class);
+                                        intent.putExtra("peerId", userId);
+                                        intent.putExtra("RoomId", roomId);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        realm.close();
+                                        G.context.startActivity(intent);
+                                        finish();
+
+                                    }
+                                });
+                            }
+                        };
+
+                        new RequestChatGetRoom().chatGetRoom(userId);
+                    }
+                    realm.close();
+
+                } else {
+                    finish();
+                }
+
+
+
             }
         });
 
@@ -153,7 +199,7 @@ public class ActivityContactsProfile extends ActivityEnhanced {
             @Override
             public void onClick(View view) {
                 new MaterialDialog.Builder(ActivityContactsProfile.this)
-                        .title("Nickname")
+                        .title("Contact Name")
                         .positiveText("SAVE")
                         .alwaysCallInputCallback()
                         .widgetColor(getResources().getColor(R.color.toolbar_background))

@@ -2,6 +2,10 @@ package com.iGap.response;
 
 import com.iGap.G;
 import com.iGap.proto.ProtoGroupEdit;
+import com.iGap.realm.RealmGroupRoom;
+import com.iGap.realm.RealmRoom;
+
+import io.realm.Realm;
 
 public class GroupEditResponse extends MessageHandler {
 
@@ -22,11 +26,33 @@ public class GroupEditResponse extends MessageHandler {
     public void handler() {
 
         ProtoGroupEdit.GroupEditResponse.Builder builder = (ProtoGroupEdit.GroupEditResponse.Builder) message;
-        builder.getRoomId();
-        builder.getName();
-        builder.getDescription();
+        long roomId = builder.getRoomId();
+        final String name = builder.getName();
+        final String descriptions = builder.getDescription();
 
-        G.onGroupEdit.onGroupEdit(builder.getRoomId(), builder.getName(), builder.getDescription());
+
+        Realm realm = Realm.getDefaultInstance();
+        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+
+        if (realmRoom != null) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+
+                    realmRoom.setTitle(name);
+                    RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+                    realmGroupRoom.setDescription(descriptions);
+
+                }
+            });
+
+            G.onGroupEdit.onGroupEdit(builder.getRoomId(), builder.getName(), builder.getDescription());
+
+        }
+
+        realm.close();
+
+
 
 
 
