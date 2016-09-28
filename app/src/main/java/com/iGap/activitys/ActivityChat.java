@@ -259,7 +259,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                             }
                         }
                         for (long seenId : offlineSeenId) {
-                            G.chatUpdateStatusUtil.sendUpdateStatus(mRoomId, seenId, ProtoGlobal.RoomMessageStatus.SEEN);
+                            G.chatUpdateStatusUtil.sendUpdateStatus(chatType, mRoomId, seenId, ProtoGlobal.RoomMessageStatus.SEEN);
                         }
                     }
                 });
@@ -461,13 +461,13 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             if (!messageInfo.isTimeMessage()) {
                 switch (messageInfo.messageType) {
                     case TEXT:
-                        if (chatType == ProtoGlobal.Room.Type.CHAT) {
+                        if (chatType != ProtoGlobal.Room.Type.CHANNEL) {
                             if (!addTop) {
                                 mAdapter.add(new MessageItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
                                 mAdapter.add(0, new MessageItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                             }
-                        } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
+                        } else {
                             if (!addTop) {
                                 mAdapter.add(new ChannelMessageItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
@@ -476,13 +476,13 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                         }
                         break;
                     case IMAGE:
-                        if (chatType == ProtoGlobal.Room.Type.CHAT) {
+                        if (chatType != ProtoGlobal.Room.Type.CHANNEL) {
                             if (!addTop) {
                                 mAdapter.add(new ImageItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
                                 mAdapter.add(0, new ImageItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                             }
-                        } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
+                        } else {
                             if (!addTop) {
                                 mAdapter.add(new ChannelImageItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
@@ -491,13 +491,13 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                         }
                         break;
                     case IMAGE_TEXT:
-                        if (chatType == ProtoGlobal.Room.Type.CHAT) {
+                        if (chatType != ProtoGlobal.Room.Type.CHANNEL) {
                             if (!addTop) {
                                 mAdapter.add(new ImageWithTextItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
                                 mAdapter.add(0, new ImageWithTextItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                             }
-                        } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
+                        } else {
                             if (!addTop) {
                                 mAdapter.add(new ChannelImageItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
@@ -506,13 +506,13 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                         }
                         break;
                     case VIDEO:
-                        if (chatType == ProtoGlobal.Room.Type.CHAT) {
+                        if (chatType != ProtoGlobal.Room.Type.CHANNEL) {
                             if (!addTop) {
                                 mAdapter.add(new VideoItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
                                 mAdapter.add(0, new VideoItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                             }
-                        } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
+                        } else {
                             if (!addTop) {
                                 mAdapter.add(new ChannelVideoItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
@@ -521,13 +521,13 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                         }
                         break;
                     case VIDEO_TEXT:
-                        if (chatType == ProtoGlobal.Room.Type.CHAT) {
+                        if (chatType != ProtoGlobal.Room.Type.CHANNEL) {
                             if (!addTop) {
                                 mAdapter.add(new VideoWithTextItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
                                 mAdapter.add(0, new VideoWithTextItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                             }
-                        } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
+                        } else {
                             if (!addTop) {
                                 mAdapter.add(new ChannelVideoItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
@@ -537,13 +537,13 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                         break;
                     case LOCATION:
                         // TODO: 9/15/2016 [Alireza Eskandarpour Shoferi] fill
-                        if (chatType == ProtoGlobal.Room.Type.CHAT) {
+                        if (chatType != ProtoGlobal.Room.Type.CHANNEL) {
                             if (!addTop) {
                                 mAdapter.add(new LocationItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
                                 mAdapter.add(0, new LocationItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                             }
-                        } /*else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
+                        } /*else {
                         mAdapter.add(new ChannelVideoItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
                     }*/
                         break;
@@ -1887,7 +1887,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     }
 
                     // make update status to message sender that i've read his message
-                    G.chatUpdateStatusUtil.sendUpdateStatus(roomMessage.getRoomId(), roomMessage.getRoomMessage().getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+                    G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomMessage.getRoomId(), roomMessage.getRoomMessage().getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
                 }
             });
 
@@ -1903,7 +1903,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             });
         } else {
             // user has received the message, so I make a new delivered update status request
-            G.chatUpdateStatusUtil.sendUpdateStatus(roomMessage.getRoomId(), roomMessage.getRoomMessage().getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
+            G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomMessage.getRoomId(), roomMessage.getRoomMessage().getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
             // I'm not in the room, but I have to add 1 to unread messages count
             Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
@@ -1995,13 +1995,97 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     }
 
     @Override
-    public void onMessageUpdated(long messageId, ProtoGlobal.RoomMessageStatus status, String identity, ProtoGroupSendMessage.GroupSendMessageResponse.Builder roomMessage) {
-        // TODO: 9/25/2016 [Alireza Eskandarpour Shoferi] implement
+    public void onMessageUpdated(final long messageId, final ProtoGlobal.RoomMessageStatus status, final String identity, ProtoGroupSendMessage.GroupSendMessageResponse.Builder roomMessage) {
+        // I'm in the room
+        if (roomMessage.getRoomId() == mRoomId) {
+            // update message status in telegram
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mAdapter.updateMessageIdAndStatus(messageId, identity, status);
+                }
+            });
+        }
     }
 
     @Override
-    public void onReceiveChatMessage(String message, String messageType, ProtoGroupSendMessage.GroupSendMessageResponse.Builder roomMessage) {
-        // TODO: 9/25/2016 [Alireza Eskandarpour Shoferi] implement
+    public void onReceiveChatMessage(String message, String messageType, final ProtoGroupSendMessage.GroupSendMessageResponse.Builder roomMessage) {
+        Log.i(ActivityChat.class.getSimpleName(), "onReceiveChatMessage called for group");
+        // I'm in the room
+        if (roomMessage.getRoomId() == mRoomId) {
+            // I'm in the room, so unread messages count is 0. it means, I read all messages
+            final Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmRoom room = realm.where(RealmRoom.class).equalTo("id", mRoomId).findFirst();
+                    if (room != null) {
+                        room.setUnreadCount(0);
+                        realm.copyToRealmOrUpdate(room);
+                    }
+                }
+            });
+
+            // when user receive message, I send update status as SENT to the message sender
+            // but imagine user is not in the room (or he is in another room) and received some messages
+            // when came back to the room with new messages, I make new update status request as SEEN to
+            // the message sender
+            final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", roomMessage.getRoomMessage().getMessageId()).findFirst();
+            //Start ClientCondition OfflineSeen
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", mRoomId).findFirst();
+
+                    if (realmRoomMessage != null) {
+                        if (!realmRoomMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
+                            realmRoomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
+
+                            RealmOfflineSeen realmOfflineSeen = realm.createObject(RealmOfflineSeen.class);
+                            realmOfflineSeen.setId(System.currentTimeMillis());
+                            realmOfflineSeen.setOfflineSeen(realmRoomMessage.getMessageId());
+                            realm.copyToRealmOrUpdate(realmOfflineSeen);
+
+                            Log.i(RealmClientCondition.class.getSimpleName(), "before size: " + realmClientCondition.getOfflineSeen().size());
+
+                            realmClientCondition.getOfflineSeen().add(realmOfflineSeen);
+
+                            Log.i(RealmClientCondition.class.getSimpleName(), "after size: " + realmClientCondition.getOfflineSeen().size());
+                        }
+                    }
+
+                    // make update status to message sender that i've read his message
+                    G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomMessage.getRoomId(), roomMessage.getRoomMessage().getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+                }
+            });
+
+            realm.close();
+
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mAdapter.add(new MessageItem(chatType).setMessage(StructMessageInfo.convert(roomMessage)));
+                    scrollToEnd();
+                }
+            });
+        } else {
+            // user has received the message, so I make a new delivered update status request
+            G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomMessage.getRoomId(), roomMessage.getRoomMessage().getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
+            // I'm not in the room, but I have to add 1 to unread messages count
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmRoom room = realm.where(RealmRoom.class).equalTo("id", mRoomId).findFirst();
+                    if (room != null) {
+                        room.setUnreadCount(room.getUnreadCount() + 1);
+                        realm.copyToRealmOrUpdate(room);
+                    }
+                }
+            });
+            realm.close();
+        }
     }
 
     /**

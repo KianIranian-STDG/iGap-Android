@@ -149,18 +149,6 @@ public class ChatMessagesFastAdapter<Item extends AbstractChatItem> extends Fast
         }
     }
 
-    /*public void updateItemFileHash(long messageId, byte[] fileHash) {
-        List<Item> items = getAdapterItems();
-        for (Item messageInfo : items) {
-            if (messageInfo.mMessage.messageID.equals(Long.toString(messageId))) {
-                int pos = items.indexOf(messageInfo);
-                messageInfo.mMessage.fileHash = fileHash;
-                set(pos, messageInfo);
-                break;
-            }
-        }
-    }*/
-
     /**
      * update message id and its status
      *

@@ -6,6 +6,7 @@ import android.text.format.DateUtils;
 
 import com.iGap.proto.ProtoChatSendMessage;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.proto.ProtoGroupSendMessage;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmUserInfo;
 
@@ -168,6 +169,26 @@ public class StructMessageInfo implements Parcelable {
     }
 
     public static StructMessageInfo convert(ProtoChatSendMessage.ChatSendMessageResponse.Builder builder) {
+        Realm realm = Realm.getDefaultInstance();
+        long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
+        StructMessageInfo messageInfo = new StructMessageInfo();
+        messageInfo.status = builder.getRoomMessage().getStatus().toString();
+        messageInfo.messageID = Long.toString(builder.getRoomMessage().getMessageId());
+        messageInfo.messageType = builder.getRoomMessage().getMessageType();
+        messageInfo.time = builder.getRoomMessage().getUpdateTime() * DateUtils.SECOND_IN_MILLIS;
+        messageInfo.messageText = builder.getRoomMessage().getMessage();
+        messageInfo.senderID = Long.toString(builder.getRoomMessage().getUserId());
+        messageInfo.attachment = StructMessageAttachment.convert(builder.getRoomMessage().getAttachment());
+        messageInfo.uploadProgress = messageInfo.attachment.token != null && !messageInfo.attachment.token.isEmpty() ? 100 : 0;
+        if (builder.getRoomMessage().getUserId() == userId) {
+            messageInfo.sendType = MyType.SendType.send;
+        } else if (builder.getRoomMessage().getUserId() != userId) {
+            messageInfo.sendType = MyType.SendType.recvive;
+        }
+        return messageInfo;
+    }
+
+    public static StructMessageInfo convert(ProtoGroupSendMessage.GroupSendMessageResponse.Builder builder) {
         Realm realm = Realm.getDefaultInstance();
         long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
         StructMessageInfo messageInfo = new StructMessageInfo();

@@ -1,6 +1,17 @@
 package com.iGap.response;
 
+import android.util.Log;
+
+import com.iGap.G;
+import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGroupUpdateStatus;
+import com.iGap.proto.ProtoResponse;
+import com.iGap.realm.RealmClientCondition;
+import com.iGap.realm.RealmOfflineSeen;
+import com.iGap.realm.RealmRoomMessage;
+
+import io.realm.Realm;
+import io.realm.RealmList;
 
 public class GroupUpdateStatusResponse extends MessageHandler {
 
@@ -19,17 +30,58 @@ public class GroupUpdateStatusResponse extends MessageHandler {
 
     @Override
     public void handler() {
+        final ProtoGroupUpdateStatus.GroupUpdateStatusResponse.Builder builder = (ProtoGroupUpdateStatus.GroupUpdateStatusResponse.Builder) message;
+        final ProtoResponse.Response.Builder response = ProtoResponse.Response.newBuilder().mergeFrom(builder.getResponse());
+        Log.i("SOC_CONDITION", "GroupUpdateStatusResponse response.getId() : " + response.getId());
+        Log.i("SOC_CONDITION", "GroupUpdateStatusResponse response.getTimestamp() : " + response.getTimestamp());
+        Log.i("SOC_CONDITION", "GroupUpdateStatusResponse chatUpdateStatus : " + builder.getStatus());
 
-        ProtoGroupUpdateStatus.GroupUpdateStatusResponse.Builder builder = (ProtoGroupUpdateStatus.GroupUpdateStatusResponse.Builder) message;
-        builder.getRoomId();
-        builder.getMessageId();
-        builder.getStatus();
-        builder.getStatusVersion();
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                if (!response.getId().isEmpty()) { // I'm sender
+
+                    RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", builder.getRoomId()).findFirst();
+                    RealmList<RealmOfflineSeen> offlineSeen = realmClientCondition.getOfflineSeen();
+                    for (int i = offlineSeen.size() - 1; i >= 0; i--) {
+                        RealmOfflineSeen realmOfflineSeen = offlineSeen.get(i);
+                        Log.i("SOC_CONDITION", "realmOfflineSeen 1 : " + realmOfflineSeen);
+                        realmOfflineSeen.deleteFromRealm();
+                    }
+
+                } else { // I'm recipient
+
+                    // find message from database and update its status
+                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", builder.getMessageId()).findFirst();
+                    Log.i("SOC_CONDITION", "I'm recipient 1");
+                    if (roomMessage != null) {
+                        Log.i(ChatUpdateStatusResponse.class.getSimpleName(), "oftad > " + builder.getStatus().toString());
+                        roomMessage.setStatus(builder.getStatus().toString());
+                        realm.copyToRealmOrUpdate(roomMessage);
+                        Log.i("SOC_CONDITION", "I'm recipient ");
+                        G.chatUpdateStatusUtil.onChatUpdateStatus(builder.getRoomId(), builder.getMessageId(), builder.getStatus(), builder.getStatusVersion());
+                    }
+
+                }
+            }
+        });
+        realm.close();
 
     }
 
     @Override
     public void error() {
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        int majorCode = errorResponse.getMajorCode();
+        int minorCode = errorResponse.getMinorCode();
 
+        Log.i("SOC", "GroupUpdateStatusResponse response.majorCode() : " + majorCode);
+        Log.i("SOC", "GroupUpdateStatusResponse response.minorCode() : " + minorCode);
+    }
+
+    @Override
+    public void timeOut() {
+        Log.i("SOC", "GroupUpdateStatusResponse timeout");
     }
 }

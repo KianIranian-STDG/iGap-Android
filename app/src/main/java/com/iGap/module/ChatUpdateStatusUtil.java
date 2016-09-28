@@ -3,6 +3,7 @@ package com.iGap.module;
 import com.iGap.interface_package.OnChatUpdateStatusResponse;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.request.RequestChatUpdateStatus;
+import com.iGap.request.RequestGroupUpdateStatus;
 
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/5/2016.
@@ -19,8 +20,13 @@ public class ChatUpdateStatusUtil implements OnChatUpdateStatusResponse {
         this.onChatUpdateStatusResponse = response;
     }
 
-    public void sendUpdateStatus(long roomId, long messageId, ProtoGlobal.RoomMessageStatus roomMessageStatus) {
-        new RequestChatUpdateStatus().updateStatus(roomId, messageId, roomMessageStatus);
+    public void sendUpdateStatus(ProtoGlobal.Room.Type roomType, long roomId, long messageId, ProtoGlobal.RoomMessageStatus roomMessageStatus) {
+        if (roomType == ProtoGlobal.Room.Type.CHAT) {
+            new RequestChatUpdateStatus().updateStatus(roomId, messageId, roomMessageStatus);
+        } else if (roomType == ProtoGlobal.Room.Type.GROUP) {
+            new RequestGroupUpdateStatus().groupUpdateStatus(roomId, messageId, roomMessageStatus);
+        }
+        // TODO: 9/28/2016 [Alireza Eskandarpour Shoferi] add channel request update status if needed
     }
 
     @Override
