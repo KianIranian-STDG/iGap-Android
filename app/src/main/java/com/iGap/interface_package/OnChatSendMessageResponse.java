@@ -1,6 +1,5 @@
 package com.iGap.interface_package;
 
-import com.iGap.proto.ProtoChatSendMessage;
 import com.iGap.proto.ProtoGlobal;
 
 /**
@@ -8,7 +7,7 @@ import com.iGap.proto.ProtoGlobal;
  */
 public interface OnChatSendMessageResponse {
     // message updated after send request sent
-    void onMessageUpdated(long messageId, ProtoGlobal.RoomMessageStatus status, String identity, ProtoChatSendMessage.ChatSendMessageResponse.Builder roomMessage);
+    void onMessageUpdate(long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, String identity, ProtoGlobal.RoomMessage roomMessage);
 
-    void onReceiveChatMessage(String message, String messageType, ProtoChatSendMessage.ChatSendMessageResponse.Builder roomMessage);
+    void onMessageReceive(long roomId, String message, String messageType, ProtoGlobal.RoomMessage roomMessage);
 }

@@ -34,7 +34,6 @@ import com.iGap.interface_package.OnChatUpdateStatusResponse;
 import com.iGap.interface_package.OnClientGetRoomListResponse;
 import com.iGap.interface_package.OnClientGetRoomResponse;
 import com.iGap.interface_package.OnConnectionChangeState;
-import com.iGap.interface_package.OnGroupChatSendMessageResponse;
 import com.iGap.libs.floatingAddButton.ArcMenu;
 import com.iGap.libs.floatingAddButton.StateChangeListener;
 import com.iGap.libs.flowingdrawer.FlowingView;
@@ -45,10 +44,8 @@ import com.iGap.module.MyType;
 import com.iGap.module.OnComplete;
 import com.iGap.module.ShouldScrolledBehavior;
 import com.iGap.module.StructChatInfo;
-import com.iGap.proto.ProtoChatSendMessage;
 import com.iGap.proto.ProtoClientGetRoom;
 import com.iGap.proto.ProtoGlobal;
-import com.iGap.proto.ProtoGroupSendMessage;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmChatHistory;
 import com.iGap.realm.RealmClientCondition;
@@ -69,7 +66,7 @@ import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
-public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnGroupChatSendMessageResponse {
+public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse {
 
     public static LeftDrawerLayout mLeftDrawerLayout;
     private RecyclerView recyclerView;
@@ -86,7 +83,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
         G.chatSendMessageUtil.setOnChatSendMessageResponse(this);
-        G.groupChatSendMessageUtil.setOnChatSendMessageResponse(this);
         G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
         G.onClientGetRoomResponse = new OnClientGetRoomResponse() {
             @Override
@@ -1026,7 +1022,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
         G.chatSendMessageUtil.setOnChatSendMessageResponse(this);
-        G.groupChatSendMessageUtil.setOnChatSendMessageResponse(this);
         G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
 
         // adapter may be null because it's initializing async
@@ -1109,18 +1104,18 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     }
 
     @Override
-    public void onMessageUpdated(long messageId, ProtoGlobal.RoomMessageStatus status, String identity, ProtoChatSendMessage.ChatSendMessageResponse.Builder roomMessage) {
+    public void onMessageUpdate(long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, String identity, ProtoGlobal.RoomMessage roomMessage) {
         // TODO
     }
 
     @Override
-    public void onReceiveChatMessage(String message, String messageType, final ProtoChatSendMessage.ChatSendMessageResponse.Builder roomMessage) {
+    public void onMessageReceive(final long roomId, String message, String messageType, final ProtoGlobal.RoomMessage roomMessage) {
         // I'm not in the room, so I have to add 1 to the unread messages count
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                final RealmRoom room = realm.where(RealmRoom.class).equalTo("id", roomMessage.getRoomId()).findFirst();
+                final RealmRoom room = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
                 if (room != null) {
                     final int updatedUnreadCount = room.getUnreadCount() + 1;
                     room.setUnreadCount(updatedUnreadCount);
@@ -1134,7 +1129,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mAdapter.updateChat(roomMessage.getRoomId(), convertToChatItem(roomMessage.getRoomId()));
+                    mAdapter.updateChat(roomId, convertToChatItem(roomId));
                 }
             });
         }
@@ -1142,16 +1137,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
     @Override
     public void onChatUpdateStatus(long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, int statusVersion) {
-        // TODO
-    }
-
-    @Override
-    public void onMessageUpdated(long messageId, ProtoGlobal.RoomMessageStatus status, String identity, ProtoGroupSendMessage.GroupSendMessageResponse.Builder roomMessage) {
-        // TODO: 9/25/2016 [Alireza Eskandarpour Shoferi] implement
-    }
-
-    @Override
-    public void onReceiveChatMessage(String message, String messageType, ProtoGroupSendMessage.GroupSendMessageResponse.Builder roomMessage) {
-        // TODO: 9/25/2016 [Alireza Eskandarpour Shoferi] implement
+        // TODO: 9/28/2016 [Alireza Eskandarpour Shoferi] implement
     }
 }

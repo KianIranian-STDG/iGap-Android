@@ -79,7 +79,6 @@ import com.iGap.interface_package.OnChatSendMessageResponse;
 import com.iGap.interface_package.OnChatUpdateStatusResponse;
 import com.iGap.interface_package.OnFileUpload;
 import com.iGap.interface_package.OnFileUploadStatusResponse;
-import com.iGap.interface_package.OnGroupChatSendMessageResponse;
 import com.iGap.interface_package.OnMessageClick;
 import com.iGap.module.AttachFile;
 import com.iGap.module.ChatSendMessageUtil;
@@ -89,7 +88,6 @@ import com.iGap.module.EmojiRecentsManager;
 import com.iGap.module.EndlessRecyclerOnScrollListener;
 import com.iGap.module.FileUploadStructure;
 import com.iGap.module.FileUtils;
-import com.iGap.module.GroupChatSendMessageUtil;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.MyType;
 import com.iGap.module.OnComplete;
@@ -100,10 +98,8 @@ import com.iGap.module.StructMessageInfo;
 import com.iGap.module.TimeUtils;
 import com.iGap.module.Utils;
 import com.iGap.module.VoiceRecord;
-import com.iGap.proto.ProtoChatSendMessage;
 import com.iGap.proto.ProtoFileUploadStatus;
 import com.iGap.proto.ProtoGlobal;
-import com.iGap.proto.ProtoGroupSendMessage;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmChannelRoom;
 import com.iGap.realm.RealmChatHistory;
@@ -151,7 +147,7 @@ import io.realm.RealmResults;
 /**
  * Created by android3 on 8/5/2016.
  */
-public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, IRecentsLongClick, OnMessageClick, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractChatItem>, OnChatMessageRemove, OnGroupChatSendMessageResponse, OnFileUpload, OnFileUploadStatusResponse {
+public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, IRecentsLongClick, OnMessageClick, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractChatItem>, OnChatMessageRemove, OnFileUpload, OnFileUploadStatusResponse {
 
     private RelativeLayout parentLayout;
     private SharedPreferences sharedPreferences;
@@ -416,7 +412,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
     public void initCallbacks() {
         G.chatSendMessageUtil.setOnChatSendMessageResponse(this);
-        G.groupChatSendMessageUtil.setOnChatSendMessageResponse(this);
         G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
 
         G.onChatEditMessageResponse = new OnChatEditMessageResponse() {
@@ -893,17 +888,10 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
                         scrollToEnd();
 
-                        if (chatType == ProtoGlobal.Room.Type.CHAT) {
-                            new ChatSendMessageUtil()
-                                    .newBuilder(ProtoGlobal.RoomMessageType.TEXT, mRoomId)
-                                    .message(message)
-                                    .sendMessage(identity);
-                        } else if (chatType == ProtoGlobal.Room.Type.GROUP) {
-                            new GroupChatSendMessageUtil()
-                                    .newBuilder(ProtoGlobal.RoomMessageType.TEXT, mRoomId)
-                                    .message(message)
-                                    .sendMessage(identity);
-                        }
+                        new ChatSendMessageUtil()
+                                .newBuilder(ProtoGlobal.RoomMessageType.TEXT, mRoomId)
+                                .message(message)
+                                .sendMessage(chatType, identity);
 
                         edtChat.setText("");
 
@@ -1826,100 +1814,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         // TODO
     }
 
-    @Override
-    public void onMessageUpdated(final long messageId, final ProtoGlobal.RoomMessageStatus status, final String identity, ProtoChatSendMessage.ChatSendMessageResponse.Builder roomMessage) {
-        // I'm in the room
-        if (roomMessage.getRoomId() == mRoomId) {
-            // update message status in telegram
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    mAdapter.updateMessageIdAndStatus(messageId, identity, status);
-                }
-            });
-        }
-    }
-
-    @Override
-    public void onReceiveChatMessage(String message, String messageType, final ProtoChatSendMessage.ChatSendMessageResponse.Builder roomMessage) {
-        Log.i(ActivityChat.class.getSimpleName(), "onReceiveChatMessage called");
-        // I'm in the room
-        if (roomMessage.getRoomId() == mRoomId) {
-            // I'm in the room, so unread messages count is 0. it means, I read all messages
-            final Realm realm = Realm.getDefaultInstance();
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmRoom room = realm.where(RealmRoom.class).equalTo("id", mRoomId).findFirst();
-                    if (room != null) {
-                        room.setUnreadCount(0);
-                        realm.copyToRealmOrUpdate(room);
-                    }
-                }
-            });
-
-            // when user receive message, I send update status as SENT to the message sender
-            // but imagine user is not in the room (or he is in another room) and received some messages
-            // when came back to the room with new messages, I make new update status request as SEEN to
-            // the message sender
-            final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", roomMessage.getRoomMessage().getMessageId()).findFirst();
-            //Start ClientCondition OfflineSeen
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", mRoomId).findFirst();
-
-                    if (realmRoomMessage != null) {
-                        if (!realmRoomMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
-                            realmRoomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
-
-                            RealmOfflineSeen realmOfflineSeen = realm.createObject(RealmOfflineSeen.class);
-                            realmOfflineSeen.setId(System.currentTimeMillis());
-                            realmOfflineSeen.setOfflineSeen(realmRoomMessage.getMessageId());
-                            realm.copyToRealmOrUpdate(realmOfflineSeen);
-
-                            Log.i(RealmClientCondition.class.getSimpleName(), "before size: " + realmClientCondition.getOfflineSeen().size());
-
-                            realmClientCondition.getOfflineSeen().add(realmOfflineSeen);
-
-                            Log.i(RealmClientCondition.class.getSimpleName(), "after size: " + realmClientCondition.getOfflineSeen().size());
-                        }
-                    }
-
-                    // make update status to message sender that i've read his message
-                    G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomMessage.getRoomId(), roomMessage.getRoomMessage().getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
-                }
-            });
-
-            realm.close();
-
-
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    mAdapter.add(new MessageItem(chatType).setMessage(StructMessageInfo.convert(roomMessage)));
-                    scrollToEnd();
-                }
-            });
-        } else {
-            // user has received the message, so I make a new delivered update status request
-            G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomMessage.getRoomId(), roomMessage.getRoomMessage().getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
-            // I'm not in the room, but I have to add 1 to unread messages count
-            Realm realm = Realm.getDefaultInstance();
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmRoom room = realm.where(RealmRoom.class).equalTo("id", mRoomId).findFirst();
-                    if (room != null) {
-                        room.setUnreadCount(room.getUnreadCount() + 1);
-                        realm.copyToRealmOrUpdate(room);
-                    }
-                }
-            });
-            realm.close();
-        }
-    }
-
     private void scrollToEnd() {
         recyclerView.postDelayed(new Runnable() {
             @Override
@@ -1995,9 +1889,9 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     }
 
     @Override
-    public void onMessageUpdated(final long messageId, final ProtoGlobal.RoomMessageStatus status, final String identity, ProtoGroupSendMessage.GroupSendMessageResponse.Builder roomMessage) {
+    public void onMessageUpdate(long roomId, final long messageId, final ProtoGlobal.RoomMessageStatus status, final String identity, ProtoGlobal.RoomMessage roomMessage) {
         // I'm in the room
-        if (roomMessage.getRoomId() == mRoomId) {
+        if (roomId == mRoomId) {
             // update message status in telegram
             runOnUiThread(new Runnable() {
                 @Override
@@ -2009,10 +1903,10 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     }
 
     @Override
-    public void onReceiveChatMessage(String message, String messageType, final ProtoGroupSendMessage.GroupSendMessageResponse.Builder roomMessage) {
-        Log.i(ActivityChat.class.getSimpleName(), "onReceiveChatMessage called for group");
+    public void onMessageReceive(final long roomId, String message, String messageType, final ProtoGlobal.RoomMessage roomMessage) {
+        Log.i(ActivityChat.class.getSimpleName(), "onMessageReceive called for group");
         // I'm in the room
-        if (roomMessage.getRoomId() == mRoomId) {
+        if (roomId == mRoomId) {
             // I'm in the room, so unread messages count is 0. it means, I read all messages
             final Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
@@ -2030,7 +1924,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             // but imagine user is not in the room (or he is in another room) and received some messages
             // when came back to the room with new messages, I make new update status request as SEEN to
             // the message sender
-            final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", roomMessage.getRoomMessage().getMessageId()).findFirst();
+            final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", roomMessage.getMessageId()).findFirst();
             //Start ClientCondition OfflineSeen
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
@@ -2055,7 +1949,11 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     }
 
                     // make update status to message sender that i've read his message
-                    G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomMessage.getRoomId(), roomMessage.getRoomMessage().getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+                    if (chatType == ProtoGlobal.Room.Type.CHAT) {
+                        G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+                    } else if (chatType == ProtoGlobal.Room.Type.GROUP && (roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT || roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.DELIVERED)) {
+                        G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+                    }
                 }
             });
 
@@ -2071,7 +1969,12 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             });
         } else {
             // user has received the message, so I make a new delivered update status request
-            G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomMessage.getRoomId(), roomMessage.getRoomMessage().getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
+            if (chatType == ProtoGlobal.Room.Type.CHAT) {
+                G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
+
+            } else if (chatType == ProtoGlobal.Room.Type.GROUP && roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT) {
+                G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
+            }
             // I'm not in the room, but I have to add 1 to unread messages count
             Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
@@ -2235,18 +2138,10 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     public void onFileUploadStatus(ProtoFileUploadStatus.FileUploadStatusResponse.Status status, double progress, int recheckDelayMS, final String identity, ProtoResponse.Response response) {
         final FileUploadStructure fileUploadStructure = getSelectedFile(identity);
         if (status == ProtoFileUploadStatus.FileUploadStatusResponse.Status.PROCESSED && progress == 100D) {
-            if (chatType == ProtoGlobal.Room.Type.CHAT) {
-                new ChatSendMessageUtil()
-                        .newBuilder(fileUploadStructure.messageType, fileUploadStructure.roomId)
-                        .attachment(fileUploadStructure.token)
-                        .sendMessage(Long.toString(fileUploadStructure.messageId));
-            } else if (chatType == ProtoGlobal.Room.Type.GROUP) {
-                new GroupChatSendMessageUtil()
-                        .newBuilder(fileUploadStructure.messageType, fileUploadStructure.roomId)
-                        .attachment(fileUploadStructure.token)
-                        .sendMessage(Long.toString(fileUploadStructure.messageId));
-            }
-            // TODO: 9/26/2016 [Alireza Eskandarpour Shoferi] send request for channel
+            new ChatSendMessageUtil()
+                    .newBuilder(fileUploadStructure.messageType, fileUploadStructure.roomId)
+                    .attachment(fileUploadStructure.token)
+                    .sendMessage(chatType, Long.toString(fileUploadStructure.messageId));
 
             runOnUiThread(new Runnable() {
                 @Override

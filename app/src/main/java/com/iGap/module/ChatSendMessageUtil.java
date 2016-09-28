@@ -4,6 +4,7 @@ import com.iGap.interface_package.OnChatSendMessageResponse;
 import com.iGap.proto.ProtoChatSendMessage;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.request.RequestChatSendMessage;
+import com.iGap.request.RequestGroupSendMessage;
 
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/5/2016.
@@ -54,22 +55,27 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
         this.onChatSendMessageResponse = response;
     }
 
-    public void sendMessage(String fakeMessageIdAsIdentity) {
-        new RequestChatSendMessage().newBuilder(chatSendMessage.getMessageType(), chatSendMessage.getRoomId())
-                .message(chatSendMessage.getMessage()).attachment(chatSendMessage.getAttachment()).location(chatSendMessage.getLocation()).log(chatSendMessage.getLog()).sendMessage(fakeMessageIdAsIdentity);
-    }
-
-    @Override
-    public void onMessageUpdated(long messageId, ProtoGlobal.RoomMessageStatus status, String identity, ProtoChatSendMessage.ChatSendMessageResponse.Builder roomMessage) {
-        if (onChatSendMessageResponse != null) {
-            onChatSendMessageResponse.onMessageUpdated(messageId, status, identity, roomMessage);
+    public void sendMessage(ProtoGlobal.Room.Type roomType, String fakeMessageIdAsIdentity) {
+        if (roomType == ProtoGlobal.Room.Type.CHAT) {
+            new RequestChatSendMessage().newBuilder(chatSendMessage.getMessageType(), chatSendMessage.getRoomId())
+                    .message(chatSendMessage.getMessage()).attachment(chatSendMessage.getAttachment()).location(chatSendMessage.getLocation()).log(chatSendMessage.getLog()).sendMessage(fakeMessageIdAsIdentity);
+        } else if (roomType == ProtoGlobal.Room.Type.GROUP) {
+            new RequestGroupSendMessage().newBuilder(chatSendMessage.getMessageType(), chatSendMessage.getRoomId())
+                    .message(chatSendMessage.getMessage()).attachment(chatSendMessage.getAttachment()).location(chatSendMessage.getLocation()).log(chatSendMessage.getLog()).sendMessage(fakeMessageIdAsIdentity);
         }
     }
 
     @Override
-    public void onReceiveChatMessage(String message, String messageType, ProtoChatSendMessage.ChatSendMessageResponse.Builder roomMessage) {
+    public void onMessageUpdate(long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, String identity, ProtoGlobal.RoomMessage roomMessage) {
         if (onChatSendMessageResponse != null) {
-            onChatSendMessageResponse.onReceiveChatMessage(message, messageType, roomMessage);
+            onChatSendMessageResponse.onMessageUpdate(roomId, messageId, status, identity, roomMessage);
+        }
+    }
+
+    @Override
+    public void onMessageReceive(long roomId, String message, String messageType, ProtoGlobal.RoomMessage roomMessage) {
+        if (onChatSendMessageResponse != null) {
+            onChatSendMessageResponse.onMessageReceive(roomId, message, messageType, roomMessage);
         }
     }
 }
