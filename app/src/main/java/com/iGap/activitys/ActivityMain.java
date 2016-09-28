@@ -116,6 +116,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 //        ShortcutBadger.removeCount(context);
 
     }
+
     /**
      * init floating menu drawer
      */
@@ -1137,6 +1138,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
     @Override
     public void onChatUpdateStatus(long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, int statusVersion) {
-        // TODO: 9/28/2016 [Alireza Eskandarpour Shoferi] implement
+        // empty
     }
 }
