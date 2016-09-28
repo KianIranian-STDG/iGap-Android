@@ -77,7 +77,7 @@
         android:id="@+id/cl_recycler_view_contact"
         android:layout_width="match_parent"
         android:paddingTop="@dimen/dp4"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:overScrollMode="never">
 
     </android.support.v7.widget.RecyclerView>
