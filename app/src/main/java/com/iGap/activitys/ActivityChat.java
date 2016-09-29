@@ -167,6 +167,9 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     private Button btnCopySelected;
     private Button btnForwardSelected;
     private Button btnDeleteSelected;
+    private Button btnCancelSeningFile;
+    private TextView txtFileNameForSend;
+    private LinearLayout ll_attach_text;
     private TextView txtNumberOfSelected;
     private LinearLayout ll_AppBarSelected;
     private LinearLayout toolbar;
@@ -204,6 +207,11 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     private String initialize;
     private String color;
     private boolean isMute = false;
+
+
+    private int tmpRequestCode;
+    private int tmpResultCode;
+    private Intent tmpData;
 
     //chat
     private long chatPeerId;
@@ -599,6 +607,40 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         }
         realm.close();
 
+
+        ll_attach_text = (LinearLayout) findViewById(R.id.ac_ll_attach_text);
+        txtFileNameForSend = (TextView) findViewById(R.id.ac_txt_file_neme_for_sending);
+        btnCancelSeningFile = (Button) findViewById(R.id.ac_btn_cancel_sending_file);
+        btnCancelSeningFile.setTypeface(G.flaticon);
+        btnCancelSeningFile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ll_attach_text.setVisibility(View.GONE);
+
+
+                if (edtChat.getText().length() == 0) {
+
+                    layoutAttachBottom.animate().alpha(1F).setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            layoutAttachBottom.setVisibility(View.VISIBLE);
+                        }
+                    }).start();
+                    imvSendButton.animate().alpha(0F).setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            imvSendButton.setVisibility(View.GONE);
+                        }
+                    }).start();
+                }
+
+
+            }
+        });
+
+
         txtName = (TextView) findViewById(R.id.chl_txt_name);
         txtName.setTypeface(G.arialBold);
         if (title != null)
@@ -789,6 +831,14 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             @Override
             public void onClick(View view) {
                 Log.i("MMM", "Send Message Start");
+
+                if (ll_attach_text.getVisibility() == View.VISIBLE) {
+                    onActivityResult(tmpRequestCode, tmpResultCode, tmpData);
+                    ll_attach_text.setVisibility(View.GONE);
+                    edtChat.setText("");
+                    return;
+                }
+
 
                 // if use click on a message, the message's text will be put to the EditText
                 // i set the message object for that view's tag to obtain it here
@@ -1061,36 +1111,40 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (edtChat.getText().length() > 0) {
-                    layoutAttachBottom.animate().alpha(0F).setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            super.onAnimationEnd(animation);
-                            layoutAttachBottom.setVisibility(View.GONE);
-                        }
-                    }).start();
-                    imvSendButton.animate().alpha(1F).setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            super.onAnimationEnd(animation);
-                            imvSendButton.setVisibility(View.VISIBLE);
-                        }
-                    }).start();
-                } else {
-                    layoutAttachBottom.animate().alpha(1F).setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            super.onAnimationEnd(animation);
-                            layoutAttachBottom.setVisibility(View.VISIBLE);
-                        }
-                    }).start();
-                    imvSendButton.animate().alpha(0F).setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            super.onAnimationEnd(animation);
-                            imvSendButton.setVisibility(View.GONE);
-                        }
-                    }).start();
+
+                if (ll_attach_text.getVisibility() == View.GONE) {
+
+                    if (edtChat.getText().length() > 0) {
+                        layoutAttachBottom.animate().alpha(0F).setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                super.onAnimationEnd(animation);
+                                layoutAttachBottom.setVisibility(View.GONE);
+                            }
+                        }).start();
+                        imvSendButton.animate().alpha(1F).setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                super.onAnimationEnd(animation);
+                                imvSendButton.setVisibility(View.VISIBLE);
+                            }
+                        }).start();
+                    } else {
+                        layoutAttachBottom.animate().alpha(1F).setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                super.onAnimationEnd(animation);
+                                layoutAttachBottom.setVisibility(View.VISIBLE);
+                            }
+                        }).start();
+                        imvSendButton.animate().alpha(0F).setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                super.onAnimationEnd(animation);
+                                imvSendButton.setVisibility(View.GONE);
+                            }
+                        }).start();
+                    }
                 }
 
                 // android emojione doesn't support common space unicode
@@ -1231,6 +1285,49 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == Activity.RESULT_OK && ll_attach_text.getVisibility() == View.GONE) {
+            tmpRequestCode = requestCode;
+            tmpResultCode = resultCode;
+            tmpData = data;
+
+            ll_attach_text.setVisibility(View.VISIBLE);
+            layoutAttachBottom.animate().alpha(0F).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    layoutAttachBottom.setVisibility(View.GONE);
+                }
+            }).start();
+            imvSendButton.animate().alpha(1F).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    imvSendButton.setVisibility(View.VISIBLE);
+                }
+            }).start();
+
+            switch (requestCode) {
+                case AttachFile.request_code_TAKE_PICTURE:
+                    txtFileNameForSend.setText(AttachFile.imagePath);
+                    break;
+                case AttachFile.request_code_media_from_gallary:
+                case AttachFile.request_code_VIDEO_CAPTURED:
+                case AttachFile.request_code_pic_audi:
+                    txtFileNameForSend.setText(AttachFile.getFilePathFromUri(data.getData()));
+                    break;
+                case AttachFile.request_code_pic_file:
+                case AttachFile.request_code_paint:
+                    txtFileNameForSend.setText(data.getData().getPath());
+                    break;
+                case AttachFile.request_code_contact_phone:
+                    txtFileNameForSend.setText("send phone contact");
+                    break;
+            }
+
+            return;
+        }
+
 
         if (requestCode == AttachFile.request_code_position && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             attachFile.requestGetPosition(complete);

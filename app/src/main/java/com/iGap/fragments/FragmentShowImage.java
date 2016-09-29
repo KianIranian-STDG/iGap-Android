@@ -40,6 +40,7 @@ public class FragmentShowImage extends Fragment {
     private ArrayList<StructSharedMedia> list;
     private int selectedFile = 0;
     private int listSize = 0;
+    private float MIN_SCALE = 1;
 
 
     public static FragmentShowImage newInstance() {
@@ -56,32 +57,32 @@ public class FragmentShowImage extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        getIntentData(this.getArguments());
-
-        initComponent(view);
+        if (getIntentData(this.getArguments()))
+            initComponent(view);
     }
 
-
-    private void getIntentData(Bundle bundle) {
+    private boolean getIntentData(Bundle bundle) {
 
         if (bundle != null) { // get a list of image
             list = (ArrayList<StructSharedMedia>) bundle.getSerializable("listPic");
             if (list == null) {
                 getActivity().getFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
-                return;
+                return false;
             }
             if (list.size() < 1) {
                 getActivity().getFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
-                return;
+                return false;
             }
 
             int si = bundle.getInt("SelectedImage");
             if (si >= 0)
                 selectedFile = si;
 
+            return true;
+
         } else {
             getActivity().getFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
-            return;
+            return false;
         }
     }
 
@@ -133,8 +134,8 @@ public class FragmentShowImage extends Fragment {
         viewPager.setCurrentItem(selectedFile);
 
         txtImageNumber.setText(selectedFile + 1 + " of " + listSize);
-//        txtImageName.setText(list.get(selectedFile).fileName);
-//        txtImageDate.setText(list.get(selectedFile).fileTime);
+        txtImageName.setText(list.get(selectedFile).fileName);
+        txtImageDate.setText(list.get(selectedFile).fileTime);
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -155,6 +156,17 @@ public class FragmentShowImage extends Fragment {
 
             }
         });
+
+        viewPager.setPageTransformer(false, new ViewPager.PageTransformer() {
+            @Override
+            public void transformPage(View view, float position) {
+                final float normalizedposition = Math.abs(Math.abs(position) - 1);
+                view.setScaleX(normalizedposition / 2 + 0.5f);
+                view.setScaleY(normalizedposition / 2 + 0.5f);
+            }
+        });
+
+
     }
 
     private class AdapterViewPager extends PagerAdapter {

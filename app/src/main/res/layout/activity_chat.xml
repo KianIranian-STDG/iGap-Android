@@ -220,6 +220,40 @@
 
     </android.support.v7.widget.RecyclerView>
 
+
+    <LinearLayout
+        android:id="@+id/ac_ll_attach_text"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp48"
+        android:clickable="true"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="@dimen/dp48"
+        android:background="@color/white"
+        android:gravity="center"
+        android:visibility="gone"
+        android:orientation="horizontal">
+
+
+        <TextView
+            android:id="@+id/ac_txt_file_neme_for_sending"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingLeft="@dimen/dp12"
+            android:singleLine="true"
+            android:text="New Text" />
+
+        <Button
+            android:id="@+id/ac_btn_cancel_sending_file"
+            android:layout_width="@dimen/dp40"
+            android:layout_height="match_parent"
+            android:textSize="@dimen/sp22"
+            android:background="@null"
+            android:textColor="@color/red"
+            android:text="@string/md_cancel_button" />
+    </LinearLayout>
+
+
     <include
         android:id="@+id/layout_mic_recorde"
         layout="@layout/layout_mic_record"
