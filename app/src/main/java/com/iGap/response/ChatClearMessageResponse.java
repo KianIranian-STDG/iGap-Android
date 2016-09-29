@@ -34,9 +34,9 @@ public class ChatClearMessageResponse extends MessageHandler {
                 if (realmClientCondition != null) {
                     realmClientCondition.setClearId(0);
                 }
-                realm.close();
             }
         });
+        realm.close();
 
         G.clearMessagesUtil.onChatClearMessage(chatClearMessage.getRoomId(), chatClearMessage.getClearId(), chatClearMessage.getResponse());
     }
