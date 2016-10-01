@@ -125,31 +125,21 @@
 
     <string-array name="sound_message">
         <item>Default Notification tone</item>
-        <item>None</item>
-        <item>Adm Sound success</item>
-        <item>Arrow</item>
-        <item>Bongo</item>
-        <item>Car Lock</item>
-        <item>Cascade</item>
-        <item>Clever</item>
-        <item>Crystal Drop</item>
-        <item>Cuckoo</item>
-        <item>Doorbell</item>
-        <item>Facebook Pop</item>
-        <item>Hangouts Message</item>
-        <item>Joyful</item>
-        <item>Lavender</item>
-        <item>Letter</item>
-        <item>Microwave Think Alike</item>
-        <item>Music Box</item>
-        <item>Old Bicycle</item>
-        <item>Outlook Calender</item>
-        <item>Outlook Email</item>
-        <item>Shine</item>
-        <item>step</item>
-        <item>Sunrise</item>
-        <item>Whisper</item>>
-        <item>Whistle</item>>
+        <item>aooow</item>
+        <item>bbalert</item>
+        <item>boom</item>
+        <item>bounce</item>
+        <item>doodoo</item>
+        <item>igap</item>
+        <item>jing</item>
+        <item>lili</item>
+        <item>msg</item>
+        <item>newa</item>
+        <item>none</item>
+        <item>onelime</item>
+        <item>tone</item>
+        <item>woow</item>
+
     </string-array>
 
     <string name="replay_item_dialog">Replay</string>

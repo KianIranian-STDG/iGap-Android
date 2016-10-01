@@ -50,6 +50,7 @@ import com.iGap.request.RequestUserProfileSetNickname;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -383,9 +384,12 @@ public class ActivitySetting extends ActivityEnhanced {
             @Override
             public void onClick(View view) {
 
+                ArrayList<StructSharedMedia> items = setItem(new File(G.DIR_IMAGE_USER));
+                Collections.reverse(items);
+
                 Fragment fragment = FragmentShowImage.newInstance();
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("listPic", setItem(new File(G.DIR_IMAGE_USER)));
+                bundle.putSerializable("listPic", items);
                 bundle.putInt("SelectedImage", 0);
                 fragment.setArguments(bundle);
 
@@ -970,7 +974,6 @@ public class ActivitySetting extends ActivityEnhanced {
         });
 
         realm.close();
-
     }
 
     //dialog for choose pic from gallery or camera
@@ -1156,6 +1159,7 @@ public class ActivitySetting extends ActivityEnhanced {
 
         ArrayList<StructSharedMedia> items = new ArrayList<>();
         File file[] = f.listFiles();
+        Log.i("ZZXXCCX", "setItem: " + file.length);
         for (int i = 0; i < file.length; i++) {
             if (!file[i].getPath().equals(G.chatBackground.toString())) {
                 StructSharedMedia item = new StructSharedMedia();

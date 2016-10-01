@@ -277,6 +277,9 @@
     <string name="st_title_reset">Reset</string>
     <string name="st_reset_all_notification">Reset All Notification</string>
     <string name="st_text_reset_all_notification">Undo all custom notification settings for all your contacts and groups</string>
+    <string name="st_dialog_reset_all_notification">Are you sure for undo all custom notification setting?</string>
+    <string name="st_dialog_reset_all_notification_yes">YES</string>
+    <string name="st_dialog_reset_all_notification_no">NO</string>
     <string name="st_popup_logout">Are you sure you want to log out? \n Note that you can seamLessly use iGap on all your devices at once. \n Remember,logging out kills all your Secret Chats.</string>
     <string name="st_title_Background">Chat Background</string>
 

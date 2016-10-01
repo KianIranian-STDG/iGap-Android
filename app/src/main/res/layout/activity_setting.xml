@@ -27,18 +27,20 @@
 
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingTop="@dimen/dp8"
-                app:layout_collapseMode="parallax">
+                app:layout_collapseMode="parallax"
+                android:layout_gravity="center">
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/st_img_circleImage"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_weight=".9"
-                    android:src="@mipmap/b" />
+                    android:src="@mipmap/b"
+                    android:layout_gravity="center" />
 
                 <TextView
                     android:id="@+id/ac_txt_nickname_title"
@@ -52,7 +54,6 @@
                     android:textStyle="bold" />
 
             </LinearLayout>
-
             <android.support.v7.widget.Toolbar
                 android:id="@+id/st_toolbar"
                 android:layout_width="match_parent"
@@ -98,18 +99,9 @@
                         android:src="@mipmap/popup_menu"
                         android:tint="@color/whit_background" />
 
-                    <!--<TextView-->
-                    <!--android:id="@+id/st_txt_menuPopup"-->
-                    <!--android:layout_width="@dimen/dp60"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--android:layout_alignParentRight="true"-->
-                    <!--android:gravity="center"-->
-                    <!--android:text="@string/fa_ellipsis_v"-->
-                    <!--android:textColor="@color/whit_background"-->
-                    <!--android:textSize="@dimen/sp22" />-->
-
                 </RelativeLayout>
             </android.support.v7.widget.Toolbar>
+
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 

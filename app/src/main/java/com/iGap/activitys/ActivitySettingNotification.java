@@ -1,11 +1,17 @@
 package com.iGap.activitys;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.GradientDrawable;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.PowerManager;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -60,8 +66,6 @@ public class ActivitySettingNotification extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(ActivitySettingNotification.this, ActivitySetting.class);
-                startActivity(intent);
                 finish();
             }
         });
@@ -125,7 +129,8 @@ public class ActivitySettingNotification extends AppCompatActivity {
         });
         int ledColorMessage = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_LED_COLOR_MESSAGE, -8257792);
         imgLedMessage = (ImageView) findViewById(R.id.stns_img_ledColorMessage);
-        imgLedMessage.setBackgroundColor(ledColorMessage);
+        GradientDrawable bgShape = (GradientDrawable) imgLedMessage.getBackground();
+        bgShape.setColor(ledColorMessage);
         ltLedColorMessage = (ViewGroup) findViewById(R.id.stns_layout_ledColorMessage);
         ltLedColorMessage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -165,10 +170,11 @@ public class ActivitySettingNotification extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
 
+
                         dialog.dismiss();
-                        imgLedMessage.setBackgroundColor(picker.getColor());
+                        GradientDrawable bgShape = (GradientDrawable) imgLedMessage.getBackground();
+                        bgShape.setColor(picker.getColor());
                         editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_MESSAGE, picker.getColor());
-                        Log.i("VVCCVV", "onClick: " + picker.getColor());
                         editor.apply();
                     }
                 });
@@ -207,21 +213,40 @@ public class ActivitySettingNotification extends AppCompatActivity {
                                         txtVibrateMessage.setText("Default");
                                         editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, "Default");
                                         editor.apply();
+                                        AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+                                        switch (am.getRingerMode()) {
+                                            case AudioManager.RINGER_MODE_VIBRATE:
+                                                Vibrator vSilent = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
+                                                vSilent.vibrate(AudioManager.VIBRATE_SETTING_ONLY_SILENT);
+                                                break;
+                                        }
                                         break;
                                     case 2:
                                         txtVibrateMessage.setText("Short");
                                         editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, "Short");
                                         editor.apply();
+                                        Vibrator vShort = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
+                                        vShort.vibrate(200);
                                         break;
                                     case 3:
                                         txtVibrateMessage.setText("Long");
                                         editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, "Long");
                                         editor.apply();
+                                        Vibrator vLong = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
+                                        vLong.vibrate(500);
                                         break;
                                     case 4:
                                         txtVibrateMessage.setText("Only if silent");
                                         editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, "Only if silent");
                                         editor.apply();
+                                        AudioManager am2 = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+
+                                        switch (am2.getRingerMode()) {
+                                            case AudioManager.RINGER_MODE_SILENT:
+                                                Vibrator vSilent = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
+                                                vSilent.vibrate(AudioManager.VIBRATE_SETTING_ONLY_SILENT);
+                                                break;
+                                        }
                                         break;
                                 }
                             }
@@ -240,7 +265,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
             public void onClick(View view) {
 
                 new MaterialDialog.Builder(ActivitySettingNotification.this)
-                        .title("Vibrate")
+                        .title("Popup Notification")
                         .items(R.array.popup_Notification)
                         .negativeText("CANCEL")
                         .itemsCallback(new MaterialDialog.ListCallback() {
@@ -259,11 +284,33 @@ public class ActivitySettingNotification extends AppCompatActivity {
                                         txtPopupNotification.setText("Only when screen \"on\"");
                                         editor.putString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, "Only when screen \"on\"");
                                         editor.apply();
+
+                                        PowerManager pmOn = (PowerManager) getSystemService(Context.POWER_SERVICE);
+                                        boolean isScreenOn;
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+                                            isScreenOn = pmOn.isInteractive();
+                                        } else {
+                                            isScreenOn = pmOn.isScreenOn();
+                                        }
+                                        if (isScreenOn) {
+                                            // TODO: 10/1/2016 when screen is on
+                                        }
                                         break;
                                     case 2:
                                         txtPopupNotification.setText("Only when screen \"off\"");
                                         editor.putString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, "Only when screen \"off\"");
                                         editor.apply();
+
+                                        PowerManager pmOff = (PowerManager) getSystemService(Context.POWER_SERVICE);
+                                        boolean isScreenOff;
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+                                            isScreenOff = pmOff.isInteractive();
+                                        } else {
+                                            isScreenOff = pmOff.isScreenOn();
+                                        }
+                                        if (!isScreenOff) {
+                                            // TODO: 10/1/2016 when screen is off
+                                        }
                                         break;
                                     case 3:
                                         txtPopupNotification.setText("Always show popup");
@@ -283,6 +330,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
         String soundMessage = sharedPreferences.getString(SHP_SETTING.KEY_STNS_SOUND_MESSAGE, "Arrow");
         txtSoundMessage.setText(soundMessage);
         ltSoundMessage = (ViewGroup) findViewById(R.id.stns_layout_sound_message);
+
         ltSoundMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -292,18 +340,65 @@ public class ActivitySettingNotification extends AppCompatActivity {
                         .titleGravity(GravityEnum.START)
                         .titleColor(getResources().getColor(android.R.color.black))
                         .items(R.array.sound_message)
+                        .alwaysCallSingleChoiceCallback()
                         .itemsCallbackSingleChoice(poRbDialogSoundMessage, new MaterialDialog.ListCallbackSingleChoice() {
                             @Override
                             public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
+                                switch (which) {
+                                    case 0:
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.aooow).start();
+                                        break;
+                                    case 1:
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.bbalert).start();
+                                        break;
+                                    case 2:
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.boom).start();
+                                        break;
+                                    case 3:
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.bounce).start();
+                                        break;
+                                    case 4:
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.doodoo).start();
+                                        break;
+                                    case 5:
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.igap).start();
+                                        break;
+                                    case 6:
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.jing).start();
+                                        break;
+                                    case 7:
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.lili).start();
+                                        break;
+                                    case 8:
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.msg).start();
+                                        break;
+                                    case 9:
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.newa).start();
+                                        break;
+                                    case 10:
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.none).start();
+                                        break;
+                                    case 11:
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.onelime).start();
+                                        break;
+                                    case 12:
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.tone).start();
+                                        break;
+                                    case 13:
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.woow).start();
+                                        break;
+                                }
+
                                 txtSoundMessage.setText(text.toString());
-                                poRbDialogSoundMessage = which;
+
                                 sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
                                 editor.putString(SHP_SETTING.KEY_STNS_SOUND_MESSAGE, text.toString());
                                 editor.putInt(SHP_SETTING.KEY_STNS_SOUND_MESSAGE_POSITION, which);
                                 editor.apply();
-                                return false;
+
+                                return true;
                             }
                         })
                         .positiveText("OK")
@@ -372,9 +467,10 @@ public class ActivitySettingNotification extends AppCompatActivity {
             }
         });
 
-        int ledColorGroup = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, 0);
+        final int ledColorGroup = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, 0);
         imgLedColor_group = (ImageView) findViewById(R.id.stns_img_ledColor_group);
-        imgLedColor_group.setBackgroundColor(ledColorGroup);
+        GradientDrawable bgShapeGroup = (GradientDrawable) imgLedColor_group.getBackground();
+        bgShapeGroup.setColor(ledColorGroup);
         ltLedColor_group = (ViewGroup) findViewById(R.id.stns_layout_ledColor_group);
         ltLedColor_group.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -407,15 +503,16 @@ public class ActivitySettingNotification extends AppCompatActivity {
                 final ColorPicker picker = (ColorPicker) view1.findViewById(R.id.picker);
                 SVBar svBar = (SVBar) view1.findViewById(R.id.svbar);
                 OpacityBar opacityBar = (OpacityBar) view1.findViewById(R.id.opacitybar);
+                picker.setOldCenterColor(ledColorGroup);
                 picker.addSVBar(svBar);
                 picker.addOpacityBar(opacityBar);
-
                 dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
                         dialog.dismiss();
-                        imgLedColor_group.setBackgroundColor(picker.getColor());
+                        GradientDrawable bgShapeGroup = (GradientDrawable) imgLedColor_group.getBackground();
+                        bgShapeGroup.setColor(picker.getColor());
                         editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, picker.getColor());
                         editor.apply();
                     }
@@ -455,21 +552,43 @@ public class ActivitySettingNotification extends AppCompatActivity {
                                         txtVibrateGroup.setText("Default");
                                         editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, "Default");
                                         editor.apply();
+                                        AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+                                        switch (am.getRingerMode()) {
+                                            case AudioManager.RINGER_MODE_VIBRATE:
+                                                Vibrator vSilent = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
+                                                vSilent.vibrate(AudioManager.VIBRATE_SETTING_ONLY_SILENT);
+                                                break;
+                                        }
+
                                         break;
                                     case 2:
                                         txtVibrateGroup.setText("Short");
                                         editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, "Short");
                                         editor.apply();
+                                        Vibrator vShort = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
+                                        vShort.vibrate(200);
                                         break;
                                     case 3:
                                         txtVibrateGroup.setText("Long");
                                         editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, "Long");
                                         editor.apply();
+                                        Vibrator vLong = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
+                                        vLong.vibrate(500);
                                         break;
                                     case 4:
                                         txtVibrateGroup.setText("Only if silent");
                                         editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, "Only if silent");
                                         editor.apply();
+
+                                        AudioManager am2 = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+
+                                        switch (am2.getRingerMode()) {
+                                            case AudioManager.RINGER_MODE_SILENT:
+                                                Vibrator vSilent = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
+                                                vSilent.vibrate(AudioManager.VIBRATE_SETTING_ONLY_SILENT);
+                                                break;
+                                        }
+
                                         break;
                                 }
                             }
@@ -477,7 +596,6 @@ public class ActivitySettingNotification extends AppCompatActivity {
                         .show();
             }
         });
-
         txtPopupNotificationGroup = (TextView) findViewById(R.id.stns_txt_popupNotification_group_text);
         txtPopupNotificationGroup.setTypeface(G.arial);
         String popupNotificationGroup = sharedPreferences.getString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, "Default1");
@@ -488,7 +606,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
             public void onClick(View view) {
 
                 new MaterialDialog.Builder(ActivitySettingNotification.this)
-                        .title("Vibrate")
+                        .title("Popup Notification")
                         .items(R.array.popup_Notification)
                         .negativeText("CANCEL")
                         .itemsCallback(new MaterialDialog.ListCallback() {
@@ -507,11 +625,31 @@ public class ActivitySettingNotification extends AppCompatActivity {
                                         txtPopupNotificationGroup.setText("Only when screen \"on\"");
                                         editor.putString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, "Only when screen \"on\"");
                                         editor.apply();
+                                        PowerManager pmOn = (PowerManager) getSystemService(Context.POWER_SERVICE);
+                                        boolean isScreenOn;
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+                                            isScreenOn = pmOn.isInteractive();
+                                        } else {
+                                            isScreenOn = pmOn.isScreenOn();
+                                        }
+                                        if (isScreenOn) {
+                                            // TODO: 10/1/2016 when screen is on
+                                        }
                                         break;
                                     case 2:
                                         txtPopupNotificationGroup.setText("Only when screen \"off\"");
                                         editor.putString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, "Only when screen \"off\"");
                                         editor.apply();
+                                        PowerManager pmOff = (PowerManager) getSystemService(Context.POWER_SERVICE);
+                                        boolean isScreenOff;
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+                                            isScreenOff = pmOff.isInteractive();
+                                        } else {
+                                            isScreenOff = pmOff.isScreenOn();
+                                        }
+                                        if (!isScreenOff) {
+                                            // TODO: 10/1/2016 when screen is off
+                                        }
                                         break;
                                     case 3:
                                         txtPopupNotificationGroup.setText("Always show popup");
@@ -540,10 +678,54 @@ public class ActivitySettingNotification extends AppCompatActivity {
                         .titleGravity(GravityEnum.START)
                         .titleColor(getResources().getColor(android.R.color.black))
                         .items(R.array.sound_message)
+                        .alwaysCallSingleChoiceCallback()
                         .itemsCallbackSingleChoice(poRbDialogSoundGroup, new MaterialDialog.ListCallbackSingleChoice() {
                             @Override
                             public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-
+                                switch (which) {
+                                    case 0:
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.aooow).start();
+                                        break;
+                                    case 1:
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.bbalert).start();
+                                        break;
+                                    case 2:
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.boom).start();
+                                        break;
+                                    case 3:
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.bounce).start();
+                                        break;
+                                    case 4:
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.doodoo).start();
+                                        break;
+                                    case 5:
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.igap).start();
+                                        break;
+                                    case 6:
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.jing).start();
+                                        break;
+                                    case 7:
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.lili).start();
+                                        break;
+                                    case 8:
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.msg).start();
+                                        break;
+                                    case 9:
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.newa).start();
+                                        break;
+                                    case 10:
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.none).start();
+                                        break;
+                                    case 11:
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.onelime).start();
+                                        break;
+                                    case 12:
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.tone).start();
+                                        break;
+                                    case 13:
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.woow).start();
+                                        break;
+                                }
                                 txtSoundGroup.setText(text.toString());
                                 poRbDialogSoundGroup = which;
                                 sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
@@ -551,7 +733,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
                                 editor.putString(SHP_SETTING.KEY_STNS_SOUND_GROUP, text.toString());
                                 editor.putInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, which);
                                 editor.apply();
-                                return false;
+                                return true;
                             }
                         })
                         .positiveText("OK")
@@ -824,7 +1006,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
             public void onClick(View view) {
 
                 new MaterialDialog.Builder(ActivitySettingNotification.this)
-                        .title("Vibrate")
+                        .title("Repeat Notifications")
                         .items(R.array.repeat_notification)
                         .negativeText("CANCEL")
                         .itemsCallback(new MaterialDialog.ListCallback() {
@@ -882,33 +1064,46 @@ public class ActivitySettingNotification extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putInt(SHP_SETTING.KEY_STNS_ALERT_MESSAGE, 1);
-                editor.putInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_MESSAGE, 1);
-                editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, "Default");
-                editor.putString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, "Always show popup");
-                editor.putInt(SHP_SETTING.KEY_STNS_ALERT_GROUP, 1);
-                editor.putInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_GROUP, 1);
-                editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, "Default");
-                editor.putString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, "Always show popup");
-                editor.putInt(SHP_SETTING.KEY_STNS_APP_SOUND, 1);
-                editor.putInt(SHP_SETTING.KEY_STNS_APP_VIBRATE, 1);
-                editor.putInt(SHP_SETTING.KEY_STNS_APP_PREVIEW, 1);
-                editor.putInt(SHP_SETTING.KEY_STNS_CHAT_SOUND, 1);
-                editor.putInt(SHP_SETTING.KEY_STNS_CONTACT_JOINED, 1);
-                editor.putInt(SHP_SETTING.KEY_STNS_PINNED_MESSAGE, 1);
-                editor.putInt(SHP_SETTING.KEY_STNS_KEEP_ALIVE_SERVICE, 1);
-                editor.putInt(SHP_SETTING.KEY_STNS_BACKGROUND_CONNECTION, 1);
-                editor.putInt(SHP_SETTING.KEY_STNS_BADGE_CONTENT, 1);
-                editor.putString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION, "1 hour");
-                editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_MESSAGE, -8257792);
-                editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, -8257792);
-                editor.apply();
-                Toast.makeText(ActivitySettingNotification.this, "Reset All Notification", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(ActivitySettingNotification.this, ActivitySettingNotification.class));
-                finish();
+                new MaterialDialog.Builder(ActivitySettingNotification.this)
+                        .title(R.string.st_title_reset)
+                        .content(R.string.st_dialog_reset_all_notification)
+                        .positiveText(R.string.st_dialog_reset_all_notification_yes)
+                        .negativeText(R.string.st_dialog_reset_all_notification_no)
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putInt(SHP_SETTING.KEY_STNS_ALERT_MESSAGE, 1);
+                                editor.putInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_MESSAGE, 1);
+                                editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, "Default");
+                                editor.putString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, "Always show popup");
+                                editor.putInt(SHP_SETTING.KEY_STNS_ALERT_GROUP, 1);
+                                editor.putInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_GROUP, 1);
+                                editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, "Default");
+                                editor.putString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, "Always show popup");
+                                editor.putInt(SHP_SETTING.KEY_STNS_APP_SOUND, 1);
+                                editor.putInt(SHP_SETTING.KEY_STNS_APP_VIBRATE, 1);
+                                editor.putInt(SHP_SETTING.KEY_STNS_APP_PREVIEW, 1);
+                                editor.putInt(SHP_SETTING.KEY_STNS_CHAT_SOUND, 1);
+                                editor.putInt(SHP_SETTING.KEY_STNS_CONTACT_JOINED, 1);
+                                editor.putInt(SHP_SETTING.KEY_STNS_PINNED_MESSAGE, 1);
+                                editor.putInt(SHP_SETTING.KEY_STNS_KEEP_ALIVE_SERVICE, 1);
+                                editor.putInt(SHP_SETTING.KEY_STNS_BACKGROUND_CONNECTION, 1);
+                                editor.putInt(SHP_SETTING.KEY_STNS_BADGE_CONTENT, 1);
+                                editor.putString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION, "1 hour");
+                                editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_MESSAGE, -8257792);
+                                editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, -8257792);
+                                editor.apply();
+                                Toast.makeText(ActivitySettingNotification.this, "Reset All Notification", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(ActivitySettingNotification.this, ActivitySettingNotification.class));
+                                finish();
+                            }
+                        })
+                        .show();
+
             }
         });
     }

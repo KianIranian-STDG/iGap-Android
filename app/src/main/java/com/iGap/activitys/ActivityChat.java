@@ -692,13 +692,12 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 popupWindow.setBackgroundDrawable(new BitmapDrawable());
                 popupWindow.setOutsideTouchable(true);
 //                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                    popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.shadow30, ActivityChat.this.getTheme()));
+//                    popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.shadow, ActivityChat.this.getTheme()));
 //                } else {
-//                    popupWindow.setBackgroundDrawable((getResources().getDrawable(R.drawable.shadow30)));
+//                    popupWindow.setBackgroundDrawable((getResources().getDrawable(R.drawable.shadow)));
 //                }
                 if (popupWindow.isOutsideTouchable()) {
                     popupWindow.dismiss();
-                    Log.i("CCVVBB", "rr: ");
                 }
                 popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
                     @Override
@@ -709,7 +708,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
                 popupWindow.setAnimationStyle(android.R.style.Animation_InputMethod);
                 popupWindow.showAtLocation(popupView,
-                        Gravity.RIGHT | Gravity.TOP, 0, (int) getResources().getDimension(R.dimen.dp16));
+                        Gravity.RIGHT | Gravity.TOP, 3, (int) getResources().getDimension(R.dimen.dp16));
                 popupWindow.showAsDropDown(v);
 
 

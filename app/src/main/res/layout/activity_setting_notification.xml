@@ -163,7 +163,7 @@
                         android:layout_height="@dimen/dp24"
                         android:layout_gravity="center_vertical"
                         android:layout_marginRight="@dimen/dp16"
-                        android:background="@color/toolbar_background"
+                        android:background="@drawable/circle_color_notificatin_setting"
                         android:gravity="center" />
 
                 </LinearLayout>
@@ -388,7 +388,7 @@
                         android:layout_height="@dimen/dp24"
                         android:layout_gravity="center_vertical"
                         android:layout_marginRight="@dimen/dp16"
-                        android:background="@drawable/pu_circle_button_give_image"
+                        android:background="@drawable/circle_color_notificatin_setting"
                         android:gravity="center" />
 
                 </LinearLayout>

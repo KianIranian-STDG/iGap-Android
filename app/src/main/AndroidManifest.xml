@@ -19,6 +19,7 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <!-- required for drawer contacts fragment -->
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:name=".G"
