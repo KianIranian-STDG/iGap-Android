@@ -21,6 +21,7 @@ import com.iGap.interface_package.OnChatGetRoom;
 import com.iGap.interface_package.OnClientGetRoomListResponse;
 import com.iGap.interface_package.OnClientGetRoomResponse;
 import com.iGap.interface_package.OnConnectionChangeState;
+import com.iGap.interface_package.OnFileDownloadResponse;
 import com.iGap.interface_package.OnFileUploadStatusResponse;
 import com.iGap.interface_package.OnGroupAddAdmin;
 import com.iGap.interface_package.OnGroupAddMember;
@@ -186,6 +187,7 @@ public class G extends Application {
     public static OnGroupKickMember onGroupKickMember;
     public static OnGroupKickModerator onGroupKickModerator;
     public static OnGroupLeft onGroupLeft;
+    public static OnFileDownloadResponse onFileDownloadResponse;
 
     public static final String DIR_SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static final String DIR_APP = DIR_SDCARD + "/iGap";

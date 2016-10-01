@@ -2,10 +2,12 @@ package com.iGap.adapter.items.chat;
 
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Environment;
 import android.support.annotation.CallSuper;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -14,10 +16,14 @@ import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.interface_package.IChatItemAttachment;
 import com.iGap.module.MyType;
+import com.iGap.module.StructDownloadAttachment;
 import com.iGap.module.StructMessageInfo;
 import com.iGap.module.TimeUtils;
+import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.request.RequestFileDownload;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -27,10 +33,23 @@ import java.util.List;
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/6/2016.
  */
-public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH extends RecyclerView.ViewHolder> extends AbstractItem<Item, VH> {
+public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH extends RecyclerView.ViewHolder> extends AbstractItem<Item, VH> implements IChatItemAttachment<VH> {
     public StructMessageInfo mMessage;
     public boolean directionalBased = true;
     public ProtoGlobal.Room.Type type;
+
+    @Override
+    public void onRequestDownloadThumbnail() {
+        ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
+        if (mMessage.attachment.getLocalThumbnailPath() == null || mMessage.attachment.getLocalThumbnailPath().isEmpty()) {
+            mMessage.attachment.setLocalThumbnailPath(Long.parseLong(mMessage.messageID), Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + mMessage.downloadAttachment.token + System.nanoTime() + mMessage.attachment.name);
+        }
+
+        // I don't use offset in getting thumbnail
+        String identity = mMessage.downloadAttachment.token + '*' + selector.toString() + '*' + mMessage.attachment.smallThumbnail.size + '*' + mMessage.attachment.getLocalThumbnailPath() + '*' + mMessage.downloadAttachment.offset;
+
+        new RequestFileDownload().download(mMessage.downloadAttachment.token, 0, (int) mMessage.attachment.smallThumbnail.size, selector, identity);
+    }
 
     public AbstractChatItem(boolean directionalBased, ProtoGlobal.Room.Type type) {
         this.directionalBased = directionalBased;
@@ -42,22 +61,43 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
         return this;
     }
 
+    @Override
+    @CallSuper
+    public void onLoadFromLocal(VH holder, String localPath) {
+
+    }
+
+    @Override
+    @CallSuper
+    public void onRequestDownloadFile(int offset, int progress) {
+        if (progress == 100) {
+            // TODO: 9/28/2016 [Alireza Eskandarpour Shoferi] make progress invisible
+            return; // necessary
+        }
+        ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
+        if (mMessage.attachment.getLocalFilePath() == null || mMessage.attachment.getLocalFilePath().isEmpty()) {
+            mMessage.attachment.setLocalFilePath(Long.parseLong(mMessage.messageID), Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + mMessage.downloadAttachment.token + System.nanoTime() + mMessage.attachment.name);
+        }
+        String identity = mMessage.downloadAttachment.token + '*' + selector.toString() + '*' + mMessage.attachment.size + '*' + mMessage.attachment.getLocalFilePath() + '*' + mMessage.downloadAttachment.offset;
+
+        // TODO: 9/28/2016 [Alireza Eskandarpour Shoferi] update download progress here
+
+        new RequestFileDownload().download(mMessage.downloadAttachment.token, offset, (int) mMessage.attachment.size, selector, identity);
+    }
+
     /**
      * automatically update progress if layout has one
      *
      * @param holder VH
      */
-    public void updateProgressIfNeeded(VH holder) {
-        if (mMessage.hasAttachment()) {
-            if (mMessage.uploadProgress != 100) {
-                if (holder.itemView.findViewById(R.id.progress) != null) {
-                    ((ProgressBar) holder.itemView.findViewById(R.id.progress)).setProgress(mMessage.uploadProgress);
-                }
-            } else {
-                if (holder.itemView.findViewById(R.id.progress) != null) {
-                    holder.itemView.findViewById(R.id.progress).setVisibility(View.GONE);
-                }
-            }
+    private void updateProgressIfNeeded(VH holder) {
+        if (holder.itemView.findViewById(R.id.progress) == null) {
+            return;
+        }
+        if (mMessage.uploadProgress != 100) {
+            ((ProgressBar) holder.itemView.findViewById(R.id.progress)).setProgress(mMessage.uploadProgress);
+        } else {
+            holder.itemView.findViewById(R.id.progress).setVisibility(View.GONE);
         }
     }
 
@@ -144,7 +184,45 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
         setReplayMessage(holder);
         setForwardMessage(holder);
 
-        updateProgressIfNeeded(holder);
+        if (mMessage.hasAttachment()) {
+            if (mMessage.attachment.existsFileOnLocal()) {
+                View view = holder.itemView.findViewById(R.id.shli_imv_image);
+                if (view != null) {
+                    view.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    view.requestLayout();
+                    view.postInvalidate();
+                }
+
+                onLoadFromLocal(holder, mMessage.attachment.getLocalFilePath());
+            } else {
+                if (mMessage.attachment.existsThumbnailOnLocal()) {
+                    View view = holder.itemView.findViewById(R.id.shli_imv_image);
+                    if (view != null) {
+                        view.getLayoutParams().width = mMessage.attachment.width;
+                        view.getLayoutParams().height = mMessage.attachment.height;
+                        view.requestLayout();
+                    }
+                    onLoadFromLocal(holder, mMessage.attachment.getLocalThumbnailPath());
+                }
+                // create new download attachment once with attachment token
+                if (mMessage.downloadAttachment == null) {
+                    mMessage.downloadAttachment = new StructDownloadAttachment(mMessage.attachment.token);
+                }
+
+                if ((mMessage.messageType == ProtoGlobal.RoomMessageType.IMAGE || mMessage.messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT) && !mMessage.downloadAttachment.thumbnailRequested) {
+                    onRequestDownloadThumbnail();
+                    mMessage.downloadAttachment.thumbnailRequested = true;
+                }
+                // TODO: 9/28/2016 [Alireza Eskandarpour Shoferi] set downloading FILE in download view onClick
+                // make sure to not request multiple times by checking last offset with the new one
+                if (mMessage.downloadAttachment.lastOffset < mMessage.downloadAttachment.offset) {
+                    onRequestDownloadFile(mMessage.downloadAttachment.offset, mMessage.downloadAttachment.progress);
+                    mMessage.downloadAttachment.lastOffset = mMessage.downloadAttachment.offset;
+                }
+            }
+
+            updateProgressIfNeeded(holder);
+        }
     }
 
     @CallSuper

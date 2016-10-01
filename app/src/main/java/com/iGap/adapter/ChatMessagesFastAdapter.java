@@ -35,6 +35,30 @@ public class ChatMessagesFastAdapter<Item extends AbstractChatItem> extends Fast
         }
     };
 
+    public void updateDownloadFields(String token, int progress, int offset) {
+        for (Item item : getAdapterItems()) {
+            if (item.mMessage.downloadAttachment != null && item.mMessage.downloadAttachment.token.equalsIgnoreCase(token)) {
+                int pos = getAdapterItems().indexOf(item);
+                item.mMessage.downloadAttachment.offset = offset;
+                item.mMessage.downloadAttachment.progress = progress;
+                item.onRequestDownloadFile(offset, progress);
+
+                notifyItemChanged(pos);
+                break;
+            }
+        }
+    }
+
+    public void updateThumbnail(String token) {
+        for (Item item : getAdapterItems()) {
+            if (item.mMessage.downloadAttachment != null && item.mMessage.downloadAttachment.token.equalsIgnoreCase(token)) {
+                int pos = getAdapterItems().indexOf(item);
+                notifyItemChanged(pos);
+                break;
+            }
+        }
+    }
+
     /**
      * update message text
      *

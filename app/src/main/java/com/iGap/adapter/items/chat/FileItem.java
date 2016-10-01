@@ -37,13 +37,6 @@ public class FileItem extends AbstractChatItem<FileItem, FileItem.ViewHolder> {
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        if (mMessage.attachment.existsOnLocal()) {
-            ImageLoader.getInstance().displayImage(suitablePath(mMessage.attachment.localPath), holder.cslf_imv_image_file);
-        } else {
-            // TODO: 9/28/2016 [Alireza Eskandarpour Shoferi] request to download file and set progress, then update localPath field
-            // behtare dokme download dashte bashe ke click kard, download kone, niaz be UI darim
-        }
-
         // TODO: 9/15/2016 [Alireza Eskandarpour Shoferi] implement fileState
 
         holder.cslf_txt_file_name.setText(mMessage.fileName);
@@ -61,6 +54,13 @@ public class FileItem extends AbstractChatItem<FileItem, FileItem.ViewHolder> {
     @Override
     public ViewHolderFactory<? extends ViewHolder> getFactory() {
         return FACTORY;
+    }
+
+    @Override
+    public void onLoadFromLocal(ViewHolder holder, String localPath) {
+        super.onLoadFromLocal(holder, localPath);
+        // TODO: 9/28/2016 [Alireza Eskandarpour Shoferi] check all file types and display desired pic
+        ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.cslf_imv_image_file);
     }
 
     protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {

@@ -51,6 +51,12 @@ public class VoiceItem extends AbstractChatItem<VoiceItem, VoiceItem.ViewHolder>
         return FACTORY;
     }
 
+    @Override
+    public void onLoadFromLocal(ViewHolder holder, String localPath) {
+        super.onLoadFromLocal(holder, localPath);
+        // TODO: 9/28/2016 [Alireza]
+    }
+
     protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {
         public ViewHolder create(View v) {
             return new ViewHolder(v);

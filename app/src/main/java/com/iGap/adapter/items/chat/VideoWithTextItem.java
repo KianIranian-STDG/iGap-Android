@@ -62,6 +62,12 @@ public class VideoWithTextItem extends AbstractChatItem<VideoWithTextItem, Video
         return FACTORY;
     }
 
+    @Override
+    public void onLoadFromLocal(ViewHolder holder, String localPath) {
+        super.onLoadFromLocal(holder, localPath);
+        new HelperMimeType().LoadVideoTumpnail(holder.cslv_imv_vido_image, localPath);
+    }
+
     protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {
         public ViewHolder create(View v) {
             return new ViewHolder(v);

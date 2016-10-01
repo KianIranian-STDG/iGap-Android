@@ -21,21 +21,51 @@ public class RealmMessageAttachment extends RealmObject {
     private double duration;
     private String cacheId;
 
+    public RealmMessageThumbnail getLargeThumbnail() {
+        return largeThumbnail;
+    }
+
+    public void setLargeThumbnail(RealmMessageThumbnail largeThumbnail) {
+        this.largeThumbnail = largeThumbnail;
+    }
+
+    public RealmMessageThumbnail getSmallThumbnail() {
+        return smallThumbnail;
+    }
+
+    public void setSmallThumbnail(RealmMessageThumbnail smallThumbnail) {
+        this.smallThumbnail = smallThumbnail;
+    }
+
+    private RealmMessageThumbnail largeThumbnail;
+    private RealmMessageThumbnail smallThumbnail;
+
     @Nullable
-    public String getLocalPath() {
-        return localPath;
+    public String getLocalThumbnailPath() {
+        return localThumbnailPath;
     }
 
-    public boolean existsOnLocal() {
-        return localPath != null && new File(localPath).exists();
+    public boolean thumbnailExistsOnLocal() {
+        return localThumbnailPath != null && new File(localThumbnailPath).exists();
     }
 
-    public void setLocalPath(@Nullable String localPath) {
-        this.localPath = localPath;
+    public void setLocalThumbnailPath(@Nullable String localThumbnailPath) {
+        this.localThumbnailPath = localThumbnailPath;
     }
 
     @Nullable
-    private String localPath;
+    private String localThumbnailPath;
+    @Nullable
+    private String localFilePath;
+
+    @Nullable
+    public String getLocalFilePath() {
+        return localFilePath;
+    }
+
+    public void setLocalFilePath(@Nullable String localFilePath) {
+        this.localFilePath = localFilePath;
+    }
 
     public long getMessageId() {
         return messageId;

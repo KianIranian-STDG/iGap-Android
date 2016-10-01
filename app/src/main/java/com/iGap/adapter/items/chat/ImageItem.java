@@ -14,8 +14,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
-import java.util.List;
-
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/2016.
  */
@@ -37,40 +35,34 @@ public class ImageItem extends AbstractChatItem<ImageItem, ImageItem.ViewHolder>
     }
 
     @Override
-    public void bindView(final ViewHolder holder, List payloads) {
-        super.bindView(holder, payloads);
-
-        if (mMessage.attachment.existsOnLocal()) {
-            ImageLoader.getInstance().displayImage(suitablePath(mMessage.attachment.localPath), holder.imvPicture, new ImageLoadingListener() {
-                @Override
-                public void onLoadingStarted(String imageUri, View view) {
-
-                }
-
-                @Override
-                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-
-                }
-
-                @Override
-                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                    holder.imvPicture.setImageBitmap(ImageHelper.getRoundedCornerBitmap(loadedImage, (int) holder.itemView.getResources().getDimension(R.dimen.chatMessageImageCorner)));
-                }
-
-                @Override
-                public void onLoadingCancelled(String imageUri, View view) {
-
-                }
-            });
-        } else {
-            // TODO: 9/28/2016 [Alireza Eskandarpour Shoferi] request to download file and set progress, then update localPath field
-            // behtare dokme download dashte bashe ke click kard, download kone, niaz be UI darim
-        }
+    public ViewHolderFactory<? extends ViewHolder> getFactory() {
+        return FACTORY;
     }
 
     @Override
-    public ViewHolderFactory<? extends ViewHolder> getFactory() {
-        return FACTORY;
+    public void onLoadFromLocal(final ViewHolder holder, String localPath) {
+        super.onLoadFromLocal(holder, localPath);
+        ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.imvPicture, new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String imageUri, View view) {
+
+            }
+
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+            }
+
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                holder.imvPicture.setImageBitmap(ImageHelper.getRoundedCornerBitmap(loadedImage, (int) holder.itemView.getResources().getDimension(R.dimen.chatMessageImageCorner)));
+            }
+
+            @Override
+            public void onLoadingCancelled(String imageUri, View view) {
+
+            }
+        });
     }
 
     protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {

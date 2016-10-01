@@ -6,6 +6,8 @@ import android.content.Context;
 import android.graphics.Point;
 import android.view.Display;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;
@@ -52,6 +54,28 @@ public final class Utils {
             result = context.getResources().getDimensionPixelSize(resourceId);
         }
         return result;
+    }
+
+    public static void writeBytesToFile(String filePath, byte[] chunk, int offset) {
+        FileOutputStream fop = null;
+        File file;
+        try {
+            file = new File(filePath);
+            fop = new FileOutputStream(file, true);
+            fop.write(chunk);
+            fop.flush();
+            fop.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fop != null) {
+                    fop.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -103,7 +127,7 @@ public final class Utils {
      * get SHA-256 from file
      * note: our server needs 32 bytes, so always pass true as second parameter.
      *
-     * @param uploadStructure  FileUploadStructure
+     * @param uploadStructure FileUploadStructure
      */
     public static byte[] getFileHash(FileUploadStructure uploadStructure) throws NoSuchAlgorithmException, IOException {
         try {

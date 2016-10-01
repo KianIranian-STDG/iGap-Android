@@ -44,13 +44,6 @@ public class VideoItem extends AbstractChatItem<VideoItem, VideoItem.ViewHolder>
         holder.cslv_txt_video_mime_type.setText(mMessage.fileMime);
         holder.cslv_txt_vido_size.setText(Utils.humanReadableByteCount(mMessage.fileSize, true));
 
-        if (mMessage.attachment.existsOnLocal()) {
-            new HelperMimeType().LoadVideoTumpnail(holder.cslv_imv_vido_image, mMessage.attachment.localPath);
-        } else {
-            // TODO: 9/28/2016 [Alireza Eskandarpour Shoferi] request to download file and set progress, then update localPath field
-            // behtare dokme download dashte bashe ke click kard, download kone, niaz be UI darim
-        }
-
         if (mMessage.fileState == MyType.FileState.notDownload || mMessage.fileState == MyType.FileState.downloading)// enable or disable btn play video
         {
             holder.cslv_btn_play_video.setVisibility(View.GONE);
@@ -62,6 +55,12 @@ public class VideoItem extends AbstractChatItem<VideoItem, VideoItem.ViewHolder>
     @Override
     public ViewHolderFactory<? extends ViewHolder> getFactory() {
         return FACTORY;
+    }
+
+    @Override
+    public void onLoadFromLocal(ViewHolder holder, String localPath) {
+        super.onLoadFromLocal(holder, localPath);
+        new HelperMimeType().LoadVideoTumpnail(holder.cslv_imv_vido_image, localPath);
     }
 
     protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {

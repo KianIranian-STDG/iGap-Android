@@ -16,7 +16,7 @@ import io.realm.Realm;
  */
 public class StructMessageInfo implements Parcelable {
 
-    public StructMessageInfo(String messageID, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, MyType.FileState fileState, String fileName, String fileMime, String filePic, String filePath, long fileSize, byte[] fileHash, long time) {
+    public StructMessageInfo(String messageID, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, MyType.FileState fileState, String fileName, String fileMime, String filePic, String localThumbnailPath, String localFilePath, long fileSize, byte[] fileHash, long time) {
         this.messageID = messageID;
         this.senderID = senderID;
         this.status = status;
@@ -26,19 +26,18 @@ public class StructMessageInfo implements Parcelable {
         this.fileName = fileName;
         this.fileMime = fileMime;
         this.filePic = filePic;
-        this.filePath = filePath;
-        if (this.attachment != null) {
-            this.attachment.localPath = filePath;
-        } else {
+        this.filePath = localThumbnailPath;
+        if (this.attachment == null) {
             this.attachment = new StructMessageAttachment();
-            this.attachment.localPath = filePath;
         }
+        this.attachment.setLocalThumbnailPath(Long.parseLong(messageID), localThumbnailPath);
+        this.attachment.setLocalFilePath(Long.parseLong(messageID), localFilePath);
         this.fileSize = fileSize;
         this.fileHash = fileHash;
         this.time = time;
     }
 
-    public StructMessageInfo(String messageID, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, MyType.FileState fileState, String fileName, String fileMime, String filePic, String filePath, long fileSize, byte[] fileHash, long time, StructMessageInfo replayObject) {
+    public StructMessageInfo(String messageID, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, MyType.FileState fileState, String fileName, String fileMime, String filePic, String localThumbnailPath, String localFilePath, long fileSize, byte[] fileHash, long time, StructMessageInfo replayObject) {
         this.messageID = messageID;
         this.senderID = senderID;
         this.status = status;
@@ -48,13 +47,12 @@ public class StructMessageInfo implements Parcelable {
         this.fileName = fileName;
         this.fileMime = fileMime;
         this.filePic = filePic;
-        this.filePath = filePath;
-        if (this.attachment != null) {
-            this.attachment.localPath = filePath;
-        } else {
+        this.filePath = localThumbnailPath;
+        if (this.attachment == null) {
             this.attachment = new StructMessageAttachment();
-            this.attachment.localPath = filePath;
         }
+        this.attachment.setLocalThumbnailPath(Long.parseLong(messageID), localThumbnailPath);
+        this.attachment.setLocalFilePath(Long.parseLong(messageID), localFilePath);
         this.fileSize = fileSize;
         this.fileHash = fileHash;
         this.time = time;
@@ -72,37 +70,35 @@ public class StructMessageInfo implements Parcelable {
         }
     }
 
-    public StructMessageInfo(String messageID, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, MyType.FileState fileState, String filePath, long time) {
+    public StructMessageInfo(String messageID, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, MyType.FileState fileState, String localThumbnailPath, String localFilePath, long time) {
         this.messageID = messageID;
         this.senderID = senderID;
         this.status = status;
         this.messageType = messageType;
         this.sendType = sendType;
         this.fileState = fileState;
-        this.filePath = filePath;
-        if (this.attachment != null) {
-            this.attachment.localPath = filePath;
-        } else {
+        this.filePath = localThumbnailPath;
+        if (this.attachment == null) {
             this.attachment = new StructMessageAttachment();
-            this.attachment.localPath = filePath;
         }
+        this.attachment.setLocalThumbnailPath(Long.parseLong(messageID), localThumbnailPath);
+        this.attachment.setLocalFilePath(Long.parseLong(messageID), localFilePath);
         this.time = time;
     }
 
-    public StructMessageInfo(String messageID, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, MyType.FileState fileState, String filePath, long time, StructMessageInfo replayObject) {
+    public StructMessageInfo(String messageID, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, MyType.FileState fileState, String localThumbnailPath, String localFilePath, long time, StructMessageInfo replayObject) {
         this.messageID = messageID;
         this.senderID = senderID;
         this.status = status;
         this.messageType = messageType;
         this.sendType = sendType;
         this.fileState = fileState;
-        this.filePath = filePath;
-        if (this.attachment != null) {
-            this.attachment.localPath = filePath;
-        } else {
+        this.filePath = localThumbnailPath;
+        if (this.attachment == null) {
             this.attachment = new StructMessageAttachment();
-            this.attachment.localPath = filePath;
         }
+        this.attachment.setLocalThumbnailPath(Long.parseLong(messageID), localThumbnailPath);
+        this.attachment.setLocalFilePath(Long.parseLong(messageID), localFilePath);
         this.time = time;
         this.replayFrom = replayObject.senderName;
         this.replayMessage = replayObject.messageText;
@@ -148,6 +144,7 @@ public class StructMessageInfo implements Parcelable {
     public byte[] fileHash;
     public int uploadProgress;
     public StructMessageAttachment attachment;
+    public StructDownloadAttachment downloadAttachment;
 
     public StructMessageAttachment getAttachment() {
         return attachment;

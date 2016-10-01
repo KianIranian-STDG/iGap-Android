@@ -2,6 +2,8 @@ package com.iGap.response;
 
 import android.util.Log;
 
+import com.iGap.G;
+import com.iGap.module.Utils;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoFileDownload;
 
@@ -25,11 +27,23 @@ public class FileDownloadResponse extends MessageHandler {
         ProtoFileDownload.FileDownloadResponse.Builder builder = (ProtoFileDownload.FileDownloadResponse.Builder) message;
         builder.getBytes();
 
+        String[] identityParams = identity.split("\\*");
+        String token = identityParams[0];
+        ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.valueOf(identityParams[1]);
+        long fileSize = Long.parseLong(identityParams[2]);
+        String filePath = identityParams[3];
+        int previousOffset = Integer.parseInt(identityParams[4]);
+        int nextOffset = previousOffset + builder.getBytes().size();
+        int progress = nextOffset * 100 / (int) fileSize;
+
+        Utils.writeBytesToFile(filePath, builder.getBytes().toByteArray(), previousOffset);
+
+        G.onFileDownloadResponse.onFileDownload(token, nextOffset, selector, progress);
     }
 
     @Override
     public void timeOut() {
-        Log.i("SOC", "ClientGetRoomResponse timeout");
+        Log.i("SOC", "FileDownloadResponse timeout");
     }
 
     @Override
@@ -37,8 +51,8 @@ public class FileDownloadResponse extends MessageHandler {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
-        Log.i("SOC", "ClientGetRoomResponse response.majorCode() : " + majorCode);
-        Log.i("SOC", "ClientGetRoomResponse response.minorCode() : " + minorCode);
+        Log.i("SOC", "FileDownloadResponse response.majorCode() : " + majorCode);
+        Log.i("SOC", "FileDownloadResponse response.minorCode() : " + minorCode);
     }
 }
 
