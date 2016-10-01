@@ -109,7 +109,7 @@ public class ActivityContactsProfile extends ActivityEnhanced {
             @Override
             public void onClick(View view) {
 
-                File file = new File(G.DIR_ALL_IMAGE_USER + "/" + username);
+                File file = new File(G.DIR_ALL_IMAGE_USER_CONTACT + "/" + username);
                 if (!file.exists()) {
                     file.mkdirs();
                 }
@@ -121,7 +121,6 @@ public class ActivityContactsProfile extends ActivityEnhanced {
 
                 ActivityContactsProfile.this.getFragmentManager().beginTransaction().replace(R.id.chi_layoutParent, fragment).commit();
 
-                Log.i("AASSDD", "onClick: ");
             }
         });
 
@@ -570,9 +569,8 @@ public class ActivityContactsProfile extends ActivityEnhanced {
     }
 
     public ArrayList<StructSharedMedia> setItem(File f) {
-
         ArrayList<StructSharedMedia> items = new ArrayList<>();
-//        File addFile = new File(G.DIR_ALL_IMAGE_USER);
+//        File addFile = new File(G.DIR_ALL_IMAGE_USER_CONTACT);
         File file[] = f.listFiles();
         for (int i = 0; i < file.length; i++) {
             if (!file[i].getPath().equals(G.chatBackground.toString())) {
@@ -581,8 +579,6 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                 items.add(item);
             }
         }
-
-        Log.e("ddd", items.size() + "        gggggggggggggggggg");
         return items;
     }
 

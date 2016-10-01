@@ -61,7 +61,6 @@ public class ActivityChatBackground extends ActivityEnhanced {
             @Override
             public void onClick(View view) {
 
-                startActivity(new Intent(ActivityChatBackground.this, ActivitySetting.class));
                 finish();
             }
         });

@@ -117,16 +117,13 @@ public class FragmentShowImage extends Fragment {
         txtImageName = (TextView) view.findViewById(R.id.asi_txt_image_name);
         txtImageDate = (TextView) view.findViewById(R.id.asi_txt_image_date);
 
-
         initViewPager();
-
     }
 
 
     //***************************************************************************************
 
     private void initViewPager() {
-
 
         AdapterViewPager mAdapter = new AdapterViewPager();
         viewPager.setAdapter(mAdapter);
@@ -188,7 +185,6 @@ public class FragmentShowImage extends Fragment {
             LayoutInflater inflater = LayoutInflater.from(getActivity());
             ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.show_image_sub_layout, (ViewGroup) container, false);
 
-
             TouchImageView touchImageView = (TouchImageView) layout.findViewById(R.id.sisl_touch_image_view);
 
             //TODO     nejati         if file not exsit download it and than show it
@@ -199,7 +195,6 @@ public class FragmentShowImage extends Fragment {
                 Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                 touchImageView.setImageBitmap(myBitmap);
             }
-
 
             ((ViewGroup) container).addView(layout);
 

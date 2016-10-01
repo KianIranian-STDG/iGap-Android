@@ -267,7 +267,7 @@ public class ActivityRegister extends ActivityEnhanced {
                     }
                 });
 
-                final ViewGroup root = (ViewGroup) dialogChooseCountry.findViewById(R.id.rg_layoutRoot_dialog);
+                final ViewGroup root = (ViewGroup) dialogChooseCountry.findViewById(android.R.id.content);
                 InputMethodManager im = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
                 SoftKeyboard softKeyboard = new SoftKeyboard(root, im);
                 softKeyboard.setSoftKeyboardCallback(new SoftKeyboard.SoftKeyboardChanged() {
@@ -277,12 +277,11 @@ public class ActivityRegister extends ActivityEnhanced {
                             @Override
                             public void run() {
                                 if (edtSearchView.getQuery().toString().length() > 0) {
-
                                     edtSearchView.setIconified(false);
 //                                    edtSearchView.onActionViewExpanded();
                                     txtTitle.setVisibility(View.GONE);
-                                } else {
 
+                                } else {
                                     edtSearchView.setIconified(true);
 //                                    edtSearchView.onActionViewCollapsed();
                                     txtTitle.setVisibility(View.VISIBLE);

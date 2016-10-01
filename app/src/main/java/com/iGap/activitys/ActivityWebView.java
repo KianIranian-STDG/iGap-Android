@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -53,11 +54,13 @@ public class ActivityWebView extends ActivityEnhanced {
         txtShare = (MaterialDesignTextView) findViewById(R.id.stfaq_txt_share);
         txtPopupMenu = (MaterialDesignTextView) findViewById(R.id.stfaq_txt_menuPopup);
 
+        EditText searchBox = ((EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text));
+        searchBox.setTextColor(getResources().getColor(R.color.white));
+
         txtBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                startActivity(new Intent(ActivityWebView.this, ActivitySetting.class));
                 finish();
             }
         });
@@ -102,7 +105,14 @@ public class ActivityWebView extends ActivityEnhanced {
             }
         });
 
-        final int screenWidth = (int) (getResources().getDisplayMetrics().widthPixels / 1.4);
+        final int screenWidth;
+        int portrait_landscape = getResources().getConfiguration().orientation;
+        if (portrait_landscape == 1) {//portrait
+            screenWidth = (int) (getResources().getDisplayMetrics().widthPixels / 1.2);
+
+        } else {
+            screenWidth = (int) (getResources().getDisplayMetrics().widthPixels / 1.4);
+        }
 
         txtPopupMenu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,10 +120,19 @@ public class ActivityWebView extends ActivityEnhanced {
 
                 LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 final View popupView = layoutInflater.inflate(R.layout.popup_faq, null);
+                int finalScreen;
 
                 popupWindow = new PopupWindow(popupView, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT, true);
                 popupWindow.setBackgroundDrawable(new BitmapDrawable());
                 popupWindow.setOutsideTouchable(true);
+
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.shadow30, ActivityWebView.this.getTheme()));
+                } else {
+                    popupWindow.setBackgroundDrawable((getResources().getDrawable(R.drawable.shadow30)));
+                }
+
 
                 if (popupWindow.isOutsideTouchable()) {
                     popupWindow.dismiss();
@@ -127,7 +146,9 @@ public class ActivityWebView extends ActivityEnhanced {
                 });
 
                 popupWindow.setAnimationStyle(android.R.style.Animation_InputMethod);
-                popupWindow.showAtLocation(popupView, Gravity.RIGHT | Gravity.TOP, 10, 80);
+                popupWindow.showAtLocation(popupView,
+                        Gravity.RIGHT | Gravity.TOP, 0, (int) getResources().getDimension(R.dimen.dp16));
+
                 popupWindow.showAsDropDown(v);
                 TextView txtFindPage = (TextView) popupView.findViewById(R.id.popup_faq_findPage);
                 txtFindPage.setOnClickListener(new View.OnClickListener() {

@@ -1,5 +1,6 @@
 package com.iGap.realm;
 
+import io.realm.RealmList;
 import io.realm.RealmObject;
 
 public class RealmUserInfo extends RealmObject {
@@ -12,10 +13,21 @@ public class RealmUserInfo extends RealmObject {
     private String nickName;
     private String gender;
     private String phoneNumber;
-    private String avatarPath;
+
+    private RealmList<RealmAvatarPath> avatarPath;
+
     private String token;
 
     //===Setters
+
+
+    public RealmList<RealmAvatarPath> getAvatarPath() {
+        return avatarPath;
+    }
+
+    public void setAvatarPath(RealmList<RealmAvatarPath> avatarPath) {
+        this.avatarPath = avatarPath;
+    }
 
     public void setUserRegistrationState(boolean value) {
         this.registrationStatus = value;
@@ -49,9 +61,6 @@ public class RealmUserInfo extends RealmObject {
         this.phoneNumber = value;
     }
 
-    public void setAvatarPath(String value) {
-        this.avatarPath = value;
-    }
 
     public void setToken(String value) {
         this.token = value;
@@ -91,9 +100,6 @@ public class RealmUserInfo extends RealmObject {
         return this.phoneNumber;
     }
 
-    public String getAvatarPath() {
-        return this.avatarPath;
-    }
 
     public String getToken() {
         return this.token;

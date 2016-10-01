@@ -14,14 +14,14 @@
         <com.iGap.module.MaterialDesignTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp20"
+            android:layout_marginLeft="@dimen/dp16"
             android:text="@string/md_right_arrow_button"
             android:textSize="@dimen/sp22" />
 
         <com.iGap.module.MaterialDesignTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp52"
+            android:layout_marginLeft="@dimen/dp40"
             android:text="@string/md_round_info_button"
             android:textSize="@dimen/sp22" />
 
@@ -29,7 +29,7 @@
             android:id="@+id/popup_faq_reload"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp52"
+            android:layout_marginLeft="@dimen/dp40"
             android:text="@string/md_refresh_button"
             android:textSize="@dimen/sp22" />
 

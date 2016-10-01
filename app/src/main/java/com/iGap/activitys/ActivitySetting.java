@@ -1,5 +1,6 @@
 package com.iGap.activitys;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,7 +8,9 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -15,12 +18,14 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.text.InputType;
 import android.util.DisplayMetrics;
-import android.view.MenuItem;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,21 +36,26 @@ import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.fragments.FragmentShowImage;
 import com.iGap.helper.HelperImageBackColor;
 import com.iGap.interface_package.OnUserProfileSetNickNameResponse;
 import com.iGap.module.HelperDecodeFile;
 import com.iGap.module.SHP_SETTING;
+import com.iGap.module.StructSharedMedia;
 import com.iGap.proto.ProtoResponse;
+import com.iGap.realm.RealmAvatarPath;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestUserProfileSetNickname;
 
 import java.io.File;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivitySetting extends ActivityEnhanced {
@@ -59,6 +69,7 @@ public class ActivitySetting extends ActivityEnhanced {
 
     private RelativeLayout ltClearCache;
 
+    private PopupWindow popupWindow;
 
     private int poRbDialogLangouage = -1;
     private String textLanguage = "English";
@@ -72,7 +83,13 @@ public class ActivitySetting extends ActivityEnhanced {
 
     private int myResultCodeCamera = 1;
     private int myResultCodeGallery = 0;
+    private int myResultCrop = 3;
     private Uri uriIntent;
+    private int idAvatar;
+    private File nameImageFile;
+    private String pathImageDecode;
+    private RealmResults<RealmAvatarPath> realmAvatarPaths;
+    public static String pathSaveImage;
 
     private FloatingActionButton fab;
     private CircleImageView circleImageView;
@@ -123,13 +140,13 @@ public class ActivitySetting extends ActivityEnhanced {
         txtUserName = (TextView) findViewById(R.id.st_txt_userName);
         txtPhoneNumber = (TextView) findViewById(R.id.st_txt_phoneNumber);
 
-        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+        final RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
         if (realmUserInfo != null) {
             nickName = realmUserInfo.getNickName();
             userName = realmUserInfo.getUserName();
             phoneName = realmUserInfo.getPhoneNumber();
-        }
 
+        }
 
         if (nickName != null) {
             txtNickName.setText(nickName);
@@ -276,89 +293,106 @@ public class ActivitySetting extends ActivityEnhanced {
         });
 
         // button popupMenu in toolbar
+        final int screenWidth;
+        int portrait_landscape = getResources().getConfiguration().orientation;
+        if (portrait_landscape == 1) {//portrait
+            screenWidth = (int) (getResources().getDisplayMetrics().widthPixels / 1.2);
+
+        } else {
+            screenWidth = (int) (getResources().getDisplayMetrics().widthPixels / 1.4);
+        }
         imgMenu = (ImageView) findViewById(R.id.st_img_menuPopup);
         assert txtMenu != null;
         imgMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-
-                PopupMenu popupMenu = new PopupMenu(ActivitySetting.this, v);
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                final View popupView = layoutInflater.inflate(R.layout.popup_window, null);
+                popupWindow = new PopupWindow(popupView, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+                popupWindow.setBackgroundDrawable(new BitmapDrawable());
+                popupWindow.setOutsideTouchable(true);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.shadow30, ActivitySetting.this.getTheme()));
+                } else {
+                    popupWindow.setBackgroundDrawable((getResources().getDrawable(R.drawable.shadow30)));
+                }
+                if (popupWindow.isOutsideTouchable()) {
+                    popupWindow.dismiss();
+                    Log.i("CCVVBB", "rr: ");
+                }
+                popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
                     @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-
-                        switch (item.getItemId()) {
-
-                            case R.id.st_logOut:
-
-                                new MaterialDialog.Builder(ActivitySetting.this)
-                                        .title("iGap")
-                                        .positiveText("LOGOUT")
-                                        .negativeText("CANCEL")
-                                        .content(R.string.st_popup_logout)
-                                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                            @Override
-                                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                                                final RealmResults<RealmUserInfo> result = realm.where(RealmUserInfo.class).findAll();
-                                                realm.executeTransaction(new Realm.Transaction() {
-                                                    @Override
-                                                    public void execute(Realm realm) {
-                                                        result.deleteAllFromRealm();
-                                                    }
-                                                });
-
-                                                startActivity(new Intent(ActivitySetting.this, ActivityIntroduce.class));
-                                                finish();
-                                            }
-                                        }).show();
-
-                                return true;
-                        }
-                        return true;
+                    public void onDismiss() {
+                        //TODO do sth here on dismiss
                     }
                 });
 
-                popupMenu.inflate(R.menu.sc_popup_menu);
-                popupMenu.show();
+                popupWindow.setAnimationStyle(android.R.style.Animation_InputMethod);
+                popupWindow.showAtLocation(popupView,
+                        Gravity.RIGHT | Gravity.TOP, 0, (int) getResources().getDimension(R.dimen.dp16));
+                popupWindow.showAsDropDown(v);
+
+
+                TextView txtSearch = (TextView) popupView.findViewById(R.id.popup_txtItem1);
+                txtSearch.setText("Log Out");
+                txtSearch.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        Toast.makeText(ActivitySetting.this, "1", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+                TextView txtClearHistory = (TextView) popupView.findViewById(R.id.popup_txtItem2);
+                txtClearHistory.setVisibility(View.GONE);
+                TextView txtDeleteChat = (TextView) popupView.findViewById(R.id.popup_txtItem3);
+                txtDeleteChat.setVisibility(View.GONE);
+                TextView txtMutNotification = (TextView) popupView.findViewById(R.id.popup_txtItem4);
+                txtMutNotification.setVisibility(View.GONE);
 
             }
         });
-
+        realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
         //fab button for set pic
         fab = (FloatingActionButton) findViewById(R.id.st_fab_setPic);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!G.imageFile.exists()) {
-                    startDialog(R.array.profile);
-                } else {
+
+                Realm realm = Realm.getDefaultInstance();
+                RealmResults<RealmAvatarPath> realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
+
+
+                if (realmAvatarPaths.size() > 0) {
                     startDialog(R.array.profile_delete);
+                } else {
+
+                    startDialog(R.array.profile);
                 }
             }
         });
 
-        circleImageView = (CircleImageView) findViewById(R.id.st_img_circleImage);
-        if (G.imageFile.exists()) {
-            decodeBitmapProfile = HelperDecodeFile.decodeFile(G.imageFile);
-            circleImageView.setImageBitmap(decodeBitmapProfile);
+        for (RealmAvatarPath r : realmAvatarPaths) {
 
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                    realmUserInfo.setAvatarPath(G.imageFile.toString());
-                }
-            });
-
-        } else {//TODO [Saeed Mozaffari] [2016-09-10 4:22 PM] - waiting for proto , for get initials and color
-//            circleImageView.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp60), "H", "#7f7f7f"));
-            String name = HelperImageBackColor.getFirstAlphabetName(txtNickName.getText().toString());
-            circleImageView.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp100), name, HelperImageBackColor.getColor(name)));
-
+            Log.i("RRRRR", "onCreate: " + r.getId());
         }
+        circleImageView = (CircleImageView) findViewById(R.id.st_img_circleImage);
+        circleImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+                Fragment fragment = FragmentShowImage.newInstance();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("listPic", setItem(new File(G.DIR_IMAGE_USER)));
+                bundle.putInt("SelectedImage", 0);
+                fragment.setArguments(bundle);
+
+                ActivitySetting.this.getFragmentManager().beginTransaction().replace(R.id.st_layoutParent, fragment).commit();
+            }
+        });
+        setImage();
         textLanguage = sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, "English");
         if (textLanguage.equals("English")) {
             poRbDialogLangouage = 0;
@@ -950,32 +984,63 @@ public class ActivitySetting extends ActivityEnhanced {
                     @Override
                     public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
+
                         if (text.toString().equals("From Camera")) {
 
                             if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
+                                Realm realm = Realm.getDefaultInstance();
+                                RealmResults<RealmAvatarPath> realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
+                                realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
+                                if (realmAvatarPaths.size() > 0) {
 
+                                    idAvatar = realmAvatarPaths.first().getId();
+                                } else {
+                                    idAvatar = 0;
+                                }
+                                pathSaveImage = G.imageFile.toString() + "_" + idAvatar + ".jpg";
+                                nameImageFile = new File(pathSaveImage);
                                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                uriIntent = Uri.fromFile(G.imageFile);
+                                uriIntent = Uri.fromFile(nameImageFile);
                                 intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
                                 startActivityForResult(intent, myResultCodeCamera);
+                                realm.close();
                                 dialog.dismiss();
 
                             } else {
                                 Toast.makeText(ActivitySetting.this, "Please check your Camera", Toast.LENGTH_SHORT).show();
                             }
-
                         } else if (text.toString().equals("Delete photo")) {
-                            G.imageFile.delete();
-                            String name = HelperImageBackColor.getFirstAlphabetName(txtNickName.getText().toString());
-                            circleImageView.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp100), name, HelperImageBackColor.getColor(name)));
 
-
+                            Realm realm = Realm.getDefaultInstance();
+                            realm.executeTransaction(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+                                    RealmResults<RealmAvatarPath> realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
+                                    realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
+                                    new File(realmAvatarPaths.first().getPathImage()).delete();
+                                    RealmAvatarPath delete = realmAvatarPaths.first();
+                                    delete.deleteFromRealm();
+                                }
+                            });
+                            realm.close();
+                            setImage();
                         } else {
                             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                            Realm realm = Realm.getDefaultInstance();
+                            RealmResults<RealmAvatarPath> realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
+                            realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
+                            if (realmAvatarPaths.size() > 0) {
+
+                                idAvatar = realmAvatarPaths.first().getId();
+                            } else {
+                                idAvatar = 0;
+                            }
+                            pathSaveImage = G.imageFile.toString() + "_" + idAvatar + ".jpg";
+                            nameImageFile = new File(pathSaveImage);
                             startActivityForResult(intent, myResultCodeGallery);
                             dialog.dismiss();
+                            realm.close();
                         }
-
                     }
                 })
                 .show();
@@ -989,19 +1054,37 @@ public class ActivitySetting extends ActivityEnhanced {
         if (requestCode == myResultCodeCamera && resultCode == RESULT_OK) {// result for camera
 
             Intent intent = new Intent(ActivitySetting.this, ActivityCrop.class);
-            intent.putExtra("IMAGE_CAMERA", uriIntent.toString());
-            intent.putExtra("TYPE", "camera");
-            intent.putExtra("PAGE", "setting");
-            startActivity(intent);
-            finish();
+            if (uriIntent != null) {
+
+                intent.putExtra("IMAGE_CAMERA", uriIntent.toString());
+                intent.putExtra("TYPE", "camera");
+                intent.putExtra("PAGE", "setting");
+                startActivityForResult(intent, myResultCrop);
+            }
 
         } else if (requestCode == myResultCodeGallery && resultCode == RESULT_OK) {// result for gallery
-            Intent intent = new Intent(ActivitySetting.this, ActivityCrop.class);
-            intent.putExtra("IMAGE_CAMERA", data.getData().toString());
-            intent.putExtra("TYPE", "gallery");
-            intent.putExtra("PAGE", "setting");
-            startActivity(intent);
-            finish();
+            if (data != null) {
+                Intent intent = new Intent(ActivitySetting.this, ActivityCrop.class);
+                intent.putExtra("IMAGE_CAMERA", data.getData().toString());
+                intent.putExtra("TYPE", "gallery");
+                intent.putExtra("PAGE", "setting");
+                startActivityForResult(intent, myResultCrop);
+            }
+
+        } else if (requestCode == myResultCrop) {
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    final RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                    RealmAvatarPath realmAvatarPath = realm.createObject(RealmAvatarPath.class);
+                    realmAvatarPath.setId(idAvatar + 1);
+                    realmAvatarPath.setPathImage(nameImageFile.toString());
+                    realmUserInfo.getAvatarPath().add(realmAvatarPath);
+                }
+            });
+            realm.close();
+            setImage();
         }
     }
 
@@ -1053,7 +1136,33 @@ public class ActivitySetting extends ActivityEnhanced {
         } else {
             hrSize = dec.format(b).concat(" Bytes");
         }
-
         return hrSize;
+    }
+
+    private void setImage() {
+        realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
+        if (realmAvatarPaths.size() > 0) {
+            pathImageDecode = realmAvatarPaths.first().getPathImage();
+            decodeBitmapProfile = HelperDecodeFile.decodeFile(new File(pathImageDecode));
+            circleImageView.setImageBitmap(decodeBitmapProfile);
+        } else {
+            String name = HelperImageBackColor.getFirstAlphabetName(txtNickName.getText().toString());
+            circleImageView.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp100), name, HelperImageBackColor.getColor(name)));
+        }
+
+    }
+
+    public ArrayList<StructSharedMedia> setItem(File f) {
+
+        ArrayList<StructSharedMedia> items = new ArrayList<>();
+        File file[] = f.listFiles();
+        for (int i = 0; i < file.length; i++) {
+            if (!file[i].getPath().equals(G.chatBackground.toString())) {
+                StructSharedMedia item = new StructSharedMedia();
+                item.filePath = file[i].getPath();
+                items.add(item);
+            }
+        }
+        return items;
     }
 }

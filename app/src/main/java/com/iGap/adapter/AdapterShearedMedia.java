@@ -360,9 +360,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
             }
         }
 
-
         Fragment fragment = FragmentShowImage.newInstance();
-
         Bundle bundle = new Bundle();
         bundle.putSerializable("listPic", listPic);
         bundle.putInt("SelectedImage", selectedImage);

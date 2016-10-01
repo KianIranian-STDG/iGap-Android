@@ -197,7 +197,8 @@ public class G extends Application {
     public static final String DIR_CHAT_BACKGROUND = DIR_APP + "/chat_background";
     public static final String DIR_NEW_GROUP = DIR_APP + "/new_group";
     public static final String DIR_NEW_CHANEL = DIR_APP + "/new_chanel";
-    public static final String DIR_ALL_IMAGE_USER = DIR_APP + "/all_image_user";
+    public static final String DIR_ALL_IMAGE_USER_CONTACT = DIR_APP + "/all_image_user_contact";
+    public static final String DIR_IMAGE_USER = DIR_APP + "/image_user";
 
     public static File chatBackground;
     public static File IMAGE_NEW_GROUP;
@@ -228,11 +229,14 @@ public class G extends Application {
         new File(DIR_CHAT_BACKGROUND).mkdirs();
         new File(DIR_NEW_GROUP).mkdirs();
         new File(DIR_NEW_CHANEL).mkdirs();
-        new File(DIR_ALL_IMAGE_USER).mkdirs();
+        new File(DIR_ALL_IMAGE_USER_CONTACT).mkdirs();
+        new File(DIR_IMAGE_USER).mkdirs();
 
         chatBackground = new File(DIR_CHAT_BACKGROUND, "addChatBackground.jpg");
-        IMAGE_NEW_GROUP = new File(G.DIR_NEW_GROUP, "image_new_group.png");
-        IMAGE_NEW_CHANEL = new File(G.DIR_NEW_CHANEL, "image_new_chanel.png");
+        IMAGE_NEW_GROUP = new File(G.DIR_NEW_GROUP, "image_new_group.jpg");
+        IMAGE_NEW_CHANEL = new File(G.DIR_NEW_CHANEL, "image_new_chanel.jpg");
+        imageFile = new File(DIR_IMAGE_USER, "image_user");
+
 
         context = getApplicationContext();
         handler = new Handler();
@@ -253,7 +257,7 @@ public class G extends Application {
         VerdanaBold = Typeface.createFromAsset(this.getAssets(), "fonts/VerdanaBold.ttf");
         fontawesome = Typeface.createFromAsset(this.getAssets(), "fonts/fontawesome.ttf");
         flaticon = Typeface.createFromAsset(this.getAssets(), "fonts/Flaticon.ttf");
-
+        FONT_IGAP = Typeface.createFromAsset(context.getAssets(), "fonts/neuropolitical.ttf");
         HELETICBLK_TITR = Typeface.createFromAsset(context.getAssets(), "fonts/ar.ttf");
         ARIAL_TEXT = Typeface.createFromAsset(context.getAssets(), "fonts/arial.ttf");
         YEKAN_FARSI = Typeface.createFromAsset(context.getAssets(), "fonts/yekan.ttf");
@@ -277,15 +281,8 @@ public class G extends Application {
                 .build();
         ImageLoader.getInstance().init(new ImageLoaderConfiguration.Builder(this).defaultDisplayImageOptions(defaultOptions).build());
 
-        String imageUser = Environment.getExternalStorageDirectory() + "/image_user";
+        FONT_IGAP = Typeface.createFromAsset(context.getAssets(), "fonts/neuropolitical.ttf");
 
-        FONT_IGAP = Typeface.createFromAsset(context.getAssets(), "fonts/neuropolitical.ttf");
-        imageFile = new File(imageUser);
-        if (!imageFile.exists()) {
-            imageFile.mkdirs();
-        }
-        imageFile = new File(imageUser, "image_user.jpg");
-        FONT_IGAP = Typeface.createFromAsset(context.getAssets(), "fonts/neuropolitical.ttf");
 
         SharedPreferences sharedPreferences = getSharedPreferences("CopyDataBase", MODE_PRIVATE);
         boolean isCopyFromAsset = sharedPreferences.getBoolean("isCopyRealm", true);

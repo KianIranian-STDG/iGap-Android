@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.TextInputLayout;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,8 +20,11 @@ import com.iGap.R;
 import com.iGap.interface_package.OnUserProfileSetNickNameResponse;
 import com.iGap.module.HelperDecodeFile;
 import com.iGap.proto.ProtoResponse;
+import com.iGap.realm.RealmAvatarPath;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestUserProfileSetNickname;
+
+import java.io.File;
 
 import io.realm.Realm;
 
@@ -34,7 +38,9 @@ public class ActivityProfile extends ActivityEnhanced {
     private EditText edtNikName;
     private Uri uriIntent;
     private String pathImageUser;
+    private int myResultCrop = 3;
     public static boolean IsDeleteFile;
+    private final File F = new File(G.imageFile.toString() + "_" + 0 + ".jpg");
 
 
     public static Bitmap decodeBitmapProfile = null;
@@ -43,11 +49,6 @@ public class ActivityProfile extends ActivityEnhanced {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-
-        if (!IsDeleteFile && G.imageFile.exists()) {
-            G.imageFile.delete();
-        }
-
 
         txtTitlInformation = (TextView) findViewById(R.id.pu_txt_title_information);
         txtTitlInformation.setTypeface(G.arialBold);
@@ -79,6 +80,7 @@ public class ActivityProfile extends ActivityEnhanced {
         btnLetsGo.setOnClickListener(new View.OnClickListener() { // button for save data and go to next page
             @Override
             public void onClick(View view) {
+
                 Realm realm = Realm.getDefaultInstance();
                 final String nickName = edtNikName.getText().toString();
 
@@ -95,7 +97,6 @@ public class ActivityProfile extends ActivityEnhanced {
                                     startActivity(intent);
                                     finish();
                                 }
-
                                 @Override
                                 public void onUserProfileNickNameError(int majorCode, int minorCode) {
 
@@ -121,13 +122,18 @@ public class ActivityProfile extends ActivityEnhanced {
                             };
                             new RequestUserProfileSetNickname().userProfileNickName(nickName);
 
-                            if (G.imageFile.exists()) {
-                                realmUserInfo.setAvatarPath(G.imageFile.toString());
+                            if (F.exists()) {
+
+                                RealmAvatarPath realmAvatarPath = realm.createObject(RealmAvatarPath.class);
+                                realmAvatarPath.setId(0);
+                                realmAvatarPath.setPathImage(F.toString());
+                                realmUserInfo.getAvatarPath().add(realmAvatarPath);
+
                             }
                             realmUserInfo.setNickName(nickName);
                         }
                     });
-                    realm.close();
+
                 } else {
                     runOnUiThread(new Runnable() {
                         @Override
@@ -136,11 +142,14 @@ public class ActivityProfile extends ActivityEnhanced {
                         }
                     });
                 }
+
+                realm.close();
             }
         });
 
-        if (G.imageFile.exists()) {
-            decodeBitmapProfile = HelperDecodeFile.decodeFile(G.imageFile);
+
+        if (F.exists()) {
+            decodeBitmapProfile = HelperDecodeFile.decodeFile(F);
             btnSetImage.setImageBitmap(decodeBitmapProfile);
             btnSetImage.setPadding(0, 0, 0, 0);
             btnSetImage.setBackgroundColor(getResources().getColor(android.R.color.transparent));
@@ -163,7 +172,7 @@ public class ActivityProfile extends ActivityEnhanced {
                             if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
 
                                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                uriIntent = Uri.fromFile(G.imageFile);
+                                uriIntent = Uri.fromFile(F);
                                 intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
                                 startActivityForResult(intent, myResultCodeCamera);
                                 dialog.dismiss();
@@ -194,18 +203,34 @@ public class ActivityProfile extends ActivityEnhanced {
             intent.putExtra("IMAGE_CAMERA", uriIntent.toString());
             intent.putExtra("TYPE", "camera");
             intent.putExtra("PAGE", "profile");
-            startActivity(intent);
-            finish();
+            startActivityForResult(intent, myResultCrop);
 
         } else if (requestCode == myResultCodeGallery && resultCode == RESULT_OK) {// result for gallery
             Intent intent = new Intent(ActivityProfile.this, ActivityCrop.class);
             intent.putExtra("IMAGE_CAMERA", data.getData().toString());
             intent.putExtra("TYPE", "gallery");
             intent.putExtra("PAGE", "profile");
-            startActivity(intent);
-            finish();
+            startActivityForResult(intent, myResultCrop);
+        } else if (requestCode == myResultCrop) {
+
+            if (F.exists()) {
+                decodeBitmapProfile = HelperDecodeFile.decodeFile(F);
+                btnSetImage.setImageBitmap(decodeBitmapProfile);
+                btnSetImage.setPadding(0, 0, 0, 0);
+                btnSetImage.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+            }
+
         }
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
 
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (F.exists()) {
+                F.delete();
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 }

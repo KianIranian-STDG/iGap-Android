@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.fragments.FragmentNewGroup;
 import com.iGap.fragments.RegisteredContactsFragment;
 import com.iGap.libs.flowingdrawer.MenuFragment;
 import com.iGap.module.HelperDecodeFile;
@@ -100,10 +101,13 @@ public class FragmentDrawerMenu extends MenuFragment {
         layoutNewGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(G.currentActivity, ActivityNewGroup.class);
-                intent.putExtra("TYPE", "NewGroup");
-                G.currentActivity.startActivity(intent);
-                ActivityMain.mLeftDrawerLayout.closeDrawer();
+
+                FragmentNewGroup fragment = FragmentNewGroup.newInstance();
+                Bundle bundle = new Bundle();
+                bundle.putString("TYPE", "NewGroup");
+                fragment.setArguments(bundle);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
+
             }
         });
 
@@ -130,13 +134,13 @@ public class FragmentDrawerMenu extends MenuFragment {
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(G.currentActivity, ActivityNewGroup.class);
-                intent.putExtra("TYPE", "NewChanel");
-                G.currentActivity.startActivity(intent);
-                ActivityMain.mLeftDrawerLayout.closeDrawer();
+                FragmentNewGroup fragment = FragmentNewGroup.newInstance();
+                Bundle bundle = new Bundle();
+                bundle.putString("TYPE", "NewChanel");
+                fragment.setArguments(bundle);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
             }
         });
-
 
         LinearLayout layoutContacts = (LinearLayout) v.findViewById(R.id.lm_ll_contacts);
         layoutContacts.setOnClickListener(new View.OnClickListener() {
@@ -164,10 +168,8 @@ public class FragmentDrawerMenu extends MenuFragment {
                 startActivity(sendIntent);
                 ActivityMain.mLeftDrawerLayout.closeDrawer();
 
-
             }
         });
-
 
         LinearLayout layoutSetting = (LinearLayout) v.findViewById(R.id.lm_ll_setting);
         layoutSetting.setOnClickListener(new View.OnClickListener() {

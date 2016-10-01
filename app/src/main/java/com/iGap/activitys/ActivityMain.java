@@ -1,5 +1,6 @@
 package com.iGap.activitys;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,6 +15,8 @@ import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -25,6 +28,7 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.ChatsFastAdapter;
 import com.iGap.adapter.items.ChatItem;
+import com.iGap.fragments.FragmentNewGroup;
 import com.iGap.fragments.RegisteredContactsFragment;
 import com.iGap.helper.ServiceContact;
 import com.iGap.interface_package.OnChatClearMessageResponse;
@@ -43,6 +47,7 @@ import com.iGap.module.MyAppBarLayout;
 import com.iGap.module.MyType;
 import com.iGap.module.OnComplete;
 import com.iGap.module.ShouldScrolledBehavior;
+import com.iGap.module.SoftKeyboard;
 import com.iGap.module.StructChatInfo;
 import com.iGap.proto.ProtoClientGetRoom;
 import com.iGap.proto.ProtoGlobal;
@@ -65,6 +70,7 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import me.leolin.shortcutbadger.ShortcutBadger;
 
 public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse {
 
@@ -99,6 +105,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                 }
             }
         };
+
         initComponent();
         initRecycleView();
         initFloatingButtonCreateNew();
@@ -108,13 +115,12 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
 
         //*******************add count badgeIcon
-//        int badgeCount = 15;
-//        ShortcutBadger.applyCount(G.context, badgeCount);
+        int badgeCount = 15;
+        ShortcutBadger.applyCount(G.context, badgeCount);
 
 
         //*******************remove count badgeIcon
 //        ShortcutBadger.removeCount(context);
-
     }
 
     /**
@@ -182,30 +188,56 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             @Override
             public boolean onClose() {
                 txtIgap.setVisibility(View.VISIBLE);
+                arcMenu.setVisibility(View.VISIBLE);
 
                 return false;
             }
         });
-
-        if (btnSearch != null) { //TODO [Saeed Mozaffari] [2016-09-26 10:40 AM] - need back icon
-            btnSearch.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View view, boolean b) {
-
-                    if (b) {
-                        txtIgap.setVisibility(View.GONE);
-                    }
-                }
-            });
-        }
-
 
         EditText searchBox = ((EditText) btnSearch.findViewById(android.support.v7.appcompat.R.id.search_src_text));
         searchBox.setTextColor(getResources().getColor(R.color.white));
         btnMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                btnSearch.onActionViewCollapsed();
+                txtIgap.setVisibility(View.VISIBLE);
+                arcMenu.setVisibility(View.VISIBLE);
                 mLeftDrawerLayout.toggle();
+            }
+        });
+
+        ViewGroup root = (ViewGroup) findViewById(R.id.fragmentContainer);
+        InputMethodManager im = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+        SoftKeyboard softKeyboard = new SoftKeyboard(root, im);
+        softKeyboard.setSoftKeyboardCallback(new SoftKeyboard.SoftKeyboardChanged() {
+            @Override
+            public void onSoftKeyboardHide() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        arcMenu.setVisibility(View.VISIBLE);
+                        if (btnSearch.getQuery().toString().length() > 0) {
+                            btnSearch.setIconified(false);
+                            txtIgap.setVisibility(View.GONE);
+
+                        } else {
+                            btnSearch.setIconified(true);
+                            txtIgap.setVisibility(View.VISIBLE);
+
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onSoftKeyboardShow() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        arcMenu.setVisibility(View.GONE);
+                        txtIgap.setVisibility(View.GONE);
+                    }
+                });
             }
         });
     }
@@ -254,9 +286,11 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             public void onClick(View view) {
 
 
-                Intent intent = new Intent(ActivityMain.this, ActivityNewGroup.class);
-                intent.putExtra("TYPE", "NewGroup");
-                startActivity(intent);
+                FragmentNewGroup fragment = FragmentNewGroup.newInstance();
+                Bundle bundle = new Bundle();
+                bundle.putString("TYPE", "NewGroup");
+                fragment.setArguments(bundle);
+                ActivityMain.this.getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
                 arcMenu.toggleMenu();
             }
         });
@@ -266,11 +300,14 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(ActivityMain.this, ActivityNewGroup.class);
-                intent.putExtra("TYPE", "NewChanel");
-                startActivity(intent);
 
+                Fragment fragment = FragmentNewGroup.newInstance();
+                Bundle bundle = new Bundle();
+                bundle.putString("TYPE", "NewChanel");
+                fragment.setArguments(bundle);
+                ActivityMain.this.getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
                 arcMenu.toggleMenu();
+
             }
         });
 

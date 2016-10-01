@@ -51,8 +51,7 @@
         <activity
             android:name=".activitys.ActivityMain"
             android:theme="@style/AppThemeTranslucent"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
-            android:windowSoftInputMode="stateAlwaysHidden">
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale">
 
             <!-- this part add app logo to list of share -->
             <intent-filter>
@@ -75,6 +74,7 @@
         <activity
             android:name=".activitys.ActivityIntroduce"
             android:configChanges="keyboard|keyboardHidden|screenSize|locale">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -85,7 +85,6 @@
             android:name=".activitys.ActivityProfile"
             android:configChanges="keyboard|keyboardHidden|screenSize|locale"
             android:windowSoftInputMode="adjustPan|stateHidden">
-
         </activity>
         <activity android:name=".activitys.ActivityCrop" />
         <activity android:name=".activitys.ActivitySettingNotification" />
@@ -114,9 +113,6 @@
 
         <activity android:name=".activitys.ActivityChatBackground" />
         <activity android:name=".activitys.ActivityWebView" />
-        <activity android:name=".activitys.ActivityNewGroup">
-
-        </activity>
         <activity android:name=".activitys.ActivityNewChanelFinish" />
         <activity android:name=".activitys.ActivityProfileChannel"></activity>
 

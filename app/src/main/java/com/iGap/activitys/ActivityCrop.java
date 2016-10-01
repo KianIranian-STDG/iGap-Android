@@ -3,9 +3,11 @@ package com.iGap.activitys;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,9 +16,18 @@ import android.widget.Toast;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.module.HelperCopyFile;
+import com.iGap.module.HelperDecodeFile;
+import com.iGap.realm.RealmAvatarPath;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
+import io.realm.Sort;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityCrop extends ActivityEnhanced {
@@ -24,6 +35,8 @@ public class ActivityCrop extends ActivityEnhanced {
     private ImageView imgPic;
     private Uri resultUri;
     private TextView txtCancel, txtSet, txtCrop, txtAgreeImage;
+    private int idAvatar;
+    private String pathSaveImage;
 
     private String page;
     private String type;
@@ -98,15 +111,12 @@ public class ActivityCrop extends ActivityEnhanced {
                         startActivity(intent);
                         finish();
                     } else if (page.equals("NewGroup")) {
-                        Intent intent = new Intent(ActivityCrop.this, ActivityNewGroup.class);
-                        intent.putExtra("TYPE", "NewGroup");
-                        startActivity(intent);
                         finish();
+
                     } else if (page.equals("NewChanel")) {
-                        Intent intent = new Intent(ActivityCrop.this, ActivityNewGroup.class);
-                        intent.putExtra("TYPE", "NewChanel");
-                        startActivity(intent);
+
                         finish();
+
                     }
                 }
 
@@ -125,20 +135,14 @@ public class ActivityCrop extends ActivityEnhanced {
                         finish();
 
                     } else if (page.equals("setting")) {
-
+//
                         Intent intent = new Intent(ActivityCrop.this, ActivitySetting.class);
                         startActivity(intent);
                         finish();
 
                     } else if (page.equals("NewGroup")) {
-                        Intent intent = new Intent(ActivityCrop.this, ActivityNewGroup.class);
-                        intent.putExtra("TYPE", "NewGroup");
-                        startActivity(intent);
                         finish();
                     } else if (page.equals("NewChanel")) {
-                        Intent intent = new Intent(ActivityCrop.this, ActivityNewGroup.class);
-                        intent.putExtra("TYPE", "NewChanel");
-                        startActivity(intent);
                         finish();
                     }
                 }
@@ -148,51 +152,54 @@ public class ActivityCrop extends ActivityEnhanced {
         txtSet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 if (resultUri != null && type.equals("crop") || type.equals("gallery")) {
                     pathImageUser = getRealPathFromURI(resultUri);
+                    HelperCopyFile.copyFile(pathImageUser, realm());
                     if (page.equals("NewGroup")) {
                         if (G.IMAGE_NEW_GROUP.exists())
-                            G.imageFile.delete();// if file exists delete
-                        HelperCopyFile.copyFile(pathImageUser, G.IMAGE_NEW_GROUP.toString());
+                            HelperCopyFile.copyFile(pathImageUser, G.IMAGE_NEW_GROUP.toString());
                     } else if (page.equals("NewChanel")) {
-                        if (G.IMAGE_NEW_GROUP.exists())
-                            G.imageFile.delete();// if file exists delete
-                        HelperCopyFile.copyFile(pathImageUser, G.IMAGE_NEW_CHANEL.toString());
+                        if (G.IMAGE_NEW_CHANEL.exists())
+                            HelperCopyFile.copyFile(pathImageUser, G.IMAGE_NEW_CHANEL.toString());
                     } else {
-                        if (G.imageFile.exists()) G.imageFile.delete();// if file exists delete
-                        HelperCopyFile.copyFile(pathImageUser, G.imageFile.toString());
-                    }
 
+                        HelperCopyFile.copyFile(pathImageUser, realm());
+                    }
                 }
                 if (page != null) {
                     if (page.equals("profile")) {
 
-                        Intent intent = new Intent(ActivityCrop.this, ActivityProfile.class);
-                        ActivityProfile.IsDeleteFile = true;
-                        startActivity(intent);
+                        resizeImage(realm());
                         finish();
 
                     } else if (page.equals("setting")) {
-                        Intent intent = new Intent(ActivityCrop.this, ActivitySetting.class);
-                        startActivity(intent);
+                        resizeImage(realm());
                         finish();
                     } else if (page.equals("NewGroup")) {
-                        Intent intent = new Intent(ActivityCrop.this, ActivityNewGroup.class);
-                        intent.putExtra("TYPE", "NewGroup");
-                        startActivity(intent);
+                        resizeImage(G.IMAGE_NEW_GROUP.toString());
                         finish();
                     } else if (page.equals("NewChanel")) {
-                        Intent intent = new Intent(ActivityCrop.this, ActivityNewGroup.class);
-                        intent.putExtra("TYPE", "NewChanel");
-                        startActivity(intent);
+                        resizeImage(G.IMAGE_NEW_CHANEL.toString());
                         finish();
                     }
                 }
             }
         });
+    }
 
+    private String realm() {
 
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<RealmAvatarPath> realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
+        realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
+        if (realmAvatarPaths.size() > 0) {
+            idAvatar = realmAvatarPaths.first().getId();
+        } else {
+            idAvatar = 0;
+        }
+        realm.close();
+
+        return G.imageFile.toString() + "_" + idAvatar + ".jpg";
     }
 
     //======================================================================================================// result from crop
@@ -231,6 +238,24 @@ public class ActivityCrop extends ActivityEnhanced {
             cursor.close();
         }
         return result;
+    }
+
+    private void resizeImage(String pathSaveImage) {
+        Bitmap b = HelperDecodeFile.decodeFile(new File(pathSaveImage));
+        try {
+            FileOutputStream out = new FileOutputStream(pathSaveImage);
+
+            if (b != null) {
+                b.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            } else {
+                Toast.makeText(ActivityCrop.this, "khfifhiwfhiwhieaf", Toast.LENGTH_SHORT).show();
+            }
+            out.flush();
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Log.i("dddddd", "onClick: ");
     }
 
 

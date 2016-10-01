@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ng_fragmentContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layoutDirection="ltr"
-    tools:context="com.iGap.activitys.ActivityNewGroup">
+    android:background="@color/white"
+    android:fitsSystemWindows="false"
+    android:layoutDirection="ltr">
 
 
     <android.support.v7.widget.Toolbar
@@ -83,7 +83,8 @@
                     android:id="@+id/ng_edt_newGroup"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp8" />
+                    android:layout_marginTop="@dimen/dp8"
+                    android:singleLine="true" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -103,6 +104,8 @@
                     android:background="@android:color/transparent"
                     android:maxLength="500"
                     android:maxLines="4"
+                    android:lines="4"
+                    android:ems="4"
                     android:paddingTop="0dp" />
 
             </android.support.design.widget.TextInputLayout>

@@ -12,9 +12,6 @@ import android.widget.EditText;
 import com.iGap.G;
 import com.iGap.R;
 
-/**
- * Created by Rahmani on 9/19/2016.
- */
 public class LinedEditText extends EditText {
 
     // the vertical offset scaling factor (10% of the height of the text)
@@ -32,11 +29,13 @@ public class LinedEditText extends EditText {
         super(context);
         init();
         setMaxLines(4);
+        setLines(4);
     }
     public LinedEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
         setMaxLines(4);
+        setLines(4);
 
     }
 
@@ -44,7 +43,7 @@ public class LinedEditText extends EditText {
         super(context, attrs, defStyle);
         init();
         setMaxLines(4);
-
+        setLines(4);
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -86,7 +85,7 @@ public class LinedEditText extends EditText {
         int baseline = getLineBounds(0, reuseableRect);
 
         // for each line
-        for (int i = 0; i < numberOfLines; i++) {
+        for (int i = 0; i < 4; i++) {
 
             // draw the line
             canvas.drawLine(
