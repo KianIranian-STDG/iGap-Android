@@ -1175,7 +1175,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     }
 
     @Override
-    public void onChatUpdateStatus(long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, int statusVersion) {
+    public void onChatUpdateStatus(long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, long statusVersion) {
         // empty
     }
 }

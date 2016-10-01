@@ -30,7 +30,7 @@ public class ChatUpdateStatusUtil implements OnChatUpdateStatusResponse {
     }
 
     @Override
-    public void onChatUpdateStatus(long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, int statusVersion) {
+    public void onChatUpdateStatus(long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, long statusVersion) {
         if (onChatUpdateStatusResponse != null) {
             onChatUpdateStatusResponse.onChatUpdateStatus(roomId, messageId, status, statusVersion);
         }

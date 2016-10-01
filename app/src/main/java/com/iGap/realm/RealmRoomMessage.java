@@ -11,9 +11,9 @@ import io.realm.annotations.PrimaryKey;
 public class RealmRoomMessage extends RealmObject {
     @PrimaryKey
     private long messageId;
-    private int messageVersion;
+    private long messageVersion;
     private String status;
-    private int statusVersion;
+    private long statusVersion;
     private String messageType;
     private String message = "hello";
     private long userId;
@@ -31,11 +31,11 @@ public class RealmRoomMessage extends RealmObject {
         this.messageId = messageId;
     }
 
-    public int getMessageVersion() {
+    public long getMessageVersion() {
         return messageVersion;
     }
 
-    public void setMessageVersion(int messageVersion) {
+    public void setMessageVersion(long messageVersion) {
         this.messageVersion = messageVersion;
     }
 
@@ -47,7 +47,7 @@ public class RealmRoomMessage extends RealmObject {
         this.status = status;
     }
 
-    public int getStatusVersion() {
+    public long getStatusVersion() {
         return statusVersion;
     }
 
@@ -129,7 +129,7 @@ public class RealmRoomMessage extends RealmObject {
     }
 
     public void setAttachment(long messageId, ProtoGlobal.File attachment) {
-        if (!attachment.getToken().isEmpty()){
+        if (!attachment.getToken().isEmpty()) {
             if (this.attachment == null) {
                 Realm realm = Realm.getDefaultInstance();
                 RealmMessageAttachment realmMessageAttachment = realm.createObject(RealmMessageAttachment.class);

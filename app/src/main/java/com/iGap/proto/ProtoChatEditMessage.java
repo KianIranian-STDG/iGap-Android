@@ -870,9 +870,9 @@ public final class ProtoChatEditMessage {
     long getMessageId();
 
     /**
-     * <code>optional uint32 message_version = 4;</code>
+     * <code>optional uint64 message_version = 4;</code>
      */
-    int getMessageVersion();
+    long getMessageVersion();
 
     /**
      * <code>optional string message = 5;</code>
@@ -898,7 +898,7 @@ public final class ProtoChatEditMessage {
     private ChatEditMessageResponse() {
       roomId_ = 0L;
       messageId_ = 0L;
-      messageVersion_ = 0;
+      messageVersion_ = 0L;
       message_ = "";
     }
 
@@ -952,7 +952,7 @@ public final class ProtoChatEditMessage {
             }
             case 32: {
 
-              messageVersion_ = input.readUInt32();
+              messageVersion_ = input.readUInt64();
               break;
             }
             case 42: {
@@ -1024,11 +1024,11 @@ public final class ProtoChatEditMessage {
     }
 
     public static final int MESSAGE_VERSION_FIELD_NUMBER = 4;
-    private int messageVersion_;
+    private long messageVersion_;
     /**
-     * <code>optional uint32 message_version = 4;</code>
+     * <code>optional uint64 message_version = 4;</code>
      */
-    public int getMessageVersion() {
+    public long getMessageVersion() {
       return messageVersion_;
     }
 
@@ -1087,8 +1087,8 @@ public final class ProtoChatEditMessage {
       if (messageId_ != 0L) {
         output.writeUInt64(3, messageId_);
       }
-      if (messageVersion_ != 0) {
-        output.writeUInt32(4, messageVersion_);
+      if (messageVersion_ != 0L) {
+        output.writeUInt64(4, messageVersion_);
       }
       if (!getMessageBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 5, message_);
@@ -1112,9 +1112,9 @@ public final class ProtoChatEditMessage {
         size += com.google.protobuf.CodedOutputStream
                 .computeUInt64Size(3, messageId_);
       }
-      if (messageVersion_ != 0) {
+      if (messageVersion_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
-                .computeUInt32Size(4, messageVersion_);
+                .computeUInt64Size(4, messageVersion_);
       }
       if (!getMessageBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, message_);
@@ -1169,7 +1169,8 @@ public final class ProtoChatEditMessage {
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
               getMessageId());
       hash = (37 * hash) + MESSAGE_VERSION_FIELD_NUMBER;
-      hash = (53 * hash) + getMessageVersion();
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+              getMessageVersion());
       hash = (37 * hash) + MESSAGE_FIELD_NUMBER;
       hash = (53 * hash) + getMessage().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
@@ -1302,7 +1303,7 @@ public final class ProtoChatEditMessage {
 
         messageId_ = 0L;
 
-        messageVersion_ = 0;
+        messageVersion_ = 0L;
 
         message_ = "";
 
@@ -1388,7 +1389,7 @@ public final class ProtoChatEditMessage {
         if (other.getMessageId() != 0L) {
           setMessageId(other.getMessageId());
         }
-        if (other.getMessageVersion() != 0) {
+        if (other.getMessageVersion() != 0L) {
           setMessageVersion(other.getMessageVersion());
         }
         if (!other.getMessage().isEmpty()) {
@@ -1590,28 +1591,28 @@ public final class ProtoChatEditMessage {
         return this;
       }
 
-      private int messageVersion_;
+      private long messageVersion_;
       /**
-       * <code>optional uint32 message_version = 4;</code>
+       * <code>optional uint64 message_version = 4;</code>
        */
-      public int getMessageVersion() {
+      public long getMessageVersion() {
         return messageVersion_;
       }
       /**
-       * <code>optional uint32 message_version = 4;</code>
+       * <code>optional uint64 message_version = 4;</code>
        */
-      public Builder setMessageVersion(int value) {
-
+      public Builder setMessageVersion(long value) {
+        
         messageVersion_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional uint32 message_version = 4;</code>
+       * <code>optional uint64 message_version = 4;</code>
        */
       public Builder clearMessageVersion() {
 
-        messageVersion_ = 0;
+        messageVersion_ = 0L;
         onChanged();
         return this;
       }
@@ -1760,7 +1761,7 @@ public final class ProtoChatEditMessage {
                     "e\030\004 \001(\t\"\213\001\n\027ChatEditMessageResponse\022!\n\010r" +
                     "esponse\030\001 \001(\0132\017.proto.Response\022\017\n\007room_i" +
                     "d\030\002 \001(\004\022\022\n\nmessage_id\030\003 \001(\004\022\027\n\017message_v" +
-                    "ersion\030\004 \001(\r\022\017\n\007message\030\005 \001(\tB&\n\016com.iGa" +
+                    "ersion\030\004 \001(\004\022\017\n\007message\030\005 \001(\tB&\n\016com.iGa" +
                     "p.protoB\024ProtoChatEditMessageb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =

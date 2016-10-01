@@ -15,7 +15,7 @@ import io.realm.Realm;
 import io.realm.Sort;
 
 public class RequestClientCondition {
-
+    //TODO [Saeed Mozaffari] [2016-09-29 12:45 PM] - after get response for client condition delete all data (hint : just clear data in room don't delete room)
     public void clientCondition() {
         Realm realm = Realm.getDefaultInstance();
 
@@ -87,12 +87,12 @@ public class RequestClientCondition {
 //            }
 //        });
 
-//        RequestWrapper requestWrapper = new RequestWrapper(600, clientCondition);
-//        try {
-//            RequestQueue.sendRequest(requestWrapper);
-//        } catch (IllegalAccessException e) {
-//            e.printStackTrace();
-//        }
+        RequestWrapper requestWrapper = new RequestWrapper(600, clientCondition);
+        try {
+            RequestQueue.sendRequest(requestWrapper);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 
 }

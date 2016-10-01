@@ -10,8 +10,8 @@ import io.realm.annotations.PrimaryKey;
 public class RealmClientCondition extends RealmObject {
     @PrimaryKey
     private long roomId;
-    private int messageVersion;
-    private int statusVersion;// client condition
+    private long messageVersion;
+    private long statusVersion;
     private long deleteVersion;
     private RealmList<RealmOfflineDelete> offlineDeleted;
     private RealmList<RealmOfflineEdited> offlineEdited;
@@ -29,19 +29,19 @@ public class RealmClientCondition extends RealmObject {
         this.roomId = roomId;
     }
 
-    public int getMessageVersion() {
+    public long getMessageVersion() {
         return messageVersion;
     }
 
-    public void setMessageVersion(int messageVersion) {
+    public void setMessageVersion(long messageVersion) {
         this.messageVersion = messageVersion;
     }
 
-    public int getStatusVersion() {
+    public long getStatusVersion() {
         return statusVersion;
     }
 
-    public void setStatusVersion(int statusVersion) {
+    public void setStatusVersion(long statusVersion) {
         this.statusVersion = statusVersion;
     }
 

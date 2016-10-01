@@ -154,14 +154,14 @@ public final class ProtoClientCondition {
       long getRoomId();
 
       /**
-       * <code>optional uint32 message_version = 3;</code>
+       * <code>optional uint64 message_version = 3;</code>
        */
-      int getMessageVersion();
+      long getMessageVersion();
 
       /**
-       * <code>optional uint32 status_version = 4;</code>
+       * <code>optional uint64 status_version = 4;</code>
        */
-      int getStatusVersion();
+      long getStatusVersion();
 
       /**
        * <code>optional uint64 delete_version = 5;</code>
@@ -255,8 +255,8 @@ public final class ProtoClientCondition {
       }
       private Room() {
         roomId_ = 0L;
-        messageVersion_ = 0;
-        statusVersion_ = 0;
+        messageVersion_ = 0L;
+        statusVersion_ = 0L;
         deleteVersion_ = 0L;
         offlineDeleted_ = java.util.Collections.emptyList();
         offlineEdited_ = java.util.Collections.emptyList();
@@ -299,12 +299,12 @@ public final class ProtoClientCondition {
               }
               case 24: {
 
-                messageVersion_ = input.readUInt32();
+                messageVersion_ = input.readUInt64();
                 break;
               }
               case 32: {
 
-                statusVersion_ = input.readUInt32();
+                statusVersion_ = input.readUInt64();
                 break;
               }
               case 40: {
@@ -1115,20 +1115,20 @@ public final class ProtoClientCondition {
       }
 
       public static final int MESSAGE_VERSION_FIELD_NUMBER = 3;
-      private int messageVersion_;
+      private long messageVersion_;
       /**
-       * <code>optional uint32 message_version = 3;</code>
+       * <code>optional uint64 message_version = 3;</code>
        */
-      public int getMessageVersion() {
+      public long getMessageVersion() {
         return messageVersion_;
       }
 
       public static final int STATUS_VERSION_FIELD_NUMBER = 4;
-      private int statusVersion_;
+      private long statusVersion_;
       /**
-       * <code>optional uint32 status_version = 4;</code>
+       * <code>optional uint64 status_version = 4;</code>
        */
-      public int getStatusVersion() {
+      public long getStatusVersion() {
         return statusVersion_;
       }
 
@@ -1281,11 +1281,11 @@ public final class ProtoClientCondition {
         if (roomId_ != 0L) {
           output.writeUInt64(2, roomId_);
         }
-        if (messageVersion_ != 0) {
-          output.writeUInt32(3, messageVersion_);
+        if (messageVersion_ != 0L) {
+          output.writeUInt64(3, messageVersion_);
         }
-        if (statusVersion_ != 0) {
-          output.writeUInt32(4, statusVersion_);
+        if (statusVersion_ != 0L) {
+          output.writeUInt64(4, statusVersion_);
         }
         if (deleteVersion_ != 0L) {
           output.writeUInt64(5, deleteVersion_);
@@ -1330,13 +1330,13 @@ public final class ProtoClientCondition {
           size += com.google.protobuf.CodedOutputStream
                   .computeUInt64Size(2, roomId_);
         }
-        if (messageVersion_ != 0) {
+        if (messageVersion_ != 0L) {
           size += com.google.protobuf.CodedOutputStream
-                  .computeUInt32Size(3, messageVersion_);
+                  .computeUInt64Size(3, messageVersion_);
         }
-        if (statusVersion_ != 0) {
+        if (statusVersion_ != 0L) {
           size += com.google.protobuf.CodedOutputStream
-                  .computeUInt32Size(4, statusVersion_);
+                  .computeUInt64Size(4, statusVersion_);
         }
         if (deleteVersion_ != 0L) {
           size += com.google.protobuf.CodedOutputStream
@@ -1441,9 +1441,11 @@ public final class ProtoClientCondition {
         hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
                 getRoomId());
         hash = (37 * hash) + MESSAGE_VERSION_FIELD_NUMBER;
-        hash = (53 * hash) + getMessageVersion();
+        hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+                getMessageVersion());
         hash = (37 * hash) + STATUS_VERSION_FIELD_NUMBER;
-        hash = (53 * hash) + getStatusVersion();
+        hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+                getStatusVersion());
         hash = (37 * hash) + DELETE_VERSION_FIELD_NUMBER;
         hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
                 getDeleteVersion());
@@ -1593,9 +1595,9 @@ public final class ProtoClientCondition {
           super.clear();
           roomId_ = 0L;
 
-          messageVersion_ = 0;
+          messageVersion_ = 0L;
 
-          statusVersion_ = 0;
+          statusVersion_ = 0L;
 
           deleteVersion_ = 0L;
 
@@ -1714,10 +1716,10 @@ public final class ProtoClientCondition {
           if (other.getRoomId() != 0L) {
             setRoomId(other.getRoomId());
           }
-          if (other.getMessageVersion() != 0) {
+          if (other.getMessageVersion() != 0L) {
             setMessageVersion(other.getMessageVersion());
           }
-          if (other.getStatusVersion() != 0) {
+          if (other.getStatusVersion() != 0L) {
             setStatusVersion(other.getStatusVersion());
           }
           if (other.getDeleteVersion() != 0L) {
@@ -1834,54 +1836,54 @@ public final class ProtoClientCondition {
           return this;
         }
 
-        private int messageVersion_;
+        private long messageVersion_;
         /**
-         * <code>optional uint32 message_version = 3;</code>
+         * <code>optional uint64 message_version = 3;</code>
          */
-        public int getMessageVersion() {
+        public long getMessageVersion() {
           return messageVersion_;
         }
         /**
-         * <code>optional uint32 message_version = 3;</code>
+         * <code>optional uint64 message_version = 3;</code>
          */
-        public Builder setMessageVersion(int value) {
-
+        public Builder setMessageVersion(long value) {
+          
           messageVersion_ = value;
           onChanged();
           return this;
         }
         /**
-         * <code>optional uint32 message_version = 3;</code>
+         * <code>optional uint64 message_version = 3;</code>
          */
         public Builder clearMessageVersion() {
 
-          messageVersion_ = 0;
+          messageVersion_ = 0L;
           onChanged();
           return this;
         }
 
-        private int statusVersion_;
+        private long statusVersion_;
         /**
-         * <code>optional uint32 status_version = 4;</code>
+         * <code>optional uint64 status_version = 4;</code>
          */
-        public int getStatusVersion() {
+        public long getStatusVersion() {
           return statusVersion_;
         }
         /**
-         * <code>optional uint32 status_version = 4;</code>
+         * <code>optional uint64 status_version = 4;</code>
          */
-        public Builder setStatusVersion(int value) {
-
+        public Builder setStatusVersion(long value) {
+          
           statusVersion_ = value;
           onChanged();
           return this;
         }
         /**
-         * <code>optional uint32 status_version = 4;</code>
+         * <code>optional uint64 status_version = 4;</code>
          */
         public Builder clearStatusVersion() {
 
-          statusVersion_ = 0;
+          statusVersion_ = 0L;
           onChanged();
           return this;
         }
@@ -3860,7 +3862,7 @@ public final class ProtoClientCondition {
                     "n\022\037\n\007request\030\001 \001(\0132\016.proto.Request\022*\n\005ro" +
                     "oms\030\002 \003(\0132\033.proto.ClientCondition.Room\032\275" +
                     "\003\n\004Room\022\017\n\007room_id\030\002 \001(\004\022\027\n\017message_vers" +
-                    "ion\030\003 \001(\r\022\026\n\016status_version\030\004 \001(\r\022\026\n\016del" +
+                    "ion\030\003 \001(\004\022\026\n\016status_version\030\004 \001(\004\022\026\n\016del" +
                     "ete_version\030\005 \001(\004\022\027\n\017offline_deleted\030\006 \003" +
                     "(\004\022A\n\016offline_edited\030\007 \003(\0132).proto.Clien" +
                     "tCondition.Room.OfflineEdited\022\024\n\014offline" +

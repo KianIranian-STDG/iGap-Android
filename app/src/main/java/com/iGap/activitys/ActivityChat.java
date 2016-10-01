@@ -428,7 +428,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
         G.onChatEditMessageResponse = new OnChatEditMessageResponse() {
             @Override
-            public void onChatEditMessage(long roomId, final long messageId, int messageVersion, final String message, ProtoResponse.Response response) {
+            public void onChatEditMessage(long roomId, final long messageId, long messageVersion, final String message, ProtoResponse.Response response) {
                 Log.i(ActivityMain.class.getSimpleName(), "onChatEditMessage called");
                 if (mRoomId == roomId) {
                     // I'm in the room
@@ -866,7 +866,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                                 RealmOfflineEdited realmOfflineEdited = realm.createObject(RealmOfflineEdited.class);
                                 realmOfflineEdited.setId(System.nanoTime());
                                 realmOfflineEdited.setMessageId(Long.parseLong(messageInfo.messageID));
-                                realmOfflineEdited.setMessage(messageInfo.messageText);
+                                realmOfflineEdited.setMessage(message);
                                 realmOfflineEdited = realm.copyToRealm(realmOfflineEdited);
 
                                 realmClientCondition.getOfflineEdited().add(realmOfflineEdited);
@@ -1756,7 +1756,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
         Collections.sort(lastResultMessages, SortMessages.DESC);
 
-        realm.close();
+
 
         EndlessRecyclerOnScrollListener endlessRecyclerOnScrollListener = new EndlessRecyclerOnScrollListener(lastResultMessages, mAdapter, ImageLoader.getInstance(), false, true) {
             @Override
@@ -1780,7 +1780,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         for (RealmRoomMessage realmRoomMessage : endlessRecyclerOnScrollListener.loadMore(0)) {
             messageInfos.add(StructMessageInfo.convert(realmRoomMessage));
         }
-
+        realm.close();
         return messageInfos;
     }
 
@@ -1972,7 +1972,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     }
 
     @Override
-    public void onChatUpdateStatus(long roomId, final long messageId, final ProtoGlobal.RoomMessageStatus status, int statusVersion) {
+    public void onChatUpdateStatus(long roomId, final long messageId, final ProtoGlobal.RoomMessageStatus status, long statusVersion) {
         Log.i(ActivityChat.class.getSimpleName(), "onChatUpdateStatus called");
 
         // I'm in the room

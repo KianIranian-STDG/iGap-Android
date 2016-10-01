@@ -834,9 +834,9 @@ public final class ProtoChatUpdateStatus {
     com.iGap.proto.ProtoGlobal.RoomMessageStatus getStatus();
 
     /**
-     * <code>optional uint32 status_version = 5;</code>
+     * <code>optional uint64 status_version = 5;</code>
      */
-    int getStatusVersion();
+    long getStatusVersion();
   }
   /**
    * Protobuf type {@code proto.ChatUpdateStatusResponse}
@@ -853,7 +853,7 @@ public final class ProtoChatUpdateStatus {
       roomId_ = 0L;
       messageId_ = 0L;
       status_ = 0;
-      statusVersion_ = 0;
+      statusVersion_ = 0L;
     }
 
     @java.lang.Override
@@ -912,7 +912,7 @@ public final class ProtoChatUpdateStatus {
             }
             case 40: {
 
-              statusVersion_ = input.readUInt32();
+              statusVersion_ = input.readUInt64();
               break;
             }
           }
@@ -994,11 +994,11 @@ public final class ProtoChatUpdateStatus {
     }
 
     public static final int STATUS_VERSION_FIELD_NUMBER = 5;
-    private int statusVersion_;
+    private long statusVersion_;
     /**
-     * <code>optional uint32 status_version = 5;</code>
+     * <code>optional uint64 status_version = 5;</code>
      */
-    public int getStatusVersion() {
+    public long getStatusVersion() {
       return statusVersion_;
     }
 
@@ -1026,8 +1026,8 @@ public final class ProtoChatUpdateStatus {
       if (status_ != com.iGap.proto.ProtoGlobal.RoomMessageStatus.FAILED.getNumber()) {
         output.writeEnum(4, status_);
       }
-      if (statusVersion_ != 0) {
-        output.writeUInt32(5, statusVersion_);
+      if (statusVersion_ != 0L) {
+        output.writeUInt64(5, statusVersion_);
       }
     }
 
@@ -1052,9 +1052,9 @@ public final class ProtoChatUpdateStatus {
         size += com.google.protobuf.CodedOutputStream
                 .computeEnumSize(4, status_);
       }
-      if (statusVersion_ != 0) {
+      if (statusVersion_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
-                .computeUInt32Size(5, statusVersion_);
+                .computeUInt64Size(5, statusVersion_);
       }
       memoizedSize = size;
       return size;
@@ -1107,7 +1107,8 @@ public final class ProtoChatUpdateStatus {
       hash = (37 * hash) + STATUS_FIELD_NUMBER;
       hash = (53 * hash) + status_;
       hash = (37 * hash) + STATUS_VERSION_FIELD_NUMBER;
-      hash = (53 * hash) + getStatusVersion();
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+              getStatusVersion());
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -1240,7 +1241,7 @@ public final class ProtoChatUpdateStatus {
 
         status_ = 0;
 
-        statusVersion_ = 0;
+        statusVersion_ = 0L;
 
         return this;
       }
@@ -1327,7 +1328,7 @@ public final class ProtoChatUpdateStatus {
         if (other.status_ != 0) {
           setStatusValue(other.getStatusValue());
         }
-        if (other.getStatusVersion() != 0) {
+        if (other.getStatusVersion() != 0L) {
           setStatusVersion(other.getStatusVersion());
         }
         onChanged();
@@ -1569,28 +1570,28 @@ public final class ProtoChatUpdateStatus {
         return this;
       }
 
-      private int statusVersion_;
+      private long statusVersion_;
       /**
-       * <code>optional uint32 status_version = 5;</code>
+       * <code>optional uint64 status_version = 5;</code>
        */
-      public int getStatusVersion() {
+      public long getStatusVersion() {
         return statusVersion_;
       }
       /**
-       * <code>optional uint32 status_version = 5;</code>
+       * <code>optional uint64 status_version = 5;</code>
        */
-      public Builder setStatusVersion(int value) {
-
+      public Builder setStatusVersion(long value) {
+        
         statusVersion_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional uint32 status_version = 5;</code>
+       * <code>optional uint64 status_version = 5;</code>
        */
       public Builder clearStatusVersion() {
 
-        statusVersion_ = 0;
+        statusVersion_ = 0L;
         onChanged();
         return this;
       }
@@ -1672,7 +1673,7 @@ public final class ProtoChatUpdateStatus {
                     "\n\010response\030\001 \001(\0132\017.proto.Response\022\017\n\007roo" +
                     "m_id\030\002 \001(\004\022\022\n\nmessage_id\030\003 \001(\004\022(\n\006status" +
                     "\030\004 \001(\0162\030.proto.RoomMessageStatus\022\026\n\016stat" +
-                    "us_version\030\005 \001(\rB\'\n\016com.iGap.protoB\025Prot",
+                    "us_version\030\005 \001(\004B\'\n\016com.iGap.protoB\025Prot",
             "oChatUpdateStatusb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =

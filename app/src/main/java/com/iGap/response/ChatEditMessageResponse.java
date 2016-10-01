@@ -45,6 +45,7 @@ public class ChatEditMessageResponse extends MessageHandler {
 
                     if (realmClientCondition != null) {//TODO [Saeed Mozaffari] [2016-09-17 3:18 PM] - FORCE - client condition checking
                         realmClientCondition.setMessageVersion(chatEditMessageResponse.getMessageVersion());
+                        Log.i("CLI", "Edit message version : " + chatEditMessageResponse.getMessageVersion());
                         Log.i("SOC_CONDITION", "Edit Response 2");
                         for (RealmOfflineEdited realmOfflineEdited : realmClientCondition.getOfflineEdited()) { // contains
                             Log.i("SOC_CONDITION", "Edit Response 3");
