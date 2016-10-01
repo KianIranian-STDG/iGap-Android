@@ -103,11 +103,11 @@ public class StructMessageAttachment implements Parcelable {
         this.smallThumbnail = smallThumbnail;
     }
 
-    public boolean existsFileOnLocal() {
+    public boolean isFileExistsOnLocal() {
         return localFilePath != null && new File(localFilePath).exists();
     }
 
-    public boolean existsThumbnailOnLocal() {
+    public boolean isThumbnailExistsOnLocal() {
         return localThumbnailPath != null && new File(localThumbnailPath).exists();
     }
 

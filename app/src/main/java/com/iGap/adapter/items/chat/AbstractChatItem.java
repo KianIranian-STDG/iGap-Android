@@ -94,8 +94,21 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
         if (holder.itemView.findViewById(R.id.progress) == null) {
             return;
         }
+        // update upload progress
         if (mMessage.uploadProgress != 100) {
             ((ProgressBar) holder.itemView.findViewById(R.id.progress)).setProgress(mMessage.uploadProgress);
+        } else {
+            holder.itemView.findViewById(R.id.progress).setVisibility(View.GONE);
+        }
+
+        // TODO: 10/1/2016 [Alireza] update download progress if needed
+        // update download progress
+        if (mMessage.downloadAttachment != null) {
+            if (mMessage.downloadAttachment.progress == 100) {
+                holder.itemView.findViewById(R.id.progress).setVisibility(View.GONE);
+            } else {
+                ((ProgressBar) holder.itemView.findViewById(R.id.progress)).setProgress(mMessage.uploadProgress);
+            }
         } else {
             holder.itemView.findViewById(R.id.progress).setVisibility(View.GONE);
         }
@@ -184,24 +197,38 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
         setReplayMessage(holder);
         setForwardMessage(holder);
 
+        download(holder);
+    }
+
+    private void download(VH holder) {
+        // runs if message has attachment
         if (mMessage.hasAttachment()) {
-            if (mMessage.attachment.existsFileOnLocal()) {
+            // if file already exists, simply show the local one
+            if (mMessage.attachment.isFileExistsOnLocal()) {
                 View view = holder.itemView.findViewById(R.id.shli_imv_image);
                 if (view != null) {
+                    // TODO: 10/1/2016 [Alireza] needs optimization
+                    // for displaying thumbnail, I make the view dimens as original file dimens
+                    // so, I make it default here to display the image in corrected way
                     view.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                     view.requestLayout();
                     view.postInvalidate();
                 }
 
+                // load file from local
                 onLoadFromLocal(holder, mMessage.attachment.getLocalFilePath());
             } else {
-                if (mMessage.attachment.existsThumbnailOnLocal()) {
+                // file doesn't exist on local, I check for a thumbnail
+                // if thumbnail exists, I load it into the view
+                if (mMessage.attachment.isThumbnailExistsOnLocal()) {
                     View view = holder.itemView.findViewById(R.id.shli_imv_image);
                     if (view != null) {
                         view.getLayoutParams().width = mMessage.attachment.width;
                         view.getLayoutParams().height = mMessage.attachment.height;
                         view.requestLayout();
                     }
+
+                    // load thumbnail from local
                     onLoadFromLocal(holder, mMessage.attachment.getLocalThumbnailPath());
                 }
                 // create new download attachment once with attachment token
@@ -209,8 +236,10 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
                     mMessage.downloadAttachment = new StructDownloadAttachment(mMessage.attachment.token);
                 }
 
+                // request thumbnail if message type is IMAGE
                 if ((mMessage.messageType == ProtoGlobal.RoomMessageType.IMAGE || mMessage.messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT) && !mMessage.downloadAttachment.thumbnailRequested) {
                     onRequestDownloadThumbnail();
+                    // prevent from multiple requesting thumbnail
                     mMessage.downloadAttachment.thumbnailRequested = true;
                 }
                 // TODO: 9/28/2016 [Alireza Eskandarpour Shoferi] set downloading FILE in download view onClick
