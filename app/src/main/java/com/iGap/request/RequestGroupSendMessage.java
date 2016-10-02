@@ -33,6 +33,11 @@ public class RequestGroupSendMessage { //TODO [Saeed Mozaffari] [2016-08-29 1:02
         return this;
     }
 
+    public RequestGroupSendMessage contact(ProtoGlobal.RoomMessageContact value) {
+        groupSendMessage.setContact(value);
+        return this;
+    }
+
     public RequestGroupSendMessage sendMessage(String fakeMessageIdAsIdentity) {
         RequestWrapper requestWrapper = new RequestWrapper(310, groupSendMessage, fakeMessageIdAsIdentity);
         try {

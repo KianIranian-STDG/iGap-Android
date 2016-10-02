@@ -1,8 +1,10 @@
 package com.iGap.response;
 
 import android.text.format.DateUtils;
+import android.util.Log;
 
 import com.iGap.G;
+import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoGroupSendMessage;
 import com.iGap.realm.RealmChatHistory;
@@ -135,6 +137,17 @@ public class GroupSendMessageResponse extends MessageHandler {
 
     @Override
     public void error() {
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        int majorCode = errorResponse.getMajorCode();
+        int minorCode = errorResponse.getMinorCode();
 
+        Log.i("SOC", "GroupSendMessageResponse response.majorCode() : " + majorCode);
+        Log.i("SOC", "GroupSendMessageResponse response.minorCode() : " + minorCode);
+    }
+
+    @Override
+    public void timeOut() {
+        super.timeOut();
+        Log.i("SOC", "GroupSendMessageResponse timeout");
     }
 }

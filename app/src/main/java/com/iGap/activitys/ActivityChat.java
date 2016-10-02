@@ -897,7 +897,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 if (ll_attach_text.getVisibility() == View.VISIBLE) {
                     onActivityResult(tmpRequestCode, tmpResultCode, tmpData);
                     ll_attach_text.setVisibility(View.GONE);
-                    edtChat.setText("");
                     return;
                 }
 
@@ -994,7 +993,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
                         // user wants to replay to a message
                         if (mReplayLayout != null && mReplayLayout.getTag() instanceof StructMessageInfo) {
-                            // TODO: 10/2/2016 [Alireza] inja bayad check koni age taraf ax gozashte bood, type khodesho bede va be hamoon send kone
                             mAdapter.add(new MessageItem(chatType).setMessage(StructMessageInfo.convert(roomMessage, ((StructMessageInfo) mReplayLayout.getTag()).senderName, ((StructMessageInfo) mReplayLayout.getTag()).messageText, ((StructMessageInfo) mReplayLayout.getTag()).filePic)));
                         } else {
                             mAdapter.add(new MessageItem(chatType).setMessage(StructMessageInfo.convert(roomMessage)));
@@ -1005,9 +1003,9 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                         scrollToEnd();
 
                         new ChatSendMessageUtil()
-                                .newBuilder(ProtoGlobal.RoomMessageType.TEXT, mRoomId)
+                                .newBuilder(chatType, ProtoGlobal.RoomMessageType.TEXT, mRoomId)
                                 .message(message)
-                                .sendMessage(chatType, identity);
+                                .sendMessage(identity);
 
                         edtChat.setText("");
 
@@ -1016,7 +1014,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                             mReplayLayout.setVisibility(View.GONE);
                         }
                     } else {
-                        Toast.makeText(G.context, "Please Write Your Messge!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(G.context, "Please Write Your message!", Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -1555,6 +1553,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                         long fileSize = file.length();
                         FileUploadStructure fileUploadStructure = new FileUploadStructure(fileName, fileSize, filePath, messageId, messageType, mRoomId);
                         fileUploadStructure.openFile(filePath);
+                        fileUploadStructure.text = getWrittenMessage();
 
                         byte[] fileHash = Utils.getFileHash(fileUploadStructure);
                         fileUploadStructure.setFileHash(fileHash);
@@ -1573,6 +1572,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     super.onPostExecute(result);
                     mSelectedFiles.add(result);
                     G.uploaderUtil.startUploading(result.fileSize, Long.toString(result.messageId));
+                    edtChat.setText("");
                 }
             }.execute(filePath, messageId, messageType);
 
@@ -2392,12 +2392,15 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     @Override
     public void onFileUploadStatus(ProtoFileUploadStatus.FileUploadStatusResponse.Status status, double progress, int recheckDelayMS, final String identity, ProtoResponse.Response response) {
         final FileUploadStructure fileUploadStructure = getSelectedFile(identity);
+        if (fileUploadStructure == null) {
+            return;
+        }
         if (status == ProtoFileUploadStatus.FileUploadStatusResponse.Status.PROCESSED && progress == 100D) {
             new ChatSendMessageUtil()
-                    .newBuilder(fileUploadStructure.messageType, fileUploadStructure.roomId)
+                    .newBuilder(chatType, fileUploadStructure.messageType, fileUploadStructure.roomId)
                     .attachment(fileUploadStructure.token)
-                    .message(getWrittenMessage())
-                    .sendMessage(chatType, Long.toString(fileUploadStructure.messageId));
+                    .message(fileUploadStructure.text)
+                    .sendMessage(Long.toString(fileUploadStructure.messageId));
 
             runOnUiThread(new Runnable() {
                 @Override

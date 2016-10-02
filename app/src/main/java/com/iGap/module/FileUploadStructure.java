@@ -27,6 +27,7 @@ public class FileUploadStructure {
     public long messageId;
     public ProtoGlobal.RoomMessageType messageType;
     public long roomId;
+    public String text;
     // FIXME: 9/19/2016 [Alireza Eskandarpour Shoferi] for test purposes
     public long uploadStartTime;
     public long getNBytesTime;
