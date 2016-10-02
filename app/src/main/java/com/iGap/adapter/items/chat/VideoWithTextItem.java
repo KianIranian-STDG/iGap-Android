@@ -45,8 +45,6 @@ public class VideoWithTextItem extends AbstractChatItem<VideoWithTextItem, Video
         holder.cslv_txt_video_mime_type.setText(mMessage.fileMime);
         holder.cslv_txt_vido_size.setText(Utils.humanReadableByteCount(mMessage.fileSize, true));
 
-        new HelperMimeType().LoadVideoTumpnail(holder.cslv_imv_vido_image, mMessage.filePic);
-
         if (mMessage.fileState == MyType.FileState.notDownload || mMessage.fileState == MyType.FileState.downloading)// enable or disable btn play video
         {
             holder.cslv_btn_play_video.setVisibility(View.GONE);

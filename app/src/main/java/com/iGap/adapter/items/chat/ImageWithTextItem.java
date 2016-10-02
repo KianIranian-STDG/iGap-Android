@@ -41,8 +41,6 @@ public class ImageWithTextItem extends AbstractChatItem<ImageWithTextItem, Image
     public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        holder.imvPicture.setImageResource(Integer.parseInt(mMessage.filePath));
-
         holder.messageText.setText(mMessage.messageText);
     }
 

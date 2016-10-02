@@ -236,8 +236,8 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
                     mMessage.downloadAttachment = new StructDownloadAttachment(mMessage.attachment.token);
                 }
 
-                // request thumbnail if message type is IMAGE
-                if ((mMessage.messageType == ProtoGlobal.RoomMessageType.IMAGE || mMessage.messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT) && !mMessage.downloadAttachment.thumbnailRequested) {
+                // request thumbnail
+                if (!mMessage.downloadAttachment.thumbnailRequested) {
                     onRequestDownloadThumbnail();
                     // prevent from multiple requesting thumbnail
                     mMessage.downloadAttachment.thumbnailRequested = true;

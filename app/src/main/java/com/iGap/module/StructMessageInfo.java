@@ -86,6 +86,23 @@ public class StructMessageInfo implements Parcelable {
         this.time = time;
     }
 
+    public StructMessageInfo(String messageID, String messageText, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, MyType.FileState fileState, String localThumbnailPath, String localFilePath, long time) {
+        this.messageID = messageID;
+        this.senderID = senderID;
+        this.status = status;
+        this.messageType = messageType;
+        this.messageText = messageText;
+        this.sendType = sendType;
+        this.fileState = fileState;
+        this.filePath = localThumbnailPath;
+        if (this.attachment == null) {
+            this.attachment = new StructMessageAttachment();
+        }
+        this.attachment.setLocalThumbnailPath(Long.parseLong(messageID), localThumbnailPath);
+        this.attachment.setLocalFilePath(Long.parseLong(messageID), localFilePath);
+        this.time = time;
+    }
+
     public StructMessageInfo(String messageID, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, MyType.FileState fileState, String localThumbnailPath, String localFilePath, long time, StructMessageInfo replayObject) {
         this.messageID = messageID;
         this.senderID = senderID;
