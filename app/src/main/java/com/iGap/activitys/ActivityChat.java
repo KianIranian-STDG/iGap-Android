@@ -71,6 +71,7 @@ import com.iGap.adapter.items.chat.VideoWithTextItem;
 import com.iGap.adapter.items.chat.VoiceItem;
 import com.iGap.fragments.FragmentShowImage;
 import com.iGap.helper.Emojione;
+import com.iGap.helper.HelperMimeType;
 import com.iGap.interface_package.IEmojiBackspaceClick;
 import com.iGap.interface_package.IEmojiClickListener;
 import com.iGap.interface_package.IEmojiLongClickListener;
@@ -1907,6 +1908,10 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
         if (messageInfo.messageType.toString().equals("IMAGE") || messageInfo.messageType.toString().equals("IMAGE_TEXT")) {
             showImage(messageInfo.getAttachment().getLocalThumbnailPath());
+        } else if (!messageInfo.messageType.toString().equals("TEXT") && !messageInfo.messageType.toString().equals("LOCATION")) {
+            Intent intent = HelperMimeType.appropriateProgram(messageInfo.getAttachment().getLocalFilePath());
+            if (intent != null)
+                startActivity(intent);
         } else {
 
             @ArrayRes

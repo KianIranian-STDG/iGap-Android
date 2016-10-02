@@ -1,9 +1,11 @@
 package com.iGap.helper;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -17,6 +19,63 @@ import java.io.File;
  * Created by android3 on 9/7/2016.
  */
 public class HelperMimeType {
+
+
+    /**
+     * open a file by appropriate Program
+     *
+     * @param filePath for realize type of file like image.png or dd.pdf
+     * @return intent for open file
+     */
+    public static Intent appropriateProgram(String filePath) {
+
+
+        File file = new File(filePath);
+
+        if (!file.exists()) {
+            return null;
+        }
+
+        String path = filePath.toLowerCase();
+
+        Intent intent = new Intent();
+        intent.setAction(android.content.Intent.ACTION_VIEW);
+
+
+        if (path.endsWith(".txt") || path.endsWith(".csv") || path.endsWith(".xml") || path.endsWith(".html")) {
+
+            intent.setDataAndType(Uri.fromFile(file), "text/*");
+        } else if (path.endsWith(".mp3") || path.endsWith(".ogg") || path.endsWith(".wma") || path.endsWith(".m4a") || path.endsWith(".amr") || path.endsWith(".wav") || path.endsWith(".mid") || path.endsWith(".midi")) {
+
+            intent.setDataAndType(Uri.fromFile(file), "audio/*");
+        } else if (path.endsWith(".mp4") || path.endsWith(".3gp") || path.endsWith(".avi") || path.endsWith(".mpg") || path.endsWith(".mpeg") || path.endsWith(".flv") || path.endsWith(".wmv") || path.endsWith(".m4v")) {
+
+            intent.setDataAndType(Uri.fromFile(file), "video/*");
+        } else if (path.endsWith(".pdf")) {
+
+            intent.setDataAndType(Uri.fromFile(file), "application/pdf");
+        } else if (path.endsWith(".jpg") || path.endsWith(".bmp") || path.endsWith(".png") || path.endsWith(".gif") || path.endsWith(".jpeg") || path.endsWith(".tiff")) {
+
+            intent.setDataAndType(Uri.fromFile(file), "image/*");
+        } else if (path.endsWith(".apk")) {
+
+            intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
+        } else if (path.endsWith(".gz") || path.endsWith(".gz") || path.endsWith(".zip")) {
+            intent.setDataAndType(Uri.fromFile(file), "package/*");
+        } else if (path.endsWith(".ppt") || path.endsWith(".pptx")) {
+
+            intent.setDataAndType(Uri.fromFile(file), "application/vnd.ms-powerpoint");
+        } else if (path.endsWith(".xls") || path.endsWith(".xlsx")) {
+            intent.setDataAndType(Uri.fromFile(file), "application/vnd.ms-excel");
+        } else if (path.endsWith(".rtf")) {
+            intent.setDataAndType(Uri.fromFile(file), "application/rtf");
+        }
+
+
+        return intent;
+    }
+
+
 
 
     /**
