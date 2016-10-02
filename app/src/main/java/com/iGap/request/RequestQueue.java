@@ -24,7 +24,6 @@ import java.util.Map;
 public class RequestQueue {
 
     public static synchronized void sendRequest(RequestWrapper... requestWrappers) throws IllegalAccessException {
-        Log.i("SOC_REQ", "RequestQueue 1 sendRequest");
         int length = requestWrappers.length;
         String randomId = HelperString.generateKey();
         if (length == 1) {
@@ -47,7 +46,6 @@ public class RequestQueue {
 
 
     protected static synchronized void prepareRequest(String randomId, RequestWrapper requestWrapper) {
-        Log.i("SOC_REQ", "RequestQueue 2 prepareRequest");
         if (!G.pullRequestQueueRunned.get()) {
             G.pullRequestQueueRunned.getAndSet(true);
             G.handler.postDelayed(new Runnable() {
@@ -62,7 +60,6 @@ public class RequestQueue {
         ProtoRequest.Request.Builder requestBuilder = ProtoRequest.Request.newBuilder();
         requestBuilder.setId(randomId);
 
-        Log.i("SOC", "ConnectionSecuringResponse 3");
         try {
             Object protoObject = requestWrapper.getProtoObject();
             Object protoInstance = null;
@@ -72,10 +69,8 @@ public class RequestQueue {
                 Method method2 = protoInstance.getClass().getMethod("build");
                 protoInstance = method2.invoke(protoInstance);
             } catch (NoSuchMethodException e) {
-                Log.i("SOC_REQ", "RequestQueue Error : " + e);
                 e.printStackTrace();
             }
-            Log.i("SOC", "ConnectionSecuringResponse 4");
             G.requestQueueMap.put(randomId, requestWrapper);
 
             byte[] actionId = HelperNumerical.intToByteArray(requestWrapper.actionId);
@@ -85,24 +80,20 @@ public class RequestQueue {
             byte[] payload = (byte[]) toByteArrayMethod.invoke(protoInstance);
             byte[] message = HelperNumerical.appendByteArrays(actionId, payload);
 
-            Log.i("SOC", "RequestWrapper message : " + message);
-
             if (G.isSecure) {
                 message = AESCrypt.encrypt(G.symmetricKey, message);
+                WebSocketClient.getInstance().sendBinary(message);
+                Log.i("SOC_REQ", "RequestQueue ********** sendRequest Secure successful **********");
+            } else if (G.unSecure.contains(requestWrapper.actionId + "")) {
+                WebSocketClient.getInstance().sendBinary(message);
+                Log.i("SOC_REQ", "RequestQueue ********** sendRequest unSecure successful **********");
             }
 
-            Log.i("SOC_REQ", "RequestQueue **************** message : " + message);
-            WebSocketClient.getInstance().sendBinary(message);
-            Log.i("SOC_REQ", "RequestQueue 3 sendRequest successful");
-
         } catch (NoSuchMethodException e) {
-            Log.i("SOC_REQ", "RequestQueue Error : " + e);
             e.printStackTrace();
         } catch (InvocationTargetException e) {
-            Log.i("SOC_REQ", "RequestQueue Error : " + e);
             e.printStackTrace();
         } catch (IllegalAccessException e) {
-            Log.i("SOC_REQ", "RequestQueue Error : " + e);
             e.printStackTrace();
         } catch (GeneralSecurityException e) {
             e.printStackTrace();
