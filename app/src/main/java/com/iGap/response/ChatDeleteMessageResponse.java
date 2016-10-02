@@ -33,11 +33,16 @@ public class ChatDeleteMessageResponse extends MessageHandler {
             @Override
             public void execute(Realm realm) {
                 RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", chatDeleteMessage.getRoomId()).findFirst();
+                Log.i("CLI", "Delete 1 : " + chatDeleteMessage.getMessageId());
                 if (realmClientCondition != null) {
+                    realmClientCondition.setDeleteVersion(chatDeleteMessage.getMessageId());
+                    Log.i("CLI", "Delete 2");
                     for (RealmOfflineDelete realmOfflineDeleted : realmClientCondition.getOfflineDeleted()) {
+                        Log.i("CLI", "Delete 3");
                         if (realmOfflineDeleted.getOfflineDelete() == chatDeleteMessage.getMessageId()) {
                             realmOfflineDeleted.deleteFromRealm();
-                            realmClientCondition.setDeleteVersion(chatDeleteMessage.getMessageId());
+                            Log.i("CLI", "realmClientCondition : " + realmClientCondition);
+                            break;
                         }
                     }
                 }

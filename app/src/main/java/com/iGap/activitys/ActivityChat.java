@@ -2036,15 +2036,17 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
         if (chatHistories != null) {
             for (RealmChatHistory chatHistory : chatHistories) {
-                if (chatHistory.getRoomMessage().getMessageType().equals(ProtoGlobal.RoomMessageType.IMAGE.toString())) {
-                    RealmMessageAttachment attachment = chatHistory.getRoomMessage().getAttachment();
-                    StructSharedMedia item = new StructSharedMedia();
-                    item.filePath = attachment.getLocalThumbnailPath();
-                    item.fileName = attachment.getName();
-                    if (item.filePath.equals(filePath))
-                        selectedPicture = listPic.size();
+                if (chatHistory.getRoomMessage() != null) {
+                    if (chatHistory.getRoomMessage().getMessageType().equals(ProtoGlobal.RoomMessageType.IMAGE.toString())) {
+                        RealmMessageAttachment attachment = chatHistory.getRoomMessage().getAttachment();
+                        StructSharedMedia item = new StructSharedMedia();
+                        item.filePath = attachment.getLocalFilePath();
+                        item.fileName = attachment.getName();
+                        if (item.filePath.equals(filePath))
+                            selectedPicture = listPic.size();
 
-                    listPic.add(item);
+                        listPic.add(item);
+                    }
                 }
             }
         }

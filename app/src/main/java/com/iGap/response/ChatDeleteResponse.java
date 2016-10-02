@@ -26,6 +26,7 @@ public class ChatDeleteResponse extends MessageHandler {
 
     @Override
     public void handler() {
+        super.handler();
         Log.i("RRR", "ChatDeleteResponse delete 1");
         ProtoChatDelete.ChatDeleteResponse.Builder builder = (ProtoChatDelete.ChatDeleteResponse.Builder) message;
         Log.i("RRR", "ChatDeleteResponse delete 2");
@@ -48,10 +49,12 @@ public class ChatDeleteResponse extends MessageHandler {
 
     @Override
     public void timeOut() {
+        super.timeOut();
     }
 
     @Override
     public void error() {
+        super.error();
         ProtoError.ErrorResponse.Builder builder = (ProtoError.ErrorResponse.Builder) message;
         Log.i("RRR", "ChatDeleteResponse error builder.getMajorCode() : " + builder.getMajorCode());
         Log.i("RRR", "ChatDeleteResponse error builder.getMinorCode() : " + builder.getMinorCode());

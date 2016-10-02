@@ -70,7 +70,6 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
-import me.leolin.shortcutbadger.ShortcutBadger;
 
 public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse {
 
@@ -114,9 +113,9 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         Contacts.FillRealmInviteFriend();
 
 
-        //*******************add count badgeIcon
-        int badgeCount = 15;
-        ShortcutBadger.applyCount(G.context, badgeCount);
+        //*******************add count badgeIcon //TODO [Saeed Mozaffari] [2016-10-01 11:59 AM] - i received exception for badge update  (( me.leolin.shortcutbadger.ShortcutBadgeException: unable to resolve intent: Intent { act=android.intent.action.BADGE_COUNT_UPDATE (has extras) } ))
+        //int badgeCount = 15;
+        //ShortcutBadger.applyCount(G.context, badgeCount);
 
 
         //*******************remove count badgeIcon
@@ -480,6 +479,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                         final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", chatId).findFirst();
 
                         if (realmRoom.getLastMessageId() != -1) {
+                            Log.i("CLI1", "CLEAR RoomId : " + chatId + "  ||  realmRoom.getLastMessageId() : " + realmRoom.getLastMessageId());
                             element.setClearId(realmRoom.getLastMessageId());
 
                             G.clearMessagesUtil.clearMessages(chatId, realmRoom.getLastMessageId());

@@ -53,6 +53,7 @@ public class ChatSendMessageResponse extends MessageHandler {
 
                 Log.i("CLI", "send message MessageVersion : " + roomMessage.getMessageVersion());
                 Log.i("CLI", "send message StatusVersion : " + roomMessage.getStatusVersion());
+                Log.i("CLI", "send message MessageId : " + roomMessage.getMessageId());
 
                 // if first message received but the room doesn't exist, create new room
                 RealmRoom room = realm.where(RealmRoom.class).equalTo("id", chatSendMessageResponse.getRoomId()).findFirst();

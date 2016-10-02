@@ -11,7 +11,6 @@ import com.iGap.realm.RealmOfflineSeen;
 import com.iGap.realm.RealmRoomMessage;
 
 import io.realm.Realm;
-import io.realm.RealmList;
 
 public class ChatUpdateStatusResponse extends MessageHandler {
 
@@ -41,15 +40,21 @@ public class ChatUpdateStatusResponse extends MessageHandler {
             @Override
             public void execute(Realm realm) {
                 if (!response.getId().isEmpty()) { // I'm sender
-
+                    Log.i("CLI", "chatUpdateStatus getMessageId : " + chatUpdateStatus.getMessageId());
                     RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", chatUpdateStatus.getRoomId()).findFirst();
-                    RealmList<RealmOfflineSeen> offlineSeen = realmClientCondition.getOfflineSeen();
-                    for (int i = offlineSeen.size() - 1; i >= 0; i--) {
-                        RealmOfflineSeen realmOfflineSeen = offlineSeen.get(i);
-                        Log.i("SOC_CONDITION", "realmOfflineSeen 1 : " + realmOfflineSeen);
-                        realmOfflineSeen.deleteFromRealm();
+                    // RealmList<RealmOfflineSeen> offlineSeen = realmClientCondition.getOfflineSeen();
+                    for (RealmOfflineSeen realmOfflineSeen : realmClientCondition.getOfflineSeen()) {
+                        if (realmOfflineSeen.getOfflineSeen() == chatUpdateStatus.getMessageId()) {
+                            realmOfflineSeen.deleteFromRealm();
+                            Log.i("CLI", "chatUpdateStatus Delete Seen");
+                            break;
+                        }
                     }
-
+//                    for (int i = offlineSeen.size() - 1; i >= 0; i--) {
+//                        RealmOfflineSeen realmOfflineSeen = offlineSeen.get(i);
+//                        Log.i("SOC_CONDITION", "realmOfflineSeen 1 : " + realmOfflineSeen);
+//                        realmOfflineSeen.deleteFromRealm();
+//                    }
                 } else { // I'm recipient
 
                     // find message from database and update its status

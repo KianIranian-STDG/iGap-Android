@@ -34,36 +34,27 @@ public class ChatEditMessageResponse extends MessageHandler {
             @Override
             public void execute(Realm realm) {
 
+                RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", chatEditMessageResponse.getRoomId()).findFirst();
+                if (realmClientCondition != null) {
+                    realmClientCondition.setMessageVersion(chatEditMessageResponse.getMessageVersion());
+                }
+
                 if (!chatEditMessageResponse.getResponse().getId().isEmpty()) {
-                    // set info for clientCondition
-                    RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", chatEditMessageResponse.getRoomId()).findFirst();
+                    Log.i("CLI", "Edit message version : " + chatEditMessageResponse.getMessageVersion());
+                    Log.i("CLI", "Edit message ID : " + chatEditMessageResponse.getMessageId());
 
-                    Log.i("SOC_CONDITION", "RoomId : " + chatEditMessageResponse.getRoomId());
-                    for (RealmOfflineEdited edited : realmClientCondition.getOfflineEdited()) {
-                        Log.i("SOC_CONDITION", "Edit Response 1 realmClientCondition : " + edited.getMessage());
-                    }
-
-                    if (realmClientCondition != null) {//TODO [Saeed Mozaffari] [2016-09-17 3:18 PM] - FORCE - client condition checking
-                        realmClientCondition.setMessageVersion(chatEditMessageResponse.getMessageVersion());
-                        Log.i("CLI", "Edit message version : " + chatEditMessageResponse.getMessageVersion());
-                        Log.i("SOC_CONDITION", "Edit Response 2");
-                        for (RealmOfflineEdited realmOfflineEdited : realmClientCondition.getOfflineEdited()) { // contains
-                            Log.i("SOC_CONDITION", "Edit Response 3");
-                            if (realmOfflineEdited.getMessageId() == chatEditMessageResponse.getMessageId()) {
-                                Log.i("SOC_CONDITION", "Edit Response 4 realmOfflineEdited : " + realmOfflineEdited);
-                                realmOfflineEdited.deleteFromRealm();
-                                Log.i("SOC_CONDITION", "Edit Response 5  : " + realmOfflineEdited);
-                            }
-                        }
-                        for (RealmOfflineEdited edited : realmClientCondition.getOfflineEdited()) {
-                            Log.i("SOC_CONDITION", "Edit Response last realmClientCondition : " + edited.getMessage());
+                    for (RealmOfflineEdited realmOfflineEdited : realmClientCondition.getOfflineEdited()) {
+                        if (realmOfflineEdited.getMessageId() == chatEditMessageResponse.getMessageId()) {
+                            realmOfflineEdited.deleteFromRealm();
+                            Log.i("SOC_CONDITION", "Edit deleteFromRealm  : " + realmOfflineEdited);
+                            break;
                         }
                     }
+
                 } else {
                     Log.i("SOC_CONDITION", "I'm Recipient 1");
                     RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", chatEditMessageResponse.getMessageId()).findFirst();
                     Log.i("SOC_CONDITION", "I'm Recipient 2 roomMessage : " + roomMessage);
-                    Log.i("SOC_CONDITION", "I'm Recipient 3 chatEditMessageResponse.getMessage() : " + chatEditMessageResponse.getMessage());
                     if (roomMessage != null) {
                         // update message text in database
                         roomMessage.setMessage(chatEditMessageResponse.getMessage());

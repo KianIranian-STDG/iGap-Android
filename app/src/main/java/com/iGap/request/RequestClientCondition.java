@@ -12,6 +12,7 @@ import com.iGap.realm.RealmOfflineSeen;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.Sort;
 
 public class RequestClientCondition {
@@ -23,59 +24,64 @@ public class RequestClientCondition {
 
         for (RealmClientCondition realmClientCondition : realm.where(RealmClientCondition.class).findAll()) {
             ProtoClientCondition.ClientCondition.Room.Builder room = ProtoClientCondition.ClientCondition.Room.newBuilder();
-            room.setRoomId(realmClientCondition.getRoomId());
-            room.setMessageVersion(realmClientCondition.getMessageVersion());
-            room.setStatusVersion(realmClientCondition.getStatusVersion());
-            room.setDeleteVersion(realmClientCondition.getDeleteVersion()); // latest receive response from delete message
+            if (realmClientCondition.getRoomId() == 94) {
+                room.setRoomId(realmClientCondition.getRoomId());
+                room.setMessageVersion(realmClientCondition.getMessageVersion());
+                room.setStatusVersion(realmClientCondition.getStatusVersion());
+                room.setDeleteVersion(realmClientCondition.getDeleteVersion());
 
-            for (RealmOfflineDelete offlineDeleted : realmClientCondition.getOfflineDeleted()) {
-                room.addOfflineDeleted(offlineDeleted.getOfflineDelete());
-                Log.i("SOC_CONDITION", "*** offlineDeleted : " + offlineDeleted.getOfflineDelete());
-            }
+                for (RealmOfflineDelete offlineDeleted : realmClientCondition.getOfflineDeleted()) {
+                    room.addOfflineDeleted(offlineDeleted.getOfflineDelete());
+                }
 
-            for (RealmOfflineEdited realmOfflineEdited : realmClientCondition.getOfflineEdited()) {
-                ProtoClientCondition.ClientCondition.Room.OfflineEdited.Builder offlineEdited = ProtoClientCondition.ClientCondition.Room.OfflineEdited.newBuilder();
-                offlineEdited.setMessageId(realmOfflineEdited.getMessageId());
-                offlineEdited.setMessage(realmOfflineEdited.getMessage());
-                room.addOfflineEdited(offlineEdited);
-                Log.i("SOC_CONDITION", "*** offlineEdited roomId : " + realmClientCondition.getRoomId());
-                Log.i("SOC_CONDITION", "*** offlineEdited : " + realmOfflineEdited.getMessage());
-            }
+                for (RealmOfflineEdited realmOfflineEdited : realmClientCondition.getOfflineEdited()) {
+                    ProtoClientCondition.ClientCondition.Room.OfflineEdited.Builder offlineEdited = ProtoClientCondition.ClientCondition.Room.OfflineEdited.newBuilder();
+                    offlineEdited.setMessageId(realmOfflineEdited.getMessageId());
+                    offlineEdited.setMessage(realmOfflineEdited.getMessage());
+                    room.addOfflineEdited(offlineEdited);
+                }
 
-            for (RealmOfflineSeen offlineSeen : realmClientCondition.getOfflineSeen()) {
-                room.addOfflineSeen(offlineSeen.getOfflineSeen());
-            }
+                for (RealmOfflineSeen offlineSeen : realmClientCondition.getOfflineSeen()) {
+                    room.addOfflineSeen(offlineSeen.getOfflineSeen());
+                }
 
-            //room.setClearId(realmClientCondition.getClearId()); //TODO [Saeed Mozaffari] [2016-09-17 4:25 PM] - after make clear history get clear Id
+                room.setClearId(realmClientCondition.getClearId());
 
-            RealmChatHistory realmChatHistory = realm.where(RealmChatHistory.class).equalTo("roomId", realmClientCondition.getRoomId()).findFirst();
-            if (realmChatHistory != null && realmChatHistory.getRoomMessage() != null) {
-                room.setCacheStartId(realmChatHistory.getRoomMessage().getMessageId());
+                RealmChatHistory realmChatHistory = realm.where(RealmChatHistory.class).equalTo("roomId", realmClientCondition.getRoomId()).findFirst();
+                Log.i("CLI1", "realmChatHistory : " + realmChatHistory);
+                if (realmChatHistory != null && realmChatHistory.getRoomMessage() != null) {
+                    Log.i("CLI1", "start ID : " + realmChatHistory.getRoomMessage().getMessageId());
+                    room.setCacheStartId(realmChatHistory.getRoomMessage().getMessageId());
 
-                List<RealmChatHistory> allItems = realm.where(RealmChatHistory.class).equalTo("roomId", realmClientCondition.getRoomId()).findAll().sort("id", Sort.DESCENDING);
+                    List<RealmChatHistory> allItems = realm.where(RealmChatHistory.class).equalTo("roomId", realmClientCondition.getRoomId()).findAll().sort("id", Sort.DESCENDING);
 
-                for (RealmChatHistory item : allItems) {
-                    if (item.getRoomMessage() != null) {
-                        room.setCacheEndId(item.getRoomMessage().getMessageId());
-                        break;
+                    for (RealmChatHistory item : allItems) {
+                        Log.i("CLI1", "End 1");
+                        if (item.getRoomMessage() != null) {
+                            Log.i("CLI1", "End ID : " + item.getRoomMessage().getMessageId());
+                            room.setCacheEndId(item.getRoomMessage().getMessageId());
+                            break;
+                        }
                     }
                 }
-            }
 
-            if (realmClientCondition.getOfflineMute() != null) {
-                if (realmClientCondition.getOfflineMute() == ProtoClientCondition.ClientCondition.Room.OfflineMute.MUTED.toString()) {
-                    room.setOfflineMute(ProtoClientCondition.ClientCondition.Room.OfflineMute.MUTED);
-                } else if (realmClientCondition.getOfflineMute() == ProtoClientCondition.ClientCondition.Room.OfflineMute.UNMUTED.toString()) {
-                    room.setOfflineMute(ProtoClientCondition.ClientCondition.Room.OfflineMute.UNMUTED);
+                if (realmClientCondition.getOfflineMute() != null) {
+                    if (realmClientCondition.getOfflineMute() == ProtoClientCondition.ClientCondition.Room.OfflineMute.MUTED.toString()) {
+                        room.setOfflineMute(ProtoClientCondition.ClientCondition.Room.OfflineMute.MUTED);
+                    } else {
+                        room.setOfflineMute(ProtoClientCondition.ClientCondition.Room.OfflineMute.UNMUTED);
+                    }
+                } else {
+                    room.setOfflineMute(ProtoClientCondition.ClientCondition.Room.OfflineMute.UNCHANGED);
                 }
-            } else {
-                room.setOfflineMute(ProtoClientCondition.ClientCondition.Room.OfflineMute.UNCHANGED);
-            }
 
-            clientCondition.addRooms(room);
+                clientCondition.addRooms(room);
+
+                clearOffline(realmClientCondition, realm);
+            }
         }
 
-        Log.i("SOC_CONDITION", "clientCondition.build() : " + clientCondition.build());
+        Log.i("CLI1", "clientCondition.build() : " + clientCondition.build());
 
         realm.close();
 
@@ -93,6 +99,17 @@ public class RequestClientCondition {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+    }
+
+    private void clearOffline(final RealmClientCondition realmClientCondition, Realm realm) {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realmClientCondition.setOfflineEdited(new RealmList<RealmOfflineEdited>());
+                realmClientCondition.setOfflineDeleted(new RealmList<RealmOfflineDelete>());
+                realmClientCondition.setOfflineSeen(new RealmList<RealmOfflineSeen>());
+            }
+        });
     }
 
 }
