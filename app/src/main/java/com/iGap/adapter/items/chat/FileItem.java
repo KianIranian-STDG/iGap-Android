@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -57,10 +58,13 @@ public class FileItem extends AbstractChatItem<FileItem, FileItem.ViewHolder> {
     }
 
     @Override
-    public void onLoadFromLocal(ViewHolder holder, String localPath) {
-        super.onLoadFromLocal(holder, localPath);
-        // TODO: 9/28/2016 [Alireza Eskandarpour Shoferi] check all file types and display desired pic
-        ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.cslf_imv_image_file);
+    public void onLoadFromLocal(ViewHolder holder, String localPath, LocalFileType fileType) {
+        super.onLoadFromLocal(holder, localPath, fileType);
+        if (fileType == LocalFileType.THUMBNAIL) {
+            ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.cslf_imv_image_file);
+        } else {
+            // TODO: 10/2/2016 [Alireza] implement
+        }
     }
 
     protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {

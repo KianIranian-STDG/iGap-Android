@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 
@@ -52,8 +53,8 @@ public class VoiceItem extends AbstractChatItem<VoiceItem, VoiceItem.ViewHolder>
     }
 
     @Override
-    public void onLoadFromLocal(ViewHolder holder, String localPath) {
-        super.onLoadFromLocal(holder, localPath);
+    public void onLoadFromLocal(ViewHolder holder, String localPath, LocalFileType fileType) {
+        super.onLoadFromLocal(holder, localPath, fileType);
         // TODO: 9/28/2016 [Alireza]
     }
 

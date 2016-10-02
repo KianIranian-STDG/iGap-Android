@@ -12,6 +12,7 @@ import com.iGap.R;
 import com.iGap.helper.HelperMimeType;
 import com.iGap.module.MyType;
 import com.iGap.module.Utils;
+import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 
@@ -61,8 +62,8 @@ public class VideoWithTextItem extends AbstractChatItem<VideoWithTextItem, Video
     }
 
     @Override
-    public void onLoadFromLocal(ViewHolder holder, String localPath) {
-        super.onLoadFromLocal(holder, localPath);
+    public void onLoadFromLocal(ViewHolder holder, String localPath, LocalFileType fileType) {
+        super.onLoadFromLocal(holder, localPath, fileType);
         new HelperMimeType().LoadVideoTumpnail(holder.cslv_imv_vido_image, localPath);
     }
 

@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.helper.ImageHelper;
+import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -50,8 +51,8 @@ public class ImageWithTextItem extends AbstractChatItem<ImageWithTextItem, Image
     }
 
     @Override
-    public void onLoadFromLocal(final ViewHolder holder, String localPath) {
-        super.onLoadFromLocal(holder, localPath);
+    public void onLoadFromLocal(final ViewHolder holder, String localPath, LocalFileType fileType) {
+        super.onLoadFromLocal(holder, localPath, fileType);
         ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.imvPicture, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {

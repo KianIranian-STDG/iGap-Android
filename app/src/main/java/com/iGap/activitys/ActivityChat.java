@@ -994,6 +994,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
                         // user wants to replay to a message
                         if (mReplayLayout != null && mReplayLayout.getTag() instanceof StructMessageInfo) {
+                            // TODO: 10/2/2016 [Alireza] inja bayad check koni age taraf ax gozashte bood, type khodesho bede va be hamoon send kone
                             mAdapter.add(new MessageItem(chatType).setMessage(StructMessageInfo.convert(roomMessage, ((StructMessageInfo) mReplayLayout.getTag()).senderName, ((StructMessageInfo) mReplayLayout.getTag()).messageText, ((StructMessageInfo) mReplayLayout.getTag()).filePic)));
                         } else {
                             mAdapter.add(new MessageItem(chatType).setMessage(StructMessageInfo.convert(roomMessage)));

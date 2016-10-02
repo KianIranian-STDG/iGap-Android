@@ -21,6 +21,7 @@ import com.iGap.module.MyType;
 import com.iGap.module.StructDownloadAttachment;
 import com.iGap.module.StructMessageInfo;
 import com.iGap.module.TimeUtils;
+import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.request.RequestFileDownload;
@@ -63,7 +64,7 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
 
     @Override
     @CallSuper
-    public void onLoadFromLocal(VH holder, String localPath) {
+    public void onLoadFromLocal(VH holder, String localPath, LocalFileType fileType) {
 
     }
 
@@ -216,7 +217,22 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
                 }
 
                 // load file from local
-                onLoadFromLocal(holder, mMessage.attachment.getLocalFilePath());
+                onLoadFromLocal(holder, mMessage.attachment.getLocalFilePath(), LocalFileType.FILE);
+
+                // file exists on local, but I check for a thumbnail
+                // if thumbnail exists, I call onLoadFromLocal(), otherwise, request for the thumbnail
+                // FIXME: 10/2/2016 [Alireza] bayad vaghti sender, pdf masalan upload mikone, thumbesh ro ham begire khodesh, ya aslan nagire
+                /*if ((mMessage.messageType == ProtoGlobal.RoomMessageType.FILE || mMessage.messageType == ProtoGlobal.RoomMessageType.FILE_TEXT)) {
+                    if (mMessage.attachment.isThumbnailExistsOnLocal()) {
+                        // load thumbnail from local
+                        onLoadFromLocal(holder, mMessage.attachment.getLocalThumbnailPath(), LocalFileType.THUMBNAIL);
+                    } else {
+                        if (mMessage.attachment.smallThumbnail == null){
+                            mMessage.attachment.smallThumbnail = new StructMessageThumbnail(mMessage.attachment.size,mMessage.attachment.width,mMessage.attachment.height,null);
+                        }
+                        requestForThumbnail();
+                    }
+                }*/
             } else {
                 // file doesn't exist on local, I check for a thumbnail
                 // if thumbnail exists, I load it into the view
@@ -229,19 +245,11 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
                     }
 
                     // load thumbnail from local
-                    onLoadFromLocal(holder, mMessage.attachment.getLocalThumbnailPath());
-                }
-                // create new download attachment once with attachment token
-                if (mMessage.downloadAttachment == null) {
-                    mMessage.downloadAttachment = new StructDownloadAttachment(mMessage.attachment.token);
+                    onLoadFromLocal(holder, mMessage.attachment.getLocalThumbnailPath(), LocalFileType.THUMBNAIL);
                 }
 
-                // request thumbnail
-                if (!mMessage.downloadAttachment.thumbnailRequested) {
-                    onRequestDownloadThumbnail();
-                    // prevent from multiple requesting thumbnail
-                    mMessage.downloadAttachment.thumbnailRequested = true;
-                }
+                requestForThumbnail();
+
                 // TODO: 9/28/2016 [Alireza Eskandarpour Shoferi] set downloading FILE in download view onClick
                 // make sure to not request multiple times by checking last offset with the new one
                 if (mMessage.downloadAttachment.lastOffset < mMessage.downloadAttachment.offset) {
@@ -251,6 +259,20 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
             }
 
             updateProgressIfNeeded(holder);
+        }
+    }
+
+    private void requestForThumbnail() {
+        // create new download attachment once with attachment token
+        if (mMessage.downloadAttachment == null) {
+            mMessage.downloadAttachment = new StructDownloadAttachment(mMessage.attachment.token);
+        }
+
+        // request thumbnail
+        if (!mMessage.downloadAttachment.thumbnailRequested) {
+            onRequestDownloadThumbnail();
+            // prevent from multiple requesting thumbnail
+            mMessage.downloadAttachment.thumbnailRequested = true;
         }
     }
 
