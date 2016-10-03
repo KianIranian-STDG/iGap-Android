@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activitys.ActivityComment;
+import com.iGap.interface_package.OnMessageViewClick;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 
@@ -23,8 +24,8 @@ import java.util.List;
 public class ChannelFileItem extends AbstractChatItem<ChannelFileItem, ChannelFileItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
-    public ChannelFileItem(ProtoGlobal.Room.Type type) {
-        super(false, type);
+    public ChannelFileItem(ProtoGlobal.Room.Type type, OnMessageViewClick messageClickListener) {
+        super(false, type, messageClickListener);
     }
 
     @Override

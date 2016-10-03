@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.iGap.R;
+import com.iGap.interface_package.OnMessageViewClick;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 
@@ -16,8 +17,8 @@ import java.util.List;
 public class TimeItem extends AbstractChatItem<TimeItem, TimeItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
-    public TimeItem() {
-        super(false, ProtoGlobal.Room.Type.CHAT);
+    public TimeItem(OnMessageViewClick messageClickListener) {
+        super(false, ProtoGlobal.Room.Type.CHAT, messageClickListener);
     }
 
     @Override

@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.interface_package.OnMessageViewClick;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
@@ -21,8 +22,8 @@ import java.util.List;
 public class VoiceItem extends AbstractChatItem<VoiceItem, VoiceItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
-    public VoiceItem(ProtoGlobal.Room.Type type) {
-        super(true, type);
+    public VoiceItem(ProtoGlobal.Room.Type type, OnMessageViewClick messageClickListener) {
+        super(true, type, messageClickListener);
     }
 
     @Override
@@ -36,6 +37,17 @@ public class VoiceItem extends AbstractChatItem<VoiceItem, VoiceItem.ViewHolder>
     }
 
     @Override
+    public ViewHolderFactory<? extends ViewHolder> getFactory() {
+        return FACTORY;
+    }
+
+    @Override
+    public void onLoadFromLocal(ViewHolder holder, String localPath, LocalFileType fileType) {
+        super.onLoadFromLocal(holder, localPath, fileType);
+        // TODO: 9/28/2016 [Alireza]
+    }
+
+    @Override
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
@@ -45,17 +57,6 @@ public class VoiceItem extends AbstractChatItem<VoiceItem, VoiceItem.ViewHolder>
         } else {
             holder.cslr_txt_message.setVisibility(View.GONE);
         }
-    }
-
-    @Override
-    public ViewHolderFactory<? extends ViewHolder> getFactory() {
-        return FACTORY;
-    }
-
-    @Override
-    public void onLoadFromLocal(ViewHolder holder, String localPath, LocalFileType fileType) {
-        super.onLoadFromLocal(holder, localPath, fileType);
-        // TODO: 9/28/2016 [Alireza]
     }
 
     protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {

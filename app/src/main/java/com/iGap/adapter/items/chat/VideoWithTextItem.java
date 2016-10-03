@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.helper.HelperMimeType;
+import com.iGap.interface_package.OnMessageViewClick;
 import com.iGap.module.MyType;
 import com.iGap.module.Utils;
 import com.iGap.module.enums.LocalFileType;
@@ -24,8 +25,8 @@ import java.util.List;
 public class VideoWithTextItem extends AbstractChatItem<VideoWithTextItem, VideoWithTextItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
-    public VideoWithTextItem(ProtoGlobal.Room.Type type) {
-        super(true, type);
+    public VideoWithTextItem(ProtoGlobal.Room.Type type, OnMessageViewClick messageClickListener) {
+        super(true, type, messageClickListener);
     }
 
     @Override
@@ -57,14 +58,14 @@ public class VideoWithTextItem extends AbstractChatItem<VideoWithTextItem, Video
     }
 
     @Override
-    public ViewHolderFactory<? extends ViewHolder> getFactory() {
-        return FACTORY;
-    }
-
-    @Override
     public void onLoadFromLocal(ViewHolder holder, String localPath, LocalFileType fileType) {
         super.onLoadFromLocal(holder, localPath, fileType);
         new HelperMimeType().LoadVideoTumpnail(holder.cslv_imv_vido_image, localPath);
+    }
+
+    @Override
+    public ViewHolderFactory<? extends ViewHolder> getFactory() {
+        return FACTORY;
     }
 
     protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {

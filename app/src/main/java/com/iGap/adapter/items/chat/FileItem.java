@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.interface_package.OnMessageViewClick;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
@@ -20,8 +21,8 @@ import java.util.List;
 public class FileItem extends AbstractChatItem<FileItem, FileItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
-    public FileItem(ProtoGlobal.Room.Type type) {
-        super(true, type);
+    public FileItem(ProtoGlobal.Room.Type type, OnMessageViewClick messageClickListener) {
+        super(true, type, messageClickListener);
     }
 
     @Override
@@ -32,6 +33,21 @@ public class FileItem extends AbstractChatItem<FileItem, FileItem.ViewHolder> {
     @Override
     public int getLayoutRes() {
         return R.layout.chat_sub_layout_file;
+    }
+
+    @Override
+    public ViewHolderFactory<? extends ViewHolder> getFactory() {
+        return FACTORY;
+    }
+
+    @Override
+    public void onLoadFromLocal(ViewHolder holder, String localPath, LocalFileType fileType) {
+        super.onLoadFromLocal(holder, localPath, fileType);
+        if (fileType == LocalFileType.THUMBNAIL) {
+            ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.cslf_imv_image_file);
+        } else {
+            // TODO: 10/2/2016 [Alireza] implement
+        }
     }
 
     @Override
@@ -49,21 +65,6 @@ public class FileItem extends AbstractChatItem<FileItem, FileItem.ViewHolder> {
             holder.cslr_txt_message.setVisibility(View.VISIBLE);
         } else {
             holder.cslr_txt_message.setVisibility(View.GONE);
-        }
-    }
-
-    @Override
-    public ViewHolderFactory<? extends ViewHolder> getFactory() {
-        return FACTORY;
-    }
-
-    @Override
-    public void onLoadFromLocal(ViewHolder holder, String localPath, LocalFileType fileType) {
-        super.onLoadFromLocal(holder, localPath, fileType);
-        if (fileType == LocalFileType.THUMBNAIL) {
-            ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.cslf_imv_image_file);
-        } else {
-            // TODO: 10/2/2016 [Alireza] implement
         }
     }
 

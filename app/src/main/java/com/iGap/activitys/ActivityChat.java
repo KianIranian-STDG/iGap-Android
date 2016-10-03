@@ -55,7 +55,7 @@ import com.iGap.adapter.items.chat.ChannelContactItem;
 import com.iGap.adapter.items.chat.ChannelFileItem;
 import com.iGap.adapter.items.chat.ChannelGifItem;
 import com.iGap.adapter.items.chat.ChannelImageItem;
-import com.iGap.adapter.items.chat.ChannelMessageItem;
+import com.iGap.adapter.items.chat.ChannelTextItem;
 import com.iGap.adapter.items.chat.ChannelVideoItem;
 import com.iGap.adapter.items.chat.ChannelVoiceItem;
 import com.iGap.adapter.items.chat.ContactItem;
@@ -64,7 +64,7 @@ import com.iGap.adapter.items.chat.GifItem;
 import com.iGap.adapter.items.chat.ImageItem;
 import com.iGap.adapter.items.chat.ImageWithTextItem;
 import com.iGap.adapter.items.chat.LocationItem;
-import com.iGap.adapter.items.chat.MessageItem;
+import com.iGap.adapter.items.chat.TextItem;
 import com.iGap.adapter.items.chat.TimeItem;
 import com.iGap.adapter.items.chat.VideoItem;
 import com.iGap.adapter.items.chat.VideoWithTextItem;
@@ -89,7 +89,7 @@ import com.iGap.interface_package.OnChatUpdateStatusResponse;
 import com.iGap.interface_package.OnFileDownloadResponse;
 import com.iGap.interface_package.OnFileUpload;
 import com.iGap.interface_package.OnFileUploadStatusResponse;
-import com.iGap.interface_package.OnMessageClick;
+import com.iGap.interface_package.OnMessageViewClick;
 import com.iGap.module.AttachFile;
 import com.iGap.module.ChatSendMessageUtil;
 import com.iGap.module.EmojiEditText;
@@ -160,7 +160,7 @@ import io.realm.RealmResults;
 /**
  * Created by android3 on 8/5/2016.
  */
-public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, IRecentsLongClick, OnMessageClick, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractChatItem>, OnChatMessageRemove, OnFileUpload, OnFileUploadStatusResponse, OnFileDownloadResponse {
+public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, IRecentsLongClick, OnMessageViewClick, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractChatItem>, OnChatMessageRemove, OnFileUpload, OnFileUploadStatusResponse, OnFileDownloadResponse {
 
     private RelativeLayout parentLayout;
     private SharedPreferences sharedPreferences;
@@ -477,75 +477,75 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     case TEXT:
                         if (chatType != ProtoGlobal.Room.Type.CHANNEL) {
                             if (!addTop) {
-                                mAdapter.add(new MessageItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(new TextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
-                                mAdapter.add(0, new MessageItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(0, new TextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             }
                         } else {
                             if (!addTop) {
-                                mAdapter.add(new ChannelMessageItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(new ChannelTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
-                                mAdapter.add(0, new ChannelMessageItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(0, new ChannelTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             }
                         }
                         break;
                     case IMAGE:
                         if (chatType != ProtoGlobal.Room.Type.CHANNEL) {
                             if (!addTop) {
-                                mAdapter.add(new ImageItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(new ImageItem(chatType, 400, 400, this).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
-                                mAdapter.add(0, new ImageItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(0, new ImageItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             }
                         } else {
                             if (!addTop) {
-                                mAdapter.add(new ChannelImageItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(new ChannelImageItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
-                                mAdapter.add(0, new ChannelImageItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(0, new ChannelImageItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             }
                         }
                         break;
                     case IMAGE_TEXT:
                         if (chatType != ProtoGlobal.Room.Type.CHANNEL) {
                             if (!addTop) {
-                                mAdapter.add(new ImageWithTextItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(new ImageWithTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
-                                mAdapter.add(0, new ImageWithTextItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(0, new ImageWithTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             }
                         } else {
                             if (!addTop) {
-                                mAdapter.add(new ChannelImageItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(new ChannelImageItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
-                                mAdapter.add(0, new ChannelImageItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(0, new ChannelImageItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             }
                         }
                         break;
                     case VIDEO:
                         if (chatType != ProtoGlobal.Room.Type.CHANNEL) {
                             if (!addTop) {
-                                mAdapter.add(new VideoItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(new VideoItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
-                                mAdapter.add(0, new VideoItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(0, new VideoItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             }
                         } else {
                             if (!addTop) {
-                                mAdapter.add(new ChannelVideoItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(new ChannelVideoItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
-                                mAdapter.add(0, new ChannelVideoItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(0, new ChannelVideoItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             }
                         }
                         break;
                     case VIDEO_TEXT:
                         if (chatType != ProtoGlobal.Room.Type.CHANNEL) {
                             if (!addTop) {
-                                mAdapter.add(new VideoWithTextItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(new VideoWithTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
-                                mAdapter.add(0, new VideoWithTextItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(0, new VideoWithTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             }
                         } else {
                             if (!addTop) {
-                                mAdapter.add(new ChannelVideoItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(new ChannelVideoItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
-                                mAdapter.add(0, new ChannelVideoItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(0, new ChannelVideoItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             }
                         }
                         break;
@@ -553,42 +553,42 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                         // TODO: 9/15/2016 [Alireza Eskandarpour Shoferi] fill
                         if (chatType != ProtoGlobal.Room.Type.CHANNEL) {
                             if (!addTop) {
-                                mAdapter.add(new LocationItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(new LocationItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
-                                mAdapter.add(0, new LocationItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(0, new LocationItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             }
                         } /*else {
-                        mAdapter.add(new ChannelVideoItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                        mAdapter.add(new ChannelVideoItem(chatType,this).setMessage(messageInfo).withIdentifier(identifier));
                     }*/
                         break;
                     case FILE:
                     case FILE_TEXT:
                         if (chatType != ProtoGlobal.Room.Type.CHANNEL) {
                             if (!addTop) {
-                                mAdapter.add(new FileItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(new FileItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
-                                mAdapter.add(0, new FileItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(0, new FileItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             }
                         } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
                             if (!addTop) {
-                                mAdapter.add(new ChannelFileItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(new ChannelFileItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
-                                mAdapter.add(0, new ChannelFileItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(0, new ChannelFileItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             }
                         }
                         break;
                     case VOICE:
                         if (chatType != ProtoGlobal.Room.Type.CHANNEL) {
                             if (!addTop) {
-                                mAdapter.add(new VoiceItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(new VoiceItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
-                                mAdapter.add(0, new VoiceItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(0, new VoiceItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             }
                         } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
                             if (!addTop) {
-                                mAdapter.add(new ChannelVoiceItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(new ChannelVoiceItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
-                                mAdapter.add(0, new ChannelVoiceItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(0, new ChannelVoiceItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             }
                         }
                         break;
@@ -596,45 +596,45 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     case AUDIO_TEXT:
                         if (chatType != ProtoGlobal.Room.Type.CHANNEL) {
                             if (!addTop) {
-                                mAdapter.add(new AudioItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(new AudioItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
-                                mAdapter.add(0, new AudioItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(0, new AudioItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             }
                         } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
                             if (!addTop) {
-                                mAdapter.add(new ChannelAudioItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(new ChannelAudioItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
-                                mAdapter.add(0, new ChannelAudioItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(0, new ChannelAudioItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             }
                         }
                         break;
                     case CONTACT:
                         if (chatType != ProtoGlobal.Room.Type.CHANNEL) {
                             if (!addTop) {
-                                mAdapter.add(new ContactItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(new ContactItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
-                                mAdapter.add(0, new ContactItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(0, new ContactItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             }
                         } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
                             if (!addTop) {
-                                mAdapter.add(new ChannelContactItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(new ChannelContactItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
-                                mAdapter.add(0, new ChannelContactItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(0, new ChannelContactItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             }
                         }
                         break;
                     case GIF:
                         if (chatType != ProtoGlobal.Room.Type.CHANNEL) {
                             if (!addTop) {
-                                mAdapter.add(new GifItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(new GifItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
-                                mAdapter.add(0, new GifItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(0, new GifItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             }
                         } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
                             if (!addTop) {
-                                mAdapter.add(new ChannelGifItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(new ChannelGifItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
-                                mAdapter.add(0, new ChannelGifItem(chatType).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(0, new ChannelGifItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             }
                         }
                         break;
@@ -644,9 +644,9 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 }
             } else {
                 if (!addTop) {
-                    mAdapter.add(new TimeItem().setMessage(messageInfo).withIdentifier(identifier));
+                    mAdapter.add(new TimeItem(this).setMessage(messageInfo).withIdentifier(identifier));
                 } else {
-                    mAdapter.add(0, new TimeItem().setMessage(messageInfo).withIdentifier(identifier));
+                    mAdapter.add(0, new TimeItem(this).setMessage(messageInfo).withIdentifier(identifier));
                 }
             }
 
@@ -993,9 +993,9 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
                         // user wants to replay to a message
                         if (mReplayLayout != null && mReplayLayout.getTag() instanceof StructMessageInfo) {
-                            mAdapter.add(new MessageItem(chatType).setMessage(StructMessageInfo.convert(roomMessage, ((StructMessageInfo) mReplayLayout.getTag()).senderName, ((StructMessageInfo) mReplayLayout.getTag()).messageText, ((StructMessageInfo) mReplayLayout.getTag()).filePic)));
+                            mAdapter.add(new TextItem(chatType, ActivityChat.this).setMessage(StructMessageInfo.convert(roomMessage, ((StructMessageInfo) mReplayLayout.getTag()).senderName, ((StructMessageInfo) mReplayLayout.getTag()).messageText, ((StructMessageInfo) mReplayLayout.getTag()).filePic)));
                         } else {
-                            mAdapter.add(new MessageItem(chatType).setMessage(StructMessageInfo.convert(roomMessage)));
+                            mAdapter.add(new TextItem(chatType, ActivityChat.this).setMessage(StructMessageInfo.convert(roomMessage)));
                         }
 
                         realm.close();
@@ -1417,12 +1417,12 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     }
                     // user wants to replay to a message
                     if (userTriesReplay()) {
-                        mAdapter.add(new ImageItem(chatType).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, null, filePath, updateTime, ((StructMessageInfo) mReplayLayout.getTag()))).withIdentifier(System.nanoTime()));
+                        mAdapter.add(new ImageItem(chatType, this).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, null, filePath, updateTime, ((StructMessageInfo) mReplayLayout.getTag()))).withIdentifier(System.nanoTime()));
                     } else {
                         if (isMessageWrote()) {
-                            mAdapter.add(new ImageWithTextItem(chatType).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, null, filePath, updateTime)).withIdentifier(System.nanoTime()));
+                            mAdapter.add(new ImageWithTextItem(chatType, this).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, null, filePath, updateTime)).withIdentifier(System.nanoTime()));
                         } else {
-                            mAdapter.add(new ImageItem(chatType).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, null, filePath, updateTime)).withIdentifier(System.nanoTime()));
+                            mAdapter.add(new ImageItem(chatType, this).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, null, filePath, updateTime)).withIdentifier(System.nanoTime()));
                         }
                     }
                     Log.e("ddd", filePath + "     image path");
@@ -1435,12 +1435,12 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                         messageType = ProtoGlobal.RoomMessageType.IMAGE;
                     }
                     if (userTriesReplay()) {
-                        mAdapter.add(new ImageItem(chatType).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, null, filePath, updateTime, ((StructMessageInfo) mReplayLayout.getTag()))).withIdentifier(System.nanoTime()));
+                        mAdapter.add(new ImageItem(chatType, this).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, null, filePath, updateTime, ((StructMessageInfo) mReplayLayout.getTag()))).withIdentifier(System.nanoTime()));
                     } else {
                         if (isMessageWrote()) {
-                            mAdapter.add(new ImageWithTextItem(chatType).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, null, filePath, updateTime)).withIdentifier(System.nanoTime()));
+                            mAdapter.add(new ImageWithTextItem(chatType, this).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, null, filePath, updateTime)).withIdentifier(System.nanoTime()));
                         } else {
-                            mAdapter.add(new ImageItem(chatType).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, null, filePath, updateTime)).withIdentifier(System.nanoTime()));
+                            mAdapter.add(new ImageItem(chatType, this).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, null, filePath, updateTime)).withIdentifier(System.nanoTime()));
                         }
                     }
                     Log.e("ddd", filePath + "    gallary file path");
@@ -1456,12 +1456,12 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     String videoFileName = videoFile.getName();
                     String videoFileMime = FileUtils.getMimeType(videoFile);
                     if (userTriesReplay()) {
-                        mAdapter.add(new VideoItem(chatType).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, videoFileName, videoFileMime, filePath, null, filePath, videoFile.length(), null, updateTime, ((StructMessageInfo) mReplayLayout.getTag()))).withIdentifier(System.nanoTime()));
+                        mAdapter.add(new VideoItem(chatType, this).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, videoFileName, videoFileMime, filePath, null, filePath, videoFile.length(), null, updateTime, ((StructMessageInfo) mReplayLayout.getTag()))).withIdentifier(System.nanoTime()));
                     } else {
                         if (isMessageWrote()) {
-                            mAdapter.add(new VideoWithTextItem(chatType).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, videoFileName, videoFileMime, filePath, null, filePath, videoFile.length(), null, updateTime)).withIdentifier(System.nanoTime()));
+                            mAdapter.add(new VideoWithTextItem(chatType, this).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, videoFileName, videoFileMime, filePath, null, filePath, videoFile.length(), null, updateTime)).withIdentifier(System.nanoTime()));
                         } else {
-                            mAdapter.add(new VideoItem(chatType).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, videoFileName, videoFileMime, filePath, null, filePath, videoFile.length(), null, updateTime)).withIdentifier(System.nanoTime()));
+                            mAdapter.add(new VideoItem(chatType, this).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, videoFileName, videoFileMime, filePath, null, filePath, videoFile.length(), null, updateTime)).withIdentifier(System.nanoTime()));
                         }
                     }
                     Log.e("ddd", AttachFile.getFilePathFromUri(data.getData()) + "    video capture path");
@@ -1483,9 +1483,9 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     String fileFileName = fileFile.getName();
                     String fileFileMime = FileUtils.getMimeType(fileFile);
                     if (userTriesReplay()) {
-                        mAdapter.add(new FileItem(chatType).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, fileFileName, fileFileMime, filePath, null, filePath, fileFile.length(), null, updateTime, ((StructMessageInfo) mReplayLayout.getTag()))).withIdentifier(System.nanoTime()));
+                        mAdapter.add(new FileItem(chatType, this).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, fileFileName, fileFileMime, filePath, null, filePath, fileFile.length(), null, updateTime, ((StructMessageInfo) mReplayLayout.getTag()))).withIdentifier(System.nanoTime()));
                     } else {
-                        mAdapter.add(new FileItem(chatType).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, fileFileName, fileFileMime, filePath, null, filePath, fileFile.length(), null, updateTime)).withIdentifier(System.nanoTime()));
+                        mAdapter.add(new FileItem(chatType, this).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, fileFileName, fileFileMime, filePath, null, filePath, fileFile.length(), null, updateTime)).withIdentifier(System.nanoTime()));
                     }
                     Log.e("ddd", data.getData() + "    pic file path");
                     break;
@@ -1503,12 +1503,12 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                         messageType = ProtoGlobal.RoomMessageType.IMAGE;
                     }
                     if (userTriesReplay()) {
-                        mAdapter.add(new ImageItem(chatType).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, null, filePath, updateTime, ((StructMessageInfo) mReplayLayout.getTag()))).withIdentifier(System.nanoTime()));
+                        mAdapter.add(new ImageItem(chatType, this).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, null, filePath, updateTime, ((StructMessageInfo) mReplayLayout.getTag()))).withIdentifier(System.nanoTime()));
                     } else {
                         if (isMessageWrote()) {
-                            mAdapter.add(new ImageWithTextItem(chatType).setMessage(new StructMessageInfo(Long.toString(messageId), getWrittenMessage(), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, null, filePath, updateTime)).withIdentifier(System.nanoTime()));
+                            mAdapter.add(new ImageWithTextItem(chatType, this).setMessage(new StructMessageInfo(Long.toString(messageId), getWrittenMessage(), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, null, filePath, updateTime)).withIdentifier(System.nanoTime()));
                         } else {
-                            mAdapter.add(new ImageItem(chatType).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, null, filePath, updateTime)).withIdentifier(System.nanoTime()));
+                            mAdapter.add(new ImageItem(chatType, this).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, null, filePath, updateTime)).withIdentifier(System.nanoTime()));
                         }
                     }
                     Log.e("ddd", filePath + "   pain path");
@@ -1901,129 +1901,136 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         return null;
     }
 
-
     @Override
-    public void onMessageClick(View view, final StructMessageInfo messageInfo, int position) {
-        Log.i(ActivityChat.class.getSimpleName(), "Message clicked");
+    public void onMessageFileClick(View view, final StructMessageInfo messageInfo, int position, ProtoGlobal.RoomMessageType fileType) {
+        switch (fileType) {
+            case IMAGE:
+            case IMAGE_TEXT:
+                showImage(messageInfo.getAttachment().getLocalThumbnailPath());
+                break;
+            case LOCATION:
+                Intent intent = HelperMimeType.appropriateProgram(messageInfo.getAttachment().getLocalFilePath());
+                if (intent != null)
+                    startActivity(intent);
+                break;
+            case TEXT:
+                Log.i(ActivityChat.class.getSimpleName(), "Message clicked");
 
+                @ArrayRes
+                int itemsRes = 0;
+                switch (messageInfo.messageType) {
+                    case TEXT:
+                        itemsRes = R.array.textMessageDialogItems;
+                        break;
+                    case FILE_TEXT:
+                    case IMAGE_TEXT:
+                    case VIDEO_TEXT:
+                        itemsRes = R.array.fileTextMessageDialogItems;
+                        break;
+                    case FILE:
+                    case IMAGE:
+                    case VIDEO:
+                    case VOICE:
+                        itemsRes = R.array.fileMessageDialogItems;
+                        break;
+                    case LOCATION:
+                    case LOG:
+                        itemsRes = R.array.otherMessageDialogItems;
+                        break;
+                }
 
-        if (messageInfo.messageType.toString().equals("IMAGE") || messageInfo.messageType.toString().equals("IMAGE_TEXT")) {
-            showImage(messageInfo.getAttachment().getLocalThumbnailPath());
-        } else if (!messageInfo.messageType.toString().equals("TEXT") && !messageInfo.messageType.toString().equals("LOCATION")) {
-            Intent intent = HelperMimeType.appropriateProgram(messageInfo.getAttachment().getLocalFilePath());
-            if (intent != null)
-                startActivity(intent);
-        } else {
+                // Arrays.asList returns fixed size, doing like this fixes remove object UnsupportedOperationException exception
+                List<String> items = new LinkedList<>(Arrays.asList(getResources().getStringArray(itemsRes)));
 
-            @ArrayRes
-            int itemsRes = 0;
-            switch (messageInfo.messageType) {
-                case TEXT:
-                    itemsRes = R.array.textMessageDialogItems;
-                    break;
-                case FILE_TEXT:
-                case IMAGE_TEXT:
-                case VIDEO_TEXT:
-                    itemsRes = R.array.fileTextMessageDialogItems;
-                    break;
-                case FILE:
-                case IMAGE:
-                case VIDEO:
-                case VOICE:
-                    itemsRes = R.array.fileMessageDialogItems;
-                    break;
-                case LOCATION:
-                case LOG:
-                    itemsRes = R.array.otherMessageDialogItems;
-                    break;
-            }
+                Realm realm = Realm.getDefaultInstance();
+                // if user clicked on any message which he wasn't its sender, remove edit item option
+                if (!messageInfo.senderID.equalsIgnoreCase(Long.toString(realm.where(RealmUserInfo.class).findFirst().getUserId()))) {
+                    items.remove(getString(R.string.edit_item_dialog));
+                }
+                realm.close();
 
-            // Arrays.asList returns fixed size, doing like this fixes remove object UnsupportedOperationException exception
-            List<String> items = new LinkedList<>(Arrays.asList(getResources().getStringArray(itemsRes)));
+                new MaterialDialog.Builder(this)
+                        .title("Message")
+                        .negativeText("CANCEL")
+                        .items(items)
+                        .itemsCallback(new MaterialDialog.ListCallback() {
+                            @Override
+                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                                // TODO: 9/14/2016 [Alireza Eskandarpour Shoferi] implement other items
+                                if (text.toString().equalsIgnoreCase(getString(R.string.copy_item_dialog))) {
+                                    // copy message
+                                    ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                                    ClipData clip = ClipData.newPlainText("Copied Text", messageInfo.messageText);
+                                    clipboard.setPrimaryClip(clip);
+                                } else if (text.toString().equalsIgnoreCase(getString(R.string.delete_item_dialog))) {
+                                    final Realm realmCondition = Realm.getDefaultInstance();
+                                    final RealmClientCondition realmClientCondition = realmCondition.where(RealmClientCondition.class).equalTo("roomId", mRoomId).findFirstAsync();
+                                    realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
+                                        @Override
+                                        public void onChange(final RealmClientCondition element) {
+                                            realmCondition.executeTransaction(new Realm.Transaction() {
+                                                @Override
+                                                public void execute(Realm realm) {
+                                                    if (element != null) {
+                                                        if (realmCondition.where(RealmOfflineDelete.class).equalTo("offlineDelete", Long.parseLong(messageInfo.messageID)).findFirst() == null) {
+                                                            RealmOfflineDelete realmOfflineDelete = realmCondition.createObject(RealmOfflineDelete.class);
+                                                            realmOfflineDelete.setId(System.nanoTime());
+                                                            realmOfflineDelete.setOfflineDelete(Long.parseLong(messageInfo.messageID));
+                                                            element.getOfflineDeleted().add(realmOfflineDelete);
 
-            Realm realm = Realm.getDefaultInstance();
-            // if user clicked on any message which he wasn't its sender, remove edit item option
-            if (!messageInfo.senderID.equalsIgnoreCase(Long.toString(realm.where(RealmUserInfo.class).findFirst().getUserId()))) {
-                items.remove(getString(R.string.edit_item_dialog));
-            }
-            realm.close();
+                                                            runOnUiThread(new Runnable() {
+                                                                @Override
+                                                                public void run() {
+                                                                    // remove deleted message from adapter
+                                                                    mAdapter.removeMessage(Long.parseLong(messageInfo.messageID));
 
-            new MaterialDialog.Builder(this)
-                    .title("Message")
-                    .negativeText("CANCEL")
-                    .items(items)
-                    .itemsCallback(new MaterialDialog.ListCallback() {
-                        @Override
-                        public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                            // TODO: 9/14/2016 [Alireza Eskandarpour Shoferi] implement other items
-                            if (text.toString().equalsIgnoreCase(getString(R.string.copy_item_dialog))) {
-                                // copy message
-                                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                                ClipData clip = ClipData.newPlainText("Copied Text", messageInfo.messageText);
-                                clipboard.setPrimaryClip(clip);
-                            } else if (text.toString().equalsIgnoreCase(getString(R.string.delete_item_dialog))) {
-                                final Realm realmCondition = Realm.getDefaultInstance();
-                                final RealmClientCondition realmClientCondition = realmCondition.where(RealmClientCondition.class).equalTo("roomId", mRoomId).findFirstAsync();
-                                realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
-                                    @Override
-                                    public void onChange(final RealmClientCondition element) {
-                                        realmCondition.executeTransaction(new Realm.Transaction() {
-                                            @Override
-                                            public void execute(Realm realm) {
-                                                if (element != null) {
-                                                    if (realmCondition.where(RealmOfflineDelete.class).equalTo("offlineDelete", Long.parseLong(messageInfo.messageID)).findFirst() == null) {
-                                                        RealmOfflineDelete realmOfflineDelete = realmCondition.createObject(RealmOfflineDelete.class);
-                                                        realmOfflineDelete.setId(System.nanoTime());
-                                                        realmOfflineDelete.setOfflineDelete(Long.parseLong(messageInfo.messageID));
-                                                        element.getOfflineDeleted().add(realmOfflineDelete);
-
-                                                        runOnUiThread(new Runnable() {
-                                                            @Override
-                                                            public void run() {
-                                                                // remove deleted message from adapter
-                                                                mAdapter.removeMessage(Long.parseLong(messageInfo.messageID));
-
-                                                                // remove tag from edtChat if the message has deleted
-                                                                if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
-                                                                    if (Long.toString(Long.parseLong(messageInfo.messageID)).equals(((StructMessageInfo) edtChat.getTag()).messageID)) {
-                                                                        edtChat.setTag(null);
+                                                                    // remove tag from edtChat if the message has deleted
+                                                                    if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
+                                                                        if (Long.toString(Long.parseLong(messageInfo.messageID)).equals(((StructMessageInfo) edtChat.getTag()).messageID)) {
+                                                                            edtChat.setTag(null);
+                                                                        }
                                                                     }
                                                                 }
-                                                            }
-                                                        });
-                                                        // delete message
-                                                        new RequestChatDeleteMessage().chatDeleteMessage(mRoomId, Long.parseLong(messageInfo.messageID));
+                                                            });
+                                                            // delete message
+                                                            new RequestChatDeleteMessage().chatDeleteMessage(mRoomId, Long.parseLong(messageInfo.messageID));
+                                                        }
+                                                        element.removeChangeListeners();
                                                     }
-                                                    element.removeChangeListeners();
                                                 }
-                                            }
-                                        });
+                                            });
 
-                                        realmCondition.close();
+                                            realmCondition.close();
+                                        }
+                                    });
+                                } else if (text.toString().equalsIgnoreCase(getString(R.string.edit_item_dialog))) {
+                                    // edit message
+                                    // put message text to EditText
+                                    if (!messageInfo.messageText.isEmpty()) {
+                                        edtChat.setText(messageInfo.messageText);
+                                        edtChat.setSelection(0, edtChat.getText().length());
+                                        // put message object to edtChat's tag to obtain it later and
+                                        // found is user trying to edit a message
+                                        edtChat.setTag(messageInfo);
                                     }
-                                });
-                            } else if (text.toString().equalsIgnoreCase(getString(R.string.edit_item_dialog))) {
-                                // edit message
-                                // put message text to EditText
-                                if (!messageInfo.messageText.isEmpty()) {
-                                    edtChat.setText(messageInfo.messageText);
-                                    edtChat.setSelection(0, edtChat.getText().length());
-                                    // put message object to edtChat's tag to obtain it later and
-                                    // found is user trying to edit a message
-                                    edtChat.setTag(messageInfo);
-                                }
-                            } else if (text.toString().equalsIgnoreCase(getString(R.string.replay_item_dialog))) {
-                                replay(messageInfo);
-                            } else if (text.toString().equalsIgnoreCase(getString(R.string.forward_item_dialog))) {
-                                // forward selected messages to room list for selecting room
-                                if (mAdapter != null) {
-                                    startActivity(makeIntentForForwardMessages(messageInfo));
+                                } else if (text.toString().equalsIgnoreCase(getString(R.string.replay_item_dialog))) {
+                                    replay(messageInfo);
+                                } else if (text.toString().equalsIgnoreCase(getString(R.string.forward_item_dialog))) {
+                                    // forward selected messages to room list for selecting room
+                                    if (mAdapter != null) {
+                                        startActivity(makeIntentForForwardMessages(messageInfo));
+                                    }
                                 }
                             }
-                        }
-                    })
-                    .show();
+                        })
+                        .show();
+                break;
         }
+    }
+
+    @Override
+    public void onSenderAvatarClick(View view, StructMessageInfo messageInfo, int position) {
+        // TODO: 10/2/2016 [Alireza] implement later
     }
 
 

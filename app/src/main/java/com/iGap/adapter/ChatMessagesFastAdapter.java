@@ -9,7 +9,7 @@ import com.iGap.R;
 import com.iGap.adapter.items.chat.AbstractChatItem;
 import com.iGap.interface_package.OnChatMessageRemove;
 import com.iGap.interface_package.OnChatMessageSelectionChanged;
-import com.iGap.interface_package.OnMessageClick;
+import com.iGap.interface_package.OnMessageViewClick;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class ChatMessagesFastAdapter<Item extends AbstractChatItem> extends FastItemAdapter<Item> implements FastAdapter.OnLongClickListener<Item> {
     private OnChatMessageSelectionChanged<Item> onChatMessageSelectionChanged;
-    private OnMessageClick onMessageClick;
+    private OnMessageViewClick onMessageViewClick;
     private OnChatMessageRemove onChatMessageRemove;
 
     private OnLongClickListener longClickListener = new OnLongClickListener<Item>() {
@@ -110,9 +110,9 @@ public class ChatMessagesFastAdapter<Item extends AbstractChatItem> extends Fast
         return null;
     }
 
-    public ChatMessagesFastAdapter(OnChatMessageSelectionChanged<Item> OnChatMessageSelectionChangedListener, final OnMessageClick onMessageClickListener, final OnChatMessageRemove chatMessageRemoveListener) {
+    public ChatMessagesFastAdapter(OnChatMessageSelectionChanged<Item> OnChatMessageSelectionChangedListener, final OnMessageViewClick onMessageViewClickListener, final OnChatMessageRemove chatMessageRemoveListener) {
         onChatMessageSelectionChanged = OnChatMessageSelectionChangedListener;
-        onMessageClick = onMessageClickListener;
+        onMessageViewClick = onMessageViewClickListener;
         onChatMessageRemove = chatMessageRemoveListener;
 
         // as we provide id's for the items we want the hasStableIds enabled to speed up things
@@ -127,16 +127,21 @@ public class ChatMessagesFastAdapter<Item extends AbstractChatItem> extends Fast
             @Override
             public boolean onClick(View v, IAdapter<Item> adapter, Item item, int position) {
                 if (getSelectedItems().size() == 0) {
-                    if (onMessageClick != null) {
-                        onMessageClick.onMessageClick(v, item.mMessage, position);
+                    if (onMessageViewClick != null) {
+                        onMessageViewClick.onMessageFileClick(v, item.mMessage, position, ProtoGlobal.RoomMessageType.TEXT);
                     }
                 } /*else {
-                    select(position);
-                    onLongClick(v, adapter, item, position);
-                    longClickListener.onLongClick(v, adapter, item, position);
+                    if (!item.isSelected()){
+                        select(position);
+                        makeSelected(v);
+                    }
+                    else{
+                        deselect(position);
+                        makeDeselected(v);
+                    }
                 }*/
                 // TODO: 9/17/2016 [Alireza Eskandarpour Shoferi] implement
-                return false;
+                return true;
             }
         });
     }
@@ -211,16 +216,22 @@ public class ChatMessagesFastAdapter<Item extends AbstractChatItem> extends Fast
         }
     }
 
+    private void makeSelected(View v) {
+        //noinspection RedundantCast
+        ((FrameLayout) v).setForeground(new ColorDrawable(v.getResources().getColor(R.color.colorChatMessageSelectableItemBg)));
+    }
+
+    private void makeDeselected(View v) {
+        //noinspection RedundantCast
+        ((FrameLayout) v).setForeground(new ColorDrawable(Color.TRANSPARENT));
+    }
+
     @Override
     public boolean onLongClick(View v, IAdapter<Item> adapter, Item item, int position) {
-        // don't remove following casting because FrameLayout has setForeground() from API 1 but
-        // View has it from API 23 and Lint doesn't get it correctly!
         if (!item.isSelected()) {
-            //noinspection RedundantCast
-            ((FrameLayout) v).setForeground(new ColorDrawable(v.getResources().getColor(R.color.colorChatMessageSelectableItemBg)));
+            makeSelected(v);
         } else {
-            //noinspection RedundantCast
-            ((FrameLayout) v).setForeground(new ColorDrawable(Color.TRANSPARENT));
+            makeDeselected(v);
         }
         return false;
     }

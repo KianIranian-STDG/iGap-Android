@@ -43,7 +43,7 @@
                         layout="@layout/chat_sub_layout_forward" />
 
                     <ImageView
-                        android:id="@+id/shli_imv_image"
+                        android:id="@+id/image"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:adjustViewBounds="true"

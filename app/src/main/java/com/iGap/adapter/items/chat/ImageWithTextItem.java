@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.helper.ImageHelper;
+import com.iGap.interface_package.OnMessageViewClick;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
@@ -24,8 +25,8 @@ import java.util.List;
 public class ImageWithTextItem extends AbstractChatItem<ImageWithTextItem, ImageWithTextItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
-    public ImageWithTextItem(ProtoGlobal.Room.Type type) {
-        super(true, type);
+    public ImageWithTextItem(ProtoGlobal.Room.Type type, OnMessageViewClick messageClickListener) {
+        super(true, type, messageClickListener);
     }
 
     @Override
@@ -43,11 +44,9 @@ public class ImageWithTextItem extends AbstractChatItem<ImageWithTextItem, Image
         super.bindView(holder, payloads);
 
         holder.messageText.setText(mMessage.messageText);
-    }
 
-    @Override
-    public ViewHolderFactory<? extends ViewHolder> getFactory() {
-        return FACTORY;
+        setOnClick(holder, holder.imvPicture, ProtoGlobal.RoomMessageType.IMAGE);
+        setOnClick(holder, holder.messageText, ProtoGlobal.RoomMessageType.TEXT);
     }
 
     @Override
@@ -76,6 +75,11 @@ public class ImageWithTextItem extends AbstractChatItem<ImageWithTextItem, Image
         });
     }
 
+    @Override
+    public ViewHolderFactory<? extends ViewHolder> getFactory() {
+        return FACTORY;
+    }
+
     protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {
         public ViewHolder create(View v) {
             return new ViewHolder(v);
@@ -89,7 +93,7 @@ public class ImageWithTextItem extends AbstractChatItem<ImageWithTextItem, Image
         public ViewHolder(View view) {
             super(view);
 
-            imvPicture = (ImageView) view.findViewById(R.id.shli_imv_image);
+            imvPicture = (ImageView) view.findViewById(R.id.image);
             messageText = (TextView) view.findViewById(R.id.messageText);
             messageText.setTextSize(G.userTextSize);
         }

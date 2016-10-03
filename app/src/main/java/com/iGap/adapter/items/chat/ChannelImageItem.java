@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activitys.ActivityComment;
+import com.iGap.interface_package.OnMessageViewClick;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 
@@ -23,8 +24,8 @@ import java.util.List;
 public class ChannelImageItem extends AbstractChatItem<ChannelImageItem, ChannelImageItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
-    public ChannelImageItem(ProtoGlobal.Room.Type type) {
-        super(false, type);
+    public ChannelImageItem(ProtoGlobal.Room.Type type, OnMessageViewClick messageClickListener) {
+        super(false, type, messageClickListener);
     }
 
     @Override
@@ -122,7 +123,7 @@ public class ChannelImageItem extends AbstractChatItem<ChannelImageItem, Channel
             cslch_txt_comment = (TextView) view.findViewById(R.id.cslch_txt_comment);
             cslch_txt_image_seen = (TextView) view.findViewById(R.id.cslch_txt_image_seen);
             cslch_txt_seen = (TextView) view.findViewById(R.id.cslch_txt_seen);
-            shli_imv_image = (ImageView) view.findViewById(R.id.shli_imv_image);
+            shli_imv_image = (ImageView) view.findViewById(R.id.image);
             cslr_ll_forward = (LinearLayout) view.findViewById(R.id.cslr_ll_forward);
             cslr_txt_forward_from = (TextView) view.findViewById(R.id.cslr_txt_forward_from);
 

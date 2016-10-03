@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activitys.ActivityComment;
+import com.iGap.interface_package.OnMessageViewClick;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 
@@ -20,11 +21,11 @@ import java.util.List;
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/2016.
  */
-public class ChannelMessageItem extends AbstractChatItem<ChannelMessageItem, ChannelMessageItem.ViewHolder> {
+public class ChannelTextItem extends AbstractChatItem<ChannelTextItem, ChannelTextItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
-    public ChannelMessageItem(ProtoGlobal.Room.Type type) {
-        super(false, type);
+    public ChannelTextItem(ProtoGlobal.Room.Type type, OnMessageViewClick messageClickListener) {
+        super(false, type, messageClickListener);
     }
 
     @Override

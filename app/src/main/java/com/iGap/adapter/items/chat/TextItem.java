@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.interface_package.OnMessageViewClick;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 
@@ -14,11 +15,11 @@ import java.util.List;
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/2016.
  */
-public class MessageItem extends AbstractChatItem<MessageItem, MessageItem.ViewHolder> {
+public class TextItem extends AbstractChatItem<TextItem, TextItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
-    public MessageItem(ProtoGlobal.Room.Type type) {
-        super(true, type);
+    public TextItem(ProtoGlobal.Room.Type type, OnMessageViewClick messageClickListener) {
+        super(true, type, messageClickListener);
     }
 
     @Override
@@ -32,10 +33,12 @@ public class MessageItem extends AbstractChatItem<MessageItem, MessageItem.ViewH
     }
 
     @Override
-    public void bindView(ViewHolder holder, List payloads) {
+    public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
         holder.messageText.setText(mMessage.messageText);
+
+        setOnClick(holder, holder.messageText, ProtoGlobal.RoomMessageType.TEXT);
     }
 
     @Override
