@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.interface_package.OnVoiceRecord;
 
 import java.io.IOException;
 import java.util.Timer;
@@ -42,10 +43,11 @@ public class VoiceRecord {
     private String itemTag = "";
     private View layoutAttach;
     private View layoutMic;
+    private OnVoiceRecord onVoiceRecordListener;
 
     private Context context;
 
-    public VoiceRecord(Context context, View layoutMic, View layoutAttach) {
+    public VoiceRecord(Context context, View layoutMic, View layoutAttach, OnVoiceRecord listener) {
 
         this.context = context;
 
@@ -56,7 +58,7 @@ public class VoiceRecord {
 
         this.layoutAttach = layoutAttach;
         this.layoutMic = layoutMic;
-
+        this.onVoiceRecordListener = listener;
     }
 
 
@@ -257,11 +259,16 @@ public class VoiceRecord {
         }
 
         if (cansel) {
+            if (onVoiceRecordListener != null) {
+                onVoiceRecordListener.onVoiceRecordCancel();
+            }
             Toast.makeText(context, context.getString(R.string.cancel), Toast.LENGTH_SHORT).show();
         } else {
             if (canStop) {
                 try {
-
+                    if (onVoiceRecordListener != null) {
+                        onVoiceRecordListener.onVoiceRecordDone(outputFile);
+                    }
                     Toast.makeText(context, outputFile, Toast.LENGTH_SHORT).show();
 
                 } catch (Exception e) {

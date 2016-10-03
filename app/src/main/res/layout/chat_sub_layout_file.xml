@@ -5,9 +5,9 @@
              android:id="@+id/chatSubLayoutFile"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
-             android:textDirection="firstStrong"
+             android:layout_marginBottom="@dimen/dp4"
              android:maxWidth="@dimen/dp300"
-             android:layout_marginBottom="@dimen/dp4">
+             android:textDirection="firstStrong">
 
     <LinearLayout
         android:id="@+id/mainContainer"
@@ -21,7 +21,7 @@
             android:layout_width="@dimen/dp52"
             android:layout_height="@dimen/dp52"
             android:layout_marginRight="@dimen/dp8"
-            android:src="@mipmap/b" />
+            android:src="@mipmap/b"/>
 
         <LinearLayout
             android:id="@+id/contentContainer"
@@ -33,15 +33,16 @@
 
             <include
                 android:id="@+id/replayLayout"
-                layout="@layout/chat_sub_layout_replay" />
+                layout="@layout/chat_sub_layout_replay"/>
 
             <include
                 android:id="@+id/cslr_ll_forward"
-                layout="@layout/chat_sub_layout_forward" />
+                layout="@layout/chat_sub_layout_forward"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center_vertical"
                 android:layoutDirection="ltr"
                 android:minWidth="@dimen/dp140"
                 android:orientation="horizontal">
@@ -51,86 +52,60 @@
                     android:layout_height="@dimen/dp88">
 
                     <ImageView
-                        android:id="@+id/cslf_imv_image_file"
+                        android:id="@+id/thumbnail"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:padding="@dimen/dp4"
-                        android:src="@mipmap/doc_blue" />
+                        android:background="@drawable/gray_bg_rounded_corner"/>
 
-                    <ImageView
-                        android:id="@+id/cslf_imv_state_file"
-                        android:layout_width="@dimen/dp32"
-                        android:layout_height="@dimen/dp32"
-                        android:layout_gravity="center"
-                        android:src="@mipmap/file_b_load_s" />
+                    <include
+                        android:id="@+id/progress"
+                        layout="@layout/test_progress_item"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"/>
                 </FrameLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp4"
-                    android:orientation="vertical"
-                    android:paddingRight="@dimen/dp12">
+                    android:layout_marginLeft="@dimen/dp8"
+                    android:orientation="vertical">
 
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/songArtist"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp12"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/cslf_txt_file_name"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:maxWidth="@dimen/dp200"
-                            android:singleLine="true"
-                            android:text="file media golha "
-                            android:textColor="@android:color/black"
-                            android:textSize="@dimen/sp16" />
-
-                        <TextView
-                            android:id="@+id/cslf_txt_file_mime_type"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:maxWidth="@dimen/dp88"
-                            android:singleLine="true"
-                            android:text=".mp4"
-                            android:textColor="@android:color/black"
-                            android:textSize="@dimen/sp16" />
-                    </LinearLayout>
+                        android:singleLine="true"
+                        android:text="file_name.ext"
+                        android:textAllCaps="true"
+                        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+                        android:textColor="@android:color/black"
+                        android:textStyle="bold"/>
 
                     <TextView
                         android:id="@+id/cslf_txt_file_size"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp4"
-                        android:maxWidth="@dimen/dp200"
                         android:singleLine="true"
                         android:text="3.2 mb"
-                        android:textColor="@android:color/black"
-                        android:textSize="@dimen/sp14" />
+                        android:textAllCaps="true"
+                        android:textColor="@color/gray"
+                        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"/>
 
                 </LinearLayout>
 
             </LinearLayout>
 
-            <include
-                android:id="@+id/progress"
-                layout="@layout/test_progress_item"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"/>
-
             <com.iGap.module.EmojiTextView
                 android:id="@+id/messageText"
                 style="@style/ChatMessages.EmojiTextView"
+                android:layout_marginTop="@dimen/dp20"
                 android:text="SAMPLE TEXT"
                 android:textColor="@android:color/black"/>
 
             <include
                 android:id="@+id/cslr_ll_time"
-                layout="@layout/chat_sub_layout_messages_time" />
+                layout="@layout/chat_sub_layout_messages_time"/>
         </LinearLayout>
     </LinearLayout>
 </FrameLayout>

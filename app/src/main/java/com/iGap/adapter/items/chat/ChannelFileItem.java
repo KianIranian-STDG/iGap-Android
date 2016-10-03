@@ -97,7 +97,6 @@ public class ChannelFileItem extends AbstractChatItem<ChannelFileItem, ChannelFi
         protected ImageView cslf_imv_image_file;
         protected ImageView cslf_imv_state_file;
         protected TextView cslf_txt_file_name;
-        protected TextView cslf_txt_file_mime_type;
         protected TextView cslf_txt_file_size;
         protected ImageView chslr_imv_replay_pic;
         protected TextView chslr_txt_replay_from;
@@ -129,8 +128,7 @@ public class ChannelFileItem extends AbstractChatItem<ChannelFileItem, ChannelFi
             cslr_txt_forward_from = (TextView) view.findViewById(R.id.cslr_txt_forward_from);
             cslf_imv_image_file = (ImageView) view.findViewById(R.id.cslf_imv_image_file);
             cslf_imv_state_file = (ImageView) view.findViewById(R.id.cslf_imv_state_file);
-            cslf_txt_file_name = (TextView) view.findViewById(R.id.cslf_txt_file_name);
-            cslf_txt_file_mime_type = (TextView) view.findViewById(R.id.cslf_txt_file_mime_type);
+            cslf_txt_file_name = (TextView) view.findViewById(R.id.songArtist);
             cslf_txt_file_size = (TextView) view.findViewById(R.id.cslf_txt_file_size);
 
             chslr_imv_replay_pic = (ImageView) view.findViewById(R.id.chslr_imv_replay_pic);

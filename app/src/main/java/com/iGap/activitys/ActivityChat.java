@@ -90,6 +90,7 @@ import com.iGap.interface_package.OnFileDownloadResponse;
 import com.iGap.interface_package.OnFileUpload;
 import com.iGap.interface_package.OnFileUploadStatusResponse;
 import com.iGap.interface_package.OnMessageViewClick;
+import com.iGap.interface_package.OnVoiceRecord;
 import com.iGap.module.AttachFile;
 import com.iGap.module.ChatSendMessageUtil;
 import com.iGap.module.EmojiEditText;
@@ -160,7 +161,7 @@ import io.realm.RealmResults;
 /**
  * Created by android3 on 8/5/2016.
  */
-public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, IRecentsLongClick, OnMessageViewClick, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractChatItem>, OnChatMessageRemove, OnFileUpload, OnFileUploadStatusResponse, OnFileDownloadResponse {
+public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, IRecentsLongClick, OnMessageViewClick, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractChatItem>, OnChatMessageRemove, OnFileUpload, OnFileUploadStatusResponse, OnFileDownloadResponse, OnVoiceRecord {
 
     private RelativeLayout parentLayout;
     private SharedPreferences sharedPreferences;
@@ -336,7 +337,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
         viewAttachFile = findViewById(R.id.layout_attach_file);
         viewMicRecorder = findViewById(R.id.layout_mic_recorde);
-        voiceRecord = new VoiceRecord(this, viewMicRecorder, viewAttachFile);
+        voiceRecord = new VoiceRecord(this, viewMicRecorder, viewAttachFile, this);
 
         lastDateCalendar.clear();
 
@@ -1541,40 +1542,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
             realm.close();
 
-            new AsyncTask<Object, FileUploadStructure, FileUploadStructure>() {
-                @Override
-                protected FileUploadStructure doInBackground(Object... params) {
-                    try {
-                        String filePath = (String) params[0];
-                        long messageId = (long) params[1];
-                        ProtoGlobal.RoomMessageType messageType = (ProtoGlobal.RoomMessageType) params[2];
-                        File file = new File(filePath);
-                        String fileName = file.getName();
-                        long fileSize = file.length();
-                        FileUploadStructure fileUploadStructure = new FileUploadStructure(fileName, fileSize, filePath, messageId, messageType, mRoomId);
-                        fileUploadStructure.openFile(filePath);
-                        fileUploadStructure.text = getWrittenMessage();
-
-                        byte[] fileHash = Utils.getFileHash(fileUploadStructure);
-                        fileUploadStructure.setFileHash(fileHash);
-
-                        return fileUploadStructure;
-                    } catch (NoSuchAlgorithmException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    return null;
-                }
-
-                @Override
-                protected void onPostExecute(FileUploadStructure result) {
-                    super.onPostExecute(result);
-                    mSelectedFiles.add(result);
-                    G.uploaderUtil.startUploading(result.fileSize, Long.toString(result.messageId));
-                    edtChat.setText("");
-                }
-            }.execute(filePath, messageId, messageType);
+            new UploadTask().execute(filePath, messageId, messageType, mRoomId, getWrittenMessage());
 
             scrollToEnd();
         }
@@ -2394,7 +2362,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     }
 
     // selected files (paths)
-    private CopyOnWriteArrayList<FileUploadStructure> mSelectedFiles = new CopyOnWriteArrayList<>();
+    private static CopyOnWriteArrayList<FileUploadStructure> mSelectedFiles = new CopyOnWriteArrayList<>();
 
     @Override
     public void onFileUploadStatus(ProtoFileUploadStatus.FileUploadStatusResponse.Status status, double progress, int recheckDelayMS, final String identity, ProtoResponse.Response response) {
@@ -2460,5 +2428,91 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 }
             }
         });
+    }
+
+    @Override
+    public void onVoiceRecordDone(final String savedPath) {
+        Realm realm = Realm.getDefaultInstance();
+        final long messageId = System.nanoTime();
+        final long updateTime = System.currentTimeMillis();
+        final long senderID = realm.where(RealmUserInfo.class).findFirst().getUserId();
+        if (userTriesReplay()) {
+            mAdapter.add(new VoiceItem(chatType, this).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.VOICE, MyType.SendType.send, MyType.FileState.uploading, null, savedPath, updateTime, ((StructMessageInfo) mReplayLayout.getTag()))).withIdentifier(System.nanoTime()));
+        } else {
+            if (isMessageWrote()) {
+                mAdapter.add(new VoiceItem(chatType, this).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.VOICE, MyType.SendType.send, MyType.FileState.uploading, null, savedPath, updateTime)).withIdentifier(System.nanoTime()));
+            } else {
+                mAdapter.add(new VoiceItem(chatType, this).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.VOICE, MyType.SendType.send, MyType.FileState.uploading, null, savedPath, updateTime)).withIdentifier(System.nanoTime()));
+            }
+        }
+
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmChatHistory chatHistory = realm.createObject(RealmChatHistory.class);
+                RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class);
+
+                roomMessage.setMessageType(ProtoGlobal.RoomMessageType.VOICE.toString());
+                roomMessage.setMessage(getWrittenMessage());
+                roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
+                roomMessage.setAttachmentForLocalFilePath(messageId, savedPath);
+                roomMessage.setMessageId(messageId);
+                roomMessage.setUserId(senderID);
+                roomMessage.setUpdateTime((int) (updateTime / DateUtils.SECOND_IN_MILLIS));
+
+                // TODO: 9/26/2016 [Alireza Eskandarpour Shoferi] user may wants to send a file in response to a message as replay, so after server done creating replay and forward options, modify this section and sending message as well.
+
+                chatHistory.setId(System.currentTimeMillis());
+                chatHistory.setRoomId(mRoomId);
+                chatHistory.setRoomMessage(roomMessage);
+            }
+        });
+
+        new UploadTask().execute(savedPath, messageId, ProtoGlobal.RoomMessageType.VOICE, mRoomId, getWrittenMessage());
+
+        scrollToEnd();
+
+        realm.close();
+    }
+
+    @Override
+    public void onVoiceRecordCancel() {
+
+    }
+
+    private static class UploadTask extends AsyncTask<Object, FileUploadStructure, FileUploadStructure> {
+        @Override
+        protected FileUploadStructure doInBackground(Object... params) {
+            try {
+                String filePath = (String) params[0];
+                long messageId = (long) params[1];
+                ProtoGlobal.RoomMessageType messageType = (ProtoGlobal.RoomMessageType) params[2];
+                long roomId = (long) params[3];
+                String messageText = (String) params[4];
+                File file = new File(filePath);
+                String fileName = file.getName();
+                long fileSize = file.length();
+                FileUploadStructure fileUploadStructure = new FileUploadStructure(fileName, fileSize, filePath, messageId, messageType, roomId);
+                fileUploadStructure.openFile(filePath);
+                fileUploadStructure.text = messageText;
+
+                byte[] fileHash = Utils.getFileHash(fileUploadStructure);
+                fileUploadStructure.setFileHash(fileHash);
+
+                return fileUploadStructure;
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(FileUploadStructure result) {
+            super.onPostExecute(result);
+            mSelectedFiles.add(result);
+            G.uploaderUtil.startUploading(result.fileSize, Long.toString(result.messageId));
+        }
     }
 }

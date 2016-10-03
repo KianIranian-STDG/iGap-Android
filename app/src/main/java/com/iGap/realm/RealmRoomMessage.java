@@ -192,4 +192,23 @@ public class RealmRoomMessage extends RealmObject {
         }
         realm.close();
     }
+
+    public void setAttachmentForLocalFilePath(final long messageId, final String localPath) {
+        Realm realm = Realm.getDefaultInstance();
+        if (attachment == null) {
+            if (realm.where(RealmMessageAttachment.class).equalTo("messageId", messageId).count() <= 0) {
+                RealmMessageAttachment realmMessageAttachment = realm.createObject(RealmMessageAttachment.class);
+                realmMessageAttachment.setMessageId(messageId);
+                realmMessageAttachment.setLocalFilePath(localPath);
+                attachment = realmMessageAttachment;
+            } else {
+                RealmMessageAttachment realmMessageAttachment = realm.where(RealmMessageAttachment.class).equalTo("messageId", messageId).findFirst();
+                realmMessageAttachment.setLocalFilePath(localPath);
+                attachment = realmMessageAttachment;
+            }
+        } else {
+            attachment.setLocalThumbnailPath(localPath);
+        }
+        realm.close();
+    }
 }
