@@ -192,27 +192,21 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
                         File file2 = new File(path, prefix + "_" + newName + Math.random() * 10000 + 1 + ".png");
                         if (prefix.equals("NewChanel")) {
                             success = G.IMAGE_NEW_CHANEL.renameTo(file2);
+                            startActivity(new Intent(G.context, ActivityNewChanelFinish.class));
+                            getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
+                            Log.i("AAASSDD", "0: " + success);
                         } else {
                             success = G.IMAGE_NEW_GROUP.renameTo(file2);
+                            createGroup();
+                            Log.i("AAASSDD", "1: " + success);
                         }
 
-                        if (success) {
-
-                            if (prefix.equals("NewChanel")) {
-                                startActivity(new Intent(G.context, ActivityNewChanelFinish.class));
-                                getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
-                            } else {
-                                createGroup();
-                            }
-                        }
                     } else {
                         Toast.makeText(G.context, "Please Description tour Group", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(G.context, "Please Enter Your Name Group", Toast.LENGTH_SHORT).show();
                 }
-
-//                }
             }
         });
         //=======================button cancel
@@ -253,7 +247,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putLong("RoomId", roomId);
                 fragment.setArguments(bundle);
-                getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.ng_fragmentContainer, fragment).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
                 ActivityMain.mLeftDrawerLayout.closeDrawer();
                 getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
             }

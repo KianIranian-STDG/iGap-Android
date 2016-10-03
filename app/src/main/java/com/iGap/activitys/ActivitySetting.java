@@ -145,9 +145,7 @@ public class ActivitySetting extends ActivityEnhanced {
             nickName = realmUserInfo.getNickName();
             userName = realmUserInfo.getUserName();
             phoneName = realmUserInfo.getPhoneNumber();
-
         }
-
         if (nickName != null) {
             txtNickName.setText(nickName);
             txtNickNameTitle.setText(nickName);
@@ -270,14 +268,19 @@ public class ActivitySetting extends ActivityEnhanced {
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
 
                 TextView titleToolbar = (TextView) findViewById(R.id.st_txt_titleToolbar);
-                if (verticalOffset < -1) {
+                ViewGroup viewGroup = (ViewGroup) findViewById(R.id.st_parentLayoutCircleImage);
+                if (verticalOffset < -5) {
 
-                    titleToolbar.animate().alpha(1).setDuration(300);
+                    viewGroup.animate().alpha(0).setDuration(700);
+                    viewGroup.setVisibility(View.GONE);
                     titleToolbar.setVisibility(View.VISIBLE);
+                    titleToolbar.animate().alpha(1).setDuration(300);
 
                 } else {
-                    titleToolbar.animate().alpha(0).setDuration(500);
                     titleToolbar.setVisibility(View.GONE);
+                    viewGroup.setVisibility(View.VISIBLE);
+                    titleToolbar.animate().alpha(0).setDuration(500);
+                    viewGroup.animate().alpha(1).setDuration(700);
                 }
             }
         });
@@ -1157,15 +1160,23 @@ public class ActivitySetting extends ActivityEnhanced {
     public ArrayList<StructSharedMedia> setItem(File f) {
 
         ArrayList<StructSharedMedia> items = new ArrayList<>();
-        File file[] = f.listFiles();
-        Log.i("ZZXXCCX", "setItem: " + file.length);
-        for (int i = 0; i < file.length; i++) {
-            if (!file[i].getPath().equals(G.chatBackground.toString())) {
-                StructSharedMedia item = new StructSharedMedia();
-                item.filePath = file[i].getPath();
-                items.add(item);
-            }
+//        File file[] = f.listFiles();
+//        Log.i("ZZXXCCX", "setItem: " + file.length);
+//        for (int i = 0; i < file.length; i++) {
+//            if (!file[i].getPath().equals(G.chatBackground.toString())) {
+//                StructSharedMedia item = new StructSharedMedia();
+//                item.filePath = file[i].getPath();
+//                items.add(item);
+//            }
+//        }
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<RealmAvatarPath> realmItemList = realm.where(RealmAvatarPath.class).findAll();
+        for (int i = 0; i < realmItemList.size(); i++) {
+            StructSharedMedia item = new StructSharedMedia();
+            item.filePath = realmItemList.get(i).getPathImage();
+            items.add(item);
         }
+
         return items;
     }
 }

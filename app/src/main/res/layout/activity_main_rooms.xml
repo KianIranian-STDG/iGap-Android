@@ -57,6 +57,7 @@
                         android:layout_height="match_parent"
                         android:theme="@style/SearchViewToolbar"
                         android:searchHintIcon="@null"
+                        app:queryHint="Search"
                         android:visibility="visible" />
 
                     <TextView

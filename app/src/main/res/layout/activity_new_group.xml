@@ -50,12 +50,12 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@+id/ng_backgroundToolbar">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <com.iGap.module.CircleImageView
                 android:id="@+id/ng_profile_circle_image"
@@ -111,6 +111,7 @@
             </android.support.design.widget.TextInputLayout>
 
             <TextView
+                android:padding="@dimen/dp12"
                 android:id="@+id/ng_txt_nextStep"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -125,6 +126,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:padding="@dimen/dp12"
                 android:id="@+id/ng_txt_cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

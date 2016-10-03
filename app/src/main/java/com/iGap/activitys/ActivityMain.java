@@ -319,7 +319,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                 Bundle bundle = new Bundle();
                 bundle.putString("TYPE", "NewGroup");
                 fragment.setArguments(bundle);
-                ActivityMain.this.getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
+                ActivityMain.this.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
                 arcMenu.toggleMenu();
             }
         });
@@ -334,7 +334,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                 Bundle bundle = new Bundle();
                 bundle.putString("TYPE", "NewChanel");
                 fragment.setArguments(bundle);
-                ActivityMain.this.getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
+                ActivityMain.this.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
                 arcMenu.toggleMenu();
 
             }

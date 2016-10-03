@@ -222,6 +222,10 @@ public class FragmentShowImage extends Fragment {
                             showAllMedia();
                         } else if (which == 1) {
                             saveToGalary();
+                        } else if (which == 2) {
+
+                            list.remove(viewPager.getCurrentItem());
+
                         }
 
 

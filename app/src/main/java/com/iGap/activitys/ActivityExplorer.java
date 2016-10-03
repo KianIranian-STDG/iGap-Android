@@ -207,7 +207,6 @@ public class ActivityExplorer extends ActivityEnhanced {
                 data.setData(Uri.parse(fileDir.getAbsolutePath()));
 
                 setResult(Activity.RESULT_OK, data);
-
                 finish();
 
             }
