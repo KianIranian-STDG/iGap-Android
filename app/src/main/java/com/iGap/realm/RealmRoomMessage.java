@@ -2,6 +2,7 @@ package com.iGap.realm;
 
 import android.text.format.DateUtils;
 
+import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 
 import io.realm.Realm;
@@ -174,40 +175,31 @@ public class RealmRoomMessage extends RealmObject {
         }
     }
 
-    public void setAttachmentForLocalThumbnailPath(final long messageId, final String localPath) {
+    public void setAttachment(final long messageId, final String path, int width, int height, long size, String name, double duration, LocalFileType type) {
         Realm realm = Realm.getDefaultInstance();
         if (attachment == null) {
-            if (realm.where(RealmMessageAttachment.class).equalTo("messageId", messageId).count() <= 0) {
-                RealmMessageAttachment realmMessageAttachment = realm.createObject(RealmMessageAttachment.class);
+            RealmMessageAttachment realmMessageAttachment = realm.where(RealmMessageAttachment.class).equalTo("messageId", messageId).findFirst();
+            if (realmMessageAttachment == null) {
+                realmMessageAttachment = realm.createObject(RealmMessageAttachment.class);
                 realmMessageAttachment.setMessageId(messageId);
-                realmMessageAttachment.setLocalThumbnailPath(localPath);
-                attachment = realmMessageAttachment;
-            } else {
-                RealmMessageAttachment realmMessageAttachment = realm.where(RealmMessageAttachment.class).equalTo("messageId", messageId).findFirst();
-                realmMessageAttachment.setLocalThumbnailPath(localPath);
-                attachment = realmMessageAttachment;
             }
-        } else {
-            attachment.setLocalThumbnailPath(localPath);
-        }
-        realm.close();
-    }
-
-    public void setAttachmentForLocalFilePath(final long messageId, final String localPath) {
-        Realm realm = Realm.getDefaultInstance();
-        if (attachment == null) {
-            if (realm.where(RealmMessageAttachment.class).equalTo("messageId", messageId).count() <= 0) {
-                RealmMessageAttachment realmMessageAttachment = realm.createObject(RealmMessageAttachment.class);
-                realmMessageAttachment.setMessageId(messageId);
-                realmMessageAttachment.setLocalFilePath(localPath);
-                attachment = realmMessageAttachment;
+            if (type == LocalFileType.THUMBNAIL) {
+                realmMessageAttachment.setLocalThumbnailPath(path);
             } else {
-                RealmMessageAttachment realmMessageAttachment = realm.where(RealmMessageAttachment.class).equalTo("messageId", messageId).findFirst();
-                realmMessageAttachment.setLocalFilePath(localPath);
-                attachment = realmMessageAttachment;
+                realmMessageAttachment.setLocalFilePath(path);
             }
+            realmMessageAttachment.setWidth(width);
+            realmMessageAttachment.setSize(size);
+            realmMessageAttachment.setHeight(height);
+            realmMessageAttachment.setName(name);
+            realmMessageAttachment.setDuration(duration);
+            attachment = realmMessageAttachment;
         } else {
-            attachment.setLocalThumbnailPath(localPath);
+            if (type == LocalFileType.THUMBNAIL) {
+                attachment.setLocalThumbnailPath(path);
+            } else {
+                attachment.setLocalFilePath(path);
+            }
         }
         realm.close();
     }

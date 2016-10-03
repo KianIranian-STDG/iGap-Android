@@ -102,7 +102,7 @@ public class ImageItem extends AbstractChatItem<ImageItem, ImageItem.ViewHolder>
         public ViewHolder(View view) {
             super(view);
 
-            image = (ImageView) view.findViewById(R.id.image);
+            image = (ImageView) view.findViewById(R.id.thumbnail);
             progressBar = (ProgressBar) view.findViewById(R.id.progress);
 
             progressBar.setIndeterminate(false);

@@ -4,6 +4,8 @@ package com.iGap.module;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Point;
+import android.media.MediaMetadataRetriever;
+import android.net.Uri;
 import android.view.Display;
 
 import java.io.File;
@@ -23,6 +25,20 @@ public final class Utils {
         Point size = new Point();
         display.getSize(size);
         return size.x;
+    }
+
+    public static String getAudioArtistName(String filePath) {
+        MediaMetadataRetriever metaRetriever = new MediaMetadataRetriever();
+        metaRetriever.setDataSource(filePath);
+        return metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
+    }
+
+    public static long getAudioDuration(Context context, String filePath) {
+        Uri uri = Uri.parse(filePath);
+        MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+        mmr.setDataSource(context, uri);
+        String durationStr = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+        return Integer.parseInt(durationStr);
     }
 
     /**

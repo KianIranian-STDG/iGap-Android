@@ -23,7 +23,6 @@ public class StructMessageInfo implements Parcelable {
         this.messageType = messageType;
         this.sendType = sendType;
         this.fileState = fileState;
-        this.fileName = fileName;
         this.fileMime = fileMime;
         this.filePic = filePic;
         this.filePath = localThumbnailPath;
@@ -32,19 +31,43 @@ public class StructMessageInfo implements Parcelable {
         }
         this.attachment.setLocalThumbnailPath(Long.parseLong(messageID), localThumbnailPath);
         this.attachment.setLocalFilePath(Long.parseLong(messageID), localFilePath);
-        this.fileSize = fileSize;
         this.fileHash = fileHash;
         this.time = time;
     }
 
-    public StructMessageInfo(String messageID, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, MyType.FileState fileState, String fileName, String fileMime, String filePic, String localThumbnailPath, String localFilePath, long fileSize, byte[] fileHash, long time, StructMessageInfo replayObject) {
+    public static StructMessageInfo buildForAudio(long messageID, long senderID, ProtoGlobal.RoomMessageStatus status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, long time, String messageText, String localThumbnailPath, String localFilePath, String songArtist, long songLength, Object replayObject) {
+        StructMessageInfo info = new StructMessageInfo();
+
+        info.messageID = Long.toString(messageID);
+        info.senderID = Long.toString(senderID);
+        info.status = status.toString();
+        info.messageType = messageType;
+        info.sendType = sendType;
+        info.attachment = info.attachment == null ? new StructMessageAttachment() : info.attachment;
+        info.attachment.setLocalThumbnailPath(messageID, localThumbnailPath);
+        info.attachment.setLocalFilePath(messageID, localFilePath);
+        info.time = time;
+        info.messageText = messageText;
+        if (replayObject != null && replayObject instanceof StructMessageInfo) {
+            info.replayFrom = ((StructMessageInfo) replayObject).senderName;
+            info.replayPicturePath = ((StructMessageInfo) replayObject).filePic;
+            info.replayMessage = ((StructMessageInfo) replayObject).messageText;
+        }
+
+        // audio exclusive
+        info.songArtist = songArtist;
+        info.songLength = songLength;
+
+        return info;
+    }
+
+    public StructMessageInfo(String messageID, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, MyType.FileState fileState, String fileMime, String filePic, String localThumbnailPath, String localFilePath, byte[] fileHash, long time, StructMessageInfo replayObject) {
         this.messageID = messageID;
         this.senderID = senderID;
         this.status = status;
         this.messageType = messageType;
         this.sendType = sendType;
         this.fileState = fileState;
-        this.fileName = fileName;
         this.fileMime = fileMime;
         this.filePic = filePic;
         this.filePath = localThumbnailPath;
@@ -53,7 +76,6 @@ public class StructMessageInfo implements Parcelable {
         }
         this.attachment.setLocalThumbnailPath(Long.parseLong(messageID), localThumbnailPath);
         this.attachment.setLocalFilePath(Long.parseLong(messageID), localFilePath);
-        this.fileSize = fileSize;
         this.fileHash = fileHash;
         this.time = time;
         this.replayFrom = replayObject.senderName;
@@ -149,14 +171,14 @@ public class StructMessageInfo implements Parcelable {
     public String replayFrom = "";
     public String replayMessage = "";
     public String replayPicturePath = "";
+    public String songArtist;
+    public long songLength;
 
     public String messageText = "";
 
-    public String fileName = "";
     public String fileMime = "";
     public String filePic = "";
     public String filePath = "";
-    public long fileSize;
     // used for uploading process and getting item from adapter by file hash
     public byte[] fileHash;
     public int uploadProgress;
@@ -273,11 +295,9 @@ public class StructMessageInfo implements Parcelable {
         dest.writeString(this.replayMessage);
         dest.writeString(this.replayPicturePath);
         dest.writeString(this.messageText);
-        dest.writeString(this.fileName);
         dest.writeString(this.fileMime);
         dest.writeString(this.filePic);
         dest.writeString(this.filePath);
-        dest.writeLong(this.fileSize);
         dest.writeByteArray(this.fileHash);
         dest.writeInt(this.uploadProgress);
         dest.writeParcelable(this.attachment, flags);
@@ -305,11 +325,9 @@ public class StructMessageInfo implements Parcelable {
         this.replayMessage = in.readString();
         this.replayPicturePath = in.readString();
         this.messageText = in.readString();
-        this.fileName = in.readString();
         this.fileMime = in.readString();
         this.filePic = in.readString();
         this.filePath = in.readString();
-        this.fileSize = in.readLong();
         this.fileHash = in.createByteArray();
         this.uploadProgress = in.readInt();
         this.attachment = in.readParcelable(StructMessageAttachment.class.getClassLoader());

@@ -103,7 +103,7 @@
                                 </LinearLayout>
 
                                 <TextView
-                                    android:id="@+id/cslf_txt_file_size"
+                                    android:id="@+id/fileSize"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/dp4"

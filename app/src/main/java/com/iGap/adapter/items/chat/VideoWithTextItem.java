@@ -11,6 +11,7 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.helper.HelperMimeType;
 import com.iGap.interface_package.OnMessageViewClick;
+import com.iGap.module.EmojiTextView;
 import com.iGap.module.MyType;
 import com.iGap.module.Utils;
 import com.iGap.module.enums.LocalFileType;
@@ -43,9 +44,9 @@ public class VideoWithTextItem extends AbstractChatItem<VideoWithTextItem, Video
     public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        holder.cslv_txt_video_name.setText(mMessage.fileName);
+        holder.cslv_txt_video_name.setText(mMessage.attachment.name);
         holder.cslv_txt_video_mime_type.setText(mMessage.fileMime);
-        holder.cslv_txt_vido_size.setText(Utils.humanReadableByteCount(mMessage.fileSize, true));
+        holder.cslv_txt_vido_size.setText(Utils.humanReadableByteCount(mMessage.attachment.size, true));
 
         if (mMessage.fileState == MyType.FileState.notDownload || mMessage.fileState == MyType.FileState.downloading)// enable or disable btn play video
         {
@@ -54,7 +55,7 @@ public class VideoWithTextItem extends AbstractChatItem<VideoWithTextItem, Video
             holder.cslv_btn_play_video.setVisibility(View.VISIBLE);
         }
 
-        holder.cslr_txt_message.setText(mMessage.messageText);
+        setTextIfNeeded(holder.messageText);
     }
 
     @Override
@@ -80,13 +81,13 @@ public class VideoWithTextItem extends AbstractChatItem<VideoWithTextItem, Video
         protected TextView cslv_txt_video_name;
         protected TextView cslv_txt_video_mime_type;
         protected TextView cslv_txt_vido_size;
-        protected TextView cslr_txt_message;
+        protected EmojiTextView messageText;
 
         public ViewHolder(View view) {
             super(view);
 
-            cslr_txt_message = (TextView) view.findViewById(R.id.messageText);
-            cslr_txt_message.setTextSize(G.userTextSize);
+            messageText = (EmojiTextView) view.findViewById(R.id.messageText);
+            messageText.setTextSize(G.userTextSize);
             cslv_imv_vido_image = (ImageView) view.findViewById(R.id.cslv_imv_vido_image);
             cslv_btn_play_video = (ImageButton) view.findViewById(R.id.cslv_btn_play_video);
             cslv_txt_video_name = (TextView) view.findViewById(R.id.cslv_txt_video_name);

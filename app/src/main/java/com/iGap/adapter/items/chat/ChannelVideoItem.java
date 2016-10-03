@@ -44,9 +44,9 @@ public class ChannelVideoItem extends AbstractChatItem<ChannelVideoItem, Channel
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        holder.cslv_txt_video_name.setText(mMessage.fileName);
+        holder.cslv_txt_video_name.setText(mMessage.attachment.name);
         holder.cslv_txt_video_mime_type.setText(mMessage.fileMime);
-        holder.cslv_txt_vido_size.setText(Long.toString(mMessage.fileSize));
+        holder.cslv_txt_vido_size.setText(Long.toString(mMessage.attachment.size));
 
         holder.cslv_imv_vido_image.setImageResource(Integer.parseInt(mMessage.filePic));
 

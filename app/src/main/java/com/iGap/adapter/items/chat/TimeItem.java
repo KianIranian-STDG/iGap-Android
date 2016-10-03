@@ -35,7 +35,7 @@ public class TimeItem extends AbstractChatItem<TimeItem, TimeItem.ViewHolder> {
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        holder.text.setText(mMessage.messageText);
+        setTextIfNeeded(holder.text);
     }
 
     @Override

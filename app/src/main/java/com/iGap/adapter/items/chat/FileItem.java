@@ -7,6 +7,7 @@ import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.interface_package.OnMessageViewClick;
+import com.iGap.module.EmojiTextView;
 import com.iGap.module.Utils;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
@@ -55,15 +56,10 @@ public class FileItem extends AbstractChatItem<FileItem, FileItem.ViewHolder> {
 
         // TODO: 9/15/2016 [Alireza Eskandarpour Shoferi] implement fileState
 
-        holder.cslf_txt_file_name.setText(mMessage.fileName);
-        holder.cslf_txt_file_size.setText(Utils.humanReadableByteCount(mMessage.fileSize, true));
+        holder.cslf_txt_file_name.setText(mMessage.attachment.name);
+        holder.cslf_txt_file_size.setText(Utils.humanReadableByteCount(mMessage.attachment.size, true));
 
-        if (mMessage.messageText != null && !mMessage.messageText.isEmpty()) {
-            holder.cslr_txt_message.setText(mMessage.messageText);
-            holder.cslr_txt_message.setVisibility(View.VISIBLE);
-        } else {
-            holder.cslr_txt_message.setVisibility(View.GONE);
-        }
+        setTextIfNeeded(holder.messageText);
     }
 
     protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {
@@ -75,15 +71,15 @@ public class FileItem extends AbstractChatItem<FileItem, FileItem.ViewHolder> {
     protected static class ViewHolder extends RecyclerView.ViewHolder {
         protected TextView cslf_txt_file_name;
         protected TextView cslf_txt_file_size;
-        protected TextView cslr_txt_message;
+        protected EmojiTextView messageText;
 
         public ViewHolder(View view) {
             super(view);
 
-            cslr_txt_message = (TextView) view.findViewById(R.id.messageText);
-            cslr_txt_message.setTextSize(G.userTextSize);
+            messageText = (EmojiTextView) view.findViewById(R.id.messageText);
+            messageText.setTextSize(G.userTextSize);
             cslf_txt_file_name = (TextView) view.findViewById(R.id.songArtist);
-            cslf_txt_file_size = (TextView) view.findViewById(R.id.cslf_txt_file_size);
+            cslf_txt_file_size = (TextView) view.findViewById(R.id.fileSize);
         }
     }
 }

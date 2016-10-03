@@ -53,9 +53,9 @@ public class VideoItem extends AbstractChatItem<VideoItem, VideoItem.ViewHolder>
     public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        holder.cslv_txt_video_name.setText(mMessage.fileName);
+        holder.cslv_txt_video_name.setText(mMessage.attachment.name);
         holder.cslv_txt_video_mime_type.setText(mMessage.fileMime);
-        holder.cslv_txt_vido_size.setText(Utils.humanReadableByteCount(mMessage.fileSize, true));
+        holder.cslv_txt_vido_size.setText(Utils.humanReadableByteCount(mMessage.attachment.size, true));
 
         if (mMessage.fileState == MyType.FileState.notDownload || mMessage.fileState == MyType.FileState.downloading)// enable or disable btn play video
         {

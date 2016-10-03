@@ -2,11 +2,11 @@ package com.iGap.adapter.items.chat;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.interface_package.OnMessageViewClick;
+import com.iGap.module.EmojiTextView;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 
@@ -36,7 +36,7 @@ public class TextItem extends AbstractChatItem<TextItem, TextItem.ViewHolder> {
     public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        holder.messageText.setText(mMessage.messageText);
+        setTextIfNeeded(holder.messageText);
 
         setOnClick(holder, holder.messageText, ProtoGlobal.RoomMessageType.TEXT);
     }
@@ -53,12 +53,12 @@ public class TextItem extends AbstractChatItem<TextItem, TextItem.ViewHolder> {
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
-        protected TextView messageText;
+        protected EmojiTextView messageText;
 
         public ViewHolder(View view) {
             super(view);
 
-            messageText = (TextView) view.findViewById(R.id.messageText);
+            messageText = (EmojiTextView) view.findViewById(R.id.messageText);
             messageText.setTextSize(G.userTextSize);
         }
     }

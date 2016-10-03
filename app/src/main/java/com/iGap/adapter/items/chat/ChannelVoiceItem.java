@@ -94,7 +94,6 @@ public class ChannelVoiceItem extends AbstractChatItem<ChannelVoiceItem, Channel
         protected TextView csla_txt_audio_name;
         protected TextView csla_txt_audio_mime_type;
         protected TextView csla_txt_audio_size;
-        protected Button csla_btn_audio_menu;
         protected ImageView chslr_imv_icon_replay;
         protected View chslr_v_vertical_line;
         protected ImageView chslr_imv_replay_pic;
@@ -130,7 +129,6 @@ public class ChannelVoiceItem extends AbstractChatItem<ChannelVoiceItem, Channel
             csla_txt_audio_name = (TextView) view.findViewById(R.id.csla_txt_audio_name);
             csla_txt_audio_mime_type = (TextView) view.findViewById(R.id.csla_txt_audio_mime_type);
             csla_txt_audio_size = (TextView) view.findViewById(R.id.csla_txt_audio_size);
-            csla_btn_audio_menu = (Button) view.findViewById(R.id.csla_btn_audio_menu);
 
             chslr_imv_replay_pic = (ImageView) view.findViewById(R.id.chslr_imv_replay_pic);
             chslr_txt_replay_from = (TextView) view.findViewById(R.id.chslr_txt_replay_from);
@@ -158,12 +156,6 @@ public class ChannelVoiceItem extends AbstractChatItem<ChannelVoiceItem, Channel
                 @Override
                 public void onClick(View view) {
                     Log.e("ddd", "Unclick");
-                }
-            });
-            csla_btn_audio_menu.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Log.e("ddd", "click audio menu");
                 }
             });
         }

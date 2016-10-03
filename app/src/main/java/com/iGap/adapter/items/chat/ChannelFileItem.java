@@ -129,7 +129,7 @@ public class ChannelFileItem extends AbstractChatItem<ChannelFileItem, ChannelFi
             cslf_imv_image_file = (ImageView) view.findViewById(R.id.cslf_imv_image_file);
             cslf_imv_state_file = (ImageView) view.findViewById(R.id.cslf_imv_state_file);
             cslf_txt_file_name = (TextView) view.findViewById(R.id.songArtist);
-            cslf_txt_file_size = (TextView) view.findViewById(R.id.cslf_txt_file_size);
+            cslf_txt_file_size = (TextView) view.findViewById(R.id.fileSize);
 
             chslr_imv_replay_pic = (ImageView) view.findViewById(R.id.chslr_imv_replay_pic);
             chslr_txt_replay_from = (TextView) view.findViewById(R.id.chslr_txt_replay_from);

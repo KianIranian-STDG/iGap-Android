@@ -58,6 +58,15 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
         });
     }
 
+    protected void setTextIfNeeded(TextView view) {
+        if (mMessage.messageText != null && !mMessage.messageText.isEmpty()) {
+            view.setText(mMessage.messageText);
+            view.setVisibility(View.VISIBLE);
+        } else {
+            view.setVisibility(View.GONE);
+        }
+    }
+
     public AbstractChatItem setMessage(StructMessageInfo message) {
         this.mMessage = message;
         return this;
@@ -289,7 +298,7 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
                 // file doesn't exist on local, I check for a thumbnail
                 // if thumbnail exists, I load it into the view
                 if (mMessage.attachment.isThumbnailExistsOnLocal()) {
-                    ViewGroup view = (ViewGroup) holder.itemView.findViewById(R.id.image).getParent();
+                    ViewGroup view = (ViewGroup) holder.itemView.findViewById(R.id.thumbnail).getParent();
                     if (view != null) {
                         view.setLayoutParams(new LinearLayout.LayoutParams(mMessage.attachment.width, mMessage.attachment.height));
                         view.requestLayout();
@@ -297,9 +306,10 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
 
                     // load thumbnail from local
                     onLoadFromLocal(holder, mMessage.attachment.getLocalThumbnailPath(), LocalFileType.THUMBNAIL);
+                } else {
+                    requestForThumbnail();
                 }
 
-                requestForThumbnail();
 
                 // TODO: 9/28/2016 [Alireza Eskandarpour Shoferi] set downloading FILE in download view onClick
                 // make sure to not request multiple times by checking last offset with the new one
