@@ -34,7 +34,7 @@ public class ActivitySelectChat extends ActivityEnhanced {
     private ArrayList<StructMessageInfo> mForwardMessages;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -43,7 +43,6 @@ public class ActivitySelectChat extends ActivityEnhanced {
         initRecycleView();
         initComponent();
     }
-
     private void initComponent() {
         Button btnMenu = (Button) findViewById(R.id.cl_btn_menu);
         btnMenu.setTypeface(G.fontawesome);
@@ -60,7 +59,6 @@ public class ActivitySelectChat extends ActivityEnhanced {
             }
         });
     }
-
     private void initRecycleView() {
         mRecyclerView = (RecyclerView) findViewById(R.id.cl_recycler_view_contact);
         mAdapter = new FastItemAdapter<>();
@@ -124,7 +122,6 @@ public class ActivitySelectChat extends ActivityEnhanced {
                 }
             });
         }
-
         realm.close();
     }
 }

@@ -113,7 +113,7 @@ public class ActivityRegister extends ActivityEnhanced {
     static final String KEY_SAVE_NAMECOUNTRY = "SAVE_NAMECOUNTRY";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         edtCodeNumber = (EditText) findViewById(R.id.rg_edt_CodeNumber);

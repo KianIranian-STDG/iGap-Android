@@ -40,7 +40,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
     private OnComplete complete;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sheared_media);
 
@@ -54,7 +54,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             super.onBackPressed();
         }
     }
-
 
     private void initComponent() {
 
@@ -77,9 +76,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             }
         });
 
-
         txtSharedMedia = (TextView) findViewById(R.id.asm_txt_sheared_media);
-
 
         complete = new OnComplete() {
             @Override

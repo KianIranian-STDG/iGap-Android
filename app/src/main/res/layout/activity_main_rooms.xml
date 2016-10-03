@@ -34,7 +34,18 @@
                     android:paddingBottom="@dimen/dp4"
                     android:text="@string/md_menu_button"
                     android:textColor="@android:color/white"
-                    android:textSize="@dimen/sp20"/>
+                    android:textSize="@dimen/sp20" />
+
+                <Button
+                    android:id="@+id/cl_btn_backSearch"
+                    android:layout_width="@dimen/dp60"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:paddingBottom="@dimen/dp4"
+                    android:text="@string/md_back_arrow"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/sp20"
+                    android:visibility="gone" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -45,6 +56,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:theme="@style/SearchViewToolbar"
+                        android:searchHintIcon="@null"
                         android:visibility="visible" />
 
                     <TextView

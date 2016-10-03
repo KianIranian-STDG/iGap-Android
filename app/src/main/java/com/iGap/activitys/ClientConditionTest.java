@@ -9,7 +9,7 @@ import android.support.annotation.Nullable;
 public class ClientConditionTest extends ActivityEnhanced {
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 }

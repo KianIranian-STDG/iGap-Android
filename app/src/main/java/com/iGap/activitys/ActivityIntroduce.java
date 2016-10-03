@@ -64,7 +64,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
     static final String KEY_SAVE = "SAVE";
     static int ONETIME = 1;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
 

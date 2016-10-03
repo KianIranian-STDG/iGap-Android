@@ -37,7 +37,7 @@ public class ActivityWebView extends ActivityEnhanced {
     private String key;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting_webview);
 

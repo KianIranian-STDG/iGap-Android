@@ -75,7 +75,7 @@
 
     </style>
 
-    <style name="SearchViewToolbar" parent="android:Theme.Holo.Light.DarkActionBar">
+    <style name="SearchViewToolbar" parent="Widget.AppCompat.Light.SearchView">
         <item name="android:editTextColor">@color/white</item>
         <item name="android:textColorHint">@color/white</item>
         <item name="colorAccent">@color/white</item>

@@ -46,7 +46,7 @@ public class ActivityProfile extends ActivityEnhanced {
     public static Bitmap decodeBitmapProfile = null;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 

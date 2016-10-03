@@ -223,6 +223,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     private int tmpRequestCode;
     private int tmpResultCode;
     private Intent tmpData;
+    public static final int myResultCrop = 3;
 
     //chat
     private long chatPeerId;
@@ -309,7 +310,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     private Calendar lastDateCalendar = Calendar.getInstance();
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
@@ -765,9 +766,8 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
                 popupWindow.setAnimationStyle(android.R.style.Animation_InputMethod);
                 popupWindow.showAtLocation(popupView,
-                        Gravity.RIGHT | Gravity.TOP, 3, (int) getResources().getDimension(R.dimen.dp16));
-                popupWindow.showAsDropDown(v);
-
+                        Gravity.RIGHT | Gravity.TOP, (int) getResources().getDimension(R.dimen.dp16), (int) getResources().getDimension(R.dimen.dp32));
+//                popupWindow.showAsDropDown(v);
 
                 TextView txtSearch = (TextView) popupView.findViewById(R.id.popup_txtItem1);
                 txtSearch.setTypeface(G.arial);
@@ -1349,7 +1349,17 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == Activity.RESULT_OK && ll_attach_text.getVisibility() == View.GONE) {
+        if (resultCode == Activity.RESULT_OK && requestCode == AttachFile.request_code_media_from_gallary) {
+
+            Log.i("SSSSSS", 1 + "     gallary file path");
+            Intent intent = new Intent(ActivityChat.this, ActivityCrop.class);
+            intent.putExtra("IMAGE_CAMERA", data.getData().toString());
+            intent.putExtra("TYPE", "gallery");
+            intent.putExtra("PAGE", "chat");
+            startActivityForResult(intent, myResultCrop);
+
+            return;
+        } else if (resultCode == Activity.RESULT_OK && ll_attach_text.getVisibility() == View.GONE) {
             tmpRequestCode = requestCode;
             tmpResultCode = resultCode;
             tmpData = data;
@@ -1374,7 +1384,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 case AttachFile.request_code_TAKE_PICTURE:
                     txtFileNameForSend.setText(AttachFile.imagePath);
                     break;
-                case AttachFile.request_code_media_from_gallary:
+//                case AttachFile.request_code_media_from_gallary:
                 case AttachFile.request_code_VIDEO_CAPTURED:
                 case AttachFile.request_code_pic_audi:
                     txtFileNameForSend.setText(AttachFile.getFilePathFromUri(data.getData()));
@@ -1385,6 +1395,9 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     break;
                 case AttachFile.request_code_contact_phone:
                     txtFileNameForSend.setText("send phone contact");
+                    break;
+                case myResultCrop:
+                    txtFileNameForSend.setText("crop image");
                     break;
             }
 
@@ -1434,15 +1447,9 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     }
                     Log.e("ddd", filePath + "     image path");
                     break;
-                case AttachFile.request_code_media_from_gallary:
-                    filePath = AttachFile.getFilePathFromUri(data.getData());
-                    fileName = new File(filePath).getName();
-                    fileSize = new File(filePath).length();
-                    if (isMessageWrote()) {
-                        messageType = ProtoGlobal.RoomMessageType.IMAGE_TEXT;
-                    } else {
-                        messageType = ProtoGlobal.RoomMessageType.IMAGE;
-                    }
+                case myResultCrop:
+                    filePath = data.getData().toString();
+                    messageType = ProtoGlobal.RoomMessageType.IMAGE;
                     if (userTriesReplay()) {
                         mAdapter.add(new ImageItem(chatType, this).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, null, filePath, updateTime, ((StructMessageInfo) mReplayLayout.getTag()))).withIdentifier(System.nanoTime()));
                     } else {

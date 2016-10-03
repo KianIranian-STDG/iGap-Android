@@ -9,7 +9,7 @@ import com.iGap.proto.ProtoUserRegister;
 public class RequestUserRegister extends ActivityEnhanced {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // build proto class

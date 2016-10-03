@@ -2,6 +2,7 @@ package com.iGap.activitys;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
@@ -64,6 +65,7 @@ import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItemAdapter;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 import io.realm.Realm;
@@ -82,7 +84,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     public static boolean isMenuButtonAddShown = false;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -140,8 +142,10 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     }
 
     private void initComponent() {
-        Button btnMenu = (Button) findViewById(R.id.cl_btn_menu);
+        final Button btnMenu = (Button) findViewById(R.id.cl_btn_menu);
         btnMenu.setTypeface(G.flaticon);
+        final Button btnBackSearch = (Button) findViewById(R.id.cl_btn_backSearch);
+        btnBackSearch.setTypeface(G.flaticon);
 
         btnSearch = (SearchView) findViewById(R.id.cl_btn_search);
 
@@ -188,12 +192,24 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             public boolean onClose() {
                 txtIgap.setVisibility(View.VISIBLE);
                 arcMenu.setVisibility(View.VISIBLE);
-
+                btnBackSearch.setVisibility(View.GONE);
+                btnMenu.setVisibility(View.VISIBLE);
                 return false;
             }
         });
 
-        EditText searchBox = ((EditText) btnSearch.findViewById(android.support.v7.appcompat.R.id.search_src_text));
+        try {
+            Field mDrawable = SearchView.class.getDeclaredField("mSearchHintIcon");
+            mDrawable.setAccessible(true);
+            Drawable drawable = (Drawable) mDrawable.get(btnSearch);
+            drawable.setAlpha(0);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        final EditText searchBox = ((EditText) btnSearch.findViewById(android.support.v7.appcompat.R.id.search_src_text));
         searchBox.setTextColor(getResources().getColor(R.color.white));
         btnMenu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -218,11 +234,13 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                         if (btnSearch.getQuery().toString().length() > 0) {
                             btnSearch.setIconified(false);
                             txtIgap.setVisibility(View.GONE);
+                            btnBackSearch.setVisibility(View.VISIBLE);
 
                         } else {
                             btnSearch.setIconified(true);
                             txtIgap.setVisibility(View.VISIBLE);
-
+                            btnBackSearch.setVisibility(View.GONE);
+                            btnMenu.setVisibility(View.VISIBLE);
                         }
                     }
                 });
@@ -235,8 +253,20 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                     public void run() {
                         arcMenu.setVisibility(View.GONE);
                         txtIgap.setVisibility(View.GONE);
+                        btnBackSearch.setVisibility(View.VISIBLE);
+                        btnMenu.setVisibility(View.GONE);
+
                     }
                 });
+            }
+        });
+
+        btnBackSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                btnSearch.setIconified(true);
+                txtIgap.setVisibility(View.VISIBLE);
+                btnBackSearch.setVisibility(View.GONE);
             }
         });
     }

@@ -3,17 +3,21 @@ package com.iGap;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.multidex.MultiDex;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.Toast;
 
 import com.iGap.helper.HelperFillLookUpClass;
+import com.iGap.helper.MyService;
 import com.iGap.interface_package.OnChatDelete;
 import com.iGap.interface_package.OnChatDeleteMessageResponse;
 import com.iGap.interface_package.OnChatEditMessageResponse;
@@ -77,6 +81,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -94,6 +99,7 @@ public class G extends Application {
     public static Typeface robotoRegular;
     public static Typeface arialBold;
     public static Typeface arial;
+    public static Typeface iranSans;
     public static Typeface verdana;
     public static Typeface VerdanaBold;
     public static Typeface fontawesome;
@@ -216,11 +222,18 @@ public class G extends Application {
         MultiDex.install(getApplicationContext());
         super.onCreate();
 
-        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                .setDefaultFontPath("fonts/arial.ttf")
-                .setFontAttrId(R.attr.fontPath)
-                .build()
-        );
+
+        SharedPreferences shKeepAlive = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        int isStart = shKeepAlive.getInt(SHP_SETTING.KEY_STNS_KEEP_ALIVE_SERVICE, 1);
+        if (isStart == 1) {
+            Intent intent = new Intent(this, MyService.class);
+            startService(intent);
+            Log.i("XXCCXXXXX", "2222: ");
+
+        }
+
+        setFont();
+
 
         new File(DIR_APP).mkdirs();
         new File(DIR_IMAGES).mkdirs();
@@ -255,6 +268,7 @@ public class G extends Application {
         robotoRegular = Typeface.createFromAsset(this.getAssets(), "fonts/Roboto-Regular.ttf");
         arialBold = Typeface.createFromAsset(this.getAssets(), "fonts/arialbd.ttf");
         arial = Typeface.createFromAsset(this.getAssets(), "fonts/arial.ttf");
+        iranSans = Typeface.createFromAsset(this.getAssets(), "fonts/IRANSansMobile.ttf");
         verdana = Typeface.createFromAsset(this.getAssets(), "fonts/Verdana.ttf");
         VerdanaBold = Typeface.createFromAsset(this.getAssets(), "fonts/VerdanaBold.ttf");
         fontawesome = Typeface.createFromAsset(this.getAssets(), "fonts/fontawesome.ttf");
@@ -300,11 +314,60 @@ public class G extends Application {
                 e.printStackTrace();
             }
         }
-
         setUserTextSize();
 
     }
 
+    private void setFont() {
+
+        SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+
+        String language = sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, "en");
+
+        if (language.equals("فارسی")) {
+            CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                    .setDefaultFontPath("fonts/IRANSansMobile.ttf")
+                    .setFontAttrId(R.attr.fontPath)
+                    .build()
+            );
+            setLocale("fa");
+
+        } else if (language.equals("English")) {
+            CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                    .setDefaultFontPath("fonts/arial.ttf")
+                    .setFontAttrId(R.attr.fontPath)
+                    .build()
+            );
+            setLocale("en");
+        } else if (language.equals("العربی")) {
+            CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                    .setDefaultFontPath("fonts/arial.ttf")
+                    .setFontAttrId(R.attr.fontPath)
+                    .build()
+            );
+            setLocale("ar");
+
+        } else if (language.equals("Deutsch")) {
+            CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                    .setDefaultFontPath("fonts/arial.ttf")
+                    .setFontAttrId(R.attr.fontPath)
+                    .build()
+            );
+            setLocale("nl");
+
+        }
+    }
+
+    public void setLocale(String lang) {
+
+        Locale myLocale = new Locale(lang);
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.locale = myLocale;
+        res.updateConfiguration(conf, dm);
+
+    }
 
     public static void setUserTextSize() {
 

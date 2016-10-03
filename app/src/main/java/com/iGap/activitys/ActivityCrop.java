@@ -1,11 +1,13 @@
 package com.iGap.activitys;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -24,6 +26,9 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -41,14 +46,16 @@ public class ActivityCrop extends ActivityEnhanced {
     private String page;
     private String type;
     private String pathImageUser;
-
+    public final String IMAGE_DIRECTORY_NAME = "Upload";
+    private File mediaStorageDir;
+    private File file2;
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crop);
 
@@ -110,13 +117,8 @@ public class ActivityCrop extends ActivityEnhanced {
                         Intent intent = new Intent(ActivityCrop.this, ActivitySetting.class);
                         startActivity(intent);
                         finish();
-                    } else if (page.equals("NewGroup")) {
+                    } else {
                         finish();
-
-                    } else if (page.equals("NewChanel")) {
-
-                        finish();
-
                     }
                 }
 
@@ -140,9 +142,7 @@ public class ActivityCrop extends ActivityEnhanced {
                         startActivity(intent);
                         finish();
 
-                    } else if (page.equals("NewGroup")) {
-                        finish();
-                    } else if (page.equals("NewChanel")) {
+                    } else {
                         finish();
                     }
                 }
@@ -154,16 +154,22 @@ public class ActivityCrop extends ActivityEnhanced {
             public void onClick(View view) {
                 if (resultUri != null && type.equals("crop") || type.equals("gallery")) {
                     pathImageUser = getRealPathFromURI(resultUri);
-                    HelperCopyFile.copyFile(pathImageUser, realm());
                     if (page.equals("NewGroup")) {
                         if (G.IMAGE_NEW_GROUP.exists())
                             HelperCopyFile.copyFile(pathImageUser, G.IMAGE_NEW_GROUP.toString());
                     } else if (page.equals("NewChanel")) {
                         if (G.IMAGE_NEW_CHANEL.exists())
                             HelperCopyFile.copyFile(pathImageUser, G.IMAGE_NEW_CHANEL.toString());
-                    } else {
+                    } else if (page.equals("chat")) {
 
+                        mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), IMAGE_DIRECTORY_NAME);
+
+                        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+                        file2 = new File(mediaStorageDir.getPath() + File.separator + "IMG_" + timeStamp + ".jpg");
+                        HelperCopyFile.copyFile(pathImageUser, file2.toString());
+                    } else {
                         HelperCopyFile.copyFile(pathImageUser, realm());
+
                     }
                 }
                 if (page != null) {
@@ -180,6 +186,12 @@ public class ActivityCrop extends ActivityEnhanced {
                         finish();
                     } else if (page.equals("NewChanel")) {
                         resizeImage(G.IMAGE_NEW_CHANEL.toString());
+                        finish();
+                    } else if (page.equals("chat")) {
+                        resizeImage(file2.toString());
+                        Intent data = new Intent();
+                        data.setData(Uri.parse(file2.toString()));
+                        setResult(Activity.RESULT_OK, data);
                         finish();
                     }
                 }

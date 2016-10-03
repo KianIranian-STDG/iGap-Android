@@ -24,6 +24,7 @@ import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.helper.MyService;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.SHP_SETTING;
 import com.larswerkman.holocolorpicker.ColorPicker;
@@ -347,45 +348,48 @@ public class ActivitySettingNotification extends AppCompatActivity {
 
                                 switch (which) {
                                     case 0:
-                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.aooow).start();
-                                        break;
-                                    case 1:
-                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.bbalert).start();
-                                        break;
-                                    case 2:
-                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.boom).start();
-                                        break;
-                                    case 3:
-                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.bounce).start();
-                                        break;
-                                    case 4:
-                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.doodoo).start();
-                                        break;
-                                    case 5:
                                         MediaPlayer.create(ActivitySettingNotification.this, R.raw.igap).start();
                                         break;
+                                    case 1:
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.aooow).start();
+                                        break;
+                                    case 2:
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.bbalert).start();
+                                        break;
+                                    case 3:
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.boom).start();
+                                        break;
+                                    case 4:
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.bounce).start();
+                                        break;
+                                    case 5:
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.doodoo).start();
+                                        break;
                                     case 6:
-                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.jing).start();
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.igap).start();
                                         break;
                                     case 7:
-                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.lili).start();
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.jing).start();
                                         break;
                                     case 8:
-                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.msg).start();
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.lili).start();
                                         break;
                                     case 9:
-                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.newa).start();
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.msg).start();
                                         break;
                                     case 10:
-                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.none).start();
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.newa).start();
                                         break;
                                     case 11:
-                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.onelime).start();
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.none).start();
                                         break;
                                     case 12:
-                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.tone).start();
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.onelime).start();
                                         break;
                                     case 13:
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.tone).start();
+                                        break;
+                                    case 14:
                                         MediaPlayer.create(ActivitySettingNotification.this, R.raw.woow).start();
                                         break;
                                 }
@@ -469,8 +473,10 @@ public class ActivitySettingNotification extends AppCompatActivity {
 
         final int ledColorGroup = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, 0);
         imgLedColor_group = (ImageView) findViewById(R.id.stns_img_ledColor_group);
+
         GradientDrawable bgShapeGroup = (GradientDrawable) imgLedColor_group.getBackground();
         bgShapeGroup.setColor(ledColorGroup);
+
         ltLedColor_group = (ViewGroup) findViewById(R.id.stns_layout_ledColor_group);
         ltLedColor_group.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -684,47 +690,51 @@ public class ActivitySettingNotification extends AppCompatActivity {
                             public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                                 switch (which) {
                                     case 0:
-                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.aooow).start();
-                                        break;
-                                    case 1:
-                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.bbalert).start();
-                                        break;
-                                    case 2:
-                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.boom).start();
-                                        break;
-                                    case 3:
-                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.bounce).start();
-                                        break;
-                                    case 4:
-                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.doodoo).start();
-                                        break;
-                                    case 5:
                                         MediaPlayer.create(ActivitySettingNotification.this, R.raw.igap).start();
                                         break;
+                                    case 1:
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.aooow).start();
+                                        break;
+                                    case 2:
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.bbalert).start();
+                                        break;
+                                    case 3:
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.boom).start();
+                                        break;
+                                    case 4:
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.bounce).start();
+                                        break;
+                                    case 5:
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.doodoo).start();
+                                        break;
                                     case 6:
-                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.jing).start();
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.igap).start();
                                         break;
                                     case 7:
-                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.lili).start();
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.jing).start();
                                         break;
                                     case 8:
-                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.msg).start();
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.lili).start();
                                         break;
                                     case 9:
-                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.newa).start();
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.msg).start();
                                         break;
                                     case 10:
-                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.none).start();
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.newa).start();
                                         break;
                                     case 11:
-                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.onelime).start();
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.none).start();
                                         break;
                                     case 12:
-                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.tone).start();
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.onelime).start();
                                         break;
                                     case 13:
+                                        MediaPlayer.create(ActivitySettingNotification.this, R.raw.tone).start();
+                                        break;
+                                    case 14:
                                         MediaPlayer.create(ActivitySettingNotification.this, R.raw.woow).start();
                                         break;
+
                                 }
                                 txtSoundGroup.setText(text.toString());
                                 poRbDialogSoundGroup = which;
@@ -935,11 +945,15 @@ public class ActivitySettingNotification extends AppCompatActivity {
                     editor.putInt(SHP_SETTING.KEY_STNS_KEEP_ALIVE_SERVICE, 0);
                     editor.apply();
 
+                    stopService(new Intent(ActivitySettingNotification.this, MyService.class));
+
                 } else {
                     tgKeep_alive_service.setChecked(true);
                     editor.putInt(SHP_SETTING.KEY_STNS_KEEP_ALIVE_SERVICE, 1);
                     editor.apply();
+                    startService(new Intent(ActivitySettingNotification.this, MyService.class));
                 }
+
             }
         });
 
