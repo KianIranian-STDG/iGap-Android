@@ -3,6 +3,7 @@ package com.iGap.module;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
@@ -39,6 +40,16 @@ public final class Utils {
         mmr.setDataSource(context, uri);
         String durationStr = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
         return Integer.parseInt(durationStr);
+    }
+
+    public static int[] getImageDimens(String filePath) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+
+        BitmapFactory.decodeFile(filePath, options);
+        int width = options.outWidth;
+        int height = options.outHeight;
+        return new int[]{width, height};
     }
 
     /**

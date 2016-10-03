@@ -40,8 +40,8 @@
                 layout="@layout/chat_sub_layout_forward"/>
 
             <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_width="475px"
+                android:layout_height="575px">
 
                 <ImageView
                     android:id="@+id/thumbnail"

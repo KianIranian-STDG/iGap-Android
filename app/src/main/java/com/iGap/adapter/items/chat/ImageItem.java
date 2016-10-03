@@ -3,9 +3,8 @@ package com.iGap.adapter.items.chat;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.iGap.R;
@@ -25,16 +24,9 @@ import java.util.List;
  */
 public class ImageItem extends AbstractChatItem<ImageItem, ImageItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
-    private int width, height;
 
     public ImageItem(ProtoGlobal.Room.Type type, OnMessageViewClick messageClickListener) {
         super(true, type, messageClickListener);
-    }
-
-    public ImageItem(ProtoGlobal.Room.Type type, int width, int height, OnMessageViewClick messageClickListener) {
-        super(true, type, messageClickListener);
-        this.width = width;
-        this.height = height;
     }
 
     @Override
@@ -82,9 +74,8 @@ public class ImageItem extends AbstractChatItem<ImageItem, ImageItem.ViewHolder>
     public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        if (width != 0 && height != 0) {
-            ((ViewGroup) holder.image.getParent()).setLayoutParams(new LinearLayout.LayoutParams(width, height));
-        }
+        ((FrameLayout) holder.image.getParent()).setMinimumWidth(mMessage.attachment.width);
+        ((FrameLayout) holder.image.getParent()).setMinimumHeight(mMessage.attachment.height);
 
         setOnClick(holder, holder.image, ProtoGlobal.RoomMessageType.IMAGE);
     }

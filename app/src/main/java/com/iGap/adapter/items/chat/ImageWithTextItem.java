@@ -3,6 +3,7 @@ package com.iGap.adapter.items.chat;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.iGap.G;
@@ -43,16 +44,19 @@ public class ImageWithTextItem extends AbstractChatItem<ImageWithTextItem, Image
     public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
+        ((FrameLayout) holder.image.getParent()).setMinimumWidth(mMessage.attachment.width);
+        ((FrameLayout) holder.image.getParent()).setMinimumHeight(mMessage.attachment.height);
+
         setTextIfNeeded(holder.messageText);
 
-        setOnClick(holder, holder.imvPicture, ProtoGlobal.RoomMessageType.IMAGE);
+        setOnClick(holder, holder.image, ProtoGlobal.RoomMessageType.IMAGE);
         setOnClick(holder, holder.messageText, ProtoGlobal.RoomMessageType.TEXT);
     }
 
     @Override
     public void onLoadFromLocal(final ViewHolder holder, String localPath, LocalFileType fileType) {
         super.onLoadFromLocal(holder, localPath, fileType);
-        ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.imvPicture, new ImageLoadingListener() {
+        ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.image, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
 
@@ -65,7 +69,7 @@ public class ImageWithTextItem extends AbstractChatItem<ImageWithTextItem, Image
 
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                holder.imvPicture.setImageBitmap(ImageHelper.getRoundedCornerBitmap(loadedImage, (int) holder.itemView.getResources().getDimension(R.dimen.chatMessageImageCorner)));
+                holder.image.setImageBitmap(ImageHelper.getRoundedCornerBitmap(loadedImage, (int) holder.itemView.getResources().getDimension(R.dimen.chatMessageImageCorner)));
             }
 
             @Override
@@ -87,13 +91,13 @@ public class ImageWithTextItem extends AbstractChatItem<ImageWithTextItem, Image
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
-        protected ImageView imvPicture;
+        protected ImageView image;
         protected EmojiTextView messageText;
 
         public ViewHolder(View view) {
             super(view);
 
-            imvPicture = (ImageView) view.findViewById(R.id.thumbnail);
+            image = (ImageView) view.findViewById(R.id.thumbnail);
             messageText = (EmojiTextView) view.findViewById(R.id.messageText);
             messageText.setTextSize(G.userTextSize);
         }
