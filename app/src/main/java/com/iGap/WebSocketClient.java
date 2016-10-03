@@ -111,20 +111,11 @@ public class WebSocketClient {
     public static WebSocket getInstance() { //TODO [Saeed Mozaffari] [2016-10-03 12:12 PM] - checking this code for waitingForReconnecting(boolean) that can this boolean make problem or no
         if (!waitingForReconnecting && (webSocketClient == null || !webSocketClient.isOpen())) {
             waitingForReconnecting = true;
-            Log.i("JJJ", "getInstance");
             HelperConnectionState.connectionState(Config.ConnectionState.CONNECTING);
             return webSocketClient = createSocketConnection();
         } else {
             return webSocketClient;
         }
-    }
-
-
-    public static WebSocket disconnect() {
-        if (webSocketClient != null && webSocketClient.isOpen()) {
-            webSocketClient.disconnect();
-        }
-        return webSocketClient;
     }
 
     /**
@@ -136,7 +127,6 @@ public class WebSocketClient {
         if (allowForReconnecting) {//&& (webSocketClient == null || !webSocketClient.isOpen())
             allowForReconnecting = false;
             if (G.allowForConnect) {
-                Log.i("JJJ", "reconnect");
                 latestConnectionTryTiming = System.currentTimeMillis();
                 waitingForReconnecting = false;
                 resetWebsocketInfo();
@@ -145,6 +135,10 @@ public class WebSocketClient {
             }
         }
     }
+
+    /**
+     * check if socket connected or from last try connecting over the past ten seconds and finally reconnect or run this method again
+     */
 
     private static void checkSocketConnection() {
 
@@ -160,15 +154,15 @@ public class WebSocketClient {
                         checkSocketConnection();
                     }
                 }
-            }, 1000);
+            }, Config.REPEAT_CONNECTION_CHECKING);
         } else {
             /*
              when connecting was successful and user login ,
              in user login response will be change
-             allowForReconnecting and waitingForReconnecting
-             for allow that reconnecting later if need
+             allowForReconnecting=true and waitingForReconnecting=false
+             for allow reconnecting later if need
              */
-            Log.i("JJJ", "Don't Need For Reconnecting");
+            Log.i("SOC_WebSocket", "Don't Need For Reconnecting");
         }
     }
 
@@ -186,11 +180,24 @@ public class WebSocketClient {
         long currentTime = System.currentTimeMillis();
         difference = (currentTime - beforeTime);
 
-        if (difference >= 10000) {
+        if (difference >= Config.ALLOW_RECONNECT_AGAIN) {
             return true;
         }
 
         return false;
+    }
+
+    /**
+     * disconnect current websocket if connection created and is open
+     *
+     * @return current webSocket
+     */
+
+    public static WebSocket disconnect() {
+        if (webSocketClient != null && webSocketClient.isOpen()) {
+            webSocketClient.disconnect();
+        }
+        return webSocketClient;
     }
 
     /**
