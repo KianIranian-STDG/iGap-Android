@@ -140,7 +140,7 @@ public class ChannelVideoItem extends AbstractChatItem<ChannelVideoItem, Channel
             cslch_txt_comment = (TextView) view.findViewById(R.id.cslch_txt_comment);
             cslch_txt_image_seen = (TextView) view.findViewById(R.id.cslch_txt_image_seen);
             cslch_txt_seen = (TextView) view.findViewById(R.id.cslch_txt_seen);
-            cslv_imv_vido_image = (ImageView) view.findViewById(R.id.cslv_imv_vido_image);
+            cslv_imv_vido_image = (ImageView) view.findViewById(R.id.thumbnail);
             cslv_btn_play_video = (ImageButton) view.findViewById(R.id.cslv_btn_play_video);
             cslv_txt_video_name = (TextView) view.findViewById(R.id.cslv_txt_video_name);
             cslv_txt_video_mime_type = (TextView) view.findViewById(R.id.cslv_txt_video_mime_type);

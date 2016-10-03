@@ -46,7 +46,7 @@ public class VideoItem extends AbstractChatItem<VideoItem, VideoItem.ViewHolder>
     @Override
     public void onLoadFromLocal(ViewHolder holder, String localPath, LocalFileType fileType) {
         super.onLoadFromLocal(holder, localPath, fileType);
-        new HelperMimeType().LoadVideoTumpnail(holder.cslv_imv_vido_image, localPath);
+        new HelperMimeType().LoadVideoTumpnail(holder.thumbnail, localPath);
     }
 
     @Override
@@ -72,7 +72,7 @@ public class VideoItem extends AbstractChatItem<VideoItem, VideoItem.ViewHolder>
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
-        protected ImageView cslv_imv_vido_image;
+        protected ImageView thumbnail;
         protected ImageButton cslv_btn_play_video;
         protected TextView cslv_txt_video_name;
         protected TextView cslv_txt_video_mime_type;
@@ -81,7 +81,7 @@ public class VideoItem extends AbstractChatItem<VideoItem, VideoItem.ViewHolder>
         public ViewHolder(View view) {
             super(view);
 
-            cslv_imv_vido_image = (ImageView) view.findViewById(R.id.cslv_imv_vido_image);
+            thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
             cslv_btn_play_video = (ImageButton) view.findViewById(R.id.cslv_btn_play_video);
             cslv_txt_video_name = (TextView) view.findViewById(R.id.cslv_txt_video_name);
             cslv_txt_video_mime_type = (TextView) view.findViewById(R.id.cslv_txt_video_mime_type);

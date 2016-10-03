@@ -88,7 +88,7 @@ public class VideoWithTextItem extends AbstractChatItem<VideoWithTextItem, Video
 
             messageText = (EmojiTextView) view.findViewById(R.id.messageText);
             messageText.setTextSize(G.userTextSize);
-            cslv_imv_vido_image = (ImageView) view.findViewById(R.id.cslv_imv_vido_image);
+            cslv_imv_vido_image = (ImageView) view.findViewById(R.id.thumbnail);
             cslv_btn_play_video = (ImageButton) view.findViewById(R.id.cslv_btn_play_video);
             cslv_txt_video_name = (TextView) view.findViewById(R.id.cslv_txt_video_name);
             cslv_txt_video_mime_type = (TextView) view.findViewById(R.id.cslv_txt_video_mime_type);

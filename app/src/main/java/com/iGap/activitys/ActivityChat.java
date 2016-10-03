@@ -1423,7 +1423,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             String fileName = null;
             long duration = 0;
             long fileSize = 0;
-            int[] imageDimens = {};
+            int[] imageDimens = {0, 0};
             Realm realm = Realm.getDefaultInstance();
             final long senderID = realm.where(RealmUserInfo.class).findFirst().getUserId();
             StructMessageInfo messageInfo = null;
