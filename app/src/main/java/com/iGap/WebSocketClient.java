@@ -20,57 +20,15 @@ import java.util.Map;
 public class WebSocketClient {
 
     private static WebSocket webSocketClient;
-    private static WebSocket webSocketFileUpload;
     private static int count = 0;
+    public static boolean allowForReconnecting = true;
+    public static boolean waitingForReconnecting = false;
+    private static long latestConnectionTryTiming;
 
-    private static WebSocket createFileUploadConnection(String fileSocketAddress) {
-        WebSocket webSocketFile = null;
-
-        try {
-            webSocketFile = new WebSocketFactory().createSocket(fileSocketAddress);
-            webSocketFile.addListener(new WebSocketAdapter() {
-
-                @Override
-                public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
-                    super.onConnected(websocket, headers);
-                }
-
-                @Override
-                public void onConnectError(WebSocket websocket, WebSocketException exception) throws Exception {
-                    super.onConnectError(websocket, exception);
-                }
-
-                @Override
-                public void onBinaryMessage(WebSocket websocket, byte[] binary) throws Exception {
-                    super.onBinaryMessage(websocket, binary);
-                }
-
-                @Override
-                public void onError(WebSocket websocket, WebSocketException cause) throws Exception {
-                    super.onError(websocket, cause);
-                }
-
-                @Override
-                public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
-                    super.onDisconnected(websocket, serverCloseFrame, clientCloseFrame, closedByServer);
-
-                    webSocketFileUpload = null;
-                }
-            });
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    private static WebSocket createSocketConnection() {
+    private static synchronized WebSocket createSocketConnection() {
         WebSocket websocketFactory = null;
         try {
-            Log.i("SOC_WebSocket", "createSocket Connection : " + Config.urlWebsocket);
             websocketFactory = new WebSocketFactory().createSocket(Config.urlWebsocket);
-
             websocketFactory.addListener(new WebSocketAdapter() {
 
                 @Override
@@ -85,9 +43,7 @@ public class WebSocketClient {
                 @Override
                 public void onBinaryMessage(WebSocket websocket, final byte[] binary) throws Exception {
                     Log.i("SOC_WebSocket", "WebSocketClient binary : " + binary);
-                    //G.responseCount++;
                     new HandleResponse(binary).run();
-
                     super.onBinaryMessage(websocket, binary);
                 }
 
@@ -120,7 +76,6 @@ public class WebSocketClient {
 
             });
         } catch (IOException e) {
-            Log.i("SOC_WebSocket", "iGap IOException iGap : " + e);
             e.printStackTrace();
         }
         final WebSocket finalWs = websocketFactory;
@@ -153,33 +108,24 @@ public class WebSocketClient {
      * @return webSocketConnection
      */
 
-    public static WebSocket getInstance() {
-        if (webSocketClient == null) {
+    public static WebSocket getInstance() { //TODO [Saeed Mozaffari] [2016-10-03 12:12 PM] - checking this code for waitingForReconnecting(boolean) that can this boolean make problem or no
+        if (!waitingForReconnecting && (webSocketClient == null || !webSocketClient.isOpen())) {
+            waitingForReconnecting = true;
+            Log.i("JJJ", "getInstance");
             HelperConnectionState.connectionState(Config.ConnectionState.CONNECTING);
-            webSocketClient = createSocketConnection();
+            return webSocketClient = createSocketConnection();
         } else {
-            if (!webSocketClient.isOpen()) {
-                HelperConnectionState.connectionState(Config.ConnectionState.CONNECTING);
-                webSocketClient = createSocketConnection();
-            } else {
-                return webSocketClient;
-            }
+            return webSocketClient;
+        }
+    }
+
+
+    public static WebSocket disconnect() {
+        if (webSocketClient != null && webSocketClient.isOpen()) {
+            webSocketClient.disconnect();
         }
         return webSocketClient;
     }
-
-    public static WebSocket getFileUploadSocketInstance(String fileSocketAddress) {
-
-        if (webSocketFileUpload == null) {
-            webSocketFileUpload = createFileUploadConnection(fileSocketAddress);
-        } else {
-            if (!webSocketFileUpload.isOpen()) {
-                webSocketFileUpload = createFileUploadConnection(fileSocketAddress);
-            }
-        }
-        return webSocketFileUpload;
-    }
-
 
     /**
      * clear securing state and reconnect to server
@@ -187,18 +133,69 @@ public class WebSocketClient {
 
     private static void reconnect() {
         HelperConnectionState.connectionState(Config.ConnectionState.CONNECTING);
-        if (G.allowForConnect) {
-            resetWebsocketInfo();
+        if (allowForReconnecting) {//&& (webSocketClient == null || !webSocketClient.isOpen())
+            allowForReconnecting = false;
+            if (G.allowForConnect) {
+                Log.i("JJJ", "reconnect");
+                latestConnectionTryTiming = System.currentTimeMillis();
+                waitingForReconnecting = false;
+                resetWebsocketInfo();
+                WebSocketClient.getInstance();
+                checkSocketConnection();
+            }
+        }
+    }
+
+    private static void checkSocketConnection() {
+
+        if (webSocketClient == null || !webSocketClient.isOpen()) {
             G.handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    WebSocketClient.getInstance();
+                    if (timeDifference(latestConnectionTryTiming)) {
+                        allowForReconnecting = true;
+                        waitingForReconnecting = false;
+                        reconnect();
+                    } else {
+                        checkSocketConnection();
+                    }
                 }
             }, 1000);
         } else {
-            Log.i("SOC_WebSocket", "No Network");
+            /*
+             when connecting was successful and user login ,
+             in user login response will be change
+             allowForReconnecting and waitingForReconnecting
+             for allow that reconnecting later if need
+             */
+            Log.i("JJJ", "Don't Need For Reconnecting");
         }
     }
+
+    /**
+     * compute time difference between latest try for connecting to socket and current time
+     *
+     * @param beforeTime when try for connect to socket (currentTimeMillis)
+     * @return return true if difference is bigger than 10 second
+     */
+
+    private static boolean timeDifference(long beforeTime) {
+
+        long difference;
+
+        long currentTime = System.currentTimeMillis();
+        difference = (currentTime - beforeTime);
+
+        if (difference >= 10000) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * role back main data for preparation for reconnecting to socket
+     */
 
     private static void resetWebsocketInfo() {
         count = 0;
