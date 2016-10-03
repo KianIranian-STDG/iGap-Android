@@ -1,6 +1,7 @@
 package com.iGap.realm;
 
 import android.text.format.DateUtils;
+import android.util.Log;
 
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.enums.RoomType;
@@ -14,19 +15,19 @@ import io.realm.annotations.PrimaryKey;
 // https://github.com/realm/realm-java/issues/776
 public class RealmRoom extends RealmObject {
     @PrimaryKey
-    private long id;
-    private String type;
-    private String title;
-    private String initials;
-    private String color;
-    private int unread_count;
-    private boolean mute;
+    private long id;//
+    private String type;//
+    private String title;//
+    private String initials;//
+    private String color;//
+    private int unread_count;//
+    private boolean mute;//
     private RealmChatRoom chat_room;
     private RealmGroupRoom group_room;
     private RealmChannelRoom channel_room;
     private long lastMessageId;
     private long lastMessageTime;
-    private String lastMessage;
+    private String lastMessage;//
 
     public long getLastMessageTime() {
         return lastMessageTime;
@@ -140,32 +141,70 @@ public class RealmRoom extends RealmObject {
      */
     public static RealmRoom convert(ProtoGlobal.Room room, Realm realm) {
         putChatToClientCondition(room, realm);
-        RealmRoom realmRoom = new RealmRoom();
-        realmRoom.setColor(room.getColor());
-        realmRoom.setId(room.getId());
-        realmRoom.setInitials(room.getInitials());
-        realmRoom.setTitle(room.getTitle());
-        realmRoom.setType(RoomType.convert(room.getType()));
-        realmRoom.setUnreadCount(room.getUnreadCount());
-        realmRoom.setMute(false); //TODO [Saeed Mozaffari] [2016-09-07 9:59 AM] - agar mute ro az server gereftim be jaye false sabt mikonim
-        switch (room.getType()) {
-            case CHANNEL:
-                realmRoom.setType(RoomType.CHANNEL);
-                realmRoom.setChannelRoom(RealmChannelRoom.convert(room.getChannelRoom()));
-                break;
-            case CHAT:
-                realmRoom.setType(RoomType.CHAT);
-                realmRoom.setChatRoom(RealmChatRoom.convert(room.getChatRoom()));
-                break;
-            case GROUP:
-                realmRoom.setType(RoomType.GROUP);
-                realmRoom.setGroupRoom(RealmGroupRoom.convert(room.getGroupRoom()));
-                realmRoom.getGroupRoom().setDescription(room.getGroupRoom().getDescription());
-                break;
+
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", room.getId()).findFirst();
+        if (realmRoom == null) { // Create New Room
+            realmRoom = new RealmRoom();
+            realmRoom.setColor(room.getColor());
+            realmRoom.setId(room.getId());
+            realmRoom.setInitials(room.getInitials());
+            realmRoom.setTitle(room.getTitle());
+            realmRoom.setType(RoomType.convert(room.getType()));
+            realmRoom.setUnreadCount(room.getUnreadCount());
+            realmRoom.setMute(false); //TODO [Saeed Mozaffari] [2016-09-07 9:59 AM] - agar mute ro az server gereftim be jaye false sabt mikonim
+            switch (room.getType()) {
+                case CHANNEL:
+                    realmRoom.setType(RoomType.CHANNEL);
+                    realmRoom.setChannelRoom(RealmChannelRoom.convert(room.getChannelRoom()));
+                    break;
+                case CHAT:
+                    realmRoom.setType(RoomType.CHAT);
+                    realmRoom.setChatRoom(RealmChatRoom.convert(room.getChatRoom(), realmRoom.getChatRoom()));
+                    break;
+                case GROUP:
+                    realmRoom.setType(RoomType.GROUP);
+                    realmRoom.setGroupRoom(RealmGroupRoom.convert(room.getGroupRoom(), realmRoom.getGroupRoom(), realm));
+                    realmRoom.getGroupRoom().setDescription(room.getGroupRoom().getDescription());
+                    break;
+            }
+            realmRoom.setLastMessageTime(room.getLastMessage().getUpdateTime());
+            realmRoom.setLastMessage(room.getLastMessage().getMessage());
+            realmRoom.setLastMessageId(room.getLastMessage().getMessageId());
+
+        } else { // Update Room
+
+            realmRoom.setColor(room.getColor());
+            realmRoom.setId(room.getId());
+            realmRoom.setInitials(room.getInitials());
+            realmRoom.setTitle(room.getTitle());
+            realmRoom.setType(RoomType.convert(room.getType()));
+            realmRoom.setUnreadCount(room.getUnreadCount());
+            realmRoom.setMute(false); //TODO [Saeed Mozaffari] [2016-09-07 9:59 AM] - agar mute ro az server gereftim be jaye false sabt mikonim
+            switch (room.getType()) {
+                case CHANNEL:
+                    realmRoom.setType(RoomType.CHANNEL);
+                    realmRoom.setChannelRoom(RealmChannelRoom.convert(room.getChannelRoom()));
+                    break;
+                case CHAT:
+                    realmRoom.setType(RoomType.CHAT);
+                    RealmChatRoom realmChatRoom = RealmChatRoom.convert(room.getChatRoom(), realmRoom.getChatRoom());
+                    realmRoom.setChatRoom(realmChatRoom);
+                    break;
+                case GROUP:
+                    realmRoom.setType(RoomType.GROUP);
+                    realmRoom.setGroupRoom(RealmGroupRoom.convert(room.getGroupRoom(), realmRoom.getGroupRoom(), realm));
+                    realmRoom.getGroupRoom().setDescription(room.getGroupRoom().getDescription());
+                    break;
+            }
+            Log.i("BBB", "********* getTitle : " + room.getTitle());
+            Log.i("BBB", "getType : " + room.getType());
+            Log.i("BBB", "getMessage : " + room.getLastMessage().getMessage());
+            Log.i("BBB", "getMessageId : " + room.getLastMessage().getMessageId());
+            realmRoom.setLastMessageTime(room.getLastMessage().getUpdateTime());
+            realmRoom.setLastMessage(room.getLastMessage().getMessage());
+            realmRoom.setLastMessageId(room.getLastMessage().getMessageId());
         }
-        realmRoom.setLastMessageTime(room.getLastMessage().getUpdateTime());
-        realmRoom.setLastMessage(room.getLastMessage().getMessage());
-        realmRoom.setLastMessageId(room.getLastMessage().getMessageId());
+
 
         return realmRoom;
     }

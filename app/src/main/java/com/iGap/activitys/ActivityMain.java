@@ -683,7 +683,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                         mAdapter.clear();
 
                         for (final ProtoGlobal.Room room : roomList) { //TODO [Saeed Mozaffari] [2016-09-07 9:56 AM] - manage mute state
-
                             putChatToDatabase(room);
 
                             final ChatItem chatItem = new ChatItem();
@@ -692,10 +691,10 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                             info.chatId = room.getId();
                             info.chatTitle = room.getTitle();
                             info.initials = room.getInitials();
+                            info.unreadMessagesCount = room.getUnreadCount();
                             switch (room.getType()) {
                                 case CHAT:
                                     info.chatType = RoomType.CHAT;
-                                    info.memberCount = "1";
                                     break;
                                 case CHANNEL:
                                     info.chatType = RoomType.CHANNEL;
@@ -708,7 +707,9 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                                     break;
                             }
 
+                            info.lastMessageTime = room.getLastMessage().getUpdateTime();
                             info.lastmessage = room.getLastMessage().getMessage();
+                            info.lastMessageStatus = room.getLastMessage().getStatus().toString();
                             info.color = room.getColor();
                             info.muteNotification = false; // TODO: 9/14/2016 [Alireza Eskandarpour Shoferi] vaghti server mute ro implement kard inja get kon
                             info.imageSource = ""; // FIXME
@@ -1036,7 +1037,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             info.chatId = realmRoom.getId();
             info.chatTitle = realmRoom.getTitle();
             info.initials = realmRoom.getInitials();
-            Log.i("XXX", "Local initials : " + realmRoom.getInitials());
             switch (realmRoom.getType()) {
                 case CHAT:
                     info.chatType = RoomType.CHAT;
@@ -1049,16 +1049,20 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                 case GROUP:
                     info.chatType = RoomType.GROUP;
                     info.memberCount = realmRoom.getGroupRoom().getParticipantsCountLabel();
+                    info.description = realmRoom.getGroupRoom().getDescription();
                     break;
             }
             info.color = realmRoom.getColor();
             RealmRoomMessage lastMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", realmRoom.getLastMessageId()).findFirst();
             if (lastMessage != null) {
-                info.lastMessageTime = lastMessage.getUpdateTime();
-                info.lastmessage = lastMessage.getMessage();
+                //info.lastMessageTime = lastMessage.getUpdateTime();
+                //info.lastmessage = lastMessage.getMessage();
                 info.lastMessageSenderIsMe = lastMessage.isSenderMe();
                 info.lastMessageStatus = lastMessage.getStatus();
             }
+            Log.i("BBBB", "Realm Reading getLastMessage : " + realmRoom.getLastMessage());
+            info.lastmessage = realmRoom.getLastMessage();
+            info.lastMessageTime = realmRoom.getLastMessageTime();
             info.muteNotification = realmRoom.getMute(); // FIXME
             info.imageSource = ""; // FIXME
 
@@ -1097,6 +1101,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         if (mAdapter != null) {
             mAdapter.clear();
             // check if new rooms exist, add to adapter
+            // loadLocalChatList();
             final Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
@@ -1129,22 +1134,26 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         chatInfo.chatTitle = room.getTitle();
         chatInfo.initials = room.getInitials();
         RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", room.getLastMessageId()).findFirst();
+        chatInfo.lastMessageTime = room.getLastMessageTime(); //TODO [Saeed Mozaffari] [2016-10-03 5:38 PM] - can see this code for avoid from multiple calling lastMessageTime and lastmessage
+        chatInfo.lastmessage = room.getLastMessage();
         if (roomMessage != null) {
             chatInfo.lastMessageTime = roomMessage.getUpdateTime();
             chatInfo.lastmessage = roomMessage.getMessage();
             chatInfo.lastMessageStatus = roomMessage.getStatus();
             chatInfo.lastMessageSenderIsMe = roomMessage.isSenderMe();
         }
+
         chatInfo.chatType = room.getType();
         switch (room.getType()) {
-            case CHANNEL:
-                chatInfo.memberCount = room.getChannelRoom().getParticipantsCountLabel();
-                break;
             case CHAT:
                 chatInfo.memberCount = "1";
                 break;
             case GROUP:
                 chatInfo.memberCount = room.getGroupRoom().getParticipantsCountLabel();
+                chatInfo.description = room.getGroupRoom().getDescription();
+                break;
+            case CHANNEL:
+                chatInfo.memberCount = room.getChannelRoom().getParticipantsCountLabel();
                 break;
         }
         chatInfo.muteNotification = room.getMute();

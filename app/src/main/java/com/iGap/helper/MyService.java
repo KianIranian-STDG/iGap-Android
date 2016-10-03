@@ -3,9 +3,6 @@ package com.iGap.helper;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import android.widget.Toast;
-
-import com.iGap.G;
 
 public class MyService extends Service {
 
@@ -15,7 +12,6 @@ public class MyService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        repeat();
     }
 
     @Override
@@ -26,16 +22,6 @@ public class MyService extends Service {
             return Service.START_STICKY;
 
         }
-    }
-
-    private void repeat() {
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(MyService.this, "test services", Toast.LENGTH_SHORT).show();
-                repeat();
-            }
-        }, 7000);
     }
 
     @Override

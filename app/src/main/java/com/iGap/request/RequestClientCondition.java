@@ -24,7 +24,7 @@ public class RequestClientCondition {
 
         for (RealmClientCondition realmClientCondition : realm.where(RealmClientCondition.class).findAll()) {
             ProtoClientCondition.ClientCondition.Room.Builder room = ProtoClientCondition.ClientCondition.Room.newBuilder();
-            if (realmClientCondition.getRoomId() == 94) {
+            if (realmClientCondition.getRoomId() != 90000) {
                 room.setRoomId(realmClientCondition.getRoomId());
                 room.setMessageVersion(realmClientCondition.getMessageVersion());
                 room.setStatusVersion(realmClientCondition.getStatusVersion());

@@ -24,8 +24,7 @@ public class RealmChatRoom extends RealmObject {
      * @param room ProtoGlobal.ChatRoom
      * @return RealmChatRoom
      */
-    public static RealmChatRoom convert(ProtoGlobal.ChatRoom room) {
-        RealmChatRoom realmChatRoom = new RealmChatRoom();
+    public static RealmChatRoom convert(ProtoGlobal.ChatRoom room, RealmChatRoom realmChatRoom) {
         realmChatRoom.setPeerId(room.getPeerId());
         return realmChatRoom;
     }
