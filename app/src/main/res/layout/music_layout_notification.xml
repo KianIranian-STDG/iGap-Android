@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#f2b33d"
+    android:gravity="left|center">
+
+    <ImageView
+        android:id="@+id/mln_img_picture_music"
+        android:layout_width="@dimen/dp48"
+        android:layout_height="@dimen/dp48"
+        android:layout_margin="10dp"
+        android:src="@mipmap/igap_music" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/mln_txt_music_name"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:textColor="@android:color/black"
+            android:layout_weight="1"
+            android:gravity="left|center"
+            android:singleLine="true"
+            android:text="music name" />
+
+        <TextView
+            android:id="@+id/mln_txt_music_place"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:singleLine="true"
+            android:textColor="@android:color/black"
+            android:gravity="left|center"
+            android:text="place" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/mln_btn_Previous_music"
+            android:layout_width="@dimen/dp32"
+            android:layout_height="@dimen/dp32"
+            android:src="@mipmap/back"
+            android:gravity="center" />
+
+        <ImageView
+            android:id="@+id/mln_btn_play_music"
+            android:layout_width="@dimen/dp32"
+            android:layout_height="@dimen/dp32"
+            android:layout_marginLeft="@dimen/dp8"
+            android:src="@mipmap/play"
+            android:layout_marginRight="@dimen/dp8"
+            android:gravity="center" />
+
+        <ImageView
+            android:id="@+id/mln_btn_forward_music"
+            android:layout_width="@dimen/dp32"
+            android:layout_height="@dimen/dp32"
+            android:src="@mipmap/next"
+            android:gravity="center" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/dp16"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/mln_btn_close"
+            android:layout_width="@dimen/dp32"
+            android:layout_height="match_parent"
+            android:src="@mipmap/close"
+            android:gravity="top|center" />
+    </LinearLayout>
+</LinearLayout>

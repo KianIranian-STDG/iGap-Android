@@ -29,6 +29,13 @@
     <string name="md_menu_button">\uf1db</string>
     <string name="md_searching_magnifying_glass">\uf23a</string>
 
+    <string name="md_play_rounded_button">\uf201</string>
+    <string name="md_round_pause_button">\uf224</string>
+    <string name="md_play_next_button">\uf200</string>
+    <string name="md_previous_track">\uf206</string>
+
+
+    <string name="fa_stop">&#xf04d;</string>
     <string name="fa_menu_bar">&#xf0c9;</string>
     <string name="fa_bell_slash_o">&#xf1f7;</string>
     <string name="fa_bullhorn">&#xf0a1;</string>

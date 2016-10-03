@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layoutDirection="ltr"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp80"
+        android:background="@color/green"
+        android:gravity="left|center">
+
+        <Button
+            android:id="@+id/ml_btn_back"
+            android:layout_width="@dimen/dp40"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:gravity="center"
+            android:text="@string/md_back_arrow"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp26" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@+id/ml_txt_music_name"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="music name"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/ml_txt_music_place"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="place"
+                android:textColor="@color/white" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:padding="@dimen/dp8">
+
+        <ImageView
+            android:id="@+id/ml_img_music_picture"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:src="@mipmap/igap_music_large" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp40"
+            android:gravity="center"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@+id/ml_txt_timer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="timer" />
+
+            <SeekBar
+                android:id="@+id/ml_seekBar1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/ml_txt_music_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="music time" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/ml_txt_music_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="@dimen/sp16" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp48"
+        android:background="@color/green"
+        android:gravity="center"
+        android:paddingLeft="@dimen/dp8"
+        android:paddingRight="@dimen/dp8">
+
+
+        <Button
+            android:id="@+id/ml_btn_Previous_music"
+            android:layout_width="@dimen/dp40"
+            android:layout_height="@dimen/dp40"
+            android:background="@null"
+            android:gravity="center"
+            android:text="@string/md_previous_track"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp26" />
+
+        <Button
+            android:id="@+id/ml_btn_play_music"
+            android:layout_width="@dimen/dp40"
+            android:layout_height="@dimen/dp40"
+            android:layout_marginLeft="@dimen/dp8"
+            android:layout_marginRight="@dimen/dp8"
+            android:background="@null"
+            android:gravity="center"
+            android:text="@string/md_play_rounded_button"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp26" />
+
+        <Button
+            android:id="@+id/ml_btn_forward_music"
+            android:layout_width="@dimen/dp40"
+            android:layout_height="@dimen/dp40"
+            android:background="@null"
+            android:gravity="center"
+            android:text="@string/md_play_next_button"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp26" />
+
+
+    </LinearLayout>
+
+</LinearLayout>

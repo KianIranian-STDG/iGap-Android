@@ -100,6 +100,7 @@ import com.iGap.module.EndlessRecyclerOnScrollListener;
 import com.iGap.module.FileUploadStructure;
 import com.iGap.module.FileUtils;
 import com.iGap.module.MaterialDesignTextView;
+import com.iGap.module.MusicPlayer;
 import com.iGap.module.MyType;
 import com.iGap.module.OnComplete;
 import com.iGap.module.SHP_SETTING;
@@ -201,6 +202,9 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     private View viewMicRecorder;
     private VoiceRecord voiceRecord;
     private boolean sendByEnter = false;
+
+    LinearLayout mediaLayout;
+    MusicPlayer musicPlayer;
 
     public static ActivityChat activityChat;
 
@@ -314,6 +318,21 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        mediaLayout = (LinearLayout) findViewById(R.id.ac_ll_music_layout);
+        musicPlayer = new MusicPlayer(mediaLayout);
+
+        if (MusicPlayer.mp != null) {
+            mediaLayout.setVisibility(View.VISIBLE);
+            ((TextView) mediaLayout.findViewById(R.id.mls_txt_music_name)).setText(MusicPlayer.musicName);
+            ((TextView) mediaLayout.findViewById(R.id.mls_txt_music_time)).setText(MusicPlayer.milliSecondsToTimer((long) MusicPlayer.mp.getDuration()));
+
+            if (MusicPlayer.mp.isPlaying()) {
+                ((Button) mediaLayout.findViewById(R.id.mls_btn_play_music)).setText(G.context.getString(R.string.md_round_pause_button));
+            } else {
+                ((Button) mediaLayout.findViewById(R.id.mls_btn_play_music)).setText(G.context.getString(R.string.md_play_rounded_button));
+            }
+        }
 
         activityChat = this;
 
@@ -1924,128 +1943,132 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
     @Override
     public void onMessageFileClick(View view, final StructMessageInfo messageInfo, int position, ProtoGlobal.RoomMessageType fileType) {
-        switch (fileType) {
-            case IMAGE:
-            case IMAGE_TEXT:
-                showImage(messageInfo.getAttachment().getLocalThumbnailPath());
-                break;
-            case LOCATION:
-                Intent intent = HelperMimeType.appropriateProgram(messageInfo.getAttachment().getLocalFilePath());
-                if (intent != null)
-                    startActivity(intent);
-                break;
-            case TEXT:
-                Log.i(ActivityChat.class.getSimpleName(), "Message clicked");
 
-                @ArrayRes
-                int itemsRes = 0;
-                switch (messageInfo.messageType) {
-                    case TEXT:
-                        itemsRes = R.array.textMessageDialogItems;
-                        break;
-                    case FILE_TEXT:
-                    case IMAGE_TEXT:
-                    case VIDEO_TEXT:
-                        itemsRes = R.array.fileTextMessageDialogItems;
-                        break;
-                    case FILE:
-                    case IMAGE:
-                    case VIDEO:
-                    case VOICE:
-                        itemsRes = R.array.fileMessageDialogItems;
-                        break;
-                    case LOCATION:
-                    case LOG:
-                        itemsRes = R.array.otherMessageDialogItems;
-                        break;
-                }
+        if (messageInfo.messageType.toString().equals("VOICE") || messageInfo.messageType.toString().equals("AUDIO") ||
+                messageInfo.messageType.toString().equals("AUDIO_TEXT")) {
+            MusicPlayer.startPlayer(messageInfo.getAttachment().getLocalFilePath(), title, mRoomId, true);
+        } else if (messageInfo.messageType.toString().equals("IMAGE") || messageInfo.messageType.toString().equals("IMAGE_TEXT")) {
+            showImage(messageInfo.getAttachment().getLocalThumbnailPath());
+        } else if (messageInfo.messageType.toString().equals("FILE") || messageInfo.messageType.toString().equals("FILE_TEXT") ||
+                messageInfo.messageType.toString().equals("VIDEO") || messageInfo.messageType.toString().equals("VIDEO_TEXT")) {
+            Intent intent = HelperMimeType.appropriateProgram(messageInfo.getAttachment().getLocalFilePath());
+            if (intent != null)
+                startActivity(intent);
+        } else {
+            switch (fileType) {
+                case TEXT:
+                    Log.i(ActivityChat.class.getSimpleName(), "Message clicked");
 
-                // Arrays.asList returns fixed size, doing like this fixes remove object UnsupportedOperationException exception
-                List<String> items = new LinkedList<>(Arrays.asList(getResources().getStringArray(itemsRes)));
+                    @ArrayRes
+                    int itemsRes = 0;
+                    switch (messageInfo.messageType) {
+                        case TEXT:
+                            itemsRes = R.array.textMessageDialogItems;
+                            break;
+                        case FILE_TEXT:
+                        case IMAGE_TEXT:
+                        case VIDEO_TEXT:
+                            itemsRes = R.array.fileTextMessageDialogItems;
+                            break;
+                        case FILE:
+                        case IMAGE:
+                        case VIDEO:
+                        case VOICE:
+                            itemsRes = R.array.fileMessageDialogItems;
+                            break;
+                        case LOCATION:
+                        case LOG:
+                            itemsRes = R.array.otherMessageDialogItems;
+                            break;
+                    }
 
-                Realm realm = Realm.getDefaultInstance();
-                // if user clicked on any message which he wasn't its sender, remove edit item option
-                if (!messageInfo.senderID.equalsIgnoreCase(Long.toString(realm.where(RealmUserInfo.class).findFirst().getUserId()))) {
-                    items.remove(getString(R.string.edit_item_dialog));
-                }
-                realm.close();
+                    // Arrays.asList returns fixed size, doing like this fixes remove object UnsupportedOperationException exception
+                    List<String> items = new LinkedList<>(Arrays.asList(getResources().getStringArray(itemsRes)));
 
-                new MaterialDialog.Builder(this)
-                        .title("Message")
-                        .negativeText("CANCEL")
-                        .items(items)
-                        .itemsCallback(new MaterialDialog.ListCallback() {
-                            @Override
-                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                                // TODO: 9/14/2016 [Alireza Eskandarpour Shoferi] implement other items
-                                if (text.toString().equalsIgnoreCase(getString(R.string.copy_item_dialog))) {
-                                    // copy message
-                                    ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                                    ClipData clip = ClipData.newPlainText("Copied Text", messageInfo.messageText);
-                                    clipboard.setPrimaryClip(clip);
-                                } else if (text.toString().equalsIgnoreCase(getString(R.string.delete_item_dialog))) {
-                                    final Realm realmCondition = Realm.getDefaultInstance();
-                                    final RealmClientCondition realmClientCondition = realmCondition.where(RealmClientCondition.class).equalTo("roomId", mRoomId).findFirstAsync();
-                                    realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
-                                        @Override
-                                        public void onChange(final RealmClientCondition element) {
-                                            realmCondition.executeTransaction(new Realm.Transaction() {
-                                                @Override
-                                                public void execute(Realm realm) {
-                                                    if (element != null) {
-                                                        if (realmCondition.where(RealmOfflineDelete.class).equalTo("offlineDelete", Long.parseLong(messageInfo.messageID)).findFirst() == null) {
-                                                            RealmOfflineDelete realmOfflineDelete = realmCondition.createObject(RealmOfflineDelete.class);
-                                                            realmOfflineDelete.setId(System.nanoTime());
-                                                            realmOfflineDelete.setOfflineDelete(Long.parseLong(messageInfo.messageID));
-                                                            element.getOfflineDeleted().add(realmOfflineDelete);
+                    Realm realm = Realm.getDefaultInstance();
+                    // if user clicked on any message which he wasn't its sender, remove edit item option
+                    if (!messageInfo.senderID.equalsIgnoreCase(Long.toString(realm.where(RealmUserInfo.class).findFirst().getUserId()))) {
+                        items.remove(getString(R.string.edit_item_dialog));
+                    }
+                    realm.close();
 
-                                                            runOnUiThread(new Runnable() {
-                                                                @Override
-                                                                public void run() {
-                                                                    // remove deleted message from adapter
-                                                                    mAdapter.removeMessage(Long.parseLong(messageInfo.messageID));
+                    new MaterialDialog.Builder(this)
+                            .title("Message")
+                            .negativeText("CANCEL")
+                            .items(items)
+                            .itemsCallback(new MaterialDialog.ListCallback() {
+                                @Override
+                                public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                                    // TODO: 9/14/2016 [Alireza Eskandarpour Shoferi] implement other items
+                                    if (text.toString().equalsIgnoreCase(getString(R.string.copy_item_dialog))) {
+                                        // copy message
+                                        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                                        ClipData clip = ClipData.newPlainText("Copied Text", messageInfo.messageText);
+                                        clipboard.setPrimaryClip(clip);
+                                    } else if (text.toString().equalsIgnoreCase(getString(R.string.delete_item_dialog))) {
+                                        final Realm realmCondition = Realm.getDefaultInstance();
+                                        final RealmClientCondition realmClientCondition = realmCondition.where(RealmClientCondition.class).equalTo("roomId", mRoomId).findFirstAsync();
+                                        realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
+                                            @Override
+                                            public void onChange(final RealmClientCondition element) {
+                                                realmCondition.executeTransaction(new Realm.Transaction() {
+                                                    @Override
+                                                    public void execute(Realm realm) {
+                                                        if (element != null) {
+                                                            if (realmCondition.where(RealmOfflineDelete.class).equalTo("offlineDelete", Long.parseLong(messageInfo.messageID)).findFirst() == null) {
+                                                                RealmOfflineDelete realmOfflineDelete = realmCondition.createObject(RealmOfflineDelete.class);
+                                                                realmOfflineDelete.setId(System.nanoTime());
+                                                                realmOfflineDelete.setOfflineDelete(Long.parseLong(messageInfo.messageID));
+                                                                element.getOfflineDeleted().add(realmOfflineDelete);
 
-                                                                    // remove tag from edtChat if the message has deleted
-                                                                    if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
-                                                                        if (Long.toString(Long.parseLong(messageInfo.messageID)).equals(((StructMessageInfo) edtChat.getTag()).messageID)) {
-                                                                            edtChat.setTag(null);
+                                                                runOnUiThread(new Runnable() {
+                                                                    @Override
+                                                                    public void run() {
+                                                                        // remove deleted message from adapter
+                                                                        mAdapter.removeMessage(Long.parseLong(messageInfo.messageID));
+
+                                                                        // remove tag from edtChat if the message has deleted
+                                                                        if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
+                                                                            if (Long.toString(Long.parseLong(messageInfo.messageID)).equals(((StructMessageInfo) edtChat.getTag()).messageID)) {
+                                                                                edtChat.setTag(null);
+                                                                            }
                                                                         }
                                                                     }
-                                                                }
-                                                            });
-                                                            // delete message
-                                                            new RequestChatDeleteMessage().chatDeleteMessage(mRoomId, Long.parseLong(messageInfo.messageID));
+                                                                });
+                                                                // delete message
+                                                                new RequestChatDeleteMessage().chatDeleteMessage(mRoomId, Long.parseLong(messageInfo.messageID));
+                                                            }
+                                                            element.removeChangeListeners();
                                                         }
-                                                        element.removeChangeListeners();
                                                     }
-                                                }
-                                            });
+                                                });
 
-                                            realmCondition.close();
+                                                realmCondition.close();
+                                            }
+                                        });
+                                    } else if (text.toString().equalsIgnoreCase(getString(R.string.edit_item_dialog))) {
+                                        // edit message
+                                        // put message text to EditText
+                                        if (!messageInfo.messageText.isEmpty()) {
+                                            edtChat.setText(messageInfo.messageText);
+                                            edtChat.setSelection(0, edtChat.getText().length());
+                                            // put message object to edtChat's tag to obtain it later and
+                                            // found is user trying to edit a message
+                                            edtChat.setTag(messageInfo);
                                         }
-                                    });
-                                } else if (text.toString().equalsIgnoreCase(getString(R.string.edit_item_dialog))) {
-                                    // edit message
-                                    // put message text to EditText
-                                    if (!messageInfo.messageText.isEmpty()) {
-                                        edtChat.setText(messageInfo.messageText);
-                                        edtChat.setSelection(0, edtChat.getText().length());
-                                        // put message object to edtChat's tag to obtain it later and
-                                        // found is user trying to edit a message
-                                        edtChat.setTag(messageInfo);
-                                    }
-                                } else if (text.toString().equalsIgnoreCase(getString(R.string.replay_item_dialog))) {
-                                    replay(messageInfo);
-                                } else if (text.toString().equalsIgnoreCase(getString(R.string.forward_item_dialog))) {
-                                    // forward selected messages to room list for selecting room
-                                    if (mAdapter != null) {
-                                        startActivity(makeIntentForForwardMessages(messageInfo));
+                                    } else if (text.toString().equalsIgnoreCase(getString(R.string.replay_item_dialog))) {
+                                        replay(messageInfo);
+                                    } else if (text.toString().equalsIgnoreCase(getString(R.string.forward_item_dialog))) {
+                                        // forward selected messages to room list for selecting room
+                                        if (mAdapter != null) {
+                                            startActivity(makeIntentForForwardMessages(messageInfo));
+                                        }
                                     }
                                 }
-                            }
-                        })
-                        .show();
-                break;
+                            })
+                            .show();
+                    break;
+            }
         }
     }
 
