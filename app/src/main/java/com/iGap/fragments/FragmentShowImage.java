@@ -1,6 +1,7 @@
 package com.iGap.fragments;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -20,15 +21,17 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.activitys.ActivitySetting;
 import com.iGap.module.StructSharedMedia;
 import com.iGap.module.TouchImageView;
+import com.iGap.realm.RealmAvatarPath;
 
 import java.io.File;
 import java.util.ArrayList;
 
-/**
- * Created by android3 on 9/5/2016.
- */
+import io.realm.Realm;
+
+
 public class FragmentShowImage extends Fragment {
 
     private TextView txtImageNumber;
@@ -36,11 +39,13 @@ public class FragmentShowImage extends Fragment {
     private TextView txtImageDate;
 
     private ViewPager viewPager;
+    private ActivitySetting activitySetting;
 
     private ArrayList<StructSharedMedia> list;
     private int selectedFile = 0;
     private int listSize = 0;
     private float MIN_SCALE = 1;
+    private AdapterViewPager mAdapter;
 
 
     public static FragmentShowImage newInstance() {
@@ -95,8 +100,9 @@ public class FragmentShowImage extends Fragment {
             public void onClick(View view) {
                 Log.e("ddd", "close");
 
+                getActivity().finish();
+                getActivity().startActivity(new Intent(getActivity(), ActivitySetting.class));
                 getActivity().getFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
-
 
             }
         });
@@ -116,7 +122,6 @@ public class FragmentShowImage extends Fragment {
         txtImageNumber = (TextView) view.findViewById(R.id.asi_txt_image_number);
         txtImageName = (TextView) view.findViewById(R.id.asi_txt_image_name);
         txtImageDate = (TextView) view.findViewById(R.id.asi_txt_image_date);
-
         initViewPager();
     }
 
@@ -125,7 +130,8 @@ public class FragmentShowImage extends Fragment {
 
     private void initViewPager() {
 
-        AdapterViewPager mAdapter = new AdapterViewPager();
+        activitySetting = new ActivitySetting();
+        mAdapter = new AdapterViewPager();
         viewPager.setAdapter(mAdapter);
         listSize = list.size();
         viewPager.setCurrentItem(selectedFile);
@@ -214,6 +220,47 @@ public class FragmentShowImage extends Fragment {
         public void destroyItem(ViewGroup container, int position, Object object) {
             container.removeView((View) object);
         }
+
+        @Override
+        public int getItemPosition(Object object) {
+            int index = list.indexOf(object);
+            if (index == -1)
+                return POSITION_NONE;
+            else
+                return index;
+        }
+
+        public int removeView(ViewPager pager, StructSharedMedia v) {
+            return removeView(pager, list.indexOf(v));
+        }
+
+        //-----------------------------------------------------------------------------
+
+        public int removeView(ViewPager pager, int position) {
+
+            Realm realm = Realm.getDefaultInstance();
+            final RealmAvatarPath realmAvatarPath = realm.where(RealmAvatarPath.class).equalTo("id", list.get(position).id).findFirst();
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    realmAvatarPath.deleteFromRealm();
+                }
+            });
+            realm.close();
+            pager.setAdapter(null);
+            list.remove(position);
+            pager.setAdapter(this);
+            notifyDataSetChanged();
+            if (list.size() > 0) {
+                initViewPager();
+            }
+            return position;
+        }
+
+        public StructSharedMedia getView(int position) {
+            return list.get(position);
+        }
+
     }
 
     //***************************************************************************************
@@ -238,11 +285,17 @@ public class FragmentShowImage extends Fragment {
                             saveToGalary();
                         } else if (which == 2) {
 
-                            list.remove(viewPager.getCurrentItem());
+                            int pageIndex = mAdapter.removeView(viewPager, getCurrentPage());
+                            if (list.size() == 0) {
+                                getActivity().finish();
+                                getActivity().startActivity(new Intent(getActivity(), ActivitySetting.class));
+                                getActivity().getFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
 
+                            } else if (pageIndex == mAdapter.getCount()) {
+                                pageIndex--;
+                            }
+                            viewPager.setCurrentItem(pageIndex);
                         }
-
-
                     }
                 }).show();
 
@@ -262,4 +315,12 @@ public class FragmentShowImage extends Fragment {
     }
 
 
+    public StructSharedMedia getCurrentPage() {
+        return mAdapter.getView(viewPager.getCurrentItem());
+    }
+
+    //-----------------------------------------------------------------------------
+//    public void setCurrentPage(View pageToShow) {
+//        viewPager.setCurrentItem(mAdapter.getItemPosition(pageToShow), true);
+//    }
 }

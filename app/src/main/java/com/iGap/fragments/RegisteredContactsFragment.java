@@ -42,6 +42,7 @@ public class RegisteredContactsFragment extends Fragment {
     private FastAdapter fastAdapter;
     private SearchView searchView;
     private TextView menu_txt_titleToolbar;
+    private ViewGroup vgAddContact;
 
     public static RegisteredContactsFragment newInstance() {
         return new RegisteredContactsFragment();
@@ -96,16 +97,7 @@ public class RegisteredContactsFragment extends Fragment {
                 return false;
             }
         });
-//        RelativeLayout layout = (RelativeLayout) view.findViewById(R.id.menu_layout);
-//        layout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-////                searchView.onActionViewExpanded();
-//                searchView.setIconified(false);
-//                menu_txt_titleToolbar.setVisibility(View.GONE);
-//                Log.i("AASSAA", "2: "+menu_txt_titleToolbar );
-//            }
-//        });
+
         searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
@@ -158,6 +150,19 @@ public class RegisteredContactsFragment extends Fragment {
 
         final EditText searchBox = ((EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text));
         searchBox.setTextColor(getResources().getColor(R.color.white));
+
+        vgAddContact = (ViewGroup) view.findViewById(R.id.menu_layout_addContact);
+        vgAddContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                FragmentAddContact fragment = FragmentAddContact.newInstance();
+                Bundle bundle = new Bundle();
+                bundle.putString("TITLE", "add_contact");
+                fragment.setArguments(bundle);
+                getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
+            }
+        });
 
         TextView txtMenu = (TextView) view.findViewById(R.id.menu_txtBack);
         txtMenu.setTypeface(G.fontawesome);

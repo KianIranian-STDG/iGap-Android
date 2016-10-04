@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,6 +54,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
     private TextView txtNextStep, txtCancel, txtTitleToolbar;
     private String prefix = "NewGroup";
     private String path;
+    private RelativeLayout parent;
 
     private EditText edtGroupName;
     private LinedEditText edtDescription;
@@ -86,6 +88,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
 
     public void initComponent(View view) {
 
+
         txtBack = (MaterialDesignTextView) view.findViewById(R.id.ng_txt_back);
         txtBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,6 +111,14 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
         } else {
             txtTitleToolbar.setText("New Group");
         }
+
+        parent = (RelativeLayout) view.findViewById(R.id.ng_fragmentContainer);
+        parent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
 
         //=======================set image for group
         imgCircleImageView = (CircleImageView) view.findViewById(R.id.ng_profile_circle_image);

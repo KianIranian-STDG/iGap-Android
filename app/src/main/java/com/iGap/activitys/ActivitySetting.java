@@ -394,8 +394,8 @@ public class ActivitySetting extends ActivityEnhanced {
                 bundle.putSerializable("listPic", items);
                 bundle.putInt("SelectedImage", 0);
                 fragment.setArguments(bundle);
-
                 ActivitySetting.this.getFragmentManager().beginTransaction().replace(R.id.st_layoutParent, fragment).commit();
+
             }
         });
         setImage();
@@ -1144,7 +1144,9 @@ public class ActivitySetting extends ActivityEnhanced {
         return hrSize;
     }
 
-    private void setImage() {
+    public void setImage() {
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<RealmAvatarPath> realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
         realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
         if (realmAvatarPaths.size() > 0) {
             pathImageDecode = realmAvatarPaths.first().getPathImage();
@@ -1154,26 +1156,20 @@ public class ActivitySetting extends ActivityEnhanced {
             String name = HelperImageBackColor.getFirstAlphabetName(txtNickName.getText().toString());
             circleImageView.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp100), name, HelperImageBackColor.getColor(name)));
         }
+        realm.close();
 
     }
 
     public ArrayList<StructSharedMedia> setItem(File f) {
 
         ArrayList<StructSharedMedia> items = new ArrayList<>();
-//        File file[] = f.listFiles();
-//        Log.i("ZZXXCCX", "setItem: " + file.length);
-//        for (int i = 0; i < file.length; i++) {
-//            if (!file[i].getPath().equals(G.chatBackground.toString())) {
-//                StructSharedMedia item = new StructSharedMedia();
-//                item.filePath = file[i].getPath();
-//                items.add(item);
-//            }
-//        }
+
         Realm realm = Realm.getDefaultInstance();
         RealmResults<RealmAvatarPath> realmItemList = realm.where(RealmAvatarPath.class).findAll();
         for (int i = 0; i < realmItemList.size(); i++) {
             StructSharedMedia item = new StructSharedMedia();
             item.filePath = realmItemList.get(i).getPathImage();
+            item.id = realmItemList.get(i).getId();
             items.add(item);
         }
 

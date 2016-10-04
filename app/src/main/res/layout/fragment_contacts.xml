@@ -58,6 +58,30 @@
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
 
+    <LinearLayout
+        android:id="@+id/menu_layout_addContact"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_margin="@dimen/dp12">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@mipmap/add_chat_background2"
+            android:layout_marginLeft="@dimen/dp32" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Add Contact"
+            android:textSize="@dimen/sp20"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:gravity="center_vertical" />
+
+    </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"

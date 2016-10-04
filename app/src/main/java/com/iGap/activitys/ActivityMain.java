@@ -204,7 +204,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             Field mDrawable = SearchView.class.getDeclaredField("mSearchHintIcon");
             mDrawable.setAccessible(true);
             Drawable drawable = (Drawable) mDrawable.get(btnSearch);
-            drawable.setAlpha(0);
+            drawable.setBounds(0, 0, -5, 0);
 
         } catch (Exception e) {
             e.printStackTrace();

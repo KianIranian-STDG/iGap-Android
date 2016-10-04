@@ -21,7 +21,10 @@ public class StructSharedMedia implements Serializable {
 
     public String fileInfo = "";
 
+    public int id;
+
     public ProtoGlobal.Room.Type chatType = ProtoGlobal.Room.Type.CHAT;
     public String chatId = "";
 
 }
+
