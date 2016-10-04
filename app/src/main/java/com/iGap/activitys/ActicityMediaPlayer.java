@@ -54,7 +54,7 @@ public class ActicityMediaPlayer extends ActivityEnhanced {
         if (MusicPlayer.mp == null) {
             finish();
             NotificationManager notifManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notifManager.cancelAll();
+            notifManager.cancel(MusicPlayer.notificationId);
             return;
         }
 
@@ -95,7 +95,7 @@ public class ActicityMediaPlayer extends ActivityEnhanced {
         updateUi();
 
         NotificationManager notifManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notifManager.cancelAll();
+        notifManager.cancel(MusicPlayer.notificationId);
         if (MusicPlayer.mp != null)
             if (MusicPlayer.mp.isPlaying())
                 updateProgress();

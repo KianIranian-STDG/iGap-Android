@@ -99,7 +99,7 @@ public class ChatSendMessageResponse extends MessageHandler {
 
                     realm.copyToRealm(realmChatHistory);
                     if (!G.isAppInFg)
-                        G.helperNotificationAndBadge.updateNotification();
+                        G.helperNotificationAndBadge.updateNotificationAndBadge(true);
 
                 } else {
                     // i'm the sender

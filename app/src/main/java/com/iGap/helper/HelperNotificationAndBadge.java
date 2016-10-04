@@ -109,7 +109,7 @@ public class HelperNotificationAndBadge {
 
     }
 
-    public void updateNotification() {
+    public void updateNotificationAndBadge(boolean updateNotification) {
 
         unreadMessageCount = 0;
         isFromOnRoom = true;
@@ -143,13 +143,21 @@ public class HelperNotificationAndBadge {
         realm.close();
 
         if (unreadMessageCount == 0) {
-            notificationManager.cancel(notificationId);
+            if (updateNotification) {
+                notificationManager.cancel(notificationId);
+            }
             ShortcutBadger.applyCount(G.context, 0);
         } else {
-            setNotification();
+            if (updateNotification) {
+                setNotification();
+            }
             ShortcutBadger.applyCount(G.context, unreadMessageCount);
         }
     }
 
+
+    public void cancelNotification() {
+        notificationManager.cancel(notificationId);
+    }
 
 }

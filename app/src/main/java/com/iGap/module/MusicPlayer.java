@@ -56,6 +56,7 @@ public class MusicPlayer {
     public static OnComplete onComplete = null;
     private static RealmList<RealmRoomMessage> mediaList;
     private static int selectedMedia = 0;
+    public static final int notificationId = 19;
 
 
     public MusicPlayer(LinearLayout layoutTripMusic) {
@@ -131,7 +132,7 @@ public class MusicPlayer {
             btnPlayMusic.setText(G.context.getString(R.string.md_play_rounded_button));
             remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.play);
             if (onComplete == null) {
-                notificationManager.notify(0, notification);
+                notificationManager.notify(notificationId, notification);
             } else {
                 onComplete.complete(true, "play", "");
             }
@@ -148,7 +149,7 @@ public class MusicPlayer {
             btnPlayMusic.setText(G.context.getString(R.string.md_round_pause_button));
             remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause);
             if (onComplete == null) {
-                notificationManager.notify(0, notification);
+                notificationManager.notify(notificationId, notification);
             } else {
                 onComplete.complete(true, "pause", "");
             }
@@ -172,7 +173,7 @@ public class MusicPlayer {
             btnPlayMusic.setText(G.context.getString(R.string.md_play_rounded_button));
             remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.play);
             if (onComplete == null) {
-                notificationManager.notify(0, notification);
+                notificationManager.notify(notificationId, notification);
             } else {
                 onComplete.complete(true, "play", "");
             }
@@ -223,7 +224,7 @@ public class MusicPlayer {
         }
 
         NotificationManager notifManager = (NotificationManager) G.context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notifManager.cancelAll();
+        notifManager.cancel(notificationId);
 
     }
 
@@ -251,7 +252,7 @@ public class MusicPlayer {
 
                     remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause);
                     if (onComplete == null) {
-                        notificationManager.notify(0, notification);
+                        notificationManager.notify(notificationId, notification);
                     } else {
                         onComplete.complete(true, "pause", "");
                     }
@@ -282,7 +283,7 @@ public class MusicPlayer {
                     btnPlayMusic.setText(G.context.getString(R.string.md_round_pause_button));
                     remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause);
                     if (onComplete == null) {
-                        notificationManager.notify(0, notification);
+                        notificationManager.notify(notificationId, notification);
                     } else {
                         onComplete.complete(true, "pause", "");
                     }
@@ -403,7 +404,7 @@ public class MusicPlayer {
                 .build();
 
         try {
-            notificationManager.notify(0, notification);
+            notificationManager.notify(notificationId, notification);
         } catch (RuntimeException e) {
         }
 

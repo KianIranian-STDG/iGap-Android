@@ -287,7 +287,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                             G.chatUpdateStatusUtil.sendUpdateStatus(chatType, mRoomId, seenId, ProtoGlobal.RoomMessageStatus.SEEN);
                         }
 
-                        G.helperNotificationAndBadge.updateNotification();
+                        G.helperNotificationAndBadge.updateNotificationAndBadge(false);
                     }
                 });
 
@@ -921,6 +921,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 if (ll_attach_text.getVisibility() == View.VISIBLE) {
                     onActivityResult(tmpRequestCode, tmpResultCode, tmpData);
                     ll_attach_text.setVisibility(View.GONE);
+                    edtChat.setText("");
                     return;
                 }
 
@@ -1950,7 +1951,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 messageInfo.messageType.toString().equals("AUDIO_TEXT")) {
             MusicPlayer.startPlayer(messageInfo.getAttachment().getLocalFilePath(), title, mRoomId, true);
         } else if (messageInfo.messageType.toString().equals("IMAGE") || messageInfo.messageType.toString().equals("IMAGE_TEXT")) {
-            showImage(messageInfo.getAttachment().getLocalThumbnailPath());
+            showImage(messageInfo.getAttachment().getLocalFilePath(), messageInfo.getAttachment().getLocalThumbnailPath());
         } else if (messageInfo.messageType.toString().equals("FILE") || messageInfo.messageType.toString().equals("FILE_TEXT") ||
                 messageInfo.messageType.toString().equals("VIDEO") || messageInfo.messageType.toString().equals("VIDEO_TEXT")) {
             Intent intent = HelperMimeType.appropriateProgram(messageInfo.getAttachment().getLocalFilePath());
@@ -2080,7 +2081,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     }
 
 
-    private void showImage(String filePath) {
+    private void showImage(String filePath, String thumpnailPath) {
 
         ArrayList<StructSharedMedia> listPic = new ArrayList<>();
         int selectedPicture = 0;
@@ -2095,7 +2096,8 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                         StructSharedMedia item = new StructSharedMedia();
                         item.filePath = attachment.getLocalFilePath();
                         item.fileName = attachment.getName();
-                        if (item.filePath.equals(filePath))
+                        item.tumpnail = attachment.getLocalThumbnailPath();
+                        if (item.filePath.equals(filePath) || item.tumpnail.equals(thumpnailPath))
                             selectedPicture = listPic.size();
 
                         listPic.add(item);

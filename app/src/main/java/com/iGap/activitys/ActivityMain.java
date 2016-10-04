@@ -88,6 +88,8 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        G.helperNotificationAndBadge.cancelNotification();
+
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
         G.chatSendMessageUtil.setOnChatSendMessageResponse(this);
         G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);

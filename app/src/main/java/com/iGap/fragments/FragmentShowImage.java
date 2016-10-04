@@ -194,6 +194,15 @@ public class FragmentShowImage extends Fragment {
             if (imgFile.exists()) {
                 Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                 touchImageView.setImageBitmap(myBitmap);
+            } else {
+                File imgThumpnailFile = new File(list.get(position).tumpnail);
+                if (imgThumpnailFile.exists()) {
+                    Bitmap myBitmap = BitmapFactory.decodeFile(imgThumpnailFile.getAbsolutePath());
+                    touchImageView.setImageBitmap(myBitmap);
+                }
+
+                downloadImage();
+
             }
 
             ((ViewGroup) container).addView(layout);
@@ -208,6 +217,11 @@ public class FragmentShowImage extends Fragment {
     }
 
     //***************************************************************************************
+
+    private void downloadImage() {
+
+        Log.e("ddd", " download image");
+    }
 
     public void popUpMenuShowImage() {
 
