@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.widget.Toast;
 
 import com.iGap.helper.HelperFillLookUpClass;
+import com.iGap.helper.HelperNotificationAndBadge;
 import com.iGap.helper.MyService;
 import com.iGap.interface_package.OnChatDelete;
 import com.iGap.interface_package.OnChatDeleteMessageResponse;
@@ -107,6 +108,11 @@ public class G extends Application {
 
     public static Context context;
     public static Handler handler;
+
+    public static HelperNotificationAndBadge helperNotificationAndBadge;
+    public static boolean isAppInFg = false;
+    public static boolean isScrInFg = false;
+    public static boolean isChangeScrFg = false;
 
     public static ArrayList<String> unSecure = new ArrayList<>();
 
@@ -256,6 +262,8 @@ public class G extends Application {
         context = getApplicationContext();
         handler = new Handler();
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        helperNotificationAndBadge = new HelperNotificationAndBadge();
 
         HelperFillLookUpClass.fillLookUpClassArray();
         fillUnSecureList();

@@ -94,6 +94,9 @@ public class GroupSendMessageResponse extends MessageHandler {
 
                     realm.copyToRealm(realmChatHistory);
 
+                    if (!G.isAppInFg)
+                        G.helperNotificationAndBadge.updateNotification();
+
                 } else {
                     // i'm the sender
                     // update message fields into database

@@ -98,6 +98,8 @@ public class ChatSendMessageResponse extends MessageHandler {
                     realmChatHistory.setRoomMessage(realmRoomMessage);
 
                     realm.copyToRealm(realmChatHistory);
+                    if (!G.isAppInFg)
+                        G.helperNotificationAndBadge.updateNotification();
 
                 } else {
                     // i'm the sender

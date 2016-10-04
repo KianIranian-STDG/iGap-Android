@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.iGap.G;
@@ -39,22 +38,18 @@ public class HelperNotificationAndBadge {
 
     private NotificationManager notificationManager;
     private Notification notification;
-    private int notificationId = 0;
+    private int notificationId = 20;
     private RemoteViews remoteViews;
 
 
     public HelperNotificationAndBadge() {
         notificationManager = (NotificationManager) G.context.getSystemService(Context.NOTIFICATION_SERVICE);
         remoteViews = new RemoteViews(G.context.getPackageName(), R.layout.layout_notification);
-
     }
-
 
     //*****************************************************************************************   notification ***********************
 
-
     private void setRemoteViews() {
-
 
         String avatarPath = null;
         if (unreadMessageCount == 1) {
@@ -62,7 +57,6 @@ public class HelperNotificationAndBadge {
         } else {
             remoteViews.setTextViewText(R.id.ln_txt_message_notification, " you have " + unreadMessageCount + " unread message");
         }
-
 
         if (isFromOnRoom) {
             Realm realm = Realm.getDefaultInstance();
@@ -121,10 +115,7 @@ public class HelperNotificationAndBadge {
         isFromOnRoom = true;
 
         Realm realm = Realm.getDefaultInstance();
-
         long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
-
-
         RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class).findAll();
 
         if (chatHistories != null) {
@@ -132,7 +123,7 @@ public class HelperNotificationAndBadge {
                 RealmRoomMessage roomMessage = realmChatHistory.getRoomMessage();
                 if (roomMessage != null) {
                     if (roomMessage.getUserId() != userId) {
-                        if (roomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENT.toString())) {
+                        if (roomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENT.toString()) || roomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.DELIVERED.toString())) {
                             unreadMessageCount++;
                             message = roomMessage.getMessage();
                             senderId = roomMessage.getUserId();
@@ -142,34 +133,23 @@ public class HelperNotificationAndBadge {
 
                             if (roomId != realmChatHistory.getRoomId()) {
                                 isFromOnRoom = false;
-
-                                Log.e("ddd", "isFromOnRoom    " + isFromOnRoom);
                             }
                         }
                     }
                 }
-
-
             }
-
         }
 
         realm.close();
 
-        Log.e("ddd", "unreadMessageCount     " + unreadMessageCount);
         if (unreadMessageCount == 0) {
-            notificationManager.cancelAll();
+            notificationManager.cancel(notificationId);
             ShortcutBadger.applyCount(G.context, 0);
         } else {
             setNotification();
             ShortcutBadger.applyCount(G.context, unreadMessageCount);
         }
-
-
     }
-
-
-    //*****************************************************************************************   badge ***********************
 
 
 }

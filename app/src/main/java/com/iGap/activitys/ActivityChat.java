@@ -286,6 +286,8 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                         for (long seenId : offlineSeenId) {
                             G.chatUpdateStatusUtil.sendUpdateStatus(chatType, mRoomId, seenId, ProtoGlobal.RoomMessageStatus.SEEN);
                         }
+
+                        G.helperNotificationAndBadge.updateNotification();
                     }
                 });
 
