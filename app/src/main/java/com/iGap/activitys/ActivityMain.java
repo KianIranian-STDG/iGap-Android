@@ -529,6 +529,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                             room.setUnreadCount(0);
                             room.setLastMessageId(0);
                             room.setLastMessageTime(0);
+                            room.setLastMessage("");
 
                             realm.copyToRealmOrUpdate(room);
                         }
@@ -679,7 +680,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
                         // creating new struct for each room and add them to adapter
 
-
                         mAdapter.clear();
 
                         for (final ProtoGlobal.Room room : roomList) { //TODO [Saeed Mozaffari] [2016-09-07 9:56 AM] - manage mute state
@@ -709,6 +709,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
                             info.lastMessageTime = room.getLastMessage().getUpdateTime();
                             info.lastmessage = room.getLastMessage().getMessage();
+                            Log.i("BBBA", "Server unreadMessagesCount : " + room.getUnreadCount());
                             info.lastMessageStatus = room.getLastMessage().getStatus().toString();
                             info.color = room.getColor();
                             info.muteNotification = false; // TODO: 9/14/2016 [Alireza Eskandarpour Shoferi] vaghti server mute ro implement kard inja get kon
@@ -1053,16 +1054,19 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                     break;
             }
             info.color = realmRoom.getColor();
+            Log.i("BBBBC", "Realm Reading getUnreadCount : " + realmRoom.getUnreadCount());
+            Log.i("BBBB", "Realm Reading getLastMessage : " + realmRoom.getLastMessage());
+            Log.i("BBBA", "Realm Reading lastMessageStatus : " + realmRoom.getLastMessageStatus());
+            info.lastmessage = realmRoom.getLastMessage();
+            info.lastMessageTime = realmRoom.getLastMessageTime();
+            info.lastMessageStatus = realmRoom.getLastMessageStatus();
             RealmRoomMessage lastMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", realmRoom.getLastMessageId()).findFirst();
             if (lastMessage != null) {
-                //info.lastMessageTime = lastMessage.getUpdateTime();
-                //info.lastmessage = lastMessage.getMessage();
+                info.lastmessage = lastMessage.getMessage();
+                info.lastMessageTime = lastMessage.getUpdateTime();
                 info.lastMessageSenderIsMe = lastMessage.isSenderMe();
                 info.lastMessageStatus = lastMessage.getStatus();
             }
-            Log.i("BBBB", "Realm Reading getLastMessage : " + realmRoom.getLastMessage());
-            info.lastmessage = realmRoom.getLastMessage();
-            info.lastMessageTime = realmRoom.getLastMessageTime();
             info.muteNotification = realmRoom.getMute(); // FIXME
             info.imageSource = ""; // FIXME
 
@@ -1133,9 +1137,12 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         chatInfo.chatId = room.getId();
         chatInfo.chatTitle = room.getTitle();
         chatInfo.initials = room.getInitials();
-        RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", room.getLastMessageId()).findFirst();
-        chatInfo.lastMessageTime = room.getLastMessageTime(); //TODO [Saeed Mozaffari] [2016-10-03 5:38 PM] - can see this code for avoid from multiple calling lastMessageTime and lastmessage
+        chatInfo.lastMessageTime = room.getLastMessageTime(); //TODO [Saeed Mozaffari] [2016-10-03 5:38 PM] -  see this code later for avoid from multiple calling lastMessageTime and lastMessage and lastMessageStatus
         chatInfo.lastmessage = room.getLastMessage();
+        chatInfo.lastMessageStatus = room.getLastMessageStatus();
+        Log.i("BBBA", " convertToChatItem : " + room.getLastMessageStatus());
+        Log.i("BBBA", "convertToChatItem getUnreadCount : " + room.getUnreadCount());
+        RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", room.getLastMessageId()).findFirst();
         if (roomMessage != null) {
             chatInfo.lastMessageTime = roomMessage.getUpdateTime();
             chatInfo.lastmessage = roomMessage.getMessage();

@@ -66,15 +66,19 @@ public class StructChatInfo {
         chatInfo.muteNotification = false;
         chatInfo.ownerShip = MyType.OwnerShip.member;
         chatInfo.color = builder.getRoom().getColor();
+        chatInfo.lastmessage = builder.getRoom().getLastMessage().getStatus().toString();
+        chatInfo.lastMessageTime = builder.getRoom().getLastMessage().getUpdateTime();
+        chatInfo.lastMessageStatus = builder.getRoom().getLastMessage().getStatus().toString();
+        chatInfo.unreadMessagesCount = builder.getRoom().getUnreadCount();
         Realm realm = Realm.getDefaultInstance();
         RealmRoom room = realm.where(RealmRoom.class).equalTo("id", builder.getRoom().getId()).findFirst();
         if (room != null) {
             RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", room.getLastMessageId()).findFirst();
             if (roomMessage != null) {
-                chatInfo.lastMessageTime = roomMessage.getUpdateTime();
                 chatInfo.lastmessage = roomMessage.getMessage();
-                chatInfo.unreadMessagesCount = room.getUnreadCount();
+                chatInfo.lastMessageTime = roomMessage.getUpdateTime();
                 chatInfo.lastMessageStatus = roomMessage.getStatus();
+                chatInfo.unreadMessagesCount = room.getUnreadCount();
             }
         }
         realm.close();

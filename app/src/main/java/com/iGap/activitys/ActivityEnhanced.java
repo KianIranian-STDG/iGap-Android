@@ -25,7 +25,6 @@ public class ActivityEnhanced extends AppCompatActivity {
         if (!G.isAppInFg) {
             G.isAppInFg = true;
             G.isChangeScrFg = false;
-            onAppStart();
         } else {
             G.isChangeScrFg = true;
         }
@@ -40,18 +39,8 @@ public class ActivityEnhanced extends AppCompatActivity {
 
         if (!G.isScrInFg || !G.isChangeScrFg) {
             G.isAppInFg = false;
-            onAppPause();
         }
         G.isScrInFg = false;
     }
 
-    public void onAppStart() {
-        //  Toast.makeText(getApplicationContext(), "App in foreground", Toast.LENGTH_LONG).show();
-        // TODO: 10/1/2016 (molareza) wgen app in foreground
-    }
-
-    public void onAppPause() {
-        // Toast.makeText(getApplicationContext(), "App in background", Toast.LENGTH_LONG).show();
-        // TODO: 10/1/2016 (molareza) wgen app in background
-    }
 }

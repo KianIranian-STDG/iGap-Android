@@ -3,11 +3,9 @@ package com.iGap.realm;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.enums.ChannelChatRole;
 
+import io.realm.Realm;
 import io.realm.RealmObject;
 
-/**
- * Created by Alireza Eskandarpour Shoferi (meNESS) on 8/31/2016.
- */
 public class RealmChannelRoom extends RealmObject {
     private String role;
     private String participants_count_label;
@@ -34,8 +32,10 @@ public class RealmChannelRoom extends RealmObject {
      * @param room ProtoGlobal.ChannelRoom
      * @return RealmChannelRoom
      */
-    public static RealmChannelRoom convert(ProtoGlobal.ChannelRoom room) {
-        RealmChannelRoom realmChannelRoom = new RealmChannelRoom();
+    public static RealmChannelRoom convert(ProtoGlobal.ChannelRoom room, RealmChannelRoom realmChannelRoom, Realm realm) {
+        if (realmChannelRoom == null) {
+            realmChannelRoom = realm.createObject(RealmChannelRoom.class);
+        }
         realmChannelRoom.setParticipantsCountLabel(room.getParticipantsCountLabel());
         realmChannelRoom.setRole(ChannelChatRole.convert(room.getRole()));
         return realmChannelRoom;

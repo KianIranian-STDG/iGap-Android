@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * for create webSocketConnection
+ * for create and manage webSocketConnection
  */
 public class WebSocketClient {
 
@@ -24,6 +24,12 @@ public class WebSocketClient {
     public static boolean allowForReconnecting = true;
     public static boolean waitingForReconnecting = false;
     private static long latestConnectionTryTiming;
+
+    /**
+     * add webSocketConnection listeners and try for connect
+     *
+     * @return WebSocket
+     */
 
     private static synchronized WebSocket createSocketConnection() {
         WebSocket websocketFactory = null;
@@ -108,14 +114,35 @@ public class WebSocketClient {
      * @return webSocketConnection
      */
 
-    public static WebSocket getInstance() { //TODO [Saeed Mozaffari] [2016-10-03 12:12 PM] - checking this code for waitingForReconnecting(boolean) that can this boolean make problem or no
+    public static WebSocket getInstance() {
         if (!waitingForReconnecting && (webSocketClient == null || !webSocketClient.isOpen())) {
             waitingForReconnecting = true;
             HelperConnectionState.connectionState(Config.ConnectionState.CONNECTING);
+            checkGetInstanceSuccessfully();
             return webSocketClient = createSocketConnection();
         } else {
             return webSocketClient;
         }
+    }
+
+    /**
+     * check current state of socket for insuring that
+     * connection established and if socket connection
+     * wasn't open or is null try for reconnecting
+     */
+
+    private static void checkGetInstanceSuccessfully() {
+
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (webSocketClient == null || !webSocketClient.isOpen()) {
+                    reconnect();
+                }
+
+            }
+        }, Config.INSTANCE_SUCCESSFULLY_CHECKING);
+
     }
 
     /**
