@@ -9,6 +9,9 @@ import io.realm.RealmObject;
 public class RealmChannelRoom extends RealmObject {
     private String role;
     private String participants_count_label;
+    private String description;
+    private int avatarCount;
+    private RealmAvatar avatar;
 
     public ChannelChatRole getRole() {
         return (role != null) ? ChannelChatRole.valueOf(role) : null;
@@ -24,6 +27,30 @@ public class RealmChannelRoom extends RealmObject {
 
     public void setParticipantsCountLabel(String participants_count_label) {
         this.participants_count_label = participants_count_label;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getAvatarCount() {
+        return avatarCount;
+    }
+
+    public void setAvatarCount(int avatarCount) {
+        this.avatarCount = avatarCount;
+    }
+
+    public RealmAvatar getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(RealmAvatar avatar) {
+        this.avatar = avatar;
     }
 
     /**

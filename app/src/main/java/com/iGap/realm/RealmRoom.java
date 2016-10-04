@@ -20,8 +20,9 @@ public class RealmRoom extends RealmObject {
     private String initials;
     private String color;
     private int unread_count;
-    private boolean mute;
+    private boolean readOnly;
     private RealmChatRoom chat_room;
+    private boolean mute;
     private RealmGroupRoom group_room;
     private RealmChannelRoom channel_room;
     private long lastMessageId;

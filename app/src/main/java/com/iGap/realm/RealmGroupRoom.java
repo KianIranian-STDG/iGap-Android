@@ -1,5 +1,6 @@
 package com.iGap.realm;
 
+
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.enums.GroupChatRole;
 
@@ -10,9 +11,9 @@ import io.realm.RealmObject;
 public class RealmGroupRoom extends RealmObject {
     private String role;
     private String participants_count_label;
-    private boolean left;
     private String description;
-    private RealmList<RealmMember> members;
+    private int avatarCount;
+    private RealmList<RealmMember> members; //TODO [Saeed Mozaffari] [2016-10-04 2:41 PM] - RealmMember joda shavad
 
     public GroupChatRole getRole() {
         return (role != null) ? GroupChatRole.valueOf(role) : null;
@@ -30,20 +31,20 @@ public class RealmGroupRoom extends RealmObject {
         this.participants_count_label = participants_count_label;
     }
 
-    public boolean getLeft() {
-        return left;
-    }
-
-    public void setLeft(boolean left) {
-        this.left = left;
-    }
-
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getAvatarCount() {
+        return avatarCount;
+    }
+
+    public void setAvatarCount(int avatarCount) {
+        this.avatarCount = avatarCount;
     }
 
     public RealmList<RealmMember> getMembers() {
@@ -66,7 +67,6 @@ public class RealmGroupRoom extends RealmObject {
         }
         realmGroupRoom.setRole(GroupChatRole.convert(room.getRole()));
         realmGroupRoom.setParticipantsCountLabel(room.getParticipantsCountLabel());
-        realmGroupRoom.setLeft(room.getLeft());
         realmGroupRoom.setDescription(room.getDescription());
         return realmGroupRoom;
     }

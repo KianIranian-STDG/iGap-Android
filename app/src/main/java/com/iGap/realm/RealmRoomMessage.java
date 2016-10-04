@@ -17,12 +17,14 @@ public class RealmRoomMessage extends RealmObject {
     private long statusVersion;
     private String messageType;
     private String message;
+    private RealmMessageAttachment attachment;
     private long userId;
     private String location;
     private String log;
+    private RealmRoomMessageContact roomMessageContact;
     private boolean edited;
     private long updateTime;
-    private RealmMessageAttachment attachment;
+    private boolean deleted;
 
     public long getMessageId() {
         return messageId;
@@ -96,6 +98,14 @@ public class RealmRoomMessage extends RealmObject {
         this.log = log;
     }
 
+    public RealmRoomMessageContact getRoomMessageContact() {
+        return roomMessageContact;
+    }
+
+    public void setRoomMessageContact(RealmRoomMessageContact roomMessageContact) {
+        this.roomMessageContact = roomMessageContact;
+    }
+
     public boolean isEdited() {
         return edited;
     }
@@ -110,6 +120,14 @@ public class RealmRoomMessage extends RealmObject {
 
     public void setUpdateTime(int updateTime) {
         this.updateTime = updateTime * DateUtils.SECOND_IN_MILLIS;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     public boolean isSenderMe() {

@@ -7,7 +7,10 @@ import com.iGap.module.Contacts;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoUserContactsGetList;
+import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmContacts;
+import com.iGap.realm.RealmFileAvatar;
+import com.iGap.realm.RealmThumbnail;
 
 import io.realm.Realm;
 
@@ -50,6 +53,39 @@ public class UserContactsGetListResponse extends MessageHandler {
                     listResponse.setColor(registerUser.getColor());
                     listResponse.setStatus(registerUser.getStatus().toString());
                     listResponse.setLast_seen(registerUser.getLastSeen());
+                    listResponse.setAvatarCount(registerUser.getAvatarCount());
+
+                    RealmAvatar realmAvatar = realm.createObject(RealmAvatar.class);
+                    realmAvatar.setId(registerUser.getId());
+                    listResponse.setAvatar(realmAvatar);
+
+                    RealmFileAvatar realmFileAvatar = realm.createObject(RealmFileAvatar.class);
+                    ProtoGlobal.File file = registerUser.getAvatar().getFile();
+                    realmFileAvatar.setToken(file.getToken());
+                    realmFileAvatar.setName(file.getName());
+                    realmFileAvatar.setSize(file.getSize());
+
+                    ProtoGlobal.Thumbnail smallThumbnail = file.getSmallThumbnail();
+                    ProtoGlobal.Thumbnail largeThumbnail = file.getLargeThumbnail();
+
+                    RealmThumbnail realmThumbnailSmall = realm.createObject(RealmThumbnail.class);
+                    realmThumbnailSmall.setSize(smallThumbnail.getSize());
+                    realmThumbnailSmall.setWidth(smallThumbnail.getWidth());
+                    realmThumbnailSmall.setHeight(smallThumbnail.getHeight());
+                    realmThumbnailSmall.setCacheId(smallThumbnail.getCacheId());
+
+                    RealmThumbnail realmThumbnailLarge = realm.createObject(RealmThumbnail.class);
+                    realmThumbnailLarge.setSize(largeThumbnail.getSize());
+                    realmThumbnailLarge.setWidth(largeThumbnail.getWidth());
+                    realmThumbnailLarge.setHeight(largeThumbnail.getHeight());
+                    realmThumbnailLarge.setCacheId(largeThumbnail.getCacheId());
+
+                    realmFileAvatar.setLargeThumbnail(realmThumbnailLarge);
+                    realmFileAvatar.setSmallThumbnail(realmThumbnailSmall);
+                    realmFileAvatar.setWidth(file.getWidth());
+                    realmFileAvatar.setHeight(file.getHeight());
+                    realmFileAvatar.setDuration(file.getDuration());
+                    realmFileAvatar.setCatchId(file.getCacheId());
                 }
             }
         });

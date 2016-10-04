@@ -1,26 +1,23 @@
 package com.iGap.realm;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
-public class RealmContacts extends RealmObject {
+public class RealmRegisteredUser extends RealmObject {
 
+    @PrimaryKey
     private long id;
     private String username;
     private long phone;
-    private String first_name;
-    private String last_name;
-    private String display_name;
+    private String firstName;
+    private String lastName;
+    private String displayName;
     private String initials;
     private String color;
     private String status;
-    private long last_seen;
+    private int lastSeen;
     private int avatarCount;
     private RealmAvatar avatar;
-
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
     public long getId() {
         return id;
@@ -46,28 +43,28 @@ public class RealmContacts extends RealmObject {
         this.phone = phone;
     }
 
-    public String getFirst_name() {
-        return first_name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getLast_name() {
-        return last_name;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public String getDisplay_name() {
-        return display_name;
+    public String getDisplayName() {
+        return displayName;
     }
 
-    public void setDisplay_name(String display_name) {
-        this.display_name = display_name;
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     public String getInitials() {
@@ -86,16 +83,20 @@ public class RealmContacts extends RealmObject {
         this.color = color;
     }
 
-    public long getLast_seen() {
-        return last_seen;
-    }
-
-    public void setLast_seen(long last_seen) {
-        this.last_seen = last_seen;
-    }
-
     public String getStatus() {
         return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public int getLastSeen() {
+        return lastSeen;
+    }
+
+    public void setLastSeen(int lastSeen) {
+        this.lastSeen = lastSeen;
     }
 
     public int getAvatarCount() {

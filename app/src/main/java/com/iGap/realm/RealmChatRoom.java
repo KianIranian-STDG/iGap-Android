@@ -29,7 +29,7 @@ public class RealmChatRoom extends RealmObject {
         if (realmChatRoom == null) {
             realmChatRoom = realm.createObject(RealmChatRoom.class);
         }
-        realmChatRoom.setPeerId(room.getPeerId());
+        realmChatRoom.setPeerId(room.getPeer().getId());
         return realmChatRoom;
     }
 }
