@@ -5,7 +5,7 @@ import android.os.Parcelable;
 import android.support.annotation.Nullable;
 
 import com.iGap.proto.ProtoGlobal;
-import com.iGap.realm.RealmMessageAttachment;
+import com.iGap.realm.RealmAttachment;
 
 import java.io.File;
 
@@ -36,22 +36,22 @@ public class StructMessageAttachment implements Parcelable {
     public void setLocalFilePath(final long messageId, @Nullable final String path) {
         this.localFilePath = path;
         Realm realm = Realm.getDefaultInstance();
-        final RealmMessageAttachment realmMessageAttachment = realm.where(RealmMessageAttachment.class).equalTo("messageId", messageId).findFirst();
-        if (realmMessageAttachment == null) {
+        final RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo("id", messageId).findFirst();
+        if (realmAttachment == null) {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
-                    RealmMessageAttachment messageAttachment = realm.createObject(RealmMessageAttachment.class);
+                    RealmAttachment messageAttachment = realm.createObject(RealmAttachment.class);
                     messageAttachment.setLocalFilePath(path);
-                    messageAttachment.setMessageId(messageId);
+                    messageAttachment.setId(messageId);
                 }
             });
         } else {
-            if (realmMessageAttachment.getLocalFilePath() == null) {
+            if (realmAttachment.getLocalFilePath() == null) {
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-                        realmMessageAttachment.setLocalFilePath(path);
+                        realmAttachment.setLocalFilePath(path);
                     }
                 });
             }
@@ -67,22 +67,22 @@ public class StructMessageAttachment implements Parcelable {
     public void setLocalThumbnailPath(final long messageId, @Nullable final String localPath) {
         this.localThumbnailPath = localPath;
         Realm realm = Realm.getDefaultInstance();
-        final RealmMessageAttachment realmMessageAttachment = realm.where(RealmMessageAttachment.class).equalTo("messageId", messageId).findFirst();
-        if (realmMessageAttachment == null) {
+        final RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo("id", messageId).findFirst();
+        if (realmAttachment == null) {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
-                    RealmMessageAttachment messageAttachment = realm.createObject(RealmMessageAttachment.class);
+                    RealmAttachment messageAttachment = realm.createObject(RealmAttachment.class);
                     messageAttachment.setLocalThumbnailPath(localPath);
-                    messageAttachment.setMessageId(messageId);
+                    messageAttachment.setId(messageId);
                 }
             });
         } else {
-            if (realmMessageAttachment.getLocalThumbnailPath() == null) {
+            if (realmAttachment.getLocalThumbnailPath() == null) {
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-                        realmMessageAttachment.setLocalThumbnailPath(localPath);
+                        realmAttachment.setLocalThumbnailPath(localPath);
                     }
                 });
             }
@@ -118,7 +118,7 @@ public class StructMessageAttachment implements Parcelable {
         return new StructMessageAttachment(attachment.getToken(), attachment.getName(), attachment.getSize(), attachment.getWidth(), attachment.getHeight(), attachment.getDuration(), null, null, StructMessageThumbnail.convert(attachment.getLargeThumbnail()), StructMessageThumbnail.convert(attachment.getSmallThumbnail()));
     }
 
-    public static StructMessageAttachment convert(RealmMessageAttachment attachment) {
+    public static StructMessageAttachment convert(RealmAttachment attachment) {
         if (attachment == null) {
             return new StructMessageAttachment();
         }

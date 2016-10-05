@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.iGap.proto.ProtoGlobal;
-import com.iGap.realm.RealmMessageThumbnail;
+import com.iGap.realm.RealmThumbnail;
 
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/29/2016.
@@ -24,7 +24,7 @@ public class StructMessageThumbnail implements Parcelable {
         return new StructMessageThumbnail(thumbnail.getSize(), thumbnail.getWidth(), thumbnail.getHeight(), thumbnail.getCacheId());
     }
 
-    public static StructMessageThumbnail convert(RealmMessageThumbnail thumbnail) {
+    public static StructMessageThumbnail convert(RealmThumbnail thumbnail) {
         if (thumbnail == null) {
             return new StructMessageThumbnail();
         }

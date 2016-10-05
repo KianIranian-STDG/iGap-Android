@@ -13,6 +13,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -90,9 +91,11 @@ import com.iGap.interface_package.OnFileDownloadResponse;
 import com.iGap.interface_package.OnFileUpload;
 import com.iGap.interface_package.OnFileUploadStatusResponse;
 import com.iGap.interface_package.OnMessageViewClick;
+import com.iGap.interface_package.OnUserInfoResponse;
 import com.iGap.interface_package.OnVoiceRecord;
 import com.iGap.module.AttachFile;
 import com.iGap.module.ChatSendMessageUtil;
+import com.iGap.module.ContactUtils;
 import com.iGap.module.EmojiEditText;
 import com.iGap.module.EmojiPopup;
 import com.iGap.module.EmojiRecentsManager;
@@ -117,18 +120,19 @@ import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoFileUploadStatus;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
+import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmChannelRoom;
 import com.iGap.realm.RealmChatHistory;
 import com.iGap.realm.RealmChatRoom;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmContacts;
 import com.iGap.realm.RealmGroupRoom;
-import com.iGap.realm.RealmMessageAttachment;
 import com.iGap.realm.RealmOfflineDelete;
 import com.iGap.realm.RealmOfflineEdited;
 import com.iGap.realm.RealmOfflineSeen;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomMessage;
+import com.iGap.realm.RealmRoomMessageContact;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.realm.enums.ChannelChatRole;
 import com.iGap.realm.enums.GroupChatRole;
@@ -164,7 +168,7 @@ import io.realm.RealmResults;
 /**
  * Created by android3 on 8/5/2016.
  */
-public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, IRecentsLongClick, OnMessageViewClick, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractChatItem>, OnChatMessageRemove, OnFileUpload, OnFileUploadStatusResponse, OnFileDownloadResponse, OnVoiceRecord {
+public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, IRecentsLongClick, OnMessageViewClick, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractChatItem>, OnChatMessageRemove, OnFileUpload, OnFileUploadStatusResponse, OnFileDownloadResponse, OnVoiceRecord, OnUserInfoResponse {
 
     private RelativeLayout parentLayout;
     private SharedPreferences sharedPreferences;
@@ -380,6 +384,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         G.uploaderUtil.setActivityCallbacks(this);
         G.onFileUploadStatusResponse = this;
         G.onFileDownloadResponse = this;
+        G.onUserInfoResponse = this;
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -1553,12 +1558,20 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     Log.e("ddd", data.getData() + "    pic file path");
                     break;
                 case AttachFile.request_code_contact_phone:
-                    filePath = data.getData().getPath();
-                    fileName = new File(filePath).getName();
-                    fileSize = new File(filePath).length();
+                    ContactUtils contactUtils = new ContactUtils(getApplicationContext(), data.getData());
+                    String name = contactUtils.retrieveName();
+                    String firstName = name;
+                    String lastName = name;
+                    String number = contactUtils.retrieveNumber();
+                    String username = "username";
+                    Uri imageUri = contactUtils.getPhotoUri();
+                    String image = null;
+                    if (imageUri != null) {
+                        image = imageUri.toString();
+                    }
                     messageType = ProtoGlobal.RoomMessageType.CONTACT;
-                    // TODO: 9/15/2016 [Alireza Eskandarpour Shoferi] implement
-                    Log.e("ddd", filePath + "   contact phone");
+
+                    messageInfo = StructMessageInfo.buildForContact(messageId, senderID, MyType.SendType.send, updateTime, ProtoGlobal.RoomMessageStatus.SENDING, image, username, firstName,lastName, number, userTriesReplay() ? mReplayLayout.getTag() : null);
                     break;
                 case AttachFile.request_code_paint:
                     filePath = data.getData().getPath();
@@ -1603,21 +1616,42 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     roomMessage.setUserId(senderID);
                     roomMessage.setUpdateTime((int) (updateTime / DateUtils.SECOND_IN_MILLIS));
 
+                    if (finalMessageType == ProtoGlobal.RoomMessageType.CONTACT) {
+                        RealmRoomMessageContact realmRoomMessageContact = realm.createObject(RealmRoomMessageContact.class);
+                        realmRoomMessageContact.setFirstName(finalMessageInfo.userInfo.firstName);
+                        realmRoomMessageContact.setLastName(finalMessageInfo.userInfo.lastName);
+                        realmRoomMessageContact.addPhone(finalMessageInfo.userInfo.phone);
+                        roomMessage.setRoomMessageContact(realmRoomMessageContact);
+                    }
+
                     // TODO: 9/26/2016 [Alireza Eskandarpour Shoferi] user may wants to send a file in response to a message as replay, so after server done creating replay and forward options, modify this section and sending message as well.
 
                     chatHistory.setId(System.currentTimeMillis());
                     chatHistory.setRoomId(mRoomId);
                     chatHistory.setRoomMessage(roomMessage);
 
-                    finalMessageInfo.attachment = StructMessageAttachment.convert(roomMessage.getAttachment());
+                    if (finalMessageType != ProtoGlobal.RoomMessageType.CONTACT) {
+                        finalMessageInfo.attachment = StructMessageAttachment.convert(roomMessage.getAttachment());
+                    }
 
                     switchAddItem(new ArrayList<>(Arrays.asList(finalMessageInfo)), false);
+
+                    if (finalFilePath != null) {
+                        new UploadTask().execute(finalFilePath, messageId, finalMessageType, mRoomId, getWrittenMessage());
+                    } else {
+                        ChatSendMessageUtil messageUtil = new ChatSendMessageUtil()
+                                .newBuilder(chatType, finalMessageType, mRoomId)
+                                .message(getWrittenMessage());
+                        if (finalMessageType == ProtoGlobal.RoomMessageType.CONTACT) {
+                            // FIXME: 10/5/2016 [Alireza] retrieve last name
+                            messageUtil.contact(finalMessageInfo.userInfo.firstName, finalMessageInfo.userInfo.lastName, finalMessageInfo.userInfo.phone);
+                        }
+                        messageUtil.sendMessage(Long.toString(messageId));
+                    }
                 }
             });
 
             realm.close();
-
-            new UploadTask().execute(filePath, messageId, messageType, mRoomId, getWrittenMessage());
 
             scrollToEnd();
         }
@@ -2092,7 +2126,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             for (RealmChatHistory chatHistory : chatHistories) {
                 if (chatHistory.getRoomMessage() != null) {
                     if (chatHistory.getRoomMessage().getMessageType().equals(ProtoGlobal.RoomMessageType.IMAGE.toString())) {
-                        RealmMessageAttachment attachment = chatHistory.getRoomMessage().getAttachment();
+                        RealmAttachment attachment = chatHistory.getRoomMessage().getAttachment();
                         StructSharedMedia item = new StructSharedMedia();
                         item.filePath = attachment.getLocalFilePath();
                         item.fileName = attachment.getName();
@@ -2558,6 +2592,11 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
     @Override
     public void onVoiceRecordCancel() {
+
+    }
+
+    @Override
+    public void onUserInfo(final ProtoGlobal.RegisteredUser user, ProtoResponse.Response response) {
 
     }
 

@@ -10,7 +10,6 @@ import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
 import android.widget.RemoteViews;
 
-import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activitys.ActivityChat;
 import com.iGap.activitys.ActivityMain;
@@ -34,6 +33,7 @@ public class HelperNotificationAndBadge {
     private boolean isFromOnRoom = true;
     private long roomId = 0;
     private long senderId = 0;
+    private Context mContext;
 
 
     private NotificationManager notificationManager;
@@ -42,9 +42,10 @@ public class HelperNotificationAndBadge {
     private RemoteViews remoteViews;
 
 
-    public HelperNotificationAndBadge() {
-        notificationManager = (NotificationManager) G.context.getSystemService(Context.NOTIFICATION_SERVICE);
-        remoteViews = new RemoteViews(G.context.getPackageName(), R.layout.layout_notification);
+    public HelperNotificationAndBadge(Context context) {
+        mContext = context;
+        notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        remoteViews = new RemoteViews(context.getPackageName(), R.layout.layout_notification);
     }
 
     //*****************************************************************************************   notification ***********************
@@ -84,17 +85,17 @@ public class HelperNotificationAndBadge {
         PendingIntent pi;
 
         if (isFromOnRoom) {
-            Intent intent = new Intent(G.context, ActivityChat.class);
+            Intent intent = new Intent(mContext, ActivityChat.class);
             intent.putExtra("RoomId", roomId);
-            pi = PendingIntent.getActivity(G.context, 10, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            pi = PendingIntent.getActivity(mContext, 10, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         } else {
-            pi = PendingIntent.getActivity(G.context, 10, new Intent(G.context, ActivityMain.class), PendingIntent.FLAG_UPDATE_CURRENT);
+            pi = PendingIntent.getActivity(mContext, 10, new Intent(mContext, ActivityMain.class), PendingIntent.FLAG_UPDATE_CURRENT);
         }
 
         setRemoteViews();
 
-        notification = new NotificationCompat.Builder(G.context)
+        notification = new NotificationCompat.Builder(mContext)
                 .setTicker(" you have New Message ")
                 .setSmallIcon(R.mipmap.logo)
                 .setContentTitle("my notification")
@@ -146,12 +147,12 @@ public class HelperNotificationAndBadge {
             if (updateNotification) {
                 notificationManager.cancel(notificationId);
             }
-            ShortcutBadger.applyCount(G.context, 0);
+            ShortcutBadger.applyCount(mContext, 0);
         } else {
             if (updateNotification) {
                 setNotification();
             }
-            ShortcutBadger.applyCount(G.context, unreadMessageCount);
+            ShortcutBadger.applyCount(mContext, unreadMessageCount);
         }
     }
 

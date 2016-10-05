@@ -58,6 +58,24 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
         return this;
     }
 
+    public ChatSendMessageUtil contact(String firstName, String lastName, String phoneNumber) {
+        ProtoGlobal.RoomMessageContact.Builder value = ProtoGlobal.RoomMessageContact.newBuilder();
+        value.setFirstName(firstName);
+        value.setLastName(lastName);
+        //value.addEmail();
+        //value.setNickname();
+        value.addPhone(phoneNumber);
+
+        ProtoGlobal.RoomMessageContact built = value.build();
+
+        if (roomType == ProtoGlobal.Room.Type.CHAT) {
+            requestChatSendMessage.contact(built);
+        } else if (roomType == ProtoGlobal.Room.Type.GROUP) {
+            requestGroupSendMessage.contact(built);
+        }
+        return this;
+    }
+
     public ChatSendMessageUtil location(ProtoGlobal.RoomMessageLocation value) {
         if (roomType == ProtoGlobal.Room.Type.CHAT) {
             requestChatSendMessage.location(value);

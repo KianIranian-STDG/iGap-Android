@@ -338,7 +338,28 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
         }
         ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
         if (mMessage.attachment.getLocalFilePath() == null || mMessage.attachment.getLocalFilePath().isEmpty()) {
-            mMessage.attachment.setLocalFilePath(Long.parseLong(mMessage.messageID), Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + mMessage.downloadAttachment.token + System.nanoTime() + mMessage.attachment.name);
+            String basePath = "";
+            switch (mMessage.messageType) {
+                case AUDIO:
+                case AUDIO_TEXT:
+                case VOICE:
+                    basePath = G.DIR_AUDIOS;
+                    break;
+                case FILE:
+                case FILE_TEXT:
+                    basePath = G.DIR_DOCUMENT;
+                    break;
+                case IMAGE:
+                case IMAGE_TEXT:
+                    basePath = G.DIR_IMAGES;
+                    break;
+                case VIDEO:
+                case VIDEO_TEXT:
+                    basePath = G.DIR_VIDEOS;
+                    break;
+
+            }
+            mMessage.attachment.setLocalFilePath(Long.parseLong(mMessage.messageID), basePath + "/" + mMessage.downloadAttachment.token + System.nanoTime() + mMessage.attachment.name);
         }
         String identity = mMessage.downloadAttachment.token + '*' + selector.toString() + '*' + mMessage.attachment.size + '*' + mMessage.attachment.getLocalFilePath() + '*' + mMessage.downloadAttachment.offset;
 

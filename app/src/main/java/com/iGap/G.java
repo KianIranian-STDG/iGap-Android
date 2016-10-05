@@ -47,6 +47,7 @@ import com.iGap.interface_package.OnUserContactDelete;
 import com.iGap.interface_package.OnUserContactEdit;
 import com.iGap.interface_package.OnUserContactGetList;
 import com.iGap.interface_package.OnUserContactImport;
+import com.iGap.interface_package.OnUserInfoResponse;
 import com.iGap.interface_package.OnUserLogin;
 import com.iGap.interface_package.OnUserProfileGetEmail;
 import com.iGap.interface_package.OnUserProfileGetGender;
@@ -200,6 +201,7 @@ public class G extends Application {
     public static OnGroupKickModerator onGroupKickModerator;
     public static OnGroupLeft onGroupLeft;
     public static OnFileDownloadResponse onFileDownloadResponse;
+    public static OnUserInfoResponse onUserInfoResponse;
 
     public static final String DIR_SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static final String DIR_APP = DIR_SDCARD + "/iGap";
@@ -263,7 +265,7 @@ public class G extends Application {
         handler = new Handler();
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        helperNotificationAndBadge = new HelperNotificationAndBadge();
+        helperNotificationAndBadge = new HelperNotificationAndBadge(this);
 
         HelperFillLookUpClass.fillLookUpClassArray();
         fillUnSecureList();

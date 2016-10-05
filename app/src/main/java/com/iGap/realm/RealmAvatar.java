@@ -4,12 +4,14 @@ import com.iGap.proto.ProtoGlobal;
 
 import io.realm.Realm;
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 
 public class RealmAvatar extends RealmObject {
 
+    @PrimaryKey
     private long id;
-    private RealmFileAvatar file;
+    private RealmAttachment file;
 
     public long getId() {
         return id;
@@ -19,11 +21,11 @@ public class RealmAvatar extends RealmObject {
         this.id = id;
     }
 
-    public RealmFileAvatar getFile() {
+    public RealmAttachment getFile() {
         return file;
     }
 
-    public void setFile(RealmFileAvatar file) {
+    public void setFile(RealmAttachment file) {
         this.file = file;
     }
 
@@ -45,6 +47,7 @@ public class RealmAvatar extends RealmObject {
         //small thumbnail
         ProtoGlobal.Thumbnail smallThumbnail = file.getSmallThumbnail();
         RealmThumbnail realmThumbnailSmall = realm.createObject(RealmThumbnail.class);
+        realmThumbnailSmall.setId(System.nanoTime());
         realmThumbnailSmall.setSize(smallThumbnail.getSize());
         realmThumbnailSmall.setWidth(smallThumbnail.getWidth());
         realmThumbnailSmall.setHeight(smallThumbnail.getHeight());
@@ -53,27 +56,19 @@ public class RealmAvatar extends RealmObject {
         //large thumbnail
         ProtoGlobal.Thumbnail largeThumbnail = file.getLargeThumbnail();
         RealmThumbnail realmThumbnailLarge = realm.createObject(RealmThumbnail.class);
+        realmThumbnailLarge.setId(System.nanoTime());
         realmThumbnailLarge.setSize(largeThumbnail.getSize());
         realmThumbnailLarge.setWidth(largeThumbnail.getWidth());
         realmThumbnailLarge.setHeight(largeThumbnail.getHeight());
         realmThumbnailLarge.setCacheId(largeThumbnail.getCacheId());
 
         //File info for avatar
-        RealmFileAvatar realmFileAvatar = realm.createObject(RealmFileAvatar.class);
-        realmFileAvatar.setToken(file.getToken());
-        realmFileAvatar.setName(file.getName());
-        realmFileAvatar.setSize(file.getSize());
-        realmFileAvatar.setLargeThumbnail(realmThumbnailLarge);
-        realmFileAvatar.setSmallThumbnail(realmThumbnailSmall);
-        realmFileAvatar.setWidth(file.getWidth());
-        realmFileAvatar.setHeight(file.getHeight());
-        realmFileAvatar.setDuration(file.getDuration());
-        realmFileAvatar.setCatchId(file.getCacheId());
-
-        //set info in avatar
-        realmAvatar = realm.createObject(RealmAvatar.class);
-        realmAvatar.setId(room.getId());
-        realmAvatar.setFile(realmFileAvatar);
+        RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo("id", room.getId()).findFirst();
+        if (realmAvatar == null) {
+            realmAvatar = realm.createObject(RealmAvatar.class);
+            realmAvatar.setId(room.getId());
+        }
+        realmAvatar.setFile(RealmAttachment.build(file));
 
         return realmAvatar;
     }

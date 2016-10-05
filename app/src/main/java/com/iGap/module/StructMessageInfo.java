@@ -184,6 +184,27 @@ public class StructMessageInfo implements Parcelable {
     public int uploadProgress;
     public StructMessageAttachment attachment;
     public StructDownloadAttachment downloadAttachment;
+    public StructRegisteredInfo userInfo;
+
+    public static StructMessageInfo buildForContact(long messageID, long senderID, MyType.SendType sendType, long time, ProtoGlobal.RoomMessageStatus status, String avatar, String username, String firstName, String lastName, String number, Object replayObject) {
+        StructMessageInfo info = new StructMessageInfo();
+
+        info.messageID = Long.toString(messageID);
+        info.senderID = Long.toString(senderID);
+        info.status = status.toString();
+        info.messageType = ProtoGlobal.RoomMessageType.CONTACT;
+        info.sendType = sendType;
+        info.time = time;
+        if (replayObject != null && replayObject instanceof StructMessageInfo) {
+            info.replayFrom = ((StructMessageInfo) replayObject).senderName;
+            info.replayPicturePath = ((StructMessageInfo) replayObject).filePic;
+            info.replayMessage = ((StructMessageInfo) replayObject).messageText;
+        }
+
+        // contact exclusive
+        info.userInfo = new StructRegisteredInfo(lastName,firstName,number,username,senderID);
+        return info;
+    }
 
     public StructMessageAttachment getAttachment() {
         return attachment;
@@ -242,6 +263,7 @@ public class StructMessageInfo implements Parcelable {
         } else if (roomMessage.getUserId() != userId) {
             messageInfo.sendType = MyType.SendType.recvive;
         }
+        messageInfo.userInfo = StructRegisteredInfo.build(roomMessage.getRoomMessageContact());
         return messageInfo;
     }
 

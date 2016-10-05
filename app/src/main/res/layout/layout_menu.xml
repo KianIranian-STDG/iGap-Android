@@ -22,11 +22,11 @@
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="200dp"
                     android:layout_marginRight="@dimen/dp8"
                     android:adjustViewBounds="true"
                     android:scaleType="centerCrop"
-                    android:src="@mipmap/contacts_header2" />
+                    android:src="@mipmap/back_phone" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

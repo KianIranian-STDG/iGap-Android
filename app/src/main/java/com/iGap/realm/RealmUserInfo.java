@@ -2,11 +2,13 @@ package com.iGap.realm;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 public class RealmUserInfo extends RealmObject {
 
-    private boolean registrationStatus;
+    @PrimaryKey
     private long userId;
+    private boolean registrationStatus;
     private String userName;
     private String countryISOCode;
     private String email;

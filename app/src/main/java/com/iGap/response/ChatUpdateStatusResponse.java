@@ -40,7 +40,7 @@ public class ChatUpdateStatusResponse extends MessageHandler {
             @Override
             public void execute(Realm realm) {
                 if (!response.getId().isEmpty()) { // I'm sender
-                    Log.i("CLI", "chatUpdateStatus getMessageId : " + chatUpdateStatus.getMessageId());
+                    Log.i("CLI", "chatUpdateStatus getId : " + chatUpdateStatus.getMessageId());
                     RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", chatUpdateStatus.getRoomId()).findFirst();
                     // RealmList<RealmOfflineSeen> offlineSeen = realmClientCondition.getOfflineSeen();
                     for (RealmOfflineSeen realmOfflineSeen : realmClientCondition.getOfflineSeen()) {
