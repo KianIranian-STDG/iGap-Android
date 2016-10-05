@@ -1,6 +1,7 @@
 package com.iGap.module;
 
 import com.iGap.proto.ProtoClientGetRoom;
+import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.enums.RoomType;
@@ -25,10 +26,13 @@ public class StructChatInfo {
     public long lastMessageTime;
     public boolean lastMessageSenderIsMe;
     public int unreadMessagesCount = 0;
+    public boolean readOnly;
     public String memberCount = "1";
     public String initials = "";
     public String lastMessageStatus = "";
     public String description = "";
+    public int avatarCount;
+    public RealmAvatar avatar;
 
     public String fileName = "";
     public String fileMime = "";
@@ -53,16 +57,23 @@ public class StructChatInfo {
         chatInfo.chatType = RoomType.convert(builder.getRoom().getType());
         chatInfo.initials = builder.getRoom().getInitials();
         switch (builder.getRoom().getType()) {
-            case CHANNEL:
-                chatInfo.memberCount = builder.getRoom().getChannelRoom().getParticipantsCountLabel();
-                break;
             case CHAT:
                 chatInfo.memberCount = "1";
                 break;
             case GROUP:
                 chatInfo.memberCount = builder.getRoom().getGroupRoom().getParticipantsCountLabel();
+                chatInfo.description = builder.getRoom().getGroupRoom().getDescription();
+                chatInfo.avatarCount = builder.getRoom().getChannelRoom().getAvatarCount();
+                chatInfo.avatar = RealmAvatar.convert(builder.getRoom());
+                break;
+            case CHANNEL:
+                chatInfo.memberCount = builder.getRoom().getChannelRoom().getParticipantsCountLabel();
+                chatInfo.description = builder.getRoom().getChannelRoom().getDescription();
+                chatInfo.avatarCount = builder.getRoom().getGroupRoom().getAvatarCount();
+                chatInfo.avatar = RealmAvatar.convert(builder.getRoom());
                 break;
         }
+        chatInfo.readOnly = builder.getRoom().getReadOnly();
         chatInfo.muteNotification = false;
         chatInfo.ownerShip = MyType.OwnerShip.member;
         chatInfo.color = builder.getRoom().getColor();

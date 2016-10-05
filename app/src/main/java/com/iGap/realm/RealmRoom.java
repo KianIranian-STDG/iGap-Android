@@ -29,6 +29,7 @@ public class RealmRoom extends RealmObject {
     private long lastMessageTime;
     private String lastMessage;
     private String lastMessageStatus;
+    private RealmAvatar avatar;
 
     public long getLastMessageTime() {
         return lastMessageTime;
@@ -94,6 +95,14 @@ public class RealmRoom extends RealmObject {
         this.unread_count = unread_count;
     }
 
+    public boolean getReadOnly() {
+        return readOnly;
+    }
+
+    public void setReadOnly(boolean readOnly) {
+        this.readOnly = readOnly;
+    }
+
     public boolean getMute() {
         return mute;
     }
@@ -142,6 +151,14 @@ public class RealmRoom extends RealmObject {
         this.lastMessageStatus = lastMessageStatus;
     }
 
+    public RealmAvatar getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(RealmAvatar avatar) {
+        this.avatar = avatar;
+    }
+
     /**
      * convert ProtoGlobal.Room to RealmRoom for saving into database
      *
@@ -161,11 +178,13 @@ public class RealmRoom extends RealmObject {
         realmRoom.setTitle(room.getTitle());
         realmRoom.setType(RoomType.convert(room.getType()));
         realmRoom.setUnreadCount(room.getUnreadCount());
+        realmRoom.setReadOnly(room.getReadOnly());
         realmRoom.setMute(false); //TODO [Saeed Mozaffari] [2016-09-07 9:59 AM] - agar mute ro az server gereftim be jaye false sabt mikonim
         switch (room.getType()) {
             case CHANNEL:
                 realmRoom.setType(RoomType.CHANNEL);
                 realmRoom.setChannelRoom(RealmChannelRoom.convert(room.getChannelRoom(), realmRoom.getChannelRoom(), realm));
+                realmRoom.setAvatar(RealmAvatar.convert(room, realm));
                 break;
             case CHAT:
                 realmRoom.setType(RoomType.CHAT);
@@ -175,6 +194,7 @@ public class RealmRoom extends RealmObject {
                 realmRoom.setType(RoomType.GROUP);
                 realmRoom.setGroupRoom(RealmGroupRoom.convert(room.getGroupRoom(), realmRoom.getGroupRoom(), realm));
                 realmRoom.getGroupRoom().setDescription(room.getGroupRoom().getDescription());
+                realmRoom.setAvatar(RealmAvatar.convert(room, realm));
                 break;
         }
         realmRoom.setLastMessageTime(room.getLastMessage().getUpdateTime());

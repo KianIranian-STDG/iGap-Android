@@ -13,6 +13,7 @@ public class RealmGroupRoom extends RealmObject {
     private String participants_count_label;
     private String description;
     private int avatarCount;
+    private RealmAvatar avatar;
     private RealmList<RealmMember> members; //TODO [Saeed Mozaffari] [2016-10-04 2:41 PM] - RealmMember joda shavad
 
     public GroupChatRole getRole() {
@@ -45,6 +46,14 @@ public class RealmGroupRoom extends RealmObject {
 
     public void setAvatarCount(int avatarCount) {
         this.avatarCount = avatarCount;
+    }
+
+    public RealmAvatar getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(RealmAvatar avatar) {
+        this.avatar = avatar;
     }
 
     public RealmList<RealmMember> getMembers() {

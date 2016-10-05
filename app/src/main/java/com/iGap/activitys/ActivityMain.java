@@ -53,6 +53,7 @@ import com.iGap.module.StructChatInfo;
 import com.iGap.proto.ProtoClientGetRoom;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
+import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmChatHistory;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmOfflineDelete;
@@ -115,15 +116,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         initDrawerMenu();
 
         Contacts.FillRealmInviteFriend();
-
-
-        //*******************add count badgeIcon //TODO [Saeed Mozaffari] [2016-10-01 11:59 AM] - i received exception for badge update  (( me.leolin.shortcutbadger.ShortcutBadgeException: unable to resolve intent: Intent { act=android.intent.action.BADGE_COUNT_UPDATE (has extras) } ))
-        //int badgeCount = 15;
-        //ShortcutBadger.applyCount(G.context, badgeCount);
-
-
-        //*******************remove count badgeIcon
-//        ShortcutBadger.removeCount(context);
     }
 
     /**
@@ -668,6 +660,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         }, 1000);
     }
 
+    //TODO [Saeed Mozaffari] [2016-10-05 9:47 AM] - in execute Transaction for realmAvatar
     private void getChatsList() {
 
         G.onClientGetRoomListResponse = new OnClientGetRoomListResponse() {
@@ -694,6 +687,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                             info.chatTitle = room.getTitle();
                             info.initials = room.getInitials();
                             info.unreadMessagesCount = room.getUnreadCount();
+                            info.readOnly = room.getReadOnly();
                             switch (room.getType()) {
                                 case CHAT:
                                     info.chatType = RoomType.CHAT;
@@ -701,11 +695,16 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                                 case CHANNEL:
                                     info.chatType = RoomType.CHANNEL;
                                     info.memberCount = room.getChannelRoom().getParticipantsCountLabel();
+                                    info.description = room.getChannelRoom().getDescription();
+                                    info.avatarCount = room.getChannelRoom().getAvatarCount();
+                                    info.avatar = RealmAvatar.convert(room);
                                     break;
                                 case GROUP:
                                     info.chatType = RoomType.GROUP;
                                     info.memberCount = room.getGroupRoom().getParticipantsCountLabel();
                                     info.description = room.getGroupRoom().getDescription();
+                                    info.avatarCount = room.getGroupRoom().getAvatarCount();
+                                    info.avatar = RealmAvatar.convert(room);
                                     break;
                             }
 
@@ -1040,25 +1039,28 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             info.chatId = realmRoom.getId();
             info.chatTitle = realmRoom.getTitle();
             info.initials = realmRoom.getInitials();
+            info.readOnly = realmRoom.getReadOnly();
+            info.avatar = realmRoom.getAvatar();
             switch (realmRoom.getType()) {
                 case CHAT:
                     info.chatType = RoomType.CHAT;
-                    info.memberCount = "1";
                     break;
                 case CHANNEL:
                     info.chatType = RoomType.CHANNEL;
                     info.memberCount = realmRoom.getChannelRoom().getParticipantsCountLabel();
+                    info.description = realmRoom.getChannelRoom().getDescription();
+                    info.avatarCount = realmRoom.getChannelRoom().getAvatarCount();
+                    info.avatar = realmRoom.getChannelRoom().getAvatar();
                     break;
                 case GROUP:
                     info.chatType = RoomType.GROUP;
                     info.memberCount = realmRoom.getGroupRoom().getParticipantsCountLabel();
                     info.description = realmRoom.getGroupRoom().getDescription();
+                    info.avatarCount = realmRoom.getGroupRoom().getAvatarCount();
+                    info.avatar = realmRoom.getGroupRoom().getAvatar();
                     break;
             }
             info.color = realmRoom.getColor();
-            Log.i("BBBBC", "Realm Reading getUnreadCount : " + realmRoom.getUnreadCount());
-            Log.i("BBBB", "Realm Reading getLastMessage : " + realmRoom.getLastMessage());
-            Log.i("BBBA", "Realm Reading lastMessageStatus : " + realmRoom.getLastMessageStatus());
             info.lastmessage = realmRoom.getLastMessage();
             info.lastMessageTime = realmRoom.getLastMessageTime();
             info.lastMessageStatus = realmRoom.getLastMessageStatus();
@@ -1142,8 +1144,8 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         chatInfo.lastMessageTime = room.getLastMessageTime(); //TODO [Saeed Mozaffari] [2016-10-03 5:38 PM] -  see this code later for avoid from multiple calling lastMessageTime and lastMessage and lastMessageStatus
         chatInfo.lastmessage = room.getLastMessage();
         chatInfo.lastMessageStatus = room.getLastMessageStatus();
-        Log.i("BBBA", " convertToChatItem : " + room.getLastMessageStatus());
-        Log.i("BBBA", "convertToChatItem getUnreadCount : " + room.getUnreadCount());
+        chatInfo.readOnly = room.getReadOnly();
+        chatInfo.avatar = room.getAvatar();
         RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", room.getLastMessageId()).findFirst();
         if (roomMessage != null) {
             chatInfo.lastMessageTime = roomMessage.getUpdateTime();
@@ -1160,9 +1162,14 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             case GROUP:
                 chatInfo.memberCount = room.getGroupRoom().getParticipantsCountLabel();
                 chatInfo.description = room.getGroupRoom().getDescription();
+                chatInfo.avatarCount = room.getGroupRoom().getAvatarCount();
+                chatInfo.avatar = room.getGroupRoom().getAvatar();
                 break;
             case CHANNEL:
                 chatInfo.memberCount = room.getChannelRoom().getParticipantsCountLabel();
+                chatInfo.description = room.getChannelRoom().getDescription();
+                chatInfo.avatarCount = room.getChannelRoom().getAvatarCount();
+                chatInfo.avatar = room.getChannelRoom().getAvatar();
                 break;
         }
         chatInfo.muteNotification = room.getMute();
