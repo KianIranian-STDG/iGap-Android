@@ -44,6 +44,15 @@ public class HelperFillLookUpClass {
         G.lookupMap.put(30112, "ProtoUserProfileGetNickname.UserProfileGetNicknameResponse");
         G.lookupMap.put(113, "UserUsernameToId");
         G.lookupMap.put(30113, "ProtoUserUsernameToId.UserUsernameToIdResponse");
+        G.lookupMap.put(114, "UserAvatarAdd");
+        G.lookupMap.put(30114, "ProtoUserAvatarAdd.UserAvatarAddResponse");
+        G.lookupMap.put(115, "UserAvatarDelete");
+        G.lookupMap.put(30115, "ProtoUserAvatarDelete.UserAvatarDeleteResponse");
+        G.lookupMap.put(116, "UserAvatarGetList");
+        G.lookupMap.put(30116, "ProtoUserAvatarGetList.UserAvatarGetListResponse");
+        G.lookupMap.put(117, "UserInfo");
+        G.lookupMap.put(30117, "ProtoUserInfo.UserInfoResponse");
+
 
         // Chat 2xx , 302xx
         G.lookupMap.put(200, "Chat.GetRoom");
@@ -86,6 +95,13 @@ public class HelperFillLookUpClass {
         G.lookupMap.put(30310, "ProtoGroupSendMessage.GroupSendMessageResponse");
         G.lookupMap.put(311, "GroupUpdateStatus");
         G.lookupMap.put(30311, "ProtoGroupUpdateStatus.GroupUpdateStatusResponse");
+
+        G.lookupMap.put(312, "GroupAvatarAdd");
+        G.lookupMap.put(30312, "ProtoGroupAvatarAdd.GroupAvatarAddResponse");
+        G.lookupMap.put(313, "GroupAvatarDelete");
+        G.lookupMap.put(30313, "ProtoGroupAvatarDelete.GroupAvatarDeleteResponse");
+        G.lookupMap.put(314, "GroupAvatarGetList");
+        G.lookupMap.put(30314, "ProtoGroupAvatarGetList.GroupAvatarGetListResponse");
 
         // Info 5xx , 305xx
         G.lookupMap.put(500, "Info.Location");

@@ -2,7 +2,7 @@ package com.iGap.response;
 
 import android.util.Log;
 
-public abstract class MessageHandler { //TODO [Saeed Mozaffari] [2016-09-01 9:47 AM] - MessageHandler extends from ActivityEnhanced for instance and close realm, test it
+public abstract class MessageHandler {
 
     int actionId;
     public Object message;
