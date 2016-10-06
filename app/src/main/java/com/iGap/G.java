@@ -265,7 +265,7 @@ public class G extends Application {
         handler = new Handler();
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        helperNotificationAndBadge = new HelperNotificationAndBadge(this);
+        helperNotificationAndBadge = new HelperNotificationAndBadge();
 
         HelperFillLookUpClass.fillLookUpClassArray();
         fillUnSecureList();

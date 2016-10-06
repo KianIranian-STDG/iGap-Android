@@ -325,6 +325,8 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
+        G.helperNotificationAndBadge.cancelNotification();
+
         mediaLayout = (LinearLayout) findViewById(R.id.ac_ll_music_layout);
         musicPlayer = new MusicPlayer(mediaLayout);
 

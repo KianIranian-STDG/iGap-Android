@@ -31,6 +31,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <receiver android:name=".module.MusicPlayer$customButtonListener" />
+        <receiver android:name=".helper.HelperNotificationAndBadge$RemoteActionReciver" />
         <activity
             android:name=".activitys.ActivityChat"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
