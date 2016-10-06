@@ -132,53 +132,6 @@ public class ActivityProfileChannel extends AppCompatActivity {
         });
         txtDescription = (TextView) findViewById(R.id.pch_txt_description);
         txtDescription.setMovementMethod(LinkMovementMethod.getInstance());
-        ClickableSpan telMode = new ClickableSpan() {
-            @Override
-            public void onClick(final View v) {
-
-                TextView tv = (TextView) v;
-                if (tv.getText() instanceof Spannable) {
-
-                    String valuesSpan;
-                    Spanned s = (Spanned) tv.getText();
-                    int start = s.getSpanStart(this);
-                    int end = s.getSpanEnd(this);
-                    valuesSpan = s.subSequence(start, end).toString();
-                }
-                new MaterialDialog.Builder(ActivityProfileChannel.this)
-                        .items(R.array.phone_profile_chanel)
-                        .negativeText("CANCEL")
-                        .itemsCallback(new MaterialDialog.ListCallback() {
-                            @Override
-                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                                switch (which) {
-                                    case 0:
-                                        break;
-                                    case 1:
-                                        break;
-                                    case 2:
-                                        break;
-                                }
-                            }
-                        })
-                        .show();
-            }
-        };
-        ClickableSpan emailMode = new ClickableSpan() {
-            @Override
-            public void onClick(View v) {
-
-                // get spanClick values
-                String valuesSpan;
-                TextView tv = (TextView) v;
-                if (tv.getText() instanceof Spannable) {
-                    Spanned s = (Spanned) tv.getText();
-                    int start = s.getSpanStart(this);
-                    int end = s.getSpanEnd(this);
-                    valuesSpan = s.subSequence(start, end).toString();
-                }
-            }
-        };
 
         String a[] = txtDescription.getText().toString().split(" ");
         SpannableStringBuilder builder = new SpannableStringBuilder();
@@ -188,13 +141,55 @@ public class ActivityProfileChannel extends AppCompatActivity {
 
                 wordtoSpan = new SpannableString(a[i]);
                 wordtoSpan.setSpan(new ForegroundColorSpan(Color.BLUE), 0, a[i].length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                wordtoSpan.setSpan(telMode, 0, a[i].length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                wordtoSpan.setSpan(new ClickableSpan() {
+                    @Override
+                    public void onClick(View v) {
+                        TextView tv = (TextView) v;
+                        if (tv.getText() instanceof Spannable) {
+
+                            String valuesSpan;
+                            Spanned s = (Spanned) tv.getText();
+                            int start = s.getSpanStart(this);
+                            int end = s.getSpanEnd(this);
+                            valuesSpan = s.subSequence(start, end).toString();
+                        }
+                        new MaterialDialog.Builder(ActivityProfileChannel.this)
+                                .items(R.array.phone_profile_chanel)
+                                .negativeText("CANCEL")
+                                .itemsCallback(new MaterialDialog.ListCallback() {
+                                    @Override
+                                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                                        switch (which) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                        }
+                                    }
+                                })
+                                .show();
+                    }
+                }, 0, a[i].length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
             } else if (a[i].matches("\\@(\\w+)")) {
 
                 wordtoSpan = new SpannableString(a[i]);
                 wordtoSpan.setSpan(new ForegroundColorSpan(Color.BLUE), 0, a[i].length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                wordtoSpan.setSpan(emailMode, 0, a[i].length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                wordtoSpan.setSpan(new ClickableSpan() {
+                    @Override
+                    public void onClick(View v) {
+                        String valuesSpan;
+                        TextView tv = (TextView) v;
+                        if (tv.getText() instanceof Spannable) {
+                            Spanned s = (Spanned) tv.getText();
+                            int start = s.getSpanStart(this);
+                            int end = s.getSpanEnd(this);
+                            valuesSpan = s.subSequence(start, end).toString();
+                        }
+                    }
+                }, 0, a[i].length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             } else {
                 wordtoSpan = new SpannableString(a[i]);
                 wordtoSpan.setSpan(new ForegroundColorSpan(Color.BLACK), 0, a[i].length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);

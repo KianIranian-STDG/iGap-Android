@@ -193,9 +193,9 @@
     <string name="st_titleToolbar_page_Notification_and_sounds">Message notification</string>
     <string name="st_title_messageNotification">Message notification</string>
     <string name="st_alert">Alert</string>
-    <string name="st_messagePreview">Message Preview</string>
+    <string name="st_messagePreview">پیشنمایش پیغام</string>
     <string name="st_led_color">LED Color</string>
-    <string name="st_vibrate">Vibrate</string>
+    <string name="st_vibrate">ویبره</string>
     <string name="st_popupNotification">Popup Notification</string>
     <string name="st_sound">Sound</string>
     <string name="st_title_groupNotification">Group Notification</string>
@@ -233,6 +233,12 @@
     <string name="chi_popup_delete">Delete</string>
     <string name="chi_popup_shortcut">Add Shortcut</string>
     <string name="hint_search">Search…</string>
+
+    <!--fragment add contact-->
+    <string name="fac_contact_info">اطلاعات تماس</string>
+    <string name="fac_First_Name">نام کوچک</string>
+    <string name="fac_Last_Name">نام خانوادگی</string>
+    <string name="fac_Phone_Number">شماره تماس</string>
 
     <string name="mh_popup_link">Links</string>
     <string name="mh_popup_media">Media</string>

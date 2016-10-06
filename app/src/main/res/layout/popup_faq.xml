@@ -42,7 +42,7 @@
         android:paddingBottom="@dimen/dp16"
         android:paddingLeft="@dimen/dp20"
         android:paddingTop="@dimen/dp8"
-        android:text="Find in Page"
+        android:text="@string/fac_Find_in_Page"
         android:textSize="@dimen/sp20" />
 
     <TextView
@@ -52,7 +52,7 @@
         android:paddingBottom="@dimen/dp16"
         android:paddingLeft="@dimen/dp20"
         android:paddingTop="@dimen/dp4"
-        android:text="Open in Chrome"
+        android:text="@string/fac_Open_in_Chrome"
         android:textSize="@dimen/sp20" />
 
     <View
@@ -67,7 +67,7 @@
         android:paddingBottom="@dimen/dp8"
         android:paddingLeft="@dimen/dp20"
         android:paddingTop="@dimen/dp8"
-        android:text="Powerd by iGap"
+        android:text="@string/fac_Powered_by_iGap"
         android:textSize="@dimen/sp16" />
 
 </LinearLayout>

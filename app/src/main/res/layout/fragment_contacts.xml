@@ -4,7 +4,7 @@
     android:id="@+id/menu_parent_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:attr/windowBackground"
+    android:background="@android:color/white"
     android:layoutDirection="ltr"
     android:orientation="vertical">
 
@@ -58,28 +58,61 @@
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
 
+    <!--<LinearLayout-->
+    <!--android:id="@+id/menu_layout_addContact"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="60dp"-->
+    <!--android:orientation="horizontal"-->
+    <!--android:gravity="center_vertical"-->
+    <!--android:layout_margin="@dimen/dp12">-->
+
+    <!--<ImageView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:src="@mipmap/add_chat_background2"-->
+    <!--android:layout_marginLeft="@dimen/dp32" />-->
+
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:text="Add Contact"-->
+    <!--android:textSize="@dimen/sp16"-->
+    <!--android:textStyle="bold"-->
+    <!--android:textColor="@android:color/black"-->
+    <!--android:gravity="center_vertical" />-->
+
+    <!--</LinearLayout>-->
+
     <LinearLayout
         android:id="@+id/menu_layout_addContact"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp16"
         android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:layout_margin="@dimen/dp12">
+        android:gravity="center"
+        android:paddingEnd="@dimen/dp28"
+        android:paddingLeft="@dimen/dp52"
+        android:paddingRight="@dimen/dp28"
+        android:paddingStart="@dimen/dp52">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@mipmap/add_chat_background2"
-            android:layout_marginLeft="@dimen/dp32" />
+        <com.iGap.module.CircleImageView
+            android:layout_width="@dimen/dp48"
+            android:layout_height="@dimen/dp48"
+            android:src="@mipmap/add_chat_background2" />
 
-        <TextView
-            android:layout_width="wrap_content"
+
+        <com.iGap.module.CustomTextViewMedium
+            android:id="@+id/title"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Add Contact"
-            android:textSize="@dimen/sp20"
-            android:textStyle="bold"
-            android:textColor="@android:color/black"
-            android:gravity="center_vertical" />
+            android:gravity="left|center_vertical"
+            android:singleLine="true"
+            android:text="@string/menu_add_contact"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:textColor="@color/cardview_dark_background"
+            android:textSize="@dimen/sp16"
+            android:layout_marginLeft="@dimen/dp8"
+            android:layout_marginStart="@dimen/dp8" />
 
     </LinearLayout>
 

@@ -92,9 +92,12 @@
     <string name="clear_history">Clear history</string>
     <string name="delete_chat">Delete Chat</string>
     <string name="cancel">Cancel</string>
+    <string name="B_cancel">CANCEL</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="ok">Ok</string>
+    <string name="B_ok">OK</string>
+    <string name="set">SET</string>
 
 
     <string name="am_camera">camera</string>
@@ -118,7 +121,7 @@
     <string name="invite_friend">Invite Friend</string>
     <string name="slide_to_cancel_en"> &lt; Slide to Cancel </string>
 
-    //mo
+    <!--//mo-->
 
     <!--Toolbar-->
 
@@ -136,6 +139,7 @@
     <string name="Re_dialog_message">Double Check that this is your number! we\'re about to verify it an SMS </string>
     <string name="Re_dialog_message_error">The number you specified</string>
     <string name="Re_dialog_message_error2">is invalid</string>
+    <string name="Re_Phone_Verification">Phone Verification</string>
 
 
     <!--check connect to internet Page-->
@@ -163,9 +167,7 @@
 
     <string name="text_line_1_introduce_page2">SECURITY</string>
     <string name="text_line_2_introduce_page2"> The thing is, iGap promises you providing a secure connection with your friends and family. We use all new encryption algorithms to secure your privacy. </string>
-
     <!--page3-->
-
     <string name="text_line_1_introduce_page3">CHAT</string>
     <string name="text_line_2_introduce_page3"> You can chat in private or groups and even create your own channel and add members. </string>
 
@@ -185,11 +187,12 @@
 <![CDATA[ Not to bore you no more! <br /> iGap is all Free. Create your own world just now! ]]>
 </string>
 
-    //profile user
+    <!--//profile user-->
     <string name="pu_title_profileUser">YOUR INFORMATION</string>
     <string name="pu_desc_profileUser">Enter your name and add a profile picture.</string>
     <string name="pu_addPhoto_profileUser">Profile Picture</string>
     <string name="pu_nikname_profileUser">Nickname</string>
+    <string name="pu_Lets_Go">Lets Go</string>
 
 
     <!--REGISTER PAGE-->
@@ -200,6 +203,8 @@
     <string name="rg_verify">Verify your phone number to connect to IGap</string>
     <string name="rg_copy_right_rooyekhat">power by rooyekhat</string>
     <string name="rg_button_register">Register</string>
+    <string name="rg_Start">Start</string>
+    <string name="rg_Select_Country">Select Country</string>
 
     <string name="rg_agreement_title_register">agreement</string>
     <string name="rg_agreement_text_register">
@@ -208,13 +213,12 @@
         Double Check that this is your number! we\'re about to verify it an SMSDouble Check that this is your number!
         Double Check that this is your number! we\'re about to verify it an SMSDouble Check that this is your number!
         Double Check that this is your number! we\'re about to verify it an SMSDouble Check that this is your number!
-        Double Check that this is your number! we\'re about to verify it an SMSDouble Check that this is your number!
-        Double Check that this is your number! we\'re about to verify it an SMSDouble Check that this is your number!
+
     </string>
-    <string name="rg_verify_register1">Connecting...</string>
-    <string name="rg_verify_register2">Waiting for SMS Verification...</string>
-    <string name="rg_verify_register3">Generating Key...</string>
-    <string name="rg_verify_register4">Registering with server...</string>
+    <string name="rg_verify_register1">Connecting&#8230;</string>
+    <string name="rg_verify_register2">Waiting for SMS Verification&#8230;</string>
+    <string name="rg_verify_register3">Generating Key&#8230;</string>
+    <string name="rg_verify_register4">Registering with server&#8230;</string>
 
     <string name="rg_verify_dialog_enter_code">iGap App try to detect sms via your phone but maybe you used other phone or another reason happen app cannot detect number of verification code , you can wrote manually and try or resend again .</string>
     <string name="rg_verify_dialog_try_code">Try</string>
@@ -222,8 +226,11 @@
     <string name="search">rg_search</string>
     <string name="Re_dialog_verify_number_part1">we will Verifying the phone number: \n</string>
     <string name="Re_dialog_verify_number_part2">is this OK , or would you like to edit the number?</string>
+    <string name="Re_Enter_Verify_Code_Please">Enter Verify Code Please</string>
 
     <!--setting-->
+    <string name="st_Info">Info</string>
+    <string name="st_Language">Language</string>
     <string name="st_popupMenu_toolbar_rename">rename</string>
     <string name="st_popupMenu_toolbar_more">Log Out</string>
     <string name="st_titleToolbar">Settings</string>
@@ -304,6 +311,20 @@
     <string name="chi_popup_delete">Delete</string>
     <string name="chi_popup_shortcut">Add Shortcut</string>
     <string name="hint_search">Search…</string>
+    <string name="chi_NEXT_STEP">NEXT STEP</string>
+
+    <!--fragment add contact-->
+    <string name="fac_Add_Contact">Add Contact</string>
+    <string name="fac_contact_info">Contact Info</string>
+    <string name="fac_First_Name">First Name</string>
+    <string name="fac_Last_Name">Last Name</string>
+    <string name="fac_Phone_Number">Phone Number</string>
+
+    <string name="fac_Find_in_Page">Find in Page</string>
+    <string name="fac_Open_in_Chrome">Open in Chrome</string>
+    <string name="fac_Powered_by_iGap">Powered by iGap</string>
+
+    <string name="menu_add_contact">Add Contact</string>
 
     <string name="mh_popup_link">Links</string>
     <string name="mh_popup_media">Media</string>
@@ -324,18 +345,46 @@
     <string name="today">Today</string>
     <string name="yesterday">Yesterday</string>
 
-    <string-array name="pop_up_shared_media">
-        <item>@string/shared_media</item>
-        <item>@string/shared_files</item>
-        <item>@string/shared_links</item>
-        <item>@string/shared_music</item>
-    </string-array>
+    <!--array-->
+    <string name="array_Photo">Photo</string>
+    <string name="array_Voice_Message">Voice_Message</string>
+    <string name="array_Video">Video</string>
+    <string name="array_File">File</string>
+    <string name="array_Music">Photo</string>
+    <string name="array_GIF">GIF</string>
+    <string name="array_Log_Out">Log Out</string>
+    <string name="array_Add_to_Contact">Add to Contact</string>
+    <string name="array_Call">Call</string>
+    <string name="array_Copy">Copy</string>
+    <string name="array_Off">Off</string>
+    <string name="array_No_popup">No popup</string>
+    <string name="array_Only_when_screen_on">Only when screen "on"</string>
+    <string name="array_Only_when_screen_off">Only when screen "off"</string>
+    <string name="array_Always_show_popup">Always show popup</string>
+    <string name="array_Disable">Disable</string>
+    <string name="array_Default">Default</string>
+    <string name="array_Short">Short</string>
+    <string name="array_Long">Long</string>
+    <string name="array_Only_if_silent">Only if silent</string>
+    <string name="array_From_Gallery">From Gallery</string>
+    <string name="array_From_Camera">From Camera</string>
+    <string name="array_Delete_photo">Delete photo</string>
+    <string name="array_5_minutes">5 minutes</string>
+    <string name="array_10_minutes">10 minutes</string>
+    <string name="array_30_minutes">30 minutes</string>
+    <string name="array_1_hour">1 hour</string>
+    <string name="array_2_hour">2 hours</string>
+    <string name="array_4_hour">4 hours</string>
+    <string name="array_Default_Notification_tone">Default Notification tone</string>
 
-    <string-array name="pop_up_menu_show_image">
-        <item>@string/show_all_media</item>
-        <item>@string/save_to_gallery</item>
-        <item>@string/delete_from_gallery</item>
-    </string-array>
+
+    <string name="replay_item_dialog">Replay</string>
+    <string name="copy_item_dialog">Copy</string>
+    <string name="share_item_dialog">Share</string>
+    <string name="forward_item_dialog">Forward</string>
+    <string name="delete_item_dialog">Delete</string>
+    <string name="saveToDownload_item_dialog">Save to Download</string>
+    <string name="edit_item_dialog">Edit</string>
 
 
     <string name="test">

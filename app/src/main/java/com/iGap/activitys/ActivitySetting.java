@@ -8,9 +8,8 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
+import android.graphics.Color;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -20,9 +19,9 @@ import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
@@ -284,7 +283,6 @@ public class ActivitySetting extends ActivityEnhanced {
                 }
             }
         });
-
         // button back in toolbar
         txtBack = (TextView) findViewById(R.id.st_txt_back);
         txtBack.setTypeface(G.fontawesome);
@@ -310,50 +308,69 @@ public class ActivitySetting extends ActivityEnhanced {
             @Override
             public void onClick(View v) {
 
-                LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                final View popupView = layoutInflater.inflate(R.layout.popup_window, null);
-                popupWindow = new PopupWindow(popupView, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-                popupWindow.setBackgroundDrawable(new BitmapDrawable());
-                popupWindow.setOutsideTouchable(true);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.shadow30, ActivitySetting.this.getTheme()));
-                } else {
-                    popupWindow.setBackgroundDrawable((getResources().getDrawable(R.drawable.shadow30)));
-                }
-                if (popupWindow.isOutsideTouchable()) {
-                    popupWindow.dismiss();
-                    Log.i("CCVVBB", "rr: ");
-                }
-                popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-                    @Override
-                    public void onDismiss() {
-                        //TODO do sth here on dismiss
-                    }
-                });
+//                LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//                final View popupView = layoutInflater.inflate(R.layout.popup_window, null);
+//                popupWindow = new PopupWindow(popupView, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+//                popupWindow.setBackgroundDrawable(new BitmapDrawable());
+//                popupWindow.setOutsideTouchable(true);
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                    popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.shadow30, ActivitySetting.this.getTheme()));
+//                } else {
+//                    popupWindow.setBackgroundDrawable((getResources().getDrawable(R.drawable.shadow30)));
+//                }
+//                if (popupWindow.isOutsideTouchable()) {
+//                    popupWindow.dismiss();
+//                    Log.i("CCVVBB", "rr: ");
+//                }
+//                popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+//                    @Override
+//                    public void onDismiss() {
+//                        //TODO do sth here on dismiss
+//                    }
+//                });
+//
+//                popupWindow.setAnimationStyle(android.R.style.Animation_InputMethod);
+//                popupWindow.showAtLocation(popupView,
+//                        Gravity.RIGHT | Gravity.TOP, 0, (int) getResources().getDimension(R.dimen.dp16));
+//                popupWindow.showAsDropDown(v);
+//
+//
+//                TextView txtSearch = (TextView) popupView.findViewById(R.id.popup_txtItem1);
+//                txtSearch.setText("Log Out");
+//                txtSearch.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//
+//                        Toast.makeText(ActivitySetting.this, "1", Toast.LENGTH_SHORT).show();
+//
+//                    }
+//                });
+//
+//                TextView txtClearHistory = (TextView) popupView.findViewById(R.id.popup_txtItem2);
+//                txtClearHistory.setVisibility(View.GONE);
+//                TextView txtDeleteChat = (TextView) popupView.findViewById(R.id.popup_txtItem3);
+//                txtDeleteChat.setVisibility(View.GONE);
+//                TextView txtMutNotification = (TextView) popupView.findViewById(R.id.popup_txtItem4);
+//                txtMutNotification.setVisibility(View.GONE);
+                MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this)
+                        .items(R.array.menu_setting)
+                        .contentColor(Color.BLACK)
+                        .itemsCallback(new MaterialDialog.ListCallback() {
+                            @Override
+                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                popupWindow.setAnimationStyle(android.R.style.Animation_InputMethod);
-                popupWindow.showAtLocation(popupView,
-                        Gravity.RIGHT | Gravity.TOP, 0, (int) getResources().getDimension(R.dimen.dp16));
-                popupWindow.showAsDropDown(v);
-
-
-                TextView txtSearch = (TextView) popupView.findViewById(R.id.popup_txtItem1);
-                txtSearch.setText("Log Out");
-                txtSearch.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        Toast.makeText(ActivitySetting.this, "1", Toast.LENGTH_SHORT).show();
-
-                    }
-                });
-
-                TextView txtClearHistory = (TextView) popupView.findViewById(R.id.popup_txtItem2);
-                txtClearHistory.setVisibility(View.GONE);
-                TextView txtDeleteChat = (TextView) popupView.findViewById(R.id.popup_txtItem3);
-                txtDeleteChat.setVisibility(View.GONE);
-                TextView txtMutNotification = (TextView) popupView.findViewById(R.id.popup_txtItem4);
-                txtMutNotification.setVisibility(View.GONE);
+                                switch (which) {
+                                    case 0:
+                                        Toast.makeText(ActivitySetting.this, "Log Out", Toast.LENGTH_SHORT).show();
+                                        break;
+                                }
+                            }
+                        }).show();
+                WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+                layoutParams.copyFrom(dialog.getWindow().getAttributes());
+                layoutParams.width = (int) getResources().getDimension(R.dimen.dp200);
+                layoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
+                dialog.getWindow().setAttributes(layoutParams);
 
             }
         });
@@ -394,7 +411,7 @@ public class ActivitySetting extends ActivityEnhanced {
                 bundle.putSerializable("listPic", items);
                 bundle.putInt("SelectedImage", 0);
                 fragment.setArguments(bundle);
-                ActivitySetting.this.getFragmentManager().beginTransaction().replace(R.id.st_layoutParent, fragment).commit();
+                ActivitySetting.this.getFragmentManager().beginTransaction().add(R.id.st_layoutParent, fragment, "Show_Image_fragment").commit();
 
             }
         });
@@ -1035,7 +1052,6 @@ public class ActivitySetting extends ActivityEnhanced {
                             RealmResults<RealmAvatarPath> realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
                             realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
                             if (realmAvatarPaths.size() > 0) {
-
                                 idAvatar = realmAvatarPaths.first().getId();
                             } else {
                                 idAvatar = 0;
@@ -1076,7 +1092,7 @@ public class ActivitySetting extends ActivityEnhanced {
                 startActivityForResult(intent, myResultCrop);
             }
 
-        } else if (requestCode == myResultCrop) {
+        } else if (requestCode == myResultCrop) { // save path image on data base ( realm )
             Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
@@ -1174,5 +1190,20 @@ public class ActivitySetting extends ActivityEnhanced {
         }
 
         return items;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        FragmentShowImage myFragment = (FragmentShowImage) getFragmentManager().findFragmentByTag("Show_Image_fragment");
+        if (myFragment != null && myFragment.isVisible()) {
+            getFragmentManager().beginTransaction().remove(myFragment).commit();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i("ZZZZ", "onResume: ");
     }
 }

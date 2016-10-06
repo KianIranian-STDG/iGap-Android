@@ -98,7 +98,7 @@
                 android:layout_weight=".5"
                 android:background="@android:color/transparent"
                 android:gravity="center"
-                android:text="CANCEL"
+                android:text="@string/B_cancel"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/sp16"
                 android:textStyle="bold" />
@@ -116,7 +116,7 @@
                 android:background="@android:color/transparent"
                 android:gravity="center"
 
-                android:text="SET"
+                android:text="@string/set"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/sp16"
                 android:textStyle="bold" />

@@ -384,7 +384,7 @@
         android:textColor="@color/toolbar_background"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="-27dp"
-        android:layout_marginRight="@dimen/dp8"
+        android:layout_marginRight="@dimen/dp20"
         android:layout_above="@+id/int_layoutParentCircleImage"
         android:textSize="@dimen/sp16"
         />

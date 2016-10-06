@@ -16,6 +16,7 @@ public class MyService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
         if (startId == 24) {
             return Service.START_NOT_STICKY;
         } else {
@@ -33,6 +34,7 @@ public class MyService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+
         Intent i = new Intent("stop");
         onStartCommand(i, 12, 24);
         stopSelf();

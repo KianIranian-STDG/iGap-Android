@@ -1,6 +1,6 @@
 package com.iGap.fragments;
 
-import android.content.Intent;
+import android.content.ContentProviderOperation;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
@@ -14,6 +14,8 @@ import android.widget.Toast;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.module.MaterialDesignTextView;
+
+import java.util.ArrayList;
 
 
 public class FragmentAddContact extends android.support.v4.app.Fragment {
@@ -76,16 +78,52 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
                         String displayName = txtFirstName.getText().toString() + " " + txtLastName.getText().toString();
                         String phone = txtPhoneNumber.getText().toString();
 
-                        Intent intent = new Intent(Intent.ACTION_INSERT, ContactsContract.Contacts.CONTENT_URI);
-                        intent.putExtra(ContactsContract.Intents.Insert.NAME, displayName);
-                        intent.putExtra(ContactsContract.Intents.Insert.PHONE, phone);
-                        startActivity(intent);
+                        ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+
+                        ops.add(ContentProviderOperation.newInsert(
+                                ContactsContract.RawContacts.CONTENT_URI)
+                                .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, null)
+                                .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, null)
+                                .build());
+
+                        //------------------------------------------------------ Names
+                        if (displayName != null) {
+                            ops.add(ContentProviderOperation.newInsert(
+                                    ContactsContract.Data.CONTENT_URI)
+                                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+                                    .withValue(ContactsContract.Data.MIMETYPE,
+                                            ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
+                                    .withValue(
+                                            ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME,
+                                            displayName).build());
+                        }
+                        //------------------------------------------------------ Mobile Number
+                        if (phone != null) {
+                            ops.add(ContentProviderOperation.
+                                    newInsert(ContactsContract.Data.CONTENT_URI)
+                                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+                                    .withValue(ContactsContract.Data.MIMETYPE,
+                                            ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
+                                    .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, phone)
+                                    .withValue(ContactsContract.CommonDataKinds.Phone.TYPE,
+                                            ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)
+                                    .build());
+                        }
+
+                        try {
+                            G.context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
+                            Toast.makeText(G.context, "Save Ok: ", Toast.LENGTH_SHORT).show();
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Toast.makeText(G.context, "Exception: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+
                         getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentAddContact.this).commit();
 
                     } else {
                         Toast.makeText(G.context, "Please Enter PhoneNumber", Toast.LENGTH_SHORT).show();
                     }
-
                 } else {
                     Toast.makeText(G.context, "Please Enter FirstName or LastName", Toast.LENGTH_SHORT).show();
                 }

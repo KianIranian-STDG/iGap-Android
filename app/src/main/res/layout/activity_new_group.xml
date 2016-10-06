@@ -134,7 +134,7 @@
                 android:layout_marginRight="@dimen/dp20"
                 android:layout_marginTop="@dimen/dp12"
                 android:layout_toLeftOf="@+id/ng_txt_nextStep"
-                android:text="CANCEL"
+                android:text="@string/B_cancel"
                 android:textColor="@color/toolbar_background"
                 android:textSize="@dimen/dp16"
                 android:textStyle="bold" />

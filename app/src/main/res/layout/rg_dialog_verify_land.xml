@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp52"
         android:gravity="center"
-        android:text="Phone Verification"
+        android:text="@string/Re_Phone_Verification"
         android:textSize="@dimen/sp22"
         android:textStyle="bold"
         android:textColor="@color/toolbar_background" />

@@ -148,7 +148,7 @@
             android:layout_marginTop="@dimen/dp12"
             android:layout_below="@id/rg_layout_center"
             android:background="@drawable/rg_background_button_start_register"
-            android:text="Start"
+            android:text="@string/rg_Start"
             android:textColor="@color/rg_whit_background" />
 
     </RelativeLayout>

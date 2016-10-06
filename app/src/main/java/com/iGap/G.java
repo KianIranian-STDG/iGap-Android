@@ -378,7 +378,6 @@ public class G extends Application {
         res.updateConfiguration(conf, dm);
 
     }
-
     public static void setUserTextSize() {
 
         SharedPreferences sharedPreferencesSetting = context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);

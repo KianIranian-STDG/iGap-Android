@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:paddingTop="@dimen/dp12"
-        android:text="@string/Re_dialog_verify_number_part2"
+        android:text="@string/Re_dialog_verify_number_part1"
         android:textColor="@android:color/black"
         android:textSize="16sp" />
 

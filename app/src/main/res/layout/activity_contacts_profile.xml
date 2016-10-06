@@ -315,7 +315,7 @@
                     android:paddingBottom="@dimen/dp16"
                     android:paddingLeft="@dimen/dp16"
                     android:paddingRight="@dimen/dp16"
-                    android:text="Notification and Sounds"
+                    android:text="@string/st_title_notification_sounds"
                     android:textColor="@color/black_register"
                     android:textSize="@dimen/sp18"
                     android:textStyle="normal" />

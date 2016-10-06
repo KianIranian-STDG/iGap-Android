@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp60"
         android:gravity="start|center_vertical"
-        android:text="Phone Verification"
+        android:text="@string/Re_Phone_Verification"
         android:textSize="@dimen/sp22"
         android:textStyle="bold"
 
@@ -45,7 +45,7 @@
         android:layout_marginRight="@dimen/dp20"
         android:layout_marginLeft="@dimen/dp24"
         android:layout_marginTop="@dimen/dp24"
-        android:hint="Enter Verify Code Please"
+        android:hint="@string/Re_Enter_Verify_Code_Please"
         android:textSize="@dimen/sp16"
         android:theme="@style/Setting_editText" />
 

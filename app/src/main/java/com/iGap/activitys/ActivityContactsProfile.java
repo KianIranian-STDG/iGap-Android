@@ -457,10 +457,10 @@ public class ActivityContactsProfile extends ActivityEnhanced {
 //                            row2.put(ContactsContract.Contacts.DISPLAY_NAME, "am");
 //                            data.add(row2);
 //
-                            ContentValues row3 = new ContentValues();
-                            row3.put(ContactsContract.Contacts.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
-                            row3.put(ContactsContract.CommonDataKinds.Phone.NUMBER, Long.parseLong(txtPhoneNumber.getText().toString()));
-                            data.add(row3);
+//                            ContentValues row3 = new ContentValues();
+//                            row3.put(ContactsContract.Contacts.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
+//                            row3.put(ContactsContract.CommonDataKinds.Phone.NUMBER, Long.parseLong(txtPhoneNumber.getText().toString()));
+//                            data.add(row3);
 //
 ////                            ContentValues row4 = new ContentValues();
 ////                            row4.put(ContactsContract.Contacts.Data.MIMETYPE, ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE);
@@ -469,10 +469,10 @@ public class ActivityContactsProfile extends ActivityEnhanced {
 ////                            row4.put(ContactsContract.CommonDataKinds.Email.ADDRESS, "android@android.com");
 ////                            data.add(row4);
 //
-                            ContentValues row5 = new ContentValues();
-                            row5.put(ContactsContract.Contacts.Data.MIMETYPE, ContactsContract.CommonDataKinds.Nickname.CONTENT_ITEM_TYPE);
-                            row5.put(ContactsContract.CommonDataKinds.Nickname.NAME, txtNickname.getText().toString());
-                            data.add(row5);
+//                            ContentValues row5 = new ContentValues();
+//                            row5.put(ContactsContract.Contacts.Data.MIMETYPE, ContactsContract.CommonDataKinds.Nickname.CONTENT_ITEM_TYPE);
+//                            row5.put(ContactsContract.CommonDataKinds.Nickname.NAME, txtNickname.getText().toString());
+//                            data.add(row5);
 //
                             Bitmap bmImage = ((BitmapDrawable) imgUser.getDrawable()).getBitmap();
 //                            Bitmap bmImage = BitmapFactory.decodeFile(G.imageFile.toString());

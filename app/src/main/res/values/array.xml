@@ -34,12 +34,12 @@
     </string-array>
 
     <string-array name="auto_download_data">
-        <item>Photo</item>
-        <item>Voice Message</item>
-        <item>Video</item>
-        <item>File</item>
-        <item>Music</item>
-        <item>GIF</item>
+        <item>@string/array_Photo</item>
+        <item>@string/array_Voice_Message</item>
+        <item>@string/array_Video</item>
+        <item>@string/array_File</item>
+        <item>@string/array_Music</item>
+        <item>@string/array_GIF</item>
 
     </string-array>
 
@@ -78,53 +78,57 @@
     </string-array>
 
     <string-array name="profile">
-        <item>From Gallery</item>
-        <item>From Camera</item>
+        <item>@string/array_From_Gallery</item>
+        <item>@string/array_From_Camera</item>
     </string-array>
 
     <string-array name="profile_delete">
-        <item>From Gallery</item>
-        <item>From Camera</item>
-        <item>Delete photo</item>
+        <item>@string/array_From_Gallery</item>
+        <item>@string/array_From_Camera</item>
+        <item>@string/array_Delete_photo</item>
     </string-array>
 
-    <string-array name="st_popup">
-        <item>Log Out</item>
-    </string-array>
+    <!--<string-array name="st_popup">-->
+    <!--<item>@string/array_Log_Out</item>-->
+    <!--</string-array>-->
 
     <string-array name="vibrate">
-        <item>Disable</item>
-        <item>Default</item>
-        <item>Short</item>
-        <item>Long</item>
-        <item>Only if silent</item>
+        <item>@string/array_Disable</item>
+        <item>@string/array_Default</item>
+        <item>@string/array_Short</item>
+        <item>@string/array_Long</item>
+        <item>@string/array_Only_if_silent</item>
     </string-array>
 
     <string-array name="popup_Notification">
-        <item>No popup</item>
-        <item>Only when screen "on"</item>
-        <item>Only when screen "off"</item>
-        <item>Always show popup</item>
+        <item>@string/array_No_popup</item>
+        <item>@string/array_Only_when_screen_on</item>
+        <item>@string/array_Only_when_screen_off</item>
+        <item>@string/array_Always_show_popup</item>
     </string-array>
 
     <string-array name="repeat_notification">
-        <item>Off</item>
-        <item>5 minutes</item>
-        <item>10 minutes</item>
-        <item>30 minutes</item>
-        <item>1 hour</item>
-        <item>2 hours</item>
-        <item>4 hours</item>
+        <item>@string/array_Off</item>
+        <item>@string/array_5_minutes</item>
+        <item>@string/array_10_minutes</item>
+        <item>@string/array_30_minutes</item>
+        <item>@string/array_1_hour</item>
+        <item>@string/array_2_hour</item>
+        <item>@string/array_4_hour</item>
     </string-array>
 
     <string-array name="phone_profile_chanel">
-        <item>Add to Contact</item>
-        <item>Call</item>
-        <item>Copy</item>
+        <item>@string/array_Add_to_Contact</item>
+        <item>@string/array_Call</item>
+        <item>@string/array_Copy</item>
+    </string-array>
+
+    <string-array name="menu_setting">
+        <item>@string/array_Log_Out</item>
     </string-array>
 
     <string-array name="sound_message">
-        <item>Default Notification tone</item>
+        <item>@string/array_Default_Notification_tone</item>
         <item>aooow</item>
         <item>bbalert</item>
         <item>boom</item>
@@ -139,14 +143,20 @@
         <item>onelime</item>
         <item>tone</item>
         <item>woow</item>
-
     </string-array>
 
-    <string name="replay_item_dialog">Replay</string>
-    <string name="copy_item_dialog">Copy</string>
-    <string name="share_item_dialog">Share</string>
-    <string name="forward_item_dialog">Forward</string>
-    <string name="delete_item_dialog">Delete</string>
-    <string name="saveToDownload_item_dialog">Save to Download</string>
-    <string name="edit_item_dialog">Edit</string>
+    <string-array name="pop_up_shared_media">
+        <item>@string/shared_media</item>
+        <item>@string/shared_files</item>
+        <item>@string/shared_links</item>
+        <item>@string/shared_music</item>
+    </string-array>
+
+    <string-array name="pop_up_menu_show_image">
+        <item>@string/show_all_media</item>
+        <item>@string/save_to_gallery</item>
+        <item>@string/delete_from_gallery</item>
+    </string-array>
+
+
 </resources>

@@ -951,6 +951,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
                     tgKeep_alive_service.setChecked(true);
                     editor.putInt(SHP_SETTING.KEY_STNS_KEEP_ALIVE_SERVICE, 1);
                     editor.apply();
+
                     startService(new Intent(ActivitySettingNotification.this, MyService.class));
                 }
 

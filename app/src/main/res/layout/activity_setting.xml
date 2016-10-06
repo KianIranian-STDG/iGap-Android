@@ -98,7 +98,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/dp4"
-                    android:text="Amir Molareza"
+                    android:text="AM"
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/sp16"
                     android:textStyle="bold" />
@@ -141,7 +141,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:paddingBottom="@dimen/dp20"
-                    android:text="Info"
+                    android:text="@string/st_Info"
                     android:textColor="@color/green"
                     android:textSize="@dimen/sp22"
                     android:textStyle="bold" />
@@ -265,7 +265,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight=".5"
-                        android:text="Language"
+                        android:text="@string/st_Language"
                         android:textColor="@color/black_register"
                         android:textSize="@dimen/sp18"
                         android:textStyle="normal" />

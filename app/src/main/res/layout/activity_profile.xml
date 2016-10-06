@@ -176,7 +176,7 @@
             android:layout_gravity="center"
             android:background="@drawable/pu_background_button_start_register"
             android:gravity="center"
-            android:text="Lets Go"
+            android:text="@string/pu_Lets_Go"
             android:textAllCaps="false"
             android:textColor="@color/whit_background"
             android:textSize="@dimen/sp16" />

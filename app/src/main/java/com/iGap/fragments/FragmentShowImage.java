@@ -1,7 +1,6 @@
 package com.iGap.fragments;
 
 import android.app.Fragment;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -39,7 +38,6 @@ public class FragmentShowImage extends Fragment {
     private TextView txtImageDate;
 
     private ViewPager viewPager;
-    private ActivitySetting activitySetting;
 
     private ArrayList<StructSharedMedia> list;
     private int selectedFile = 0;
@@ -100,10 +98,8 @@ public class FragmentShowImage extends Fragment {
             public void onClick(View view) {
                 Log.e("ddd", "close");
 
-                getActivity().finish();
-                getActivity().startActivity(new Intent(getActivity(), ActivitySetting.class));
                 getActivity().getFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
-
+                ((ActivitySetting) getActivity()).setImage();
             }
         });
 
@@ -130,7 +126,6 @@ public class FragmentShowImage extends Fragment {
 
     private void initViewPager() {
 
-        activitySetting = new ActivitySetting();
         mAdapter = new AdapterViewPager();
         viewPager.setAdapter(mAdapter);
         listSize = list.size();
@@ -287,10 +282,8 @@ public class FragmentShowImage extends Fragment {
 
                             int pageIndex = mAdapter.removeView(viewPager, getCurrentPage());
                             if (list.size() == 0) {
-                                getActivity().finish();
-                                getActivity().startActivity(new Intent(getActivity(), ActivitySetting.class));
                                 getActivity().getFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
-
+                                ((ActivitySetting) getActivity()).setImage();
                             } else if (pageIndex == mAdapter.getCount()) {
                                 pageIndex--;
                             }
@@ -323,4 +316,6 @@ public class FragmentShowImage extends Fragment {
 //    public void setCurrentPage(View pageToShow) {
 //        viewPager.setCurrentItem(mAdapter.getItemPosition(pageToShow), true);
 //    }
+
+
 }

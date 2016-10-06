@@ -26,7 +26,7 @@
                 android:layout_height="match_parent"
                 android:layout_centerInParent="true"
                 android:gravity="center"
-                android:text="Add Contact"
+                android:text="@string/fac_Add_Contact"
                 android:textColor="@color/whit_background"
                 android:textSize="@dimen/sp22"
                 android:textStyle="bold"
@@ -59,7 +59,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/sp16"
-        android:text="Contact Info"
+        android:text="@string/fac_contact_info"
         android:textColor="@android:color/black"
         android:textSize="@dimen/sp22"
         android:textStyle="bold" />
@@ -76,7 +76,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp8"
-            android:hint="First Name"
+            android:hint="@string/fac_First_Name"
             android:singleLine="true" />
 
     </android.support.design.widget.TextInputLayout>
@@ -93,7 +93,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp8"
-            android:hint="Last Name"
+            android:hint="@string/fac_Last_Name"
             android:singleLine="true" />
 
     </android.support.design.widget.TextInputLayout>
@@ -110,7 +110,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp8"
-            android:hint="Phone Number"
+            android:hint="@string/fac_Phone_Number"
             android:singleLine="true"
             android:inputType="phone"
             android:maxLength="12" />
