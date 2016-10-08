@@ -21,8 +21,6 @@ import com.iGap.module.MusicPlayer;
 import com.iGap.module.OnComplete;
 
 import java.io.File;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Created by android3 on 10/2/2016.
@@ -38,19 +36,15 @@ public class ActicityMediaPlayer extends ActivityEnhanced {
     private ImageView img_MusicImage;
     private Button btnPlay;
 
-    private Timer mTimer, mTimeSecend;
-    private long time = 0;
-    private double amoungToupdate;
-
     private String str_info = "";
-
     OnComplete onComplete;
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_media_player);
+
+        MusicPlayer.isShowMediaPlayer = true;
 
         if (MusicPlayer.mp == null) {
             finish();
@@ -59,32 +53,47 @@ public class ActicityMediaPlayer extends ActivityEnhanced {
             return;
         }
 
-        initComponent();
 
-        getMusicInfo();
 
         onComplete = new OnComplete() {
             @Override
-            public void complete(boolean result, String messageOne, String MessageTow) {
+            public void complete(boolean result, String messageOne, final String MessageTow) {
 
                 if (messageOne.equals("play")) {
                     btnPlay.setText(R.string.md_play_rounded_button);
-                    stopTimer();
+
                 } else if (messageOne.equals("pause")) {
                     btnPlay.setText(R.string.md_round_pause_button);
-                    updateProgress();
+
                 } else if (messageOne.equals("update")) {
                     updateUi();
+                } else if (messageOne.equals("updateTime")) {
+                    txt_Timer.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            txt_Timer.setText(MessageTow);
+                            musikSeekbar.setProgress(MusicPlayer.musicProgress);
+                        }
+                    });
+
                 }
 
             }
         };
 
+        MusicPlayer.onComplete = onComplete;
+
+        initComponent();
+
+        getMusicInfo();
+
     }
+
 
     @Override
     protected void onPause() {
         super.onPause();
+        MusicPlayer.isShowMediaPlayer = false;
         MusicPlayer.onComplete = null;
         MusicPlayer.updateNotification();
     }
@@ -92,14 +101,12 @@ public class ActicityMediaPlayer extends ActivityEnhanced {
     @Override
     protected void onResume() {
         super.onResume();
+        MusicPlayer.isShowMediaPlayer = true;
         MusicPlayer.onComplete = onComplete;
         updateUi();
-
         NotificationManager notifManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notifManager.cancel(MusicPlayer.notificationId);
-        if (MusicPlayer.mp != null)
-            if (MusicPlayer.mp.isPlaying())
-                updateProgress();
+
     }
 
     //*****************************************************************************************
@@ -154,8 +161,6 @@ public class ActicityMediaPlayer extends ActivityEnhanced {
         txt_MusicTime = (TextView) findViewById(R.id.ml_txt_music_time);
         txt_Timer = (TextView) findViewById(R.id.ml_txt_timer);
 
-        if (MusicPlayer.mp != null)
-            txt_Timer.setText(MusicPlayer.milliSecondsToTimer(MusicPlayer.mp.getCurrentPosition()));
 
 
         txt_musicInfo = (TextView) findViewById(R.id.ml_txt_music_info);
@@ -166,26 +171,13 @@ public class ActicityMediaPlayer extends ActivityEnhanced {
 
 
         musikSeekbar = (SeekBar) findViewById(R.id.ml_seekBar1);
-
-        if (MusicPlayer.mp != null) {
-            musikSeekbar.setProgress((int) ((MusicPlayer.mp.getCurrentPosition() * 100) / MusicPlayer.mp.getDuration()));
-        }
-
         musikSeekbar.setOnTouchListener(new View.OnTouchListener() {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
-                try {
-                    if (MusicPlayer.mp != null) {
-                        MusicPlayer.mp.seekTo((int) (musikSeekbar.getProgress() * amoungToupdate));
-                        time = MusicPlayer.mp.getCurrentPosition();
-                        txt_Timer.setText(MusicPlayer.milliSecondsToTimer(time));
-                    }
-                } catch (IllegalStateException e) {
-                    Log.e("wer", e.toString());
-                }
-
+                if (event.getAction() == MotionEvent.ACTION_UP)
+                    MusicPlayer.setMusicProgress(musikSeekbar.getProgress());
                 return false;
             }
         });
@@ -261,7 +253,7 @@ public class ActicityMediaPlayer extends ActivityEnhanced {
     }
 
     private void updateUi() {
-        txt_MusicTime.setText(MusicPlayer.txt_music_time.getText());
+        txt_MusicTime.setText(MusicPlayer.musicTime);
         txt_MusicPlace.setText(MusicPlayer.roomName);
         txt_MusicName.setText(MusicPlayer.musicName);
 
@@ -286,66 +278,9 @@ public class ActicityMediaPlayer extends ActivityEnhanced {
 
     }
 
-    private void stopTimer() {
-        if (mTimer != null) {
-            mTimer.cancel();
-            mTimer = null;
-        }
-        if (mTimeSecend != null) {
-            mTimeSecend.cancel();
-            mTimeSecend = null;
-        }
-    }
 
-    private void updateProgress() {
 
-        stopTimer();
 
-        double duration = MusicPlayer.mp.getDuration();
-        amoungToupdate = duration / 100;
-        musikSeekbar.setProgress((int) (MusicPlayer.mp.getCurrentPosition() / amoungToupdate));
-        time = MusicPlayer.mp.getCurrentPosition();
-        mTimeSecend = new Timer();
-        mTimeSecend.schedule(new TimerTask() {
-
-            @Override
-            public void run() {
-
-                runOnUiThread(new Runnable() {
-
-                    public void run() {
-                        txt_Timer.setText(MusicPlayer.milliSecondsToTimer(time));
-                    }
-                });
-                time += 1000;
-            }
-        }, 0, 1000);
-
-        mTimer = new Timer();
-        mTimer.schedule(new TimerTask() {
-
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        if (musikSeekbar.getProgress() < 100) {
-                            int p = musikSeekbar.getProgress();
-                            p += 1;
-                            musikSeekbar.setProgress(p);
-                        } else {
-                            stopTimer();
-
-                        }
-                    }
-                });
-            }
-
-            ;
-        }, 0, (int) amoungToupdate);
-
-    }
 
 
 }

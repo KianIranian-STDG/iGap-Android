@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
@@ -26,6 +27,8 @@ import com.iGap.realm.RealmChatHistory;
 import com.iGap.realm.RealmRoomMessage;
 
 import java.io.File;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -59,13 +62,22 @@ public class MusicPlayer {
     private static int selectedMedia = 0;
     public static final int notificationId = 19;
 
+    public static boolean isShowMediaPlayer = false;
+    private static Timer mTimer, mTimeSecend;
+    private static long time = 0;
+    private static double amoungToupdate;
+    public static int musicProgress = 0;
+    private static String strTimer = "";
+
+    private static Handler handler;
+
 
     public MusicPlayer(LinearLayout layoutTripMusic) {
         this.layoutTripMusic = layoutTripMusic;
 
         remoteViews = new RemoteViews(G.context.getPackageName(), R.layout.music_layout_notification);
-        notificationManager = (NotificationManager) G.context.getSystemService(G.context.NOTIFICATION_SERVICE);
-
+        notificationManager = (NotificationManager) G.context.getSystemService(Context.NOTIFICATION_SERVICE);
+        handler = new Handler(G.context.getMainLooper());
         initLayoutTripMusic();
     }
 
@@ -82,7 +94,6 @@ public class MusicPlayer {
 
         txt_music_time = (TextView) layoutTripMusic.findViewById(R.id.mls_txt_music_time);
         txt_music_name = (TextView) layoutTripMusic.findViewById(R.id.mls_txt_music_name);
-
 
 
         btnPlayMusic = (Button) layoutTripMusic.findViewById(R.id.mls_btn_play_music);
@@ -123,13 +134,17 @@ public class MusicPlayer {
 
     private static void pauseSound() {
         try {
+
+            stopTimer();
+
             btnPlayMusic.setText(G.context.getString(R.string.md_play_rounded_button));
             remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.play);
-            if (onComplete == null) {
+            if (!isShowMediaPlayer) {
                 notificationManager.notify(notificationId, notification);
             } else {
                 onComplete.complete(true, "play", "");
             }
+
         } catch (Exception e) {
         }
 
@@ -142,11 +157,13 @@ public class MusicPlayer {
         try {
             btnPlayMusic.setText(G.context.getString(R.string.md_round_pause_button));
             remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause);
-            if (onComplete == null) {
+            if (!isShowMediaPlayer) {
                 notificationManager.notify(notificationId, notification);
             } else {
                 onComplete.complete(true, "pause", "");
             }
+
+
         } catch (Exception e) {
         }
 
@@ -154,6 +171,7 @@ public class MusicPlayer {
             if (mp != null) {
                 mp.start();
                 isPause = false;
+                updateProgress();
             }
         } else {
             startPlayer(musicPath, roomName, roomId, false);
@@ -166,12 +184,16 @@ public class MusicPlayer {
         try {
             btnPlayMusic.setText(G.context.getString(R.string.md_play_rounded_button));
             remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.play);
-            if (onComplete == null) {
+            if (!isShowMediaPlayer) {
                 notificationManager.notify(notificationId, notification);
             } else {
                 onComplete.complete(true, "play", "");
             }
+
+            stopTimer();
+
         } catch (Exception e) {
+
         }
 
         if (mp != null) {
@@ -217,8 +239,11 @@ public class MusicPlayer {
             mp = null;
         }
 
-        NotificationManager notifManager = (NotificationManager) G.context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notifManager.cancel(notificationId);
+        try {
+            notificationManager.cancel(notificationId);
+        } catch (RuntimeException e) {
+        }
+
 
     }
 
@@ -241,19 +266,27 @@ public class MusicPlayer {
                 mp.prepare();
                 mp.start();
 
-                try {
+
                     btnPlayMusic.setText(G.context.getString(R.string.md_round_pause_button));
 
                     remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause);
-                    if (onComplete == null) {
-                        notificationManager.notify(notificationId, notification);
+                if (!isShowMediaPlayer) {
+
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                notificationManager.notify(notificationId, notification);
+                            } catch (RuntimeException e) {
+                            }
+                        }
+                    });
+
+
                     } else {
                         onComplete.complete(true, "pause", "");
                     }
-                } catch (Exception e) {
 
-                    Log.e("ddd", "aaaaaaaaa      " + e.toString());
-                }
 
 
                 musicTime = milliSecondsToTimer((long) mp.getDuration());
@@ -278,17 +311,26 @@ public class MusicPlayer {
                 musicTime = milliSecondsToTimer((long) mp.getDuration());
                 txt_music_time.setText(musicTime);
 
-                try {
+
                     btnPlayMusic.setText(G.context.getString(R.string.md_round_pause_button));
                     remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause);
-                    if (onComplete == null) {
-                        notificationManager.notify(notificationId, notification);
+                if (!isShowMediaPlayer) {
+
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                notificationManager.notify(notificationId, notification);
+                            } catch (RuntimeException e) {
+                            }
+                        }
+                    });
+
+
                     } else {
                         onComplete.complete(true, "pause", "");
                     }
-                } catch (Exception e) {
-                    Log.e("ddd", "aaaaaaaaa      " + e.toString());
-                }
+
 
                 mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 
@@ -302,10 +344,12 @@ public class MusicPlayer {
                 txt_music_name.setText(musicName);
                 updateNotification();
 
-            } catch (Exception e) {
 
+            } catch (Exception e) {
             }
         }
+
+        updateProgress();
 
         if (updateList)
             fillMediaList();
@@ -344,6 +388,7 @@ public class MusicPlayer {
 
     public static void updateNotification() {
 
+
         PendingIntent pi = PendingIntent.getActivity(G.context, 10, new Intent(G.context, ActicityMediaPlayer.class), PendingIntent.FLAG_UPDATE_CURRENT);
 
         remoteViews.setTextViewText(R.id.mln_txt_music_name, MusicPlayer.musicName);
@@ -369,7 +414,6 @@ public class MusicPlayer {
                 remoteViews.setImageViewResource(R.id.mln_img_picture_music, R.mipmap.igap_music);
             }
         } catch (Exception e) {
-
         }
 
         Intent intentPrevious = new Intent(G.context, customButtonListener.class);
@@ -402,14 +446,17 @@ public class MusicPlayer {
                 .setAutoCancel(false)
                 .build();
 
-        try {
-
-            if (onComplete == null) {
-                notificationManager.notify(notificationId, notification);
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if (!isShowMediaPlayer) {
+                        notificationManager.notify(notificationId, notification);
+                    }
+                } catch (RuntimeException e) {
+                }
             }
-
-        } catch (RuntimeException e) {
-        }
+        });
 
     }
 
@@ -432,7 +479,6 @@ public class MusicPlayer {
 
         }
     }
-
 
     public static void fillMediaList() {
 
@@ -458,6 +504,93 @@ public class MusicPlayer {
         }
 
         realm.close();
+
+    }
+
+    private static void updateProgress() {
+
+        stopTimer();
+
+        double duration = MusicPlayer.mp.getDuration();
+        amoungToupdate = duration / 100;
+        time = MusicPlayer.mp.getCurrentPosition();
+        musicProgress = ((int) (time / amoungToupdate));
+
+        mTimeSecend = new Timer();
+
+        mTimeSecend.schedule(new TimerTask() {
+            @Override
+            public void run() {
+
+                updatePlayerTime();
+                time += 1000;
+            }
+        }, 0, 1000);
+
+        mTimer = new Timer();
+        mTimer.schedule(new TimerTask() {
+
+            @Override
+            public void run() {
+
+                if (musicProgress < 100) {
+                    musicProgress++;
+                } else {
+                    stopTimer();
+
+                }
+
+            }
+
+            ;
+        }, 0, (int) amoungToupdate);
+
+    }
+
+    private static void stopTimer() {
+        if (mTimer != null) {
+            mTimer.cancel();
+            mTimer = null;
+        }
+        if (mTimeSecend != null) {
+            mTimeSecend.cancel();
+            mTimeSecend = null;
+        }
+    }
+
+    private static void updatePlayerTime() {
+
+        strTimer = MusicPlayer.milliSecondsToTimer(time);
+
+        if (txt_music_time != null) {
+
+            txt_music_time.post(new Runnable() {
+                @Override
+                public void run() {
+                    txt_music_time.setText(strTimer + "/" + musicTime);
+                }
+            });
+
+        }
+
+        //  remoteViews.setTextViewText(R.id.mln_txt_music_time, strTimer + "/" + musicTime);
+
+        if (isShowMediaPlayer) {
+            onComplete.complete(true, "updateTime", strTimer);
+        }
+
+    }
+
+    public static void setMusicProgress(int percent) {
+        try {
+            musicProgress = percent;
+            if (MusicPlayer.mp != null) {
+                MusicPlayer.mp.seekTo((int) (musicProgress * amoungToupdate));
+                time = MusicPlayer.mp.getCurrentPosition();
+                updatePlayerTime();
+            }
+        } catch (IllegalStateException e) {
+        }
 
     }
 
