@@ -204,9 +204,10 @@
             <ImageView
                 android:id="@+id/mln_btn_replay"
                 android:layout_width="@dimen/dp32"
+                android:padding="@dimen/dp4"
                 android:layout_height="@dimen/dp28"
                 android:gravity="top|center"
-                android:src="@mipmap/ic_ab_reply" />
+                android:src="@mipmap/reply_icon" />
 
             <TextView
                 android:id="@+id/ln_txt_replay"
@@ -214,7 +215,7 @@
                 android:layout_height="wrap_content"
                 android:text="REPLAY"
                 android:textColor="@color/white"
-                android:textSize="@dimen/sp16" />
+                android:textSize="@dimen/sp14" />
 
             <TextView
                 android:id="@+id/ln_txt_unread_message"

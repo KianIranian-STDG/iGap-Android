@@ -6,6 +6,7 @@ import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -114,20 +115,29 @@ public class ActicityMediaPlayer extends ActivityEnhanced {
         String title = (String) mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
 
         if (title != null) {
-            str_info += title + "\n";
+            str_info += title + "       ";
         }
 
         String albumName = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
         if (albumName != null) {
-            str_info += albumName + "\n";
+            str_info += albumName + "       ";
         }
 
         String artist = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
         if (artist != null) {
-            str_info += artist + "\n";
+            str_info += artist + "       ";
         }
 
-        txt_musicInfo.setText(str_info);
+        if (str_info.trim().length() > 0) {
+            txt_musicInfo.setVisibility(View.VISIBLE);
+            txt_musicInfo.setText(str_info);
+
+            txt_musicInfo.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+            txt_musicInfo.setSelected(true);
+            txt_musicInfo.setSingleLine(true);
+        } else {
+            txt_musicInfo.setVisibility(View.GONE);
+        }
 
 //        byte[] data = mediaMetadataRetriever.getEmbeddedPicture();
 //        if (data != null) {
@@ -190,6 +200,17 @@ public class ActicityMediaPlayer extends ActivityEnhanced {
         });
 
 
+        Button btnMusicMenu = (Button) findViewById(R.id.ml_btn_music_menu);
+        btnMusicMenu.setTypeface(G.flaticon);
+        btnMusicMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Log.e("ddd", "menu clicked");
+            }
+        });
+
+
         Button btnPrevious = (Button) findViewById(R.id.ml_btn_Previous_music);
         btnPrevious.setTypeface(G.flaticon);
         btnPrevious.setOnClickListener(new View.OnClickListener() {
@@ -198,6 +219,25 @@ public class ActicityMediaPlayer extends ActivityEnhanced {
                 MusicPlayer.previousMusic();
             }
         });
+
+        Button btnShuffel = (Button) findViewById(R.id.ml_btn_shuffel_music);
+        btnShuffel.setTypeface(G.flaticon);
+        btnShuffel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("ddd", "shuffel click");
+            }
+        });
+
+        Button btnReplay = (Button) findViewById(R.id.ml_btn_replay_music);
+        btnReplay.setTypeface(G.flaticon);
+        btnReplay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("ddd", "btnReplay click");
+            }
+        });
+
 
         btnPlay = (Button) findViewById(R.id.ml_btn_play_music);
         btnPlay.setTypeface(G.flaticon);

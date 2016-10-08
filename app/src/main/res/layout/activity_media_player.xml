@@ -2,142 +2,211 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:layoutDirection="ltr"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp80"
-        android:background="@color/green"
+        android:layout_height="@dimen/dp68"
+        android:background="@color/white"
         android:gravity="left|center">
 
         <Button
             android:id="@+id/ml_btn_back"
-            android:layout_width="@dimen/dp40"
+            android:layout_width="@dimen/dp48"
             android:layout_height="match_parent"
             android:background="@null"
             android:gravity="center"
             android:text="@string/md_back_arrow"
-            android:textColor="@color/white"
-            android:textSize="@dimen/sp26" />
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/sp20" />
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:gravity="center|left"
             android:orientation="vertical"
             android:padding="5dp">
 
             <TextView
                 android:id="@+id/ml_txt_music_name"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="music name"
-                android:textColor="@color/white" />
+                android:singleLine="true"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/sp18" />
 
             <TextView
                 android:id="@+id/ml_txt_music_place"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="place"
-                android:textColor="@color/white" />
+                android:textColor="@color/green"
+                android:textSize="@dimen/sp16" />
         </LinearLayout>
+
+        <Button
+            android:id="@+id/ml_btn_music_menu"
+            android:layout_width="@dimen/dp48"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:gravity="center"
+            android:text="@string/md_show_more_button"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/sp22" />
+
+
     </LinearLayout>
 
-    <LinearLayout
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="@color/white"
-        android:orientation="vertical"
-        android:padding="@dimen/dp8">
+        android:background="@color/gray_f2">
 
         <ImageView
             android:id="@+id/ml_img_music_picture"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:src="@mipmap/igap_music_large" />
+            android:scaleType="centerCrop"
+            android:layout_height="match_parent"
+            android:src="@mipmap/player_background" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp40"
-            android:gravity="center"
-            android:padding="5dp">
-
-            <TextView
-                android:id="@+id/ml_txt_timer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="timer" />
-
-            <SeekBar
-                android:id="@+id/ml_seekBar1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_weight="1" />
-
-            <TextView
-                android:id="@+id/ml_txt_music_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="music time" />
-        </LinearLayout>
 
         <TextView
             android:id="@+id/ml_txt_music_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@color/greenStatus"
+            android:paddingBottom="@dimen/dp4"
+            android:paddingTop="@dimen/dp4"
             android:text=""
+            android:fadingEdge="horizontal"
+            android:textColor="@color/white"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:lines="1"
+
             android:textSize="@dimen/sp16" />
-    </LinearLayout>
+
+    </FrameLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp48"
-        android:background="@color/green"
+        android:layout_height="@dimen/dp40"
+        android:gravity="center"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/ml_txt_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="timer"
+            android:textColor="@color/green" />
+
+        <SeekBar
+            android:id="@+id/ml_seekBar1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/ml_txt_music_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="music time" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp60"
         android:gravity="center"
         android:paddingLeft="@dimen/dp8"
         android:paddingRight="@dimen/dp8">
 
 
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/ml_btn_shuffel_music"
+                android:layout_width="@dimen/dp40"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:gravity="center"
+                android:text="@string/md_shuffle_mode"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/sp20" />
+
+
+        </LinearLayout>
+
+
         <Button
             android:id="@+id/ml_btn_Previous_music"
             android:layout_width="@dimen/dp40"
-            android:layout_height="@dimen/dp40"
+            android:layout_height="match_parent"
             android:background="@null"
             android:gravity="center"
             android:text="@string/md_previous_track"
-            android:textColor="@color/white"
-            android:textSize="@dimen/sp26" />
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/sp22" />
 
         <Button
             android:id="@+id/ml_btn_play_music"
             android:layout_width="@dimen/dp40"
-            android:layout_height="@dimen/dp40"
+            android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/dp8"
             android:layout_marginRight="@dimen/dp8"
             android:background="@null"
             android:gravity="center"
             android:text="@string/md_play_rounded_button"
-            android:textColor="@color/white"
-            android:textSize="@dimen/sp26" />
+            android:textColor="@color/green"
+            android:textSize="@dimen/sp36" />
 
         <Button
             android:id="@+id/ml_btn_forward_music"
             android:layout_width="@dimen/dp40"
-            android:layout_height="@dimen/dp40"
+            android:layout_height="match_parent"
             android:background="@null"
             android:gravity="center"
             android:text="@string/md_play_next_button"
-            android:textColor="@color/white"
-            android:textSize="@dimen/sp26" />
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/sp22" />
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/ml_btn_replay_music"
+                android:layout_width="@dimen/dp40"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:gravity="center"
+                android:text="@string/md_synchronization_arrows"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/sp28" />
+
+
+        </LinearLayout>
 
 
     </LinearLayout>

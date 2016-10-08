@@ -97,6 +97,9 @@ public class HelperImageBackColor {
             alphabetName = text.replace(" ", "");
         }
 
+        if (alphabetName.length() >= 2) {
+            alphabetName = alphabetName.substring(0, 1) + "\u200b" + alphabetName.substring(1, 2);
+        }
 
         Bitmap bitmap = Bitmap.createBitmap(with, with, Bitmap.Config.ARGB_8888);
 //        bitmap.eraseColor(Color.parseColor(getColor(alphabetName)));
@@ -108,7 +111,7 @@ public class HelperImageBackColor {
         Paint textPaint = new Paint(Paint.FILTER_BITMAP_FLAG | Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
         textPaint.setMaskFilter(new BlurMaskFilter(1, BlurMaskFilter.Blur.SOLID));
         textPaint.setColor(Color.parseColor(mColor));
-        textPaint.setTypeface(G.robotoBold);
+        textPaint.setTypeface(G.robotoRegular);
         textPaint.setTextAlign(Paint.Align.CENTER);
         textPaint.setTextSize(fontsize);
         textPaint.setStyle(Paint.Style.FILL);

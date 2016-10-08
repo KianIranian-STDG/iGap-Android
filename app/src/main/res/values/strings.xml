@@ -34,6 +34,8 @@
     <string name="md_play_next_button">\uf200</string>
     <string name="md_previous_track">\uf206</string>
 
+    <string name="md_shuffle_mode">\uf250</string>
+    <string name="md_synchronization_arrows">\uf262</string>
 
     <string name="fa_stop">&#xf04d;</string>
     <string name="fa_menu_bar">&#xf0c9;</string>

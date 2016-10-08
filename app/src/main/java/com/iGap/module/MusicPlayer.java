@@ -38,11 +38,12 @@ public class MusicPlayer {
 
 
     private static LinearLayout layoutTripMusic;
-    private static Button btnStopMusic;
     private static Button btnPlayMusic;
     private static Button btnCloseMusic;
     public static TextView txt_music_time;
     private static TextView txt_music_name;
+
+    public static String musicTime = "";
     public static String roomName;
     public static String musicPath;
     public static String musicName;
@@ -82,14 +83,7 @@ public class MusicPlayer {
         txt_music_time = (TextView) layoutTripMusic.findViewById(R.id.mls_txt_music_time);
         txt_music_name = (TextView) layoutTripMusic.findViewById(R.id.mls_txt_music_name);
 
-        btnStopMusic = (Button) layoutTripMusic.findViewById(R.id.mls_btn_stop);
-        btnStopMusic.setTypeface(G.fontawesome);
-        btnStopMusic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                stopSound();
-            }
-        });
+
 
         btnPlayMusic = (Button) layoutTripMusic.findViewById(R.id.mls_btn_play_music);
         btnPlayMusic.setTypeface(G.flaticon);
@@ -261,7 +255,9 @@ public class MusicPlayer {
                     Log.e("ddd", "aaaaaaaaa      " + e.toString());
                 }
 
-                txt_music_time.setText(milliSecondsToTimer((long) mp.getDuration()));
+
+                musicTime = milliSecondsToTimer((long) mp.getDuration());
+                txt_music_time.setText(musicTime);
 
                 musicName = musicPath.substring(musicPath.lastIndexOf("/") + 1);
                 txt_music_name.setText(musicName);
@@ -278,7 +274,10 @@ public class MusicPlayer {
                 mp.setDataSource(musicPath);
                 mp.prepare();
                 mp.start();
-                txt_music_time.setText(milliSecondsToTimer((long) mp.getDuration()));
+
+                musicTime = milliSecondsToTimer((long) mp.getDuration());
+                txt_music_time.setText(musicTime);
+
                 try {
                     btnPlayMusic.setText(G.context.getString(R.string.md_round_pause_button));
                     remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause);
@@ -348,7 +347,7 @@ public class MusicPlayer {
         PendingIntent pi = PendingIntent.getActivity(G.context, 10, new Intent(G.context, ActicityMediaPlayer.class), PendingIntent.FLAG_UPDATE_CURRENT);
 
         remoteViews.setTextViewText(R.id.mln_txt_music_name, MusicPlayer.musicName);
-        remoteViews.setTextViewText(R.id.mln_txt_music_place, MusicPlayer.roomName);
+        remoteViews.setTextViewText(R.id.mln_txt_music_time, MusicPlayer.musicTime);
 
         if (mp != null)
             if (mp.isPlaying())
@@ -404,7 +403,11 @@ public class MusicPlayer {
                 .build();
 
         try {
-            notificationManager.notify(notificationId, notification);
+
+            if (onComplete == null) {
+                notificationManager.notify(notificationId, notification);
+            }
+
         } catch (RuntimeException e) {
         }
 
