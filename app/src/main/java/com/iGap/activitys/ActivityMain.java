@@ -150,17 +150,21 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         txtIgap.setTypeface(G.neuroplp);
 
         if (G.connectionState == Config.ConnectionState.WAITING_FOR_NETWORK) {
-            txtIgap.setText("Waiting For Network");
-            txtIgap.setTextSize(15);
+            txtIgap.setText("Waiting For Network...");
+            txtIgap.setTypeface(null);
+            // txtIgap.setTextSize(16);
         } else if (G.connectionState == Config.ConnectionState.CONNECTING) {
             txtIgap.setText("Connecting...");
-            txtIgap.setTextSize(15);
+            txtIgap.setTypeface(null);
+            // txtIgap.setTextSize(16);
         } else if (G.connectionState == Config.ConnectionState.UPDATING) {
             txtIgap.setText("Updating...");
-            txtIgap.setTextSize(15);
+            txtIgap.setTypeface(null);
+            // txtIgap.setTextSize(16);
         } else {
             txtIgap.setText("iGap");
-            txtIgap.setTextSize(20);
+            txtIgap.setTypeface(G.neuroplp);
+            // txtIgap.setTextSize(20);
         }
         if (G.connectionState != null) {
             Log.i("XXX", "G.connectionState  : " + G.connectionState.toString());
@@ -176,17 +180,21 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                     @Override
                     public void run() {
                         if (connectionState == Config.ConnectionState.WAITING_FOR_NETWORK) {
-                            txtIgap.setText("Waiting For Network");
-                            txtIgap.setTextSize(15);
+                            txtIgap.setText("Waiting For Network...");
+                            txtIgap.setTypeface(null);
+                            //  txtIgap.setTextSize(16);
                         } else if (connectionState == Config.ConnectionState.CONNECTING) {
                             txtIgap.setText("Connecting...");
-                            txtIgap.setTextSize(15);
+                            txtIgap.setTypeface(null);
+                            // txtIgap.setTextSize(16);
                         } else if (connectionState == Config.ConnectionState.UPDATING) {
                             txtIgap.setText("Updating...");
-                            txtIgap.setTextSize(15);
+                            txtIgap.setTypeface(null);
+                            //  txtIgap.setTextSize(16);
                         } else {
                             txtIgap.setText("iGap");
-                            txtIgap.setTextSize(20);
+                            txtIgap.setTypeface(G.neuroplp);
+                            //   txtIgap.setTextSize(20);
                         }
                     }
                 });

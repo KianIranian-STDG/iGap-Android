@@ -20,9 +20,8 @@ public class GroupAvatarAddResponse extends MessageHandler {
         super.handler();
 
         ProtoGroupAvatarAdd.GroupAvatarAddResponse.Builder groupAvatarAddResponse = (ProtoGroupAvatarAdd.GroupAvatarAddResponse.Builder) message;
-        groupAvatarAddResponse.getAttachment();
         groupAvatarAddResponse.getRoomId();
-        groupAvatarAddResponse.getId();
+        groupAvatarAddResponse.getAvatar();
     }
 
     @Override

@@ -20,8 +20,7 @@ public class UserAvatarAddResponse extends MessageHandler {
         super.handler();
 
         ProtoUserAvatarAdd.UserAvatarAddResponse.Builder userAvatarAddResponse = (ProtoUserAvatarAdd.UserAvatarAddResponse.Builder) message;
-        userAvatarAddResponse.getId();
-        userAvatarAddResponse.getAttachment();
+        userAvatarAddResponse.getAvatar();
     }
 
     @Override
