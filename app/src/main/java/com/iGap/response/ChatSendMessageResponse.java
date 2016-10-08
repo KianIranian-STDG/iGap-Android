@@ -35,6 +35,8 @@ public class ChatSendMessageResponse extends MessageHandler {
     @Override
     public void handler() {
         Realm realm = Realm.getDefaultInstance();
+        String nickName = realm.where(RealmUserInfo.class).findFirst().getNickName();
+        // Log.i("CLI_SEND", "ChatSendMessageResponse handler for " + nickName + " : " + message);
 
         final ProtoChatSendMessage.ChatSendMessageResponse.Builder chatSendMessageResponse = (ProtoChatSendMessage.ChatSendMessageResponse.Builder) message;
 
@@ -73,7 +75,7 @@ public class ChatSendMessageResponse extends MessageHandler {
                 // because user may have more than one device, his another device should not be recipient
                 // but sender. so I check current userId with room message user id, and if not equals
                 // and response is null, so we sure recipient is another user
-                if (userId != roomMessage.getUserId() && chatSendMessageResponse.getResponse().getId().isEmpty()) {
+                if (chatSendMessageResponse.getResponse().getId().isEmpty()) {//TODO [Saeed Mozaffari] [2016-10-06 12:35 PM] - check this comment Alireza added and removed with saeed ==> //userId != roomMessage.getUserId() &&
                     // i'm the recipient
 
                     RealmChatHistory realmChatHistory = realm.createObject(RealmChatHistory.class);
@@ -99,7 +101,7 @@ public class ChatSendMessageResponse extends MessageHandler {
 
                     realm.copyToRealm(realmChatHistory);
                     if (!G.isAppInFg)
-                        G.helperNotificationAndBadge.updateNotificationAndBadge(true);
+                        G.helperNotificationAndBadge.updateNotificationAndBadge(true); //TODO [Saeed Mozaffari] [2016-10-08 10:02 AM] - show notification if this message isn't for another account
 
                 } else {
                     // i'm the sender
@@ -129,7 +131,7 @@ public class ChatSendMessageResponse extends MessageHandler {
             }
         });
 
-        if (userId != roomMessage.getUserId() && chatSendMessageResponse.getResponse().getId().isEmpty()) {
+        if (chatSendMessageResponse.getResponse().getId().isEmpty()) {//TODO [Saeed Mozaffari] [2016-10-06 12:35 PM] - check this comment Alireza added and removed with saeed ==> //userId != roomMessage.getUserId() &&
             // invoke following callback when i'm not the sender, because I already done everything after sending message
             if (realm.where(RealmRoom.class).equalTo("id", chatSendMessageResponse.getRoomId()).findFirst() != null) {
                 G.chatSendMessageUtil.onMessageReceive(chatSendMessageResponse.getRoomId(), roomMessage.getMessage(), roomMessage.getMessageType().toString(), roomMessage);

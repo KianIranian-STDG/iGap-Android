@@ -7,6 +7,7 @@ import com.iGap.proto.ProtoChatDeleteMessage;
 import com.iGap.proto.ProtoError;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmOfflineDelete;
+import com.iGap.realm.RealmUserInfo;
 
 import io.realm.Realm;
 
@@ -29,19 +30,21 @@ public class ChatDeleteMessageResponse extends MessageHandler {
         final ProtoChatDeleteMessage.ChatDeleteMessageResponse.Builder chatDeleteMessage = (ProtoChatDeleteMessage.ChatDeleteMessageResponse.Builder) message;
 
         Realm realm = Realm.getDefaultInstance();
+        String nickName = realm.where(RealmUserInfo.class).findFirst().getNickName();
+        Log.i("CLI_DELETE", "ChatDeleteMessageResponse handler for " + nickName + " : " + message);
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", chatDeleteMessage.getRoomId()).findFirst();
-                Log.i("CLI", "Delete 1 : " + chatDeleteMessage.getMessageId());
+                Log.i("CLI_DELETE", "Delete 1 : " + chatDeleteMessage.getMessageId());
                 if (realmClientCondition != null) {
-                    realmClientCondition.setDeleteVersion(chatDeleteMessage.getMessageId());
-                    Log.i("CLI", "Delete 2");
+                    realmClientCondition.setDeleteVersion(chatDeleteMessage.getDeleteVersion());
+                    Log.i("CLI_DELETE", "Delete 2");
                     for (RealmOfflineDelete realmOfflineDeleted : realmClientCondition.getOfflineDeleted()) {
-                        Log.i("CLI", "Delete 3");
+                        Log.i("CLI_DELETE", "Delete 3");
                         if (realmOfflineDeleted.getOfflineDelete() == chatDeleteMessage.getMessageId()) {
                             realmOfflineDeleted.deleteFromRealm();
-                            Log.i("CLI", "realmClientCondition : " + realmClientCondition);
+                            Log.i("CLI_DELETE", "realmClientCondition : " + realmClientCondition);
                             break;
                         }
                     }

@@ -62,7 +62,7 @@ public class WebSocketClient {
 
                 @Override
                 public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
-                    Log.i("SOC_WebSocket", "onDisconnected");
+                    Log.i("SOC_WebSocketD", "onDisconnected");
                     reconnect();
                     super.onDisconnected(websocket, serverCloseFrame, clientCloseFrame, closedByServer);
                 }
