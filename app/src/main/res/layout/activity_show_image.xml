@@ -18,7 +18,7 @@
         android:background="#55000000"
         android:orientation="horizontal">
 
-        <com.andexert.library.RippleView
+        <com.iGap.libs.rippleeffect.RippleView
             android:id="@+id/asi_ripple_back"
             rv_centered="true"
             android:layout_width="wrap_content"
@@ -35,7 +35,7 @@
             android:text="@string/fa_chevron_left"
             android:textColor="@android:color/white"
             android:textSize="@dimen/sp20" />
-        </com.andexert.library.RippleView>
+        </com.iGap.libs.rippleeffect.RippleView>
 
         <TextView
             android:id="@+id/asi_txt_image_number"
@@ -48,7 +48,7 @@
             android:textColor="@android:color/white"
             android:textSize="@dimen/sp18" />
 
-        <com.andexert.library.RippleView
+        <com.iGap.libs.rippleeffect.RippleView
             android:id="@+id/asi_ripple_menu"
             rv_centered="true"
             android:layout_width="wrap_content"
@@ -65,7 +65,7 @@
             android:text="@string/fa_ellipsis_v"
             android:textColor="@android:color/white"
             android:textSize="@dimen/sp20" />
-        </com.andexert.library.RippleView>
+        </com.iGap.libs.rippleeffect.RippleView>
     </LinearLayout>
 
     <LinearLayout

@@ -21,9 +21,9 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.andexert.library.RippleView;
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.MaterialDesignTextView;
 
 public class ActivityWebView extends ActivityEnhanced {

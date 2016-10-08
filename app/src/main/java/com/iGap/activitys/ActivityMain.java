@@ -24,7 +24,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.andexert.library.RippleView;
 import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.R;
@@ -46,6 +45,7 @@ import com.iGap.libs.floatingAddButton.ArcMenu;
 import com.iGap.libs.floatingAddButton.StateChangeListener;
 import com.iGap.libs.flowingdrawer.FlowingView;
 import com.iGap.libs.flowingdrawer.LeftDrawerLayout;
+import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.Contacts;
 import com.iGap.module.MyAppBarLayout;
 import com.iGap.module.MyType;

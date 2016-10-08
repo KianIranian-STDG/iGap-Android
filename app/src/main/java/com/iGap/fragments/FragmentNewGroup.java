@@ -21,7 +21,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.andexert.library.RippleView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activitys.ActivityCrop;
@@ -29,6 +28,7 @@ import com.iGap.activitys.ActivityMain;
 import com.iGap.activitys.ActivityNewChanelFinish;
 import com.iGap.interface_package.OnClientGetRoomResponse;
 import com.iGap.interface_package.OnGroupCreate;
+import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.HelperDecodeFile;
 import com.iGap.module.LinedEditText;

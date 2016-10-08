@@ -30,7 +30,7 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
-                <com.andexert.library.RippleView
+                <com.iGap.libs.rippleeffect.RippleView
                     android:id="@+id/stfaq_riple_back"
                     rv_centered="true"
                     android:layout_width="wrap_content"
@@ -48,7 +48,7 @@
                         android:text="@string/md_close_button"
                         android:textColor="@color/whit_background"
                         android:textSize="@dimen/sp22" />
-                </com.andexert.library.RippleView>
+                </com.iGap.libs.rippleeffect.RippleView>
 
                 <TextView
                     android:id="@+id/stfaq_txt_titleToolbar"
@@ -62,7 +62,7 @@
                     android:textStyle="bold"
                     android:visibility="visible" />
 
-                <com.andexert.library.RippleView
+                <com.iGap.libs.rippleeffect.RippleView
                     android:id="@+id/stfaq_ripple_share"
                     rv_centered="true"
                     android:layout_width="wrap_content"
@@ -81,9 +81,9 @@
                     android:textColor="@color/whit_background"
                     android:textSize="@dimen/sp22" />
 
-                </com.andexert.library.RippleView>
+                </com.iGap.libs.rippleeffect.RippleView>
 
-                <com.andexert.library.RippleView
+                <com.iGap.libs.rippleeffect.RippleView
                     android:id="@+id/stfaq_ripple_menuPopup"
                     rv_centered="true"
                     android:layout_width="wrap_content"
@@ -101,7 +101,7 @@
                     android:text="@string/md_show_more_button"
                     android:textColor="@color/whit_background"
                     android:textSize="@dimen/sp22" />
-                </com.andexert.library.RippleView>
+                </com.iGap.libs.rippleeffect.RippleView>
             </LinearLayout>
 
         </RelativeLayout>

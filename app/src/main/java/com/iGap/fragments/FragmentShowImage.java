@@ -18,11 +18,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.andexert.library.RippleView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activitys.ActivitySetting;
 import com.iGap.interface_package.OnFileDownloadResponse;
+import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.StructSharedMedia;
 import com.iGap.module.TouchImageView;
 import com.iGap.proto.ProtoFileDownload;

@@ -29,7 +29,7 @@
                 android:orientation="horizontal">
 
 
-                <com.andexert.library.RippleView
+                <com.iGap.libs.rippleeffect.RippleView
                     android:id="@+id/chl_ripple_back_Button"
                     rv_centered="true"
                     android:layout_width="wrap_content"
@@ -47,7 +47,7 @@
                         android:paddingLeft="@dimen/dp16"
                         android:paddingRight="@dimen/dp12"
                         android:src="@drawable/left_arrow_key" />
-                </com.andexert.library.RippleView>
+                </com.iGap.libs.rippleeffect.RippleView>
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -110,7 +110,7 @@
                     android:padding="@dimen/dp4"
                     android:src="@mipmap/h" />
 
-                <com.andexert.library.RippleView
+                <com.iGap.libs.rippleeffect.RippleView
                     android:id="@+id/chl_ripple_menu_button"
                     rv_centered="true"
                     android:layout_width="wrap_content"
@@ -128,7 +128,7 @@
                         android:paddingLeft="@dimen/dp16"
                         android:paddingRight="@dimen/dp12"
                         android:src="@drawable/show_more_button_with_three_dots" />
-                </com.andexert.library.RippleView>
+                </com.iGap.libs.rippleeffect.RippleView>
             </LinearLayout>
 
             <LinearLayout

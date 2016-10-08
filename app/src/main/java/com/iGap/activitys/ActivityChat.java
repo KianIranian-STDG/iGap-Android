@@ -46,7 +46,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.andexert.library.RippleView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.ChatMessagesFastAdapter;
@@ -94,6 +93,7 @@ import com.iGap.interface_package.OnFileUploadStatusResponse;
 import com.iGap.interface_package.OnMessageViewClick;
 import com.iGap.interface_package.OnUserInfoResponse;
 import com.iGap.interface_package.OnVoiceRecord;
+import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.AttachFile;
 import com.iGap.module.ChatSendMessageUtil;
 import com.iGap.module.ContactUtils;

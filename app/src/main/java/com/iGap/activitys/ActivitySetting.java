@@ -9,6 +9,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -36,7 +37,6 @@ import android.widget.ToggleButton;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.andexert.library.RippleView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.fragments.FragmentShowImage;
@@ -44,6 +44,7 @@ import com.iGap.helper.HelperImageBackColor;
 import com.iGap.interface_package.OnFileUpload;
 import com.iGap.interface_package.OnFileUploadStatusResponse;
 import com.iGap.interface_package.OnUserProfileSetNickNameResponse;
+import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.FileUploadStructure;
 import com.iGap.module.HelperDecodeFile;
 import com.iGap.module.SHP_SETTING;
@@ -238,6 +239,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
                             }
 
                         }).show();
+
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
             }
         });

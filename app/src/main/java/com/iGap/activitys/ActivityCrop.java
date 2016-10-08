@@ -15,9 +15,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.andexert.library.RippleView;
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.HelperCopyFile;
 import com.iGap.module.HelperDecodeFile;
 import com.theartofdev.edmodo.cropper.CropImage;
