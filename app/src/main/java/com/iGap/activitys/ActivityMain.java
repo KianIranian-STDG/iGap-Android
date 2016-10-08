@@ -60,6 +60,7 @@ import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmOfflineDelete;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomMessage;
+import com.iGap.realm.RealmUserInfo;
 import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestChatDelete;
 import com.iGap.request.RequestClientGetRoomList;
@@ -1241,19 +1242,24 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     @Override
     public void onMessageReceive(final long roomId, String message, String messageType, final ProtoGlobal.RoomMessage roomMessage) {
         // I'm not in the room, so I have to add 1 to the unread messages count
+
         Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                final RealmRoom room = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
-                if (room != null) {
-                    final int updatedUnreadCount = room.getUnreadCount() + 1;
-                    room.setUnreadCount(updatedUnreadCount);
-                    realm.copyToRealmOrUpdate(room);
+        if (roomMessage.getUserId() != realm.where(RealmUserInfo.class).findFirst().getUserId()) {
+            //if another account not send this message , and really i'm recipient not sender update unread count
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    final RealmRoom room = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+                    if (room != null) {
+                        final int updatedUnreadCount = room.getUnreadCount() + 1;
+                        room.setUnreadCount(updatedUnreadCount);
+                        realm.copyToRealmOrUpdate(room);
+                    }
                 }
-            }
-        });
+            });
+        }
         realm.close();
+
 
         if (mAdapter != null) {
             runOnUiThread(new Runnable() {

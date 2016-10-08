@@ -163,6 +163,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 /**
  * Created by android3 on 8/5/2016.
@@ -2271,11 +2272,56 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
     @Override
     public void onChatClearMessage(long roomId, long clearId, ProtoResponse.Response response) {
-        if (response.getId().isEmpty()) {
-            mAdapter.clear();
+
+        boolean clearMessage = false;
+
+        Realm realm = Realm.getDefaultInstance();
+        Log.i("CLEAR", "onChatClearMessage 1 clearId : " + clearId);
+        RealmResults<RealmChatHistory> realmChatHistories = realm.where(RealmChatHistory.class).equalTo("roomId", roomId).findAllSorted("id", Sort.DESCENDING);
+        for (final RealmChatHistory chatHistory : realmChatHistories) {
+            Log.i("CLEAR", "onChatClearMessage 2 getMessage : " + chatHistory.getRoomMessage().getMessage());
+            Log.i("CLEAR", "onChatClearMessage 2 getMessageId : " + chatHistory.getRoomMessage().getMessageId());
+            final RealmRoomMessage roomMessage = chatHistory.getRoomMessage();
+
+
+            if (!clearMessage && roomMessage.getMessageId() == clearId) {
+                Log.i("CLEAR", "clearMessage = true");
+                clearMessage = true;
+            }
+
+            if (clearMessage) {
+                final long messageId = chatHistory.getRoomMessage().getMessageId();
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        chatHistory.getRoomMessage().deleteFromRealm();
+                    }
+                });
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // remove deleted message from adapter
+                        Log.i("CLEAR", "mAdapter.removeMessage");
+                        mAdapter.removeMessage(messageId);
+
+                        // remove tag from edtChat if the message has deleted
+                        if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
+                            if (Long.toString(messageId).equals(((StructMessageInfo) edtChat.getTag()).messageID)) {
+                                edtChat.setTag(null);
+                            }
+                        }
+                    }
+                });
+            }
+
+//            if (roomMessage != null) {
+//                // delete chat history message
+//                chatHistory.getRoomMessage().deleteFromRealm();
+//            }
         }
-        Log.i(ActivityChat.class.getSimpleName(), "onChatClearMessage called");
-        // TODO
+        realm.close();
+
     }
 
     private void scrollToEnd() {
@@ -2335,6 +2381,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 @Override
                 public void execute(Realm realm) {
                     RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", mRoomId).findFirst();
+
                     AbstractChatItem lastMessageBeforeDeleted = mAdapter.getAdapterItem(mAdapter.getAdapterItemCount() - 1);
                     if (lastMessageBeforeDeleted != null) {
                         realmRoom.setLastMessageId(Long.parseLong(lastMessageBeforeDeleted.mMessage.messageID));
@@ -2453,6 +2500,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             }
 
         } else {
+
             // I'm sender . but another account sent this message and i received it.
             runOnUiThread(new Runnable() {
                 @Override

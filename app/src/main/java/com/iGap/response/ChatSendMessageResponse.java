@@ -100,8 +100,12 @@ public class ChatSendMessageResponse extends MessageHandler {
                     realmChatHistory.setRoomMessage(realmRoomMessage);
 
                     realm.copyToRealm(realmChatHistory);
-                    if (!G.isAppInFg)
-                        G.helperNotificationAndBadge.updateNotificationAndBadge(true); //TODO [Saeed Mozaffari] [2016-10-08 10:02 AM] - show notification if this message isn't for another account
+
+                    if (roomMessage.getUserId() != userId) { // show notification if this message isn't for another account
+                        if (!G.isAppInFg) {
+                            G.helperNotificationAndBadge.updateNotificationAndBadge(true);
+                        }
+                    }
 
                 } else {
                     // i'm the sender
