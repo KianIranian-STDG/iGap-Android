@@ -316,6 +316,8 @@ public class StructMessageInfo implements Parcelable {
         dest.writeString(this.replayFrom);
         dest.writeString(this.replayMessage);
         dest.writeString(this.replayPicturePath);
+        dest.writeString(this.songArtist);
+        dest.writeLong(this.songLength);
         dest.writeString(this.messageText);
         dest.writeString(this.fileMime);
         dest.writeString(this.filePic);
@@ -323,6 +325,8 @@ public class StructMessageInfo implements Parcelable {
         dest.writeByteArray(this.fileHash);
         dest.writeInt(this.uploadProgress);
         dest.writeParcelable(this.attachment, flags);
+        dest.writeParcelable(this.downloadAttachment, flags);
+        dest.writeParcelable(this.userInfo, flags);
         dest.writeLong(this.time);
     }
 
@@ -346,6 +350,8 @@ public class StructMessageInfo implements Parcelable {
         this.replayFrom = in.readString();
         this.replayMessage = in.readString();
         this.replayPicturePath = in.readString();
+        this.songArtist = in.readString();
+        this.songLength = in.readLong();
         this.messageText = in.readString();
         this.fileMime = in.readString();
         this.filePic = in.readString();
@@ -353,6 +359,8 @@ public class StructMessageInfo implements Parcelable {
         this.fileHash = in.createByteArray();
         this.uploadProgress = in.readInt();
         this.attachment = in.readParcelable(StructMessageAttachment.class.getClassLoader());
+        this.downloadAttachment = in.readParcelable(StructDownloadAttachment.class.getClassLoader());
+        this.userInfo = in.readParcelable(StructRegisteredInfo.class.getClassLoader());
         this.time = in.readLong();
     }
 

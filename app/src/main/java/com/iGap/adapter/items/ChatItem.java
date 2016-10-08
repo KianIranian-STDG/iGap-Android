@@ -1,5 +1,6 @@
 package com.iGap.adapter.items;
 
+import android.os.Environment;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -12,10 +13,14 @@ import com.iGap.module.EmojiTextView;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.OnComplete;
 import com.iGap.module.StructChatInfo;
+import com.iGap.module.StructDownloadAttachment;
 import com.iGap.module.TimeUtils;
+import com.iGap.proto.ProtoFileDownload;
 import com.iGap.realm.enums.RoomType;
+import com.iGap.request.RequestUserInfo;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
@@ -81,16 +86,68 @@ public class ChatItem extends AbstractItem<ChatItem, ChatItem.ViewHolder> {
         }
     }
 
+    private void requestForThumbnail() {
+        // create new download attachment once with attachment token
+        if (mInfo.downloadAttachment == null) {
+            mInfo.downloadAttachment = new StructDownloadAttachment(mInfo.avatar.token);
+        }
+
+        // request thumbnail
+        if (!mInfo.downloadAttachment.thumbnailRequested) {
+            onRequestDownloadThumbnail();
+            // prevent from multiple requesting thumbnail
+            mInfo.downloadAttachment.thumbnailRequested = true;
+        }
+    }
+
+    public void onRequestDownloadThumbnail() {
+        ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
+        if (mInfo.avatar == null || (mInfo.avatar.getLocalThumbnailPath() != null && mInfo.avatar.getLocalThumbnailPath().isEmpty())) {
+            mInfo.avatar.setLocalThumbnailPath(mInfo.chatId, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + mInfo.downloadAttachment.token + System.nanoTime() + mInfo.avatar.name);
+        }
+
+        // FIXME: 10/8/2016 [Alireza] uncomment please
+        // I don't use offset in getting thumbnail
+        // String identity = mInfo.downloadAttachment.token + '*' + selector.toString() + '*' + mInfo.avatar.smallThumbnail.size + '*' + mInfo.avatar.getLocalThumbnailPath() + '*' + mInfo.downloadAttachment.offset;
+
+        // new RequestFileDownload().download(mInfo.downloadAttachment.token, 0, (int) mInfo.avatar.smallThumbnail.size, selector, identity);
+    }
+
+    private void requestForUserInfo() {
+        if (!mInfo.userInfoAlreadyRequested) {
+            RequestUserInfo requestUserInfo = new RequestUserInfo();
+            requestUserInfo.userInfo(mInfo.ownerId);
+
+            mInfo.userInfoAlreadyRequested = true;
+        }
+    }
+
     @Override
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
         holder.lastMessage.setText(mInfo.lastmessage);
 
-        if (mInfo.imageSource.length() > 0) {
-            holder.image.setImageResource(Integer.parseInt(mInfo.imageSource));
+        if (mInfo.avatar != null) {
+            if (mInfo.avatar.isFileExistsOnLocal()) {
+                ImageLoader.getInstance().displayImage(mInfo.avatar.getLocalFilePath(), holder.image);
+            } else if (mInfo.avatar.isThumbnailExistsOnLocal()) {
+                ImageLoader.getInstance().displayImage(mInfo.avatar.getLocalThumbnailPath(), holder.image);
+            } else {
+                if (mInfo.chatType != RoomType.CHAT) {
+                    requestForThumbnail();
+                } else {
+                    requestForUserInfo();
+                }
+            }
         } else {
             holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), mInfo.initials, mInfo.color));
+
+            if (mInfo.chatType != RoomType.CHAT) {
+                requestForThumbnail();
+            } else {
+                requestForUserInfo();
+            }
         }
 
         holder.chatIcon.setText(getStringChatIcon(mInfo.chatType));

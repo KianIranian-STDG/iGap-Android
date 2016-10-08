@@ -1,7 +1,6 @@
 package com.iGap.module;
 
 import com.iGap.proto.ProtoClientGetRoom;
-import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.enums.RoomType;
@@ -32,12 +31,15 @@ public class StructChatInfo {
     public String lastMessageStatus = "";
     public String description = "";
     public int avatarCount;
-    public RealmAvatar avatar;
+    public StructMessageAttachment avatar;
+    public long ownerId;
+    public boolean userInfoAlreadyRequested;
 
     public String fileName = "";
     public String fileMime = "";
     public String fileSize = "";
     public String filePath = "";
+    public StructDownloadAttachment downloadAttachment;
 
     public String fileInfo = "";
     public String filePic = "";
@@ -59,18 +61,20 @@ public class StructChatInfo {
         switch (builder.getRoom().getType()) {
             case CHAT:
                 chatInfo.memberCount = "1";
+                chatInfo.avatar = StructMessageAttachment.convert(builder.getRoom().getChatRoom().getPeer().getAvatar());
+                chatInfo.ownerId = builder.getRoom().getChatRoom().getPeer().getId();
                 break;
             case GROUP:
                 chatInfo.memberCount = builder.getRoom().getGroupRoom().getParticipantsCountLabel();
                 chatInfo.description = builder.getRoom().getGroupRoom().getDescription();
                 chatInfo.avatarCount = builder.getRoom().getChannelRoom().getAvatarCount();
-                chatInfo.avatar = RealmAvatar.convert(builder.getRoom());
+                chatInfo.avatar = StructMessageAttachment.convert(builder.getRoom().getGroupRoom().getAvatar().getFile());
                 break;
             case CHANNEL:
                 chatInfo.memberCount = builder.getRoom().getChannelRoom().getParticipantsCountLabel();
                 chatInfo.description = builder.getRoom().getChannelRoom().getDescription();
                 chatInfo.avatarCount = builder.getRoom().getGroupRoom().getAvatarCount();
-                chatInfo.avatar = RealmAvatar.convert(builder.getRoom());
+                chatInfo.avatar = StructMessageAttachment.convert(builder.getRoom().getChannelRoom().getAvatar().getFile());
                 break;
         }
         chatInfo.readOnly = builder.getRoom().getReadOnly();

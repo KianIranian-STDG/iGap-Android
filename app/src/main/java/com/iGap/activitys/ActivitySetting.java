@@ -56,6 +56,7 @@ import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestFileUpload;
 import com.iGap.request.RequestFileUploadInit;
 import com.iGap.request.RequestFileUploadStatus;
+import com.iGap.request.RequestUserAvatarAdd;
 import com.iGap.request.RequestUserProfileSetNickname;
 
 import java.io.File;
@@ -1387,6 +1388,15 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
             return;
         }
         if (status == ProtoFileUploadStatus.FileUploadStatusResponse.Status.PROCESSED && progress == 100D) {
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    circleImageView.setImageURI(Uri.fromFile(new File(fileUploadStructure.filePath)));
+                }
+            });
+
+            new RequestUserAvatarAdd().userAddAvatar(fileUploadStructure.token);
             // TODO: 10/5/2016 [Alireza] inja mitooni view ro update koni, masalan progress
 
             // remove from selected files to prevent calling this method multiple times

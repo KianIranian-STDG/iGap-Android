@@ -81,9 +81,13 @@ public class ChatSendMessageResponse extends MessageHandler {
                     RealmChatHistory realmChatHistory = realm.createObject(RealmChatHistory.class);
                     realmChatHistory.setId(System.currentTimeMillis());
 
-                    RealmRoomMessage realmRoomMessage = realm.createObject(RealmRoomMessage.class);
+                    RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", roomMessage.getMessageId()).findFirst();
 
-                    realmRoomMessage.setMessageId(roomMessage.getMessageId());
+                    if (realmRoomMessage == null) {
+                        realmRoomMessage = realm.createObject(RealmRoomMessage.class);
+                        realmRoomMessage.setMessageId(roomMessage.getMessageId());
+                    }
+
                     realmRoomMessage.setMessageVersion(roomMessage.getMessageVersion());
                     realmRoomMessage.setStatus(roomMessage.getStatus().toString());
                     realmRoomMessage.setMessageType(roomMessage.getMessageType().toString());

@@ -1,9 +1,11 @@
 package com.iGap.module;
 
-import com.iGap.realm.RealmAvatar;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.iGap.realm.RealmRoomMessageContact;
 
-public class StructRegisteredInfo {
+public class StructRegisteredInfo implements Parcelable {
     public long id;
     public String username;
     public String phone;
@@ -15,12 +17,12 @@ public class StructRegisteredInfo {
     public String status;
     public int lastSeen;
     public int avatarCount;
-    public RealmAvatar avatar;
+    public StructMessageAttachment avatar;
 
     public StructRegisteredInfo() {
     }
 
-    public StructRegisteredInfo(long id, String username, String phone, String firstName, String lastName, String displayName, String initials, String color, String status, int lastSeen, int avatarCount, RealmAvatar avatar) {
+    public StructRegisteredInfo(long id, String username, String phone, String firstName, String lastName, String displayName, String initials, String color, String status, int lastSeen, int avatarCount, StructMessageAttachment avatar) {
         this.id = id;
         this.username = username;
         this.phone = phone;
@@ -57,4 +59,52 @@ public class StructRegisteredInfo {
 
         return userInfo;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(this.id);
+        dest.writeString(this.username);
+        dest.writeString(this.phone);
+        dest.writeString(this.firstName);
+        dest.writeString(this.lastName);
+        dest.writeString(this.displayName);
+        dest.writeString(this.initials);
+        dest.writeString(this.color);
+        dest.writeString(this.status);
+        dest.writeInt(this.lastSeen);
+        dest.writeInt(this.avatarCount);
+        dest.writeParcelable(this.avatar, flags);
+    }
+
+    protected StructRegisteredInfo(Parcel in) {
+        this.id = in.readLong();
+        this.username = in.readString();
+        this.phone = in.readString();
+        this.firstName = in.readString();
+        this.lastName = in.readString();
+        this.displayName = in.readString();
+        this.initials = in.readString();
+        this.color = in.readString();
+        this.status = in.readString();
+        this.lastSeen = in.readInt();
+        this.avatarCount = in.readInt();
+        this.avatar = in.readParcelable(StructMessageAttachment.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<StructRegisteredInfo> CREATOR = new Parcelable.Creator<StructRegisteredInfo>() {
+        @Override
+        public StructRegisteredInfo createFromParcel(Parcel source) {
+            return new StructRegisteredInfo(source);
+        }
+
+        @Override
+        public StructRegisteredInfo[] newArray(int size) {
+            return new StructRegisteredInfo[size];
+        }
+    };
 }

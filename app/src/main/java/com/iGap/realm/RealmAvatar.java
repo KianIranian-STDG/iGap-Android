@@ -29,8 +29,6 @@ public class RealmAvatar extends RealmObject {
         this.file = file;
     }
 
-    private static RealmAvatar realmAvatar = null;
-
     public static RealmAvatar convert(final ProtoGlobal.Room room, Realm realm) {  //TODO [Saeed Mozaffari] [2016-10-04 5:40 PM] - check this code . i guess is wrong!!! maybe overwriting realmAvatar
         ProtoGlobal.File file = null;
         switch (room.getType()) {
@@ -83,16 +81,17 @@ public class RealmAvatar extends RealmObject {
 
     public static RealmAvatar convert(final ProtoGlobal.Room room) {
         Realm realm = Realm.getDefaultInstance();
+        final RealmAvatar[] realmAvatar = {null};
 
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                realmAvatar = convert(room, realm);
+                realmAvatar[0] = convert(room, realm);
             }
         });
 
         realm.close();
 
-        return realmAvatar;
+        return realmAvatar[0];
     }
 }

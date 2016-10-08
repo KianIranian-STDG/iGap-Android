@@ -40,6 +40,8 @@ import com.iGap.interface_package.OnChatUpdateStatusResponse;
 import com.iGap.interface_package.OnClientGetRoomListResponse;
 import com.iGap.interface_package.OnClientGetRoomResponse;
 import com.iGap.interface_package.OnConnectionChangeState;
+import com.iGap.interface_package.OnFileDownloadResponse;
+import com.iGap.interface_package.OnUserInfoResponse;
 import com.iGap.libs.floatingAddButton.ArcMenu;
 import com.iGap.libs.floatingAddButton.StateChangeListener;
 import com.iGap.libs.flowingdrawer.FlowingView;
@@ -51,13 +53,15 @@ import com.iGap.module.OnComplete;
 import com.iGap.module.ShouldScrolledBehavior;
 import com.iGap.module.SoftKeyboard;
 import com.iGap.module.StructChatInfo;
+import com.iGap.module.StructMessageAttachment;
 import com.iGap.proto.ProtoClientGetRoom;
+import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
-import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmChatHistory;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmOfflineDelete;
+import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmUserInfo;
@@ -76,7 +80,7 @@ import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
-public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse {
+public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnFileDownloadResponse, OnUserInfoResponse {
 
     public static LeftDrawerLayout mLeftDrawerLayout;
     private RecyclerView recyclerView;
@@ -93,6 +97,8 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
         G.helperNotificationAndBadge.cancelNotification();
 
+        G.onFileDownloadResponse = this;
+        G.onUserInfoResponse = this;
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
         G.chatSendMessageUtil.setOnChatSendMessageResponse(this);
         G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
@@ -297,7 +303,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 //                mLeftDrawerLayout.toggle();
 //            }
 //        });
-
 
 
         btnBackSearch.setOnClickListener(new View.OnClickListener() {
@@ -736,20 +741,25 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                             switch (room.getType()) {
                                 case CHAT:
                                     info.chatType = RoomType.CHAT;
+                                    Realm realm = Realm.getDefaultInstance();
+                                    RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", room.getChatRoom().getPeer().getId()).findFirst();
+                                    info.avatar = realmRegisteredInfo != null ? StructMessageAttachment.convert(realmRegisteredInfo.getAvatar()) : new StructMessageAttachment();
+                                    realm.close();
+                                    info.ownerId = room.getChatRoom().getPeer().getId();
                                     break;
                                 case CHANNEL:
                                     info.chatType = RoomType.CHANNEL;
                                     info.memberCount = room.getChannelRoom().getParticipantsCountLabel();
                                     info.description = room.getChannelRoom().getDescription();
                                     info.avatarCount = room.getChannelRoom().getAvatarCount();
-                                    info.avatar = RealmAvatar.convert(room);
+                                    info.avatar = StructMessageAttachment.convert(room.getChannelRoom().getAvatar());
                                     break;
                                 case GROUP:
                                     info.chatType = RoomType.GROUP;
                                     info.memberCount = room.getGroupRoom().getParticipantsCountLabel();
                                     info.description = room.getGroupRoom().getDescription();
                                     info.avatarCount = room.getGroupRoom().getAvatarCount();
-                                    info.avatar = RealmAvatar.convert(room);
+                                    info.avatar = StructMessageAttachment.convert(room.getGroupRoom().getAvatar());
                                     break;
                             }
 
@@ -769,310 +779,12 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
                         }
                         loadLocalChatList();
-
-                        // FIXME clear later
-                        // fake data set
-
-//                        StructChatInfo a = new StructChatInfo();
-//                        a.unreadMessagesCount = 5256;
-//                        a.chatId = "123";
-//                        a.chatTitle = "mehdi hosiny";
-//                        a.chatType = RoomType.GROUP;
-//                        a.color = "#ff3131";
-//                        a.memberCount = 122 + "";
-//                        a.lastMessageTime = "10:21";
-//                        a.lastmessage = "how are you jhjh hjh jhhhh";
-//                        a.muteNotification = true;
-//                        a.imageSource = "";
-//                        mAdapter.add(new ChatItem().setInfo(a).setComplete(ActivityMain.this));
-//
-//                        StructChatInfo a1 = new StructChatInfo();
-//                        a1.unreadMessagesCount = 5256;
-//                        a1.chatId = "123";
-//                        a1.chatTitle = "mehdi hosiny";
-//                        a1.chatType = RoomType.GROUP;
-//                        a1.color = "#ff3131";
-//                        a1.memberCount = 122 + "";
-//                        a1.lastMessageTime = "10:21";
-//                        a1.lastmessage = "how are you jhjh hjh jhhhh";
-//                        a1.muteNotification = true;
-//                        a1.imageSource = "";
-//                        mAdapter.add(new ChatItem().setInfo(a1).setComplete(ActivityMain.this));
-//
-//
-//                        StructChatInfo a2 = new StructChatInfo();
-//                        a2.unreadMessagesCount = 5256;
-//                        a2.chatId = "123";
-//                        a2.chatTitle = "mehdi hosiny";
-//                        a2.chatType = RoomType.GROUP;
-//                        a2.color = "#ff3131";
-//                        a2.memberCount = 122 + "";
-//                        a2.lastMessageTime = "10:21";
-//                        a2.lastmessage = "how are you jhjh hjh jhhhh";
-//                        a2.muteNotification = true;
-//                        a2.imageSource = "";
-//                        mAdapter.add(new ChatItem().setInfo(a2).setComplete(ActivityMain.this));
-//
-//                        //===
-//                        StructChatInfo c = new StructChatInfo();
-//                        c.unreadMessagesCount = 5256;
-//                        c.chatId = "123";
-//                        c.chatTitle = "mehdi hosiny";
-//                        c.chatType = RoomType.GROUP;
-//                        c.color = "#ff3131";
-//                        c.memberCount = 122 + "";
-//                        c.lastMessageTime = "10:21";
-//                        c.lastmessage = "how are you jhjh hjh jhhhh";
-//                        c.muteNotification = true;
-//                        c.imageSource = "";
-//                        mAdapter.add(new ChatItem().setInfo(c).setComplete(ActivityMain.this));
-//
-//                        StructChatInfo c1 = new StructChatInfo();
-//                        c1.unreadMessagesCount = 325515;
-//                        c1.chatId = "123";
-//                        c1.chatTitle = "Valerie";
-//                        c1.chatType = RoomType.CHAT;
-//                        c1.color = "#5c9dff";
-//                        c1.lastMessageTime = "10:21";
-//                        c1.lastmessage = "Valeri is typing...";
-//                        c1.muteNotification = false;
-//                        c1.imageSource = "";
-//                        mAdapter.add(new ChatItem().setInfo(c1).setComplete(ActivityMain.this));
-//
-//
-//                        StructChatInfo c2 = new StructChatInfo();
-//                        c2.unreadMessagesCount = 823;
-//                        c2.chatId = "123";
-//                        c2.chatTitle = "ali";
-//                        c2.memberCount = "12k";
-//                        c2.chatType = RoomType.CHANNEL;
-//                        c2.color = "#f1d900";
-//                        c2.lastMessageTime = "2:45";
-//                        c2.lastmessage = "where are you";
-//                        c2.muteNotification = false;
-//                        c2.imageSource = R.mipmap.d + "";
-//                        mAdapter.add(new ChatItem().setInfo(c2).setComplete(ActivityMain.this));
-//
-//                        StructChatInfo c3 = new StructChatInfo();
-//                        c3.unreadMessagesCount = 65;
-//                        c3.chatId = "123";
-//                        c3.chatTitle = "hiwa";
-//                        c3.chatType = RoomType.CHAT;
-//                        c3.color = "#f75cff";
-//                        c3.lastMessageTime = "21:45";
-//                        c3.lastmessage = "iz typing how are you";
-//                        c3.muteNotification = true;
-//                        c3.imageSource = R.mipmap.h + "";
-//                        mAdapter.add(new ChatItem().setInfo(c3).setComplete(ActivityMain.this));
-//
-//
-//                        StructChatInfo c4 = new StructChatInfo();
-//                        c4.unreadMessagesCount = 0;
-//                        c4.chatId = "123";
-//                        c4.chatTitle = "has";
-//                        c4.chatType = RoomType.GROUP;
-//                        c4.color = "#4fb559";
-//                        c4.lastMessageTime = "21:30";
-//                        c4.lastmessage = "go to link";
-//                        c4.muteNotification = false;
-//                        c4.imageSource = "";
-//                        mAdapter.add(new ChatItem().setInfo(c4).setComplete(ActivityMain.this));
-//
-//                        StructChatInfo c5 = new StructChatInfo();
-//                        c5.unreadMessagesCount = 50;
-//                        c5.chatId = "123";
-//                        c5.chatTitle = "has";
-//                        c5.chatType = RoomType.CHANNEL;
-//                        c5.color = "#f26d7d";
-//                        c5.lastMessageTime = "21:30";
-//                        c5.lastmessage = "go to link";
-//                        c5.muteNotification = false;
-//                        c5.imageSource = R.mipmap.e + "";
-//                        mAdapter.add(new ChatItem().setInfo(c5).setComplete(ActivityMain.this));
-//
-//                        StructChatInfo c6 = new StructChatInfo();
-//                        c6.unreadMessagesCount = 0;
-//                        c6.chatId = "123";
-//                        c6.chatTitle = "hasan";
-//                        c6.chatType = RoomType.GROUP;
-//                        c6.color = "#ff8a00";
-//                        c6.lastMessageTime = "21:30";
-//                        c6.lastmessage = "go to link";
-//                        c6.muteNotification = false;
-//                        c6.imageSource = R.mipmap.c + "";
-//                        mAdapter.add(new ChatItem().setInfo(c6).setComplete(ActivityMain.this));
-//
-//                        StructChatInfo c7 = new StructChatInfo();
-//                        c7.unreadMessagesCount = 55;
-//                        c7.chatId = "123";
-//                        c7.chatTitle = "sorosh";
-//                        c7.chatType = RoomType.CHAT;
-//                        c7.color = "#47dfff";
-//                        c7.lastMessageTime = "21:30";
-//                        c7.lastmessage = "go to link";
-//                        c7.muteNotification = false;
-//                        c7.imageSource = R.mipmap.g + "";
-//                        mAdapter.add(new ChatItem().setInfo(c7).setComplete(ActivityMain.this));
                     }
                 });
             }
         };
 
         testIsSecure();
-
-        /*ArrayList<StructChatInfo> list = new ArrayList<>();
-
-        StructChatInfo c = new StructChatInfo();
-        c.unreadMessagesCount = 5256;
-        c.chatId = "user";
-        c.chatTitle = "mehdi hosiny";
-        c.chatType = MyType.ChatType.groupChat;
-        c.color = "#ff3131";
-        c.memberCount = 122 + "";
-        c.lastMessageTime = "10:21";
-        c.lastmessage = "how are you jhjh hjh jhhhh";
-        c.muteNotification = true;
-        c.imageSource = "";
-        list.add(c);
-
-
-        StructChatInfo c1 = new StructChatInfo();
-        c1.unreadMessagesCount = 325515;
-        c1.chatId = "user1";
-        c1.chatTitle = "Valerie";
-        c1.chatType = MyType.ChatType.singleChat;
-        c1.color = "#5c9dff";
-        c1.lastMessageTime = "10:21";
-        c1.lastmessage = "Valeri is typing...";
-        c1.muteNotification = false;
-        c1.imageSource = "";
-        list.add(c1);
-
-
-        StructChatInfo c2 = new StructChatInfo();
-        c2.unreadMessagesCount = 823;
-        c2.chatId = "user2";
-        c2.chatTitle = "ali";
-        c2.memberCount = "12k";
-        c2.chatType = MyType.ChatType.channel;
-        c2.color = "#f1d900";
-        c2.lastMessageTime = "2:45";
-        c2.lastmessage = "where are you";
-        c2.muteNotification = false;
-        c2.imageSource = R.mipmap.d + "";
-        list.add(c2);
-
-        StructChatInfo c3 = new StructChatInfo();
-        c3.unreadMessagesCount = 65;
-        c3.chatId = "user3";
-        c3.chatTitle = "hiwa";
-        c3.chatType = MyType.ChatType.singleChat;
-        c3.color = "#f75cff";
-        c3.lastMessageTime = "21:45";
-        c3.lastmessage = "iz typing how are you";
-        c3.muteNotification = true;
-        c3.imageSource = R.mipmap.h + "";
-        list.add(c3);
-
-
-        StructChatInfo c4 = new StructChatInfo();
-        c4.unreadMessagesCount = 0;
-        c4.chatId = "user4";
-        c4.chatTitle = "has";
-        c4.chatType = MyType.ChatType.groupChat;
-        c4.color = "#4fb559";
-        c4.lastMessageTime = "21:30";
-        c4.lastmessage = "go to link";
-        c4.muteNotification = false;
-        c4.imageSource = "";
-        list.add(c4);
-
-        StructChatInfo c5 = new StructChatInfo();
-        c5.unreadMessagesCount = 50;
-        c5.chatId = "user5";
-        c5.chatTitle = "has";
-        c5.chatType = MyType.ChatType.channel;
-        c5.color = "#f26d7d";
-        c5.lastMessageTime = "21:30";
-        c5.lastmessage = "go to link";
-        c5.muteNotification = false;
-        c5.imageSource = R.mipmap.e + "";
-        list.add(c5);
-
-        StructChatInfo c6 = new StructChatInfo();
-        c6.unreadMessagesCount = 0;
-        c6.chatId = "user6";
-        c6.chatTitle = "hasan";
-        c6.chatType = MyType.ChatType.groupChat;
-        c6.color = "#ff8a00";
-        c6.lastMessageTime = "21:30";
-        c6.lastmessage = "go to link";
-        c6.muteNotification = false;
-        c6.imageSource = R.mipmap.c + "";
-        list.add(c6);
-
-        StructChatInfo c7 = new StructChatInfo();
-        c7.unreadMessagesCount = 55;
-        c7.chatId = "user7";
-        c7.chatTitle = "sorosh";
-        c7.chatType = MyType.ChatType.singleChat;
-        c7.color = "#47dfff";
-        c7.lastMessageTime = "21:30";
-        c7.lastmessage = "go to link";
-        c7.muteNotification = false;
-        c7.imageSource = R.mipmap.g + "";
-        list.add(c7);
-
-        list.add(c);
-        list.add(c1);
-        list.add(c2);
-        list.add(c3);
-        list.add(c4);
-        list.add(c5);
-        list.add(c6);
-        list.add(c7);
-        list.add(c);
-        list.add(c1);
-        list.add(c2);
-        list.add(c3);
-        list.add(c4);
-        list.add(c5);
-        list.add(c6);
-        list.add(c7);
-        list.add(c);
-        list.add(c1);
-        list.add(c2);
-        list.add(c3);
-        list.add(c4);
-        list.add(c5);
-        list.add(c6);
-        list.add(c7);
-        list.add(c);
-        list.add(c1);
-        list.add(c2);
-        list.add(c3);
-        list.add(c4);
-        list.add(c5);
-        list.add(c6);
-        list.add(c7);
-        list.add(c);
-        list.add(c1);
-        list.add(c2);
-        list.add(c3);
-        list.add(c4);
-        list.add(c5);
-        list.add(c6);
-        list.add(c7);
-        list.add(c);
-        list.add(c1);
-        list.add(c2);
-        list.add(c3);
-        list.add(c4);
-        list.add(c5);
-        list.add(c6);
-        list.add(c7);
-
-        return list;*/
     }
 
     private void loadLocalChatList() {
@@ -1085,24 +797,26 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             info.chatTitle = realmRoom.getTitle();
             info.initials = realmRoom.getInitials();
             info.readOnly = realmRoom.getReadOnly();
-            info.avatar = realmRoom.getAvatar();
             switch (realmRoom.getType()) {
                 case CHAT:
                     info.chatType = RoomType.CHAT;
+                    RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", realmRoom.getChatRoom().getPeerId()).findFirst();
+                    info.avatar = realmRegisteredInfo != null ? StructMessageAttachment.convert(realmRegisteredInfo.getAvatar()) : new StructMessageAttachment();
+                    info.ownerId = realmRoom.getChatRoom().getPeerId();
                     break;
                 case CHANNEL:
                     info.chatType = RoomType.CHANNEL;
                     info.memberCount = realmRoom.getChannelRoom().getParticipantsCountLabel();
                     info.description = realmRoom.getChannelRoom().getDescription();
                     info.avatarCount = realmRoom.getChannelRoom().getAvatarCount();
-                    info.avatar = realmRoom.getChannelRoom().getAvatar();
+                    info.avatar = StructMessageAttachment.convert(realmRoom.getChannelRoom().getAvatar());
                     break;
                 case GROUP:
                     info.chatType = RoomType.GROUP;
                     info.memberCount = realmRoom.getGroupRoom().getParticipantsCountLabel();
                     info.description = realmRoom.getGroupRoom().getDescription();
                     info.avatarCount = realmRoom.getGroupRoom().getAvatarCount();
-                    info.avatar = realmRoom.getGroupRoom().getAvatar();
+                    info.avatar = StructMessageAttachment.convert(realmRoom.getGroupRoom().getAvatar());
                     break;
             }
             info.color = realmRoom.getColor();
@@ -1190,7 +904,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         chatInfo.lastmessage = room.getLastMessage();
         chatInfo.lastMessageStatus = room.getLastMessageStatus();
         chatInfo.readOnly = room.getReadOnly();
-        chatInfo.avatar = room.getAvatar();
         RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", room.getLastMessageId()).findFirst();
         if (roomMessage != null) {
             chatInfo.lastMessageTime = roomMessage.getUpdateTime();
@@ -1203,18 +916,21 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         switch (room.getType()) {
             case CHAT:
                 chatInfo.memberCount = "1";
+                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", room.getChatRoom().getPeerId()).findFirst();
+                chatInfo.avatar = realmRegisteredInfo != null ? StructMessageAttachment.convert(realmRegisteredInfo.getAvatar()) : null;
+                chatInfo.ownerId = room.getChatRoom().getPeerId();
                 break;
             case GROUP:
                 chatInfo.memberCount = room.getGroupRoom().getParticipantsCountLabel();
                 chatInfo.description = room.getGroupRoom().getDescription();
                 chatInfo.avatarCount = room.getGroupRoom().getAvatarCount();
-                chatInfo.avatar = room.getGroupRoom().getAvatar();
+                chatInfo.avatar = StructMessageAttachment.convert(room.getGroupRoom().getAvatar());
                 break;
             case CHANNEL:
                 chatInfo.memberCount = room.getChannelRoom().getParticipantsCountLabel();
                 chatInfo.description = room.getChannelRoom().getDescription();
                 chatInfo.avatarCount = room.getChannelRoom().getAvatarCount();
-                chatInfo.avatar = room.getChannelRoom().getAvatar();
+                chatInfo.avatar = StructMessageAttachment.convert(room.getChannelRoom().getAvatar());
                 break;
         }
         chatInfo.muteNotification = room.getMute();
@@ -1228,6 +944,22 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         realm.close();
 
         return chatItem;
+    }
+
+    @Override
+    public void onFileDownload(final String token, final int offset, final ProtoFileDownload.FileDownload.Selector selector, final int progress) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // if thumbnail
+                if (selector != ProtoFileDownload.FileDownload.Selector.FILE) {
+                    mAdapter.updateThumbnail(token);
+                } else {
+                    // else file
+                    mAdapter.updateDownloadFields(token, progress, offset);
+                }
+            }
+        });
     }
 
     @Override
@@ -1282,5 +1014,17 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     @Override
     public void onChatUpdateStatus(long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, long statusVersion) {
         // empty
+    }
+
+    @Override
+    public void onUserInfo(final ProtoGlobal.RegisteredUser user, ProtoResponse.Response response) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Realm realm = Realm.getDefaultInstance();
+                mAdapter.updateChatAvatar(user.getId(), StructMessageAttachment.convert(realm.where(RealmRegisteredInfo.class).equalTo("id", user.getId()).findFirst().getAvatar()));
+                realm.close();
+            }
+        });
     }
 }

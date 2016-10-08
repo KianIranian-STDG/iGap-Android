@@ -81,6 +81,10 @@ public class RealmAttachment extends RealmObject {
         return localThumbnailPath != null && new File(localThumbnailPath).exists();
     }
 
+    public boolean fileExistsOnLocal() {
+        return localFilePath != null && new File(localFilePath).exists();
+    }
+
     public void setLocalThumbnailPath(@Nullable String localThumbnailPath) {
         this.localThumbnailPath = localThumbnailPath;
     }

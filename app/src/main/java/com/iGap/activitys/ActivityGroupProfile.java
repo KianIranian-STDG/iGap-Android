@@ -3,6 +3,7 @@ package com.iGap.activitys;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -63,6 +64,7 @@ import com.iGap.request.RequestFileUploadStatus;
 import com.iGap.request.RequestGroupAddAdmin;
 import com.iGap.request.RequestGroupAddMember;
 import com.iGap.request.RequestGroupAddModerator;
+import com.iGap.request.RequestGroupAvatarAdd;
 import com.iGap.request.RequestGroupEdit;
 import com.iGap.request.RequestGroupKickAdmin;
 import com.iGap.request.RequestGroupKickMember;
@@ -533,7 +535,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnFileUplo
                     break;
                 case AttachFile.request_code_media_from_gallary:
                     filePath = AttachFile.getFilePathFromUri(data.getData());
-                    Log.e("ddd",  filePath+ "    gallary file path");
+                    Log.e("ddd", filePath + "    gallary file path");
                     break;
 
             }
@@ -548,7 +550,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnFileUplo
         protected FileUploadStructure doInBackground(Object... params) {
             try {
                 String filePath = (String) params[0];
-                int avatarId = (int) params[1];
+                long avatarId = (long) params[1];
                 File file = new File(filePath);
                 String fileName = file.getName();
                 long fileSize = file.length();
@@ -583,7 +585,15 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnFileUplo
         }
         if (status == ProtoFileUploadStatus.FileUploadStatusResponse.Status.PROCESSED && progress == 100D) {
 
-// TODO: 10/8/2016 [Alireza] harkari mesle update view
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    imvGroupAvatar.setImageURI(Uri.fromFile(new File(fileUploadStructure.filePath)));
+                }
+            });
+
+            new RequestGroupAvatarAdd().groupAvatarAdd(roomId, fileUploadStructure.token);
+            // TODO: 10/8/2016 [Alireza] harkari mesle update view
 
             // remove from selected files to prevent calling this method multiple times
             // multiple calling may occurs because of the server

@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAttachment;
+import com.iGap.realm.RealmAvatar;
 
 import java.io.File;
 
@@ -118,11 +119,25 @@ public class StructMessageAttachment implements Parcelable {
         return new StructMessageAttachment(attachment.getToken(), attachment.getName(), attachment.getSize(), attachment.getWidth(), attachment.getHeight(), attachment.getDuration(), null, null, StructMessageThumbnail.convert(attachment.getLargeThumbnail()), StructMessageThumbnail.convert(attachment.getSmallThumbnail()));
     }
 
+    public static StructMessageAttachment convert(ProtoGlobal.Avatar attachment) {
+        if (attachment == null) {
+            return new StructMessageAttachment();
+        }
+        return new StructMessageAttachment(attachment.getFile().getToken(), attachment.getFile().getName(), attachment.getFile().getSize(), attachment.getFile().getWidth(), attachment.getFile().getHeight(), attachment.getFile().getDuration(), null, null, StructMessageThumbnail.convert(attachment.getFile().getLargeThumbnail()), StructMessageThumbnail.convert(attachment.getFile().getSmallThumbnail()));
+    }
+
     public static StructMessageAttachment convert(RealmAttachment attachment) {
         if (attachment == null) {
             return new StructMessageAttachment();
         }
         return new StructMessageAttachment(attachment.getToken(), attachment.getName(), attachment.getSize(), attachment.getWidth(), attachment.getHeight(), attachment.getDuration(), attachment.getLocalThumbnailPath(), attachment.getLocalFilePath(), StructMessageThumbnail.convert(attachment.getLargeThumbnail()), StructMessageThumbnail.convert(attachment.getSmallThumbnail()));
+    }
+
+    public static StructMessageAttachment convert(RealmAvatar attachment) {
+        if (attachment == null || attachment.getFile() == null) {
+            return new StructMessageAttachment();
+        }
+        return new StructMessageAttachment(attachment.getFile().getToken(), attachment.getFile().getName(), attachment.getFile().getSize(), attachment.getFile().getWidth(), attachment.getFile().getHeight(), attachment.getFile().getDuration(), attachment.getFile().getLocalThumbnailPath(), attachment.getFile().getLocalFilePath(), StructMessageThumbnail.convert(attachment.getFile().getLargeThumbnail()), StructMessageThumbnail.convert(attachment.getFile().getSmallThumbnail()));
     }
 
     public StructMessageAttachment() {

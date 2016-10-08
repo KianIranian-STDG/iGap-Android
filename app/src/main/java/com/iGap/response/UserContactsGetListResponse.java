@@ -62,8 +62,11 @@ public class UserContactsGetListResponse extends MessageHandler {
                     }
                     listResponse.setAvatar(realmAvatar);
 
-                    RealmAttachment realmAttachment = realm.createObject(RealmAttachment.class);
-                    realmAttachment.setId(registerUser.getId());
+                    RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo("id", registerUser.getId()).findFirst();
+                    if (realmAttachment == null) {
+                        realmAttachment = realm.createObject(RealmAttachment.class);
+                        realmAttachment.setId(registerUser.getId());
+                    }
                     ProtoGlobal.File file = registerUser.getAvatar().getFile();
                     realmAttachment.setToken(file.getToken());
                     realmAttachment.setName(file.getName());
