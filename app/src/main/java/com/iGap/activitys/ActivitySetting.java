@@ -1032,17 +1032,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
                         if (text.toString().equals("From Camera")) {
 
                             if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
-//                                Realm realm = Realm.getDefaultInstance();
-//                                RealmResults<RealmAvatarPath> realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
-//                                realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
-//                                if (realmAvatarPaths.size() > 0) {
-//
-//                                    idAvatar = realmAvatarPaths.first().getId();
-//                                } else {
-//                                    idAvatar = 0;
-//                                }
-                                Log.i("ZZZZ", "camera: " + getIndexRealm());
-                                pathSaveImage = G.imageFile.toString() + "_" + getIndexRealm() + 1 + ".jpg";
+
+                                idAvatar = getIndexRealm();
+                                pathSaveImage = G.imageFile.toString() + "_" + idAvatar + 1 + ".jpg";
                                 nameImageFile = new File(pathSaveImage);
                                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                                 uriIntent = Uri.fromFile(nameImageFile);
@@ -1062,6 +1054,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
                                 public void execute(Realm realm) {
                                     RealmResults<RealmAvatarPath> realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
                                     realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
+
                                     new File(realmAvatarPaths.first().getPathImage()).delete();
                                     RealmAvatarPath delete = realmAvatarPaths.first();
                                     delete.deleteFromRealm();
@@ -1081,6 +1074,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
 //                            }
 //                            pathSaveImage = G.imageFile.toString() + "_" + idAvatar + ".jpg";
 //                            nameImageFile = new File(pathSaveImage);
+                            idAvatar = getIndexRealm();
                             startActivityForResult(intent, myResultCodeGallery);
                             dialog.dismiss();
 //                            realm.close();
@@ -1103,7 +1097,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
                 intent.putExtra("IMAGE_CAMERA", uriIntent.toString());
                 intent.putExtra("TYPE", "camera");
                 intent.putExtra("PAGE", "setting");
-                intent.putExtra("ID", getIndexRealm() + 1);
+                intent.putExtra("ID", idAvatar + 1);
                 startActivityForResult(intent, myResultCrop);
             }
 
@@ -1113,7 +1107,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
                 intent.putExtra("IMAGE_CAMERA", data.getData().toString());
                 intent.putExtra("TYPE", "gallery");
                 intent.putExtra("PAGE", "setting");
-                intent.putExtra("ID", getIndexRealm() + 1);
+                intent.putExtra("ID", idAvatar + 1);
                 startActivityForResult(intent, myResultCrop);
             }
 
@@ -1129,16 +1123,17 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
                 public void execute(Realm realm) {
                     final RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                     RealmAvatarPath realmAvatarPath = realm.createObject(RealmAvatarPath.class);
-                    Log.i("ZZZZ", "execute: " + getIndexRealm());
-                    realmAvatarPath.setId(getIndexRealm() + 1);
+                    realmAvatarPath.setId(idAvatar + 1);
                     realmAvatarPath.setPathImage(pathSaveImage);
                     realmUserInfo.getAvatarPath().add(realmAvatarPath);
 
-                    new UploadTask().execute(nameImageFile.toString(), getIndexRealm());
                 }
             });
             realm.close();
             setImage();
+
+            new UploadTask().execute(pathSaveImage, idAvatar + 1);
+
         }
     }
 
