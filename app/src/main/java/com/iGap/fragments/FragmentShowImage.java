@@ -21,8 +21,10 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activitys.ActivitySetting;
+import com.iGap.interface_package.OnFileDownloadResponse;
 import com.iGap.module.StructSharedMedia;
 import com.iGap.module.TouchImageView;
+import com.iGap.proto.ProtoFileDownload;
 import com.iGap.realm.RealmAvatarPath;
 
 import java.io.File;
@@ -31,7 +33,7 @@ import java.util.ArrayList;
 import io.realm.Realm;
 
 
-public class FragmentShowImage extends Fragment {
+public class FragmentShowImage extends Fragment implements OnFileDownloadResponse {
 
     private TextView txtImageNumber;
     private TextView txtImageName;
@@ -118,6 +120,9 @@ public class FragmentShowImage extends Fragment {
         txtImageNumber = (TextView) view.findViewById(R.id.asi_txt_image_number);
         txtImageName = (TextView) view.findViewById(R.id.asi_txt_image_name);
         txtImageDate = (TextView) view.findViewById(R.id.asi_txt_image_date);
+
+        G.onFileDownloadResponse = this;
+
         initViewPager();
     }
 
@@ -143,10 +148,19 @@ public class FragmentShowImage extends Fragment {
 
             @Override
             public void onPageSelected(int position) {
+                StructSharedMedia sharedMedia = list.get(position);
 
                 txtImageNumber.setText(position + 1 + " of " + listSize);
-                txtImageName.setText(list.get(position).fileName);
-                txtImageDate.setText(list.get(position).fileTime);
+                txtImageName.setText(sharedMedia.fileName);
+                txtImageDate.setText(sharedMedia.fileTime);
+
+                // TODO: 10/8/2016 [Alireza] check if file exists, if not, send download request
+                if (!new File(sharedMedia.filePath).exists()) {
+                    if (!new File(sharedMedia.tumpnail).exists()) {
+                        // TODO: 10/8/2016 [Alireza] request download thumbnail
+                    }
+                    // TODO: 10/8/2016 [Alireza] request download file
+                }
             }
 
             @Override
@@ -165,6 +179,11 @@ public class FragmentShowImage extends Fragment {
         });
 
 
+    }
+
+    @Override
+    public void onFileDownload(final String token, final int offset, final ProtoFileDownload.FileDownload.Selector selector, final int progress) {
+        // TODO: 10/8/2016 [Alireza] file download shod yekari mikoni hala
     }
 
     private class AdapterViewPager extends PagerAdapter {

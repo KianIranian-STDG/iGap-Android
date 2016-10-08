@@ -111,7 +111,6 @@ import com.iGap.module.ShouldScrolledBehavior;
 import com.iGap.module.SortMessages;
 import com.iGap.module.StructMessageAttachment;
 import com.iGap.module.StructMessageInfo;
-import com.iGap.module.StructSharedMedia;
 import com.iGap.module.TimeUtils;
 import com.iGap.module.Utils;
 import com.iGap.module.VoiceRecord;
@@ -120,7 +119,6 @@ import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoFileUploadStatus;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
-import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmChannelRoom;
 import com.iGap.realm.RealmChatHistory;
 import com.iGap.realm.RealmChatRoom;
@@ -1592,6 +1590,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     String firstName = name;
                     String lastName = name;
                     String number = contactUtils.retrieveNumber();
+                    // FIXME: 10/5/2016 [Alireza] get username
                     String username = "username";
                     Uri imageUri = contactUtils.getPhotoUri();
                     String image = null;
@@ -2153,26 +2152,17 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
     private void showImage(String filePath, String thumpnailPath) {
 
-        ArrayList<StructSharedMedia> listPic = new ArrayList<>();
+        ArrayList<StructMessageInfo> listPic = new ArrayList<>();
         int selectedPicture = 0;
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class).equalTo("roomId", mRoomId).findAll();
 
-        if (chatHistories != null) {
-            for (RealmChatHistory chatHistory : chatHistories) {
-                if (chatHistory.getRoomMessage() != null) {
-                    if (chatHistory.getRoomMessage().getMessageType().equals(ProtoGlobal.RoomMessageType.IMAGE.toString())) {
-                        RealmAttachment attachment = chatHistory.getRoomMessage().getAttachment();
-                        StructSharedMedia item = new StructSharedMedia();
-                        item.filePath = attachment.getLocalFilePath();
-                        item.fileName = attachment.getName();
-                        item.tumpnail = attachment.getLocalThumbnailPath();
-                        if (item.filePath.equals(filePath) || item.tumpnail.equals(thumpnailPath))
-                            selectedPicture = listPic.size();
-
-                        listPic.add(item);
-                    }
+        for (AbstractChatItem chatItem : mAdapter.getAdapterItems()) {
+            if (chatItem.mMessage.messageType == ProtoGlobal.RoomMessageType.IMAGE) {
+                if (chatItem.mMessage.filePath.equals(filePath) || chatItem.mMessage.attachment.getLocalThumbnailPath().equals(thumpnailPath)) {
+                    selectedPicture = listPic.size();
                 }
+
+                listPic.add(chatItem.mMessage);
             }
         }
 

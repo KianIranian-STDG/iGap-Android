@@ -47,6 +47,13 @@ public class FileUploadStructure {
         this.filePath = filePath;
     }
 
+    public FileUploadStructure(String fileName, long fileSize, String filePath, long messageId) {
+        this.fileName = fileName;
+        this.fileSize = fileSize;
+        this.filePath = filePath;
+        this.messageId = messageId;
+    }
+
     public FileUploadStructure(String fileName, long fileSize, String filePath, long messageId, ProtoGlobal.RoomMessageType messageType, long roomId) {
         this.fileName = fileName;
         this.fileSize = fileSize;
