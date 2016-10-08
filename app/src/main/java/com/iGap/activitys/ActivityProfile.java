@@ -131,15 +131,14 @@ public class ActivityProfile extends ActivityEnhanced {
                             new RequestUserProfileSetNickname().userProfileNickName(nickName);
                             if (realmUserInfo != null) {
 
-                                RealmAvatarPath realmAvatarPath = realm.createObject(RealmAvatarPath.class);
-
-                                realmAvatarPath.setId(0);
-                                realmAvatarPath.setPathImage(pathImageUser);
-                                Log.i("TTTT", "profile: " + realmAvatarPath.getPathImage());
-                                realmUserInfo.getAvatarPath().add(realmAvatarPath);
-
+                                if (pathImageUser != null) {
+                                    RealmAvatarPath realmAvatarPath = realm.createObject(RealmAvatarPath.class);
+                                    realmAvatarPath.setId(0);
+                                    realmAvatarPath.setPathImage(pathImageUser);
+                                    realmUserInfo.getAvatarPath().add(realmAvatarPath);
+                                    Log.i("TTTT", "profile: " + realmAvatarPath.getPathImage());
+                                }
                                 realmUserInfo.setNickName(nickName);
-
                             }
                         }
                     });
