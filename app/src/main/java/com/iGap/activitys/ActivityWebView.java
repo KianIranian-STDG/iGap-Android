@@ -21,6 +21,7 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.andexert.library.RippleView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.module.MaterialDesignTextView;
@@ -54,20 +55,46 @@ public class ActivityWebView extends ActivityEnhanced {
         txtShare = (MaterialDesignTextView) findViewById(R.id.stfaq_txt_share);
         txtPopupMenu = (MaterialDesignTextView) findViewById(R.id.stfaq_txt_menuPopup);
 
+
         EditText searchBox = ((EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text));
         searchBox.setTextColor(getResources().getColor(R.color.white));
 
-        txtBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+//        txtBack.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                finish();
+//            }
+//        });
 
+        RippleView rippleBack = (RippleView) findViewById(R.id.stfaq_riple_back);
+        rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+
+            @Override
+            public void onComplete(RippleView rippleView) {
                 finish();
             }
+
         });
 
-        txtShare.setOnClickListener(new View.OnClickListener() {
+
+//        txtShare.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+//                sharingIntent.setType("text/plain");
+//                String shareBody = "Here is the share content body";
+//                sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "Title");
+//                sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
+//                startActivity(Intent.createChooser(sharingIntent, "Share via"));
+//            }
+//        });
+
+        RippleView rippleShare = (RippleView) findViewById(R.id.stfaq_ripple_share);
+        rippleShare.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+
             @Override
-            public void onClick(View v) {
+            public void onComplete(RippleView rippleView) {
                 Intent sharingIntent = new Intent(Intent.ACTION_SEND);
                 sharingIntent.setType("text/plain");
                 String shareBody = "Here is the share content body";
@@ -75,6 +102,7 @@ public class ActivityWebView extends ActivityEnhanced {
                 sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
                 startActivity(Intent.createChooser(sharingIntent, "Share via"));
             }
+
         });
 
         webView = (WebView) findViewById(R.id.stfaq_webView);
@@ -114,10 +142,121 @@ public class ActivityWebView extends ActivityEnhanced {
             screenWidth = (int) (getResources().getDisplayMetrics().widthPixels / 1.4);
         }
 
-        txtPopupMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+//        txtPopupMenu.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//                final View popupView = layoutInflater.inflate(R.layout.popup_faq, null);
+//                int finalScreen;
+//
+//                popupWindow = new PopupWindow(popupView, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+//                popupWindow.setBackgroundDrawable(new BitmapDrawable());
+//                popupWindow.setOutsideTouchable(true);
+//
+//
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                    popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.shadow30, ActivityWebView.this.getTheme()));
+//                } else {
+//                    popupWindow.setBackgroundDrawable((getResources().getDrawable(R.drawable.shadow30)));
+//                }
+//
+//
+//                if (popupWindow.isOutsideTouchable()) {
+//                    popupWindow.dismiss();
+//                    Log.i("CCVVBB", "rr: ");
+//                }
+//                popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+//                    @Override
+//                    public void onDismiss() {
+//                        //TODO do sth here on dismiss
+//                    }
+//                });
+//
+//                popupWindow.setAnimationStyle(android.R.style.Animation_InputMethod);
+//                popupWindow.showAtLocation(popupView,
+//                        Gravity.RIGHT | Gravity.TOP, 0, (int) getResources().getDimension(R.dimen.dp16));
+//
+//                popupWindow.showAsDropDown(v);
+//                TextView txtFindPage = (TextView) popupView.findViewById(R.id.popup_faq_findPage);
+//                txtFindPage.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        popupWindow.dismiss();
+//                        allLayoutToolbar.setVisibility(View.GONE);
+//                        searchView.setVisibility(View.VISIBLE);
+//                        searchView.setIconified(false);
+//                        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//                            @Override
+//                            public boolean onQueryTextSubmit(String query) {
+//                                return false;
+//                            }
+//
+//                            @Override
+//                            public boolean onQueryTextChange(String newText) {
+//
+//                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+//                                    webView.findAllAsync(newText);
+//                                } else {
+//                                    webView.findAll(newText);
+//                                }
+//
+//                                return false;
+//                            }
+//                        });
+//                        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+//                            @Override
+//                            public boolean onClose() {
+//
+//                                allLayoutToolbar.setVisibility(View.VISIBLE);
+//                                searchView.setVisibility(View.GONE);
+//                                return false;
+//                            }
+//                        });
+//                    }
+//                });
+//                TextView openChrome = (TextView) popupView.findViewById(R.id.popup_faq_openChrome);
+//                openChrome.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        String urlString;
+//                        if (key.equals("FAQ")) {
+//                            urlString = G.FAQ;
+//                        } else {
+//                            urlString = G.POLICY;
+//                        }
+//
+//                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlString));
+//                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                        intent.setPackage("com.android.chrome");
+//                        try {
+//                            G.context.startActivity(intent);
+//                        } catch (ActivityNotFoundException ex) {
+//                            // Chrome browser presumably not installed so allow user to choose instead
+//                            intent.setPackage(null);
+//                            G.context.startActivity(intent);
+//                        }
+//                    }
+//                });
+//
+//                MaterialDesignTextView reload = (MaterialDesignTextView) popupView.findViewById(R.id.popup_faq_reload);
+//                reload.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        webView.reload();
+//                        popupWindow.dismiss();
+//                    }
+//                });
+//
+//            }
+//
+//        });
 
+        RippleView rippleMenu = (RippleView) findViewById(R.id.stfaq_ripple_menuPopup);
+        rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+
+            @Override
+            public void onComplete(RippleView rippleView) {
                 LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 final View popupView = layoutInflater.inflate(R.layout.popup_faq, null);
                 int finalScreen;
@@ -149,7 +288,7 @@ public class ActivityWebView extends ActivityEnhanced {
                 popupWindow.showAtLocation(popupView,
                         Gravity.RIGHT | Gravity.TOP, 0, (int) getResources().getDimension(R.dimen.dp16));
 
-                popupWindow.showAsDropDown(v);
+                popupWindow.showAsDropDown(rippleView);
                 TextView txtFindPage = (TextView) popupView.findViewById(R.id.popup_faq_findPage);
                 txtFindPage.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -219,6 +358,7 @@ public class ActivityWebView extends ActivityEnhanced {
                         popupWindow.dismiss();
                     }
                 });
+
 
             }
 

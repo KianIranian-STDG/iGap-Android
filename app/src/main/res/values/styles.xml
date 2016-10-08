@@ -72,7 +72,6 @@
         <item name="android:tint">@color/border_editText</item>
         <item name="android:gravity">right</item>
         <item name="android:textColor">@color/text_verify</item>
-
     </style>
 
     <style name="SearchViewToolbar" parent="Widget.AppCompat.Light.SearchView">
@@ -82,9 +81,7 @@
         <item name="android:tint">@color/white</item>
         <item name="android:gravity">right</item>
         <item name="android:textColor">@color/white</item>
-
     </style>
-
     <style name="EmojiPopupAnimation">
         <item name="android:windowEnterAnimation">@anim/popup_enter</item>
         <item name="android:windowExitAnimation">@anim/popup_exit</item>

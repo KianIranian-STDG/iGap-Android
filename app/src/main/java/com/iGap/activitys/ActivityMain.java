@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.andexert.library.RippleView;
 import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.R;
@@ -138,6 +139,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     private void initComponent() {
         final Button btnMenu = (Button) findViewById(R.id.cl_btn_menu);
         btnMenu.setTypeface(G.flaticon);
+        RippleView rippleMenu = (RippleView) findViewById(R.id.cl_ripple_menu);
         final Button btnBackSearch = (Button) findViewById(R.id.cl_btn_backSearch);
         btnBackSearch.setTypeface(G.flaticon);
 
@@ -189,6 +191,17 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                 });
             }
         };
+
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                arcMenu.setVisibility(View.GONE);
+                txtIgap.setVisibility(View.GONE);
+                btnBackSearch.setVisibility(View.VISIBLE);
+                btnMenu.setVisibility(View.GONE);
+            }
+        });
+
         btnSearch.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
@@ -197,29 +210,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                 btnBackSearch.setVisibility(View.GONE);
                 btnMenu.setVisibility(View.VISIBLE);
                 return false;
-            }
-        });
-
-        try {
-            Field mDrawable = SearchView.class.getDeclaredField("mSearchHintIcon");
-            mDrawable.setAccessible(true);
-            Drawable drawable = (Drawable) mDrawable.get(btnSearch);
-            drawable.setBounds(0, 0, -5, 0);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-        final EditText searchBox = ((EditText) btnSearch.findViewById(android.support.v7.appcompat.R.id.search_src_text));
-        searchBox.setTextColor(getResources().getColor(R.color.white));
-        btnMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                btnSearch.onActionViewCollapsed();
-                txtIgap.setVisibility(View.VISIBLE);
-                arcMenu.setVisibility(View.VISIBLE);
-                mLeftDrawerLayout.toggle();
             }
         });
 
@@ -262,6 +252,44 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                 });
             }
         });
+
+        try {
+            Field mDrawable = SearchView.class.getDeclaredField("mSearchHintIcon");
+            mDrawable.setAccessible(true);
+            Drawable drawable = (Drawable) mDrawable.get(btnSearch);
+            drawable.setBounds(0, 0, -5, 0);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        final EditText searchBox = ((EditText) btnSearch.findViewById(android.support.v7.appcompat.R.id.search_src_text));
+        searchBox.setTextColor(getResources().getColor(R.color.white));
+
+        rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+
+            @Override
+            public void onComplete(RippleView rippleView) {
+                btnSearch.onActionViewCollapsed();
+                txtIgap.setVisibility(View.VISIBLE);
+                arcMenu.setVisibility(View.VISIBLE);
+                mLeftDrawerLayout.toggle();
+            }
+
+        });
+
+//        btnMenu.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                btnSearch.onActionViewCollapsed();
+//                txtIgap.setVisibility(View.VISIBLE);
+//                arcMenu.setVisibility(View.VISIBLE);
+//                mLeftDrawerLayout.toggle();
+//            }
+//        });
+
+
 
         btnBackSearch.setOnClickListener(new View.OnClickListener() {
             @Override

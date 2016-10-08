@@ -46,6 +46,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.andexert.library.RippleView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.ChatMessagesFastAdapter;
@@ -714,6 +715,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     private void initComponent() {
         toolbar = (LinearLayout) findViewById(R.id.toolbar);
         ImageView imvBackButton = (ImageView) findViewById(R.id.chl_imv_back_Button);
+        RippleView rippleBackButton = (RippleView) findViewById(R.id.chl_ripple_back_Button);
 
         final Realm realm = Realm.getDefaultInstance();
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", mRoomId).findFirst();
@@ -795,9 +797,12 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
         final int screenWidth = (int) (getResources().getDisplayMetrics().widthPixels / 1.7);
         ImageView imvMenuButton = (ImageView) findViewById(R.id.chl_imv_menu_button);
-        imvMenuButton.setOnClickListener(new View.OnClickListener() {
+
+        RippleView rippleMenuButton = (RippleView) findViewById(R.id.chl_ripple_menu_button);
+        rippleMenuButton.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+
             @Override
-            public void onClick(View v) {
+            public void onComplete(RippleView rippleView) {
                 LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 final View popupView = layoutInflater.inflate(R.layout.popup_window, null);
                 popupWindow = new PopupWindow(popupView, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT, true);
@@ -871,8 +876,88 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     }
                 });
 
+
             }
+
         });
+//        imvMenuButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//                final View popupView = layoutInflater.inflate(R.layout.popup_window, null);
+//                popupWindow = new PopupWindow(popupView, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+//                popupWindow.setBackgroundDrawable(new BitmapDrawable());
+//                popupWindow.setOutsideTouchable(true);
+////                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+////                    popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.shadow, ActivityChat.this.getTheme()));
+////                } else {
+////                    popupWindow.setBackgroundDrawable((getResources().getDrawable(R.drawable.shadow)));
+////                }
+//                if (popupWindow.isOutsideTouchable()) {
+//                    popupWindow.dismiss();
+//                }
+//                popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+//                    @Override
+//                    public void onDismiss() {
+//                        //TODO do sth here on dismiss
+//                    }
+//                });
+//
+//                popupWindow.setAnimationStyle(android.R.style.Animation_InputMethod);
+//                popupWindow.showAtLocation(popupView,
+//                        Gravity.RIGHT | Gravity.TOP, (int) getResources().getDimension(R.dimen.dp16), (int) getResources().getDimension(R.dimen.dp32));
+////                popupWindow.showAsDropDown(v);
+//
+//                TextView txtSearch = (TextView) popupView.findViewById(R.id.popup_txtItem1);
+//                txtSearch.setTypeface(G.arial);
+//                txtSearch.setText("Search");
+//                txtSearch.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//
+//                        Toast.makeText(ActivityChat.this, "1", Toast.LENGTH_SHORT).show();
+//
+//                    }
+//                });
+//
+//                TextView txtClearHistory = (TextView) popupView.findViewById(R.id.popup_txtItem2);
+//                txtClearHistory.setTypeface(G.arial);
+//                txtClearHistory.setText("Clear History");
+//                txtClearHistory.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//
+//                        Toast.makeText(ActivityChat.this, "2", Toast.LENGTH_SHORT).show();
+//
+//                    }
+//                });
+//
+//                TextView txtDeleteChat = (TextView) popupView.findViewById(R.id.popup_txtItem3);
+//                txtDeleteChat.setTypeface(G.arial);
+//                txtDeleteChat.setText("Delete Chat");
+//                txtDeleteChat.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//
+//                        Toast.makeText(ActivityChat.this, "3", Toast.LENGTH_SHORT).show();
+//
+//                    }
+//                });
+//
+//                TextView txtMutNotification = (TextView) popupView.findViewById(R.id.popup_txtItem4);
+//                txtMutNotification.setTypeface(G.arial);
+//                txtMutNotification.setText("Mut Notification");
+//                txtMutNotification.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//
+//                        Toast.makeText(ActivityChat.this, "4", Toast.LENGTH_SHORT).show();
+//
+//                    }
+//                });
+//
+//            }
+//        });
 
 
         imvSmileButton = (MaterialDesignTextView) findViewById(R.id.chl_imv_smile_button);
@@ -918,9 +1003,15 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             recyclerView.scrollToPosition(position - 1);
 
 
-        imvBackButton.setOnClickListener(new View.OnClickListener() {
+//        imvBackButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                finish();
+//            }
+//        });
+        rippleBackButton.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
-            public void onClick(View view) {
+            public void onComplete(RippleView rippleView) {
                 finish();
             }
         });

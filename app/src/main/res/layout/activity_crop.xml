@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/crop_layoutParent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/crop_layoutParent"
     android:layoutDirection="ltr">
 
     <LinearLayout
@@ -26,10 +26,10 @@
                 android:layout_height="match_parent">
 
                 <android.support.v7.widget.SearchView
+                    android:id="@+id/stfaq_searchView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:theme="@style/MySearch"
-                    android:id="@+id/stfaq_searchView"
                     android:visibility="gone" />
 
                 <LinearLayout
@@ -38,16 +38,26 @@
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
 
+                    <com.andexert.library.RippleView
+                        android:id="@+id/pu_ripple_back"
+                        rv_centered="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:rv_alpha="200"
+                        app:rv_centered="true"
+                        app:rv_rippleDuration="150"
+                        app:rv_ripplePadding="5dp">
 
-                    <com.iGap.module.MaterialDesignTextView
-                        android:id="@+id/pu_txt_agreeImage"
-                        android:layout_width="@dimen/dp60"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="@string/md_back_arrow"
-                        android:textColor="@color/whit_background"
-                        android:textSize="@dimen/sp22"
-                        fontPath="fonts/Flaticon.ttf" />
+                        <com.iGap.module.MaterialDesignTextView
+                            android:id="@+id/pu_txt_agreeImage"
+                            fontPath="fonts/Flaticon.ttf"
+                            android:layout_width="@dimen/dp60"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="@string/md_back_arrow"
+                            android:textColor="@color/whit_background"
+                            android:textSize="@dimen/sp22" />
+                    </com.andexert.library.RippleView>
 
                     <TextView
                         android:id="@+id/stfaq_txt_titleToolbar"
@@ -60,18 +70,28 @@
                         android:textStyle="bold"
                         android:visibility="visible" />
 
+                    <com.andexert.library.RippleView
+                        android:id="@+id/pu_ripple_crop"
+                        rv_centered="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:rv_alpha="200"
+                        app:rv_centered="true"
+                        app:rv_rippleDuration="150"
+                        app:rv_ripplePadding="5dp">
 
-                    <com.iGap.module.MaterialDesignTextView
-                        android:id="@+id/pu_txt_crop"
-                        android:layout_width="@dimen/dp60"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="right"
-                        android:gravity="center"
-                        android:text="@string/md_crop_button"
-                        android:textColor="@color/whit_background"
-                        android:textSize="@dimen/sp22"
-                        fontPath="fonts/Flaticon.ttf" />
 
+                        <com.iGap.module.MaterialDesignTextView
+                            android:id="@+id/pu_txt_crop"
+                            fontPath="fonts/Flaticon.ttf"
+                            android:layout_width="@dimen/dp60"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="right"
+                            android:gravity="center"
+                            android:text="@string/md_crop_button"
+                            android:textColor="@color/whit_background"
+                            android:textSize="@dimen/sp22" />
+                    </com.andexert.library.RippleView>
                 </LinearLayout>
 
             </RelativeLayout>

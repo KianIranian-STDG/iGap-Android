@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.andexert.library.RippleView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activitys.ActivityCrop;
@@ -90,10 +91,10 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
 
 
         txtBack = (MaterialDesignTextView) view.findViewById(R.id.ng_txt_back);
-        txtBack.setOnClickListener(new View.OnClickListener() {
+        RippleView rippleBack = (RippleView) view.findViewById(R.id.ng_ripple_back);
+        rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
-            public void onClick(View view) {
-
+            public void onComplete(RippleView rippleView) {
                 Log.i("ddd", "close");
                 if (G.IMAGE_NEW_GROUP.exists()) {
                     G.IMAGE_NEW_GROUP.delete();
@@ -103,6 +104,19 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
                 getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
             }
         });
+//        txtBack.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                Log.i("ddd", "close");
+//                if (G.IMAGE_NEW_GROUP.exists()) {
+//                    G.IMAGE_NEW_GROUP.delete();
+//                } else {
+//                    G.IMAGE_NEW_CHANEL.delete();
+//                }
+//                getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
+//            }
+//        });
 
         txtTitleToolbar = (TextView) view.findViewById(R.id.ng_txt_titleToolbar);
         txtTitleToolbar.setTypeface(G.arial);
@@ -122,10 +136,51 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
 
         //=======================set image for group
         imgCircleImageView = (CircleImageView) view.findViewById(R.id.ng_profile_circle_image);
-        imgCircleImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+//        imgCircleImageView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                new MaterialDialog.Builder(getActivity())
+//                        .title("Choose Picture")
+//                        .negativeText("CANCEL")
+//                        .items(R.array.profile)
+//                        .itemsCallback(new MaterialDialog.ListCallback() {
+//                            @Override
+//                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+//
+//                                if (text.toString().equals("From Camera")) {
+//
+//                                    if (G.context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
+//
+//                                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                                        if (prefix.equals("NewChanel")) {
+//                                            uriIntent = Uri.fromFile(G.IMAGE_NEW_CHANEL);
+//                                        } else {
+//                                            uriIntent = Uri.fromFile(G.IMAGE_NEW_GROUP);
+//                                        }
+//
+//                                        intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
+//                                        startActivityForResult(intent, myResultCodeCamera);
+//                                        dialog.dismiss();
+//
+//                                    } else {
+//                                        Toast.makeText(G.context, "Please check your Camera", Toast.LENGTH_SHORT).show();
+//                                    }
+//
+//                                } else {
+//                                    Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//                                    startActivityForResult(intent, myResultCodeGallery);
+//                                    dialog.dismiss();
+//                                }
+//                            }
+//                        }).show();
+//            }
+//        });
 
+        RippleView rippleCircleImage = (RippleView) view.findViewById(R.id.ng_ripple_circle_image);
+        rippleCircleImage.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+            @Override
+            public void onComplete(RippleView rippleView) {
                 new MaterialDialog.Builder(getActivity())
                         .title("Choose Picture")
                         .negativeText("CANCEL")

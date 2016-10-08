@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/black"
     android:layoutDirection="ltr">
 
@@ -17,6 +18,15 @@
         android:background="#55000000"
         android:orientation="horizontal">
 
+        <com.andexert.library.RippleView
+            android:id="@+id/asi_ripple_back"
+            rv_centered="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:rv_alpha="200"
+            app:rv_centered="true"
+            app:rv_rippleDuration="150"
+            app:rv_ripplePadding="5dp">
         <Button
             android:id="@+id/asi_btn_back"
             android:layout_width="@dimen/dp60"
@@ -25,6 +35,7 @@
             android:text="@string/fa_chevron_left"
             android:textColor="@android:color/white"
             android:textSize="@dimen/sp20" />
+        </com.andexert.library.RippleView>
 
         <TextView
             android:id="@+id/asi_txt_image_number"
@@ -37,6 +48,15 @@
             android:textColor="@android:color/white"
             android:textSize="@dimen/sp18" />
 
+        <com.andexert.library.RippleView
+            android:id="@+id/asi_ripple_menu"
+            rv_centered="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:rv_alpha="200"
+            app:rv_centered="true"
+            app:rv_rippleDuration="150"
+            app:rv_ripplePadding="5dp">
         <Button
             android:id="@+id/asi_btn_menu"
             android:layout_width="@dimen/dp60"
@@ -45,6 +65,7 @@
             android:text="@string/fa_ellipsis_v"
             android:textColor="@android:color/white"
             android:textSize="@dimen/sp20" />
+        </com.andexert.library.RippleView>
     </LinearLayout>
 
     <LinearLayout

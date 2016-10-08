@@ -49,4 +49,6 @@ dependencies {
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     compile 'uk.co.chrisjenx:calligraphy:2.2.0'
     compile 'me.leolin:ShortcutBadger:1.1.9@aar'
+    compile 'com.github.traex.rippleeffect:library:1.3'
+
 }

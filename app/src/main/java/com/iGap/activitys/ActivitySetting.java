@@ -36,6 +36,7 @@ import android.widget.ToggleButton;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.andexert.library.RippleView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.fragments.FragmentShowImage;
@@ -104,6 +105,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
     private String pathImageDecode;
     private RealmResults<RealmAvatarPath> realmAvatarPaths;
     public static String pathSaveImage;
+
 
     private FloatingActionButton fab;
     private CircleImageView circleImageView;
@@ -303,72 +305,29 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
         // button back in toolbar
         txtBack = (TextView) findViewById(R.id.st_txt_back);
         txtBack.setTypeface(G.fontawesome);
-        txtBack.setOnClickListener(new View.OnClickListener() {
+        RippleView rippleBack = (RippleView) findViewById(R.id.st_ripple_back);
+
+        rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+
             @Override
-            public void onClick(View view) {
+            public void onComplete(RippleView rippleView) {
                 finish();
             }
+
         });
+//        txtBack.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                finish();
+//            }
+//        });
 
         // button popupMenu in toolbar
-        final int screenWidth;
-        int portrait_landscape = getResources().getConfiguration().orientation;
-        if (portrait_landscape == 1) {//portrait
-            screenWidth = (int) (getResources().getDisplayMetrics().widthPixels / 1.2);
+        RippleView rippleMore = (RippleView) findViewById(R.id.st_ripple_more);
+        rippleMore.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
-        } else {
-            screenWidth = (int) (getResources().getDisplayMetrics().widthPixels / 1.4);
-        }
-        imgMenu = (ImageView) findViewById(R.id.st_img_menuPopup);
-        assert txtMenu != null;
-        imgMenu.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-
-//                LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//                final View popupView = layoutInflater.inflate(R.layout.popup_window, null);
-//                popupWindow = new PopupWindow(popupView, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-//                popupWindow.setBackgroundDrawable(new BitmapDrawable());
-//                popupWindow.setOutsideTouchable(true);
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                    popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.shadow30, ActivitySetting.this.getTheme()));
-//                } else {
-//                    popupWindow.setBackgroundDrawable((getResources().getDrawable(R.drawable.shadow30)));
-//                }
-//                if (popupWindow.isOutsideTouchable()) {
-//                    popupWindow.dismiss();
-//                    Log.i("CCVVBB", "rr: ");
-//                }
-//                popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-//                    @Override
-//                    public void onDismiss() {
-//                        //TODO do sth here on dismiss
-//                    }
-//                });
-//
-//                popupWindow.setAnimationStyle(android.R.style.Animation_InputMethod);
-//                popupWindow.showAtLocation(popupView,
-//                        Gravity.RIGHT | Gravity.TOP, 0, (int) getResources().getDimension(R.dimen.dp16));
-//                popupWindow.showAsDropDown(v);
-//
-//
-//                TextView txtSearch = (TextView) popupView.findViewById(R.id.popup_txtItem1);
-//                txtSearch.setText("Log Out");
-//                txtSearch.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//
-//                        Toast.makeText(ActivitySetting.this, "1", Toast.LENGTH_SHORT).show();
-//
-//                    }
-//                });
-//
-//                TextView txtClearHistory = (TextView) popupView.findViewById(R.id.popup_txtItem2);
-//                txtClearHistory.setVisibility(View.GONE);
-//                TextView txtDeleteChat = (TextView) popupView.findViewById(R.id.popup_txtItem3);
-//                txtDeleteChat.setVisibility(View.GONE);
-//                TextView txtMutNotification = (TextView) popupView.findViewById(R.id.popup_txtItem4);
-//                txtMutNotification.setVisibility(View.GONE);
+            public void onComplete(RippleView rippleView) {
                 MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this)
                         .items(R.array.menu_setting)
                         .contentColor(Color.BLACK)
@@ -388,9 +347,38 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
                 layoutParams.width = (int) getResources().getDimension(R.dimen.dp200);
                 layoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
                 dialog.getWindow().setAttributes(layoutParams);
-
+                ;
             }
+
         });
+        imgMenu = (ImageView) findViewById(R.id.st_img_menuPopup);
+        assert txtMenu != null;
+//        imgMenu.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this)
+//                        .items(R.array.menu_setting)
+//                        .contentColor(Color.BLACK)
+//                        .itemsCallback(new MaterialDialog.ListCallback() {
+//                            @Override
+//                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+//
+//                                switch (which) {
+//                                    case 0:
+//                                        Toast.makeText(ActivitySetting.this, "Log Out", Toast.LENGTH_SHORT).show();
+//                                        break;
+//                                }
+//                            }
+//                        }).show();
+//                WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+//                layoutParams.copyFrom(dialog.getWindow().getAttributes());
+//                layoutParams.width = (int) getResources().getDimension(R.dimen.dp200);
+//                layoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
+//                dialog.getWindow().setAttributes(layoutParams);
+//
+//            }
+//        });
         realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
         //fab button for set pic
         fab = (FloatingActionButton) findViewById(R.id.st_fab_setPic);
@@ -416,10 +404,11 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
             Log.i("RRRRR", "onCreate: " + r.getId());
         }
         circleImageView = (CircleImageView) findViewById(R.id.st_img_circleImage);
-        circleImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        RippleView rippleImageView = (RippleView) findViewById(R.id.st_ripple_circleImage);
+        rippleImageView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
+            @Override
+            public void onComplete(RippleView rippleView) {
                 ArrayList<StructSharedMedia> items = setItem(new File(G.DIR_IMAGE_USER));
                 Collections.reverse(items);
 
@@ -429,9 +418,25 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
                 bundle.putInt("SelectedImage", 0);
                 fragment.setArguments(bundle);
                 ActivitySetting.this.getFragmentManager().beginTransaction().add(R.id.st_layoutParent, fragment, "Show_Image_fragment").commit();
-
             }
+
         });
+//        circleImageView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                ArrayList<StructSharedMedia> items = setItem(new File(G.DIR_IMAGE_USER));
+//                Collections.reverse(items);
+//
+//                Fragment fragment = FragmentShowImage.newInstance();
+//                Bundle bundle = new Bundle();
+//                bundle.putSerializable("listPic", items);
+//                bundle.putInt("SelectedImage", 0);
+//                fragment.setArguments(bundle);
+//                ActivitySetting.this.getFragmentManager().beginTransaction().add(R.id.st_layoutParent, fragment, "Show_Image_fragment").commit();
+//
+//            }
+//        });
         setImage();
         textLanguage = sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, "English");
         if (textLanguage.equals("English")) {
@@ -1027,22 +1032,23 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
                         if (text.toString().equals("From Camera")) {
 
                             if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
-                                Realm realm = Realm.getDefaultInstance();
-                                RealmResults<RealmAvatarPath> realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
-                                realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
-                                if (realmAvatarPaths.size() > 0) {
-
-                                    idAvatar = realmAvatarPaths.first().getId();
-                                } else {
-                                    idAvatar = 0;
-                                }
-                                pathSaveImage = G.imageFile.toString() + "_" + idAvatar + ".jpg";
+//                                Realm realm = Realm.getDefaultInstance();
+//                                RealmResults<RealmAvatarPath> realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
+//                                realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
+//                                if (realmAvatarPaths.size() > 0) {
+//
+//                                    idAvatar = realmAvatarPaths.first().getId();
+//                                } else {
+//                                    idAvatar = 0;
+//                                }
+                                Log.i("ZZZZ", "camera: " + getIndexRealm());
+                                pathSaveImage = G.imageFile.toString() + "_" + getIndexRealm() + 1 + ".jpg";
                                 nameImageFile = new File(pathSaveImage);
                                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                                 uriIntent = Uri.fromFile(nameImageFile);
                                 intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
                                 startActivityForResult(intent, myResultCodeCamera);
-                                realm.close();
+//                                realm.close();
                                 dialog.dismiss();
 
                             } else {
@@ -1065,19 +1071,19 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
                             setImage();
                         } else {
                             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                            Realm realm = Realm.getDefaultInstance();
-                            RealmResults<RealmAvatarPath> realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
-                            realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
-                            if (realmAvatarPaths.size() > 0) {
-                                idAvatar = realmAvatarPaths.first().getId();
-                            } else {
-                                idAvatar = 0;
-                            }
-                            pathSaveImage = G.imageFile.toString() + "_" + idAvatar + ".jpg";
-                            nameImageFile = new File(pathSaveImage);
+//                            Realm realm = Realm.getDefaultInstance();
+//                            RealmResults<RealmAvatarPath> realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
+//                            realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
+//                            if (realmAvatarPaths.size() > 0) {
+//                                idAvatar = realmAvatarPaths.first().getId();
+//                            } else {
+//                                idAvatar = 0;
+//                            }
+//                            pathSaveImage = G.imageFile.toString() + "_" + idAvatar + ".jpg";
+//                            nameImageFile = new File(pathSaveImage);
                             startActivityForResult(intent, myResultCodeGallery);
                             dialog.dismiss();
-                            realm.close();
+//                            realm.close();
                         }
                     }
                 })
@@ -1097,6 +1103,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
                 intent.putExtra("IMAGE_CAMERA", uriIntent.toString());
                 intent.putExtra("TYPE", "camera");
                 intent.putExtra("PAGE", "setting");
+                intent.putExtra("ID", getIndexRealm() + 1);
                 startActivityForResult(intent, myResultCrop);
             }
 
@@ -1106,22 +1113,28 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
                 intent.putExtra("IMAGE_CAMERA", data.getData().toString());
                 intent.putExtra("TYPE", "gallery");
                 intent.putExtra("PAGE", "setting");
+                intent.putExtra("ID", getIndexRealm() + 1);
                 startActivityForResult(intent, myResultCrop);
             }
 
-        } else if (requestCode == myResultCrop) { // save path image on data base ( realm )
+        } else if (requestCode == myResultCrop && resultCode == RESULT_OK) { // save path image on data base ( realm )
+
+            if (data != null) {
+                pathSaveImage = data.getData().toString();
+            }
+//            getIndexRealm();
             Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
                     final RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                     RealmAvatarPath realmAvatarPath = realm.createObject(RealmAvatarPath.class);
-                    int avatarId = idAvatar + 1;
-                    realmAvatarPath.setId(avatarId);
-                    realmAvatarPath.setPathImage(nameImageFile.toString());
+                    Log.i("ZZZZ", "execute: " + getIndexRealm());
+                    realmAvatarPath.setId(getIndexRealm() + 1);
+                    realmAvatarPath.setPathImage(pathSaveImage);
                     realmUserInfo.getAvatarPath().add(realmAvatarPath);
 
-                    new UploadTask().execute(nameImageFile.toString(), avatarId);
+                    new UploadTask().execute(nameImageFile.toString(), getIndexRealm());
                 }
             });
             realm.close();
@@ -1225,6 +1238,22 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
     protected void onResume() {
         super.onResume();
         Log.i("ZZZZ", "onResume: ");
+    }
+
+    private int getIndexRealm() {
+        int idAvatar;
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<RealmAvatarPath> realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
+        realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
+        if (realmAvatarPaths.size() > 0) {
+            idAvatar = realmAvatarPaths.first().getId();
+        } else {
+            idAvatar = 0;
+        }
+//        pathSaveImage = G.imageFile.toString() + "_" + idAvatar + ".jpg";
+        realm.close();
+
+        return idAvatar;
     }
 
     /**

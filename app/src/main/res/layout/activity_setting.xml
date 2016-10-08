@@ -26,7 +26,6 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
 
-
             <android.support.v7.widget.Toolbar
                 android:id="@+id/st_toolbar"
                 android:layout_width="match_parent"
@@ -51,29 +50,48 @@
                         android:textStyle="bold"
                         android:visibility="gone" />
 
-                    <TextView
-                        android:id="@+id/st_txt_back"
-                        android:layout_width="@dimen/dp60"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentLeft="true"
-                        android:gravity="center"
-                        android:text="@string/fa_chevron_left"
-                        android:textColor="@color/whit_background"
-                        android:textSize="@dimen/sp22" />
+                    <com.andexert.library.RippleView
+                        android:id="@+id/st_ripple_back"
+                        rv_centered="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:rv_alpha="200"
+                        app:rv_centered="true"
+                        app:rv_rippleDuration="150"
+                        app:rv_ripplePadding="5dp">
 
+                        <TextView
+                            android:id="@+id/st_txt_back"
+                            android:layout_width="@dimen/dp60"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="@string/fa_chevron_left"
+                            android:textColor="@color/whit_background"
+                            android:textSize="@dimen/sp22" />
+                    </com.andexert.library.RippleView>
 
-                    <ImageView
-                        android:id="@+id/st_img_menuPopup"
-                        android:layout_width="@dimen/dp32"
-                        android:layout_height="match_parent"
+                    <com.andexert.library.RippleView
+                        android:id="@+id/st_ripple_more"
+                        rv_centered="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:layout_marginRight="@dimen/dp4"
-                        android:gravity="center"
-                        android:src="@mipmap/popup_menu"
-                        android:tint="@color/whit_background" />
+                        app:rv_alpha="200"
+                        app:rv_centered="true"
+                        app:rv_rippleDuration="150"
+                        app:rv_ripplePadding="5dp">
 
+                        <ImageView
+                            android:id="@+id/st_img_menuPopup"
+                            android:layout_width="@dimen/dp48"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="@dimen/dp16"
+                            android:paddingRight="@dimen/dp12"
+                            android:src="@drawable/show_more_button_with_three_dots" />
+                    </com.andexert.library.RippleView>
                 </RelativeLayout>
             </android.support.v7.widget.Toolbar>
+
             <LinearLayout
                 android:id="@+id/st_parentLayoutCircleImage"
                 android:layout_width="wrap_content"
@@ -84,13 +102,25 @@
                 android:paddingTop="@dimen/dp8"
                 app:layout_collapseMode="parallax">
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/st_img_circleImage"
+                <com.andexert.library.RippleView
+                    android:id="@+id/st_ripple_circleImage"
+                    rv_centered="true"
                     android:layout_width="@dimen/dp100"
                     android:layout_height="0dp"
-                    android:layout_gravity="center"
                     android:layout_weight=".9"
-                    android:src="@mipmap/b" />
+                    app:rv_alpha="200"
+                    app:rv_centered="true"
+                    app:rv_rippleDuration="150"
+                    app:rv_ripplePadding="5dp">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/st_img_circleImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_weight=".9"
+                        android:src="@mipmap/b" />
+                </com.andexert.library.RippleView>
 
                 <TextView
                     android:id="@+id/ac_txt_nickname_title"
@@ -761,6 +791,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dp20"
+        android:background="?attr/selectableItemBackground"
         android:clickable="true"
         android:src="@mipmap/pu_camera"
         android:theme="@style/FabButton"

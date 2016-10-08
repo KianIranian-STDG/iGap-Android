@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.andexert.library.RippleView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activitys.ActivitySetting;
@@ -95,26 +96,43 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
 
         Button btnBack = (Button) view.findViewById(R.id.asi_btn_back);
         btnBack.setTypeface(G.fontawesome);
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.e("ddd", "close");
+//        btnBack.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Log.e("ddd", "close");
+//
+//                getActivity().getFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
+//                ((ActivitySetting) getActivity()).setImage();
+//            }
+//        });
+        RippleView rippleBack = (RippleView) view.findViewById(R.id.asi_ripple_back);
+        rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
+            @Override
+            public void onComplete(RippleView rippleView) {
                 getActivity().getFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
                 ((ActivitySetting) getActivity()).setImage();
             }
-        });
 
+        });
 
         Button btnMenu = (Button) view.findViewById(R.id.asi_btn_menu);
         btnMenu.setTypeface(G.fontawesome);
-        btnMenu.setOnClickListener(new View.OnClickListener() {
+//        btnMenu.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                popUpMenuShowImage();
+//            }
+//        });
+        RippleView rippleMenu = (RippleView) view.findViewById(R.id.asi_ripple_menu);
+        rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+
             @Override
-            public void onClick(View view) {
+            public void onComplete(RippleView rippleView) {
                 popUpMenuShowImage();
             }
-        });
 
+        });
         viewPager = (ViewPager) view.findViewById(R.id.asi_view_pager);
 
         txtImageNumber = (TextView) view.findViewById(R.id.asi_txt_image_number);

@@ -18,10 +18,10 @@
             android:layout_height="match_parent">
 
             <android.support.v7.widget.SearchView
+                android:id="@+id/stfaq_searchView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:theme="@style/SearchViewToolbar"
-                android:id="@+id/stfaq_searchView"
                 android:visibility="gone" />
 
             <LinearLayout
@@ -30,15 +30,25 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
+                <com.andexert.library.RippleView
+                    android:id="@+id/stfaq_riple_back"
+                    rv_centered="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:rv_alpha="200"
+                    app:rv_centered="true"
+                    app:rv_rippleDuration="150"
+                    app:rv_ripplePadding="5dp">
 
-                <com.iGap.module.MaterialDesignTextView
-                    android:id="@+id/stfaq_txt_back"
-                    android:layout_width="@dimen/dp60"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="@string/md_close_button"
-                    android:textColor="@color/whit_background"
-                    android:textSize="@dimen/sp22" />
+                    <com.iGap.module.MaterialDesignTextView
+                        android:id="@+id/stfaq_txt_back"
+                        android:layout_width="@dimen/dp60"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="@string/md_close_button"
+                        android:textColor="@color/whit_background"
+                        android:textSize="@dimen/sp22" />
+                </com.andexert.library.RippleView>
 
                 <TextView
                     android:id="@+id/stfaq_txt_titleToolbar"
@@ -52,6 +62,15 @@
                     android:textStyle="bold"
                     android:visibility="visible" />
 
+                <com.andexert.library.RippleView
+                    android:id="@+id/stfaq_ripple_share"
+                    rv_centered="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:rv_alpha="200"
+                    app:rv_centered="true"
+                    app:rv_rippleDuration="150"
+                    app:rv_ripplePadding="5dp">
                 <com.iGap.module.MaterialDesignTextView
                     android:id="@+id/stfaq_txt_share"
                     android:layout_width="@dimen/dp60"
@@ -62,6 +81,17 @@
                     android:textColor="@color/whit_background"
                     android:textSize="@dimen/sp22" />
 
+                </com.andexert.library.RippleView>
+
+                <com.andexert.library.RippleView
+                    android:id="@+id/stfaq_ripple_menuPopup"
+                    rv_centered="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:rv_alpha="200"
+                    app:rv_centered="true"
+                    app:rv_rippleDuration="150"
+                    app:rv_ripplePadding="5dp">
                 <com.iGap.module.MaterialDesignTextView
                     android:id="@+id/stfaq_txt_menuPopup"
                     android:layout_width="@dimen/dp60"
@@ -71,7 +101,7 @@
                     android:text="@string/md_show_more_button"
                     android:textColor="@color/whit_background"
                     android:textSize="@dimen/sp22" />
-
+                </com.andexert.library.RippleView>
             </LinearLayout>
 
         </RelativeLayout>

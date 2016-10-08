@@ -15,11 +15,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.andexert.library.RippleView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.module.HelperCopyFile;
 import com.iGap.module.HelperDecodeFile;
-import com.iGap.realm.RealmAvatarPath;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -30,9 +30,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import io.realm.Realm;
-import io.realm.RealmResults;
-import io.realm.Sort;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityCrop extends ActivityEnhanced {
@@ -45,10 +42,13 @@ public class ActivityCrop extends ActivityEnhanced {
 
     private String page;
     private String type;
+    private int id;
     private String pathImageUser;
     public final String IMAGE_DIRECTORY_NAME = "Upload";
     private File mediaStorageDir;
     private File file2;
+    private String re;
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
@@ -71,6 +71,8 @@ public class ActivityCrop extends ActivityEnhanced {
             resultUri = Uri.parse(bundle.getString("IMAGE_CAMERA"));
             page = bundle.getString("PAGE");
             type = bundle.getString("TYPE");
+            id = bundle.getInt("ID");
+
         }
         if (resultUri != null) {
 
@@ -78,9 +80,33 @@ public class ActivityCrop extends ActivityEnhanced {
         }
 
         txtCrop = (TextView) findViewById(R.id.pu_txt_crop);
-        txtCrop.setOnClickListener(new View.OnClickListener() {
+
+//        txtCrop.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                CropImage.activity(resultUri).setGuidelines(CropImageView.Guidelines.ON)
+//                        .setMinCropResultSize(120, 120)
+//                        .setAutoZoomEnabled(false)
+//                        .setInitialCropWindowPaddingRatio(.08f) // padding window from all
+//                        .setBorderCornerLength(50)
+//                        .setBorderCornerOffset(0)
+//                        .setAllowCounterRotation(true)
+//                        .setBorderCornerThickness(8.0f)
+//                        .setShowCropOverlay(true)
+//                        .setAspectRatio(1, 1)
+//                        .setFixAspectRatio(true)
+//                        .setBorderCornerColor(getResources().getColor(R.color.whit_background))
+//                        .setBackgroundColor(getResources().getColor(R.color.ou_background_crop))
+//                        .setScaleType(CropImageView.ScaleType.FIT_CENTER)
+//                        .start(ActivityCrop.this);
+//            }
+//        });
+
+        RippleView rippleCrop = (RippleView) findViewById(R.id.pu_ripple_crop);
+        rippleCrop.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+
             @Override
-            public void onClick(View view) {
+            public void onComplete(RippleView rippleView) {
                 CropImage.activity(resultUri).setGuidelines(CropImageView.Guidelines.ON)
                         .setMinCropResultSize(120, 120)
                         .setAutoZoomEnabled(false)
@@ -97,32 +123,58 @@ public class ActivityCrop extends ActivityEnhanced {
                         .setScaleType(CropImageView.ScaleType.FIT_CENTER)
                         .start(ActivityCrop.this);
             }
+
         });
+//        txtAgreeImage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                if (page != null) {
+//
+//                    if (page.equals("profile")) {
+//
+//                        Intent intent = new Intent(ActivityCrop.this, ActivityProfile.class);
+//                        startActivity(intent);
+//                        finish();
+//
+//                    } else if (page.equals("setting")) {
+//
+//                        Intent intent = new Intent(ActivityCrop.this, ActivitySetting.class);
+//                        startActivity(intent);
+//                        finish();
+//                    } else {
+//                        finish();
+//                    }
+//                }
+//
+//            }
+//        });
 
-
-        txtAgreeImage.setOnClickListener(new View.OnClickListener() {
+        RippleView rippleBack = (RippleView) findViewById(R.id.pu_ripple_back);
+        rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
-            public void onClick(View view) {
+            public void onComplete(RippleView rippleView) {
 
                 if (page != null) {
 
                     if (page.equals("profile")) {
 
-                        Intent intent = new Intent(ActivityCrop.this, ActivityProfile.class);
-                        startActivity(intent);
+//                        Intent intent = new Intent(ActivityCrop.this, ActivityProfile.class);
+//                        startActivity(intent);
                         finish();
 
                     } else if (page.equals("setting")) {
 
-                        Intent intent = new Intent(ActivityCrop.this, ActivitySetting.class);
-                        startActivity(intent);
+//                        Intent intent = new Intent(ActivityCrop.this, ActivitySetting.class);
+//                        startActivity(intent);
                         finish();
                     } else {
                         finish();
                     }
                 }
-
             }
+
+
         });
         txtCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -168,18 +220,26 @@ public class ActivityCrop extends ActivityEnhanced {
                         file2 = new File(mediaStorageDir.getPath() + File.separator + "IMG_" + timeStamp + ".jpg");
                         HelperCopyFile.copyFile(pathImageUser, file2.toString());
                     } else {
-                        HelperCopyFile.copyFile(pathImageUser, realm());
+                        re = realm();
+                        HelperCopyFile.copyFile(pathImageUser, re);
 
                     }
+                } else {
+                    re = getRealPathFromURI(resultUri);
                 }
                 if (page != null) {
                     if (page.equals("profile")) {
-
-                        resizeImage(realm());
+                        resizeImage(re);
+                        Intent data = new Intent();
+                        data.setData(Uri.parse(re));
+                        setResult(Activity.RESULT_OK, data);
                         finish();
 
                     } else if (page.equals("setting")) {
-                        resizeImage(realm());
+                        Intent data = new Intent();
+                        data.setData(Uri.parse(re));
+                        setResult(Activity.RESULT_OK, data);
+                        resizeImage(re);
                         finish();
                     } else if (page.equals("NewGroup")) {
                         resizeImage(G.IMAGE_NEW_GROUP.toString());
@@ -201,17 +261,17 @@ public class ActivityCrop extends ActivityEnhanced {
 
     private String realm() {
 
-        Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmAvatarPath> realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
-        realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
-        if (realmAvatarPaths.size() > 0) {
-            idAvatar = realmAvatarPaths.first().getId();
-        } else {
-            idAvatar = 0;
-        }
-        realm.close();
+//        Realm realm = Realm.getDefaultInstance();
+//        RealmResults<RealmAvatarPath> realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
+//        realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
+//        if (realmAvatarPaths.size() > 0) {
+//            idAvatar = realmAvatarPaths.first().getId();
+//        } else {
+//            idAvatar = 0;
+//        }
+//        realm.close();
 
-        return G.imageFile.toString() + "_" + idAvatar + ".jpg";
+        return G.imageFile.toString() + "_" + id + ".jpg";
     }
 
     //======================================================================================================// result from crop

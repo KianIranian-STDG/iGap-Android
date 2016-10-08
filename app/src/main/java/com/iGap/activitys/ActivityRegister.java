@@ -251,7 +251,6 @@ public class ActivityRegister extends ActivityEnhanced {
                     public void onClick(View view) {
 
                         edtSearchView.setIconified(false);
-//                        edtSearchView.onActionViewExpanded();
                         edtSearchView.setIconifiedByDefault(true);
                         txtTitle.setVisibility(View.GONE);
                     }
@@ -278,12 +277,10 @@ public class ActivityRegister extends ActivityEnhanced {
                             public void run() {
                                 if (edtSearchView.getQuery().toString().length() > 0) {
                                     edtSearchView.setIconified(false);
-//                                    edtSearchView.onActionViewExpanded();
                                     txtTitle.setVisibility(View.GONE);
 
                                 } else {
                                     edtSearchView.setIconified(true);
-//                                    edtSearchView.onActionViewCollapsed();
                                     txtTitle.setVisibility(View.VISIBLE);
 
                                 }
@@ -563,7 +560,6 @@ public class ActivityRegister extends ActivityEnhanced {
                                     int seconds = (int) ((millisUntilFinished) / 1000);
                                     int minutes = seconds / 60;
                                     seconds = seconds % 60;
-
                                     int portrait_landscape = getResources().getConfiguration().orientation;
                                     if (portrait_landscape == 1) {//portrait
                                         txtTimer = (TextView) findViewById(R.id.rg_txt_verify_timer);
@@ -692,6 +688,9 @@ public class ActivityRegister extends ActivityEnhanced {
         });
 
         dialog.show();
+        if (dialog.isShowing()) {
+            countDownTimer.cancel();
+        }
     }
 
     private void userRegister() {
@@ -715,9 +714,10 @@ public class ActivityRegister extends ActivityEnhanced {
                         } else if (methodValue == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SOCKET) {//verification with socket
 
                             errorVerifySms(); // open rg_dialog for enter sms code
-
+                            countDownTimer.cancel();
 
                         } else if (methodValue == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SMS_SOCKET) {//verification with sms and socket
+
 
                         }
 

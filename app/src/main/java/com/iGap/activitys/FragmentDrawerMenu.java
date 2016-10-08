@@ -19,13 +19,20 @@ import com.iGap.fragments.FragmentNewGroup;
 import com.iGap.fragments.RegisteredContactsFragment;
 import com.iGap.libs.flowingdrawer.MenuFragment;
 import com.iGap.module.HelperDecodeFile;
+import com.iGap.realm.RealmAvatarPath;
 import com.iGap.realm.RealmUserInfo;
 
+import java.io.File;
+
 import io.realm.Realm;
+import io.realm.RealmResults;
+import io.realm.Sort;
 
 
 public class FragmentDrawerMenu extends MenuFragment {
-
+    public static Bitmap decodeBitmapProfile = null;
+    private String pathImageDecode;
+    private ImageView imgUserPhoto;
     Context context;
 
 
@@ -77,7 +84,7 @@ public class FragmentDrawerMenu extends MenuFragment {
         String phoneNumber = realmUserInfo.getPhoneNumber();
         realm.close();
 
-        ImageView imgUserPhoto = (ImageView) v.findViewById(R.id.lm_imv_user_picture);
+        imgUserPhoto = (ImageView) v.findViewById(R.id.lm_imv_user_picture);
 
         TextView txtUserName = (TextView) v.findViewById(R.id.lm_txt_user_name);
         txtUserName.setTypeface(G.arialBold);
@@ -88,13 +95,15 @@ public class FragmentDrawerMenu extends MenuFragment {
         txtUserName.setText(username);
         txtPhoneNumber.setText(phoneNumber);
 
-        if (G.imageFile.exists()) {
-            Bitmap decodeBitmapProfile = HelperDecodeFile.decodeFile(G.imageFile); //TODO [Saeed Mozaffari] [2016-09-10 2:49 PM] -dar har vorud be barname decode kardane tasvir eshtebah ast.
-            imgUserPhoto.setImageBitmap(decodeBitmapProfile);
-        } else {
-            imgUserPhoto.setImageResource(R.mipmap.b);
-            imgUserPhoto.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imgUserPhoto.getContext().getResources().getDimension(R.dimen.dp60), "H", "#7f7f7f"));
-        }
+        setImage();
+
+//        if (G.imageFile.exists()) {
+//            Bitmap decodeBitmapProfile = HelperDecodeFile.decodeFile(G.imageFile); //TODO [Saeed Mozaffari] [2016-09-10 2:49 PM] -dar har vorud be barname decode kardane tasvir eshtebah ast.
+//            imgUserPhoto.setImageBitmap(decodeBitmapProfile);
+//        } else {
+//            imgUserPhoto.setImageResource(R.mipmap.b);
+//            imgUserPhoto.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imgUserPhoto.getContext().getResources().getDimension(R.dimen.dp60), "H", "#7f7f7f"));
+//        }
 
 
         LinearLayout layoutNewGroup = (LinearLayout) v.findViewById(R.id.lm_ll_new_group);
@@ -193,5 +202,19 @@ public class FragmentDrawerMenu extends MenuFragment {
 
     }
 
+    public void setImage() {
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<RealmAvatarPath> realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
+        realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
+        if (realmAvatarPaths.size() > 0) {
+            pathImageDecode = realmAvatarPaths.first().getPathImage();
+            decodeBitmapProfile = HelperDecodeFile.decodeFile(new File(pathImageDecode));
+            imgUserPhoto.setImageBitmap(decodeBitmapProfile);
+        } else {
+            imgUserPhoto.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imgUserPhoto.getContext().getResources().getDimension(R.dimen.dp60), "H", "#7f7f7f"));
+        }
+        realm.close();
+
+    }
 
 }

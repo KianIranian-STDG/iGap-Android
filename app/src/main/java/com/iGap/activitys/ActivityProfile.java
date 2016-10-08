@@ -3,10 +3,12 @@ package com.iGap.activitys;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.TextInputLayout;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -18,7 +20,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.interface_package.OnUserProfileSetNickNameResponse;
-import com.iGap.module.HelperDecodeFile;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmAvatarPath;
 import com.iGap.realm.RealmUserInfo;
@@ -27,6 +28,7 @@ import com.iGap.request.RequestUserProfileSetNickname;
 import java.io.File;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class ActivityProfile extends ActivityEnhanced {
 
@@ -40,8 +42,10 @@ public class ActivityProfile extends ActivityEnhanced {
     private String pathImageUser;
     private int myResultCrop = 3;
     public static boolean IsDeleteFile;
-    private final File F = new File(G.imageFile.toString() + "_" + 0 + ".jpg");
+    private File pathImageFromCamera = new File(G.imageFile.toString() + "_" + 0 + ".jpg");
 
+    private int idAvatar;
+    private String pathSaveImage;
 
     public static Bitmap decodeBitmapProfile = null;
 
@@ -49,7 +53,7 @@ public class ActivityProfile extends ActivityEnhanced {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-
+        delete();
         txtTitlInformation = (TextView) findViewById(R.id.pu_txt_title_information);
         txtTitlInformation.setTypeface(G.arialBold);
         txtDesc = (TextView) findViewById(R.id.pu_txt_title_desc);
@@ -85,10 +89,13 @@ public class ActivityProfile extends ActivityEnhanced {
                 final String nickName = edtNikName.getText().toString();
 
                 if (!nickName.equals("")) {
+                    btnLetsGo.setEnabled(false);
+                    btnSetImage.setEnabled(false);
+                    edtNikName.setEnabled(false);
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
-                            final RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
 
                             G.onUserProfileSetNickNameResponse = new OnUserProfileSetNickNameResponse() {
                                 @Override
@@ -97,6 +104,7 @@ public class ActivityProfile extends ActivityEnhanced {
                                     startActivity(intent);
                                     finish();
                                 }
+
                                 @Override
                                 public void onUserProfileNickNameError(int majorCode, int minorCode) {
 
@@ -121,19 +129,21 @@ public class ActivityProfile extends ActivityEnhanced {
                                 }
                             };
                             new RequestUserProfileSetNickname().userProfileNickName(nickName);
-
-                            if (F.exists()) {
+                            if (realmUserInfo != null) {
 
                                 RealmAvatarPath realmAvatarPath = realm.createObject(RealmAvatarPath.class);
+
                                 realmAvatarPath.setId(0);
-                                realmAvatarPath.setPathImage(F.toString());
+                                realmAvatarPath.setPathImage(pathImageUser);
+                                Log.i("TTTT", "profile: " + realmAvatarPath.getPathImage());
                                 realmUserInfo.getAvatarPath().add(realmAvatarPath);
 
+                                realmUserInfo.setNickName(nickName);
+
                             }
-                            realmUserInfo.setNickName(nickName);
                         }
                     });
-
+                    realm.close();
                 } else {
                     runOnUiThread(new Runnable() {
                         @Override
@@ -143,17 +153,13 @@ public class ActivityProfile extends ActivityEnhanced {
                     });
                 }
 
-                realm.close();
+
             }
         });
 
 
-        if (F.exists()) {
-            decodeBitmapProfile = HelperDecodeFile.decodeFile(F);
-            btnSetImage.setImageBitmap(decodeBitmapProfile);
-            btnSetImage.setPadding(0, 0, 0, 0);
-            btnSetImage.setBackgroundColor(getResources().getColor(android.R.color.transparent));
-        }
+        setImage();
+
     }
 
     //======================================================================================================dialog for choose image
@@ -172,7 +178,9 @@ public class ActivityProfile extends ActivityEnhanced {
                             if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
 
                                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                uriIntent = Uri.fromFile(F);
+                                pathImageUser = G.imageFile.toString() + "_" + 0 + ".jpg";
+                                pathImageFromCamera = new File(pathImageUser);
+                                uriIntent = Uri.fromFile(pathImageFromCamera);
                                 intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
                                 startActivityForResult(intent, myResultCodeCamera);
                                 dialog.dismiss();
@@ -203,6 +211,7 @@ public class ActivityProfile extends ActivityEnhanced {
             intent.putExtra("IMAGE_CAMERA", uriIntent.toString());
             intent.putExtra("TYPE", "camera");
             intent.putExtra("PAGE", "profile");
+            intent.putExtra("ID", 0);
             startActivityForResult(intent, myResultCrop);
 
         } else if (requestCode == myResultCodeGallery && resultCode == RESULT_OK) {// result for gallery
@@ -210,27 +219,50 @@ public class ActivityProfile extends ActivityEnhanced {
             intent.putExtra("IMAGE_CAMERA", data.getData().toString());
             intent.putExtra("TYPE", "gallery");
             intent.putExtra("PAGE", "profile");
+            intent.putExtra("ID", 0);
             startActivityForResult(intent, myResultCrop);
-        } else if (requestCode == myResultCrop) {
+        } else if (requestCode == myResultCrop && resultCode == RESULT_OK) {
 
-            if (F.exists()) {
-                decodeBitmapProfile = HelperDecodeFile.decodeFile(F);
-                btnSetImage.setImageBitmap(decodeBitmapProfile);
-                btnSetImage.setPadding(0, 0, 0, 0);
-                btnSetImage.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+            Log.i("ZZZZ", "ActivityProfile crop: " + data.getData().toString());
+
+            if (data != null) {
+                pathImageUser = data.getData().toString();
             }
+            setImage();
 
         }
     }
 
+
+    private void setImage() {
+        if (pathImageUser != null) {
+            Bitmap bitmap = BitmapFactory.decodeFile(pathImageUser);
+            btnSetImage.setPadding(0, 0, 0, 0);
+            btnSetImage.setImageBitmap(bitmap);
+        }
+    }
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (F.exists()) {
-                F.delete();
+            if (pathImageFromCamera.exists()) {
+                pathImageFromCamera.delete();
             }
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    private void delete() {
+        Realm realm = Realm.getDefaultInstance();
+        final RealmResults<RealmAvatarPath> realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
+        if (realmAvatarPaths.size() > 0) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    realmAvatarPaths.deleteAllFromRealm();
+                }
+            });
+        }
+        realm.close();
     }
 }

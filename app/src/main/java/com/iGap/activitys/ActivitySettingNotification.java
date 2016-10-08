@@ -22,6 +22,7 @@ import android.widget.ToggleButton;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.andexert.library.RippleView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.helper.MyService;
@@ -63,12 +64,21 @@ public class ActivitySettingNotification extends AppCompatActivity {
 
         txtBack = (TextView) findViewById(R.id.stns_txt_back);
         txtBack.setTypeface(G.fontawesome);
-        txtBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+//        txtBack.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                finish();
+//            }
+//        });
+        RippleView rippleBack = (RippleView) findViewById(R.id.stns_ripple_back);
+        rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
+            @Override
+            public void onComplete(RippleView rippleView) {
                 finish();
             }
+
         });
 
         //=============================================================================Message

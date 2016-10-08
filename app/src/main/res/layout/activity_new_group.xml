@@ -34,17 +34,27 @@
                 android:textStyle="bold"
                 android:visibility="visible" />
 
-            <com.iGap.module.MaterialDesignTextView
-                android:id="@+id/ng_txt_back"
-                fontPath="fonts/Flaticon.ttf"
-                android:layout_width="@dimen/dp60"
-                android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:gravity="center"
-                android:text="@string/md_back_arrow"
-                android:textColor="@color/whit_background"
-                android:textSize="@dimen/sp22" />
+            <com.andexert.library.RippleView
+                android:id="@+id/ng_ripple_back"
+                rv_centered="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:rv_alpha="200"
+                app:rv_centered="true"
+                app:rv_rippleDuration="150"
+                app:rv_ripplePadding="5dp">
 
+                <com.iGap.module.MaterialDesignTextView
+                    android:id="@+id/ng_txt_back"
+                    fontPath="fonts/Flaticon.ttf"
+                    android:layout_width="@dimen/dp60"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:gravity="center"
+                    android:text="@string/md_back_arrow"
+                    android:textColor="@color/whit_background"
+                    android:textSize="@dimen/sp22" />
+            </com.andexert.library.RippleView>
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
 
@@ -57,27 +67,37 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.iGap.module.CircleImageView
-                android:id="@+id/ng_profile_circle_image"
+            <com.andexert.library.RippleView
+                android:id="@+id/ng_ripple_circle_image"
+                rv_centered="true"
                 android:layout_width="@dimen/dp105"
                 android:layout_height="@dimen/dp105"
                 android:layout_alignParentTop="true"
                 android:layout_centerInParent="true"
-                android:layout_gravity="center"
                 android:layout_marginTop="@dimen/dp12"
-                android:background="@drawable/circle_color_notificatin_setting"
-                android:gravity="center"
-                android:padding="@dimen/dp32"
-                android:src="@mipmap/plus"
-                app:civ_border_width="0dp" />
+                app:rv_alpha="210"
+                app:rv_centered="true"
+                app:rv_rippleDuration="150">
+
+                <com.iGap.module.CircleImageView
+                    android:id="@+id/ng_profile_circle_image"
+                    android:layout_width="@dimen/dp105"
+                    android:layout_height="@dimen/dp105"
+                    android:layout_gravity="center"
+                    android:background="@drawable/circle_color_notificatin_setting"
+                    android:gravity="center"
+                    android:padding="@dimen/dp32"
+                    android:src="@mipmap/plus"
+                    app:civ_border_width="0dp" />
+            </com.andexert.library.RippleView>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/ng_txtInput_newGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/ng_ripple_circle_image"
                 android:layout_marginLeft="@dimen/dp20"
-                android:layout_marginRight="@dimen/dp140"
-                android:layout_below="@+id/ng_profile_circle_image">
+                android:layout_marginRight="@dimen/dp140">
 
                 <EditText
                     android:id="@+id/ng_edt_newGroup"
@@ -102,16 +122,15 @@
                     android:layout_marginLeft="@dimen/dp20"
                     android:layout_marginRight="@dimen/dp20"
                     android:background="@android:color/transparent"
+                    android:ems="4"
+                    android:lines="4"
                     android:maxLength="500"
                     android:maxLines="4"
-                    android:lines="4"
-                    android:ems="4"
                     android:paddingTop="0dp" />
 
             </android.support.design.widget.TextInputLayout>
 
             <TextView
-                android:padding="@dimen/dp12"
                 android:id="@+id/ng_txt_nextStep"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -119,6 +138,7 @@
                 android:layout_below="@+id/ng_txtInput_description"
                 android:layout_marginRight="@dimen/dp20"
                 android:layout_marginTop="@dimen/dp12"
+                android:padding="@dimen/dp12"
                 android:singleLine="false"
                 android:text="NEXT STEP"
                 android:textColor="@color/toolbar_background"
@@ -126,7 +146,6 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:padding="@dimen/dp12"
                 android:id="@+id/ng_txt_cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -134,6 +153,7 @@
                 android:layout_marginRight="@dimen/dp20"
                 android:layout_marginTop="@dimen/dp12"
                 android:layout_toLeftOf="@+id/ng_txt_nextStep"
+                android:padding="@dimen/dp12"
                 android:text="@string/B_cancel"
                 android:textColor="@color/toolbar_background"
                 android:textSize="@dimen/dp16"

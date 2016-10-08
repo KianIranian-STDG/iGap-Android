@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.andexert.library.RippleView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activitys.ActivityChat;
@@ -165,10 +166,10 @@ public class RegisteredContactsFragment extends Fragment {
         });
 
         TextView txtMenu = (TextView) view.findViewById(R.id.menu_txtBack);
-        txtMenu.setTypeface(G.fontawesome);
-        txtMenu.setOnClickListener(new View.OnClickListener() {
+        RippleView rippleMenu = (RippleView) view.findViewById(R.id.menu_ripple_txtBack);
+        rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
-            public void onClick(View view) {
+            public void onComplete(RippleView rippleView) {
                 // close and remove fragment from stack
                 if (!searchView.isIconified()) {
                     searchView.onActionViewCollapsed();
@@ -176,6 +177,17 @@ public class RegisteredContactsFragment extends Fragment {
                 getActivity().getSupportFragmentManager().popBackStack();
             }
         });
+        txtMenu.setTypeface(G.fontawesome);
+//        txtMenu.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                // close and remove fragment from stack
+//                if (!searchView.isIconified()) {
+//                    searchView.onActionViewCollapsed();
+//                }
+//                getActivity().getSupportFragmentManager().popBackStack();
+//            }
+//        });
         //configure our fastAdapter
         //as we provide id's for the items we want the hasStableIds enabled to speed up things
         fastAdapter.setHasStableIds(true);

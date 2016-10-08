@@ -105,7 +105,6 @@ public class ActivityProfileChannel extends AppCompatActivity {
                     }
                 });
 
-
                 TextView gone2 = (TextView) popupView.findViewById(R.id.popup_txtItem2);
                 gone2.setVisibility(View.GONE);
                 TextView gone3 = (TextView) popupView.findViewById(R.id.popup_txtItem3);
