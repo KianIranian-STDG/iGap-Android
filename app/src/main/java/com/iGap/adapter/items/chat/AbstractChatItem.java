@@ -27,7 +27,6 @@ import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.request.RequestFileDownload;
 import com.mikepenz.fastadapter.items.AbstractItem;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
 import java.util.List;
@@ -113,7 +112,7 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
         // display user avatar only if chat type is GROUP
         if (type == ProtoGlobal.Room.Type.GROUP) {
             if (!mMessage.isSenderMe()) {
-                holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.VISIBLE);
+               /* holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.VISIBLE);
 
                 if (!mMessage.senderAvatar.isEmpty()) {
                     ImageLoader.getInstance().displayImage(suitablePath(mMessage.senderAvatar), (ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar));
@@ -126,7 +125,7 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
                     public void onClick(View v) {
                         messageClickListener.onSenderAvatarClick(v, mMessage, holder.getAdapterPosition());
                     }
-                });
+                });*/
             } else {
                 holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.GONE);
             }

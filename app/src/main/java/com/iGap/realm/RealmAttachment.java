@@ -40,8 +40,10 @@ public class RealmAttachment extends RealmObject {
         long smallId = System.nanoTime();
         RealmThumbnail.create(smallId, id, file.getSmallThumbnail());
 
-        realmAttachment.setLargeThumbnail(realm.where(RealmThumbnail.class).equalTo("id", largeId).findFirst());
-        realmAttachment.setLargeThumbnail(realm.where(RealmThumbnail.class).equalTo("id", smallId).findFirst());
+        RealmThumbnail largeThumbnail = realm.where(RealmThumbnail.class).equalTo("id", largeId).findFirst();
+        realmAttachment.setLargeThumbnail(largeThumbnail);
+        RealmThumbnail smallThumbnail = realm.where(RealmThumbnail.class).equalTo("id", smallId).findFirst();
+        realmAttachment.setSmallThumbnail(smallThumbnail);
 
         realmAttachment.setLocalFilePath("");
         realmAttachment.setLocalThumbnailPath("");

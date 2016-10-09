@@ -31,6 +31,7 @@ import com.iGap.interface_package.OnFileUploadStatusResponse;
 import com.iGap.interface_package.OnGroupAddAdmin;
 import com.iGap.interface_package.OnGroupAddMember;
 import com.iGap.interface_package.OnGroupAddModerator;
+import com.iGap.interface_package.OnGroupAvatarResponse;
 import com.iGap.interface_package.OnGroupClearMessage;
 import com.iGap.interface_package.OnGroupCreate;
 import com.iGap.interface_package.OnGroupEdit;
@@ -204,6 +205,7 @@ public class G extends Application {
     public static OnFileDownloadResponse onFileDownloadResponse;
     public static OnUserInfoResponse onUserInfoResponse;
     public static OnUserAvatarResponse onUserAvatarResponse;
+    public static OnGroupAvatarResponse onGroupAvatarResponse;
 
     public static final String DIR_SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static final String DIR_APP = DIR_SDCARD + "/iGap";

@@ -118,6 +118,10 @@ public class RealmRegisteredInfo extends RealmObject {
     }
 
     public void setAvatar(ProtoGlobal.Avatar avatar) {
+        if (avatar == null || avatar.getFile() == null || (avatar.getFile().getToken() == null || avatar.getFile().getToken().isEmpty())) {
+            return;
+        }
+
         Realm realm = Realm.getDefaultInstance();
         RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo("id", avatar.getId()).findFirst();
 

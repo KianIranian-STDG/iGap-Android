@@ -74,8 +74,10 @@ public class ImageItem extends AbstractChatItem<ImageItem, ImageItem.ViewHolder>
     public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        ((FrameLayout) holder.image.getParent()).setMinimumWidth(mMessage.attachment.width);
-        ((FrameLayout) holder.image.getParent()).setMinimumHeight(mMessage.attachment.height);
+        if (mMessage.attachment != null) {
+            ((FrameLayout) holder.image.getParent()).setMinimumWidth(mMessage.attachment.width);
+            ((FrameLayout) holder.image.getParent()).setMinimumHeight(mMessage.attachment.height);
+        }
 
         setOnClick(holder, holder.image, ProtoGlobal.RoomMessageType.IMAGE);
     }

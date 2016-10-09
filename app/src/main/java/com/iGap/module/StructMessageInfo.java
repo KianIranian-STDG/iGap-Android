@@ -146,7 +146,6 @@ public class StructMessageInfo implements Parcelable {
 
     public String messageID = "1";
 
-    public String senderAvatar = "";  // useful for displaying avatar in group chat type
     public String senderName = "";
     public String senderID = "";
     // TODO: 9/15/2016 [Alireza Eskandarpour Shoferi] need sender avatar bg color
@@ -185,6 +184,7 @@ public class StructMessageInfo implements Parcelable {
     public StructMessageAttachment attachment;
     public StructDownloadAttachment downloadAttachment;
     public StructRegisteredInfo userInfo;
+    public StructMessageAttachment senderAvatar;
 
     public static StructMessageInfo buildForContact(long messageID, long senderID, MyType.SendType sendType, long time, ProtoGlobal.RoomMessageStatus status, String avatar, String username, String firstName, String lastName, String number, Object replayObject) {
         StructMessageInfo info = new StructMessageInfo();
@@ -301,7 +301,6 @@ public class StructMessageInfo implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.messageID);
-        dest.writeString(this.senderAvatar);
         dest.writeString(this.senderName);
         dest.writeString(this.senderID);
         dest.writeString(this.senderColor);
@@ -332,7 +331,6 @@ public class StructMessageInfo implements Parcelable {
 
     protected StructMessageInfo(Parcel in) {
         this.messageID = in.readString();
-        this.senderAvatar = in.readString();
         this.senderName = in.readString();
         this.senderID = in.readString();
         this.senderColor = in.readString();

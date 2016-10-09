@@ -1,5 +1,6 @@
 package com.iGap.response;
 
+import com.iGap.G;
 import com.iGap.proto.ProtoGroupAvatarAdd;
 
 public class GroupAvatarAddResponse extends MessageHandler {
@@ -20,8 +21,7 @@ public class GroupAvatarAddResponse extends MessageHandler {
         super.handler();
 
         ProtoGroupAvatarAdd.GroupAvatarAddResponse.Builder groupAvatarAddResponse = (ProtoGroupAvatarAdd.GroupAvatarAddResponse.Builder) message;
-        groupAvatarAddResponse.getRoomId();
-        groupAvatarAddResponse.getAvatar();
+        G.onGroupAvatarResponse.onAvatarAdd(groupAvatarAddResponse.getRoomId(), groupAvatarAddResponse.getAvatar());
     }
 
     @Override

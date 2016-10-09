@@ -37,6 +37,7 @@ import com.iGap.interface_package.OnFileUploadStatusResponse;
 import com.iGap.interface_package.OnGroupAddAdmin;
 import com.iGap.interface_package.OnGroupAddMember;
 import com.iGap.interface_package.OnGroupAddModerator;
+import com.iGap.interface_package.OnGroupAvatarResponse;
 import com.iGap.interface_package.OnGroupEdit;
 import com.iGap.interface_package.OnGroupKickAdmin;
 import com.iGap.interface_package.OnGroupKickMember;
@@ -53,6 +54,8 @@ import com.iGap.module.Utils;
 import com.iGap.proto.ProtoFileUploadStatus;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
+import com.iGap.realm.RealmAttachment;
+import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmContacts;
 import com.iGap.realm.RealmGroupRoom;
 import com.iGap.realm.RealmMember;
@@ -93,7 +96,7 @@ import io.realm.RealmList;
 /**
  * Created by android3 on 9/18/2016.
  */
-public class ActivityGroupProfile extends ActivityEnhanced implements OnFileUploadStatusResponse, OnFileUpload {
+public class ActivityGroupProfile extends ActivityEnhanced implements OnFileUploadStatusResponse, OnFileUpload, OnGroupAvatarResponse {
 
 
     private CircleImageView imvGroupAvatar;
@@ -167,6 +170,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnFileUplo
 
         G.uploaderUtil.setActivityCallbacks(this);
         G.onFileUploadStatusResponse = this;
+        G.onGroupAvatarResponse = this;
     }
 
     private void initComponent() {
@@ -542,7 +546,24 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnFileUplo
 
             new UploadTask().execute(filePath, avatarId);
         }
+    }
 
+    @Override
+    public void onAvatarAdd(final long roomId, final ProtoGlobal.Avatar avatar) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo("id", roomId).findFirst();
+                if (realmAvatar == null) {
+                    realmAvatar = realm.createObject(RealmAvatar.class);
+                    realmAvatar.setId(roomId);
+                }
+
+                realmAvatar.setFile(RealmAttachment.build(avatar.getFile()));
+            }
+        });
+        realm.close();
     }
 
     private static class UploadTask extends AsyncTask<Object, FileUploadStructure, FileUploadStructure> {

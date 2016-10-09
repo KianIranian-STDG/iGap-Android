@@ -1,5 +1,6 @@
 package com.iGap.adapter.items;
 
+import android.net.Uri;
 import android.os.Environment;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -17,11 +18,13 @@ import com.iGap.module.StructDownloadAttachment;
 import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.realm.enums.RoomType;
+import com.iGap.request.RequestFileDownload;
 import com.iGap.request.RequestUserInfo;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -102,15 +105,15 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
 
     public void onRequestDownloadThumbnail() {
         ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
-        if (mInfo.avatar == null || (mInfo.avatar.getLocalThumbnailPath() != null && mInfo.avatar.getLocalThumbnailPath().isEmpty())) {
+        if (mInfo.avatar != null && (mInfo.avatar.getLocalThumbnailPath() == null || mInfo.avatar.getLocalThumbnailPath().isEmpty())) {
             mInfo.avatar.setLocalThumbnailPath(mInfo.chatId, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + mInfo.downloadAttachment.token + System.nanoTime() + mInfo.avatar.name);
         }
 
-        // FIXME: 10/8/2016 [Alireza] uncomment please
         // I don't use offset in getting thumbnail
-        // String identity = mInfo.downloadAttachment.token + '*' + selector.toString() + '*' + mInfo.avatar.smallThumbnail.size + '*' + mInfo.avatar.getLocalThumbnailPath() + '*' + mInfo.downloadAttachment.offset;
+        String identity = mInfo.downloadAttachment.token + '*' + selector.toString() + '*' + mInfo.avatar.smallThumbnail.size + '*' + mInfo.avatar.getLocalThumbnailPath() + '*' + mInfo.downloadAttachment.offset;
 
-        // new RequestFileDownload().download(mInfo.downloadAttachment.token, 0, (int) mInfo.avatar.smallThumbnail.size, selector, identity);
+        new RequestFileDownload().download(mInfo.downloadAttachment.token, 0, (int) mInfo.avatar.smallThumbnail.size, selector, identity);
+
     }
 
     private void requestForUserInfo() {
@@ -122,6 +125,20 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
         }
     }
 
+    /**
+     * return suitable path for using with UIL
+     *
+     * @param path String path
+     * @return correct local path/passed path
+     */
+    protected String suitablePath(String path) {
+        if (path.matches("\\w+?://")) {
+            return path;
+        } else {
+            return Uri.fromFile(new File(path)).toString();
+        }
+    }
+
     @Override
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
@@ -130,14 +147,22 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
 
         if (mInfo.avatar != null) {
             if (mInfo.avatar.isFileExistsOnLocal()) {
-                ImageLoader.getInstance().displayImage(mInfo.avatar.getLocalFilePath(), holder.image);
+                ImageLoader.getInstance().displayImage(suitablePath(mInfo.avatar.getLocalFilePath()), holder.image);
             } else if (mInfo.avatar.isThumbnailExistsOnLocal()) {
-                ImageLoader.getInstance().displayImage(mInfo.avatar.getLocalThumbnailPath(), holder.image);
+                ImageLoader.getInstance().displayImage(suitablePath(mInfo.avatar.getLocalThumbnailPath()), holder.image);
             } else {
+                holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), mInfo.initials, mInfo.color));
+
                 if (mInfo.chatType != RoomType.CHAT) {
-                    requestForThumbnail();
+                    if (mInfo.avatar.token != null && !mInfo.avatar.token.isEmpty()) {
+                        requestForThumbnail();
+                    }
                 } else {
-                    requestForUserInfo();
+                    if (mInfo.avatar.token != null && !mInfo.avatar.token.isEmpty()) {
+                        requestForThumbnail();
+                    } else {
+                        requestForUserInfo();
+                    }
                 }
             }
         } else {
