@@ -50,6 +50,19 @@ public class GroupSendMessageResponse extends MessageHandler {
                     realmClientCondition.setStatusVersion(roomMessage.getStatusVersion());
                 }
 
+                Log.i("CLI_XXX", "getRoomId : " + builder.getRoomId());
+                Log.i("CLI_XXX", "getMessageVersion : " + roomMessage.getMessageVersion());
+                Log.i("CLI_XXX", "getStatusVersion : " + roomMessage.getStatusVersion());
+                Log.i("CLI_XXX", "getMessageId : " + roomMessage.getMessageId());
+                Log.i("CLI_XXX", "getMessage : " + roomMessage.getMessage());
+                Log.i("CLI_XXX", "***");
+                Log.i("CLI_XXX", "**********************************************");
+                Log.i("CLI_XXX", "***");
+
+                Log.i("CLI", "send message MessageVersion : " + roomMessage.getMessageVersion());
+                Log.i("CLI", "send message StatusVersion : " + roomMessage.getStatusVersion());
+                Log.i("CLI", "send message MessageId : " + roomMessage.getMessageId());
+
                 // if first message received but the room doesn't exist, create new room
                 RealmRoom room = realm.where(RealmRoom.class).equalTo("id", builder.getRoomId()).findFirst();
                 if (room == null) {

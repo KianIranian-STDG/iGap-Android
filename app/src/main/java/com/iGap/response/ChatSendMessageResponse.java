@@ -53,6 +53,15 @@ public class ChatSendMessageResponse extends MessageHandler {
                     realmClientCondition.setStatusVersion(roomMessage.getStatusVersion());
                 }
 
+                Log.i("CLI_XX", "Chat getRoomId : " + chatSendMessageResponse.getRoomId());
+                Log.i("CLI_XX", "Chat getMessageVersion : " + roomMessage.getMessageVersion());
+                Log.i("CLI_XX", "Chat getStatusVersion : " + roomMessage.getStatusVersion());
+                Log.i("CLI_XX", "Chat getMessageId : " + roomMessage.getMessageId());
+                Log.i("CLI_XX", "Chat getMessage : " + roomMessage.getMessage());
+                Log.i("CLI_XX", "***");
+                Log.i("CLI_XX", "**********************************************");
+                Log.i("CLI_XX", "***");
+
                 Log.i("CLI", "send message MessageVersion : " + roomMessage.getMessageVersion());
                 Log.i("CLI", "send message StatusVersion : " + roomMessage.getStatusVersion());
                 Log.i("CLI", "send message MessageId : " + roomMessage.getMessageId());

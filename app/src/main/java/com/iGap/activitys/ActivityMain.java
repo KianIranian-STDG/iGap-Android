@@ -2,6 +2,7 @@ package com.iGap.activitys;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -154,52 +155,34 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         final TextView txtIgap = (TextView) findViewById(R.id.cl_txt_igap);
         txtIgap.setTypeface(G.neuroplp);
 
+        txtIgap.setTypeface(null, Typeface.BOLD);
         if (G.connectionState == Config.ConnectionState.WAITING_FOR_NETWORK) {
             txtIgap.setText("Waiting For Network...");
-            txtIgap.setTypeface(null);
-            // txtIgap.setTextSize(16);
         } else if (G.connectionState == Config.ConnectionState.CONNECTING) {
             txtIgap.setText("Connecting...");
-            txtIgap.setTypeface(null);
-            // txtIgap.setTextSize(16);
         } else if (G.connectionState == Config.ConnectionState.UPDATING) {
             txtIgap.setText("Updating...");
-            txtIgap.setTypeface(null);
-            // txtIgap.setTextSize(16);
         } else {
             txtIgap.setText("iGap");
-            txtIgap.setTypeface(G.neuroplp);
-            // txtIgap.setTextSize(20);
-        }
-        if (G.connectionState != null) {
-            Log.i("XXX", "G.connectionState  : " + G.connectionState.toString());
-        } else {
-            Log.i("XXX", "G.connectionState is null");
+            txtIgap.setTypeface(G.neuroplp, Typeface.NORMAL);
         }
 
         G.onConnectionChangeState = new OnConnectionChangeState() {
             @Override
             public void onChangeState(final Config.ConnectionState connectionState) {
-                Log.i("XXX", "onChangeState  : " + connectionState.toString());
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        txtIgap.setTypeface(null, Typeface.BOLD);
                         if (connectionState == Config.ConnectionState.WAITING_FOR_NETWORK) {
                             txtIgap.setText("Waiting For Network...");
-                            txtIgap.setTypeface(null);
-                            //  txtIgap.setTextSize(16);
                         } else if (connectionState == Config.ConnectionState.CONNECTING) {
                             txtIgap.setText("Connecting...");
-                            txtIgap.setTypeface(null);
-                            // txtIgap.setTextSize(16);
                         } else if (connectionState == Config.ConnectionState.UPDATING) {
                             txtIgap.setText("Updating...");
-                            txtIgap.setTypeface(null);
-                            //  txtIgap.setTextSize(16);
                         } else {
                             txtIgap.setText("iGap");
-                            txtIgap.setTypeface(G.neuroplp);
-                            //   txtIgap.setTextSize(20);
+                            txtIgap.setTypeface(G.neuroplp, Typeface.NORMAL);
                         }
                     }
                 });
