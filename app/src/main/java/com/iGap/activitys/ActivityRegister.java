@@ -976,7 +976,9 @@ public class ActivityRegister extends ActivityEnhanced {
                                 userInfo.setCountryISOCode(isoCode);
                                 userInfo.setPhoneNumber(phoneNumber);
                                 userInfo.setToken(token);
-                                userInfo.setUserRegistrationState(true);
+                                if (!newUser) {
+                                    userInfo.setUserRegistrationState(true);
+                                }
                                 G.importContact();
                             }
                         });

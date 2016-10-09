@@ -950,7 +950,89 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
     @Override
     public void onChatClearMessage(final long roomId, long clearId, final ProtoResponse.Response response) {
-        Log.i(ActivityMain.class.getSimpleName(), "onChatClearMessage called");
+        if (response.getId().isEmpty()) {// another account cleared message
+            // if have message show last message otherwise clear item from message and time and last seen state
+            Realm realm = Realm.getDefaultInstance();
+
+            boolean clearMessage = false;
+            Log.i("ZZZ", "clear message 1");
+
+            RealmResults<RealmChatHistory> realmChatHistories = realm.where(RealmChatHistory.class).equalTo("roomId", roomId).findAllSorted("id", Sort.DESCENDING);
+            for (final RealmChatHistory chatHistory : realmChatHistories) {
+                final RealmRoomMessage roomMessage = chatHistory.getRoomMessage();
+                if (!clearMessage && roomMessage.getMessageId() == clearId) {
+                    clearMessage = true;
+                }
+
+                if (clearMessage) {
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            if (chatHistory.getRoomMessage() != null) {
+                                chatHistory.getRoomMessage().deleteFromRealm();
+                            }
+                        }
+                    });
+                }
+            }
+            List<RealmChatHistory> allItems = realm.where(RealmChatHistory.class).equalTo("roomId", roomId).findAll().sort("id", Sort.DESCENDING);
+            long latestMessageId = 0;
+            for (RealmChatHistory item : allItems) {
+                Log.i("ZZZ", "item : " + item);
+                if (item.getRoomMessage() != null) {
+                    latestMessageId = item.getRoomMessage().getMessageId();
+                    break;
+                }
+            }
+
+            Log.i("ZZZ", "clearId : " + clearId + "  ||  latestMessageId : " + latestMessageId);
+            if (latestMessageId == 0) { // if cleared from latest message
+
+                // clear item
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        RealmRoom room = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+                        if (room != null) {
+                            room.setUnreadCount(0);
+                            room.setLastMessageId(0);
+                            room.setLastMessageTime(0);
+                            room.setLastMessage("");
+
+                            realm.copyToRealmOrUpdate(room);
+                            Log.i("ZZZ", "runOnUiThread");
+                        }
+                    }
+                });
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.i("ZZZ", "mAdapter : " + mAdapter);
+                        if (mAdapter != null) {
+                            Log.i("ZZZ", "mAdapter updated");
+                            mAdapter.updateChat(roomId, convertToChatItem(roomId));
+                        }
+                    }
+                });
+            } else {
+//                RealmResults<RealmChatHistory> realmChatHistories = realm.where(RealmChatHistory.class).equalTo("roomId", roomId).findAllSorted("id", Sort.DESCENDING);
+//
+//                for (final RealmChatHistory chatHistory : realmChatHistories) {
+//                    if (chatHistory.getRoomMessage().getMessage() != null) {
+//                        // show last message
+//
+//                        break;
+//                    }
+//
+//                    if (chatHistory.getRoomMessage().getMessageId() == clearId) {
+//                        // show last message
+//                    }
+//                }
+            }
+            realm.close();
+
+        }
     }
 
     @Override

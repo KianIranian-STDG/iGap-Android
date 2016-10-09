@@ -2276,16 +2276,11 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         boolean clearMessage = false;
 
         Realm realm = Realm.getDefaultInstance();
-        Log.i("CLEAR", "onChatClearMessage 1 clearId : " + clearId);
         RealmResults<RealmChatHistory> realmChatHistories = realm.where(RealmChatHistory.class).equalTo("roomId", roomId).findAllSorted("id", Sort.DESCENDING);
         for (final RealmChatHistory chatHistory : realmChatHistories) {
-            Log.i("CLEAR", "onChatClearMessage 2 getMessage : " + chatHistory.getRoomMessage().getMessage());
-            Log.i("CLEAR", "onChatClearMessage 2 getMessageId : " + chatHistory.getRoomMessage().getMessageId());
             final RealmRoomMessage roomMessage = chatHistory.getRoomMessage();
 
-
             if (!clearMessage && roomMessage.getMessageId() == clearId) {
-                Log.i("CLEAR", "clearMessage = true");
                 clearMessage = true;
             }
 
@@ -2314,11 +2309,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     }
                 });
             }
-
-//            if (roomMessage != null) {
-//                // delete chat history message
-//                chatHistory.getRoomMessage().deleteFromRealm();
-//            }
         }
         realm.close();
 

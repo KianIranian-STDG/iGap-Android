@@ -100,6 +100,17 @@ public class ActivityProfile extends ActivityEnhanced {
                             G.onUserProfileSetNickNameResponse = new OnUserProfileSetNickNameResponse() {
                                 @Override
                                 public void onUserProfileNickNameResponse(final String nickName, ProtoResponse.Response response) {
+
+                                    Realm realm = Realm.getDefaultInstance();
+                                    realm.executeTransaction(new Realm.Transaction() {
+                                        @Override
+                                        public void execute(Realm realm) {
+                                            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+                                            userInfo.setUserRegistrationState(true);
+                                        }
+                                    });
+                                    realm.close();
+
                                     Intent intent = new Intent(G.context, ActivityMain.class);
                                     startActivity(intent);
                                     finish();
@@ -107,6 +118,15 @@ public class ActivityProfile extends ActivityEnhanced {
 
                                 @Override
                                 public void onUserProfileNickNameError(int majorCode, int minorCode) {
+
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            btnLetsGo.setEnabled(true);
+                                            btnSetImage.setEnabled(true);
+                                            edtNikName.setEnabled(true);
+                                        }
+                                    });
 
                                     if (majorCode == 112 && minorCode == 1) {
                                         runOnUiThread(new Runnable() {
@@ -240,6 +260,7 @@ public class ActivityProfile extends ActivityEnhanced {
             btnSetImage.setImageBitmap(bitmap);
         }
     }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
