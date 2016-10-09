@@ -372,6 +372,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                 } else {
                     Intent intent = new Intent(ActivityMain.this, ActivityChat.class);
                     intent.putExtra("RoomId", item.mInfo.chatId);
+                    intent.putExtra("MUT", item.mInfo.muteNotification);
                     startActivity(intent);
                 }
                 return false;
