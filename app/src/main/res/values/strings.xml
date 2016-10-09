@@ -33,6 +33,8 @@
     <string name="md_round_pause_button">\uf224</string>
     <string name="md_play_next_button">\uf200</string>
     <string name="md_previous_track">\uf206</string>
+    <string name="md_play_arrow">\uf1fe</string>
+    <string name="md_pause_button">\uf1f1</string>
 
     <string name="md_shuffle_mode">\uf250</string>
     <string name="md_synchronization_arrows">\uf262</string>

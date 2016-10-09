@@ -19,7 +19,7 @@
             android:paddingRight="@dimen/dp8"
             android:background="@null"
             android:gravity="center"
-            android:text="@string/md_play_rounded_button"
+            android:text="@string/md_play_arrow"
             android:textColor="@color/green"
             android:textSize="@dimen/sp26" />
 

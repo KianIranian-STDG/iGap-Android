@@ -336,9 +336,9 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             ((TextView) mediaLayout.findViewById(R.id.mls_txt_music_time)).setText(MusicPlayer.milliSecondsToTimer((long) MusicPlayer.mp.getDuration()));
 
             if (MusicPlayer.mp.isPlaying()) {
-                ((Button) mediaLayout.findViewById(R.id.mls_btn_play_music)).setText(G.context.getString(R.string.md_round_pause_button));
+                ((Button) mediaLayout.findViewById(R.id.mls_btn_play_music)).setText(G.context.getString(R.string.md_pause_button));
             } else {
-                ((Button) mediaLayout.findViewById(R.id.mls_btn_play_music)).setText(G.context.getString(R.string.md_play_rounded_button));
+                ((Button) mediaLayout.findViewById(R.id.mls_btn_play_music)).setText(G.context.getString(R.string.md_play_arrow));
             }
         }
 

@@ -138,7 +138,7 @@ public class MusicPlayer {
             stopTimer();
 
             btnPlayMusic.setText(G.context.getString(R.string.md_play_rounded_button));
-            remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.play);
+            remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.play_button);
             if (!isShowMediaPlayer) {
                 notificationManager.notify(notificationId, notification);
             } else {
@@ -156,7 +156,7 @@ public class MusicPlayer {
     private static void playSound() {
         try {
             btnPlayMusic.setText(G.context.getString(R.string.md_round_pause_button));
-            remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause);
+            remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause_button);
             if (!isShowMediaPlayer) {
                 notificationManager.notify(notificationId, notification);
             } else {
@@ -183,7 +183,7 @@ public class MusicPlayer {
 
         try {
             btnPlayMusic.setText(G.context.getString(R.string.md_play_rounded_button));
-            remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.play);
+            remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.play_button);
             if (!isShowMediaPlayer) {
                 notificationManager.notify(notificationId, notification);
             } else {
@@ -269,7 +269,7 @@ public class MusicPlayer {
 
                     btnPlayMusic.setText(G.context.getString(R.string.md_round_pause_button));
 
-                    remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause);
+                remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause_button);
                 if (!isShowMediaPlayer) {
 
                     handler.post(new Runnable() {
@@ -313,7 +313,7 @@ public class MusicPlayer {
 
 
                     btnPlayMusic.setText(G.context.getString(R.string.md_round_pause_button));
-                    remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause);
+                remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause_button);
                 if (!isShowMediaPlayer) {
 
                     handler.post(new Runnable() {
@@ -396,9 +396,9 @@ public class MusicPlayer {
 
         if (mp != null)
             if (mp.isPlaying())
-                remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause);
+                remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause_button);
             else {
-                remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.play);
+                remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.play_button);
             }
 
         try {
@@ -411,7 +411,7 @@ public class MusicPlayer {
                 mediaThumpnail = BitmapFactory.decodeByteArray(data, 0, data.length);
                 remoteViews.setImageViewBitmap(R.id.mln_img_picture_music, mediaThumpnail);
             } else {
-                remoteViews.setImageViewResource(R.id.mln_img_picture_music, R.mipmap.igap_music);
+                remoteViews.setImageViewResource(R.id.mln_img_picture_music, R.mipmap.music_icon_green);
             }
         } catch (Exception e) {
         }

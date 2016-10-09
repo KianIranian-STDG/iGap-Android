@@ -10,7 +10,7 @@
         android:layout_width="@dimen/dp60"
         android:layout_height="@dimen/dp60"
         android:layout_margin="@dimen/dp4"
-        android:src="@mipmap/igap_music" />
+        android:src="@mipmap/music_icon_green" />
 
 
     <LinearLayout
@@ -53,24 +53,28 @@
                 android:id="@+id/mln_btn_Previous_music"
                 android:layout_width="@dimen/dp32"
                 android:layout_height="@dimen/dp32"
+                android:padding="@dimen/dp6"
+                android:layout_marginLeft="@dimen/dp8"
                 android:gravity="center"
-                android:src="@mipmap/back" />
+                android:src="@mipmap/previous_track" />
 
             <ImageView
                 android:id="@+id/mln_btn_play_music"
                 android:layout_width="@dimen/dp32"
                 android:layout_height="@dimen/dp32"
+                android:padding="@dimen/dp6"
                 android:layout_marginLeft="@dimen/dp40"
                 android:layout_marginRight="@dimen/dp40"
                 android:gravity="center"
-                android:src="@mipmap/play" />
+                android:src="@mipmap/play_button" />
 
             <ImageView
                 android:id="@+id/mln_btn_forward_music"
                 android:layout_width="@dimen/dp32"
                 android:layout_height="@dimen/dp32"
+                android:padding="@dimen/dp6"
                 android:gravity="center"
-                android:src="@mipmap/next" />
+                android:src="@mipmap/play_next_button" />
 
             <TextView
                 android:id="@+id/mln_txt_music_time"

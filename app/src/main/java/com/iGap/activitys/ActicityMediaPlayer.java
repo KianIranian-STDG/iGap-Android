@@ -34,7 +34,9 @@ public class ActicityMediaPlayer extends ActivityEnhanced {
     private TextView txt_musicInfo;
     private SeekBar musikSeekbar;
     private ImageView img_MusicImage;
+    private ImageView img_MusicImage_default_icon;
     private Button btnPlay;
+
 
     private String str_info = "";
     OnComplete onComplete;
@@ -165,9 +167,16 @@ public class ActicityMediaPlayer extends ActivityEnhanced {
 
         txt_musicInfo = (TextView) findViewById(R.id.ml_txt_music_info);
         img_MusicImage = (ImageView) findViewById(R.id.ml_img_music_picture);
-        if (MusicPlayer.mediaThumpnail != null)
+        img_MusicImage_default_icon = (ImageView) findViewById(R.id.ml_img_music_icon_default);
+
+        if (MusicPlayer.mediaThumpnail != null) {
             img_MusicImage.setImageBitmap(MusicPlayer.mediaThumpnail);
-        else img_MusicImage.setImageResource(R.mipmap.igap_music_large);
+            img_MusicImage.setVisibility(View.VISIBLE);
+            img_MusicImage_default_icon.setVisibility(View.GONE);
+        } else {
+            img_MusicImage.setVisibility(View.GONE);
+            img_MusicImage_default_icon.setVisibility(View.VISIBLE);
+        }
 
 
         musikSeekbar = (SeekBar) findViewById(R.id.ml_seekBar1);
@@ -266,9 +275,11 @@ public class ActicityMediaPlayer extends ActivityEnhanced {
 
             if (MusicPlayer.mediaThumpnail != null) {
                 img_MusicImage.setImageBitmap(MusicPlayer.mediaThumpnail);
-
+                img_MusicImage.setVisibility(View.VISIBLE);
+                img_MusicImage_default_icon.setVisibility(View.GONE);
             } else {
-                img_MusicImage.setImageResource(R.mipmap.igap_music_large);
+                img_MusicImage.setVisibility(View.GONE);
+                img_MusicImage_default_icon.setVisibility(View.VISIBLE);
             }
 
             getMusicInfo();

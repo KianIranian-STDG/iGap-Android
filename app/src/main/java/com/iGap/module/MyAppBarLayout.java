@@ -49,9 +49,19 @@ public class MyAppBarLayout extends AppBarLayout implements AppBarLayout.OnOffse
         int verticalOffsetAbs = Math.abs(verticalOffset);
         int appBarLayoutHeight = appBarLayout.getHeight();
 
-        if (verticalOffsetAbs == 0 || verticalOffsetAbs == appBarLayoutHeight) {
+
+        if (verticalOffset == 0) {
+            if (mListener != null) {
+                mListener.onAppBarLayoutMove(appBarLayout, verticalOffset, false);
+            }
+            return;
+        } else if (verticalOffset == appBarLayoutHeight) {
+            if (mListener != null) {
+                mListener.onAppBarLayoutMove(appBarLayout, verticalOffset, true);
+            }
             return;
         }
+
 
         if (mListener != null) {
             // FIXME: 9/24/2016 [Alireza Eskandarpour Shoferi] bad tashkhis mide ke be bala scroll mishe ya paeen

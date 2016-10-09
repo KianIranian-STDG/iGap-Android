@@ -35,8 +35,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="music name"
                 android:singleLine="true"
+                android:text="music name"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/sp18" />
 
@@ -68,14 +68,22 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="@color/gray_f2">
+        android:background="#f0f0f0">
 
         <ImageView
             android:id="@+id/ml_img_music_picture"
             android:layout_width="match_parent"
-            android:scaleType="centerCrop"
             android:layout_height="match_parent"
-            android:src="@mipmap/player_background" />
+            android:scaleType="centerCrop" />
+
+
+        <ImageView
+            android:id="@+id/ml_img_music_icon_default"
+            android:layout_width="@dimen/dp100"
+            android:layout_height="@dimen/dp100"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/music_icon_gray" />
 
 
         <TextView
@@ -84,16 +92,16 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:background="@color/greenStatus"
+            android:ellipsize="marquee"
+            android:fadingEdge="horizontal"
+            android:lines="1"
+            android:marqueeRepeatLimit="marquee_forever"
             android:paddingBottom="@dimen/dp4"
             android:paddingTop="@dimen/dp4"
-            android:text=""
-            android:fadingEdge="horizontal"
-            android:textColor="@color/white"
-            android:ellipsize="marquee"
-            android:marqueeRepeatLimit="marquee_forever"
             android:scrollHorizontally="true"
             android:singleLine="true"
-            android:lines="1"
+            android:text=""
+            android:textColor="@color/white"
 
             android:textSize="@dimen/sp16" />
 
@@ -139,8 +147,8 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_weight="1">
 
             <Button
                 android:id="@+id/ml_btn_shuffel_music"
@@ -191,9 +199,9 @@
 
         <LinearLayout
             android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="right"
-            android:layout_height="match_parent">
+            android:gravity="right">
 
             <Button
                 android:id="@+id/ml_btn_replay_music"

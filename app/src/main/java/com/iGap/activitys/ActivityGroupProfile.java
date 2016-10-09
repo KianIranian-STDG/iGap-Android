@@ -871,7 +871,21 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnFileUplo
 
     private void addMemberToGroup() {
 
-        Fragment fragment = ShowCustomList.newInstance(Contacts.retrieve(null), new OnSelectedList() {
+
+        List<StructContactInfo> userList = Contacts.retrieve(null);
+
+        for (int i = 0; i < contacts.size(); i++) {
+            long id = contacts.get(i).peerId;
+            for (int j = 0; j < userList.size(); j++) {
+                if (userList.get(j).peerId == id) {
+                    userList.remove(j);
+                    break;
+                }
+            }
+        }
+
+
+        Fragment fragment = ShowCustomList.newInstance(userList, new OnSelectedList() {
             @Override
             public void getSelectedList(boolean result, String message, final ArrayList<StructContactInfo> list) {
 
@@ -935,12 +949,23 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnFileUplo
                         }
 
                         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+                        RealmList<RealmMember> memberList = realmRoom.getGroupRoom().getMembers();
 
-                        for (RealmMember member : realmRoom.getGroupRoom().getMembers()) {
-                            members.add(member);
+
+                        for (int i = 0; i < members.size(); i++) {
+                            long id = members.get(i).getPeerId();
+                            boolean canAdd = true;
+                            for (int j = 0; j < memberList.size(); j++) {
+                                if (memberList.get(j).getPeerId() == id) {
+                                    canAdd = false;
+                                    break;
+                                }
+                            }
+                            if (canAdd) {
+                                memberList.add(members.get(i));
+                            }
                         }
 
-                        realmRoom.getGroupRoom().setMembers(members);
                     }
                 });
 
