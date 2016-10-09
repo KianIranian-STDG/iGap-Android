@@ -21,7 +21,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -153,12 +153,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         btnSearch = (SearchView) findViewById(R.id.cl_btn_search);
 
         final TextView txtIgap = (TextView) findViewById(R.id.cl_txt_igap);
-//        txtIgap.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//            }
-//        });
         txtIgap.setTypeface(G.neuroplp);
 
         txtIgap.setTypeface(null, Typeface.BOLD);
@@ -194,16 +188,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                 });
             }
         };
-
-        btnSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                arcMenu.setVisibility(View.GONE);
-                txtIgap.setVisibility(View.GONE);
-                btnBackSearch.setVisibility(View.VISIBLE);
-                btnMenu.setVisibility(View.GONE);
-            }
-        });
 
         btnSearch.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
@@ -419,7 +403,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         recyclerView.setAdapter(mAdapter);
 
         MyAppBarLayout appBarLayout = (MyAppBarLayout) findViewById(R.id.appBarLayout);
-        final LinearLayout toolbar = (LinearLayout) findViewById(R.id.toolbar);
+        final RelativeLayout toolbar = (RelativeLayout) findViewById(R.id.toolbar);
         appBarLayout.addOnMoveListener(new MyAppBarLayout.OnMoveListener() {
             @Override
             public void onAppBarLayoutMove(AppBarLayout appBarLayout, int verticalOffset, boolean moveUp) {
