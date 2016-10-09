@@ -197,24 +197,33 @@
             android:textSize="@dimen/sp22" />
 
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="right">
+            android:layout_weight="1">
 
             <Button
                 android:id="@+id/ml_btn_replay_music"
                 android:layout_width="@dimen/dp40"
                 android:layout_height="match_parent"
+                android:layout_gravity="right"
                 android:background="@null"
                 android:gravity="center"
                 android:text="@string/md_synchronization_arrows"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/sp28" />
 
+            <ImageView
+                android:id="@+id/ml_img_repead_one"
+                android:layout_width="@dimen/dp16"
+                android:layout_height="@dimen/dp16"
+                android:layout_marginRight="@dimen/dp12"
+                android:layout_gravity="right|center"
+                android:visibility="gone"
+                android:src="@mipmap/red_one" />
 
-        </LinearLayout>
+
+        </FrameLayout>
 
 
     </LinearLayout>

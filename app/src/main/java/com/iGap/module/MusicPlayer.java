@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
@@ -27,6 +28,7 @@ import com.iGap.realm.RealmChatHistory;
 import com.iGap.realm.RealmRoomMessage;
 
 import java.io.File;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -39,6 +41,15 @@ import io.realm.RealmResults;
  */
 public class MusicPlayer {
 
+
+    public enum RepeatMode {
+        noRepeat,
+        oneRpeat,
+        repeatAll;
+    }
+
+    public static String repeatMode = RepeatMode.noRepeat.toString();
+    public static boolean isShuffelOn = false;
 
     private static LinearLayout layoutTripMusic;
     private static Button btnPlayMusic;
@@ -79,6 +90,53 @@ public class MusicPlayer {
         notificationManager = (NotificationManager) G.context.getSystemService(Context.NOTIFICATION_SERVICE);
         handler = new Handler(G.context.getMainLooper());
         initLayoutTripMusic();
+
+        getAtribuits();
+
+    }
+
+
+    private void getAtribuits() {
+        SharedPreferences sharedPreferences = sharedPreferences = G.context.getSharedPreferences("MusicSetting", G.context.MODE_PRIVATE);
+        repeatMode = sharedPreferences.getString("RepeatMode", RepeatMode.noRepeat.toString());
+        isShuffelOn = sharedPreferences.getBoolean("Shuffel", false);
+    }
+
+    public static void repeatClick() {
+
+        String str = "";
+        if (repeatMode.equals(RepeatMode.noRepeat.toString())) {
+            str = RepeatMode.repeatAll.toString();
+        } else if (repeatMode.equals(RepeatMode.repeatAll.toString())) {
+            str = RepeatMode.oneRpeat.toString();
+        } else if (repeatMode.equals(RepeatMode.oneRpeat.toString())) {
+            str = RepeatMode.noRepeat.toString();
+        }
+
+        repeatMode = str;
+
+        SharedPreferences sharedPreferences = sharedPreferences = G.context.getSharedPreferences("MusicSetting", G.context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("RepeatMode", str);
+        editor.apply();
+
+        if (onComplete != null) {
+            onComplete.complete(true, "RepeatMode", "");
+        }
+
+    }
+
+    public static void shuffelClick() {
+
+        isShuffelOn = !isShuffelOn;
+        SharedPreferences sharedPreferences = sharedPreferences = G.context.getSharedPreferences("MusicSetting", G.context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("Shuffel", isShuffelOn);
+        editor.apply();
+        if (onComplete != null) {
+            onComplete.complete(true, "Shuffel", "");
+        }
+
     }
 
     private void initLayoutTripMusic() {
@@ -136,8 +194,7 @@ public class MusicPlayer {
         try {
 
             stopTimer();
-
-            btnPlayMusic.setText(G.context.getString(R.string.md_play_rounded_button));
+            btnPlayMusic.setText(G.context.getString(R.string.md_play_arrow));
             remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.play_button);
             if (!isShowMediaPlayer) {
                 notificationManager.notify(notificationId, notification);
@@ -155,14 +212,13 @@ public class MusicPlayer {
 
     private static void playSound() {
         try {
-            btnPlayMusic.setText(G.context.getString(R.string.md_round_pause_button));
+            btnPlayMusic.setText(G.context.getString(R.string.md_pause_button));
             remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause_button);
             if (!isShowMediaPlayer) {
                 notificationManager.notify(notificationId, notification);
             } else {
                 onComplete.complete(true, "pause", "");
             }
-
 
         } catch (Exception e) {
         }
@@ -182,18 +238,15 @@ public class MusicPlayer {
     public static void stopSound() {
 
         try {
-            btnPlayMusic.setText(G.context.getString(R.string.md_play_rounded_button));
+            btnPlayMusic.setText(G.context.getString(R.string.md_play_arrow));
             remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.play_button);
             if (!isShowMediaPlayer) {
                 notificationManager.notify(notificationId, notification);
             } else {
                 onComplete.complete(true, "play", "");
             }
-
             stopTimer();
-
         } catch (Exception e) {
-
         }
 
         if (mp != null) {
@@ -203,21 +256,27 @@ public class MusicPlayer {
     }
 
     public static void nextMusic() {
-        Log.e("ddd", selectedMedia + "   selected media");
-
         if (selectedMedia < mediaList.size()) {
             startPlayer(mediaList.get(selectedMedia).getAttachment().getLocalFilePath(), roomName, roomId, false);
-
             selectedMedia++;
-
             if (onComplete != null)
                 onComplete.complete(true, "update", "");
+        } else {
+            stopSound();
         }
     }
 
-    public static void previousMusic() {
+    private static void nextRandomMusic() {
+        Random r = new Random();
+        selectedMedia = r.nextInt(mediaList.size());
+        startPlayer(mediaList.get(selectedMedia).getAttachment().getLocalFilePath(), roomName, roomId, false);
 
-        Log.e("ddd", selectedMedia + "   selected media");
+        if (onComplete != null)
+            onComplete.complete(true, "update", "");
+
+    }
+
+    public static void previousMusic() {
 
         if (selectedMedia > 1) {
             selectedMedia--;
@@ -225,25 +284,23 @@ public class MusicPlayer {
 
             if (onComplete != null)
                 onComplete.complete(true, "update", "");
+        } else {
+            stopSound();
         }
     }
 
     private static void closeLayoutMediaPlayer() {
         if (layoutTripMusic != null)
             layoutTripMusic.setVisibility(View.GONE);
-
         stopSound();
-
         if (mp != null) {
             mp.release();
             mp = null;
         }
-
         try {
             notificationManager.cancel(notificationId);
         } catch (RuntimeException e) {
         }
-
 
     }
 
@@ -267,7 +324,7 @@ public class MusicPlayer {
                 mp.start();
 
 
-                    btnPlayMusic.setText(G.context.getString(R.string.md_round_pause_button));
+                btnPlayMusic.setText(G.context.getString(R.string.md_pause_button));
 
                 remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause_button);
                 if (!isShowMediaPlayer) {
@@ -283,11 +340,9 @@ public class MusicPlayer {
                     });
 
 
-                    } else {
-                        onComplete.complete(true, "pause", "");
-                    }
-
-
+                } else {
+                    onComplete.complete(true, "pause", "");
+                }
 
                 musicTime = milliSecondsToTimer((long) mp.getDuration());
                 txt_music_time.setText(musicTime);
@@ -312,7 +367,7 @@ public class MusicPlayer {
                 txt_music_time.setText(musicTime);
 
 
-                    btnPlayMusic.setText(G.context.getString(R.string.md_round_pause_button));
+                btnPlayMusic.setText(G.context.getString(R.string.md_pause_button));
                 remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause_button);
                 if (!isShowMediaPlayer) {
 
@@ -327,16 +382,35 @@ public class MusicPlayer {
                     });
 
 
-                    } else {
-                        onComplete.complete(true, "pause", "");
-                    }
+                } else {
+                    onComplete.complete(true, "pause", "");
+                }
 
 
                 mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 
                     @Override
                     public void onCompletion(MediaPlayer mp) {
-                        stopSound();
+
+
+                        if (repeatMode.equals(RepeatMode.noRepeat.toString())) {
+                            stopSound();
+                        } else if (repeatMode.equals(RepeatMode.repeatAll.toString())) {
+
+                            Log.e("ddd", repeatMode + "   " + isShuffelOn);
+
+                            if (isShuffelOn) {
+                                nextRandomMusic();
+                            } else {
+                                nextMusic();
+                            }
+
+                        } else if (repeatMode.equals(RepeatMode.oneRpeat.toString())) {
+                            stopSound();
+                            playAndPause();
+                        }
+
+
                     }
                 });
 

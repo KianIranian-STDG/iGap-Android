@@ -2,6 +2,7 @@ package com.iGap.activitys;
 
 import android.app.NotificationManager;
 import android.content.Context;
+import android.graphics.Color;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
@@ -34,9 +35,11 @@ public class ActicityMediaPlayer extends ActivityEnhanced {
     private TextView txt_musicInfo;
     private SeekBar musikSeekbar;
     private ImageView img_MusicImage;
+    private ImageView img_RepeadOne;
     private ImageView img_MusicImage_default_icon;
     private Button btnPlay;
-
+    Button btnReplay;
+    Button btnShuffel;
 
     private String str_info = "";
     OnComplete onComplete;
@@ -54,7 +57,6 @@ public class ActicityMediaPlayer extends ActivityEnhanced {
             notifManager.cancel(MusicPlayer.notificationId);
             return;
         }
-
 
 
         onComplete = new OnComplete() {
@@ -77,7 +79,10 @@ public class ActicityMediaPlayer extends ActivityEnhanced {
                             musikSeekbar.setProgress(MusicPlayer.musicProgress);
                         }
                     });
-
+                } else if (messageOne.equals("RepeatMode")) {
+                    setReplayButton();
+                } else if (messageOne.equals("Shuffel")) {
+                    setShuffelButton();
                 }
 
             }
@@ -91,6 +96,31 @@ public class ActicityMediaPlayer extends ActivityEnhanced {
 
     }
 
+
+    private void setShuffelButton() {
+
+        if (MusicPlayer.isShuffelOn) {
+            btnShuffel.setTextColor(Color.BLACK);
+        } else {
+            btnShuffel.setTextColor(Color.GRAY);
+        }
+    }
+
+    private void setReplayButton() {
+        if (MusicPlayer.repeatMode.equals(MusicPlayer.RepeatMode.noRepeat.toString())) {
+            btnReplay.setText(R.string.md_synchronization_arrows);
+            btnReplay.setTextColor(Color.GRAY);
+            img_RepeadOne.setVisibility(View.GONE);
+        } else if (MusicPlayer.repeatMode.equals(MusicPlayer.RepeatMode.repeatAll.toString())) {
+            btnReplay.setText(R.string.md_synchronization_arrows);
+            btnReplay.setTextColor(Color.BLACK);
+            img_RepeadOne.setVisibility(View.GONE);
+        } else if (MusicPlayer.repeatMode.equals(MusicPlayer.RepeatMode.oneRpeat.toString())) {
+            btnReplay.setText(R.string.md_synchronization_arrows);
+            btnReplay.setTextColor(Color.BLACK);
+            img_RepeadOne.setVisibility(View.VISIBLE);
+        }
+    }
 
     @Override
     protected void onPause() {
@@ -164,11 +194,10 @@ public class ActicityMediaPlayer extends ActivityEnhanced {
         txt_Timer = (TextView) findViewById(R.id.ml_txt_timer);
 
 
-
         txt_musicInfo = (TextView) findViewById(R.id.ml_txt_music_info);
         img_MusicImage = (ImageView) findViewById(R.id.ml_img_music_picture);
         img_MusicImage_default_icon = (ImageView) findViewById(R.id.ml_img_music_icon_default);
-
+        img_RepeadOne = (ImageView) findViewById(R.id.ml_img_repead_one);
         if (MusicPlayer.mediaThumpnail != null) {
             img_MusicImage.setImageBitmap(MusicPlayer.mediaThumpnail);
             img_MusicImage.setVisibility(View.VISIBLE);
@@ -221,24 +250,26 @@ public class ActicityMediaPlayer extends ActivityEnhanced {
             }
         });
 
-        Button btnShuffel = (Button) findViewById(R.id.ml_btn_shuffel_music);
+        btnShuffel = (Button) findViewById(R.id.ml_btn_shuffel_music);
         btnShuffel.setTypeface(G.flaticon);
         btnShuffel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("ddd", "shuffel click");
+                MusicPlayer.shuffelClick();
             }
         });
 
-        Button btnReplay = (Button) findViewById(R.id.ml_btn_replay_music);
+        setShuffelButton();
+
+        btnReplay = (Button) findViewById(R.id.ml_btn_replay_music);
         btnReplay.setTypeface(G.flaticon);
         btnReplay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("ddd", "btnReplay click");
+                MusicPlayer.repeatClick();
             }
         });
-
+        setReplayButton();
 
         btnPlay = (Button) findViewById(R.id.ml_btn_play_music);
         btnPlay.setTypeface(G.flaticon);
@@ -288,10 +319,6 @@ public class ActicityMediaPlayer extends ActivityEnhanced {
 
 
     }
-
-
-
-
 
 
 }

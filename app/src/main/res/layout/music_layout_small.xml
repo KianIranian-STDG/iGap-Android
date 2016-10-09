@@ -21,7 +21,7 @@
             android:gravity="center"
             android:text="@string/md_play_arrow"
             android:textColor="@color/green"
-            android:textSize="@dimen/sp26" />
+            android:textSize="@dimen/sp18" />
 
         <TextView
             android:id="@+id/mls_txt_music_name"
