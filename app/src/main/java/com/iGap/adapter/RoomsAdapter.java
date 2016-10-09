@@ -1,6 +1,6 @@
 package com.iGap.adapter;
 
-import com.iGap.adapter.items.ChatItem;
+import com.iGap.adapter.items.RoomItem;
 import com.iGap.module.StructMessageAttachment;
 import com.iGap.realm.enums.RoomType;
 import com.mikepenz.fastadapter.adapters.FastItemAdapter;
@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/6/2016.
  */
-public class RoomsAdapter<Item extends ChatItem> extends FastItemAdapter<Item> {
+public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
     public RoomsAdapter() {
         // as we provide id's for the items we want the hasStableIds enabled to speed up things
         setHasStableIds(true);

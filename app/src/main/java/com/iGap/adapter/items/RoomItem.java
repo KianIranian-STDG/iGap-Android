@@ -31,17 +31,17 @@ import java.util.List;
 /**
  * chat item for main displaying chats
  */
-public class ChatItem extends AbstractItem<ChatItem, ChatItem.ViewHolder> {
+public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
     public StructChatInfo mInfo;
     public OnComplete mComplete;
 
-    public ChatItem setComplete(OnComplete complete) {
+    public RoomItem setComplete(OnComplete complete) {
         this.mComplete = complete;
         return this;
     }
 
-    public ChatItem setInfo(StructChatInfo info) {
+    public RoomItem setInfo(StructChatInfo info) {
         this.mInfo = info;
         return this;
     }

@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.adapter.items.ChatItem;
+import com.iGap.adapter.items.RoomItem;
 import com.iGap.module.StructChatInfo;
 import com.iGap.module.StructMessageInfo;
 import com.iGap.realm.RealmRoom;
@@ -29,7 +29,7 @@ import io.realm.Realm;
 public class ActivitySelectChat extends ActivityEnhanced {
 
     private RecyclerView mRecyclerView;
-    private FastItemAdapter<ChatItem> mAdapter;
+    private FastItemAdapter<RoomItem> mAdapter;
     public static final String ARG_FORWARD_MESSAGE = "arg_forward_msg";
     private ArrayList<StructMessageInfo> mForwardMessages;
 
@@ -62,9 +62,9 @@ public class ActivitySelectChat extends ActivityEnhanced {
     private void initRecycleView() {
         mRecyclerView = (RecyclerView) findViewById(R.id.cl_recycler_view_contact);
         mAdapter = new FastItemAdapter<>();
-        mAdapter.withOnClickListener(new FastAdapter.OnClickListener<ChatItem>() {
+        mAdapter.withOnClickListener(new FastAdapter.OnClickListener<RoomItem>() {
             @Override
-            public boolean onClick(View v, IAdapter<ChatItem> adapter, ChatItem item, int position) {
+            public boolean onClick(View v, IAdapter<RoomItem> adapter, RoomItem item, int position) {
                 Intent intent = new Intent(ActivitySelectChat.this, ActivityChat.class);
                 intent.putExtra("RoomId", item.mInfo.chatId);
                 intent.putParcelableArrayListExtra(ARG_FORWARD_MESSAGE, mForwardMessages);
@@ -83,7 +83,7 @@ public class ActivitySelectChat extends ActivityEnhanced {
     private void loadLocalChatList() {
         Realm realm = Realm.getDefaultInstance();
         for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAll()) {
-            final ChatItem chatItem = new ChatItem();
+            final RoomItem roomItem = new RoomItem();
             StructChatInfo info = new StructChatInfo();
             info.unreadMessagesCount = realmRoom.getUnreadCount();
             info.chatId = realmRoom.getId();
@@ -113,11 +113,11 @@ public class ActivitySelectChat extends ActivityEnhanced {
             }
             info.muteNotification = realmRoom.getMute(); // FIXME
 
-            chatItem.setInfo(info);
+            roomItem.setInfo(info);
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mAdapter.add(chatItem);
+                    mAdapter.add(roomItem);
                 }
             });
         }

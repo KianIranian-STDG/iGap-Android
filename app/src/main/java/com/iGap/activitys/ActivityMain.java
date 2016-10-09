@@ -28,7 +28,7 @@ import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.RoomsAdapter;
-import com.iGap.adapter.items.ChatItem;
+import com.iGap.adapter.items.RoomItem;
 import com.iGap.fragments.FragmentNewGroup;
 import com.iGap.fragments.RegisteredContactsFragment;
 import com.iGap.helper.ServiceContact;
@@ -83,7 +83,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
     public static LeftDrawerLayout mLeftDrawerLayout;
     private RecyclerView recyclerView;
-    private RoomsAdapter<ChatItem> mAdapter;
+    private RoomsAdapter<RoomItem> mAdapter;
     private ArcMenu arcMenu;
     private SearchView btnSearch;
 
@@ -109,7 +109,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                mAdapter.add(new ChatItem().setInfo(StructChatInfo.convert(builder)));
+                                mAdapter.add(new RoomItem().setInfo(StructChatInfo.convert(builder)));
                             }
                         });
                     }
@@ -391,9 +391,9 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         recyclerView.setItemAnimator(null);
         recyclerView.setHasFixedSize(true);
         mAdapter = new RoomsAdapter<>();
-        mAdapter.withOnClickListener(new FastAdapter.OnClickListener<ChatItem>() {
+        mAdapter.withOnClickListener(new FastAdapter.OnClickListener<RoomItem>() {
             @Override
-            public boolean onClick(View v, IAdapter<ChatItem> adapter, ChatItem item, int position) {
+            public boolean onClick(View v, IAdapter<RoomItem> adapter, RoomItem item, int position) {
                 if (ActivityMain.isMenuButtonAddShown) {
                     item.mComplete.complete(true, "closeMenuButton", "");
                 } else {
@@ -405,9 +405,9 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             }
         });
 
-        mAdapter.withOnLongClickListener(new FastAdapter.OnLongClickListener<ChatItem>() {
+        mAdapter.withOnLongClickListener(new FastAdapter.OnLongClickListener<RoomItem>() {
             @Override
-            public boolean onLongClick(View v, IAdapter<ChatItem> adapter, final ChatItem item, final int position) {
+            public boolean onLongClick(View v, IAdapter<RoomItem> adapter, final RoomItem item, final int position) {
                 if (ActivityMain.isMenuButtonAddShown) {
                     item.mComplete.complete(true, "closeMenuButton", "");
                 } else {
@@ -470,9 +470,9 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                 }
             }
         });
-        mAdapter.withFilterPredicate(new IItemAdapter.Predicate<ChatItem>() {
+        mAdapter.withFilterPredicate(new IItemAdapter.Predicate<RoomItem>() {
             @Override
-            public boolean filter(ChatItem item, CharSequence constraint) {
+            public boolean filter(RoomItem item, CharSequence constraint) {
                 //return true if we should filter it out
                 //return false to keep it
                 return !item.mInfo.chatTitle.toLowerCase().startsWith(String.valueOf(constraint).toLowerCase());
@@ -520,7 +520,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         return false;
     }
 
-    private void muteNotification(final ChatItem item) {
+    private void muteNotification(final RoomItem item) {
         Realm realm = Realm.getDefaultInstance();
 
         item.mInfo.muteNotification = !item.mInfo.muteNotification;
@@ -535,8 +535,8 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         realm.close();
     }
 
-    private void clearHistory(ChatItem item) {
-        final ChatItem chatInfo = mAdapter.getAdapterItem(mAdapter.getPosition(item));
+    private void clearHistory(RoomItem item) {
+        final RoomItem chatInfo = mAdapter.getAdapterItem(mAdapter.getPosition(item));
         final long chatId = chatInfo.mInfo.chatId;
 
         // make request for clearing messages
@@ -596,7 +596,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         });
     }
 
-    private void deleteChat(final ChatItem item) {
+    private void deleteChat(final RoomItem item) {
         G.onChatDelete = new OnChatDelete() {
             @Override
             public void onChatDelete(long roomId) {
@@ -680,7 +680,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
      * @param message  message text
      * @param position position dfdfdfdf
      */
-    private void onSelectRoomMenu(String message, int position, ChatItem item) {
+    private void onSelectRoomMenu(String message, int position, RoomItem item) {
         switch (message) {
             case "txtMuteNotification":
                 muteNotification(item);
@@ -729,7 +729,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                         for (final ProtoGlobal.Room room : roomList) { //TODO [Saeed Mozaffari] [2016-09-07 9:56 AM] - manage mute state
                             putChatToDatabase(room);
 
-                            final ChatItem chatItem = new ChatItem();
+                            final RoomItem roomItem = new RoomItem();
                             StructChatInfo info = new StructChatInfo();
                             info.unreadMessagesCount = room.getUnreadCount();
                             info.chatId = room.getId();
@@ -771,8 +771,8 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
                             // create item from info
 
-                            chatItem.setInfo(info);
-                            chatItem.setComplete(ActivityMain.this);
+                            roomItem.setInfo(info);
+                            roomItem.setComplete(ActivityMain.this);
 
 
                         }
@@ -788,7 +788,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     private void loadLocalChatList() {
         Realm realm = Realm.getDefaultInstance();
         for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAllSorted("lastMessageTime", Sort.DESCENDING)) {
-            final ChatItem chatItem = new ChatItem();
+            final RoomItem roomItem = new RoomItem();
             StructChatInfo info = new StructChatInfo();
             info.unreadMessagesCount = realmRoom.getUnreadCount();
             info.chatId = realmRoom.getId();
@@ -830,12 +830,12 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             }
             info.muteNotification = realmRoom.getMute(); // FIXME
 
-            chatItem.setInfo(info);
-            chatItem.setComplete(ActivityMain.this);
+            roomItem.setInfo(info);
+            roomItem.setComplete(ActivityMain.this);
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mAdapter.add(chatItem);
+                    mAdapter.add(roomItem);
                 }
             });
         }
@@ -884,15 +884,15 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     }
 
     /**
-     * convert RealmRoom to ChatItem. needed for adding items to adapter.
+     * convert RealmRoom to RoomItem. needed for adding items to adapter.
      *
      * @param roomId room id
-     * @return ChatItem
+     * @return RoomItem
      */
-    private ChatItem convertToChatItem(long roomId) {
+    private RoomItem convertToChatItem(long roomId) {
         Realm realm = Realm.getDefaultInstance();
         RealmRoom room = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
-        ChatItem chatItem = new ChatItem();
+        RoomItem roomItem = new RoomItem();
         StructChatInfo chatInfo = new StructChatInfo();
         chatInfo.chatId = room.getId();
         chatInfo.chatTitle = room.getTitle();
@@ -934,12 +934,12 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         chatInfo.unreadMessagesCount = room.getUnreadCount();
         chatInfo.color = room.getColor();
 
-        chatItem.mInfo = chatInfo;
-        chatItem.mComplete = ActivityMain.this;
+        roomItem.mInfo = chatInfo;
+        roomItem.mComplete = ActivityMain.this;
 
         realm.close();
 
-        return chatItem;
+        return roomItem;
     }
 
     @Override
