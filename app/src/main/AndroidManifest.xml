@@ -44,7 +44,7 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
 
         <activity
-            android:name=".activitys.ActicityMediaPlayer"
+            android:name=".activitys.ActivityMediaPlayer"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
 
         <activity

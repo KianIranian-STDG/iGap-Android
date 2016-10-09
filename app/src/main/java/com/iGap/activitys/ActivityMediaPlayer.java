@@ -23,23 +23,20 @@ import com.iGap.module.OnComplete;
 
 import java.io.File;
 
-/**
- * Created by android3 on 10/2/2016.
- */
-public class ActicityMediaPlayer extends ActivityEnhanced {
+public class ActivityMediaPlayer extends ActivityEnhanced {
 
     private TextView txt_MusicName;
     private TextView txt_MusicPlace;
     private TextView txt_MusicTime;
     private TextView txt_Timer;
     private TextView txt_musicInfo;
-    private SeekBar musikSeekbar;
+    private SeekBar musicSeekbar;
     private ImageView img_MusicImage;
-    private ImageView img_RepeadOne;
+    private ImageView img_RepeatOne;
     private ImageView img_MusicImage_default_icon;
     private Button btnPlay;
     Button btnReplay;
-    Button btnShuffel;
+    Button btnShuffle;
 
     private String str_info = "";
     OnComplete onComplete;
@@ -53,8 +50,8 @@ public class ActicityMediaPlayer extends ActivityEnhanced {
 
         if (MusicPlayer.mp == null) {
             finish();
-            NotificationManager notifManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notifManager.cancel(MusicPlayer.notificationId);
+            NotificationManager notifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notifyManager.cancel(MusicPlayer.notificationId);
             return;
         }
 
@@ -76,13 +73,13 @@ public class ActicityMediaPlayer extends ActivityEnhanced {
                         @Override
                         public void run() {
                             txt_Timer.setText(MessageTow);
-                            musikSeekbar.setProgress(MusicPlayer.musicProgress);
+                            musicSeekbar.setProgress(MusicPlayer.musicProgress);
                         }
                     });
                 } else if (messageOne.equals("RepeatMode")) {
                     setReplayButton();
                 } else if (messageOne.equals("Shuffel")) {
-                    setShuffelButton();
+                    setShuffleButton();
                 }
 
             }
@@ -97,12 +94,12 @@ public class ActicityMediaPlayer extends ActivityEnhanced {
     }
 
 
-    private void setShuffelButton() {
+    private void setShuffleButton() {
 
         if (MusicPlayer.isShuffelOn) {
-            btnShuffel.setTextColor(Color.BLACK);
+            btnShuffle.setTextColor(Color.BLACK);
         } else {
-            btnShuffel.setTextColor(Color.GRAY);
+            btnShuffle.setTextColor(Color.GRAY);
         }
     }
 
@@ -110,15 +107,15 @@ public class ActicityMediaPlayer extends ActivityEnhanced {
         if (MusicPlayer.repeatMode.equals(MusicPlayer.RepeatMode.noRepeat.toString())) {
             btnReplay.setText(R.string.md_synchronization_arrows);
             btnReplay.setTextColor(Color.GRAY);
-            img_RepeadOne.setVisibility(View.GONE);
+            img_RepeatOne.setVisibility(View.GONE);
         } else if (MusicPlayer.repeatMode.equals(MusicPlayer.RepeatMode.repeatAll.toString())) {
             btnReplay.setText(R.string.md_synchronization_arrows);
             btnReplay.setTextColor(Color.BLACK);
-            img_RepeadOne.setVisibility(View.GONE);
+            img_RepeatOne.setVisibility(View.GONE);
         } else if (MusicPlayer.repeatMode.equals(MusicPlayer.RepeatMode.oneRpeat.toString())) {
             btnReplay.setText(R.string.md_synchronization_arrows);
             btnReplay.setTextColor(Color.BLACK);
-            img_RepeadOne.setVisibility(View.VISIBLE);
+            img_RepeatOne.setVisibility(View.VISIBLE);
         }
     }
 
@@ -136,8 +133,8 @@ public class ActicityMediaPlayer extends ActivityEnhanced {
         MusicPlayer.isShowMediaPlayer = true;
         MusicPlayer.onComplete = onComplete;
         updateUi();
-        NotificationManager notifManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notifManager.cancel(MusicPlayer.notificationId);
+        NotificationManager notifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notifyManager.cancel(MusicPlayer.notificationId);
 
     }
 
@@ -149,7 +146,7 @@ public class ActicityMediaPlayer extends ActivityEnhanced {
 
         MediaMetadataRetriever mediaMetadataRetriever = (MediaMetadataRetriever) new MediaMetadataRetriever();
         Uri uri = (Uri) Uri.fromFile(new File(MusicPlayer.musicPath));
-        mediaMetadataRetriever.setDataSource(ActicityMediaPlayer.this, uri);
+        mediaMetadataRetriever.setDataSource(ActivityMediaPlayer.this, uri);
 
         String title = (String) mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
 
@@ -197,7 +194,7 @@ public class ActicityMediaPlayer extends ActivityEnhanced {
         txt_musicInfo = (TextView) findViewById(R.id.ml_txt_music_info);
         img_MusicImage = (ImageView) findViewById(R.id.ml_img_music_picture);
         img_MusicImage_default_icon = (ImageView) findViewById(R.id.ml_img_music_icon_default);
-        img_RepeadOne = (ImageView) findViewById(R.id.ml_img_repead_one);
+        img_RepeatOne = (ImageView) findViewById(R.id.ml_img_repead_one);
         if (MusicPlayer.mediaThumpnail != null) {
             img_MusicImage.setImageBitmap(MusicPlayer.mediaThumpnail);
             img_MusicImage.setVisibility(View.VISIBLE);
@@ -208,14 +205,14 @@ public class ActicityMediaPlayer extends ActivityEnhanced {
         }
 
 
-        musikSeekbar = (SeekBar) findViewById(R.id.ml_seekBar1);
-        musikSeekbar.setOnTouchListener(new View.OnTouchListener() {
+        musicSeekbar = (SeekBar) findViewById(R.id.ml_seekBar1);
+        musicSeekbar.setOnTouchListener(new View.OnTouchListener() {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
                 if (event.getAction() == MotionEvent.ACTION_UP)
-                    MusicPlayer.setMusicProgress(musikSeekbar.getProgress());
+                    MusicPlayer.setMusicProgress(musicSeekbar.getProgress());
                 return false;
             }
         });
@@ -250,16 +247,16 @@ public class ActicityMediaPlayer extends ActivityEnhanced {
             }
         });
 
-        btnShuffel = (Button) findViewById(R.id.ml_btn_shuffel_music);
-        btnShuffel.setTypeface(G.flaticon);
-        btnShuffel.setOnClickListener(new View.OnClickListener() {
+        btnShuffle = (Button) findViewById(R.id.ml_btn_shuffel_music);
+        btnShuffle.setTypeface(G.flaticon);
+        btnShuffle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MusicPlayer.shuffelClick();
             }
         });
 
-        setShuffelButton();
+        setShuffleButton();
 
         btnReplay = (Button) findViewById(R.id.ml_btn_replay_music);
         btnReplay.setTypeface(G.flaticon);

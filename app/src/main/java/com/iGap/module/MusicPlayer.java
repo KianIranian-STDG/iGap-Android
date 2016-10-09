@@ -23,7 +23,7 @@ import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.activitys.ActicityMediaPlayer;
+import com.iGap.activitys.ActivityMediaPlayer;
 import com.iGap.realm.RealmChatHistory;
 import com.iGap.realm.RealmRoomMessage;
 
@@ -144,7 +144,7 @@ public class MusicPlayer {
         layoutTripMusic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(G.context, ActicityMediaPlayer.class);
+                Intent intent = new Intent(G.context, ActivityMediaPlayer.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 G.context.startActivity(intent);
             }
@@ -463,7 +463,7 @@ public class MusicPlayer {
     public static void updateNotification() {
 
 
-        PendingIntent pi = PendingIntent.getActivity(G.context, 10, new Intent(G.context, ActicityMediaPlayer.class), PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pi = PendingIntent.getActivity(G.context, 10, new Intent(G.context, ActivityMediaPlayer.class), PendingIntent.FLAG_UPDATE_CURRENT);
 
         remoteViews.setTextViewText(R.id.mln_txt_music_name, MusicPlayer.musicName);
         remoteViews.setTextViewText(R.id.mln_txt_music_time, MusicPlayer.musicTime);
