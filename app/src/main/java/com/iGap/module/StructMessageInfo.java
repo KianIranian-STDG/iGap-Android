@@ -5,8 +5,12 @@ import android.os.Parcelable;
 import android.text.format.DateUtils;
 
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmUserInfo;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.realm.Realm;
 
@@ -18,6 +22,10 @@ public class StructMessageInfo implements Parcelable {
 
     public StructMessageInfo(String messageID, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, MyType.FileState fileState, String fileName, String fileMime, String filePic, String localThumbnailPath, String localFilePath, long fileSize, byte[] fileHash, long time) {
         this.messageID = messageID;
+        Realm realm = Realm.getDefaultInstance();
+        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", Long.parseLong(senderID)).findFirst();
+        this.senderAvatar = realmRegisteredInfo != null ? StructMessageAttachment.convert(realmRegisteredInfo.getAvatar()) : null;
+        realm.close();
         this.senderID = senderID;
         this.status = status;
         this.messageType = messageType;
@@ -39,6 +47,10 @@ public class StructMessageInfo implements Parcelable {
         StructMessageInfo info = new StructMessageInfo();
 
         info.messageID = Long.toString(messageID);
+        Realm realm = Realm.getDefaultInstance();
+        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", senderID).findFirst();
+        info.senderAvatar = realmRegisteredInfo != null ? StructMessageAttachment.convert(realmRegisteredInfo.getAvatar()) : null;
+        realm.close();
         info.senderID = Long.toString(senderID);
         info.status = status.toString();
         info.messageType = messageType;
@@ -63,6 +75,10 @@ public class StructMessageInfo implements Parcelable {
 
     public StructMessageInfo(String messageID, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, MyType.FileState fileState, String fileMime, String filePic, String localThumbnailPath, String localFilePath, byte[] fileHash, long time, StructMessageInfo replayObject) {
         this.messageID = messageID;
+        Realm realm = Realm.getDefaultInstance();
+        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", Long.parseLong(senderID)).findFirst();
+        this.senderAvatar = realmRegisteredInfo != null ? StructMessageAttachment.convert(realmRegisteredInfo.getAvatar()) : null;
+        realm.close();
         this.senderID = senderID;
         this.status = status;
         this.messageType = messageType;
@@ -94,6 +110,10 @@ public class StructMessageInfo implements Parcelable {
 
     public StructMessageInfo(String messageID, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, MyType.FileState fileState, String localThumbnailPath, String localFilePath, long time) {
         this.messageID = messageID;
+        Realm realm = Realm.getDefaultInstance();
+        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", Long.parseLong(senderID)).findFirst();
+        this.senderAvatar = realmRegisteredInfo != null ? StructMessageAttachment.convert(realmRegisteredInfo.getAvatar()) : null;
+        realm.close();
         this.senderID = senderID;
         this.status = status;
         this.messageType = messageType;
@@ -110,6 +130,10 @@ public class StructMessageInfo implements Parcelable {
 
     public StructMessageInfo(String messageID, String messageText, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, MyType.FileState fileState, String localThumbnailPath, String localFilePath, long time) {
         this.messageID = messageID;
+        Realm realm = Realm.getDefaultInstance();
+        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", Long.parseLong(senderID)).findFirst();
+        this.senderAvatar = realmRegisteredInfo != null ? StructMessageAttachment.convert(realmRegisteredInfo.getAvatar()) : null;
+        realm.close();
         this.senderID = senderID;
         this.status = status;
         this.messageType = messageType;
@@ -127,6 +151,10 @@ public class StructMessageInfo implements Parcelable {
 
     public StructMessageInfo(String messageID, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, MyType.FileState fileState, String localThumbnailPath, String localFilePath, long time, StructMessageInfo replayObject) {
         this.messageID = messageID;
+        Realm realm = Realm.getDefaultInstance();
+        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", Long.parseLong(senderID)).findFirst();
+        this.senderAvatar = realmRegisteredInfo != null ? StructMessageAttachment.convert(realmRegisteredInfo.getAvatar()) : null;
+        realm.close();
         this.senderID = senderID;
         this.status = status;
         this.messageType = messageType;
@@ -185,12 +213,19 @@ public class StructMessageInfo implements Parcelable {
     public StructDownloadAttachment downloadAttachment;
     public StructRegisteredInfo userInfo;
     public StructMessageAttachment senderAvatar;
+    // contain sender id
+    public List<String> userInfoAlreadyRequested = new ArrayList<>();
+    public List<String> thumbnailRequested = new ArrayList<>();
 
     public static StructMessageInfo buildForContact(long messageID, long senderID, MyType.SendType sendType, long time, ProtoGlobal.RoomMessageStatus status, String avatar, String username, String firstName, String lastName, String number, Object replayObject) {
         StructMessageInfo info = new StructMessageInfo();
 
         info.messageID = Long.toString(messageID);
         info.senderID = Long.toString(senderID);
+        Realm realm = Realm.getDefaultInstance();
+        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", senderID).findFirst();
+        info.senderAvatar = realmRegisteredInfo != null ? StructMessageAttachment.convert(realmRegisteredInfo.getAvatar()) : null;
+        realm.close();
         info.status = status.toString();
         info.messageType = ProtoGlobal.RoomMessageType.CONTACT;
         info.sendType = sendType;
@@ -229,6 +264,8 @@ public class StructMessageInfo implements Parcelable {
         StructMessageInfo messageInfo = new StructMessageInfo();
         messageInfo.status = message.getStatus().toString();
         messageInfo.messageID = Long.toString(message.getMessageId());
+        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", message.getUserId()).findFirst();
+        messageInfo.senderAvatar = realmRegisteredInfo != null ? StructMessageAttachment.convert(realmRegisteredInfo.getAvatar()) : null;
         messageInfo.messageType = message.getMessageType();
         messageInfo.time = message.getUpdateTime() * DateUtils.SECOND_IN_MILLIS;
         messageInfo.messageText = message.getMessage();
@@ -249,6 +286,8 @@ public class StructMessageInfo implements Parcelable {
         StructMessageInfo messageInfo = new StructMessageInfo();
         messageInfo.status = roomMessage.getStatus();
         messageInfo.messageID = Long.toString(roomMessage.getMessageId());
+        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", roomMessage.getUserId()).findFirst();
+        messageInfo.senderAvatar = realmRegisteredInfo != null ? StructMessageAttachment.convert(realmRegisteredInfo.getAvatar()) : null;
         messageInfo.isEdited = roomMessage.isEdited();
         messageInfo.messageType = ProtoGlobal.RoomMessageType.valueOf(roomMessage.getMessageType());
         messageInfo.time = roomMessage.getUpdateTime();
@@ -273,6 +312,8 @@ public class StructMessageInfo implements Parcelable {
         StructMessageInfo messageInfo = new StructMessageInfo();
         messageInfo.status = roomMessage.getStatus();
         messageInfo.messageID = Long.toString(roomMessage.getMessageId());
+        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", roomMessage.getUserId()).findFirst();
+        messageInfo.senderAvatar = realmRegisteredInfo != null ? StructMessageAttachment.convert(realmRegisteredInfo.getAvatar()) : null;
         messageInfo.isEdited = roomMessage.isEdited();
         messageInfo.messageType = ProtoGlobal.RoomMessageType.valueOf(roomMessage.getMessageType());
         messageInfo.time = roomMessage.getUpdateTime();
@@ -326,6 +367,9 @@ public class StructMessageInfo implements Parcelable {
         dest.writeParcelable(this.attachment, flags);
         dest.writeParcelable(this.downloadAttachment, flags);
         dest.writeParcelable(this.userInfo, flags);
+        dest.writeParcelable(this.senderAvatar, flags);
+        dest.writeStringList(this.userInfoAlreadyRequested);
+        dest.writeStringList(this.thumbnailRequested);
         dest.writeLong(this.time);
     }
 
@@ -359,6 +403,9 @@ public class StructMessageInfo implements Parcelable {
         this.attachment = in.readParcelable(StructMessageAttachment.class.getClassLoader());
         this.downloadAttachment = in.readParcelable(StructDownloadAttachment.class.getClassLoader());
         this.userInfo = in.readParcelable(StructRegisteredInfo.class.getClassLoader());
+        this.senderAvatar = in.readParcelable(StructMessageAttachment.class.getClassLoader());
+        this.userInfoAlreadyRequested = in.createStringArrayList();
+        this.thumbnailRequested = in.createStringArrayList();
         this.time = in.readLong();
     }
 

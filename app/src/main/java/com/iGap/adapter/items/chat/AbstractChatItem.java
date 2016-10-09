@@ -26,7 +26,9 @@ import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.request.RequestFileDownload;
+import com.iGap.request.RequestUserInfo;
 import com.mikepenz.fastadapter.items.AbstractItem;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
 import java.util.List;
@@ -71,6 +73,41 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
         return this;
     }
 
+    private void requestForAvatar() {
+        // create new download attachment once with attachment token
+        if (mMessage.downloadAttachment == null) {
+            mMessage.downloadAttachment = new StructDownloadAttachment(mMessage.senderAvatar.token);
+        }
+
+        // request thumbnail
+        if (!mMessage.thumbnailRequested.contains(mMessage.senderID)) {
+            onRequestDownloadAvatar();
+            // prevent from multiple requesting thumbnail
+            mMessage.thumbnailRequested.add(mMessage.senderID);
+        }
+    }
+
+    private void requestForUserInfo() {
+        if (!mMessage.userInfoAlreadyRequested.contains(mMessage.senderID)) {
+            RequestUserInfo requestUserInfo = new RequestUserInfo();
+            requestUserInfo.userInfo(Long.parseLong(mMessage.senderID));
+
+            mMessage.userInfoAlreadyRequested.add(mMessage.senderID);
+        }
+    }
+
+    public void onRequestDownloadAvatar() {
+        ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
+        if (mMessage.senderAvatar != null && (mMessage.senderAvatar.getLocalThumbnailPath() == null || mMessage.senderAvatar.getLocalThumbnailPath().isEmpty())) {
+            mMessage.senderAvatar.setLocalThumbnailPath(Long.parseLong(mMessage.senderID), Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + mMessage.downloadAttachment.token + System.nanoTime() + mMessage.senderAvatar.name);
+        }
+
+        // I don't use offset in getting thumbnail
+        String identity = mMessage.downloadAttachment.token + '*' + selector.toString() + '*' + mMessage.senderAvatar.smallThumbnail.size + '*' + mMessage.senderAvatar.getLocalThumbnailPath() + '*' + mMessage.downloadAttachment.offset;
+
+        new RequestFileDownload().download(mMessage.downloadAttachment.token, 0, (int) mMessage.senderAvatar.smallThumbnail.size, selector, identity);
+    }
+
     @Override
     public Item withIdentifier(long identifier) {
         return super.withIdentifier(identifier);
@@ -112,6 +149,26 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
         // display user avatar only if chat type is GROUP
         if (type == ProtoGlobal.Room.Type.GROUP) {
             if (!mMessage.isSenderMe()) {
+                if (mMessage.senderAvatar != null) {
+                    if (mMessage.senderAvatar.isFileExistsOnLocal()) {
+                        ImageLoader.getInstance().displayImage(suitablePath(mMessage.senderAvatar.getLocalFilePath()), (ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar));
+                    } else if (mMessage.senderAvatar.isThumbnailExistsOnLocal()) {
+                        ImageLoader.getInstance().displayImage(suitablePath(mMessage.senderAvatar.getLocalThumbnailPath()), (ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar));
+                    } else {
+                        ((ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar)).setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), mMessage.initials, mMessage.senderColor));
+
+                        if (mMessage.senderAvatar.token != null && !mMessage.senderAvatar.token.isEmpty()) {
+                            requestForAvatar();
+                        } else {
+                            requestForUserInfo();
+                        }
+                    }
+                } else {
+                    ((ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar)).setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), mMessage.initials, mMessage.senderColor));
+
+                    requestForUserInfo();
+                }
+                
                /* holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.VISIBLE);
 
                 if (!mMessage.senderAvatar.isEmpty()) {

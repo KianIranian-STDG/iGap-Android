@@ -129,6 +129,7 @@ import com.iGap.realm.RealmGroupRoom;
 import com.iGap.realm.RealmOfflineDelete;
 import com.iGap.realm.RealmOfflineEdited;
 import com.iGap.realm.RealmOfflineSeen;
+import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageContact;
@@ -1142,9 +1143,9 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
                         // user wants to replay to a message
                         if (mReplayLayout != null && mReplayLayout.getTag() instanceof StructMessageInfo) {
-                            mAdapter.add(new TextItem(chatType, ActivityChat.this).setMessage(StructMessageInfo.convert(roomMessage, ((StructMessageInfo) mReplayLayout.getTag()).senderName, ((StructMessageInfo) mReplayLayout.getTag()).messageText, ((StructMessageInfo) mReplayLayout.getTag()).filePic)));
+                            mAdapter.add(new TextItem(chatType, ActivityChat.this).setMessage(StructMessageInfo.convert(roomMessage, ((StructMessageInfo) mReplayLayout.getTag()).senderName, ((StructMessageInfo) mReplayLayout.getTag()).messageText, ((StructMessageInfo) mReplayLayout.getTag()).filePic)).withIdentifier(System.nanoTime()));
                         } else {
-                            mAdapter.add(new TextItem(chatType, ActivityChat.this).setMessage(StructMessageInfo.convert(roomMessage)));
+                            mAdapter.add(new TextItem(chatType, ActivityChat.this).setMessage(StructMessageInfo.convert(roomMessage)).withIdentifier(System.nanoTime()));
                         }
 
                         realm.close();
@@ -2766,7 +2767,14 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
     @Override
     public void onUserInfo(final ProtoGlobal.RegisteredUser user, ProtoResponse.Response response) {
-
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Realm realm = Realm.getDefaultInstance();
+                mAdapter.updateChatAvatar(user.getId(), StructMessageAttachment.convert(realm.where(RealmRegisteredInfo.class).equalTo("id", user.getId()).findFirst().getAvatar()));
+                realm.close();
+            }
+        });
     }
 
     private static class UploadTask extends AsyncTask<Object, FileUploadStructure, FileUploadStructure> {

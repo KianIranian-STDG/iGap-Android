@@ -89,7 +89,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
         }
     }
 
-    private void requestForThumbnail() {
+    private void requestForAvatar() {
         // create new download attachment once with attachment token
         if (mInfo.downloadAttachment == null) {
             mInfo.downloadAttachment = new StructDownloadAttachment(mInfo.avatar.token);
@@ -97,13 +97,13 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
 
         // request thumbnail
         if (!mInfo.downloadAttachment.thumbnailRequested) {
-            onRequestDownloadThumbnail();
+            onRequestDownloadAvatar();
             // prevent from multiple requesting thumbnail
             mInfo.downloadAttachment.thumbnailRequested = true;
         }
     }
 
-    public void onRequestDownloadThumbnail() {
+    public void onRequestDownloadAvatar() {
         ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
         if (mInfo.avatar != null && (mInfo.avatar.getLocalThumbnailPath() == null || mInfo.avatar.getLocalThumbnailPath().isEmpty())) {
             mInfo.avatar.setLocalThumbnailPath(mInfo.chatId, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + mInfo.downloadAttachment.token + System.nanoTime() + mInfo.avatar.name);
@@ -155,11 +155,11 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
 
                 if (mInfo.chatType != RoomType.CHAT) {
                     if (mInfo.avatar.token != null && !mInfo.avatar.token.isEmpty()) {
-                        requestForThumbnail();
+                        requestForAvatar();
                     }
                 } else {
                     if (mInfo.avatar.token != null && !mInfo.avatar.token.isEmpty()) {
-                        requestForThumbnail();
+                        requestForAvatar();
                     } else {
                         requestForUserInfo();
                     }
@@ -169,7 +169,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
             holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), mInfo.initials, mInfo.color));
 
             if (mInfo.chatType != RoomType.CHAT) {
-                requestForThumbnail();
+                requestForAvatar();
             } else {
                 requestForUserInfo();
             }

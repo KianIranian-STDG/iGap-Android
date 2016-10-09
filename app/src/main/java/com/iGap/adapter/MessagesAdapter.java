@@ -10,6 +10,7 @@ import com.iGap.adapter.items.chat.AbstractChatItem;
 import com.iGap.interface_package.OnChatMessageRemove;
 import com.iGap.interface_package.OnChatMessageSelectionChanged;
 import com.iGap.interface_package.OnMessageViewClick;
+import com.iGap.module.StructMessageAttachment;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
@@ -55,6 +56,16 @@ public class MessagesAdapter<Item extends AbstractChatItem> extends FastItemAdap
                 int pos = getAdapterItems().indexOf(item);
                 notifyItemChanged(pos);
                 break;
+            }
+        }
+    }
+
+    public void updateChatAvatar(long userId, StructMessageAttachment avatar) {
+        for (Item item : getAdapterItems()) {
+            if (!item.mMessage.isSenderMe() && item.mMessage.senderID.equalsIgnoreCase(Long.toString(userId))) {
+                int pos = getAdapterItems().indexOf(item);
+                item.mMessage.senderAvatar = avatar;
+                notifyItemChanged(pos);
             }
         }
     }

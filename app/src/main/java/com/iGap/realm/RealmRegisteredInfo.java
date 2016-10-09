@@ -126,7 +126,7 @@ public class RealmRegisteredInfo extends RealmObject {
         RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo("id", avatar.getId()).findFirst();
 
         if (realmAvatar == null) {
-            realmAvatar = new RealmAvatar(avatar.getId());
+            realmAvatar = realm.createObject(RealmAvatar.class);
         } else {
             if (realmAvatar.getFile() != null) {
                 realmAvatar.getFile().deleteFromRealm();
