@@ -21,6 +21,7 @@ import com.iGap.R;
 import com.iGap.adapter.StickyHeaderAdapter;
 import com.iGap.adapter.items.ContactItemGroup;
 import com.iGap.interface_package.OnSelectedList;
+import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.StructContactInfo;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
@@ -73,27 +74,51 @@ public class ShowCustomList extends Fragment {
 
         Button btnBack = (Button) view.findViewById(R.id.fcg_btn_back);
         btnBack.setTypeface(G.fontawesome);
-        btnBack.setOnClickListener(new View.OnClickListener() {
+//        btnBack.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                getActivity().getSupportFragmentManager().popBackStack();
+//            }
+//        });
+
+        RippleView rippleBack = (RippleView) view.findViewById(R.id.fcg_ripple_back);
+        rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
-            public void onClick(View view) {
+            public void onComplete(RippleView rippleView) {
+
                 getActivity().getSupportFragmentManager().popBackStack();
+
             }
         });
 
         Button btnDone = (Button) view.findViewById(R.id.fcg_btn_done);
         btnDone.setTypeface(G.fontawesome);
-        btnDone.setOnClickListener(new View.OnClickListener() {
+        RippleView rippleDown = (RippleView) view.findViewById(R.id.fcg_ripple_done);
+        rippleDown.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
-            public void onClick(View view) {
+            public void onComplete(RippleView rippleView) {
 
                 if (onSelectedList != null) {
                     onSelectedList.getSelectedList(true, "", getSelectedList());
                 }
-
+//
                 getActivity().getSupportFragmentManager().popBackStack();
 
             }
         });
+
+//        btnDone.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                if (onSelectedList != null) {
+//                    onSelectedList.getSelectedList(true, "", getSelectedList());
+//                }
+//
+//                getActivity().getSupportFragmentManager().popBackStack();
+//
+//            }
+//        });
 
         //create our FastAdapter
         fastAdapter = new FastAdapter();

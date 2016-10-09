@@ -242,10 +242,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
 
                             }
 
-                        }).show();
-
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
+                        }).build();
+                dialog.show();
             }
         });
 
@@ -314,7 +312,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
         txtBack = (TextView) findViewById(R.id.st_txt_back);
         txtBack.setTypeface(G.fontawesome);
         RippleView rippleBack = (RippleView) findViewById(R.id.st_ripple_back);
-
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
             @Override
@@ -349,13 +346,18 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
                                         break;
                                 }
                             }
-                        }).show();
+                        }).build();
                 WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
                 layoutParams.copyFrom(dialog.getWindow().getAttributes());
                 layoutParams.width = (int) getResources().getDimension(R.dimen.dp200);
                 layoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
                 dialog.getWindow().setAttributes(layoutParams);
-                ;
+
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.getWindow().setDimAmount(0);
+
+                dialog.show();
+
             }
 
         });
@@ -659,7 +661,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
 
 
         txtNotifyAndSound = (TextView) findViewById(R.id.st_txt_notifyAndSound);
-        txtNotifyAndSound.setTypeface(G.flaticon);
         txtNotifyAndSound.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

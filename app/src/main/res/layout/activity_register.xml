@@ -22,7 +22,7 @@
             android:gravity="center"
             android:text="@string/igap"
             android:textColor="@color/rg_whit_background"
-            android:textSize="@dimen/sp18" />
+            android:textSize="@dimen/sp20" />
 
     </android.support.v7.widget.Toolbar>
 

@@ -153,6 +153,12 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         btnSearch = (SearchView) findViewById(R.id.cl_btn_search);
 
         final TextView txtIgap = (TextView) findViewById(R.id.cl_txt_igap);
+//        txtIgap.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//            }
+//        });
         txtIgap.setTypeface(G.neuroplp);
 
         txtIgap.setTypeface(null, Typeface.BOLD);

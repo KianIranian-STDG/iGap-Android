@@ -175,7 +175,7 @@
                         android:paddingLeft="@dimen/dp4"
                         android:paddingStart="@dimen/dp4"
                         android:text="@string/st_contactName"
-                        android:textColor="@color/st_title_s"
+                        android:textColor="@android:color/secondary_text_light"
                         android:textSize="@dimen/sp18"
                         android:textStyle="bold" />
 
@@ -188,7 +188,7 @@
                         android:paddingLeft="@dimen/dp4"
                         android:paddingStart="@dimen/dp4"
                         android:text="Alexander Smith"
-                        android:textColor="@android:color/black"
+                        android:textColor="@android:color/secondary_text_light"
                         android:textSize="@dimen/sp18"
                         android:theme="@style/Setting_editText" />
 
@@ -207,7 +207,7 @@
                         android:paddingLeft="@dimen/dp4"
                         android:paddingStart="@dimen/dp4"
                         android:text="@string/st_username"
-                        android:textColor="@color/st_title_s"
+                        android:textColor="@android:color/secondary_text_light"
                         android:textSize="@dimen/sp18"
                         android:textStyle="bold" />
 
@@ -217,10 +217,12 @@
                         android:layout_height="@dimen/dp40"
                         android:background="@android:color/transparent"
                         android:clickable="false"
+                        android:paddingLeft="@dimen/dp4"
+                        android:paddingStart="@dimen/dp4"
                         android:gravity="center_vertical"
                         android:maxLength="25"
                         android:text="Alexander Smith:"
-                        android:textColor="@android:color/black"
+                        android:textColor="@android:color/secondary_text_light"
                         android:textSize="@dimen/sp18" />
 
                 </LinearLayout>
@@ -240,7 +242,7 @@
                         android:paddingLeft="@dimen/dp4"
                         android:paddingStart="@dimen/dp4"
                         android:text="@string/st_phoneNumber"
-                        android:textColor="@color/st_title_s"
+                        android:textColor="@android:color/secondary_text_light"
                         android:textSize="@dimen/sp18"
                         android:textStyle="bold" />
 
@@ -252,7 +254,9 @@
                         android:gravity="center_vertical"
                         android:maxLength="11"
                         android:text="09125554433"
-                        android:textColor="@android:color/black"
+                        android:paddingLeft="@dimen/dp4"
+                        android:paddingStart="@dimen/dp4"
+                        android:textColor="@android:color/secondary_text_light"
                         android:textSize="@dimen/sp18" />
                 </LinearLayout>
 
@@ -269,7 +273,7 @@
                         android:paddingLeft="@dimen/dp4"
                         android:paddingStart="@dimen/dp4"
                         android:text="@string/chi_shared_Media"
-                        android:textColor="@color/st_title_s"
+                        android:textColor="@android:color/secondary_text_light"
                         android:textSize="@dimen/sp18"
                         android:textStyle="bold" />
 
@@ -280,7 +284,10 @@
                         android:inputType="phone"
                         android:maxLength="11"
                         android:text="12"
-                        android:textColor="@android:color/black"
+                        android:paddingLeft="@dimen/dp4"
+                        android:paddingStart="@dimen/dp4"
+                        android:gravity="center_vertical"
+                        android:textColor="@android:color/secondary_text_light"
                         android:textSize="@dimen/sp18"
                         android:theme="@style/Setting_editText" />
 

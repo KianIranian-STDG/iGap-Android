@@ -3,6 +3,8 @@ package com.iGap.activitys;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -17,9 +19,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -44,6 +48,7 @@ import com.iGap.interface_package.OnGroupKickMember;
 import com.iGap.interface_package.OnGroupKickModerator;
 import com.iGap.interface_package.OnGroupLeft;
 import com.iGap.interface_package.OnSelectedList;
+import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.AttachFile;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.Contacts;
@@ -177,20 +182,58 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnFileUplo
 
         Button btnBack = (Button) findViewById(R.id.agp_btn_back);
         btnBack.setTypeface(G.fontawesome);
-        btnBack.setOnClickListener(new View.OnClickListener() {
+//
+        RippleView rippleBack = (RippleView) findViewById(R.id.agp_ripple_back);
+        rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+
             @Override
-            public void onClick(View view) {
+            public void onComplete(RippleView rippleView) {
                 finish();
             }
+
         });
 
         Button btnMenu = (Button) findViewById(R.id.agp_btn_menu);
         btnMenu.setTypeface(G.fontawesome);
-        btnMenu.setOnClickListener(new View.OnClickListener() {
+
+        RippleView rippleMenu = (RippleView) findViewById(R.id.agp_ripple_menu);
+        rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+
             @Override
-            public void onClick(View view) {
+            public void onComplete(RippleView rippleView) {
+
+                MaterialDialog dialog = new MaterialDialog.Builder(ActivityGroupProfile.this)
+                        .items(R.array.menu_setting)
+                        .contentColor(Color.BLACK)
+                        .itemsCallback(new MaterialDialog.ListCallback() {
+                            @Override
+                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+
+                                switch (which) {
+                                    case 0:
+                                        Toast.makeText(ActivityGroupProfile.this, "Log Out", Toast.LENGTH_SHORT).show();
+                                        break;
+                                }
+                            }
+                        }).build();
+                WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+                layoutParams.copyFrom(dialog.getWindow().getAttributes());
+                layoutParams.width = (int) getResources().getDimension(R.dimen.dp200);
+                layoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
+                dialog.getWindow().setAttributes(layoutParams);
+
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.getWindow().setDimAmount(0);
+
+                dialog.show();
             }
+
         });
+//        btnMenu.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//            }
+//        });
 
 
         layoutSetting = (LinearLayout) findViewById(R.id.agp_ll_seetting);
@@ -356,6 +399,16 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnFileUplo
             public void onClick(View view) {
                 groupLeft();
             }
+        });
+
+        RippleView rippleCircleImage = (RippleView) findViewById(R.id.agp_ripple_group_avatar);
+        rippleCircleImage.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+
+            @Override
+            public void onComplete(RippleView rippleView) {
+
+            }
+
         });
 
         imvGroupAvatar.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvGroupAvatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));

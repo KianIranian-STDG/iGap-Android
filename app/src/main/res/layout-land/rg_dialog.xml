@@ -77,23 +77,23 @@
         android:orientation="horizontal"
         android:layoutDirection="ltr">
 
-        <TextView
-            android:id="@+id/rg_txt_cancelDialog"
-            android:layout_width="@dimen/dp60"
-            android:layout_height="@dimen/dp36"
-            android:background="@android:color/transparent"
-            android:text="@string/B_cancel"
-            android:gravity="center"
-            android:textColor="@color/toolbar_background"
-            android:textSize="@dimen/sp14"
-            android:textStyle="bold" />
+        <!--<TextView-->
+        <!--android:id="@+id/rg_txt_cancelDialog"-->
+        <!--android:layout_width="@dimen/dp60"-->
+        <!--android:layout_height="@dimen/dp36"-->
+        <!--android:background="@android:color/transparent"-->
+        <!--android:text="@string/B_cancel"-->
+        <!--android:gravity="center"-->
+        <!--android:textColor="@color/toolbar_background"-->
+        <!--android:textSize="@dimen/sp14"-->
+        <!--android:textStyle="bold" />-->
 
         <TextView
             android:id="@+id/rg_txt_okDialog"
             android:layout_width="@dimen/dp60"
             android:layout_height="@dimen/dp36"
             android:background="@android:color/transparent"
-            android:text="@string/B_ok"
+            android:text="@string/B_cancel"
             android:layout_marginLeft="@dimen/dp8"
             android:gravity="center"
             android:textColor="@color/toolbar_background"

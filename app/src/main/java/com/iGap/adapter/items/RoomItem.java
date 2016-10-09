@@ -79,11 +79,11 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
     private String getStringChatIcon(RoomType chatType) {
         switch (chatType) {
             case CHAT:
-                return G.context.getString(R.string.fa_user);
+                return G.context.getString(R.string.md_user_shape);
             case CHANNEL:
                 return G.context.getString(R.string.fa_bullhorn);
             case GROUP:
-                return G.context.getString(R.string.fa_group);
+                return G.context.getString(R.string.md_users_social_symbol);
             default:
                 return null;
         }
@@ -175,11 +175,17 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
             }
         }
 
-        holder.chatIcon.setText(getStringChatIcon(mInfo.chatType));
         if (mInfo.chatType == RoomType.CHAT) {
-            holder.chatIcon.setVisibility(View.GONE);
-        } else {
-            holder.chatIcon.setVisibility(View.VISIBLE);
+            holder.chatIcon.setText(getStringChatIcon(RoomType.CHAT));
+            holder.chatIcon.setTypeface(G.flaticon);
+        } else if (mInfo.chatType == RoomType.GROUP) {
+            holder.chatIcon.setText(getStringChatIcon(RoomType.GROUP));
+            holder.chatIcon.setTypeface(G.flaticon);
+
+        } else if (mInfo.chatType == RoomType.CHANNEL) {
+            holder.chatIcon.setText(getStringChatIcon(RoomType.CHANNEL));
+            holder.chatIcon.setTypeface(G.fontawesome);
+
         }
 
         holder.name.setText(mInfo.chatTitle);
@@ -258,7 +264,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
             mute = (TextView) view.findViewById(R.id.cs_txt_mute);
             messageStatus = (MaterialDesignTextView) view.findViewById(R.id.cslr_txt_tic);
 
-            chatIcon.setTypeface(G.fontawesome);
+
             mute.setTypeface(G.fontawesome);
             lastSeen.setTypeface(G.arial);
             unreadMessage.setTypeface(G.arial);

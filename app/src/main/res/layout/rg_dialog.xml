@@ -78,7 +78,7 @@
             android:layout_width="@dimen/dp60"
             android:layout_height="@dimen/dp36"
             android:background="@android:color/transparent"
-            android:text="@string/B_ok"
+            android:text="@string/B_cancel"
             android:layout_marginLeft="@dimen/dp8"
             android:gravity="center"
             android:textColor="@color/toolbar_background"
