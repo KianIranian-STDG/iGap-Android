@@ -112,7 +112,6 @@ public class ActivitySelectChat extends ActivityEnhanced {
                 info.lastMessageSenderIsMe = lastMessage.isSenderMe();
             }
             info.muteNotification = realmRoom.getMute(); // FIXME
-            info.imageSource = ""; // FIXME
 
             chatItem.setInfo(info);
             runOnUiThread(new Runnable() {

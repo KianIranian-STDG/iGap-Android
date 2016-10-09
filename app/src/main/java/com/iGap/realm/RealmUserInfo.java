@@ -16,7 +16,16 @@ public class RealmUserInfo extends RealmObject {
     private String gender;
     private String phoneNumber;
 
-    private RealmList<RealmAvatarPath> avatarPath;
+    private RealmList<RealmAvatarPath> avatarPath = new RealmList<>();
+    private RealmList<RealmAvatarToken> avatarTokens = new RealmList<>();
+
+    public RealmList<RealmAvatarToken> getAvatarTokens() {
+        return avatarTokens;
+    }
+
+    public void setAvatarTokens(RealmList<RealmAvatarToken> avatarTokens) {
+        this.avatarTokens = avatarTokens;
+    }
 
     private String token;
 
@@ -29,6 +38,14 @@ public class RealmUserInfo extends RealmObject {
 
     public void setAvatarPath(RealmList<RealmAvatarPath> avatarPath) {
         this.avatarPath = avatarPath;
+    }
+
+    public void addAvatarPath(RealmAvatarPath avatarPath) {
+        this.avatarPath.add(avatarPath);
+    }
+
+    public void addAvatarToken(RealmAvatarToken avatarToken) {
+        this.avatarTokens.add(avatarToken);
     }
 
     public void setUserRegistrationState(boolean value) {

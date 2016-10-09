@@ -15,9 +15,7 @@ public class StructChatInfo {
 
     public long chatId;
     public boolean muteNotification = false;
-    public MyType.OwnerShip ownerShip = MyType.OwnerShip.member;
 
-    public String imageSource = "";
     public String color = "";
     public RoomType chatType = RoomType.CHAT;
     public String chatTitle = "";
@@ -36,15 +34,9 @@ public class StructChatInfo {
     public boolean userInfoAlreadyRequested;
 
     public String fileName = "";
-    public String fileMime = "";
     public String fileSize = "";
     public String filePath = "";
     public StructDownloadAttachment downloadAttachment;
-
-    public String fileInfo = "";
-    public String filePic = "";
-
-    public MyType.FileState fileState = MyType.FileState.notDownload;
 
     /**
      * convert ProtoClientGetRoom.ClientGetRoomResponse.Builder to StructChatInfo
@@ -79,7 +71,6 @@ public class StructChatInfo {
         }
         chatInfo.readOnly = builder.getRoom().getReadOnly();
         chatInfo.muteNotification = false;
-        chatInfo.ownerShip = MyType.OwnerShip.member;
         chatInfo.color = builder.getRoom().getColor();
         chatInfo.lastmessage = builder.getRoom().getLastMessage().getStatus().toString();
         chatInfo.lastMessageTime = builder.getRoom().getLastMessage().getUpdateTime();

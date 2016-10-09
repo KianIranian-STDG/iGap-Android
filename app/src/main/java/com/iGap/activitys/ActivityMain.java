@@ -48,7 +48,6 @@ import com.iGap.libs.flowingdrawer.LeftDrawerLayout;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.Contacts;
 import com.iGap.module.MyAppBarLayout;
-import com.iGap.module.MyType;
 import com.iGap.module.OnComplete;
 import com.iGap.module.ShouldScrolledBehavior;
 import com.iGap.module.SoftKeyboard;
@@ -769,7 +768,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                             info.lastMessageStatus = room.getLastMessage().getStatus().toString();
                             info.color = room.getColor();
                             info.muteNotification = false; // TODO: 9/14/2016 [Alireza Eskandarpour Shoferi] vaghti server mute ro implement kard inja get kon
-                            info.imageSource = ""; // FIXME
 
                             // create item from info
 
@@ -831,7 +829,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                 info.lastMessageStatus = lastMessage.getStatus();
             }
             info.muteNotification = realmRoom.getMute(); // FIXME
-            info.imageSource = ""; // FIXME
 
             chatItem.setInfo(info);
             chatItem.setComplete(ActivityMain.this);
@@ -934,7 +931,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                 break;
         }
         chatInfo.muteNotification = room.getMute();
-        chatInfo.ownerShip = MyType.OwnerShip.member;
         chatInfo.unreadMessagesCount = room.getUnreadCount();
         chatInfo.color = room.getColor();
 

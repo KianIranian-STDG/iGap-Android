@@ -43,6 +43,7 @@ import com.iGap.fragments.FragmentShowImage;
 import com.iGap.helper.HelperImageBackColor;
 import com.iGap.interface_package.OnFileUpload;
 import com.iGap.interface_package.OnFileUploadStatusResponse;
+import com.iGap.interface_package.OnUserAvatarResponse;
 import com.iGap.interface_package.OnUserProfileSetNickNameResponse;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.FileUploadStructure;
@@ -51,8 +52,10 @@ import com.iGap.module.SHP_SETTING;
 import com.iGap.module.StructSharedMedia;
 import com.iGap.module.Utils;
 import com.iGap.proto.ProtoFileUploadStatus;
+import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmAvatarPath;
+import com.iGap.realm.RealmAvatarToken;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestFileUpload;
 import com.iGap.request.RequestFileUploadInit;
@@ -75,7 +78,7 @@ import io.realm.RealmResults;
 import io.realm.Sort;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, OnFileUploadStatusResponse {
+public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, OnFileUploadStatusResponse, OnUserAvatarResponse {
 
     private SharedPreferences sharedPreferences;
     private int messageTextSize = 16;
@@ -152,6 +155,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
 
         G.uploaderUtil.setActivityCallbacks(this);
         G.onFileUploadStatusResponse = this;
+        G.onUserAvatarResponse = this;
 
         final Realm realm = Realm.getDefaultInstance();
         final TextView txtNickNameTitle = (TextView) findViewById(R.id.ac_txt_nickname_title);
@@ -1088,6 +1092,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
                 .show();
     }
 
+    private int lastUploadedAvatarId;
+
     //=====================================================================================result from camera , gallery and crop
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -1136,7 +1142,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
             realm.close();
             setImage();
 
-            new UploadTask().execute(pathSaveImage, idAvatar + 1);
+            lastUploadedAvatarId = idAvatar + 1;
+            new UploadTask().execute(pathSaveImage, lastUploadedAvatarId);
 
         }
     }
@@ -1430,6 +1437,22 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
         } else {
             G.uploaderUtil.startUploading(fileUploadStructure.fileSize, Long.toString(fileUploadStructure.messageId));
         }
+    }
+
+    @Override
+    public void onAvatarAdd(final ProtoGlobal.Avatar avatar) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                RealmAvatarToken realmAvatarPath = realm.createObject(RealmAvatarToken.class);
+                realmAvatarPath.setId(lastUploadedAvatarId);
+                realmAvatarPath.setToken(avatar.getFile().getToken());
+                realmUserInfo.addAvatarToken(realmAvatarPath);
+            }
+        });
+        realm.close();
     }
 
     private static class UploadTask extends AsyncTask<Object, FileUploadStructure, FileUploadStructure> {

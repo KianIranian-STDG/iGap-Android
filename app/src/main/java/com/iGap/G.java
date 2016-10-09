@@ -43,6 +43,7 @@ import com.iGap.interface_package.OnInfoTime;
 import com.iGap.interface_package.OnReceiveInfoLocation;
 import com.iGap.interface_package.OnReceivePageInfoTOS;
 import com.iGap.interface_package.OnSecuring;
+import com.iGap.interface_package.OnUserAvatarResponse;
 import com.iGap.interface_package.OnUserContactDelete;
 import com.iGap.interface_package.OnUserContactEdit;
 import com.iGap.interface_package.OnUserContactGetList;
@@ -202,6 +203,7 @@ public class G extends Application {
     public static OnGroupLeft onGroupLeft;
     public static OnFileDownloadResponse onFileDownloadResponse;
     public static OnUserInfoResponse onUserInfoResponse;
+    public static OnUserAvatarResponse onUserAvatarResponse;
 
     public static final String DIR_SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static final String DIR_APP = DIR_SDCARD + "/iGap";

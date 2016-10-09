@@ -1,5 +1,6 @@
 package com.iGap.response;
 
+import com.iGap.G;
 import com.iGap.proto.ProtoUserAvatarAdd;
 
 public class UserAvatarAddResponse extends MessageHandler {
@@ -21,6 +22,8 @@ public class UserAvatarAddResponse extends MessageHandler {
 
         ProtoUserAvatarAdd.UserAvatarAddResponse.Builder userAvatarAddResponse = (ProtoUserAvatarAdd.UserAvatarAddResponse.Builder) message;
         userAvatarAddResponse.getAvatar();
+
+        G.onUserAvatarResponse.onAvatarAdd(userAvatarAddResponse.getAvatar());
     }
 
     @Override
