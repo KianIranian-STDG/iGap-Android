@@ -48,7 +48,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.adapter.ChatMessagesFastAdapter;
+import com.iGap.adapter.MessagesAdapter;
 import com.iGap.adapter.items.chat.AbstractChatItem;
 import com.iGap.adapter.items.chat.AudioItem;
 import com.iGap.adapter.items.chat.ChannelAudioItem;
@@ -212,7 +212,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
     public static ActivityChat activityChat;
 
-    private ChatMessagesFastAdapter<AbstractChatItem> mAdapter;
+    private MessagesAdapter<AbstractChatItem> mAdapter;
     private ProtoGlobal.Room.Type chatType;
 
     private String lastSeen;
@@ -985,7 +985,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         recyclerView.setItemViewCacheSize(20);
         recyclerView.setDrawingCacheEnabled(true);
 
-        mAdapter = new ChatMessagesFastAdapter<>(this, this, this);
+        mAdapter = new MessagesAdapter<>(this, this, this);
 
         switchAddItem(getChatList(), true);
 

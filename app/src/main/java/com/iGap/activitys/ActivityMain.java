@@ -27,7 +27,7 @@ import android.widget.Toast;
 import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.adapter.ChatsFastAdapter;
+import com.iGap.adapter.RoomsAdapter;
 import com.iGap.adapter.items.ChatItem;
 import com.iGap.fragments.FragmentNewGroup;
 import com.iGap.fragments.RegisteredContactsFragment;
@@ -83,7 +83,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
     public static LeftDrawerLayout mLeftDrawerLayout;
     private RecyclerView recyclerView;
-    private ChatsFastAdapter<ChatItem> mAdapter;
+    private RoomsAdapter<ChatItem> mAdapter;
     private ArcMenu arcMenu;
     private SearchView btnSearch;
 
@@ -390,7 +390,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         // remove notifying fancy animation
         recyclerView.setItemAnimator(null);
         recyclerView.setHasFixedSize(true);
-        mAdapter = new ChatsFastAdapter<>();
+        mAdapter = new RoomsAdapter<>();
         mAdapter.withOnClickListener(new FastAdapter.OnClickListener<ChatItem>() {
             @Override
             public boolean onClick(View v, IAdapter<ChatItem> adapter, ChatItem item, int position) {

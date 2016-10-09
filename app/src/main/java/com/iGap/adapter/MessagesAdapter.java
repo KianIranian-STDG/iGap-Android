@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/6/2016.
  */
-public class ChatMessagesFastAdapter<Item extends AbstractChatItem> extends FastItemAdapter<Item> implements FastAdapter.OnLongClickListener<Item> {
+public class MessagesAdapter<Item extends AbstractChatItem> extends FastItemAdapter<Item> implements FastAdapter.OnLongClickListener<Item> {
     private OnChatMessageSelectionChanged<Item> onChatMessageSelectionChanged;
     private OnMessageViewClick onMessageViewClick;
     private OnChatMessageRemove onChatMessageRemove;
@@ -110,7 +110,7 @@ public class ChatMessagesFastAdapter<Item extends AbstractChatItem> extends Fast
         return null;
     }
 
-    public ChatMessagesFastAdapter(OnChatMessageSelectionChanged<Item> OnChatMessageSelectionChangedListener, final OnMessageViewClick onMessageViewClickListener, final OnChatMessageRemove chatMessageRemoveListener) {
+    public MessagesAdapter(OnChatMessageSelectionChanged<Item> OnChatMessageSelectionChangedListener, final OnMessageViewClick onMessageViewClickListener, final OnChatMessageRemove chatMessageRemoveListener) {
         onChatMessageSelectionChanged = OnChatMessageSelectionChangedListener;
         onMessageViewClick = onMessageViewClickListener;
         onChatMessageRemove = chatMessageRemoveListener;
