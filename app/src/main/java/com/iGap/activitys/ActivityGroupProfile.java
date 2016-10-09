@@ -592,6 +592,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnFileUplo
                 }
             });
 
+            Log.i("AVATAR", "fileUploadStructure.token : " + fileUploadStructure.token + "  ||  roomId : " + roomId);
             new RequestGroupAvatarAdd().groupAvatarAdd(roomId, fileUploadStructure.token);
             // TODO: 10/8/2016 [Alireza] harkari mesle update view
 

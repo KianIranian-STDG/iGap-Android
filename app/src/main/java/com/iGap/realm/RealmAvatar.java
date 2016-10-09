@@ -9,6 +9,13 @@ import io.realm.annotations.PrimaryKey;
 
 public class RealmAvatar extends RealmObject {
 
+    public RealmAvatar() {
+    }
+
+    public RealmAvatar(long id) {
+        this.id = id;
+    }
+
     @PrimaryKey
     private long id;
     private RealmAttachment file;
@@ -63,8 +70,7 @@ public class RealmAvatar extends RealmObject {
         //File info for avatar
         RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo("id", room.getId()).findFirst();
         if (realmAvatar == null) {
-            realmAvatar = realm.createObject(RealmAvatar.class);
-            realmAvatar.setId(room.getId());
+            realmAvatar = new RealmAvatar(room.getId());
         }
         realmAvatar.setFile(RealmAttachment.build(file));
 

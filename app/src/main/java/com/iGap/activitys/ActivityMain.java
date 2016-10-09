@@ -1009,7 +1009,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
     @Override
     public void onChatUpdateStatus(long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, long statusVersion) {
-        // empty
+        mAdapter.updateChatStatus(roomId, status.toString());
     }
 
     @Override
