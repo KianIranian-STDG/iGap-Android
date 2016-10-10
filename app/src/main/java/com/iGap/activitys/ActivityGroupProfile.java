@@ -61,6 +61,7 @@ import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmAvatar;
+import com.iGap.realm.RealmChatHistory;
 import com.iGap.realm.RealmContacts;
 import com.iGap.realm.RealmGroupRoom;
 import com.iGap.realm.RealmMember;
@@ -97,6 +98,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import io.realm.Realm;
 import io.realm.RealmList;
+import io.realm.RealmResults;
+import io.realm.Sort;
 
 /**
  * Created by android3 on 9/18/2016.
@@ -144,6 +147,8 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnFileUplo
 
     private int countAddMemberResponse = 0;
     private int countAddMemberRequest = 0;
+
+    private long startMessageId = 0;
 
 
     @Override
@@ -961,7 +966,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnFileUplo
 
         Fragment fragment = ShowCustomList.newInstance(userList, new OnSelectedList() {
             @Override
-            public void getSelectedList(boolean result, String message, final ArrayList<StructContactInfo> list) {
+            public void getSelectedList(boolean result, String message, int countForShowLastMessage, final ArrayList<StructContactInfo> list) {
 
 
                 countAddMemberResponse = 0;
@@ -993,66 +998,107 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnFileUplo
 
                                 }
                             });
-
                         }
                     }
                 };
 
-                Realm realm = Realm.getDefaultInstance();
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        final RealmList<RealmMember> members = new RealmList<>();
-                        for (int i = 0; i < list.size(); i++) {
-                            long peerId = list.get(i).peerId;
-                            //add member to realm
-                            RealmMember realmMember = new RealmMember();
-                            int autoIncrement = 0;
-                            if (realm.where(RealmMember.class).max("id") != null) {
-                                autoIncrement = realm.where(RealmMember.class).max("id").intValue() + 1;
-                            }
-                            realmMember.setId(autoIncrement);
-                            realmMember.setPeerId(peerId);
-                            realmMember.setRole(ProtoGlobal.GroupRoom.Role.MEMBER.toString());
-                            realmMember = realm.copyToRealm(realmMember);
+                memberRealmAndRequest(list, countForShowLastMessage);
+            }
+        });
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("DIALOG_SHOWING", true);
+        fragment.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                .addToBackStack(null).replace(R.id.fragmentContainer_group_profile, fragment)
+                .commit();
 
-                            members.add(realmMember);
+    }
 
-                            //request for add member
-                            new RequestGroupAddMember().groupAddMemeber(roomId, peerId, 0, ProtoGlobal.GroupRoom.Role.MEMBER);
-                        }
+    /**
+     * add member to realm and send request to server for really added this contacts to this group
+     */
+    private void memberRealmAndRequest(final ArrayList<StructContactInfo> list, int messageCount) {
+        Realm realm = Realm.getDefaultInstance();
 
-                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
-                        RealmList<RealmMember> memberList = realmRoom.getGroupRoom().getMembers();
+        if (messageCount == 0) {
+            startMessageId = 0;
+        } else {
+            RealmResults<RealmChatHistory> realmChatHistories = realm.where(RealmChatHistory.class).equalTo("roomId", roomId).findAllSorted("id", Sort.DESCENDING);
 
+            if (messageCount >= realmChatHistories.size()) {
+                // if count is bigger than exist messages get first message id that exist
+                RealmResults<RealmChatHistory> realmChatHistoriesAscending = realm.where(RealmChatHistory.class).equalTo("roomId", roomId).findAllSorted("id", Sort.ASCENDING);
+                for (final RealmChatHistory chatHistory : realmChatHistoriesAscending) {
 
-                        for (int i = 0; i < members.size(); i++) {
-                            long id = members.get(i).getPeerId();
-                            boolean canAdd = true;
-                            for (int j = 0; j < memberList.size(); j++) {
-                                if (memberList.get(j).getPeerId() == id) {
-                                    canAdd = false;
-                                    break;
-                                }
-                            }
-                            if (canAdd) {
-                                memberList.add(members.get(i));
-                            }
-                        }
-
+                    if (chatHistory.getRoomMessage() != null) {
+                        startMessageId = chatHistory.getRoomMessage().getMessageId();
+                        Log.i("HHH", "startMessageId1 : " + startMessageId);
+                        Log.i("HHH", "getMessage1 : " + chatHistory.getRoomMessage().getMessage());
+                        break;
                     }
-                });
+                }
 
-                realm.close();
+            } else {
+
+                for (final RealmChatHistory chatHistory : realmChatHistories) {
+                    messageCount--;
+                    if (messageCount == 0) {
+                        startMessageId = chatHistory.getRoomMessage().getMessageId();
+                        Log.i("HHH", "startMessageId2 : " + startMessageId);
+                        Log.i("HHH", "getMessage2 : " + chatHistory.getRoomMessage().getMessage());
+                    }
+                }
+            }
+        }
+
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                final RealmList<RealmMember> members = new RealmList<>();
+                for (int i = 0; i < list.size(); i++) {
+                    long peerId = list.get(i).peerId;
+                    //add member to realm
+                    RealmMember realmMember = new RealmMember();
+                    int autoIncrement = 0;
+                    if (realm.where(RealmMember.class).max("id") != null) {
+                        autoIncrement = realm.where(RealmMember.class).max("id").intValue() + 1;
+                    }
+                    realmMember.setId(autoIncrement);
+                    realmMember.setPeerId(peerId);
+                    realmMember.setRole(ProtoGlobal.GroupRoom.Role.MEMBER.toString());
+                    realmMember = realm.copyToRealm(realmMember);
+
+                    members.add(realmMember);
+
+                    //request for add member
+                    new RequestGroupAddMember().groupAddMember(roomId, peerId, startMessageId, ProtoGlobal.GroupRoom.Role.MEMBER);
+                }
+
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+                RealmList<RealmMember> memberList = realmRoom.getGroupRoom().getMembers();
+
+
+                for (int i = 0; i < members.size(); i++) {
+                    long id = members.get(i).getPeerId();
+                    boolean canAdd = true;
+                    for (int j = 0; j < memberList.size(); j++) {
+                        if (memberList.get(j).getPeerId() == id) {
+                            canAdd = false;
+                            break;
+                        }
+                    }
+                    if (canAdd) {
+                        memberList.add(members.get(i));
+                    }
+                }
 
             }
         });
 
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
-                R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer_group_profile, fragment).commit();
-
-
+        realm.close();
     }
+
 
     private void ChangeGroupName() {
 
@@ -1341,7 +1387,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnFileUplo
 
         Fragment fragment = ShowCustomList.newInstance(contacts, new OnSelectedList() {
             @Override
-            public void getSelectedList(boolean result, String message, final ArrayList<StructContactInfo> list) {
+            public void getSelectedList(boolean result, String message, int count, final ArrayList<StructContactInfo> list) {
 
                 G.onGroupAddModerator = new OnGroupAddModerator() {
                     @Override
@@ -1372,7 +1418,9 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnFileUplo
                 }
             }
         });
-
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("DIALOG_SHOWING", false);
+        fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
                 R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer_group_profile, fragment).commit();
 
@@ -1383,7 +1431,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnFileUplo
 
         Fragment fragment = ShowCustomList.newInstance(contacts, new OnSelectedList() {
             @Override
-            public void getSelectedList(boolean result, String message, ArrayList<StructContactInfo> list) {
+            public void getSelectedList(boolean result, String message, int count, ArrayList<StructContactInfo> list) {
 
 
                 G.onGroupAddAdmin = new OnGroupAddAdmin() {
@@ -1418,7 +1466,9 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnFileUplo
 
             }
         });
-
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("DIALOG_SHOWING", false);
+        fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
                 R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer_group_profile, fragment).commit();
 

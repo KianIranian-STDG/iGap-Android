@@ -1,13 +1,16 @@
 package com.iGap.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +19,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.StickyHeaderAdapter;
@@ -45,6 +50,9 @@ public class ShowCustomList extends Fragment {
     private static List<StructContactInfo> contacts;
     private static OnSelectedList onSelectedList;
 
+    private boolean dialogShowing = false;
+
+
     public static ShowCustomList newInstance(List<StructContactInfo> list, OnSelectedList onSelectedListResult) {
         onSelectedList = onSelectedListResult;
         contacts = list;
@@ -66,6 +74,11 @@ public class ShowCustomList extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            dialogShowing = bundle.getBoolean("DIALOG_SHOWING");
+        }
 
         txtStatus = (TextView) view.findViewById(R.id.fcg_txt_status);
         txtNumberOfMember = (TextView) view.findViewById(R.id.fcg_txt_number_of_member);
@@ -98,27 +111,19 @@ public class ShowCustomList extends Fragment {
             @Override
             public void onComplete(RippleView rippleView) {
 
-                if (onSelectedList != null) {
-                    onSelectedList.getSelectedList(true, "", getSelectedList());
-                }
-//
-                getActivity().getSupportFragmentManager().popBackStack();
+                if (dialogShowing) {
 
+                    showDialog();
+
+                } else {
+                    if (onSelectedList != null) {
+                        onSelectedList.getSelectedList(true, "", 0, getSelectedList());
+                    }
+                    getActivity().getSupportFragmentManager().popBackStack();
+                }
             }
         });
 
-//        btnDone.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                if (onSelectedList != null) {
-//                    onSelectedList.getSelectedList(true, "", getSelectedList());
-//                }
-//
-//                getActivity().getSupportFragmentManager().popBackStack();
-//
-//            }
-//        });
 
         //create our FastAdapter
         fastAdapter = new FastAdapter();
@@ -227,6 +232,43 @@ public class ShowCustomList extends Fragment {
         fastAdapter.withSavedInstanceState(savedInstanceState);
     }
 
+    private int count = 0;
+
+    private void showDialog() {
+        Log.i("HHH", "showDialog");
+
+        MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
+                .title("Show Message Count")
+                .positiveText("Ok")
+                .alwaysCallInputCallback()
+                .widgetColor(getResources().getColor(R.color.toolbar_background))
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        Log.i("HHH", "count : " + count);
+                        if (onSelectedList != null) {
+                            onSelectedList.getSelectedList(true, "", count, getSelectedList());
+                        }
+                        getActivity().getSupportFragmentManager().popBackStack();
+                    }
+                })
+                .negativeText("CANCEL")
+                .inputType(InputType.TYPE_CLASS_PHONE)
+                .input("count of show message", null, new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(MaterialDialog dialog, CharSequence input) {
+                        Log.i("HHH", "showDialog input : " + input);
+                        Log.i("HHH", "showDialog input.toString() : " + input.toString());
+                        if (input.toString() != null && !input.toString().isEmpty()) {
+                            count = Integer.parseInt(input.toString());
+                        } else {
+                            count = 0;
+                        }
+                    }
+
+                }).build();
+        dialog.show();
+    }
 
     private void refreshView() {
 

@@ -141,6 +141,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
     public static int KEY_AD_ROAMING_MUSIC = -1;
     public static int KEY_AD_ROAMINGN_GIF = -1;
 
+    private CharSequence inputText = "";
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
@@ -218,7 +220,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
                                     }
                                 };
 
-                                new RequestUserProfileSetNickname().userProfileNickName(txtNickName.getText().toString());
+                                Log.i("HHH", "txtNickName.getText().toString() : " + inputText.toString());
+                                new RequestUserProfileSetNickname().userProfileNickName(inputText.toString());
 
                             }
                         })
@@ -228,7 +231,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
                             @Override
                             public void onInput(MaterialDialog dialog, CharSequence input) {
                                 // Do something
-
+                                inputText = input;
                                 View positive = dialog.getActionButton(DialogAction.POSITIVE);
 
                                 if (!input.toString().equals(txtNickName.getText().toString())) {

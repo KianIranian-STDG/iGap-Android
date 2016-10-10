@@ -56,8 +56,9 @@ public class ContactGroupFragment extends Fragment {
     private int countAddMemberResponse = 0;
     private int countAddMemberRequest = 0;
 
-    private int sizeTextEdittext = 0;
+    private int sizeTextEditText = 0;
     private List<StructContactInfo> contacts;
+
 
     public static ContactGroupFragment newInstance() {
         return new ContactGroupFragment();
@@ -106,15 +107,10 @@ public class ContactGroupFragment extends Fragment {
                         Log.i("XXX", "countAddMemberResponse : " + countAddMemberResponse);
                         Log.i("XXX", "countAddMemberRequest : " + countAddMemberRequest);
                         if (countAddMemberResponse >= countAddMemberRequest) {
-
-
                             Intent intent = new Intent(G.context, ActivityChat.class);
                             intent.putExtra("RoomId", roomId);
                             startActivity(intent);
-                            getActivity().getFragmentManager().popBackStack();
-
-
-
+                            getActivity().getSupportFragmentManager().popBackStack();
                         }
                     }
                 };
@@ -140,7 +136,7 @@ public class ContactGroupFragment extends Fragment {
                             members.add(realmMember);
 
                             //request for add member
-                            new RequestGroupAddMember().groupAddMemeber(roomId, peerId, 0, ProtoGlobal.GroupRoom.Role.MEMBER);
+                            new RequestGroupAddMember().groupAddMember(roomId, peerId, 0, ProtoGlobal.GroupRoom.Role.MEMBER);
                         }
 
                         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
@@ -195,8 +191,8 @@ public class ContactGroupFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                if (charSequence.length() > sizeTextEdittext) {
-                    String s = edtSearch.getText().toString().substring(sizeTextEdittext, charSequence.length());
+                if (charSequence.length() > sizeTextEditText) {
+                    String s = edtSearch.getText().toString().substring(sizeTextEditText, charSequence.length());
                     itemAdapter.filter(s);
                 } else {
                     itemAdapter.filter("");
@@ -220,7 +216,7 @@ public class ContactGroupFragment extends Fragment {
             @Override
             public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
                 if ((keyCode == KeyEvent.KEYCODE_DEL)) {
-                    if (edtSearch.getText().length() <= sizeTextEdittext) {
+                    if (edtSearch.getText().length() <= sizeTextEditText) {
                         return true;
                     }
                 }
@@ -265,7 +261,6 @@ public class ContactGroupFragment extends Fragment {
         fastAdapter.withSavedInstanceState(savedInstanceState);
     }
 
-
     private void refreshView() {
 
         int selectedNumber = 0;
@@ -279,7 +274,7 @@ public class ContactGroupFragment extends Fragment {
         }
 
         txtNumberOfMember.setText(selectedNumber + " / 5000 member");
-        sizeTextEdittext = textString.length();
+        sizeTextEditText = textString.length();
         edtSearch.setText(textString);
     }
 

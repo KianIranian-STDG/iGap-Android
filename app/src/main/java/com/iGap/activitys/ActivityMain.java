@@ -329,8 +329,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         btnCreateNewGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
                 FragmentNewGroup fragment = FragmentNewGroup.newInstance();
                 Bundle bundle = new Bundle();
                 bundle.putString("TYPE", "NewGroup");

@@ -260,15 +260,13 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
                             success = G.IMAGE_NEW_CHANEL.renameTo(file2);
                             startActivity(new Intent(G.context, ActivityNewChanelFinish.class));
                             getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
-                            Log.i("AAASSDD", "0: " + success);
                         } else {
                             success = G.IMAGE_NEW_GROUP.renameTo(file2);
                             createGroup();
-                            Log.i("AAASSDD", "1: " + success);
                         }
 
                     } else {
-                        Toast.makeText(G.context, "Please Description tour Group", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(G.context, "Please Enter Description For Group", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(G.context, "Please Enter Your Name Group", Toast.LENGTH_SHORT).show();
@@ -312,6 +310,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
                 android.support.v4.app.Fragment fragment = ContactGroupFragment.newInstance();
                 Bundle bundle = new Bundle();
                 bundle.putLong("RoomId", roomId);
+                bundle.putBoolean("NewRoom", true);
                 fragment.setArguments(bundle);
                 getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
                 ActivityMain.mLeftDrawerLayout.closeDrawer();

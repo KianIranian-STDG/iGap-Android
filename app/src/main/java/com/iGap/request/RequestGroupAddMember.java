@@ -5,7 +5,7 @@ import com.iGap.proto.ProtoGroupAddMember;
 
 public class RequestGroupAddMember {
 
-    public void groupAddMemeber(long roomId, long userId, long startMessageId, ProtoGlobal.GroupRoom.Role role) {
+    public void groupAddMember(long roomId, long userId, long startMessageId, ProtoGlobal.GroupRoom.Role role) {
 
         ProtoGroupAddMember.GroupAddMember.Member.Builder member = ProtoGroupAddMember.GroupAddMember.Member.newBuilder();
         member.setUserId(userId);
