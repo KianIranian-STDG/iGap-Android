@@ -114,6 +114,7 @@ import com.iGap.module.ShouldScrolledBehavior;
 import com.iGap.module.SortMessages;
 import com.iGap.module.StructMessageAttachment;
 import com.iGap.module.StructMessageInfo;
+import com.iGap.module.StructSharedMedia;
 import com.iGap.module.TimeUtils;
 import com.iGap.module.Utils;
 import com.iGap.module.VoiceRecord;
@@ -2301,21 +2302,28 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
     private void showImage(String filePath, String thumpnailPath) {
 
-        ArrayList<StructMessageInfo> listPic = new ArrayList<>();
+        ArrayList<StructSharedMedia> listPic = new ArrayList<>();
         int selectedPicture = 0;
-        Realm realm = Realm.getDefaultInstance();
 
         for (AbstractChatItem chatItem : mAdapter.getAdapterItems()) {
-            if (chatItem.mMessage.messageType == ProtoGlobal.RoomMessageType.IMAGE) {
-                if (chatItem.mMessage.filePath.equals(filePath) || chatItem.mMessage.attachment.getLocalThumbnailPath().equals(thumpnailPath)) {
-                    selectedPicture = listPic.size();
+            if (chatItem.mMessage.messageType == ProtoGlobal.RoomMessageType.IMAGE || chatItem.mMessage.messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
+                if (chatItem.mMessage.attachment.getLocalFilePath() != null) {
+                    if (chatItem.mMessage.attachment.getLocalFilePath().equals(filePath))
+                        selectedPicture = listPic.size();
+                } else if (chatItem.mMessage.attachment.getLocalThumbnailPath() != null) {
+                    if (chatItem.mMessage.attachment.getLocalThumbnailPath().equals(thumpnailPath))
+                        selectedPicture = listPic.size();
                 }
 
-                listPic.add(chatItem.mMessage);
+                StructSharedMedia item = new StructSharedMedia();
+                item.tumpnail = chatItem.mMessage.attachment.getLocalThumbnailPath();
+                item.filePath = chatItem.mMessage.attachment.getLocalFilePath();
+                item.fileName = chatItem.mMessage.attachment.name;
+                item.fileTime = TimeUtils.toLocal(chatItem.mMessage.time, G.CHAT_MESSAGE_TIME);
+
+                listPic.add(item);
             }
         }
-
-        realm.close();
 
 
         Fragment fragment = FragmentShowImage.newInstance();
