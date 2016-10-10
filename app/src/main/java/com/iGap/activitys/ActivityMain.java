@@ -933,6 +933,11 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     }
 
     @Override
+    public void onAvatarDownload(String token, int offset, ProtoFileDownload.FileDownload.Selector selector, int progress, long userId) {
+        // empty
+    }
+
+    @Override
     public void complete(boolean result, String messageOne, String MessageTow) {
         if (messageOne.equals("closeMenuButton")) {
             arcMenu.toggleMenu();

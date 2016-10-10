@@ -50,5 +50,5 @@ dependencies {
     compile 'uk.co.chrisjenx:calligraphy:2.2.0'
     compile 'me.leolin:ShortcutBadger:1.1.9@aar'
     //compile 'com.github.traex.rippleeffect:library:1.3'
-
+    compile project(":messageprogress")
 }

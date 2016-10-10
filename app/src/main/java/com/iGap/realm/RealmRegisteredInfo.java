@@ -117,16 +117,17 @@ public class RealmRegisteredInfo extends RealmObject {
         this.avatar = avatar;
     }
 
-    public void setAvatar(ProtoGlobal.Avatar avatar) {
+    public void setAvatar(long userId, ProtoGlobal.Avatar avatar) {
         if (avatar == null || avatar.getFile() == null || (avatar.getFile().getToken() == null || avatar.getFile().getToken().isEmpty())) {
             return;
         }
 
         Realm realm = Realm.getDefaultInstance();
-        RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo("id", avatar.getId()).findFirst();
+        RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo("id", userId).findFirst();
 
         if (realmAvatar == null) {
             realmAvatar = realm.createObject(RealmAvatar.class);
+            realmAvatar.setId(userId);
         } else {
             if (realmAvatar.getFile() != null) {
                 realmAvatar.getFile().deleteFromRealm();

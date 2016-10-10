@@ -25,7 +25,6 @@ public class FileDownloadResponse extends MessageHandler {
     @Override
     public void handler() {
         ProtoFileDownload.FileDownloadResponse.Builder builder = (ProtoFileDownload.FileDownloadResponse.Builder) message;
-        builder.getBytes();
 
         String[] identityParams = identity.split("\\*");
         String token = identityParams[0];
@@ -33,12 +32,22 @@ public class FileDownloadResponse extends MessageHandler {
         long fileSize = Long.parseLong(identityParams[2]);
         String filePath = identityParams[3];
         int previousOffset = Integer.parseInt(identityParams[4]);
+        boolean avatarRequested = false;
+        long userId = -1;
+        if (identityParams.length == 7) {
+            avatarRequested = Boolean.parseBoolean(identityParams[5]);
+            userId = Long.parseLong(identityParams[6]);
+        }
         int nextOffset = previousOffset + builder.getBytes().size();
         int progress = nextOffset * 100 / (int) fileSize;
 
         Utils.writeBytesToFile(filePath, builder.getBytes().toByteArray(), previousOffset);
 
-        G.onFileDownloadResponse.onFileDownload(token, nextOffset, selector, progress);
+        if (!avatarRequested) {
+            G.onFileDownloadResponse.onFileDownload(token, nextOffset, selector, progress);
+        } else {
+            G.onFileDownloadResponse.onAvatarDownload(token, nextOffset, selector, progress, userId);
+        }
     }
 
     @Override

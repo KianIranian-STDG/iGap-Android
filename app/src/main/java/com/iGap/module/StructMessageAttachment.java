@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmAvatar;
+import com.iGap.realm.RealmRegisteredInfo;
 
 import java.io.File;
 
@@ -79,15 +80,49 @@ public class StructMessageAttachment implements Parcelable {
                 }
             });
         } else {
-            if (realmAttachment.getLocalThumbnailPath() == null) {
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        realmAttachment.setLocalThumbnailPath(localPath);
-                    }
-                });
-            }
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    realmAttachment.setLocalThumbnailPath(localPath);
+                }
+            });
         }
+        realm.close();
+    }
+
+    public void setLocalThumbnailPathForAvatar(final long userId, @Nullable final String localPath) {
+        this.localThumbnailPath = localPath;
+        Realm realm = Realm.getDefaultInstance();
+        final RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo("id", userId).findFirst();
+        if (realmAttachment == null) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmAttachment messageAttachment = realm.createObject(RealmAttachment.class);
+                    messageAttachment.setLocalThumbnailPath(localPath);
+                    messageAttachment.setId(userId);
+                }
+            });
+        } else {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    realmAttachment.setLocalThumbnailPath(localPath);
+                }
+            });
+        }
+
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", userId).findFirst();
+                if (realmRegisteredInfo == null) {
+                    realmRegisteredInfo = realm.createObject(RealmRegisteredInfo.class);
+                    realmRegisteredInfo.setId(userId);
+                }
+                realmRegisteredInfo.setAvatar(RealmAvatar.convert(realmAttachment));
+            }
+        });
         realm.close();
     }
 

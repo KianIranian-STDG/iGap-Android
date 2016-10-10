@@ -9,9 +9,6 @@ import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmUserInfo;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import io.realm.Realm;
 
 /**
@@ -213,9 +210,6 @@ public class StructMessageInfo implements Parcelable {
     public StructDownloadAttachment downloadAttachment;
     public StructRegisteredInfo userInfo;
     public StructMessageAttachment senderAvatar;
-    // contain sender id
-    public List<String> userInfoAlreadyRequested = new ArrayList<>();
-    public List<String> thumbnailRequested = new ArrayList<>();
 
     public static StructMessageInfo buildForContact(long messageID, long senderID, MyType.SendType sendType, long time, ProtoGlobal.RoomMessageStatus status, String avatar, String username, String firstName, String lastName, String number, Object replayObject) {
         StructMessageInfo info = new StructMessageInfo();
@@ -368,8 +362,6 @@ public class StructMessageInfo implements Parcelable {
         dest.writeParcelable(this.downloadAttachment, flags);
         dest.writeParcelable(this.userInfo, flags);
         dest.writeParcelable(this.senderAvatar, flags);
-        dest.writeStringList(this.userInfoAlreadyRequested);
-        dest.writeStringList(this.thumbnailRequested);
         dest.writeLong(this.time);
     }
 
@@ -404,8 +396,6 @@ public class StructMessageInfo implements Parcelable {
         this.downloadAttachment = in.readParcelable(StructDownloadAttachment.class.getClassLoader());
         this.userInfo = in.readParcelable(StructRegisteredInfo.class.getClassLoader());
         this.senderAvatar = in.readParcelable(StructMessageAttachment.class.getClassLoader());
-        this.userInfoAlreadyRequested = in.createStringArrayList();
-        this.thumbnailRequested = in.createStringArrayList();
         this.time = in.readLong();
     }
 

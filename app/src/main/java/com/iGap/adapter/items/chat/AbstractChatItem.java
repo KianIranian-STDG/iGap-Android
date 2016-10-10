@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.adapter.MessagesAdapter;
 import com.iGap.interface_package.IChatItemAttachment;
 import com.iGap.interface_package.OnMessageViewClick;
 import com.iGap.module.MyType;
@@ -79,31 +80,31 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
             mMessage.downloadAttachment = new StructDownloadAttachment(mMessage.senderAvatar.token);
         }
 
-        // request thumbnail
-        if (!mMessage.thumbnailRequested.contains(mMessage.senderID)) {
+        // request avatar
+        if (!MessagesAdapter.avatarsRequested.contains(mMessage.senderID)) {
             onRequestDownloadAvatar();
             // prevent from multiple requesting thumbnail
-            mMessage.thumbnailRequested.add(mMessage.senderID);
+            MessagesAdapter.avatarsRequested.add(mMessage.senderID);
         }
     }
 
     private void requestForUserInfo() {
-        if (!mMessage.userInfoAlreadyRequested.contains(mMessage.senderID)) {
+        if (!MessagesAdapter.usersInfoRequested.contains(mMessage.senderID)) {
             RequestUserInfo requestUserInfo = new RequestUserInfo();
             requestUserInfo.userInfo(Long.parseLong(mMessage.senderID));
 
-            mMessage.userInfoAlreadyRequested.add(mMessage.senderID);
+            MessagesAdapter.usersInfoRequested.add(mMessage.senderID);
         }
     }
 
     public void onRequestDownloadAvatar() {
         ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
         if (mMessage.senderAvatar != null && (mMessage.senderAvatar.getLocalThumbnailPath() == null || mMessage.senderAvatar.getLocalThumbnailPath().isEmpty())) {
-            mMessage.senderAvatar.setLocalThumbnailPath(Long.parseLong(mMessage.senderID), Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + mMessage.downloadAttachment.token + System.nanoTime() + mMessage.senderAvatar.name);
+            mMessage.senderAvatar.setLocalThumbnailPathForAvatar(Long.parseLong(mMessage.senderID), Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + mMessage.downloadAttachment.token + System.nanoTime() + mMessage.senderAvatar.name);
         }
 
         // I don't use offset in getting thumbnail
-        String identity = mMessage.downloadAttachment.token + '*' + selector.toString() + '*' + mMessage.senderAvatar.smallThumbnail.size + '*' + mMessage.senderAvatar.getLocalThumbnailPath() + '*' + mMessage.downloadAttachment.offset;
+        String identity = mMessage.downloadAttachment.token + '*' + selector.toString() + '*' + mMessage.senderAvatar.smallThumbnail.size + '*' + mMessage.senderAvatar.getLocalThumbnailPath() + '*' + mMessage.downloadAttachment.offset + '*' + Boolean.toString(true) + '*' + mMessage.senderID;
 
         new RequestFileDownload().download(mMessage.downloadAttachment.token, 0, (int) mMessage.senderAvatar.smallThumbnail.size, selector, identity);
     }
@@ -168,21 +169,6 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
 
                     requestForUserInfo();
                 }
-                
-               /* holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.VISIBLE);
-
-                if (!mMessage.senderAvatar.isEmpty()) {
-                    ImageLoader.getInstance().displayImage(suitablePath(mMessage.senderAvatar), (ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar));
-                } else {
-                    ((ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar)).setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), mMessage.initials, mMessage.senderColor));
-                }
-
-                holder.itemView.findViewById(R.id.messageSenderAvatar).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        messageClickListener.onSenderAvatarClick(v, mMessage, holder.getAdapterPosition());
-                    }
-                });*/
             } else {
                 holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.GONE);
             }

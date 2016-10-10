@@ -70,7 +70,8 @@ public class RealmAvatar extends RealmObject {
         //File info for avatar
         RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo("id", room.getId()).findFirst();
         if (realmAvatar == null) {
-            realmAvatar = new RealmAvatar(room.getId());
+            realmAvatar = realm.createObject(RealmAvatar.class);
+            realmAvatar.setId(room.getId());
         }
         realmAvatar.setFile(RealmAttachment.build(file));
 
@@ -99,5 +100,21 @@ public class RealmAvatar extends RealmObject {
         realm.close();
 
         return realmAvatar[0];
+    }
+
+    public static RealmAvatar convert(final RealmAttachment attachment) {
+        Realm realm = Realm.getDefaultInstance();
+
+        // don't put it into transaction
+        RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo("id", attachment.getId()).findFirst();
+        if (realmAvatar == null) {
+            realmAvatar = realm.createObject(RealmAvatar.class);
+            realmAvatar.setId(attachment.getId());
+        }
+        realmAvatar.setFile(attachment);
+
+        realm.close();
+
+        return realmAvatar;
     }
 }

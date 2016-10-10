@@ -37,7 +37,7 @@ public class UserInfoResponse extends MessageHandler {
                     realmRegisteredInfo.setId(builder.getUser().getId());
                 }
 
-                realmRegisteredInfo.setAvatar(builder.getUser().getAvatar());
+                realmRegisteredInfo.setAvatar(builder.getUser().getId(), builder.getUser().getAvatar());
                 realmRegisteredInfo.setAvatarCount(builder.getUser().getAvatarCount());
                 realmRegisteredInfo.setColor(builder.getUser().getColor());
                 realmRegisteredInfo.setDisplayName(builder.getUser().getDisplayName());

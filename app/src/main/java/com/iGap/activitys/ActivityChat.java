@@ -2779,6 +2779,24 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     }
 
     @Override
+    public void onAvatarDownload(final String token, final int offset, final ProtoFileDownload.FileDownload.Selector selector, final int progress, final long userId) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // if thumbnail
+                if (selector != ProtoFileDownload.FileDownload.Selector.FILE) {
+                    Realm realm = Realm.getDefaultInstance();
+                    mAdapter.updateChatAvatar(userId, StructMessageAttachment.convert(realm.where(RealmRegisteredInfo.class).equalTo("id", userId).findFirst().getAvatar()));
+                    realm.close();
+                } else {
+                    // else file
+                    mAdapter.updateDownloadFields(token, progress, offset);
+                }
+            }
+        });
+    }
+
+    @Override
     public void onVoiceRecordDone(final String savedPath) {
         Realm realm = Realm.getDefaultInstance();
         final long messageId = System.nanoTime();

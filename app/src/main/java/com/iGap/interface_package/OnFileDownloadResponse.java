@@ -7,4 +7,6 @@ import com.iGap.proto.ProtoFileDownload;
  */
 public interface OnFileDownloadResponse {
     void onFileDownload(String token, int offset, ProtoFileDownload.FileDownload.Selector selector, int progress);
+
+    void onAvatarDownload(String token, int offset, ProtoFileDownload.FileDownload.Selector selector, int progress, long userId);
 }

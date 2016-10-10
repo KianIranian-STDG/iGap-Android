@@ -43,6 +43,7 @@ public class ActivityProfile extends ActivityEnhanced {
     private int myResultCrop = 3;
     public static boolean IsDeleteFile;
     private File pathImageFromCamera = new File(G.imageFile.toString() + "_" + 0 + ".jpg");
+    public final static String ARG_USER_ID = "arg_user_id";
 
     private int idAvatar;
     private String pathSaveImage;
@@ -153,7 +154,7 @@ public class ActivityProfile extends ActivityEnhanced {
 
                                 if (pathImageUser != null) {
                                     RealmAvatarPath realmAvatarPath = realm.createObject(RealmAvatarPath.class);
-                                    realmAvatarPath.setId(0);
+                                    realmAvatarPath.setId((int) getIntent().getLongExtra(ARG_USER_ID, -1));
                                     realmAvatarPath.setPathImage(pathImageUser);
                                     realmUserInfo.getAvatarPath().add(realmAvatarPath);
                                     Log.i("TTTT", "profile: " + realmAvatarPath.getPathImage());
@@ -230,7 +231,7 @@ public class ActivityProfile extends ActivityEnhanced {
             intent.putExtra("IMAGE_CAMERA", uriIntent.toString());
             intent.putExtra("TYPE", "camera");
             intent.putExtra("PAGE", "profile");
-            intent.putExtra("ID", 0);
+            intent.putExtra("ID", (int) getIntent().getLongExtra(ARG_USER_ID, -1));
             startActivityForResult(intent, myResultCrop);
 
         } else if (requestCode == myResultCodeGallery && resultCode == RESULT_OK) {// result for gallery
@@ -238,7 +239,7 @@ public class ActivityProfile extends ActivityEnhanced {
             intent.putExtra("IMAGE_CAMERA", data.getData().toString());
             intent.putExtra("TYPE", "gallery");
             intent.putExtra("PAGE", "profile");
-            intent.putExtra("ID", 0);
+            intent.putExtra("ID", (int) getIntent().getLongExtra(ARG_USER_ID, -1));
             startActivityForResult(intent, myResultCrop);
         } else if (requestCode == myResultCrop && resultCode == RESULT_OK) {
 

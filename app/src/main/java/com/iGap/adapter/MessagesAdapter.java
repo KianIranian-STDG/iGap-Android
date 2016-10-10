@@ -16,6 +16,7 @@ import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.adapters.FastItemAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,6 +26,9 @@ public class MessagesAdapter<Item extends AbstractChatItem> extends FastItemAdap
     private OnChatMessageSelectionChanged<Item> onChatMessageSelectionChanged;
     private OnMessageViewClick onMessageViewClick;
     private OnChatMessageRemove onChatMessageRemove;
+    // contain sender id
+    public static List<String> avatarsRequested = new ArrayList<>();
+    public static List<String> usersInfoRequested = new ArrayList<>();
 
     private OnLongClickListener longClickListener = new OnLongClickListener<Item>() {
         @Override

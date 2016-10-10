@@ -995,6 +995,7 @@ public class ActivityRegister extends ActivityEnhanced {
                         }
                         realm.close();
                         Intent intent = new Intent(G.context, className);
+                        intent.putExtra(ActivityProfile.ARG_USER_ID, userId);
                         startActivity(intent);
                         finish();
                     }

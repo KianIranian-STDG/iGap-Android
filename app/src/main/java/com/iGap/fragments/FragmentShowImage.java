@@ -204,6 +204,11 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
         // TODO: 10/8/2016 [Alireza] file download shod yekari mikoni hala
     }
 
+    @Override
+    public void onAvatarDownload(String token, int offset, ProtoFileDownload.FileDownload.Selector selector, int progress, long userId) {
+        // empty
+    }
+
     private class AdapterViewPager extends PagerAdapter {
 
         @Override
