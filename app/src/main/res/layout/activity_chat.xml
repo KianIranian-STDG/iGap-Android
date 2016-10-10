@@ -229,6 +229,33 @@
                 android:background="#34a49f"></View>
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/ac_ll_search_message"
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:layout_height="@dimen/dp60">
+
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textCursorDrawable="@drawable/white_cursor_color"
+                android:padding="@dimen/dp8"
+                android:id="@+id/ac_edt_search_message" />
+
+            <Button
+                android:layout_width="@dimen/dp40"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:text="@string/md_close_button"
+                android:textSize="@dimen/sp18"
+                android:textColor="@color/white"
+                android:id="@+id/ac_btn_close_layout_search_message" />
+        </LinearLayout>
+
         <include
             android:id="@+id/ac_ll_music_layout"
             layout="@layout/music_layout_small"
@@ -309,7 +336,8 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/gray" />
+            android:background="@color/gray"
+            android:id="@+id/view" />
 
         <LinearLayout
             android:layout_width="match_parent"

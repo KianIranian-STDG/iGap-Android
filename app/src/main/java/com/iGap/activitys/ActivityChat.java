@@ -38,6 +38,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -144,6 +145,7 @@ import com.iGap.request.RequestChatEditMessage;
 import com.iGap.request.RequestFileUpload;
 import com.iGap.request.RequestFileUploadInit;
 import com.iGap.request.RequestFileUploadStatus;
+import com.mikepenz.fastadapter.IItemAdapter;
 import com.nightonke.boommenu.BoomMenuButton;
 import com.nightonke.boommenu.Types.BoomType;
 import com.nightonke.boommenu.Types.ButtonType;
@@ -212,6 +214,10 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
     LinearLayout mediaLayout;
     MusicPlayer musicPlayer;
+
+    LinearLayout ll_Search;
+    Button btnCloseLayoutSearch;
+    EditText edtSearchMessage;
 
     public static ActivityChat activityChat;
 
@@ -771,6 +777,40 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             txtName.setText(title);
 
 
+        ll_Search = (LinearLayout) findViewById(R.id.ac_ll_search_message);
+        btnCloseLayoutSearch = (Button) findViewById(R.id.ac_btn_close_layout_search_message);
+        btnCloseLayoutSearch.setTypeface(G.flaticon);
+        edtSearchMessage = (EditText) findViewById(R.id.ac_edt_search_message);
+
+        btnCloseLayoutSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                edtSearchMessage.setText("");
+                ll_Search.setVisibility(View.GONE);
+                findViewById(R.id.toolbarContainer).setVisibility(View.VISIBLE);
+            }
+        });
+
+        edtSearchMessage.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                mAdapter.filter(charSequence);
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+
         txtLastSeen = (TextView) findViewById(R.id.chl_txt_last_seen);
 
         if (chatType == ProtoGlobal.Room.Type.CHAT) {
@@ -841,10 +881,11 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 txtSearch.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(ActivityChat.this, "1", Toast.LENGTH_SHORT).show();
+
+                        findViewById(R.id.toolbarContainer).setVisibility(View.GONE);
+                        ll_Search.setVisibility(View.VISIBLE);
                         popupWindow.dismiss();
-
-
+                        edtSearchMessage.requestFocus();
                     }
                 });
 
@@ -995,6 +1036,13 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         recyclerView.setDrawingCacheEnabled(true);
 
         mAdapter = new MessagesAdapter<>(this, this, this);
+
+        mAdapter.withFilterPredicate(new IItemAdapter.Predicate<AbstractChatItem>() {
+            @Override
+            public boolean filter(AbstractChatItem item, CharSequence constraint) {
+                return !item.mMessage.messageText.toLowerCase().contains(constraint.toString().toLowerCase());
+            }
+        });
 
         switchAddItem(getChatList(), true);
 
