@@ -73,6 +73,24 @@ public class SHP_SETTING {
 
     public static final String KEY_PATH_CHAT_BACKGROUND = "KEY_PATH_CHAT_BACKGROUND";
 
+    // ========================================================================================== Notifications and sound Group
+
+    public static final String KEY_NTSG_NOTIFICATIONS_GROUP = "KEY_NTSG_NOTIFICATIONS_GROUP";
+    public static final String KEY_NTSG_VIBRATE_GROUP = "KEY_NTSG_VIBRATE_GROUP";
+    public static final String KEY_NTSG_SOUND_GROUP = "KEY_NTSG_SOUND_GROUP";
+    public static final String KEY_NTSG_SOUND_POSITION_GROUP = "KEY_NTSG_SOUND_POSITION_GROUP";
+    public static final String KEY_NTSG_SMART_NOTIFICATION_GROUP = "KEY_NTSG_SMART_NOTIFICATION_GROUP";
+    public static final String KEY_NTSG_LED_COLOR_GROUP = "KEY_NTSG_LED_COLOR_GROUP";
+
+    // ========================================================================================== Notifications and sound contact profile
+
+    public static final String KEY_NTSG_NOTIFICATIONS_CONTACTPROFILE = "KEY_NTSG_NOTIFICATIONS_CONTACT_PROFILE";
+    public static final String KEY_NTSG_VIBRATE_CONTACTPROFILE = "KEY_NTSG_VIBRATE_CONTACT_PROFILE";
+    public static final String KEY_NTSG_SOUND_CONTACTPROFILE = "KEY_NTSG_SOUND_CONTACT_PROFILE";
+    public static final String KEY_NTSG_SMART_NOTIFICATION_CONTACTPROFILE = "KEY_NTSG_SMART_NOTIFICATION_CONTACT_PROFILE";
+    public static final String KEY_NTSG_LED_COLOR_CONTACTPROFILE = "KEY_NTSG_LED_COLOR_CONTACT_PROFILE";
+
+    // ========================================================================================== Notifications and sound contact profile
 }
 
 

@@ -36,6 +36,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.fragments.FragmentNotification;
 import com.iGap.fragments.FragmentShowImage;
 import com.iGap.interface_package.OnChatGetRoom;
 import com.iGap.interface_package.OnUserContactEdit;
@@ -426,6 +427,12 @@ public class ActivityContactsProfile extends ActivityEnhanced {
             public void onClick(View view) {
 
                 // TODO: 9/3/2016 (molareza) go to NotifyAndSound page
+
+                FragmentNotification fragmentNotification = new FragmentNotification();
+                Bundle bundle = new Bundle();
+                bundle.putString("PAGE", "Contact");
+                fragmentNotification.setArguments(bundle);
+                getSupportFragmentManager().beginTransaction().replace(R.id.chi_layoutParent, fragmentNotification).commit();
 
 
             }

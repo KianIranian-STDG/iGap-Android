@@ -35,6 +35,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.items.ContatItemGroupProfile;
+import com.iGap.fragments.FragmentNotification;
 import com.iGap.fragments.ShowCustomList;
 import com.iGap.interface_package.OnFileUpload;
 import com.iGap.interface_package.OnFileUploadStatusResponse;
@@ -394,6 +395,13 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnFileUplo
             @Override
             public void onClick(View view) {
                 Log.e("ddd", "Notification clicked");
+
+                FragmentNotification fragmentNotification = new FragmentNotification();
+                Bundle bundle = new Bundle();
+                bundle.putString("PAGE", "Group");
+                fragmentNotification.setArguments(bundle);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer_group_profile, fragmentNotification).commit();
+
             }
         });
 

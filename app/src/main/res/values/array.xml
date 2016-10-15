@@ -100,6 +100,20 @@
         <item>@string/array_Only_if_silent</item>
     </string-array>
 
+    <string-array name="notifications_vibrate">
+        <item>@string/array_Disable</item>
+        <item>@string/array_setting_default</item>
+        <item>@string/array_system_default</item>
+        <item>@string/array_Short</item>
+        <item>@string/array_Long</item>
+    </string-array>
+
+    <string-array name="notifications_notification">
+        <item>@string/array_Default</item>
+        <item>@string/array_enable</item>
+        <item>@string/array_Disable</item>
+    </string-array>
+
     <string-array name="popup_Notification">
         <item>@string/array_No_popup</item>
         <item>@string/array_Only_when_screen_on</item>
