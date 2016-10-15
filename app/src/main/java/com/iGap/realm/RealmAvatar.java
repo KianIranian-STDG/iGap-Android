@@ -18,6 +18,16 @@ public class RealmAvatar extends RealmObject {
 
     @PrimaryKey
     private long id;
+    private long ownerId;
+
+    public long getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(long ownerId) {
+        this.ownerId = ownerId;
+    }
+
     private RealmAttachment file;
 
     public long getId() {
@@ -68,10 +78,11 @@ public class RealmAvatar extends RealmObject {
         realmThumbnailLarge.setCacheId(largeThumbnail.getCacheId());
 
         //File info for avatar
-        RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo("id", room.getId()).findFirst();
+        RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo("ownerId", room.getId()).findFirst();
         if (realmAvatar == null) {
             realmAvatar = realm.createObject(RealmAvatar.class);
-            realmAvatar.setId(room.getId());
+            realmAvatar.setOwnerId(room.getId());
+            realmAvatar.setId(System.nanoTime());
         }
         realmAvatar.setFile(RealmAttachment.build(file));
 
@@ -102,14 +113,15 @@ public class RealmAvatar extends RealmObject {
         return realmAvatar[0];
     }
 
-    public static RealmAvatar convert(final RealmAttachment attachment) {
+    public static RealmAvatar convert(long userId, final RealmAttachment attachment) {
         Realm realm = Realm.getDefaultInstance();
 
         // don't put it into transaction
-        RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo("id", attachment.getId()).findFirst();
+        RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo("ownerId", userId).findFirst();
         if (realmAvatar == null) {
             realmAvatar = realm.createObject(RealmAvatar.class);
             realmAvatar.setId(attachment.getId());
+            realmAvatar.setOwnerId(userId);
         }
         realmAvatar.setFile(attachment);
 

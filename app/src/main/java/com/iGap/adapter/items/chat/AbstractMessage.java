@@ -355,33 +355,35 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
             }
 
-            ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withOnProgress(new OnProgress() {
-                @Override
-                public void onProgressFinished() {
-                    // TODO: 10/15/2016 [Alireza] onClick babate har kodom age niaz bood, masalan vase play, bayad video ro play kone
-                    switch (mMessage.messageType) {
-                        case IMAGE:
-                        case IMAGE_TEXT:
-                            holder.itemView.findViewById(R.id.progress).setVisibility(View.INVISIBLE);
-                            break;
-                        case VIDEO:
-                        case VIDEO_TEXT:
-                            ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_play);
-                            break;
-                        case AUDIO:
-                        case AUDIO_TEXT:
-                            ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_play);
-                            break;
-                        case FILE:
-                        case FILE_TEXT:
-                            ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_open);
-                            break;
-                        case VOICE:
-                            ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_play);
-                            break;
+            if (holder.itemView.findViewById(R.id.progress) != null) {
+                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withOnProgress(new OnProgress() {
+                    @Override
+                    public void onProgressFinished() {
+                        // TODO: 10/15/2016 [Alireza] onClick babate har kodom age niaz bood, masalan vase play, bayad video ro play kone
+                        switch (mMessage.messageType) {
+                            case IMAGE:
+                            case IMAGE_TEXT:
+                                holder.itemView.findViewById(R.id.progress).setVisibility(View.INVISIBLE);
+                                break;
+                            case VIDEO:
+                            case VIDEO_TEXT:
+                                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_play);
+                                break;
+                            case AUDIO:
+                            case AUDIO_TEXT:
+                                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_play);
+                                break;
+                            case FILE:
+                            case FILE_TEXT:
+                                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_open);
+                                break;
+                            case VOICE:
+                                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_play);
+                                break;
+                        }
                     }
-                }
-            });
+                });
+            }
 
             updateProgressIfNeeded(holder);
         }

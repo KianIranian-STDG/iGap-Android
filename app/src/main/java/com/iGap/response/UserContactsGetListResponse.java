@@ -55,10 +55,11 @@ public class UserContactsGetListResponse extends MessageHandler {
                     listResponse.setLast_seen(registerUser.getLastSeen());
                     listResponse.setAvatarCount(registerUser.getAvatarCount());
 
-                    RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo("id", registerUser.getId()).findFirst();
+                    RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo("ownerId", registerUser.getId()).findFirst();
                     if (realmAvatar == null) {
                         realmAvatar = realm.createObject(RealmAvatar.class);
-                        realmAvatar.setId(registerUser.getId());
+                        realmAvatar.setOwnerId(registerUser.getId());
+                        realmAvatar.setId(System.nanoTime());
                     }
                     listResponse.setAvatar(realmAvatar);
 

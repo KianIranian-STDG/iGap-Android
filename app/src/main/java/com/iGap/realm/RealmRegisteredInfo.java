@@ -3,6 +3,7 @@ package com.iGap.realm;
 import com.iGap.proto.ProtoGlobal;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -19,7 +20,7 @@ public class RealmRegisteredInfo extends RealmObject {
     private String status;
     private int lastSeen;
     private int avatarCount;
-    private RealmAvatar avatar;
+    private RealmList<RealmAvatar> avatar = new RealmList<>();
 
     public long getId() {
         return id;
@@ -109,25 +110,37 @@ public class RealmRegisteredInfo extends RealmObject {
         this.avatarCount = avatarCount;
     }
 
-    public RealmAvatar getAvatar() {
+    public RealmList<RealmAvatar> getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(RealmAvatar avatar) {
+    public RealmAvatar getLastAvatar() {
+        if (avatar.isEmpty()) {
+            return null;
+        }
+        return avatar.last();
+    }
+
+    public void setAvatar(RealmList<RealmAvatar> avatar) {
         this.avatar = avatar;
     }
 
-    public void setAvatar(long userId, ProtoGlobal.Avatar avatar) {
+    public void addAvatar(RealmAvatar avatar) {
+        this.avatar.add(avatar);
+    }
+
+    public void addAvatar(long userId, ProtoGlobal.Avatar avatar) {
         if (avatar == null || avatar.getFile() == null || (avatar.getFile().getToken() == null || avatar.getFile().getToken().isEmpty())) {
             return;
         }
 
         Realm realm = Realm.getDefaultInstance();
-        RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo("id", userId).findFirst();
+        RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo("ownerId", userId).findFirst();
 
         if (realmAvatar == null) {
             realmAvatar = realm.createObject(RealmAvatar.class);
-            realmAvatar.setId(userId);
+            realmAvatar.setId(System.nanoTime());
+            realmAvatar.setOwnerId(userId);
         } else {
             if (realmAvatar.getFile() != null) {
                 realmAvatar.getFile().deleteFromRealm();
@@ -136,7 +149,7 @@ public class RealmRegisteredInfo extends RealmObject {
 
         realmAvatar.setFile(RealmAttachment.build(avatar.getFile()));
 
-        this.avatar = realmAvatar;
+        addAvatar(realmAvatar);
         realm.close();
     }
 }

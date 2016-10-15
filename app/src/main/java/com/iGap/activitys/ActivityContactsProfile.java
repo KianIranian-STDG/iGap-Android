@@ -90,9 +90,11 @@ public class ActivityContactsProfile extends ActivityEnhanced {
         enterFrom = extras.getString("enterFrom");
 
         RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", userId).findFirst();
-        avatarPath = realmRegisteredInfo.getAvatar().getFile().getLocalThumbnailPath();
-        Log.i("XXX", "realmRegisteredInfo.getAvatar().getFile().getLocalThumbnailPath() : " + realmRegisteredInfo.getAvatar().getFile().getLocalThumbnailPath());
-        Log.i("XXX", "realmRegisteredInfo.getAvatar().getFile().getLocalFilePath() : " + realmRegisteredInfo.getAvatar().getFile().getLocalFilePath());
+        if (realmRegisteredInfo.getLastAvatar() != null) {
+            avatarPath = realmRegisteredInfo.getLastAvatar().getFile().getLocalThumbnailPath();
+            Log.i("XXX", "realmRegisteredInfo.getAvatar().getFile().getLocalThumbnailPath() : " + realmRegisteredInfo.getLastAvatar().getFile().getLocalThumbnailPath());
+            Log.i("XXX", "realmRegisteredInfo.getAvatar().getFile().getLocalFilePath() : " + realmRegisteredInfo.getLastAvatar().getFile().getLocalFilePath());
+        }
 
         RealmContacts realmUser = realm.where(RealmContacts.class).equalTo("id", userId).findFirst();
 

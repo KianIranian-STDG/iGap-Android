@@ -620,10 +620,11 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnFileUplo
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo("id", roomId).findFirst();
+                RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo("ownerId", roomId).findFirst();
                 if (realmAvatar == null) {
                     realmAvatar = realm.createObject(RealmAvatar.class);
-                    realmAvatar.setId(roomId);
+                    realmAvatar.setId(System.nanoTime());
+                    realmAvatar.setOwnerId(roomId);
                 }
 
                 realmAvatar.setFile(RealmAttachment.build(avatar.getFile()));

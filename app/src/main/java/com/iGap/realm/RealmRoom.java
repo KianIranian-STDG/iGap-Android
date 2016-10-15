@@ -190,7 +190,7 @@ public class RealmRoom extends RealmObject {
                 realmRoom.setType(RoomType.CHAT);
                 realmRoom.setChatRoom(RealmChatRoom.convert(room.getChatRoom(), realmRoom.getChatRoom(), realm));
                 RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", room.getChatRoom().getPeer().getId()).findFirst();
-                realmRoom.setAvatar(realmRegisteredInfo != null ? realmRegisteredInfo.getAvatar() : null);
+                realmRoom.setAvatar(realmRegisteredInfo != null ? realmRegisteredInfo.getLastAvatar() : null);
                 break;
             case GROUP:
                 realmRoom.setType(RoomType.GROUP);

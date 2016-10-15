@@ -434,8 +434,8 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     }
 
                     RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", chatPeerId).findFirst();
-                    if (realmRegisteredInfo != null && realmRegisteredInfo.getAvatar() != null) {
-                        avatarPath = realmRegisteredInfo.getAvatar().getFile().getLocalThumbnailPath();
+                    if (realmRegisteredInfo != null && realmRegisteredInfo.getAvatar() != null && realmRegisteredInfo.getLastAvatar() != null) {
+                        avatarPath = realmRegisteredInfo.getLastAvatar().getFile().getLocalThumbnailPath();
                     }
 
                 } else if (realmRoom.getType() == RoomType.GROUP) {
@@ -2799,7 +2799,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 // if thumbnail
                 if (selector != ProtoFileDownload.FileDownload.Selector.FILE) {
                     Realm realm = Realm.getDefaultInstance();
-                    mAdapter.updateChatAvatar(userId, StructMessageAttachment.convert(realm.where(RealmRegisteredInfo.class).equalTo("id", userId).findFirst().getAvatar()));
+                    mAdapter.updateChatAvatar(userId, StructMessageAttachment.convert(realm.where(RealmRegisteredInfo.class).equalTo("id", userId).findFirst().getLastAvatar()));
                     realm.close();
                 } else {
                     // else file
@@ -2866,7 +2866,10 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             @Override
             public void run() {
                 Realm realm = Realm.getDefaultInstance();
-                mAdapter.updateChatAvatar(user.getId(), StructMessageAttachment.convert(realm.where(RealmRegisteredInfo.class).equalTo("id", user.getId()).findFirst().getAvatar()));
+                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", user.getId()).findFirst();
+                if (realmRegisteredInfo != null) {
+                    mAdapter.updateChatAvatar(user.getId(), StructMessageAttachment.convert(realmRegisteredInfo.getLastAvatar()));
+                }
                 realm.close();
             }
         });

@@ -714,7 +714,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                                     info.chatType = RoomType.CHAT;
                                     Realm realm = Realm.getDefaultInstance();
                                     RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", room.getChatRoom().getPeer().getId()).findFirst();
-                                    info.avatar = realmRegisteredInfo != null ? StructMessageAttachment.convert(realmRegisteredInfo.getAvatar()) : new StructMessageAttachment();
+                                    info.avatar = realmRegisteredInfo != null ? StructMessageAttachment.convert(realmRegisteredInfo.getLastAvatar()) : new StructMessageAttachment();
                                     realm.close();
                                     info.ownerId = room.getChatRoom().getPeer().getId();
                                     break;
@@ -771,7 +771,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                 case CHAT:
                     info.chatType = RoomType.CHAT;
                     RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", realmRoom.getChatRoom().getPeerId()).findFirst();
-                    info.avatar = realmRegisteredInfo != null ? StructMessageAttachment.convert(realmRegisteredInfo.getAvatar()) : new StructMessageAttachment();
+                    info.avatar = realmRegisteredInfo != null ? StructMessageAttachment.convert(realmRegisteredInfo.getLastAvatar()) : new StructMessageAttachment();
                     info.ownerId = realmRoom.getChatRoom().getPeerId();
                     break;
                 case CHANNEL:
@@ -886,7 +886,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             case CHAT:
                 chatInfo.memberCount = "1";
                 RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", room.getChatRoom().getPeerId()).findFirst();
-                chatInfo.avatar = realmRegisteredInfo != null ? StructMessageAttachment.convert(realmRegisteredInfo.getAvatar()) : null;
+                chatInfo.avatar = realmRegisteredInfo != null ? StructMessageAttachment.convert(realmRegisteredInfo.getLastAvatar()) : null;
                 chatInfo.ownerId = room.getChatRoom().getPeerId();
                 break;
             case GROUP:
@@ -1077,7 +1077,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             @Override
             public void run() {
                 Realm realm = Realm.getDefaultInstance();
-                mAdapter.updateChatAvatar(user.getId(), StructMessageAttachment.convert(realm.where(RealmRegisteredInfo.class).equalTo("id", user.getId()).findFirst().getAvatar()));
+                mAdapter.updateChatAvatar(user.getId(), StructMessageAttachment.convert(realm.where(RealmRegisteredInfo.class).equalTo("id", user.getId()).findFirst().getLastAvatar()));
                 realm.close();
             }
         });
