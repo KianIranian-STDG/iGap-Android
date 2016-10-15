@@ -64,7 +64,6 @@ public class ActivityProfile extends ActivityEnhanced implements OnFileUpload, O
     public final static String ARG_USER_ID = "arg_user_id";
 
     private int idAvatar;
-    private String pathSaveImage;
 
     public static Bitmap decodeBitmapProfile = null;
 
@@ -270,7 +269,7 @@ public class ActivityProfile extends ActivityEnhanced implements OnFileUpload, O
                     final RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                     RealmAvatarPath realmAvatarPath = realm.createObject(RealmAvatarPath.class);
                     realmAvatarPath.setId(idAvatar + 1);
-                    realmAvatarPath.setPathImage(pathSaveImage);
+                    realmAvatarPath.setPathImage(pathImageUser);
                     realmUserInfo.getAvatarPath().add(realmAvatarPath);
 
                 }
@@ -279,8 +278,7 @@ public class ActivityProfile extends ActivityEnhanced implements OnFileUpload, O
 
             lastUploadedAvatarId = idAvatar + 1;
 
-            G.onChangeUserPhotoListener.onChangePhoto(pathSaveImage);
-            new UploadTask().execute(pathSaveImage, lastUploadedAvatarId);
+            new UploadTask().execute(pathImageUser, lastUploadedAvatarId);
         }
     }
 
@@ -321,9 +319,9 @@ public class ActivityProfile extends ActivityEnhanced implements OnFileUpload, O
     // selected files (paths)
     private static CopyOnWriteArrayList<FileUploadStructure> mSelectedFiles = new CopyOnWriteArrayList<>();
 
-    private void setImage() {
+    private void setImage(String path) {
         if (pathImageUser != null) {
-            Bitmap bitmap = BitmapFactory.decodeFile(pathImageUser);
+            Bitmap bitmap = BitmapFactory.decodeFile(path);
             btnSetImage.setPadding(0, 0, 0, 0);
             btnSetImage.setImageBitmap(bitmap);
         }
@@ -494,7 +492,7 @@ public class ActivityProfile extends ActivityEnhanced implements OnFileUpload, O
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    btnSetImage.setImageURI(Uri.fromFile(new File(fileUploadStructure.filePath)));
+                    setImage(fileUploadStructure.filePath);
                 }
             });
 
