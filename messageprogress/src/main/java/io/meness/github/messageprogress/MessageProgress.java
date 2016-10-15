@@ -24,6 +24,7 @@ public class MessageProgress extends FrameLayout implements IMessageProgress, Vi
     private Paint mPaint = new Paint();
     private OnMessageProgress mOnMessageProgress;
     private Drawable mProgressFinishedDrawable;
+    private boolean mProgressFinishedHide;
 
     public MessageProgress(Context context, OnMessageProgress onMessageProgress) {
         super(context);
@@ -141,6 +142,26 @@ public class MessageProgress extends FrameLayout implements IMessageProgress, Vi
     }
 
     @Override
+    public void withProgressFinishedHide() {
+        mProgressFinishedHide = true;
+    }
+
+    private void hide() {
+        setVisibility(INVISIBLE);
+    }
+
+    private void show() {
+        setVisibility(VISIBLE);
+    }
+
+    @Override
+    public void reset() {
+        mProgressFinishedHide = false;
+        mProgressFinishedDrawable = null;
+        show();
+    }
+
+    @Override
     public void onClick(View v) {
         if (mOnMessageProgress != null) {
             mOnMessageProgress.onMessageProgressClick((MessageProgress) v);
@@ -169,6 +190,10 @@ public class MessageProgress extends FrameLayout implements IMessageProgress, Vi
             for (int c = 0; c < getChildCount(); c++) {
                 View child = getChildAt(c);
                 if (child instanceof CircularProgressView) {
+                    if (mProgressFinishedHide) {
+                        hide();
+                        return;
+                    }
                     // if progress is 100, hide it automatically
                     // user doesn't need to hide manually
                     child.setVisibility(INVISIBLE);

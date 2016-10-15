@@ -22,4 +22,8 @@ public interface IMessageProgress {
     void withProgressFinishedDrawable(@DrawableRes int d);
 
     void withProgressFinishedDrawable(Drawable d);
+
+    void withProgressFinishedHide();
+
+    void reset();
 }

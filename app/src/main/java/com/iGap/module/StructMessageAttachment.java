@@ -93,28 +93,18 @@ public class StructMessageAttachment implements Parcelable {
     public void setLocalThumbnailPathForAvatar(final long userId, @Nullable final String localPath) {
         this.localThumbnailPath = localPath;
         Realm realm = Realm.getDefaultInstance();
-        final RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo("id", userId).findFirst();
-        if (realmAttachment == null) {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmAttachment messageAttachment = realm.createObject(RealmAttachment.class);
-                    messageAttachment.setLocalThumbnailPath(localPath);
-                    messageAttachment.setId(userId);
-                }
-            });
-        } else {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    realmAttachment.setLocalThumbnailPath(localPath);
-                }
-            });
-        }
-
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
+                final RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo("id", userId).findFirst();
+                if (realmAttachment == null) {
+                    RealmAttachment messageAttachment = realm.createObject(RealmAttachment.class);
+                    messageAttachment.setLocalThumbnailPath(localPath);
+                    messageAttachment.setId(userId);
+                } else {
+                    realmAttachment.setLocalThumbnailPath(localPath);
+                }
+
                 RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", userId).findFirst();
                 if (realmRegisteredInfo == null) {
                     realmRegisteredInfo = realm.createObject(RealmRegisteredInfo.class);
@@ -123,6 +113,7 @@ public class StructMessageAttachment implements Parcelable {
                 realmRegisteredInfo.setAvatar(RealmAvatar.convert(realmAttachment));
             }
         });
+
         realm.close();
     }
 
