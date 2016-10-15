@@ -91,6 +91,8 @@ import com.iGap.interface_package.OnChatMessageRemove;
 import com.iGap.interface_package.OnChatMessageSelectionChanged;
 import com.iGap.interface_package.OnChatSendMessageResponse;
 import com.iGap.interface_package.OnChatUpdateStatusResponse;
+import com.iGap.interface_package.OnClearChatHistory;
+import com.iGap.interface_package.OnDeleteChatFinishActivity;
 import com.iGap.interface_package.OnFileDownloadResponse;
 import com.iGap.interface_package.OnFileUpload;
 import com.iGap.interface_package.OnFileUploadStatusResponse;
@@ -476,6 +478,36 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 sendForwardedMessage(messageInfo);
             }
         }
+        clearHistoryFromContactsProfileInterface();
+        onDeleteChatFinishActivityInterface();
+    }
+
+    private void clearHistoryFromContactsProfileInterface() {
+        G.onClearChatHistory = new OnClearChatHistory() {
+            @Override
+            public void onClearChatHistory() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapter.clear();
+                    }
+                });
+            }
+        };
+    }
+
+    private void onDeleteChatFinishActivityInterface() {
+        G.onDeleteChatFinishActivity = new OnDeleteChatFinishActivity() {
+            @Override
+            public void onFinish() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() { //TODO [Saeed Mozaffari] [2016-10-15 4:19 PM] - runOnUiThread need here???
+                        finish();
+                    }
+                });
+            }
+        };
     }
 
     private void sendForwardedMessage(StructMessageInfo messageInfo) {
@@ -911,7 +943,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     @Override
                     public void onClick(View view) {
 
-
                         onSelectRoomMenu("txtDeleteChat", (int) mRoomId);
                         popupWindow.dismiss();
                     }
@@ -919,7 +950,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
                 TextView txtMutNotification = (TextView) popupView.findViewById(R.id.popup_txtItem4);
                 txtMutNotification.setTypeface(G.arial);
-                txtMutNotification.setText("Mut Notification");
+                txtMutNotification.setText("Mute Notification");
                 txtMutNotification.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -1083,6 +1114,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 if (chatType == ProtoGlobal.Room.Type.CHAT && chatPeerId != 134) {//TODO [Saeed Mozaffari] [2016-09-07 11:46 AM] -  in if eshtebah ast check for iGap message ==> chatPeerId == 134(alan baraye check kardane) , waiting for userDetail proto
                     Intent intent = new Intent(G.context, ActivityContactsProfile.class);
                     intent.putExtra("peerId", chatPeerId);
+                    intent.putExtra("RoomId", mRoomId);
                     intent.putExtra("enterFrom", ProtoGlobal.Room.Type.CHAT.toString());
                     startActivity(intent);
                 } else if (chatType == ProtoGlobal.Room.Type.GROUP) {
@@ -2988,8 +3020,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                             @Override
                             public void run() {
                                 if (mAdapter != null) {
-//                                    mAdapter.updateMessageStatus(chatId, convertToChatItem(chatId).mInfo.chatId);
-                                    // TODO: 10/9/2016 i dont now how can update list when clear history is down
+                                    mAdapter.clear();
                                 }
                             }
                         });

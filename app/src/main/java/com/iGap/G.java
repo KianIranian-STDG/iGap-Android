@@ -24,9 +24,11 @@ import com.iGap.interface_package.OnChatDelete;
 import com.iGap.interface_package.OnChatDeleteMessageResponse;
 import com.iGap.interface_package.OnChatEditMessageResponse;
 import com.iGap.interface_package.OnChatGetRoom;
+import com.iGap.interface_package.OnClearChatHistory;
 import com.iGap.interface_package.OnClientGetRoomListResponse;
 import com.iGap.interface_package.OnClientGetRoomResponse;
 import com.iGap.interface_package.OnConnectionChangeState;
+import com.iGap.interface_package.OnDeleteChatFinishActivity;
 import com.iGap.interface_package.OnFileDownloadResponse;
 import com.iGap.interface_package.OnFileUploadStatusResponse;
 import com.iGap.interface_package.OnGroupAddAdmin;
@@ -211,6 +213,8 @@ public class G extends Application {
     public static OnUserAvatarResponse onUserAvatarResponse;
     public static OnGroupAvatarResponse onGroupAvatarResponse;
     public static OnChangeUserPhotoListener onChangeUserPhotoListener;
+    public static OnClearChatHistory onClearChatHistory;
+    public static OnDeleteChatFinishActivity onDeleteChatFinishActivity;
 
     public static final String DIR_SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static final String DIR_APP = DIR_SDCARD + "/iGap";
@@ -514,7 +518,7 @@ public class G extends Application {
     public static void getUserInfo() {
 
         //TODO [Saeed Mozaffari] [2016-10-15 1:51 PM] - nabayad har bar etella'ate khodam ro begiram. agar ham digar account taghiri dadae bashe response hamun zaman miayad va man ba accountam yeki misham
-        //TODO [Saeed Mozaffari] [2016-10-15 1:52 PM] - bayad zamani ke register kardam userInfo ro begiram
+        //TODO [Saeed Mozaffari] [2016-10-15 1:52 PM] - bayad zamani ke register kardam userInfo ro begiram , fekr nemikonam ke deige niaz be har bar gereftan bashe
         Realm realm = Realm.getDefaultInstance();
         final long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
         realm.close();
@@ -525,8 +529,6 @@ public class G extends Application {
 
                 // fill own user info
                 if (userId == user.getId()) {
-                    Log.i("UUU", "user.getDisplayName() : " + user.getDisplayName());
-                    Log.i("UUU", "user.getInitials() : " + user.getInitials());
                     Realm realm = Realm.getDefaultInstance();
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override

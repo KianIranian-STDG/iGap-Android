@@ -434,22 +434,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
             }
 
         });
-//        circleImageView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                ArrayList<StructSharedMedia> items = setItem(new File(G.DIR_IMAGE_USER));
-//                Collections.reverse(items);
-//
-//                Fragment fragment = FragmentShowImage.newInstance();
-//                Bundle bundle = new Bundle();
-//                bundle.putSerializable("listPic", items);
-//                bundle.putInt("SelectedImage", 0);
-//                fragment.setArguments(bundle);
-//                ActivitySetting.this.getFragmentManager().beginTransaction().add(R.id.st_layoutParent, fragment, "Show_Image_fragment").commit();
-//
-//            }
-//        });
         setImage();
         textLanguage = sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, "English");
         if (textLanguage.equals("English")) {

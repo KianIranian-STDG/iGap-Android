@@ -38,13 +38,19 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.fragments.FragmentNotification;
 import com.iGap.fragments.FragmentShowImage;
+import com.iGap.interface_package.OnChatDelete;
 import com.iGap.interface_package.OnChatGetRoom;
 import com.iGap.interface_package.OnUserContactEdit;
 import com.iGap.module.StructSharedMedia;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.realm.RealmChatHistory;
+import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmContacts;
+import com.iGap.realm.RealmOfflineDelete;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRoom;
+import com.iGap.realm.RealmRoomMessage;
+import com.iGap.request.RequestChatDelete;
 import com.iGap.request.RequestChatGetRoom;
 
 import java.io.ByteArrayOutputStream;
@@ -53,9 +59,12 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmResults;
 
 public class ActivityContactsProfile extends ActivityEnhanced {
     private long userId = 0;
+    private long roomId;
     private long phone = 912123456;
     private String displayName = "Alexander Smith";
     private String username = "Alexander Smith";
@@ -87,6 +96,7 @@ public class ActivityContactsProfile extends ActivityEnhanced {
 
         Bundle extras = getIntent().getExtras();
         userId = extras.getLong("peerId");
+        roomId = extras.getLong("RoomId");
         enterFrom = extras.getString("enterFrom");
 
         RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", userId).findFirst();
@@ -351,20 +361,17 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                     @Override
                     public void onClick(View view) {
 
-                        Toast.makeText(ActivityContactsProfile.this, "1", Toast.LENGTH_SHORT).show();
-
                     }
                 });
 
-                TextView txtClearHistory = (TextView) popupView.findViewById(R.id.popup_txtItem2);
-                txtClearHistory.setTypeface(G.arial);
-                txtClearHistory.setText("Delete");
-                txtClearHistory.setOnClickListener(new View.OnClickListener() {
+                TextView txtDelete = (TextView) popupView.findViewById(R.id.popup_txtItem2);
+                txtDelete.setTypeface(G.arial);
+                txtDelete.setText("Delete");
+                txtDelete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
-                        Toast.makeText(ActivityContactsProfile.this, "2", Toast.LENGTH_SHORT).show();
-
+                        deleteChat();
                     }
                 });
 
@@ -375,7 +382,6 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                     @Override
                     public void onClick(View view) {
 
-                        Toast.makeText(ActivityContactsProfile.this, "3", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -572,6 +578,7 @@ public class ActivityContactsProfile extends ActivityEnhanced {
         builder.setPositiveButton(positive, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                clearHistory();
                 dialogInterface.dismiss();
             }
         });
@@ -610,6 +617,136 @@ public class ActivityContactsProfile extends ActivityEnhanced {
         }
         return items;
     }
+
+    //TODO [Saeed Mozaffari] [2016-10-15 3:31 PM] - clearHistory , DeleteChat , use in ActivityMain , ActivityChat , ActivityContactsProfile . mitunim method ha ro tekrar nakonim va ye ja bashe va az chand ja farakhani konim
+    private void clearHistory() {
+
+        // make request for clearing messages
+        final Realm realm = Realm.getDefaultInstance();
+
+        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", roomId).findFirstAsync();
+        realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
+            @Override
+            public void onChange(final RealmClientCondition element) {
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+
+                        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+
+                        if (realmRoom.getLastMessageId() != -1) {
+                            element.setClearId(realmRoom.getLastMessageId());
+                            G.clearMessagesUtil.clearMessages(roomId, realmRoom.getLastMessageId());
+                        }
+
+                        RealmResults<RealmChatHistory> realmChatHistories = realm.where(RealmChatHistory.class).equalTo("roomId", roomId).findAll();
+                        for (RealmChatHistory chatHistory : realmChatHistories) {
+                            RealmRoomMessage roomMessage = chatHistory.getRoomMessage();
+                            if (roomMessage != null) {
+                                // delete chat history message
+                                chatHistory.getRoomMessage().deleteFromRealm();
+                            }
+                        }
+
+                        RealmRoom room = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+                        if (room != null) {
+                            room.setUnreadCount(0);
+                            room.setLastMessageId(0);
+                            room.setLastMessageTime(0);
+                            room.setLastMessage("");
+
+                            realm.copyToRealmOrUpdate(room);
+                        }
+                        // finally delete whole chat history
+                        realmChatHistories.deleteAllFromRealm();
+                    }
+                });
+
+                element.removeChangeListeners();
+                realm.close();
+            }
+        });
+
+        if (G.onClearChatHistory != null) {
+            G.onClearChatHistory.onClearChatHistory();
+        }
+    }
+
+    private void deleteChat() {
+        G.onChatDelete = new OnChatDelete() {
+            @Override
+            public void onChatDelete(long roomId) {
+            }
+
+            @Override
+            public void onChatDeleteError(int majorCode, int minorCode) {
+
+                if (majorCode == 218 && minorCode == 1) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // TODO: 9/25/2016 Error 218 - CHAT_DELETE_BAD_PAYLOAD
+                            //Invalid roomId
+
+                        }
+                    });
+                } else if (majorCode == 219) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // TODO: 9/25/2016 Error 219 - CHAT_DELETE_INTERNAL_SERVER_ERROR
+                            //Invalid roomId
+
+                        }
+                    });
+                } else if (majorCode == 220) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // TODO: 9/25/2016 Error 220 - CHAT_DELETE_FORBIDDEN
+                            //Invalid roomId
+
+                        }
+                    });
+                }
+            }
+        };
+        final Realm realm = Realm.getDefaultInstance();
+        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", roomId).findFirstAsync();
+        realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
+            @Override
+            public void onChange(final RealmClientCondition element) {
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(final Realm realm) {
+                        if (realm.where(RealmOfflineDelete.class).equalTo("offlineDelete", roomId).findFirst() == null) {
+                            RealmOfflineDelete realmOfflineDelete = realm.createObject(RealmOfflineDelete.class);
+                            realmOfflineDelete.setId(System.nanoTime());
+                            realmOfflineDelete.setOfflineDelete(userId);
+
+                            element.getOfflineDeleted().add(realmOfflineDelete);
+
+
+                            realm.where(RealmRoom.class).equalTo("id", roomId).findFirst().deleteFromRealm();
+                            realm.where(RealmChatHistory.class).equalTo("roomId", roomId).findAll().deleteAllFromRealm();
+
+                            new RequestChatDelete().chatDelete(roomId);
+                        }
+                    }
+                });
+
+
+                element.removeChangeListeners();
+                realm.close();
+                finish();
+                // call this for finish activity chat when delete chat
+                if (G.onDeleteChatFinishActivity != null) {
+                    G.onDeleteChatFinishActivity.onFinish();
+                }
+            }
+        });
+    }
+
 
 }
 
