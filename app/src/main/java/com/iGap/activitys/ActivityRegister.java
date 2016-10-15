@@ -970,8 +970,11 @@ public class ActivityRegister extends ActivityEnhanced {
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
-                                RealmUserInfo userInfo = realm.createObject(RealmUserInfo.class);
-                                userInfo.setUserId(userId);
+                                RealmUserInfo userInfo = realm.where(RealmUserInfo.class).equalTo("userId", userId).findFirst();
+                                if (userInfo == null) {
+                                    userInfo = realm.createObject(RealmUserInfo.class);
+                                    userInfo.setUserId(userId);
+                                }
                                 userInfo.setUserName(userName);
                                 userInfo.setCountryISOCode(isoCode);
                                 userInfo.setPhoneNumber(phoneNumber);

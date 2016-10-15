@@ -174,6 +174,13 @@ public class ActivityProfile extends ActivityEnhanced implements OnFileUpload, O
 
                                 if (!realmUserInfo.getNickName().equalsIgnoreCase(nickName)) {
                                     new RequestUserProfileSetNickname().userProfileNickName(nickName);
+                                } else {
+                                    RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+                                    userInfo.setUserRegistrationState(true);
+
+                                    Intent intent = new Intent(G.context, ActivityMain.class);
+                                    startActivity(intent);
+                                    finish();
                                 }
                             } else {
                                 new RequestUserProfileSetNickname().userProfileNickName(nickName);
