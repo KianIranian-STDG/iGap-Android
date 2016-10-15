@@ -223,8 +223,8 @@ public class FragmentDrawerMenu extends MenuFragment {
                         if (imagePath == null) {
 
                             Realm realm1 = Realm.getDefaultInstance();
-                            String name = HelperImageBackColor.getFirstAlphabetName(realm1.where(RealmUserInfo.class).findFirst().getNickName());
-                            imgUserPhoto.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) imgUserPhoto.getContext().getResources().getDimension(R.dimen.dp100), name, HelperImageBackColor.getColor(name)));
+                            RealmUserInfo realmUserInfo = realm1.where(RealmUserInfo.class).findFirst();
+                            imgUserPhoto.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) imgUserPhoto.getContext().getResources().getDimension(R.dimen.dp100), realmUserInfo.getInitials(), realmUserInfo.getColor()));
                             realm1.close();
 
                         } else {

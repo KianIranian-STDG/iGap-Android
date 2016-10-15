@@ -67,10 +67,13 @@ import com.iGap.module.ClearMessagesUtil;
 import com.iGap.module.Contacts;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.UploaderUtil;
+import com.iGap.proto.ProtoGlobal;
+import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmMigrationClass;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestClientCondition;
 import com.iGap.request.RequestUserContactsGetList;
+import com.iGap.request.RequestUserInfo;
 import com.iGap.request.RequestUserLogin;
 import com.iGap.request.RequestWrapper;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -242,8 +245,6 @@ public class G extends Application {
         if (isStart == 1) {
             Intent intent = new Intent(this, MyService.class);
             startService(intent);
-            Log.i("XXCCXXXXX", "2222: ");
-
         }
 
         setFont();
@@ -384,6 +385,7 @@ public class G extends Application {
         res.updateConfiguration(conf, dm);
 
     }
+
     public static void setUserTextSize() {
 
         SharedPreferences sharedPreferencesSetting = context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
@@ -449,6 +451,7 @@ public class G extends Application {
                         Log.i("FFF", "Login");
                         Toast.makeText(G.context, "User Login!", Toast.LENGTH_SHORT).show();
                         new RequestClientCondition().clientCondition();
+                        getUserInfo();
                         importContact();
                     }
                 });
@@ -506,5 +509,36 @@ public class G extends Application {
         };
 
         new RequestUserContactsGetList().userContactGetList();
+    }
+
+    public static void getUserInfo() {
+
+        Realm realm = Realm.getDefaultInstance();
+        final long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
+        realm.close();
+
+        G.onUserInfoResponse = new OnUserInfoResponse() {
+            @Override
+            public void onUserInfo(final ProtoGlobal.RegisteredUser user, ProtoResponse.Response response) {
+
+                // fill own user info
+                if (userId == user.getId()) {
+                    Log.i("UUU", "user.getDisplayName() : " + user.getDisplayName());
+                    Log.i("UUU", "user.getInitials() : " + user.getInitials());
+                    Realm realm = Realm.getDefaultInstance();
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                            realmUserInfo.setColor(user.getColor());
+                            realmUserInfo.setInitials(user.getInitials());
+                        }
+                    });
+                    realm.close();
+                }
+            }
+        };
+
+        new RequestUserInfo().userInfo(userId);
     }
 }

@@ -79,11 +79,17 @@ public class RealmUserInfo extends RealmObject {
         this.phoneNumber = value;
     }
 
-
     public void setToken(String value) {
         this.token = value;
     }
 
+    public void setInitials(String initials) {
+        this.initials = initials;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
     //===Getters
 
     public boolean getUserRegistrationState() {
@@ -118,9 +124,16 @@ public class RealmUserInfo extends RealmObject {
         return this.phoneNumber;
     }
 
-
     public String getToken() {
         return this.token;
+    }
+
+    public String getInitials() {
+        return initials;
+    }
+
+    public String getColor() {
+        return color;
     }
 
 }
