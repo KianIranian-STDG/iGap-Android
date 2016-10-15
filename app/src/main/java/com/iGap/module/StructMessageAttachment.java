@@ -96,11 +96,11 @@ public class StructMessageAttachment implements Parcelable {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                final RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo("id", userId).findFirst();
+                RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo("id", userId).findFirst();
                 if (realmAttachment == null) {
-                    RealmAttachment messageAttachment = realm.createObject(RealmAttachment.class);
-                    messageAttachment.setLocalThumbnailPath(localPath);
-                    messageAttachment.setId(userId);
+                    realmAttachment = realm.createObject(RealmAttachment.class);
+                    realmAttachment.setLocalThumbnailPath(localPath);
+                    realmAttachment.setId(userId);
                 } else {
                     realmAttachment.setLocalThumbnailPath(localPath);
                 }
