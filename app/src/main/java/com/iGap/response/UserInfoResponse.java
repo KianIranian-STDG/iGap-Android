@@ -47,11 +47,11 @@ public class UserInfoResponse extends MessageHandler {
                 realmRegisteredInfo.setPhone(builder.getUser().getPhone());
                 realmRegisteredInfo.setStatus(builder.getUser().getStatus().toString());
                 realmRegisteredInfo.setUsername(builder.getUser().getUsername());
+
+                G.onUserInfoResponse.onUserInfo(builder.getUser(), builder.getResponse());
             }
         });
         realm.close();
-
-        G.onUserInfoResponse.onUserInfo(builder.getUser(), builder.getResponse());
     }
 
     @Override
