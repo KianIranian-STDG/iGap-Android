@@ -1,9 +1,7 @@
 package com.iGap.activitys;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
@@ -13,14 +11,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +26,7 @@ import com.iGap.adapter.RoomsAdapter;
 import com.iGap.adapter.items.RoomItem;
 import com.iGap.fragments.FragmentNewGroup;
 import com.iGap.fragments.RegisteredContactsFragment;
+import com.iGap.fragments.SearchFragment;
 import com.iGap.helper.ServiceContact;
 import com.iGap.interface_package.OnChatClearMessageResponse;
 import com.iGap.interface_package.OnChatDelete;
@@ -51,7 +46,6 @@ import com.iGap.module.Contacts;
 import com.iGap.module.MyAppBarLayout;
 import com.iGap.module.OnComplete;
 import com.iGap.module.ShouldScrolledBehavior;
-import com.iGap.module.SoftKeyboard;
 import com.iGap.module.StructChatInfo;
 import com.iGap.module.StructMessageAttachment;
 import com.iGap.proto.ProtoClientGetRoom;
@@ -72,7 +66,6 @@ import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItemAdapter;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
 import io.realm.Realm;
@@ -86,7 +79,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     private RecyclerView recyclerView;
     private RoomsAdapter<RoomItem> mAdapter;
     private ArcMenu arcMenu;
-    private SearchView btnSearch;
+    private Button btnSearchAll;
 
     public static boolean isMenuButtonAddShown = false;
 
@@ -147,10 +140,11 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         final Button btnMenu = (Button) findViewById(R.id.cl_btn_menu);
         btnMenu.setTypeface(G.flaticon);
         RippleView rippleMenu = (RippleView) findViewById(R.id.cl_ripple_menu);
-        final Button btnBackSearch = (Button) findViewById(R.id.cl_btn_backSearch);
-        btnBackSearch.setTypeface(G.flaticon);
 
-        btnSearch = (SearchView) findViewById(R.id.cl_btn_search);
+
+        btnSearchAll = (Button) findViewById(R.id.amr_btn_search);
+        btnSearchAll.setTypeface(G.flaticon);
+
 
         final TextView txtIgap = (TextView) findViewById(R.id.cl_txt_igap);
         txtIgap.setTypeface(G.neuroplp);
@@ -189,102 +183,25 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             }
         };
 
-        btnSearch.setOnCloseListener(new SearchView.OnCloseListener() {
+        btnSearchAll.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onClose() {
-                txtIgap.setVisibility(View.VISIBLE);
-                arcMenu.setVisibility(View.VISIBLE);
-                btnBackSearch.setVisibility(View.GONE);
-                btnMenu.setVisibility(View.VISIBLE);
-                return false;
+            public void onClick(View view) {
+                Fragment fragment = SearchFragment.newInstance();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment, "Search_fragment").commit();
             }
         });
 
-        ViewGroup root = (ViewGroup) findViewById(R.id.fragmentContainer);
-        InputMethodManager im = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-        SoftKeyboard softKeyboard = new SoftKeyboard(root, im);
-        softKeyboard.setSoftKeyboardCallback(new SoftKeyboard.SoftKeyboardChanged() {
-            @Override
-            public void onSoftKeyboardHide() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        arcMenu.setVisibility(View.VISIBLE);
-                        if (btnSearch.getQuery().toString().length() > 0) {
-                            btnSearch.setIconified(false);
-                            txtIgap.setVisibility(View.GONE);
-                            btnBackSearch.setVisibility(View.VISIBLE);
-
-                        } else {
-                            btnSearch.setIconified(true);
-                            txtIgap.setVisibility(View.VISIBLE);
-                            btnBackSearch.setVisibility(View.GONE);
-                            btnMenu.setVisibility(View.VISIBLE);
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void onSoftKeyboardShow() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        arcMenu.setVisibility(View.GONE);
-                        txtIgap.setVisibility(View.GONE);
-                        btnBackSearch.setVisibility(View.VISIBLE);
-                        btnMenu.setVisibility(View.GONE);
-
-                    }
-                });
-            }
-        });
-
-        try {
-            Field mDrawable = SearchView.class.getDeclaredField("mSearchHintIcon");
-            mDrawable.setAccessible(true);
-            Drawable drawable = (Drawable) mDrawable.get(btnSearch);
-            drawable.setBounds(0, 0, -5, 0);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-        final EditText searchBox = ((EditText) btnSearch.findViewById(android.support.v7.appcompat.R.id.search_src_text));
-        searchBox.setTextColor(getResources().getColor(R.color.white));
 
         rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
             @Override
             public void onComplete(RippleView rippleView) {
-                btnSearch.onActionViewCollapsed();
-                txtIgap.setVisibility(View.VISIBLE);
-                arcMenu.setVisibility(View.VISIBLE);
+
                 mLeftDrawerLayout.toggle();
             }
 
         });
 
-//        btnMenu.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                btnSearch.onActionViewCollapsed();
-//                txtIgap.setVisibility(View.VISIBLE);
-//                arcMenu.setVisibility(View.VISIBLE);
-//                mLeftDrawerLayout.toggle();
-//            }
-//        });
-
-
-        btnBackSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                btnSearch.setIconified(true);
-                txtIgap.setVisibility(View.VISIBLE);
-                btnBackSearch.setVisibility(View.GONE);
-            }
-        });
     }
 
     private void initFloatingButtonCreateNew() {
@@ -450,21 +367,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                 return !item.mInfo.chatTitle.toLowerCase().startsWith(String.valueOf(constraint).toLowerCase());
             }
         });
-        btnSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
 
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-
-                mAdapter.filter(s);
-                mAdapter.notifyDataSetChanged();
-                return false;
-            }
-        });
 
         loadLocalChatList();
         getChatsList();

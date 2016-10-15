@@ -228,6 +228,8 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
     private String lastSeen;
     private long mRoomId;
+    long messageId;
+    int scroolPosition = 0;
 
     private Button btnUp;
     private Button btnDown;
@@ -406,6 +408,8 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             mRoomId = extras.getLong("RoomId");
             isMuteNotification = extras.getBoolean("MUT");
             Log.i("CCC", "mRoomId : " + mRoomId);
+
+            messageId = extras.getLong("MessageId");
 
             Realm realm = Realm.getDefaultInstance();
 
@@ -1090,9 +1094,26 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mAdapter);
 
-        int position = recyclerView.getAdapter().getItemCount();
-        if (position > 0)
-            recyclerView.scrollToPosition(position - 1);
+        if (messageId > 0) {
+            // TODO: 10/15/2016  if list biger then 50 item list should load some data we need
+            scroolPosition = 0;
+            for (AbstractMessage chatItem : mAdapter.getAdapterItems()) {
+                if (chatItem.mMessage.messageID.equals(messageId + "")) {
+                    break;
+                }
+                scroolPosition++;
+            }
+            recyclerView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    recyclerView.scrollToPosition(scroolPosition);
+                }
+            }, 1500);
+        } else {
+            int position = recyclerView.getAdapter().getItemCount();
+            if (position > 0)
+                recyclerView.scrollToPosition(position - 1);
+        }
 
 
 //        imvBackButton.setOnClickListener(new View.OnClickListener() {
