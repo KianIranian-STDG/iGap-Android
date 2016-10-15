@@ -245,7 +245,12 @@ public class FragmentDrawerMenu extends MenuFragment {
             decodeBitmapProfile = HelperDecodeFile.decodeFile(new File(pathImageDecode));
             imgUserPhoto.setImageBitmap(decodeBitmapProfile);
         } else {
-            imgUserPhoto.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imgUserPhoto.getContext().getResources().getDimension(R.dimen.dp60), "H", "#7f7f7f"));
+            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+            if (realmUserInfo.getColor() == null) {
+                imgUserPhoto.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imgUserPhoto.getContext().getResources().getDimension(R.dimen.dp60), " ", "#117f7f7f"));
+            } else {
+                imgUserPhoto.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) imgUserPhoto.getContext().getResources().getDimension(R.dimen.dp100), realmUserInfo.getInitials(), realmUserInfo.getColor()));
+            }
         }
         realm.close();
 

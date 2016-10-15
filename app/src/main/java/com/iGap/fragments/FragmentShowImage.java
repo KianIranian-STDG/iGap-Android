@@ -111,7 +111,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
             @Override
             public void onComplete(RippleView rippleView) {
                 getActivity().getFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
-                ((ActivitySetting) getActivity()).setImage();
+                //((ActivitySetting) getActivity()).setImage();
             }
 
         });

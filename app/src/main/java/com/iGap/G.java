@@ -513,6 +513,8 @@ public class G extends Application {
 
     public static void getUserInfo() {
 
+        //TODO [Saeed Mozaffari] [2016-10-15 1:51 PM] - nabayad har bar etella'ate khodam ro begiram. agar ham digar account taghiri dadae bashe response hamun zaman miayad va man ba accountam yeki misham
+        //TODO [Saeed Mozaffari] [2016-10-15 1:52 PM] - bayad zamani ke register kardam userInfo ro begiram
         Realm realm = Realm.getDefaultInstance();
         final long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
         realm.close();
@@ -535,6 +537,8 @@ public class G extends Application {
                         }
                     });
                     realm.close();
+
+                    G.onChangeUserPhotoListener.onChangePhoto(null);
                 }
             }
         };
