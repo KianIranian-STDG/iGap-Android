@@ -173,9 +173,6 @@ import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
-/**
- * Created by android3 on 8/5/2016.
- */
 public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, IRecentsLongClick, OnMessageViewClick, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractChatItem>, OnChatMessageRemove, OnFileUpload, OnFileUploadStatusResponse, OnFileDownloadResponse, OnVoiceRecord, OnUserInfoResponse {
 
     private RelativeLayout parentLayout;
@@ -437,7 +434,9 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     }
 
                     RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", chatPeerId).findFirst();
-                    avatarPath = realmRegisteredInfo.getAvatar().getFile().getLocalThumbnailPath();
+                    if (realmRegisteredInfo != null && realmRegisteredInfo.getAvatar() != null) {
+                        avatarPath = realmRegisteredInfo.getAvatar().getFile().getLocalThumbnailPath();
+                    }
 
                 } else if (realmRoom.getType() == RoomType.GROUP) {
                     chatType = ProtoGlobal.Room.Type.GROUP;

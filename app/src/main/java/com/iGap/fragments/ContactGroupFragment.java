@@ -9,7 +9,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -102,11 +101,22 @@ public class ContactGroupFragment extends Fragment {
 
                 G.onGroupAddMember = new OnGroupAddMember() {
                     @Override
-                    public void onGroupAddMember() {
+                    public void onGroupAddMember() { //TODO [Saeed Mozaffari] [2016-10-15 10:34 AM] - bayad id ra begirim ke daghighan motevajeh shavim ke chand nafar add shodeand
                         countAddMemberResponse++;
-                        Log.i("XXX", "countAddMemberResponse : " + countAddMemberResponse);
-                        Log.i("XXX", "countAddMemberRequest : " + countAddMemberRequest);
                         if (countAddMemberResponse >= countAddMemberRequest) {
+
+                            Realm realm = Realm.getDefaultInstance();
+
+                            realm.executeTransaction(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+                                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+                                    realmRoom.getGroupRoom().setParticipantsCountLabel(countAddMemberResponse + "");
+                                }
+                            });
+
+                            realm.close();
+
                             Intent intent = new Intent(G.context, ActivityChat.class);
                             intent.putExtra("RoomId", roomId);
                             startActivity(intent);

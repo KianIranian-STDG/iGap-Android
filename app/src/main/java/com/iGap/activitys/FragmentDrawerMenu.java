@@ -24,7 +24,6 @@ import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmAvatarPath;
 import com.iGap.realm.RealmUserInfo;
-import com.iGap.request.RequestUserInfo;
 
 import java.io.File;
 
@@ -210,7 +209,7 @@ public class FragmentDrawerMenu extends MenuFragment {
             }
         };
 
-        new RequestUserInfo().userInfo(realm.where(RealmUserInfo.class).findFirst().getUserId());
+        //new RequestUserInfo().userInfo(realm.where(RealmUserInfo.class).findFirst().getUserId());
 
         if (realmAvatarPaths.size() > 0) {
             pathImageDecode = realmAvatarPaths.first().getPathImage();
