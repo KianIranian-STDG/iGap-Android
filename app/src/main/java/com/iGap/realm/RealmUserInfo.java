@@ -15,6 +15,8 @@ public class RealmUserInfo extends RealmObject {
     private String nickName;
     private String gender;
     private String phoneNumber;
+    private String initials;
+    private String color;
 
     private RealmList<RealmAvatarPath> avatarPath = new RealmList<>();
     private RealmList<RealmAvatarToken> avatarTokens = new RealmList<>();
@@ -28,9 +30,6 @@ public class RealmUserInfo extends RealmObject {
     }
 
     private String token;
-
-    //===Setters
-
 
     public RealmList<RealmAvatarPath> getAvatarPath() {
         return avatarPath;

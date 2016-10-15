@@ -17,10 +17,14 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.fragments.FragmentNewGroup;
 import com.iGap.fragments.RegisteredContactsFragment;
+import com.iGap.interface_package.OnUserInfoResponse;
 import com.iGap.libs.flowingdrawer.MenuFragment;
 import com.iGap.module.HelperDecodeFile;
+import com.iGap.proto.ProtoGlobal;
+import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmAvatarPath;
 import com.iGap.realm.RealmUserInfo;
+import com.iGap.request.RequestUserInfo;
 
 import java.io.File;
 
@@ -41,7 +45,6 @@ public class FragmentDrawerMenu extends MenuFragment {
         super.onCreate(savedInstanceState);
         context = getActivity();
     }
-
 
 
     @Override
@@ -96,15 +99,6 @@ public class FragmentDrawerMenu extends MenuFragment {
         txtPhoneNumber.setText(phoneNumber);
 
         setImage();
-
-//        if (G.imageFile.exists()) {
-//            Bitmap decodeBitmapProfile = HelperDecodeFile.decodeFile(G.imageFile); //TODO [Saeed Mozaffari] [2016-09-10 2:49 PM] -dar har vorud be barname decode kardane tasvir eshtebah ast.
-//            imgUserPhoto.setImageBitmap(decodeBitmapProfile);
-//        } else {
-//            imgUserPhoto.setImageResource(R.mipmap.b);
-//            imgUserPhoto.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imgUserPhoto.getContext().getResources().getDimension(R.dimen.dp60), "H", "#7f7f7f"));
-//        }
-
 
         LinearLayout layoutNewGroup = (LinearLayout) v.findViewById(R.id.lm_ll_new_group);
         layoutNewGroup.setOnClickListener(new View.OnClickListener() {
@@ -202,10 +196,22 @@ public class FragmentDrawerMenu extends MenuFragment {
 
     }
 
+    //TODO [Saeed Mozaffari] [2016-09-10 2:49 PM] -dar har vorud be barname decode kardane tasvir eshtebah ast.
+
     public void setImage() {
         Realm realm = Realm.getDefaultInstance();
         RealmResults<RealmAvatarPath> realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
         realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
+
+        G.onUserInfoResponse = new OnUserInfoResponse() {
+            @Override
+            public void onUserInfo(ProtoGlobal.RegisteredUser user, ProtoResponse.Response response) {
+
+            }
+        };
+
+        new RequestUserInfo().userInfo(realm.where(RealmUserInfo.class).findFirst().getUserId());
+
         if (realmAvatarPaths.size() > 0) {
             pathImageDecode = realmAvatarPaths.first().getPathImage();
             decodeBitmapProfile = HelperDecodeFile.decodeFile(new File(pathImageDecode));

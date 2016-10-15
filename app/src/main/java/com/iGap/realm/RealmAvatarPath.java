@@ -2,6 +2,9 @@ package com.iGap.realm;
 
 import io.realm.RealmObject;
 
+/**
+ * RealmAvatarPath just for userInfo
+ */
 
 public class RealmAvatarPath extends RealmObject {
 

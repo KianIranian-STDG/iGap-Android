@@ -9,6 +9,8 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -257,6 +259,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     private String channelParticipantsCountLabel;
 
     private PopupWindow popupWindow;
+    private String avatarPath;
 
     @Override
     protected void onStart() {
@@ -404,7 +407,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             mRoomId = extras.getLong("RoomId");
             isMuteNotification = extras.getBoolean("MUT");
             Log.i("CCC", "mRoomId : " + mRoomId);
-            Log.i("CCC", "getBoolean : " + extras.getBoolean("MUT"));
 
             Realm realm = Realm.getDefaultInstance();
 
@@ -416,7 +418,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 initialize = realmRoom.getInitials();
                 color = realmRoom.getColor();
 
-                if (realmRoom.getType() == RoomType.CHAT) {
+                if (realmRoom.getType() == RoomType.CHAT) { //TODO [Saeed Mozaffari] [2016-10-10 2:32 PM] - get info from registered userInfo
 
                     chatType = ProtoGlobal.Room.Type.CHAT;
                     RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
@@ -433,6 +435,9 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                         color = realmRoom.getColor();
                         lastSeen = "last seen";
                     }
+
+                    RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", chatPeerId).findFirst();
+                    avatarPath = realmRegisteredInfo.getAvatar().getFile().getLocalThumbnailPath();
 
                 } else if (realmRoom.getType() == RoomType.GROUP) {
                     chatType = ProtoGlobal.Room.Type.GROUP;
@@ -1092,8 +1097,19 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             }
         });
 
-        //TODO [Saeed Mozaffari] [2016-09-07 5:12 PM] - if user have image set image otherwise set alphabet
-        imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
+
+        //Set Avatar For Chat,Group,Channel
+        if (avatarPath != null) {
+            File imgFile = new File(avatarPath);
+            if (imgFile.exists()) {
+                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                imvUserPicture.setImageBitmap(myBitmap);
+            } else {
+                imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
+            }
+        } else {
+            imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
+        }
 
         imvSendButton.setOnClickListener(new View.OnClickListener() {
             @Override

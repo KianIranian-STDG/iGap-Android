@@ -105,8 +105,14 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
 
     public void onRequestDownloadAvatar() {
         ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
-        if (mInfo.avatar != null && (mInfo.avatar.getLocalThumbnailPath() == null || mInfo.avatar.getLocalThumbnailPath().isEmpty())) {
-            mInfo.avatar.setLocalThumbnailPath(mInfo.chatId, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + mInfo.downloadAttachment.token + System.nanoTime() + mInfo.avatar.name);
+        if (mInfo.chatType == RoomType.CHAT) {
+            if (mInfo.avatar != null && (mInfo.avatar.getLocalThumbnailPath() == null || mInfo.avatar.getLocalThumbnailPath().isEmpty())) {
+                mInfo.avatar.setLocalThumbnailPathForAvatar(mInfo.ownerId, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + mInfo.downloadAttachment.token + System.nanoTime() + mInfo.avatar.name);
+            }
+        } else {
+            if (mInfo.avatar != null && (mInfo.avatar.getLocalThumbnailPath() == null || mInfo.avatar.getLocalThumbnailPath().isEmpty())) {
+                mInfo.avatar.setLocalThumbnailPath(mInfo.chatId, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + mInfo.downloadAttachment.token + System.nanoTime() + mInfo.avatar.name);
+            }
         }
 
         // I don't use offset in getting thumbnail

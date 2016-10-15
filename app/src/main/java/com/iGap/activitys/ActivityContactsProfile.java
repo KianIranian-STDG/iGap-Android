@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -41,6 +42,7 @@ import com.iGap.interface_package.OnUserContactEdit;
 import com.iGap.module.StructSharedMedia;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmContacts;
+import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRoom;
 import com.iGap.request.RequestChatGetRoom;
 
@@ -73,6 +75,8 @@ public class ActivityContactsProfile extends ActivityEnhanced {
     private FloatingActionButton fab;
     private PopupWindow popupWindow;
 
+    private String avatarPath;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -83,6 +87,11 @@ public class ActivityContactsProfile extends ActivityEnhanced {
         Bundle extras = getIntent().getExtras();
         userId = extras.getLong("peerId");
         enterFrom = extras.getString("enterFrom");
+
+        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", userId).findFirst();
+        avatarPath = realmRegisteredInfo.getAvatar().getFile().getLocalThumbnailPath();
+        Log.i("XXX", "realmRegisteredInfo.getAvatar().getFile().getLocalThumbnailPath() : " + realmRegisteredInfo.getAvatar().getFile().getLocalThumbnailPath());
+        Log.i("XXX", "realmRegisteredInfo.getAvatar().getFile().getLocalFilePath() : " + realmRegisteredInfo.getAvatar().getFile().getLocalFilePath());
 
         RealmContacts realmUser = realm.where(RealmContacts.class).equalTo("id", userId).findFirst();
 
@@ -103,7 +112,19 @@ public class ActivityContactsProfile extends ActivityEnhanced {
         }
 
         imgUser = (CircleImageView) findViewById(R.id.chi_img_circleImage);
-        imgUser.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imgUser.getContext().getResources().getDimension(R.dimen.dp100), initials, color));
+
+        //Set ContactAvatar
+        if (avatarPath != null) {
+            File imgFile = new File(avatarPath);
+            if (imgFile.exists()) {
+                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                imgUser.setImageBitmap(myBitmap);
+            } else {
+                imgUser.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imgUser.getContext().getResources().getDimension(R.dimen.dp100), initials, color));
+            }
+        } else {
+            imgUser.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imgUser.getContext().getResources().getDimension(R.dimen.dp100), initials, color));
+        }
 
         imgUser.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -179,7 +200,6 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                 } else {
                     finish();
                 }
-
 
 
             }
