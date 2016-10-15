@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.iGap.R;
-import com.iGap.adapter.items.chat.AbstractChatItem;
+import com.iGap.adapter.items.chat.AbstractMessage;
 import com.iGap.interface_package.OnChatMessageRemove;
 import com.iGap.interface_package.OnChatMessageSelectionChanged;
 import com.iGap.interface_package.OnMessageViewClick;
@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/6/2016.
  */
-public class MessagesAdapter<Item extends AbstractChatItem> extends FastItemAdapter<Item> implements FastAdapter.OnLongClickListener<Item> {
+public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapter<Item> implements FastAdapter.OnLongClickListener<Item> {
     private OnChatMessageSelectionChanged<Item> onChatMessageSelectionChanged;
     private OnMessageViewClick onMessageViewClick;
     private OnChatMessageRemove onChatMessageRemove;

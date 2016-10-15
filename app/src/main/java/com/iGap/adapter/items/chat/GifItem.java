@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/2016.
  */
-public class GifItem extends AbstractChatItem<GifItem, GifItem.ViewHolder> {
+public class GifItem extends AbstractMessage<GifItem, GifItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
     public GifItem(ProtoGlobal.Room.Type type, OnMessageViewClick messageClickListener) {

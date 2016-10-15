@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/2016.
  */
-public class LocationItem extends AbstractChatItem<LocationItem, LocationItem.ViewHolder> {
+public class LocationItem extends AbstractMessage<LocationItem, LocationItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
     public LocationItem(ProtoGlobal.Room.Type type, OnMessageViewClick messageClickListener) {

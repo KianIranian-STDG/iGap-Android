@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/2016.
  */
-public class AudioItem extends AbstractChatItem<AudioItem, AudioItem.ViewHolder> {
+public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
     public AudioItem(ProtoGlobal.Room.Type type, OnMessageViewClick messageClickListener) {

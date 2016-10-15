@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/2016.
  */
-public class TimeItem extends AbstractChatItem<TimeItem, TimeItem.ViewHolder> {
+public class TimeItem extends AbstractMessage<TimeItem, TimeItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
     public TimeItem(OnMessageViewClick messageClickListener) {

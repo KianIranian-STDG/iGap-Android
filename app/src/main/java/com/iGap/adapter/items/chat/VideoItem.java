@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/2016.
  */
-public class VideoItem extends AbstractChatItem<VideoItem, VideoItem.ViewHolder> {
+public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
     public VideoItem(ProtoGlobal.Room.Type type, OnMessageViewClick messageClickListener) {

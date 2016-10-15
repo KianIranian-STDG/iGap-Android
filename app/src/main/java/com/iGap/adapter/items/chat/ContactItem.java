@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/2016.
  */
-public class ContactItem extends AbstractChatItem<ContactItem, ContactItem.ViewHolder> {
+public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
     public ContactItem(ProtoGlobal.Room.Type type, OnMessageViewClick messageClickListener) {

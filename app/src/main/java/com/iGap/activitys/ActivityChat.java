@@ -52,7 +52,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.MessagesAdapter;
-import com.iGap.adapter.items.chat.AbstractChatItem;
+import com.iGap.adapter.items.chat.AbstractMessage;
 import com.iGap.adapter.items.chat.AudioItem;
 import com.iGap.adapter.items.chat.ChannelAudioItem;
 import com.iGap.adapter.items.chat.ChannelContactItem;
@@ -173,7 +173,7 @@ import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
-public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, IRecentsLongClick, OnMessageViewClick, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractChatItem>, OnChatMessageRemove, OnFileUpload, OnFileUploadStatusResponse, OnFileDownloadResponse, OnVoiceRecord, OnUserInfoResponse {
+public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, IRecentsLongClick, OnMessageViewClick, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnFileUpload, OnFileUploadStatusResponse, OnFileDownloadResponse, OnVoiceRecord, OnUserInfoResponse {
 
     private RelativeLayout parentLayout;
     private SharedPreferences sharedPreferences;
@@ -221,7 +221,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
     public static ActivityChat activityChat;
 
-    private MessagesAdapter<AbstractChatItem> mAdapter;
+    private MessagesAdapter<AbstractMessage> mAdapter;
     private ProtoGlobal.Room.Type chatType;
 
     private String lastSeen;
@@ -1040,9 +1040,9 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
         mAdapter = new MessagesAdapter<>(this, this, this);
 
-        mAdapter.withFilterPredicate(new IItemAdapter.Predicate<AbstractChatItem>() {
+        mAdapter.withFilterPredicate(new IItemAdapter.Predicate<AbstractMessage>() {
             @Override
-            public boolean filter(AbstractChatItem item, CharSequence constraint) {
+            public boolean filter(AbstractMessage item, CharSequence constraint) {
                 return !item.mMessage.messageText.toLowerCase().contains(constraint.toString().toLowerCase());
             }
         });
@@ -1903,7 +1903,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
     private void replay(StructMessageInfo item) {
         if (mAdapter != null) {
-            Set<AbstractChatItem> messages = mAdapter.getSelectedItems();
+            Set<AbstractMessage> messages = mAdapter.getSelectedItems();
             // replay works if only one message selected
             inflateReplayLayoutIntoStub(item == null ? messages.iterator().next().mMessage : item);
 
@@ -1947,7 +1947,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             @Override
             public void onClick(View view) {
 
-                for (AbstractChatItem messageID : mAdapter.getSelectedItems()) {////TODO [Saeed Mozaffari] [2016-09-13 6:39 PM] - code is wrong
+                for (AbstractMessage messageID : mAdapter.getSelectedItems()) {////TODO [Saeed Mozaffari] [2016-09-13 6:39 PM] - code is wrong
                     ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
                     ClipData clip = ClipData.newPlainText("Copied Text", messageID.mMessage.messageID);
                     clipboard.setPrimaryClip(clip);
@@ -1983,7 +1983,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                         // get offline delete list , add new deleted list and update in client condition , then send request for delete message to server
                         RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", mRoomId).findFirst();
 
-                        for (final AbstractChatItem messageID : mAdapter.getSelectedItems()) {
+                        for (final AbstractMessage messageID : mAdapter.getSelectedItems()) {
                             RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", Long.parseLong(messageID.mMessage.messageID)).findFirst();
                             if (roomMessage != null) {
                                 // delete message from database
@@ -2027,7 +2027,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
     private ArrayList<StructMessageInfo> getMessageStructFromSelectedItems() {
         ArrayList<StructMessageInfo> messageInfos = new ArrayList<>(mAdapter.getSelectedItems().size());
-        for (AbstractChatItem item : mAdapter.getSelectedItems()) {
+        for (AbstractMessage item : mAdapter.getSelectedItems()) {
             messageInfos.add(item.mMessage);
         }
         return messageInfos;
@@ -2318,7 +2318,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         ArrayList<StructSharedMedia> listPic = new ArrayList<>();
         int selectedPicture = 0;
 
-        for (AbstractChatItem chatItem : mAdapter.getAdapterItems()) {
+        for (AbstractMessage chatItem : mAdapter.getAdapterItems()) {
             if (chatItem.mMessage.messageType == ProtoGlobal.RoomMessageType.IMAGE || chatItem.mMessage.messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
                 if (chatItem.mMessage.attachment.getLocalFilePath() != null) {
                     if (chatItem.mMessage.attachment.getLocalFilePath().equals(filePath))
@@ -2419,7 +2419,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     }
 
     @Override
-    public void onChatMessageSelectionChanged(int selectedCount, Set<AbstractChatItem> selectedItems) {
+    public void onChatMessageSelectionChanged(int selectedCount, Set<AbstractMessage> selectedItems) {
         Toast.makeText(ActivityChat.this, "selected: " + Integer.toString(selectedCount), Toast.LENGTH_SHORT).show();
         if (selectedCount > 0) {
             toolbar.setVisibility(View.GONE);
@@ -2450,7 +2450,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 public void execute(Realm realm) {
                     RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", mRoomId).findFirst();
 
-                    AbstractChatItem lastMessageBeforeDeleted = mAdapter.getAdapterItem(mAdapter.getAdapterItemCount() - 1);
+                    AbstractMessage lastMessageBeforeDeleted = mAdapter.getAdapterItem(mAdapter.getAdapterItemCount() - 1);
                     if (lastMessageBeforeDeleted != null) {
                         realmRoom.setLastMessageId(Long.parseLong(lastMessageBeforeDeleted.mMessage.messageID));
                         realmRoom.setLastMessageTime((int) (lastMessageBeforeDeleted.mMessage.time / DateUtils.SECOND_IN_MILLIS));

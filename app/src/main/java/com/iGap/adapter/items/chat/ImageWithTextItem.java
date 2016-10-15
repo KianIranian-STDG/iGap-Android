@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/2016.
  */
-public class ImageWithTextItem extends AbstractChatItem<ImageWithTextItem, ImageWithTextItem.ViewHolder> {
+public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageWithTextItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
     public ImageWithTextItem(ProtoGlobal.Room.Type type, OnMessageViewClick messageClickListener) {

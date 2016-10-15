@@ -40,13 +40,13 @@ import io.meness.github.messageprogress.OnProgress;
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/6/2016.
  */
-public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH extends RecyclerView.ViewHolder> extends AbstractItem<Item, VH> implements IChatItemAttachment<VH> {
+public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH extends RecyclerView.ViewHolder> extends AbstractItem<Item, VH> implements IChatItemAttachment<VH> {
     public OnMessageViewClick messageClickListener;
     public StructMessageInfo mMessage;
     public boolean directionalBased = true;
     public ProtoGlobal.Room.Type type;
 
-    public AbstractChatItem(boolean directionalBased, ProtoGlobal.Room.Type type, OnMessageViewClick messageClickListener) {
+    public AbstractMessage(boolean directionalBased, ProtoGlobal.Room.Type type, OnMessageViewClick messageClickListener) {
         this.directionalBased = directionalBased;
         this.type = type;
         this.messageClickListener = messageClickListener;
@@ -72,7 +72,7 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
         }
     }
 
-    public AbstractChatItem setMessage(StructMessageInfo message) {
+    public AbstractMessage setMessage(StructMessageInfo message) {
         this.mMessage = message;
         return this;
     }
@@ -341,16 +341,18 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
                 }
 
                 // TODO: 10/15/2016 [Alireza] vase halate auto download inja bayad taghir kone (vase ba'dan goftam)
-                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withOnMessageProgress(new OnMessageProgressClick() {
-                    @Override
-                    public void onMessageProgressClick(MessageProgress progress) {
-                        // make sure to not request multiple times by checking last offset with the new one
-                        if (mMessage.downloadAttachment.lastOffset < mMessage.downloadAttachment.offset) {
-                            onRequestDownloadFile(mMessage.downloadAttachment.offset, mMessage.downloadAttachment.progress);
-                            mMessage.downloadAttachment.lastOffset = mMessage.downloadAttachment.offset;
+                if (holder.itemView.findViewById(R.id.progress) != null) {
+                    ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withOnMessageProgress(new OnMessageProgressClick() {
+                        @Override
+                        public void onMessageProgressClick(MessageProgress progress) {
+                            // make sure to not request multiple times by checking last offset with the new one
+                            if (mMessage.downloadAttachment.lastOffset < mMessage.downloadAttachment.offset) {
+                                onRequestDownloadFile(mMessage.downloadAttachment.offset, mMessage.downloadAttachment.progress);
+                                mMessage.downloadAttachment.lastOffset = mMessage.downloadAttachment.offset;
+                            }
                         }
-                    }
-                });
+                    });
+                }
             }
 
             ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withOnProgress(new OnProgress() {

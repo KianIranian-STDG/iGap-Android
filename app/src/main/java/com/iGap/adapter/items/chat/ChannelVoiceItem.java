@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/2016.
  */
-public class ChannelVoiceItem extends AbstractChatItem<ChannelVoiceItem, ChannelVoiceItem.ViewHolder> {
+public class ChannelVoiceItem extends AbstractMessage<ChannelVoiceItem, ChannelVoiceItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
     public ChannelVoiceItem(ProtoGlobal.Room.Type type, OnMessageViewClick messageClickListener) {

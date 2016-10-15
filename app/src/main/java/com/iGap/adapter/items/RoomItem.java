@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.adapter.items.chat.AbstractChatItem;
+import com.iGap.adapter.items.chat.AbstractMessage;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.EmojiTextView;
 import com.iGap.module.MaterialDesignTextView;
@@ -201,7 +201,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
             holder.lastMessage.setVisibility(View.VISIBLE);
 
             if (mInfo.lastMessageSenderIsMe) {
-                AbstractChatItem.updateMessageStatus(holder.messageStatus, mInfo.lastMessageStatus);
+                AbstractMessage.updateMessageStatus(holder.messageStatus, mInfo.lastMessageStatus);
 
                 holder.messageStatus.setVisibility(View.VISIBLE);
             } else {

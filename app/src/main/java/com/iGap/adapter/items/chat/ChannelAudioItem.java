@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/2016.
  */
-public class ChannelAudioItem extends AbstractChatItem<ChannelAudioItem, ChannelAudioItem.ViewHolder> {
+public class ChannelAudioItem extends AbstractMessage<ChannelAudioItem, ChannelAudioItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
     public ChannelAudioItem(ProtoGlobal.Room.Type type, OnMessageViewClick messageClickListener) {

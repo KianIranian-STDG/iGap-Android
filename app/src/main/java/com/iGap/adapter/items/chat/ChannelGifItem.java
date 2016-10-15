@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/2016.
  */
-public class ChannelGifItem extends AbstractChatItem<ChannelGifItem, ChannelGifItem.ViewHolder> {
+public class ChannelGifItem extends AbstractMessage<ChannelGifItem, ChannelGifItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
     public ChannelGifItem(ProtoGlobal.Room.Type type, OnMessageViewClick messageClickListener) {
