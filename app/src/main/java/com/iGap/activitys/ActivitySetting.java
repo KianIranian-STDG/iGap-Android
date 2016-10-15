@@ -1147,6 +1147,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
             setImage();
 
             lastUploadedAvatarId = idAvatar + 1;
+
+            G.onChangeUserPhotoListener.onChangePhoto(pathSaveImage);
             new UploadTask().execute(pathSaveImage, lastUploadedAvatarId);
 
         }
@@ -1211,9 +1213,11 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
             pathImageDecode = realmAvatarPaths.first().getPathImage();
             decodeBitmapProfile = HelperDecodeFile.decodeFile(new File(pathImageDecode));
             circleImageView.setImageBitmap(decodeBitmapProfile);
-        } else {
+            G.onChangeUserPhotoListener.onChangePhoto(pathImageDecode);
+        } else { //TODO [Saeed Mozaffari] [2016-10-15 11:49 AM] - use from initials that get from server for user
             String name = HelperImageBackColor.getFirstAlphabetName(txtNickName.getText().toString());
             circleImageView.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp100), name, HelperImageBackColor.getColor(name)));
+            G.onChangeUserPhotoListener.onChangePhoto(null);
         }
         realm.close();
 

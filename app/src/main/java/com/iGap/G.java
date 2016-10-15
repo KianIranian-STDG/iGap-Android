@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.iGap.helper.HelperFillLookUpClass;
 import com.iGap.helper.HelperNotificationAndBadge;
 import com.iGap.helper.MyService;
+import com.iGap.interface_package.OnChangeUserPhotoListener;
 import com.iGap.interface_package.OnChatDelete;
 import com.iGap.interface_package.OnChatDeleteMessageResponse;
 import com.iGap.interface_package.OnChatEditMessageResponse;
@@ -206,6 +207,7 @@ public class G extends Application {
     public static OnUserInfoResponse onUserInfoResponse;
     public static OnUserAvatarResponse onUserAvatarResponse;
     public static OnGroupAvatarResponse onGroupAvatarResponse;
+    public static OnChangeUserPhotoListener onChangeUserPhotoListener;
 
     public static final String DIR_SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static final String DIR_APP = DIR_SDCARD + "/iGap";

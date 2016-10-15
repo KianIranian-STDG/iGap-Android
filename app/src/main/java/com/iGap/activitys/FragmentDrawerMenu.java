@@ -3,6 +3,7 @@ package com.iGap.activitys;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,6 +18,8 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.fragments.FragmentNewGroup;
 import com.iGap.fragments.RegisteredContactsFragment;
+import com.iGap.helper.HelperImageBackColor;
+import com.iGap.interface_package.OnChangeUserPhotoListener;
 import com.iGap.interface_package.OnUserInfoResponse;
 import com.iGap.libs.flowingdrawer.MenuFragment;
 import com.iGap.module.HelperDecodeFile;
@@ -198,7 +201,7 @@ public class FragmentDrawerMenu extends MenuFragment {
     //TODO [Saeed Mozaffari] [2016-09-10 2:49 PM] -dar har vorud be barname decode kardane tasvir eshtebah ast.
 
     public void setImage() {
-        Realm realm = Realm.getDefaultInstance();
+        final Realm realm = Realm.getDefaultInstance();
         RealmResults<RealmAvatarPath> realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
         realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
 
@@ -210,6 +213,32 @@ public class FragmentDrawerMenu extends MenuFragment {
         };
 
         //new RequestUserInfo().userInfo(realm.where(RealmUserInfo.class).findFirst().getUserId());
+
+        G.onChangeUserPhotoListener = new OnChangeUserPhotoListener() {
+            @Override
+            public void onChangePhoto(final String imagePath) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (imagePath == null) {
+
+                            Realm realm1 = Realm.getDefaultInstance();
+                            String name = HelperImageBackColor.getFirstAlphabetName(realm1.where(RealmUserInfo.class).findFirst().getNickName());
+                            imgUserPhoto.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) imgUserPhoto.getContext().getResources().getDimension(R.dimen.dp100), name, HelperImageBackColor.getColor(name)));
+                            realm1.close();
+
+                        } else {
+                            File imgFile = new File(imagePath);
+                            if (imgFile.exists()) {
+                                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                                imgUserPhoto.setImageBitmap(myBitmap);
+                            }
+                        }
+                    }
+                });
+            }
+        };
+
 
         if (realmAvatarPaths.size() > 0) {
             pathImageDecode = realmAvatarPaths.first().getPathImage();
