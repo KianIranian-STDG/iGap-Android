@@ -725,8 +725,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     mAdapter.add(0, new TimeItem(this).setMessage(messageInfo).withIdentifier(identifier));
                 }
             }
-
-            identifier++;
         }
     }
 

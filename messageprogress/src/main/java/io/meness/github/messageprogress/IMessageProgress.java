@@ -26,4 +26,10 @@ public interface IMessageProgress {
     void withProgressFinishedHide();
 
     void reset();
+
+    void withOnMessageProgress(OnMessageProgressClick listener);
+
+    void withOnProgress(OnProgress listener);
+
+    void performProgress();
 }

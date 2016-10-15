@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -14,7 +13,6 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activitys.ActivityComment;
 import com.iGap.interface_package.OnMessageViewClick;
-import com.iGap.module.MyType;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 
@@ -49,13 +47,6 @@ public class ChannelVideoItem extends AbstractChatItem<ChannelVideoItem, Channel
         holder.cslv_txt_vido_size.setText(Long.toString(mMessage.attachment.size));
 
         holder.cslv_imv_vido_image.setImageResource(Integer.parseInt(mMessage.filePic));
-
-        if (mMessage.fileState == MyType.FileState.notDownload || mMessage.fileState == MyType.FileState.downloading)// enable or disable btn play video
-        {
-            holder.cslv_btn_play_video.setVisibility(View.GONE);
-        } else {
-            holder.cslv_btn_play_video.setVisibility(View.VISIBLE);
-        }
 
         if (!mMessage.messageText.isEmpty()) {
             holder.cslr_txt_message.setText(mMessage.messageText);
@@ -108,7 +99,6 @@ public class ChannelVideoItem extends AbstractChatItem<ChannelVideoItem, Channel
         protected TextView cslch_txt_image_seen;
         protected TextView cslch_txt_seen;
         protected ImageView cslv_imv_vido_image;
-        protected ImageButton cslv_btn_play_video;
         protected TextView cslv_txt_video_name;
         protected TextView cslv_txt_video_mime_type;
         protected TextView cslv_txt_vido_size;
@@ -141,7 +131,6 @@ public class ChannelVideoItem extends AbstractChatItem<ChannelVideoItem, Channel
             cslch_txt_image_seen = (TextView) view.findViewById(R.id.cslch_txt_image_seen);
             cslch_txt_seen = (TextView) view.findViewById(R.id.cslch_txt_seen);
             cslv_imv_vido_image = (ImageView) view.findViewById(R.id.thumbnail);
-            cslv_btn_play_video = (ImageButton) view.findViewById(R.id.cslv_btn_play_video);
             cslv_txt_video_name = (TextView) view.findViewById(R.id.cslv_txt_video_name);
             cslv_txt_video_mime_type = (TextView) view.findViewById(R.id.cslv_txt_video_mime_type);
             cslv_txt_vido_size = (TextView) view.findViewById(R.id.cslv_txt_video_size);

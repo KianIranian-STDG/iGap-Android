@@ -45,6 +45,11 @@ public class AudioItem extends AbstractChatItem<AudioItem, AudioItem.ViewHolder>
     @Override
     public void onLoadFromLocal(ViewHolder holder, String localPath, LocalFileType fileType) {
         super.onLoadFromLocal(holder, localPath, fileType);
+    }
+
+    @Override
+    public void bindView(ViewHolder holder, List payloads) {
+        super.bindView(holder, payloads);
 
         holder.fileSize.setText(Utils.humanReadableByteCount(mMessage.attachment.size, true));
         holder.fileName.setText(mMessage.attachment.name);
@@ -52,13 +57,6 @@ public class AudioItem extends AbstractChatItem<AudioItem, AudioItem.ViewHolder>
         holder.elapsedTime.setText("0");
         holder.duration.setText(Double.toString(mMessage.attachment.duration));
         setTextIfNeeded(holder.messageText);
-    }
-
-    @Override
-    public void bindView(ViewHolder holder, List payloads) {
-        super.bindView(holder, payloads);
-
-
     }
 
     protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {

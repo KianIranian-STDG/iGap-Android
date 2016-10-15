@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.iGap.G;
@@ -33,6 +32,10 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
 import java.util.List;
+
+import io.meness.github.messageprogress.MessageProgress;
+import io.meness.github.messageprogress.OnMessageProgressClick;
+import io.meness.github.messageprogress.OnProgress;
 
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/6/2016.
@@ -314,28 +317,13 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
         }
     }
 
-    private void download(VH holder) {
+    private void download(final VH holder) {
         // runs if message has attachment
         if (mMessage.hasAttachment()) {
             // if file already exists, simply show the local one
             if (mMessage.attachment.isFileExistsOnLocal()) {
                 // load file from local
                 onLoadFromLocal(holder, mMessage.attachment.getLocalFilePath(), LocalFileType.FILE);
-
-                // file exists on local, but I check for a thumbnail
-                // if thumbnail exists, I call onLoadFromLocal(), otherwise, request for the thumbnail
-                // FIXME: 10/2/2016 [Alireza] bayad vaghti sender, pdf masalan upload mikone, thumbesh ro ham begire khodesh, ya aslan nagire
-                /*if ((mMessage.messageType == ProtoGlobal.RoomMessageType.FILE || mMessage.messageType == ProtoGlobal.RoomMessageType.FILE_TEXT)) {
-                    if (mMessage.attachment.isThumbnailExistsOnLocal()) {
-                        // load thumbnail from local
-                        onLoadFromLocal(holder, mMessage.attachment.getLocalThumbnailPath(), LocalFileType.THUMBNAIL);
-                    } else {
-                        if (mMessage.attachment.smallThumbnail == null){
-                            mMessage.attachment.smallThumbnail = new StructMessageThumbnail(mMessage.attachment.size,mMessage.attachment.width,mMessage.attachment.height,null);
-                        }
-                        requestForThumbnail();
-                    }
-                }*/
             } else {
                 // file doesn't exist on local, I check for a thumbnail
                 // if thumbnail exists, I load it into the view
@@ -352,14 +340,46 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
                     requestForThumbnail();
                 }
 
-
-                // TODO: 9/28/2016 [Alireza Eskandarpour Shoferi] set downloading FILE in download view onClick
-                // make sure to not request multiple times by checking last offset with the new one
-                if (mMessage.downloadAttachment.lastOffset < mMessage.downloadAttachment.offset) {
-                    onRequestDownloadFile(mMessage.downloadAttachment.offset, mMessage.downloadAttachment.progress);
-                    mMessage.downloadAttachment.lastOffset = mMessage.downloadAttachment.offset;
-                }
+                // TODO: 10/15/2016 [Alireza] vase halate auto download inja bayad taghir kone (vase ba'dan goftam)
+                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withOnMessageProgress(new OnMessageProgressClick() {
+                    @Override
+                    public void onMessageProgressClick(MessageProgress progress) {
+                        // make sure to not request multiple times by checking last offset with the new one
+                        if (mMessage.downloadAttachment.lastOffset < mMessage.downloadAttachment.offset) {
+                            onRequestDownloadFile(mMessage.downloadAttachment.offset, mMessage.downloadAttachment.progress);
+                            mMessage.downloadAttachment.lastOffset = mMessage.downloadAttachment.offset;
+                        }
+                    }
+                });
             }
+
+            ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withOnProgress(new OnProgress() {
+                @Override
+                public void onProgressFinished() {
+                    // TODO: 10/15/2016 [Alireza] onClick babate har kodom age niaz bood, masalan vase play, bayad video ro play kone
+                    switch (mMessage.messageType) {
+                        case IMAGE:
+                        case IMAGE_TEXT:
+                            holder.itemView.findViewById(R.id.progress).setVisibility(View.INVISIBLE);
+                            break;
+                        case VIDEO:
+                        case VIDEO_TEXT:
+                            ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_play);
+                            break;
+                        case AUDIO:
+                        case AUDIO_TEXT:
+                            ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_play);
+                            break;
+                        case FILE:
+                        case FILE_TEXT:
+                            ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_open);
+                            break;
+                        case VOICE:
+                            ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_play);
+                            break;
+                    }
+                }
+            });
 
             updateProgressIfNeeded(holder);
         }
@@ -375,7 +395,6 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
     @CallSuper
     public void onRequestDownloadFile(int offset, int progress) {
         if (progress == 100) {
-            // TODO: 9/28/2016 [Alireza Eskandarpour Shoferi] make progress invisible
             return; // necessary
         }
         ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
@@ -404,8 +423,6 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
             mMessage.attachment.setLocalFilePath(Long.parseLong(mMessage.messageID), basePath + "/" + mMessage.downloadAttachment.token + System.nanoTime() + mMessage.attachment.name);
         }
         String identity = mMessage.downloadAttachment.token + '*' + selector.toString() + '*' + mMessage.attachment.size + '*' + mMessage.attachment.getLocalFilePath() + '*' + mMessage.downloadAttachment.offset;
-
-        // TODO: 9/28/2016 [Alireza Eskandarpour Shoferi] update download progress here
 
         new RequestFileDownload().download(mMessage.downloadAttachment.token, offset, (int) mMessage.attachment.size, selector, identity);
     }
@@ -446,23 +463,24 @@ public abstract class AbstractChatItem<Item extends AbstractChatItem<?, ?>, VH e
         if (holder.itemView.findViewById(R.id.progress) == null) {
             return;
         }
-        // update upload progress
-        if (mMessage.uploadProgress != 100) {
-            ((ProgressBar) holder.itemView.findViewById(R.id.progress)).setProgress(mMessage.uploadProgress);
-        } else {
-            holder.itemView.findViewById(R.id.progress).setVisibility(View.GONE);
-        }
 
-        // TODO: 10/1/2016 [Alireza] update download progress if needed
-        // update download progress
-        if (mMessage.downloadAttachment != null) {
-            if (mMessage.downloadAttachment.progress == 100) {
-                holder.itemView.findViewById(R.id.progress).setVisibility(View.GONE);
+        if (mMessage.sendType == MyType.SendType.send) {
+            ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_cancel);
+            // update progress when user trying to upload
+            // FIXME: 10/15/2016 [Alireza] in condition nabayad bashe vali vase jelogiri az neshon dadane progress avalie gozashtam nabayad ba 100% moghayese kard
+            if (mMessage.uploadProgress != 100) {
+                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withProgress(mMessage.uploadProgress);
             } else {
-                ((ProgressBar) holder.itemView.findViewById(R.id.progress)).setProgress(mMessage.uploadProgress);
+                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).performProgress();
             }
         } else {
-            holder.itemView.findViewById(R.id.progress).setVisibility(View.GONE);
+            ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_download);
+            // update progress when user trying to download
+            if (mMessage.downloadAttachment != null) {
+                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withProgress(mMessage.downloadAttachment.progress);
+            } else {
+                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).performProgress();
+            }
         }
     }
 }

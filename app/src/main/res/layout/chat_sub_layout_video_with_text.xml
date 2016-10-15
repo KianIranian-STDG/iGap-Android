@@ -51,20 +51,11 @@
                     android:scaleType="centerCrop"
                     android:src="@mipmap/sd" />
 
-                <ImageButton
-                    android:id="@+id/cslv_btn_play_video"
-                    android:layout_width="@dimen/dp40"
-                    android:layout_height="@dimen/dp40"
-                    android:layout_gravity="center"
-                    android:background="@null"
-                    android:scaleType="centerCrop"
-                    android:src="@mipmap/play" />
-
                 <include
                     android:id="@+id/progress"
-                    layout="@layout/test_progress_item"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    layout="@layout/msg_progress_item"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
                     android:layout_gravity="center"/>
 
             </FrameLayout>

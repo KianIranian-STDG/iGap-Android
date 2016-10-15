@@ -28,7 +28,7 @@ public class GifItem extends AbstractChatItem<GifItem, GifItem.ViewHolder> {
 
     @Override
     public int getLayoutRes() {
-        return R.layout.chat_sub_layout_audio;
+        return R.layout.chat_sub_layout_gif;
     }
 
     @Override

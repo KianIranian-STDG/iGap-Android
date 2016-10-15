@@ -54,9 +54,9 @@
 
                 <include
                     android:id="@+id/progress"
-                    layout="@layout/test_progress_item"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    layout="@layout/msg_progress_item"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
                     android:layout_gravity="center"/>
             </FrameLayout>
 

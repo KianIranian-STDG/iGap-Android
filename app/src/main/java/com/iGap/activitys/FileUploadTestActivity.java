@@ -222,7 +222,7 @@ public class FileUploadTestActivity extends ActivityEnhanced implements OnFileUp
      * @return ProgressBar
      */
     private void addProgressBar(final byte[] fileHash) {
-        new AsyncLayoutInflater(getApplicationContext()).inflate(R.layout.test_progress_item, null, new AsyncLayoutInflater.OnInflateFinishedListener() {
+        new AsyncLayoutInflater(getApplicationContext()).inflate(R.layout.msg_progress_item, null, new AsyncLayoutInflater.OnInflateFinishedListener() {
             @Override
             public void onInflateFinished(View view, int resid, ViewGroup parent) {
                 if (view instanceof ProgressBar) {

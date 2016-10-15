@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 
 import com.iGap.R;
 import com.iGap.helper.ImageHelper;
@@ -90,16 +89,11 @@ public class ImageItem extends AbstractChatItem<ImageItem, ImageItem.ViewHolder>
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
         protected ImageView image;
-        protected ProgressBar progressBar;
 
         public ViewHolder(View view) {
             super(view);
 
             image = (ImageView) view.findViewById(R.id.thumbnail);
-            progressBar = (ProgressBar) view.findViewById(R.id.progress);
-
-            progressBar.setIndeterminate(false);
-            progressBar.setProgress(0);
         }
     }
 }

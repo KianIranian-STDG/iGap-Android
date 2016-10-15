@@ -22,18 +22,25 @@ import com.github.rahatarmanahmed.cpv.CircularProgressViewListener;
 
 public class MessageProgress extends FrameLayout implements IMessageProgress, View.OnClickListener, CircularProgressViewListener {
     private Paint mPaint = new Paint();
-    private OnMessageProgress mOnMessageProgress;
+    private OnMessageProgressClick mOnMessageProgressClick;
+    private OnProgress mOnProgress;
     private Drawable mProgressFinishedDrawable;
     private boolean mProgressFinishedHide;
 
-    public MessageProgress(Context context, OnMessageProgress onMessageProgress) {
+    public MessageProgress(Context context) {
         super(context);
-        this.mOnMessageProgress = onMessageProgress;
+
         init(context);
     }
 
-    public void withOnMessageProgress(OnMessageProgress onMessageProgress) {
-        this.mOnMessageProgress = onMessageProgress;
+    @Override
+    public void withOnMessageProgress(OnMessageProgressClick listener) {
+        this.mOnMessageProgressClick = listener;
+    }
+
+    @Override
+    public void withOnProgress(OnProgress listener) {
+        this.mOnProgress = listener;
     }
 
     public MessageProgress(Context context, AttributeSet attrs) {
@@ -85,6 +92,7 @@ public class MessageProgress extends FrameLayout implements IMessageProgress, Vi
 
     @Override
     public void withDrawable(@DrawableRes int res) {
+        show();
         setForeground(AndroidUtils.getDrawable(getContext(), res));
     }
 
@@ -158,13 +166,22 @@ public class MessageProgress extends FrameLayout implements IMessageProgress, Vi
     public void reset() {
         mProgressFinishedHide = false;
         mProgressFinishedDrawable = null;
+        mOnMessageProgressClick = null;
+        mOnProgress = null;
         show();
     }
 
     @Override
     public void onClick(View v) {
-        if (mOnMessageProgress != null) {
-            mOnMessageProgress.onMessageProgressClick((MessageProgress) v);
+        if (mOnMessageProgressClick != null) {
+            mOnMessageProgressClick.onMessageProgressClick((MessageProgress) v);
+        }
+    }
+
+    @Override
+    public void performProgress() {
+        if (mOnProgress != null) {
+            mOnProgress.onProgressFinished();
         }
     }
 
@@ -204,6 +221,10 @@ public class MessageProgress extends FrameLayout implements IMessageProgress, Vi
                     }
                     break;
                 }
+            }
+
+            if (mOnProgress != null) {
+                mOnProgress.onProgressFinished();
             }
         }
     }
