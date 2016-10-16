@@ -49,9 +49,17 @@ public class Contacts {
             // new header exists
             if (lastHeader.isEmpty() || (!lastHeader.isEmpty() && !header.isEmpty() && lastHeader.toLowerCase().charAt(0) != header.toLowerCase().charAt(0))) {
                 // TODO: 9/5/2016 [Alireza Eskandarpour Shoferi] implement contact last seen
-                items.add(new StructContactInfo(peerId, header, "", true, false, ""));
+                StructContactInfo structContactInfo = new StructContactInfo(peerId, header, "", true, false, "");
+                structContactInfo.initials = contacts.get(i).getInitials();
+                structContactInfo.color = contacts.get(i).getColor();
+                structContactInfo.avatar = contacts.get(i).getAvatar();
+                items.add(structContactInfo);
             } else {
-                items.add(new StructContactInfo(peerId, header, "", false, false, ""));
+                StructContactInfo structContactInfo = new StructContactInfo(peerId, header, "", false, false, "");
+                structContactInfo.initials = contacts.get(i).getInitials();
+                structContactInfo.color = contacts.get(i).getColor();
+                structContactInfo.avatar = contacts.get(i).getAvatar();
+                items.add(structContactInfo);
             }
             lastHeader = header;
         }
@@ -127,6 +135,7 @@ public class Contacts {
         }
         return resultContactList;
     }
+
     public static void FillRealmInviteFriend() {
 
         final ArrayList<StructListOfContact> contactList = getListOfContact(false);
@@ -172,6 +181,7 @@ public class Contacts {
             // you can delete all item in realm contact  if there was no item
         }
     }
+
     public static ArrayList<StructContactInfo> getInviteFriendList() {
 
         ArrayList<StructContactInfo> list = new ArrayList<>();

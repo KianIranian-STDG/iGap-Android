@@ -489,9 +489,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         clearHistoryFromContactsProfileInterface();
         onDeleteChatFinishActivityInterface();
 
-        Realm realm = Realm.getDefaultInstance();
-        setAvatar(realm);
-        realm.close();
+        setAvatar();
     }
 
     private void clearHistoryFromContactsProfileInterface() {
@@ -1467,7 +1465,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     }
                 }
 
-                // android emojione doesn't support common space unicode
+                // android emoji one doesn't support common space unicode
                 // to support space character, a new unicode will be replaced.
                 if (editable.toString().contains("\u0020")) {
                     Editable ab = new SpannableStringBuilder(editable.toString().replace("\u0020", "\u2000"));
@@ -1478,9 +1476,8 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     }
 
 
-    private void setAvatar(Realm realm) {
-
-        Log.i("BBB", "setAvatar 1");
+    private void setAvatar() {
+        Realm realm = Realm.getDefaultInstance();
         RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", chatPeerId).findFirst();
         if (realmRegisteredInfo != null && realmRegisteredInfo.getAvatar() != null && realmRegisteredInfo.getLastAvatar() != null) {
             avatarPath = realmRegisteredInfo.getLastAvatar().getFile().getLocalThumbnailPath();
@@ -1490,26 +1487,22 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         if (avatarPath != null) {
             File imgFile = new File(avatarPath);
             if (imgFile.exists()) {
-                Log.i("BBB", "setAvatar 2 not exists");
                 Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                 imvUserPicture.setImageBitmap(myBitmap);
             } else {
-                Log.i("BBB", "setAvatar 3 exists");
                 if (realmRegisteredInfo != null && realmRegisteredInfo.getLastAvatar() != null && realmRegisteredInfo.getLastAvatar().getFile() != null) {
                     onRequestDownloadAvatar(realmRegisteredInfo.getLastAvatar().getFile());
-                    Log.i("BBB", "setAvatar 4 onRequestDownloadAvatar");
                 }
                 imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
 
             }
         } else {
-            Log.i("BBB", "setAvatar 5");
             if (realmRegisteredInfo != null && realmRegisteredInfo.getLastAvatar() != null && realmRegisteredInfo.getLastAvatar().getFile() != null) {
-                Log.i("BBB", "setAvatar 6");
                 onRequestDownloadAvatar(realmRegisteredInfo.getLastAvatar().getFile());
             }
             imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
         }
+        realm.close();
     }
 
     public void onRequestDownloadAvatar(RealmAttachment file) {
@@ -1519,7 +1512,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
         /* if download was successful use this filepath and
          * show image , otherwise if download was not successfully
-         * setAvatar method do this process again.
+         * run setAvatar method for doing this process again.
          */
 
         Realm realm = Realm.getDefaultInstance();
@@ -1534,7 +1527,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
         // I don't use offset in getting thumbnail
         String identity = file.getToken() + '*' + selector.toString() + '*' + file.getSmallThumbnail().getSize() + '*' + filepath + '*' + file.getSmallThumbnail().getSize() + '*' + "true" + '*' + "0";// userId don't need here , so i set it with string
-        Log.i("BBB", "setAvatar 4A RequestFileDownload Start");
         new RequestFileDownload().download(file.getToken(), 0, (int) file.getSmallThumbnail().getSize(), selector, identity);
     }
 
@@ -2893,8 +2885,8 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             public void run() {
                 // if thumbnail
                 if (selector != ProtoFileDownload.FileDownload.Selector.FILE) {
+                    setAvatar();
                     Realm realm = Realm.getDefaultInstance();
-                    setAvatar(realm);
                     if (userId != 0) { // set userId 0 when download avatarChat .
                         mAdapter.updateChatAvatar(userId, StructMessageAttachment.convert(realm.where(RealmRegisteredInfo.class).equalTo("id", userId).findFirst().getLastAvatar()));
                     }

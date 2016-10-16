@@ -47,7 +47,7 @@ public class FileDownloadResponse extends MessageHandler {
         if (!avatarRequested) {
             G.onFileDownloadResponse.onFileDownload(token, nextOffset, selector, progress);
         } else {
-            Log.i("BBB", "setAvatar  onFileDownloadResponse");
+            Log.i("NNN", "setAvatar onFileDownloadResponse");
             G.onFileDownloadResponse.onAvatarDownload(token, nextOffset, selector, progress, userId);
         }
     }
