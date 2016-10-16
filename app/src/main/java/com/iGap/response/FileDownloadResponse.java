@@ -24,6 +24,7 @@ public class FileDownloadResponse extends MessageHandler {
 
     @Override
     public void handler() {
+        Log.i("BBB", "setAvatar  FileDownloadResponse message : " + message);
         ProtoFileDownload.FileDownloadResponse.Builder builder = (ProtoFileDownload.FileDownloadResponse.Builder) message;
 
         String[] identityParams = identity.split("\\*");
@@ -46,6 +47,7 @@ public class FileDownloadResponse extends MessageHandler {
         if (!avatarRequested) {
             G.onFileDownloadResponse.onFileDownload(token, nextOffset, selector, progress);
         } else {
+            Log.i("BBB", "setAvatar  onFileDownloadResponse");
             G.onFileDownloadResponse.onAvatarDownload(token, nextOffset, selector, progress, userId);
         }
     }

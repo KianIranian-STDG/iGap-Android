@@ -143,11 +143,6 @@ public class G extends Application {
 
     public static int ivSize;
 
-    public static int requestCount = 0;
-    public static int responseCount = 0;
-    public static int handlerCount = 0;
-    public static int errorCount = 0;
-    public static int timeoutCount = 0;
     public static int userTextSize = 0;
 
     public static Activity currentActivity;
@@ -222,12 +217,12 @@ public class G extends Application {
     public static final String DIR_VIDEOS = DIR_APP + "/videos";
     public static final String DIR_AUDIOS = DIR_APP + "/audios";
     public static final String DIR_DOCUMENT = DIR_APP + "/document";
-    public static final String DIR_SOUND_NOTIFICATION = DIR_APP + "/sound";
-    public static final String DIR_CHAT_BACKGROUND = DIR_APP + "/chat_background";
-    public static final String DIR_NEW_GROUP = DIR_APP + "/new_group";
-    public static final String DIR_NEW_CHANEL = DIR_APP + "/new_chanel";
-    public static final String DIR_ALL_IMAGE_USER_CONTACT = DIR_APP + "/all_image_user_contact";
-    public static final String DIR_IMAGE_USER = DIR_APP + "/image_user";
+    public static final String DIR_SOUND_NOTIFICATION = DIR_APP + "/.sound";
+    public static final String DIR_CHAT_BACKGROUND = DIR_APP + "/.chat_background";
+    public static final String DIR_NEW_GROUP = DIR_APP + "/.new_group";
+    public static final String DIR_NEW_CHANEL = DIR_APP + "/.new_chanel";
+    public static final String DIR_ALL_IMAGE_USER_CONTACT = DIR_APP + "/.all_image_user_contact";
+    public static final String DIR_IMAGE_USER = DIR_APP + "/.image_user";
 
     public static File chatBackground;
     public static File IMAGE_NEW_GROUP;

@@ -128,6 +128,7 @@ import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoFileUploadStatus;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
+import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmChannelRoom;
 import com.iGap.realm.RealmChatHistory;
 import com.iGap.realm.RealmChatRoom;
@@ -148,6 +149,7 @@ import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestChatDelete;
 import com.iGap.request.RequestChatDeleteMessage;
 import com.iGap.request.RequestChatEditMessage;
+import com.iGap.request.RequestFileDownload;
 import com.iGap.request.RequestFileUpload;
 import com.iGap.request.RequestFileUploadInit;
 import com.iGap.request.RequestFileUploadStatus;
@@ -447,11 +449,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                         lastSeen = "last seen";
                     }
 
-                    RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", chatPeerId).findFirst();
-                    if (realmRegisteredInfo != null && realmRegisteredInfo.getAvatar() != null && realmRegisteredInfo.getLastAvatar() != null) {
-                        avatarPath = realmRegisteredInfo.getLastAvatar().getFile().getLocalThumbnailPath();
-                    }
-
                 } else if (realmRoom.getType() == RoomType.GROUP) {
                     chatType = ProtoGlobal.Room.Type.GROUP;
                     RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
@@ -492,6 +489,10 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         }
         clearHistoryFromContactsProfileInterface();
         onDeleteChatFinishActivityInterface();
+
+        Realm realm = Realm.getDefaultInstance();
+        setAvatar(realm);
+        realm.close();
     }
 
     private void clearHistoryFromContactsProfileInterface() {
@@ -1147,19 +1148,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         });
 
 
-        //Set Avatar For Chat,Group,Channel
-        if (avatarPath != null) {
-            File imgFile = new File(avatarPath);
-            if (imgFile.exists()) {
-                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                imvUserPicture.setImageBitmap(myBitmap);
-            } else {
-                imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
-            }
-        } else {
-            imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
-        }
-
         imvSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1489,6 +1477,68 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             }
         });
     }
+
+
+    private void setAvatar(Realm realm) {
+
+        Log.i("BBB", "setAvatar 1");
+        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", chatPeerId).findFirst();
+        if (realmRegisteredInfo != null && realmRegisteredInfo.getAvatar() != null && realmRegisteredInfo.getLastAvatar() != null) {
+            avatarPath = realmRegisteredInfo.getLastAvatar().getFile().getLocalThumbnailPath();
+        }
+
+        //Set Avatar For Chat,Group,Channel
+        if (avatarPath != null) {
+            File imgFile = new File(avatarPath);
+            if (imgFile.exists()) {
+                Log.i("BBB", "setAvatar 2 not exists");
+                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                imvUserPicture.setImageBitmap(myBitmap);
+            } else {
+                Log.i("BBB", "setAvatar 3 exists");
+                if (realmRegisteredInfo != null && realmRegisteredInfo.getLastAvatar() != null && realmRegisteredInfo.getLastAvatar().getFile() != null) {
+                    onRequestDownloadAvatar(realmRegisteredInfo.getLastAvatar().getFile());
+                    Log.i("BBB", "setAvatar 4 onRequestDownloadAvatar");
+                }
+                imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
+
+            }
+        } else {
+            Log.i("BBB", "setAvatar 5");
+            if (realmRegisteredInfo != null && realmRegisteredInfo.getLastAvatar() != null && realmRegisteredInfo.getLastAvatar().getFile() != null) {
+                Log.i("BBB", "setAvatar 6");
+                onRequestDownloadAvatar(realmRegisteredInfo.getLastAvatar().getFile());
+            }
+            imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
+        }
+    }
+
+    public void onRequestDownloadAvatar(RealmAttachment file) {
+        ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
+
+        final String filepath = G.DIR_IMAGE_USER + "/" + file.getToken() + "_" + System.nanoTime() + "_" + selector.toString();
+
+        /* if download was successful use this filepath and
+         * show image , otherwise if download was not successfully
+         * setAvatar method do this process again.
+         */
+
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", chatPeerId).findFirst();
+                realmRegisteredInfo.getLastAvatar().getFile().setLocalThumbnailPath(filepath);
+            }
+        });
+        realm.close();
+
+        // I don't use offset in getting thumbnail
+        String identity = file.getToken() + '*' + selector.toString() + '*' + file.getSmallThumbnail().getSize() + '*' + filepath + '*' + file.getSmallThumbnail().getSize() + '*' + "true" + '*' + "0";// userId don't need here , so i set it with string
+        Log.i("BBB", "setAvatar 4A RequestFileDownload Start");
+        new RequestFileDownload().download(file.getToken(), 0, (int) file.getSmallThumbnail().getSize(), selector, identity);
+    }
+
 
     private void changeEmojiButtonImageResource(@StringRes int drawableResourceId) {
         imvSmileButton.setText(drawableResourceId);
@@ -1820,7 +1870,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     filePath = data.getData().getPath();
                     fileName = new File(filePath).getName();
 
-                    imageDimens = Utils.getImageDimens(this,filePath);
+                    imageDimens = Utils.getImageDimens(this, filePath);
                     if (isMessageWrote()) {
                         messageType = ProtoGlobal.RoomMessageType.IMAGE_TEXT;
                     } else {
@@ -2852,7 +2902,10 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 // if thumbnail
                 if (selector != ProtoFileDownload.FileDownload.Selector.FILE) {
                     Realm realm = Realm.getDefaultInstance();
-                    mAdapter.updateChatAvatar(userId, StructMessageAttachment.convert(realm.where(RealmRegisteredInfo.class).equalTo("id", userId).findFirst().getLastAvatar()));
+                    setAvatar(realm);
+                    if (userId != 0) { // set userId 0 when download avatarChat .
+                        mAdapter.updateChatAvatar(userId, StructMessageAttachment.convert(realm.where(RealmRegisteredInfo.class).equalTo("id", userId).findFirst().getLastAvatar()));
+                    }
                     realm.close();
                 } else {
                     // else file
