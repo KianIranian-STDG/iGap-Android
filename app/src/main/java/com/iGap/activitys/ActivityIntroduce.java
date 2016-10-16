@@ -409,7 +409,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
                         public void run() {
 //                            Toast.makeText(G.context, "check your internet connection", Toast.LENGTH_SHORT).show();
                             Snackbar snack = Snackbar.make(findViewById(android.R.id.content), "check your internet connection", Snackbar.LENGTH_LONG);
-                            View view = snack.getView();
+                            View view = snack.getView();//;;;;;;
 
                             FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
                             params.gravity = Gravity.TOP;
