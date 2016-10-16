@@ -2,9 +2,9 @@ package com.iGap.fragments;
 
 import android.app.Fragment;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -23,14 +25,24 @@ import com.iGap.R;
 import com.iGap.activitys.ActivitySetting;
 import com.iGap.interface_package.OnFileDownloadResponse;
 import com.iGap.libs.rippleeffect.RippleView;
-import com.iGap.module.StructSharedMedia;
+import com.iGap.module.StructDownloadAttachment;
+import com.iGap.module.StructMessageInfo;
+import com.iGap.module.TimeUtils;
 import com.iGap.module.TouchImageView;
+import com.iGap.module.Utils;
+import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.realm.RealmAvatarPath;
+import com.iGap.request.RequestFileDownload;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
-import java.io.File;
 import java.util.ArrayList;
 
+import io.meness.github.messageprogress.MessageProgress;
+import io.meness.github.messageprogress.OnMessageProgressClick;
+import io.meness.github.messageprogress.OnProgress;
 import io.realm.Realm;
 
 
@@ -42,10 +54,9 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
 
     private ViewPager viewPager;
 
-    private ArrayList<StructSharedMedia> list;
+    private ArrayList<StructMessageInfo> list;
     private int selectedFile = 0;
     private int listSize = 0;
-    private float MIN_SCALE = 1;
     private AdapterViewPager mAdapter;
 
 
@@ -70,7 +81,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
     private boolean getIntentData(Bundle bundle) {
 
         if (bundle != null) { // get a list of image
-            list = (ArrayList<StructSharedMedia>) bundle.getSerializable("listPic");
+            list = (ArrayList<StructMessageInfo>) bundle.getSerializable("listPic");
             if (list == null) {
                 getActivity().getFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
                 return false;
@@ -155,8 +166,8 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
         viewPager.setCurrentItem(selectedFile);
 
         txtImageNumber.setText(selectedFile + 1 + " of " + listSize);
-        txtImageName.setText(list.get(selectedFile).fileName);
-        txtImageDate.setText(list.get(selectedFile).fileTime);
+        txtImageName.setText(list.get(selectedFile).attachment.name);
+        txtImageDate.setText(TimeUtils.toLocal(list.get(selectedFile).time, G.CHAT_MESSAGE_TIME));
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -166,19 +177,11 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
 
             @Override
             public void onPageSelected(int position) {
-                StructSharedMedia sharedMedia = list.get(position);
+                StructMessageInfo sharedMedia = list.get(position);
 
                 txtImageNumber.setText(position + 1 + " of " + listSize);
-                txtImageName.setText(sharedMedia.fileName);
-                txtImageDate.setText(sharedMedia.fileTime);
-
-                // TODO: 10/8/2016 [Alireza] check if file exists, if not, send download request
-                if (!new File(sharedMedia.filePath).exists()) {
-                    if (!new File(sharedMedia.tumpnail).exists()) {
-                        // TODO: 10/8/2016 [Alireza] request download thumbnail
-                    }
-                    // TODO: 10/8/2016 [Alireza] request download file
-                }
+                txtImageName.setText(sharedMedia.attachment.name);
+                txtImageDate.setText(TimeUtils.toLocal(list.get(selectedFile).time, G.CHAT_MESSAGE_TIME));
             }
 
             @Override
@@ -195,13 +198,17 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
                 view.setScaleY(normalizedposition / 2 + 0.5f);
             }
         });
-
-
     }
 
     @Override
     public void onFileDownload(final String token, final int offset, final ProtoFileDownload.FileDownload.Selector selector, final int progress) {
-        // TODO: 10/8/2016 [Alireza] file download shod yekari mikoni hala
+        // if thumbnail
+        if (selector != ProtoFileDownload.FileDownload.Selector.FILE) {
+            mAdapter.updateThumbnail(token);
+        } else {
+            // else file
+            mAdapter.updateDownloadFields(token, progress, offset);
+        }
     }
 
     @Override
@@ -210,6 +217,28 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
     }
 
     private class AdapterViewPager extends PagerAdapter {
+
+        public void updateDownloadFields(String token, int progress, int offset) {
+            for (StructMessageInfo item : list) {
+                if (item.downloadAttachment != null && item.downloadAttachment.token.equalsIgnoreCase(token)) {
+                    item.downloadAttachment.offset = offset;
+                    item.downloadAttachment.progress = progress;
+                    requestDownloadFile(item);
+
+                    notifyDataSetChanged();
+                    break;
+                }
+            }
+        }
+
+        public void updateThumbnail(String token) {
+            for (StructMessageInfo item : list) {
+                if (item.downloadAttachment != null && item.downloadAttachment.token.equalsIgnoreCase(token)) {
+                    notifyDataSetChanged();
+                    break;
+                }
+            }
+        }
 
         @Override
         public int getCount() {
@@ -221,36 +250,156 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
             return view.equals(object);
         }
 
+        private void requestForThumbnail(StructMessageInfo media) {
+            // create new download attachment once with attachment token
+            if (media.downloadAttachment == null) {
+                media.downloadAttachment = new StructDownloadAttachment(media.attachment.token);
+            }
+
+            // request thumbnail
+            if (!media.downloadAttachment.thumbnailRequested) {
+
+                ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
+                if (media.attachment.getLocalThumbnailPath() == null || media.attachment.getLocalThumbnailPath().isEmpty()) {
+                    media.attachment.setLocalThumbnailPath(Long.parseLong(media.messageID), Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + media.downloadAttachment.token + System.nanoTime() + media.attachment.name);
+                }
+
+                // I don't use offset in getting thumbnail
+                String identity = media.downloadAttachment.token + '*' + selector.toString() + '*' + media.attachment.smallThumbnail.size + '*' + media.attachment.getLocalThumbnailPath() + '*' + media.downloadAttachment.offset;
+
+                new RequestFileDownload().download(media.downloadAttachment.token, 0, (int) media.attachment.smallThumbnail.size, selector, identity);
+
+
+                // prevent from multiple requesting thumbnail
+                media.downloadAttachment.thumbnailRequested = true;
+            }
+        }
+
+        private void onLoadFromLocal(final ImageView imageView, String localPath, LocalFileType fileType) {
+            ImageLoader.getInstance().displayImage(Utils.suitablePath(localPath), imageView, new ImageLoadingListener() {
+                @Override
+                public void onLoadingStarted(String imageUri, View view) {
+
+                }
+
+                @Override
+                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+                }
+
+                @Override
+                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                    imageView.setImageBitmap(Utils.scaleImageWithSavedRatio(view.getContext(), loadedImage));
+                }
+
+                @Override
+                public void onLoadingCancelled(String imageUri, View view) {
+
+                }
+            });
+        }
 
         @Override
         public Object instantiateItem(View container, int position) {
 
             LayoutInflater inflater = LayoutInflater.from(getActivity());
-            ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.show_image_sub_layout, (ViewGroup) container, false);
+            final ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.show_image_sub_layout, (ViewGroup) container, false);
 
             TouchImageView touchImageView = (TouchImageView) layout.findViewById(R.id.sisl_touch_image_view);
 
-            //TODO     nejati         if file not exsit download it and than show it
+            final StructMessageInfo media = list.get(position);
 
+            // runs if message has attachment
+            if (media.hasAttachment()) {
+                // if file already exists, simply show the local one
+                if (media.attachment.isFileExistsOnLocal()) {
+                    // load file from local
+                    onLoadFromLocal(touchImageView, media.attachment.getLocalFilePath(), LocalFileType.FILE);
+                } else {
+                    // file doesn't exist on local, I check for a thumbnail
+                    // if thumbnail exists, I load it into the view
+                    if (media.attachment.isThumbnailExistsOnLocal()) {
+                        ViewGroup view = (ViewGroup) layout.findViewById(R.id.sisl_touch_image_view).getParent();
+                        if (view != null) {
+                            int[] dimens = Utils.scaleDimenWithSavedRatio(layout.getContext(), media.attachment.width, media.attachment.height);
+                            view.setLayoutParams(new LinearLayout.LayoutParams(dimens[0], dimens[1]));
+                            view.requestLayout();
+                        }
 
-            File imgFile = new File(list.get(position).filePath);
-            if (imgFile.exists()) {
-                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                touchImageView.setImageBitmap(myBitmap);
-            } else {
-                File imgThumpnailFile = new File(list.get(position).tumpnail);
-                if (imgThumpnailFile.exists()) {
-                    Bitmap myBitmap = BitmapFactory.decodeFile(imgThumpnailFile.getAbsolutePath());
-                    touchImageView.setImageBitmap(myBitmap);
+                        // load thumbnail from local
+                        onLoadFromLocal(touchImageView, media.attachment.getLocalThumbnailPath(), LocalFileType.THUMBNAIL);
+                    } else {
+                        requestForThumbnail(media);
+                    }
+
+                    // create new download attachment once with attachment token
+                    if (media.downloadAttachment == null) {
+                        media.downloadAttachment = new StructDownloadAttachment(media.attachment.token);
+                    }
+
+                    if (layout.findViewById(R.id.progress) != null) {
+                        ((MessageProgress) layout.findViewById(R.id.progress)).withOnMessageProgress(new OnMessageProgressClick() {
+                            @Override
+                            public void onMessageProgressClick(MessageProgress progress) {
+                                // make sure to not request multiple times by checking last offset with the new one
+                                if (media.downloadAttachment.lastOffset < media.downloadAttachment.offset) {
+                                    requestDownloadFile(media);
+                                    media.downloadAttachment.lastOffset = media.downloadAttachment.offset;
+                                }
+                            }
+                        });
+                    }
                 }
 
-                downloadImage();
+                if (layout.findViewById(R.id.progress) != null) {
+                    ((MessageProgress) layout.findViewById(R.id.progress)).withOnProgress(new OnProgress() {
+                        @Override
+                        public void onProgressFinished() {
+                            layout.findViewById(R.id.progress).setVisibility(View.INVISIBLE);
+                        }
+                    });
+                }
 
+                updateProgressIfNeeded(layout, media);
             }
 
             ((ViewGroup) container).addView(layout);
 
             return layout;
+        }
+
+        /**
+         * automatically update progress if layout has one
+         */
+        private void updateProgressIfNeeded(ViewGroup itemView, StructMessageInfo media) {
+            if (itemView.findViewById(R.id.progress) == null) {
+                return;
+            }
+
+            ((MessageProgress) itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_download);
+            // update progress when user trying to download
+            if (!media.attachment.isFileExistsOnLocal() && media.downloadAttachment != null) {
+                ((MessageProgress) itemView.findViewById(R.id.progress)).withProgress(media.downloadAttachment.progress);
+            } else {
+                if (media.attachment.isFileExistsOnLocal()) {
+                    ((MessageProgress) itemView.findViewById(R.id.progress)).performProgress();
+                } else {
+                    itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
+                }
+            }
+        }
+
+        public void requestDownloadFile(StructMessageInfo media) {
+            if (media.downloadAttachment.progress == 100) {
+                return; // necessary
+            }
+            ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
+            if (media.attachment.getLocalFilePath() == null || media.attachment.getLocalFilePath().isEmpty()) {
+                media.attachment.setLocalFilePath(Long.parseLong(media.messageID), G.DIR_IMAGES + "/" + media.downloadAttachment.token + System.nanoTime() + media.attachment.name);
+            }
+            String identity = media.downloadAttachment.token + '*' + selector.toString() + '*' + media.attachment.size + '*' + media.attachment.getLocalFilePath() + '*' + media.downloadAttachment.offset;
+
+            new RequestFileDownload().download(media.downloadAttachment.token, media.downloadAttachment.offset, (int) media.attachment.size, selector, identity);
         }
 
         @Override
@@ -267,7 +416,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
                 return index;
         }
 
-        public int removeView(ViewPager pager, StructSharedMedia v) {
+        public int removeView(ViewPager pager, StructMessageInfo v) {
             return removeView(pager, list.indexOf(v));
         }
 
@@ -276,7 +425,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
         public int removeView(ViewPager pager, int position) {
 
             Realm realm = Realm.getDefaultInstance();
-            final RealmAvatarPath realmAvatarPath = realm.where(RealmAvatarPath.class).equalTo("id", list.get(position).id).findFirst();
+            final RealmAvatarPath realmAvatarPath = realm.where(RealmAvatarPath.class).equalTo("id", list.get(position).messageID).findFirst();
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -294,17 +443,10 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
             return position;
         }
 
-        public StructSharedMedia getView(int position) {
+        public StructMessageInfo getView(int position) {
             return list.get(position);
         }
 
-    }
-
-    //***************************************************************************************
-
-    private void downloadImage() {
-
-        Log.e("ddd", " download image");
     }
 
     public void popUpMenuShowImage() {
@@ -350,7 +492,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
     }
 
 
-    public StructSharedMedia getCurrentPage() {
+    public StructMessageInfo getCurrentPage() {
         return mAdapter.getView(viewPager.getCurrentItem());
     }
 

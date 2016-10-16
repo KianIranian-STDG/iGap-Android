@@ -22,6 +22,7 @@ import com.iGap.fragments.FragmentShowImage;
 import com.iGap.helper.HelperMimeType;
 import com.iGap.module.OnComplete;
 import com.iGap.module.StructSharedMedia;
+import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoGlobal;
 
 import java.util.ArrayList;
@@ -56,7 +57,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
         RecyclerView.ViewHolder viewHolder = null;
         boolean isHeader = false;
 
-        if (list.get(position).messgeType == ProtoGlobal.RoomMessageType.TEXT)
+        if (list.get(position).messageType == ProtoGlobal.RoomMessageType.TEXT)
             isHeader = true;
 
 
@@ -106,7 +107,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
 
-        if (list.get(position).messgeType != ProtoGlobal.RoomMessageType.TEXT) {// set blue back ground for selected file
+        if (list.get(position).messageType != ProtoGlobal.RoomMessageType.TEXT) {// set blue back ground for selected file
             FrameLayout layout = (FrameLayout) holder.itemView.findViewById(R.id.smsl_fl_contain_main);
 
             if (list.get(position).isSelected) {
@@ -117,7 +118,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
         }
 
 
-        if (mediaType.equals(context.getString(R.string.shared_files)) && list.get(position).messgeType == ProtoGlobal.RoomMessageType.FILE) {
+        if (mediaType.equals(context.getString(R.string.shared_files)) && list.get(position).messageType == ProtoGlobal.RoomMessageType.FILE) {
             MyHoldersFile m = (MyHoldersFile) holder;
             if (list.get(position).isDownloading) {
                 m.btnFileState.setText(context.getString(R.string.fa_pause));
@@ -183,7 +184,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
             imvPicFile = (ImageView) itemView.findViewById(R.id.smsl_imv_file_pic);
             imvPicFile.setImageResource(Integer.parseInt(list.get(position).filePath));
 
-            if (list.get(position).messgeType == ProtoGlobal.RoomMessageType.VIDEO) {
+            if (list.get(position).messageType == ProtoGlobal.RoomMessageType.VIDEO) {
 
                 itemView.findViewById(R.id.smsl_ll_video).setVisibility(View.VISIBLE);
 
@@ -243,7 +244,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
             super(itemView);
 
             txtTime = (TextView) itemView.findViewById(R.id.smslt_txt_time);
-            txtTime.setText(list.get(position).fileTime);
+            txtTime.setText(TimeUtils.toLocal(list.get(position).time, G.CHAT_MESSAGE_TIME));
 
         }
     }
@@ -254,9 +255,9 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private void doSomething(int position) {
 
-        if (list.get(position).messgeType == ProtoGlobal.RoomMessageType.IMAGE) {
+        if (list.get(position).messageType == ProtoGlobal.RoomMessageType.IMAGE) {
             selectImage(position);
-        } else if (list.get(position).messgeType == ProtoGlobal.RoomMessageType.FILE) {
+        } else if (list.get(position).messageType == ProtoGlobal.RoomMessageType.FILE) {
             if (list.get(position).isDownloading)
                 stopDownload(position);
             else
@@ -348,7 +349,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
         int selectedImage = -1;
 
         for (int i = 0; i < list.size(); i++) {// get list image from list files
-            if (list.get(i).messgeType == ProtoGlobal.RoomMessageType.IMAGE)
+            if (list.get(i).messageType == ProtoGlobal.RoomMessageType.IMAGE)
                 listPic.add(list.get(i));
         }
 

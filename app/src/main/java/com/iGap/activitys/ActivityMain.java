@@ -852,7 +852,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             Realm realm = Realm.getDefaultInstance();
 
             boolean clearMessage = false;
-            Log.i("ZZZ", "clear message 1");
 
             RealmResults<RealmChatHistory> realmChatHistories = realm.where(RealmChatHistory.class).equalTo("roomId", roomId).findAllSorted("id", Sort.DESCENDING);
             for (final RealmChatHistory chatHistory : realmChatHistories) {
@@ -875,14 +874,12 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             List<RealmChatHistory> allItems = realm.where(RealmChatHistory.class).equalTo("roomId", roomId).findAll().sort("id", Sort.DESCENDING);
             long latestMessageId = 0;
             for (RealmChatHistory item : allItems) {
-                Log.i("ZZZ", "item : " + item);
                 if (item.getRoomMessage() != null) {
                     latestMessageId = item.getRoomMessage().getMessageId();
                     break;
                 }
             }
 
-            Log.i("ZZZ", "clearId : " + clearId + "  ||  latestMessageId : " + latestMessageId);
             if (latestMessageId == 0) { // if cleared from latest message
 
                 // clear item
@@ -897,7 +894,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                             room.setLastMessage("");
 
                             realm.copyToRealmOrUpdate(room);
-                            Log.i("ZZZ", "runOnUiThread");
                         }
                     }
                 });
@@ -905,27 +901,11 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Log.i("ZZZ", "mAdapter : " + mAdapter);
                         if (mAdapter != null) {
-                            Log.i("ZZZ", "mAdapter updated");
                             mAdapter.updateChat(roomId, convertToChatItem(roomId));
                         }
                     }
                 });
-            } else {
-//                RealmResults<RealmChatHistory> realmChatHistories = realm.where(RealmChatHistory.class).equalTo("roomId", roomId).findAllSorted("id", Sort.DESCENDING);
-//
-//                for (final RealmChatHistory chatHistory : realmChatHistories) {
-//                    if (chatHistory.getRoomMessage().getMessage() != null) {
-//                        // show last message
-//
-//                        break;
-//                    }
-//
-//                    if (chatHistory.getRoomMessage().getMessageId() == clearId) {
-//                        // show last message
-//                    }
-//                }
             }
             realm.close();
 

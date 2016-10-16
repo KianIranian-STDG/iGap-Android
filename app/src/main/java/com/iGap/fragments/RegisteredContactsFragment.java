@@ -21,10 +21,12 @@ import com.iGap.activitys.ActivityChat;
 import com.iGap.adapter.StickyHeaderAdapter;
 import com.iGap.adapter.items.ContactItem;
 import com.iGap.interface_package.OnChatGetRoom;
+import com.iGap.interface_package.OnFileDownloadResponse;
 import com.iGap.interface_package.OnUserInfoResponse;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.Contacts;
 import com.iGap.module.StructContactInfo;
+import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmAvatar;
@@ -46,11 +48,12 @@ import java.util.List;
 import io.realm.Realm;
 import io.realm.RealmList;
 
-public class RegisteredContactsFragment extends Fragment {
+public class RegisteredContactsFragment extends Fragment implements OnFileDownloadResponse {
     private FastAdapter fastAdapter;
     private SearchView searchView;
     private TextView menu_txt_titleToolbar;
     private ViewGroup vgAddContact;
+    private List<StructContactInfo> contacts;
 
     public static RegisteredContactsFragment newInstance() {
         return new RegisteredContactsFragment();
@@ -65,6 +68,9 @@ public class RegisteredContactsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        //set interface for get callback here
+        G.onFileDownloadResponse = this;
 
         Bundle bundle = this.getArguments();
         String title = null;
@@ -114,7 +120,6 @@ public class RegisteredContactsFragment extends Fragment {
             public void onFocusChange(View view, boolean b) {
                 if (b && menu_txt_titleToolbar.getVisibility() == View.VISIBLE) {
                     menu_txt_titleToolbar.setVisibility(View.GONE);
-                    Log.i("AASSAA", "0: ");
                 }
             }
         });
@@ -126,38 +131,6 @@ public class RegisteredContactsFragment extends Fragment {
                 return false;
             }
         });
-//        ViewGroup root = (ViewGroup) view.findViewById(R.id.menu_parent_layout);
-//        InputMethodManager im = (InputMethodManager) G.context.getSystemService(Activity.INPUT_METHOD_SERVICE);
-//        final SoftKeyboard softKeyboard = new SoftKeyboard(root, im);
-//        softKeyboard.setSoftKeyboardCallback(new SoftKeyboard.SoftKeyboardChanged() {
-//            @Override
-//            public void onSoftKeyboardHide() {
-//                G.handler.post(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        if (searchView.getQuery().toString().length() > 0) {
-//                            searchView.setIconified(false);
-//                            menu_txt_titleToolbar.setVisibility(View.GONE);
-//                            Log.i("AASSAA", "3: "+menu_txt_titleToolbar );
-//                        } else {
-//                            searchView.setIconified(true);
-//                            menu_txt_titleToolbar.setVisibility(View.VISIBLE);
-//                            Log.i("AASSAA", "4: "+menu_txt_titleToolbar );
-//                        }
-//                    }
-//                });
-//            }
-//            @Override
-//            public void onSoftKeyboardShow() {
-//                G.handler.post(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        menu_txt_titleToolbar.setVisibility(View.GONE);
-//                        Log.i("AASSAA", "5: "+menu_txt_titleToolbar );
-//                    }
-//                });
-//            }
-//        });
 
         final EditText searchBox = ((EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text));
         searchBox.setTextColor(getResources().getColor(R.color.white));
@@ -188,17 +161,6 @@ public class RegisteredContactsFragment extends Fragment {
             }
         });
         txtMenu.setTypeface(G.fontawesome);
-//        txtMenu.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                // close and remove fragment from stack
-//                if (!searchView.isIconified()) {
-//                    searchView.onActionViewCollapsed();
-//                }
-//                getActivity().getSupportFragmentManager().popBackStack();
-//            }
-//        });
-        //configure our fastAdapter
         //as we provide id's for the items we want the hasStableIds enabled to speed up things
         fastAdapter.setHasStableIds(true);
 
@@ -213,7 +175,7 @@ public class RegisteredContactsFragment extends Fragment {
         rv.addItemDecoration(decoration);
 
         List<IItem> items = new ArrayList<>();
-        List<StructContactInfo> contacts = Contacts.retrieve(null);
+        contacts = Contacts.retrieve(null);
         for (StructContactInfo contact : contacts) {
             items.add(new ContactItem().setContact(contact).withIdentifier(100 + contacts.indexOf(contact)));
         }
@@ -314,6 +276,24 @@ public class RegisteredContactsFragment extends Fragment {
         new RequestUserInfo().userInfo(peerId);
     }
 
+    public void updateChatAvatar(long userId) {
+        int position = getPosition(contacts, userId);
+        Log.i("NNN", "set Avatar onAvatarDownload position : " + position);
+        if (position != -1) {
+            fastAdapter.notifyAdapterItemChanged(position);
+        }
+    }
+
+    private int getPosition(List<StructContactInfo> structContactInfos, long userId) {
+
+        for (int i = 0; i < structContactInfos.size(); i++) {
+            if (structContactInfos.get(i).peerId == userId) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         //add the values which need to be saved from the adapter to the bundle
@@ -321,4 +301,23 @@ public class RegisteredContactsFragment extends Fragment {
         super.onSaveInstanceState(outState);
     }
 
+    @Override
+    public void onFileDownload(String token, int offset, ProtoFileDownload.FileDownload.Selector selector, int progress) {
+        // empty
+    }
+
+    @Override
+    public void onAvatarDownload(String token, int offset, final ProtoFileDownload.FileDownload.Selector selector, int progress, final long userId) {
+        G.currentActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // if thumbnail
+                if (selector != ProtoFileDownload.FileDownload.Selector.FILE) {
+                    //fastAdapter.updateChatAvatar(userId, StructMessageAttachment.convert(realm.where(RealmRegisteredInfo.class).equalTo("id", userId).findFirst().getLastAvatar()));
+                    Log.i("NNN", "set Avatar onAvatarDownload");
+                    updateChatAvatar(userId);
+                }
+            }
+        });
+    }
 }

@@ -211,7 +211,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             @Override
             public int getSpanSize(int position) {
 
-                if (list.get(position).messgeType == ProtoGlobal.RoomMessageType.TEXT)
+                if (list.get(position).messageType == ProtoGlobal.RoomMessageType.TEXT)
                     return spanItemCount;
                 else
                     return 1;
@@ -271,39 +271,39 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         list = new ArrayList<>();
 
         StructSharedMedia item1 = new StructSharedMedia();
-        item1.fileTime = "May 2016";
-        item1.messgeType = ProtoGlobal.RoomMessageType.TEXT;
+        item1.time = System.currentTimeMillis();
+        item1.messageType = ProtoGlobal.RoomMessageType.TEXT;
         list.add(item1);
 
         StructSharedMedia item2 = new StructSharedMedia();
-        item2.messgeType = ProtoGlobal.RoomMessageType.IMAGE;
+        item2.messageType = ProtoGlobal.RoomMessageType.IMAGE;
         item2.filePath = R.mipmap.b + "";
         item2.fileName = "image 1";
-        item2.fileTime = " 2016/3/29  11:29";
+        item2.time = System.currentTimeMillis();
         list.add(item2);
 
         StructSharedMedia item3 = new StructSharedMedia();
-        item3.messgeType = ProtoGlobal.RoomMessageType.IMAGE;
+        item3.messageType = ProtoGlobal.RoomMessageType.IMAGE;
         item3.filePath = R.mipmap.c + "";
         item3.fileName = "image 2";
-        item3.fileTime = " 2016/1/2  11:29";
+        item3.time = System.currentTimeMillis();
         list.add(item3);
 
         StructSharedMedia item4 = new StructSharedMedia();
-        item4.messgeType = ProtoGlobal.RoomMessageType.VIDEO;
+        item4.messageType = ProtoGlobal.RoomMessageType.VIDEO;
         item4.fileInfo = "3:12";
         item4.filePath = R.mipmap.d + "";
         list.add(item4);
 
 
         StructSharedMedia item5 = new StructSharedMedia();
-        item5.messgeType = ProtoGlobal.RoomMessageType.VIDEO;
+        item5.messageType = ProtoGlobal.RoomMessageType.VIDEO;
         item5.fileInfo = "6:56";
         item5.filePath = R.mipmap.e + "";
         list.add(item5);
 
         StructSharedMedia item6 = new StructSharedMedia();
-        item6.messgeType = ProtoGlobal.RoomMessageType.IMAGE;
+        item6.messageType = ProtoGlobal.RoomMessageType.IMAGE;
         item6.filePath = R.mipmap.f + "";
         list.add(item6);
 
@@ -311,12 +311,12 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         StructSharedMedia item7 = new StructSharedMedia();
         item7.filePath = R.mipmap.g + "";
-        item7.messgeType = ProtoGlobal.RoomMessageType.IMAGE;
+        item7.messageType = ProtoGlobal.RoomMessageType.IMAGE;
         list.add(item7);
 
         StructSharedMedia item8 = new StructSharedMedia();
         item8.filePath = R.mipmap.h + "";
-        item8.messgeType = ProtoGlobal.RoomMessageType.IMAGE;
+        item8.messageType = ProtoGlobal.RoomMessageType.IMAGE;
         list.add(item8);
 
 
@@ -327,39 +327,39 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         list = new ArrayList<>();
 
         StructSharedMedia item1 = new StructSharedMedia();
-        item1.fileTime = "May 2016";
-        item1.messgeType = ProtoGlobal.RoomMessageType.TEXT;
+        item1.time = System.currentTimeMillis();
+        item1.messageType = ProtoGlobal.RoomMessageType.TEXT;
         list.add(item1);
 
         StructSharedMedia item2 = new StructSharedMedia();
-        item2.messgeType = ProtoGlobal.RoomMessageType.FILE;
+        item2.messageType = ProtoGlobal.RoomMessageType.FILE;
         item2.filePath = "lkjdf.png";
         item2.fileName = "image";
         item2.fileInfo = " 2016/3/29  11:29";
         list.add(item2);
 
         StructSharedMedia item3 = new StructSharedMedia();
-        item3.messgeType = ProtoGlobal.RoomMessageType.FILE;
+        item3.messageType = ProtoGlobal.RoomMessageType.FILE;
         item3.filePath = "lkjdf.mp3";
         item3.fileName = "image 2";
         item3.fileInfo = " 2016/1/2  11:29";
         list.add(item3);
 
         StructSharedMedia item4 = new StructSharedMedia();
-        item4.messgeType = ProtoGlobal.RoomMessageType.FILE;
+        item4.messageType = ProtoGlobal.RoomMessageType.FILE;
         item4.fileInfo = "3:12";
         item4.filePath = "lkjdf.mp4";
         list.add(item4);
 
 
         StructSharedMedia item5 = new StructSharedMedia();
-        item5.messgeType = ProtoGlobal.RoomMessageType.FILE;
+        item5.messageType = ProtoGlobal.RoomMessageType.FILE;
         item5.fileInfo = "6:56";
         item5.filePath = "lkjdf.apk";
         list.add(item5);
 
         StructSharedMedia item6 = new StructSharedMedia();
-        item6.messgeType = ProtoGlobal.RoomMessageType.FILE;
+        item6.messageType = ProtoGlobal.RoomMessageType.FILE;
         item6.filePath = "lkjdf.html";
         list.add(item6);
 
@@ -367,12 +367,12 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         StructSharedMedia item7 = new StructSharedMedia();
         item7.filePath = "lkjdf.pdf";
-        item7.messgeType = ProtoGlobal.RoomMessageType.FILE;
+        item7.messageType = ProtoGlobal.RoomMessageType.FILE;
         list.add(item7);
 
         StructSharedMedia item8 = new StructSharedMedia();
         item8.filePath = "lkjdf.xls";
-        item8.messgeType = ProtoGlobal.RoomMessageType.FILE;
+        item8.messageType = ProtoGlobal.RoomMessageType.FILE;
         list.add(item8);
 
     }

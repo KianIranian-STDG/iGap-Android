@@ -61,7 +61,6 @@ public class UserContactsGetListResponse extends MessageHandler {
                         realmAvatar.setOwnerId(registerUser.getId());
                         realmAvatar.setId(System.nanoTime());
                     }
-                    listResponse.setAvatar(realmAvatar);
 
                     RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo("id", registerUser.getId()).findFirst();
                     if (realmAttachment == null) {
@@ -96,6 +95,10 @@ public class UserContactsGetListResponse extends MessageHandler {
                     realmAttachment.setHeight(file.getHeight());
                     realmAttachment.setDuration(file.getDuration());
                     realmAttachment.setCacheId(file.getCacheId());
+
+                    realmAvatar.setFile(realmAttachment);
+
+                    listResponse.setAvatar(realmAvatar);
                 }
             }
         });
