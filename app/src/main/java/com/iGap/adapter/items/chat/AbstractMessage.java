@@ -347,6 +347,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withOnMessageProgress(new OnMessageProgressClick() {
                         @Override
                         public void onMessageProgressClick(MessageProgress progress) {
+                            // create new download attachment once with attachment token
+                            if (mMessage.downloadAttachment == null) {
+                                mMessage.downloadAttachment = new StructDownloadAttachment(mMessage.attachment.token);
+                            }
+
                             // make sure to not request multiple times by checking last offset with the new one
                             if (mMessage.downloadAttachment.lastOffset < mMessage.downloadAttachment.offset) {
                                 onRequestDownloadFile(mMessage.downloadAttachment.offset, mMessage.downloadAttachment.progress);
@@ -477,7 +482,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             if (mMessage.uploadProgress != 100) {
                 ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withProgress(mMessage.uploadProgress);
             } else {
-                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).performProgress();
+                if (mMessage.attachment.isFileExistsOnLocal()) {
+                    ((MessageProgress) holder.itemView.findViewById(R.id.progress)).performProgress();
+                } else {
+                    holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
+                }
             }
         } else {
             ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_download);
@@ -485,7 +494,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             if (mMessage.downloadAttachment != null) {
                 ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withProgress(mMessage.downloadAttachment.progress);
             } else {
-                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).performProgress();
+                if (mMessage.attachment.isFileExistsOnLocal()) {
+                    ((MessageProgress) holder.itemView.findViewById(R.id.progress)).performProgress();
+                } else {
+                    holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
+                }
             }
         }
     }

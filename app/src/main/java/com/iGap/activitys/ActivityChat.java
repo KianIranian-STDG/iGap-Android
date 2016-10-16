@@ -119,7 +119,6 @@ import com.iGap.module.ShouldScrolledBehavior;
 import com.iGap.module.SortMessages;
 import com.iGap.module.StructMessageAttachment;
 import com.iGap.module.StructMessageInfo;
-import com.iGap.module.StructSharedMedia;
 import com.iGap.module.TimeUtils;
 import com.iGap.module.Utils;
 import com.iGap.module.VoiceRecord;
@@ -2418,7 +2417,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
     private void showImage(String filePath, String thumpnailPath) {
 
-        ArrayList<StructSharedMedia> listPic = new ArrayList<>();
+        ArrayList<StructMessageInfo> listPic = new ArrayList<>();
         int selectedPicture = 0;
 
         for (AbstractMessage chatItem : mAdapter.getAdapterItems()) {
@@ -2431,16 +2430,9 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                         selectedPicture = listPic.size();
                 }
 
-                StructSharedMedia item = new StructSharedMedia();
-                item.tumpnail = chatItem.mMessage.attachment.getLocalThumbnailPath();
-                item.filePath = chatItem.mMessage.attachment.getLocalFilePath();
-                item.fileName = chatItem.mMessage.attachment.name;
-                item.fileTime = TimeUtils.toLocal(chatItem.mMessage.time, G.CHAT_MESSAGE_TIME);
-
-                listPic.add(item);
+                listPic.add(chatItem.mMessage);
             }
         }
-
 
         Fragment fragment = FragmentShowImage.newInstance();
         Bundle bundle = new Bundle();

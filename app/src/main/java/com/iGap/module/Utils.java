@@ -54,6 +54,20 @@ public final class Utils {
     }
 
     /**
+     * return suitable path for using with UIL
+     *
+     * @param path String path
+     * @return correct local path/passed path
+     */
+    public static String suitablePath(String path) {
+        if (path.matches("\\w+?://")) {
+            return path;
+        } else {
+            return Uri.fromFile(new File(path)).toString();
+        }
+    }
+
+    /**
      * get n bytes from file, starts from beginning
      *
      * @param uploadStructure FileUploadStructure
