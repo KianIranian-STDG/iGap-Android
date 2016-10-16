@@ -40,16 +40,14 @@
                 layout="@layout/chat_sub_layout_forward"/>
 
             <FrameLayout
-                android:layout_width="475px"
-                android:layout_height="575px">
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
                 <ImageView
                     android:id="@+id/thumbnail"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:adjustViewBounds="true"
-                    android:maxHeight="@dimen/dp360"
-                    android:scaleType="centerCrop"/>
+                    android:adjustViewBounds="true"/>
 
                 <include
                     android:id="@+id/progress"

@@ -3,16 +3,20 @@ package com.iGap.module;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
+import android.util.DisplayMetrics;
 import android.view.Display;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -42,13 +46,10 @@ public final class Utils {
         return Integer.parseInt(durationStr);
     }
 
-    public static int[] getImageDimens(String filePath) {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-
-        BitmapFactory.decodeFile(filePath, options);
-        int width = options.outWidth;
-        int height = options.outHeight;
+    public static int[] getImageDimens(Activity activity, String filePath) {
+        Bitmap bitmap = scaleImageWithSavedRatio(activity, filePath);
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
         return new int[]{width, height};
     }
 
@@ -192,6 +193,76 @@ public final class Utils {
     public static byte[] fileToBytes(FileUploadStructure uploadStructure) throws IOException {
         ByteBuffer byteBuffer = ByteBuffer.allocate((int) uploadStructure.fileSize);
         uploadStructure.fileChannel.read(byteBuffer);
+
+        byteBuffer.flip();
+
+        if (byteBuffer.hasArray()) {
+            return byteBuffer.array();
+        }
+        return null;
+    }
+
+    public static Bitmap scaleImageWithSavedRatio(Context context, String filePath) {
+        DisplayMetrics display = context.getResources().getDisplayMetrics();
+        int density = (int) (display.density * 0.9f);
+        float size = Math.min(display.widthPixels, display.heightPixels) * 0.9f * density;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(filePath, null);
+        int bitmapWidth = bitmap.getWidth();
+        int bitmapHeight = bitmap.getHeight();
+        int nh = (int) (bitmapHeight * (size / bitmapWidth));
+        if (nh > bitmapHeight) {
+            nh = bitmapHeight * density;
+        }
+        if (size > bitmapWidth) {
+            size = bitmapWidth * density;
+        }
+        return Bitmap.createScaledBitmap(bitmap, (int) size, nh, true);
+    }
+
+    public static int[] scaleDimenWithSavedRatio(Context context, int width, int height) {
+        DisplayMetrics display = context.getResources().getDisplayMetrics();
+        int density = (int) (display.density * 0.9f);
+        float size = Math.min(display.widthPixels, display.heightPixels) * 0.9f * density;
+
+        int nh = (int) (height * (size / width));
+        if (nh > height) {
+            nh = height * density;
+        }
+        if (size > width) {
+            size = width * density;
+        }
+        return new int[]{(int) size, nh};
+    }
+
+    public static Bitmap scaleImageWithSavedRatio(Context context, Bitmap bitmap) {
+        DisplayMetrics display = context.getResources().getDisplayMetrics();
+        int density = (int) (display.density * 0.9f);
+        float size = Math.min(display.widthPixels, display.heightPixels) * 0.9f * density;
+
+        int bitmapWidth = bitmap.getWidth();
+        int bitmapHeight = bitmap.getHeight();
+        int nh = (int) (bitmapHeight * (size / bitmapWidth));
+        if (nh > bitmapHeight) {
+            nh = bitmapHeight * density;
+        }
+        if (size > bitmapWidth) {
+            size = bitmapWidth * density;
+        }
+        return Bitmap.createScaledBitmap(bitmap, (int) size, nh, true);
+    }
+
+    /**
+     * return file to bytes
+     *
+     * @return bytes
+     * @throws IOException
+     */
+    public static byte[] fileToBytes(File file) throws IOException {
+        ByteBuffer byteBuffer = ByteBuffer.allocate((int) file.length());
+        RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r");
+        FileChannel fileChannel = randomAccessFile.getChannel();
+        fileChannel.read(byteBuffer);
 
         byteBuffer.flip();
 

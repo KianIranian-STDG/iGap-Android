@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -31,6 +32,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileFilter;
 import java.text.DecimalFormat;
@@ -78,6 +80,29 @@ public class FileUtils {
             // No extension.
             return "";
         }
+    }
+
+    public static byte[] toByteArray(Bitmap bitmap){
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        return stream.toByteArray();
+    }
+
+    /**
+     * decrease iamge size of file to request size
+     *
+     * @param f image file
+     * @return
+     */
+    public static Bitmap decodeFile(byte[] f) {
+        //decode image size
+        return BitmapFactory.decodeByteArray(f, 0, f.length);
+    }
+
+    public static Bitmap toBitmap(String photoPath){
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        return BitmapFactory.decodeFile(photoPath, options);
     }
 
     /**

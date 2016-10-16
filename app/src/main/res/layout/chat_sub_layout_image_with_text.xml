@@ -47,10 +47,7 @@
                     android:id="@+id/thumbnail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/dp4"
-                    android:adjustViewBounds="true"
-                    android:maxHeight="@dimen/dp360"
-                    android:scaleType="centerCrop"/>
+                    android:adjustViewBounds="true"/>
 
                 <include
                     android:id="@+id/progress"
@@ -64,6 +61,7 @@
                 android:id="@+id/messageText"
                 style="@style/ChatMessages.EmojiTextView"
                 android:text="SAMPLE TEXT"
+                android:layout_marginTop="3dp"
                 android:textColor="@android:color/black"/>
 
             <include

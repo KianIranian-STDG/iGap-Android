@@ -1702,7 +1702,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     filePath = AttachFile.imagePath;
                     fileName = new File(filePath).getName();
                     fileSize = new File(filePath).length();
-                    imageDimens = Utils.getImageDimens(filePath);
+                    imageDimens = Utils.getImageDimens(this, filePath);
                     if (isMessageWrote()) {
                         messageType = ProtoGlobal.RoomMessageType.IMAGE_TEXT;
                     } else {
@@ -1819,7 +1819,8 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 case AttachFile.request_code_paint:
                     filePath = data.getData().getPath();
                     fileName = new File(filePath).getName();
-                    imageDimens = Utils.getImageDimens(filePath);
+
+                    imageDimens = Utils.getImageDimens(this,filePath);
                     if (isMessageWrote()) {
                         messageType = ProtoGlobal.RoomMessageType.IMAGE_TEXT;
                     } else {

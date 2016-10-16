@@ -22,6 +22,7 @@ import com.iGap.module.MyType;
 import com.iGap.module.StructDownloadAttachment;
 import com.iGap.module.StructMessageInfo;
 import com.iGap.module.TimeUtils;
+import com.iGap.module.Utils;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
@@ -330,7 +331,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 if (mMessage.attachment.isThumbnailExistsOnLocal()) {
                     ViewGroup view = (ViewGroup) holder.itemView.findViewById(R.id.thumbnail).getParent();
                     if (view != null) {
-                        view.setLayoutParams(new LinearLayout.LayoutParams(mMessage.attachment.width, mMessage.attachment.height));
+                        int[] dimens = Utils.scaleDimenWithSavedRatio(holder.itemView.getContext(), mMessage.attachment.width, mMessage.attachment.height);
+                        view.setLayoutParams(new LinearLayout.LayoutParams(dimens[0], dimens[1]));
                         view.requestLayout();
                     }
 
