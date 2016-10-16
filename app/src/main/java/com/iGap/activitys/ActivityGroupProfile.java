@@ -1,12 +1,13 @@
 package com.iGap.activitys;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -23,9 +24,9 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -102,6 +103,7 @@ import io.realm.RealmList;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
+
 /**
  * Created by android3 on 9/18/2016.
  */
@@ -150,6 +152,8 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnFileUplo
     private int countAddMemberRequest = 0;
 
     private long startMessageId = 0;
+
+    private PopupWindow popupWindow;
 
 
     @Override
@@ -202,36 +206,59 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnFileUplo
         Button btnMenu = (Button) findViewById(R.id.agp_btn_menu);
         btnMenu.setTypeface(G.fontawesome);
 
+        final int screenWidth = (int) (getResources().getDisplayMetrics().widthPixels / 1.7);
         RippleView rippleMenu = (RippleView) findViewById(R.id.agp_ripple_menu);
         rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
             @Override
             public void onComplete(RippleView rippleView) {
 
-                MaterialDialog dialog = new MaterialDialog.Builder(ActivityGroupProfile.this)
-                        .items(R.array.menu_setting)
-                        .contentColor(Color.BLACK)
-                        .itemsCallback(new MaterialDialog.ListCallback() {
-                            @Override
-                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                final View popupView = layoutInflater.inflate(R.layout.popup_window, null);
+                popupWindow = new PopupWindow(popupView, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+                popupWindow.setBackgroundDrawable(new BitmapDrawable());
+                popupWindow.setOutsideTouchable(true);
 
-                                switch (which) {
-                                    case 0:
-                                        Toast.makeText(ActivityGroupProfile.this, "Log Out", Toast.LENGTH_SHORT).show();
-                                        break;
-                                }
-                            }
-                        }).build();
-                WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-                layoutParams.copyFrom(dialog.getWindow().getAttributes());
-                layoutParams.width = (int) getResources().getDimension(R.dimen.dp200);
-                layoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
-                dialog.getWindow().setAttributes(layoutParams);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    popupWindow.setBackgroundDrawable(getResources().getDrawable(R.mipmap.shadow3, ActivityGroupProfile.this.getTheme()));
+                } else {
+                    popupWindow.setBackgroundDrawable((getResources().getDrawable(R.mipmap.shadow3)));
+                }
 
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.getWindow().setDimAmount(0);
+                if (popupWindow.isOutsideTouchable()) {
+                    popupWindow.dismiss();
+                    Log.i("CCVVBB", "rr: ");
+                }
+                popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                    @Override
+                    public void onDismiss() {
+                        //TODO do sth here on dismiss
+                    }
+                });
 
-                dialog.show();
+                popupWindow.setAnimationStyle(android.R.style.Animation_InputMethod);
+                popupWindow.showAtLocation(popupView, Gravity.RIGHT | Gravity.TOP, 10, 30);
+                popupWindow.showAsDropDown(rippleView);
+
+
+                TextView txtSearch = (TextView) popupView.findViewById(R.id.popup_txtItem1);
+                txtSearch.setTypeface(G.arial);
+                txtSearch.setText("Log Out");
+                txtSearch.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        Toast.makeText(ActivityGroupProfile.this, "LogOut", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                TextView txtDelete = (TextView) popupView.findViewById(R.id.popup_txtItem2);
+                txtDelete.setVisibility(View.GONE);
+
+                TextView txtDeleteChat = (TextView) popupView.findViewById(R.id.popup_txtItem3);
+                txtDeleteChat.setVisibility(View.GONE);
+
+                TextView txtMutNotification = (TextView) popupView.findViewById(R.id.popup_txtItem4);
+                txtMutNotification.setVisibility(View.GONE);
             }
 
         });

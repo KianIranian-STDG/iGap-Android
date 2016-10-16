@@ -12,6 +12,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
@@ -331,7 +332,6 @@ public class ActivityContactsProfile extends ActivityEnhanced {
         imgMenu = (MaterialDesignTextView) findViewById(R.id.chi_img_menuPopup);
         RippleView rippleMenu = (RippleView) findViewById(R.id.chi_ripple_menuPopup);
 
-
         rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
@@ -340,6 +340,12 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                 popupWindow = new PopupWindow(popupView, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT, true);
                 popupWindow.setBackgroundDrawable(new BitmapDrawable());
                 popupWindow.setOutsideTouchable(true);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    popupWindow.setBackgroundDrawable(getResources().getDrawable(R.mipmap.shadow3, ActivityContactsProfile.this.getTheme()));
+                } else {
+                    popupWindow.setBackgroundDrawable((getResources().getDrawable(R.mipmap.shadow3)));
+                }
 
                 if (popupWindow.isOutsideTouchable()) {
                     popupWindow.dismiss();

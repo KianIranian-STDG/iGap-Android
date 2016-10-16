@@ -88,11 +88,16 @@ public class ActivityChatBackground extends ActivityEnhanced {
         addFile = new File(G.DIR_CHAT_BACKGROUND);
         File file[] = addFile.listFiles();
         for (int i = 0; i < file.length; i++) {
-            if (!file[i].getPath().equals(G.chatBackground.toString())) {
-                StructAdapterBackground item = new StructAdapterBackground();
+            StructAdapterBackground item = new StructAdapterBackground();
+            if (i == 0) {
                 item.setId(i);
-                item.setPathImage(file[i].toString());
                 items.add(item);
+            } else {
+                if (!file[i].getPath().equals(G.chatBackground.toString())) {
+                    item.setId(i);
+                    item.setPathImage(file[i].toString());
+                    items.add(item);
+                }
             }
         }
 

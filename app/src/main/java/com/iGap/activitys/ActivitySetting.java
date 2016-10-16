@@ -337,30 +337,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
 
             @Override
             public void onComplete(RippleView rippleView) {
-//                MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this)
-//                        .items(R.array.menu_setting)
-//                        .contentColor(Color.BLACK)
-//                        .itemsCallback(new MaterialDialog.ListCallback() {
-//                            @Override
-//                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-//
-//                                switch (which) {
-//                                    case 0:
-//                                        Toast.makeText(ActivitySetting.this, "Log Out", Toast.LENGTH_SHORT).show();
-//                                        break;
-//                                }
-//                            }
-//                        }).build();
-//                WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-//                layoutParams.copyFrom(dialog.getWindow().getAttributes());
-//                layoutParams.width = (int) getResources().getDimension(R.dimen.dp200);
-//                layoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
-//                dialog.getWindow().setAttributes(layoutParams);
-//
-//                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//                dialog.getWindow().setDimAmount(0);
-//
-//                dialog.show();
 
                 LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 final View popupView = layoutInflater.inflate(R.layout.popup_window, null);

@@ -1285,7 +1285,16 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             @Override
             public void onClick(View view) {
 
-                boomMenuButton.boom();
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+                G.handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        boomMenuButton.boom();
+                    }
+                }, 200);
+
             }
         });
 

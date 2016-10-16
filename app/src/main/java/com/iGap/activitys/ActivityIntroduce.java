@@ -6,12 +6,16 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewPager;
 import android.text.Html;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
+import android.view.animation.ScaleAnimation;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -386,7 +390,15 @@ public class ActivityIntroduce extends ActivityEnhanced {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(G.context, "waiting fot get info", Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(G.context, "waiting fot get info", Toast.LENGTH_SHORT).show();
+
+                                Snackbar snack = Snackbar.make(findViewById(android.R.id.content), "waiting fot get info", Snackbar.LENGTH_LONG);
+                                View view = snack.getView();
+                                FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
+                                params.gravity = Gravity.TOP;
+                                view.setLayoutParams(params);
+                                snack.show();
+
                             }
                         });
                         getInfo();
@@ -395,7 +407,35 @@ public class ActivityIntroduce extends ActivityEnhanced {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(G.context, "check your internet connection", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(G.context, "check your internet connection", Toast.LENGTH_SHORT).show();
+                            Snackbar snack = Snackbar.make(findViewById(android.R.id.content), "check your internet connection", Snackbar.LENGTH_LONG);
+                            View view = snack.getView();
+
+                            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
+                            params.gravity = Gravity.TOP;
+                            view.setLayoutParams(params);
+                            ScaleAnimation scaleAnimation = new ScaleAnimation(0, 1f, 1f, 1f, 1f, 1f);
+                            view.setAnimation(scaleAnimation);
+                            snack.show();
+
+
+//
+//                            if (snack.isShown()){
+//                                TranslateAnimation trans = new TranslateAnimation(0, 0, 0, 100);
+//                                trans.setDuration(250);
+//                                trans.setInterpolator(new AccelerateInterpolator(1.0f));
+//                                view.setAnimation(trans);
+//                                Log.i("CCCC", "1: " + snack.isShown());
+//                                Log.i("CCCC", "0: " + snack.isShownOrQueued());
+//                            }else {
+//                                TranslateAnimation trans = new TranslateAnimation(0, 0, 100, 0);
+//                                trans.setDuration(250);
+//                                trans.setInterpolator(new AccelerateInterpolator(1.0f));
+//                                view.setAnimation(trans);
+//                                Log.i("CCCC", "2: " + snack.isShown());
+//                                Log.i("CCCC", "3: " + snack.isShownOrQueued());
+//                            }
+
                         }
                     });
                 }
