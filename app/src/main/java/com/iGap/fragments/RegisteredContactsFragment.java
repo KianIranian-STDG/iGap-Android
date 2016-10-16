@@ -21,11 +21,17 @@ import com.iGap.activitys.ActivityChat;
 import com.iGap.adapter.StickyHeaderAdapter;
 import com.iGap.adapter.items.ContactItem;
 import com.iGap.interface_package.OnChatGetRoom;
+import com.iGap.interface_package.OnUserInfoResponse;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.Contacts;
 import com.iGap.module.StructContactInfo;
+import com.iGap.proto.ProtoGlobal;
+import com.iGap.proto.ProtoResponse;
+import com.iGap.realm.RealmAvatar;
+import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRoom;
 import com.iGap.request.RequestChatGetRoom;
+import com.iGap.request.RequestUserInfo;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItem;
@@ -38,6 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 
 public class RegisteredContactsFragment extends Fragment {
     private FastAdapter fastAdapter;
@@ -48,11 +55,13 @@ public class RegisteredContactsFragment extends Fragment {
     public static RegisteredContactsFragment newInstance() {
         return new RegisteredContactsFragment();
     }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_contacts, container, false);
     }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -92,6 +101,7 @@ public class RegisteredContactsFragment extends Fragment {
             public boolean onQueryTextSubmit(String query) {
                 return false;
             }
+
             @Override
             public boolean onQueryTextChange(String newText) {
                 itemAdapter.filter(newText);
@@ -237,25 +247,71 @@ public class RegisteredContactsFragment extends Fragment {
             G.onChatGetRoom = new OnChatGetRoom() {
                 @Override
                 public void onChatGetRoom(final long roomId) {
-                    G.currentActivity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Realm realm = Realm.getDefaultInstance();
-                            Intent intent = new Intent(G.context, ActivityChat.class);
-                            intent.putExtra("peerId", peerId);
-                            intent.putExtra("RoomId", roomId);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            realm.close();
-                            G.context.startActivity(intent);
-                            getActivity().getSupportFragmentManager().popBackStack();
-                        }
-                    });
+                    getUserInfo(peerId, roomId);
                 }
             };
 
             new RequestChatGetRoom().chatGetRoom(peerId);
         }
         realm.close();
+    }
+
+    private void getUserInfo(final long peerId, final long roomId) {
+
+        G.onUserInfoResponse = new OnUserInfoResponse() {
+            @Override
+            public void onUserInfo(final ProtoGlobal.RegisteredUser user, ProtoResponse.Response response) {
+
+                G.currentActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        if (user.getId() == peerId) {
+                            Realm realm = Realm.getDefaultInstance();
+
+                            realm.executeTransactionAsync(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+                                    RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", user.getId()).findFirst();
+                                    if (realmRegisteredInfo == null) {
+                                        realmRegisteredInfo = realm.createObject(RealmRegisteredInfo.class);
+                                        realmRegisteredInfo.setId(user.getId());
+                                    }
+
+                                    realmRegisteredInfo.setUsername(user.getUsername());
+                                    realmRegisteredInfo.setPhone(user.getPhone());
+                                    realmRegisteredInfo.setFirstName(user.getFirstName());
+                                    realmRegisteredInfo.setLastName(user.getLastName());
+                                    realmRegisteredInfo.setDisplayName(user.getDisplayName());
+                                    realmRegisteredInfo.setInitials(user.getInitials());
+                                    realmRegisteredInfo.setColor(user.getColor());
+                                    realmRegisteredInfo.setStatus(user.getStatus().toString());
+                                    realmRegisteredInfo.setAvatarCount(user.getAvatarCount());
+
+                                    RealmList<RealmAvatar> avatars = new RealmList<>();
+                                    avatars.add(RealmAvatar.convert(user, realm));
+                                    realmRegisteredInfo.setAvatar(avatars);
+                                }
+                            }, new Realm.Transaction.OnSuccess() {
+                                @Override
+                                public void onSuccess() {
+                                    Intent intent = new Intent(G.context, ActivityChat.class);
+                                    intent.putExtra("peerId", peerId);
+                                    intent.putExtra("RoomId", roomId);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    G.context.startActivity(intent);
+                                    getActivity().getSupportFragmentManager().popBackStack();
+                                }
+                            });
+
+                            realm.close();
+                        }
+                    }
+                });
+            }
+        };
+
+        new RequestUserInfo().userInfo(peerId);
     }
 
     @Override

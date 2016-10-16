@@ -46,6 +46,13 @@ public class RealmAvatar extends RealmObject {
         this.file = file;
     }
 
+    /**
+     * use this method just for group or channel , because chat don't have avatar in room(chat avatar exist in channel info)
+     *
+     * @param room
+     * @return
+     */
+
     public static RealmAvatar convert(final ProtoGlobal.Room room, Realm realm) {  //TODO [Saeed Mozaffari] [2016-10-04 5:40 PM] - check this code . i guess is wrong!!! maybe overwriting realmAvatar
         ProtoGlobal.File file = null;
         switch (room.getType()) {
@@ -89,14 +96,6 @@ public class RealmAvatar extends RealmObject {
         return realmAvatar;
     }
 
-    /**
-     * use this method just for group or channel .
-     *
-     * @param room
-     * @return
-     */
-
-
     public static RealmAvatar convert(final ProtoGlobal.Room room) {
         Realm realm = Realm.getDefaultInstance();
         final RealmAvatar[] realmAvatar = {null};
@@ -126,6 +125,40 @@ public class RealmAvatar extends RealmObject {
         realmAvatar.setFile(attachment);
 
         realm.close();
+
+        return realmAvatar;
+    }
+
+    public static RealmAvatar convert(ProtoGlobal.RegisteredUser user, Realm realm) {
+
+        ProtoGlobal.File file = user.getAvatar().getFile();
+
+        //small thumbnail
+        ProtoGlobal.Thumbnail smallThumbnail = file.getSmallThumbnail();
+        RealmThumbnail realmThumbnailSmall = realm.createObject(RealmThumbnail.class);
+        realmThumbnailSmall.setId(System.nanoTime());
+        realmThumbnailSmall.setSize(smallThumbnail.getSize());
+        realmThumbnailSmall.setWidth(smallThumbnail.getWidth());
+        realmThumbnailSmall.setHeight(smallThumbnail.getHeight());
+        realmThumbnailSmall.setCacheId(smallThumbnail.getCacheId());
+
+        //large thumbnail
+        ProtoGlobal.Thumbnail largeThumbnail = file.getLargeThumbnail();
+        RealmThumbnail realmThumbnailLarge = realm.createObject(RealmThumbnail.class);
+        realmThumbnailLarge.setId(System.nanoTime());
+        realmThumbnailLarge.setSize(largeThumbnail.getSize());
+        realmThumbnailLarge.setWidth(largeThumbnail.getWidth());
+        realmThumbnailLarge.setHeight(largeThumbnail.getHeight());
+        realmThumbnailLarge.setCacheId(largeThumbnail.getCacheId());
+
+        //File info for avatar
+        RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo("ownerId", user.getId()).findFirst();
+        if (realmAvatar == null) {
+            realmAvatar = realm.createObject(RealmAvatar.class);
+            realmAvatar.setOwnerId(user.getId());
+            realmAvatar.setId(System.nanoTime());
+        }
+        realmAvatar.setFile(RealmAttachment.build(file));
 
         return realmAvatar;
     }
