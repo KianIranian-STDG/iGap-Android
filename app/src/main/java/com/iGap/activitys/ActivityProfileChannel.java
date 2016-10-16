@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.R;
+import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.MaterialDesignTextView;
 
 public class ActivityProfileChannel extends AppCompatActivity {
@@ -45,13 +46,14 @@ public class ActivityProfileChannel extends AppCompatActivity {
         setContentView(R.layout.activity_profile_channel);
 
         txtBack = (MaterialDesignTextView) findViewById(R.id.pch_txt_back);
-        txtBack.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Flaticon.ttf"));
-        txtBack.setOnClickListener(new View.OnClickListener() {
+        final RippleView rippleBack = (RippleView) findViewById(R.id.pch_ripple_back);
+        rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
-            public void onClick(View view) {
+            public void onComplete(RippleView rippleView) {
                 finish();
             }
         });
+        txtBack.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Flaticon.ttf"));
 
         appBarLayout = (AppBarLayout) findViewById(R.id.pch_appbar);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
@@ -72,9 +74,10 @@ public class ActivityProfileChannel extends AppCompatActivity {
         });
         final int screenWidth = (int) (getResources().getDisplayMetrics().widthPixels / 1.7);
         imgPupupMenul = (MaterialDesignTextView) findViewById(R.id.pch_img_menuPopup);
-        imgPupupMenul.setOnClickListener(new View.OnClickListener() {
+        RippleView rippleMenu = (RippleView) findViewById(R.id.pch_ripple_menuPopup);
+        rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
-            public void onClick(View v) {
+            public void onComplete(RippleView rippleView) {
                 LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 final View popupView = layoutInflater.inflate(R.layout.popup_window, null);
 
@@ -94,7 +97,7 @@ public class ActivityProfileChannel extends AppCompatActivity {
                 });
                 popupWindow.setAnimationStyle(android.R.style.Animation_InputMethod);
                 popupWindow.showAtLocation(popupView, Gravity.RIGHT | Gravity.TOP, 10, 30);
-                popupWindow.showAsDropDown(v);
+                popupWindow.showAsDropDown(rippleView);
                 TextView remove = (TextView) popupView.findViewById(R.id.popup_txtItem1);
                 remove.setText("Remove");
                 remove.setOnClickListener(new View.OnClickListener() {
@@ -113,6 +116,7 @@ public class ActivityProfileChannel extends AppCompatActivity {
 
             }
         });
+
         fab = (FloatingActionButton) findViewById(R.id.pch_fab_addToChannel);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

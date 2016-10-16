@@ -81,26 +81,7 @@ public class ActivityCrop extends ActivityEnhanced {
 
         txtCrop = (TextView) findViewById(R.id.pu_txt_crop);
 
-//        txtCrop.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                CropImage.activity(resultUri).setGuidelines(CropImageView.Guidelines.ON)
-//                        .setMinCropResultSize(120, 120)
-//                        .setAutoZoomEnabled(false)
-//                        .setInitialCropWindowPaddingRatio(.08f) // padding window from all
-//                        .setBorderCornerLength(50)
-//                        .setBorderCornerOffset(0)
-//                        .setAllowCounterRotation(true)
-//                        .setBorderCornerThickness(8.0f)
-//                        .setShowCropOverlay(true)
-//                        .setAspectRatio(1, 1)
-//                        .setFixAspectRatio(true)
-//                        .setBorderCornerColor(getResources().getColor(R.color.whit_background))
-//                        .setBackgroundColor(getResources().getColor(R.color.ou_background_crop))
-//                        .setScaleType(CropImageView.ScaleType.FIT_CENTER)
-//                        .start(ActivityCrop.this);
-//            }
-//        });
+
 
         RippleView rippleCrop = (RippleView) findViewById(R.id.pu_ripple_crop);
         rippleCrop.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
@@ -125,30 +106,6 @@ public class ActivityCrop extends ActivityEnhanced {
             }
 
         });
-//        txtAgreeImage.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                if (page != null) {
-//
-//                    if (page.equals("profile")) {
-//
-//                        Intent intent = new Intent(ActivityCrop.this, ActivityProfile.class);
-//                        startActivity(intent);
-//                        finish();
-//
-//                    } else if (page.equals("setting")) {
-//
-//                        Intent intent = new Intent(ActivityCrop.this, ActivitySetting.class);
-//                        startActivity(intent);
-//                        finish();
-//                    } else {
-//                        finish();
-//                    }
-//                }
-//
-//            }
-//        });
 
         RippleView rippleBack = (RippleView) findViewById(R.id.pu_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
@@ -156,21 +113,7 @@ public class ActivityCrop extends ActivityEnhanced {
             public void onComplete(RippleView rippleView) {
 
                 if (page != null) {
-
-                    if (page.equals("profile")) {
-
-//                        Intent intent = new Intent(ActivityCrop.this, ActivityProfile.class);
-//                        startActivity(intent);
-                        finish();
-
-                    } else if (page.equals("setting")) {
-
-//                        Intent intent = new Intent(ActivityCrop.this, ActivitySetting.class);
-//                        startActivity(intent);
-                        finish();
-                    } else {
-                        finish();
-                    }
+                    finish();
                 }
             }
 

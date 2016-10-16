@@ -104,19 +104,6 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
                 getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
             }
         });
-//        txtBack.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                Log.i("ddd", "close");
-//                if (G.IMAGE_NEW_GROUP.exists()) {
-//                    G.IMAGE_NEW_GROUP.delete();
-//                } else {
-//                    G.IMAGE_NEW_CHANEL.delete();
-//                }
-//                getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
-//            }
-//        });
 
         txtTitleToolbar = (TextView) view.findViewById(R.id.ng_txt_titleToolbar);
         txtTitleToolbar.setTypeface(G.arial);

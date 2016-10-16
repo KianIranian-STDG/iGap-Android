@@ -8,6 +8,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.iGap.R;
+import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.MaterialDesignTextView;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -30,9 +31,10 @@ public class ActivityNewChanelFinish extends ActivityEnhanced {
         setContentView(R.layout.activity_new_chanel_finish);
 
         txtBack = (MaterialDesignTextView) findViewById(R.id.nclf_txt_back);
-        txtBack.setOnClickListener(new View.OnClickListener() {
+        RippleView rippleBack = (RippleView) findViewById(R.id.nclf_ripple_back);
+        rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
-            public void onClick(View view) {
+            public void onComplete(RippleView rippleView) {
                 finish();
             }
         });

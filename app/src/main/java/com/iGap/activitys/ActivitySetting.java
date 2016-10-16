@@ -8,10 +8,10 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
@@ -23,9 +23,9 @@ import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -330,47 +330,13 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
 //                finish();
 //            }
 //        });
-
+        final int screenWidth = (int) (getResources().getDisplayMetrics().widthPixels / 1.7);
         // button popupMenu in toolbar
         RippleView rippleMore = (RippleView) findViewById(R.id.st_ripple_more);
         rippleMore.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
             @Override
             public void onComplete(RippleView rippleView) {
-                MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this)
-                        .items(R.array.menu_setting)
-                        .contentColor(Color.BLACK)
-                        .itemsCallback(new MaterialDialog.ListCallback() {
-                            @Override
-                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-
-                                switch (which) {
-                                    case 0:
-                                        Toast.makeText(ActivitySetting.this, "Log Out", Toast.LENGTH_SHORT).show();
-                                        break;
-                                }
-                            }
-                        }).build();
-                WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-                layoutParams.copyFrom(dialog.getWindow().getAttributes());
-                layoutParams.width = (int) getResources().getDimension(R.dimen.dp200);
-                layoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
-                dialog.getWindow().setAttributes(layoutParams);
-
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.getWindow().setDimAmount(0);
-
-                dialog.show();
-
-            }
-
-        });
-        imgMenu = (MaterialDesignTextView) findViewById(R.id.st_img_menuPopup);
-        assert txtMenu != null;
-//        imgMenu.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
 //                MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this)
 //                        .items(R.array.menu_setting)
 //                        .contentColor(Color.BLACK)
@@ -384,15 +350,68 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
 //                                        break;
 //                                }
 //                            }
-//                        }).show();
+//                        }).build();
 //                WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
 //                layoutParams.copyFrom(dialog.getWindow().getAttributes());
 //                layoutParams.width = (int) getResources().getDimension(R.dimen.dp200);
 //                layoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
 //                dialog.getWindow().setAttributes(layoutParams);
 //
-//            }
-//        });
+//                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//                dialog.getWindow().setDimAmount(0);
+//
+//                dialog.show();
+
+                LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                final View popupView = layoutInflater.inflate(R.layout.popup_window, null);
+                popupWindow = new PopupWindow(popupView, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+                popupWindow.setBackgroundDrawable(new BitmapDrawable());
+                popupWindow.setOutsideTouchable(true);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    popupWindow.setBackgroundDrawable(getResources().getDrawable(R.mipmap.shadow3, ActivitySetting.this.getTheme()));
+                } else {
+                    popupWindow.setBackgroundDrawable((getResources().getDrawable(R.mipmap.shadow3)));
+                }
+                if (popupWindow.isOutsideTouchable()) {
+                    popupWindow.dismiss();
+                }
+                popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                    @Override
+                    public void onDismiss() {
+                        //TODO do sth here on dismiss
+                    }
+                });
+
+                popupWindow.setAnimationStyle(android.R.style.Animation_InputMethod);
+                popupWindow.showAtLocation(popupView,
+                        Gravity.RIGHT | Gravity.TOP, (int) getResources().getDimension(R.dimen.dp16), (int) getResources().getDimension(R.dimen.dp32));
+//                popupWindow.showAsDropDown(v);
+
+                TextView txtSearch = (TextView) popupView.findViewById(R.id.popup_txtItem1);
+                txtSearch.setTypeface(G.arial);
+                txtSearch.setText("Log Out");
+                txtSearch.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        Toast.makeText(ActivitySetting.this, "Log Out", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                TextView txtClearHistory = (TextView) popupView.findViewById(R.id.popup_txtItem2);
+                txtClearHistory.setVisibility(View.GONE);
+
+                TextView txtDeleteChat = (TextView) popupView.findViewById(R.id.popup_txtItem3);
+                txtDeleteChat.setVisibility(View.GONE);
+
+                TextView txtMutNotification = (TextView) popupView.findViewById(R.id.popup_txtItem4);
+                txtMutNotification.setVisibility(View.GONE);
+            }
+
+        });
+        imgMenu = (MaterialDesignTextView) findViewById(R.id.st_img_menuPopup);
+        assert txtMenu != null;
+
         realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
         //fab button for set pic
         fab = (FloatingActionButton) findViewById(R.id.st_fab_setPic);

@@ -56,8 +56,6 @@ public class FragmentFullChatBackground extends Fragment {
             @Override
             public void onComplete(RippleView rippleView) {
                 getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentFullChatBackground.this).commit();
-
-
             }
         });
 

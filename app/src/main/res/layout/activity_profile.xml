@@ -121,6 +121,7 @@
             android:id="@+id/pu_txtInput_nikeName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:layout_centerHorizontal="true">
 
             <EditText
@@ -135,7 +136,6 @@
                 android:minWidth="@dimen/dp180"
                 android:paddingStart="@dimen/dp32"
                 android:paddingLeft="@dimen/dp32"
-                android:paddingRight="@dimen/dp12"
                 android:singleLine="true"
                 android:textColor="@color/black_register"
                 android:textColorHint="@color/pu_edtHintText"

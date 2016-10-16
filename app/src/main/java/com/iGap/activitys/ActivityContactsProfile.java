@@ -40,6 +40,7 @@ import com.iGap.fragments.FragmentShowImage;
 import com.iGap.interface_package.OnChatDelete;
 import com.iGap.interface_package.OnChatGetRoom;
 import com.iGap.interface_package.OnUserContactEdit;
+import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.StructSharedMedia;
 import com.iGap.proto.ProtoGlobal;
@@ -159,14 +160,14 @@ public class ActivityContactsProfile extends ActivityEnhanced {
         });
 
         txtBack = (TextView) findViewById(R.id.chi_txt_back);
-        txtBack.setOnClickListener(new View.OnClickListener() {
+        txtBack.setTypeface(G.fontawesome);
+        RippleView rippleBack = (RippleView) findViewById(R.id.chi_ripple_back);
+        rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
-            public void onClick(View view) {// button back
+            public void onComplete(RippleView rippleView) {
                 finish();
             }
         });
-
-        txtBack.setTypeface(G.fontawesome);
 
         fab = (FloatingActionButton) findViewById(R.id.chi_fab_setPic);
         fab.setOnClickListener(new View.OnClickListener() { //fab button
@@ -328,10 +329,12 @@ public class ActivityContactsProfile extends ActivityEnhanced {
 
         final int screenWidth = (int) (getResources().getDisplayMetrics().widthPixels / 1.7);
         imgMenu = (MaterialDesignTextView) findViewById(R.id.chi_img_menuPopup);
-        imgMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        RippleView rippleMenu = (RippleView) findViewById(R.id.chi_ripple_menuPopup);
 
+
+        rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+            @Override
+            public void onComplete(RippleView rippleView) {
                 LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 final View popupView = layoutInflater.inflate(R.layout.popup_window, null);
                 popupWindow = new PopupWindow(popupView, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT, true);
@@ -351,7 +354,7 @@ public class ActivityContactsProfile extends ActivityEnhanced {
 
                 popupWindow.setAnimationStyle(android.R.style.Animation_InputMethod);
                 popupWindow.showAtLocation(popupView, Gravity.RIGHT | Gravity.TOP, 10, 30);
-                popupWindow.showAsDropDown(v);
+                popupWindow.showAsDropDown(rippleView);
 
 
                 TextView txtSearch = (TextView) popupView.findViewById(R.id.popup_txtItem1);
@@ -363,7 +366,6 @@ public class ActivityContactsProfile extends ActivityEnhanced {
 
                     }
                 });
-
                 TextView txtDelete = (TextView) popupView.findViewById(R.id.popup_txtItem2);
                 txtDelete.setTypeface(G.arial);
                 txtDelete.setText("Delete");
@@ -387,10 +389,8 @@ public class ActivityContactsProfile extends ActivityEnhanced {
 
                 TextView txtMutNotification = (TextView) popupView.findViewById(R.id.popup_txtItem4);
                 txtMutNotification.setVisibility(View.GONE);
-
             }
         });
-
         vgPhoneNumber.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
