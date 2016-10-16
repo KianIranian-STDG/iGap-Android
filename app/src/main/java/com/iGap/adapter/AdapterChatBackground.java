@@ -5,8 +5,11 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +20,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activitys.ActivityChatBackground;
+import com.iGap.fragments.FragmentFullChatBackground;
 import com.iGap.module.StructAdapterBackground;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -28,14 +32,13 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
     private List<StructAdapterBackground> items;
     int selected_position = 1;
 
-    private boolean isSelect = true;
+    private final int CHOOSE = 0;
+    private final int ALL = 1;
 
     private int myResultCodeCamera = 1;
     private int myResultCodeGallery = 0;
     private Uri uriIntent;
     public static ImageLoader imageLoader;
-    private ViewHolderItem imageItem = null;
-    private ViewHolderImage imageHolder = null;
 
     public AdapterChatBackground(List<StructAdapterBackground> items) {
         this.items = items;
@@ -44,51 +47,62 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        RecyclerView.ViewHolder viewHolder;
-        if (viewType == 0) {
+        if (viewType == CHOOSE) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_background_choose, parent, false);
-            viewHolder = new ViewHolderImage(view);
+            return new ViewHolderImage(view);
         } else {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_background_image, parent, false);
-            viewHolder = new ViewHolderItem(view);
+            return new ViewHolderItem(view);
         }
-        return viewHolder;
     }
+
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         final StructAdapterBackground item = items.get(position);
 
         imageLoader = ImageLoader.getInstance();
-        if (selected_position == (position) && selected_position != 0) {
+        switch (holder.getItemViewType()) {
+            case CHOOSE: {
+                ViewHolderImage holder1 = (ViewHolderImage) holder;
+            }
+            break;
+            case ALL: {
+                Log.i("TASSSSS", "0: " + position);
+                ViewHolderItem holder2 = (ViewHolderItem) holder;
+                if (position == 1) {
 
-            imageItem = (ViewHolderItem) holder;
-            imageItem.itemView.setBackgroundColor(G.context.getResources().getColor(R.color.toolbar_background));
-            imageItem.itemView.setPadding(3, 3, 3, 3);
+                    Bitmap bmp = imageLoader.loadImageSync("file://" + G.chatBackground);
+                    holder2.img.setImageBitmap(bmp);
+                } else {
+                    Log.i("TASSSSS", "1: " + position);
+                    Bitmap bmp = imageLoader.loadImageSync("file://" + item.getPathImage());
+                    holder2.img.setImageBitmap(bmp);
 
-        } else if (position != 0) {
-            imageItem = (ViewHolderItem) holder;
-            imageItem.itemView.setBackgroundColor(Color.TRANSPARENT);
-        }
-        if ((position) == 0 && imageHolder == null) {
+                }
 
-            imageHolder = (ViewHolderImage) holder;
+                if (selected_position == position) {
+                    Log.i("TASSSSS", "2: " + position);
+                    holder2.itemView.setBackgroundColor(G.context.getResources().getColor(R.color.toolbar_background));
+                    holder2.itemView.setPadding(3, 3, 3, 3);
 
-        } else if ((position) == 1 && G.chatBackground != null) {
-
-            imageItem = (ViewHolderItem) holder;
-            Bitmap bmp = imageLoader.loadImageSync("file://" + G.chatBackground);
-            imageItem.img.setImageBitmap(bmp);
-        } else {
-            imageHolder = null;
-            imageItem = (ViewHolderItem) holder;
-            Bitmap bmp = imageLoader.loadImageSync("file://" + item.getPathImage());
-            imageItem.img.setImageBitmap(bmp);
+                } else {
+                    holder2.itemView.setBackgroundColor(Color.TRANSPARENT);
+                }
+            }
+            break;
         }
     }
+
     @Override
     public int getItemViewType(int position) {
-        return position;
+
+        if (position == 0) {
+            return CHOOSE;
+        } else {
+            return ALL;
+        }
     }
+
     @Override
     public int getItemCount() {
         return items.size();
@@ -97,6 +111,7 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
     public class ViewHolderImage extends RecyclerView.ViewHolder {
 
         private ImageView imageView;
+
         public ViewHolderImage(View itemView) {
             super(itemView);
             imageView = (ImageView) itemView.findViewById(R.id.imgBackgroundImage);
@@ -134,6 +149,7 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
             });
         }
     }
+
     public class ViewHolderItem extends RecyclerView.ViewHolder {
 
         private ImageView img;
@@ -151,6 +167,12 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
                     selected_position = getLayoutPosition();
                     notifyItemChanged(selected_position);
                     StructAdapterBackground item = items.get(getPosition());
+
+                    FragmentFullChatBackground fragmentActivity = new FragmentFullChatBackground();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("IMAGE", item.getPathImage());
+                    fragmentActivity.setArguments(bundle);
+                    ((FragmentActivity) G.currentActivity).getSupportFragmentManager().beginTransaction().replace(R.id.stcb_root, fragmentActivity).commit();
 
                     ActivityChatBackground.savePath = item.getPathImage();
                     // Do your another stuff for your onClick

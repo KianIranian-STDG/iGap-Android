@@ -766,7 +766,8 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
     private void initComponent() {
         toolbar = (LinearLayout) findViewById(R.id.toolbar);
-        ImageView imvBackButton = (ImageView) findViewById(R.id.chl_imv_back_Button);
+        MaterialDesignTextView imvBackButton = (MaterialDesignTextView) findViewById(R.id.chl_imv_back_Button);
+
         RippleView rippleBackButton = (RippleView) findViewById(R.id.chl_ripple_back_Button);
 
         final Realm realm = Realm.getDefaultInstance();
@@ -882,7 +883,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         imvUserPicture = (ImageView) findViewById(R.id.chl_imv_user_picture);
 
         final int screenWidth = (int) (getResources().getDisplayMetrics().widthPixels / 1.7);
-        ImageView imvMenuButton = (ImageView) findViewById(R.id.chl_imv_menu_button);
+        MaterialDesignTextView imvMenuButton = (MaterialDesignTextView) findViewById(R.id.chl_imv_menu_button);
 
         RippleView rippleMenuButton = (RippleView) findViewById(R.id.chl_ripple_menu_button);
         rippleMenuButton.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {

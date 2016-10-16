@@ -40,13 +40,15 @@
                     app:rv_rippleDuration="150"
                     app:rv_ripplePadding="5dp">
 
-                    <ImageView
+                    <com.iGap.module.MaterialDesignTextView
                         android:id="@+id/chl_imv_back_Button"
-                        android:layout_width="@dimen/dp48"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp12"
-                        android:src="@drawable/left_arrow_key" />
+                        android:layout_width="@dimen/dp60"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="@string/md_back_arrow"
+                        android:textColor="@color/whit_background"
+                        android:textSize="@dimen/sp22" />
+
                 </com.iGap.libs.rippleeffect.RippleView>
 
                 <LinearLayout
@@ -121,13 +123,16 @@
                     app:rv_rippleDuration="150"
                     app:rv_ripplePadding="5dp">
 
-                    <ImageView
+                    <com.iGap.module.MaterialDesignTextView
                         android:id="@+id/chl_imv_menu_button"
-                        android:layout_width="@dimen/dp48"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp12"
-                        android:src="@drawable/show_more_button_with_three_dots" />
+                        android:layout_width="@dimen/dp60"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="right"
+                        android:gravity="center"
+                        android:text="@string/md_show_more_button"
+                        android:textColor="@color/whit_background"
+                        android:textSize="@dimen/sp22" />
+
                 </com.iGap.libs.rippleeffect.RippleView>
             </LinearLayout>
 
@@ -232,28 +237,28 @@
         <LinearLayout
             android:id="@+id/ac_ll_search_message"
             android:layout_width="match_parent"
+            android:layout_height="@dimen/dp60"
             android:gravity="center"
             android:orientation="horizontal"
-            android:visibility="gone"
-            android:layout_height="@dimen/dp60">
+            android:visibility="gone">
 
 
             <EditText
+                android:id="@+id/ac_edt_search_message"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textCursorDrawable="@drawable/white_cursor_color"
                 android:padding="@dimen/dp8"
-                android:id="@+id/ac_edt_search_message" />
+                android:textCursorDrawable="@drawable/white_cursor_color" />
 
             <Button
+                android:id="@+id/ac_btn_close_layout_search_message"
                 android:layout_width="@dimen/dp40"
                 android:layout_height="match_parent"
                 android:background="@null"
                 android:text="@string/md_close_button"
-                android:textSize="@dimen/sp18"
                 android:textColor="@color/white"
-                android:id="@+id/ac_btn_close_layout_search_message" />
+                android:textSize="@dimen/sp18" />
         </LinearLayout>
 
         <include
@@ -334,10 +339,10 @@
         android:visibility="gone">
 
         <View
+            android:id="@+id/view"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/gray"
-            android:id="@+id/view" />
+            android:background="@color/gray" />
 
         <LinearLayout
             android:layout_width="match_parent"

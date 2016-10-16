@@ -27,7 +27,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -48,6 +47,7 @@ import com.iGap.interface_package.OnUserProfileSetNickNameResponse;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.FileUploadStructure;
 import com.iGap.module.HelperDecodeFile;
+import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.StructSharedMedia;
 import com.iGap.module.Utils;
@@ -85,7 +85,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
 
     private TextView txtBack, txtMenu, txtMessageTextSize, txtAutoDownloadData, txtAutoDownloadWifi, txtChatBackground,
             txtAutoDownloadRoaming, txtKeepMedia, txtLanguage, txtSizeClearCach;
-    private ImageView imgMenu;
+    private MaterialDesignTextView imgMenu;
 
     private RelativeLayout ltClearCache;
 
@@ -227,6 +227,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
                         })
                         .negativeText("CANCEL")
                         .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT)
+                        .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT)
                         .input("please Enter a NickName", txtNickName.getText().toString(), new MaterialDialog.InputCallback() {
                             @Override
                             public void onInput(MaterialDialog dialog, CharSequence input) {
@@ -364,7 +365,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
             }
 
         });
-        imgMenu = (ImageView) findViewById(R.id.st_img_menuPopup);
+        imgMenu = (MaterialDesignTextView) findViewById(R.id.st_img_menuPopup);
         assert txtMenu != null;
 //        imgMenu.setOnClickListener(new View.OnClickListener() {
 //            @Override

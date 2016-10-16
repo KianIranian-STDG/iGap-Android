@@ -27,7 +27,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,6 +40,7 @@ import com.iGap.fragments.FragmentShowImage;
 import com.iGap.interface_package.OnChatDelete;
 import com.iGap.interface_package.OnChatGetRoom;
 import com.iGap.interface_package.OnUserContactEdit;
+import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.StructSharedMedia;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmChatHistory;
@@ -80,7 +80,7 @@ public class ActivityContactsProfile extends ActivityEnhanced {
     private TextView txtLastSeen, txtUserName, titleToolbar, titleLastSeen, txtBlockContact, txtClearChat, txtBack, txtPhoneNumber, txtNotifyAndSound, txtNickname;
     private ViewGroup vgPhoneNumber, vgSharedMedia, layoutNickname;
     private CircleImageView imgUser;
-    private ImageView imgMenu;
+    private MaterialDesignTextView imgMenu;
 
     private FloatingActionButton fab;
     private PopupWindow popupWindow;
@@ -327,7 +327,7 @@ public class ActivityContactsProfile extends ActivityEnhanced {
         });
 
         final int screenWidth = (int) (getResources().getDisplayMetrics().widthPixels / 1.7);
-        imgMenu = (ImageView) findViewById(R.id.chi_img_menuPopup);
+        imgMenu = (MaterialDesignTextView) findViewById(R.id.chi_img_menuPopup);
         imgMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

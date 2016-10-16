@@ -1,23 +1,20 @@
 package com.iGap.activitys;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AdapterChatBackground;
+import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.HelperCopyFile;
 import com.iGap.module.MaterialDesignTextView;
-import com.iGap.module.SHP_SETTING;
 import com.iGap.module.StructAdapterBackground;
 
 import java.io.File;
@@ -32,6 +29,7 @@ public class ActivityChatBackground extends ActivityEnhanced {
     public static Uri uriIntent;
     private File addFile;
     private int spanCount = 3;
+    private RippleView rippleBack;
 
     public MaterialDesignTextView txtSet;
 
@@ -55,28 +53,13 @@ public class ActivityChatBackground extends ActivityEnhanced {
         setContentView(R.layout.activity_chat_background);
 
         txtBack = (TextView) findViewById(R.id.stcb_txt_back);
+        rippleBack = (RippleView) findViewById(R.id.stcb_ripple_back);
         txtBack.setTypeface(G.fontawesome);
 
-        txtBack.setOnClickListener(new View.OnClickListener() {
+        rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
-            public void onClick(View view) {
-
+            public void onComplete(RippleView rippleView) {
                 finish();
-            }
-        });
-
-        txtSet = (MaterialDesignTextView) findViewById(R.id.stcb_txt_set);
-        txtSet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, savePath);
-                editor.apply();
-                startActivity(new Intent(ActivityChatBackground.this, ActivitySetting.class));
-                finish();
-
             }
         });
 

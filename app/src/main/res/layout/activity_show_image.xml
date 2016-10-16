@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/black"
     android:layoutDirection="ltr">
 
@@ -27,14 +27,15 @@
             app:rv_centered="true"
             app:rv_rippleDuration="150"
             app:rv_ripplePadding="5dp">
-        <Button
-            android:id="@+id/asi_btn_back"
-            android:layout_width="@dimen/dp60"
-            android:layout_height="match_parent"
-            android:background="@null"
-            android:text="@string/fa_chevron_left"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/sp20" />
+
+            <Button
+                android:id="@+id/asi_btn_back"
+                android:layout_width="@dimen/dp60"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:text="@string/fa_chevron_left"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp20" />
         </com.iGap.libs.rippleeffect.RippleView>
 
         <TextView
@@ -57,42 +58,43 @@
             app:rv_centered="true"
             app:rv_rippleDuration="150"
             app:rv_ripplePadding="5dp">
-        <Button
-            android:id="@+id/asi_btn_menu"
-            android:layout_width="@dimen/dp60"
-            android:layout_height="match_parent"
-            android:background="@null"
-            android:text="@string/fa_ellipsis_v"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/sp20" />
+
+            <Button
+                android:id="@+id/asi_btn_menu"
+                android:layout_width="@dimen/dp60"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:text="@string/fa_ellipsis_v"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp20" />
         </com.iGap.libs.rippleeffect.RippleView>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#55000000"
         android:layout_alignParentBottom="true"
-        android:paddingLeft="@dimen/dp32"
+        android:background="#55000000"
+        android:orientation="vertical"
         android:paddingBottom="@dimen/dp4"
-        android:orientation="vertical">
+        android:paddingLeft="@dimen/dp32">
 
 
         <TextView
+            android:id="@+id/asi_txt_image_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/sp14"
-            android:textColor="@android:color/white"
             android:text="image 232"
-            android:id="@+id/asi_txt_image_name" />
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/sp14" />
 
         <TextView
+            android:id="@+id/asi_txt_image_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/sp14"
-            android:textColor="@android:color/white"
             android:text="2016/5/19 at 11:44"
-            android:id="@+id/asi_txt_image_date" />
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/sp14" />
     </LinearLayout>
 
 

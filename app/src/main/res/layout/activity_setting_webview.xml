@@ -92,7 +92,8 @@
                     app:rv_centered="true"
                     app:rv_rippleDuration="150"
                     app:rv_ripplePadding="5dp">
-                <com.iGap.module.MaterialDesignTextView
+
+                    <com.iGap.module.MaterialDesignTextView
                     android:id="@+id/stfaq_txt_menuPopup"
                     android:layout_width="@dimen/dp60"
                     android:layout_height="match_parent"

@@ -106,7 +106,6 @@ public class FragmentNotification extends Fragment {
                                         txtPopupNotification.setText("Enable");
                                         editor.putString(SHP_SETTING.KEY_NTSG_NOTIFICATIONS_GROUP, "Enable");
                                         editor.apply();
-
                                         break;
                                     case 2:
                                         txtPopupNotification.setText("Disable");
@@ -387,7 +386,7 @@ public class FragmentNotification extends Fragment {
 
     private void callObject(View view) {
 
-        txtBack = (TextView) view.findViewById(R.id.st_txt_back);
+        txtBack = (TextView) view.findViewById(R.id.ntg_txt_back);
 
         txtPopupNotification = (TextView) view.findViewById(R.id.ntg_txt_desc_notifications);
         ltPopupNotification = (ViewGroup) view.findViewById(R.id.ntg_layout_notifications);

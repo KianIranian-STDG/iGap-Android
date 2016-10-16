@@ -20,7 +20,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,7 +32,7 @@ public class ActivityProfileChannel extends AppCompatActivity {
 
     private AppBarLayout appBarLayout;
     private TextView txtNameChannel, txtDescription, txtChannelLink, txtPhoneNumber, txtNotifyAndSound, txtDeleteCache, txtLeaveChannel, txtReport;
-    private ImageView imgPupupMenul;
+    private MaterialDesignTextView imgPupupMenul;
     private de.hdodenhof.circleimageview.CircleImageView imgCircleImageView;
     private FloatingActionButton fab;
     private PopupWindow popupWindow;
@@ -72,7 +71,7 @@ public class ActivityProfileChannel extends AppCompatActivity {
             }
         });
         final int screenWidth = (int) (getResources().getDisplayMetrics().widthPixels / 1.7);
-        imgPupupMenul = (ImageView) findViewById(R.id.pch_img_menuPopup);
+        imgPupupMenul = (MaterialDesignTextView) findViewById(R.id.pch_img_menuPopup);
         imgPupupMenul.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

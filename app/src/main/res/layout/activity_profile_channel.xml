@@ -83,16 +83,15 @@
                         android:textColor="@color/whit_background"
                         android:textSize="@dimen/sp22" />
 
-
-                    <ImageView
+                    <com.iGap.module.MaterialDesignTextView
                         android:id="@+id/pch_img_menuPopup"
-                        android:layout_width="@dimen/dp32"
+                        android:layout_width="@dimen/dp60"
                         android:layout_height="match_parent"
                         android:layout_alignParentRight="true"
-                        android:layout_marginRight="@dimen/dp4"
                         android:gravity="center"
-                        android:src="@mipmap/popup_menu"
-                        android:tint="@color/whit_background" />
+                        android:text="@string/md_show_more_button"
+                        android:textColor="@color/whit_background"
+                        android:textSize="@dimen/sp22" />
 
                 </RelativeLayout>
             </android.support.v7.widget.Toolbar>
@@ -152,8 +151,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:maxLength="700"
                     android:lineSpacingMultiplier="1.2"
+                    android:maxLength="700"
                     android:text="@string/test"
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/sp18"

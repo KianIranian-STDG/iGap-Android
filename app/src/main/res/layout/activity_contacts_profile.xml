@@ -109,15 +109,26 @@
                         android:textSize="@dimen/sp22" />
 
 
-                    <ImageView
+                    <!--<ImageView-->
+                    <!--android:id="@+id/chi_img_menuPopup"-->
+                    <!--android:layout_width="@dimen/dp32"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_alignParentRight="true"-->
+                    <!--android:layout_marginRight="@dimen/dp4"-->
+                    <!--android:gravity="center"-->
+                    <!--android:src="@mipmap/popup_menu"-->
+                    <!--android:tint="@color/whit_background" />-->
+
+                    <com.iGap.module.MaterialDesignTextView
                         android:id="@+id/chi_img_menuPopup"
-                        android:layout_width="@dimen/dp32"
-                        android:layout_height="match_parent"
+                        android:layout_width="@dimen/dp60"
                         android:layout_alignParentRight="true"
-                        android:layout_marginRight="@dimen/dp4"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="right"
                         android:gravity="center"
-                        android:src="@mipmap/popup_menu"
-                        android:tint="@color/whit_background" />
+                        android:text="@string/md_show_more_button"
+                        android:textColor="@color/whit_background"
+                        android:textSize="@dimen/sp22" />
 
                 </RelativeLayout>
             </android.support.v7.widget.Toolbar>

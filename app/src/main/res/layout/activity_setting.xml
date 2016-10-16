@@ -81,13 +81,16 @@
                         app:rv_rippleDuration="150"
                         app:rv_ripplePadding="5dp">
 
-                        <ImageView
+                        <com.iGap.module.MaterialDesignTextView
                             android:id="@+id/st_img_menuPopup"
-                            android:layout_width="@dimen/dp48"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="@dimen/dp16"
-                            android:paddingRight="@dimen/dp12"
-                            android:src="@drawable/show_more_button_with_three_dots" />
+                            android:layout_width="@dimen/dp60"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="right"
+                            android:gravity="center"
+                            android:text="@string/md_show_more_button"
+                            android:textColor="@color/whit_background"
+                            android:textSize="@dimen/sp22" />
+
                     </com.iGap.libs.rippleeffect.RippleView>
                 </RelativeLayout>
             </android.support.v7.widget.Toolbar>
@@ -164,7 +167,7 @@
                 android:paddingLeft="@dimen/dp16"
                 android:paddingRight="@dimen/dp16"
                 android:paddingTop="@dimen/dp8"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -375,7 +378,7 @@
                 android:background="@android:color/white"
                 android:orientation="vertical"
                 android:paddingTop="@dimen/dp8"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <TextView
 
@@ -546,7 +549,7 @@
                 android:background="@color/st_background2"
                 android:orientation="vertical"
                 android:paddingTop="@dimen/dp8"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <TextView
 
@@ -737,7 +740,6 @@
                     android:textSize="@dimen/sp22"
                     android:textStyle="bold" />
 
-
                 <TextView
                     android:id="@+id/st_txt_askQuestion"
                     android:layout_width="match_parent"
@@ -762,7 +764,7 @@
                     android:padding="@dimen/dp16"
                     android:paddingLeft="@dimen/dp16"
                     android:paddingRight="@dimen/dp16"
-                    android:text="@string/st_igap_faq"
+                    android:text="@string/st_About_iGap"
                     android:textColor="@color/black_register"
                     android:textSize="@dimen/sp18"
                     android:textStyle="normal" />

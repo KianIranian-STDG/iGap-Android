@@ -61,8 +61,8 @@
                     android:layout_width="@dimen/dp60"
                     android:layout_height="match_parent"
                     android:background="@null"
-                    android:paddingTop="@dimen/dp12"
                     android:text="@string/fa_ellipsis_v"
+                    android:gravity="center"
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/sp20" />
 
@@ -97,7 +97,7 @@
 
             <Button
                 android:id="@+id/asm_btn_close_layout"
-                android:layout_width="@dimen/dp48"
+                android:layout_width="@dimen/dp60"
                 android:layout_height="match_parent"
                 android:background="@null"
                 android:paddingLeft="@dimen/dp12"
@@ -132,6 +132,7 @@
                 android:layout_height="match_parent"
                 android:background="@null"
                 android:text="@string/fa_trash_o"
+                android:gravity="center"
                 android:textColor="@color/gray"
                 android:textSize="@dimen/sp20" />
 
