@@ -39,6 +39,10 @@
     <string name="md_shuffle_mode">\uf250</string>
     <string name="md_synchronization_arrows">\uf262</string>
 
+    <string name="md_expand_arrow">\uf176</string>
+    <string name="md_downwards_arrow">\uf16a</string>
+
+
     <string name="fa_stop">&#xf04d;</string>
     <string name="fa_menu_bar">&#xf0c9;</string>
     <string name="fa_bell_slash_o">&#xf1f7;</string>
@@ -406,6 +410,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="of">"of "</string>
 
 
 </resources>

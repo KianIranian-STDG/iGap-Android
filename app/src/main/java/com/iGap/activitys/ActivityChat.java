@@ -222,6 +222,13 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     Button btnCloseLayoutSearch;
     EditText edtSearchMessage;
 
+    LinearLayout ll_navigate_Message;
+    Button btnUpMessage;
+    Button btnDownMessage;
+    TextView txtMessageCounter;
+    int messageCounter = 0;
+    int selectedPosition = 0;
+
     public static ActivityChat activityChat;
 
     private MessagesAdapter<AbstractMessage> mAdapter;
@@ -765,7 +772,52 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         }
     }
 
+    private void selectMessage(int position) {
+        //  mAdapter.select(position, true);// TODO: 10/16/2016  work on blue back ground selected item
+    }
+
+    private void deSelectMessage(int position) {
+        // mAdapter.deselect(position);
+    }
+
     private void initComponent() {
+
+        ll_navigate_Message = (LinearLayout) findViewById(R.id.ac_ll_message_navigation);
+        btnUpMessage = (Button) findViewById(R.id.ac_btn_message_up);
+        btnUpMessage.setTypeface(G.flaticon);
+        btnDownMessage = (Button) findViewById(R.id.ac_btn_message_down);
+        btnDownMessage.setTypeface(G.flaticon);
+        txtMessageCounter = (TextView) findViewById(R.id.ac_txt_message_counter);
+
+        btnUpMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (selectedPosition > 0) {
+                    deSelectMessage(selectedPosition);
+                    selectedPosition--;
+                    selectMessage(selectedPosition);
+                    recyclerView.scrollToPosition(selectedPosition);
+                    txtMessageCounter.setText(selectedPosition + 1 + " " + getString(R.string.of) + messageCounter);
+                }
+
+            }
+        });
+
+        btnDownMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (selectedPosition < messageCounter - 1) {
+                    deSelectMessage(selectedPosition);
+                    selectedPosition++;
+                    selectMessage(selectedPosition);
+                    recyclerView.scrollToPosition(selectedPosition);
+                    txtMessageCounter.setText(selectedPosition + 1 + " " + getString(R.string.of) + messageCounter);
+                }
+            }
+        });
+
+
         toolbar = (LinearLayout) findViewById(R.id.toolbar);
         MaterialDesignTextView imvBackButton = (MaterialDesignTextView) findViewById(R.id.chl_imv_back_Button);
 
@@ -826,9 +878,13 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         btnCloseLayoutSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                deSelectMessage(selectedPosition);
                 edtSearchMessage.setText("");
                 ll_Search.setVisibility(View.GONE);
                 findViewById(R.id.toolbarContainer).setVisibility(View.VISIBLE);
+                ll_navigate_Message.setVisibility(View.GONE);
+                viewAttachFile.setVisibility(View.VISIBLE);
+
             }
         });
 
@@ -842,6 +898,24 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                 mAdapter.filter(charSequence);
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        messageCounter = mAdapter.getAdapterItemCount();
+
+                        if (messageCounter > 0) {
+                            selectedPosition = messageCounter - 1;
+                            recyclerView.scrollToPosition(selectedPosition);
+                            txtMessageCounter.setText(messageCounter + " " + getString(R.string.of) + messageCounter);
+                            selectMessage(selectedPosition);
+                        } else {
+                            txtMessageCounter.setText("0 " + getString(R.string.of) + messageCounter);
+                            selectedPosition = 0;
+                        }
+                    }
+                }, 1000);
+
 
             }
 
@@ -926,6 +1000,8 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                         findViewById(R.id.toolbarContainer).setVisibility(View.GONE);
                         ll_Search.setVisibility(View.VISIBLE);
                         popupWindow.dismiss();
+                        ll_navigate_Message.setVisibility(View.VISIBLE);
+                        viewAttachFile.setVisibility(View.GONE);
                         edtSearchMessage.requestFocus();
                     }
                 });
