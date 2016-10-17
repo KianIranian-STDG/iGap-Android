@@ -108,7 +108,15 @@ public class ActivityContactsProfile extends ActivityEnhanced {
 
         RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", userId).findFirst();
         if (realmRegisteredInfo.getLastAvatar() != null) {
-            avatarPath = realmRegisteredInfo.getLastAvatar().getFile().getLocalThumbnailPath();
+
+            String mainFilePath = realmRegisteredInfo.getLastAvatar().getFile().getLocalFilePath();
+
+            if (mainFilePath != null && new File(mainFilePath).exists()) { // if main image is exist showing that
+                avatarPath = mainFilePath;
+            } else {
+                avatarPath = realmRegisteredInfo.getLastAvatar().getFile().getLocalThumbnailPath();
+            }
+
             avatarList = realmRegisteredInfo.getAvatar();
         }
 
@@ -623,7 +631,6 @@ public class ActivityContactsProfile extends ActivityEnhanced {
             if (avatarList.get(i).getFile() != null) {
                 StructMessageInfo item = new StructMessageInfo();
                 item.attachment = new StructMessageAttachment(avatarList.get(i).getFile());
-                Log.i("VVV", "instantiateItem avatarList.get(i).getFile() : " + avatarList.get(i).getFile().getLocalFilePath());
                 items.add(item);
             }
         }

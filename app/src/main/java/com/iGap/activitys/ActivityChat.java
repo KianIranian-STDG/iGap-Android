@@ -149,7 +149,6 @@ import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestChatDelete;
 import com.iGap.request.RequestChatDeleteMessage;
 import com.iGap.request.RequestChatEditMessage;
-import com.iGap.request.RequestClientGetRoomHistory;
 import com.iGap.request.RequestFileDownload;
 import com.iGap.request.RequestFileUpload;
 import com.iGap.request.RequestFileUploadInit;
@@ -1492,7 +1491,14 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         Realm realm = Realm.getDefaultInstance();
         RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", chatPeerId).findFirst();
         if (realmRegisteredInfo != null && realmRegisteredInfo.getAvatar() != null && realmRegisteredInfo.getLastAvatar() != null) {
-            avatarPath = realmRegisteredInfo.getLastAvatar().getFile().getLocalThumbnailPath();
+
+            String mainFilePath = realmRegisteredInfo.getLastAvatar().getFile().getLocalFilePath();
+
+            if (mainFilePath != null && new File(mainFilePath).exists()) { // if main image is exist showing that
+                avatarPath = mainFilePath;
+            } else {
+                avatarPath = realmRegisteredInfo.getLastAvatar().getFile().getLocalThumbnailPath();
+            }
         }
 
         //Set Avatar For Chat,Group,Channel
@@ -2250,7 +2256,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     AbstractMessage item = mAdapter.getAdapterItem(p);
                     // not time message
                     if (!item.mMessage.senderID.equalsIgnoreCase("-1")) {
-                        new RequestClientGetRoomHistory().getRoomHistory(mRoomId, Long.parseLong(item.mMessage.messageID), Long.toString(mRoomId));
+                        // new RequestClientGetRoomHistory().getRoomHistory(mRoomId, Long.parseLong(item.mMessage.messageID), Long.toString(mRoomId));
                         break;
                     }
                 }
