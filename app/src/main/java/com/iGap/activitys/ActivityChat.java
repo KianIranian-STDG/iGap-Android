@@ -1777,6 +1777,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     filePath = data.getData().toString();
                     fileName = new File(filePath).getName();
                     fileSize = new File(filePath).length();
+                    imageDimens = Utils.getImageDimens(this, filePath);
                     if (isMessageWrote()) {
                         messageType = ProtoGlobal.RoomMessageType.IMAGE_TEXT;
                     } else {

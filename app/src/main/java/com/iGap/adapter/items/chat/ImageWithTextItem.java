@@ -3,14 +3,17 @@ package com.iGap.adapter.items.chat;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.FrameLayout;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.helper.ImageHelper;
 import com.iGap.interface_package.OnMessageViewClick;
 import com.iGap.module.EmojiTextView;
+import com.iGap.module.FileUtils;
+import com.iGap.module.Utils;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
@@ -44,8 +47,11 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
     public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        ((FrameLayout) holder.image.getParent()).setMinimumWidth(mMessage.attachment.width);
-        ((FrameLayout) holder.image.getParent()).setMinimumHeight(mMessage.attachment.height);
+        if (mMessage.attachment != null) {
+            int[] dimens = Utils.scaleDimenWithSavedRatio(holder.itemView.getContext(), mMessage.attachment.width, mMessage.attachment.height);
+            ((ViewGroup) holder.image.getParent()).setLayoutParams(new LinearLayout.LayoutParams(dimens[0], dimens[1]));
+            holder.image.getParent().requestLayout();
+        }
 
         setTextIfNeeded(holder.messageText);
 
@@ -69,7 +75,7 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
 
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                holder.image.setImageBitmap(ImageHelper.getRoundedCornerBitmap(loadedImage, (int) holder.itemView.getResources().getDimension(R.dimen.chatMessageImageCorner)));
+                holder.image.setImageBitmap(Utils.scaleImageWithSavedRatio(view.getContext(), FileUtils.decodeFile(FileUtils.toByteArray(ImageHelper.getRoundedCornerBitmap(loadedImage, (int) holder.itemView.getResources().getDimension(R.dimen.chatMessageImageCorner))))));
             }
 
             @Override

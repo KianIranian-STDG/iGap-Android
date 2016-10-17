@@ -11,6 +11,8 @@ import android.net.Uri;
 import android.util.DisplayMetrics;
 import android.view.Display;
 
+import com.iGap.R;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -225,11 +227,17 @@ public final class Utils {
         int bitmapWidth = bitmap.getWidth();
         int bitmapHeight = bitmap.getHeight();
         int nh = (int) (bitmapHeight * (size / bitmapWidth));
+        float maxWidth = context.getResources().getDimension(R.dimen.dp300) - context.getResources().getDimension(R.dimen.messageContainerPadding);
+
         if (nh > bitmapHeight) {
             nh = bitmapHeight * density;
         }
         if (size > bitmapWidth) {
             size = bitmapWidth * density;
+        }
+
+        if (size > maxWidth) {
+            size = maxWidth;
         }
         return Bitmap.createScaledBitmap(bitmap, (int) size, nh, true);
     }
@@ -240,12 +248,19 @@ public final class Utils {
         float size = Math.min(display.widthPixels, display.heightPixels) * 0.9f * density;
 
         int nh = (int) (height * (size / width));
+        float maxWidth = context.getResources().getDimension(R.dimen.dp300) - context.getResources().getDimension(R.dimen.messageContainerPadding);
+
         if (nh > height) {
             nh = height * density;
         }
         if (size > width) {
             size = width * density;
         }
+
+        if (size > maxWidth) {
+            size = maxWidth;
+        }
+
         return new int[]{(int) size, nh};
     }
 
@@ -257,11 +272,17 @@ public final class Utils {
         int bitmapWidth = bitmap.getWidth();
         int bitmapHeight = bitmap.getHeight();
         int nh = (int) (bitmapHeight * (size / bitmapWidth));
+        float maxWidth = context.getResources().getDimension(R.dimen.dp300) - context.getResources().getDimension(R.dimen.messageContainerPadding);
+
         if (nh > bitmapHeight) {
             nh = bitmapHeight * density;
         }
         if (size > bitmapWidth) {
             size = bitmapWidth * density;
+        }
+
+        if (size > maxWidth) {
+            size = maxWidth;
         }
         return Bitmap.createScaledBitmap(bitmap, (int) size, nh, true);
     }
