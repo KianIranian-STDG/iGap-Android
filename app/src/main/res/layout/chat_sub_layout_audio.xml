@@ -5,8 +5,8 @@
              android:id="@+id/chatSubLayoutAudio"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
-             android:maxWidth="@dimen/dp300"
-             android:layout_marginBottom="@dimen/dp4">
+             android:layout_marginBottom="@dimen/dp4"
+             android:maxWidth="@dimen/dp300">
 
     <LinearLayout
         android:id="@+id/mainContainer"
@@ -58,8 +58,8 @@
                     <include
                         android:id="@+id/progress"
                         layout="@layout/msg_progress_item"
-                        android:layout_width="64dp"
-                        android:layout_height="64dp"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
                         android:layout_gravity="center"/>
 
                     <TextView
@@ -67,7 +67,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom|center_horizontal"
-                        android:layout_marginBottom="@dimen/dp4"
+                        android:layout_marginBottom="2dp"
                         android:singleLine="true"
                         android:text="3.2 mb"
                         android:textAllCaps="true"
