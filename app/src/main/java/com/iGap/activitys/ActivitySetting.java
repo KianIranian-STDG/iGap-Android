@@ -49,7 +49,7 @@ import com.iGap.module.FileUploadStructure;
 import com.iGap.module.HelperDecodeFile;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.SHP_SETTING;
-import com.iGap.module.StructSharedMedia;
+import com.iGap.module.StructMessageInfo;
 import com.iGap.module.Utils;
 import com.iGap.proto.ProtoFileUploadStatus;
 import com.iGap.proto.ProtoGlobal;
@@ -408,17 +408,13 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
             }
         });
 
-        for (RealmAvatarPath r : realmAvatarPaths) {
-
-            Log.i("RRRRR", "onCreate: " + r.getId());
-        }
         circleImageView = (CircleImageView) findViewById(R.id.st_img_circleImage);
         RippleView rippleImageView = (RippleView) findViewById(R.id.st_ripple_circleImage);
         rippleImageView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
             @Override
             public void onComplete(RippleView rippleView) {
-                ArrayList<StructSharedMedia> items = setItem(new File(G.DIR_IMAGE_USER));
+                ArrayList<StructMessageInfo> items = setItem();
                 Collections.reverse(items);
 
                 Fragment fragment = FragmentShowImage.newInstance();
@@ -1118,6 +1114,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
                     final RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                     RealmAvatarPath realmAvatarPath = realm.createObject(RealmAvatarPath.class);
                     realmAvatarPath.setId(idAvatar + 1);
+                    Log.i("CCC", "pathSaveImage : " + pathSaveImage);
                     realmAvatarPath.setPathImage(pathSaveImage);
                     realmUserInfo.getAvatarPath().add(realmAvatarPath);
 
@@ -1203,16 +1200,16 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
 
     }
 
-    public ArrayList<StructSharedMedia> setItem(File f) {
+    public ArrayList<StructMessageInfo> setItem() {
 
-        ArrayList<StructSharedMedia> items = new ArrayList<>();
+        ArrayList<StructMessageInfo> items = new ArrayList<>();
 
         Realm realm = Realm.getDefaultInstance();
         RealmResults<RealmAvatarPath> realmItemList = realm.where(RealmAvatarPath.class).findAll();
         for (int i = 0; i < realmItemList.size(); i++) {
-            StructSharedMedia item = new StructSharedMedia();
+            StructMessageInfo item = new StructMessageInfo();
             item.filePath = realmItemList.get(i).getPathImage();
-            item.id = realmItemList.get(i).getId();
+            item.messageID = realmItemList.get(i).getId() + "";
             items.add(item);
         }
 
@@ -1231,7 +1228,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
     @Override
     protected void onResume() {
         super.onResume();
-        Log.i("ZZZZ", "onResume: ");
     }
 
     private int getIndexRealm() {

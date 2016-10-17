@@ -38,6 +38,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import io.meness.github.messageprogress.MessageProgress;
@@ -166,8 +167,12 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
         viewPager.setCurrentItem(selectedFile);
 
         txtImageNumber.setText(selectedFile + 1 + " of " + listSize);
-        txtImageName.setText(list.get(selectedFile).attachment.name);
-        txtImageDate.setText(TimeUtils.toLocal(list.get(selectedFile).time, G.CHAT_MESSAGE_TIME));
+        if (list.get(selectedFile).attachment != null) {
+            txtImageName.setText(list.get(selectedFile).attachment.name);
+        }
+        if (list.get(selectedFile).time != 0) {
+            txtImageDate.setText(TimeUtils.toLocal(list.get(selectedFile).time, G.CHAT_MESSAGE_TIME));
+        }
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -180,8 +185,14 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
                 StructMessageInfo sharedMedia = list.get(position);
 
                 txtImageNumber.setText(position + 1 + " of " + listSize);
-                txtImageName.setText(sharedMedia.attachment.name);
-                txtImageDate.setText(TimeUtils.toLocal(list.get(selectedFile).time, G.CHAT_MESSAGE_TIME));
+
+                if (sharedMedia.attachment != null) {
+                    txtImageName.setText(sharedMedia.attachment.name);
+                }
+
+                if (list.get(selectedFile).time != 0) {
+                    txtImageDate.setText(TimeUtils.toLocal(list.get(selectedFile).time, G.CHAT_MESSAGE_TIME));
+                }
             }
 
             @Override
@@ -193,9 +204,9 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
         viewPager.setPageTransformer(false, new ViewPager.PageTransformer() {
             @Override
             public void transformPage(View view, float position) {
-                final float normalizedposition = Math.abs(Math.abs(position) - 1);
-                view.setScaleX(normalizedposition / 2 + 0.5f);
-                view.setScaleY(normalizedposition / 2 + 0.5f);
+                final float normalizedPosition = Math.abs(Math.abs(position) - 1);
+                view.setScaleX(normalizedPosition / 2 + 0.5f);
+                view.setScaleY(normalizedPosition / 2 + 0.5f);
             }
         });
     }
@@ -355,6 +366,13 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
                 }
 
                 updateProgressIfNeeded(layout, media);
+            } else if (media.filePath != null) {
+                if (new File(media.filePath).exists()) {
+                    if (layout.findViewById(R.id.progress) != null) {
+                        layout.findViewById(R.id.progress).setVisibility(View.GONE);
+                    }
+                    onLoadFromLocal(touchImageView, media.filePath, LocalFileType.FILE);
+                }
             }
 
             ((ViewGroup) container).addView(layout);

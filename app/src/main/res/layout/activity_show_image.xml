@@ -16,7 +16,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp60"
         android:background="#55000000"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center">
 
         <com.iGap.libs.rippleeffect.RippleView
             android:id="@+id/asi_ripple_back"
@@ -84,7 +85,6 @@
             android:id="@+id/asi_txt_image_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="image 232"
             android:textColor="@android:color/white"
             android:textSize="@dimen/sp14" />
 
@@ -92,7 +92,6 @@
             android:id="@+id/asi_txt_image_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="2016/5/19 at 11:44"
             android:textColor="@android:color/white"
             android:textSize="@dimen/sp14" />
     </LinearLayout>

@@ -14,7 +14,7 @@ public class RealmGroupRoom extends RealmObject {
     private String description;
     private int avatarCount;
     private RealmAvatar avatar;
-    private RealmList<RealmMember> members; //TODO [Saeed Mozaffari] [2016-10-04 2:41 PM] - RealmMember joda shavad
+    private RealmList<RealmMember> members;
 
     public GroupChatRole getRole() {
         return (role != null) ? GroupChatRole.valueOf(role) : null;
