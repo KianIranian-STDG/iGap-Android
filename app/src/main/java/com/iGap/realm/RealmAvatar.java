@@ -19,6 +19,7 @@ public class RealmAvatar extends RealmObject {
     @PrimaryKey
     private long id;
     private long ownerId;
+    private RealmAttachment file;
 
     public long getOwnerId() {
         return ownerId;
@@ -27,8 +28,6 @@ public class RealmAvatar extends RealmObject {
     public void setOwnerId(long ownerId) {
         this.ownerId = ownerId;
     }
-
-    private RealmAttachment file;
 
     public long getId() {
         return id;

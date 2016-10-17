@@ -32,7 +32,9 @@ import com.iGap.module.TouchImageView;
 import com.iGap.module.Utils;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoFileDownload;
+import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmAvatarPath;
+import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.request.RequestFileDownload;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -60,6 +62,8 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
     private int listSize = 0;
     private AdapterViewPager mAdapter;
 
+    private long peerId = 0;
+
 
     public static FragmentShowImage newInstance() {
         return new FragmentShowImage();
@@ -82,6 +86,9 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
     private boolean getIntentData(Bundle bundle) {
 
         if (bundle != null) { // get a list of image
+
+            peerId = bundle.getLong("PeedId");
+
             list = (ArrayList<StructMessageInfo>) bundle.getSerializable("listPic");
             if (list == null) {
                 getActivity().getFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
@@ -218,7 +225,12 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
             mAdapter.updateThumbnail(token);
         } else {
             // else file
-            mAdapter.updateDownloadFields(token, progress, offset);
+            G.handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    mAdapter.updateDownloadFields(token, progress, offset);
+                }
+            });
         }
     }
 
@@ -401,14 +413,39 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
             }
         }
 
-        public void requestDownloadFile(StructMessageInfo media) {
+        public void requestDownloadFile(final StructMessageInfo media) {
             if (media.downloadAttachment.progress == 100) {
                 return; // necessary
             }
             ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
+            final String localFilePath = G.DIR_IMAGES + "/" + media.downloadAttachment.token + System.nanoTime() + media.attachment.name;
             if (media.attachment.getLocalFilePath() == null || media.attachment.getLocalFilePath().isEmpty()) {
-                media.attachment.setLocalFilePath(Long.parseLong(media.messageID), G.DIR_IMAGES + "/" + media.downloadAttachment.token + System.nanoTime() + media.attachment.name);
+                media.attachment.setLocalFilePath(Long.parseLong(media.messageID), localFilePath);
             }
+
+             /*
+              * use this for when show contact image, i want
+              * store file path to realm that when coming to
+              * FragmentShowImage use filepath , because i fill
+              * structMessageInfo with RealmAvatar so should exist that info
+              * */
+
+            if (peerId != 0) {
+                Realm realm = Realm.getDefaultInstance();
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", peerId).findFirst();
+                        for (RealmAvatar avatar : realmRegisteredInfo.getAvatar()) {
+                            if (avatar.getFile().getToken().equals(media.attachment.token)) {
+                                avatar.getFile().setLocalFilePath(localFilePath);
+                            }
+                        }
+                    }
+                });
+                realm.close();
+            }
+
             String identity = media.downloadAttachment.token + '*' + selector.toString() + '*' + media.attachment.size + '*' + media.attachment.getLocalFilePath() + '*' + media.downloadAttachment.offset;
 
             new RequestFileDownload().download(media.downloadAttachment.token, media.downloadAttachment.offset, (int) media.attachment.size, selector, identity);

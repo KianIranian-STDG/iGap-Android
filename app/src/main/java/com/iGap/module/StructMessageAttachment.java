@@ -169,6 +169,17 @@ public class StructMessageAttachment implements Parcelable {
     public StructMessageAttachment() {
     }
 
+    public StructMessageAttachment(RealmAttachment realmAttachment) {
+        this.token = realmAttachment.getToken();
+        this.name = realmAttachment.getName();
+        this.size = realmAttachment.getSize();
+        this.width = realmAttachment.getWidth();
+        this.height = realmAttachment.getHeight();
+        this.duration = realmAttachment.getDuration();
+        this.localThumbnailPath = realmAttachment.getLocalThumbnailPath();
+        this.localFilePath = realmAttachment.getLocalFilePath();
+    }
+
     @Override
     public int describeContents() {
         return 0;

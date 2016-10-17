@@ -40,7 +40,7 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
                 for (ProtoGlobal.RoomMessage roomMessage : builder.getMessageList()) {
 
                     // set info for clientCondition
-                    RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", identity).findFirst();
+                    RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", Long.parseLong(identity)).findFirst();
                     if (realmClientCondition != null) {
                         realmClientCondition.setMessageVersion(roomMessage.getMessageVersion());
                         realmClientCondition.setStatusVersion(roomMessage.getStatusVersion());

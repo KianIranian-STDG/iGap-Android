@@ -44,8 +44,10 @@ import com.iGap.interface_package.OnChatGetRoom;
 import com.iGap.interface_package.OnUserContactEdit;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.MaterialDesignTextView;
-import com.iGap.module.StructSharedMedia;
+import com.iGap.module.StructMessageAttachment;
+import com.iGap.module.StructMessageInfo;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmChatHistory;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmContacts;
@@ -63,6 +65,7 @@ import java.util.ArrayList;
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
+import io.realm.RealmList;
 import io.realm.RealmResults;
 
 public class ActivityContactsProfile extends ActivityEnhanced {
@@ -89,6 +92,7 @@ public class ActivityContactsProfile extends ActivityEnhanced {
     private PopupWindow popupWindow;
 
     private String avatarPath;
+    private RealmList<RealmAvatar> avatarList;
 
 
     @Override
@@ -105,8 +109,7 @@ public class ActivityContactsProfile extends ActivityEnhanced {
         RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", userId).findFirst();
         if (realmRegisteredInfo.getLastAvatar() != null) {
             avatarPath = realmRegisteredInfo.getLastAvatar().getFile().getLocalThumbnailPath();
-            Log.i("XXX", "realmRegisteredInfo.getAvatar().getFile().getLocalThumbnailPath() : " + realmRegisteredInfo.getLastAvatar().getFile().getLocalThumbnailPath());
-            Log.i("XXX", "realmRegisteredInfo.getAvatar().getFile().getLocalFilePath() : " + realmRegisteredInfo.getLastAvatar().getFile().getLocalFilePath());
+            avatarList = realmRegisteredInfo.getAvatar();
         }
 
         RealmContacts realmUser = realm.where(RealmContacts.class).equalTo("id", userId).findFirst();
@@ -146,17 +149,18 @@ public class ActivityContactsProfile extends ActivityEnhanced {
             @Override
             public void onClick(View view) {
 
-                File file = new File(G.DIR_ALL_IMAGE_USER_CONTACT + "/" + username);
-                if (!file.exists()) {
-                    file.mkdirs();
+                if (avatarList != null) {
+                    Fragment fragment = FragmentShowImage.newInstance();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("listPic", setItem());
+                    bundle.putInt("SelectedImage", 0);
+                    bundle.putLong("PeedId", userId);
+                    fragment.setArguments(bundle);
+                    ActivityContactsProfile.this.getFragmentManager().beginTransaction().add(R.id.chi_layoutParent, fragment, "Show_Image_fragment").commit();
+                } else {
+                    Toast.makeText(G.context, "Avatar Not exist!", Toast.LENGTH_SHORT).show();
                 }
-                Fragment fragment = FragmentShowImage.newInstance();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("listPic", setItem(file));
-                bundle.putInt("SelectedImage", 0);
-                fragment.setArguments(bundle);
-
-                ActivityContactsProfile.this.getFragmentManager().beginTransaction().replace(R.id.chi_layoutParent, fragment).commit();
+//                ActivityContactsProfile.this.getFragmentManager().beginTransaction().replace(R.id.chi_layoutParent, fragment).commit();
 
             }
         });
@@ -612,14 +616,14 @@ public class ActivityContactsProfile extends ActivityEnhanced {
 
     }
 
-    public ArrayList<StructSharedMedia> setItem(File f) {
-        ArrayList<StructSharedMedia> items = new ArrayList<>();
-//        File addFile = new File(G.DIR_ALL_IMAGE_USER_CONTACT);
-        File file[] = f.listFiles();
-        for (int i = 0; i < file.length; i++) {
-            if (!file[i].getPath().equals(G.chatBackground.toString())) {
-                StructSharedMedia item = new StructSharedMedia();
-                item.filePath = file[i].getPath();
+    public ArrayList<StructMessageInfo> setItem() {
+        ArrayList<StructMessageInfo> items = new ArrayList<>();
+
+        for (int i = 0; i < avatarList.size(); i++) {
+            if (avatarList.get(i).getFile() != null) {
+                StructMessageInfo item = new StructMessageInfo();
+                item.attachment = new StructMessageAttachment(avatarList.get(i).getFile());
+                Log.i("VVV", "instantiateItem avatarList.get(i).getFile() : " + avatarList.get(i).getFile().getLocalFilePath());
                 items.add(item);
             }
         }
