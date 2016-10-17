@@ -70,7 +70,7 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerViewPauseO
 
             mLoading = true;
         } else {
-            if (mAdapter.getAdapterItemCount() == mMessagesList.size() && !mAlreadyCalledOnNoMore) {
+            if (mAdapter.getAdapterItemCount() == mMessagesList.size() && mLayoutManager.findFirstVisibleItemPosition() - mVisibleThreshold <= 0 && !mAlreadyCalledOnNoMore) {
                 onNoMore(this);
                 mAlreadyCalledOnNoMore = true;
             }

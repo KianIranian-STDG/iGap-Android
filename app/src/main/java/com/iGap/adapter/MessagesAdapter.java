@@ -49,7 +49,6 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
                 item.onRequestDownloadFile(offset, progress);
 
                 notifyItemChanged(pos);
-                break;
             }
         }
     }
@@ -59,7 +58,6 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
             if (item.mMessage.downloadAttachment != null && item.mMessage.downloadAttachment.token.equalsIgnoreCase(token)) {
                 int pos = getAdapterItems().indexOf(item);
                 notifyItemChanged(pos);
-                break;
             }
         }
     }

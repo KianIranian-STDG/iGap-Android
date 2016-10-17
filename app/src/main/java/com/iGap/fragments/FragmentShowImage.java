@@ -224,20 +224,14 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
                     item.downloadAttachment.offset = offset;
                     item.downloadAttachment.progress = progress;
                     requestDownloadFile(item);
-
-                    notifyDataSetChanged();
-                    break;
                 }
             }
+
+            notifyDataSetChanged();
         }
 
         public void updateThumbnail(String token) {
-            for (StructMessageInfo item : list) {
-                if (item.downloadAttachment != null && item.downloadAttachment.token.equalsIgnoreCase(token)) {
-                    notifyDataSetChanged();
-                    break;
-                }
-            }
+            notifyDataSetChanged();
         }
 
         @Override

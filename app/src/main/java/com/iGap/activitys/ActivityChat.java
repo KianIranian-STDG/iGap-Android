@@ -93,6 +93,7 @@ import com.iGap.interface_package.OnChatMessageSelectionChanged;
 import com.iGap.interface_package.OnChatSendMessageResponse;
 import com.iGap.interface_package.OnChatUpdateStatusResponse;
 import com.iGap.interface_package.OnClearChatHistory;
+import com.iGap.interface_package.OnClientGetRoomHistoryResponse;
 import com.iGap.interface_package.OnDeleteChatFinishActivity;
 import com.iGap.interface_package.OnFileDownloadResponse;
 import com.iGap.interface_package.OnFileUpload;
@@ -148,6 +149,7 @@ import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestChatDelete;
 import com.iGap.request.RequestChatDeleteMessage;
 import com.iGap.request.RequestChatEditMessage;
+import com.iGap.request.RequestClientGetRoomHistory;
 import com.iGap.request.RequestFileDownload;
 import com.iGap.request.RequestFileUpload;
 import com.iGap.request.RequestFileUploadInit;
@@ -177,7 +179,7 @@ import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
-public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, IRecentsLongClick, OnMessageViewClick, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnFileUpload, OnFileUploadStatusResponse, OnFileDownloadResponse, OnVoiceRecord, OnUserInfoResponse {
+public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, IRecentsLongClick, OnMessageViewClick, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnFileUpload, OnFileUploadStatusResponse, OnFileDownloadResponse, OnVoiceRecord, OnUserInfoResponse, OnClientGetRoomHistoryResponse {
 
     private RelativeLayout parentLayout;
     private SharedPreferences sharedPreferences;
@@ -411,6 +413,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         G.onFileUploadStatusResponse = this;
         G.onFileDownloadResponse = this;
         G.onUserInfoResponse = this;
+        G.onClientGetRoomHistoryResponse = this;
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -2240,7 +2243,16 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
             @Override
             public void onNoMore(EndlessRecyclerOnScrollListener listener) {
-
+                // find last item from adapter (not database for better performance!)
+                // TODO: 10/17/2016 [Alireza] todo something to not request everytime
+                for (int p = mAdapter.getAdapterItemCount() - 1; p >= 0; p--) {
+                    AbstractMessage item = mAdapter.getAdapterItem(p);
+                    // not time message
+                    if (!item.mMessage.senderID.equalsIgnoreCase("-1")) {
+                        new RequestClientGetRoomHistory().getRoomHistory(mRoomId, Long.parseLong(item.mMessage.messageID), Long.toString(mRoomId));
+                        break;
+                    }
+                }
             }
         };
 
@@ -2972,6 +2984,24 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 realm.close();
             }
         });
+    }
+
+    @Override
+    public void onGetRoomHistory(final long roomId, String message, String messageType, final ProtoGlobal.RoomMessage roomMessage) {
+        final Realm realm = Realm.getDefaultInstance();
+
+        // I'm in the room
+        if (roomId == mRoomId) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    switchAddItem(new ArrayList<>(Arrays.asList(StructMessageInfo.convert(roomMessage))), false);
+                    scrollToEnd();
+                }
+            });
+        }
+
+        realm.close();
     }
 
 

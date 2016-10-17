@@ -25,6 +25,7 @@ import com.iGap.interface_package.OnChatDeleteMessageResponse;
 import com.iGap.interface_package.OnChatEditMessageResponse;
 import com.iGap.interface_package.OnChatGetRoom;
 import com.iGap.interface_package.OnClearChatHistory;
+import com.iGap.interface_package.OnClientGetRoomHistoryResponse;
 import com.iGap.interface_package.OnClientGetRoomListResponse;
 import com.iGap.interface_package.OnClientGetRoomResponse;
 import com.iGap.interface_package.OnConnectionChangeState;
@@ -210,6 +211,7 @@ public class G extends Application {
     public static OnChangeUserPhotoListener onChangeUserPhotoListener;
     public static OnClearChatHistory onClearChatHistory;
     public static OnDeleteChatFinishActivity onDeleteChatFinishActivity;
+    public static OnClientGetRoomHistoryResponse onClientGetRoomHistoryResponse;
 
     public static final String DIR_SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static final String DIR_APP = DIR_SDCARD + "/iGap";
