@@ -35,6 +35,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.adapter.AdapterShearedMedia;
 import com.iGap.adapter.items.ContatItemGroupProfile;
 import com.iGap.fragments.FragmentNotification;
 import com.iGap.fragments.ShowCustomList;
@@ -289,6 +290,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnFileUplo
         txtGroupDescription.setText(description);
 
         txtNumberOfSharedMedia = (TextView) findViewById(R.id.agp_txt_number_of_shared_media);
+        txtNumberOfSharedMedia.setText(AdapterShearedMedia.getCountOfSheareddMedia(roomId) + "");
         txtMemberNumber = (TextView) findViewById(R.id.agp_txt_member_number);
         appBarLayout = (AppBarLayout) findViewById(R.id.agp_appbar);
 

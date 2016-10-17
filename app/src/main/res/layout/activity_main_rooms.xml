@@ -97,6 +97,7 @@
         android:layout_gravity="bottom|right"
         app:borderWidth="0dp"
         app:menu_color="@color/green"
+        app:fabSize="normal"
         app:menu_open="arc_left"
         app:menu_scr="@mipmap/plus">
 
@@ -105,6 +106,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/single_chat"
+            app:fabSize="normal"
             app:backgroundTint="@color/green" />
 
         <android.support.design.widget.FloatingActionButton
@@ -112,6 +114,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/group_chat"
+            app:fabSize="normal"
             app:backgroundTint="@color/green" />
 
         <android.support.design.widget.FloatingActionButton
@@ -119,6 +122,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/channel_white"
+            app:fabSize="normal"
             app:backgroundTint="@color/green" />
 
     </com.iGap.libs.floatingAddButton.ArcMenu>

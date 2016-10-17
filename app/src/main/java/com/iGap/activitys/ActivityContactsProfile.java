@@ -36,6 +36,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.adapter.AdapterShearedMedia;
 import com.iGap.fragments.FragmentNotification;
 import com.iGap.fragments.FragmentShowImage;
 import com.iGap.interface_package.OnChatDelete;
@@ -299,7 +300,8 @@ public class ActivityContactsProfile extends ActivityEnhanced {
             vgPhoneNumber.setVisibility(View.GONE);
         }
 
-        vgSharedMedia = (ViewGroup) findViewById(R.id.chi_layout_SharedMedia);
+        TextView txtCountOfShearedMedia = (TextView) findViewById(R.id.chi_txt_count_of_sharedMedia);
+        txtCountOfShearedMedia.setText(AdapterShearedMedia.getCountOfSheareddMedia(roomId) + "");
 
         titleToolbar = (TextView) findViewById(R.id.chi_txt_titleToolbar_DisplayName);
         titleToolbar.setText("nickname");

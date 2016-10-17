@@ -300,7 +300,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/chi_txt_sharedMedia"
+                        android:id="@+id/chi_txt_count_of_sharedMedia"
                         android:layout_width="@dimen/dp200"
                         android:layout_height="@dimen/dp40"
                         android:gravity="center_vertical"

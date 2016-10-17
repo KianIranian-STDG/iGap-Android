@@ -12,13 +12,52 @@
         android:layout_height="@dimen/dp48"
         android:src="@mipmap/b" />
 
-    <TextView
-        android:id="@+id/ln_txt_message_notification"
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/dp18"
-        android:layout_marginTop="@dimen/dp16"
-        android:textColor="#000"
-        android:text="New Text" />
+        android:padding="@dimen/dp4"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/ln_txt_header"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/dp16"
+                android:textColor="@color/white"
+                android:text="New Text" />
+
+
+            <TextView
+                android:id="@+id/ln_txt_time"
+                android:layout_width="@dimen/dp80"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="@dimen/dp12"
+                android:textColor="@color/white"
+                android:text="10:52" />
+
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/ln_txt_message_notification"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/dp12"
+            android:layout_marginTop="@dimen/dp4"
+            android:textColor="@color/white"
+            android:text="New Text" />
+
+
+    </LinearLayout>
+
 
 </LinearLayout>

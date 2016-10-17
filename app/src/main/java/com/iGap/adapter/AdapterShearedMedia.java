@@ -24,8 +24,12 @@ import com.iGap.module.OnComplete;
 import com.iGap.module.StructSharedMedia;
 import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.realm.RealmChatHistory;
 
 import java.util.ArrayList;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 /**
  * Created by android3 on 9/4/2016.
@@ -333,6 +337,31 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 //        }
 
 
+    }
+
+    public static int getCountOfSheareddMedia(long roomId) {
+
+        int counter = 0;
+
+        Realm realm = Realm.getDefaultInstance();
+
+        RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class).equalTo("roomId", roomId).findAll();
+
+        for (RealmChatHistory chatHistory : chatHistories) {
+            String type = chatHistory.getRoomMessage().getMessageType();
+            if (type.equals(ProtoGlobal.RoomMessageType.VOICE.toString())
+                    || type.equals(ProtoGlobal.RoomMessageType.AUDIO.toString()) || type.equals(ProtoGlobal.RoomMessageType.AUDIO_TEXT.toString()) ||
+                    type.equals(ProtoGlobal.RoomMessageType.VIDEO.toString()) || type.equals(ProtoGlobal.RoomMessageType.VIDEO_TEXT.toString()) ||
+                    type.equals(ProtoGlobal.RoomMessageType.FILE.toString()) || type.equals(ProtoGlobal.RoomMessageType.FILE_TEXT.toString()) ||
+                    type.equals(ProtoGlobal.RoomMessageType.IMAGE.toString()) || type.equals(ProtoGlobal.RoomMessageType.IMAGE_TEXT.toString())) {
+
+                counter++;
+            }
+        }
+
+        realm.close();
+
+        return counter;
     }
 
 

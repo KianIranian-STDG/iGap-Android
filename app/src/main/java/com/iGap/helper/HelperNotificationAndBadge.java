@@ -44,6 +44,7 @@ public class HelperNotificationAndBadge {
     private long senderId = 0;
 
     private ArrayList<Item> list = new ArrayList<>();
+    private ArrayList<Long> senderList = new ArrayList<>();
 
     private NotificationManager notificationManager;
     private Notification notification;
@@ -94,9 +95,24 @@ public class HelperNotificationAndBadge {
 
         String avatarPath = null;
         if (unreadMessageCount == 1) {
-            remoteViews.setTextViewText(R.id.ln_txt_message_notification, list.get(0).name + " " + list.get(0).message);
+            remoteViews.setTextViewText(R.id.ln_txt_header, list.get(0).name);
+            remoteViews.setTextViewText(R.id.ln_txt_time, list.get(0).time);
+            remoteViews.setTextViewText(R.id.ln_txt_message_notification, list.get(0).message);
+
         } else {
-            remoteViews.setTextViewText(R.id.ln_txt_message_notification, " you have " + unreadMessageCount + " unread message");
+
+            remoteViews.setTextViewText(R.id.ln_txt_header, " iGap");
+            remoteViews.setTextViewText(R.id.ln_txt_time, list.get(list.size() - 1).time);
+
+            String s = "";
+            if (countUnicChat == 1) {
+                s = " chat";
+            } else if (countUnicChat > 1) {
+                s = " chats";
+            }
+
+
+            remoteViews.setTextViewText(R.id.ln_txt_message_notification, unreadMessageCount + " new messages from " + countUnicChat + s);
         }
 
         if (isFromOnRoom) {
@@ -227,13 +243,25 @@ public class HelperNotificationAndBadge {
         }
 
         String chatCount = "";
-        if (countUnicChat > 1) {
+
+        if (countUnicChat == 1) {
             chatCount = "from " + countUnicChat + " chat";
+        } else if (countUnicChat > 1) {
+            chatCount = "from " + countUnicChat + " chats";
         }
 
-        remoteViewsLarge.setTextViewText(R.id.ln_txt_unread_message, unreadMessageCount + " new message" + chatCount);
 
-        if (isFromOnRoom) {
+        String newmess = "";
+        if (unreadMessageCount == 1) {
+            newmess = " new message ";
+            chatCount = "";
+        } else {
+            newmess = " new messages ";
+        }
+
+        remoteViewsLarge.setTextViewText(R.id.ln_txt_unread_message, unreadMessageCount + newmess + chatCount);
+
+        if (unreadMessageCount == 1) {
             remoteViewsLarge.setViewVisibility(R.id.mln_btn_replay, View.VISIBLE);
             remoteViewsLarge.setViewVisibility(R.id.ln_txt_replay, View.VISIBLE);
         } else {
@@ -290,6 +318,7 @@ public class HelperNotificationAndBadge {
         countUnicChat = 0;
 
         list.clear();
+        senderList.clear();
 
         Realm realm = Realm.getDefaultInstance();
         long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
@@ -307,17 +336,13 @@ public class HelperNotificationAndBadge {
 
 
                             if (unreadMessageCount == 1 || unreadMessageCount == 2 || unreadMessageCount == 3) {
-
                                 Item item = new Item();
-
                                 RealmRoom room = realm.where(RealmRoom.class).equalTo("id", realmChatHistory.getRoomId()).findFirst();
                                 if (room != null) {
                                     item.name = room.getTitle() + " : ";
                                 }
-
                                 item.message = roomMessage.getMessage();
                                 item.time = TimeUtils.toLocal(roomMessage.getUpdateTime(), G.CHAT_MESSAGE_TIME);
-
                                 list.add(item);
                             }
 
@@ -327,12 +352,24 @@ public class HelperNotificationAndBadge {
 
                             if (roomId != realmChatHistory.getRoomId()) {
                                 isFromOnRoom = false;
-                                countUnicChat++;
                             }
+
+                            boolean isAdd = true;
+                            for (int k = 0; k < senderList.size(); k++) {
+                                if (senderList.get(k) == realmChatHistory.getRoomId()) {
+                                    isAdd = false;
+                                    break;
+                                }
+                            }
+
+                            if (isAdd)
+                                senderList.add(realmChatHistory.getRoomId());
                         }
                     }
                 }
             }
+
+            countUnicChat = senderList.size();
         }
 
         realm.close();
