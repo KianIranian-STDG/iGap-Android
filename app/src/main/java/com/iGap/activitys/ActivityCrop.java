@@ -46,7 +46,7 @@ public class ActivityCrop extends ActivityEnhanced {
     private String pathImageUser;
     public final String IMAGE_DIRECTORY_NAME = "Upload";
     private File mediaStorageDir;
-    private File file2;
+    private File fileChat;
     private String re;
 
     @Override
@@ -160,8 +160,8 @@ public class ActivityCrop extends ActivityEnhanced {
                         mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), IMAGE_DIRECTORY_NAME);
 
                         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-                        file2 = new File(mediaStorageDir.getPath() + File.separator + "IMG_" + timeStamp + ".jpg");
-                        HelperCopyFile.copyFile(pathImageUser, file2.toString());
+                        fileChat = new File(mediaStorageDir.getPath() + File.separator + "IMG_" + timeStamp + ".jpg");
+                        HelperCopyFile.copyFile(pathImageUser, fileChat.toString());
                     } else {
                         re = realm();
                         HelperCopyFile.copyFile(pathImageUser, re);
@@ -191,9 +191,9 @@ public class ActivityCrop extends ActivityEnhanced {
                         resizeImage(G.IMAGE_NEW_CHANEL.toString());
                         finish();
                     } else if (page.equals("chat")) {
-                        resizeImage(file2.toString());
+                        resizeImage(fileChat.toString());
                         Intent data = new Intent();
-                        data.setData(Uri.parse(file2.toString()));
+                        data.setData(Uri.parse(fileChat.toString()));
                         setResult(Activity.RESULT_OK, data);
                         finish();
                     }

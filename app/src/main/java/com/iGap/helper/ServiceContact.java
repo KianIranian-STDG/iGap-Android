@@ -111,9 +111,9 @@ public class ServiceContact extends Service {
                         resultContactList.add(itemContact);
                     }
                 }
-                RequestUserContactImport listContact = new RequestUserContactImport();
-                listContact.contactImport(resultContactList);
             }
+            RequestUserContactImport listContact = new RequestUserContactImport();
+            listContact.contactImport(resultContactList);
         }
     }
 }

@@ -79,67 +79,6 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
         txtLastName = (TextView) view.findViewById(R.id.ac_edt_lastName);
         txtPhoneNumber = (TextView) view.findViewById(R.id.ac_edt_phoneNumber);
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-//        txtSet.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (txtFirstName.getText().toString().length() > 0 || txtLastName.getText().toString().length() > 0) {
-//                    if (txtPhoneNumber.getText().toString().length() > 0) {
-//
-//                        String displayName = txtFirstName.getText().toString() + " " + txtLastName.getText().toString();
-//                        String phone = txtPhoneNumber.getText().toString();
-//
-//                        ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
-//
-//                        ops.add(ContentProviderOperation.newInsert(
-//                                ContactsContract.RawContacts.CONTENT_URI)
-//                                .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, null)
-//                                .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, null)
-//                                .build());
-//
-//                        //------------------------------------------------------ Names
-//                        if (displayName != null) {
-//                            ops.add(ContentProviderOperation.newInsert(
-//                                    ContactsContract.Data.CONTENT_URI)
-//                                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
-//                                    .withValue(ContactsContract.Data.MIMETYPE,
-//                                            ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
-//                                    .withValue(
-//                                            ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME,
-//                                            displayName).build());
-//                        }
-//                        //------------------------------------------------------ Mobile Number
-//                        if (phone != null) {
-//                            ops.add(ContentProviderOperation.
-//                                    newInsert(ContactsContract.Data.CONTENT_URI)
-//                                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
-//                                    .withValue(ContactsContract.Data.MIMETYPE,
-//                                            ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
-//                                    .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, phone)
-//                                    .withValue(ContactsContract.CommonDataKinds.Phone.TYPE,
-//                                            ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)
-//                                    .build());
-//                        }
-//
-//                        try {
-//                            G.context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
-//                            Toast.makeText(G.context, "Save Ok: ", Toast.LENGTH_SHORT).show();
-//
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                            Toast.makeText(G.context, "Exception: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-//                        }
-//
-//                        getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentAddContact.this).commit();
-//
-//                    } else {
-//                        Toast.makeText(G.context, "Please Enter PhoneNumber", Toast.LENGTH_SHORT).show();
-//                    }
-//                } else {
-//                    Toast.makeText(G.context, "Please Enter FirstName or LastName", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
-
         RippleView rippleSet = (RippleView) view.findViewById(R.id.ac_ripple_set);
         rippleSet.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override

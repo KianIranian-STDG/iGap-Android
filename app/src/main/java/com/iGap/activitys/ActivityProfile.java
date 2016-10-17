@@ -15,7 +15,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +25,7 @@ import com.iGap.interface_package.OnFileUpload;
 import com.iGap.interface_package.OnFileUploadStatusResponse;
 import com.iGap.interface_package.OnUserAvatarResponse;
 import com.iGap.interface_package.OnUserProfileSetNickNameResponse;
+import com.iGap.module.EditTextAdjustPan;
 import com.iGap.module.FileUploadStructure;
 import com.iGap.module.Utils;
 import com.iGap.proto.ProtoFileUploadStatus;
@@ -55,7 +55,7 @@ public class ActivityProfile extends ActivityEnhanced implements OnFileUpload, O
     private com.iGap.module.CircleImageView btnSetImage;
     private int myResultCodeCamera = 1;
     private int myResultCodeGallery = 0;
-    private EditText edtNikName;
+    private EditTextAdjustPan edtNikName;
     private Uri uriIntent;
     private String pathImageUser;
     private int myResultCrop = 3;
@@ -150,7 +150,7 @@ public class ActivityProfile extends ActivityEnhanced implements OnFileUpload, O
         TextInputLayout txtInputNickName = (TextInputLayout) findViewById(R.id.pu_txtInput_nikeName);
 //        txtInputNickName.setHint("Nickname");
 
-        edtNikName = (EditText) findViewById(R.id.pu_edt_nikeName); // edit Text for NikName
+        edtNikName = (EditTextAdjustPan) findViewById(R.id.pu_edt_nikeName); // edit Text for NikName
         edtNikName.setTypeface(G.arial);
         btnLetsGo = (Button) findViewById(R.id.pu_btn_letsGo);
         btnLetsGo.setTypeface(G.arial);

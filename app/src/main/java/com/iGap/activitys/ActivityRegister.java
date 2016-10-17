@@ -276,7 +276,8 @@ public class ActivityRegister extends ActivityEnhanced {
                             @Override
                             public void run() {
                                 if (edtSearchView.getQuery().toString().length() > 0) {
-                                    edtSearchView.setIconified(true);
+                                    edtSearchView.setIconified(false);
+                                    edtSearchView.clearFocus();
                                     txtTitle.setVisibility(View.GONE);
 
                                 } else {
