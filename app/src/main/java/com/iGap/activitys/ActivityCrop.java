@@ -161,9 +161,10 @@ public class ActivityCrop extends ActivityEnhanced {
 
                         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
                         fileChat = new File(mediaStorageDir.getPath() + File.separator + "IMG_" + timeStamp + ".jpg");
-                        HelperCopyFile.copyFile(pathImageUser, fileChat.toString());
+                        re = fileChat.toString();
+                        HelperCopyFile.copyFile(pathImageUser, re);
                     } else {
-                        re = realm();
+                        re = G.imageFile.toString() + "_" + id + ".jpg";
                         HelperCopyFile.copyFile(pathImageUser, re);
 
                     }
@@ -179,10 +180,10 @@ public class ActivityCrop extends ActivityEnhanced {
                         finish();
 
                     } else if (page.equals("setting")) {
+                        resizeImage(re);
                         Intent data = new Intent();
                         data.setData(Uri.parse(re));
                         setResult(Activity.RESULT_OK, data);
-                        resizeImage(re);
                         finish();
                     } else if (page.equals("NewGroup")) {
                         resizeImage(G.IMAGE_NEW_GROUP.toString());
@@ -191,30 +192,18 @@ public class ActivityCrop extends ActivityEnhanced {
                         resizeImage(G.IMAGE_NEW_CHANEL.toString());
                         finish();
                     } else if (page.equals("chat")) {
-                        resizeImage(fileChat.toString());
+
+                        Log.i("AAAAA", "a: " + new File(re).length());
+                        resizeImage(re);
+                        Log.i("AAAAA", "b: " + new File(re).length());
                         Intent data = new Intent();
-                        data.setData(Uri.parse(fileChat.toString()));
+                        data.setData(Uri.parse(re));
                         setResult(Activity.RESULT_OK, data);
                         finish();
                     }
                 }
             }
         });
-    }
-
-    private String realm() {
-
-//        Realm realm = Realm.getDefaultInstance();
-//        RealmResults<RealmAvatarPath> realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
-//        realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
-//        if (realmAvatarPaths.size() > 0) {
-//            idAvatar = realmAvatarPaths.first().getId();
-//        } else {
-//            idAvatar = 0;
-//        }
-//        realm.close();
-
-        return G.imageFile.toString() + "_" + id + ".jpg";
     }
 
     //======================================================================================================// result from crop

@@ -1,7 +1,6 @@
 package com.iGap.activitys;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.BitmapDrawable;
@@ -214,21 +213,34 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnFileUplo
             @Override
             public void onComplete(RippleView rippleView) {
 
-                LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                final View popupView = layoutInflater.inflate(R.layout.popup_window, null);
-                popupWindow = new PopupWindow(popupView, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+                LinearLayout layoutDialog = new LinearLayout(ActivityGroupProfile.this);
+                ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                layoutDialog.setOrientation(LinearLayout.VERTICAL);
+                layoutDialog.setBackgroundColor(getResources().getColor(android.R.color.white));
+                TextView text1 = new TextView(ActivityGroupProfile.this);
+                TextView text2 = new TextView(ActivityGroupProfile.this);
+                TextView text3 = new TextView(ActivityGroupProfile.this);
+
+                text1.setText("Edit Name");
+                text2.setText("Delete and leave Group");
+                text3.setText("Add Shortcut");
+                text1.setPadding(10, 10, 10, 10);
+                text2.setPadding(10, 0, 10, 0);
+                text3.setPadding(10, 10, 10, 10);
+                layoutDialog.addView(text1, params);
+                layoutDialog.addView(text2, params);
+                layoutDialog.addView(text3, params);
+
+                popupWindow = new PopupWindow(layoutDialog, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT, true);
                 popupWindow.setBackgroundDrawable(new BitmapDrawable());
                 popupWindow.setOutsideTouchable(true);
-
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     popupWindow.setBackgroundDrawable(getResources().getDrawable(R.mipmap.shadow3, ActivityGroupProfile.this.getTheme()));
                 } else {
                     popupWindow.setBackgroundDrawable((getResources().getDrawable(R.mipmap.shadow3)));
                 }
-
                 if (popupWindow.isOutsideTouchable()) {
                     popupWindow.dismiss();
-                    Log.i("CCVVBB", "rr: ");
                 }
                 popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
                     @Override
@@ -238,28 +250,31 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnFileUplo
                 });
 
                 popupWindow.setAnimationStyle(android.R.style.Animation_InputMethod);
-                popupWindow.showAtLocation(popupView, Gravity.RIGHT | Gravity.TOP, 10, 30);
-                popupWindow.showAsDropDown(rippleView);
+                popupWindow.showAtLocation(layoutDialog,
+                        Gravity.RIGHT | Gravity.TOP, (int) getResources().getDimension(R.dimen.dp16), (int) getResources().getDimension(R.dimen.dp32));
+//                popupWindow.showAsDropDown(v);
 
-
-                TextView txtSearch = (TextView) popupView.findViewById(R.id.popup_txtItem1);
-                txtSearch.setTypeface(G.arial);
-                txtSearch.setText("Log Out");
-                txtSearch.setOnClickListener(new View.OnClickListener() {
+                text1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
-                        Toast.makeText(ActivityGroupProfile.this, "LogOut", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(G.context, "Edit Name", Toast.LENGTH_SHORT).show();
+                        popupWindow.dismiss();
                     }
                 });
-                TextView txtDelete = (TextView) popupView.findViewById(R.id.popup_txtItem2);
-                txtDelete.setVisibility(View.GONE);
-
-                TextView txtDeleteChat = (TextView) popupView.findViewById(R.id.popup_txtItem3);
-                txtDeleteChat.setVisibility(View.GONE);
-
-                TextView txtMutNotification = (TextView) popupView.findViewById(R.id.popup_txtItem4);
-                txtMutNotification.setVisibility(View.GONE);
+                text2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(G.context, "Delete and leave Group", Toast.LENGTH_SHORT).show();
+                        popupWindow.dismiss();
+                    }
+                });
+                text3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(G.context, "Add Shortcut", Toast.LENGTH_SHORT).show();
+                        popupWindow.dismiss();
+                    }
+                });
             }
 
         });

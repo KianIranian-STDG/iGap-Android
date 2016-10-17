@@ -240,7 +240,7 @@ public final class Utils {
             nh = (int) (bitmapHeight * (size / maxWidth));
             size = maxWidth;
         }
-        return Bitmap.createScaledBitmap(bitmap, (int) size, nh, true);
+        return Bitmap.createScaledBitmap(bitmap, (int) +size, nh, true);
     }
 
     public static int[] scaleDimenWithSavedRatio(Context context, int width, int height) {

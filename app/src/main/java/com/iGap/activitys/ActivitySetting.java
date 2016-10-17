@@ -23,10 +23,10 @@ import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -338,9 +338,16 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
             @Override
             public void onComplete(RippleView rippleView) {
 
-                LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                final View popupView = layoutInflater.inflate(R.layout.popup_window, null);
-                popupWindow = new PopupWindow(popupView, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+                LinearLayout layoutDialog = new LinearLayout(ActivitySetting.this);
+                ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                layoutDialog.setOrientation(LinearLayout.VERTICAL);
+                layoutDialog.setBackgroundColor(getResources().getColor(android.R.color.white));
+                TextView textView = new TextView(ActivitySetting.this);
+                textView.setText("LogOut");
+                textView.setPadding(10, 10, 10, 10);
+                layoutDialog.addView(textView, params);
+
+                popupWindow = new PopupWindow(layoutDialog, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT, true);
                 popupWindow.setBackgroundDrawable(new BitmapDrawable());
                 popupWindow.setOutsideTouchable(true);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -359,29 +366,17 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
                 });
 
                 popupWindow.setAnimationStyle(android.R.style.Animation_InputMethod);
-                popupWindow.showAtLocation(popupView,
+                popupWindow.showAtLocation(layoutDialog,
                         Gravity.RIGHT | Gravity.TOP, (int) getResources().getDimension(R.dimen.dp16), (int) getResources().getDimension(R.dimen.dp32));
 //                popupWindow.showAsDropDown(v);
 
-                TextView txtSearch = (TextView) popupView.findViewById(R.id.popup_txtItem1);
-                txtSearch.setTypeface(G.arial);
-                txtSearch.setText("Log Out");
-                txtSearch.setOnClickListener(new View.OnClickListener() {
+                textView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
-                        Toast.makeText(ActivitySetting.this, "Log Out", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ActivitySetting.this, "Log out", Toast.LENGTH_SHORT).show();
+                        popupWindow.dismiss();
                     }
                 });
-
-                TextView txtClearHistory = (TextView) popupView.findViewById(R.id.popup_txtItem2);
-                txtClearHistory.setVisibility(View.GONE);
-
-                TextView txtDeleteChat = (TextView) popupView.findViewById(R.id.popup_txtItem3);
-                txtDeleteChat.setVisibility(View.GONE);
-
-                TextView txtMutNotification = (TextView) popupView.findViewById(R.id.popup_txtItem4);
-                txtMutNotification.setVisibility(View.GONE);
             }
 
         });

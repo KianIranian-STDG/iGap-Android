@@ -4,7 +4,6 @@ import android.app.Fragment;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -23,11 +22,11 @@ import android.support.v7.widget.PopupMenu;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -326,7 +325,8 @@ public class ActivityContactsProfile extends ActivityEnhanced {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
 
-                if (verticalOffset < -17) {
+                ViewGroup viewGroup = (ViewGroup) findViewById(R.id.st_parentLayoutCircleImage);
+                if (verticalOffset < -5) {
 
                     titleToolbar.setVisibility(View.VISIBLE);
                     titleToolbar.animate().alpha(1).setDuration(300);
@@ -349,21 +349,35 @@ public class ActivityContactsProfile extends ActivityEnhanced {
         rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                final View popupView = layoutInflater.inflate(R.layout.popup_window, null);
-                popupWindow = new PopupWindow(popupView, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+
+                LinearLayout layoutDialog = new LinearLayout(ActivityContactsProfile.this);
+                ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                layoutDialog.setOrientation(LinearLayout.VERTICAL);
+                layoutDialog.setBackgroundColor(getResources().getColor(android.R.color.white));
+                TextView text1 = new TextView(ActivityContactsProfile.this);
+                TextView text2 = new TextView(ActivityContactsProfile.this);
+                TextView text3 = new TextView(ActivityContactsProfile.this);
+
+                text1.setText("Share");
+                text2.setText("Delete");
+                text3.setText("Add Shortcut");
+                text1.setPadding(10, 10, 10, 10);
+                text2.setPadding(10, 0, 10, 0);
+                text3.setPadding(10, 10, 10, 10);
+                layoutDialog.addView(text1, params);
+                layoutDialog.addView(text2, params);
+                layoutDialog.addView(text3, params);
+
+                popupWindow = new PopupWindow(layoutDialog, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT, true);
                 popupWindow.setBackgroundDrawable(new BitmapDrawable());
                 popupWindow.setOutsideTouchable(true);
-
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     popupWindow.setBackgroundDrawable(getResources().getDrawable(R.mipmap.shadow3, ActivityContactsProfile.this.getTheme()));
                 } else {
                     popupWindow.setBackgroundDrawable((getResources().getDrawable(R.mipmap.shadow3)));
                 }
-
                 if (popupWindow.isOutsideTouchable()) {
                     popupWindow.dismiss();
-                    Log.i("CCVVBB", "rr: ");
                 }
                 popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
                     @Override
@@ -373,42 +387,31 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                 });
 
                 popupWindow.setAnimationStyle(android.R.style.Animation_InputMethod);
-                popupWindow.showAtLocation(popupView, Gravity.RIGHT | Gravity.TOP, 10, 30);
-                popupWindow.showAsDropDown(rippleView);
+                popupWindow.showAtLocation(layoutDialog,
+                        Gravity.RIGHT | Gravity.TOP, (int) getResources().getDimension(R.dimen.dp16), (int) getResources().getDimension(R.dimen.dp32));
+//                popupWindow.showAsDropDown(v);
 
-
-                TextView txtSearch = (TextView) popupView.findViewById(R.id.popup_txtItem1);
-                txtSearch.setTypeface(G.arial);
-                txtSearch.setText("Share");
-                txtSearch.setOnClickListener(new View.OnClickListener() {
+                text1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        Toast.makeText(G.context, "Log out", Toast.LENGTH_SHORT).show();
+                        popupWindow.dismiss();
                     }
                 });
-                TextView txtDelete = (TextView) popupView.findViewById(R.id.popup_txtItem2);
-                txtDelete.setTypeface(G.arial);
-                txtDelete.setText("Delete");
-                txtDelete.setOnClickListener(new View.OnClickListener() {
+                text2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
-                        deleteChat();
+                        Toast.makeText(G.context, "Delete", Toast.LENGTH_SHORT).show();
+                        popupWindow.dismiss();
                     }
                 });
-
-                TextView txtDeleteChat = (TextView) popupView.findViewById(R.id.popup_txtItem3);
-                txtDeleteChat.setTypeface(G.arial);
-                txtDeleteChat.setText("Add Shortcut");
-                txtDeleteChat.setOnClickListener(new View.OnClickListener() {
+                text3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        Toast.makeText(G.context, "Add Shortcut", Toast.LENGTH_SHORT).show();
+                        popupWindow.dismiss();
                     }
                 });
-
-                TextView txtMutNotification = (TextView) popupView.findViewById(R.id.popup_txtItem4);
-                txtMutNotification.setVisibility(View.GONE);
             }
         });
         vgPhoneNumber.setOnClickListener(new View.OnClickListener() {

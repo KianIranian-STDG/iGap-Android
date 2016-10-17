@@ -256,6 +256,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     private int tmpResultCode;
     private Intent tmpData;
     public static final int myResultCrop = 3;
+    public static final int myResultCamera = 4;
 
     //chat
     private long chatPeerId;
@@ -1688,6 +1689,17 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             startActivityForResult(intent, myResultCrop);
 
             return;
+        } else if (resultCode == Activity.RESULT_OK && requestCode == AttachFile.request_code_TAKE_PICTURE) {
+
+            Intent intent = new Intent(ActivityChat.this, ActivityCrop.class);
+            Log.i("AAAA", "onActivityResult: " + AttachFile.imagePath);
+            intent.putExtra("IMAGE_CAMERA", AttachFile.imagePath);
+            intent.putExtra("TYPE", "camera");
+            intent.putExtra("PAGE", "chat");
+            startActivityForResult(intent, myResultCamera);
+
+            return;
+
         } else if (resultCode == Activity.RESULT_OK && ll_attach_text.getVisibility() == View.GONE) {
             tmpRequestCode = requestCode;
             tmpResultCode = resultCode;
@@ -1757,8 +1769,11 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             StructMessageInfo messageInfo = null;
 
             switch (requestCode) {
-                case AttachFile.request_code_TAKE_PICTURE:
-                    filePath = AttachFile.imagePath;
+                case myResultCamera:
+//                    filePath = AttachFile.imagePath;
+
+                    Log.i("AAAAA", "c: " + new File(data.getData().toString()).length());
+                    filePath = data.getData().toString();
                     fileName = new File(filePath).getName();
                     fileSize = new File(filePath).length();
                     imageDimens = Utils.getImageDimens(this, filePath);
