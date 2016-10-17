@@ -51,7 +51,7 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
     @Override
     public void onLoadFromLocal(ViewHolder holder, String localPath, LocalFileType fileType) {
         super.onLoadFromLocal(holder, localPath, fileType);
-        new HelperMimeType().LoadVideoTumpnail(holder.cslv_imv_vido_image, localPath);
+        new HelperMimeType().loadVideoThumbnail(holder.cslv_imv_vido_image, localPath);
     }
 
     @Override

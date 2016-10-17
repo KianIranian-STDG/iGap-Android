@@ -4,10 +4,10 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:id="@+id/chatSubLayoutVideo"
              android:layout_width="match_parent"
-             android:textDirection="firstStrong"
              android:layout_height="wrap_content"
+             android:layout_marginBottom="@dimen/dp4"
              android:maxWidth="@dimen/dp300"
-             android:layout_marginBottom="@dimen/dp4">
+             android:textDirection="firstStrong">
 
     <LinearLayout
         android:id="@+id/mainContainer"
@@ -21,7 +21,7 @@
             android:layout_width="@dimen/dp52"
             android:layout_height="@dimen/dp52"
             android:layout_marginRight="@dimen/dp8"
-            android:src="@mipmap/b" />
+            android:src="@mipmap/b"/>
 
         <LinearLayout
             android:id="@+id/contentContainer"
@@ -33,23 +33,22 @@
 
             <include
                 android:id="@+id/replayLayout"
-                layout="@layout/chat_sub_layout_replay" />
+                layout="@layout/chat_sub_layout_replay"/>
 
             <include
                 android:id="@+id/cslr_ll_forward"
-                layout="@layout/chat_sub_layout_forward" />
+                layout="@layout/chat_sub_layout_forward"/>
 
             <FrameLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
                 <ImageView
                     android:id="@+id/thumbnail"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:maxHeight="@dimen/dp360"
-                    android:scaleType="centerCrop"
-                    android:src="@mipmap/sd" />
+                    android:layout_height="match_parent"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"/>
 
                 <include
                     android:id="@+id/progress"
@@ -75,7 +74,7 @@
                         android:layout_height="wrap_content"
                         android:text="10:21"
                         android:textColor="@android:color/white"
-                        android:textSize="@dimen/sp12" />
+                        android:textSize="@dimen/sp12"/>
 
                     <com.iGap.module.MaterialDesignTextView
                         android:id="@+id/cslr_txt_tic"
@@ -83,10 +82,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="@dimen/dp4"
-                        android:layout_marginRight="@dimen/dp4"
                         android:gravity="bottom"
                         android:text="@string/md_clock_with_white_face"
-                        android:textColor="@color/green" />
+                        android:textColor="@color/green"/>
 
 
                 </LinearLayout>
@@ -106,7 +104,7 @@
                     android:singleLine="true"
                     android:text="cslv_txt_video_name"
                     android:textColor="@android:color/black"
-                    android:textSize="@dimen/sp16" />
+                    android:textSize="@dimen/sp16"/>
 
                 <TextView
                     android:id="@+id/cslv_txt_video_mime_type"
@@ -116,7 +114,7 @@
                     android:singleLine="true"
                     android:text="cslv_txt_video_mime_type"
                     android:textColor="@android:color/black"
-                    android:textSize="@dimen/sp16" />
+                    android:textSize="@dimen/sp16"/>
             </LinearLayout>
 
             <TextView
@@ -126,7 +124,7 @@
                 android:singleLine="true"
                 android:text="cslv_txt_vido_info"
                 android:textColor="@color/gray"
-                android:textSize="@dimen/sp12" />
+                android:textSize="@dimen/sp12"/>
         </LinearLayout>
     </LinearLayout>
 </FrameLayout>

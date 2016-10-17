@@ -77,7 +77,7 @@ public class AdapterExplorer extends RecyclerView.Adapter<AdapterExplorer.ViewHo
         if (rowItem.image == R.mipmap.j_pic) {
             helperMimeType.LoadImageTumpnail(holder.imageView, rowItem.path);
         } else if (rowItem.image == R.mipmap.j_video) {
-            helperMimeType.LoadVideoTumpnail(holder.imageView, rowItem.path);
+            helperMimeType.loadVideoThumbnail(holder.imageView, rowItem.path);
         }
 
     }

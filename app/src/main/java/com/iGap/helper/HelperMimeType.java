@@ -144,7 +144,7 @@ public class HelperMimeType {
 
     }
 
-    public void LoadVideoTumpnail(ImageView imageView, String path) {
+    public void loadVideoThumbnail(ImageView imageView, String path) {
         new getVideoThumbnail(imageView, path).execute();
     }
 
@@ -207,8 +207,7 @@ public class HelperMimeType {
         @Override
         protected Bitmap doInBackground(Object... params) {
 
-            Bitmap bMap = ThumbnailUtils.createVideoThumbnail(path, MediaStore.Video.Thumbnails.MICRO_KIND);
-            return bMap;
+            return ThumbnailUtils.createVideoThumbnail(path, MediaStore.Video.Thumbnails.FULL_SCREEN_KIND);
         }
 
 

@@ -43,7 +43,7 @@ public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> 
     @Override
     public void onLoadFromLocal(ViewHolder holder, String localPath, LocalFileType fileType) {
         super.onLoadFromLocal(holder, localPath, fileType);
-        new HelperMimeType().LoadVideoTumpnail(holder.thumbnail, localPath);
+        new HelperMimeType().loadVideoThumbnail(holder.thumbnail, localPath);
     }
 
     @Override
