@@ -220,14 +220,14 @@ public final class Utils {
 
     public static Bitmap scaleImageWithSavedRatio(Context context, String filePath) {
         DisplayMetrics display = context.getResources().getDisplayMetrics();
-        int density = (int) (display.density * 0.9f);
+        int density = Math.round(display.density * 0.9f);
         float size = Math.min(display.widthPixels, display.heightPixels) * 0.9f * density;
 
         Bitmap bitmap = BitmapFactory.decodeFile(filePath, null);
         int bitmapWidth = bitmap.getWidth();
         int bitmapHeight = bitmap.getHeight();
         int nh = (int) (bitmapHeight * (size / bitmapWidth));
-        float maxWidth = context.getResources().getDimension(R.dimen.dp300) - context.getResources().getDimension(R.dimen.messageContainerPadding);
+        float maxWidth = context.getResources().getDimension(R.dimen.dp300) - (context.getResources().getDimension(R.dimen.messageContainerPadding) * 2);
 
         if (nh > bitmapHeight) {
             nh = bitmapHeight * density;
@@ -244,11 +244,11 @@ public final class Utils {
 
     public static int[] scaleDimenWithSavedRatio(Context context, int width, int height) {
         DisplayMetrics display = context.getResources().getDisplayMetrics();
-        int density = (int) (display.density * 0.9f);
+        int density = Math.round(display.density * 0.9f);
         float size = Math.min(display.widthPixels, display.heightPixels) * 0.9f * density;
 
         int nh = (int) (height * (size / width));
-        float maxWidth = context.getResources().getDimension(R.dimen.dp300) - context.getResources().getDimension(R.dimen.messageContainerPadding);
+        float maxWidth = context.getResources().getDimension(R.dimen.dp300) - (context.getResources().getDimension(R.dimen.messageContainerPadding) * 2);
 
         if (nh > height) {
             nh = height * density;
@@ -266,13 +266,13 @@ public final class Utils {
 
     public static Bitmap scaleImageWithSavedRatio(Context context, Bitmap bitmap) {
         DisplayMetrics display = context.getResources().getDisplayMetrics();
-        int density = (int) (display.density * 0.9f);
+        int density = Math.round(display.density * 0.9f);
         float size = Math.min(display.widthPixels, display.heightPixels) * 0.9f * density;
 
         int bitmapWidth = bitmap.getWidth();
         int bitmapHeight = bitmap.getHeight();
         int nh = (int) (bitmapHeight * (size / bitmapWidth));
-        float maxWidth = context.getResources().getDimension(R.dimen.dp300) - context.getResources().getDimension(R.dimen.messageContainerPadding);
+        float maxWidth = context.getResources().getDimension(R.dimen.dp300) - (context.getResources().getDimension(R.dimen.messageContainerPadding) * 2);
 
         if (nh > bitmapHeight) {
             nh = bitmapHeight * density;
