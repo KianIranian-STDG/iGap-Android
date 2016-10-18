@@ -1768,7 +1768,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     filePath = data.getData().toString();
                     fileName = new File(filePath).getName();
                     fileSize = new File(filePath).length();
-                    imageDimens = Utils.getImageDimens(this, filePath);
+                    imageDimens = Utils.getImageDimens(filePath);
                     if (isMessageWrote()) {
                         messageType = ProtoGlobal.RoomMessageType.IMAGE_TEXT;
                     } else {
@@ -1786,7 +1786,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     fileName = new File(filePath).getName();
                     fileSize = new File(filePath).length();
                     duration = Utils.getAudioDuration(getApplicationContext(), filePath);
-
                     if (isMessageWrote()) {
                         messageType = ProtoGlobal.RoomMessageType.VIDEO_TEXT;
                     } else {
@@ -1858,7 +1857,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     filePath = data.getData().getPath();
                     fileName = new File(filePath).getName();
 
-                    imageDimens = Utils.getImageDimens(this, filePath);
+                    imageDimens = Utils.getImageDimens(filePath);
                     if (isMessageWrote()) {
                         messageType = ProtoGlobal.RoomMessageType.IMAGE_TEXT;
                     } else {

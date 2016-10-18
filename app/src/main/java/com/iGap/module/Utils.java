@@ -48,8 +48,8 @@ public final class Utils {
         return Integer.parseInt(durationStr);
     }
 
-    public static int[] getImageDimens(Activity activity, String filePath) {
-        Bitmap bitmap = scaleImageWithSavedRatio(activity, filePath);
+    public static int[] getImageDimens(String filePath) {
+        Bitmap bitmap = BitmapFactory.decodeFile(filePath);
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
         return new int[]{width, height};
@@ -218,79 +218,30 @@ public final class Utils {
         return null;
     }
 
-    public static Bitmap scaleImageWithSavedRatio(Context context, String filePath) {
-        DisplayMetrics display = context.getResources().getDisplayMetrics();
-        int density = Math.round(display.density * 0.9f);
-        float size = Math.min(display.widthPixels, display.heightPixels) * 0.9f * density;
-
-        Bitmap bitmap = BitmapFactory.decodeFile(filePath, null);
-        int bitmapWidth = bitmap.getWidth();
-        int bitmapHeight = bitmap.getHeight();
-        int nh = (int) (bitmapHeight * (size / bitmapWidth));
-        float maxWidth = context.getResources().getDimension(R.dimen.dp300) - (context.getResources().getDimension(R.dimen.messageContainerPadding) * 4);
-
-        if (size > maxWidth) {
-            nh = bitmapHeight * density;
-            size = maxWidth;
-        } else {
-            if (nh > bitmapHeight) {
-                nh = bitmapHeight * density;
-            }
-            if (size > bitmapWidth) {
-                size = bitmapWidth * density;
-            }
-        }
-
-        return Bitmap.createScaledBitmap(bitmap, (int) size, nh, true);
-    }
-
     public static int[] scaleDimenWithSavedRatio(Context context, int width, int height) {
         DisplayMetrics display = context.getResources().getDisplayMetrics();
         int density = Math.round(display.density * 0.9f);
-        float size = Math.min(display.widthPixels, display.heightPixels) * 0.9f * density;
-
-        int nh = (int) (height * (size / width));
+        float newWidth;
+        int newHeight;
         float maxWidth = context.getResources().getDimension(R.dimen.dp300) - (context.getResources().getDimension(R.dimen.messageContainerPadding) * 4);
 
-        if (size > maxWidth) {
-            nh = height * density;
-            size = maxWidth;
+        if (width < maxWidth) {
+            newHeight = height * density;
+            newWidth = width * density;
+
+            if (newWidth > maxWidth) {
+                newHeight = (int) (height * (newWidth / width)) / density;
+                newWidth = maxWidth;
+            }
+
         } else {
-            if (nh > height) {
-                nh = height * density;
-            }
-            if (size > width) {
-                size = width * density;
-            }
+            newWidth = maxWidth;
+            int calculatedFromWidth = (int) (width - maxWidth);
+            newHeight = height - calculatedFromWidth;
         }
 
 
-        return new int[]{(int) size, nh};
-    }
-
-    public static Bitmap scaleImageWithSavedRatio(Context context, Bitmap bitmap) {
-        DisplayMetrics display = context.getResources().getDisplayMetrics();
-        int density = Math.round(display.density * 0.9f);
-        float size = Math.min(display.widthPixels, display.heightPixels) * 0.9f * density;
-
-        int bitmapWidth = bitmap.getWidth();
-        int bitmapHeight = bitmap.getHeight();
-        int nh = (int) (bitmapHeight * (size / bitmapWidth));
-        float maxWidth = context.getResources().getDimension(R.dimen.dp300) - (context.getResources().getDimension(R.dimen.messageContainerPadding) * 4);
-
-        if (size > maxWidth) {
-            nh = bitmapHeight * density;
-            size = maxWidth;
-        } else {
-            if (nh > bitmapHeight) {
-                nh = bitmapHeight * density;
-            }
-            if (size > bitmapWidth) {
-                size = bitmapWidth * density;
-            }
-        }
-
-        return Bitmap.createScaledBitmap(bitmap, (int) size, nh, true);
+        return new int[]{(int) newWidth, newHeight};
     }
 
     /**

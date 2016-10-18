@@ -2,7 +2,9 @@ package com.iGap.adapter.items.chat;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.iGap.R;
@@ -43,12 +45,18 @@ public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> 
     @Override
     public void onLoadFromLocal(ViewHolder holder, String localPath, LocalFileType fileType) {
         super.onLoadFromLocal(holder, localPath, fileType);
-        new HelperMimeType().loadVideoThumbnail(holder.thumbnail, localPath);
+        new HelperMimeType().loadVideoThumbnail(holder.image, localPath);
     }
 
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
+
+        if (mMessage.attachment != null) {
+            int[] dimens = Utils.scaleDimenWithSavedRatio(holder.itemView.getContext(), mMessage.attachment.width, mMessage.attachment.height);
+            ((ViewGroup) holder.image.getParent()).setLayoutParams(new LinearLayout.LayoutParams(dimens[0], dimens[1]));
+            holder.image.getParent().requestLayout();
+        }
 
         holder.cslv_txt_video_name.setText(mMessage.attachment.name);
         holder.cslv_txt_video_mime_type.setText(mMessage.fileMime);
@@ -62,7 +70,7 @@ public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> 
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
-        protected ImageView thumbnail;
+        protected ImageView image;
         protected TextView cslv_txt_video_name;
         protected TextView cslv_txt_video_mime_type;
         protected TextView cslv_txt_vido_size;
@@ -70,7 +78,7 @@ public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> 
         public ViewHolder(View view) {
             super(view);
 
-            thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
+            image = (ImageView) view.findViewById(R.id.thumbnail);
             cslv_txt_video_name = (TextView) view.findViewById(R.id.cslv_txt_video_name);
             cslv_txt_video_mime_type = (TextView) view.findViewById(R.id.cslv_txt_video_mime_type);
             cslv_txt_vido_size = (TextView) view.findViewById(R.id.cslv_txt_video_size);

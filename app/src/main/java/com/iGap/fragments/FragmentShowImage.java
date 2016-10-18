@@ -287,7 +287,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
 
                 @Override
                 public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                    imageView.setImageBitmap(Utils.scaleImageWithSavedRatio(view.getContext(), loadedImage));
+                    imageView.setImageBitmap(loadedImage);
                 }
 
                 @Override

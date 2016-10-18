@@ -61,7 +61,7 @@ public class ImageItem extends AbstractMessage<ImageItem, ImageItem.ViewHolder> 
 
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                holder.image.setImageBitmap(Utils.scaleImageWithSavedRatio(view.getContext(), ImageHelper.getRoundedCornerBitmap(loadedImage, (int) holder.itemView.getResources().getDimension(R.dimen.chatMessageImageCorner))));
+                holder.image.setImageBitmap(ImageHelper.getRoundedCornerBitmap(loadedImage, (int) holder.itemView.getResources().getDimension(R.dimen.chatMessageImageCorner)));
             }
 
             @Override
