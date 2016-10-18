@@ -364,6 +364,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
                     if (layout.findViewById(R.id.progress) != null) {
                         layout.findViewById(R.id.progress).setVisibility(View.GONE);
                     }
+                    Log.i("VVV", "media.filePath : " + media.filePath);
                     onLoadFromLocal(touchImageView, media.filePath, LocalFileType.FILE);
                 }
             }
@@ -497,7 +498,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
                             int pageIndex = mAdapter.removeView(viewPager, getCurrentPage());
                             if (list.size() == 0) {
                                 getActivity().getFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
-                                ((ActivitySetting) getActivity()).setImage();
+                                ((ActivitySetting) getActivity()).setAvatar();
                             } else if (pageIndex == mAdapter.getCount()) {
                                 pageIndex--;
                             }

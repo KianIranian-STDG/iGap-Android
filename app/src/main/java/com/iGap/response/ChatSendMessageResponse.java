@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.iGap.G;
 import com.iGap.proto.ProtoChatSendMessage;
-import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmChatHistory;
 import com.iGap.realm.RealmClientCondition;
@@ -17,6 +16,8 @@ import com.iGap.realm.RealmRoomMessageLog;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestClientGetRoom;
 
+import java.util.ArrayList;
+
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -25,6 +26,7 @@ public class ChatSendMessageResponse extends MessageHandler {
     public int actionId;
     public Object message;
     public String identity;
+    private ArrayList<Long> messageId = new ArrayList<>();
 
     public ChatSendMessageResponse(int actionId, Object protoClass, String identity) {
         super(actionId, protoClass, identity);
@@ -38,9 +40,6 @@ public class ChatSendMessageResponse extends MessageHandler {
     @Override
     public void handler() {
         Realm realm = Realm.getDefaultInstance();
-        String nickName = realm.where(RealmUserInfo.class).findFirst().getNickName();
-        // Log.i("CLI_SEND", "ChatSendMessageResponse handler for " + nickName + " : " + message);
-
         final ProtoChatSendMessage.ChatSendMessageResponse.Builder chatSendMessageResponse = (ProtoChatSendMessage.ChatSendMessageResponse.Builder) message;
 
         final ProtoGlobal.RoomMessage roomMessage = chatSendMessageResponse.getRoomMessage();
@@ -87,6 +86,7 @@ public class ChatSendMessageResponse extends MessageHandler {
                 // because user may have more than one device, his another device should not be recipient
                 // but sender. so I check current userId with room message user id, and if not equals
                 // and response is null, so we sure recipient is another user
+
                 if (chatSendMessageResponse.getResponse().getId().isEmpty()) {//TODO [Saeed Mozaffari] [2016-10-06 12:35 PM] - check this comment Alireza added and removed with saeed ==> //userId != roomMessage.getUserId() &&
                     // i'm the recipient
 
@@ -97,7 +97,7 @@ public class ChatSendMessageResponse extends MessageHandler {
                      *  else this message is repetitious find fetch RealmChatHistory with messageId and update it
                      */
                     RealmChatHistory realmChatHistory;
-                    
+
                     if (realmRoomMessage == null) {
                         realmChatHistory = realm.createObject(RealmChatHistory.class);
                         realmChatHistory.setId(System.currentTimeMillis());
@@ -105,6 +105,14 @@ public class ChatSendMessageResponse extends MessageHandler {
                         realmRoomMessage = realm.createObject(RealmRoomMessage.class);
                         realmRoomMessage.setMessageId(roomMessage.getMessageId());
                     } else {
+
+                        /*
+                        * message exist in chat room so don't calling onMessageReceive callback , just
+                        * update message . this process for this is that maybe receive repetitious message
+                        * from server so client should handle this subject
+                        */
+                        messageId.add(roomMessage.getMessageId());
+
                         realmChatHistory = realm.where(RealmChatHistory.class).equalTo("roomMessage.messageId", roomMessage.getMessageId()).findFirst();
                     }
 
@@ -163,8 +171,12 @@ public class ChatSendMessageResponse extends MessageHandler {
 
         if (chatSendMessageResponse.getResponse().getId().isEmpty()) {//TODO [Saeed Mozaffari] [2016-10-06 12:35 PM] - check this comment Alireza added and removed with saeed ==> //userId != roomMessage.getUserId() &&
             // invoke following callback when i'm not the sender, because I already done everything after sending message
-            if (realm.where(RealmRoom.class).equalTo("id", chatSendMessageResponse.getRoomId()).findFirst() != null) {
-                G.chatSendMessageUtil.onMessageReceive(chatSendMessageResponse.getRoomId(), roomMessage.getMessage(), roomMessage.getMessageType().toString(), roomMessage);
+            if (!messageId.contains(roomMessage.getMessageId())) {
+                if (realm.where(RealmRoom.class).equalTo("id", chatSendMessageResponse.getRoomId()).findFirst() != null) {
+                    G.chatSendMessageUtil.onMessageReceive(chatSendMessageResponse.getRoomId(), roomMessage.getMessage(), roomMessage.getMessageType().toString(), roomMessage);
+                }
+            } else {
+                messageId.remove(messageId.indexOf(roomMessage.getMessageId()));
             }
         } else {
             // invoke following callback when I'm the sender and the message has updated
@@ -176,16 +188,11 @@ public class ChatSendMessageResponse extends MessageHandler {
 
     @Override
     public void error() {
-        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
-        int majorCode = errorResponse.getMajorCode();
-        int minorCode = errorResponse.getMinorCode();
-
-        Log.i("SOC", "ChatSendMessageResponse response.majorCode() : " + majorCode);
-        Log.i("SOC", "ChatSendMessageResponse response.minorCode() : " + minorCode);
+        super.error();
     }
 
     @Override
     public void timeOut() {
-        Log.i("SOC", "ChatSendMessageResponse timeout");
+        super.timeOut();
     }
 }

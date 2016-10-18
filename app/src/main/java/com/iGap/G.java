@@ -73,6 +73,7 @@ import com.iGap.module.SHP_SETTING;
 import com.iGap.module.UploaderUtil;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
+import com.iGap.realm.RealmAvatarPath;
 import com.iGap.realm.RealmMigrationClass;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestClientCondition;
@@ -101,6 +102,8 @@ import javax.crypto.spec.SecretKeySpec;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
+import io.realm.Sort;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 public class G extends Application {
@@ -525,27 +528,33 @@ public class G extends Application {
         G.onUserInfoResponse = new OnUserInfoResponse() {
             @Override
             public void onUserInfo(final ProtoGlobal.RegisteredUser user, ProtoResponse.Response response) {
-                Log.i("FFF", "onUserInfoResponse 3 userId : " + userId);
-                Log.i("FFF", "onUserInfoResponse 3 user.getId() : " + user.getId());
                 // fill own user info
                 if (userId == user.getId()) {
                     Realm realm = Realm.getDefaultInstance();
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
-                            Log.i("FFF", "onUserInfoResponse user : " + user);
                             RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                             realmUserInfo.setColor(user.getColor());
                             realmUserInfo.setInitials(user.getInitials());
                         }
                     });
-                    realm.close();
 
-                    G.onChangeUserPhotoListener.onChangePhoto(null);
+                    RealmResults<RealmAvatarPath> realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
+                    if (realmAvatarPaths != null) {
+                        realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
+                    }
+                    if (realmAvatarPaths != null && realmAvatarPaths.size() > 0) {
+                        String pathImageDecode = realmAvatarPaths.first().getPathImage();
+                        G.onChangeUserPhotoListener.onChangePhoto(pathImageDecode);
+                    } else {
+                        G.onChangeUserPhotoListener.onChangePhoto(null);
+                    }
+
+                    realm.close();
                 }
             }
         };
-        Log.i("FFF", "RequestUserInfo 2");
         new RequestUserInfo().userInfo(userId);
     }
 }

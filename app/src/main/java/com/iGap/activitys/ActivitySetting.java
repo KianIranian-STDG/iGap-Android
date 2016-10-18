@@ -70,7 +70,6 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Locale;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -414,7 +413,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
             @Override
             public void onComplete(RippleView rippleView) {
                 ArrayList<StructMessageInfo> items = setItem();
-                Collections.reverse(items);
+                // Collections.reverse(items);
 
                 Fragment fragment = FragmentShowImage.newInstance();
                 Bundle bundle = new Bundle();
@@ -425,7 +424,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
             }
 
         });
-        setImage();
+        setAvatar();
         textLanguage = sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, "English");
         if (textLanguage.equals("English")) {
             poRbDialogLangouage = 0;
@@ -1058,7 +1057,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
                                                 }
                                             });
                                             realm.close();
-                                            setImage();
+                                            setAvatar();
                                         }
                                     });
                                 }
@@ -1140,7 +1139,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
                 }
             });
             realm.close();
-            setImage();
+            setAvatar();
 
             lastUploadedAvatarId = idAvatar + 1;
 
@@ -1201,7 +1200,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
         return hrSize;
     }
 
-    public void setImage() {
+    public void setAvatar() {
         Realm realm = Realm.getDefaultInstance();
         RealmResults<RealmAvatarPath> realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
         realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
@@ -1225,9 +1224,11 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
 
         Realm realm = Realm.getDefaultInstance();
         RealmResults<RealmAvatarPath> realmItemList = realm.where(RealmAvatarPath.class).findAll();
+        realmItemList = realmItemList.sort("id", Sort.DESCENDING);
         for (int i = 0; i < realmItemList.size(); i++) {
             StructMessageInfo item = new StructMessageInfo();
             item.filePath = realmItemList.get(i).getPathImage();
+            Log.i("VVV", "filePath : " + realmItemList.get(i).getPathImage());
             item.messageID = realmItemList.get(i).getId() + "";
             items.add(item);
         }
