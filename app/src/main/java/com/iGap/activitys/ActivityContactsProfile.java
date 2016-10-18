@@ -325,19 +325,24 @@ public class ActivityContactsProfile extends ActivityEnhanced {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
 
-                ViewGroup viewGroup = (ViewGroup) findViewById(R.id.st_parentLayoutCircleImage);
+                ViewGroup viewGroup = (ViewGroup) findViewById(R.id.chi_root_circleImage);
                 if (verticalOffset < -5) {
 
+                    viewGroup.animate().alpha(0).setDuration(700);
+                    viewGroup.setVisibility(View.GONE);
                     titleToolbar.setVisibility(View.VISIBLE);
                     titleToolbar.animate().alpha(1).setDuration(300);
                     titleLastSeen.setVisibility(View.VISIBLE);
                     titleLastSeen.animate().alpha(1).setDuration(300);
 
                 } else {
+                    viewGroup.setVisibility(View.VISIBLE);
+                    viewGroup.animate().alpha(1).setDuration(700);
                     titleToolbar.setVisibility(View.GONE);
                     titleToolbar.animate().alpha(0).setDuration(500);
                     titleLastSeen.setVisibility(View.GONE);
                     titleLastSeen.animate().alpha(0).setDuration(500);
+
                 }
             }
         });
@@ -358,12 +363,29 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                 TextView text2 = new TextView(ActivityContactsProfile.this);
                 TextView text3 = new TextView(ActivityContactsProfile.this);
 
-                text1.setText("Share");
-                text2.setText("Delete");
-                text3.setText("Add Shortcut");
-                text1.setPadding(10, 10, 10, 10);
-                text2.setPadding(10, 0, 10, 0);
-                text3.setPadding(10, 10, 10, 10);
+                text1.setText(getResources().getString(R.string.share_item_dialog));
+                text2.setText(getResources().getString(R.string.chi_popup_delete));
+                text3.setText(getResources().getString(R.string.chi_popup_shortcut));
+
+                text1.setTextColor(getResources().getColor(android.R.color.black));
+                text2.setTextColor(getResources().getColor(android.R.color.black));
+                text3.setTextColor(getResources().getColor(android.R.color.black));
+
+                text1.setText(getResources().getString(R.string.Search));
+                text2.setText(getResources().getString(R.string.clear_history));
+                text3.setText(getResources().getString(R.string.delete_chat));
+
+                int dim20 = (int) getResources().getDimension(R.dimen.dp20);
+                int dim12 = (int) getResources().getDimension(R.dimen.dp12);
+
+                text1.setTextSize(16);
+                text2.setTextSize(16);
+                text3.setTextSize(16);
+
+                text1.setPadding(dim20, dim12, dim12, dim20);
+                text2.setPadding(dim20, 0, dim12, dim20);
+                text3.setPadding(dim20, 0, dim12, dim20);
+
                 layoutDialog.addView(text1, params);
                 layoutDialog.addView(text2, params);
                 layoutDialog.addView(text3, params);
@@ -461,7 +483,8 @@ public class ActivityContactsProfile extends ActivityEnhanced {
 
                 FragmentNotification fragmentNotification = new FragmentNotification();
                 Bundle bundle = new Bundle();
-                bundle.putString("PAGE", "Contact");
+                bundle.putString("PAGE", "CONTACT");
+                bundle.putLong("ID", roomId);
                 fragmentNotification.setArguments(bundle);
                 getSupportFragmentManager().beginTransaction().replace(R.id.chi_layoutParent, fragmentNotification).commit();
 

@@ -389,4 +389,11 @@
         android:textSize="@dimen/sp16"
         />
 
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/snackbarlocation"></android.support.design.widget.CoordinatorLayout>
+
 </android.support.percent.PercentRelativeLayout>

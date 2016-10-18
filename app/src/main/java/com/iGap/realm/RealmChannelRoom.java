@@ -12,6 +12,7 @@ public class RealmChannelRoom extends RealmObject {
     private String description;
     private int avatarCount;
     private RealmAvatar avatar;
+    private RealmNotificationSetting realmNotificationSetting;
 
     public ChannelChatRole getRole() {
         return (role != null) ? ChannelChatRole.valueOf(role) : null;
@@ -49,8 +50,17 @@ public class RealmChannelRoom extends RealmObject {
         return avatar;
     }
 
+
     public void setAvatar(RealmAvatar avatar) {
         this.avatar = avatar;
+    }
+
+    public RealmNotificationSetting getRealmNotificationSetting() {
+        return realmNotificationSetting;
+    }
+
+    public void setRealmNotificationSetting(RealmNotificationSetting realmNotificationSetting) {
+        this.realmNotificationSetting = realmNotificationSetting;
     }
 
     /**

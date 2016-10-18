@@ -368,7 +368,42 @@
                     android:textSize="@dimen/sp18"
                     android:textStyle="normal" />
 
+                <LinearLayout
+                    android:id="@+id/st_layout_crop"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp60"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/dp16">
+
+                    <TextView
+
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".5"
+                        android:text="@string/st_crop"
+                        android:textColor="@color/black_register"
+                        android:textSize="@dimen/sp18"
+                        android:textStyle="normal" />
+
+                    <ToggleButton
+                        android:id="@+id/st_toggle_crop"
+                        android:layout_width="@dimen/dp40"
+                        android:layout_height="@dimen/dp40"
+                        android:background="@drawable/st_switch_button"
+                        android:paddingRight="@dimen/dp4"
+                        android:textOff=""
+                        android:textOn="" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/background_editText" />
+
             </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"

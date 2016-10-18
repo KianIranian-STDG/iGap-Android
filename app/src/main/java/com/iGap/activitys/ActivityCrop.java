@@ -82,7 +82,6 @@ public class ActivityCrop extends ActivityEnhanced {
         txtCrop = (TextView) findViewById(R.id.pu_txt_crop);
 
 
-
         RippleView rippleCrop = (RippleView) findViewById(R.id.pu_ripple_crop);
         rippleCrop.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
@@ -125,21 +124,7 @@ public class ActivityCrop extends ActivityEnhanced {
 
                 if (page != null) {
 
-                    if (page.equals("profile")) {
-
-                        Intent intent = new Intent(ActivityCrop.this, ActivityProfile.class);
-                        startActivity(intent);
-                        finish();
-
-                    } else if (page.equals("setting")) {
-//
-                        Intent intent = new Intent(ActivityCrop.this, ActivitySetting.class);
-                        startActivity(intent);
-                        finish();
-
-                    } else {
-                        finish();
-                    }
+                    finish();
                 }
             }
         });

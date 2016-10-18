@@ -35,7 +35,6 @@ import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -962,12 +961,51 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
         RippleView rippleMenuButton = (RippleView) findViewById(R.id.chl_ripple_menu_button);
         rippleMenuButton.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-
             @Override
             public void onComplete(RippleView rippleView) {
-                LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                final View popupView = layoutInflater.inflate(R.layout.popup_window, null);
-                popupWindow = new PopupWindow(popupView, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+
+
+                LinearLayout layoutDialog = new LinearLayout(ActivityChat.this);
+                ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                layoutDialog.setOrientation(LinearLayout.VERTICAL);
+                layoutDialog.setBackgroundColor(getResources().getColor(android.R.color.white));
+                TextView text1 = new TextView(ActivityChat.this);
+                TextView text2 = new TextView(ActivityChat.this);
+                TextView text3 = new TextView(ActivityChat.this);
+                TextView text4 = new TextView(ActivityChat.this);
+
+                text1.setTextColor(getResources().getColor(android.R.color.black));
+                text2.setTextColor(getResources().getColor(android.R.color.black));
+                text3.setTextColor(getResources().getColor(android.R.color.black));
+                text4.setTextColor(getResources().getColor(android.R.color.black));
+
+
+                text1.setText(getResources().getString(R.string.Search));
+                text2.setText(getResources().getString(R.string.clear_history));
+                text3.setText(getResources().getString(R.string.delete_chat));
+                text4.setText(getResources().getString(R.string.mute_notification));
+
+                int dim20 = (int) getResources().getDimension(R.dimen.dp20);
+                int dim16 = (int) getResources().getDimension(R.dimen.dp16);
+                int dim12 = (int) getResources().getDimension(R.dimen.dp12);
+                int sp16 = (int) getResources().getDimension(R.dimen.sp12);
+
+                text1.setTextSize(16);
+                text2.setTextSize(16);
+                text3.setTextSize(16);
+                text4.setTextSize(16);
+
+                text1.setPadding(dim20, dim12, dim12, dim20);
+                text2.setPadding(dim20, 0, dim12, dim20);
+                text3.setPadding(dim20, 0, dim12, dim20);
+                text4.setPadding(dim20, 0, dim12, (dim16));
+
+                layoutDialog.addView(text1, params);
+                layoutDialog.addView(text2, params);
+                layoutDialog.addView(text3, params);
+                layoutDialog.addView(text4, params);
+
+                popupWindow = new PopupWindow(layoutDialog, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT, true);
                 popupWindow.setBackgroundDrawable(new BitmapDrawable());
                 popupWindow.setOutsideTouchable(true);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -985,18 +1023,16 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     }
                 });
 
+
                 popupWindow.setAnimationStyle(android.R.style.Animation_InputMethod);
-                popupWindow.showAtLocation(popupView,
+                popupWindow.showAtLocation(rippleView,
                         Gravity.RIGHT | Gravity.TOP, (int) getResources().getDimension(R.dimen.dp16), (int) getResources().getDimension(R.dimen.dp32));
 //                popupWindow.showAsDropDown(v);
 
-                TextView txtSearch = (TextView) popupView.findViewById(R.id.popup_txtItem1);
-                txtSearch.setTypeface(G.arial);
-                txtSearch.setText("Search");
-                txtSearch.setOnClickListener(new View.OnClickListener() {
+                text1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        popupWindow.dismiss();
                         findViewById(R.id.toolbarContainer).setVisibility(View.GONE);
                         ll_Search.setVisibility(View.VISIBLE);
                         popupWindow.dismiss();
@@ -1005,45 +1041,27 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                         edtSearchMessage.requestFocus();
                     }
                 });
-
-                TextView txtClearHistory = (TextView) popupView.findViewById(R.id.popup_txtItem2);
-                txtClearHistory.setTypeface(G.arial);
-                txtClearHistory.setText("Clear History");
-                txtClearHistory.setOnClickListener(new View.OnClickListener() {
+                text2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
                         onSelectRoomMenu("txtClearHistory", (int) mRoomId);
                         popupWindow.dismiss();
                     }
                 });
-
-                TextView txtDeleteChat = (TextView) popupView.findViewById(R.id.popup_txtItem3);
-                txtDeleteChat.setTypeface(G.arial);
-                txtDeleteChat.setText("Delete Chat");
-                txtDeleteChat.setOnClickListener(new View.OnClickListener() {
+                text3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
                         onSelectRoomMenu("txtDeleteChat", (int) mRoomId);
                         popupWindow.dismiss();
                     }
                 });
-
-                TextView txtMutNotification = (TextView) popupView.findViewById(R.id.popup_txtItem4);
-                txtMutNotification.setTypeface(G.arial);
-                txtMutNotification.setText("Mute Notification");
-                txtMutNotification.setOnClickListener(new View.OnClickListener() {
+                text4.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
                         onSelectRoomMenu("txtMuteNotification", (int) mRoomId);
                         popupWindow.dismiss();
-
                     }
                 });
-
-
             }
 
         });

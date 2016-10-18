@@ -221,9 +221,29 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnFileUplo
                 TextView text2 = new TextView(ActivityGroupProfile.this);
                 TextView text3 = new TextView(ActivityGroupProfile.this);
 
-                text1.setText("Edit Name");
-                text2.setText("Delete and leave Group");
-                text3.setText("Add Shortcut");
+                text1.setText(getResources().getString(R.string.Edit_Name));
+                text2.setText(getResources().getString(R.string.Delete_and_leave_Group));
+                text3.setText(getResources().getString(R.string.chi_popup_shortcut));
+
+                text1.setTextColor(getResources().getColor(android.R.color.black));
+                text2.setTextColor(getResources().getColor(android.R.color.black));
+                text3.setTextColor(getResources().getColor(android.R.color.black));
+
+                text1.setText(getResources().getString(R.string.Search));
+                text2.setText(getResources().getString(R.string.clear_history));
+                text3.setText(getResources().getString(R.string.delete_chat));
+
+                int dim20 = (int) getResources().getDimension(R.dimen.dp20);
+                int dim12 = (int) getResources().getDimension(R.dimen.dp12);
+
+                text1.setTextSize(16);
+                text2.setTextSize(16);
+                text3.setTextSize(16);
+
+                text1.setPadding(dim20, dim12, dim12, dim20);
+                text2.setPadding(dim20, 0, dim12, dim20);
+                text3.setPadding(dim20, 0, dim12, dim20);
+
                 text1.setPadding(10, 10, 10, 10);
                 text2.setPadding(10, 0, 10, 0);
                 text3.setPadding(10, 10, 10, 10);
@@ -442,7 +462,8 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnFileUplo
 
                 FragmentNotification fragmentNotification = new FragmentNotification();
                 Bundle bundle = new Bundle();
-                bundle.putString("PAGE", "Group");
+                bundle.putString("PAGE", "GROUP");
+                bundle.putLong("ID", roomId);
                 fragmentNotification.setArguments(bundle);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer_group_profile, fragmentNotification).commit();
 

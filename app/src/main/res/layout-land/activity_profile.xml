@@ -129,20 +129,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <EditText
+            <com.iGap.module.EditTextAdjustPan
                 android:id="@+id/pu_edt_nikeName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
-                android:gravity="start"
                 android:hint="@string/pu_nikname_profileUser"
                 android:lines="1"
                 android:maxLength="20"
                 android:maxLines="1"
+                android:gravity="center"
+                android:minWidth="104dp"
                 android:singleLine="true"
                 android:textColor="@color/black_register"
                 android:textColorHint="@color/pu_edtHintText"
-                android:textSize="@dimen/sp18" />
+                android:textSize="@dimen/sp22" />
 
         </android.support.design.widget.TextInputLayout>
         <View

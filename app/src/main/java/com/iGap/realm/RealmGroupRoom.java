@@ -14,6 +14,7 @@ public class RealmGroupRoom extends RealmObject {
     private String description;
     private int avatarCount;
     private RealmAvatar avatar;
+    private RealmNotificationSetting realmNotificationSetting;
     private RealmList<RealmMember> members;
 
     public GroupChatRole getRole() {
@@ -31,7 +32,6 @@ public class RealmGroupRoom extends RealmObject {
     public void setParticipantsCountLabel(String participants_count_label) {
         this.participants_count_label = participants_count_label;
     }
-
     public String getDescription() {
         return description;
     }
@@ -52,8 +52,17 @@ public class RealmGroupRoom extends RealmObject {
         return avatar;
     }
 
+
     public void setAvatar(RealmAvatar avatar) {
         this.avatar = avatar;
+    }
+
+    public RealmNotificationSetting getRealmNotificationSetting() {
+        return realmNotificationSetting;
+    }
+
+    public void setRealmNotificationSetting(RealmNotificationSetting realmNotificationSetting) {
+        this.realmNotificationSetting = realmNotificationSetting;
     }
 
     public RealmList<RealmMember> getMembers() {

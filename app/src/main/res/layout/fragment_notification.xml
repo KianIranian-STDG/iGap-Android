@@ -93,7 +93,7 @@
         android:id="@+id/ntg_layout_vibrate"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp60"
-        android:background="@color/st_background2"
+        android:background="@color/white"
         android:orientation="vertical"
         android:paddingLeft="@dimen/dp16">
 
@@ -164,7 +164,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp60"
         android:orientation="vertical"
-        android:background="@color/st_background2"
+        android:background="@color/white"
         android:paddingLeft="@dimen/dp16">
 
         <TextView

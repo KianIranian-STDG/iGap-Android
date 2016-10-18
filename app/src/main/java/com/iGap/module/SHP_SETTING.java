@@ -13,6 +13,7 @@ public class SHP_SETTING {
     public static final String KEY_ENABLE_ANIMATION = "enable_animation";
     public static final String KEY_AUTOPLAY_GIFS = "autoplay_gif";
     public static final String KEY_SAVE_TO_GALLERY = "save_to_gallery";
+    public static final String KEY_CROP = "KEY_CROP";
 
     public static final String KEY_AD_DATA_PHOTO = "DATA_PHOTO";
     public static final String KEY_AD_DATA_VOICE_MESSAGE = "DATA_VOICE_MESSAGE";

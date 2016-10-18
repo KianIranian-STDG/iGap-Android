@@ -96,9 +96,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
     private String textLanguage = "English";
     private int poRbDialogTextSize = -1;
 
-    private ViewGroup ltMessageTextSize, ltLanguage, ltInAppBrowser, ltSentByEnter, ltEnableAnimation, ltAutoGifs, ltSaveToGallery;
+    private ViewGroup ltMessageTextSize, ltLanguage, ltInAppBrowser, ltSentByEnter, ltEnableAnimation, ltAutoGifs, ltSaveToGallery, layoutCrop;
     private TextView txtNickName, txtUserName, txtPhoneNumber, txtNotifyAndSound, txtFaq, txtPrivacyPolicy;
-    private ToggleButton toggleSentByEnter, toggleEnableAnimation, toggleAutoGifs, toggleSaveToGallery, toggleInAppBrowser;
+    private ToggleButton toggleSentByEnter, toggleEnableAnimation, toggleAutoGifs, toggleSaveToGallery, toggleInAppBrowser, toggleCrop;
 
     private AppBarLayout appBarLayout;
 
@@ -327,12 +327,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
             }
 
         });
-//        txtBack.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                finish();
-//            }
-//        });
+
         final int screenWidth = (int) (getResources().getDisplayMetrics().widthPixels / 1.7);
         // button popupMenu in toolbar
         RippleView rippleMore = (RippleView) findViewById(R.id.st_ripple_more);
@@ -347,7 +342,14 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
                 layoutDialog.setBackgroundColor(getResources().getColor(android.R.color.white));
                 TextView textView = new TextView(ActivitySetting.this);
                 textView.setText("LogOut");
-                textView.setPadding(10, 10, 10, 10);
+                textView.setTextColor(getResources().getColor(android.R.color.black));
+
+                int dim20 = (int) getResources().getDimension(R.dimen.dp20);
+                int dim12 = (int) getResources().getDimension(R.dimen.dp12);
+
+                textView.setTextSize(16);
+                textView.setPadding(dim20, dim12, dim12, dim12);
+
                 layoutDialog.addView(textView, params);
 
                 popupWindow = new PopupWindow(layoutDialog, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT, true);
@@ -596,6 +598,29 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
                         .show();
             }
         });
+
+        layoutCrop = (ViewGroup) findViewById(R.id.st_layout_crop);
+        int checkeCrop = sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 0);
+        toggleCrop = (ToggleButton) findViewById(R.id.st_toggle_crop);
+        if (checkeCrop == 1) {
+            toggleCrop.setChecked(true);
+        } else {
+            toggleCrop.setChecked(false);
+        }
+        layoutCrop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        toggleCrop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
 
         txtChatBackground = (TextView) findViewById(R.id.st_txt_chatBackground);
         txtChatBackground.setTypeface(G.arial);

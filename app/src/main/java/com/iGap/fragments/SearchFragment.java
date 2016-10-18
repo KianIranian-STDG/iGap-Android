@@ -101,11 +101,15 @@ public class SearchFragment extends Fragment {
 
         Button btnBack = (Button) view.findViewById(R.id.sfl_btn_back);
         btnBack.setTypeface(G.fontawesome);
-        RippleView rippleBack = (RippleView) view.findViewById(R.id.sfl_ripple_back);
+        final RippleView rippleBack = (RippleView) view.findViewById(R.id.sfl_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
+
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(rippleBack.getWindowToken(), 0);
                 getActivity().getSupportFragmentManager().beginTransaction().remove(SearchFragment.this).commit();
+
             }
         });
 

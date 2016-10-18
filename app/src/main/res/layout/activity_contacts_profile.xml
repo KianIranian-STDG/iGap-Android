@@ -122,6 +122,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingTop="@dimen/dp8"
+                android:id="@+id/chi_root_circleImage"
                 app:layout_collapseMode="parallax">
 
                 <de.hdodenhof.circleimageview.CircleImageView

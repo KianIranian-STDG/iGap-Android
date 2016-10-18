@@ -259,6 +259,7 @@
     <string name="st_chatBackground">Chat Background</string>
     <string name="st_Enable_Animation">Enable Animation </string>
     <string name="st_inApp_Browser">In_App Browser</string>
+    <string name="st_crop">Crop</string>
     <string name="st_send_by_enter">Send By Enter</string>
     <string name="st_title_Media">Media</string>
     <string name="st_auto_download_data">Auto Download (cellular Data) </string>
@@ -406,6 +407,13 @@
     <string name="delete_item_dialog">Delete</string>
     <string name="saveToDownload_item_dialog">Save to Download</string>
     <string name="edit_item_dialog">Edit</string>
+
+
+    <string name="Search">Search</string>
+    <string name="Edit_Name">Edit Name</string>
+    <string name="Delete_and_leave_Group">Delete and leave Group</string>
+
+
 
 
     <string name="test">
