@@ -266,7 +266,9 @@ public class StructMessageInfo implements Parcelable {
         messageInfo.messageText = message.getMessage();
         messageInfo.senderID = Long.toString(message.getUserId());
         messageInfo.attachment = StructMessageAttachment.convert(message.getAttachment());
-        messageInfo.userInfo = StructRegisteredInfo.build(message.getContact());
+        if (message.getMessageType() == ProtoGlobal.RoomMessageType.CONTACT) {
+            messageInfo.userInfo = StructRegisteredInfo.build(message.getContact());
+        }
         messageInfo.uploadProgress = messageInfo.attachment.token != null && !messageInfo.attachment.token.isEmpty() ? 100 : 0;
         if (message.getUserId() == userId) {
             messageInfo.sendType = MyType.SendType.send;
@@ -298,7 +300,9 @@ public class StructMessageInfo implements Parcelable {
         } else if (roomMessage.getUserId() != userId) {
             messageInfo.sendType = MyType.SendType.recvive;
         }
-        messageInfo.userInfo = StructRegisteredInfo.build(roomMessage.getRoomMessageContact());
+        if (roomMessage.getMessageType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.CONTACT.toString())) {
+            messageInfo.userInfo = StructRegisteredInfo.build(roomMessage.getRoomMessageContact());
+        }
         return messageInfo;
     }
 
