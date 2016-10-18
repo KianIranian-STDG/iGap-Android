@@ -23,21 +23,6 @@ public class StructRegisteredInfo implements Parcelable {
     public StructRegisteredInfo() {
     }
 
-    public StructRegisteredInfo(long id, String username, String phone, String firstName, String lastName, String displayName, String initials, String color, String status, int lastSeen, int avatarCount, StructMessageAttachment avatar) {
-        this.id = id;
-        this.username = username;
-        this.phone = phone;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.displayName = displayName;
-        this.initials = initials;
-        this.color = color;
-        this.status = status;
-        this.lastSeen = lastSeen;
-        this.avatarCount = avatarCount;
-        this.avatar = avatar;
-    }
-
     public StructRegisteredInfo(String lastName, String firstName, String phone, String username, long id) {
         this.lastName = lastName;
         this.firstName = firstName;
@@ -55,7 +40,9 @@ public class StructRegisteredInfo implements Parcelable {
         //userInfo.imageSource=;
         userInfo.firstName = messageContact.getFirstName();
         userInfo.lastName = messageContact.getLastName();
-        userInfo.phone = messageContact.getPhones().get(0).getString();
+        if (messageContact.getPhones() != null && messageContact.getPhones().first() != null) {
+            userInfo.phone = messageContact.getPhones().first().getString();
+        }
         userInfo.displayName = userInfo.firstName + " " + userInfo.lastName;
         //userInfo.userName=;
 
@@ -70,7 +57,9 @@ public class StructRegisteredInfo implements Parcelable {
         //userInfo.imageSource=;
         userInfo.firstName = messageContact.getFirstName();
         userInfo.lastName = messageContact.getLastName();
-        userInfo.phone = messageContact.getPhoneList().get(0);
+        if (messageContact.getPhoneList() != null && messageContact.getPhoneList().size() > 0) {
+            userInfo.phone = messageContact.getPhoneList().get(messageContact.getPhoneList().size() - 1);
+        }
         userInfo.displayName = userInfo.firstName + " " + userInfo.lastName;
         //userInfo.userName=;
 

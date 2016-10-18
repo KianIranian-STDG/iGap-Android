@@ -329,11 +329,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 // file doesn't exist on local, I check for a thumbnail
                 // if thumbnail exists, I load it into the view
                 if (mMessage.attachment.isThumbnailExistsOnLocal()) {
-                    ViewGroup view = (ViewGroup) holder.itemView.findViewById(R.id.thumbnail).getParent();
-                    if (view != null) {
-                        int[] dimens = Utils.scaleDimenWithSavedRatio(holder.itemView.getContext(), mMessage.attachment.width, mMessage.attachment.height);
-                        view.setLayoutParams(new LinearLayout.LayoutParams(dimens[0], dimens[1]));
-                        view.requestLayout();
+                    if (mMessage.messageType == ProtoGlobal.RoomMessageType.IMAGE || mMessage.messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
+                        ViewGroup view = (ViewGroup) holder.itemView.findViewById(R.id.thumbnail).getParent();
+                        if (view != null) {
+                            int[] dimens = Utils.scaleDimenWithSavedRatio(holder.itemView.getContext(), mMessage.attachment.width, mMessage.attachment.height);
+                            view.setLayoutParams(new LinearLayout.LayoutParams(dimens[0], dimens[1]));
+                            view.requestLayout();
+                        }
                     }
 
                     // load thumbnail from local

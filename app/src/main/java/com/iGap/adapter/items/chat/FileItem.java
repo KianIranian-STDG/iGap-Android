@@ -2,6 +2,7 @@ package com.iGap.adapter.items.chat;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.iGap.G;
@@ -12,6 +13,7 @@ import com.iGap.module.Utils;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
@@ -41,20 +43,15 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
     }
 
     @Override
-    public void onLoadFromLocal(ViewHolder holder, String localPath, LocalFileType fileType) {
+    public void onLoadFromLocal(final ViewHolder holder, String localPath, LocalFileType fileType) {
         super.onLoadFromLocal(holder, localPath, fileType);
-        /*if (fileType == LocalFileType.THUMBNAIL) {
-            ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.cslf_imv_image_file);
-        } else {
-            // TODO: 10/2/2016 [Alireza] implement
-        }*/
+
+        ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.image);
     }
 
     @Override
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
-
-        // TODO: 9/15/2016 [Alireza Eskandarpour Shoferi] implement fileState
 
         holder.cslf_txt_file_name.setText(mMessage.attachment.name);
         holder.cslf_txt_file_size.setText(Utils.humanReadableByteCount(mMessage.attachment.size, true));
@@ -72,6 +69,7 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
         protected TextView cslf_txt_file_name;
         protected TextView cslf_txt_file_size;
         protected EmojiTextView messageText;
+        protected ImageView image;
 
         public ViewHolder(View view) {
             super(view);
@@ -80,6 +78,7 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
             messageText.setTextSize(G.userTextSize);
             cslf_txt_file_name = (TextView) view.findViewById(R.id.songArtist);
             cslf_txt_file_size = (TextView) view.findViewById(R.id.fileSize);
+            image = (ImageView) view.findViewById(R.id.thumbnail);
         }
     }
 }
