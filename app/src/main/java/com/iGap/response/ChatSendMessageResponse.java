@@ -87,14 +87,22 @@ public class ChatSendMessageResponse extends MessageHandler {
                 if (chatSendMessageResponse.getResponse().getId().isEmpty()) {//TODO [Saeed Mozaffari] [2016-10-06 12:35 PM] - check this comment Alireza added and removed with saeed ==> //userId != roomMessage.getUserId() &&
                     // i'm the recipient
 
-                    RealmChatHistory realmChatHistory = realm.createObject(RealmChatHistory.class);
-                    realmChatHistory.setId(System.currentTimeMillis());
-
                     RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", roomMessage.getMessageId()).findFirst();
 
+                    /*
+                     *  if this is new message and not exist this messageId createObject from RealmChatHistory
+                     *  else this message is repetitious find fetch RealmChatHistory with messageId and update it
+                     */
+                    RealmChatHistory realmChatHistory;
+                    
                     if (realmRoomMessage == null) {
+                        realmChatHistory = realm.createObject(RealmChatHistory.class);
+                        realmChatHistory.setId(System.currentTimeMillis());
+
                         realmRoomMessage = realm.createObject(RealmRoomMessage.class);
                         realmRoomMessage.setMessageId(roomMessage.getMessageId());
+                    } else {
+                        realmChatHistory = realm.where(RealmChatHistory.class).equalTo("roomMessage.messageId", roomMessage.getMessageId()).findFirst();
                     }
 
                     realmRoomMessage.setMessageVersion(roomMessage.getMessageVersion());
