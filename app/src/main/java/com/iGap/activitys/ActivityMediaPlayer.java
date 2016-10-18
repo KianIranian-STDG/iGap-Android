@@ -2,26 +2,27 @@ package com.iGap.activitys;
 
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
-import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.helper.HelperSaveFile;
 import com.iGap.module.MusicPlayer;
 import com.iGap.module.OnComplete;
-
-import java.io.File;
 
 public class ActivityMediaPlayer extends ActivityEnhanced {
 
@@ -38,7 +39,6 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
     Button btnReplay;
     Button btnShuffle;
 
-    private String str_info = "";
     OnComplete onComplete;
 
     @Override
@@ -89,7 +89,7 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
 
         initComponent();
 
-        getMusicInfo();
+        setMusicInfo();
 
     }
 
@@ -139,49 +139,6 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
     }
 
     //*****************************************************************************************
-
-    private void getMusicInfo() {
-
-        str_info = "";
-
-        MediaMetadataRetriever mediaMetadataRetriever = (MediaMetadataRetriever) new MediaMetadataRetriever();
-        Uri uri = (Uri) Uri.fromFile(new File(MusicPlayer.musicPath));
-        mediaMetadataRetriever.setDataSource(ActivityMediaPlayer.this, uri);
-
-        String title = (String) mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
-
-        if (title != null) {
-            str_info += title + "       ";
-        }
-
-        String albumName = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
-        if (albumName != null) {
-            str_info += albumName + "       ";
-        }
-
-        String artist = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
-        if (artist != null) {
-            str_info += artist + "       ";
-        }
-
-        if (str_info.trim().length() > 0) {
-            txt_musicInfo.setVisibility(View.VISIBLE);
-            txt_musicInfo.setText(str_info);
-
-            txt_musicInfo.setEllipsize(TextUtils.TruncateAt.MARQUEE);
-            txt_musicInfo.setSelected(true);
-            txt_musicInfo.setSingleLine(true);
-        } else {
-            txt_musicInfo.setVisibility(View.GONE);
-        }
-
-//        byte[] data = mediaMetadataRetriever.getEmbeddedPicture();
-//        if (data != null) {
-//            Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-//            img_MusicImage.setImageBitmap(bitmap);
-//        }
-
-    }
 
     private void initComponent() {
 
@@ -233,7 +190,7 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
             @Override
             public void onClick(View v) {
 
-                Log.e("ddd", "menu clicked");
+                popUpMusicMenu();
             }
         });
 
@@ -289,9 +246,59 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
 
     }
 
+    private void popUpMusicMenu() {
+
+        MaterialDialog dialog = new MaterialDialog.Builder(this)
+                .items(R.array.pop_up_media_player)
+                .contentColor(Color.BLACK)
+                .itemsCallback(new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+
+                        switch (which) {
+                            case 0:
+                                saveToMusic();
+                                break;
+                            case 1:
+                                shareMusuic();
+                                break;
+                        }
+
+
+                    }
+                }).show();
+
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        layoutParams.copyFrom(dialog.getWindow().getAttributes());
+        layoutParams.width = (int) getResources().getDimension(R.dimen.dp260);
+        layoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
+
+        dialog.getWindow().setAttributes(layoutParams);
+    }
+
+
+    private void saveToMusic() {
+
+        HelperSaveFile.saveToMusicFolder(MusicPlayer.musicPath, MusicPlayer.musicName);
+
+    }
+
+    private void shareMusuic() {
+
+        String sharePath = MusicPlayer.musicPath;
+
+        Uri uri = Uri.parse(sharePath);
+        Intent share = new Intent(Intent.ACTION_SEND);
+        share.setType("audio/*");
+        share.putExtra(Intent.EXTRA_STREAM, uri);
+        startActivity(Intent.createChooser(share, "Share audio File"));
+
+    }
+
+
     private void updateUi() {
         txt_MusicTime.setText(MusicPlayer.musicTime);
-        txt_MusicPlace.setText(MusicPlayer.roomName);
+        txt_MusicPlace.setText(MusicPlayer.musicInfoTitle);
         txt_MusicName.setText(MusicPlayer.musicName);
 
         if (MusicPlayer.mp != null) {
@@ -310,8 +317,23 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
                 img_MusicImage_default_icon.setVisibility(View.VISIBLE);
             }
 
-            getMusicInfo();
+            setMusicInfo();
 
+        }
+
+    }
+
+    private void setMusicInfo() {
+
+        if (MusicPlayer.musicInfo.trim().length() > 0) {
+            txt_musicInfo.setVisibility(View.VISIBLE);
+            txt_musicInfo.setText(MusicPlayer.musicInfo);
+
+            txt_musicInfo.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+            txt_musicInfo.setSelected(true);
+            txt_musicInfo.setSingleLine(true);
+        } else {
+            txt_musicInfo.setVisibility(View.GONE);
         }
 
 

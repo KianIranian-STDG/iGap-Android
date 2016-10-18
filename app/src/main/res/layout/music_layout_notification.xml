@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/gray"
+    android:background="@color/gray_4c"
     android:gravity="left|center">
 
     <ImageView
@@ -31,6 +31,7 @@
                 android:gravity="left|center"
                 android:singleLine="true"
                 android:text="music name"
+                android:layout_marginLeft="@dimen/dp12"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp16" />
 

@@ -332,7 +332,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnFileUplo
             @Override
             public void onClick(View view) {
 
-                Log.e("ddd", "shared media click");
+                startActivity(new Intent(ActivityGroupProfile.this, ActivityShearedMedia.class));
 
             }
         });

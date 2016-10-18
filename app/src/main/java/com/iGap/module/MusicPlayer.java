@@ -14,7 +14,6 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -55,12 +54,15 @@ public class MusicPlayer {
     private static Button btnPlayMusic;
     private static Button btnCloseMusic;
     public static TextView txt_music_time;
+    public static TextView txt_music_time_counter;
     private static TextView txt_music_name;
 
     public static String musicTime = "";
     public static String roomName;
     public static String musicPath;
     public static String musicName;
+    public static String musicInfo = "";
+    public static String musicInfoTitle = "";
     public static long roomId = 0;
     public static Bitmap mediaThumpnail = null;
     public static MediaPlayer mp;
@@ -151,6 +153,7 @@ public class MusicPlayer {
         });
 
         txt_music_time = (TextView) layoutTripMusic.findViewById(R.id.mls_txt_music_time);
+        txt_music_time_counter = (TextView) layoutTripMusic.findViewById(R.id.mls_txt_music_time_counter);
         txt_music_name = (TextView) layoutTripMusic.findViewById(R.id.mls_txt_music_name);
 
 
@@ -244,6 +247,8 @@ public class MusicPlayer {
                 notificationManager.notify(notificationId, notification);
             } else {
                 onComplete.complete(true, "play", "");
+                musicProgress = 100;
+                onComplete.complete(true, "updateTime", strTimer);
             }
             stopTimer();
         } catch (Exception e) {
@@ -261,8 +266,6 @@ public class MusicPlayer {
             selectedMedia++;
             if (onComplete != null)
                 onComplete.complete(true, "update", "");
-        } else {
-            stopSound();
         }
     }
 
@@ -284,8 +287,6 @@ public class MusicPlayer {
 
             if (onComplete != null)
                 onComplete.complete(true, "update", "");
-        } else {
-            stopSound();
         }
     }
 
@@ -397,11 +398,13 @@ public class MusicPlayer {
                             stopSound();
                         } else if (repeatMode.equals(RepeatMode.repeatAll.toString())) {
 
-                            Log.e("ddd", repeatMode + "   " + isShuffelOn);
-
                             if (isShuffelOn) {
                                 nextRandomMusic();
                             } else {
+
+                                if (selectedMedia >= mediaList.size()) {
+                                    selectedMedia = 0;
+                                }
                                 nextMusic();
                             }
 
@@ -462,6 +465,7 @@ public class MusicPlayer {
 
     public static void updateNotification() {
 
+        getMusicInfo();
 
         PendingIntent pi = PendingIntent.getActivity(G.context, 10, new Intent(G.context, ActivityMediaPlayer.class), PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -475,20 +479,6 @@ public class MusicPlayer {
                 remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.play_button);
             }
 
-        try {
-            MediaMetadataRetriever mediaMetadataRetriever = (MediaMetadataRetriever) new MediaMetadataRetriever();
-            Uri uri = (Uri) Uri.fromFile(new File(musicPath));
-
-            mediaMetadataRetriever.setDataSource(G.context, uri);
-            byte[] data = mediaMetadataRetriever.getEmbeddedPicture();
-            if (data != null) {
-                mediaThumpnail = BitmapFactory.decodeByteArray(data, 0, data.length);
-                remoteViews.setImageViewBitmap(R.id.mln_img_picture_music, mediaThumpnail);
-            } else {
-                remoteViews.setImageViewResource(R.id.mln_img_picture_music, R.mipmap.music_icon_green);
-            }
-        } catch (Exception e) {
-        }
 
         Intent intentPrevious = new Intent(G.context, customButtonListener.class);
         intentPrevious.putExtra("mode", "previous");
@@ -636,12 +626,12 @@ public class MusicPlayer {
 
         strTimer = MusicPlayer.milliSecondsToTimer(time);
 
-        if (txt_music_time != null) {
+        if (txt_music_time_counter != null) {
 
-            txt_music_time.post(new Runnable() {
+            txt_music_time_counter.post(new Runnable() {
                 @Override
                 public void run() {
-                    txt_music_time.setText(strTimer + "/" + musicTime);
+                    txt_music_time_counter.setText(strTimer + "/");
                 }
             });
 
@@ -665,6 +655,57 @@ public class MusicPlayer {
             }
         } catch (IllegalStateException e) {
         }
+
+    }
+
+    private static void getMusicInfo() {
+
+        musicInfo = "";
+        musicInfoTitle = "";
+
+        MediaMetadataRetriever mediaMetadataRetriever = (MediaMetadataRetriever) new MediaMetadataRetriever();
+        Uri uri = (Uri) Uri.fromFile(new File(MusicPlayer.musicPath));
+        mediaMetadataRetriever.setDataSource(G.context, uri);
+
+        String title = (String) mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
+
+        if (title != null) {
+            musicInfo += title + "       ";
+            musicInfoTitle = title;
+        }
+
+        String albumName = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
+        if (albumName != null) {
+            musicInfo += albumName + "       ";
+            musicInfoTitle = albumName;
+        }
+
+        String artist = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
+        if (artist != null) {
+            musicInfo += artist + "       ";
+            musicInfoTitle = artist;
+        }
+
+        if (musicInfoTitle.trim().length() == 0)
+            musicInfoTitle = "unknown artist";
+
+        try {
+            mediaMetadataRetriever.setDataSource(G.context, uri);
+            byte[] data = mediaMetadataRetriever.getEmbeddedPicture();
+            if (data != null) {
+                mediaThumpnail = BitmapFactory.decodeByteArray(data, 0, data.length);
+                int size = (int) G.context.getResources().getDimension(R.dimen.dp48);
+                remoteViews.setImageViewBitmap(R.id.mln_img_picture_music, Bitmap.createScaledBitmap(mediaThumpnail, size, size, false));
+            } else {
+                remoteViews.setImageViewResource(R.id.mln_img_picture_music, R.mipmap.music_icon_green);
+            }
+        } catch (Exception e) {
+        }
+
+
+
+
+
 
     }
 

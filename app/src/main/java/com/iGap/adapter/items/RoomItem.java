@@ -79,7 +79,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
     private String getStringChatIcon(RoomType chatType) {
         switch (chatType) {
             case CHAT:
-                return G.context.getString(R.string.md_user_shape);
+                return "";//G.context.getString(R.string.md_user_shape);
             case CHANNEL:
                 return G.context.getString(R.string.fa_bullhorn);
             case GROUP:

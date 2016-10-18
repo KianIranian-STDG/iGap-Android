@@ -19,7 +19,7 @@
             android:background="@null"
             android:gravity="center"
             android:text="@string/md_back_arrow"
-            android:textColor="@android:color/black"
+            android:textColor="@android:color/darker_gray"
             android:textSize="@dimen/sp20" />
 
         <LinearLayout
@@ -46,7 +46,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="place"
-                android:textColor="@color/green"
+                android:singleLine="true"
+                android:textColor="@color/gray_4c"
                 android:textSize="@dimen/sp16" />
         </LinearLayout>
 
@@ -57,7 +58,7 @@
             android:background="@null"
             android:gravity="center"
             android:text="@string/md_show_more_button"
-            android:textColor="@android:color/black"
+            android:textColor="@android:color/darker_gray"
             android:textSize="@dimen/sp22" />
 
 
@@ -70,12 +71,6 @@
         android:layout_weight="1"
         android:background="#f0f0f0">
 
-        <ImageView
-            android:id="@+id/ml_img_music_picture"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop" />
-
 
         <ImageView
             android:id="@+id/ml_img_music_icon_default"
@@ -85,6 +80,12 @@
             android:scaleType="centerCrop"
             android:src="@mipmap/music_icon_gray" />
 
+
+        <ImageView
+            android:id="@+id/ml_img_music_picture"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
 
         <TextView
             android:id="@+id/ml_txt_music_info"
@@ -105,6 +106,7 @@
 
             android:textSize="@dimen/sp16" />
 
+
     </FrameLayout>
 
 
@@ -118,7 +120,7 @@
             android:id="@+id/ml_txt_timer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="timer"
+            android:text="00:00"
             android:textColor="@color/green" />
 
         <SeekBar
@@ -171,15 +173,15 @@
             android:background="@null"
             android:gravity="center"
             android:text="@string/md_previous_track"
-            android:textColor="@android:color/black"
+            android:textColor="#444"
             android:textSize="@dimen/sp22" />
 
         <Button
             android:id="@+id/ml_btn_play_music"
             android:layout_width="@dimen/dp40"
             android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/dp8"
-            android:layout_marginRight="@dimen/dp8"
+            android:layout_marginLeft="@dimen/dp24"
+            android:layout_marginRight="@dimen/dp24"
             android:background="@null"
             android:gravity="center"
             android:text="@string/md_play_rounded_button"
@@ -193,7 +195,7 @@
             android:background="@null"
             android:gravity="center"
             android:text="@string/md_play_next_button"
-            android:textColor="@android:color/black"
+            android:textColor="#444"
             android:textSize="@dimen/sp22" />
 
 
@@ -217,9 +219,10 @@
                 android:id="@+id/ml_img_repead_one"
                 android:layout_width="@dimen/dp16"
                 android:layout_height="@dimen/dp16"
-                android:layout_marginRight="@dimen/dp12"
+                android:layout_marginRight="@dimen/dp4"
+                android:layout_marginBottom="@dimen/dp12"
                 android:layout_gravity="right|center"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:src="@mipmap/red_one" />
 
 
