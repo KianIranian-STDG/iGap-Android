@@ -42,6 +42,7 @@ import com.iGap.fragments.FragmentShowImage;
 import com.iGap.helper.HelperImageBackColor;
 import com.iGap.interface_package.OnFileUpload;
 import com.iGap.interface_package.OnFileUploadStatusResponse;
+import com.iGap.interface_package.OnUserAvatarDelete;
 import com.iGap.interface_package.OnUserAvatarResponse;
 import com.iGap.interface_package.OnUserProfileSetNickNameResponse;
 import com.iGap.libs.rippleeffect.RippleView;
@@ -61,6 +62,7 @@ import com.iGap.request.RequestFileUpload;
 import com.iGap.request.RequestFileUploadInit;
 import com.iGap.request.RequestFileUploadStatus;
 import com.iGap.request.RequestUserAvatarAdd;
+import com.iGap.request.RequestUserAvatarDelete;
 import com.iGap.request.RequestUserProfileSetNickname;
 
 import java.io.File;
@@ -119,6 +121,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
     private String nickName;
     private String userName;
     private String phoneName;
+    private long userId;
 
     public static int KEY_AD_DATA_PHOTO = -1;
     public static int KEY_AD_DATA_VOICE_MESSAGE = -1;
@@ -168,6 +171,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
 
         final RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
         if (realmUserInfo != null) {
+            userId = realmUserInfo.getUserId();
             nickName = realmUserInfo.getNickName();
             userName = realmUserInfo.getUserName();
             phoneName = realmUserInfo.getPhoneNumber();
@@ -1017,7 +1021,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
                             if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
 
                                 idAvatar = getIndexRealm();
-                                pathSaveImage = G.imageFile.toString() + "_" + idAvatar + 1 + ".jpg";
+                                pathSaveImage = G.imageFile.toString() + "_" + System.currentTimeMillis() + "_" + idAvatar + 1 + ".jpg";
                                 nameImageFile = new File(pathSaveImage);
                                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                                 uriIntent = Uri.fromFile(nameImageFile);
@@ -1031,36 +1035,56 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
                             }
                         } else if (text.toString().equals("Delete photo")) {
 
-                            Realm realm = Realm.getDefaultInstance();
-                            realm.executeTransaction(new Realm.Transaction() {
+                            G.onUserAvatarDelete = new OnUserAvatarDelete() {
                                 @Override
-                                public void execute(Realm realm) {
-                                    RealmResults<RealmAvatarPath> realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
-                                    realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
+                                public void onUserAvatarDelete(final long avatarId, final String token) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Realm realm = Realm.getDefaultInstance();
+                                            realm.executeTransaction(new Realm.Transaction() {
+                                                @Override
+                                                public void execute(Realm realm) {
+                                                    Log.i("XXX", "RealmAvatarPath 3");
+                                                    for (RealmAvatarPath avatarPath : realm.where(RealmAvatarPath.class).findAll()) {
+                                                        Log.i("XXX", "RealmAvatarPath 4 avatarPath.getId() : " + avatarPath.getId());
+                                                        if (avatarId == avatarPath.getId()) {
+                                                            new File(avatarPath.getPathImage()).delete();
+                                                            avatarPath.deleteFromRealm();
 
-                                    new File(realmAvatarPaths.first().getPathImage()).delete();
-                                    RealmAvatarPath delete = realmAvatarPaths.first();
-                                    delete.deleteFromRealm();
+                                                            //realm.where(RealmAvatarToken.class).equalTo("token", token).findFirst().deleteFromRealm();
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                            realm.close();
+                                            setImage();
+                                        }
+                                    });
                                 }
-                            });
-                            realm.close();
-                            setImage();
+                            };
+                            Realm realm1 = Realm.getDefaultInstance();
+                            RealmResults<RealmAvatarPath> realmAvatarPaths = realm1.where(RealmAvatarPath.class).findAll();
+                            realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
+                            Log.i("XXX", "RequestUserAvatarDelete 1 avatarId : " + realmAvatarPaths.first().getId());
+
+//                            RealmAvatarToken realmAvatarToken = realm1.where(RealmAvatarToken.class).equalTo("id", realmAvatarPaths.first().getId()).findFirst();
+//                            realmAvatarToken.getToken();
+//                            Log.i("XXX", "RequestUserAvatarDelete 1 realmAvatarToken.getToken() : " + realmAvatarToken.getToken());
+//
+//                            /*
+//                              * set token for identity , when i get response fetch RealmAvatarToken
+//                              * with this identity(token) and delete that row from RealmAvatarToken
+//                              * */
+
+                            new RequestUserAvatarDelete().userAvatarDelete(realmAvatarPaths.first().getId(), "");
+                            realm1.close();
+
                         } else {
                             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//                            Realm realm = Realm.getDefaultInstance();
-//                            RealmResults<RealmAvatarPath> realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
-//                            realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
-//                            if (realmAvatarPaths.size() > 0) {
-//                                idAvatar = realmAvatarPaths.first().getId();
-//                            } else {
-//                                idAvatar = 0;
-//                            }
-//                            pathSaveImage = G.imageFile.toString() + "_" + idAvatar + ".jpg";
-//                            nameImageFile = new File(pathSaveImage);
                             idAvatar = getIndexRealm();
                             startActivityForResult(intent, myResultCodeGallery);
                             dialog.dismiss();
-//                            realm.close();
                         }
                     }
                 })
@@ -1428,6 +1452,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
                 RealmAvatarToken realmAvatarPath = realm.createObject(RealmAvatarToken.class);
                 realmAvatarPath.setId(lastUploadedAvatarId);
                 realmAvatarPath.setToken(avatar.getFile().getToken());
+                Log.i("XXX", "onAvatarAdd avatar.getFile().getToken() : " + avatar.getFile().getToken());
                 realmUserInfo.addAvatarToken(realmAvatarPath);
             }
         });

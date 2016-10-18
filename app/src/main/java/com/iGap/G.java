@@ -48,6 +48,7 @@ import com.iGap.interface_package.OnInfoTime;
 import com.iGap.interface_package.OnReceiveInfoLocation;
 import com.iGap.interface_package.OnReceivePageInfoTOS;
 import com.iGap.interface_package.OnSecuring;
+import com.iGap.interface_package.OnUserAvatarDelete;
 import com.iGap.interface_package.OnUserAvatarResponse;
 import com.iGap.interface_package.OnUserContactDelete;
 import com.iGap.interface_package.OnUserContactEdit;
@@ -212,6 +213,7 @@ public class G extends Application {
     public static OnClearChatHistory onClearChatHistory;
     public static OnDeleteChatFinishActivity onDeleteChatFinishActivity;
     public static OnClientGetRoomHistoryResponse onClientGetRoomHistoryResponse;
+    public static OnUserAvatarDelete onUserAvatarDelete;
 
     public static final String DIR_SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static final String DIR_APP = DIR_SDCARD + "/iGap";
@@ -224,7 +226,7 @@ public class G extends Application {
     public static final String DIR_NEW_GROUP = DIR_APP + "/.new_group";
     public static final String DIR_NEW_CHANEL = DIR_APP + "/.new_chanel";
     public static final String DIR_ALL_IMAGE_USER_CONTACT = DIR_APP + "/.all_image_user_contact";
-    public static final String DIR_IMAGE_USER = DIR_APP + "/.image_user";
+    public static final String DIR_IMAGE_USER = DIR_APP + "/image_user";
 
     public static File chatBackground;
     public static File IMAGE_NEW_GROUP;
@@ -513,7 +515,7 @@ public class G extends Application {
     }
 
     public static void getUserInfo() {
-
+        Log.i("FFF", "getUserInfo 1");
         //TODO [Saeed Mozaffari] [2016-10-15 1:51 PM] - nabayad har bar etella'ate khodam ro begiram. agar ham digar account taghiri dadae bashe response hamun zaman miayad va man ba accountam yeki misham
         //TODO [Saeed Mozaffari] [2016-10-15 1:52 PM] - bayad zamani ke register kardam userInfo ro begiram , fekr nemikonam ke deige niaz be har bar gereftan bashe
         Realm realm = Realm.getDefaultInstance();
@@ -523,13 +525,15 @@ public class G extends Application {
         G.onUserInfoResponse = new OnUserInfoResponse() {
             @Override
             public void onUserInfo(final ProtoGlobal.RegisteredUser user, ProtoResponse.Response response) {
-
+                Log.i("FFF", "onUserInfoResponse 3 userId : " + userId);
+                Log.i("FFF", "onUserInfoResponse 3 user.getId() : " + user.getId());
                 // fill own user info
                 if (userId == user.getId()) {
                     Realm realm = Realm.getDefaultInstance();
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
+                            Log.i("FFF", "onUserInfoResponse user : " + user);
                             RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                             realmUserInfo.setColor(user.getColor());
                             realmUserInfo.setInitials(user.getInitials());
@@ -541,7 +545,7 @@ public class G extends Application {
                 }
             }
         };
-
+        Log.i("FFF", "RequestUserInfo 2");
         new RequestUserInfo().userInfo(userId);
     }
 }

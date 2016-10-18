@@ -67,12 +67,21 @@ public class ActivityIntroduce extends ActivityEnhanced {
 
     static final String KEY_SAVE = "SAVE";
     static int ONETIME = 1;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
 
         Realm realm = Realm.getDefaultInstance();
+
+//        realm.executeTransaction(new Realm.Transaction() {
+//            @Override
+//            public void execute(Realm realm) {
+//                realm.where(RealmAvatarToken.class).findAll().deleteAllFromRealm();
+//            }
+//        });
+
         RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
         if (userInfo != null && userInfo.getUserRegistrationState()) { // user registered before
             Intent intent = new Intent(G.context, ActivityMain.class);

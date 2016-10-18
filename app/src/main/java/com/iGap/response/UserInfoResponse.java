@@ -48,15 +48,16 @@ public class UserInfoResponse extends MessageHandler {
                 realmRegisteredInfo.setStatus(builder.getUser().getStatus().toString());
                 realmRegisteredInfo.setUsername(builder.getUser().getUsername());
 
-                G.onUserInfoResponse.onUserInfo(builder.getUser(), builder.getResponse());
             }
         });
         realm.close();
+
+        G.onUserInfoResponse.onUserInfo(builder.getUser(), builder.getResponse());
     }
 
     @Override
     public void timeOut() {
-        Log.i("SOC", "UserInfoResponse timeout");
+        Log.i("SOCA", "UserInfoResponse timeout");
     }
 
     @Override
@@ -65,8 +66,8 @@ public class UserInfoResponse extends MessageHandler {
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
 
-        Log.i("SOC", "UserInfoResponse response.majorCode() : " + majorCode);
-        Log.i("SOC", "UserInfoResponse response.minorCode() : " + minorCode);
+        Log.i("SOCA", "UserInfoResponse response.majorCode() : " + majorCode);
+        Log.i("SOCA", "UserInfoResponse response.minorCode() : " + minorCode);
     }
 }
 

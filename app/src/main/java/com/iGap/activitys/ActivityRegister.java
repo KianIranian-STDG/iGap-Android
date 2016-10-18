@@ -984,6 +984,7 @@ public class ActivityRegister extends ActivityEnhanced {
                                     userInfo.setUserRegistrationState(true);
                                 }
                                 G.importContact();
+                                G.getUserInfo();
                             }
                         });
 
