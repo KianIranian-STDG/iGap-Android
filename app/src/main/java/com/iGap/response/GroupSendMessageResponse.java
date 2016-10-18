@@ -11,6 +11,9 @@ import com.iGap.realm.RealmChatHistory;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomMessage;
+import com.iGap.realm.RealmRoomMessageContact;
+import com.iGap.realm.RealmRoomMessageLocation;
+import com.iGap.realm.RealmRoomMessageLog;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestClientGetRoom;
 
@@ -97,8 +100,9 @@ public class GroupSendMessageResponse extends MessageHandler {
 
                     realmRoomMessage.setAttachment(roomMessage.getMessageId(), roomMessage.getAttachment());
                     realmRoomMessage.setUserId(roomMessage.getUserId());
-                    realmRoomMessage.setLocation(roomMessage.getLocation().toString());
-                    realmRoomMessage.setLog(roomMessage.getLog().toString());
+                    realmRoomMessage.setLocation(RealmRoomMessageLocation.build(roomMessage.getLocation()));
+                    realmRoomMessage.setLog(RealmRoomMessageLog.build(roomMessage.getLog()));
+                    realmRoomMessage.setRoomMessageContact(RealmRoomMessageContact.build(roomMessage.getContact()));
                     realmRoomMessage.setEdited(roomMessage.getEdited());
                     realmRoomMessage.setUpdateTime(roomMessage.getUpdateTime());
 
@@ -125,8 +129,9 @@ public class GroupSendMessageResponse extends MessageHandler {
                             message.setMessage(roomMessage.getMessage());
                             message.setAttachment(roomMessage.getMessageId(), roomMessage.getAttachment());
                             message.setUserId(roomMessage.getUserId());
-                            message.setLocation(roomMessage.getLocation().toString());
-                            message.setLog(roomMessage.getLog().toString());
+                            message.setLocation(RealmRoomMessageLocation.build(roomMessage.getLocation()));
+                            message.setLog(RealmRoomMessageLog.build(roomMessage.getLog()));
+                            message.setRoomMessageContact(RealmRoomMessageContact.build(roomMessage.getContact()));
                             message.setEdited(roomMessage.getEdited());
                             message.setUpdateTime(roomMessage.getUpdateTime());
 

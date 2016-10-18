@@ -19,8 +19,8 @@ public class RealmRoomMessage extends RealmObject {
     private String message;
     private RealmAttachment attachment;
     private long userId;
-    private String location;
-    private String log;
+    private RealmRoomMessageLocation location;
+    private RealmRoomMessageLog log;
     private RealmRoomMessageContact roomMessageContact;
     private boolean edited;
     private long updateTime;
@@ -82,19 +82,19 @@ public class RealmRoomMessage extends RealmObject {
         this.userId = userId;
     }
 
-    public String getLocation() {
+    public RealmRoomMessageLocation getLocation() {
         return location;
     }
 
-    public void setLocation(String location) {
+    public void setLocation(RealmRoomMessageLocation location) {
         this.location = location;
     }
 
-    public String getLog() {
+    public RealmRoomMessageLog getLog() {
         return log;
     }
 
-    public void setLog(String log) {
+    public void setLog(RealmRoomMessageLog log) {
         this.log = log;
     }
 

@@ -29,7 +29,7 @@ public class StructUserInfo implements Parcelable {
         //userInfo.imageSource=;
         userInfo.name = messageContact.getFirstName() + " " + messageContact.getLastName();
         //userInfo.lastSeen=;
-        userInfo.number = messageContact.getPhones().get(0).getPhone();
+        userInfo.number = messageContact.getPhones().get(0).getString();
         //userInfo.userName=;
 
         return userInfo;

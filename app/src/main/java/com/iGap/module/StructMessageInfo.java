@@ -266,6 +266,7 @@ public class StructMessageInfo implements Parcelable {
         messageInfo.messageText = message.getMessage();
         messageInfo.senderID = Long.toString(message.getUserId());
         messageInfo.attachment = StructMessageAttachment.convert(message.getAttachment());
+        messageInfo.userInfo = StructRegisteredInfo.build(message.getContact());
         messageInfo.uploadProgress = messageInfo.attachment.token != null && !messageInfo.attachment.token.isEmpty() ? 100 : 0;
         if (message.getUserId() == userId) {
             messageInfo.sendType = MyType.SendType.send;

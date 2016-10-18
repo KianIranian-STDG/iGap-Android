@@ -1839,8 +1839,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 case AttachFile.request_code_contact_phone:
                     ContactUtils contactUtils = new ContactUtils(getApplicationContext(), data.getData());
                     String name = contactUtils.retrieveName();
-                    String firstName = name;
-                    String lastName = name;
                     String number = contactUtils.retrieveNumber();
                     // FIXME: 10/5/2016 [Alireza] get username
                     String username = "username";
@@ -1850,8 +1848,8 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                         image = imageUri.toString();
                     }
                     messageType = ProtoGlobal.RoomMessageType.CONTACT;
-
-                    messageInfo = StructMessageInfo.buildForContact(messageId, senderID, MyType.SendType.send, updateTime, ProtoGlobal.RoomMessageStatus.SENDING, image, username, firstName, lastName, number, userTriesReplay() ? mReplayLayout.getTag() : null);
+                    // FIXME: 10/18/2016 [Alireza] lastName "" gozashtam jash, firstName esme kamele
+                    messageInfo = StructMessageInfo.buildForContact(messageId, senderID, MyType.SendType.send, updateTime, ProtoGlobal.RoomMessageStatus.SENDING, image, username, name, "", number, userTriesReplay() ? mReplayLayout.getTag() : null);
                     break;
                 case AttachFile.request_code_paint:
                     filePath = data.getData().getPath();
@@ -1895,6 +1893,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
                     if (finalMessageType == ProtoGlobal.RoomMessageType.CONTACT) {
                         RealmRoomMessageContact realmRoomMessageContact = realm.createObject(RealmRoomMessageContact.class);
+                        realmRoomMessageContact.setId(System.nanoTime());
                         realmRoomMessageContact.setFirstName(finalMessageInfo.userInfo.firstName);
                         realmRoomMessageContact.setLastName(finalMessageInfo.userInfo.lastName);
                         realmRoomMessageContact.addPhone(finalMessageInfo.userInfo.phone);

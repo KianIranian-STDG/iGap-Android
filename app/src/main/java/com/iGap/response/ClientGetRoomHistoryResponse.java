@@ -6,6 +6,9 @@ import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmChatHistory;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmRoomMessage;
+import com.iGap.realm.RealmRoomMessageContact;
+import com.iGap.realm.RealmRoomMessageLocation;
+import com.iGap.realm.RealmRoomMessageLog;
 import com.iGap.realm.RealmUserInfo;
 
 import io.realm.Realm;
@@ -63,8 +66,9 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
 
                     realmRoomMessage.setAttachment(roomMessage.getMessageId(), roomMessage.getAttachment());
                     realmRoomMessage.setUserId(roomMessage.getUserId());
-                    realmRoomMessage.setLocation(roomMessage.getLocation().toString());
-                    realmRoomMessage.setLog(roomMessage.getLog().toString());
+                    realmRoomMessage.setLocation(RealmRoomMessageLocation.build(roomMessage.getLocation()));
+                    realmRoomMessage.setLog(RealmRoomMessageLog.build(roomMessage.getLog()));
+                    realmRoomMessage.setRoomMessageContact(RealmRoomMessageContact.build(roomMessage.getContact()));
                     realmRoomMessage.setEdited(roomMessage.getEdited());
                     realmRoomMessage.setUpdateTime(roomMessage.getUpdateTime());
 

@@ -3,6 +3,7 @@ package com.iGap.module;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoomMessageContact;
 
 public class StructRegisteredInfo implements Parcelable {
@@ -40,6 +41,7 @@ public class StructRegisteredInfo implements Parcelable {
     public StructRegisteredInfo(String lastName, String firstName, String phone, String username, long id) {
         this.lastName = lastName;
         this.firstName = firstName;
+        this.displayName = firstName + " " + lastName;
         this.phone = phone;
         this.username = username;
         this.id = id;
@@ -53,7 +55,22 @@ public class StructRegisteredInfo implements Parcelable {
         //userInfo.imageSource=;
         userInfo.firstName = messageContact.getFirstName();
         userInfo.lastName = messageContact.getLastName();
-        userInfo.phone = messageContact.getPhones().get(0).getPhone();
+        userInfo.phone = messageContact.getPhones().get(0).getString();
+        userInfo.displayName = userInfo.firstName + " " + userInfo.lastName;
+        //userInfo.userName=;
+
+        return userInfo;
+    }
+
+    public static StructRegisteredInfo build(ProtoGlobal.RoomMessageContact messageContact) {
+        if (messageContact == null) {
+            return null;
+        }
+        StructRegisteredInfo userInfo = new StructRegisteredInfo();
+        //userInfo.imageSource=;
+        userInfo.firstName = messageContact.getFirstName();
+        userInfo.lastName = messageContact.getLastName();
+        userInfo.phone = messageContact.getPhoneList().get(0);
         userInfo.displayName = userInfo.firstName + " " + userInfo.lastName;
         //userInfo.userName=;
 
