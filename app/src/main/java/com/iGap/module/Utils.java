@@ -229,18 +229,19 @@ public final class Utils {
         int nh = (int) (bitmapHeight * (size / bitmapWidth));
         float maxWidth = context.getResources().getDimension(R.dimen.dp300) - (context.getResources().getDimension(R.dimen.messageContainerPadding) * 4);
 
-        if (nh > bitmapHeight) {
+        if (size > maxWidth) {
             nh = bitmapHeight * density;
-        }
-        if (size > bitmapWidth) {
-            size = bitmapWidth * density;
+            size = maxWidth;
+        } else {
+            if (nh > bitmapHeight) {
+                nh = bitmapHeight * density;
+            }
+            if (size > bitmapWidth) {
+                size = bitmapWidth * density;
+            }
         }
 
-        if (size > maxWidth) {
-            nh = (int) (bitmapHeight * (size / maxWidth));
-            size = maxWidth;
-        }
-        return Bitmap.createScaledBitmap(bitmap, (int) +size, nh, true);
+        return Bitmap.createScaledBitmap(bitmap, (int) size, nh, true);
     }
 
     public static int[] scaleDimenWithSavedRatio(Context context, int width, int height) {
@@ -251,17 +252,18 @@ public final class Utils {
         int nh = (int) (height * (size / width));
         float maxWidth = context.getResources().getDimension(R.dimen.dp300) - (context.getResources().getDimension(R.dimen.messageContainerPadding) * 4);
 
-        if (nh > height) {
+        if (size > maxWidth) {
             nh = height * density;
-        }
-        if (size > width) {
-            size = width * density;
+            size = maxWidth;
+        } else {
+            if (nh > height) {
+                nh = height * density;
+            }
+            if (size > width) {
+                size = width * density;
+            }
         }
 
-        if (size > maxWidth) {
-            nh = (int) (height * (size / maxWidth));
-            size = maxWidth;
-        }
 
         return new int[]{(int) size, nh};
     }
@@ -276,17 +278,18 @@ public final class Utils {
         int nh = (int) (bitmapHeight * (size / bitmapWidth));
         float maxWidth = context.getResources().getDimension(R.dimen.dp300) - (context.getResources().getDimension(R.dimen.messageContainerPadding) * 4);
 
-        if (nh > bitmapHeight) {
+        if (size > maxWidth) {
             nh = bitmapHeight * density;
-        }
-        if (size > bitmapWidth) {
-            size = bitmapWidth * density;
+            size = maxWidth;
+        } else {
+            if (nh > bitmapHeight) {
+                nh = bitmapHeight * density;
+            }
+            if (size > bitmapWidth) {
+                size = bitmapWidth * density;
+            }
         }
 
-        if (size > maxWidth) {
-            nh = (int) (bitmapHeight * (size / maxWidth));
-            size = maxWidth;
-        }
         return Bitmap.createScaledBitmap(bitmap, (int) size, nh, true);
     }
 

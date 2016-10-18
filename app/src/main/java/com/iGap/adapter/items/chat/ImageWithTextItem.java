@@ -12,7 +12,6 @@ import com.iGap.R;
 import com.iGap.helper.ImageHelper;
 import com.iGap.interface_package.OnMessageViewClick;
 import com.iGap.module.EmojiTextView;
-import com.iGap.module.FileUtils;
 import com.iGap.module.Utils;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
@@ -75,7 +74,7 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
 
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                holder.image.setImageBitmap(Utils.scaleImageWithSavedRatio(view.getContext(), FileUtils.decodeFile(FileUtils.toByteArray(ImageHelper.getRoundedCornerBitmap(loadedImage, (int) holder.itemView.getResources().getDimension(R.dimen.chatMessageImageCorner))))));
+                holder.image.setImageBitmap(Utils.scaleImageWithSavedRatio(view.getContext(), ImageHelper.getRoundedCornerBitmap(loadedImage, (int) holder.itemView.getResources().getDimension(R.dimen.chatMessageImageCorner))));
             }
 
             @Override

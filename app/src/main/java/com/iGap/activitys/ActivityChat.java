@@ -256,7 +256,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     private int tmpResultCode;
     private Intent tmpData;
     public static final int myResultCrop = 3;
-    public static final int myResultCamera = 4;
 
     //chat
     private long chatPeerId;
@@ -1696,7 +1695,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             intent.putExtra("IMAGE_CAMERA", AttachFile.imagePath);
             intent.putExtra("TYPE", "camera");
             intent.putExtra("PAGE", "chat");
-            startActivityForResult(intent, myResultCamera);
+            startActivityForResult(intent, myResultCrop);
 
             return;
 
@@ -1769,31 +1768,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             StructMessageInfo messageInfo = null;
 
             switch (requestCode) {
-                case myResultCamera:
-//                    filePath = AttachFile.imagePath;
-
-                    Log.i("AAAAA", "c: " + new File(data.getData().toString()).length());
-                    filePath = data.getData().toString();
-                    fileName = new File(filePath).getName();
-                    fileSize = new File(filePath).length();
-                    imageDimens = Utils.getImageDimens(this, filePath);
-                    if (isMessageWrote()) {
-                        messageType = ProtoGlobal.RoomMessageType.IMAGE_TEXT;
-                    } else {
-                        messageType = ProtoGlobal.RoomMessageType.IMAGE;
-                    }
-                    // user wants to replay to a message
-                    if (userTriesReplay()) {
-                        messageInfo = new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, null, filePath, updateTime, ((StructMessageInfo) mReplayLayout.getTag()));
-                    } else {
-                        if (isMessageWrote()) {
-                            messageInfo = new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, null, filePath, updateTime);
-                        } else {
-                            messageInfo = new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, null, filePath, updateTime);
-                        }
-                    }
-                    Log.e("ddd", filePath + "     image path");
-                    break;
                 case myResultCrop:
                     filePath = data.getData().toString();
                     fileName = new File(filePath).getName();
@@ -1807,11 +1781,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     if (userTriesReplay()) {
                         messageInfo = new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, null, filePath, updateTime, ((StructMessageInfo) mReplayLayout.getTag()));
                     } else {
-                        if (isMessageWrote()) {
-                            messageInfo = new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, null, filePath, updateTime);
-                        } else {
-                            messageInfo = new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, null, filePath, updateTime);
-                        }
+                        messageInfo = new StructMessageInfo(Long.toString(messageId), getWrittenMessage(), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, null, filePath, updateTime);
                     }
                     Log.e("ddd", filePath + "    gallary file path");
                     break;
@@ -1820,6 +1790,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     fileName = new File(filePath).getName();
                     fileSize = new File(filePath).length();
                     duration = Utils.getAudioDuration(getApplicationContext(), filePath);
+
                     if (isMessageWrote()) {
                         messageType = ProtoGlobal.RoomMessageType.VIDEO_TEXT;
                     } else {
@@ -1831,11 +1802,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     if (userTriesReplay()) {
                         messageInfo = new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, videoFileMime, filePath, null, filePath, null, updateTime, ((StructMessageInfo) mReplayLayout.getTag()));
                     } else {
-                        if (isMessageWrote()) {
-                            messageInfo = new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, videoFileName, videoFileMime, filePath, null, filePath, videoFile.length(), null, updateTime);
-                        } else {
-                            messageInfo = new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, videoFileName, videoFileMime, filePath, null, filePath, videoFile.length(), null, updateTime);
-                        }
+                        messageInfo = new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), getWrittenMessage(), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, videoFileName, videoFileMime, filePath, null, filePath, videoFile.length(), null, updateTime);
                     }
                     Log.e("ddd", AttachFile.getFilePathFromUri(data.getData()) + "    video capture path");
                     break;
@@ -1870,7 +1837,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     if (userTriesReplay()) {
                         messageInfo = new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, fileFileMime, filePath, null, filePath, null, updateTime, ((StructMessageInfo) mReplayLayout.getTag()));
                     } else {
-                        messageInfo = new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, fileFileName, fileFileMime, filePath, null, filePath, fileFile.length(), null, updateTime);
+                        messageInfo = new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), getWrittenMessage(), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, fileFileName, fileFileMime, filePath, null, filePath, fileFile.length(), null, updateTime);
                     }
                     Log.e("ddd", data.getData() + "    pic file path");
                     break;
@@ -1904,11 +1871,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     if (userTriesReplay()) {
                         messageInfo = new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, null, filePath, updateTime, ((StructMessageInfo) mReplayLayout.getTag()));
                     } else {
-                        if (isMessageWrote()) {
-                            messageInfo = new StructMessageInfo(Long.toString(messageId), getWrittenMessage(), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, null, filePath, updateTime);
-                        } else {
-                            messageInfo = new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, null, filePath, updateTime);
-                        }
+                        messageInfo = new StructMessageInfo(Long.toString(messageId), getWrittenMessage(), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, null, filePath, updateTime);
                     }
                     Log.e("ddd", filePath + "   pain path");
                     break;

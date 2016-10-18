@@ -17,7 +17,7 @@ import io.realm.Realm;
  */
 public class StructMessageInfo implements Parcelable {
 
-    public StructMessageInfo(String messageID, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, MyType.FileState fileState, String fileName, String fileMime, String filePic, String localThumbnailPath, String localFilePath, long fileSize, byte[] fileHash, long time) {
+    public StructMessageInfo(String messageID, String senderID, String messageText, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, MyType.FileState fileState, String fileName, String fileMime, String filePic, String localThumbnailPath, String localFilePath, long fileSize, byte[] fileHash, long time) {
         this.messageID = messageID;
         Realm realm = Realm.getDefaultInstance();
         RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", Long.parseLong(senderID)).findFirst();
@@ -31,6 +31,7 @@ public class StructMessageInfo implements Parcelable {
         this.fileMime = fileMime;
         this.filePic = filePic;
         this.filePath = localThumbnailPath;
+        this.messageText = messageText;
         if (this.attachment == null) {
             this.attachment = new StructMessageAttachment();
         }
