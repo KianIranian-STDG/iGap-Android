@@ -44,7 +44,6 @@ public class ChannelVideoItem extends AbstractMessage<ChannelVideoItem, ChannelV
 
         holder.cslv_txt_video_name.setText(mMessage.attachment.name);
         holder.cslv_txt_video_mime_type.setText(mMessage.fileMime);
-        holder.cslv_txt_vido_size.setText(Long.toString(mMessage.attachment.size));
 
         holder.cslv_imv_vido_image.setImageResource(Integer.parseInt(mMessage.filePic));
 
@@ -101,7 +100,6 @@ public class ChannelVideoItem extends AbstractMessage<ChannelVideoItem, ChannelV
         protected ImageView cslv_imv_vido_image;
         protected TextView cslv_txt_video_name;
         protected TextView cslv_txt_video_mime_type;
-        protected TextView cslv_txt_vido_size;
         protected ImageView chslr_imv_replay_pic;
         protected TextView chslr_txt_replay_from;
         protected TextView chslr_txt_replay_message;
@@ -131,9 +129,8 @@ public class ChannelVideoItem extends AbstractMessage<ChannelVideoItem, ChannelV
             cslch_txt_image_seen = (TextView) view.findViewById(R.id.cslch_txt_image_seen);
             cslch_txt_seen = (TextView) view.findViewById(R.id.cslch_txt_seen);
             cslv_imv_vido_image = (ImageView) view.findViewById(R.id.thumbnail);
-            cslv_txt_video_name = (TextView) view.findViewById(R.id.cslv_txt_video_name);
-            cslv_txt_video_mime_type = (TextView) view.findViewById(R.id.cslv_txt_video_mime_type);
-            cslv_txt_vido_size = (TextView) view.findViewById(R.id.cslv_txt_video_size);
+            cslv_txt_video_name = (TextView) view.findViewById(R.id.fileName);
+            cslv_txt_video_mime_type = (TextView) view.findViewById(R.id.duration);
             cslr_ll_forward = (LinearLayout) view.findViewById(R.id.cslr_ll_forward);
             cslr_txt_forward_from = (TextView) view.findViewById(R.id.cslr_txt_forward_from);
 

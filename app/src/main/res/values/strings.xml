@@ -129,6 +129,8 @@
     <string name="invite_friend">Invite Friend</string>
     <string name="slide_to_cancel_en"> &lt; Slide to Cancel </string>
 
+    <string name="video_duration" formatted="false">%s (%s)</string>
+
     <!--//mo-->
 
     <!--Toolbar-->

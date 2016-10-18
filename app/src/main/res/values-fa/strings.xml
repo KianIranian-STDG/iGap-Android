@@ -55,7 +55,7 @@
     <string name="ok">Ok</string>
 
 
-    //mo
+    <string name="video_duration" formatted="false">%s (%s)</string>
 
     <!--Toolbar-->
 

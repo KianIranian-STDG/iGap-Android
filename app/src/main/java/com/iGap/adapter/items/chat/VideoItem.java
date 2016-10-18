@@ -1,5 +1,6 @@
 package com.iGap.adapter.items.chat;
 
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,12 +9,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.iGap.R;
-import com.iGap.helper.HelperMimeType;
+import com.iGap.helper.ImageHelper;
 import com.iGap.interface_package.OnMessageViewClick;
 import com.iGap.module.Utils;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import java.util.List;
 
@@ -43,9 +47,29 @@ public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> 
     }
 
     @Override
-    public void onLoadFromLocal(ViewHolder holder, String localPath, LocalFileType fileType) {
+    public void onLoadFromLocal(final ViewHolder holder, String localPath, LocalFileType fileType) {
         super.onLoadFromLocal(holder, localPath, fileType);
-        new HelperMimeType().loadVideoThumbnail(holder.image, localPath);
+        ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.image, new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String imageUri, View view) {
+
+            }
+
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+            }
+
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                holder.image.setImageBitmap(ImageHelper.getRoundedCornerBitmap(loadedImage, (int) holder.itemView.getResources().getDimension(R.dimen.chatMessageImageCorner)));
+            }
+
+            @Override
+            public void onLoadingCancelled(String imageUri, View view) {
+
+            }
+        });
     }
 
     @Override
@@ -58,9 +82,8 @@ public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> 
             holder.image.getParent().requestLayout();
         }
 
-        holder.cslv_txt_video_name.setText(mMessage.attachment.name);
-        holder.cslv_txt_video_mime_type.setText(mMessage.fileMime);
-        holder.cslv_txt_vido_size.setText(Utils.humanReadableByteCount(mMessage.attachment.size, true));
+        holder.fileName.setText(mMessage.attachment.name);
+        holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), Double.toString(mMessage.attachment.duration).replace(".", ":"), Utils.humanReadableByteCount(mMessage.attachment.size, true)));
     }
 
     protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {
@@ -71,17 +94,15 @@ public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> 
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
         protected ImageView image;
-        protected TextView cslv_txt_video_name;
-        protected TextView cslv_txt_video_mime_type;
-        protected TextView cslv_txt_vido_size;
+        protected TextView fileName;
+        protected TextView duration;
 
         public ViewHolder(View view) {
             super(view);
 
             image = (ImageView) view.findViewById(R.id.thumbnail);
-            cslv_txt_video_name = (TextView) view.findViewById(R.id.cslv_txt_video_name);
-            cslv_txt_video_mime_type = (TextView) view.findViewById(R.id.cslv_txt_video_mime_type);
-            cslv_txt_vido_size = (TextView) view.findViewById(R.id.cslv_txt_video_size);
+            fileName = (TextView) view.findViewById(R.id.fileName);
+            duration = (TextView) view.findViewById(R.id.duration);
         }
     }
 }
