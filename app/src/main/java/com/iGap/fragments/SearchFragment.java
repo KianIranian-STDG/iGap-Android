@@ -25,6 +25,7 @@ import com.iGap.adapter.items.SearchItem;
 import com.iGap.adapter.items.SearchItemHeader;
 import com.iGap.interface_package.OnChatGetRoom;
 import com.iGap.libs.rippleeffect.RippleView;
+import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmChatHistory;
 import com.iGap.realm.RealmContacts;
 import com.iGap.realm.RealmRoom;
@@ -43,9 +44,6 @@ import java.util.List;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-/**
- * Created by android3 on 10/10/2016.
- */
 public class SearchFragment extends Fragment {
 
     private FastAdapter fastAdapter;
@@ -81,7 +79,6 @@ public class SearchFragment extends Fragment {
         edtSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
 
             }
 
@@ -124,8 +121,6 @@ public class SearchFragment extends Fragment {
 
 
         recyclerView = (RecyclerView) view.findViewById(R.id.sfl_recycleview);
-
-
     }
 
 
@@ -209,26 +204,20 @@ public class SearchFragment extends Fragment {
         Realm realm = Realm.getDefaultInstance();
 
         for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAll()) {
-
             StructSearch item = new StructSearch();
-
-//            item.avatar=realmRoom.getAvatar().getFile().getLocalFilePath();
-//            if(item.avatar==null) {
-//                item.avatar = realmRoom.getAvatar().getFile().getLocalThumbnailPath();
-//            }
 
             item.roomType = realmRoom.getType();
             item.name = realmRoom.getTitle();
             item.time = realmRoom.getLastMessageTime();
             item.id = realmRoom.getId();
             item.type = SearchType.room;
-
+            item.initials = realmRoom.getInitials();
+            item.color = realmRoom.getColor();
+            item.avatar = realmRoom.getAvatar();
 
             list.add(item);
-
         }
         realm.close();
-
     }
 
     private void fillContacts() {
@@ -244,7 +233,6 @@ public class SearchFragment extends Fragment {
                     str = str.substring(str.length() - 10, str.length());
                 }
 
-
                 StructSearch item = new StructSearch();
 
                 item.name = contact.getDisplay_name();
@@ -252,16 +240,14 @@ public class SearchFragment extends Fragment {
                 item.comment = str;
                 item.id = contact.getId();
                 item.type = SearchType.contact;
+                item.initials = contact.getInitials();
+                item.color = contact.getColor();
+                item.avatar = contact.getAvatar();
 
                 list.add(item);
-
             }
-
-
         }
-
         realm.close();
-
     }
 
     private void addHeader(String header) {
@@ -272,6 +258,8 @@ public class SearchFragment extends Fragment {
     }
 
     private void fillMessages() {
+
+        //TODO [Saeed Mozaffari] [2016-10-18 10:19 AM] - now load avatar just from local . shayad avatar download nashode bashe. inja download nemikonim faghat agar vojud dashte bashe neshun midim
 
         Realm realm = Realm.getDefaultInstance();
 
@@ -290,13 +278,15 @@ public class SearchFragment extends Fragment {
 
                 if (realmRoom != null) { // room exist
                     item.name = realmRoom.getTitle();
+                    item.initials = realmRoom.getInitials();
+                    item.color = realmRoom.getColor();
                     item.roomType = realmRoom.getType();
+                    item.avatar = realmRoom.getAvatar();
                 }
 
                 list.add(item);
             }
         }
-
     }
 
     private void goToRoom(final long id, SearchType type, long messageId) {
@@ -349,17 +339,19 @@ public class SearchFragment extends Fragment {
     //*********************************************************************************************
 
     public class StructSearch {
-        public String avatar = "";
-        public RoomType roomType;
         public String name = "";
-        public long time = 0;
         public String comment = "";
+        public String initials;
+        public String color;
+        public long time = 0;
         public long id = 0;
-        public SearchType type = SearchType.header;
         public long messageId = 0;
+        public RealmAvatar avatar;
+        public RoomType roomType;
+        public SearchType type = SearchType.header;
     }
 
-    private enum SearchType {
+    public enum SearchType {
         header,
         room,
         contact,

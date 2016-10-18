@@ -1150,7 +1150,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         imvSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i("MMM", "Send Message Start");
 
                 if (ll_attach_text.getVisibility() == View.VISIBLE) {
                     onActivityResult(tmpRequestCode, tmpResultCode, tmpData);
@@ -1158,7 +1157,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     edtChat.setText("");
                     return;
                 }
-
 
                 // if use click on a message, the message's text will be put to the EditText
                 // i set the message object for that view's tag to obtain it here
@@ -1168,8 +1166,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     final String message = getWrittenMessage();
                     if (!message.equals(messageInfo.messageText)) {
 
-                        //TODO [Saeed Mozaffari] [2016-09-17 3:12 PM] - FORCE - check this code for update edited list
-                        //Start new Changes for clientCondition ==> remove comment after check this code
                         final Realm realm1 = Realm.getDefaultInstance();
                         realm1.executeTransaction(new Realm.Transaction() {
                             @Override

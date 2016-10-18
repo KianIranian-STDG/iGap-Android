@@ -9,9 +9,6 @@ import android.util.Log;
 
 import com.iGap.G;
 
-/**
- * Created by android3 on 8/13/2016.
- */
 public class HelperImageBackColor {
 
     /**
@@ -89,10 +86,10 @@ public class HelperImageBackColor {
         Log.i("CCC", "text : " + text);
 
         if (color == null || color.equals("")) {
-            color = "#7f7f7f";
+            color = "#7f7f7f7f";
         }
         if (text == null || text.equals("")) {
-            alphabetName = "?";
+            alphabetName = " ";
         } else {
             alphabetName = text.replace(" ", "");
         }

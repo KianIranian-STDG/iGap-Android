@@ -1,5 +1,7 @@
 package com.iGap.adapter.items;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -15,6 +17,7 @@ import com.iGap.realm.enums.RoomType;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 
+import java.io.File;
 import java.util.List;
 
 
@@ -41,13 +44,7 @@ public class SearchItem extends AbstractItem<SearchItem, SearchItem.ViewHolder> 
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-
-        if (item.avatar.length() == 0) {
-            String name = HelperImageBackColor.getFirstAlphabetName(item.name);
-            holder.avatar.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(holder.avatar.getLayoutParams().width, name, HelperImageBackColor.getColor(name)));
-        } else {
-            // TODO: 10/15/2016  set avatar picture   nejati
-        }
+        setAvatar(holder);
 
         holder.name.setText(item.name);
         holder.lastSeen.setText(item.comment);
@@ -69,6 +66,28 @@ public class SearchItem extends AbstractItem<SearchItem, SearchItem.ViewHolder> 
             holder.txtIcon.setText(G.context.getString(R.string.fa_bullhorn));
         }
 
+    }
+
+    private void setAvatar(ViewHolder holder) {
+        if (item.avatar != null && item.avatar.getFile() != null) {
+
+            String filepath = item.avatar.getFile().getLocalFilePath();
+            if (filepath != null && new File(filepath).exists()) {
+                Bitmap bitmap = BitmapFactory.decodeFile(filepath);
+                holder.avatar.setImageBitmap(bitmap);
+            } else {
+                String filepathThumbnail = item.avatar.getFile().getLocalThumbnailPath();
+                if (filepathThumbnail != null && new File(filepathThumbnail).exists()) {
+                    Bitmap bitmap = BitmapFactory.decodeFile(filepathThumbnail);
+                    holder.avatar.setImageBitmap(bitmap);
+                } else {
+                    holder.avatar.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(holder.avatar.getLayoutParams().width, item.initials, item.color));
+                }
+            }
+
+        } else {
+            holder.avatar.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(holder.avatar.getLayoutParams().width, item.initials, item.color));
+        }
     }
 
     protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {

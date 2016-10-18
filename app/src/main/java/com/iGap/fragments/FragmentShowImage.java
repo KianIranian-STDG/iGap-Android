@@ -115,34 +115,17 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
 
         Button btnBack = (Button) view.findViewById(R.id.asi_btn_back);
         btnBack.setTypeface(G.fontawesome);
-//        btnBack.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Log.e("ddd", "close");
-//
-//                getActivity().getFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
-//                ((ActivitySetting) getActivity()).setImage();
-//            }
-//        });
         RippleView rippleBack = (RippleView) view.findViewById(R.id.asi_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
             @Override
             public void onComplete(RippleView rippleView) {
                 getActivity().getFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
-                //((ActivitySetting) getActivity()).setImage();
             }
-
         });
 
         Button btnMenu = (Button) view.findViewById(R.id.asi_btn_menu);
         btnMenu.setTypeface(G.fontawesome);
-//        btnMenu.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                popUpMenuShowImage();
-//            }
-//        });
         RippleView rippleMenu = (RippleView) view.findViewById(R.id.asi_ripple_menu);
         rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
@@ -150,7 +133,6 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
             public void onComplete(RippleView rippleView) {
                 popUpMenuShowImage();
             }
-
         });
         viewPager = (ViewPager) view.findViewById(R.id.asi_view_pager);
 
@@ -162,7 +144,6 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
 
         initViewPager();
     }
-
 
     //***************************************************************************************
 
