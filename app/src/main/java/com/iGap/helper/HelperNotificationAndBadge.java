@@ -378,12 +378,18 @@ public class HelperNotificationAndBadge {
             if (updateNotification) {
                 notificationManager.cancel(notificationId);
             }
-            ShortcutBadger.applyCount(G.context, 0);
+            try {
+                ShortcutBadger.applyCount(G.context, 0);
+            } catch (RuntimeException e) {
+            }
         } else {
             if (updateNotification) {
                 setNotification();
             }
-            ShortcutBadger.applyCount(G.context, unreadMessageCount);
+            try {
+                ShortcutBadger.applyCount(G.context, unreadMessageCount);
+            } catch (RuntimeException e) {
+            }
         }
     }
 

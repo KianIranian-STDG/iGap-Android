@@ -12,6 +12,7 @@ import com.iGap.fragments.SearchFragment;
 import com.iGap.helper.HelperImageBackColor;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.CustomTextViewMedium;
+import com.iGap.module.EmojiTextView;
 import com.iGap.module.TimeUtils;
 import com.iGap.realm.enums.RoomType;
 import com.mikepenz.fastadapter.items.AbstractItem;
@@ -105,7 +106,7 @@ public class SearchItem extends AbstractItem<SearchItem, SearchItem.ViewHolder> 
         protected CircleImageView avatar;
         protected CustomTextViewMedium name;
         protected TextView txtIcon;
-        protected CustomTextViewMedium lastSeen;
+        protected EmojiTextView lastSeen;
         protected TextView txtTime;
 
         public ViewHolder(View view) {
@@ -113,7 +114,7 @@ public class SearchItem extends AbstractItem<SearchItem, SearchItem.ViewHolder> 
 
             avatar = (CircleImageView) view.findViewById(R.id.sfsl_imv_contact_avatar);
             name = (CustomTextViewMedium) view.findViewById(R.id.sfsl_txt_contact_name);
-            lastSeen = (CustomTextViewMedium) view.findViewById(R.id.sfsl_txt_contact_lastseen);
+            lastSeen = (EmojiTextView) view.findViewById(R.id.sfsl_txt_contact_lastseen);
             txtIcon = (TextView) view.findViewById(R.id.sfsl_txt_icon);
             txtIcon.setTypeface(G.flaticon);
             txtTime = (TextView) view.findViewById(R.id.sfsl_txt_time);

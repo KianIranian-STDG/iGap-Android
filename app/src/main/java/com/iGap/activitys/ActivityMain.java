@@ -720,7 +720,11 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
     @Override
     public void onBackPressed() {
-        if (mLeftDrawerLayout.isShownMenu()) {
+
+        SearchFragment myFragment = (SearchFragment) getSupportFragmentManager().findFragmentByTag("Search_fragment");
+        if (myFragment != null && myFragment.isVisible()) {
+            getSupportFragmentManager().beginTransaction().remove(myFragment).commit();
+        } else if (mLeftDrawerLayout.isShownMenu()) {
             mLeftDrawerLayout.closeDrawer();
         } else {
             super.onBackPressed();

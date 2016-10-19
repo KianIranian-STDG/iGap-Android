@@ -37,6 +37,7 @@
     <dimen name="dp44">66dp</dimen>
     <dimen name="dp48">72dp</dimen>
     <dimen name="dp52">78dp</dimen>
+    <dimen name="dp56">84dp</dimen>
     <dimen name="dp60">90dp</dimen>
     <dimen name="dp68">102dp</dimen>
     <dimen name="dp80">120dp</dimen>

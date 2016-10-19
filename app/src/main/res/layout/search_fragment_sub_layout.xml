@@ -57,7 +57,7 @@
             </LinearLayout>
 
 
-            <com.iGap.module.CustomTextViewMedium
+            <com.iGap.module.EmojiTextView
                 android:id="@+id/sfsl_txt_contact_lastseen"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

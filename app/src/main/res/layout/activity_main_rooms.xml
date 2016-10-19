@@ -92,8 +92,8 @@
 
     <com.iGap.libs.floatingAddButton.ArcMenu
         android:id="@+id/ac_arc_button_add"
-        android:layout_width="@dimen/dp60"
-        android:layout_height="@dimen/dp60"
+        android:layout_width="@dimen/dp56"
+        android:layout_height="@dimen/dp56"
         android:layout_gravity="bottom|right"
         app:borderWidth="0dp"
         app:menu_color="@color/green"
@@ -102,23 +102,26 @@
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/ac_fab_start_new_chat"
-            android:layout_width="@dimen/dp60"
-            android:layout_height="@dimen/dp60"
+            android:layout_width="@dimen/dp56"
+            android:layout_height="@dimen/dp56"
             android:src="@mipmap/single_chat"
+            app:elevation="@dimen/dp6"
             app:backgroundTint="@color/green" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/ac_fab_crate_new_group"
-            android:layout_width="@dimen/dp60"
-            android:layout_height="@dimen/dp60"
+            android:layout_width="@dimen/dp56"
+            android:layout_height="@dimen/dp56"
             android:src="@mipmap/group_chat"
+            app:elevation="@dimen/dp6"
             app:backgroundTint="@color/green" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/ac_fab_crate_new_channel"
-            android:layout_width="@dimen/dp60"
-            android:layout_height="@dimen/dp60"
+            android:layout_width="@dimen/dp56"
+            android:layout_height="@dimen/dp56"
             android:src="@mipmap/channel_white"
+            app:elevation="@dimen/dp6"
             app:backgroundTint="@color/green" />
 
     </com.iGap.libs.floatingAddButton.ArcMenu>
