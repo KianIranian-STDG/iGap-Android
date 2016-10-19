@@ -1,5 +1,7 @@
 package com.iGap.realm;
 
+import android.util.Log;
+
 import com.iGap.proto.ProtoGlobal;
 
 import io.realm.Realm;
@@ -151,5 +153,59 @@ public class RealmRegisteredInfo extends RealmObject {
 
         addAvatar(realmAvatar);
         realm.close();
+    }
+
+    /**
+     * create new object from RealmRegisteredInfo and set all fields with registeredUser Proto
+     *
+     * @param registeredUser proto that get from server
+     * @param realm          realm that get from executeTransaction
+     */
+
+    public void setRegisteredUserInfo(ProtoGlobal.RegisteredUser registeredUser, RealmRegisteredInfo realmRegisteredInfo, Realm realm) {
+        fillRegisteredUserInfo(registeredUser, realmRegisteredInfo, realm);
+    }
+
+    /**
+     * get exist row from RealmRegisteredInfo and set all fields with registeredUser Proto
+     *
+     * @param registeredUser      proto that get from server
+     * @param realmRegisteredInfo current object from realm
+     * @param realm               realm that get from executeTransaction
+     */
+    public void updateRegisteredUserInfo(ProtoGlobal.RegisteredUser registeredUser, RealmRegisteredInfo realmRegisteredInfo, Realm realm) {
+        fillRegisteredUserInfo(registeredUser, realmRegisteredInfo, realm);
+    }
+
+    /**
+     * fill object from proto to realm
+     *
+     * @param registeredUser proto that get from server
+     * @param info           object from RealmRegisteredInfo
+     * @param realm          realm that get from executeTransaction
+     */
+
+    private void fillRegisteredUserInfo(ProtoGlobal.RegisteredUser registeredUser, RealmRegisteredInfo info, Realm realm) {
+
+        info.setId(registeredUser.getId());
+        info.setUsername(registeredUser.getUsername());
+        info.setPhone(registeredUser.getPhone());
+        info.setFirstName(registeredUser.getFirstName());
+        info.setLastName(registeredUser.getLastName());
+        info.setDisplayName(registeredUser.getDisplayName());
+        info.setInitials(registeredUser.getInitials());
+        info.setColor(registeredUser.getColor());
+        info.setStatus(registeredUser.getStatus().toString());
+        info.setLastName(registeredUser.getLastName());
+        info.setAvatarCount(registeredUser.getAvatarCount());
+
+        if (registeredUser.getAvatarCount() > 0) {
+            Log.i("SSS", "Avatar Exist");
+            RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo("file.token", registeredUser.getAvatar().getFile().getToken()).findFirst();
+            Log.i("SSS", "realmAvatar : " + realmAvatar);
+            if (realmAvatar == null) {
+                info.addAvatar(RealmAvatar.convert(registeredUser, realm));
+            }
+        }
     }
 }

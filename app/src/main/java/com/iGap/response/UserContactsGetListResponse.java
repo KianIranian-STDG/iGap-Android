@@ -1,15 +1,13 @@
 package com.iGap.response;
 
-import android.util.Log;
-
 import com.iGap.G;
 import com.iGap.module.Contacts;
-import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoUserContactsGetList;
 import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmContacts;
+import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmThumbnail;
 
 import io.realm.Realm;
@@ -42,6 +40,15 @@ public class UserContactsGetListResponse extends MessageHandler {
                 realm.delete(RealmContacts.class);
 
                 for (ProtoGlobal.RegisteredUser registerUser : builder.getRegisteredUserList()) {
+
+                    RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", registerUser.getId()).findFirst();
+                    if (realmRegisteredInfo == null) {
+                        realmRegisteredInfo = realm.createObject(RealmRegisteredInfo.class);
+                        realmRegisteredInfo.setRegisteredUserInfo(registerUser, realmRegisteredInfo, realm);
+                    } else {
+                        realmRegisteredInfo.updateRegisteredUserInfo(registerUser, realmRegisteredInfo, realm);
+                    }
+
                     RealmContacts listResponse = realm.createObject(RealmContacts.class);
                     listResponse.setId(registerUser.getId());
                     listResponse.setUsername(registerUser.getUsername());
@@ -112,19 +119,12 @@ public class UserContactsGetListResponse extends MessageHandler {
 
     @Override
     public void timeOut() {
-        Log.i("XXX", "UserContactsGetListResponse timeOut");
+        super.timeOut();
     }
 
     @Override
     public void error() {
-
-        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
-        errorResponse.getMajorCode();
-        errorResponse.getMinorCode();
-
-        Log.i("XXX", "UserContactsGetListResponse errorReponse.getMajorCode() : " + errorResponse.getMajorCode());
-        Log.i("XXX", "UserContactsGetListResponse errorReponse.getMinorCode() : " + errorResponse.getMinorCode());
-
+        super.error();
     }
 }
 
