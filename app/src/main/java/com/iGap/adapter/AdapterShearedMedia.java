@@ -8,8 +8,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +33,7 @@ import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmChatHistory;
 import com.iGap.realm.RealmRoomMessage;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import io.realm.Realm;
@@ -126,12 +129,52 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
     }
 
+
     private View setLayoutHeaderTime(View parent) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.shared_media_sub_layout_time, null);
         RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         view.setLayoutParams(lp);
         view.setBackgroundColor(Color.parseColor("#cccccc"));
         return view;
+    }
+
+
+    class LoadImageToImageView extends AsyncTask<Object, Void, Bitmap> {
+
+        private ImageView imv;
+        private String path;
+
+
+        public LoadImageToImageView(ImageView imageView, String path) {
+            imv = imageView;
+            this.path = path;
+        }
+
+
+        @Override
+        protected Bitmap doInBackground(Object... params) {
+
+            Bitmap bitmap = null;
+//            BitmapFactory.Options opts = new BitmapFactory.Options();
+//            opts.inSampleSize = 8;
+
+            File file = new File(path);
+
+            if (file.exists())
+                bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+
+            return bitmap;
+        }
+
+
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            Log.e("ddd", "LoadImageToImageView");
+            if (result != null && imv != null) {
+                imv.setImageBitmap(result);
+            }
+        }
+
     }
 
     @Override
@@ -152,11 +195,26 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
             if (mediaType.equals(context.getString(R.string.shared_media))) {
 
-                String path = list.get(position).getAttachment().getLocalFilePath();
-                if (path == null)
-                    path = list.get(position).getAttachment().getLocalThumbnailPath();
+                String path = "";
 
-                ((MyHoldersImage) holder).imvPicFile.setImageBitmap(Bitmap.createScaledBitmap(BitmapFactory.decodeFile(path), 300, 300, false));//todo in asynk task
+                if (list.get(position).getMessageType().equals(ProtoGlobal.RoomMessageType.VIDEO.toString()) ||
+                        list.get(position).getMessageType().equals(ProtoGlobal.RoomMessageType.VIDEO_TEXT.toString())) {
+                    path = list.get(position).getAttachment().getLocalThumbnailPath();
+                    if (path.length() < 1) {
+                        ((MyHoldersImage) holder).imvPicFile.setImageResource(R.mipmap.j_video);
+                    } else {
+                        new HelperMimeType().loadVideoThumbnail(((MyHoldersImage) holder).imvPicFile, path);
+                        //  new LoadImageToImageView(((MyHoldersImage) holder).imvPicFile, path).execute();
+                    }
+
+                } else {
+                    path = list.get(position).getAttachment().getLocalFilePath();
+                    if (path.length() < 1)
+                        path = list.get(position).getAttachment().getLocalThumbnailPath();
+
+                    if (path.length() > 0)
+                        new LoadImageToImageView(((MyHoldersImage) holder).imvPicFile, path).execute();
+                }
 
             } else if (mediaType.equals(context.getString(R.string.shared_files))) {
                 MyHoldersFile m = (MyHoldersFile) holder;
@@ -166,7 +224,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
                     m.btnFileState.setText(context.getString(R.string.fa_arrow_down));
                 }
 
-                //// TODO: 9/7/2016 nejati     get picture thumbnile if file image of video or music    use HelperMimeType
+
             }
         }
 
@@ -247,17 +305,16 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
             super(itemView);
 
             imvPicFile = (ImageView) itemView.findViewById(R.id.smslf_imv_icon_file);
-            imvPicFile.setImageBitmap(HelperMimeType.getMimePic(context, HelperMimeType.getMimeResource(list.get(position).getAttachment().getLocalFilePath())));
-
             btnFileState = (Button) itemView.findViewById(R.id.smslf_btn_file_state);
             btnFileState.setTypeface(G.fontawesome);
-
             TextView txtFileName = (TextView) itemView.findViewById(R.id.smslf_txt_file_name);
-            txtFileName.setText(list.get(position).getAttachment().getName());
-
             TextView txtFileInfo = (TextView) itemView.findViewById(R.id.smslf_txt_file_info);
-            txtFileInfo.setText(Utils.humanReadableByteCount(list.get(position).getAttachment().getSize(), true));
 
+            if (list.get(position).getAttachment() != null) {
+                imvPicFile.setImageBitmap(HelperMimeType.getMimePic(context, HelperMimeType.getMimeResource(list.get(position).getAttachment().getLocalFilePath())));
+                txtFileName.setText(list.get(position).getAttachment().getName());
+                txtFileInfo.setText(Utils.humanReadableByteCount(list.get(position).getAttachment().getSize(), true));
+            }
         }
 
     }
@@ -278,10 +335,13 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
             btnFileState.setTypeface(G.fontawesome);
 
             TextView txtFileName = (TextView) itemView.findViewById(R.id.smslf_txt_file_name);
-            txtFileName.setText(list.get(position).getAttachment().getName());
-
             TextView txtFileInfo = (TextView) itemView.findViewById(R.id.smslf_txt_file_info);
-            txtFileInfo.setText(Utils.humanReadableByteCount(list.get(position).getAttachment().getSize(), true));
+
+            if (list.get(position).getAttachment() != null) {
+                txtFileName.setText(list.get(position).getAttachment().getName());
+                txtFileInfo.setText(Utils.humanReadableByteCount(list.get(position).getAttachment().getSize(), true));
+            }
+
 
         }
 
@@ -460,7 +520,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
         bundle.putInt("SelectedImage", selectedPicture);
         fragment.setArguments(bundle);
 
-        ((Activity) context).getFragmentManager().beginTransaction().replace(R.id.asm_ll_parent, fragment).commit();
+        ((Activity) context).getFragmentManager().beginTransaction().replace(R.id.asm_ll_parent, fragment, "Show_Image_fragment_shared_media").commit();
 
     }
 

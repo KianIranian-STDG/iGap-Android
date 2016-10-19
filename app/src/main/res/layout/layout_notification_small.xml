@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="64dp"
+    android:gravity="center"
     android:background="@drawable/notification_gradiant"
     android:orientation="horizontal">
 
@@ -16,7 +17,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:padding="@dimen/dp4"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
 
@@ -30,7 +31,8 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/dp16"
+                android:singleLine="true"
+                android:textSize="@dimen/sp16"
                 android:textColor="@color/white"
                 android:text="New Text" />
 
@@ -40,7 +42,7 @@
                 android:layout_width="@dimen/dp80"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:textSize="@dimen/dp12"
+                android:textSize="@dimen/sp12"
                 android:textColor="@color/white"
                 android:text="10:52" />
 
@@ -51,8 +53,9 @@
             android:id="@+id/ln_txt_message_notification"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/dp12"
-            android:layout_marginTop="@dimen/dp4"
+            android:layout_marginRight="@dimen/dp12"
+            android:textSize="@dimen/sp12"
+            android:singleLine="true"
             android:textColor="@color/white"
             android:text="New Text" />
 

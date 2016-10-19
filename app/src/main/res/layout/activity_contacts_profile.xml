@@ -149,6 +149,18 @@
     </android.support.design.widget.AppBarLayout>
 
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/chi_fab_setPic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp20"
+        android:clickable="true"
+        android:src="@mipmap/comment"
+        android:theme="@style/FabButton"
+        android:tint="@color/gray"
+        app:layout_anchor="@+id/chi_appbar"
+        app:layout_anchorGravity="bottom|right|end" />
+
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/chi_scroll_nested"
         android:layout_width="match_parent"
@@ -297,6 +309,7 @@
                         android:paddingLeft="@dimen/dp4"
                         android:paddingStart="@dimen/dp4"
                         android:text="@string/chi_shared_Media"
+                        android:clickable="false"
                         android:textColor="@android:color/secondary_text_light"
                         android:textSize="@dimen/sp18"
                         android:textStyle="bold" />
@@ -308,6 +321,7 @@
                         android:gravity="center_vertical"
                         android:inputType="phone"
                         android:maxLength="11"
+                        android:clickable="false"
                         android:paddingLeft="@dimen/dp4"
                         android:paddingStart="@dimen/dp4"
                         android:text="12"
@@ -396,18 +410,6 @@
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/chi_fab_setPic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dp20"
-        android:clickable="true"
-        android:src="@mipmap/comment"
-        android:theme="@style/FabButton"
-        android:tint="@color/gray"
-        app:layout_anchor="@+id/chi_appbar"
-        app:layout_anchorGravity="bottom|right|end" />
 
 </android.support.design.widget.CoordinatorLayout>
 

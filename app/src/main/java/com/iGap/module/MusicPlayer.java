@@ -558,10 +558,12 @@ public class MusicPlayer {
                         || chatHistory.getRoomMessage().getMessageType().equals("AUDIO_TEXT")) {
                     mediaList.add(chatHistory.getRoomMessage());
 
-                    String tmpPath = chatHistory.getRoomMessage().getAttachment().getLocalFilePath();
-                    if (tmpPath != null)
-                        if (tmpPath.equals(musicPath))
-                            selectedMedia = mediaList.size();
+                    if (chatHistory.getRoomMessage().getAttachment() != null) {
+                        String tmpPath = chatHistory.getRoomMessage().getAttachment().getLocalFilePath();
+                        if (tmpPath != null)
+                            if (tmpPath.equals(musicPath))
+                                selectedMedia = mediaList.size();
+                    }
                 }
             }
 

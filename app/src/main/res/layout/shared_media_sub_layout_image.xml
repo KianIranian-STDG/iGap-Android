@@ -19,7 +19,7 @@
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
-            android:src="@mipmap/c" />
+            android:src="@mipmap/difaultimage" />
 
         <LinearLayout
             android:id="@+id/smsl_ll_video"

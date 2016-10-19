@@ -177,8 +177,8 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
                     txtImageName.setText(sharedMedia.attachment.name);
                 }
 
-                if (list.get(selectedFile).time != 0) {
-                    txtImageDate.setText(TimeUtils.toLocal(list.get(selectedFile).time, G.CHAT_MESSAGE_TIME));
+                if (sharedMedia.time != 0) {
+                    txtImageDate.setText(TimeUtils.toLocal(sharedMedia.time, G.CHAT_MESSAGE_TIME));
                 }
             }
 

@@ -19,6 +19,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AdapterShearedMedia;
+import com.iGap.fragments.FragmentShowImage;
 import com.iGap.module.MusicPlayer;
 import com.iGap.module.OnComplete;
 import com.iGap.proto.ProtoGlobal;
@@ -79,8 +80,10 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
     @Override
     public void onBackPressed() {
-
-        if (!mAdapter.resetSelected()) {
+        FragmentShowImage myFragment = (FragmentShowImage) getFragmentManager().findFragmentByTag("Show_Image_fragment_shared_media");
+        if (myFragment != null && myFragment.isVisible()) {
+            getFragmentManager().beginTransaction().remove(myFragment).commit();
+        } else if (!mAdapter.resetSelected()) {
             super.onBackPressed();
         }
     }

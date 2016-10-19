@@ -455,10 +455,9 @@ public class ActivityContactsProfile extends ActivityEnhanced {
             @Override
             public void onClick(View view) {
 
-//                startActivity(new Intent(ActivityContactsProfile.this , ActivitySharedMedia.class));
-//                finish();
-
-                // TODO: 9/3/2016 (molareza) go to MediaShared page
+                Intent intent = new Intent(ActivityContactsProfile.this, ActivityShearedMedia.class);
+                intent.putExtra("RoomID", roomId);
+                startActivity(intent);
 
             }
         });
