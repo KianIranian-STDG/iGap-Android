@@ -233,6 +233,7 @@ public class G extends Application {
     public static final String DIR_NEW_CHANEL = DIR_APP + "/.new_chanel";
     public static final String DIR_ALL_IMAGE_USER_CONTACT = DIR_APP + "/.all_image_user_contact";
     public static final String DIR_IMAGE_USER = DIR_APP + "/image_user";
+    public static final String DIR_TEMP = DIR_APP + "/.temp";
 
     public static File chatBackground;
     public static File IMAGE_NEW_GROUP;
@@ -272,6 +273,7 @@ public class G extends Application {
         new File(DIR_NEW_CHANEL).mkdirs();
         new File(DIR_ALL_IMAGE_USER_CONTACT).mkdirs();
         new File(DIR_IMAGE_USER).mkdirs();
+        new File(DIR_TEMP).mkdirs();
 
         chatBackground = new File(DIR_CHAT_BACKGROUND, "addChatBackground.jpg");
         IMAGE_NEW_GROUP = new File(G.DIR_NEW_GROUP, "image_new_group.jpg");

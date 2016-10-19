@@ -769,7 +769,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnFileUplo
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        } else if (status == ProtoFileUploadStatus.FileUploadStatusResponse.Status.PROCESSING) {
+        } else if (status == ProtoFileUploadStatus.FileUploadStatusResponse.Status.PROCESSING || (status == ProtoFileUploadStatus.FileUploadStatusResponse.Status.UPLOADING) && progress == 100D) {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {

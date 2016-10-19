@@ -31,7 +31,12 @@ public class FileDownloadResponse extends MessageHandler {
         String token = identityParams[0];
         ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.valueOf(identityParams[1]);
         long fileSize = Long.parseLong(identityParams[2]);
-        String filePath = identityParams[3];
+        String filePath;
+        if (selector == ProtoFileDownload.FileDownload.Selector.FILE) {
+            filePath = G.DIR_TEMP + "/" + identityParams[3];
+        } else {
+            filePath = identityParams[3];
+        }
         int previousOffset = Integer.parseInt(identityParams[4]);
         boolean avatarRequested = false;
         long userId = -1;

@@ -32,6 +32,7 @@ import com.mikepenz.fastadapter.items.AbstractItem;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import io.meness.github.messageprogress.MessageProgress;
@@ -349,6 +350,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withOnMessageProgress(new OnMessageProgressClick() {
                         @Override
                         public void onMessageProgressClick(MessageProgress progress) {
+                            ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_cancel);
+                            ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withIndeterminate(true);
                             // create new download attachment once with attachment token
                             if (mMessage.downloadAttachment == null) {
                                 mMessage.downloadAttachment = new StructDownloadAttachment(mMessage.attachment.token);
@@ -407,50 +410,37 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     @Override
     @CallSuper
     public void onRequestDownloadFile(int offset, int progress) {
+        String fileName = mMessage.attachment.token + "_" + mMessage.attachment.name;
         if (progress == 100) {
+            mMessage.attachment.setLocalFilePath(Long.parseLong(mMessage.messageID), Utils.suitableAppFilePath(mMessage.messageType) + "/" + fileName);
+
+            try {
+                Utils.cutFromTemp(mMessage.messageType, fileName);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             return; // necessary
         }
         ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
-        if (mMessage.attachment.getLocalFilePath() == null || mMessage.attachment.getLocalFilePath().isEmpty()) {
-            String basePath = "";
-            switch (mMessage.messageType) {
-                case AUDIO:
-                case AUDIO_TEXT:
-                case VOICE:
-                    basePath = G.DIR_AUDIOS;
-                    break;
-                case FILE:
-                case FILE_TEXT:
-                    basePath = G.DIR_DOCUMENT;
-                    break;
-                case IMAGE:
-                case IMAGE_TEXT:
-                    basePath = G.DIR_IMAGES;
-                    break;
-                case VIDEO:
-                case VIDEO_TEXT:
-                    basePath = G.DIR_VIDEOS;
-                    break;
-
-            }
-            mMessage.attachment.setLocalFilePath(Long.parseLong(mMessage.messageID), basePath + "/" + mMessage.downloadAttachment.token + System.nanoTime() + mMessage.attachment.name);
-        }
-        String identity = mMessage.downloadAttachment.token + '*' + selector.toString() + '*' + mMessage.attachment.size + '*' + mMessage.attachment.getLocalFilePath() + '*' + mMessage.downloadAttachment.offset;
+        String identity = mMessage.attachment.token + '*' + selector.toString() + '*' + mMessage.attachment.size + '*' + fileName + '*' + mMessage.downloadAttachment.offset;
 
         new RequestFileDownload().download(mMessage.downloadAttachment.token, offset, (int) mMessage.attachment.size, selector, identity);
     }
 
     @Override
     public void onRequestDownloadThumbnail() {
-        ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
-        if (mMessage.attachment.getLocalThumbnailPath() == null || mMessage.attachment.getLocalThumbnailPath().isEmpty()) {
-            mMessage.attachment.setLocalThumbnailPath(Long.parseLong(mMessage.messageID), Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + mMessage.downloadAttachment.token + System.nanoTime() + ".jpg");
+        if (mMessage.attachment.smallThumbnail.size != 0) {
+            ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
+            if (mMessage.attachment.getLocalThumbnailPath() == null || mMessage.attachment.getLocalThumbnailPath().isEmpty()) {
+                mMessage.attachment.setLocalThumbnailPath(Long.parseLong(mMessage.messageID), Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + mMessage.downloadAttachment.token + System.nanoTime() + ".jpg");
+            }
+
+            // I don't use offset in getting thumbnail
+            String identity = mMessage.downloadAttachment.token + '*' + selector.toString() + '*' + mMessage.attachment.smallThumbnail.size + '*' + mMessage.attachment.getLocalThumbnailPath() + '*' + mMessage.downloadAttachment.offset;
+
+            new RequestFileDownload().download(mMessage.downloadAttachment.token, 0, (int) mMessage.attachment.smallThumbnail.size, selector, identity);
         }
-
-        // I don't use offset in getting thumbnail
-        String identity = mMessage.downloadAttachment.token + '*' + selector.toString() + '*' + mMessage.attachment.smallThumbnail.size + '*' + mMessage.attachment.getLocalThumbnailPath() + '*' + mMessage.downloadAttachment.offset;
-
-        new RequestFileDownload().download(mMessage.downloadAttachment.token, 0, (int) mMessage.attachment.smallThumbnail.size, selector, identity);
     }
 
     private void requestForThumbnail() {
@@ -478,29 +468,46 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
 
         if (mMessage.sendType == MyType.SendType.send) {
-            ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_cancel);
-            // update progress when user trying to upload
-            // FIXME: 10/15/2016 [Alireza] in condition nabayad bashe vali vase jelogiri az neshon dadane progress avalie gozashtam nabayad ba 100% moghayese kard
-            if (mMessage.uploadProgress != 100) {
-                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withProgress(mMessage.uploadProgress);
+            // update progress when user trying to upload or download
+            if (MessagesAdapter.uploading.containsKey(Long.parseLong(mMessage.messageID))) {
+                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_cancel);
+                holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
+                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withProgress(MessagesAdapter.uploading.get(Long.parseLong(mMessage.messageID)));
+                if (MessagesAdapter.uploading.get(Long.parseLong(mMessage.messageID)) == 100) {
+                    ((MessageProgress) holder.itemView.findViewById(R.id.progress)).performProgress();
+                }
+            } else {
+                checkForDownloading(holder);
+            }
+        } else {
+            checkForDownloading(holder);
+        }
+    }
+
+    private void checkForDownloading(VH holder) {
+        if (mMessage.downloadAttachment != null) {
+            if (MessagesAdapter.downloading.containsKey(mMessage.attachment.token)) {
+                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_cancel);
+                holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
+                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withProgress(MessagesAdapter.downloading.get(mMessage.attachment.token));
+
+                if (MessagesAdapter.downloading.get(mMessage.attachment.token) == 100) {
+                    MessagesAdapter.downloading.remove(mMessage.attachment.token);
+                    ((MessageProgress) holder.itemView.findViewById(R.id.progress)).performProgress();
+                }
             } else {
                 if (mMessage.attachment.isFileExistsOnLocal()) {
                     ((MessageProgress) holder.itemView.findViewById(R.id.progress)).performProgress();
                 } else {
+                    ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_download);
                     holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
                 }
             }
         } else {
-            ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_download);
-            // update progress when user trying to download
-            if (mMessage.downloadAttachment != null) {
-                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withProgress(mMessage.downloadAttachment.progress);
+            if (mMessage.attachment.isFileExistsOnLocal()) {
+                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).performProgress();
             } else {
-                if (mMessage.attachment.isFileExistsOnLocal()) {
-                    ((MessageProgress) holder.itemView.findViewById(R.id.progress)).performProgress();
-                } else {
-                    holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
-                }
+                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_download);
             }
         }
     }

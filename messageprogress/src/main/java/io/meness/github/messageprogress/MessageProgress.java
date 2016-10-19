@@ -121,6 +121,9 @@ public class MessageProgress extends FrameLayout implements IMessageProgress, Vi
                 if (child.getVisibility() != VISIBLE) {
                     child.setVisibility(VISIBLE);
                 }
+                if (((CircularProgressView) child).isIndeterminate()) {
+                    ((CircularProgressView) child).setIndeterminate(false);
+                }
 
                 ((CircularProgressView) child).setProgress(i);
                 break;

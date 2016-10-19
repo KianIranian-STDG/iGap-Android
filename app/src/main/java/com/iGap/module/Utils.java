@@ -11,11 +11,16 @@ import android.net.Uri;
 import android.util.DisplayMetrics;
 import android.view.Display;
 
+import com.iGap.G;
 import com.iGap.R;
+import com.iGap.proto.ProtoGlobal;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
@@ -182,6 +187,52 @@ public final class Utils {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static void cutFromTemp(ProtoGlobal.RoomMessageType messageType, String fileName) throws IOException {
+        File cutTo = new File(suitableAppFilePath(messageType) + "/" + fileName);
+        File cutFrom = new File(G.DIR_TEMP + "/" + fileName);
+
+        copyFile(cutFrom, cutTo);
+        deleteFile(cutFrom);
+    }
+
+    private static void copyFile(File src, File dst) throws IOException {
+        InputStream in = new FileInputStream(src);
+        OutputStream out = new FileOutputStream(dst);
+
+        // Transfer bytes from in to out
+        byte[] buf = new byte[1024];
+        int len;
+        while ((len = in.read(buf)) > 0) {
+            out.write(buf, 0, len);
+        }
+        in.close();
+        out.close();
+    }
+
+    private static boolean deleteFile(File src) {
+        return src.delete();
+    }
+
+    public static String suitableAppFilePath(ProtoGlobal.RoomMessageType messageType) {
+        switch (messageType) {
+            case AUDIO:
+            case AUDIO_TEXT:
+            case VOICE:
+                return G.DIR_AUDIOS;
+            case FILE:
+            case FILE_TEXT:
+                return G.DIR_DOCUMENT;
+            case IMAGE:
+            case IMAGE_TEXT:
+                return G.DIR_IMAGES;
+            case VIDEO:
+            case VIDEO_TEXT:
+                return G.DIR_VIDEOS;
+            default:
+                return G.DIR_APP;
+        }
     }
 
     /**

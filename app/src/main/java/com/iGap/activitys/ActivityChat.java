@@ -1942,6 +1942,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             final long finalDuration = duration;
             final long finalFileSize = fileSize;
             final int[] finalImageDimens = imageDimens;
+
             final StructMessageInfo finalMessageInfo = messageInfo;
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
@@ -2754,6 +2755,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     @Override
     public void OnFileUploadOption(int firstBytesLimit, int lastBytesLimit, int maxConnection, String fileHashAsIdentity, ProtoResponse.Response response) {
         try {
+            Log.d("INJARO", "INJARO response:" + response);
             FileUploadStructure fileUploadStructure = getSelectedFile(fileHashAsIdentity);
             // getting bytes from file as server said
             byte[] bytesFromFirst = Utils.getBytesFromStart(fileUploadStructure, firstBytesLimit);
@@ -2884,7 +2886,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         if (fileUploadStructure == null) {
             return;
         }
-        if (status == ProtoFileUploadStatus.FileUploadStatusResponse.Status.PROCESSED && progress == 100D) {
+        if (status == ProtoFileUploadStatus.FileUploadStatusResponse.Status.PROCESSED) {
             new ChatSendMessageUtil()
                     .newBuilder(chatType, fileUploadStructure.messageType, fileUploadStructure.roomId)
                     .attachment(fileUploadStructure.token)
@@ -2916,7 +2918,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        } else if (status == ProtoFileUploadStatus.FileUploadStatusResponse.Status.PROCESSING) {
+        } else if (status == ProtoFileUploadStatus.FileUploadStatusResponse.Status.PROCESSING || (status == ProtoFileUploadStatus.FileUploadStatusResponse.Status.UPLOADING) && progress == 100D) {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -3081,6 +3083,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         @Override
         protected void onPostExecute(FileUploadStructure result) {
             super.onPostExecute(result);
+            MessagesAdapter.uploading.put(result.messageId, 0);
             mSelectedFiles.add(result);
             G.uploaderUtil.startUploading(result.fileSize, Long.toString(result.messageId));
         }

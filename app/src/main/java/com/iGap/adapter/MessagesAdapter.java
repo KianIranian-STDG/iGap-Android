@@ -2,6 +2,7 @@ package com.iGap.adapter;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v4.util.ArrayMap;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -29,6 +30,8 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
     // contain sender id
     public static List<String> avatarsRequested = new ArrayList<>();
     public static List<String> usersInfoRequested = new ArrayList<>();
+    public static ArrayMap<Long, Integer> uploading = new ArrayMap<>();
+    public static ArrayMap<String, Integer> downloading = new ArrayMap<>();
 
     private OnLongClickListener longClickListener = new OnLongClickListener<Item>() {
         @Override
@@ -46,6 +49,14 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
                 int pos = getAdapterItems().indexOf(item);
                 item.mMessage.downloadAttachment.offset = offset;
                 item.mMessage.downloadAttachment.progress = progress;
+
+                if (!downloading.containsKey(token)) {
+                    downloading.put(token, progress);
+                } else {
+                    int pos2 = downloading.indexOfKey(token);
+                    downloading.setValueAt(pos2, progress);
+                }
+
                 item.onRequestDownloadFile(offset, progress);
 
                 notifyItemChanged(pos);
@@ -100,9 +111,17 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
      */
     public void updateProgress(long messageId, int progress) {
         Item item = getItemByFileIdentity(messageId);
-        if (item != null && item.mMessage.uploadProgress < progress) {
+        if (item != null && uploading.get(messageId) < progress) {
             int pos = getAdapterItems().indexOf(item);
             item.mMessage.uploadProgress = progress;
+
+            if (!uploading.containsKey(messageId)) {
+                uploading.put(messageId, progress);
+            } else {
+                int pos2 = uploading.indexOfKey(messageId);
+                uploading.setValueAt(pos2, progress);
+            }
+
             set(pos, item);
         }
     }
