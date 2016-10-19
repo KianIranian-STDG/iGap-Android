@@ -8,9 +8,12 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Typeface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.multidex.MultiDex;
+import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -239,6 +242,9 @@ public class G extends Application {
     public static final String CHAT_MESSAGE_TIME = "H:mm";
     public static final String ROOM_LAST_MESSAGE_TIME = "h:mm a";
 
+    public static String connectionMode;
+    public static boolean isNetworkRoaming;
+
 
     @Override
     public void onCreate() {
@@ -442,6 +448,29 @@ public class G extends Application {
             public void onSecure() {
                 Log.i("FFF", "Secure");
                 login();
+
+                ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+
+                switch (activeNetwork.getType()) {
+                    case ConnectivityManager.TYPE_WIFI:
+
+                        connectionMode = "WIFI";
+                        break;
+                    case ConnectivityManager.TYPE_MOBILE:
+                        connectionMode = "MOBILE";
+                        break;
+                    case ConnectivityManager.TYPE_WIMAX:
+                        connectionMode = "WIMAX";
+                        break;
+                }
+
+                TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+                if (tm.isNetworkRoaming()) {
+                    isNetworkRoaming = tm.isNetworkRoaming();
+                }
+
+
             }
         };
     }

@@ -611,13 +611,27 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
             @Override
             public void onClick(View view) {
 
+                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                if (toggleCrop.isChecked()) {
+                    toggleCrop.setChecked(false);
+                    editor.putInt(SHP_SETTING.KEY_CROP, 0);
+                    editor.apply();
+
+                } else {
+                    toggleCrop.setChecked(true);
+                    editor.putInt(SHP_SETTING.KEY_CROP, 1);
+                    editor.apply();
+                }
+
             }
         });
 
         toggleCrop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                layoutCrop.performClick();
             }
         });
 

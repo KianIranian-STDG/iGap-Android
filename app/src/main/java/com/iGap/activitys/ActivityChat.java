@@ -110,6 +110,7 @@ import com.iGap.module.EmojiRecentsManager;
 import com.iGap.module.EndlessRecyclerOnScrollListener;
 import com.iGap.module.FileUploadStructure;
 import com.iGap.module.FileUtils;
+import com.iGap.module.HelperDecodeFile;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.MusicPlayer;
 import com.iGap.module.MyType;
@@ -161,6 +162,7 @@ import com.nightonke.boommenu.Util;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -1692,7 +1694,9 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == Activity.RESULT_OK && requestCode == AttachFile.request_code_media_from_gallary) {
+        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+
+        if (resultCode == Activity.RESULT_OK && sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 0) == 1 && requestCode == AttachFile.request_code_media_from_gallary) {
 
             Log.i("SSSSSS", 1 + "     gallary file path");
             Intent intent = new Intent(ActivityChat.this, ActivityCrop.class);
@@ -1702,7 +1706,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             startActivityForResult(intent, myResultCrop);
 
             return;
-        } else if (resultCode == Activity.RESULT_OK && requestCode == AttachFile.request_code_TAKE_PICTURE) {
+        } else if (resultCode == Activity.RESULT_OK && sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 0) == 1 && requestCode == AttachFile.request_code_TAKE_PICTURE) {
 
             Intent intent = new Intent(ActivityChat.this, ActivityCrop.class);
             Log.i("AAAA", "onActivityResult: " + AttachFile.imagePath);
@@ -1710,7 +1714,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             intent.putExtra("TYPE", "camera");
             intent.putExtra("PAGE", "chat");
             startActivityForResult(intent, myResultCrop);
-
             return;
 
         } else if (resultCode == Activity.RESULT_OK && ll_attach_text.getVisibility() == View.GONE) {
@@ -1738,6 +1741,9 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 case AttachFile.request_code_TAKE_PICTURE:
                     txtFileNameForSend.setText(AttachFile.imagePath);
                     break;
+                case AttachFile.request_code_media_from_gallary:
+                    txtFileNameForSend.setText("");
+                    break;
 //                case AttachFile.request_code_media_from_gallary:
                 case AttachFile.request_code_VIDEO_CAPTURED:
                 case AttachFile.request_code_pic_audi:
@@ -1753,6 +1759,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 case myResultCrop:
                     txtFileNameForSend.setText("crop image");
                     break;
+
             }
 
             return;
@@ -1799,6 +1806,48 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     }
                     Log.e("ddd", filePath + "    gallary file path");
                     break;
+                case AttachFile.request_code_TAKE_PICTURE:
+
+                    filePath = AttachFile.imagePath;
+                    resizeImage(filePath);
+
+                    fileName = new File(filePath).getName();
+                    fileSize = new File(filePath).length();
+                    imageDimens = Utils.getImageDimens(filePath);
+                    if (isMessageWrote()) {
+                        messageType = ProtoGlobal.RoomMessageType.IMAGE_TEXT;
+                    } else {
+                        messageType = ProtoGlobal.RoomMessageType.IMAGE;
+                    }
+                    if (userTriesReplay()) {
+                        messageInfo = new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, null, filePath, updateTime, ((StructMessageInfo) mReplayLayout.getTag()));
+                    } else {
+                        messageInfo = new StructMessageInfo(Long.toString(messageId), getWrittenMessage(), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, null, filePath, updateTime);
+                    }
+                    Log.e("ddd", filePath + "    gallary file path");
+
+                    break;
+
+                case AttachFile.request_code_media_from_gallary:
+                    filePath = AttachFile.getFilePathFromUri(data.getData());
+                    resizeImage(filePath);
+
+                    fileName = new File(filePath).getName();
+                    fileSize = new File(filePath).length();
+                    imageDimens = Utils.getImageDimens(filePath);
+                    if (isMessageWrote()) {
+                        messageType = ProtoGlobal.RoomMessageType.IMAGE_TEXT;
+                    } else {
+                        messageType = ProtoGlobal.RoomMessageType.IMAGE;
+                    }
+                    if (userTriesReplay()) {
+                        messageInfo = new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, null, filePath, updateTime, ((StructMessageInfo) mReplayLayout.getTag()));
+                    } else {
+                        messageInfo = new StructMessageInfo(Long.toString(messageId), getWrittenMessage(), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, MyType.FileState.uploading, null, filePath, updateTime);
+                    }
+                    Log.e("ddd", filePath + "    gallary file path");
+                    break;
+
                 case AttachFile.request_code_VIDEO_CAPTURED:
                     filePath = AttachFile.getFilePathFromUri(data.getData());
                     fileName = new File(filePath).getName();
@@ -3195,5 +3244,22 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 finish();
             }
         });
+    }
+
+    private void resizeImage(String pathSaveImage) {
+        Bitmap b = HelperDecodeFile.decodeFile(new File(pathSaveImage));
+        try {
+            FileOutputStream out = new FileOutputStream(pathSaveImage);
+
+            if (b != null) {
+                b.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            } else {
+                Toast.makeText(ActivityChat.this, "", Toast.LENGTH_SHORT).show();
+            }
+            out.flush();
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
