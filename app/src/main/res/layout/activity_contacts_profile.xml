@@ -71,6 +71,7 @@
                             android:visibility="gone" />
                     </LinearLayout>
 
+
                     <com.iGap.libs.rippleeffect.RippleView
                         android:id="@+id/chi_ripple_back"
                         rv_centered="true"

@@ -352,7 +352,9 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnFileUplo
             @Override
             public void onClick(View view) {
 
-                startActivity(new Intent(ActivityGroupProfile.this, ActivityShearedMedia.class));
+                Intent intent = new Intent(ActivityGroupProfile.this, ActivityShearedMedia.class);
+                intent.putExtra("RoomID", roomId);
+                startActivity(intent);
 
             }
         });

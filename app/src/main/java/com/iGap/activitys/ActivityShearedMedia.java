@@ -19,11 +19,17 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AdapterShearedMedia;
+import com.iGap.module.MusicPlayer;
 import com.iGap.module.OnComplete;
-import com.iGap.module.StructSharedMedia;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.realm.RealmChatHistory;
+import com.iGap.realm.RealmRoomMessage;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 /**
  * Created by android3 on 9/4/2016.
@@ -31,18 +37,42 @@ import java.util.ArrayList;
 public class ActivityShearedMedia extends ActivityEnhanced {
 
     private RecyclerView recyclerView;
-    private ArrayList<StructSharedMedia> list;
     private AdapterShearedMedia mAdapter;
     private int spanItemCount = 3;
     private TextView txtSharedMedia;
     private TextView txtNumberOfSelected;
     private LinearLayout ll_AppBarSelected;
     private OnComplete complete;
+    private long roomId = 0;
+    private ArrayList<RealmRoomMessage> mList;
+
+    private LinearLayout mediaLayout;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sheared_media);
+
+        roomId = getIntent().getExtras().getLong("RoomID");
+
+
+        mediaLayout = (LinearLayout) findViewById(R.id.asm_ll_music_layout);
+
+
+        if (MusicPlayer.mp != null) {
+            mediaLayout.setVisibility(View.VISIBLE);
+            ((TextView) mediaLayout.findViewById(R.id.mls_txt_music_name)).setText(MusicPlayer.musicName);
+            ((TextView) mediaLayout.findViewById(R.id.mls_txt_music_time)).setText(MusicPlayer.milliSecondsToTimer((long) MusicPlayer.mp.getDuration()));
+
+            if (MusicPlayer.mp.isPlaying()) {
+                ((Button) mediaLayout.findViewById(R.id.mls_btn_play_music)).setText(G.context.getString(R.string.md_pause_button));
+            } else {
+                ((Button) mediaLayout.findViewById(R.id.mls_btn_play_music)).setText(G.context.getString(R.string.md_play_arrow));
+            }
+        }
+
+
 
         initComponent();
     }
@@ -204,14 +234,14 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         txtSharedMedia.setText(getString(R.string.shared_media));
 
-        mAdapter = new AdapterShearedMedia(ActivityShearedMedia.this, list, txtSharedMedia.getText().toString(), complete);
+        mAdapter = new AdapterShearedMedia(ActivityShearedMedia.this, mList, txtSharedMedia.getText().toString(), complete, mediaLayout, roomId);
         final GridLayoutManager gLayoutManager = new GridLayoutManager(ActivityShearedMedia.this, spanItemCount);
 
         gLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
 
-                if (list.get(position).messageType == ProtoGlobal.RoomMessageType.TEXT)
+                if (mList.get(position).getMessageType().equals(ProtoGlobal.RoomMessageType.TEXT.toString()))
                     return spanItemCount;
                 else
                     return 1;
@@ -248,7 +278,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         fillListFile();
 
-        mAdapter = new AdapterShearedMedia(ActivityShearedMedia.this, list, txtSharedMedia.getText().toString(), complete);
+        mAdapter = new AdapterShearedMedia(ActivityShearedMedia.this, mList, txtSharedMedia.getText().toString(), complete, mediaLayout, roomId);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(ActivityShearedMedia.this);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -262,118 +292,133 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
     private void showMusic() {
         txtSharedMedia.setText("Shared Music");
+        fillListMusic();
+
+        mAdapter = new AdapterShearedMedia(ActivityShearedMedia.this, mList, txtSharedMedia.getText().toString(), complete, mediaLayout, roomId);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(ActivityShearedMedia.this);
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(mAdapter);
+
+
     }
 
     //********************************************************************************************
 
+
     private void fillListImage() {
 
-        list = new ArrayList<>();
+        mList = new ArrayList<>();
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class).equalTo("roomId", roomId).findAllSorted("id");
 
-        StructSharedMedia item1 = new StructSharedMedia();
-        item1.time = System.currentTimeMillis();
-        item1.messageType = ProtoGlobal.RoomMessageType.TEXT;
-        list.add(item1);
+        String firstItmeTime = "";
+        String secendItemTime = "";
+        SimpleDateFormat month_date = new SimpleDateFormat("yyyy/MM/dd");
+        String type = "";
 
-        StructSharedMedia item2 = new StructSharedMedia();
-        item2.messageType = ProtoGlobal.RoomMessageType.IMAGE;
-        item2.filePath = R.mipmap.b + "";
-        item2.fileName = "image 1";
-        item2.time = System.currentTimeMillis();
-        list.add(item2);
+        for (RealmChatHistory chatHistory : chatHistories) {
+            try {
+                type = chatHistory.getRoomMessage().getMessageType();
+            } catch (NullPointerException e) {
+            }
+            if (type.equals(ProtoGlobal.RoomMessageType.VIDEO.toString()) || type.equals(ProtoGlobal.RoomMessageType.VIDEO_TEXT.toString()) ||
+                    type.equals(ProtoGlobal.RoomMessageType.IMAGE.toString()) || type.equals(ProtoGlobal.RoomMessageType.IMAGE_TEXT.toString())) {
 
-        StructSharedMedia item3 = new StructSharedMedia();
-        item3.messageType = ProtoGlobal.RoomMessageType.IMAGE;
-        item3.filePath = R.mipmap.c + "";
-        item3.fileName = "image 2";
-        item3.time = System.currentTimeMillis();
-        list.add(item3);
+                secendItemTime = month_date.format(chatHistory.getRoomMessage().getUpdateTime());
 
-        StructSharedMedia item4 = new StructSharedMedia();
-        item4.messageType = ProtoGlobal.RoomMessageType.VIDEO;
-        item4.fileInfo = "3:12";
-        item4.filePath = R.mipmap.d + "";
-        list.add(item4);
+                if (secendItemTime.compareTo(firstItmeTime) > 0) {
 
+                    RealmRoomMessage message = new RealmRoomMessage();
+                    message.setMessage(secendItemTime);
+                    message.setMessageType(ProtoGlobal.RoomMessageType.TEXT.toString());
+                    mList.add(message);
 
-        StructSharedMedia item5 = new StructSharedMedia();
-        item5.messageType = ProtoGlobal.RoomMessageType.VIDEO;
-        item5.fileInfo = "6:56";
-        item5.filePath = R.mipmap.e + "";
-        list.add(item5);
+                    firstItmeTime = secendItemTime;
+                }
 
-        StructSharedMedia item6 = new StructSharedMedia();
-        item6.messageType = ProtoGlobal.RoomMessageType.IMAGE;
-        item6.filePath = R.mipmap.f + "";
-        list.add(item6);
+                mList.add(chatHistory.getRoomMessage());
+            }
+        }
 
-        list.add(item1);
-
-        StructSharedMedia item7 = new StructSharedMedia();
-        item7.filePath = R.mipmap.g + "";
-        item7.messageType = ProtoGlobal.RoomMessageType.IMAGE;
-        list.add(item7);
-
-        StructSharedMedia item8 = new StructSharedMedia();
-        item8.filePath = R.mipmap.h + "";
-        item8.messageType = ProtoGlobal.RoomMessageType.IMAGE;
-        list.add(item8);
-
+        realm.close();
 
     }
 
     private void fillListFile() {
 
-        list = new ArrayList<>();
+        mList = new ArrayList<>();
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class).equalTo("roomId", roomId).findAllSorted("id");
 
-        StructSharedMedia item1 = new StructSharedMedia();
-        item1.time = System.currentTimeMillis();
-        item1.messageType = ProtoGlobal.RoomMessageType.TEXT;
-        list.add(item1);
+        String firstItmeTime = "";
+        String secendItemTime = "";
+        SimpleDateFormat month_date = new SimpleDateFormat("yyyy/MM/dd");
+        String type = "";
 
-        StructSharedMedia item2 = new StructSharedMedia();
-        item2.messageType = ProtoGlobal.RoomMessageType.FILE;
-        item2.filePath = "lkjdf.png";
-        item2.fileName = "image";
-        item2.fileInfo = " 2016/3/29  11:29";
-        list.add(item2);
+        for (RealmChatHistory chatHistory : chatHistories) {
+            try {
+                type = chatHistory.getRoomMessage().getMessageType();
+            } catch (NullPointerException e) {
+            }
+            if (type.equals(ProtoGlobal.RoomMessageType.FILE.toString()) || type.equals(ProtoGlobal.RoomMessageType.FILE_TEXT.toString())) {
 
-        StructSharedMedia item3 = new StructSharedMedia();
-        item3.messageType = ProtoGlobal.RoomMessageType.FILE;
-        item3.filePath = "lkjdf.mp3";
-        item3.fileName = "image 2";
-        item3.fileInfo = " 2016/1/2  11:29";
-        list.add(item3);
+                secendItemTime = month_date.format(chatHistory.getRoomMessage().getUpdateTime());
 
-        StructSharedMedia item4 = new StructSharedMedia();
-        item4.messageType = ProtoGlobal.RoomMessageType.FILE;
-        item4.fileInfo = "3:12";
-        item4.filePath = "lkjdf.mp4";
-        list.add(item4);
+                if (secendItemTime.compareTo(firstItmeTime) > 0) {
 
+                    RealmRoomMessage message = new RealmRoomMessage();
+                    message.setMessage(secendItemTime);
+                    message.setMessageType(ProtoGlobal.RoomMessageType.TEXT.toString());
+                    mList.add(message);
 
-        StructSharedMedia item5 = new StructSharedMedia();
-        item5.messageType = ProtoGlobal.RoomMessageType.FILE;
-        item5.fileInfo = "6:56";
-        item5.filePath = "lkjdf.apk";
-        list.add(item5);
+                    firstItmeTime = secendItemTime;
+                }
 
-        StructSharedMedia item6 = new StructSharedMedia();
-        item6.messageType = ProtoGlobal.RoomMessageType.FILE;
-        item6.filePath = "lkjdf.html";
-        list.add(item6);
+                mList.add(chatHistory.getRoomMessage());
+            }
+        }
 
-        list.add(item1);
+        realm.close();
 
-        StructSharedMedia item7 = new StructSharedMedia();
-        item7.filePath = "lkjdf.pdf";
-        item7.messageType = ProtoGlobal.RoomMessageType.FILE;
-        list.add(item7);
+    }
 
-        StructSharedMedia item8 = new StructSharedMedia();
-        item8.filePath = "lkjdf.xls";
-        item8.messageType = ProtoGlobal.RoomMessageType.FILE;
-        list.add(item8);
+    private void fillListMusic() {
+
+        mList = new ArrayList<>();
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class).equalTo("roomId", roomId).findAllSorted("id");
+
+        String firstItmeTime = "";
+        String secendItemTime = "";
+        SimpleDateFormat month_date = new SimpleDateFormat("yyyy/MM/dd");
+        String type = "";
+
+        for (RealmChatHistory chatHistory : chatHistories) {
+            try {
+                type = chatHistory.getRoomMessage().getMessageType();
+            } catch (NullPointerException e) {
+            }
+            if (type.equals(ProtoGlobal.RoomMessageType.AUDIO.toString()) || type.equals(ProtoGlobal.RoomMessageType.AUDIO_TEXT.toString()) ||
+                    type.equals(ProtoGlobal.RoomMessageType.VOICE.toString())) {
+
+                secendItemTime = month_date.format(chatHistory.getRoomMessage().getUpdateTime());
+
+                if (secendItemTime.compareTo(firstItmeTime) > 0) {
+
+                    RealmRoomMessage message = new RealmRoomMessage();
+                    message.setMessage(secendItemTime);
+                    message.setMessageType(ProtoGlobal.RoomMessageType.TEXT.toString());
+                    mList.add(message);
+
+                    firstItmeTime = secendItemTime;
+                }
+
+                mList.add(chatHistory.getRoomMessage());
+            }
+        }
+
+        realm.close();
 
     }
 

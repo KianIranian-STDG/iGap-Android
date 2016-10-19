@@ -73,6 +73,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="#34a49f"></View>
+
+            <include
+                android:id="@+id/asm_ll_music_layout"
+                layout="@layout/music_layout_small"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
         </LinearLayout>
 
 

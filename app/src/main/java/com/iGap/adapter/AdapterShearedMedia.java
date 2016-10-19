@@ -3,28 +3,33 @@ package com.iGap.adapter;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.fragments.FragmentShowImage;
 import com.iGap.helper.HelperMimeType;
+import com.iGap.module.MusicPlayer;
 import com.iGap.module.OnComplete;
-import com.iGap.module.StructSharedMedia;
-import com.iGap.module.TimeUtils;
+import com.iGap.module.StructMessageInfo;
+import com.iGap.module.Utils;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmChatHistory;
+import com.iGap.realm.RealmRoomMessage;
 
 import java.util.ArrayList;
 
@@ -39,19 +44,34 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
     private boolean isSelectedMode = false;    // for determine user select some file
     private int numberOfSelected = 0;
 
-    ArrayList<StructSharedMedia> list;
+    ArrayList<RealmRoomMessage> list;
+    ArrayList<option> options;
     Context context;
     private String mediaType;
     private OnComplete complete;
+    private MusicPlayer musicPlayer;
+    private long roomId = 0;
 
-    public AdapterShearedMedia(Context context, ArrayList<StructSharedMedia> list, String mediaType, OnComplete complete) {
+    private class option {
+        public boolean isSelected = false;
+        public boolean isDownloading = false;
+    }
+
+    public AdapterShearedMedia(Context context, ArrayList<RealmRoomMessage> list, String mediaType, OnComplete complete, LinearLayout mediaLayout, long roomId) {
         this.context = context;
         this.list = list;
         this.mediaType = mediaType;
         this.complete = complete;
+        this.roomId = roomId;
 
+        musicPlayer = new MusicPlayer(mediaLayout);
 
-        Log.e("ddd", mediaType);
+        options = new ArrayList<>();
+
+        for (int i = 0; i < list.size(); i++) {
+            options.add(new option());
+        }
+
     }
 
 
@@ -61,7 +81,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
         RecyclerView.ViewHolder viewHolder = null;
         boolean isHeader = false;
 
-        if (list.get(position).messageType == ProtoGlobal.RoomMessageType.TEXT)
+        if (list.get(position).getMessageType().equals(ProtoGlobal.RoomMessageType.TEXT.toString()))
             isHeader = true;
 
 
@@ -75,13 +95,9 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
                 viewHolder = new MyHoldersImage(view, position);
             }
 
-        } else if (mediaType.equals(context.getString(R.string.shared_files))) {
+        } else if (mediaType.equals(context.getString(R.string.shared_files))) {// file
             if (isHeader) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.shared_media_sub_layout_time, null);
-                RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                view.setLayoutParams(lp);
-                view.setBackgroundColor(Color.parseColor("#cccccc"));
-                viewHolder = new MyHoldersTime(view, position);
+                viewHolder = new MyHoldersTime(setLayoutHeaderTime(parent), position);
             } else {
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.shared_media_sub_layout_file, null);
                 RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -90,15 +106,18 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
             }
         } else if (mediaType.equals(context.getString(R.string.shared_links))) {
             if (isHeader) {
-
+                viewHolder = new MyHoldersTime(setLayoutHeaderTime(parent), position);
             } else {
 
             }
         } else if (mediaType.equals(context.getString(R.string.shared_music))) {
             if (isHeader) {
-
+                viewHolder = new MyHoldersTime(setLayoutHeaderTime(parent), position);
             } else {
-
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.shared_media_sub_layout_file, null);
+                RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                view.setLayoutParams(lp);
+                viewHolder = new MyHoldersMusic(view, position);
             }
         }
 
@@ -107,33 +126,49 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
     }
 
+    private View setLayoutHeaderTime(View parent) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.shared_media_sub_layout_time, null);
+        RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        view.setLayoutParams(lp);
+        view.setBackgroundColor(Color.parseColor("#cccccc"));
+        return view;
+    }
+
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
 
-        if (list.get(position).messageType != ProtoGlobal.RoomMessageType.TEXT) {// set blue back ground for selected file
+        if (!list.get(position).getMessageType().equals(ProtoGlobal.RoomMessageType.TEXT.toString())) {
+
+            // set blue back ground for selected file
             FrameLayout layout = (FrameLayout) holder.itemView.findViewById(R.id.smsl_fl_contain_main);
 
-            if (list.get(position).isSelected) {
+            if (options.get(position).isSelected) {
                 layout.setForeground(new ColorDrawable(Color.parseColor("#99AADFF7")));
             } else {
                 layout.setForeground(new ColorDrawable(Color.TRANSPARENT));
             }
-        }
 
 
-        if (mediaType.equals(context.getString(R.string.shared_files)) && list.get(position).messageType == ProtoGlobal.RoomMessageType.FILE) {
-            MyHoldersFile m = (MyHoldersFile) holder;
-            if (list.get(position).isDownloading) {
-                m.btnFileState.setText(context.getString(R.string.fa_pause));
-            } else {
-                m.btnFileState.setText(context.getString(R.string.fa_arrow_down));
+            if (mediaType.equals(context.getString(R.string.shared_media))) {
+
+                String path = list.get(position).getAttachment().getLocalFilePath();
+                if (path == null)
+                    path = list.get(position).getAttachment().getLocalThumbnailPath();
+
+                ((MyHoldersImage) holder).imvPicFile.setImageBitmap(Bitmap.createScaledBitmap(BitmapFactory.decodeFile(path), 300, 300, false));//todo in asynk task
+
+            } else if (mediaType.equals(context.getString(R.string.shared_files))) {
+                MyHoldersFile m = (MyHoldersFile) holder;
+                if (options.get(position).isDownloading) {
+                    m.btnFileState.setText(context.getString(R.string.fa_pause));
+                } else {
+                    m.btnFileState.setText(context.getString(R.string.fa_arrow_down));
+                }
+
+                //// TODO: 9/7/2016 nejati     get picture thumbnile if file image of video or music    use HelperMimeType
             }
-
-            //// TODO: 9/7/2016 nejati     get picture thumbnile if file image of video or music    use HelperMimeType
-
         }
-
 
     }
 
@@ -186,9 +221,9 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
             super(itemView);
 
             imvPicFile = (ImageView) itemView.findViewById(R.id.smsl_imv_file_pic);
-            imvPicFile.setImageResource(Integer.parseInt(list.get(position).filePath));
 
-            if (list.get(position).messageType == ProtoGlobal.RoomMessageType.VIDEO) {
+
+            if (list.get(position).getMessageType().equals(ProtoGlobal.RoomMessageType.VIDEO.toString())) {
 
                 itemView.findViewById(R.id.smsl_ll_video).setVisibility(View.VISIBLE);
 
@@ -196,7 +231,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
                 txtVideoIcon.setTypeface(G.fontawesome);
 
                 TextView txtVideoTime = (TextView) itemView.findViewById(R.id.smsl_txt_video_time);
-                txtVideoTime.setText(list.get(position).fileInfo);
+                txtVideoTime.setText(list.get(position).getAttachment().getSize() + " ");
             }
 
         }
@@ -212,30 +247,56 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
             super(itemView);
 
             imvPicFile = (ImageView) itemView.findViewById(R.id.smslf_imv_icon_file);
-            imvPicFile.setImageBitmap(HelperMimeType.getMimePic(context, HelperMimeType.getMimeResource(list.get(position).filePath)));
+            imvPicFile.setImageBitmap(HelperMimeType.getMimePic(context, HelperMimeType.getMimeResource(list.get(position).getAttachment().getLocalFilePath())));
 
             btnFileState = (Button) itemView.findViewById(R.id.smslf_btn_file_state);
             btnFileState.setTypeface(G.fontawesome);
 
             TextView txtFileName = (TextView) itemView.findViewById(R.id.smslf_txt_file_name);
-            txtFileName.setText(list.get(position).fileName);
+            txtFileName.setText(list.get(position).getAttachment().getName());
 
             TextView txtFileInfo = (TextView) itemView.findViewById(R.id.smslf_txt_file_info);
-            txtFileInfo.setText(list.get(position).fileInfo);
+            txtFileInfo.setText(Utils.humanReadableByteCount(list.get(position).getAttachment().getSize(), true));
 
         }
 
     }
 
+
+    public class MyHoldersMusic extends MyHolder {
+
+        public ImageView imvPicFile;
+        public Button btnFileState;
+
+        public MyHoldersMusic(View itemView, final int position) {
+            super(itemView);
+
+            imvPicFile = (ImageView) itemView.findViewById(R.id.smslf_imv_icon_file);
+            imvPicFile.setImageResource(R.mipmap.j_audio);
+
+            btnFileState = (Button) itemView.findViewById(R.id.smslf_btn_file_state);
+            btnFileState.setTypeface(G.fontawesome);
+
+            TextView txtFileName = (TextView) itemView.findViewById(R.id.smslf_txt_file_name);
+            txtFileName.setText(list.get(position).getAttachment().getName());
+
+            TextView txtFileInfo = (TextView) itemView.findViewById(R.id.smslf_txt_file_info);
+            txtFileInfo.setText(Utils.humanReadableByteCount(list.get(position).getAttachment().getSize(), true));
+
+        }
+
+    }
+
+
     private void startDownload(int position) {
 
-        list.get(position).isDownloading = true;
+        options.get(position).isDownloading = true;
         notifyItemChanged(position);
 
     }
 
     private void stopDownload(int position) {
-        list.get(position).isDownloading = false;
+        options.get(position).isDownloading = false;
         notifyItemChanged(position);
     }
 
@@ -248,7 +309,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
             super(itemView);
 
             txtTime = (TextView) itemView.findViewById(R.id.smslt_txt_time);
-            txtTime.setText(TimeUtils.toLocal(list.get(position).time, G.CHAT_MESSAGE_TIME));
+            txtTime.setText(list.get(position).getMessage());
 
         }
     }
@@ -259,25 +320,52 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private void doSomething(int position) {
 
-        if (list.get(position).messageType == ProtoGlobal.RoomMessageType.IMAGE) {
-            selectImage(position);
-        } else if (list.get(position).messageType == ProtoGlobal.RoomMessageType.FILE) {
-            if (list.get(position).isDownloading)
-                stopDownload(position);
-            else
-                startDownload(position);
+
+        if (false) {
+            // if need dowmload get file from server
+            downloadFile(position);
+
+        } else {
+
+            if (list.get(position).getMessageType().equals(ProtoGlobal.RoomMessageType.IMAGE.toString()) ||
+                    list.get(position).getMessageType().equals(ProtoGlobal.RoomMessageType.IMAGE_TEXT.toString())) {
+                selectImage(position);
+            } else if (list.get(position).getMessageType().equals(ProtoGlobal.RoomMessageType.FILE.toString()) ||
+                    list.get(position).getMessageType().equals(ProtoGlobal.RoomMessageType.FILE_TEXT.toString()) ||
+                    list.get(position).getMessageType().equals(ProtoGlobal.RoomMessageType.VIDEO.toString()) ||
+                    list.get(position).getMessageType().equals(ProtoGlobal.RoomMessageType.VIDEO_TEXT.toString())) {
+
+                Intent intent = HelperMimeType.appropriateProgram(list.get(position).getAttachment().getLocalFilePath());
+                if (intent != null)
+                    context.startActivity(intent);
+            } else if (list.get(position).getMessageType().equals(ProtoGlobal.RoomMessageType.VOICE.toString()) ||
+                    list.get(position).getMessageType().equals(ProtoGlobal.RoomMessageType.AUDIO.toString()) ||
+                    list.get(position).getMessageType().equals(ProtoGlobal.RoomMessageType.AUDIO_TEXT.toString())) {
+
+                MusicPlayer.startPlayer(list.get(position).getAttachment().getLocalFilePath(), list.get(position).getAttachment().getName(), roomId, true);
+            }
+
         }
+
+    }
+
+    private void downloadFile(int position) {
+
+        if (options.get(position).isDownloading)
+            stopDownload(position);
+        else
+            startDownload(position);
 
     }
 
 
     private void setSelectedItem(int position) {
 
-        if (list.get(position).isSelected == false) {
-            list.get(position).isSelected = true;
+        if (options.get(position).isSelected == false) {
+            options.get(position).isSelected = true;
             numberOfSelected++;
         } else {
-            list.get(position).isSelected = false;
+            options.get(position).isSelected = false;
             numberOfSelected--;
 
             if (numberOfSelected < 1) {
@@ -301,8 +389,8 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
             isSelectedMode = false;
 
             for (int i = 0; i < list.size(); i++) {
-                if (list.get(i).isSelected) {
-                    list.get(i).isSelected = false;
+                if (options.get(i).isSelected) {
+                    options.get(i).isSelected = false;
                     notifyItemChanged(i);
                     numberOfSelected--;
                     if (numberOfSelected < 1)
@@ -318,25 +406,8 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
 
     public void selectImage(int position) {
-
-        String path = list.get(position).filePath;
-
+        String path = list.get(position).getAttachment().getLocalFilePath();
         showImage(path);
-
-
-//        if(path.length()>0){
-//            File file=new File(path);
-//            if(file.exists()){
-//                showImage(path);
-//            }else{
-//                downloadFile();
-//            }
-//        }
-//        else{
-//            downloadFile();
-//        }
-
-
     }
 
     public static int getCountOfSheareddMedia(long roomId) {
@@ -364,28 +435,21 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
         return counter;
     }
 
-
-    private void downloadFile() {
-
-        // TODO: 9/6/2016   write download class
-
-    }
-
     private void showImage(String filePath) {
 
-        ArrayList<StructSharedMedia> listPic = new ArrayList<>();
+        ArrayList<StructMessageInfo> listPic = new ArrayList<>();
+        int selectedPicture = 0;
 
-        int selectedImage = -1;
-
-        for (int i = 0; i < list.size(); i++) {// get list image from list files
-            if (list.get(i).messageType == ProtoGlobal.RoomMessageType.IMAGE)
-                listPic.add(list.get(i));
+        for (RealmRoomMessage mMessage : list) {
+            if (mMessage.getMessageType().equals(ProtoGlobal.RoomMessageType.IMAGE.toString()) || mMessage.getMessageType().equals(ProtoGlobal.RoomMessageType.IMAGE_TEXT.toString())) {
+                listPic.add(StructMessageInfo.convert(mMessage));
+            }
         }
 
 
         for (int i = 0; i < listPic.size(); i++) { // determin selected image in list image
-            if (listPic.get(i).filePath.equals(filePath)) {
-                selectedImage = i;
+            if (listPic.get(i).attachment.getLocalFilePath().equals(filePath)) {
+                selectedPicture = i;
                 break;
             }
         }
@@ -393,7 +457,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
         Fragment fragment = FragmentShowImage.newInstance();
         Bundle bundle = new Bundle();
         bundle.putSerializable("listPic", listPic);
-        bundle.putInt("SelectedImage", selectedImage);
+        bundle.putInt("SelectedImage", selectedPicture);
         fragment.setArguments(bundle);
 
         ((Activity) context).getFragmentManager().beginTransaction().replace(R.id.asm_ll_parent, fragment).commit();
