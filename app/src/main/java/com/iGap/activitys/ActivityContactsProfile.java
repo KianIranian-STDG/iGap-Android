@@ -128,6 +128,13 @@ public class ActivityContactsProfile extends ActivityEnhanced {
             lastSeen = realmUser.getLast_seen();
             color = realmUser.getColor();
             initials = realmUser.getInitials();
+        } else {
+            phone = realmRegisteredInfo.getPhone();
+            displayName = realmRegisteredInfo.getDisplayName();
+            username = realmRegisteredInfo.getUsername();
+            lastSeen = realmRegisteredInfo.getLastSeen();
+            color = realmRegisteredInfo.getColor();
+            initials = realmRegisteredInfo.getInitials();
         }
 
         RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo("phone", phone).findFirst();
@@ -327,7 +334,6 @@ public class ActivityContactsProfile extends ActivityEnhanced {
 
                 ViewGroup viewGroup = (ViewGroup) findViewById(R.id.chi_root_circleImage);
                 if (verticalOffset < -5) {
-
                     viewGroup.animate().alpha(0).setDuration(700);
                     viewGroup.setVisibility(View.GONE);
                     titleToolbar.setVisibility(View.VISIBLE);
@@ -653,11 +659,17 @@ public class ActivityContactsProfile extends ActivityEnhanced {
     public ArrayList<StructMessageInfo> setItem() {
         ArrayList<StructMessageInfo> items = new ArrayList<>();
 
+        ArrayList<String> currentTokenAdded = new ArrayList<>();
+
         for (int i = 0; i < avatarList.size(); i++) {
             if (avatarList.get(i).getFile() != null) {
                 StructMessageInfo item = new StructMessageInfo();
-                item.attachment = new StructMessageAttachment(avatarList.get(i).getFile());
-                items.add(item);
+                RealmAvatar avatar = avatarList.get(i);
+                if (!currentTokenAdded.contains(avatar.getFile().getToken())) {
+                    currentTokenAdded.add(avatar.getFile().getToken());
+                    item.attachment = new StructMessageAttachment(avatarList.get(i).getFile());
+                    items.add(item);
+                }
             }
         }
         return items;

@@ -1110,7 +1110,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
 //                            realmAvatarToken.getToken();
 //                            Log.i("XXX", "RequestUserAvatarDelete 1 realmAvatarToken.getToken() : " + realmAvatarToken.getToken());
 //
-//                            /*
+//                             /*
 //                              * set token for identity , when i get response fetch RealmAvatarToken
 //                              * with this identity(token) and delete that row from RealmAvatarToken
 //                              * */
@@ -1245,6 +1245,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
         realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
         if (realmAvatarPaths.size() > 0) {
             pathImageDecode = realmAvatarPaths.first().getPathImage();
+            Log.i("VVV", "pathImageDecode : " + pathImageDecode);
             decodeBitmapProfile = HelperDecodeFile.decodeFile(new File(pathImageDecode));
             circleImageView.setImageBitmap(decodeBitmapProfile);
             G.onChangeUserPhotoListener.onChangePhoto(pathImageDecode);
@@ -1492,7 +1493,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnFileUpload, O
                 RealmAvatarToken realmAvatarPath = realm.createObject(RealmAvatarToken.class);
                 realmAvatarPath.setId(lastUploadedAvatarId);
                 realmAvatarPath.setToken(avatar.getFile().getToken());
-                Log.i("XXX", "onAvatarAdd avatar.getFile().getToken() : " + avatar.getFile().getToken());
                 realmUserInfo.addAvatarToken(realmAvatarPath);
             }
         });

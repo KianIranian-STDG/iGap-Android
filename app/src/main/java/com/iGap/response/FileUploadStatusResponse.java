@@ -5,7 +5,6 @@ import android.util.Log;
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoFileUploadStatus;
-import com.iGap.proto.ProtoResponse;
 
 public class FileUploadStatusResponse extends MessageHandler {
 
@@ -25,11 +24,6 @@ public class FileUploadStatusResponse extends MessageHandler {
     @Override
     public void handler() {
         ProtoFileUploadStatus.FileUploadStatusResponse.Builder builder = (ProtoFileUploadStatus.FileUploadStatusResponse.Builder) message;
-
-        ProtoResponse.Response.Builder response = ProtoResponse.Response.newBuilder().mergeFrom(builder.getResponse());
-        Log.i("SOC", "FileUploadStatusResponse response.getId() : " + response.getId());
-        Log.i("SOC", "FileUploadStatusResponse response.getTimestamp() : " + response.getTimestamp());
-
         G.onFileUploadStatusResponse.onFileUploadStatus(builder.getStatus(), builder.getProgress(), builder.getRecheckDelayMs(), this.identity, builder.getResponse());
     }
 

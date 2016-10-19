@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -274,6 +273,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
         }
 
         private void onLoadFromLocal(final ImageView imageView, String localPath, LocalFileType fileType) {
+            Log.i("VVV", "localPath : " + localPath);
             ImageLoader.getInstance().displayImage(Utils.suitablePath(localPath), imageView, new ImageLoadingListener() {
                 @Override
                 public void onLoadingStarted(String imageUri, View view) {
@@ -318,11 +318,11 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
                     // if thumbnail exists, I load it into the view
                     if (media.attachment.isThumbnailExistsOnLocal()) {
                         ViewGroup view = (ViewGroup) layout.findViewById(R.id.sisl_touch_image_view).getParent();
-                        if (view != null) {
-                            int[] dimens = Utils.scaleDimenWithSavedRatio(layout.getContext(), media.attachment.width, media.attachment.height);
-                            view.setLayoutParams(new LinearLayout.LayoutParams(dimens[0], dimens[1]));
-                            view.requestLayout();
-                        }
+//                        if (view != null) {
+//                            int[] dimens = Utils.scaleDimenWithSavedRatio(layout.getContext(), media.attachment.width, media.attachment.height);
+//                            view.setLayoutParams(new LinearLayout.LayoutParams(dimens[0], dimens[1]));
+//                            view.requestLayout();
+//                        }
 
                         // load thumbnail from local
                         onLoadFromLocal(touchImageView, media.attachment.getLocalThumbnailPath(), LocalFileType.THUMBNAIL);

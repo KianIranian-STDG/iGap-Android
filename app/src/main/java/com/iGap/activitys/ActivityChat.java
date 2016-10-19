@@ -1528,7 +1528,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     onRequestDownloadAvatar(realmRegisteredInfo.getLastAvatar().getFile());
                 }
                 imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
-
             }
         } else {
             if (realmRegisteredInfo != null && realmRegisteredInfo.getLastAvatar() != null && realmRegisteredInfo.getLastAvatar().getFile() != null) {

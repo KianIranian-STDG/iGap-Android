@@ -261,7 +261,6 @@ public class G extends Application {
 
         setFont();
 
-
         new File(DIR_APP).mkdirs();
         new File(DIR_IMAGES).mkdirs();
         new File(DIR_VIDEOS).mkdirs();
@@ -570,14 +569,17 @@ public class G extends Application {
                     });
 
                     RealmResults<RealmAvatarPath> realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
-                    if (realmAvatarPaths != null) {
-                        realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
-                    }
-                    if (realmAvatarPaths != null && realmAvatarPaths.size() > 0) {
-                        String pathImageDecode = realmAvatarPaths.first().getPathImage();
-                        G.onChangeUserPhotoListener.onChangePhoto(pathImageDecode);
-                    } else {
-                        G.onChangeUserPhotoListener.onChangePhoto(null);
+
+                    if (G.onChangeUserPhotoListener != null) {
+                        if (realmAvatarPaths != null) {
+                            realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
+                        }
+                        if (realmAvatarPaths != null && realmAvatarPaths.size() > 0) {
+                            String pathImageDecode = realmAvatarPaths.first().getPathImage();
+                            G.onChangeUserPhotoListener.onChangePhoto(pathImageDecode);
+                        } else {
+                            G.onChangeUserPhotoListener.onChangePhoto(null);
+                        }
                     }
 
                     realm.close();
