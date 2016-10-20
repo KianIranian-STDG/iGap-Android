@@ -400,7 +400,9 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
                 return; // necessary
             }
             ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
-            final String localFilePath = G.DIR_IMAGES + "/" + media.downloadAttachment.token + System.nanoTime() + media.attachment.name;
+//            final String localFilePath = G.DIR_IMAGES + "/" + media.downloadAttachment.token + System.nanoTime() + media.attachment.name;
+            final String localFilePath = media.downloadAttachment.token + System.nanoTime() + media.attachment.name;
+            Log.i("GGG", "localFilePath : " + localFilePath);
             if (media.attachment.getLocalFilePath() == null || media.attachment.getLocalFilePath().isEmpty()) {
                 media.attachment.setLocalFilePath(Long.parseLong(media.messageID), localFilePath);
             }
@@ -428,6 +430,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
                 realm.close();
             }
 
+            Log.i("GGG", "media.attachment.getLocalFilePath() : " + media.attachment.getLocalFilePath());
             String identity = media.downloadAttachment.token + '*' + selector.toString() + '*' + media.attachment.size + '*' + media.attachment.getLocalFilePath() + '*' + media.downloadAttachment.offset;
 
             new RequestFileDownload().download(media.downloadAttachment.token, media.downloadAttachment.offset, (int) media.attachment.size, selector, identity);

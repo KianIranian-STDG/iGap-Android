@@ -1,7 +1,6 @@
 package com.iGap.adapter.items;
 
 import android.net.Uri;
-import android.os.Environment;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -104,14 +103,14 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
     }
 
     public void onRequestDownloadAvatar() {
-        ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
+        ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
         if (mInfo.chatType == RoomType.CHAT) {
             if (mInfo.avatar != null && (mInfo.avatar.getLocalThumbnailPath() == null || mInfo.avatar.getLocalThumbnailPath().isEmpty())) {
-                mInfo.avatar.setLocalThumbnailPathForAvatar(mInfo.ownerId, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + mInfo.downloadAttachment.token + System.nanoTime() + mInfo.avatar.name);
+                mInfo.avatar.setLocalThumbnailPathForAvatar(mInfo.ownerId, mInfo.downloadAttachment.token + System.nanoTime() + mInfo.avatar.name, selector);
             }
         } else {
             if (mInfo.avatar != null && (mInfo.avatar.getLocalThumbnailPath() == null || mInfo.avatar.getLocalThumbnailPath().isEmpty())) {
-                mInfo.avatar.setLocalThumbnailPath(mInfo.chatId, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + mInfo.downloadAttachment.token + System.nanoTime() + mInfo.avatar.name);
+                mInfo.avatar.setLocalThumbnailPath(mInfo.chatId, mInfo.downloadAttachment.token + System.nanoTime() + mInfo.avatar.name);
             }
         }
 

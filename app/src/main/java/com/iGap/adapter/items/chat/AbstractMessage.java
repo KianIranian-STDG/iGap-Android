@@ -105,7 +105,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     public void onRequestDownloadAvatar() {
         ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
         if (mMessage.senderAvatar != null && (mMessage.senderAvatar.getLocalThumbnailPath() == null || mMessage.senderAvatar.getLocalThumbnailPath().isEmpty())) {
-            mMessage.senderAvatar.setLocalThumbnailPathForAvatar(Long.parseLong(mMessage.senderID), Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + mMessage.downloadAttachment.token + System.nanoTime() + mMessage.senderAvatar.name);
+            mMessage.senderAvatar.setLocalThumbnailPathForAvatar(Long.parseLong(mMessage.senderID), Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + mMessage.downloadAttachment.token + System.nanoTime() + mMessage.senderAvatar.name, selector);
         }
 
         // I don't use offset in getting thumbnail

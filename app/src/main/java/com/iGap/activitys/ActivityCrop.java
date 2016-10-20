@@ -149,7 +149,7 @@ public class ActivityCrop extends ActivityEnhanced {
                         re = fileChat.toString();
                         HelperCopyFile.copyFile(pathImageUser, re);
                     } else {
-                        re = G.imageFile.toString() + "_" + id + ".jpg";
+                        re = G.imageFile.toString() + "_" + System.currentTimeMillis() + "_" + id + ".jpg";
                         HelperCopyFile.copyFile(pathImageUser, re);
 
                     }

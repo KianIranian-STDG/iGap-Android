@@ -34,6 +34,8 @@ public class FileDownloadResponse extends MessageHandler {
         String filePath;
         if (selector == ProtoFileDownload.FileDownload.Selector.FILE) {
             filePath = G.DIR_TEMP + "/" + identityParams[3];
+            Log.i("GGG", "identityParams[3] : " + identityParams[3]);
+            Log.i("GGG", "G.DIR_TEMP : " + G.DIR_TEMP);
         } else {
             filePath = identityParams[3];
         }

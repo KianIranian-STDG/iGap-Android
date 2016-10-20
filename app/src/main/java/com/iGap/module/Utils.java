@@ -9,6 +9,7 @@ import android.graphics.Point;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 
 import com.iGap.G;
@@ -109,7 +110,9 @@ public final class Utils {
         FileOutputStream fop = null;
         File file;
         try {
+            Log.i("GGG", "filePath : " + filePath);
             file = new File(filePath);
+            Log.i("GGG", "file.getPath : " + file.getPath());
             fop = new FileOutputStream(file, true);
             fop.write(chunk);
             fop.flush();
