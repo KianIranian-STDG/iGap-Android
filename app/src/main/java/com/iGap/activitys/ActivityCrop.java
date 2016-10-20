@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -35,7 +34,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class ActivityCrop extends ActivityEnhanced {
 
     private ImageView imgPic;
-    private Uri resultUri;
+    private Uri uri;
     private TextView txtCancel, txtSet, txtCrop, txtAgreeImage;
     private int idAvatar;
     private String pathSaveImage;
@@ -47,7 +46,7 @@ public class ActivityCrop extends ActivityEnhanced {
     public final String IMAGE_DIRECTORY_NAME = "Upload";
     private File mediaStorageDir;
     private File fileChat;
-    private String re;
+    private String result;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -68,15 +67,15 @@ public class ActivityCrop extends ActivityEnhanced {
         final Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
 
-            resultUri = Uri.parse(bundle.getString("IMAGE_CAMERA"));
+            uri = Uri.parse(bundle.getString("IMAGE_CAMERA"));
             page = bundle.getString("PAGE");
             type = bundle.getString("TYPE");
             id = bundle.getInt("ID");
 
         }
-        if (resultUri != null) {
+        if (uri != null) {
 
-            imgPic.setImageURI(resultUri);
+            imgPic.setImageURI(uri);
         }
 
         txtCrop = (TextView) findViewById(R.id.pu_txt_crop);
@@ -87,7 +86,7 @@ public class ActivityCrop extends ActivityEnhanced {
 
             @Override
             public void onComplete(RippleView rippleView) {
-                CropImage.activity(resultUri).setGuidelines(CropImageView.Guidelines.ON)
+                CropImage.activity(uri).setGuidelines(CropImageView.Guidelines.ON)
                         .setMinCropResultSize(120, 120)
                         .setAutoZoomEnabled(false)
                         .setInitialCropWindowPaddingRatio(.08f) // padding window from all
@@ -111,9 +110,8 @@ public class ActivityCrop extends ActivityEnhanced {
             @Override
             public void onComplete(RippleView rippleView) {
 
-                if (page != null) {
-                    finish();
-                }
+                finish();
+
             }
 
 
@@ -122,70 +120,53 @@ public class ActivityCrop extends ActivityEnhanced {
             @Override
             public void onClick(View view) {
 
-                if (page != null) {
 
-                    finish();
-                }
+                finish();
+
             }
         });
 
         txtSet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (resultUri != null && type.equals("crop") || type.equals("gallery")) {
-                    pathImageUser = getRealPathFromURI(resultUri);
-                    if (page.equals("NewGroup")) {
-                        if (G.IMAGE_NEW_GROUP.exists())
-                            HelperCopyFile.copyFile(pathImageUser, G.IMAGE_NEW_GROUP.toString());
-                    } else if (page.equals("NewChanel")) {
-                        if (G.IMAGE_NEW_CHANEL.exists())
-                            HelperCopyFile.copyFile(pathImageUser, G.IMAGE_NEW_CHANEL.toString());
-                    } else if (page.equals("chat")) {
+                if (uri != null && type.equals("crop") || type.equals("gallery")) {
+                    pathImageUser = getRealPathFromURI(uri);
+                    switch (page) {
+                        case "NewGroup":
+                            result = G.IMAGE_NEW_GROUP.toString();
+                            HelperCopyFile.copyFile(pathImageUser, result);
 
-                        mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), IMAGE_DIRECTORY_NAME);
+                            break;
+                        case "NewChanel":
 
-                        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-                        fileChat = new File(mediaStorageDir.getPath() + File.separator + "IMG_" + timeStamp + ".jpg");
-                        re = fileChat.toString();
-                        HelperCopyFile.copyFile(pathImageUser, re);
-                    } else {
-                        re = G.imageFile.toString() + "_" + System.currentTimeMillis() + "_" + id + ".jpg";
-                        HelperCopyFile.copyFile(pathImageUser, re);
+                            result = G.IMAGE_NEW_CHANEL.toString();
+                            HelperCopyFile.copyFile(pathImageUser, result);
 
+                            break;
+                        case "chat":
+                            mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), IMAGE_DIRECTORY_NAME);
+                            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+                            fileChat = new File(mediaStorageDir.getPath() + File.separator + "IMG_" + timeStamp + ".jpg");
+                            result = fileChat.toString();
+                            HelperCopyFile.copyFile(pathImageUser, result);
+                            break;
+                        default:
+
+                            result = G.imageFile.toString() + "_" + id + ".jpg";
+                            HelperCopyFile.copyFile(pathImageUser, result);
+                            break;
                     }
                 } else {
-                    re = getRealPathFromURI(resultUri);
+                    result = getRealPathFromURI(uri);
                 }
                 if (page != null) {
-                    if (page.equals("profile")) {
-                        resizeImage(re);
-                        Intent data = new Intent();
-                        data.setData(Uri.parse(re));
-                        setResult(Activity.RESULT_OK, data);
-                        finish();
 
-                    } else if (page.equals("setting")) {
-                        resizeImage(re);
-                        Intent data = new Intent();
-                        data.setData(Uri.parse(re));
-                        setResult(Activity.RESULT_OK, data);
-                        finish();
-                    } else if (page.equals("NewGroup")) {
-                        resizeImage(G.IMAGE_NEW_GROUP.toString());
-                        finish();
-                    } else if (page.equals("NewChanel")) {
-                        resizeImage(G.IMAGE_NEW_CHANEL.toString());
-                        finish();
-                    } else if (page.equals("chat")) {
+                    resizeImage(result);
+                    Intent data = new Intent();
+                    data.setData(Uri.parse(result));
+                    setResult(Activity.RESULT_OK, data);
+                    finish();
 
-                        Log.i("AAAAA", "a: " + new File(re).length());
-                        resizeImage(re);
-                        Log.i("AAAAA", "b: " + new File(re).length());
-                        Intent data = new Intent();
-                        data.setData(Uri.parse(re));
-                        setResult(Activity.RESULT_OK, data);
-                        finish();
-                    }
                 }
             }
         });
@@ -202,8 +183,8 @@ public class ActivityCrop extends ActivityEnhanced {
             if (resultCode == RESULT_OK) {
 
                 type = "crop";
-                resultUri = result.getUri();
-                imgPic.setImageURI(resultUri);
+                uri = result.getUri();
+                imgPic.setImageURI(uri);
 
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
@@ -237,14 +218,12 @@ public class ActivityCrop extends ActivityEnhanced {
             if (b != null) {
                 b.compress(Bitmap.CompressFormat.JPEG, 100, out);
             } else {
-                Toast.makeText(ActivityCrop.this, "khfifhiwfhiwhieaf", Toast.LENGTH_SHORT).show();
             }
             out.flush();
             out.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Log.i("dddddd", "onClick: ");
     }
 
 

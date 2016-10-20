@@ -276,7 +276,7 @@
         android:layout_height="match_parent"
         android:overScrollMode="never"
         android:layout_marginBottom="@dimen/dp48"
-        android:paddingTop="@dimen/dp12"
+        android:paddingBottom="@dimen/dp8"
         android:scrollbars="none">
 
     </android.support.v7.widget.RecyclerView>

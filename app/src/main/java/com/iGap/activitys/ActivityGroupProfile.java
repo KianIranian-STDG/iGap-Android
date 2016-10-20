@@ -458,7 +458,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                 bundle.putString("PAGE", "GROUP");
                 bundle.putLong("ID", roomId);
                 fragmentNotification.setArguments(bundle);
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer_group_profile, fragmentNotification).commit();
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer_group_profile, fragmentNotification).commit();
 
             }
         });

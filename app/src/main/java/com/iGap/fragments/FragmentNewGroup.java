@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -29,7 +30,6 @@ import com.iGap.interface_package.OnClientGetRoomResponse;
 import com.iGap.interface_package.OnGroupCreate;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.CircleImageView;
-import com.iGap.module.HelperDecodeFile;
 import com.iGap.module.LinedEditText;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.proto.ProtoClientGetRoom;
@@ -39,9 +39,7 @@ import com.iGap.request.RequestGroupCreate;
 
 import java.io.File;
 
-/**
- * Created by android3 on 9/5/2016.
- */
+
 public class FragmentNewGroup extends android.support.v4.app.Fragment {
 
     private MaterialDesignTextView txtBack;
@@ -94,7 +92,6 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-
                 if (G.IMAGE_NEW_GROUP.exists()) {
                     G.IMAGE_NEW_GROUP.delete();
                 } else {
@@ -107,9 +104,9 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
         txtTitleToolbar = (TextView) view.findViewById(R.id.ng_txt_titleToolbar);
         txtTitleToolbar.setTypeface(G.arial);
         if (prefix.equals("NewChanel")) {
-            txtTitleToolbar.setText(R.string.new_chanel);
+            txtTitleToolbar.setText(getResources().getString(R.string.New_Chanel));
         } else {
-            txtTitleToolbar.setText(R.string.new_group);
+            txtTitleToolbar.setText(getResources().getString(R.string.New_Group));
         }
 
         parent = (RelativeLayout) view.findViewById(R.id.ng_fragmentContainer);
@@ -122,46 +119,6 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
 
         //=======================set image for group
         imgCircleImageView = (CircleImageView) view.findViewById(R.id.ng_profile_circle_image);
-//        imgCircleImageView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                new MaterialDialog.Builder(getActivity())
-//                        .title("Choose Picture")
-//                        .negativeText("CANCEL")
-//                        .items(R.array.profile)
-//                        .itemsCallback(new MaterialDialog.ListCallback() {
-//                            @Override
-//                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-//
-//                                if (text.toString().equals("From Camera")) {
-//
-//                                    if (G.context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
-//
-//                                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//                                        if (prefix.equals("NewChanel")) {
-//                                            uriIntent = Uri.fromFile(G.IMAGE_NEW_CHANEL);
-//                                        } else {
-//                                            uriIntent = Uri.fromFile(G.IMAGE_NEW_GROUP);
-//                                        }
-//
-//                                        intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
-//                                        startActivityForResult(intent, myResultCodeCamera);
-//                                        dialog.dismiss();
-//
-//                                    } else {
-//                                        Toast.makeText(G.context, "Please check your Camera", Toast.LENGTH_SHORT).show();
-//                                    }
-//
-//                                } else {
-//                                    Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//                                    startActivityForResult(intent, myResultCodeGallery);
-//                                    dialog.dismiss();
-//                                }
-//                            }
-//                        }).show();
-//            }
-//        });
 
         RippleView rippleCircleImage = (RippleView) view.findViewById(R.id.ng_ripple_circle_image);
         rippleCircleImage.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
@@ -215,9 +172,9 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
 
         edtGroupName = (EditText) view.findViewById(R.id.ng_edt_newGroup);
         if (prefix.equals("NewChanel")) {
-            txtInputNewGroup.setHint(getString(R.string.new_chanel));
+            txtInputNewGroup.setHint(getResources().getString(R.string.New_Chanel));
         } else {
-            txtInputNewGroup.setHint(getString(R.string.new_group));
+            txtInputNewGroup.setHint(getResources().getString(R.string.New_Group));
         }
 
         //=======================description group
@@ -237,8 +194,17 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View view) {
 
+
                 if (edtDescription.getText().toString().length() > 0) {
                     if (edtGroupName.getText().toString().length() > 0) {
+
+                        txtNextStep.setEnabled(false);
+                        txtBack.setEnabled(false);
+                        txtCancel.setEnabled(false);
+                        edtDescription.setEnabled(false);
+                        edtGroupName.setEnabled(false);
+                        imgCircleImageView.setEnabled(false);
+
                         boolean success;
                         String newName = edtGroupName.getText().toString().replace(" ", "_");
                         File file2 = new File(path, prefix + "_" + newName + Math.random() * 10000 + 1 + ".png");
@@ -330,18 +296,13 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
                 intent.putExtra("TYPE", "gallery");
                 intent.putExtra("PAGE", prefix);
                 startActivityForResult(intent, myResultFragment);
-//            getActivity().getFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
             }
         } else if (requestCode == myResultFragment) {
 
-            if (G.IMAGE_NEW_GROUP.exists()) {
-                decodeBitmapProfile = HelperDecodeFile.decodeFile(G.IMAGE_NEW_GROUP);
-                imgCircleImageView.setImageBitmap(decodeBitmapProfile);
-                imgCircleImageView.setPadding(0, 0, 0, 0);
-                imgCircleImageView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
-            } else if (G.IMAGE_NEW_CHANEL.exists()) {
-                decodeBitmapProfile = HelperDecodeFile.decodeFile(G.IMAGE_NEW_CHANEL);
-                imgCircleImageView.setImageBitmap(decodeBitmapProfile);
+            if (data != null) {
+                data.getData().toString();
+                Bitmap bitmap = BitmapFactory.decodeFile(data.getData().toString());
+                imgCircleImageView.setImageBitmap(bitmap);
                 imgCircleImageView.setPadding(0, 0, 0, 0);
                 imgCircleImageView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
             }

@@ -199,11 +199,16 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                                     @Override
                                                     public void execute(Realm realm) {
                                                         realm.where(RealmUserInfo.class).findFirst().setNickName(nickName);
+                                                        Log.i("AAAAA", "0: " + nickName);
+                                                        txtNickNameTitle.setText(nickName);
+                                                        FragmentDrawerMenu.txtUserName.setText(nickName);
                                                     }
                                                 });
 
                                                 realm1.close();
                                                 txtNickName.setText(nickName);
+//
+                                                Log.i("AAAAA", "1: " + nickName);
                                             }
                                         });
                                     }
@@ -216,7 +221,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                                 Log.i("HHH", "txtNickName.getText().toString() : " + inputText.toString());
                                 new RequestUserProfileSetNickname().userProfileNickName(inputText.toString());
-
+                                Log.i("AAAAA", "1: " + nickName);
                             }
                         })
                         .negativeText("CANCEL")
@@ -604,16 +609,18 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                 sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-
                 if (toggleCrop.isChecked()) {
                     toggleCrop.setChecked(false);
                     editor.putInt(SHP_SETTING.KEY_CROP, 0);
                     editor.apply();
+                    Log.i("SSSSS", "2: ");
 
                 } else {
                     toggleCrop.setChecked(true);
                     editor.putInt(SHP_SETTING.KEY_CROP, 1);
                     editor.apply();
+                    Log.i("SSSSS", "3: ");
+
                 }
 
             }
@@ -622,7 +629,23 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         toggleCrop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.i("SSSSS", "1: ");
                 layoutCrop.performClick();
+                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                if (toggleCrop.isChecked()) {
+                    toggleCrop.setChecked(false);
+                    editor.putInt(SHP_SETTING.KEY_CROP, 0);
+                    editor.apply();
+                    Log.i("SSSSS", "6: ");
+
+                } else {
+                    toggleCrop.setChecked(true);
+                    editor.putInt(SHP_SETTING.KEY_CROP, 1);
+                    editor.apply();
+                    Log.i("SSSSS", "7: ");
+
+                }
             }
         });
 
@@ -645,6 +668,25 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         } else {
             toggleInAppBrowser.setChecked(false);
         }
+
+        toggleInAppBrowser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                if (toggleInAppBrowser.isChecked()) {
+                    toggleInAppBrowser.setChecked(false);
+                    editor.putInt(SHP_SETTING.KEY_IN_APP_BROWSER, 0);
+                    editor.apply();
+
+                } else {
+                    toggleInAppBrowser.setChecked(true);
+                    editor.putInt(SHP_SETTING.KEY_IN_APP_BROWSER, 1);
+                    editor.apply();
+                }
+            }
+        });
 
 
         ltInAppBrowser.setOnClickListener(new View.OnClickListener() {
@@ -684,6 +726,26 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         } else {
             toggleSentByEnter.setChecked(false);
         }
+
+        toggleSentByEnter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                if (toggleSentByEnter.isChecked()) {
+
+                    toggleSentByEnter.setChecked(false);
+                    editor.putInt(SHP_SETTING.KEY_SEND_BT_ENTER, 0);
+                    editor.apply();
+
+                } else {
+                    toggleSentByEnter.setChecked(true);
+                    editor.putInt(SHP_SETTING.KEY_SEND_BT_ENTER, 1);
+                    editor.apply();
+                }
+            }
+        });
 
 
         ltSentByEnter.setOnClickListener(new View.OnClickListener() {
@@ -928,6 +990,24 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             toggleEnableAnimation.setChecked(false);
         }
 
+        toggleEnableAnimation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                if (toggleEnableAnimation.isChecked()) {
+                    toggleEnableAnimation.setChecked(false);
+                    editor.putInt(SHP_SETTING.KEY_ENABLE_ANIMATION, 0);
+                    editor.apply();
+
+                } else {
+                    toggleEnableAnimation.setChecked(true);
+                    editor.putInt(SHP_SETTING.KEY_ENABLE_ANIMATION, 1);
+                    editor.apply();
+                }
+            }
+        });
 
         ltEnableAnimation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -957,7 +1037,24 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             toggleAutoGifs.setChecked(false);
         }
 
+        toggleAutoGifs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
 
+                if (toggleAutoGifs.isChecked()) {
+                    toggleAutoGifs.setChecked(false);
+                    editor.putInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, 0);
+                    editor.apply();
+
+                } else {
+                    toggleAutoGifs.setChecked(true);
+                    editor.putInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, 1);
+                    editor.apply();
+                }
+            }
+        });
         ltAutoGifs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -987,6 +1084,26 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             toggleSaveToGallery.setChecked(false);
         }
 
+        toggleSaveToGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                if (toggleSaveToGallery.isChecked()) {
+
+                    toggleSaveToGallery.setChecked(false);
+
+                    editor.putInt(SHP_SETTING.KEY_SAVE_TO_GALLERY, 0);
+                    editor.apply();
+
+                } else {
+                    toggleSaveToGallery.setChecked(true);
+                    editor.putInt(SHP_SETTING.KEY_SAVE_TO_GALLERY, 1);
+                    editor.apply();
+                }
+            }
+        });
 
         ltSaveToGallery.setOnClickListener(new View.OnClickListener() {
             @Override

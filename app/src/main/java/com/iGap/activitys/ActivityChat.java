@@ -1644,6 +1644,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 switch (buttonIndex) {
 
                     case 0:
+
                         attachFile.requestTakePicture();
                         break;
                     case 1:

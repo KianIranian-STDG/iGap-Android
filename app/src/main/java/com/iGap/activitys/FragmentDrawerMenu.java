@@ -39,6 +39,7 @@ public class FragmentDrawerMenu extends MenuFragment {
     public static Bitmap decodeBitmapProfile = null;
     private String pathImageDecode;
     private ImageView imgUserPhoto;
+    public static TextView txtUserName;
     Context context;
 
 
@@ -91,7 +92,7 @@ public class FragmentDrawerMenu extends MenuFragment {
 
         imgUserPhoto = (ImageView) v.findViewById(R.id.lm_imv_user_picture);
 
-        TextView txtUserName = (TextView) v.findViewById(R.id.lm_txt_user_name);
+        txtUserName = (TextView) v.findViewById(R.id.lm_txt_user_name);
         txtUserName.setTypeface(G.arialBold);
 
         TextView txtPhoneNumber = (TextView) v.findViewById(R.id.lm_txt_phone_number);

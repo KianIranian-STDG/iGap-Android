@@ -117,12 +117,10 @@ public class AttachFile {
     }
 
 //*************************************************************************************************************
-
     public void requestOpenGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK, Uri.parse("content://media/internal/images/media"));
         ((Activity) context).startActivityForResult(intent, request_code_media_from_gallary);
     }
-
     public void requestOpenGalleryForImage() {
 
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -130,8 +128,7 @@ public class AttachFile {
         ((Activity) context).startActivityForResult(Intent.createChooser(intent, context.getString(R.string.select_picture_en)), request_code_media_from_gallary);
     }
 
-//*************************************************************************************************************
-
+    //*************************************************************************************************************
     public void requestVideoCapture() {
 
         PackageManager packageManager = context.getPackageManager();

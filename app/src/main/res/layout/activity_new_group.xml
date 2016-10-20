@@ -91,7 +91,7 @@
                 android:layout_marginTop="@dimen/dp12"
                 android:padding="@dimen/dp12"
                 android:singleLine="false"
-                android:text="NEXT STEP"
+                android:text="@string/chi_NEXT_STEP"
                 android:textColor="@color/toolbar_background"
                 android:textSize="@dimen/dp16"
                 android:textStyle="bold" />

@@ -412,6 +412,12 @@
     <string name="Search">Search</string>
     <string name="Edit_Name">Edit Name</string>
     <string name="Delete_and_leave_Group">Delete and leave Group</string>
+    <string name="New_Chanel">New Chanel</string>
+    <string name="New_Group">New Group</string>
+    <string name="Description">Description</string>
+    <string name="Please_Enter_Description">Please Enter Description For Group</string>
+    <string name="Please_Enter_Description2">Please Enter Your Name Group</string>
+
 
 
 

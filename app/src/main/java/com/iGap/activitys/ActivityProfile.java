@@ -193,7 +193,26 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
         });
     }
 
+    public void useCamera() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        pathImageUser = G.imageFile.toString() + "_" + 0 + ".jpg";
+        pathImageFromCamera = new File(pathImageUser);
+        uriIntent = Uri.fromFile(pathImageFromCamera);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
+
+        startActivityForResult(intent, myResultCodeCamera);
+
+    }
+
+    public void useGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, myResultCodeGallery);
+    }
+
+
     //======================================================================================================dialog for choose image
+
+
     private void startDialog() {
 
         new MaterialDialog.Builder(this)
@@ -206,14 +225,9 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
 
                         if (text.toString().equals("From Camera")) {
 
-                            if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
 
-                                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                pathImageUser = G.imageFile.toString() + "_" + 0 + ".jpg";
-                                pathImageFromCamera = new File(pathImageUser);
-                                uriIntent = Uri.fromFile(pathImageFromCamera);
-                                intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
-                                startActivityForResult(intent, myResultCodeCamera);
+                            if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
+                                useCamera();
                                 dialog.dismiss();
 
                             } else {
@@ -221,8 +235,7 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
                             }
 
                         } else {
-                            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                            startActivityForResult(intent, myResultCodeGallery);
+                            useGallery();
                             dialog.dismiss();
                         }
 

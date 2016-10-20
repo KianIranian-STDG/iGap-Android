@@ -724,6 +724,7 @@ public class ActivityRegister extends ActivityEnhanced {
 
                         rg_prg_verify_connect.setVisibility(View.GONE);
                         rg_img_verify_connect.setVisibility(View.VISIBLE);
+                        rg_txt_verify_connect.setTextAppearance(G.context, R.style.RedHUGEText);
                         rg_txt_verify_connect.setTextColor(getResources().getColor(R.color.rg_text_verify));
 
                         rg_prg_verify_sms.setVisibility(View.VISIBLE);
