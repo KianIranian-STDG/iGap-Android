@@ -343,7 +343,7 @@
             android:maxWidth="@dimen/dp100"
             android:padding="@dimen/dp8"
             android:singleLine="true"
-            android:text="1 of 21"
+            android:text="0 of 0"
             android:textColor="@color/green"
             android:textSize="@dimen/sp16" />
 

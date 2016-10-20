@@ -44,7 +44,7 @@ public class ContatItemGroupProfile extends AbstractItem<ContatItemGroupProfile,
             holder.topLine.setVisibility(View.GONE);
         }
 
-        holder.title.setText(mContact.displayName + "  " + mContact.role);
+        holder.title.setText(mContact.displayName);
 
         holder.subtitle.setText(R.string.last_seen_recently);
 

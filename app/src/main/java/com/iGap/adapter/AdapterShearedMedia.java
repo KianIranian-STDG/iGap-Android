@@ -200,6 +200,8 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
                 if (list.get(position).getMessageType().equals(ProtoGlobal.RoomMessageType.VIDEO.toString()) ||
                         list.get(position).getMessageType().equals(ProtoGlobal.RoomMessageType.VIDEO_TEXT.toString())) {
                     path = list.get(position).getAttachment().getLocalThumbnailPath();
+                    if (path == null) path = "";
+
                     if (path.length() < 1) {
                         ((MyHoldersImage) holder).imvPicFile.setImageResource(R.mipmap.j_video);
                     } else {
@@ -209,8 +211,12 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
                 } else {
                     path = list.get(position).getAttachment().getLocalFilePath();
+                    if (path == null) path = "";
+
                     if (path.length() < 1)
                         path = list.get(position).getAttachment().getLocalThumbnailPath();
+
+                    if (path == null) path = "";
 
                     if (path.length() > 0)
                         new LoadImageToImageView(((MyHoldersImage) holder).imvPicFile, path).execute();

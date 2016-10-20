@@ -126,7 +126,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:autoText="false"
-            android:background="@null"
             android:hint="Search "
             android:maxLines="5"
             android:padding="@dimen/dp20" />
@@ -138,6 +137,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:paddingBottom="@dimen/dp8"
         android:scrollbars="vertical" />
 
 
