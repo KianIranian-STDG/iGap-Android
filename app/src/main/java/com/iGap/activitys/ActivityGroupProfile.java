@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -38,8 +37,7 @@ import com.iGap.adapter.AdapterShearedMedia;
 import com.iGap.adapter.items.ContatItemGroupProfile;
 import com.iGap.fragments.FragmentNotification;
 import com.iGap.fragments.ShowCustomList;
-import com.iGap.interface_package.OnFileUpload;
-import com.iGap.interface_package.OnFileUploadStatusResponse;
+import com.iGap.interface_package.OnFileUploadForActivities;
 import com.iGap.interface_package.OnGroupAddAdmin;
 import com.iGap.interface_package.OnGroupAddMember;
 import com.iGap.interface_package.OnGroupAddModerator;
@@ -58,9 +56,7 @@ import com.iGap.module.CustomTextViewMedium;
 import com.iGap.module.FileUploadStructure;
 import com.iGap.module.StructContactInfo;
 import com.iGap.module.Utils;
-import com.iGap.proto.ProtoFileUploadStatus;
 import com.iGap.proto.ProtoGlobal;
-import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmChatHistory;
@@ -69,9 +65,6 @@ import com.iGap.realm.RealmGroupRoom;
 import com.iGap.realm.RealmMember;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.enums.GroupChatRole;
-import com.iGap.request.RequestFileUpload;
-import com.iGap.request.RequestFileUploadInit;
-import com.iGap.request.RequestFileUploadStatus;
 import com.iGap.request.RequestGroupAddAdmin;
 import com.iGap.request.RequestGroupAddMember;
 import com.iGap.request.RequestGroupAddModerator;
@@ -96,7 +89,6 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -107,7 +99,7 @@ import io.realm.Sort;
 /**
  * Created by android3 on 9/18/2016.
  */
-public class ActivityGroupProfile extends ActivityEnhanced implements OnFileUploadStatusResponse, OnFileUpload, OnGroupAvatarResponse {
+public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAvatarResponse, OnFileUploadForActivities {
 
 
     private CircleImageView imvGroupAvatar;
@@ -184,7 +176,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnFileUplo
         attachFile = new AttachFile(this);
 
         G.uploaderUtil.setActivityCallbacks(this);
-        G.onFileUploadStatusResponse = this;
         G.onGroupAvatarResponse = this;
     }
 
@@ -700,6 +691,23 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnFileUplo
         realm.close();
     }
 
+    @Override
+    public void onFileUploaded(final FileUploadStructure uploadStructure, String identity) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                imvGroupAvatar.setImageURI(Uri.fromFile(new File(uploadStructure.filePath)));
+            }
+        });
+
+        new RequestGroupAvatarAdd().groupAvatarAdd(roomId, uploadStructure.token);
+    }
+
+    @Override
+    public void onFileUploading(FileUploadStructure uploadStructure, String identity, double progress) {
+        // TODO: 10/20/2016 [Alireza] update view something like updating progress
+    }
+
     private static class UploadTask extends AsyncTask<Object, FileUploadStructure, FileUploadStructure> {
         @Override
         protected FileUploadStructure doInBackground(Object... params) {
@@ -727,191 +735,8 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnFileUplo
         @Override
         protected void onPostExecute(FileUploadStructure result) {
             super.onPostExecute(result);
-            mSelectedFiles.add(result);
-            G.uploaderUtil.startUploading(result.fileSize, Long.toString(result.messageId));
+            G.uploaderUtil.startUploading(result, Long.toString(result.messageId));
         }
-    }
-
-    @Override
-    public void onFileUploadStatus(ProtoFileUploadStatus.FileUploadStatusResponse.Status status, double progress, int recheckDelayMS, final String identity, ProtoResponse.Response response) {
-        final FileUploadStructure fileUploadStructure = getSelectedFile(identity);
-        if (fileUploadStructure == null) {
-            return;
-        }
-        if (status == ProtoFileUploadStatus.FileUploadStatusResponse.Status.PROCESSED && progress == 100D) {
-
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    imvGroupAvatar.setImageURI(Uri.fromFile(new File(fileUploadStructure.filePath)));
-                }
-            });
-
-            Log.i("AVATAR", "fileUploadStructure.token : " + fileUploadStructure.token + "  ||  roomId : " + roomId);
-            new RequestGroupAvatarAdd().groupAvatarAdd(roomId, fileUploadStructure.token);
-            // TODO: 10/8/2016 [Alireza] harkari mesle update view
-
-            // remove from selected files to prevent calling this method multiple times
-            // multiple calling may occurs because of the server
-            try {
-                // FIXME: 9/19/2016 [Alireza Eskandarpour Shoferi] uncomment plz
-                //removeFromSelectedFiles(identity);
-            } catch (Exception e) {
-                Log.i("BreakPoint", e.getMessage());
-                e.printStackTrace();
-            }
-
-            // close file into structure
-            try {
-                if (fileUploadStructure != null) {
-                    fileUploadStructure.closeFile();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else if (status == ProtoFileUploadStatus.FileUploadStatusResponse.Status.PROCESSING || (status == ProtoFileUploadStatus.FileUploadStatusResponse.Status.UPLOADING) && progress == 100D) {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    new RequestFileUploadStatus().fileUploadStatus(fileUploadStructure.token, identity);
-                }
-            }, recheckDelayMS);
-        } else {
-            G.uploaderUtil.startUploading(fileUploadStructure.fileSize, Long.toString(fileUploadStructure.messageId));
-        }
-    }
-
-    @Override
-    public void OnFileUploadOption(int firstBytesLimit, int lastBytesLimit, int maxConnection, String fileHashAsIdentity, ProtoResponse.Response response) {
-        try {
-            FileUploadStructure fileUploadStructure = getSelectedFile(fileHashAsIdentity);
-            // getting bytes from file as server said
-            byte[] bytesFromFirst = Utils.getBytesFromStart(fileUploadStructure, firstBytesLimit);
-            byte[] bytesFromLast = Utils.getBytesFromEnd(fileUploadStructure, lastBytesLimit);
-            // make second request
-            new RequestFileUploadInit().fileUploadInit(bytesFromFirst, bytesFromLast, fileUploadStructure.fileSize, fileUploadStructure.fileHash, Long.toString(fileUploadStructure.messageId), fileUploadStructure.fileName);
-        } catch (IOException e) {
-            Log.i("BreakPoint", e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void OnFileUploadInit(String token, final double progress, long offset, int limit, final String identity, ProtoResponse.Response response) {
-        // token needed for requesting upload
-        // updating structure with new token
-        FileUploadStructure fileUploadStructure = getSelectedFile(identity);
-        fileUploadStructure.token = token;
-
-        // not already uploaded
-        if (progress != 100.0) {
-            try {
-                byte[] bytes = Utils.getNBytesFromOffset(fileUploadStructure, (int) offset, limit);
-                // make third request for first time
-                new RequestFileUpload().fileUpload(token, offset, bytes, identity);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            try {
-                // TODO: 10/8/2016 [Alireza] harkari mesle update view
-
-                if (isFileExistInList(Long.parseLong(identity))) {
-                    // handle when the file has already uploaded
-                    onFileUploadComplete(identity, response);
-                }
-            } catch (Exception e) {
-                Log.i("BreakPoint", e.getMessage());
-            }
-        }
-    }
-
-    /**
-     * does file exist in the list
-     * useful for preventing from calling onFileUploadComplete() multiple for a file
-     *
-     * @param messageId file hash
-     * @return boolean
-     */
-    private boolean isFileExistInList(long messageId) {
-        for (FileUploadStructure fileUploadStructure : mSelectedFiles) {
-            if (fileUploadStructure.messageId == messageId) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public void onFileUpload(final double progress, long nextOffset, int nextLimit, final String identity, ProtoResponse.Response response) {
-        final long startOnFileUploadTime = System.currentTimeMillis();
-
-        // for specific views, tags must be set with files hashes
-        // get the view which has provided hash string
-        // then do anything you want to do wit that view
-
-        try {
-            // update progress
-            Log.i("SOC", "************************************ identity : " + identity + "  ||  progress : " + progress);
-            Log.i("BreakPoint", identity + " > bad az update progress");
-
-            if (progress != 100.0) {
-                // TODO: 10/8/2016 [Alireza] harkari mesle update view
-
-                Log.i("BreakPoint", identity + " > 100 nist");
-                FileUploadStructure fileUploadStructure = getSelectedFile(identity);
-                Log.i("BreakPoint", identity + " > fileUploadStructure");
-                final long startGetNBytesTime = System.currentTimeMillis();
-                byte[] bytes = Utils.getNBytesFromOffset(fileUploadStructure, (int) nextOffset, nextLimit);
-
-                fileUploadStructure.getNBytesTime += System.currentTimeMillis() - startGetNBytesTime;
-
-                Log.i("BreakPoint", identity + " > after bytes");
-                // make request till uploading has finished
-                final long startSendReqTime = System.currentTimeMillis();
-
-                new RequestFileUpload().fileUpload(fileUploadStructure.token, nextOffset, bytes, identity);
-                fileUploadStructure.sendRequestsTime += System.currentTimeMillis() - startSendReqTime;
-                Log.i("BreakPoint", identity + " > after fileUpload request");
-
-                fileUploadStructure.elapsedInOnFileUpload += System.currentTimeMillis() - startOnFileUploadTime;
-            } else {
-                if (isFileExistInList(Long.parseLong(identity))) {
-                    // handle when the file has already uploaded
-                    onFileUploadComplete(identity, response);
-                }
-            }
-        } catch (IOException e) {
-            Log.i("BreakPoint", e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
-    // selected files (paths)
-    private static CopyOnWriteArrayList<FileUploadStructure> mSelectedFiles = new CopyOnWriteArrayList<>();
-
-    @Override
-    public void onFileUploadComplete(String fileHashAsIdentity, ProtoResponse.Response response) {
-        final FileUploadStructure fileUploadStructure = getSelectedFile(fileHashAsIdentity);
-
-        new RequestFileUploadStatus().fileUploadStatus(fileUploadStructure.token, fileHashAsIdentity);
-    }
-
-
-    /**
-     * get file with hash string
-     *
-     * @param identity file hash
-     * @return FileUploadStructure
-     */
-    @Nullable
-    private FileUploadStructure getSelectedFile(String identity) {
-        for (FileUploadStructure structure : mSelectedFiles) {
-            if (structure.messageId == Long.parseLong(identity)) {
-                return structure;
-            }
-        }
-        return null;
     }
 
     public class StickyHeaderAdapter extends AbstractAdapter implements StickyRecyclerHeadersAdapter {
