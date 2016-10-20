@@ -268,21 +268,21 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                 text1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(G.context, "Edit Name", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(G.context, R.string.edit_name, Toast.LENGTH_SHORT).show();
                         popupWindow.dismiss();
                     }
                 });
                 text2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(G.context, "Delete and leave Group", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(G.context, R.string.delete_and_leave_group, Toast.LENGTH_SHORT).show();
                         popupWindow.dismiss();
                     }
                 });
                 text3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(G.context, "Add Shortcut", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(G.context, R.string.add_shortcut, Toast.LENGTH_SHORT).show();
                         popupWindow.dismiss();
                     }
                 });
@@ -815,14 +815,14 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     private void startDialogSelectPicture(int r) {
 
         new MaterialDialog.Builder(this)
-                .title("Choose Picture")
-                .negativeText("CANCEL")
+                .title(R.string.choose_picture)
+                .negativeText(R.string.cansel)
                 .items(r)
                 .itemsCallback(new MaterialDialog.ListCallback() {
                     @Override
                     public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                        if (text.toString().equals("From Camera")) {
+                        if (text.toString().equals(getString(R.string.from_camera))) {
 
                             if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
 
@@ -831,10 +831,10 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                                 dialog.dismiss();
 
                             } else {
-                                Toast.makeText(ActivityGroupProfile.this, "Please check your Camera", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ActivityGroupProfile.this, R.string.please_check_your_camera, Toast.LENGTH_SHORT).show();
                             }
 
-                        } else if (text.toString().equals("Delete photo")) {
+                        } else if (text.toString().equals(getString(R.string.delete_photo))) {
                             // TODO: 9/20/2016  delete  group image
 
                         } else {
@@ -1004,8 +1004,8 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     private void ChangeGroupName() {
 
         MaterialDialog dialog = new MaterialDialog.Builder(ActivityGroupProfile.this)
-                .title("Group Name")
-                .positiveText("SAVE")
+                .title(R.string.group_name)
+                .positiveText(R.string.save)
                 .alwaysCallInputCallback()
                 .widgetColor(getResources().getColor(R.color.toolbar_background))
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
@@ -1036,9 +1036,9 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
                     }
                 })
-                .negativeText("CANCEL")
+                .negativeText(getString(R.string.cancel))
                 .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT)
-                .input("please Enter Group Name", txtGroupName.getText().toString(), new MaterialDialog.InputCallback() {
+                .input(getString(R.string.please_enter_group_name), txtGroupName.getText().toString(), new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
                         // Do something
@@ -1061,8 +1061,8 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
     private void ChangeGroupDescription() {
         MaterialDialog dialog = new MaterialDialog.Builder(ActivityGroupProfile.this)
-                .title("Group Descripton")
-                .positiveText("SAVE")
+                .title(R.string.group_description)
+                .positiveText(getString(R.string.save))
                 .alwaysCallInputCallback()
                 .widgetColor(getResources().getColor(R.color.toolbar_background))
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
@@ -1093,9 +1093,9 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
                     }
                 })
-                .negativeText("CANCEL")
+                .negativeText(getString(R.string.cancel))
                 .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT)
-                .input("please Enter Group Description", txtGroupDescription.getText().toString(), new MaterialDialog.InputCallback() {
+                .input(getString(R.string.please_enter_group_description), txtGroupDescription.getText().toString(), new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
                         // Do something
@@ -1120,7 +1120,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     private void groupLeft() {
 
         new MaterialDialog.Builder(ActivityGroupProfile.this)
-                .content("do you want to delete this group ")
+                .content(R.string.do_you_want_to_delete_this_group)
                 .positiveText(R.string.ok)
                 .negativeText(R.string.cancel)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
@@ -1154,7 +1154,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     private void kickAdmin(final long memberID) {
 
         new MaterialDialog.Builder(ActivityGroupProfile.this)
-                .content("do you want to set admin role to member")
+                .content(R.string.do_you_want_to_set_admin_role_to_member)
                 .positiveText(R.string.ok)
                 .negativeText(R.string.cancel)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
@@ -1203,7 +1203,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     private void kickMember(final long memberID) {
 
         new MaterialDialog.Builder(ActivityGroupProfile.this)
-                .content("do you want to kick this member ")
+                .content(R.string.do_you_want_to_kick_this_member)
                 .positiveText(R.string.ok)
                 .negativeText(R.string.cancel)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
@@ -1245,7 +1245,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     private void kickModerator(final long memberID) {
 
         new MaterialDialog.Builder(ActivityGroupProfile.this)
-                .content("do you want to set modereator role to member")
+                .content(R.string.do_you_want_to_set_modereator_role_to_member)
                 .positiveText(R.string.ok)
                 .negativeText(R.string.cancel)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {

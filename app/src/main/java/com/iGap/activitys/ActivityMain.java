@@ -151,13 +151,13 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
         txtIgap.setTypeface(null, Typeface.BOLD);
         if (G.connectionState == Config.ConnectionState.WAITING_FOR_NETWORK) {
-            txtIgap.setText("Waiting For Network...");
+            txtIgap.setText(R.string.waiting_for_network);
         } else if (G.connectionState == Config.ConnectionState.CONNECTING) {
-            txtIgap.setText("Connecting...");
+            txtIgap.setText(R.string.connecting);
         } else if (G.connectionState == Config.ConnectionState.UPDATING) {
-            txtIgap.setText("Updating...");
+            txtIgap.setText(R.string.updating);
         } else {
-            txtIgap.setText("iGap");
+            txtIgap.setText(R.string.igap);
             txtIgap.setTypeface(G.neuroplp, Typeface.NORMAL);
         }
 
@@ -169,13 +169,13 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                     public void run() {
                         txtIgap.setTypeface(null, Typeface.BOLD);
                         if (connectionState == Config.ConnectionState.WAITING_FOR_NETWORK) {
-                            txtIgap.setText("Waiting For Network...");
+                            txtIgap.setText(R.string.waiting_for_network);
                         } else if (connectionState == Config.ConnectionState.CONNECTING) {
-                            txtIgap.setText("Connecting...");
+                            txtIgap.setText(R.string.connecting);
                         } else if (connectionState == Config.ConnectionState.UPDATING) {
-                            txtIgap.setText("Updating...");
+                            txtIgap.setText(R.string.updating);
                         } else {
-                            txtIgap.setText("iGap");
+                            txtIgap.setText(R.string.igap);
                             txtIgap.setTypeface(G.neuroplp, Typeface.NORMAL);
                         }
                     }

@@ -123,20 +123,20 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
 
                         try {
                             G.context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
-                            Toast.makeText(G.context, "Save Ok: ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(G.context, R.string.save_ok, Toast.LENGTH_SHORT).show();
 
                         } catch (Exception e) {
                             e.printStackTrace();
-                            Toast.makeText(G.context, "Exception: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(G.context, getString(R.string.exception) + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
 
                         getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentAddContact.this).commit();
 
                     } else {
-                        Toast.makeText(G.context, "Please Enter PhoneNumber", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(G.context, R.string.please_enter_phone_number, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(G.context, "Please Enter FirstName or LastName", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(G.context, R.string.please_enter_firstname_or_lastname, Toast.LENGTH_SHORT).show();
                 }
 
             }

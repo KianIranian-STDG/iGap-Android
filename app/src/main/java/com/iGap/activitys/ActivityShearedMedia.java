@@ -290,11 +290,11 @@ public class ActivityShearedMedia extends ActivityEnhanced {
     }
 
     private void showLink() {
-        txtSharedMedia.setText("Shared Link");
+        txtSharedMedia.setText(R.string.shared_links);
     }
 
     private void showMusic() {
-        txtSharedMedia.setText("Shared Music");
+        txtSharedMedia.setText(R.string.shared_music);
         fillListMusic();
 
         mAdapter = new AdapterShearedMedia(ActivityShearedMedia.this, mList, txtSharedMedia.getText().toString(), complete, mediaLayout, roomId);

@@ -101,18 +101,18 @@ public class HelperNotificationAndBadge {
 
         } else {
 
-            remoteViews.setTextViewText(R.id.ln_txt_header, " iGap");
+            remoteViews.setTextViewText(R.id.ln_txt_header, " " + G.context.getString(R.string.igap));
             remoteViews.setTextViewText(R.id.ln_txt_time, list.get(list.size() - 1).time);
 
             String s = "";
             if (countUnicChat == 1) {
-                s = " chat";
+                s = " " + G.context.getString(R.string.chat);
             } else if (countUnicChat > 1) {
-                s = " chats";
+                s = " " + G.context.getString(R.string.chats);
             }
 
 
-            remoteViews.setTextViewText(R.id.ln_txt_message_notification, unreadMessageCount + " new messages from " + countUnicChat + s);
+            remoteViews.setTextViewText(R.id.ln_txt_message_notification, unreadMessageCount + G.context.getString(R.string.new_messages_from) + countUnicChat + s);
         }
 
         if (isFromOnRoom) {
@@ -245,18 +245,18 @@ public class HelperNotificationAndBadge {
         String chatCount = "";
 
         if (countUnicChat == 1) {
-            chatCount = "from " + countUnicChat + " chat";
+            chatCount = G.context.getString(R.string.from) + " " + countUnicChat + " " + G.context.getString(R.string.chat);
         } else if (countUnicChat > 1) {
-            chatCount = "from " + countUnicChat + " chats";
+            chatCount = G.context.getString(R.string.from) + " " + countUnicChat + " " + G.context.getString(R.string.chats);
         }
 
 
         String newmess = "";
         if (unreadMessageCount == 1) {
-            newmess = " new message ";
+            newmess = G.context.getString(R.string.new_message);
             chatCount = "";
         } else {
-            newmess = " new messages ";
+            newmess = G.context.getString(R.string.new_messages);
         }
 
         remoteViewsLarge.setTextViewText(R.id.ln_txt_unread_message, unreadMessageCount + newmess + chatCount);
@@ -295,7 +295,7 @@ public class HelperNotificationAndBadge {
         notification = new NotificationCompat.Builder(G.context)
                 .setTicker(list.get(0).name + " " + messageToshow)
                 .setSmallIcon(R.mipmap.logo)
-                .setContentTitle("new message recicve")
+                .setContentTitle(G.context.getString(R.string.new_message_recicve))
                 .setContent(remoteViews)
                 .setContentIntent(pi)
                 .setAutoCancel(false)

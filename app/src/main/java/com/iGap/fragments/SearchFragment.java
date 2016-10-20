@@ -180,11 +180,11 @@ public class SearchFragment extends Fragment {
     private void fillList() {
 
         list.clear();
-        addHeader("Chats");
+        addHeader(getString(R.string.chats));
         fillRoomList();
-        addHeader("Contacts");
+        addHeader(getString(R.string.contacts));
         fillContacts();
-        addHeader("Messages");
+        addHeader(getString(R.string.messages));
         fillMessages();
 
         List<IItem> items = new ArrayList<>();

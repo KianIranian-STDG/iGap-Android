@@ -283,7 +283,7 @@ public class ContactGroupFragment extends Fragment {
             }
         }
 
-        txtNumberOfMember.setText(selectedNumber + " / 5000 member");
+        txtNumberOfMember.setText(selectedNumber + " / " + contacts.size() + getString(R.string.member));
         sizeTextEditText = textString.length();
         edtSearch.setText(textString);
     }

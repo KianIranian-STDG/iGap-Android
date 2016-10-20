@@ -151,9 +151,9 @@ public class ActivityComment extends ActivityEnhanced implements IEmojiViewCreat
 
         TextView txtNumberOfComment = (TextView) findViewById(R.id.acs_txt_number_of_comment);
         if (numberOfComment > 0)
-            txtNumberOfComment.setText("Comment (" + numberOfComment + ")");
+            txtNumberOfComment.setText(getString(R.string.comment) + " (" + numberOfComment + ")");
         else
-            txtNumberOfComment.setText("NO Comment");
+            txtNumberOfComment.setText(R.string.no_comment);
 
     }
 

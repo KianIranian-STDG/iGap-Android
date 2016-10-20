@@ -10,7 +10,6 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -95,7 +94,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                Log.i("ddd", "close");
+
                 if (G.IMAGE_NEW_GROUP.exists()) {
                     G.IMAGE_NEW_GROUP.delete();
                 } else {
@@ -108,9 +107,9 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
         txtTitleToolbar = (TextView) view.findViewById(R.id.ng_txt_titleToolbar);
         txtTitleToolbar.setTypeface(G.arial);
         if (prefix.equals("NewChanel")) {
-            txtTitleToolbar.setText("New Chanel");
+            txtTitleToolbar.setText(R.string.new_chanel);
         } else {
-            txtTitleToolbar.setText("New Group");
+            txtTitleToolbar.setText(R.string.new_group);
         }
 
         parent = (RelativeLayout) view.findViewById(R.id.ng_fragmentContainer);
@@ -169,8 +168,8 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
             @Override
             public void onComplete(RippleView rippleView) {
                 new MaterialDialog.Builder(getActivity())
-                        .title("Choose Picture")
-                        .negativeText("CANCEL")
+                        .title(getString(R.string.choose_picture))
+                        .negativeText(getString(R.string.cancel))
                         .items(R.array.profile)
                         .itemsCallback(new MaterialDialog.ListCallback() {
                             @Override
@@ -192,7 +191,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
                                         dialog.dismiss();
 
                                     } else {
-                                        Toast.makeText(G.context, "Please check your Camera", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(G.context, R.string.please_check_your_camera, Toast.LENGTH_SHORT).show();
                                     }
 
                                 } else {
@@ -216,9 +215,9 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
 
         edtGroupName = (EditText) view.findViewById(R.id.ng_edt_newGroup);
         if (prefix.equals("NewChanel")) {
-            txtInputNewGroup.setHint("New Chanel");
+            txtInputNewGroup.setHint(getString(R.string.new_chanel));
         } else {
-            txtInputNewGroup.setHint("New Group");
+            txtInputNewGroup.setHint(getString(R.string.new_group));
         }
 
         //=======================description group
@@ -253,10 +252,10 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
                         }
 
                     } else {
-                        Toast.makeText(G.context, "Please Enter Description For Group", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(G.context, R.string.please_enter_group_description, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(G.context, "Please Enter Your Name Group", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(G.context, R.string.please_enter_group_name, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -293,7 +292,6 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
             @Override
             public void onClientGetRoomResponse(ProtoGlobal.Room room, ProtoClientGetRoom.ClientGetRoomResponse.Builder builder) {
                 getFragmentManager().popBackStack();
-                Log.e("ddd", "ContactGroupFragment");
                 android.support.v4.app.Fragment fragment = ContactGroupFragment.newInstance();
                 Bundle bundle = new Bundle();
                 bundle.putLong("RoomId", roomId);
@@ -323,7 +321,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
                 intent.putExtra("PAGE", prefix);
                 startActivityForResult(intent, myResultFragment);
             } else {
-                Toast.makeText(G.context, "can't save picture,pleas try again.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(G.context, R.string.can_not_save_picture_pleas_try_again, Toast.LENGTH_SHORT).show();
             }
         } else if (requestCode == myResultCodeGallery && resultCode == getActivity().RESULT_OK) {// result for gallery
             if (data != null) {

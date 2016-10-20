@@ -238,8 +238,8 @@ public class ShowCustomList extends Fragment {
         Log.i("HHH", "showDialog");
 
         MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
-                .title("Show Message Count")
-                .positiveText("Ok")
+                .title(R.string.show_message_count)
+                .positiveText(getString(R.string.ok))
                 .alwaysCallInputCallback()
                 .widgetColor(getResources().getColor(R.color.toolbar_background))
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
@@ -252,9 +252,9 @@ public class ShowCustomList extends Fragment {
                         getActivity().getSupportFragmentManager().popBackStack();
                     }
                 })
-                .negativeText("CANCEL")
+                .negativeText(getString(R.string.cancel))
                 .inputType(InputType.TYPE_CLASS_PHONE)
-                .input("count of show message", null, new MaterialDialog.InputCallback() {
+                .input(getString(R.string.count_of_show_message), null, new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
                         Log.i("HHH", "showDialog input : " + input);

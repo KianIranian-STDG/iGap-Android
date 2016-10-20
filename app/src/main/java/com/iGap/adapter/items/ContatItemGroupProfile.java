@@ -46,7 +46,7 @@ public class ContatItemGroupProfile extends AbstractItem<ContatItemGroupProfile,
 
         holder.title.setText(mContact.displayName + "  " + mContact.role);
 
-        holder.subtitle.setText("last seen recently");
+        holder.subtitle.setText(R.string.last_seen_recently);
 
 
         String name = HelperImageBackColor.getFirstAlphabetName(mContact.displayName);

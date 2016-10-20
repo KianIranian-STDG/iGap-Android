@@ -93,7 +93,7 @@ public class MyDialog {
 
         final Dialog dialog = new Dialog(context);
         // dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setTitle("iGap");
+        dialog.setTitle(G.context.getString(R.string.igap));
         dialog.setContentView(R.layout.dialog_notification);
         dialog.show();
 

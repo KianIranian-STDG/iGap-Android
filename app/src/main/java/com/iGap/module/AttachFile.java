@@ -206,8 +206,8 @@ public class AttachFile {
                     location.getLatitude();
                     location.getLongitude();
 
-                    String position = "My Position is : " + "\n" + "Latitude : " + String.valueOf(location.getLatitude()) +
-                            "\n" + "Longitude : " + String.valueOf(location.getLongitude());
+                    String position = context.getString(R.string.my_Position_is) + "\n" + context.getString(R.string.latitude) + String.valueOf(location.getLatitude()) +
+                            "\n" + context.getString(R.string.longitude) + String.valueOf(location.getLongitude());
 
                     if (complete != null)
                         complete.complete(true, position, "");
@@ -261,8 +261,8 @@ public class AttachFile {
                 location.getLatitude();
                 location.getLongitude();
 
-                String position = "My Position is : " + "\n" + "Latitude : " + String.valueOf(location.getLatitude()) +
-                        "\n" + "Longitude : " + String.valueOf(location.getLongitude());
+                String position = context.getString(R.string.my_Position_is) + "\n" + context.getString(R.string.latitude) + String.valueOf(location.getLatitude()) +
+                        "\n" + context.getString(R.string.longitude) + String.valueOf(location.getLongitude());
 
                 if (complete != null)
                     complete.complete(true, position, "");

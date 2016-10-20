@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
-import android.util.Log;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -21,8 +20,6 @@ public class HelperCorrectImageRotate {
      * @return return correct rotate bitmap or return null if file path not exist
      */
     public static Bitmap correct(String filepath) {
-
-        Log.e("dddddddddddddddddddd", "filepath   :  " + filepath);
 
         Bitmap bitmap = null;
 
@@ -43,19 +40,16 @@ public class HelperCorrectImageRotate {
                     bitmap = rotateImage(bitmap, 90);
                     if (filepath.length() > 0)
                         SaveBitmapToFile(filepath, bitmap);
-                    Log.e("dddddddddddddddddddd", "90");
                     break;
                 case ExifInterface.ORIENTATION_ROTATE_180:
                     bitmap = rotateImage(bitmap, 180);
                     if (filepath.length() > 0)
                         SaveBitmapToFile(filepath, bitmap);
-                    Log.e("dddddddddddddddddddd", "180");
                     break;
                 case ExifInterface.ORIENTATION_ROTATE_270:
                     bitmap = rotateImage(bitmap, 270);
                     if (filepath.length() > 0)
                         SaveBitmapToFile(filepath, bitmap);
-                    Log.e("dddddddddddddddddddd", "270");
                     break;
             }
         } catch (IOException e) {

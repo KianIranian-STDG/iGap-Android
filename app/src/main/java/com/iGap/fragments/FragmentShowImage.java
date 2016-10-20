@@ -153,7 +153,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
         listSize = list.size();
         viewPager.setCurrentItem(selectedFile);
 
-        txtImageNumber.setText(selectedFile + 1 + " of " + listSize);
+        txtImageNumber.setText(selectedFile + 1 + " " + getString(R.string.of) + " " + listSize);
         if (list.get(selectedFile).attachment != null) {
             txtImageName.setText(list.get(selectedFile).attachment.name);
         }
@@ -171,7 +171,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
             public void onPageSelected(int position) {
                 StructMessageInfo sharedMedia = list.get(position);
 
-                txtImageNumber.setText(position + 1 + " of " + listSize);
+                txtImageNumber.setText(position + 1 + " " + getString(R.string.of) + " " + listSize);
 
                 if (sharedMedia.attachment != null) {
                     txtImageName.setText(sharedMedia.attachment.name);

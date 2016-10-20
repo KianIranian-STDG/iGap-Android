@@ -192,7 +192,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:singleLine="true"
-                                android:text="group name : "
+                                android:text="@string/group_name"
                                 android:textSize="@dimen/sp16" />
 
                             <TextView
@@ -219,7 +219,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:singleLine="true"
-                                android:text="sheared media :"
+                                android:text="@string/shared_media"
                                 android:textSize="@dimen/sp16" />
 
                             <TextView
@@ -257,7 +257,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:singleLine="true"
-                                android:text="group description : "
+                                android:text="@string/group_description"
                                 android:textSize="@dimen/sp16" />
 
                             <TextView
@@ -267,7 +267,7 @@
                                 android:paddingBottom="@dimen/dp18"
                                 android:paddingTop="@dimen/dp4"
                                 android:singleLine="true"
-                                android:text="family group"
+                                android:text=""
                                 android:textColor="@android:color/black"
                                 android:textSize="@dimen/sp16" />
 
@@ -283,7 +283,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:singleLine="true"
-                                android:text="Members : "
+                                android:text="@string/messages"
                                 android:textSize="@dimen/sp16" />
 
                             <TextView
@@ -345,7 +345,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="@dimen/dp8"
-                            android:text="Add New Member"
+                            android:text="@string/add_new_member"
                             android:textSize="@dimen/sp16" />
 
 
@@ -407,7 +407,7 @@
                             android:paddingLeft="@dimen/dp16"
                             android:paddingTop="@dimen/dp4"
                             android:singleLine="true"
-                            android:text="Set Admin"
+                            android:text="@string/set_admin"
                             android:textColor="@android:color/black"
                             android:textSize="@dimen/sp16" />
 
@@ -435,7 +435,7 @@
                             android:paddingLeft="@dimen/dp16"
                             android:paddingTop="@dimen/dp4"
                             android:singleLine="true"
-                            android:text="Set Modereator"
+                            android:text="@string/set_modereator"
                             android:textColor="@android:color/black"
                             android:textSize="@dimen/sp16" />
 
@@ -471,7 +471,7 @@
                                 android:paddingLeft="@dimen/dp16"
                                 android:paddingTop="@dimen/dp4"
                                 android:singleLine="true"
-                                android:text="Member Can Add New Member"
+                                android:text="@string/member_can_add_new_member"
                                 android:textColor="@android:color/black"
                                 android:textSize="@dimen/sp16" />
 
@@ -511,7 +511,7 @@
                             android:paddingLeft="@dimen/dp16"
                             android:paddingTop="@dimen/dp4"
                             android:singleLine="true"
-                            android:text="Notificaion and Sound"
+                            android:text="@string/notificaion_and_sound"
                             android:textColor="@android:color/black"
                             android:textSize="@dimen/sp16" />
 
@@ -539,7 +539,7 @@
                             android:paddingLeft="@dimen/dp16"
                             android:paddingTop="@dimen/dp4"
                             android:singleLine="true"
-                            android:text="Delete and Leave Group"
+                            android:text="@string/Delete_and_leave_Group"
                             android:textColor="@android:color/black"
                             android:textSize="@dimen/sp16" />
                     </LinearLayout>

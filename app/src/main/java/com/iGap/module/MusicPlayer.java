@@ -689,7 +689,7 @@ public class MusicPlayer {
         }
 
         if (musicInfoTitle.trim().length() == 0)
-            musicInfoTitle = "unknown artist";
+            musicInfoTitle = G.context.getString(R.string.unknown_artist);
 
         try {
             mediaMetadataRetriever.setDataSource(G.context, uri);
