@@ -2509,7 +2509,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         boolean clearMessage = false;
 
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmChatHistory> realmChatHistories = realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, roomId).findAllSorted("id", Sort.DESCENDING);
+        RealmResults<RealmChatHistory> realmChatHistories = realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, roomId).findAllSorted(RealmChatHistoryFields.ID, Sort.DESCENDING);
         for (final RealmChatHistory chatHistory : realmChatHistories) {
             final RealmRoomMessage roomMessage = chatHistory.getRoomMessage();
 

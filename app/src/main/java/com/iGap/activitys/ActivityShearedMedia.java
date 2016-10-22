@@ -314,7 +314,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         mList = new ArrayList<>();
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, roomId).findAllSorted("id");
+        RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, roomId).findAllSorted(RealmChatHistoryFields.ID);
 
         String firstItmeTime = "";
         String secendItemTime = "";
@@ -353,7 +353,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         mList = new ArrayList<>();
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, roomId).findAllSorted("id");
+        RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, roomId).findAllSorted(RealmChatHistoryFields.ID);
 
         String firstItmeTime = "";
         String secendItemTime = "";
@@ -391,7 +391,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         mList = new ArrayList<>();
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, roomId).findAllSorted("id");
+        RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, roomId).findAllSorted(RealmChatHistoryFields.ID);
 
         String firstItmeTime = "";
         String secendItemTime = "";

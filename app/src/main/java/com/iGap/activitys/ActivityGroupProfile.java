@@ -929,11 +929,11 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         if (messageCount == 0) {
             startMessageId = 0;
         } else {
-            RealmResults<RealmChatHistory> realmChatHistories = realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, roomId).findAllSorted("id", Sort.DESCENDING);
+            RealmResults<RealmChatHistory> realmChatHistories = realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, roomId).findAllSorted(RealmChatHistoryFields.ID, Sort.DESCENDING);
 
             if (messageCount >= realmChatHistories.size()) {
                 // if count is bigger than exist messages get first message id that exist
-                RealmResults<RealmChatHistory> realmChatHistoriesAscending = realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, roomId).findAllSorted("id", Sort.ASCENDING);
+                RealmResults<RealmChatHistory> realmChatHistoriesAscending = realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, roomId).findAllSorted(RealmChatHistoryFields.ID, Sort.ASCENDING);
                 for (final RealmChatHistory chatHistory : realmChatHistoriesAscending) {
 
                     if (chatHistory.getRoomMessage() != null) {

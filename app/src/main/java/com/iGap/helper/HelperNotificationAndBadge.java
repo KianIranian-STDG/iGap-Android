@@ -22,6 +22,7 @@ import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAvatarPath;
 import com.iGap.realm.RealmAvatarPathFields;
 import com.iGap.realm.RealmChatHistory;
+import com.iGap.realm.RealmChatHistoryFields;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
@@ -324,7 +325,7 @@ public class HelperNotificationAndBadge {
 
         Realm realm = Realm.getDefaultInstance();
         long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
-        RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class).findAllSorted("id", Sort.DESCENDING);
+        RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class).findAllSorted(RealmChatHistoryFields.ID, Sort.DESCENDING);
 
         if (chatHistories != null) {
             for (RealmChatHistory realmChatHistory : chatHistories) {

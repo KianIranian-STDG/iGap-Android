@@ -6,7 +6,9 @@ import android.provider.ContactsContract;
 
 import com.iGap.G;
 import com.iGap.realm.RealmContacts;
+import com.iGap.realm.RealmContactsFields;
 import com.iGap.realm.RealmInviteFriend;
+import com.iGap.realm.RealmInviteFriendFields;
 import com.iGap.request.RequestUserContactImport;
 
 import java.util.ArrayList;
@@ -33,12 +35,12 @@ public class Contacts {
 
         RealmResults<RealmContacts> contacts;
         if (filter == null) {
-            contacts = realm.where(RealmContacts.class).findAllSorted("display_name");
+            contacts = realm.where(RealmContacts.class).findAllSorted(RealmContactsFields.DISPLAY_NAME);
         } else {
             contacts = realm
                     .where(RealmContacts.class)
-                    .contains("display_name", filter)
-                    .findAllSorted("display_name");
+                    .contains(RealmContactsFields.DISPLAY_NAME, filter)
+                    .findAllSorted(RealmContactsFields.DISPLAY_NAME);
         }
 
         String lastHeader = "";
@@ -171,7 +173,7 @@ public class Contacts {
                                 str = str.substring(str.length() - 10, str.length());
                             }
 
-                            realm.where(RealmInviteFriend.class).contains("phone", str).findAll().deleteAllFromRealm();
+                            realm.where(RealmInviteFriend.class).contains(RealmInviteFriendFields.PHONE, str).findAll().deleteAllFromRealm();
                         }
                     }
                 });
@@ -187,7 +189,7 @@ public class Contacts {
         ArrayList<StructContactInfo> list = new ArrayList<>();
 
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmInviteFriend> results = realm.where(RealmInviteFriend.class).findAllSorted("displayName");
+        RealmResults<RealmInviteFriend> results = realm.where(RealmInviteFriend.class).findAllSorted(RealmInviteFriendFields.DISPLAY_NAME);
 
         if (results != null) {
             String lastHeader = "";

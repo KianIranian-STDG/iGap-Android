@@ -668,7 +668,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
     private void loadLocalChatList() {
         Realm realm = Realm.getDefaultInstance();
-        for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAllSorted("lastMessageTime", Sort.DESCENDING)) {
+        for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAllSorted(RealmRoomFields.LAST_MESSAGE_TIME, Sort.DESCENDING)) {
             final RoomItem roomItem = new RoomItem();
             StructChatInfo info = new StructChatInfo();
             info.unreadMessagesCount = realmRoom.getUnreadCount();
@@ -755,7 +755,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
-                    RealmResults<RealmRoom> rooms = realm.where(RealmRoom.class).findAllSorted("lastMessageTime", Sort.DESCENDING);
+                    RealmResults<RealmRoom> rooms = realm.where(RealmRoom.class).findAllSorted(RealmRoomFields.LAST_MESSAGE_TIME, Sort.DESCENDING);
                     for (final RealmRoom room : rooms) {
                         mAdapter.add(convertToChatItem(room.getId()));
                     }
@@ -863,7 +863,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
             boolean clearMessage = false;
 
-            RealmResults<RealmChatHistory> realmChatHistories = realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, roomId).findAllSorted("id", Sort.DESCENDING);
+            RealmResults<RealmChatHistory> realmChatHistories = realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, roomId).findAllSorted(RealmChatHistoryFields.ID, Sort.DESCENDING);
             for (final RealmChatHistory chatHistory : realmChatHistories) {
                 final RealmRoomMessage roomMessage = chatHistory.getRoomMessage();
                 if (!clearMessage && roomMessage.getMessageId() == clearId) {
