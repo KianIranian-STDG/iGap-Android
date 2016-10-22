@@ -32,8 +32,8 @@ dependencies {
         transitive = true
     }
     compile project(":messageprogress")
+    compile project(":proto")
     compile 'com.android.support:appcompat-v7:24.2.1'
-    compile 'com.google.protobuf:protobuf-java:3.0.0'
     compile 'com.neovisionaries:nv-websocket-client:1.29'
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.android.support:recyclerview-v7:24.2.1'
