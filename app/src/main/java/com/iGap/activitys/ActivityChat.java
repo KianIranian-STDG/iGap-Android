@@ -129,17 +129,24 @@ import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmChannelRoom;
 import com.iGap.realm.RealmChatHistory;
+import com.iGap.realm.RealmChatHistoryFields;
 import com.iGap.realm.RealmChatRoom;
 import com.iGap.realm.RealmClientCondition;
+import com.iGap.realm.RealmClientConditionFields;
 import com.iGap.realm.RealmContacts;
+import com.iGap.realm.RealmContactsFields;
 import com.iGap.realm.RealmGroupRoom;
 import com.iGap.realm.RealmOfflineDelete;
+import com.iGap.realm.RealmOfflineDeleteFields;
 import com.iGap.realm.RealmOfflineEdited;
 import com.iGap.realm.RealmOfflineSeen;
 import com.iGap.realm.RealmRegisteredInfo;
+import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmRoom;
+import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageContact;
+import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.realm.enums.ChannelChatRole;
 import com.iGap.realm.enums.GroupChatRole;
@@ -276,7 +283,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         // when came back to the room with new messages, I make new update status request as SEEN to
         // the message sender
         final Realm chatHistoriesRealm = Realm.getDefaultInstance();
-        final RealmResults<RealmChatHistory> realmChatHistories = chatHistoriesRealm.where(RealmChatHistory.class).equalTo("roomId", mRoomId).findAllAsync();
+        final RealmResults<RealmChatHistory> realmChatHistories = chatHistoriesRealm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, mRoomId).findAllAsync();
         realmChatHistories.addChangeListener(new RealmChangeListener<RealmResults<RealmChatHistory>>() {
             @Override
             public void onChange(final RealmResults<RealmChatHistory> element) {
@@ -284,7 +291,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 chatHistoriesRealm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-                        final RealmClientCondition realmClientCondition = chatHistoriesRealm.where(RealmClientCondition.class).equalTo("roomId", mRoomId).findFirst();
+                        final RealmClientCondition realmClientCondition = chatHistoriesRealm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirst();
 
                         final ArrayList<Long> offlineSeenId = new ArrayList<>();
 
@@ -324,7 +331,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         updateUnreadCountRealm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmRoom room = realm.where(RealmRoom.class).equalTo("id", mRoomId).findFirst();
+                RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                 if (room != null) {
                     room.setUnreadCount(0);
                     realm.copyToRealmOrUpdate(room);
@@ -418,7 +425,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
             Realm realm = Realm.getDefaultInstance();
 
-            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", mRoomId).findFirst();
+            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
 
             if (realmRoom != null) { // room exist
 
@@ -431,7 +438,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     chatType = ProtoGlobal.Room.Type.CHAT;
                     RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
                     chatPeerId = realmChatRoom.getPeerId();
-                    RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo("id", chatPeerId).findFirst();
+                    RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, chatPeerId).findFirst();
                     if (realmContacts != null) {
                         title = realmContacts.getDisplay_name();
                         initialize = realmContacts.getInitials();
@@ -460,7 +467,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             } else {
                 chatPeerId = extras.getLong("peerId");
                 chatType = ProtoGlobal.Room.Type.CHAT;
-                RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo("id", chatPeerId).findFirst();
+                RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, chatPeerId).findFirst();
                 title = realmContacts.getDisplay_name();
                 initialize = realmContacts.getInitials();
                 color = realmContacts.getColor();
@@ -548,7 +555,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 if (response.getId().isEmpty()) { // another account deleted this message
 
                     Realm realm = Realm.getDefaultInstance();
-                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", messageId).findFirst();
+                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
                     if (roomMessage != null) {
                         // delete message from database
                         roomMessage.deleteFromRealm();
@@ -818,7 +825,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         RippleView rippleBackButton = (RippleView) findViewById(R.id.chl_ripple_back_Button);
 
         final Realm realm = Realm.getDefaultInstance();
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", mRoomId).findFirst();
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
         if (realmRoom != null) {
             findViewById(R.id.imgMutedRoom).setVisibility(realmRoom.getMute() ? View.VISIBLE : View.GONE);
         }
@@ -1183,9 +1190,9 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                         realm1.executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
-                                RealmRoomMessage roomMessage = realm1.where(RealmRoomMessage.class).equalTo("messageId", Long.parseLong(messageInfo.messageID)).findFirst();
+                                RealmRoomMessage roomMessage = realm1.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageInfo.messageID)).findFirst();
 
-                                RealmClientCondition realmClientCondition = realm1.where(RealmClientCondition.class).equalTo("roomId", mRoomId).findFirst();
+                                RealmClientCondition realmClientCondition = realm1.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirst();
 
                                 RealmOfflineEdited realmOfflineEdited = realm.createObject(RealmOfflineEdited.class);
                                 realmOfflineEdited.setId(System.nanoTime());
@@ -1257,7 +1264,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                             }
                         });
 
-                        RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", Long.parseLong(identity)).findFirst();
+                        RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(identity)).findFirst();
 
                         // user wants to replay to a message
                         if (mReplayLayout != null && mReplayLayout.getTag() instanceof StructMessageInfo) {
@@ -1498,7 +1505,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
     private void setAvatar() {
         Realm realm = Realm.getDefaultInstance();
-        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", chatPeerId).findFirst();
+        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
         if (realmRegisteredInfo != null && realmRegisteredInfo.getAvatar() != null && realmRegisteredInfo.getLastAvatar() != null) {
 
             String mainFilePath = realmRegisteredInfo.getLastAvatar().getFile().getLocalFilePath();
@@ -1545,7 +1552,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", chatPeerId).findFirst();
+                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
                 realmRegisteredInfo.getLastAvatar().getFile().setLocalThumbnailPath(filepath);
             }
         });
@@ -2127,10 +2134,10 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     @Override
                     public void execute(Realm realm) {
                         // get offline delete list , add new deleted list and update in client condition , then send request for delete message to server
-                        RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", mRoomId).findFirst();
+                        RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirst();
 
                         for (final AbstractMessage messageID : mAdapter.getSelectedItems()) {
-                            RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", Long.parseLong(messageID.mMessage.messageID)).findFirst();
+                            RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageID.mMessage.messageID)).findFirst();
                             if (roomMessage != null) {
                                 // delete message from database
                                 roomMessage.deleteFromRealm();
@@ -2242,7 +2249,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         Realm realm = Realm.getDefaultInstance();
         ArrayList<RealmRoomMessage> realmRoomMessages = new ArrayList<>();
         // get all RealmRoomMessages
-        for (RealmChatHistory realmChatHistory : realm.where(RealmChatHistory.class).equalTo("roomId", mRoomId).findAll()) {
+        for (RealmChatHistory realmChatHistory : realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, mRoomId).findAll()) {
             RealmRoomMessage roomMessage = realmChatHistory.getRoomMessage();
             if (roomMessage != null) {
                 realmRoomMessages.add(roomMessage);
@@ -2390,7 +2397,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                                         clipboard.setPrimaryClip(clip);
                                     } else if (text.toString().equalsIgnoreCase(getString(R.string.delete_item_dialog))) {
                                         final Realm realmCondition = Realm.getDefaultInstance();
-                                        final RealmClientCondition realmClientCondition = realmCondition.where(RealmClientCondition.class).equalTo("roomId", mRoomId).findFirstAsync();
+                                        final RealmClientCondition realmClientCondition = realmCondition.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirstAsync();
                                         realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
                                             @Override
                                             public void onChange(final RealmClientCondition element) {
@@ -2398,9 +2405,9 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                                                     @Override
                                                     public void execute(Realm realm) {
                                                         if (element != null) {
-                                                            if (realmCondition.where(RealmOfflineDelete.class).equalTo("offlineDelete", Long.parseLong(messageInfo.messageID)).findFirst() == null) {
+                                                            if (realmCondition.where(RealmOfflineDelete.class).equalTo(RealmOfflineDeleteFields.OFFLINE_DELETE, Long.parseLong(messageInfo.messageID)).findFirst() == null) {
 
-                                                                RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", Long.parseLong(messageInfo.messageID)).findFirst();
+                                                                RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageInfo.messageID)).findFirst();
                                                                 if (roomMessage != null) {
                                                                     // delete message from database
                                                                     roomMessage.deleteFromRealm();
@@ -2502,7 +2509,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         boolean clearMessage = false;
 
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmChatHistory> realmChatHistories = realm.where(RealmChatHistory.class).equalTo("roomId", roomId).findAllSorted("id", Sort.DESCENDING);
+        RealmResults<RealmChatHistory> realmChatHistories = realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, roomId).findAllSorted("id", Sort.DESCENDING);
         for (final RealmChatHistory chatHistory : realmChatHistories) {
             final RealmRoomMessage roomMessage = chatHistory.getRoomMessage();
 
@@ -2596,7 +2603,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             realm.executeTransactionAsync(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
-                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", mRoomId).findFirst();
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
 
                     AbstractMessage lastMessageBeforeDeleted = mAdapter.getAdapterItem(mAdapter.getAdapterItemCount() - 1);
                     if (lastMessageBeforeDeleted != null) {
@@ -2642,7 +2649,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-                        RealmRoom room = realm.where(RealmRoom.class).equalTo("id", mRoomId).findFirst();
+                        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                         if (room != null) {
                             room.setUnreadCount(0);
                             realm.copyToRealmOrUpdate(room);
@@ -2654,12 +2661,12 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 // but imagine user is not in the room (or he is in another room) and received some messages
                 // when came back to the room with new messages, I make new update status request as SEEN to
                 // the message sender
-                final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", roomMessage.getMessageId()).findFirst();
+                final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
                 //Start ClientCondition OfflineSeen
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-                        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", mRoomId).findFirst();
+                        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirst();
 
                         if (realmRoomMessage != null) {
                             if (!realmRoomMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
@@ -2706,7 +2713,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-                        RealmRoom room = realm.where(RealmRoom.class).equalTo("id", mRoomId).findFirst();
+                        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                         if (room != null) {
                             room.setUnreadCount(room.getUnreadCount() + 1);
                             realm.copyToRealmOrUpdate(room);
@@ -2756,7 +2763,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     setAvatar();
                     Realm realm = Realm.getDefaultInstance();
                     if (userId != 0) { // set userId 0 when download avatarChat .
-                        mAdapter.updateChatAvatar(userId, StructMessageAttachment.convert(realm.where(RealmRegisteredInfo.class).equalTo("id", userId).findFirst().getLastAvatar()));
+                        mAdapter.updateChatAvatar(userId, StructMessageAttachment.convert(realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst().getLastAvatar()));
                     }
                     realm.close();
                 } else {
@@ -2824,7 +2831,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             @Override
             public void run() {
                 Realm realm = Realm.getDefaultInstance();
-                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", user.getId()).findFirst();
+                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, user.getId()).findFirst();
                 if (realmRegisteredInfo != null) {
                     mAdapter.updateChatAvatar(user.getId(), StructMessageAttachment.convert(realmRegisteredInfo.getLastAvatar()));
                 }
@@ -2937,7 +2944,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                realm.where(RealmRoom.class).equalTo("id", item).findFirst().setMute(isMuteNotification);
+                realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, item).findFirst().setMute(isMuteNotification);
             }
         });
         realm.close();
@@ -2949,14 +2956,14 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         // make request for clearing messages
         final Realm realm = Realm.getDefaultInstance();
 
-        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", chatId).findFirstAsync();
+        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, chatId).findFirstAsync();
         realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
             @Override
             public void onChange(final RealmClientCondition element) {
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-                        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", chatId).findFirst();
+                        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatId).findFirst();
 
                         if (realmRoom.getLastMessageId() != -1) {
                             Log.i("CLI1", "CLEAR RoomId : " + chatId + "  ||  realmRoom.getLastMessageId() : " + realmRoom.getLastMessageId());
@@ -2965,7 +2972,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                             G.clearMessagesUtil.clearMessages(chatId, realmRoom.getLastMessageId());
                         }
 
-                        RealmResults<RealmChatHistory> realmChatHistories = realm.where(RealmChatHistory.class).equalTo("roomId", chatId).findAll();
+                        RealmResults<RealmChatHistory> realmChatHistories = realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, chatId).findAll();
                         for (RealmChatHistory chatHistory : realmChatHistories) {
                             RealmRoomMessage roomMessage = chatHistory.getRoomMessage();
                             if (roomMessage != null) {
@@ -2974,7 +2981,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                             }
                         }
 
-                        RealmRoom room = realm.where(RealmRoom.class).equalTo("id", chatId).findFirst();
+                        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatId).findFirst();
                         if (room != null) {
                             room.setUnreadCount(0);
                             room.setLastMessageId(0);
@@ -3045,22 +3052,22 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         };
         Log.i("RRR", "onChatDelete 0 start delete");
         final Realm realm = Realm.getDefaultInstance();
-        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", item).findFirstAsync();
+        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, item).findFirstAsync();
         realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
             @Override
             public void onChange(final RealmClientCondition element) {
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(final Realm realm) {
-                        if (realm.where(RealmOfflineDelete.class).equalTo("offlineDelete", item).findFirst() == null) {
+                        if (realm.where(RealmOfflineDelete.class).equalTo(RealmOfflineDeleteFields.OFFLINE_DELETE, item).findFirst() == null) {
                             RealmOfflineDelete realmOfflineDelete = realm.createObject(RealmOfflineDelete.class);
                             realmOfflineDelete.setId(System.nanoTime());
                             realmOfflineDelete.setOfflineDelete(item);
 
                             element.getOfflineDeleted().add(realmOfflineDelete);
 
-                            realm.where(RealmRoom.class).equalTo("id", item).findFirst().deleteFromRealm();
-                            realm.where(RealmChatHistory.class).equalTo("roomId", item).findAll().deleteAllFromRealm();
+                            realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, item).findFirst().deleteFromRealm();
+                            realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, item).findAll().deleteAllFromRealm();
 
                             new RequestChatDelete().chatDelete(item);
                         }

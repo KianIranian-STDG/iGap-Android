@@ -24,6 +24,7 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activitys.ActivityMediaPlayer;
 import com.iGap.realm.RealmChatHistory;
+import com.iGap.realm.RealmChatHistoryFields;
 import com.iGap.realm.RealmRoomMessage;
 
 import java.io.File;
@@ -550,7 +551,7 @@ public class MusicPlayer {
 
         Realm realm = Realm.getDefaultInstance();
 
-        RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class).equalTo("roomId", roomId).findAll();
+        RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, roomId).findAll();
 
         if (chatHistories != null) {
             for (RealmChatHistory chatHistory : chatHistories) {

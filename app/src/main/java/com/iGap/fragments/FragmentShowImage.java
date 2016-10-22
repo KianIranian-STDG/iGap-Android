@@ -33,7 +33,9 @@ import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmAvatarPath;
+import com.iGap.realm.RealmAvatarPathFields;
 import com.iGap.realm.RealmRegisteredInfo;
+import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.request.RequestFileDownload;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -419,7 +421,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-                        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", peerId).findFirst();
+                        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, peerId).findFirst();
                         for (RealmAvatar avatar : realmRegisteredInfo.getAvatar()) {
                             if (avatar.getFile().getToken().equals(media.attachment.token)) {
                                 avatar.getFile().setLocalFilePath(localFilePath);
@@ -459,7 +461,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
         public int removeView(ViewPager pager, int position) {
 
             Realm realm = Realm.getDefaultInstance();
-            final RealmAvatarPath realmAvatarPath = realm.where(RealmAvatarPath.class).equalTo("id", list.get(position).messageID).findFirst();
+            final RealmAvatarPath realmAvatarPath = realm.where(RealmAvatarPath.class).equalTo(RealmAvatarPathFields.ID, list.get(position).messageID).findFirst();
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {

@@ -13,6 +13,7 @@ import com.iGap.module.StructContactInfo;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmContacts;
+import com.iGap.realm.RealmContactsFields;
 import com.iGap.request.RequestFileDownload;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
@@ -105,7 +106,7 @@ public class ContactItem extends AbstractItem<ContactItem, ContactItem.ViewHolde
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo("id", mContact.peerId).findFirst();
+                RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, mContact.peerId).findFirst();
                 realmContacts.getAvatar().getFile().setLocalThumbnailPath(filepath);
             }
         });

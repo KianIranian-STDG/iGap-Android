@@ -7,8 +7,10 @@ import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGroupUpdateStatus;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmClientCondition;
+import com.iGap.realm.RealmClientConditionFields;
 import com.iGap.realm.RealmOfflineSeen;
 import com.iGap.realm.RealmRoomMessage;
+import com.iGap.realm.RealmRoomMessageFields;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -42,7 +44,7 @@ public class GroupUpdateStatusResponse extends MessageHandler {
             public void execute(Realm realm) {
                 if (!response.getId().isEmpty()) { // I'm sender
 
-                    RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", builder.getRoomId()).findFirst();
+                    RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, builder.getRoomId()).findFirst();
                     RealmList<RealmOfflineSeen> offlineSeen = realmClientCondition.getOfflineSeen();
                     for (int i = offlineSeen.size() - 1; i >= 0; i--) {
                         RealmOfflineSeen realmOfflineSeen = offlineSeen.get(i);
@@ -53,7 +55,7 @@ public class GroupUpdateStatusResponse extends MessageHandler {
                 } else { // I'm recipient
 
                     // find message from database and update its status
-                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", builder.getMessageId()).findFirst();
+                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, builder.getMessageId()).findFirst();
                     Log.i("SOC_CONDITION", "I'm recipient 1");
                     if (roomMessage != null) {
                         Log.i(ChatUpdateStatusResponse.class.getSimpleName(), "oftad > " + builder.getStatus().toString());

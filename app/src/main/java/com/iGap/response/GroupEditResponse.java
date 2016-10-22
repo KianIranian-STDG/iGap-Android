@@ -4,6 +4,7 @@ import com.iGap.G;
 import com.iGap.proto.ProtoGroupEdit;
 import com.iGap.realm.RealmGroupRoom;
 import com.iGap.realm.RealmRoom;
+import com.iGap.realm.RealmRoomFields;
 
 import io.realm.Realm;
 
@@ -32,7 +33,7 @@ public class GroupEditResponse extends MessageHandler {
 
 
         Realm realm = Realm.getDefaultInstance();
-        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
         if (realmRoom != null) {
             realm.executeTransaction(new Realm.Transaction() {

@@ -1,7 +1,9 @@
 package com.iGap.helper;
 
 import com.iGap.realm.RealmChatHistory;
+import com.iGap.realm.RealmChatHistoryFields;
 import com.iGap.realm.RealmRoomMessage;
+import com.iGap.realm.RealmRoomMessageFields;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -18,7 +20,7 @@ public final class HelperRealm {
     public static RealmRoomMessage getLastMessage(long roomId) {
         Realm realm = Realm.getDefaultInstance();
 
-        RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class).equalTo("roomId", roomId).findAll();
+        RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, roomId).findAll();
         long lastMessageId = 0;
         long lastMessageTime = 0;
         for (RealmChatHistory chatHistory : chatHistories) {
@@ -30,7 +32,7 @@ public final class HelperRealm {
             }
         }
 
-        RealmRoomMessage lastMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", lastMessageId).findFirst();
+        RealmRoomMessage lastMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, lastMessageId).findFirst();
         realm.close();
 
         return lastMessage;

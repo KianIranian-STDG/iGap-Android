@@ -6,6 +6,7 @@ import com.iGap.G;
 import com.iGap.proto.ProtoChatClearMessage;
 import com.iGap.proto.ProtoError;
 import com.iGap.realm.RealmClientCondition;
+import com.iGap.realm.RealmClientConditionFields;
 
 import io.realm.Realm;
 
@@ -32,7 +33,7 @@ public class ChatClearMessageResponse extends MessageHandler {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
-                    final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", chatClearMessage.getRoomId()).findFirst();
+                    final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, chatClearMessage.getRoomId()).findFirst();
                     realmClientCondition.setClearId(chatClearMessage.getClearId());
                 }
             });

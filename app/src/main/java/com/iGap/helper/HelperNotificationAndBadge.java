@@ -20,8 +20,10 @@ import com.iGap.activitys.ActivityMain;
 import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAvatarPath;
+import com.iGap.realm.RealmAvatarPathFields;
 import com.iGap.realm.RealmChatHistory;
 import com.iGap.realm.RealmRoom;
+import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmUserInfo;
 
@@ -117,7 +119,7 @@ public class HelperNotificationAndBadge {
 
         if (isFromOnRoom) {
             Realm realm = Realm.getDefaultInstance();
-            RealmAvatarPath realmAvatarPath = realm.where(RealmAvatarPath.class).equalTo("id", senderId).findFirst();
+            RealmAvatarPath realmAvatarPath = realm.where(RealmAvatarPath.class).equalTo(RealmAvatarPathFields.ID, senderId).findFirst();
             if (realmAvatarPath != null)
                 avatarPath = realmAvatarPath.getPathImage();
             if (avatarPath != null) {
@@ -337,7 +339,7 @@ public class HelperNotificationAndBadge {
 
                             if (unreadMessageCount == 1 || unreadMessageCount == 2 || unreadMessageCount == 3) {
                                 Item item = new Item();
-                                RealmRoom room = realm.where(RealmRoom.class).equalTo("id", realmChatHistory.getRoomId()).findFirst();
+                                RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, realmChatHistory.getRoomId()).findFirst();
                                 if (room != null) {
                                     item.name = room.getTitle() + " : ";
                                 }

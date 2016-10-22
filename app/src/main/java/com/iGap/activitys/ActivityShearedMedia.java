@@ -24,6 +24,7 @@ import com.iGap.module.MusicPlayer;
 import com.iGap.module.OnComplete;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmChatHistory;
+import com.iGap.realm.RealmChatHistoryFields;
 import com.iGap.realm.RealmRoomMessage;
 
 import java.text.SimpleDateFormat;
@@ -313,7 +314,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         mList = new ArrayList<>();
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class).equalTo("roomId", roomId).findAllSorted("id");
+        RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, roomId).findAllSorted("id");
 
         String firstItmeTime = "";
         String secendItemTime = "";
@@ -352,7 +353,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         mList = new ArrayList<>();
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class).equalTo("roomId", roomId).findAllSorted("id");
+        RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, roomId).findAllSorted("id");
 
         String firstItmeTime = "";
         String secendItemTime = "";
@@ -390,7 +391,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         mList = new ArrayList<>();
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class).equalTo("roomId", roomId).findAllSorted("id");
+        RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, roomId).findAllSorted("id");
 
         String firstItmeTime = "";
         String secendItemTime = "";

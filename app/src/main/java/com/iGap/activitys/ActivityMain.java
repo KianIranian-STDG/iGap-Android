@@ -53,11 +53,17 @@ import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmChatHistory;
+import com.iGap.realm.RealmChatHistoryFields;
 import com.iGap.realm.RealmClientCondition;
+import com.iGap.realm.RealmClientConditionFields;
 import com.iGap.realm.RealmOfflineDelete;
+import com.iGap.realm.RealmOfflineDeleteFields;
 import com.iGap.realm.RealmRegisteredInfo;
+import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmRoom;
+import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
+import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestChatDelete;
@@ -402,7 +408,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                realm.where(RealmRoom.class).equalTo("id", item.getInfo().chatId).findFirst().setMute(item.mInfo.muteNotification);
+                realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, item.getInfo().chatId).findFirst().setMute(item.mInfo.muteNotification);
             }
         });
         mAdapter.notifyAdapterItemChanged(mAdapter.getAdapterPosition(item));
@@ -417,14 +423,14 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         // make request for clearing messages
         final Realm realm = Realm.getDefaultInstance();
 
-        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", chatId).findFirstAsync();
+        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, chatId).findFirstAsync();
         realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
             @Override
             public void onChange(final RealmClientCondition element) {
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-                        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", chatId).findFirst();
+                        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatId).findFirst();
 
                         if (realmRoom.getLastMessageId() != -1) {
                             Log.i("CLI1", "CLEAR RoomId : " + chatId + "  ||  realmRoom.getLastMessageId() : " + realmRoom.getLastMessageId());
@@ -433,7 +439,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                             G.clearMessagesUtil.clearMessages(chatId, realmRoom.getLastMessageId());
                         }
 
-                        RealmResults<RealmChatHistory> realmChatHistories = realm.where(RealmChatHistory.class).equalTo("roomId", chatId).findAll();
+                        RealmResults<RealmChatHistory> realmChatHistories = realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, chatId).findAll();
                         for (RealmChatHistory chatHistory : realmChatHistories) {
                             RealmRoomMessage roomMessage = chatHistory.getRoomMessage();
                             if (roomMessage != null) {
@@ -442,7 +448,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                             }
                         }
 
-                        RealmRoom room = realm.where(RealmRoom.class).equalTo("id", chatId).findFirst();
+                        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatId).findFirst();
                         if (room != null) {
                             room.setUnreadCount(0);
                             room.setLastMessageId(0);
@@ -513,14 +519,14 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         };
         Log.i("RRR", "onChatDelete 0 start delete");
         final Realm realm = Realm.getDefaultInstance();
-        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", item.getInfo().chatId).findFirstAsync();
+        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, item.getInfo().chatId).findFirstAsync();
         realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
             @Override
             public void onChange(final RealmClientCondition element) {
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(final Realm realm) {
-                        if (realm.where(RealmOfflineDelete.class).equalTo("offlineDelete", item.getInfo().chatId).findFirst() == null) {
+                        if (realm.where(RealmOfflineDelete.class).equalTo(RealmOfflineDeleteFields.OFFLINE_DELETE, item.getInfo().chatId).findFirst() == null) {
                             RealmOfflineDelete realmOfflineDelete = realm.createObject(RealmOfflineDelete.class);
                             realmOfflineDelete.setId(System.nanoTime());
                             realmOfflineDelete.setOfflineDelete(item.getInfo().chatId);
@@ -534,8 +540,8 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                                 }
                             });
 
-                            realm.where(RealmRoom.class).equalTo("id", item.getInfo().chatId).findFirst().deleteFromRealm();
-                            realm.where(RealmChatHistory.class).equalTo("roomId", item.getInfo().chatId).findAll().deleteAllFromRealm();
+                            realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, item.getInfo().chatId).findFirst().deleteFromRealm();
+                            realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, item.getInfo().chatId).findAll().deleteAllFromRealm();
 
                             new RequestChatDelete().chatDelete(item.getInfo().chatId);
                         }
@@ -616,7 +622,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                                 case CHAT:
                                     info.chatType = RoomType.CHAT;
                                     Realm realm = Realm.getDefaultInstance();
-                                    RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", room.getChatRoom().getPeer().getId()).findFirst();
+                                    RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, room.getChatRoom().getPeer().getId()).findFirst();
                                     info.avatar = realmRegisteredInfo != null ? StructMessageAttachment.convert(realmRegisteredInfo.getLastAvatar()) : new StructMessageAttachment();
                                     realm.close();
                                     info.ownerId = room.getChatRoom().getPeer().getId();
@@ -673,7 +679,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             switch (realmRoom.getType()) {
                 case CHAT:
                     info.chatType = RoomType.CHAT;
-                    RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", realmRoom.getChatRoom().getPeerId()).findFirst();
+                    RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, realmRoom.getChatRoom().getPeerId()).findFirst();
                     info.avatar = realmRegisteredInfo != null ? StructMessageAttachment.convert(realmRegisteredInfo.getLastAvatar()) : new StructMessageAttachment();
                     info.ownerId = realmRoom.getChatRoom().getPeerId();
                     break;
@@ -696,7 +702,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             info.lastmessage = realmRoom.getLastMessage();
             info.lastMessageTime = realmRoom.getLastMessageTime();
             info.lastMessageStatus = realmRoom.getLastMessageStatus();
-            RealmRoomMessage lastMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", realmRoom.getLastMessageId()).findFirst();
+            RealmRoomMessage lastMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, realmRoom.getLastMessageId()).findFirst();
             if (lastMessage != null) {
                 info.lastmessage = lastMessage.getMessage();
                 info.lastMessageTime = lastMessage.getUpdateTime();
@@ -770,7 +776,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
      */
     private RoomItem convertToChatItem(long roomId) {
         Realm realm = Realm.getDefaultInstance();
-        RealmRoom room = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         RoomItem roomItem = new RoomItem();
         StructChatInfo chatInfo = new StructChatInfo();
         chatInfo.chatId = room.getId();
@@ -780,7 +786,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         chatInfo.lastmessage = room.getLastMessage();
         chatInfo.lastMessageStatus = room.getLastMessageStatus();
         chatInfo.readOnly = room.getReadOnly();
-        RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", room.getLastMessageId()).findFirst();
+        RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, room.getLastMessageId()).findFirst();
         if (roomMessage != null) {
             chatInfo.lastMessageTime = roomMessage.getUpdateTime();
             chatInfo.lastmessage = roomMessage.getMessage();
@@ -792,7 +798,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         switch (room.getType()) {
             case CHAT:
                 chatInfo.memberCount = "1";
-                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", room.getChatRoom().getPeerId()).findFirst();
+                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, room.getChatRoom().getPeerId()).findFirst();
                 chatInfo.avatar = realmRegisteredInfo != null ? StructMessageAttachment.convert(realmRegisteredInfo.getLastAvatar()) : null;
                 chatInfo.ownerId = room.getChatRoom().getPeerId();
                 break;
@@ -857,7 +863,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
             boolean clearMessage = false;
 
-            RealmResults<RealmChatHistory> realmChatHistories = realm.where(RealmChatHistory.class).equalTo("roomId", roomId).findAllSorted("id", Sort.DESCENDING);
+            RealmResults<RealmChatHistory> realmChatHistories = realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, roomId).findAllSorted("id", Sort.DESCENDING);
             for (final RealmChatHistory chatHistory : realmChatHistories) {
                 final RealmRoomMessage roomMessage = chatHistory.getRoomMessage();
                 if (!clearMessage && roomMessage.getMessageId() == clearId) {
@@ -875,7 +881,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                     });
                 }
             }
-            List<RealmChatHistory> allItems = realm.where(RealmChatHistory.class).equalTo("roomId", roomId).findAll().sort("id", Sort.DESCENDING);
+            List<RealmChatHistory> allItems = realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, roomId).findAll().sort("id", Sort.DESCENDING);
             long latestMessageId = 0;
             for (RealmChatHistory item : allItems) {
                 if (item.getRoomMessage() != null) {
@@ -890,7 +896,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-                        RealmRoom room = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+                        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                         if (room != null) {
                             room.setUnreadCount(0);
                             room.setLastMessageId(0);
@@ -931,7 +937,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
-                    final RealmRoom room = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+                    final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                     if (room != null) {
                         final int updatedUnreadCount = room.getUnreadCount() + 1;
                         room.setUnreadCount(updatedUnreadCount);
@@ -964,7 +970,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             @Override
             public void run() {
                 Realm realm = Realm.getDefaultInstance();
-                mAdapter.updateChatAvatar(user.getId(), StructMessageAttachment.convert(realm.where(RealmRegisteredInfo.class).equalTo("id", user.getId()).findFirst().getLastAvatar()));
+                mAdapter.updateChatAvatar(user.getId(), StructMessageAttachment.convert(realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, user.getId()).findFirst().getLastAvatar()));
                 realm.close();
             }
         });

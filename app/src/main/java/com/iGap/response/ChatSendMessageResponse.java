@@ -7,10 +7,14 @@ import com.iGap.G;
 import com.iGap.proto.ProtoChatSendMessage;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmChatHistory;
+import com.iGap.realm.RealmChatHistoryFields;
 import com.iGap.realm.RealmClientCondition;
+import com.iGap.realm.RealmClientConditionFields;
 import com.iGap.realm.RealmRoom;
+import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageContact;
+import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.RealmRoomMessageLocation;
 import com.iGap.realm.RealmRoomMessageLog;
 import com.iGap.realm.RealmUserInfo;
@@ -49,7 +53,7 @@ public class ChatSendMessageResponse extends MessageHandler {
             @Override
             public void execute(Realm realm) {
                 // set info for clientCondition
-                RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", chatSendMessageResponse.getRoomId()).findFirst();
+                RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, chatSendMessageResponse.getRoomId()).findFirst();
                 if (realmClientCondition != null) {
                     realmClientCondition.setMessageVersion(roomMessage.getMessageVersion());
                     realmClientCondition.setStatusVersion(roomMessage.getStatusVersion());
@@ -69,7 +73,7 @@ public class ChatSendMessageResponse extends MessageHandler {
                 Log.i("CLI", "send message MessageId : " + roomMessage.getMessageId());
 
                 // if first message received but the room doesn't exist, create new room
-                RealmRoom room = realm.where(RealmRoom.class).equalTo("id", chatSendMessageResponse.getRoomId()).findFirst();
+                RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatSendMessageResponse.getRoomId()).findFirst();
                 if (room == null) {
                     // make get room request
                     new RequestClientGetRoom().clientGetRoom(chatSendMessageResponse.getRoomId());
@@ -90,7 +94,7 @@ public class ChatSendMessageResponse extends MessageHandler {
                 if (chatSendMessageResponse.getResponse().getId().isEmpty()) {//TODO [Saeed Mozaffari] [2016-10-06 12:35 PM] - check this comment Alireza added and removed with saeed ==> //userId != roomMessage.getUserId() &&
                     // i'm the recipient
 
-                    RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", roomMessage.getMessageId()).findFirst();
+                    RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
 
                     /*
                      *  if this is new message and not exist this messageId createObject from RealmChatHistory
@@ -113,7 +117,7 @@ public class ChatSendMessageResponse extends MessageHandler {
                         */
                         messageId.add(roomMessage.getMessageId());
 
-                        realmChatHistory = realm.where(RealmChatHistory.class).equalTo("roomMessage.messageId", roomMessage.getMessageId()).findFirst();
+                        realmChatHistory = realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_MESSAGE.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
                     }
 
                     realmRoomMessage.setMessageVersion(roomMessage.getMessageVersion());
@@ -143,7 +147,7 @@ public class ChatSendMessageResponse extends MessageHandler {
                 } else {
                     // i'm the sender
                     // update message fields into database
-                    RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class).equalTo("roomId", chatSendMessageResponse.getRoomId()).findAll();
+                    RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, chatSendMessageResponse.getRoomId()).findAll();
                     for (RealmChatHistory history : chatHistories) {
                         RealmRoomMessage message = history.getRoomMessage();
                         // find the message using identity and update it
@@ -172,7 +176,7 @@ public class ChatSendMessageResponse extends MessageHandler {
         if (chatSendMessageResponse.getResponse().getId().isEmpty()) {//TODO [Saeed Mozaffari] [2016-10-06 12:35 PM] - check this comment Alireza added and removed with saeed ==> //userId != roomMessage.getUserId() &&
             // invoke following callback when i'm not the sender, because I already done everything after sending message
             if (!messageId.contains(roomMessage.getMessageId())) {
-                if (realm.where(RealmRoom.class).equalTo("id", chatSendMessageResponse.getRoomId()).findFirst() != null) {
+                if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatSendMessageResponse.getRoomId()).findFirst() != null) {
                     G.chatSendMessageUtil.onMessageReceive(chatSendMessageResponse.getRoomId(), roomMessage.getMessage(), roomMessage.getMessageType().toString(), roomMessage);
                 }
             } else {

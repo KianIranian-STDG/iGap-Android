@@ -10,6 +10,7 @@ import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmAttachmentFields;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmRegisteredInfo;
+import com.iGap.realm.RealmRegisteredInfoFields;
 
 import java.io.File;
 
@@ -109,7 +110,7 @@ public class StructMessageAttachment implements Parcelable {
                     realmAttachment.setLocalThumbnailPath(localPath);
                 }
 
-                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", userId).findFirst();
+                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
                 if (realmRegisteredInfo == null) {
                     realmRegisteredInfo = realm.createObject(RealmRegisteredInfo.class);
                     realmRegisteredInfo.setId(userId);

@@ -5,8 +5,10 @@ import com.iGap.proto.ProtoClientGetRoomHistory;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmChatHistory;
 import com.iGap.realm.RealmClientCondition;
+import com.iGap.realm.RealmClientConditionFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageContact;
+import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.RealmRoomMessageLocation;
 import com.iGap.realm.RealmRoomMessageLog;
 import com.iGap.realm.RealmUserInfo;
@@ -43,7 +45,7 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
                 for (ProtoGlobal.RoomMessage roomMessage : builder.getMessageList()) {
 
                     // set info for clientCondition
-                    RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", Long.parseLong(identity)).findFirst();
+                    RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, Long.parseLong(identity)).findFirst();
                     if (realmClientCondition != null) {
                         realmClientCondition.setMessageVersion(roomMessage.getMessageVersion());
                         realmClientCondition.setStatusVersion(roomMessage.getStatusVersion());
@@ -52,7 +54,7 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
                     RealmChatHistory realmChatHistory = realm.createObject(RealmChatHistory.class);
                     realmChatHistory.setId(System.currentTimeMillis());
 
-                    RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", roomMessage.getMessageId()).findFirst();
+                    RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
 
                     if (realmRoomMessage == null) {
                         realmRoomMessage = realm.createObject(RealmRoomMessage.class);

@@ -2,7 +2,9 @@ package com.iGap.module;
 
 import com.iGap.proto.ProtoClientGetRoom;
 import com.iGap.realm.RealmRoom;
+import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
+import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.enums.RoomType;
 
 import io.realm.Realm;
@@ -77,9 +79,9 @@ public class StructChatInfo {
         chatInfo.lastMessageStatus = builder.getRoom().getLastMessage().getStatus().toString();
         chatInfo.unreadMessagesCount = builder.getRoom().getUnreadCount();
         Realm realm = Realm.getDefaultInstance();
-        RealmRoom room = realm.where(RealmRoom.class).equalTo("id", builder.getRoom().getId()).findFirst();
+        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoom().getId()).findFirst();
         if (room != null) {
-            RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", room.getLastMessageId()).findFirst();
+            RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, room.getLastMessageId()).findFirst();
             if (roomMessage != null) {
                 chatInfo.lastmessage = roomMessage.getMessage();
                 chatInfo.lastMessageTime = roomMessage.getUpdateTime();

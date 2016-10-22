@@ -59,11 +59,15 @@ import com.iGap.module.Utils;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmAvatar;
+import com.iGap.realm.RealmAvatarFields;
 import com.iGap.realm.RealmChatHistory;
+import com.iGap.realm.RealmChatHistoryFields;
 import com.iGap.realm.RealmContacts;
+import com.iGap.realm.RealmContactsFields;
 import com.iGap.realm.RealmGroupRoom;
 import com.iGap.realm.RealmMember;
 import com.iGap.realm.RealmRoom;
+import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.enums.GroupChatRole;
 import com.iGap.request.RequestGroupAddAdmin;
 import com.iGap.request.RequestGroupAddMember;
@@ -159,7 +163,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         Realm realm = Realm.getDefaultInstance();
 
         //group info
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
         title = realmRoom.getTitle();
         initials = realmRoom.getInitials();
@@ -608,7 +612,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             String role = member.getRole();
             long id = member.getPeerId();
 
-            RealmContacts rc = realm.where(RealmContacts.class).equalTo("id", id).findFirst();
+            RealmContacts rc = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, id).findFirst();
 
             if (rc != null) {
 
@@ -678,7 +682,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo("ownerId", roomId).findFirst();
+                RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findFirst();
                 if (realmAvatar == null) {
                     realmAvatar = realm.createObject(RealmAvatar.class);
                     realmAvatar.setId(System.nanoTime());
@@ -925,11 +929,11 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         if (messageCount == 0) {
             startMessageId = 0;
         } else {
-            RealmResults<RealmChatHistory> realmChatHistories = realm.where(RealmChatHistory.class).equalTo("roomId", roomId).findAllSorted("id", Sort.DESCENDING);
+            RealmResults<RealmChatHistory> realmChatHistories = realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, roomId).findAllSorted("id", Sort.DESCENDING);
 
             if (messageCount >= realmChatHistories.size()) {
                 // if count is bigger than exist messages get first message id that exist
-                RealmResults<RealmChatHistory> realmChatHistoriesAscending = realm.where(RealmChatHistory.class).equalTo("roomId", roomId).findAllSorted("id", Sort.ASCENDING);
+                RealmResults<RealmChatHistory> realmChatHistoriesAscending = realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, roomId).findAllSorted("id", Sort.ASCENDING);
                 for (final RealmChatHistory chatHistory : realmChatHistoriesAscending) {
 
                     if (chatHistory.getRoomMessage() != null) {
@@ -976,7 +980,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                     new RequestGroupAddMember().groupAddMember(roomId, peerId, startMessageId, ProtoGlobal.GroupRoom.Role.MEMBER);
                 }
 
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                 RealmList<RealmMember> memberList = realmRoom.getGroupRoom().getMembers();
 
 

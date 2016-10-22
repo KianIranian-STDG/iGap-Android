@@ -28,6 +28,7 @@ import com.iGap.realm.RealmChatRoom;
 import com.iGap.realm.RealmGroupRoom;
 import com.iGap.realm.RealmNotificationSetting;
 import com.iGap.realm.RealmRoom;
+import com.iGap.realm.RealmRoomFields;
 import com.larswerkman.holocolorpicker.ColorPicker;
 import com.larswerkman.holocolorpicker.OpacityBar;
 import com.larswerkman.holocolorpicker.SVBar;
@@ -86,7 +87,7 @@ public class FragmentNotification extends Fragment {
 
                 Realm realm = Realm.getDefaultInstance();
 
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
                 RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
 
@@ -104,7 +105,7 @@ public class FragmentNotification extends Fragment {
             break;
             case "CHANNEL": {
                 Realm realm = Realm.getDefaultInstance();
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                 RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
                 if (realmChannelRoom.getRealmNotificationSetting() == null) {
                     setRealm(realm, null, realmChannelRoom, null);
@@ -121,7 +122,7 @@ public class FragmentNotification extends Fragment {
             case "CONTACT": {
 
                 Realm realm = Realm.getDefaultInstance();
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                 RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
                 realmNotificationSetting = realmChatRoom.getRealmNotificationSetting();
 
@@ -180,7 +181,7 @@ public class FragmentNotification extends Fragment {
                                         realm.executeTransaction(new Realm.Transaction() {
                                             @Override
                                             public void execute(Realm realm) {
-                                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+                                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
                                                 switch (page) {
                                                     case "GROUP": {
@@ -213,7 +214,7 @@ public class FragmentNotification extends Fragment {
                                         realm.executeTransaction(new Realm.Transaction() {
                                             @Override
                                             public void execute(Realm realm) {
-                                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+                                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
                                                 switch (page) {
                                                     case "GROUP": {
@@ -246,7 +247,7 @@ public class FragmentNotification extends Fragment {
                                         realm.executeTransaction(new Realm.Transaction() {
                                             @Override
                                             public void execute(Realm realm) {
-                                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+                                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
                                                 switch (page) {
                                                     case "GROUP": {
@@ -351,7 +352,7 @@ public class FragmentNotification extends Fragment {
                                 realm.executeTransaction(new Realm.Transaction() {
                                     @Override
                                     public void execute(Realm realm) {
-                                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+                                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
                                         switch (page) {
                                             case "GROUP": {
@@ -410,7 +411,7 @@ public class FragmentNotification extends Fragment {
                                         realm.executeTransaction(new Realm.Transaction() {
                                             @Override
                                             public void execute(Realm realm) {
-                                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+                                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
                                                 switch (page) {
                                                     case "GROUP": {
@@ -445,7 +446,7 @@ public class FragmentNotification extends Fragment {
                                         realm.executeTransaction(new Realm.Transaction() {
                                             @Override
                                             public void execute(Realm realm) {
-                                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+                                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
                                                 switch (page) {
                                                     case "GROUP": {
@@ -486,7 +487,7 @@ public class FragmentNotification extends Fragment {
                                         realm.executeTransaction(new Realm.Transaction() {
                                             @Override
                                             public void execute(Realm realm) {
-                                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+                                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
                                                 switch (page) {
                                                     case "GROUP": {
@@ -521,7 +522,7 @@ public class FragmentNotification extends Fragment {
                                         realm.executeTransaction(new Realm.Transaction() {
                                             @Override
                                             public void execute(Realm realm) {
-                                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+                                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
                                                 switch (page) {
                                                     case "GROUP": {
@@ -557,7 +558,7 @@ public class FragmentNotification extends Fragment {
                                         realm.executeTransaction(new Realm.Transaction() {
                                             @Override
                                             public void execute(Realm realm) {
-                                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+                                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
                                                 switch (page) {
                                                     case "GROUP": {
@@ -634,7 +635,7 @@ public class FragmentNotification extends Fragment {
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
-                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
                                 switch (page) {
                                     case "GROUP": {
@@ -723,7 +724,7 @@ public class FragmentNotification extends Fragment {
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
-                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
                                 switch (page) {
                                     case "GROUP": {

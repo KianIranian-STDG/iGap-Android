@@ -6,8 +6,10 @@ import com.iGap.G;
 import com.iGap.proto.ProtoChatEditMessage;
 import com.iGap.proto.ProtoError;
 import com.iGap.realm.RealmClientCondition;
+import com.iGap.realm.RealmClientConditionFields;
 import com.iGap.realm.RealmOfflineEdited;
 import com.iGap.realm.RealmRoomMessage;
+import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.RealmUserInfo;
 
 import io.realm.Realm;
@@ -38,7 +40,7 @@ public class ChatEditMessageResponse extends MessageHandler {
             @Override
             public void execute(Realm realm) {
 
-                RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", chatEditMessageResponse.getRoomId()).findFirst();
+                RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, chatEditMessageResponse.getRoomId()).findFirst();
                 if (realmClientCondition != null) {
                     realmClientCondition.setMessageVersion(chatEditMessageResponse.getMessageVersion());
                 }
@@ -57,7 +59,7 @@ public class ChatEditMessageResponse extends MessageHandler {
 
                 } else {
                     Log.i("SOC_CONDITION", "I'm Recipient 1");
-                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", chatEditMessageResponse.getMessageId()).findFirst();
+                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, chatEditMessageResponse.getMessageId()).findFirst();
                     if (roomMessage != null) {
                         // update message text in database
                         roomMessage.setMessage(chatEditMessageResponse.getMessage());

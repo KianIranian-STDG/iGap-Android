@@ -137,7 +137,7 @@ public class RealmRegisteredInfo extends RealmObject {
         }
 
         Realm realm = Realm.getDefaultInstance();
-        RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo("ownerId", userId).findFirst();
+        RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findFirst();
 
         if (realmAvatar == null) {
             realmAvatar = realm.createObject(RealmAvatar.class);
@@ -201,7 +201,7 @@ public class RealmRegisteredInfo extends RealmObject {
 
         if (registeredUser.getAvatarCount() > 0) {
             Log.i("SSS", "Avatar Exist");
-            RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo("file.token", registeredUser.getAvatar().getFile().getToken()).findFirst();
+            RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.FILE.TOKEN, registeredUser.getAvatar().getFile().getToken()).findFirst();
             Log.i("SSS", "realmAvatar : " + realmAvatar);
             if (realmAvatar == null) {
                 info.addAvatar(RealmAvatar.convert(registeredUser, realm));

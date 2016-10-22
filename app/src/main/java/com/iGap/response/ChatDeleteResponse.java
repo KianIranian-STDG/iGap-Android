@@ -6,6 +6,7 @@ import com.iGap.G;
 import com.iGap.proto.ProtoChatDelete;
 import com.iGap.proto.ProtoError;
 import com.iGap.realm.RealmClientCondition;
+import com.iGap.realm.RealmClientConditionFields;
 
 import io.realm.Realm;
 
@@ -35,7 +36,7 @@ public class ChatDeleteResponse extends MessageHandler {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", ((ProtoChatDelete.ChatDeleteResponse.Builder) message).getRoomId()).findFirst();
+                RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, ((ProtoChatDelete.ChatDeleteResponse.Builder) message).getRoomId()).findFirst();
                 if (realmClientCondition != null) {
                     realmClientCondition.deleteFromRealm();
                 }

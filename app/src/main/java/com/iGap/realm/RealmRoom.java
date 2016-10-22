@@ -168,7 +168,7 @@ public class RealmRoom extends RealmObject {
     public static RealmRoom convert(ProtoGlobal.Room room, Realm realm) {
         putChatToClientCondition(room, realm);
 
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", room.getId()).findFirst();
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst();
         if (realmRoom == null) {
             realmRoom = new RealmRoom();
         }
@@ -189,7 +189,7 @@ public class RealmRoom extends RealmObject {
             case CHAT:
                 realmRoom.setType(RoomType.CHAT);
                 realmRoom.setChatRoom(RealmChatRoom.convert(room.getChatRoom(), realmRoom.getChatRoom(), realm));
-                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", room.getChatRoom().getPeer().getId()).findFirst();
+                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, room.getChatRoom().getPeer().getId()).findFirst();
                 realmRoom.setAvatar(realmRegisteredInfo != null ? realmRegisteredInfo.getLastAvatar() : null);
                 break;
             case GROUP:
@@ -209,7 +209,7 @@ public class RealmRoom extends RealmObject {
 
     private static void putChatToClientCondition(final ProtoGlobal.Room room, Realm realm) {
 
-        if (realm.where(RealmClientCondition.class).equalTo("roomId", room.getId()).findFirst() == null) {
+        if (realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, room.getId()).findFirst() == null) {
             RealmClientCondition realmClientCondition = realm.createObject(RealmClientCondition.class);
             realmClientCondition.setRoomId(room.getId());
         }

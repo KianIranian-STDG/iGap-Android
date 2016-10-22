@@ -8,6 +8,7 @@ import com.iGap.proto.ProtoGroupAddModerator;
 import com.iGap.realm.RealmGroupRoom;
 import com.iGap.realm.RealmMember;
 import com.iGap.realm.RealmRoom;
+import com.iGap.realm.RealmRoomFields;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -38,7 +39,7 @@ public class GroupAddModeratorResponse extends MessageHandler {
 
         Realm realm = Realm.getDefaultInstance();
 
-        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", builder.getRoomId()).findFirst();
+        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst();
 
         if (realmRoom != null) {
 

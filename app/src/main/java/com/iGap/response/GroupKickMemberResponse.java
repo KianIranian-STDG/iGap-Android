@@ -6,6 +6,7 @@ import com.iGap.G;
 import com.iGap.proto.ProtoGroupKickMember;
 import com.iGap.realm.RealmMember;
 import com.iGap.realm.RealmRoom;
+import com.iGap.realm.RealmRoomFields;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -34,7 +35,7 @@ public class GroupKickMemberResponse extends MessageHandler {
 
 
         Realm realm = Realm.getDefaultInstance();
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         if (realmRoom != null) {
             final RealmList<RealmMember> realmMembers = realmRoom.getGroupRoom().getMembers();
             realm.executeTransaction(new Realm.Transaction() {

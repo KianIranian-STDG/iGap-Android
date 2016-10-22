@@ -6,6 +6,7 @@ import com.iGap.G;
 import com.iGap.proto.ProtoChatDeleteMessage;
 import com.iGap.proto.ProtoError;
 import com.iGap.realm.RealmClientCondition;
+import com.iGap.realm.RealmClientConditionFields;
 import com.iGap.realm.RealmOfflineDelete;
 import com.iGap.realm.RealmUserInfo;
 
@@ -35,7 +36,7 @@ public class ChatDeleteMessageResponse extends MessageHandler {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", chatDeleteMessage.getRoomId()).findFirst();
+                RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, chatDeleteMessage.getRoomId()).findFirst();
                 Log.i("CLI_DELETE", "Delete 1 : " + chatDeleteMessage.getMessageId());
                 if (realmClientCondition != null) {
                     realmClientCondition.setDeleteVersion(chatDeleteMessage.getDeleteVersion());

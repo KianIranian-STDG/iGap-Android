@@ -16,6 +16,7 @@ import com.iGap.module.StructChatInfo;
 import com.iGap.module.StructMessageInfo;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomMessage;
+import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.enums.RoomType;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
@@ -103,7 +104,7 @@ public class ActivitySelectChat extends ActivityEnhanced {
                     break;
             }
             info.color = realmRoom.getColor();
-            RealmRoomMessage lastMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", realmRoom.getLastMessageId()).findFirst();
+            RealmRoomMessage lastMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, realmRoom.getLastMessageId()).findFirst();
             if (lastMessage != null) {
                 info.lastMessageTime = lastMessage.getUpdateTime();
                 info.lastmessage = lastMessage.getMessage();

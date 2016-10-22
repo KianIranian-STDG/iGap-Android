@@ -7,8 +7,10 @@ import com.iGap.proto.ProtoUserContactsGetList;
 import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmAttachmentFields;
 import com.iGap.realm.RealmAvatar;
+import com.iGap.realm.RealmAvatarFields;
 import com.iGap.realm.RealmContacts;
 import com.iGap.realm.RealmRegisteredInfo;
+import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmThumbnail;
 
 import io.realm.Realm;
@@ -42,7 +44,7 @@ public class UserContactsGetListResponse extends MessageHandler {
 
                 for (ProtoGlobal.RegisteredUser registerUser : builder.getRegisteredUserList()) {
 
-                    RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", registerUser.getId()).findFirst();
+                    RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, registerUser.getId()).findFirst();
                     if (realmRegisteredInfo == null) {
                         realmRegisteredInfo = realm.createObject(RealmRegisteredInfo.class);
                         realmRegisteredInfo.setRegisteredUserInfo(registerUser, realmRegisteredInfo, realm);
@@ -63,7 +65,7 @@ public class UserContactsGetListResponse extends MessageHandler {
                     listResponse.setLast_seen(registerUser.getLastSeen());
                     listResponse.setAvatarCount(registerUser.getAvatarCount());
 
-                    RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo("ownerId", registerUser.getId()).findFirst();
+                    RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, registerUser.getId()).findFirst();
                     if (realmAvatar == null) {
                         realmAvatar = realm.createObject(RealmAvatar.class);
                         realmAvatar.setOwnerId(registerUser.getId());

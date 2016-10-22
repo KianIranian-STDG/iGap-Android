@@ -7,8 +7,10 @@ import com.iGap.proto.ProtoChatUpdateStatus;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmClientCondition;
+import com.iGap.realm.RealmClientConditionFields;
 import com.iGap.realm.RealmOfflineSeen;
 import com.iGap.realm.RealmRoomMessage;
+import com.iGap.realm.RealmRoomMessageFields;
 
 import io.realm.Realm;
 
@@ -41,7 +43,7 @@ public class ChatUpdateStatusResponse extends MessageHandler {
             public void execute(Realm realm) {
                 if (!response.getId().isEmpty()) { // I'm sender
                     Log.i("CLI", "chatUpdateStatus getId : " + chatUpdateStatus.getMessageId());
-                    RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", chatUpdateStatus.getRoomId()).findFirst();
+                    RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, chatUpdateStatus.getRoomId()).findFirst();
                     // RealmList<RealmOfflineSeen> offlineSeen = realmClientCondition.getOfflineSeen();
                     for (RealmOfflineSeen realmOfflineSeen : realmClientCondition.getOfflineSeen()) {
                         if (realmOfflineSeen.getOfflineSeen() == chatUpdateStatus.getMessageId()) {
@@ -58,7 +60,7 @@ public class ChatUpdateStatusResponse extends MessageHandler {
                 } else { // I'm recipient
 
                     // find message from database and update its status
-                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", chatUpdateStatus.getMessageId()).findFirst();
+                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, chatUpdateStatus.getMessageId()).findFirst();
                     Log.i("SOC_CONDITION", "I'm recipient 1");
                     if (roomMessage != null) {
                         Log.i(ChatUpdateStatusResponse.class.getSimpleName(), "oftad > " + chatUpdateStatus.getStatus().toString());

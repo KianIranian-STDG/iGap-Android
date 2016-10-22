@@ -28,6 +28,7 @@ import com.iGap.module.StructContactInfo;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmMember;
 import com.iGap.realm.RealmRoom;
+import com.iGap.realm.RealmRoomFields;
 import com.iGap.request.RequestGroupAddMember;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
@@ -110,7 +111,7 @@ public class ContactGroupFragment extends Fragment {
                             realm.executeTransaction(new Realm.Transaction() {
                                 @Override
                                 public void execute(Realm realm) {
-                                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+                                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                                     realmRoom.getGroupRoom().setParticipantsCountLabel(countAddMemberResponse + "");
                                 }
                             });
@@ -149,7 +150,7 @@ public class ContactGroupFragment extends Fragment {
                             new RequestGroupAddMember().groupAddMember(roomId, peerId, 0, ProtoGlobal.GroupRoom.Role.MEMBER);
                         }
 
-                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
                         for (RealmMember member : realmRoom.getGroupRoom().getMembers()) {
                             members.add(member);

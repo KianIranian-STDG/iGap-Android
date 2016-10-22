@@ -31,6 +31,7 @@ import com.iGap.module.StructMessageInfo;
 import com.iGap.module.Utils;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmChatHistory;
+import com.iGap.realm.RealmChatHistoryFields;
 import com.iGap.realm.RealmRoomMessage;
 
 import java.io.File;
@@ -482,7 +483,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
         Realm realm = Realm.getDefaultInstance();
 
-        RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class).equalTo("roomId", roomId).findAll();
+        RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, roomId).findAll();
 
         for (RealmChatHistory chatHistory : chatHistories) {
             String type = chatHistory.getRoomMessage().getMessageType();

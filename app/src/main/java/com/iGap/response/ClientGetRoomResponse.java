@@ -8,6 +8,7 @@ import com.iGap.helper.HelperRealm;
 import com.iGap.proto.ProtoClientGetRoom;
 import com.iGap.proto.ProtoError;
 import com.iGap.realm.RealmRoom;
+import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
 
 import io.realm.Realm;
@@ -39,7 +40,7 @@ public class ClientGetRoomResponse extends MessageHandler {
             @Override
             public void execute(Realm realm) {
                 // check if room doesn't exist, add room to database
-                RealmRoom room = realm.where(RealmRoom.class).equalTo("id", clientGetRoom.getRoom().getId()).findFirst();
+                RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, clientGetRoom.getRoom().getId()).findFirst();
                 if (room == null) {
                     realm.copyToRealmOrUpdate(RealmRoom.convert(clientGetRoom.getRoom(), realm));
                 }
@@ -49,7 +50,7 @@ public class ClientGetRoomResponse extends MessageHandler {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmRoom room = realm.where(RealmRoom.class).equalTo("id", clientGetRoom.getRoom().getId()).findFirst();
+                RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, clientGetRoom.getRoom().getId()).findFirst();
                 // update last message sent/received in room table
                 if (room != null) {
                     RealmRoomMessage roomMessage = HelperRealm.getLastMessage(room.getId());

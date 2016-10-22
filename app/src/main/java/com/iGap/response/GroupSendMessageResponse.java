@@ -8,8 +8,11 @@ import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoGroupSendMessage;
 import com.iGap.realm.RealmChatHistory;
+import com.iGap.realm.RealmChatHistoryFields;
 import com.iGap.realm.RealmClientCondition;
+import com.iGap.realm.RealmClientConditionFields;
 import com.iGap.realm.RealmRoom;
+import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageContact;
 import com.iGap.realm.RealmRoomMessageLocation;
@@ -47,7 +50,7 @@ public class GroupSendMessageResponse extends MessageHandler {
             @Override
             public void execute(Realm realm) {
                 // set info for clientCondition
-                RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", builder.getRoomId()).findFirst();
+                RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, builder.getRoomId()).findFirst();
                 if (realmClientCondition != null) {
                     realmClientCondition.setMessageVersion(roomMessage.getMessageVersion());
                     realmClientCondition.setStatusVersion(roomMessage.getStatusVersion());
@@ -67,7 +70,7 @@ public class GroupSendMessageResponse extends MessageHandler {
                 Log.i("CLI", "send message MessageId : " + roomMessage.getMessageId());
 
                 // if first message received but the room doesn't exist, create new room
-                RealmRoom room = realm.where(RealmRoom.class).equalTo("id", builder.getRoomId()).findFirst();
+                RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst();
                 if (room == null) {
                     // make get room request
                     new RequestClientGetRoom().clientGetRoom(builder.getRoomId());
@@ -117,7 +120,7 @@ public class GroupSendMessageResponse extends MessageHandler {
                 } else {
                     // i'm the sender
                     // update message fields into database
-                    RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class).equalTo("roomId", builder.getRoomId()).findAll();
+                    RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, builder.getRoomId()).findAll();
                     for (RealmChatHistory history : chatHistories) {
                         RealmRoomMessage message = history.getRoomMessage();
                         // find the message using identity and update it
@@ -145,7 +148,7 @@ public class GroupSendMessageResponse extends MessageHandler {
 
         if (userId != roomMessage.getUserId() && builder.getResponse().getId().isEmpty()) {
             // invoke following callback when i'm not the sender, because I already done everything after sending message
-            if (realm.where(RealmRoom.class).equalTo("id", builder.getRoomId()).findFirst() != null) {
+            if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst() != null) {
                 G.chatSendMessageUtil.onMessageReceive(builder.getRoomId(), roomMessage.getMessage(), roomMessage.getMessageType().toString(), roomMessage);
             }
         } else {

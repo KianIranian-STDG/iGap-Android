@@ -29,6 +29,7 @@ import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmChatHistory;
 import com.iGap.realm.RealmContacts;
 import com.iGap.realm.RealmRoom;
+import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestChatGetRoom;
@@ -278,7 +279,7 @@ public class SearchFragment extends Fragment {
                 item.type = SearchType.message;
                 item.messageId = roomMessage.getMessageId();
 
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", realmChatHistory.getRoomId()).findFirst();
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, realmChatHistory.getRoomId()).findFirst();
 
                 if (realmRoom != null) { // room exist
                     item.name = realmRoom.getTitle();
@@ -299,9 +300,9 @@ public class SearchFragment extends Fragment {
         RealmRoom realmRoom = null;
 
         if (type == SearchType.room || type == SearchType.message) {
-            realmRoom = realm.where(RealmRoom.class).equalTo("id", id).findFirst();
+            realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst();
         } else if (type == SearchType.contact) {
-            realmRoom = realm.where(RealmRoom.class).equalTo("chat_room.peer_id", id).findFirst();
+            realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, id).findFirst();
         }
 
         if (realmRoom != null) {

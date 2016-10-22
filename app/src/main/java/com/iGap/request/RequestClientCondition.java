@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.iGap.proto.ProtoClientCondition;
 import com.iGap.realm.RealmChatHistory;
+import com.iGap.realm.RealmChatHistoryFields;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmOfflineDelete;
 import com.iGap.realm.RealmOfflineEdited;
@@ -47,13 +48,13 @@ public class RequestClientCondition {
 
                 room.setClearId(realmClientCondition.getClearId()); //DONE
 
-                RealmChatHistory realmChatHistory = realm.where(RealmChatHistory.class).equalTo("roomId", realmClientCondition.getRoomId()).findFirst();
+                RealmChatHistory realmChatHistory = realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, realmClientCondition.getRoomId()).findFirst();
                 Log.i("CLI1", "realmChatHistory : " + realmChatHistory);
                 if (realmChatHistory != null && realmChatHistory.getRoomMessage() != null) {
                     Log.i("CLI1", "start ID : " + realmChatHistory.getRoomMessage().getMessageId());
                     room.setCacheStartId(realmChatHistory.getRoomMessage().getMessageId());//Done
 
-                    List<RealmChatHistory> allItems = realm.where(RealmChatHistory.class).equalTo("roomId", realmClientCondition.getRoomId()).findAll().sort("id", Sort.DESCENDING);
+                    List<RealmChatHistory> allItems = realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, realmClientCondition.getRoomId()).findAll().sort("id", Sort.DESCENDING);
 
                     for (RealmChatHistory item : allItems) {
                         Log.i("CLI1", "End 1");

@@ -1198,7 +1198,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                                             new File(avatarPath.getPathImage()).delete();
                                                             avatarPath.deleteFromRealm();
 
-                                                            //realm.where(RealmAvatarToken.class).equalTo("token", token).findFirst().deleteFromRealm();
+                                                            //realm.where(RealmAvatarToken.class).equalTo(RealmAvatarTokenFields.TOKEN, token).findFirst().deleteFromRealm();
                                                         }
                                                     }
                                                 }
@@ -1214,7 +1214,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                             realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
                             Log.i("XXX", "RequestUserAvatarDelete 1 avatarId : " + realmAvatarPaths.first().getId());
 
-//                            RealmAvatarToken realmAvatarToken = realm1.where(RealmAvatarToken.class).equalTo("id", realmAvatarPaths.first().getId()).findFirst();
+//                            RealmAvatarToken realmAvatarToken = realm1.where(RealmAvatarToken.class).equalTo(RealmAvatarTokenFields.ID, realmAvatarPaths.first().getId()).findFirst();
 //                            realmAvatarToken.getToken();
 //                            Log.i("XXX", "RequestUserAvatarDelete 1 realmAvatarToken.getToken() : " + realmAvatarToken.getToken());
 //
