@@ -13,7 +13,7 @@ public class RealmRoomMessageContact extends RealmObject {
     private String lastName;
     private String nickName;
     private RealmList<RealmString> phones = new RealmList<>();
-    private RealmList<RealmEmail> emails = new RealmList<>();
+    private RealmList<RealmString> emails = new RealmList<>();
     @PrimaryKey
     private long id;
 
@@ -91,11 +91,11 @@ public class RealmRoomMessageContact extends RealmObject {
         return messageContact;
     }
 
-    public RealmList<RealmEmail> getEmails() {
+    public RealmList<RealmString> getEmails() {
         return emails;
     }
 
-    public void setEmails(RealmList<RealmEmail> emails) {
+    public void setEmails(RealmList<RealmString> emails) {
         this.emails = emails;
     }
 }

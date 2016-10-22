@@ -5,6 +5,7 @@ import com.iGap.module.Contacts;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoUserContactsGetList;
 import com.iGap.realm.RealmAttachment;
+import com.iGap.realm.RealmAttachmentFields;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmContacts;
 import com.iGap.realm.RealmRegisteredInfo;
@@ -69,7 +70,7 @@ public class UserContactsGetListResponse extends MessageHandler {
                         realmAvatar.setId(System.nanoTime());
                     }
 
-                    RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo("id", registerUser.getId()).findFirst();
+                    RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, registerUser.getId()).findFirst();
                     if (realmAttachment == null) {
                         realmAttachment = realm.createObject(RealmAttachment.class);
                         realmAttachment.setId(registerUser.getId());

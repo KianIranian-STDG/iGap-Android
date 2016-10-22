@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAttachment;
+import com.iGap.realm.RealmAttachmentFields;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmRegisteredInfo;
 
@@ -39,7 +40,7 @@ public class StructMessageAttachment implements Parcelable {
     public void setLocalFilePath(final long messageId, @Nullable final String path) {
         this.localFilePath = path;
         Realm realm = Realm.getDefaultInstance();
-        final RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo("id", messageId).findFirst();
+        final RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, messageId).findFirst();
         if (realmAttachment == null) {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
@@ -70,7 +71,7 @@ public class StructMessageAttachment implements Parcelable {
     public void setLocalThumbnailPath(final long messageId, @Nullable final String localPath) {
         this.localThumbnailPath = localPath;
         Realm realm = Realm.getDefaultInstance();
-        final RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo("id", messageId).findFirst();
+        final RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, messageId).findFirst();
         if (realmAttachment == null) {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
@@ -97,7 +98,7 @@ public class StructMessageAttachment implements Parcelable {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo("id", userId).findFirst();
+                RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, userId).findFirst();
 
                 if (realmAttachment == null) {
                     realmAttachment = realm.createObject(RealmAttachment.class);

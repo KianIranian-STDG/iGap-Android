@@ -199,7 +199,7 @@ public class RealmRoomMessage extends RealmObject {
         }
         Realm realm = Realm.getDefaultInstance();
         if (attachment == null) {
-            RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo("id", messageId).findFirst();
+            RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, messageId).findFirst();
             if (realmAttachment == null) {
                 realmAttachment = realm.createObject(RealmAttachment.class);
                 realmAttachment.setId(messageId);
