@@ -1,7 +1,5 @@
 package com.iGap.adapter.items.chat;
 
-import android.graphics.Color;
-import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.CallSuper;
 import android.support.v7.widget.RecyclerView;
@@ -17,12 +15,14 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.MessagesAdapter;
 import com.iGap.interface_package.IChatItemAttachment;
+import com.iGap.interface_package.IChatItemAvatar;
 import com.iGap.interface_package.OnMessageViewClick;
+import com.iGap.module.AndroidUtils;
+import com.iGap.module.AppUtils;
 import com.iGap.module.MyType;
 import com.iGap.module.StructDownloadAttachment;
 import com.iGap.module.StructMessageInfo;
 import com.iGap.module.TimeUtils;
-import com.iGap.module.Utils;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
@@ -31,7 +31,6 @@ import com.iGap.request.RequestUserInfo;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -42,7 +41,7 @@ import io.meness.github.messageprogress.OnProgress;
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/6/2016.
  */
-public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH extends RecyclerView.ViewHolder> extends AbstractItem<Item, VH> implements IChatItemAttachment<VH> {
+public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH extends RecyclerView.ViewHolder> extends AbstractItem<Item, VH> implements IChatItemAttachment<VH>, IChatItemAvatar {
     public OnMessageViewClick messageClickListener;
     public StructMessageInfo mMessage;
     public boolean directionalBased = true;
@@ -102,6 +101,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
     }
 
+    @Override
     public void onRequestDownloadAvatar() {
         ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
         if (mMessage.senderAvatar != null && (mMessage.senderAvatar.getLocalThumbnailPath() == null || mMessage.senderAvatar.getLocalThumbnailPath().isEmpty())) {
@@ -140,7 +140,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
 
         if (mMessage.sendType == MyType.SendType.send) {
-            updateMessageStatus((TextView) holder.itemView.findViewById(R.id.cslr_txt_tic), mMessage.status);
+            AppUtils.updateMessageStatus((TextView) holder.itemView.findViewById(R.id.cslr_txt_tic), mMessage.status);
         }
 
         // display 'edited' indicator beside message time if message was edited
@@ -157,9 +157,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             if (!mMessage.isSenderMe()) {
                 if (mMessage.senderAvatar != null) {
                     if (mMessage.senderAvatar.isFileExistsOnLocal()) {
-                        ImageLoader.getInstance().displayImage(suitablePath(mMessage.senderAvatar.getLocalFilePath()), (ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar));
+                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mMessage.senderAvatar.getLocalFilePath()), (ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar));
                     } else if (mMessage.senderAvatar.isThumbnailExistsOnLocal()) {
-                        ImageLoader.getInstance().displayImage(suitablePath(mMessage.senderAvatar.getLocalThumbnailPath()), (ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar));
+                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mMessage.senderAvatar.getLocalThumbnailPath()), (ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar));
                     } else {
                         ((ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar)).setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), mMessage.initials, mMessage.senderColor));
 
@@ -188,10 +188,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             ((TextView) holder.itemView.findViewById(R.id.cslr_txt_time)).setText(formatTime());
         }
 
-        setReplayMessage(holder);
-        setForwardMessage(holder);
+        replayMessageIfNeeded(holder);
+        forwardMessageIfNeeded(holder);
 
-        download(holder);
+        prepareAttachmentIfNeeded(holder);
     }
 
     @CallSuper
@@ -225,56 +225,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     }
 
     /**
-     * update message status automatically
-     *
-     * @param view TextView message status
-     */
-    public static void updateMessageStatus(TextView view, String status) {
-        // icons font MaterialDesign yeksan design nashodan vase hamin man dasti size ro barabar kardam
-        switch (status) {
-            case "DELIVERED":
-                view.setTextColor(view.getContext().getResources().getColor(R.color.green));
-                view.setText(G.context.getResources().getString(R.string.md_check_symbol));
-                view.setTextSize(12F);
-                break;
-            case "FAILED":
-                view.setTextColor(Color.RED);
-                view.setText(G.context.getResources().getString(R.string.md_cancel_button));
-                view.setTextSize(15F);
-                break;
-            case "SEEN":
-                view.setTextColor(view.getContext().getResources().getColor(R.color.green));
-                view.setText(G.context.getResources().getString(R.string.md_double_tick_indicator));
-                view.setTextSize(15F);
-                break;
-            case "SENDING":
-                view.setTextColor(view.getContext().getResources().getColor(R.color.green));
-                view.setText(G.context.getResources().getString(R.string.md_clock_with_white_face));
-                view.setTextSize(12F);
-                break;
-            case "SENT":
-                view.setTextColor(view.getContext().getResources().getColor(R.color.green));
-                view.setText(G.context.getResources().getString(R.string.md_check_symbol));
-                view.setTextSize(12F);
-                break;
-        }
-    }
-
-    /**
-     * return suitable path for using with UIL
-     *
-     * @param path String path
-     * @return correct local path/passed path
-     */
-    protected String suitablePath(String path) {
-        if (path.matches("\\w+?://")) {
-            return path;
-        } else {
-            return Uri.fromFile(new File(path)).toString();
-        }
-    }
-
-    /**
      * format long time as string
      *
      * @return String
@@ -284,7 +234,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     }
 
     @CallSuper
-    protected void setReplayMessage(VH holder) {
+    protected void replayMessageIfNeeded(VH holder) {
         // set replay container visible if message was replayed, otherwise, gone it
         LinearLayout replayContainer = (LinearLayout) holder.itemView.findViewById(R.id.replayLayout);
         if (replayContainer != null) {
@@ -306,7 +256,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     }
 
     @CallSuper
-    protected void setForwardMessage(VH holder) {
+    protected void forwardMessageIfNeeded(VH holder) {
         // set forward container visible if message was forwarded, otherwise, gone it
         LinearLayout forwardContainer = (LinearLayout) holder.itemView.findViewById(R.id.cslr_ll_forward);
         if (forwardContainer != null) {
@@ -319,7 +269,17 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
     }
 
-    private void download(final VH holder) {
+    /**
+     * does item have progress view
+     *
+     * @param itemView View
+     * @return true if item has a progress
+     */
+    private boolean hasProgress(View itemView) {
+        return itemView.findViewById(R.id.progress) != null;
+    }
+
+    private void prepareAttachmentIfNeeded(final VH holder) {
         // runs if message has attachment
         if (mMessage.hasAttachment()) {
             // if file already exists, simply show the local one
@@ -333,7 +293,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     if (mMessage.messageType == ProtoGlobal.RoomMessageType.IMAGE || mMessage.messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
                         ViewGroup view = (ViewGroup) holder.itemView.findViewById(R.id.thumbnail).getParent();
                         if (view != null) {
-                            int[] dimens = Utils.scaleDimenWithSavedRatio(holder.itemView.getContext(), mMessage.attachment.width, mMessage.attachment.height);
+                            int[] dimens = AndroidUtils.scaleDimenWithSavedRatio(holder.itemView.getContext(), mMessage.attachment.width, mMessage.attachment.height);
                             view.setLayoutParams(new LinearLayout.LayoutParams(dimens[0], dimens[1]));
                             view.requestLayout();
                         }
@@ -346,7 +306,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
 
                 // TODO: 10/15/2016 [Alireza] vase halate auto download inja bayad taghir kone (vase ba'dan goftam)
-                if (holder.itemView.findViewById(R.id.progress) != null) {
+                if (hasProgress(holder.itemView)) {
                     ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withOnMessageProgress(new OnMessageProgressClick() {
                         @Override
                         public void onMessageProgressClick(MessageProgress progress) {
@@ -367,7 +327,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
             }
 
-            if (holder.itemView.findViewById(R.id.progress) != null) {
+            if (hasProgress(holder.itemView)) {
                 ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withOnProgress(new OnProgress() {
                     @Override
                     public void onProgressFinished() {
@@ -397,7 +357,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 });
             }
 
-            updateProgressIfNeeded(holder);
+            prepareProgress(holder);
         }
     }
 
@@ -412,10 +372,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     public void onRequestDownloadFile(int offset, int progress) {
         String fileName = mMessage.attachment.token + "_" + mMessage.attachment.name;
         if (progress == 100) {
-            mMessage.attachment.setLocalFilePath(Long.parseLong(mMessage.messageID), Utils.suitableAppFilePath(mMessage.messageType) + "/" + fileName);
+            mMessage.attachment.setLocalFilePath(Long.parseLong(mMessage.messageID), AndroidUtils.suitableAppFilePath(mMessage.messageType) + "/" + fileName);
 
             try {
-                Utils.cutFromTemp(mMessage.messageType, fileName);
+                AndroidUtils.cutFromTemp(mMessage.messageType, fileName);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -462,8 +422,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
      *
      * @param holder VH
      */
-    private void updateProgressIfNeeded(VH holder) {
-        if (holder.itemView.findViewById(R.id.progress) == null) {
+    private void prepareProgress(VH holder) {
+        if (!hasProgress(holder.itemView)) {
             return;
         }
 

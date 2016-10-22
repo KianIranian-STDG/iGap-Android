@@ -44,12 +44,12 @@ import com.iGap.interface_package.OnUserAvatarDelete;
 import com.iGap.interface_package.OnUserAvatarResponse;
 import com.iGap.interface_package.OnUserProfileSetNickNameResponse;
 import com.iGap.libs.rippleeffect.RippleView;
+import com.iGap.module.AndroidUtils;
 import com.iGap.module.FileUploadStructure;
 import com.iGap.module.HelperDecodeFile;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.StructMessageInfo;
-import com.iGap.module.Utils;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmAvatarPath;
@@ -1393,7 +1393,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 FileUploadStructure fileUploadStructure = new FileUploadStructure(fileName, fileSize, filePath, avatarId);
                 fileUploadStructure.openFile(filePath);
 
-                byte[] fileHash = Utils.getFileHash(fileUploadStructure);
+                byte[] fileHash = AndroidUtils.getFileHash(fileUploadStructure);
                 fileUploadStructure.setFileHash(fileHash);
 
                 return fileUploadStructure;

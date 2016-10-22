@@ -28,8 +28,8 @@ import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public final class Utils {
-    private Utils() throws InstantiationException {
+public final class AndroidUtils {
+    private AndroidUtils() throws InstantiationException {
         throw new InstantiationException("This class is not for instantiation.");
     }
 

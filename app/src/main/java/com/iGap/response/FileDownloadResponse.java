@@ -3,7 +3,7 @@ package com.iGap.response;
 import android.util.Log;
 
 import com.iGap.G;
-import com.iGap.module.Utils;
+import com.iGap.module.AndroidUtils;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoFileDownload;
 
@@ -49,7 +49,7 @@ public class FileDownloadResponse extends MessageHandler {
         int nextOffset = previousOffset + builder.getBytes().size();
         int progress = nextOffset * 100 / (int) fileSize;
 
-        Utils.writeBytesToFile(filePath, builder.getBytes().toByteArray(), previousOffset);
+        AndroidUtils.writeBytesToFile(filePath, builder.getBytes().toByteArray(), previousOffset);
 
         if (!avatarRequested) {
             G.onFileDownloadResponse.onFileDownload(token, nextOffset, selector, progress);

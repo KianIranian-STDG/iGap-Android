@@ -8,14 +8,16 @@ import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.interface_package.OnMessageViewClick;
+import com.iGap.module.AndroidUtils;
 import com.iGap.module.EmojiTextView;
-import com.iGap.module.Utils;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
+
+import static com.iGap.module.AndroidUtils.suitablePath;
 
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/2016.
@@ -54,7 +56,7 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
         super.bindView(holder, payloads);
 
         holder.cslf_txt_file_name.setText(mMessage.attachment.name);
-        holder.cslf_txt_file_size.setText(Utils.humanReadableByteCount(mMessage.attachment.size, true));
+        holder.cslf_txt_file_size.setText(AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true));
 
         setTextIfNeeded(holder.messageText);
     }

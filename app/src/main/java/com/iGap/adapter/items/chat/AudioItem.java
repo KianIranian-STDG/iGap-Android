@@ -9,8 +9,8 @@ import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.interface_package.OnMessageViewClick;
+import com.iGap.module.AndroidUtils;
 import com.iGap.module.EmojiTextView;
-import com.iGap.module.Utils;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
@@ -51,7 +51,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        holder.fileSize.setText(Utils.humanReadableByteCount(mMessage.attachment.size, true));
+        holder.fileSize.setText(AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true));
         holder.fileName.setText(mMessage.attachment.name);
         holder.songArtist.setText(mMessage.songArtist);
         holder.elapsedTime.setText("0");

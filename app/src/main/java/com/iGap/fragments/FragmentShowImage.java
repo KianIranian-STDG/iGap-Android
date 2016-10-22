@@ -23,12 +23,12 @@ import com.iGap.R;
 import com.iGap.activitys.ActivitySetting;
 import com.iGap.interface_package.OnFileDownloadResponse;
 import com.iGap.libs.rippleeffect.RippleView;
+import com.iGap.module.AndroidUtils;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.StructDownloadAttachment;
 import com.iGap.module.StructMessageInfo;
 import com.iGap.module.TimeUtils;
 import com.iGap.module.TouchImageView;
-import com.iGap.module.Utils;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.realm.RealmAvatar;
@@ -274,7 +274,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
 
         private void onLoadFromLocal(final ImageView imageView, String localPath, LocalFileType fileType) {
             Log.i("VVV", "localPath : " + localPath);
-            ImageLoader.getInstance().displayImage(Utils.suitablePath(localPath), imageView, new ImageLoadingListener() {
+            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(localPath), imageView, new ImageLoadingListener() {
                 @Override
                 public void onLoadingStarted(String imageUri, View view) {
 
@@ -319,7 +319,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
                     if (media.attachment.isThumbnailExistsOnLocal()) {
                         ViewGroup view = (ViewGroup) layout.findViewById(R.id.sisl_touch_image_view).getParent();
 //                        if (view != null) {
-//                            int[] dimens = Utils.scaleDimenWithSavedRatio(layout.getContext(), media.attachment.width, media.attachment.height);
+//                            int[] dimens = AndroidUtils.scaleDimenWithSavedRatio(layout.getContext(), media.attachment.width, media.attachment.height);
 //                            view.setLayoutParams(new LinearLayout.LayoutParams(dimens[0], dimens[1]));
 //                            view.requestLayout();
 //                        }

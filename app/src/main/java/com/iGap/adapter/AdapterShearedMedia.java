@@ -25,10 +25,10 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.fragments.FragmentShowImage;
 import com.iGap.helper.HelperMimeType;
+import com.iGap.module.AndroidUtils;
 import com.iGap.module.MusicPlayer;
 import com.iGap.module.OnComplete;
 import com.iGap.module.StructMessageInfo;
-import com.iGap.module.Utils;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmChatHistory;
 import com.iGap.realm.RealmChatHistoryFields;
@@ -320,7 +320,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
             if (list.get(position).getAttachment() != null) {
                 imvPicFile.setImageBitmap(HelperMimeType.getMimePic(context, HelperMimeType.getMimeResource(list.get(position).getAttachment().getLocalFilePath())));
                 txtFileName.setText(list.get(position).getAttachment().getName());
-                txtFileInfo.setText(Utils.humanReadableByteCount(list.get(position).getAttachment().getSize(), true));
+                txtFileInfo.setText(AndroidUtils.humanReadableByteCount(list.get(position).getAttachment().getSize(), true));
             }
         }
 
@@ -346,7 +346,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
             if (list.get(position).getAttachment() != null) {
                 txtFileName.setText(list.get(position).getAttachment().getName());
-                txtFileInfo.setText(Utils.humanReadableByteCount(list.get(position).getAttachment().getSize(), true));
+                txtFileInfo.setText(AndroidUtils.humanReadableByteCount(list.get(position).getAttachment().getSize(), true));
             }
 
 

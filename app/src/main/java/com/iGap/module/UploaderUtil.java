@@ -47,8 +47,8 @@ public class UploaderUtil implements OnFileUpload, OnFileUploadStatusResponse {
             Log.d("INJARO", "INJARO response:" + response);
             FileUploadStructure fileUploadStructure = getSelectedFile(fileHashAsIdentity);
             // getting bytes from file as server said
-            byte[] bytesFromFirst = Utils.getBytesFromStart(fileUploadStructure, firstBytesLimit);
-            byte[] bytesFromLast = Utils.getBytesFromEnd(fileUploadStructure, lastBytesLimit);
+            byte[] bytesFromFirst = AndroidUtils.getBytesFromStart(fileUploadStructure, firstBytesLimit);
+            byte[] bytesFromLast = AndroidUtils.getBytesFromEnd(fileUploadStructure, lastBytesLimit);
             // make second request
             new RequestFileUploadInit().fileUploadInit(bytesFromFirst, bytesFromLast, fileUploadStructure.fileSize, fileUploadStructure.fileHash, Long.toString(fileUploadStructure.messageId), fileUploadStructure.fileName);
         } catch (IOException e) {
@@ -69,7 +69,7 @@ public class UploaderUtil implements OnFileUpload, OnFileUploadStatusResponse {
         // not already uploaded
         if (progress != 100.0) {
             try {
-                byte[] bytes = Utils.getNBytesFromOffset(fileUploadStructure, (int) offset, limit);
+                byte[] bytes = AndroidUtils.getNBytesFromOffset(fileUploadStructure, (int) offset, limit);
                 // make third request for first time
                 new RequestFileUpload().fileUpload(token, offset, bytes, identity);
             } catch (IOException e) {
@@ -121,7 +121,7 @@ public class UploaderUtil implements OnFileUpload, OnFileUploadStatusResponse {
                 activityCallbacks.onFileUploading(fileUploadStructure, identity, progress);
                 Log.i("BreakPoint", identity + " > fileUploadStructure");
                 final long startGetNBytesTime = System.currentTimeMillis();
-                byte[] bytes = Utils.getNBytesFromOffset(fileUploadStructure, (int) nextOffset, nextLimit);
+                byte[] bytes = AndroidUtils.getNBytesFromOffset(fileUploadStructure, (int) nextOffset, nextLimit);
 
                 fileUploadStructure.getNBytesTime += System.currentTimeMillis() - startGetNBytesTime;
 

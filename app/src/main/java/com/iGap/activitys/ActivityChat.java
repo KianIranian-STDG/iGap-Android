@@ -100,6 +100,7 @@ import com.iGap.interface_package.OnMessageViewClick;
 import com.iGap.interface_package.OnUserInfoResponse;
 import com.iGap.interface_package.OnVoiceRecord;
 import com.iGap.libs.rippleeffect.RippleView;
+import com.iGap.module.AndroidUtils;
 import com.iGap.module.AttachFile;
 import com.iGap.module.ChatSendMessageUtil;
 import com.iGap.module.ContactUtils;
@@ -120,7 +121,6 @@ import com.iGap.module.SortMessages;
 import com.iGap.module.StructMessageAttachment;
 import com.iGap.module.StructMessageInfo;
 import com.iGap.module.TimeUtils;
-import com.iGap.module.Utils;
 import com.iGap.module.VoiceRecord;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoFileDownload;
@@ -1793,7 +1793,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     filePath = data.getData().toString();
                     fileName = new File(filePath).getName();
                     fileSize = new File(filePath).length();
-                    imageDimens = Utils.getImageDimens(filePath);
+                    imageDimens = AndroidUtils.getImageDimens(filePath);
                     if (isMessageWrote()) {
                         messageType = ProtoGlobal.RoomMessageType.IMAGE_TEXT;
                     } else {
@@ -1813,7 +1813,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
                     fileName = new File(filePath).getName();
                     fileSize = new File(filePath).length();
-                    imageDimens = Utils.getImageDimens(filePath);
+                    imageDimens = AndroidUtils.getImageDimens(filePath);
                     if (isMessageWrote()) {
                         messageType = ProtoGlobal.RoomMessageType.IMAGE_TEXT;
                     } else {
@@ -1834,7 +1834,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
                     fileName = new File(filePath).getName();
                     fileSize = new File(filePath).length();
-                    imageDimens = Utils.getImageDimens(filePath);
+                    imageDimens = AndroidUtils.getImageDimens(filePath);
                     if (isMessageWrote()) {
                         messageType = ProtoGlobal.RoomMessageType.IMAGE_TEXT;
                     } else {
@@ -1852,7 +1852,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     filePath = AttachFile.getFilePathFromUri(data.getData());
                     fileName = new File(filePath).getName();
                     fileSize = new File(filePath).length();
-                    duration = Utils.getAudioDuration(getApplicationContext(), filePath);
+                    duration = AndroidUtils.getAudioDuration(getApplicationContext(), filePath);
                     if (isMessageWrote()) {
                         messageType = ProtoGlobal.RoomMessageType.VIDEO_TEXT;
                     } else {
@@ -1872,14 +1872,14 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     filePath = AttachFile.getFilePathFromUri(data.getData());
                     fileName = new File(filePath).getName();
                     fileSize = new File(filePath).length();
-                    duration = Utils.getAudioDuration(getApplicationContext(), filePath);
+                    duration = AndroidUtils.getAudioDuration(getApplicationContext(), filePath);
                     if (isMessageWrote()) {
                         messageType = ProtoGlobal.RoomMessageType.AUDIO_TEXT;
                     } else {
                         messageType = ProtoGlobal.RoomMessageType.AUDIO;
                     }
-                    String songArtist = Utils.getAudioArtistName(filePath);
-                    long songDuration = Utils.getAudioDuration(getApplicationContext(), filePath);
+                    String songArtist = AndroidUtils.getAudioArtistName(filePath);
+                    long songDuration = AndroidUtils.getAudioDuration(getApplicationContext(), filePath);
 
                     messageInfo = StructMessageInfo.buildForAudio(messageId, senderID, ProtoGlobal.RoomMessageStatus.SENDING, messageType, MyType.SendType.send, updateTime, getWrittenMessage(), null, filePath, songArtist, songDuration, userTriesReplay() ? mReplayLayout.getTag() : null);
                     Log.e("ddd", filePath + "    audio  path");
@@ -1922,7 +1922,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     filePath = data.getData().getPath();
                     fileName = new File(filePath).getName();
 
-                    imageDimens = Utils.getImageDimens(filePath);
+                    imageDimens = AndroidUtils.getImageDimens(filePath);
                     if (isMessageWrote()) {
                         messageType = ProtoGlobal.RoomMessageType.IMAGE_TEXT;
                     } else {
@@ -2780,7 +2780,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         final long messageId = System.nanoTime();
         final long updateTime = System.currentTimeMillis();
         final long senderID = realm.where(RealmUserInfo.class).findFirst().getUserId();
-        final long duration = Utils.getAudioDuration(getApplicationContext(), savedPath);
+        final long duration = AndroidUtils.getAudioDuration(getApplicationContext(), savedPath);
         if (userTriesReplay()) {
             mAdapter.add(new VoiceItem(chatType, this).setMessage(new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.VOICE, MyType.SendType.send, MyType.FileState.uploading, null, savedPath, updateTime, ((StructMessageInfo) mReplayLayout.getTag()))).withIdentifier(System.nanoTime()));
         } else {
@@ -2901,7 +2901,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 fileUploadStructure.openFile(filePath);
                 fileUploadStructure.text = messageText;
 
-                byte[] fileHash = Utils.getFileHash(fileUploadStructure);
+                byte[] fileHash = AndroidUtils.getFileHash(fileUploadStructure);
                 fileUploadStructure.setFileHash(fileHash);
 
                 return fileUploadStructure;

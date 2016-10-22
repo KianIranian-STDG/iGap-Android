@@ -48,6 +48,7 @@ import com.iGap.interface_package.OnGroupKickModerator;
 import com.iGap.interface_package.OnGroupLeft;
 import com.iGap.interface_package.OnSelectedList;
 import com.iGap.libs.rippleeffect.RippleView;
+import com.iGap.module.AndroidUtils;
 import com.iGap.module.AttachFile;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.Contacts;
@@ -55,7 +56,6 @@ import com.iGap.module.CustomTextViewMedium;
 import com.iGap.module.FileUploadStructure;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.StructContactInfo;
-import com.iGap.module.Utils;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmAvatar;
@@ -713,7 +713,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                 FileUploadStructure fileUploadStructure = new FileUploadStructure(fileName, fileSize, filePath, avatarId);
                 fileUploadStructure.openFile(filePath);
 
-                byte[] fileHash = Utils.getFileHash(fileUploadStructure);
+                byte[] fileHash = AndroidUtils.getFileHash(fileUploadStructure);
                 fileUploadStructure.setFileHash(fileHash);
 
                 return fileUploadStructure;
