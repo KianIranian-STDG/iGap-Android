@@ -200,6 +200,14 @@ public final class Utils {
         deleteFile(cutFrom);
     }
 
+    public static void cutFromTemp(String fileName) throws IOException {
+        File cutTo = new File(G.DIR_IMAGE_USER + "/" + fileName);
+        File cutFrom = new File(G.DIR_TEMP + "/" + fileName);
+
+        copyFile(cutFrom, cutTo);
+        deleteFile(cutFrom);
+    }
+
     private static void copyFile(File src, File dst) throws IOException {
         InputStream in = new FileInputStream(src);
         OutputStream out = new FileOutputStream(dst);

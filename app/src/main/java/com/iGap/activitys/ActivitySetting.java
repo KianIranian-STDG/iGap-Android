@@ -98,7 +98,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     private int myResultCodeGallery = 0;
     private int myResultCrop = 3;
     private Uri uriIntent;
-    private int idAvatar;
+    private long idAvatar;
     private File nameImageFile;
     private String pathImageDecode;
     private RealmResults<RealmAvatarPath> realmAvatarPaths;
@@ -1166,8 +1166,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                             if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
 
-                                idAvatar = getIndexRealm();
-                                pathSaveImage = G.imageFile.toString() + "_" + System.currentTimeMillis() + "_" + idAvatar + 1 + ".jpg";
+                                idAvatar = System.nanoTime();
+                                pathSaveImage = G.imageFile.toString() + "_" + System.currentTimeMillis() + "_" + idAvatar + ".jpg";
                                 nameImageFile = new File(pathSaveImage);
                                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                                 uriIntent = Uri.fromFile(nameImageFile);
@@ -1228,7 +1228,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                         } else {
                             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                            idAvatar = getIndexRealm();
+                            idAvatar = System.nanoTime();
                             startActivityForResult(intent, myResultCodeGallery);
                             dialog.dismiss();
                         }
@@ -1237,7 +1237,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 .show();
     }
 
-    private int lastUploadedAvatarId;
+    private long lastUploadedAvatarId;
 
     //=====================================================================================result from camera , gallery and crop
     @Override
@@ -1252,7 +1252,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 intent.putExtra("IMAGE_CAMERA", uriIntent.toString());
                 intent.putExtra("TYPE", "camera");
                 intent.putExtra("PAGE", "setting");
-                intent.putExtra("ID", idAvatar + 1);
+                intent.putExtra("ID", (int) (idAvatar + 1L));
                 startActivityForResult(intent, myResultCrop);
             }
 
@@ -1262,7 +1262,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 intent.putExtra("IMAGE_CAMERA", data.getData().toString());
                 intent.putExtra("TYPE", "gallery");
                 intent.putExtra("PAGE", "setting");
-                intent.putExtra("ID", idAvatar + 1);
+                intent.putExtra("ID", (int) (idAvatar + 1L));
                 startActivityForResult(intent, myResultCrop);
             }
 
@@ -1278,7 +1278,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 public void execute(Realm realm) {
                     final RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                     RealmAvatarPath realmAvatarPath = realm.createObject(RealmAvatarPath.class);
-                    realmAvatarPath.setId(idAvatar + 1);
+                    realmAvatarPath.setId((int) (idAvatar + 1L));
                     Log.i("CCC", "pathSaveImage : " + pathSaveImage);
                     realmAvatarPath.setPathImage(pathSaveImage);
                     realmUserInfo.getAvatarPath().add(realmAvatarPath);
@@ -1288,7 +1288,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             realm.close();
             setAvatar();
 
-            lastUploadedAvatarId = idAvatar + 1;
+            lastUploadedAvatarId = idAvatar + 1L;
 
             G.onChangeUserPhotoListener.onChangePhoto(pathSaveImage);
             new UploadTask().execute(pathSaveImage, lastUploadedAvatarId);
@@ -1398,22 +1398,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         super.onResume();
     }
 
-    private int getIndexRealm() {
-        int idAvatar;
-        Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmAvatarPath> realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
-        realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
-        if (realmAvatarPaths.size() > 0) {
-            idAvatar = realmAvatarPaths.first().getId();
-        } else {
-            idAvatar = 0;
-        }
-//        pathSaveImage = G.imageFile.toString() + "_" + idAvatar + ".jpg";
-        realm.close();
-
-        return idAvatar;
-    }
-
     @Override
     public void onAvatarAdd(final ProtoGlobal.Avatar avatar) {
         Realm realm = Realm.getDefaultInstance();
@@ -1422,7 +1406,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             public void execute(Realm realm) {
                 RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                 RealmAvatarToken realmAvatarPath = realm.createObject(RealmAvatarToken.class);
-                realmAvatarPath.setId(lastUploadedAvatarId);
+                realmAvatarPath.setId((int) lastUploadedAvatarId);
                 realmAvatarPath.setToken(avatar.getFile().getToken());
                 realmUserInfo.addAvatarToken(realmAvatarPath);
             }
@@ -1452,7 +1436,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         protected FileUploadStructure doInBackground(Object... params) {
             try {
                 String filePath = (String) params[0];
-                int avatarId = (int) params[1];
+                long avatarId = (long) params[1];
                 File file = new File(filePath);
                 String fileName = file.getName();
                 long fileSize = file.length();

@@ -53,5 +53,5 @@ dependencies {
     compile 'uk.co.chrisjenx:calligraphy:2.2.0'
     compile 'me.leolin:ShortcutBadger:1.1.9@aar'
     compile 'com.android.support:support-v4:24.2.1'
-
+    compile 'com.orhanobut:hawk:1.18'
 }

@@ -64,6 +64,8 @@ public class UploaderUtil implements OnFileUpload, OnFileUploadStatusResponse {
         FileUploadStructure fileUploadStructure = getSelectedFile(identity);
         fileUploadStructure.token = token;
 
+        activityCallbacks.onFileUploading(fileUploadStructure, identity, progress);
+
         // not already uploaded
         if (progress != 100.0) {
             try {
