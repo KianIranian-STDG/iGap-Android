@@ -20,6 +20,8 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AdapterShearedMedia;
 import com.iGap.fragments.FragmentShowImage;
+import com.iGap.libs.rippleeffect.RippleView;
+import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.MusicPlayer;
 import com.iGap.module.OnComplete;
 import com.iGap.proto.ProtoGlobal;
@@ -91,21 +93,21 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
     private void initComponent() {
 
-        Button btnBack = (Button) findViewById(R.id.asm_btn_back);
-        btnBack.setTypeface(G.fontawesome);
-        btnBack.setOnClickListener(new View.OnClickListener() {
+
+        MaterialDesignTextView btnBack = (MaterialDesignTextView) findViewById(R.id.asm_btn_back);
+        RippleView rippleBack = (RippleView) findViewById(R.id.asm_ripple_back);
+        rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
-            public void onClick(View view) {
+            public void onComplete(RippleView rippleView) {
                 finish();
             }
         });
 
-
-        Button btnMenu = (Button) findViewById(R.id.asm_btn_menu);
-        btnMenu.setTypeface(G.fontawesome);
-        btnMenu.setOnClickListener(new View.OnClickListener() {
+        MaterialDesignTextView btnMenu = (MaterialDesignTextView) findViewById(R.id.asm_btn_menu);
+        RippleView rippleMenu = (RippleView) findViewById(R.id.asm_ripple_menu);
+        rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
-            public void onClick(View view) {
+            public void onComplete(RippleView rippleView) {
                 popUpMenuSharedMedai();
             }
         });
@@ -142,14 +144,14 @@ public class ActivityShearedMedia extends ActivityEnhanced {
     private void initAppbarSelected() {
 
         Button btnCloseAppBarSelected = (Button) findViewById(R.id.asm_btn_close_layout);
-        btnCloseAppBarSelected.setTypeface(G.fontawesome);
-        btnCloseAppBarSelected.setOnClickListener(new View.OnClickListener() {
+
+        RippleView rippleCloseAppBarSelected = (RippleView) findViewById(R.id.asm_ripple_close_layout);
+        rippleCloseAppBarSelected.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mAdapter.resetSelected();
             }
         });
-
 
         Button btnForwardSelected = (Button) findViewById(R.id.asm_btn_forward_selected);
         btnForwardSelected.setTypeface(G.fontawesome);
@@ -161,12 +163,11 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         });
 
         Button btnDeleteSelected = (Button) findViewById(R.id.asm_btn_delete_selected);
-        btnDeleteSelected.setTypeface(G.fontawesome);
-        btnDeleteSelected.setOnClickListener(new View.OnClickListener() {
+        RippleView rippleDeleteSelected = (RippleView) findViewById(R.id.asm_ripple_close_layout);
+        rippleDeleteSelected.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
-            public void onClick(View view) {
+            public void onComplete(RippleView rippleView) {
                 Log.e("ddd", "btnDeleteSelected");
-
             }
         });
 

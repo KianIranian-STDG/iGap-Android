@@ -93,16 +93,15 @@
                             app:rv_rippleDuration="150"
                             app:rv_ripplePadding="5dp">
 
-                            <Button
+                            <com.iGap.module.MaterialDesignTextView
                                 android:id="@+id/agp_btn_back"
                                 android:layout_width="@dimen/dp60"
                                 android:layout_height="match_parent"
                                 android:layout_alignParentLeft="true"
-                                android:background="@null"
                                 android:gravity="center"
-                                android:text="@string/fa_chevron_left"
+                                android:text="@string/md_back_arrow"
                                 android:textColor="@android:color/white"
-                                android:textSize="@dimen/sp22" />
+                                android:textSize="@dimen/sp18" />
                         </com.iGap.libs.rippleeffect.RippleView>
 
                         <TextView
@@ -128,15 +127,14 @@
                             app:rv_rippleDuration="150"
                             app:rv_ripplePadding="5dp">
 
-                            <Button
+                            <com.iGap.module.MaterialDesignTextView
                                 android:id="@+id/agp_btn_menu"
                                 android:layout_width="@dimen/dp60"
                                 android:layout_height="match_parent"
-                                android:background="@null"
                                 android:gravity="center"
-                                android:text="@string/fa_ellipsis_v"
+                                android:text="@string/md_show_more_button"
                                 android:textColor="@android:color/white"
-                                android:textSize="@dimen/sp26" />
+                                android:textSize="@dimen/sp18" />
                         </com.iGap.libs.rippleeffect.RippleView>
                     </RelativeLayout>
                 </android.support.v7.widget.Toolbar>
@@ -329,25 +327,28 @@
 
 
                     <LinearLayout
+                        android:id="@+id/agp_layout_add_member"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="left|center"
                         android:orientation="horizontal"
-                        android:paddingBottom="@dimen/dp12"
-                        android:paddingLeft="@dimen/dp16">
+                        android:paddingBottom="@dimen/dp8"
+                        android:paddingLeft="@dimen/dp8">
 
                         <com.iGap.module.CircleImageView
                             android:id="@+id/agp_imv_add_member"
-                            android:layout_width="@dimen/dp52"
-                            android:layout_height="@dimen/dp52"
+                            android:layout_width="@dimen/dp48"
+                            android:layout_height="@dimen/dp48"
+                            android:layout_marginLeft="@dimen/dp4"
                             android:scaleType="centerCrop"
-                            android:src="@mipmap/add_chat_background2" />
+                            android:src="@mipmap/add_chat_background3" />
 
                         <TextView
                             android:id="@+id/agp_txt_str_add_new_member"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:padding="@dimen/dp8"
+                            android:gravity="center_vertical"
                             android:text="@string/add_new_member"
                             android:textSize="@dimen/sp16" />
 

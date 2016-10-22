@@ -15,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 
 import com.iGap.G;
@@ -25,6 +24,7 @@ import com.iGap.adapter.items.SearchItem;
 import com.iGap.adapter.items.SearchItemHeader;
 import com.iGap.interface_package.OnChatGetRoom;
 import com.iGap.libs.rippleeffect.RippleView;
+import com.iGap.module.MaterialDesignTextView;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmChatHistory;
 import com.iGap.realm.RealmContacts;
@@ -100,8 +100,7 @@ public class SearchFragment extends Fragment {
         InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(edtSearch, InputMethodManager.SHOW_IMPLICIT);
 
-        Button btnBack = (Button) view.findViewById(R.id.sfl_btn_back);
-        btnBack.setTypeface(G.fontawesome);
+        MaterialDesignTextView btnBack = (MaterialDesignTextView) view.findViewById(R.id.sfl_btn_back);
         final RippleView rippleBack = (RippleView) view.findViewById(R.id.sfl_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
@@ -114,8 +113,7 @@ public class SearchFragment extends Fragment {
             }
         });
 
-        Button btnClose = (Button) view.findViewById(R.id.sfl_btn_close);
-        btnClose.setTypeface(G.fontawesome);
+        MaterialDesignTextView btnClose = (MaterialDesignTextView) view.findViewById(R.id.sfl_btn_close);
         RippleView rippleDown = (RippleView) view.findViewById(R.id.sfl_ripple_done);
         rippleDown.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override

@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
@@ -23,7 +22,7 @@ import java.util.List;
 
 public class ActivityChatBackground extends ActivityEnhanced {
 
-    private TextView txtBack;
+    private MaterialDesignTextView txtBack;
     private int myResultCodeCamera = 1;
     private int myResultCodeGallery = 0;
     public static Uri uriIntent;
@@ -52,10 +51,8 @@ public class ActivityChatBackground extends ActivityEnhanced {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_background);
 
-        txtBack = (TextView) findViewById(R.id.stcb_txt_back);
+        txtBack = (MaterialDesignTextView) findViewById(R.id.stcb_txt_back);
         rippleBack = (RippleView) findViewById(R.id.stcb_ripple_back);
-        txtBack.setTypeface(G.fontawesome);
-
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {

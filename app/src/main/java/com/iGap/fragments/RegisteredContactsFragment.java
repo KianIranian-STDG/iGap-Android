@@ -25,6 +25,7 @@ import com.iGap.interface_package.OnFileDownloadResponse;
 import com.iGap.interface_package.OnUserInfoResponse;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.Contacts;
+import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.StructContactInfo;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
@@ -150,7 +151,7 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
             }
         });
 
-        TextView txtMenu = (TextView) view.findViewById(R.id.menu_txtBack);
+        MaterialDesignTextView txtMenu = (MaterialDesignTextView) view.findViewById(R.id.menu_txtBack);
         RippleView rippleMenu = (RippleView) view.findViewById(R.id.menu_ripple_txtBack);
         rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
@@ -162,7 +163,6 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                 getActivity().getSupportFragmentManager().popBackStack();
             }
         });
-        txtMenu.setTypeface(G.fontawesome);
         //as we provide id's for the items we want the hasStableIds enabled to speed up things
         fastAdapter.setHasStableIds(true);
 

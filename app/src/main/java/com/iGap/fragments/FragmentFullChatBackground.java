@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
@@ -25,7 +24,7 @@ import com.iGap.module.SHP_SETTING;
  */
 public class FragmentFullChatBackground extends Fragment {
 
-    private TextView txtBack, txtSet;
+    private MaterialDesignTextView txtBack, txtSet;
     private ImageView imgFullImage;
     private RippleView rippleSet, rippleBack;
 
@@ -47,11 +46,9 @@ public class FragmentFullChatBackground extends Fragment {
 
         final String fullImage = getArguments().getString("IMAGE");
 
-        txtBack = (TextView) view.findViewById(R.id.stcbf_txt_back);
+        txtBack = (MaterialDesignTextView) view.findViewById(R.id.stcbf_txt_back);
         rippleBack = (RippleView) view.findViewById(R.id.stcbf_ripple_back);
         rippleSet = (RippleView) view.findViewById(R.id.stcbf_ripple_set);
-        txtBack.setTypeface(G.fontawesome);
-
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {

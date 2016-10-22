@@ -22,7 +22,7 @@
 
         <com.iGap.module.CircleImageView
             android:id="@+id/cigp_imv_contact_avatar"
-            android:layout_marginLeft="@dimen/dp8"
+            android:layout_marginLeft="@dimen/dp4"
             android:layout_width="@dimen/dp48"
             android:layout_height="@dimen/dp48"
             android:src="@drawable/sample" />

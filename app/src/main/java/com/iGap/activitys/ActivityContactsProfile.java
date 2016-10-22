@@ -88,10 +88,10 @@ public class ActivityContactsProfile extends ActivityEnhanced {
 
     private AppBarLayout appBarLayout;
 
-    private TextView txtLastSeen, txtUserName, titleToolbar, titleLastSeen, txtBlockContact, txtClearChat, txtBack, txtPhoneNumber, txtNotifyAndSound, txtNickname;
+    private TextView txtLastSeen, txtUserName, titleToolbar, titleLastSeen, txtBlockContact, txtClearChat, txtPhoneNumber, txtNotifyAndSound, txtNickname;
     private ViewGroup vgPhoneNumber, vgSharedMedia, layoutNickname;
     private CircleImageView imgUser;
-    private MaterialDesignTextView imgMenu;
+    private MaterialDesignTextView imgMenu, txtBack;
 
     private FloatingActionButton fab;
     private PopupWindow popupWindow;
@@ -185,8 +185,7 @@ public class ActivityContactsProfile extends ActivityEnhanced {
             }
         });
 
-        txtBack = (TextView) findViewById(R.id.chi_txt_back);
-        txtBack.setTypeface(G.fontawesome);
+        txtBack = (MaterialDesignTextView) findViewById(R.id.chi_txt_back);
         RippleView rippleBack = (RippleView) findViewById(R.id.chi_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override

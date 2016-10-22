@@ -41,6 +41,7 @@
 
     <string name="md_expand_arrow">\uf176</string>
     <string name="md_downwards_arrow">\uf16a</string>
+    <string name="md_check_box">\uf142</string>
 
 
     <string name="fa_stop">&#xf04d;</string>
@@ -245,7 +246,7 @@
     <string name="st_popupMenu_toolbar_more">Log Out</string>
     <string name="st_titleToolbar">Settings</string>
     <string name="st_title_general">General</string>
-    <string name="st_username">UserName:</string>
+    <string name="st_username">Username:</string>
     <string name="st_nickname">Nickname:</string>
     <string name="st_contactName">Contact Name:</string>
     <string name="st_phoneNumber">Phone Number:</string>
@@ -255,7 +256,7 @@
     <string name="st_title_Privacy_Security">Privacy and Security</string>
     <string name="st_title_message">Message</string>
     <string name="st_title_message_textSize">Message Text Size</string>
-    <string name="st_stickers">Stickers</string>
+    <string name="st_stickers">Stickers and Picture</string>
     <string name="st_chatBackground">Chat Background</string>
     <string name="st_Enable_Animation">Enable Animation </string>
     <string name="st_inApp_Browser">In_App Browser</string>
@@ -307,6 +308,7 @@
     <string name="st_dialog_reset_all_notification_no">NO</string>
     <string name="st_popup_logout">Are you sure you want to log out? \n Note that you can seamLessly use iGap on all your devices at once. \n Remember,logging out kills all your Secret Chats.</string>
     <string name="st_title_Background">Chat Background</string>
+    <string name="st_stickers_and_picture">Stickers and Picture</string>
 
     <!--notification and sound group-->
 
@@ -444,12 +446,12 @@
     <string name="group_name">Group Name</string>
     <string name="save">SAVE</string>
     <string name="please_enter_group_name">please Enter Group Name</string>
-    <string name="group_description">Group Descripton</string>
+    <string name="group_description">Group Description</string>
     <string name="please_enter_group_description">please Enter Group Description</string>
     <string name="do_you_want_to_delete_this_group">"do you want to delete this group "</string>
     <string name="do_you_want_to_set_admin_role_to_member">do you want to set admin role to member</string>
     <string name="do_you_want_to_kick_this_member">"do you want to kick this member "</string>
-    <string name="do_you_want_to_set_modereator_role_to_member">do you want to set modereator role to member</string>
+    <string name="do_you_want_to_set_modereator_role_to_member">do you want to set moderator role to member</string>
     <string name="waiting_for_network">Waiting For Network...</string>
     <string name="connecting">Connecting...</string>
     <string name="updating">Updating...</string>
@@ -478,9 +480,9 @@
     <string name="unknown_artist">unknown artist</string>
     <string name="add_new_member">Add New Member</string>
     <string name="set_admin">Set Admin</string>
-    <string name="set_modereator">Set Modereator</string>
+    <string name="set_modereator">Set Moderator</string>
     <string name="member_can_add_new_member">Member Can Add New Member</string>
-    <string name="notificaion_and_sound">Notificaion and Sound</string>
+    <string name="notificaion_and_sound">Notification and Sound</string>
 
 
 </resources>

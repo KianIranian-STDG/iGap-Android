@@ -22,7 +22,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -54,6 +53,7 @@ import com.iGap.module.CircleImageView;
 import com.iGap.module.Contacts;
 import com.iGap.module.CustomTextViewMedium;
 import com.iGap.module.FileUploadStructure;
+import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.StructContactInfo;
 import com.iGap.module.Utils;
 import com.iGap.proto.ProtoGlobal;
@@ -174,7 +174,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         description = realmGroupRoom.getDescription();
 
         realm.close();
-
         initComponent();
 
         attachFile = new AttachFile(this);
@@ -185,9 +184,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
     private void initComponent() {
 
-        Button btnBack = (Button) findViewById(R.id.agp_btn_back);
-        btnBack.setTypeface(G.fontawesome);
-//
+        MaterialDesignTextView btnBack = (MaterialDesignTextView) findViewById(R.id.agp_btn_back);
         RippleView rippleBack = (RippleView) findViewById(R.id.agp_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
@@ -198,9 +195,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
         });
 
-        Button btnMenu = (Button) findViewById(R.id.agp_btn_menu);
-        btnMenu.setTypeface(G.fontawesome);
-
+        MaterialDesignTextView btnMenu = (MaterialDesignTextView) findViewById(R.id.agp_btn_menu);
         final int screenWidth = (int) (getResources().getDisplayMetrics().widthPixels / 1.7);
         RippleView rippleMenu = (RippleView) findViewById(R.id.agp_ripple_menu);
         rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
@@ -239,9 +234,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                 text2.setPadding(dim20, 0, dim12, dim20);
                 text3.setPadding(dim20, 0, dim12, dim20);
 
-                text1.setPadding(10, 10, 10, 10);
-                text2.setPadding(10, 0, 10, 0);
-                text3.setPadding(10, 10, 10, 10);
                 layoutDialog.addView(text1, params);
                 layoutDialog.addView(text2, params);
                 layoutDialog.addView(text3, params);
@@ -406,17 +398,14 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             }
         });
 
-
-        CircleImageView imvAddMember = (CircleImageView) findViewById(R.id.agp_imv_add_member);
-        imvAddMember.setOnClickListener(new View.OnClickListener() {
+        ViewGroup layoutAddMember = (ViewGroup) findViewById(R.id.agp_layout_add_member);
+        layoutAddMember.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 addMemberToGroup();
-
             }
         });
-
+        CircleImageView imvAddMember = (CircleImageView) findViewById(R.id.agp_imv_add_member);
 
         TextView txtSetAdmin = (TextView) findViewById(R.id.agp_txt_set_admin);
         txtSetAdmin.setOnClickListener(new View.OnClickListener() {

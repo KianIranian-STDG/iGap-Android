@@ -47,7 +47,7 @@
                         android:gravity="center"
                         android:text="@string/md_close_button"
                         android:textColor="@color/whit_background"
-                        android:textSize="@dimen/sp22" />
+                        android:textSize="@dimen/sp18" />
                 </com.iGap.libs.rippleeffect.RippleView>
 
                 <TextView
@@ -71,15 +71,16 @@
                     app:rv_centered="true"
                     app:rv_rippleDuration="150"
                     app:rv_ripplePadding="5dp">
-                <com.iGap.module.MaterialDesignTextView
-                    android:id="@+id/stfaq_txt_share"
-                    android:layout_width="@dimen/dp60"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="right"
-                    android:gravity="center"
-                    android:text="@string/md_share_button"
-                    android:textColor="@color/whit_background"
-                    android:textSize="@dimen/sp22" />
+
+                    <com.iGap.module.MaterialDesignTextView
+                        android:id="@+id/stfaq_txt_share"
+                        android:layout_width="@dimen/dp60"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="right"
+                        android:gravity="center"
+                        android:text="@string/md_share_button"
+                        android:textColor="@color/whit_background"
+                        android:textSize="@dimen/sp18" />
 
                 </com.iGap.libs.rippleeffect.RippleView>
 
@@ -94,14 +95,14 @@
                     app:rv_ripplePadding="5dp">
 
                     <com.iGap.module.MaterialDesignTextView
-                    android:id="@+id/stfaq_txt_menuPopup"
-                    android:layout_width="@dimen/dp60"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="right"
-                    android:gravity="center"
-                    android:text="@string/md_show_more_button"
-                    android:textColor="@color/whit_background"
-                    android:textSize="@dimen/sp22" />
+                        android:id="@+id/stfaq_txt_menuPopup"
+                        android:layout_width="@dimen/dp60"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="right"
+                        android:gravity="center"
+                        android:text="@string/md_show_more_button"
+                        android:textColor="@color/whit_background"
+                        android:textSize="@dimen/sp18" />
                 </com.iGap.libs.rippleeffect.RippleView>
             </LinearLayout>
 

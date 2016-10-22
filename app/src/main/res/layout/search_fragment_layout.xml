@@ -35,15 +35,15 @@
                     app:rv_rippleDuration="150"
                     app:rv_ripplePadding="5dp">
 
-                    <Button
+                    <com.iGap.module.MaterialDesignTextView
                         android:id="@+id/sfl_btn_back"
                         android:layout_width="@dimen/dp60"
                         android:layout_height="match_parent"
                         android:background="@null"
                         android:gravity="center"
-                        android:text="@string/fa_chevron_left"
+                        android:text="@string/md_back_arrow"
                         android:textColor="@android:color/white"
-                        android:textSize="@dimen/sp22" />
+                        android:textSize="@dimen/sp18" />
                 </com.iGap.libs.rippleeffect.RippleView>
 
                 <EditText
@@ -67,15 +67,15 @@
                     app:rv_rippleDuration="150"
                     app:rv_ripplePadding="5dp">
 
-                    <Button
+                    <com.iGap.module.MaterialDesignTextView
                         android:id="@+id/sfl_btn_close"
                         android:layout_width="@dimen/dp60"
                         android:layout_height="match_parent"
                         android:background="@null"
                         android:gravity="center"
-                        android:text="@string/fa_close"
+                        android:text="@string/md_close_button"
                         android:textColor="@android:color/white"
-                        android:textSize="@dimen/sp26" />
+                        android:textSize="@dimen/sp16" />
                 </com.iGap.libs.rippleeffect.RippleView>
 
             </LinearLayout>

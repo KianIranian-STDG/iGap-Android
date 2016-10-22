@@ -13,7 +13,6 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -23,7 +22,9 @@ import com.iGap.activitys.ActivityChat;
 import com.iGap.adapter.StickyHeaderAdapter;
 import com.iGap.adapter.items.ContactItemGroup;
 import com.iGap.interface_package.OnGroupAddMember;
+import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.Contacts;
+import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.StructContactInfo;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmMember;
@@ -85,21 +86,21 @@ public class ContactGroupFragment extends Fragment {
         edtSearch = (EditText) view.findViewById(R.id.fcg_edt_search);
 
 
-        Button btnBack = (Button) view.findViewById(R.id.fcg_btn_back);
-        btnBack.setTypeface(G.fontawesome);
-        btnBack.setOnClickListener(new View.OnClickListener() {
+        MaterialDesignTextView btnBack = (MaterialDesignTextView) view.findViewById(R.id.fcg_btn_back);
+        RippleView rippleBack = (RippleView) view.findViewById(R.id.fcg_ripple_back);
+        rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
-            public void onClick(View view) {
+            public void onComplete(RippleView rippleView) {
                 getActivity().getSupportFragmentManager().popBackStack();
             }
         });
 
-        Button btnDone = (Button) view.findViewById(R.id.fcg_btn_done);
-        btnDone.setTypeface(G.fontawesome);
-        btnDone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
+        MaterialDesignTextView btnDone = (MaterialDesignTextView) view.findViewById(R.id.fcg_btn_done);
+        RippleView rippleDone = (RippleView) view.findViewById(R.id.fcg_ripple_done);
+        rippleDone.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+            @Override
+            public void onComplete(RippleView rippleView) {
                 G.onGroupAddMember = new OnGroupAddMember() {
                     @Override
                     public void onGroupAddMember() { //TODO [Saeed Mozaffari] [2016-10-15 10:34 AM] - bayad id ra begirim ke daghighan motevajeh shavim ke chand nafar add shodeand
@@ -160,10 +161,8 @@ public class ContactGroupFragment extends Fragment {
                     }
                 });
                 realm.close();
-
             }
         });
-
         //create our FastAdapter
         fastAdapter = new FastAdapter();
         fastAdapter.withSelectable(true);

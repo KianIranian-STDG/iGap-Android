@@ -36,15 +36,15 @@
                     app:rv_rippleDuration="150"
                     app:rv_ripplePadding="5dp">
 
-                    <Button
+                    <com.iGap.module.MaterialDesignTextView
                         android:id="@+id/fcg_btn_back"
                         android:layout_width="@dimen/dp60"
                         android:layout_height="match_parent"
                         android:background="@null"
                         android:gravity="center"
-                        android:text="@string/fa_chevron_left"
+                        android:text="@string/md_back_arrow"
                         android:textColor="@android:color/white"
-                        android:textSize="@dimen/sp22" />
+                        android:textSize="@dimen/sp18" />
                 </com.iGap.libs.rippleeffect.RippleView>
 
                 <LinearLayout
@@ -93,15 +93,15 @@
                     app:rv_rippleDuration="150"
                     app:rv_ripplePadding="5dp">
 
-                    <Button
+                    <com.iGap.module.MaterialDesignTextView
                         android:id="@+id/fcg_btn_done"
                         android:layout_width="@dimen/dp60"
                         android:layout_height="match_parent"
                         android:background="@null"
                         android:gravity="center"
-                        android:text="@string/fa_check"
+                        android:text="@string/md_check_symbol"
                         android:textColor="@android:color/white"
-                        android:textSize="@dimen/sp26" />
+                        android:textSize="@dimen/sp18" />
                 </com.iGap.libs.rippleeffect.RippleView>
 
             </LinearLayout>

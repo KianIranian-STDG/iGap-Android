@@ -14,7 +14,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,6 +42,7 @@ import com.iGap.libs.flowingdrawer.FlowingView;
 import com.iGap.libs.flowingdrawer.LeftDrawerLayout;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.Contacts;
+import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.MyAppBarLayout;
 import com.iGap.module.OnComplete;
 import com.iGap.module.ShouldScrolledBehavior;
@@ -85,7 +85,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     private RecyclerView recyclerView;
     private RoomsAdapter<RoomItem> mAdapter;
     private ArcMenu arcMenu;
-    private Button btnSearchAll;
+    private MaterialDesignTextView btnSearchAll;
 
     public static boolean isMenuButtonAddShown = false;
 
@@ -143,13 +143,20 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     }
 
     private void initComponent() {
-        final Button btnMenu = (Button) findViewById(R.id.cl_btn_menu);
-        btnMenu.setTypeface(G.flaticon);
+        final MaterialDesignTextView btnMenu = (MaterialDesignTextView) findViewById(R.id.cl_btn_menu);
         RippleView rippleMenu = (RippleView) findViewById(R.id.cl_ripple_menu);
 
-
-        btnSearchAll = (Button) findViewById(R.id.amr_btn_search);
+        btnSearchAll = (MaterialDesignTextView) findViewById(R.id.amr_btn_search);
         btnSearchAll.setTypeface(G.flaticon);
+
+        RippleView rippleSearch = (RippleView) findViewById(R.id.amr_ripple_search);
+        rippleSearch.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+            @Override
+            public void onComplete(RippleView rippleView) {
+                Fragment fragment = SearchFragment.newInstance();
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragment, "Search_fragment").commit();
+            }
+        });
 
 
         final TextView txtIgap = (TextView) findViewById(R.id.cl_txt_igap);
@@ -188,15 +195,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                 });
             }
         };
-
-        btnSearchAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Fragment fragment = SearchFragment.newInstance();
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment, "Search_fragment").commit();
-            }
-        });
-
 
         rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 

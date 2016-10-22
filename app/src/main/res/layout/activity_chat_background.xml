@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingPrefix"
     android:id="@+id/stcb_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -42,15 +43,16 @@
                 app:rv_rippleDuration="150"
                 app:rv_ripplePadding="5dp">
 
-                <TextView
+                <com.iGap.module.MaterialDesignTextView
                     android:id="@+id/stcb_txt_back"
                     android:layout_width="@dimen/dp60"
                     android:layout_height="match_parent"
                     android:layout_alignParentLeft="true"
                     android:gravity="center"
-                    android:text="@string/fa_chevron_left"
+                    android:text="@string/md_back_arrow"
                     android:textColor="@color/whit_background"
-                    android:textSize="@dimen/sp22" />
+                    android:textSize="@dimen/sp18"
+                    fontPath="fonts/Flaticon.ttf" />
 
             </com.iGap.libs.rippleeffect.RippleView>
         </RelativeLayout>

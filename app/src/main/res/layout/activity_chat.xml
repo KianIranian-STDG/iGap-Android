@@ -47,7 +47,7 @@
                         android:gravity="center"
                         android:text="@string/md_back_arrow"
                         android:textColor="@color/whit_background"
-                        android:textSize="@dimen/sp22" />
+                        android:textSize="@dimen/sp18" />
 
                 </com.iGap.libs.rippleeffect.RippleView>
 
@@ -58,6 +58,7 @@
                     android:gravity="center_vertical|right"
                     android:orientation="vertical"
                     android:paddingRight="@dimen/dp4">
+
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -127,11 +128,10 @@
                         android:id="@+id/chl_imv_menu_button"
                         android:layout_width="@dimen/dp60"
                         android:layout_height="match_parent"
-                        android:layout_gravity="right"
                         android:gravity="center"
                         android:text="@string/md_show_more_button"
                         android:textColor="@color/whit_background"
-                        android:textSize="@dimen/sp22" />
+                        android:textSize="@dimen/sp18" />
 
                 </com.iGap.libs.rippleeffect.RippleView>
             </LinearLayout>

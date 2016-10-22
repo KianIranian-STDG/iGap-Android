@@ -30,6 +30,7 @@ import com.iGap.interface_package.IEmojiStickerClick;
 import com.iGap.interface_package.IEmojiViewCreate;
 import com.iGap.interface_package.IRecentsLongClick;
 import com.iGap.interface_package.ISoftKeyboardOpenClose;
+import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.EmojiEditText;
 import com.iGap.module.EmojiPopup;
@@ -129,21 +130,19 @@ public class ActivityComment extends ActivityEnhanced implements IEmojiViewCreat
         layoutReplay = new FragmentSubLayoutReplay(findViewById(R.id.acs_ll_replay));
 
         Button btnBack = (Button) findViewById(R.id.acs_btn_back);
-        btnBack.setTypeface(G.fontawesome);
-        btnBack.setOnClickListener(new View.OnClickListener() {
+        RippleView rippleBack = (RippleView) findViewById(R.id.acs_ripple_back);
+        rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
-            public void onClick(View view) {
-
+            public void onComplete(RippleView rippleView) {
                 finish();
             }
         });
 
-
         Button btnMenu = (Button) findViewById(R.id.acs_btn_menu);
-        btnMenu.setTypeface(G.fontawesome);
-        btnMenu.setOnClickListener(new View.OnClickListener() {
+        RippleView rippleMenu = (RippleView) findViewById(R.id.acs_ripple_menu);
+        rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
-            public void onClick(View view) {
+            public void onComplete(RippleView rippleView) {
                 Log.e("ddd", "btnMenu  ");
             }
         });

@@ -21,6 +21,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.helper.HelperSaveFile;
+import com.iGap.libs.rippleeffect.RippleView;
+import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.MusicPlayer;
 import com.iGap.module.OnComplete;
 
@@ -174,26 +176,25 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
             }
         });
 
-        Button btnBack = (Button) findViewById(R.id.ml_btn_back);
-        btnBack.setTypeface(G.flaticon);
-        btnBack.setOnClickListener(new View.OnClickListener() {
+        MaterialDesignTextView btnBack = (MaterialDesignTextView) findViewById(R.id.ml_btn_back);
+        RippleView rippleBack = (RippleView) findViewById(R.id.ml_ripple_back);
+        rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
-            public void onClick(View v) {
+            public void onComplete(RippleView rippleView) {
                 finish();
             }
         });
 
 
-        Button btnMusicMenu = (Button) findViewById(R.id.ml_btn_music_menu);
-        btnMusicMenu.setTypeface(G.flaticon);
-        btnMusicMenu.setOnClickListener(new View.OnClickListener() {
+        MaterialDesignTextView btnMusicMenu = (MaterialDesignTextView) findViewById(R.id.ml_btn_music_menu);
+        RippleView rippleMusicMenu = (RippleView) findViewById(R.id.ml_ripple_back);
+        rippleMusicMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
-            public void onClick(View v) {
-
+            public void onComplete(RippleView rippleView) {
                 popUpMusicMenu();
+
             }
         });
-
 
         Button btnPrevious = (Button) findViewById(R.id.ml_btn_Previous_music);
         btnPrevious.setTypeface(G.flaticon);

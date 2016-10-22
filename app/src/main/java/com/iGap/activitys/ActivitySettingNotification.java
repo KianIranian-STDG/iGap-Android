@@ -63,14 +63,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
         txtBack = (TextView) findViewById(R.id.stns_txt_back);
-        txtBack.setTypeface(G.fontawesome);
-//        txtBack.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                finish();
-//            }
-//        });
+
         RippleView rippleBack = (RippleView) findViewById(R.id.stns_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 

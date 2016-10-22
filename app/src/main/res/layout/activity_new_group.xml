@@ -159,7 +159,7 @@
                     android:gravity="center"
                     android:text="@string/md_back_arrow"
                     android:textColor="@color/whit_background"
-                    android:textSize="@dimen/sp22" />
+                    android:textSize="@dimen/sp18" />
             </com.iGap.libs.rippleeffect.RippleView>
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>

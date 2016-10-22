@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/chi_layoutParent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layoutDirection="ltr">
+    android:layoutDirection="ltr"
+    tools:ignore="MissingPrefix">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/chi_appbar"
@@ -82,15 +84,15 @@
                         app:rv_rippleDuration="150"
                         app:rv_ripplePadding="5dp">
 
-                        <TextView
+                        <com.iGap.module.MaterialDesignTextView
                             android:id="@+id/chi_txt_back"
                             android:layout_width="@dimen/dp60"
                             android:layout_height="match_parent"
                             android:layout_alignParentLeft="true"
                             android:gravity="center"
-                            android:text="@string/fa_chevron_left"
+                            android:text="@string/md_back_arrow"
                             android:textColor="@color/whit_background"
-                            android:textSize="@dimen/sp22" />
+                            android:textSize="@dimen/sp18" />
                     </com.iGap.libs.rippleeffect.RippleView>
 
                     <com.iGap.libs.rippleeffect.RippleView
@@ -98,10 +100,10 @@
                         rv_centered="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
                         app:rv_alpha="200"
                         app:rv_centered="true"
                         app:rv_rippleDuration="150"
-                        android:layout_alignParentRight="true"
                         app:rv_ripplePadding="5dp">
 
                         <com.iGap.module.MaterialDesignTextView
@@ -112,18 +114,18 @@
                             android:gravity="center"
                             android:text="@string/md_show_more_button"
                             android:textColor="@color/whit_background"
-                            android:textSize="@dimen/sp22" />
+                            android:textSize="@dimen/sp18" />
 
                     </com.iGap.libs.rippleeffect.RippleView>
                 </RelativeLayout>
             </android.support.v7.widget.Toolbar>
 
             <LinearLayout
+                android:id="@+id/chi_root_circleImage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingTop="@dimen/dp8"
-                android:id="@+id/chi_root_circleImage"
                 app:layout_collapseMode="parallax">
 
                 <de.hdodenhof.circleimageview.CircleImageView
@@ -148,18 +150,6 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/chi_fab_setPic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dp20"
-        android:clickable="true"
-        android:src="@mipmap/comment"
-        android:theme="@style/FabButton"
-        android:tint="@color/gray"
-        app:layout_anchor="@+id/chi_appbar"
-        app:layout_anchorGravity="bottom|right|end" />
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/chi_scroll_nested"
@@ -306,10 +296,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp20"
+                        android:clickable="false"
                         android:paddingLeft="@dimen/dp4"
                         android:paddingStart="@dimen/dp4"
                         android:text="@string/chi_shared_Media"
-                        android:clickable="false"
                         android:textColor="@android:color/secondary_text_light"
                         android:textSize="@dimen/sp18"
                         android:textStyle="bold" />
@@ -318,10 +308,10 @@
                         android:id="@+id/chi_txt_count_of_sharedMedia"
                         android:layout_width="@dimen/dp200"
                         android:layout_height="@dimen/dp40"
+                        android:clickable="false"
                         android:gravity="center_vertical"
                         android:inputType="phone"
                         android:maxLength="11"
-                        android:clickable="false"
                         android:paddingLeft="@dimen/dp4"
                         android:paddingStart="@dimen/dp4"
                         android:text="12"
@@ -410,6 +400,18 @@
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/chi_fab_setPic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp20"
+        android:clickable="true"
+        android:src="@mipmap/comment"
+        android:theme="@style/FabButton"
+        android:tint="@color/gray"
+        app:layout_anchor="@+id/chi_appbar"
+        app:layout_anchorGravity="bottom|right|end" />
 
 </android.support.design.widget.CoordinatorLayout>
 

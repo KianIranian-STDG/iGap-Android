@@ -32,14 +32,14 @@
                 app:rv_rippleDuration="150"
                 app:rv_ripplePadding="5dp">
 
-                <TextView
+                <com.iGap.module.MaterialDesignTextView
                     android:id="@+id/ntg_txt_back"
                     android:layout_width="@dimen/dp60"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="@string/fa_chevron_left"
+                    android:text="@string/md_back_arrow"
                     android:textColor="@color/whit_background"
-                    android:textSize="@dimen/sp22" />
+                    android:textSize="@dimen/sp18" />
             </com.iGap.libs.rippleeffect.RippleView>
 
             <TextView

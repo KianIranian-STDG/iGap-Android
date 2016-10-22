@@ -7,8 +7,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.Log;
 
-import com.iGap.G;
-
 public class HelperImageBackColor {
 
     /**
@@ -108,11 +106,11 @@ public class HelperImageBackColor {
         Paint textPaint = new Paint(Paint.FILTER_BITMAP_FLAG | Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
         textPaint.setMaskFilter(new BlurMaskFilter(1, BlurMaskFilter.Blur.SOLID));
         textPaint.setColor(Color.parseColor(mColor));
-        textPaint.setTypeface(G.robotoRegular);
+//        textPaint.setTypeface(G.robotoRegular);
         textPaint.setTextAlign(Paint.Align.CENTER);
         textPaint.setTextSize(fontsize);
         textPaint.setStyle(Paint.Style.FILL);
-        textPaint.setTypeface(G.arialBold);
+//        textPaint.setTypeface(G.arialBold);
         cs.drawText(alphabetName, with / 2, with / 2 + fontsize / 3, textPaint);
 
         return bitmap;

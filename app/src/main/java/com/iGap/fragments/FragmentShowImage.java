@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,6 +23,7 @@ import com.iGap.R;
 import com.iGap.activitys.ActivitySetting;
 import com.iGap.interface_package.OnFileDownloadResponse;
 import com.iGap.libs.rippleeffect.RippleView;
+import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.StructDownloadAttachment;
 import com.iGap.module.StructMessageInfo;
 import com.iGap.module.TimeUtils;
@@ -114,8 +114,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
 
     private void initComponent(View view) {
 
-        Button btnBack = (Button) view.findViewById(R.id.asi_btn_back);
-        btnBack.setTypeface(G.fontawesome);
+        MaterialDesignTextView btnBack = (MaterialDesignTextView) view.findViewById(R.id.asi_btn_back);
         RippleView rippleBack = (RippleView) view.findViewById(R.id.asi_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
@@ -125,8 +124,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
             }
         });
 
-        Button btnMenu = (Button) view.findViewById(R.id.asi_btn_menu);
-        btnMenu.setTypeface(G.fontawesome);
+        MaterialDesignTextView btnMenu = (MaterialDesignTextView) view.findViewById(R.id.asi_btn_menu);
         RippleView rippleMenu = (RippleView) view.findViewById(R.id.asi_ripple_menu);
         rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 

@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/st_layoutParent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layoutDirection="ltr">
+    android:layoutDirection="ltr"
+    tools:ignore="MissingPrefix">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/st_appbar"
@@ -60,14 +62,15 @@
                         app:rv_rippleDuration="150"
                         app:rv_ripplePadding="5dp">
 
-                        <TextView
+                        <com.iGap.module.MaterialDesignTextView
                             android:id="@+id/st_txt_back"
+                            fontPath="fonts/Flaticon.ttf"
                             android:layout_width="@dimen/dp60"
                             android:layout_height="match_parent"
                             android:gravity="center"
-                            android:text="@string/fa_chevron_left"
+                            android:text="@string/md_back_arrow"
                             android:textColor="@color/whit_background"
-                            android:textSize="@dimen/sp22" />
+                            android:textSize="@dimen/sp18" />
                     </com.iGap.libs.rippleeffect.RippleView>
 
                     <com.iGap.libs.rippleeffect.RippleView
@@ -83,13 +86,13 @@
 
                         <com.iGap.module.MaterialDesignTextView
                             android:id="@+id/st_img_menuPopup"
+                            fontPath="fonts/Flaticon.ttf"
                             android:layout_width="@dimen/dp60"
                             android:layout_height="match_parent"
-                            android:layout_gravity="right"
                             android:gravity="center"
                             android:text="@string/md_show_more_button"
                             android:textColor="@color/whit_background"
-                            android:textSize="@dimen/sp22" />
+                            android:textSize="@dimen/sp18" />
 
                     </com.iGap.libs.rippleeffect.RippleView>
                 </RelativeLayout>
@@ -138,7 +141,6 @@
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
-
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/st_scroll_nested"
@@ -368,40 +370,6 @@
                     android:textSize="@dimen/sp18"
                     android:textStyle="normal" />
 
-                <LinearLayout
-                    android:id="@+id/st_layout_crop"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp60"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/dp16">
-
-                    <TextView
-
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight=".5"
-                        android:text="@string/st_crop"
-                        android:textColor="@color/black_register"
-                        android:textSize="@dimen/sp18"
-                        android:textStyle="normal" />
-
-                    <ToggleButton
-                        android:id="@+id/st_toggle_crop"
-                        android:layout_width="@dimen/dp40"
-                        android:layout_height="@dimen/dp40"
-                        android:background="@drawable/st_switch_button"
-                        android:paddingRight="@dimen/dp4"
-                        android:textOff=""
-                        android:textOn="" />
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/background_editText" />
-
             </LinearLayout>
 
 
@@ -462,6 +430,7 @@
                     android:background="@color/background_editText" />
 
                 <TextView
+                    android:id="@+id/st_txt_sticker"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/dp16"
@@ -485,23 +454,6 @@
                     android:paddingLeft="@dimen/dp16"
                     android:paddingRight="@dimen/dp16"
                     android:text="@string/st_chatBackground"
-                    android:textColor="@color/black_register"
-                    android:textSize="@dimen/sp18"
-                    android:textStyle="normal" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/background_editText" />
-
-                <TextView
-                    android:id="@+id/st_txt_enableAnimation"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp60"
-                    android:padding="@dimen/dp16"
-                    android:paddingLeft="@dimen/dp16"
-                    android:paddingRight="@dimen/dp16"
-                    android:text="@string/st_Enable_Animation"
                     android:textColor="@color/black_register"
                     android:textSize="@dimen/sp18"
                     android:textStyle="normal" />
@@ -836,6 +788,7 @@
         android:tint="@color/gray"
         app:layout_anchor="@+id/st_appbar"
         app:layout_anchorGravity="bottom|right|end" />
+
 
 </android.support.design.widget.CoordinatorLayout>
 

@@ -29,14 +29,15 @@
             app:rv_rippleDuration="150"
             app:rv_ripplePadding="5dp">
 
-            <Button
+            <com.iGap.module.MaterialDesignTextView
                 android:id="@+id/asi_btn_back"
                 android:layout_width="@dimen/dp60"
+                android:gravity="center"
                 android:layout_height="match_parent"
                 android:background="@null"
-                android:text="@string/fa_chevron_left"
+                android:text="@string/md_back_arrow"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/sp20" />
+                android:textSize="@dimen/sp18" />
         </com.iGap.libs.rippleeffect.RippleView>
 
         <TextView
@@ -60,14 +61,15 @@
             app:rv_rippleDuration="150"
             app:rv_ripplePadding="5dp">
 
-            <Button
+            <com.iGap.module.MaterialDesignTextView
                 android:id="@+id/asi_btn_menu"
                 android:layout_width="@dimen/dp60"
                 android:layout_height="match_parent"
                 android:background="@null"
-                android:text="@string/fa_ellipsis_v"
+                android:text="@string/md_show_more_button"
+                android:gravity="center"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/sp20" />
+                android:textSize="@dimen/sp18" />
         </com.iGap.libs.rippleeffect.RippleView>
     </LinearLayout>
 

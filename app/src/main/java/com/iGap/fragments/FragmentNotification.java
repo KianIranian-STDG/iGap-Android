@@ -23,6 +23,7 @@ import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.module.MaterialDesignTextView;
 import com.iGap.realm.RealmChannelRoom;
 import com.iGap.realm.RealmChatRoom;
 import com.iGap.realm.RealmGroupRoom;
@@ -35,6 +36,8 @@ import com.larswerkman.holocolorpicker.SVBar;
 
 import io.realm.Realm;
 
+import static com.iGap.R.id.ntg_txt_back;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -44,8 +47,9 @@ public class FragmentNotification extends Fragment {
     private ViewGroup root, ltLedColor, ltVibrate, ltSound, ltPopupNotification, ltSmartNotification;
     private String page, soundName;
     private int ledColor, poRbDialogSound;
-    private TextView txtVibrate, txtSound, txtPopupNotification, txtSmartNotification, txtBack;
+    private TextView txtVibrate, txtSound, txtPopupNotification, txtSmartNotification;
     private NumberPicker numberPickerMinutes, numberPickerTimes;
+    private MaterialDesignTextView txtBack;
 
     private long roomId;
     private String realmNotification = "Default";
@@ -797,7 +801,7 @@ public class FragmentNotification extends Fragment {
 
     private void callObject(View view) {
 
-        txtBack = (TextView) view.findViewById(R.id.ntg_txt_back);
+        txtBack = (MaterialDesignTextView) view.findViewById(ntg_txt_back);
 
         txtPopupNotification = (TextView) view.findViewById(R.id.ntg_txt_desc_notifications);
         ltPopupNotification = (ViewGroup) view.findViewById(R.id.ntg_layout_notifications);

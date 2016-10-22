@@ -15,18 +15,17 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.StickyHeaderAdapter;
 import com.iGap.adapter.items.ContactItemGroup;
 import com.iGap.interface_package.OnSelectedList;
 import com.iGap.libs.rippleeffect.RippleView;
+import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.StructContactInfo;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
@@ -85,15 +84,7 @@ public class ShowCustomList extends Fragment {
         edtSearch = (EditText) view.findViewById(R.id.fcg_edt_search);
 
 
-        Button btnBack = (Button) view.findViewById(R.id.fcg_btn_back);
-        btnBack.setTypeface(G.fontawesome);
-//        btnBack.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                getActivity().getSupportFragmentManager().popBackStack();
-//            }
-//        });
-
+        MaterialDesignTextView btnBack = (MaterialDesignTextView) view.findViewById(R.id.fcg_btn_back);
         RippleView rippleBack = (RippleView) view.findViewById(R.id.fcg_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
@@ -104,8 +95,7 @@ public class ShowCustomList extends Fragment {
             }
         });
 
-        Button btnDone = (Button) view.findViewById(R.id.fcg_btn_done);
-        btnDone.setTypeface(G.fontawesome);
+        MaterialDesignTextView btnDone = (MaterialDesignTextView) view.findViewById(R.id.fcg_btn_done);
         RippleView rippleDown = (RippleView) view.findViewById(R.id.fcg_ripple_done);
         rippleDown.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override

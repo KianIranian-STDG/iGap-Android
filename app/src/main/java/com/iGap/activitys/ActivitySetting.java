@@ -37,6 +37,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.fragments.FragmentShowImage;
+import com.iGap.fragments.FragmentSticker;
 import com.iGap.helper.HelperImageBackColor;
 import com.iGap.interface_package.OnFileUploadForActivities;
 import com.iGap.interface_package.OnUserAvatarDelete;
@@ -76,9 +77,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     private SharedPreferences sharedPreferences;
     private int messageTextSize = 16;
 
-    private TextView txtBack, txtMenu, txtMessageTextSize, txtAutoDownloadData, txtAutoDownloadWifi, txtChatBackground,
+    private TextView txtMenu, txtMessageTextSize, txtAutoDownloadData, txtAutoDownloadWifi, txtChatBackground,
             txtAutoDownloadRoaming, txtKeepMedia, txtLanguage, txtSizeClearCach;
-    private MaterialDesignTextView imgMenu;
+    private MaterialDesignTextView imgMenu, txtBack;
 
     private RelativeLayout ltClearCache;
 
@@ -88,8 +89,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     private String textLanguage = "English";
     private int poRbDialogTextSize = -1;
 
-    private ViewGroup ltMessageTextSize, ltLanguage, ltInAppBrowser, ltSentByEnter, ltEnableAnimation, ltAutoGifs, ltSaveToGallery, layoutCrop;
-    private TextView txtNickName, txtUserName, txtPhoneNumber, txtNotifyAndSound, txtFaq, txtPrivacyPolicy;
+    private ViewGroup ltMessageTextSize, ltLanguage, ltInAppBrowser, ltSentByEnter, ltEnableAnimation, ltAutoGifs, ltSaveToGallery;
+    private TextView txtNickName, txtUserName, txtPhoneNumber, txtNotifyAndSound, txtFaq, txtPrivacyPolicy, txtSticker;
     private ToggleButton toggleSentByEnter, toggleEnableAnimation, toggleAutoGifs, toggleSaveToGallery, toggleInAppBrowser, toggleCrop;
 
     private AppBarLayout appBarLayout;
@@ -312,8 +313,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
         // button back in toolbar
-        txtBack = (TextView) findViewById(R.id.st_txt_back);
-        txtBack.setTypeface(G.fontawesome);
+        txtBack = (MaterialDesignTextView) findViewById(R.id.st_txt_back);
         RippleView rippleBack = (RippleView) findViewById(R.id.st_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
@@ -382,7 +382,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         });
         imgMenu = (MaterialDesignTextView) findViewById(R.id.st_img_menuPopup);
-        assert txtMenu != null;
 
         realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
         //fab button for set pic
@@ -595,63 +594,16 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
-        layoutCrop = (ViewGroup) findViewById(R.id.st_layout_crop);
-        int checkeCrop = sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 0);
-        toggleCrop = (ToggleButton) findViewById(R.id.st_toggle_crop);
-        if (checkeCrop == 1) {
-            toggleCrop.setChecked(true);
-        } else {
-            toggleCrop.setChecked(false);
-        }
-        layoutCrop.setOnClickListener(new View.OnClickListener() {
+        txtSticker = (TextView) findViewById(R.id.st_txt_sticker);
+        txtSticker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                if (toggleCrop.isChecked()) {
-                    toggleCrop.setChecked(false);
-                    editor.putInt(SHP_SETTING.KEY_CROP, 0);
-                    editor.apply();
-                    Log.i("SSSSS", "2: ");
-
-                } else {
-                    toggleCrop.setChecked(true);
-                    editor.putInt(SHP_SETTING.KEY_CROP, 1);
-                    editor.apply();
-                    Log.i("SSSSS", "3: ");
-
-                }
-
+                FragmentSticker fragmentSticker = new FragmentSticker();
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.st_layoutParent, fragmentSticker).commit();
             }
         });
-
-        toggleCrop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.i("SSSSS", "1: ");
-                layoutCrop.performClick();
-                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                if (toggleCrop.isChecked()) {
-                    toggleCrop.setChecked(false);
-                    editor.putInt(SHP_SETTING.KEY_CROP, 0);
-                    editor.apply();
-                    Log.i("SSSSS", "6: ");
-
-                } else {
-                    toggleCrop.setChecked(true);
-                    editor.putInt(SHP_SETTING.KEY_CROP, 1);
-                    editor.apply();
-                    Log.i("SSSSS", "7: ");
-
-                }
-            }
-        });
-
 
         txtChatBackground = (TextView) findViewById(R.id.st_txt_chatBackground);
-        txtChatBackground.setTypeface(G.arial);
         txtChatBackground.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1359,13 +1311,11 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             G.onChangeUserPhotoListener.onChangePhoto(pathImageDecode);
         } else {
             RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-            circleImageView.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp100), realmUserInfo.getInitials(), realmUserInfo.getColor()));
+            circleImageView.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp88), realmUserInfo.getInitials(), realmUserInfo.getColor()));
             G.onChangeUserPhotoListener.onChangePhoto(null);
         }
         realm.close();
-
     }
-
     public ArrayList<StructMessageInfo> setItem() {
 
         ArrayList<StructMessageInfo> items = new ArrayList<>();

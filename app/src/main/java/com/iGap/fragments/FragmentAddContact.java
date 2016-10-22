@@ -46,8 +46,7 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
 
     private void initComponent(View view) {
 
-        TextView btnBack = (TextView) view.findViewById(R.id.ac_txt_back);
-        btnBack.setTypeface(G.fontawesome);
+        MaterialDesignTextView btnBack = (MaterialDesignTextView) view.findViewById(R.id.ac_txt_back);
         RippleView rippleBack = (RippleView) view.findViewById(R.id.ac_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
@@ -64,8 +63,6 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
 
 
         MaterialDesignTextView txtSet = (MaterialDesignTextView) view.findViewById(R.id.ac_txt_set);
-
-        txtSet.setTypeface(G.flaticon);
 
         parent = (ViewGroup) view.findViewById(R.id.ac_layoutParent);
         parent.setOnClickListener(new View.OnClickListener() {
