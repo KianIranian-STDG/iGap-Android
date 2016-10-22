@@ -1,22 +1,18 @@
 package com.iGap.adapter.items.chat;
 
-import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.iGap.R;
-import com.iGap.helper.ImageHelper;
 import com.iGap.interface_package.OnMessageViewClick;
 import com.iGap.module.Utils;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
+import com.makeramen.roundedimageview.RoundedImageView;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import java.util.List;
 
@@ -48,27 +44,7 @@ public class ImageItem extends AbstractMessage<ImageItem, ImageItem.ViewHolder> 
     @Override
     public void onLoadFromLocal(final ViewHolder holder, String localPath, LocalFileType fileType) {
         super.onLoadFromLocal(holder, localPath, fileType);
-        ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.image, new ImageLoadingListener() {
-            @Override
-            public void onLoadingStarted(String imageUri, View view) {
-
-            }
-
-            @Override
-            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-
-            }
-
-            @Override
-            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                holder.image.setImageBitmap(ImageHelper.getRoundedCornerBitmap(loadedImage, (int) holder.itemView.getResources().getDimension(R.dimen.chatMessageImageCorner)));
-            }
-
-            @Override
-            public void onLoadingCancelled(String imageUri, View view) {
-
-            }
-        });
+        ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.image);
     }
 
     @Override
@@ -92,12 +68,12 @@ public class ImageItem extends AbstractMessage<ImageItem, ImageItem.ViewHolder> 
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
-        protected ImageView image;
+        protected RoundedImageView image;
 
         public ViewHolder(View view) {
             super(view);
 
-            image = (ImageView) view.findViewById(R.id.thumbnail);
+            image = (RoundedImageView) view.findViewById(R.id.thumbnail);
         }
     }
 }
