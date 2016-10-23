@@ -3,17 +3,15 @@ package com.iGap.module;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.view.View;
 
 import com.iGap.realm.RealmRoomMessage;
 import com.mikepenz.fastadapter.adapters.FastItemAdapter;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class EndlessRecyclerOnScrollListener extends RecyclerViewPauseOnScrollListener {
+public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScrollListener {
     private int mPreviousTotal = 0;
     private boolean mLoading = true;
     private int mCurrentPage = 0;
@@ -27,18 +25,10 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerViewPauseO
     private List<RealmRoomMessage> mMessagesList = new ArrayList<>();
     private boolean mAlreadyCalledOnNoMore;
 
-    public EndlessRecyclerOnScrollListener(List<RealmRoomMessage> messageList, FastItemAdapter adapter, ImageLoader imageLoader, boolean pauseOnScroll, boolean pauseOnSettling) {
-        super(imageLoader, pauseOnScroll, pauseOnSettling);
+    public EndlessRecyclerOnScrollListener(List<RealmRoomMessage> messageList, FastItemAdapter adapter) {
         mAdapter = adapter;
         mMessagesList = messageList;
     }
-
-    public EndlessRecyclerOnScrollListener(List<RealmRoomMessage> messageList, FastItemAdapter adapter, ImageLoader imageLoader, boolean pauseOnScroll, boolean pauseOnSettling, OnScrollListener customListener) {
-        super(imageLoader, pauseOnScroll, pauseOnSettling, customListener);
-        mAdapter = adapter;
-        mMessagesList = messageList;
-    }
-
 
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
