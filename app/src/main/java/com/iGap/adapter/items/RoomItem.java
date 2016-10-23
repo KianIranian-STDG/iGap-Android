@@ -1,12 +1,13 @@
 package com.iGap.adapter.items;
 
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.interface_package.IChatItemAvatar;
+import com.iGap.module.AndroidUtils;
 import com.iGap.module.AppUtils;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.EmojiTextView;
@@ -23,17 +24,16 @@ import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-import java.io.File;
 import java.util.List;
 
 /**
- * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/2016.
+ * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/``016.
  */
 
 /**
  * chat item for main displaying chats
  */
-public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
+public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> implements IChatItemAvatar {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
     public StructChatInfo mInfo;
     public OnComplete mComplete;
@@ -102,6 +102,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
         }
     }
 
+    @Override
     public void onRequestDownloadAvatar() {
         ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
         if (mInfo.chatType == RoomType.CHAT) {
@@ -118,7 +119,6 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
         String identity = mInfo.downloadAttachment.token + '*' + selector.toString() + '*' + mInfo.avatar.smallThumbnail.size + '*' + mInfo.avatar.getLocalThumbnailPath() + '*' + mInfo.downloadAttachment.offset;
 
         new RequestFileDownload().download(mInfo.downloadAttachment.token, 0, (int) mInfo.avatar.smallThumbnail.size, selector, identity);
-
     }
 
     private void requestForUserInfo() {
@@ -130,31 +130,32 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
         }
     }
 
-    /**
-     * return suitable path for using with UIL
-     *
-     * @param path String path
-     * @return correct local path/passed path
-     */
-    protected String suitablePath(String path) {
-        if (path.matches("\\w+?://")) {
-            return path;
-        } else {
-            return Uri.fromFile(new File(path)).toString();
-        }
-    }
-
     @Override
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        holder.lastMessage.setText(mInfo.lastmessage);
+        String lastMessage = AppUtils.rightLastMessage(holder.itemView.getResources(), mInfo.chatType, mInfo.lastMessageId);
+        if (lastMessage == null || lastMessage.isEmpty()) {
+            holder.messageStatus.setVisibility(View.GONE);
+            holder.lastMessage.setVisibility(View.GONE);
+        } else {
+            if (mInfo.lastMessageSenderIsMe) {
+                AppUtils.rightMessageStatus(holder.messageStatus, mInfo.lastMessageStatus);
+
+                holder.messageStatus.setVisibility(View.VISIBLE);
+            } else {
+                holder.messageStatus.setVisibility(View.GONE);
+            }
+
+            holder.lastMessage.setVisibility(View.VISIBLE);
+            holder.lastMessage.setText(lastMessage);
+        }
 
         if (mInfo.avatar != null) {
             if (mInfo.avatar.isFileExistsOnLocal()) {
-                ImageLoader.getInstance().displayImage(suitablePath(mInfo.avatar.getLocalFilePath()), holder.image);
+                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mInfo.avatar.getLocalFilePath()), holder.image);
             } else if (mInfo.avatar.isThumbnailExistsOnLocal()) {
-                ImageLoader.getInstance().displayImage(suitablePath(mInfo.avatar.getLocalThumbnailPath()), holder.image);
+                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mInfo.avatar.getLocalThumbnailPath()), holder.image);
             } else {
                 holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), mInfo.initials, mInfo.color));
 
@@ -194,22 +195,6 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
         }
 
         holder.name.setText(mInfo.chatTitle);
-
-        if (!mInfo.lastmessage.isEmpty()) {
-            holder.lastMessage.setText(mInfo.lastmessage);
-            holder.lastMessage.setVisibility(View.VISIBLE);
-
-            if (mInfo.lastMessageSenderIsMe) {
-                AppUtils.updateMessageStatus(holder.messageStatus, mInfo.lastMessageStatus);
-
-                holder.messageStatus.setVisibility(View.VISIBLE);
-            } else {
-                holder.messageStatus.setVisibility(View.GONE);
-            }
-        } else {
-            holder.lastMessage.setVisibility(View.GONE);
-            holder.messageStatus.setVisibility(View.GONE);
-        }
 
 
         if (mInfo.lastMessageTime != 0) {

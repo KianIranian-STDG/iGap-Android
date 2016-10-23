@@ -7,7 +7,11 @@ import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.realm.RealmRoomMessage;
+import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.enums.RoomType;
+
+import io.realm.Realm;
 
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 10/22/2016.
@@ -54,32 +58,51 @@ public final class AppUtils {
         }
     }
 
-    public static String rightLastMessage(Resources resources, RoomType roomType, String message, ProtoGlobal.RoomMessageType messageType, Object obj) {
-        if (message != null && !message.isEmpty()) {
-            return message;
+    public static String rightLastMessage(Resources resources, RoomType roomType, long messageId) {
+        Realm realm = Realm.getDefaultInstance();
+        String messageText;
+        RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+        if (message == null) {
+            return null;
+        }
+        if (message.getMessage() != null && !message.getMessage().isEmpty()) {
+            return message.getMessage();
         } else {
-            switch (messageType) {
+            switch (ProtoGlobal.RoomMessageType.valueOf(message.getMessageType())) {
                 case AUDIO:
-                    return resources.getString(R.string.last_msg_format_chat, ((ProtoGlobal.File) obj).getName());
+                    messageText = resources.getString(R.string.last_msg_format_chat, message.getAttachment().getName());
+                    break;
                 case CONTACT:
-                    return resources.getString(R.string.last_msg_format_chat, ((ProtoGlobal.RoomMessageContact) obj).getFirstName());
+                    messageText = resources.getString(R.string.last_msg_format_chat, message.getRoomMessageContact().getFirstName());
+                    break;
                 case FILE:
-                    return resources.getString(R.string.last_msg_format_chat, ((ProtoGlobal.File) obj).getName());
+                    messageText = resources.getString(R.string.last_msg_format_chat, message.getAttachment().getName());
+                    break;
                 case GIF:
-                    return null;
+                    messageText = null;
+                    break;
                 case IMAGE:
-                    return resources.getString(R.string.last_msg_format_chat, ((ProtoGlobal.File) obj).getName());
+                    messageText = resources.getString(R.string.last_msg_format_chat, message.getAttachment().getName());
+                    break;
                 case LOCATION:
-                    return null;
+                    messageText = null;
+                    break;
                 case LOG:
-                    return null;
+                    messageText = null;
+                    break;
                 case VIDEO:
-                    return resources.getString(R.string.last_msg_format_chat, ((ProtoGlobal.File) obj).getName());
+                    messageText = resources.getString(R.string.last_msg_format_chat, message.getAttachment().getName());
+                    break;
                 case VOICE:
-                    return resources.getString(R.string.last_msg_format_chat, ((ProtoGlobal.File) obj).getName());
+                    messageText = resources.getString(R.string.last_msg_format_chat, message.getAttachment().getName());
+                    break;
                 default:
-                    return null;
+                    messageText = null;
+                    break;
             }
         }
+
+        realm.close();
+        return messageText;
     }
 }

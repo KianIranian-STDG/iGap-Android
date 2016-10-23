@@ -108,6 +108,7 @@ public class ActivitySelectChat extends ActivityEnhanced {
             if (lastMessage != null) {
                 info.lastMessageTime = lastMessage.getUpdateTime();
                 info.lastmessage = lastMessage.getMessage();
+                info.lastMessageId = realmRoom.getLastMessageId();
                 info.lastMessageStatus = lastMessage.getStatus();
                 info.lastMessageSenderIsMe = lastMessage.isSenderMe();
             }
