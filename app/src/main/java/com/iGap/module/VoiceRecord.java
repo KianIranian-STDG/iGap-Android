@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.iGap.G;
 import com.iGap.R;
@@ -192,7 +191,7 @@ public class VoiceRecord {
                 break;
             case MotionEvent.ACTION_MOVE:
                 if (itemTag.equals("ivVoice"))
-                    moveing((int) event.getX());
+                    moving((int) event.getX());
                 break;
             case MotionEvent.ACTION_UP:
                 if (itemTag.equals("ivVoice"))
@@ -210,7 +209,7 @@ public class VoiceRecord {
     }
 
 
-    private void moveing(int x) {
+    private void moving(int x) {
         int i = lastX - x;
 
         if (i > 0 || Allmoving > 0) {
@@ -262,14 +261,12 @@ public class VoiceRecord {
             if (onVoiceRecordListener != null) {
                 onVoiceRecordListener.onVoiceRecordCancel();
             }
-            Toast.makeText(context, context.getString(R.string.cancel), Toast.LENGTH_SHORT).show();
         } else {
             if (canStop) {
                 try {
                     if (onVoiceRecordListener != null) {
                         onVoiceRecordListener.onVoiceRecordDone(outputFile);
                     }
-                    Toast.makeText(context, outputFile, Toast.LENGTH_SHORT).show();
 
                 } catch (Exception e) {
                     e.printStackTrace();

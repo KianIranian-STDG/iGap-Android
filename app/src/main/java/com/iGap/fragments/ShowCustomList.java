@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -95,16 +94,13 @@ public class ShowCustomList extends Fragment {
             }
         });
 
-        MaterialDesignTextView btnDone = (MaterialDesignTextView) view.findViewById(R.id.fcg_btn_done);
         RippleView rippleDown = (RippleView) view.findViewById(R.id.fcg_ripple_done);
         rippleDown.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
 
                 if (dialogShowing) {
-
                     showDialog();
-
                 } else {
                     if (onSelectedList != null) {
                         onSelectedList.getSelectedList(true, "", 0, getSelectedList());
@@ -225,8 +221,6 @@ public class ShowCustomList extends Fragment {
     private int count = 0;
 
     private void showDialog() {
-        Log.i("HHH", "showDialog");
-
         MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
                 .title(R.string.show_message_count)
                 .positiveText(getString(R.string.ok))
@@ -235,7 +229,6 @@ public class ShowCustomList extends Fragment {
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        Log.i("HHH", "count : " + count);
                         if (onSelectedList != null) {
                             onSelectedList.getSelectedList(true, "", count, getSelectedList());
                         }
@@ -244,11 +237,9 @@ public class ShowCustomList extends Fragment {
                 })
                 .negativeText(getString(R.string.cancel))
                 .inputType(InputType.TYPE_CLASS_PHONE)
-                .input(getString(R.string.count_of_show_message), null, new MaterialDialog.InputCallback() {
+                .input(getString(R.string.count_of_show_message), "50", new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
-                        Log.i("HHH", "showDialog input : " + input);
-                        Log.i("HHH", "showDialog input.toString() : " + input.toString());
                         if (input.toString() != null && !input.toString().isEmpty()) {
                             count = Integer.parseInt(input.toString());
                         } else {

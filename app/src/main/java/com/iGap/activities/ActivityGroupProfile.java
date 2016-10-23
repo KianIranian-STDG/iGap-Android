@@ -405,15 +405,12 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                 addMemberToGroup();
             }
         });
-        CircleImageView imvAddMember = (CircleImageView) findViewById(R.id.agp_imv_add_member);
 
         TextView txtSetAdmin = (TextView) findViewById(R.id.agp_txt_set_admin);
         txtSetAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 setMemberRoleToAdmin();
-
             }
         });
 
@@ -843,8 +840,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     //***********************************************************************************************************************
 
     private void addMemberToGroup() {
-
-
         List<StructContactInfo> userList = Contacts.retrieve(null);
 
         for (int i = 0; i < contacts.size(); i++) {
@@ -856,7 +851,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                 }
             }
         }
-
 
         Fragment fragment = ShowCustomList.newInstance(userList, new OnSelectedList() {
             @Override

@@ -2467,8 +2467,10 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
     @Override
     public void onSenderAvatarClick(View view, StructMessageInfo messageInfo, int position) {
-        Intent intent = new Intent(G.context, ActivityGroupProfile.class);
+        Intent intent = new Intent(G.context, ActivityContactsProfile.class);
+        intent.putExtra("peerId", Long.parseLong(messageInfo.senderID));
         intent.putExtra("RoomId", mRoomId);
+        intent.putExtra("enterFrom", ProtoGlobal.Room.Type.GROUP.toString());
         startActivity(intent);
     }
 
