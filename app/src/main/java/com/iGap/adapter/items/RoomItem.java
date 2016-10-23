@@ -6,7 +6,7 @@ import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.interface_package.IChatItemAvatar;
+import com.iGap.adapter.MessagesAdapter;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.AppUtils;
 import com.iGap.module.CircleImageView;
@@ -24,6 +24,7 @@ import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -33,7 +34,7 @@ import java.util.List;
 /**
  * chat item for main displaying chats
  */
-public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> implements IChatItemAvatar {
+public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
     public StructChatInfo mInfo;
     public OnComplete mComplete;
@@ -95,30 +96,34 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> implem
         }
 
         // request thumbnail
-        if (!mInfo.downloadAttachment.thumbnailRequested) {
-            onRequestDownloadAvatar();
+        if (!MessagesAdapter.avatarsRequested.contains(Long.toString(mInfo.chatId))) {
+            onRequestDownloadAvatar(mInfo.downloadAttachment.offset, mInfo.downloadAttachment.progress);
             // prevent from multiple requesting thumbnail
-            mInfo.downloadAttachment.thumbnailRequested = true;
+            MessagesAdapter.avatarsRequested.add(Long.toString(mInfo.chatId));
         }
     }
 
-    @Override
-    public void onRequestDownloadAvatar() {
-        ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
-        if (mInfo.chatType == RoomType.CHAT) {
-            if (mInfo.avatar != null && (mInfo.avatar.getLocalThumbnailPath() == null || mInfo.avatar.getLocalThumbnailPath().isEmpty())) {
-                mInfo.avatar.setLocalThumbnailPathForAvatar(mInfo.ownerId, mInfo.downloadAttachment.token + System.nanoTime() + mInfo.avatar.name, selector);
+    public void onRequestDownloadAvatar(int offset, int progress) {
+        ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL;
+        String fileName = mInfo.downloadAttachment.token + "_" + mInfo.avatar.name;
+        if (progress == 100) {
+            if (mInfo.chatType == RoomType.CHAT) {
+                mInfo.avatar.setLocalThumbnailPathForAvatar(mInfo.ownerId, G.DIR_IMAGE_USER + "/" + fileName, selector);
+            } else {
+                mInfo.avatar.setLocalThumbnailPath(mInfo.chatId, G.DIR_IMAGE_USER + "/" + fileName);
             }
-        } else {
-            if (mInfo.avatar != null && (mInfo.avatar.getLocalThumbnailPath() == null || mInfo.avatar.getLocalThumbnailPath().isEmpty())) {
-                mInfo.avatar.setLocalThumbnailPath(mInfo.chatId, mInfo.downloadAttachment.token + System.nanoTime() + mInfo.avatar.name);
+
+            try {
+                AndroidUtils.cutFromTemp(fileName);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
 
         // I don't use offset in getting thumbnail
-        String identity = mInfo.downloadAttachment.token + '*' + selector.toString() + '*' + mInfo.avatar.smallThumbnail.size + '*' + mInfo.avatar.getLocalThumbnailPath() + '*' + mInfo.downloadAttachment.offset;
+        String identity = mInfo.downloadAttachment.token + '*' + selector.toString() + '*' + mInfo.avatar.largeThumbnail.size + '*' + fileName + '*' + mInfo.downloadAttachment.offset + "*" + Boolean.toString(true) + "*" + mInfo.chatId + "*" + mInfo.chatType.toString();
 
-        new RequestFileDownload().download(mInfo.downloadAttachment.token, 0, (int) mInfo.avatar.smallThumbnail.size, selector, identity);
+        new RequestFileDownload().download(mInfo.downloadAttachment.token, offset, (int) mInfo.avatar.largeThumbnail.size, selector, identity);
     }
 
     private void requestForUserInfo() {

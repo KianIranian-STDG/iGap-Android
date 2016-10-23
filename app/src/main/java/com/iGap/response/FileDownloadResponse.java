@@ -6,6 +6,7 @@ import com.iGap.G;
 import com.iGap.module.AndroidUtils;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoFileDownload;
+import com.iGap.realm.enums.RoomType;
 
 public class FileDownloadResponse extends MessageHandler {
 
@@ -31,20 +32,18 @@ public class FileDownloadResponse extends MessageHandler {
         String token = identityParams[0];
         ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.valueOf(identityParams[1]);
         long fileSize = Long.parseLong(identityParams[2]);
-        String filePath;
-        if (selector == ProtoFileDownload.FileDownload.Selector.FILE) {
-            filePath = G.DIR_TEMP + "/" + identityParams[3];
-            Log.i("GGG", "identityParams[3] : " + identityParams[3]);
-            Log.i("GGG", "G.DIR_TEMP : " + G.DIR_TEMP);
-        } else {
-            filePath = identityParams[3];
-        }
+        String filePath = G.DIR_TEMP + "/" + identityParams[3];
+        Log.i("GGG", "identityParams[3] : " + identityParams[3]);
+        Log.i("GGG", "G.DIR_TEMP : " + G.DIR_TEMP);
+
         int previousOffset = Integer.parseInt(identityParams[4]);
         boolean avatarRequested = false;
         long userId = -1;
-        if (identityParams.length == 7) {
+        RoomType roomType = RoomType.CHAT;
+        if (identityParams.length == 8) {
             avatarRequested = Boolean.parseBoolean(identityParams[5]);
             userId = Long.parseLong(identityParams[6]);
+            roomType = RoomType.GROUP;
         }
         int nextOffset = previousOffset + builder.getBytes().size();
         int progress = nextOffset * 100 / (int) fileSize;
@@ -55,7 +54,7 @@ public class FileDownloadResponse extends MessageHandler {
             G.onFileDownloadResponse.onFileDownload(token, nextOffset, selector, progress);
         } else {
             Log.i("NNN", "setAvatar onFileDownloadResponse");
-            G.onFileDownloadResponse.onAvatarDownload(token, nextOffset, selector, progress, userId);
+            G.onFileDownloadResponse.onAvatarDownload(token, nextOffset, selector, progress, userId, roomType);
         }
     }
 
