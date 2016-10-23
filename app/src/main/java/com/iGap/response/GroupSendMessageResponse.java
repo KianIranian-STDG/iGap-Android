@@ -149,7 +149,7 @@ public class GroupSendMessageResponse extends MessageHandler {
         if (userId != roomMessage.getUserId() && builder.getResponse().getId().isEmpty()) {
             // invoke following callback when i'm not the sender, because I already done everything after sending message
             if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst() != null) {
-                G.chatSendMessageUtil.onMessageReceive(builder.getRoomId(), roomMessage.getMessage(), roomMessage.getMessageType().toString(), roomMessage);
+                G.chatSendMessageUtil.onMessageReceive(builder.getRoomId(), roomMessage.getMessage(), roomMessage.getMessageType().toString(), roomMessage, ProtoGlobal.Room.Type.GROUP);
             }
         } else {
             // invoke following callback when I'm the sender and the message has updated

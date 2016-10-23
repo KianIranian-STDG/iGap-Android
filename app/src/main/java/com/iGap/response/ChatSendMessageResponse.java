@@ -177,7 +177,7 @@ public class ChatSendMessageResponse extends MessageHandler {
             // invoke following callback when i'm not the sender, because I already done everything after sending message
             if (!messageId.contains(roomMessage.getMessageId())) {
                 if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatSendMessageResponse.getRoomId()).findFirst() != null) {
-                    G.chatSendMessageUtil.onMessageReceive(chatSendMessageResponse.getRoomId(), roomMessage.getMessage(), roomMessage.getMessageType().toString(), roomMessage);
+                    G.chatSendMessageUtil.onMessageReceive(chatSendMessageResponse.getRoomId(), roomMessage.getMessage(), roomMessage.getMessageType().toString(), roomMessage, ProtoGlobal.Room.Type.CHAT);
                 }
             } else {
                 messageId.remove(messageId.indexOf(roomMessage.getMessageId()));

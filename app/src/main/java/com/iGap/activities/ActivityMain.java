@@ -922,9 +922,8 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     }
 
     @Override
-    public void onMessageReceive(final long roomId, String message, String messageType, final ProtoGlobal.RoomMessage roomMessage) {
+    public void onMessageReceive(final long roomId, String message, String messageType, final ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType) {
         // I'm not in the room, so I have to add 1 to the unread messages count
-
         Realm realm = Realm.getDefaultInstance();
         if (roomMessage.getUserId() != realm.where(RealmUserInfo.class).findFirst().getUserId()) {
             //if another account not send this message , and really i'm recipient not sender update unread count
@@ -950,6 +949,13 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                     mAdapter.updateChat(roomId, convertToChatItem(roomId));
                 }
             });
+        }
+
+        // user has received the message, so I make a new delivered update status request
+        if (roomType == ProtoGlobal.Room.Type.CHAT) {
+            G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
+        } else if (roomType == ProtoGlobal.Room.Type.GROUP && roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT) {
+            G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
         }
     }
 

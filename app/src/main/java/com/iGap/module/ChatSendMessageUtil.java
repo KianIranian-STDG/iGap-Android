@@ -114,9 +114,9 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
     }
 
     @Override
-    public void onMessageReceive(long roomId, String message, String messageType, ProtoGlobal.RoomMessage roomMessage) {
+    public void onMessageReceive(long roomId, String message, String messageType, ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType) {
         if (onChatSendMessageResponse != null) {
-            onChatSendMessageResponse.onMessageReceive(roomId, message, messageType, roomMessage);
+            onChatSendMessageResponse.onMessageReceive(roomId, message, messageType, roomMessage, roomType);
         }
     }
 }

@@ -2635,7 +2635,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     }
 
     @Override
-    public void onMessageReceive(final long roomId, String message, String messageType, final ProtoGlobal.RoomMessage roomMessage) {
+    public void onMessageReceive(final long roomId, String message, String messageType, final ProtoGlobal.RoomMessage roomMessage, final ProtoGlobal.Room.Type roomType) {
         Log.i(ActivityChat.class.getSimpleName(), "onMessageReceive called for group");
 
         final Realm realm = Realm.getDefaultInstance();
@@ -2684,10 +2684,10 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                         }
 
                         // make update status to message sender that i've read his message
-                        if (chatType == ProtoGlobal.Room.Type.CHAT) {
-                            G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
-                        } else if (chatType == ProtoGlobal.Room.Type.GROUP && (roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT || roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.DELIVERED)) {
-                            G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+                        if (roomType == ProtoGlobal.Room.Type.CHAT) {
+                            G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+                        } else if (roomType == ProtoGlobal.Room.Type.GROUP && (roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT || roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.DELIVERED)) {
+                            G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
                         }
                     }
                 });
@@ -2701,11 +2701,11 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 });
             } else {
                 // user has received the message, so I make a new delivered update status request
-                if (chatType == ProtoGlobal.Room.Type.CHAT) {
-                    G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
+                if (roomType == ProtoGlobal.Room.Type.CHAT) {
+                    G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
 
-                } else if (chatType == ProtoGlobal.Room.Type.GROUP && roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT) {
-                    G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
+                } else if (roomType == ProtoGlobal.Room.Type.GROUP && roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT) {
+                    G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
                 }
                 // I'm not in the room, but I have to add 1 to unread messages count
                 realm.executeTransaction(new Realm.Transaction() {
