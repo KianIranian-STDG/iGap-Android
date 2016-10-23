@@ -140,7 +140,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
 
         if (mMessage.sendType == MyType.SendType.send) {
-            AppUtils.updateMessageStatus((TextView) holder.itemView.findViewById(R.id.cslr_txt_tic), mMessage.status);
+            AppUtils.rightMessageStatus((TextView) holder.itemView.findViewById(R.id.cslr_txt_tic), mMessage.status);
         }
 
         // display 'edited' indicator beside message time if message was edited
@@ -155,6 +155,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         // display user avatar only if chat type is GROUP
         if (type == ProtoGlobal.Room.Type.GROUP) {
             if (!mMessage.isSenderMe()) {
+                holder.itemView.findViewById(R.id.messageSenderAvatar).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        messageClickListener.onSenderAvatarClick(v, mMessage, holder.getAdapterPosition());
+                    }
+                });
                 if (mMessage.senderAvatar != null) {
                     if (mMessage.senderAvatar.isFileExistsOnLocal()) {
                         ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mMessage.senderAvatar.getLocalFilePath()), (ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar));
