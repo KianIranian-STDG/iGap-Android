@@ -70,18 +70,30 @@ public final class AppUtils {
         } else {
             switch (ProtoGlobal.RoomMessageType.valueOf(message.getMessageType())) {
                 case AUDIO:
+                    if (message.getAttachment() == null) {
+                        return null;
+                    }
                     messageText = resources.getString(R.string.last_msg_format_chat, message.getAttachment().getName());
                     break;
                 case CONTACT:
+                    if (message.getAttachment() == null) {
+                        return null;
+                    }
                     messageText = resources.getString(R.string.last_msg_format_chat, message.getRoomMessageContact().getFirstName());
                     break;
                 case FILE:
+                    if (message.getAttachment() == null) {
+                        return null;
+                    }
                     messageText = resources.getString(R.string.last_msg_format_chat, message.getAttachment().getName());
                     break;
                 case GIF:
                     messageText = null;
                     break;
                 case IMAGE:
+                    if (message.getAttachment() == null) {
+                        return null;
+                    }
                     messageText = resources.getString(R.string.last_msg_format_chat, message.getAttachment().getName());
                     break;
                 case LOCATION:
@@ -91,9 +103,15 @@ public final class AppUtils {
                     messageText = null;
                     break;
                 case VIDEO:
+                    if (message.getAttachment() == null) {
+                        return null;
+                    }
                     messageText = resources.getString(R.string.last_msg_format_chat, message.getAttachment().getName());
                     break;
                 case VOICE:
+                    if (message.getAttachment() == null) {
+                        return null;
+                    }
                     messageText = resources.getString(R.string.last_msg_format_chat, message.getAttachment().getName());
                     break;
                 default:
