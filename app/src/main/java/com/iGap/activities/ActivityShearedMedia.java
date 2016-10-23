@@ -51,6 +51,16 @@ public class ActivityShearedMedia extends ActivityEnhanced {
     private ArrayList<RealmRoomMessage> mList;
 
     private LinearLayout mediaLayout;
+    private MusicPlayer musicPlayer;
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (MusicPlayer.mp != null) {
+            MusicPlayer.initLayoutTripMusic(mediaLayout);
+        }
+    }
 
 
     @Override
@@ -58,25 +68,10 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sheared_media);
 
-        roomId = getIntent().getExtras().getLong("RoomID");
-
-
         mediaLayout = (LinearLayout) findViewById(R.id.asm_ll_music_layout);
+        musicPlayer = new MusicPlayer(mediaLayout);
 
-
-        if (MusicPlayer.mp != null) {
-            mediaLayout.setVisibility(View.VISIBLE);
-            ((TextView) mediaLayout.findViewById(R.id.mls_txt_music_name)).setText(MusicPlayer.musicName);
-            ((TextView) mediaLayout.findViewById(R.id.mls_txt_music_time)).setText(MusicPlayer.milliSecondsToTimer((long) MusicPlayer.mp.getDuration()));
-
-            if (MusicPlayer.mp.isPlaying()) {
-                ((Button) mediaLayout.findViewById(R.id.mls_btn_play_music)).setText(G.context.getString(R.string.md_pause_button));
-            } else {
-                ((Button) mediaLayout.findViewById(R.id.mls_btn_play_music)).setText(G.context.getString(R.string.md_play_arrow));
-            }
-        }
-
-
+        roomId = getIntent().getExtras().getLong("RoomID");
 
         initComponent();
     }
@@ -239,7 +234,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         txtSharedMedia.setText(getString(R.string.shared_media));
 
-        mAdapter = new AdapterShearedMedia(ActivityShearedMedia.this, mList, txtSharedMedia.getText().toString(), complete, mediaLayout, roomId);
+        mAdapter = new AdapterShearedMedia(ActivityShearedMedia.this, mList, txtSharedMedia.getText().toString(), complete, musicPlayer, roomId);
         final GridLayoutManager gLayoutManager = new GridLayoutManager(ActivityShearedMedia.this, spanItemCount);
 
         gLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
@@ -283,7 +278,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         fillListFile();
 
-        mAdapter = new AdapterShearedMedia(ActivityShearedMedia.this, mList, txtSharedMedia.getText().toString(), complete, mediaLayout, roomId);
+        mAdapter = new AdapterShearedMedia(ActivityShearedMedia.this, mList, txtSharedMedia.getText().toString(), complete, musicPlayer, roomId);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(ActivityShearedMedia.this);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -299,7 +294,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         txtSharedMedia.setText(R.string.shared_music);
         fillListMusic();
 
-        mAdapter = new AdapterShearedMedia(ActivityShearedMedia.this, mList, txtSharedMedia.getText().toString(), complete, mediaLayout, roomId);
+        mAdapter = new AdapterShearedMedia(ActivityShearedMedia.this, mList, txtSharedMedia.getText().toString(), complete, musicPlayer, roomId);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(ActivityShearedMedia.this);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());

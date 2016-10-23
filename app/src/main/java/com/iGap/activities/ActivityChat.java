@@ -348,28 +348,24 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     private Calendar lastDateCalendar = Calendar.getInstance();
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if (MusicPlayer.mp != null) {
+            MusicPlayer.initLayoutTripMusic(mediaLayout);
+        }
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        G.helperNotificationAndBadge.cancelNotification();
-
         mediaLayout = (LinearLayout) findViewById(R.id.ac_ll_music_layout);
         musicPlayer = new MusicPlayer(mediaLayout);
 
-        if (MusicPlayer.mp != null) {
-            mediaLayout.setVisibility(View.VISIBLE);
-            ((TextView) mediaLayout.findViewById(R.id.mls_txt_music_name)).setText(MusicPlayer.musicName);
-            ((TextView) mediaLayout.findViewById(R.id.mls_txt_music_time)).setText(MusicPlayer.milliSecondsToTimer((long) MusicPlayer.mp.getDuration()));
-
-            if (MusicPlayer.mp.isPlaying()) {
-                ((Button) mediaLayout.findViewById(R.id.mls_btn_play_music)).setText(G.context.getString(R.string.md_pause_button));
-            } else {
-                ((Button) mediaLayout.findViewById(R.id.mls_btn_play_music)).setText(G.context.getString(R.string.md_play_arrow));
-            }
-        }
-
         activityChat = this;
+        G.helperNotificationAndBadge.cancelNotification();
+
 
         // get sendByEnter action from setting value
         SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);

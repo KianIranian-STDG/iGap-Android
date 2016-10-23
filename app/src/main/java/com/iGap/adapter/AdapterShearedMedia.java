@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.iGap.G;
@@ -61,14 +60,13 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
         public boolean isDownloading = false;
     }
 
-    public AdapterShearedMedia(Context context, ArrayList<RealmRoomMessage> list, String mediaType, OnComplete complete, LinearLayout mediaLayout, long roomId) {
+    public AdapterShearedMedia(Context context, ArrayList<RealmRoomMessage> list, String mediaType, OnComplete complete, MusicPlayer musicPlayer, long roomId) {
         this.context = context;
         this.list = list;
         this.mediaType = mediaType;
         this.complete = complete;
         this.roomId = roomId;
-
-        musicPlayer = new MusicPlayer(mediaLayout);
+        this.musicPlayer = musicPlayer;
 
         options = new ArrayList<>();
 

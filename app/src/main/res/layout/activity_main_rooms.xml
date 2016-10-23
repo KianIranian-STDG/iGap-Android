@@ -85,11 +85,19 @@
 
             </RelativeLayout>
 
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="#34a49f" />
         </LinearLayout>
+
+        <include
+            android:id="@+id/amr_ll_music_layout"
+            layout="@layout/music_layout_small"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
 
     </com.iGap.module.MyAppBarLayout>
 
@@ -103,8 +111,8 @@
 
     <com.iGap.libs.floatingAddButton.ArcMenu
         android:id="@+id/ac_arc_button_add"
-        android:layout_width="@dimen/dp56"
-        android:layout_height="@dimen/dp56"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
         app:borderWidth="0dp"
         app:menu_color="@color/green"
@@ -113,27 +121,30 @@
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/ac_fab_start_new_chat"
-            android:layout_width="@dimen/dp56"
-            android:layout_height="@dimen/dp56"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fabSize="normal"
             android:src="@mipmap/single_chat"
             app:backgroundTint="@color/green"
             app:elevation="@dimen/dp6" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/ac_fab_crate_new_group"
-            android:layout_width="@dimen/dp56"
-            android:layout_height="@dimen/dp56"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:src="@mipmap/group_chat"
             app:backgroundTint="@color/green"
-            app:elevation="@dimen/dp6" />
+            app:elevation="@dimen/dp6"
+            app:fabSize="normal" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/ac_fab_crate_new_channel"
-            android:layout_width="@dimen/dp56"
-            android:layout_height="@dimen/dp56"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:src="@mipmap/channel_white"
-            app:backgroundTint="@color/green"
-            app:elevation="@dimen/dp6" />
+            app:fabSize="normal"
+            app:elevation="@dimen/dp6"
+            app:backgroundTint="@color/green" />
 
     </com.iGap.libs.floatingAddButton.ArcMenu>
 </com.iGap.module.NotTouchableCoordinatorLayout>

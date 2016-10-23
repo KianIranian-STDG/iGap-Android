@@ -7,7 +7,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp40"
-        android:background="@color/white"
+        android:background="#f9f9f9"
         android:gravity="left|center">
 
 
@@ -16,9 +16,9 @@
             android:layout_width="@dimen/dp40"
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/dp8"
-            android:paddingRight="@dimen/dp8"
             android:background="@null"
             android:gravity="center"
+            android:paddingRight="@dimen/dp8"
             android:text="@string/md_play_arrow"
             android:textColor="@color/green"
             android:textSize="@dimen/sp18" />
@@ -27,42 +27,41 @@
             android:id="@+id/mls_txt_music_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:textSize="@dimen/sp14"
-            android:textColor="@android:color/black"
             android:layout_margin="@dimen/dp4"
             android:layout_weight="1"
-            android:text="" />
+            android:singleLine="true"
+            android:text=""
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/sp14" />
 
         <TextView
             android:id="@+id/mls_txt_music_time_counter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#888"
-            android:textSize="@dimen/sp12"
-            android:layout_margin="@dimen/dp4"
             android:layout_marginLeft="5dp"
-            android:text="" />
+            android:text=""
+            android:textColor="#888"
+            android:textSize="@dimen/sp12" />
 
         <TextView
             android:id="@+id/mls_txt_music_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp4"
+            android:text="time"
             android:textColor="@android:color/black"
-            android:layout_margin="@dimen/dp4"
-            android:textSize="@dimen/sp12"
-            android:layout_marginLeft="5dp"
-            android:text="time" />
-            <Button
-                android:id="@+id/mls_btn_close"
-                android:layout_width="@dimen/dp40"
-                android:layout_height="match_parent"
-                android:background="@null"
-                android:layout_marginRight="@dimen/dp8"
-                android:gravity="center"
-                android:text="@string/md_close_button"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/sp14" />
+            android:textSize="@dimen/sp12" />
+
+        <Button
+            android:id="@+id/mls_btn_close"
+            android:layout_width="@dimen/dp40"
+            android:layout_height="match_parent"
+            android:layout_marginRight="@dimen/dp8"
+            android:background="@null"
+            android:gravity="center"
+            android:text="@string/md_close_button"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/sp14" />
 
     </LinearLayout>
 

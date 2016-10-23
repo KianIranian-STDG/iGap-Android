@@ -87,12 +87,17 @@ public class MusicPlayer {
 
 
     public MusicPlayer(LinearLayout layoutTripMusic) {
-        this.layoutTripMusic = layoutTripMusic;
+
 
         remoteViews = new RemoteViews(G.context.getPackageName(), R.layout.music_layout_notification);
         notificationManager = (NotificationManager) G.context.getSystemService(Context.NOTIFICATION_SERVICE);
         handler = new Handler(G.context.getMainLooper());
-        initLayoutTripMusic();
+
+        if (this.layoutTripMusic != null)
+            this.layoutTripMusic.setVisibility(View.GONE);
+
+
+        initLayoutTripMusic(layoutTripMusic);
 
         getAtribuits();
 
@@ -142,9 +147,11 @@ public class MusicPlayer {
 
     }
 
-    private void initLayoutTripMusic() {
+    public static void initLayoutTripMusic(LinearLayout layout) {
 
-        layoutTripMusic.setOnClickListener(new View.OnClickListener() {
+        MusicPlayer.layoutTripMusic = layout;
+
+        layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(G.context, ActivityMediaPlayer.class);
@@ -153,12 +160,12 @@ public class MusicPlayer {
             }
         });
 
-        txt_music_time = (TextView) layoutTripMusic.findViewById(R.id.mls_txt_music_time);
-        txt_music_time_counter = (TextView) layoutTripMusic.findViewById(R.id.mls_txt_music_time_counter);
-        txt_music_name = (TextView) layoutTripMusic.findViewById(R.id.mls_txt_music_name);
+        txt_music_time = (TextView) layout.findViewById(R.id.mls_txt_music_time);
+        txt_music_time_counter = (TextView) layout.findViewById(R.id.mls_txt_music_time_counter);
+        txt_music_name = (TextView) layout.findViewById(R.id.mls_txt_music_name);
 
 
-        btnPlayMusic = (Button) layoutTripMusic.findViewById(R.id.mls_btn_play_music);
+        btnPlayMusic = (Button) layout.findViewById(R.id.mls_btn_play_music);
         btnPlayMusic.setTypeface(G.flaticon);
         btnPlayMusic.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,7 +174,7 @@ public class MusicPlayer {
             }
         });
 
-        btnCloseMusic = (Button) layoutTripMusic.findViewById(R.id.mls_btn_close);
+        btnCloseMusic = (Button) layout.findViewById(R.id.mls_btn_close);
         btnCloseMusic.setTypeface(G.flaticon);
         btnCloseMusic.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,7 +183,22 @@ public class MusicPlayer {
             }
         });
 
+
+        if (MusicPlayer.mp != null) {
+            layout.setVisibility(View.VISIBLE);
+            txt_music_name.setText(MusicPlayer.musicName);
+            txt_music_time.setText(MusicPlayer.milliSecondsToTimer((long) MusicPlayer.mp.getDuration()));
+
+            if (MusicPlayer.mp.isPlaying()) {
+                btnPlayMusic.setText(G.context.getString(R.string.md_pause_button));
+            } else {
+                btnPlayMusic.setText(G.context.getString(R.string.md_play_arrow));
+            }
+        }
+
+
     }
+
 
     //**************************************************************************
 
@@ -267,6 +289,12 @@ public class MusicPlayer {
             selectedMedia++;
             if (onComplete != null)
                 onComplete.complete(true, "update", "");
+        } else {
+            startPlayer(mediaList.get(0).getAttachment().getLocalFilePath(), roomName, roomId, false);
+            selectedMedia = 1;
+            if (onComplete != null)
+                onComplete.complete(true, "update", "");
+
         }
     }
 
@@ -288,6 +316,14 @@ public class MusicPlayer {
 
             if (onComplete != null)
                 onComplete.complete(true, "update", "");
+        } else {
+            int item = mediaList.size();
+            if (item > 0) {
+                startPlayer(mediaList.get(item - 1).getAttachment().getLocalFilePath(), roomName, roomId, false);
+                selectedMedia = item;
+                if (onComplete != null)
+                    onComplete.complete(true, "update", "");
+            }
         }
     }
 
@@ -471,7 +507,7 @@ public class MusicPlayer {
         PendingIntent pi = PendingIntent.getActivity(G.context, 10, new Intent(G.context, ActivityMediaPlayer.class), PendingIntent.FLAG_UPDATE_CURRENT);
 
         remoteViews.setTextViewText(R.id.mln_txt_music_name, MusicPlayer.musicName);
-        remoteViews.setTextViewText(R.id.mln_txt_music_time, MusicPlayer.musicTime);
+        remoteViews.setTextViewText(R.id.mln_txt_music_outher, MusicPlayer.musicInfoTitle);
 
         if (mp != null)
             if (mp.isPlaying())
@@ -640,7 +676,6 @@ public class MusicPlayer {
 
         }
 
-        //  remoteViews.setTextViewText(R.id.mln_txt_music_time, strTimer + "/" + musicTime);
 
         if (isShowMediaPlayer) {
             onComplete.complete(true, "updateTime", strTimer);
@@ -704,10 +739,6 @@ public class MusicPlayer {
             }
         } catch (Exception e) {
         }
-
-
-
-
 
 
     }

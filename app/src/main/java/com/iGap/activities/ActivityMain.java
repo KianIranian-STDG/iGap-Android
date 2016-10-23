@@ -11,9 +11,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,6 +45,7 @@ import com.iGap.libs.flowingdrawer.LeftDrawerLayout;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.Contacts;
 import com.iGap.module.MaterialDesignTextView;
+import com.iGap.module.MusicPlayer;
 import com.iGap.module.MyAppBarLayout;
 import com.iGap.module.OnComplete;
 import com.iGap.module.ShouldScrolledBehavior;
@@ -87,12 +90,50 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     private ArcMenu arcMenu;
     private MaterialDesignTextView btnSearchAll;
 
+    FloatingActionButton btnStartNewChat;
+    FloatingActionButton btnCreateNewGroup;
+    FloatingActionButton btnCreateNewChannel;
+
+    LinearLayout mediaLayout;
+    MusicPlayer musicPlayer;
+
     public static boolean isMenuButtonAddShown = false;
+
+
+    public static double screenInches = 0;
+
+    private void getScreenInch() {
+
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        double x = Math.pow(dm.widthPixels / dm.xdpi, 2);
+        double y = Math.pow(dm.heightPixels / dm.ydpi, 2);
+        ActivityMain.screenInches = Math.sqrt(x + y);
+
+        Log.e("dddd", ActivityMain.screenInches + "              aaaaaaaaaa");
+
+
+        if (ActivityMain.screenInches > 6.7) {
+
+            arcMenu.fabMenu.setSize(FloatingActionButton.SIZE_MINI);// in demension it is 80 dp
+            btnStartNewChat.setSize(FloatingActionButton.SIZE_MINI);
+            btnCreateNewGroup.setSize(FloatingActionButton.SIZE_MINI);
+            btnCreateNewChannel.setSize(FloatingActionButton.SIZE_MINI);
+            Log.e("dddd", ActivityMain.screenInches + "              bbbbbbbbbb");
+        }
+
+    }
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        mediaLayout = (LinearLayout) findViewById(R.id.amr_ll_music_layout);
+        musicPlayer = new MusicPlayer(mediaLayout);
 
         G.helperNotificationAndBadge.cancelNotification();
 
@@ -226,8 +267,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             }
         });
 
-
-        FloatingActionButton btnStartNewChat = (FloatingActionButton) findViewById(R.id.ac_fab_start_new_chat);
+        btnStartNewChat = (FloatingActionButton) findViewById(R.id.ac_fab_start_new_chat);
         btnStartNewChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -246,7 +286,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             }
         });
 
-        FloatingActionButton btnCreateNewGroup = (FloatingActionButton) findViewById(R.id.ac_fab_crate_new_group);
+        btnCreateNewGroup = (FloatingActionButton) findViewById(R.id.ac_fab_crate_new_group);
         btnCreateNewGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -259,7 +299,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             }
         });
 
-        FloatingActionButton btnCreateNewChannel = (FloatingActionButton) findViewById(R.id.ac_fab_crate_new_channel);
+        btnCreateNewChannel = (FloatingActionButton) findViewById(R.id.ac_fab_crate_new_channel);
         btnCreateNewChannel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -739,6 +779,12 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     @Override
     protected void onResume() {
         super.onResume();
+
+        if (MusicPlayer.mp != null) {
+            MusicPlayer.initLayoutTripMusic(mediaLayout);
+        }
+
+        getScreenInch();
 
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
         G.chatSendMessageUtil.setOnChatSendMessageResponse(this);

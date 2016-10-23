@@ -60,6 +60,7 @@ public class ArcMenu extends FrameLayout {
         TypedArray attr = context.obtainStyledAttributes(attrs, R.styleable.ArcMenu, 0, 0);
         init(attr);
         fabMenu = new FloatingActionButton(context);
+
     }
 
     private void init(TypedArray attr) {
@@ -119,6 +120,7 @@ public class ArcMenu extends FrameLayout {
             fabMenu.setStateListAnimator(null);
         }
 
+        fabMenu.setSize(FloatingActionButton.SIZE_NORMAL);
 
         addView(fabMenu);
     }

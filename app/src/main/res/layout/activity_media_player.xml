@@ -230,6 +230,7 @@
             <ImageView
                 android:id="@+id/ml_img_repead_one"
                 android:layout_width="@dimen/dp16"
+                android:padding="1dp"
                 android:layout_height="@dimen/dp16"
                 android:layout_gravity="right|center"
                 android:layout_marginBottom="@dimen/dp12"
