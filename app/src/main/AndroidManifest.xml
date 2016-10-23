@@ -33,31 +33,31 @@
         <receiver android:name=".module.MusicPlayer$customButtonListener" />
         <receiver android:name=".helper.HelperNotificationAndBadge$RemoteActionReciver" />
         <activity
-            android:name=".activitys.ActivityChat"
+            android:name=".activities.ActivityChat"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
-            android:name=".activitys.ActivityShearedMedia"
+            android:name=".activities.ActivityShearedMedia"
             android:configChanges="keyboard|keyboardHidden|screenSize|locale" />
         <activity
-            android:name=".activitys.ActivityPaint"
+            android:name=".activities.ActivityPaint"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
 
         <activity
-            android:name=".activitys.ActivityMediaPlayer"
+            android:name=".activities.ActivityMediaPlayer"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
 
         <activity
-            android:name=".activitys.ActivityExplorer"
+            android:name=".activities.ActivityExplorer"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
         <activity
-            android:name=".activitys.ActivityGroupProfile"
+            android:name=".activities.ActivityGroupProfile"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
         <activity
-            android:name=".activitys.ActivityComment"
+            android:name=".activities.ActivityComment"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
         <activity
-            android:name=".activitys.ActivityMain"
+            android:name=".activities.ActivityMain"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
             android:theme="@style/AppThemeTranslucent">
 
@@ -86,7 +86,7 @@
             <!-- this part add app logo to list of share -->
         </activity>
         <activity
-            android:name=".activitys.ActivityIntroduce"
+            android:name=".activities.ActivityIntroduce"
             android:configChanges="keyboard|keyboardHidden|screenSize|locale">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -95,24 +95,24 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activitys.ActivityProfile"
+            android:name=".activities.ActivityProfile"
             android:configChanges="keyboard|keyboardHidden|screenSize|locale"
             android:windowSoftInputMode="adjustPan|stateHidden">
 
         </activity>
-        <activity android:name=".activitys.ActivityCrop" />
-        <activity android:name=".activitys.ActivitySettingNotification" />
+        <activity android:name=".activities.ActivityCrop"/>
+        <activity android:name=".activities.ActivitySettingNotification"/>
         <activity
-            android:name=".activitys.ActivityRegister"
+            android:name=".activities.ActivityRegister"
             android:configChanges="keyboard|keyboardHidden|screenSize|locale"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/AppTheme22" />
-        <activity android:name=".activitys.ActivitySetting"></activity>
-        <activity android:name=".activitys.ActivityContactsProfile" />
+        <activity android:name=".activities.ActivitySetting"></activity>
+        <activity android:name=".activities.ActivityContactsProfile"/>
         <activity
-            android:name=".activitys.ActivitySelectChat"
+            android:name=".activities.ActivitySelectChat"
             android:label="@string/select_room" />
 
         <receiver android:name=".module.IncomingSms" />
@@ -123,10 +123,10 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".activitys.ActivityChatBackground" />
-        <activity android:name=".activitys.ActivityWebView" />
-        <activity android:name=".activitys.ActivityNewChanelFinish" />
-        <activity android:name=".activitys.ActivityProfileChannel" />
+        <activity android:name=".activities.ActivityChatBackground"/>
+        <activity android:name=".activities.ActivityWebView"/>
+        <activity android:name=".activities.ActivityNewChanelFinish"/>
+        <activity android:name=".activities.ActivityProfileChannel"/>
 
         <service android:name=".helper.ServiceContact" />
         <service

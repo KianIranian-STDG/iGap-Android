@@ -19,7 +19,7 @@ import android.widget.EditText;
 
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.activitys.ActivityChat;
+import com.iGap.activities.ActivityChat;
 import com.iGap.adapter.items.SearchItem;
 import com.iGap.adapter.items.SearchItemHeader;
 import com.iGap.interface_package.OnChatGetRoom;

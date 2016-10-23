@@ -1,4 +1,4 @@
-package com.iGap.activitys;
+package com.iGap.activities;
 
 import android.content.Context;
 import android.graphics.Color;

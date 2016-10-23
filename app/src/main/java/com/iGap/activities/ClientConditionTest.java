@@ -1,4 +1,4 @@
-package com.iGap.activitys;
+package com.iGap.activities;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

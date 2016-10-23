@@ -2,7 +2,7 @@ package com.iGap.request;
 
 import android.os.Bundle;
 
-import com.iGap.activitys.ActivityEnhanced;
+import com.iGap.activities.ActivityEnhanced;
 import com.iGap.helper.HelperString;
 import com.iGap.proto.ProtoUserRegister;
 

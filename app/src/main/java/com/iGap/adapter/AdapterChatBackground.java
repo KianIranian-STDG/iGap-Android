@@ -19,7 +19,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.activitys.ActivityChatBackground;
+import com.iGap.activities.ActivityChatBackground;
 import com.iGap.fragments.FragmentFullChatBackground;
 import com.iGap.module.StructAdapterBackground;
 import com.nostra13.universalimageloader.core.ImageLoader;

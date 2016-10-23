@@ -3,7 +3,7 @@
 // RooyeKhat Media Co . - www.RooyeKhat.co
 // All rights reserved.
 
-package com.iGap.activitys;
+package com.iGap.activities;
 
 import android.app.Activity;
 import android.app.Dialog;

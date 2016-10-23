@@ -15,8 +15,8 @@ import android.widget.RemoteViews;
 
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.activitys.ActivityChat;
-import com.iGap.activitys.ActivityMain;
+import com.iGap.activities.ActivityChat;
+import com.iGap.activities.ActivityMain;
 import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAvatarPath;

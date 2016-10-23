@@ -22,7 +22,7 @@ import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.activitys.ActivityMediaPlayer;
+import com.iGap.activities.ActivityMediaPlayer;
 import com.iGap.realm.RealmChatHistory;
 import com.iGap.realm.RealmChatHistoryFields;
 import com.iGap.realm.RealmRoomMessage;

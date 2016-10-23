@@ -16,7 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.iGap.R;
-import com.iGap.activitys.ActivityComment;
+import com.iGap.activities.ActivityComment;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.StructCommentInfo;
 

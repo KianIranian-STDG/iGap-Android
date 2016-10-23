@@ -23,8 +23,8 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.activitys.ActivityExplorer;
-import com.iGap.activitys.ActivityPaint;
+import com.iGap.activities.ActivityExplorer;
+import com.iGap.activities.ActivityPaint;
 
 import java.io.File;
 import java.text.SimpleDateFormat;

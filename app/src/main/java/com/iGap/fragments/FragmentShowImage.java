@@ -20,7 +20,7 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.activitys.ActivitySetting;
+import com.iGap.activities.ActivitySetting;
 import com.iGap.interface_package.OnFileDownloadResponse;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.AndroidUtils;

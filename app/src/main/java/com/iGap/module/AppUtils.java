@@ -44,7 +44,7 @@ public final class AppUtils {
                 view.setTextSize(12F);
                 break;
             case "SENT":
-                view.setTextColor(view.getContext().getResources().getColor(R.color.green));
+                view.setTextColor(view.getContext().getResources().getColor(R.color.gray));
                 view.setText(G.context.getResources().getString(R.string.md_check_symbol));
                 view.setTextSize(12F);
                 break;

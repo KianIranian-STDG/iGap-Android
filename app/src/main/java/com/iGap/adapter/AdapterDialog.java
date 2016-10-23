@@ -11,7 +11,7 @@ import android.widget.Filterable;
 import android.widget.RadioButton;
 
 import com.iGap.R;
-import com.iGap.activitys.ActivityRegister;
+import com.iGap.activities.ActivityRegister;
 import com.iGap.module.StructCountry;
 
 import java.util.ArrayList;

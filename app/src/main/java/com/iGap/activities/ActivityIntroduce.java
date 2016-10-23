@@ -1,4 +1,4 @@
-package com.iGap.activitys;
+package com.iGap.activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
