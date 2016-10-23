@@ -125,6 +125,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     }
 
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -663,7 +664,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             info.chatId = realmRoom.getId();
             info.chatTitle = realmRoom.getTitle();
             info.initials = realmRoom.getInitials();
-            info.ownerId = realmRoom.getId();
             info.readOnly = realmRoom.getReadOnly();
             switch (realmRoom.getType()) {
                 case CHAT:
@@ -823,23 +823,23 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
     @Override
     public void onFileDownload(final String token, final int offset, final ProtoFileDownload.FileDownload.Selector selector, final int progress) {
-        // empty
-    }
-
-    @Override
-    public void onAvatarDownload(final String token, final int offset, final ProtoFileDownload.FileDownload.Selector selector, final int progress, final long userId, final RoomType roomType) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Realm realm = Realm.getDefaultInstance();
-                if (roomType == RoomType.CHAT) {
-                    mAdapter.downloadingAvatar(userId, progress, offset, StructMessageAttachment.convert(realm.where(RealmRegisteredInfo.class).equalTo("id", userId).findFirst().getLastAvatar()));
+                // if thumbnail
+                if (selector != ProtoFileDownload.FileDownload.Selector.FILE) {
+                    mAdapter.updateThumbnail(token);
                 } else {
-                    mAdapter.downloadingAvatar(userId, progress, offset, StructMessageAttachment.convert(realm.where(RealmRoom.class).equalTo("id", userId).findFirst().getAvatar()));
+                    // else file
+                    mAdapter.updateDownloadFields(token, progress, offset);
                 }
-                realm.close();
             }
         });
+    }
+
+    @Override
+    public void onAvatarDownload(String token, int offset, ProtoFileDownload.FileDownload.Selector selector, int progress, long userId) {
+        // empty
     }
 
     @Override
@@ -970,8 +970,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             @Override
             public void run() {
                 Realm realm = Realm.getDefaultInstance();
-                // FIXME: 10/23/2016 Alireza uncomment
-                //mAdapter.downloadingAvatar(user.getId(), StructMessageAttachment.convert(realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, user.getId()).findFirst().getLastAvatar()));
+                mAdapter.updateChatAvatar(user.getId(), StructMessageAttachment.convert(realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, user.getId()).findFirst().getLastAvatar()));
                 realm.close();
             }
         });

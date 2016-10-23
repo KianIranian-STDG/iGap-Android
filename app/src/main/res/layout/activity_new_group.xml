@@ -63,20 +63,24 @@
                 android:id="@+id/ng_txtInput_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp12"
                 android:layout_below="@+id/ng_txtInput_newGroup"
                 android:hint="Description">
 
                 <com.iGap.module.LinedEditText
+                    android:layout_below="@+id/ng_txtInput_newGroup"
                     android:id="@+id/ng_edt_description"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp120"
+                    android:layout_height="@dimen/dp100"
                     android:layout_marginLeft="@dimen/dp20"
                     android:layout_marginRight="@dimen/dp20"
                     android:background="@android:color/transparent"
                     android:ems="4"
+                    android:gravity="top"
                     android:lines="4"
                     android:maxLength="500"
                     android:maxLines="4"
+                    android:lineSpacingMultiplier="1.2"
                     android:paddingTop="0dp" />
 
             </android.support.design.widget.TextInputLayout>

@@ -34,7 +34,7 @@
                     rv_centered="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
+                    android:layout_margin="0dp"
                     app:rv_alpha="200"
                     app:rv_centered="true"
                     app:rv_rippleDuration="150"
@@ -42,7 +42,7 @@
 
                     <com.iGap.module.MaterialDesignTextView
                         android:id="@+id/chl_imv_back_Button"
-                        android:layout_width="@dimen/dp60"
+                        android:layout_width="@dimen/dp48"
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/md_back_arrow"
@@ -57,7 +57,11 @@
                     android:layout_weight="1"
                     android:gravity="center_vertical|right"
                     android:orientation="vertical"
-                    android:paddingRight="@dimen/dp4">
+                    android:paddingRight="0dp"
+                    android:paddingEnd="0dp"
+                    android:paddingTop="@dimen/dp4"
+                    android:paddingLeft="@dimen/dp4"
+                    android:paddingBottom="@dimen/dp4">
 
 
                     <LinearLayout
@@ -83,6 +87,7 @@
                             android:maxWidth="@dimen/dp240"
                             android:singleLine="true"
                             android:text="New Text"
+                            android:gravity="bottom"
                             android:textColor="@android:color/white"
                             android:textSize="@dimen/sp16" />
 
@@ -101,6 +106,7 @@
                         android:layout_height="wrap_content"
                         android:singleLine="true"
                         android:text="New Text"
+                        android:gravity="top"
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/sp12" />
 
@@ -108,9 +114,13 @@
 
                 <com.iGap.module.CircleImageView
                     android:id="@+id/chl_imv_user_picture"
-                    android:layout_width="@dimen/dp68"
+                    android:layout_width="@dimen/dp60"
                     android:layout_height="match_parent"
-                    android:padding="@dimen/dp4"
+                    android:paddingRight="0dp"
+                    android:paddingEnd="0dp"
+                    android:paddingTop="@dimen/dp4"
+                    android:paddingLeft="@dimen/dp4"
+                    android:paddingBottom="@dimen/dp4"
                     android:src="@mipmap/h" />
 
                 <com.iGap.libs.rippleeffect.RippleView
@@ -118,7 +128,7 @@
                     rv_centered="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
+                    android:layout_margin="0dp"
                     app:rv_alpha="200"
                     app:rv_centered="true"
                     app:rv_rippleDuration="150"
@@ -126,7 +136,7 @@
 
                     <com.iGap.module.MaterialDesignTextView
                         android:id="@+id/chl_imv_menu_button"
-                        android:layout_width="@dimen/dp60"
+                        android:layout_width="@dimen/dp48"
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/md_show_more_button"

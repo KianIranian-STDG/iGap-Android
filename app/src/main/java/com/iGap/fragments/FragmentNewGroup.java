@@ -1,5 +1,6 @@
 package com.iGap.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -10,11 +11,14 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -57,6 +61,9 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
     private EditText edtGroupName;
     private LinedEditText edtDescription;
 
+    private int lastSpecialRequestsCursorPosition = 0;
+    private String specialRequests;
+
     public static FragmentNewGroup newInstance() {
         return new FragmentNewGroup();
     }
@@ -90,8 +97,11 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
         txtBack = (MaterialDesignTextView) view.findViewById(R.id.ng_txt_back);
         RippleView rippleBack = (RippleView) view.findViewById(R.id.ng_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+
             @Override
             public void onComplete(RippleView rippleView) {
+                InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(rippleView.getWindowToken(), 0);
                 if (G.IMAGE_NEW_GROUP.exists()) {
                     G.IMAGE_NEW_GROUP.delete();
                 } else {
@@ -180,6 +190,32 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
         //=======================description group
         edtDescription = (LinedEditText) view.findViewById(R.id.ng_edt_description);
 
+
+        edtDescription.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                lastSpecialRequestsCursorPosition = edtDescription.getSelectionStart();
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                edtDescription.removeTextChangedListener(this);
+
+                if (edtDescription.getLineCount() > 4) {
+                    edtDescription.setText(specialRequests);
+                    edtDescription.setSelection(lastSpecialRequestsCursorPosition);
+                } else
+                    specialRequests = edtDescription.getText().toString();
+
+                edtDescription.addTextChangedListener(this);
+            }
+        });
+
         edtDescription.setTypeface(G.arial);
         edtDescription.setSingleLine(false);
         edtDescription.setImeOptions(EditorInfo.IME_FLAG_NO_ENTER_ACTION);
@@ -190,55 +226,67 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
 
         txtNextStep = (TextView) view.findViewById(R.id.ng_txt_nextStep);
         txtNextStep.setTypeface(G.arial);
-        txtNextStep.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        txtNextStep.setOnClickListener(new View.OnClickListener()
+
+                                       {
+                                           @Override
+                                           public void onClick(View view) {
 
 
-                if (edtDescription.getText().toString().length() > 0) {
-                    if (edtGroupName.getText().toString().length() > 0) {
+                                               if (edtDescription.getText().toString().length() > 0) {
+                                                   if (edtGroupName.getText().toString().length() > 0) {
 
-                        txtNextStep.setEnabled(false);
-                        txtBack.setEnabled(false);
-                        txtCancel.setEnabled(false);
-                        edtDescription.setEnabled(false);
-                        edtGroupName.setEnabled(false);
-                        imgCircleImageView.setEnabled(false);
+                                                       txtNextStep.setEnabled(false);
+                                                       txtBack.setEnabled(false);
+                                                       txtCancel.setEnabled(false);
+                                                       edtDescription.setEnabled(false);
+                                                       edtGroupName.setEnabled(false);
+                                                       imgCircleImageView.setEnabled(false);
+                                                       InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                                                       imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
-                        boolean success;
-                        String newName = edtGroupName.getText().toString().replace(" ", "_");
-                        File file2 = new File(path, prefix + "_" + newName + Math.random() * 10000 + 1 + ".png");
-                        if (prefix.equals("NewChanel")) {
-                            success = G.IMAGE_NEW_CHANEL.renameTo(file2);
-                            startActivity(new Intent(G.context, ActivityNewChanelFinish.class));
-                            getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
-                        } else {
-                            success = G.IMAGE_NEW_GROUP.renameTo(file2);
-                            createGroup();
-                        }
+                                                       boolean success;
+                                                       String newName = edtGroupName.getText().toString().replace(" ", "_");
+                                                       File file2 = new File(path, prefix + "_" + newName + Math.random() * 10000 + 1 + ".png");
+                                                       if (prefix.equals("NewChanel")) {
+                                                           success = G.IMAGE_NEW_CHANEL.renameTo(file2);
+                                                           startActivity(new Intent(G.context, ActivityNewChanelFinish.class));
+                                                           getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
+                                                       } else {
+                                                           success = G.IMAGE_NEW_GROUP.renameTo(file2);
+                                                           createGroup();
+                                                       }
 
-                    } else {
-                        Toast.makeText(G.context, R.string.please_enter_group_description, Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(G.context, R.string.please_enter_group_name, Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+                                                   } else {
+                                                       Toast.makeText(G.context, R.string.please_enter_group_description, Toast.LENGTH_SHORT).show();
+                                                   }
+                                               } else {
+                                                   Toast.makeText(G.context, R.string.please_enter_group_name, Toast.LENGTH_SHORT).show();
+                                               }
+                                           }
+                                       }
+
+        );
         //=======================button cancel
         txtCancel = (TextView) view.findViewById(R.id.ng_txt_cancel);
         txtCancel.setTypeface(G.arial);
-        txtCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (G.IMAGE_NEW_GROUP.exists()) {
-                    G.IMAGE_NEW_GROUP.delete();
-                } else {
-                    G.IMAGE_NEW_CHANEL.delete();
-                }
-                getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
-            }
-        });
+        txtCancel.setOnClickListener(new View.OnClickListener()
+
+                                     {
+                                         @Override
+                                         public void onClick(View view) {
+                                             InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                                             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                                             if (G.IMAGE_NEW_GROUP.exists()) {
+                                                 G.IMAGE_NEW_GROUP.delete();
+                                             } else {
+                                                 G.IMAGE_NEW_CHANEL.delete();
+                                             }
+                                             getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
+                                         }
+                                     }
+
+        );
     }
 
     private void createGroup() {

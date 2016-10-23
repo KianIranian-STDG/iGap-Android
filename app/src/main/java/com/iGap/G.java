@@ -359,7 +359,7 @@ public class G extends Application {
 
         if (language.equals("فارسی")) {
             CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                    .setDefaultFontPath("fonts/IRANSansMobile.ttf")
+                    .setDefaultFontPath("fonts/neuropol.ttf")
                     .setFontAttrId(R.attr.fontPath)
                     .build()
             );
@@ -367,14 +367,14 @@ public class G extends Application {
 
         } else if (language.equals("English")) {
             CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                    .setDefaultFontPath("fonts/arial.ttf")
+                    .setDefaultFontPath("fonts/neuropol.ttf")
                     .setFontAttrId(R.attr.fontPath)
                     .build()
             );
             setLocale("en");
         } else if (language.equals("العربی")) {
             CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                    .setDefaultFontPath("fonts/arial.ttf")
+                    .setDefaultFontPath("fonts/neuropol.ttf")
                     .setFontAttrId(R.attr.fontPath)
                     .build()
             );
@@ -382,7 +382,7 @@ public class G extends Application {
 
         } else if (language.equals("Deutsch")) {
             CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                    .setDefaultFontPath("fonts/arial.ttf")
+                    .setDefaultFontPath("fonts/neuropol.ttf")
                     .setFontAttrId(R.attr.fontPath)
                     .build()
             );

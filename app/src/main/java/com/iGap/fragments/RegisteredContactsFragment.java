@@ -35,7 +35,6 @@ import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
-import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestChatGetRoom;
 import com.iGap.request.RequestUserInfo;
 import com.mikepenz.fastadapter.FastAdapter;
@@ -310,13 +309,13 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
     }
 
     @Override
-    public void onAvatarDownload(String token, int offset, final ProtoFileDownload.FileDownload.Selector selector, int progress, final long userId, RoomType roomType) {
+    public void onAvatarDownload(String token, int offset, final ProtoFileDownload.FileDownload.Selector selector, int progress, final long userId) {
         G.currentActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 // if thumbnail
                 if (selector != ProtoFileDownload.FileDownload.Selector.FILE) {
-                    //fastAdapter.downloadingAvatar(userId, StructMessageAttachment.convert(realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst().getLastAvatar()));
+                    //fastAdapter.updateChatAvatar(userId, StructMessageAttachment.convert(realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst().getLastAvatar()));
                     Log.i("NNN", "set Avatar onAvatarDownload");
                     updateChatAvatar(userId);
                 }

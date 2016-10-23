@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -37,7 +36,6 @@ import com.iGap.realm.RealmAvatarPath;
 import com.iGap.realm.RealmAvatarPathFields;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
-import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestFileDownload;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -217,7 +215,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
     }
 
     @Override
-    public void onAvatarDownload(String token, int offset, ProtoFileDownload.FileDownload.Selector selector, int progress, long userId, RoomType roomType) {
+    public void onAvatarDownload(String token, int offset, ProtoFileDownload.FileDownload.Selector selector, int progress, long userId) {
         // empty
     }
 
@@ -320,11 +318,11 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
                     // if thumbnail exists, I load it into the view
                     if (media.attachment.isThumbnailExistsOnLocal()) {
                         ViewGroup view = (ViewGroup) layout.findViewById(R.id.sisl_touch_image_view).getParent();
-                        if (view != null) {
-                            int[] dimens = AndroidUtils.scaleDimenWithSavedRatio(layout.getContext(), media.attachment.width, media.attachment.height);
-                            view.setLayoutParams(new LinearLayout.LayoutParams(dimens[0], dimens[1]));
-                            view.requestLayout();
-                        }
+//                        if (view != null) {
+//                            int[] dimens = AndroidUtils.scaleDimenWithSavedRatio(layout.getContext(), media.attachment.width, media.attachment.height);
+//                            view.setLayoutParams(new LinearLayout.LayoutParams(dimens[0], dimens[1]));
+//                            view.requestLayout();
+//                        }
 
                         // load thumbnail from local
                         onLoadFromLocal(touchImageView, media.attachment.getLocalThumbnailPath(), LocalFileType.THUMBNAIL);

@@ -604,7 +604,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
                 StructContactInfo s = new StructContactInfo(rc.getId(), rc.getDisplay_name(), rc.getStatus(), false, false, rc.getPhone() + "");
                 s.role = role;
-
                 contacts.add(s);
             }
 

@@ -99,7 +99,7 @@ public class FragmentNotification extends Fragment {
                     setRealm(realm, realmGroupRoom, null, null);
                 } else {
 
-                    RealmNotificationSetting realmNotificationSetting = realmGroupRoom.getRealmNotificationSetting();
+                    realmNotificationSetting = realmGroupRoom.getRealmNotificationSetting();
                 }
                 getRealm();
 
@@ -113,10 +113,10 @@ public class FragmentNotification extends Fragment {
                 RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
                 if (realmChannelRoom.getRealmNotificationSetting() == null) {
                     setRealm(realm, null, realmChannelRoom, null);
+                } else {
+                    realmNotificationSetting = realmChannelRoom.getRealmNotificationSetting();
                 }
 
-
-                realmNotificationSetting = realmChannelRoom.getRealmNotificationSetting();
                 getRealm();
 
                 getRealm();
@@ -132,10 +132,10 @@ public class FragmentNotification extends Fragment {
 
                 if (realmChatRoom.getRealmNotificationSetting() == null) {
                     setRealm(realm, null, null, realmChatRoom);
+                } else {
+                    realmNotificationSetting = realmChatRoom.getRealmNotificationSetting();
                 }
 
-
-                realmNotificationSetting = realmChatRoom.getRealmNotificationSetting();
                 getRealm();
 
                 getRealm();
@@ -146,8 +146,6 @@ public class FragmentNotification extends Fragment {
         }
         //=================================================Realm
 
-
-        txtBack.setTypeface(G.fontawesome);
 
         txtBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,7 +162,6 @@ public class FragmentNotification extends Fragment {
         });
 
 
-        txtPopupNotification.setTypeface(G.arial);
         String popupNotification = realmNotification;
         txtPopupNotification.setText(popupNotification);
         ltPopupNotification.setOnClickListener(new View.OnClickListener() {
