@@ -19,9 +19,12 @@ import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 
 public class RequestQueue {
+
+    public static final CopyOnWriteArrayList<RequestWrapper> WAITING_REQUEST_WRAPPERS = new CopyOnWriteArrayList<>();
 
     public static synchronized void sendRequest(RequestWrapper... requestWrappers) throws IllegalAccessException {
         int length = requestWrappers.length;
@@ -80,14 +83,35 @@ public class RequestQueue {
             byte[] payload = (byte[]) toByteArrayMethod.invoke(protoInstance);
             byte[] message = HelperNumerical.appendByteArrays(actionId, payload);
 
-            if (G.isSecure) {
-                message = AESCrypt.encrypt(G.symmetricKey, message);
-                WebSocketClient.getInstance().sendBinary(message);
-                Log.i("SOC_REQ", "RequestQueue ********** sendRequest Secure successful **********");
-            } else if (G.unSecure.contains(requestWrapper.actionId + "")) {
-                WebSocketClient.getInstance().sendBinary(message);
-                Log.i("SOC_REQ", "RequestQueue ********** sendRequest unSecure successful **********");
+            // allowed requests (doesn't require login)
+            if (G.unSecure.contains(requestWrapper.actionId + "")) {
+                if (G.isSecure) {
+                    message = AESCrypt.encrypt(G.symmetricKey, message);
+                    WebSocketClient.getInstance().sendBinary(message);
+                    Log.i("SOC_REQ", "RequestQueue ********** sendRequest Secure successful **********");
+                } else if (G.unSecure.contains(requestWrapper.actionId + "")) {
+                    WebSocketClient.getInstance().sendBinary(message);
+                    Log.i("SOC_REQ", "RequestQueue ********** sendRequest unSecure successful **********");
+                }
+            } else {
+                if (G.userLogin) {
+                    if (G.isSecure) {
+                        message = AESCrypt.encrypt(G.symmetricKey, message);
+                        WebSocketClient.getInstance().sendBinary(message);
+                        Log.i("SOC_REQ", "RequestQueue ********** sendRequest Secure successful **********");
+                    } else if (G.unSecure.contains(requestWrapper.actionId + "")) {
+                        WebSocketClient.getInstance().sendBinary(message);
+                        Log.i("SOC_REQ", "RequestQueue ********** sendRequest unSecure successful **********");
+                    }
+
+                    // add to waiting request wrappers while user not logged-in yet
+                    WAITING_REQUEST_WRAPPERS.remove(requestWrapper);
+                } else {
+                    // add to waiting request wrappers while user not logged-in yet
+                    WAITING_REQUEST_WRAPPERS.add(requestWrapper);
+                }
             }
+
 
         } catch (NoSuchMethodException e) {
             e.printStackTrace();

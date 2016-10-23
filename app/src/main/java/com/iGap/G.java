@@ -81,6 +81,7 @@ import com.iGap.realm.RealmAvatarPath;
 import com.iGap.realm.RealmMigrationClass;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestClientCondition;
+import com.iGap.request.RequestQueue;
 import com.iGap.request.RequestUserContactsGetList;
 import com.iGap.request.RequestUserInfo;
 import com.iGap.request.RequestUserLogin;
@@ -443,6 +444,7 @@ public class G extends Application {
 
     private void fillUnSecureList() {
         unSecure.add("2");
+        unSecure.add("102");
     }
 
     private void fillSecuringInterface() {
@@ -478,6 +480,16 @@ public class G extends Application {
         };
     }
 
+    private void sendWaitingRequestWrappers() {
+        for (RequestWrapper requestWrapper : RequestQueue.WAITING_REQUEST_WRAPPERS) {
+            try {
+                RequestQueue.sendRequest(requestWrapper);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     private void login() { //TODO [Saeed Mozaffari] [2016-09-07 10:24 AM] - mitonim karhaie ke hamishe bad az login bayad anjam beshe ro dar classe login response gharar bedim
 
         G.onUserLogin = new OnUserLogin() {
@@ -491,6 +503,7 @@ public class G extends Application {
                         new RequestClientCondition().clientCondition();
                         getUserInfo();
                         importContact();
+                        sendWaitingRequestWrappers();
                     }
                 });
             }
