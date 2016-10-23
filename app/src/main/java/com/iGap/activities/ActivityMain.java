@@ -688,13 +688,11 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                     break;
             }
             info.color = realmRoom.getColor();
-            info.lastmessage = realmRoom.getLastMessage();
             info.lastMessageId = realmRoom.getLastMessageId();
             info.lastMessageTime = realmRoom.getLastMessageTime();
             info.lastMessageStatus = realmRoom.getLastMessageStatus();
             RealmRoomMessage lastMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, realmRoom.getLastMessageId()).findFirst();
             if (lastMessage != null) {
-                info.lastmessage = lastMessage.getMessage();
                 info.lastMessageTime = lastMessage.getUpdateTime();
                 info.lastMessageSenderIsMe = lastMessage.isSenderMe();
                 info.lastMessageStatus = lastMessage.getStatus();
@@ -779,14 +777,12 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         chatInfo.chatTitle = room.getTitle();
         chatInfo.initials = room.getInitials();
         chatInfo.lastMessageTime = room.getLastMessageTime(); //TODO [Saeed Mozaffari] [2016-10-03 5:38 PM] -  see this code later for avoid from multiple calling lastMessageTime and lastMessage and lastMessageStatus
-        chatInfo.lastmessage = room.getLastMessage();
         chatInfo.lastMessageId = room.getLastMessageId();
         chatInfo.lastMessageStatus = room.getLastMessageStatus();
         chatInfo.readOnly = room.getReadOnly();
         RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, room.getLastMessageId()).findFirst();
         if (roomMessage != null) {
             chatInfo.lastMessageTime = roomMessage.getUpdateTime();
-            chatInfo.lastmessage = roomMessage.getMessage();
             chatInfo.lastMessageId = room.getLastMessageId();
             chatInfo.lastMessageStatus = roomMessage.getStatus();
             chatInfo.lastMessageSenderIsMe = roomMessage.isSenderMe();

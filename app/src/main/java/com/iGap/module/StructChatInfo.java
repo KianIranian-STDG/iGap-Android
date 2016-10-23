@@ -21,7 +21,6 @@ public class StructChatInfo {
     public String color = "";
     public RoomType chatType = RoomType.CHAT;
     public String chatTitle = "";
-    public String lastmessage = "";
     public long lastMessageId;
     public long lastMessageTime;
     public boolean lastMessageSenderIsMe;
@@ -75,7 +74,6 @@ public class StructChatInfo {
         chatInfo.readOnly = builder.getReadOnly();
         chatInfo.muteNotification = false;
         chatInfo.color = builder.getColor();
-        chatInfo.lastmessage = builder.getLastMessage().getStatus().toString();
         chatInfo.lastMessageId = builder.getLastMessage().getMessageId();
         chatInfo.lastMessageTime = builder.getLastMessage().getUpdateTime();
         chatInfo.lastMessageStatus = builder.getLastMessage().getStatus().toString();
@@ -85,7 +83,6 @@ public class StructChatInfo {
         if (room != null) {
             RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, room.getLastMessageId()).findFirst();
             if (roomMessage != null) {
-                chatInfo.lastmessage = roomMessage.getMessage();
                 chatInfo.lastMessageId = roomMessage.getMessageId();
                 chatInfo.lastMessageTime = roomMessage.getUpdateTime();
                 chatInfo.lastMessageStatus = roomMessage.getStatus();
