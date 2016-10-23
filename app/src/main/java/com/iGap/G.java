@@ -52,6 +52,7 @@ import com.iGap.interface_package.OnReceiveInfoLocation;
 import com.iGap.interface_package.OnReceivePageInfoTOS;
 import com.iGap.interface_package.OnSecuring;
 import com.iGap.interface_package.OnUserAvatarDelete;
+import com.iGap.interface_package.OnUserAvatarGetList;
 import com.iGap.interface_package.OnUserAvatarResponse;
 import com.iGap.interface_package.OnUserContactDelete;
 import com.iGap.interface_package.OnUserContactEdit;
@@ -220,6 +221,7 @@ public class G extends Application {
     public static OnDeleteChatFinishActivity onDeleteChatFinishActivity;
     public static OnClientGetRoomHistoryResponse onClientGetRoomHistoryResponse;
     public static OnUserAvatarDelete onUserAvatarDelete;
+    public static OnUserAvatarGetList onUserAvatarGetList;
 
     public static final String DIR_SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static final String DIR_APP = DIR_SDCARD + "/iGap";

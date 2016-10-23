@@ -2467,7 +2467,9 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
     @Override
     public void onSenderAvatarClick(View view, StructMessageInfo messageInfo, int position) {
-        // TODO: 10/2/2016 [Alireza] implement later
+        Intent intent = new Intent(G.context, ActivityGroupProfile.class);
+        intent.putExtra("RoomId", mRoomId);
+        startActivity(intent);
     }
 
 

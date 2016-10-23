@@ -10,7 +10,7 @@ public class RequestUserAvatarGetList {
         ProtoUserAvatarGetList.UserAvatarGetList.Builder builder = ProtoUserAvatarGetList.UserAvatarGetList.newBuilder();
         builder.setUserId(userId);
 
-        RequestWrapper requestWrapper = new RequestWrapper(116, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(116, builder, userId + ""); // use from userId instead of identity
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

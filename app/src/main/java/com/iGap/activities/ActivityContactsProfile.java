@@ -40,6 +40,7 @@ import com.iGap.fragments.FragmentNotification;
 import com.iGap.fragments.FragmentShowImage;
 import com.iGap.interface_package.OnChatDelete;
 import com.iGap.interface_package.OnChatGetRoom;
+import com.iGap.interface_package.OnUserAvatarGetList;
 import com.iGap.interface_package.OnUserContactEdit;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.MaterialDesignTextView;
@@ -62,6 +63,7 @@ import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.request.RequestChatDelete;
 import com.iGap.request.RequestChatGetRoom;
+import com.iGap.request.RequestUserAvatarGetList;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -504,6 +506,23 @@ public class ActivityContactsProfile extends ActivityEnhanced {
 
         realm.close();
 
+        getAvatarList();
+    }
+
+    private void getAvatarList() {
+        G.onUserAvatarGetList = new OnUserAvatarGetList() {
+            @Override
+            public void onUserAvatarGetList() {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(G.context, "onUserAvatarGetList", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        };
+
+        new RequestUserAvatarGetList().userAddGetList(userId);
     }
 
     private void popUpMenu(final int layout, View v) {
