@@ -86,15 +86,32 @@
 
                 </LinearLayout>
 
-                <com.iGap.module.EmojiTextView
-                    android:id="@+id/cs_txt_last_message"
+                <LinearLayout
+                    android:orientation="horizontal"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="2dp"
-                    android:singleLine="true"
-                    android:text="LAST MESSAGE"
-                    android:textColor="#FF616161"
-                    android:textSize="@dimen/sp14"/>
+                    android:layout_height="wrap_content">
+
+                    <com.iGap.module.EmojiTextView
+                        android:id="@+id/cs_txt_last_message_sender"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="2dp"
+                        android:singleLine="true"
+                        android:textColor="#2bbfbd"
+                        android:textSize="@dimen/sp14" />
+
+                    <com.iGap.module.EmojiTextView
+                        android:id="@+id/cs_txt_last_message"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="2dp"
+                        android:singleLine="true"
+                        android:text="LAST MESSAGE"
+                        android:textColor="#FF616161"
+                        android:textSize="@dimen/sp14"
+                        android:layout_weight="1" />
+                </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout

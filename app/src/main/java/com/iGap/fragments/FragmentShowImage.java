@@ -317,13 +317,6 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
                     // file doesn't exist on local, I check for a thumbnail
                     // if thumbnail exists, I load it into the view
                     if (media.attachment.isThumbnailExistsOnLocal()) {
-                        ViewGroup view = (ViewGroup) layout.findViewById(R.id.sisl_touch_image_view).getParent();
-//                        if (view != null) {
-//                            int[] dimens = AndroidUtils.scaleDimenWithSavedRatio(layout.getContext(), media.attachment.width, media.attachment.height);
-//                            view.setLayoutParams(new LinearLayout.LayoutParams(dimens[0], dimens[1]));
-//                            view.requestLayout();
-//                        }
-
                         // load thumbnail from local
                         onLoadFromLocal(touchImageView, media.attachment.getLocalThumbnailPath(), LocalFileType.THUMBNAIL);
                     } else {

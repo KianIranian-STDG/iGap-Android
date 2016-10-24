@@ -1,6 +1,7 @@
 package com.iGap.adapter.items;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -17,6 +18,10 @@ import com.iGap.module.StructChatInfo;
 import com.iGap.module.StructDownloadAttachment;
 import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoFileDownload;
+import com.iGap.realm.RealmChatHistory;
+import com.iGap.realm.RealmChatHistoryFields;
+import com.iGap.realm.RealmRegisteredInfo;
+import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestFileDownload;
 import com.iGap.request.RequestUserInfo;
@@ -25,6 +30,10 @@ import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
+import io.realm.Sort;
 
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/``016.
@@ -138,6 +147,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> implem
         if (lastMessage == null || lastMessage.isEmpty()) {
             holder.messageStatus.setVisibility(View.GONE);
             holder.lastMessage.setVisibility(View.GONE);
+            holder.lastMessageSender.setVisibility(View.GONE);
         } else {
             if (mInfo.lastMessageSenderIsMe) {
                 AppUtils.rightMessageStatus(holder.messageStatus, mInfo.lastMessageStatus);
@@ -147,6 +157,43 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> implem
                 holder.messageStatus.setVisibility(View.GONE);
             }
 
+               /*
+                * here i get latest message from chat history with chatId and
+                * get DisplayName with that . when login app client get latest
+                * message for each group from server , if latest message that
+                * send server and latest message that exist in client for that
+                * room be different latest message sender showing will be wrong
+                */
+
+            String lastMessageSender = "";
+            Log.i("RRR", "mInfo.lastMessageSenderIsMe : " + mInfo.lastMessageSenderIsMe);
+            if (mInfo.lastMessageSenderIsMe) {
+                lastMessageSender = "You : ";
+            } else {
+                Realm realm = Realm.getDefaultInstance();
+                RealmResults<RealmChatHistory> results = realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, mInfo.chatId).findAllSorted(RealmChatHistoryFields.ID, Sort.DESCENDING);
+                if (results != null) {
+                    RealmChatHistory realmChatHistory = results.first();
+                    Log.i("RRR", "realmChatHistory 1 : " + realmChatHistory);
+                    Log.i("RRR", "realmChatHistory.getRoomMessage() 2 : " + realmChatHistory.getRoomMessage());
+                    if (realmChatHistory != null && realmChatHistory.getRoomMessage() != null) {
+                        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, realmChatHistory.getRoomMessage().getUserId()).findFirst();
+                        Log.i("RRR", "realmRegisteredInfo 3 : " + realmRegisteredInfo);
+                        if (realmRegisteredInfo != null) {
+                            Log.i("RRR", " realmRegisteredInfo.getDisplayName() 4 : " + realmRegisteredInfo.getDisplayName());
+                            lastMessageSender = realmRegisteredInfo.getDisplayName() + " : ";
+                        }
+                    }
+                }
+                realm.close();
+            }
+
+            if (mInfo.chatType == RoomType.GROUP) {
+                holder.lastMessageSender.setText(lastMessageSender);
+                holder.lastMessageSender.setVisibility(View.VISIBLE);
+            } else {
+                holder.lastMessageSender.setVisibility(View.GONE);
+            }
             holder.lastMessage.setVisibility(View.VISIBLE);
             holder.lastMessage.setText(lastMessage);
         }
@@ -182,13 +229,14 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> implem
         }
 
         if (mInfo.chatType == RoomType.CHAT) {
-            holder.chatIcon.setText(getStringChatIcon(RoomType.CHAT));
-            holder.chatIcon.setTypeface(G.flaticon);
+            holder.chatIcon.setVisibility(View.GONE);
         } else if (mInfo.chatType == RoomType.GROUP) {
+            holder.chatIcon.setVisibility(View.VISIBLE);
             holder.chatIcon.setText(getStringChatIcon(RoomType.GROUP));
             holder.chatIcon.setTypeface(G.flaticon);
 
         } else if (mInfo.chatType == RoomType.CHANNEL) {
+            holder.chatIcon.setVisibility(View.VISIBLE);
             holder.chatIcon.setText(getStringChatIcon(RoomType.CHANNEL));
             holder.chatIcon.setTypeface(G.fontawesome);
 
@@ -237,6 +285,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> implem
         protected EmojiTextView name;
         protected TextView mute;
         protected EmojiTextView lastMessage;
+        protected EmojiTextView lastMessageSender;
         protected TextView lastSeen;
         protected TextView unreadMessage;
         protected MaterialDesignTextView messageStatus;
@@ -249,6 +298,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> implem
             chatIcon = (TextView) view.findViewById(R.id.cs_txt_contact_icon);
             name = (EmojiTextView) view.findViewById(R.id.cs_txt_contact_name);
             lastMessage = (EmojiTextView) view.findViewById(R.id.cs_txt_last_message);
+            lastMessageSender = (EmojiTextView) view.findViewById(R.id.cs_txt_last_message_sender);
             lastSeen = (TextView) view.findViewById(R.id.cs_txt_contact_time);
             unreadMessage = (TextView) view.findViewById(R.id.cs_txt_unread_message);
             mute = (TextView) view.findViewById(R.id.cs_txt_mute);
