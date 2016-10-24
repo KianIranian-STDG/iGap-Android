@@ -1,6 +1,8 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
 
+    <dimen name="design_fab_size_mini">62dp</dimen>
+    <dimen name="design_fab_size_normal">88dp</dimen>
 
     <dimen name="sp8">16sp</dimen>
     <dimen name="sp10">20sp</dimen>

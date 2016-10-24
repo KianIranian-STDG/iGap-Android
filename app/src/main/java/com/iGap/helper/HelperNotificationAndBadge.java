@@ -104,7 +104,7 @@ public class HelperNotificationAndBadge {
 
         } else {
 
-            remoteViews.setTextViewText(R.id.ln_txt_header, " " + G.context.getString(R.string.igap));
+            remoteViews.setTextViewText(R.id.ln_txt_header, G.context.getString(R.string.igap));
             remoteViews.setTextViewText(R.id.ln_txt_time, list.get(list.size() - 1).time);
 
             String s = "";

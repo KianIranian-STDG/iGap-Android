@@ -284,7 +284,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:singleLine="true"
-                                android:text="@string/messages"
+                                android:text="@string/member"
                                 android:textSize="@dimen/sp16" />
 
                             <TextView

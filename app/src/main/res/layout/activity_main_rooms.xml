@@ -123,7 +123,6 @@
             android:id="@+id/ac_fab_start_new_chat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:fabSize="normal"
             android:src="@mipmap/single_chat"
             app:backgroundTint="@color/green"
             app:elevation="@dimen/dp6" />
@@ -134,15 +133,13 @@
             android:layout_height="wrap_content"
             android:src="@mipmap/group_chat"
             app:backgroundTint="@color/green"
-            app:elevation="@dimen/dp6"
-            app:fabSize="normal" />
+            app:elevation="@dimen/dp6" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/ac_fab_crate_new_channel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/channel_white"
-            app:fabSize="normal"
             app:elevation="@dimen/dp6"
             app:backgroundTint="@color/green" />
 

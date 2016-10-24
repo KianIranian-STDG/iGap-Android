@@ -11,7 +11,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -100,37 +99,10 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     public static boolean isMenuButtonAddShown = false;
 
 
-    public static double screenInches = 0;
-
-    private void getScreenInch() {
-
-        DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
-        double x = Math.pow(dm.widthPixels / dm.xdpi, 2);
-        double y = Math.pow(dm.heightPixels / dm.ydpi, 2);
-        ActivityMain.screenInches = Math.sqrt(x + y);
-
-        Log.e("dddd", ActivityMain.screenInches + "              aaaaaaaaaa");
-
-
-        if (ActivityMain.screenInches > 6.7) {
-
-            arcMenu.fabMenu.setSize(FloatingActionButton.SIZE_MINI);// in demension it is 80 dp
-            btnStartNewChat.setSize(FloatingActionButton.SIZE_MINI);
-            btnCreateNewGroup.setSize(FloatingActionButton.SIZE_MINI);
-            btnCreateNewChannel.setSize(FloatingActionButton.SIZE_MINI);
-            Log.e("dddd", ActivityMain.screenInches + "              bbbbbbbbbb");
-        }
-
-    }
-
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         mediaLayout = (LinearLayout) findViewById(R.id.amr_ll_music_layout);
         musicPlayer = new MusicPlayer(mediaLayout);
@@ -733,8 +705,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         if (MusicPlayer.mp != null) {
             MusicPlayer.initLayoutTripMusic(mediaLayout);
         }
-
-        getScreenInch();
 
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
         G.chatSendMessageUtil.setOnChatSendMessageResponse(this);

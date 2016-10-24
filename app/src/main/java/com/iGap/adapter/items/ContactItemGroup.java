@@ -2,8 +2,8 @@ package com.iGap.adapter.items;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.CheckBox;
 
+import com.hanks.library.AnimateCheckBox;
 import com.iGap.R;
 import com.iGap.helper.HelperImageBackColor;
 import com.iGap.module.CircleImageView;
@@ -40,6 +40,8 @@ public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItem
     @Override
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
+
+        holder.checkBoxSelect.setChecked(true);
 
         if (mContact.isHeader) {
             holder.topLine.setVisibility(View.VISIBLE);
@@ -81,7 +83,7 @@ public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItem
         protected CustomTextViewMedium title;
         protected CustomTextViewMedium subtitle;
         protected View topLine;
-        protected CheckBox checkBoxSelect;
+        protected AnimateCheckBox checkBoxSelect;
 
         public ViewHolder(View view) {
             super(view);
@@ -90,7 +92,7 @@ public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItem
             title = (CustomTextViewMedium) view.findViewById(R.id.title);
             subtitle = (CustomTextViewMedium) view.findViewById(R.id.subtitle);
             topLine = (View) view.findViewById(R.id.topLine);
-            checkBoxSelect = (CheckBox) view.findViewById(R.id.cig_checkBox_select_user);
+            checkBoxSelect = (AnimateCheckBox) view.findViewById(R.id.cig_checkBox_select_user);
         }
     }
 }

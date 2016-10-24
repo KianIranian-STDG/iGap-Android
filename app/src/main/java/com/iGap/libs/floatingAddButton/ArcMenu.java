@@ -120,7 +120,6 @@ public class ArcMenu extends FrameLayout {
             fabMenu.setStateListAnimator(null);
         }
 
-        fabMenu.setSize(FloatingActionButton.SIZE_NORMAL);
 
         addView(fabMenu);
     }

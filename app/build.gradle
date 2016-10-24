@@ -54,4 +54,5 @@ dependencies {
     compile 'com.android.support:support-v4:24.2.1'
     compile 'com.makeramen:roundedimageview:2.2.1'
     compile 'dk.ilios:realmfieldnameshelper:1.1.0'
+    compile 'com.hanks.animatecheckbox:library:0.1'
 }

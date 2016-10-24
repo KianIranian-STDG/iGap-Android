@@ -13,7 +13,9 @@
 
     <dimen name="messageContainerPadding">@dimen/dp6</dimen>
 
-    <dimen name="design_fab_size_mini">75dp</dimen>
+    <dimen name="design_fab_size_mini">44dp</dimen>
+    <dimen name="design_fab_size_normal">62dp</dimen>
+
 
     <dimen name="sp8">8sp</dimen>
     <dimen name="sp10">10sp</dimen>
