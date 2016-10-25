@@ -26,6 +26,8 @@ import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.MusicPlayer;
 import com.iGap.module.OnComplete;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 public class ActivityMediaPlayer extends ActivityEnhanced {
 
     private TextView txt_MusicName;
@@ -42,6 +44,11 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
     Button btnShuffle;
 
     OnComplete onComplete;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

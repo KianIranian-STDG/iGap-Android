@@ -60,6 +60,7 @@
                         android:layout_gravity="bottom"
                         android:paddingBottom="2dp"
                         android:textColor="@android:color/black"
+                        android:layout_marginRight="@dimen/dp8"
                         android:textSize="@dimen/sp14"/>
 
                     <com.iGap.module.EmojiTextView

@@ -783,6 +783,7 @@
         android:layout_margin="@dimen/dp20"
         android:background="?attr/selectableItemBackground"
         android:clickable="true"
+        app:fabSize="normal"
         android:src="@mipmap/pu_camera"
         android:theme="@style/FabButton"
         android:tint="@color/gray"

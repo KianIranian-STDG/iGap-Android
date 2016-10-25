@@ -55,6 +55,7 @@
                         <com.iGap.module.MaterialDesignTextView
                             android:id="@+id/acs_btn_back"
                             android:layout_width="@dimen/dp60"
+                            fontPath="fonts/Flaticon.ttf"
                             android:layout_height="match_parent"
                             android:background="@null"
                             android:gravity="center"
@@ -93,6 +94,7 @@
                             android:layout_height="match_parent"
                             android:background="@null"
                             android:gravity="center"
+                            fontPath="fonts/Flaticon.ttf"
                             android:text="@string/md_check_box"
                             android:textColor="@android:color/white"
                             android:textSize="@dimen/sp18" />

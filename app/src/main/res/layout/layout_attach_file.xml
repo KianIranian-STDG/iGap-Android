@@ -35,7 +35,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/dp8"
-                android:text="@string/md_emoticon_with_happy_face"/>
+                android:text="@string/md_emoticon_with_happy_face"
+                fontPath="fonts/Flaticon.ttf" />
 
             <com.iGap.module.EmojiEditText
                 android:id="@+id/chl_edt_chat"
@@ -73,6 +74,7 @@
                     android:layout_weight="1"
                     android:padding="@dimen/dp8"
                     android:rotation="135"
+                    fontPath="fonts/Flaticon.ttf"
                     android:text="@string/md_attachment_clip"/>
 
                 <com.nightonke.boommenu.BoomMenuButton
@@ -91,6 +93,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:padding="@dimen/dp8"
+                    fontPath="fonts/Flaticon.ttf"
                     android:text="@string/md_voice_message_microphone_button"/>
 
 

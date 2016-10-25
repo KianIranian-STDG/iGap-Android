@@ -1,5 +1,6 @@
 package com.iGap.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -19,6 +20,8 @@ import com.iGap.module.StructAdapterBackground;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityChatBackground extends ActivityEnhanced {
 
@@ -46,6 +49,10 @@ public class ActivityChatBackground extends ActivityEnhanced {
 
     }
 
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -34,6 +35,7 @@ import com.uncopt.android.widget.text.justify.JustifiedTextView;
 import java.util.Locale;
 
 import io.realm.Realm;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityIntroduce extends ActivityEnhanced {
 
@@ -68,6 +70,10 @@ public class ActivityIntroduce extends ActivityEnhanced {
     static final String KEY_SAVE = "SAVE";
     static int ONETIME = 1;
 
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

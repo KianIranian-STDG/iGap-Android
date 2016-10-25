@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,6 +65,8 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
     private int lastSpecialRequestsCursorPosition = 0;
     private String specialRequests;
 
+    private ProgressBar prgWaiting;
+
     public static FragmentNewGroup newInstance() {
         return new FragmentNewGroup();
     }
@@ -93,6 +96,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
 
     public void initComponent(View view) {
 
+        prgWaiting = (ProgressBar) view.findViewById(R.id.prgWaiting);
 
         txtBack = (MaterialDesignTextView) view.findViewById(R.id.ng_txt_back);
         RippleView rippleBack = (RippleView) view.findViewById(R.id.ng_ripple_back);
@@ -112,7 +116,6 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
         });
 
         txtTitleToolbar = (TextView) view.findViewById(R.id.ng_txt_titleToolbar);
-        txtTitleToolbar.setTypeface(G.arial);
         if (prefix.equals("NewChanel")) {
             txtTitleToolbar.setText(getResources().getString(R.string.New_Chanel));
         } else {
@@ -216,7 +219,6 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
             }
         });
 
-        edtDescription.setTypeface(G.arial);
         edtDescription.setSingleLine(false);
         edtDescription.setImeOptions(EditorInfo.IME_FLAG_NO_ENTER_ACTION);
         edtDescription.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
@@ -225,13 +227,11 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
         //=======================button next step
 
         txtNextStep = (TextView) view.findViewById(R.id.ng_txt_nextStep);
-        txtNextStep.setTypeface(G.arial);
-        txtNextStep.setOnClickListener(new View.OnClickListener()
-
-                                       {
+        txtNextStep.setOnClickListener(new View.OnClickListener() {
                                            @Override
                                            public void onClick(View view) {
 
+                                               prgWaiting.setVisibility(View.VISIBLE);
 
                                                if (edtDescription.getText().toString().length() > 0) {
                                                    if (edtGroupName.getText().toString().length() > 0) {
@@ -269,7 +269,6 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
         );
         //=======================button cancel
         txtCancel = (TextView) view.findViewById(R.id.ng_txt_cancel);
-        txtCancel.setTypeface(G.arial);
         txtCancel.setOnClickListener(new View.OnClickListener()
 
                                      {
@@ -295,6 +294,13 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
             public void onGroupCreate(long roomId) {
                 getRoom(roomId);
             }
+
+            @Override
+            public void onErrorGroupCreate() {
+
+                prgWaiting.setVisibility(View.GONE);
+            }
+
         };
 
         new RequestGroupCreate().groupCreate(edtGroupName.getText().toString(), edtDescription.getText().toString());
@@ -313,6 +319,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
                 fragment.setArguments(bundle);
                 getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
                 ActivityMain.mLeftDrawerLayout.closeDrawer();
+                prgWaiting.setVisibility(View.GONE);
                 getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
             }
         };

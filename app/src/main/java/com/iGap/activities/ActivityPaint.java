@@ -44,6 +44,8 @@ import com.iGap.module.ColorPiker;
 import java.io.File;
 import java.io.FileOutputStream;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 
 /**
  * for draw a paint and send to other user or save in device folder
@@ -62,6 +64,11 @@ public class ActivityPaint extends Activity {
     private FrameLayout frameLayout;
 
     AttachFile attachFile;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

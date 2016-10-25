@@ -51,6 +51,7 @@
                     android:layout_alignParentLeft="true"
                     android:gravity="center"
                     android:text="@string/md_back_arrow"
+                    fontPath="fonts/Flaticon.ttf"
                     android:textColor="@color/whit_background"
                     android:textSize="@dimen/sp18" />
 
@@ -73,6 +74,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="@string/md_check_symbol"
+                    fontPath="fonts/Flaticon.ttf"
                     android:textColor="@color/whit_background"
                     android:textSize="@dimen/sp18" />
 

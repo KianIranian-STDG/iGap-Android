@@ -1,5 +1,6 @@
 package com.iGap.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -80,6 +81,7 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnFileDownloadResponse, OnUserInfoResponse {
 
@@ -98,6 +100,11 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
     public static boolean isMenuButtonAddShown = false;
 
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

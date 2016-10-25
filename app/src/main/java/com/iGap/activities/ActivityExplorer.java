@@ -1,6 +1,7 @@
 package com.iGap.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,6 +22,8 @@ import com.iGap.module.StructExplorerItem;
 import java.io.File;
 import java.util.ArrayList;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 /**
  * Created by android3 on 9/7/2016.
  */
@@ -38,6 +41,11 @@ public class ActivityExplorer extends ActivityEnhanced {
     StructExplorerItem x;
     RecyclerView recyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

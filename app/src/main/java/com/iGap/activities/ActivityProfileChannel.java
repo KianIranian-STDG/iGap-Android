@@ -29,6 +29,8 @@ import com.iGap.R;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.MaterialDesignTextView;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 public class ActivityProfileChannel extends AppCompatActivity {
 
     private AppBarLayout appBarLayout;
@@ -40,6 +42,10 @@ public class ActivityProfileChannel extends AppCompatActivity {
     private Spannable wordtoSpan;
     private MaterialDesignTextView txtBack;
 
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

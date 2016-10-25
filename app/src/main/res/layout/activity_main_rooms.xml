@@ -41,6 +41,7 @@
                         android:id="@+id/cl_btn_menu"
                         android:layout_width="@dimen/dp60"
                         android:gravity="center"
+                        fontPath="fonts/Flaticon.ttf"
                         android:layout_height="match_parent"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:text="@string/md_menu_button"
@@ -78,6 +79,7 @@
                         android:layout_height="match_parent"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:text="@string/md_searching_magnifying_glass"
+                        fontPath="fonts/Flaticon.ttf"
                         android:gravity="center"
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/sp18" />

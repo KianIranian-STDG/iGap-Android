@@ -32,6 +32,8 @@ import com.larswerkman.holocolorpicker.ColorPicker;
 import com.larswerkman.holocolorpicker.OpacityBar;
 import com.larswerkman.holocolorpicker.SVBar;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 public class ActivitySettingNotification extends AppCompatActivity {
 
     private TextView txtBack, txtVibrateMessage, txtPopupNotification, txtVibrateGroup, txtPopupNotificationGroup, txtSoundGroup, txtSoundMessage, txtRepeat_Notifications;
@@ -54,6 +56,11 @@ public class ActivitySettingNotification extends AppCompatActivity {
     private ToggleButton tgAlert, tgMessagePreview, tgAlert_group, tgMessagePreview_group, tgApp_sound, tgApp_Vibrate, tgApp_preview, tgChat_sound, tgContact_joined, tgPinned_message, tgKeep_alive_service, tgBackground_connection, tgBadge_content;
 
     private SharedPreferences sharedPreferences;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

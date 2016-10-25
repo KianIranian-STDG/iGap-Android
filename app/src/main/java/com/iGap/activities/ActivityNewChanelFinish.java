@@ -25,6 +25,7 @@ public class ActivityNewChanelFinish extends ActivityEnhanced {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

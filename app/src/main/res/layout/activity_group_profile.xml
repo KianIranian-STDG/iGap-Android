@@ -97,6 +97,7 @@
                                 android:id="@+id/agp_btn_back"
                                 android:layout_width="@dimen/dp60"
                                 android:layout_height="match_parent"
+                                fontPath="fonts/Flaticon.ttf"
                                 android:layout_alignParentLeft="true"
                                 android:gravity="center"
                                 android:text="@string/md_back_arrow"
@@ -130,6 +131,7 @@
                             <com.iGap.module.MaterialDesignTextView
                                 android:id="@+id/agp_btn_menu"
                                 android:layout_width="@dimen/dp60"
+                                fontPath="fonts/Flaticon.ttf"
                                 android:layout_height="match_parent"
                                 android:gravity="center"
                                 android:text="@string/md_show_more_button"

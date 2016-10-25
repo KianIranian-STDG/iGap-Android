@@ -6,6 +6,13 @@
         <item name="colorPrimary">@color/green</item>
         <item name="colorPrimaryDark">@color/greenStatus</item>
         <item name="colorAccent">@color/green</item>
+        <item name="android:textViewStyle">@style/AppTheme.Widget.TextView</item>
+    </style>
+
+    <style name="AppTheme.Widget" />
+
+    <style name="AppTheme.Widget.TextView" parent="android:Widget.Holo.Light.TextView">
+        <item name="fontPath">fonts/iransanslite.ttf</item>
     </style>
 
     <style name="AppTheme" parent="BaseTheme">

@@ -8,6 +8,13 @@
     android:fitsSystemWindows="false"
     android:layoutDirection="ltr">
 
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:id="@+id/prgWaiting"
+        android:visibility="gone" />
+
 
     <ScrollView
         android:layout_width="match_parent"
@@ -63,24 +70,24 @@
                 android:id="@+id/ng_txtInput_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp12"
                 android:layout_below="@+id/ng_txtInput_newGroup"
+                android:layout_marginTop="@dimen/dp12"
                 android:hint="Description">
 
                 <com.iGap.module.LinedEditText
-                    android:layout_below="@+id/ng_txtInput_newGroup"
                     android:id="@+id/ng_edt_description"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp100"
+                    android:layout_below="@+id/ng_txtInput_newGroup"
                     android:layout_marginLeft="@dimen/dp20"
                     android:layout_marginRight="@dimen/dp20"
                     android:background="@android:color/transparent"
                     android:ems="4"
                     android:gravity="top"
+                    android:lineSpacingMultiplier="1.2"
                     android:lines="4"
                     android:maxLength="500"
                     android:maxLines="4"
-                    android:lineSpacingMultiplier="1.2"
                     android:paddingTop="0dp" />
 
             </android.support.design.widget.TextInputLayout>
@@ -120,13 +127,13 @@
         android:id="@+id/ng_backgroundToolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp60"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:background="@color/toolbar_background"
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp"
-        app:layout_collapseMode="pin"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        app:layout_collapseMode="pin">
 
         <RelativeLayout
             android:layout_width="match_parent"

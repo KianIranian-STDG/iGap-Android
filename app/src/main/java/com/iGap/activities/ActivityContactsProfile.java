@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -74,6 +75,7 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmList;
 import io.realm.RealmResults;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityContactsProfile extends ActivityEnhanced {
     private long userId = 0;
@@ -101,6 +103,10 @@ public class ActivityContactsProfile extends ActivityEnhanced {
     private String avatarPath;
     private RealmList<RealmAvatar> avatarList;
 
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

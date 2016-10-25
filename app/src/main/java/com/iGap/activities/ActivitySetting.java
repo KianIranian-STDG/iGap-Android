@@ -17,13 +17,17 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputLayout;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -174,79 +178,185 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         if (userName != null) txtUserName.setText(userName);
         if (phoneName != null) txtPhoneNumber.setText(phoneName);
 
+
         txtNickName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this)
+                final LinearLayout layoutNickname = new LinearLayout(ActivitySetting.this);
+                layoutNickname.setOrientation(LinearLayout.VERTICAL);
+
+                String splitNickname[] = txtNickName.getText().toString().split(" ");
+                String firsName = "";
+                String lastName = "";
+                StringBuilder stringBuilder = null;
+                if (splitNickname.length > 1) {
+
+                    lastName = splitNickname[splitNickname.length - 1];
+                    stringBuilder = new StringBuilder();
+                    for (int i = 0; i < splitNickname.length - 1; i++) {
+
+                        stringBuilder.append(splitNickname[i]).append(" ");
+
+                    }
+                    firsName = stringBuilder.toString();
+                } else {
+                    firsName = splitNickname[0];
+
+                }
+
+
+                TextInputLayout inputFirstName = new TextInputLayout(ActivitySetting.this);
+                final EditText edtFirstName = new EditText(ActivitySetting.this);
+                edtFirstName.setHint(firsName);
+
+                edtFirstName.setSingleLine(true);
+                inputFirstName.addView(edtFirstName);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    edtFirstName.setBackground(getResources().getDrawable(R.drawable.edittext_bg));
+                }
+
+                View viewFirstName = new View(ActivitySetting.this);
+                viewFirstName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
+
+                TextInputLayout inputLastName = new TextInputLayout(ActivitySetting.this);
+                final EditText edtLastName = new EditText(ActivitySetting.this);
+                edtLastName.setHint(lastName);
+                edtLastName.setSingleLine(true);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    edtLastName.setBackground(getResources().getDrawable(R.drawable.edittext_bg));
+                }
+                inputLastName.addView(edtLastName);
+
+
+                View viewLastName = new View(ActivitySetting.this);
+                viewLastName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
+
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                layoutParams.setMargins(0, 0, 0, 30);
+
+                layoutNickname.addView(inputFirstName, layoutParams);
+                layoutNickname.addView(inputLastName, layoutParams);
+
+
+                final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this)
                         .title("Nickname")
                         .positiveText("SAVE")
-                        .alwaysCallInputCallback()
+                        .customView(layoutNickname, true)
                         .widgetColor(getResources().getColor(R.color.toolbar_background))
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        .negativeText("CANCEL")
+                        .build();
+
+                final View positive = dialog.getActionButton(DialogAction.POSITIVE);
+                positive.setClickable(false);
+                positive.setAlpha(0.5f);
+
+                final String finalFirsName = firsName;
+                edtFirstName.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {
+
+                        if (!edtFirstName.getText().toString().equals(finalFirsName)) {
+                            positive.setClickable(true);
+                            positive.setAlpha(1.0f);
+                        } else {
+                            positive.setClickable(false);
+                            positive.setAlpha(0.5f);
+                        }
+
+                    }
+                });
+
+
+                final String finalLastName = lastName;
+                edtLastName.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {
+                        if (!edtLastName.getText().toString().equals(finalLastName)) {
+                            positive.setClickable(true);
+                            positive.setAlpha(1.0f);
+                        } else {
+                            positive.setClickable(false);
+                            positive.setAlpha(0.5f);
+                        }
+                    }
+                });
+
+                final String finalLastName1 = lastName;
+                final String finalFirsName1 = firsName;
+                positive.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        String fullName = "";
+                        if (edtFirstName.length() == 0) {
+
+                            fullName = finalFirsName1 + " " + edtLastName.getText().toString();
+                        }
+                        if (edtLastName.length() == 0) {
+                            fullName = edtFirstName.getText().toString() + " " + finalLastName1;
+                        }
+                        if (edtLastName.length() > 0 && edtFirstName.length() > 0) {
+                            fullName = edtFirstName.getText().toString() + " " + edtLastName.getText().toString();
+                        }
+
+                        G.onUserProfileSetNickNameResponse = new OnUserProfileSetNickNameResponse() {
                             @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                                G.onUserProfileSetNickNameResponse = new OnUserProfileSetNickNameResponse() {
+                            public void onUserProfileNickNameResponse(final String nickName, ProtoResponse.Response response) {
+                                Log.i("CCCC", "1212: " + nickName);
+                                runOnUiThread(new Runnable() {
                                     @Override
-                                    public void onUserProfileNickNameResponse(final String nickName, ProtoResponse.Response response) {
+                                    public void run() {
 
-                                        runOnUiThread(new Runnable() {
+                                        Realm realm1 = Realm.getDefaultInstance();
+                                        realm1.executeTransaction(new Realm.Transaction() {
                                             @Override
-                                            public void run() {
-
-                                                Realm realm1 = Realm.getDefaultInstance();
-                                                realm1.executeTransaction(new Realm.Transaction() {
-                                                    @Override
-                                                    public void execute(Realm realm) {
-                                                        realm.where(RealmUserInfo.class).findFirst().setNickName(nickName);
-                                                        Log.i("AAAAA", "0: " + nickName);
-                                                        txtNickNameTitle.setText(nickName);
-                                                        FragmentDrawerMenu.txtUserName.setText(nickName);
-                                                    }
-                                                });
-
-                                                realm1.close();
-                                                txtNickName.setText(nickName);
-//
-                                                Log.i("AAAAA", "1: " + nickName);
+                                            public void execute(Realm realm) {
+                                                realm.where(RealmUserInfo.class).findFirst().setNickName(nickName);
+                                                txtNickNameTitle.setText(nickName);
+                                                FragmentDrawerMenu.txtUserName.setText(nickName);
+                                                Log.i("CCCC", "5445: " + nickName);
                                             }
                                         });
+
+                                        realm1.close();
+                                        txtNickName.setText(nickName);
                                     }
-
-                                    @Override
-                                    public void onUserProfileNickNameError(int majorCode, int minorCode) {
-
-                                    }
-                                };
-
-                                Log.i("HHH", "txtNickName.getText().toString() : " + inputText.toString());
-                                new RequestUserProfileSetNickname().userProfileNickName(inputText.toString());
-                                Log.i("AAAAA", "1: " + nickName);
+                                });
                             }
-                        })
-                        .negativeText("CANCEL")
-                        .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT)
-                        .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT)
-                        .input("please Enter a NickName", txtNickName.getText().toString(), new MaterialDialog.InputCallback() {
+
                             @Override
-                            public void onInput(MaterialDialog dialog, CharSequence input) {
-                                // Do something
-                                inputText = input;
-                                View positive = dialog.getActionButton(DialogAction.POSITIVE);
-
-                                if (!input.toString().equals(txtNickName.getText().toString())) {
-
-                                    positive.setClickable(true);
-                                    positive.setAlpha(1.0f);
-                                } else {
-                                    positive.setClickable(false);
-                                    positive.setAlpha(0.5f);
-                                }
+                            public void onUserProfileNickNameError(int majorCode, int minorCode) {
 
                             }
+                        };
+                        new RequestUserProfileSetNickname().userProfileNickName(fullName);
+                        Log.i("CCCC", "fullName: " + fullName);
+                        dialog.dismiss();
+                    }
+                });
 
-                        }).build();
                 dialog.show();
             }
         });
@@ -1102,6 +1212,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         realm.close();
     }
 
+
     //dialog for choose pic from gallery or camera
     private void startDialog(int r) {
 
@@ -1316,6 +1427,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         }
         realm.close();
     }
+
     public ArrayList<StructMessageInfo> setItem() {
 
         ArrayList<StructMessageInfo> items = new ArrayList<>();

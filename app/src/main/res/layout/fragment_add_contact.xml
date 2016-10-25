@@ -47,6 +47,7 @@
                     android:layout_width="@dimen/dp60"
                     android:layout_height="match_parent"
                     android:layout_alignParentLeft="true"
+                    fontPath="fonts/Flaticon.ttf"
                     android:gravity="center"
                     android:text="@string/md_back_arrow"
                     android:textColor="@color/whit_background"
@@ -70,6 +71,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="@string/md_check_symbol"
+                    fontPath="fonts/Flaticon.ttf"
                     android:textColor="@color/whit_background"
                     android:textSize="@dimen/sp18" />
             </com.iGap.libs.rippleeffect.RippleView>

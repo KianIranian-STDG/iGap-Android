@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.iGap.module.NotTouchableCoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ac_ll_parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@mipmap/back_chat3"
     android:fitsSystemWindows="true"
+    tools:ignore="MissingPrefix"
     android:layoutDirection="ltr">
 
     <com.iGap.module.MyAppBarLayout
@@ -44,6 +46,7 @@
                         android:id="@+id/chl_imv_back_Button"
                         android:layout_width="@dimen/dp48"
                         android:layout_height="match_parent"
+                        fontPath="fonts/Flaticon.ttf"
                         android:gravity="center"
                         android:text="@string/md_back_arrow"
                         android:textColor="@color/whit_background"
@@ -95,6 +98,7 @@
                             android:id="@+id/imgMutedRoom"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            fontPath="fonts/Flaticon.ttf"
                             android:text="@string/md_flaticon_volume_off_indicator"
                             android:textColor="@android:color/darker_gray"
                             android:visibility="gone" />
@@ -140,6 +144,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/md_show_more_button"
+                        fontPath="fonts/Flaticon.ttf"
                         android:textColor="@color/whit_background"
                         android:textSize="@dimen/sp18" />
 
@@ -412,6 +417,7 @@
                 android:background="@null"
                 android:gravity="center"
                 android:text="@string/fa_chevron_up"
+                fontPath="fonts/fontawesome.ttf"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/sp20" />
 
@@ -433,6 +439,7 @@
                 android:background="@null"
                 android:gravity="center"
                 android:text="@string/fa_chevron_down"
+                fontPath="fonts/fontawesome.ttf"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/sp20" />
         </LinearLayout>

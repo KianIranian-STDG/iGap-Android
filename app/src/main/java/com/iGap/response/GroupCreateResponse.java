@@ -31,5 +31,7 @@ public class GroupCreateResponse extends MessageHandler {
     @Override
     public void error() {
         Log.i("XXX", "GroupCreateResponse error : " + message);
+
+        G.onGroupCreate.onErrorGroupCreate();
     }
 }

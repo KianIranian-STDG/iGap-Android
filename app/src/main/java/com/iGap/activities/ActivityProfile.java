@@ -1,5 +1,6 @@
 package com.iGap.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -39,6 +40,7 @@ import java.security.NoSuchAlgorithmException;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarResponse, OnFileUploadForActivities {
 
@@ -58,6 +60,11 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
     private int idAvatar;
 
     public static Bitmap decodeBitmapProfile = null;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

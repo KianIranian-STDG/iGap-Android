@@ -48,12 +48,13 @@
                     app:rv_ripplePadding="5dp">
 
                     <com.iGap.module.MaterialDesignTextView
-                    android:id="@+id/asm_btn_back"
-                    android:layout_width="@dimen/dp60"
-                    android:layout_height="match_parent"
+                        android:id="@+id/asm_btn_back"
+                        android:layout_width="@dimen/dp60"
+                        android:layout_height="match_parent"
                         android:gravity="center"
+                        fontPath="fonts/Flaticon.ttf"
                         android:text="@string/md_back_arrow"
-                    android:textColor="@android:color/white"
+                        android:textColor="@android:color/white"
                         android:textSize="@dimen/sp18" />
 
                 </com.iGap.libs.rippleeffect.RippleView>
@@ -86,6 +87,7 @@
                         android:layout_height="match_parent"
                         android:background="@null"
                         android:gravity="center"
+                        fontPath="fonts/Flaticon.ttf"
                         android:text="@string/md_show_more_button"
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/sp18" />

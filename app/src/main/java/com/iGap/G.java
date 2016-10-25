@@ -357,37 +357,42 @@ public class G extends Application {
 
         String language = sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, "en");
 
-        if (language.equals("فارسی")) {
-            CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                    .setDefaultFontPath("fonts/neuropol.ttf")
-                    .setFontAttrId(R.attr.fontPath)
-                    .build()
-            );
-            setLocale("fa");
+        switch (language) {
+            case "فارسی":
+                CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                        .setDefaultFontPath("fonts/iransanslite.ttf")
+                        .setFontAttrId(R.attr.fontPath)
+                        .build()
+                );
+                setLocale("fa");
 
-        } else if (language.equals("English")) {
-            CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                    .setDefaultFontPath("fonts/neuropol.ttf")
-                    .setFontAttrId(R.attr.fontPath)
-                    .build()
-            );
-            setLocale("en");
-        } else if (language.equals("العربی")) {
-            CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                    .setDefaultFontPath("fonts/neuropol.ttf")
-                    .setFontAttrId(R.attr.fontPath)
-                    .build()
-            );
-            setLocale("ar");
+                break;
+            case "English":
+                CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                        .setDefaultFontPath("fonts/iransanslite.ttf")
+                        .setFontAttrId(R.attr.fontPath)
+                        .build()
+                );
+                setLocale("en");
+                break;
+            case "العربی":
+                CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                        .setDefaultFontPath("fonts/iransanslite.ttf")
+                        .setFontAttrId(R.attr.fontPath)
+                        .build()
+                );
+                setLocale("ar");
 
-        } else if (language.equals("Deutsch")) {
-            CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                    .setDefaultFontPath("fonts/neuropol.ttf")
-                    .setFontAttrId(R.attr.fontPath)
-                    .build()
-            );
-            setLocale("nl");
+                break;
+            case "Deutsch":
+                CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                        .setDefaultFontPath("fonts/iransanslite.ttf")
+                        .setFontAttrId(R.attr.fontPath)
+                        .build()
+                );
+                setLocale("nl");
 
+                break;
         }
     }
 

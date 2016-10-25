@@ -179,6 +179,7 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, IRecentsLongClick, OnMessageViewClick, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnFileDownloadResponse, OnVoiceRecord, OnUserInfoResponse, OnClientGetRoomHistoryResponse, OnFileUploadForActivities {
 
@@ -353,6 +354,11 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         if (MusicPlayer.mp != null) {
             MusicPlayer.initLayoutTripMusic(mediaLayout);
         }
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
     @Override
@@ -2205,7 +2211,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
 
         btnDown = (Button) findViewById(R.id.chl_btn_down);
-        btnDown.setTypeface(G.fontawesome);
         btnDown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

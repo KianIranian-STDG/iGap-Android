@@ -45,6 +45,7 @@
                         android:layout_width="@dimen/dp60"
                         android:layout_height="match_parent"
                         android:gravity="center"
+                        fontPath="fonts/Flaticon.ttf"
                         android:text="@string/md_close_button"
                         android:textColor="@color/whit_background"
                         android:textSize="@dimen/sp18" />
@@ -78,6 +79,7 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="right"
                         android:gravity="center"
+                        fontPath="fonts/Flaticon.ttf"
                         android:text="@string/md_share_button"
                         android:textColor="@color/whit_background"
                         android:textSize="@dimen/sp18" />
@@ -99,10 +101,14 @@
                         android:layout_width="@dimen/dp60"
                         android:layout_height="match_parent"
                         android:layout_gravity="right"
+                        fontPath="fonts/Flaticon.ttf"
                         android:gravity="center"
                         android:text="@string/md_show_more_button"
                         android:textColor="@color/whit_background"
-                        android:textSize="@dimen/sp18" />
+                        android:textSize="@dimen/sp18"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true" />
                 </com.iGap.libs.rippleeffect.RippleView>
             </LinearLayout>
 

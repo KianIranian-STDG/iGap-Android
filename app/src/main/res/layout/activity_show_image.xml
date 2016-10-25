@@ -34,6 +34,7 @@
                 android:layout_width="@dimen/dp60"
                 android:gravity="center"
                 android:layout_height="match_parent"
+                fontPath="fonts/Flaticon.ttf"
                 android:background="@null"
                 android:text="@string/md_back_arrow"
                 android:textColor="@android:color/white"
@@ -67,6 +68,7 @@
                 android:layout_height="match_parent"
                 android:background="@null"
                 android:text="@string/md_show_more_button"
+                fontPath="fonts/Flaticon.ttf"
                 android:gravity="center"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/sp18" />

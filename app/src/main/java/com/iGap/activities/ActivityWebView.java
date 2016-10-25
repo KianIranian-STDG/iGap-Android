@@ -37,6 +37,10 @@ public class ActivityWebView extends ActivityEnhanced {
     private SearchView searchView;
     private String key;
 
+    //    @Override
+//    protected void attachBaseContext(Context newBase) {
+//        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+//    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

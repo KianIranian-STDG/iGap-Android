@@ -2,6 +2,7 @@ package com.iGap.activities;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
@@ -63,6 +64,7 @@ import java.util.Collections;
 import java.util.List;
 
 import io.realm.Realm;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityRegister extends ActivityEnhanced {
 
@@ -112,6 +114,11 @@ public class ActivityRegister extends ActivityEnhanced {
     static final String KEY_SAVE_PHONENUMBER_MASK = "SAVE_PHONENUMBER_MASK";
     static final String KEY_SAVE_PHONENUMBER_NUMBER = "SAVE_PHONENUMBER_NUMBER";
     static final String KEY_SAVE_NAMECOUNTRY = "SAVE_NAMECOUNTRY";
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -842,7 +849,7 @@ public class ActivityRegister extends ActivityEnhanced {
                         rg_img_verify_sms.setVisibility(View.VISIBLE);
                         rg_img_verify_sms.setImageResource(R.mipmap.check);
                         rg_img_verify_sms.setColorFilter(getResources().getColor(R.color.rg_text_verify), PorterDuff.Mode.SRC_ATOP);
-                        rg_txt_verify_sms.setTextColor(getResources().getColor(R.color.rg_start_background));
+                        rg_txt_verify_sms.setTextColor(getResources().getColor(R.color.rg_text_verify));
 
                         newUser = newUserR;
                         token = tokenR;

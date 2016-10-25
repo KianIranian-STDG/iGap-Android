@@ -39,6 +39,8 @@ import com.iGap.module.StructCommentInfo;
 
 import java.util.ArrayList;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 /**
  * Created by android3 on 8/31/2016.
  */
@@ -54,6 +56,10 @@ public class ActivityComment extends ActivityEnhanced implements IEmojiViewCreat
     private EmojiEditText edtChat;
     private ImageButton btnSmile;
 
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

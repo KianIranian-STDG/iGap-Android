@@ -1,5 +1,6 @@
 package com.iGap.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -25,6 +26,7 @@ import com.mikepenz.fastadapter.adapters.FastItemAdapter;
 import java.util.ArrayList;
 
 import io.realm.Realm;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivitySelectChat extends ActivityEnhanced {
 
@@ -33,6 +35,11 @@ public class ActivitySelectChat extends ActivityEnhanced {
     public static final String ARG_FORWARD_MESSAGE = "arg_forward_msg";
     private ArrayList<StructMessageInfo> mForwardMessages;
 
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
