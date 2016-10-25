@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.iGap.G;
 import com.iGap.WebSocketClient;
+import com.iGap.helper.HelperLogout;
 import com.iGap.proto.ProtoError;
 
 public class UserLoginResponse extends MessageHandler {
@@ -23,7 +24,7 @@ public class UserLoginResponse extends MessageHandler {
 
     @Override
     public void handler() {
-        Log.i("FFF", "handler 1");
+        super.handler();
         G.userLogin = true;
         WebSocketClient.waitingForReconnecting = false;
         WebSocketClient.allowForReconnecting = true;
@@ -32,14 +33,20 @@ public class UserLoginResponse extends MessageHandler {
 
     @Override
     public void timeOut() {
-        Log.i("FFF", "timeOut");
+        super.timeOut();
     }
 
     @Override
     public void error() {
+        super.error();
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
+
+        if (majorCode == 111 && minorCode != 4) {
+            HelperLogout.logout();
+            return;
+        }
 
         Log.i("FFF", "userLoginResponse response.majorCode() : " + majorCode);
         Log.i("FFF", "userLoginResponse response.minorCode() : " + minorCode);

@@ -44,6 +44,7 @@ import com.iGap.R;
 import com.iGap.fragments.FragmentShowImage;
 import com.iGap.fragments.FragmentSticker;
 import com.iGap.helper.HelperImageBackColor;
+import com.iGap.helper.HelperLogout;
 import com.iGap.interface_package.OnFileUploadForActivities;
 import com.iGap.interface_package.OnUserAvatarDelete;
 import com.iGap.interface_package.OnUserAvatarResponse;
@@ -482,7 +483,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 textView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(ActivitySetting.this, "Log out", Toast.LENGTH_SHORT).show();
+                        HelperLogout.logout();
                         popupWindow.dismiss();
                     }
                 });

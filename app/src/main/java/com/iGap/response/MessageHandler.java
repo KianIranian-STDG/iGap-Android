@@ -16,16 +16,16 @@ public abstract class MessageHandler {
     }
 
     public void handler() throws NullPointerException {
-        Log.i("MSG", "MessageHandler handler : " + message);
+        Log.i("MSGH", "MessageHandler handler : " + message);
     }
 
     public void timeOut() {
-        Log.i("MSG", "MessageHandler timeOut : " + message);
+        Log.i("MSGT", "MessageHandler timeOut : " + message);
         error();
     }
 
     public void error() {
-        Log.i("MSG", "MessageHandler error : " + message);
+        Log.i("MSGE", "MessageHandler error : " + message);
     }
 
 }

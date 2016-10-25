@@ -11,6 +11,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewPager;
 import android.text.Html;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,6 +75,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +91,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
 //        });
 
         RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+        Log.i("AAA", "handler 2 userInfo : " + userInfo);
         if (userInfo != null && userInfo.getUserRegistrationState()) { // user registered before
             Intent intent = new Intent(G.context, ActivityMain.class);
             startActivity(intent);
