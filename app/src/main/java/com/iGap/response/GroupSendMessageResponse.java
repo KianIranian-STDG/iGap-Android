@@ -4,6 +4,7 @@ import android.text.format.DateUtils;
 import android.util.Log;
 
 import com.iGap.G;
+import com.iGap.helper.HelperCheckUserInfoExist;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoGroupSendMessage;
@@ -89,6 +90,8 @@ public class GroupSendMessageResponse extends MessageHandler {
                 // and response is null, so we sure recipient is another user
                 if (userId != roomMessage.getUserId() && builder.getResponse().getId().isEmpty()) {
                     // i'm the recipient
+
+                    HelperCheckUserInfoExist.checkUserInfoExist(roomMessage.getUserId());
 
                     RealmChatHistory realmChatHistory = realm.createObject(RealmChatHistory.class);
                     realmChatHistory.setId(System.currentTimeMillis());

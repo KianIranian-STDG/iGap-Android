@@ -53,7 +53,9 @@ public class UserInfoResponse extends MessageHandler {
         });
         realm.close();
 
-        G.onUserInfoResponse.onUserInfo(builder.getUser(), builder.getResponse());
+        if (G.onUserInfoResponse != null) {
+            G.onUserInfoResponse.onUserInfo(builder.getUser(), builder.getResponse());
+        }
     }
 
     @Override
