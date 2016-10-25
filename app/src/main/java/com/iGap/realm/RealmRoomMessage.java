@@ -118,6 +118,10 @@ public class RealmRoomMessage extends RealmObject {
         return updateTime;
     }
 
+    public int getUpdateTimeAsSeconds() {
+        return (int) (updateTime / DateUtils.SECOND_IN_MILLIS);
+    }
+
     public void setUpdateTime(int updateTime) {
         this.updateTime = updateTime * DateUtils.SECOND_IN_MILLIS;
     }

@@ -7,6 +7,7 @@ import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.MessagesAdapter;
+import com.iGap.interface_package.IChatItemAvatar;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.AppUtils;
 import com.iGap.module.CircleImageView;
@@ -34,7 +35,7 @@ import java.util.List;
 /**
  * chat item for main displaying chats
  */
-public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
+public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> implements IChatItemAvatar {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
     public StructChatInfo mInfo;
     public OnComplete mComplete;
@@ -103,6 +104,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
         }
     }
 
+    @Override
     public void onRequestDownloadAvatar(int offset, int progress) {
         ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL;
         String fileName = mInfo.downloadAttachment.token + "_" + mInfo.avatar.name;

@@ -377,11 +377,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         // get sendByEnter action from setting value
         SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         int checkedSendByEnter = sharedPreferences.getInt(SHP_SETTING.KEY_SEND_BT_ENTER, 0);
-        if (checkedSendByEnter == 1) {
-            sendByEnter = true;
-        } else {
-            sendByEnter = false;
-        }
+        sendByEnter = checkedSendByEnter == 1;
 
 
         String backGroundPath = sharedPreferences.getString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "");
@@ -2269,7 +2265,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 timeMessage.setMessageId(System.currentTimeMillis());
                 // -1 means time message
                 timeMessage.setUserId(-1);
-                timeMessage.setUpdateTime((int) ((message.getUpdateTime() / DateUtils.SECOND_IN_MILLIS) - 1L));
+                timeMessage.setUpdateTime(message.getUpdateTimeAsSeconds() - 1);
                 timeMessage.setMessage(timeString);
                 timeMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT.toString());
                 lastResultMessages.add(timeMessage);
@@ -2760,22 +2756,13 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     }
 
     @Override
-    public void onAvatarDownload(final String token, final int offset, final ProtoFileDownload.FileDownload.Selector selector, final int progress, final long userId, RoomType roomType) {
+    public void onAvatarDownload(final String token, final int offset, final ProtoFileDownload.FileDownload.Selector selector, final int progress, final long userId, final RoomType roomType) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                // if thumbnail
-                if (selector != ProtoFileDownload.FileDownload.Selector.FILE) {
-                    setAvatar();
-                    Realm realm = Realm.getDefaultInstance();
-                    if (userId != 0) { // set userId 0 when download avatarChat .
-                        mAdapter.updateChatAvatar(userId, StructMessageAttachment.convert(realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst().getLastAvatar()));
-                    }
-                    realm.close();
-                } else {
-                    // else file
-                    mAdapter.updateDownloadFields(token, progress, offset);
-                }
+                Realm realm = Realm.getDefaultInstance();
+                mAdapter.downloadingAvatar(userId, progress, offset, StructMessageAttachment.convert(realm.where(RealmRoom.class).equalTo("id", userId).findFirst().getAvatar()));
+                realm.close();
             }
         });
     }

@@ -43,6 +43,20 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         }
     };
 
+    public void downloadingAvatar(long peerId, int progress, int offset, StructMessageAttachment avatar) {
+        for (Item item : getAdapterItems()) {
+            if (Long.parseLong(item.mMessage.senderID) == peerId) {
+                int pos = getAdapterItems().indexOf(item);
+                item.mMessage.senderAvatar = avatar;
+                item.mMessage.downloadAttachment.progress = progress;
+                item.mMessage.downloadAttachment.offset = offset;
+                item.onRequestDownloadAvatar(offset, progress);
+                notifyItemChanged(pos);
+                break;
+            }
+        }
+    }
+
     public void updateDownloadFields(String token, int progress, int offset) {
         for (Item item : getAdapterItems()) {
             if (item.mMessage.downloadAttachment != null && item.mMessage.downloadAttachment.token.equalsIgnoreCase(token)) {

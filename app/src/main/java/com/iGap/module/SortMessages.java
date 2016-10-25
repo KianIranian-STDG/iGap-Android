@@ -11,13 +11,13 @@ public enum SortMessages implements Comparator<RealmRoomMessage> {
     ASC {
         @Override
         public int compare(RealmRoomMessage o1, RealmRoomMessage o2) {
-            return Long.compare(o1.getUpdateTime(), o2.getUpdateTime());
+            return Long.compare(o1.getMessageId(), o2.getMessageId());
         }
     },
     DESC {
         @Override
         public int compare(RealmRoomMessage o1, RealmRoomMessage o2) {
-            return Long.compare(o2.getUpdateTime(), o1.getUpdateTime());
+            return Long.compare(o2.getMessageId(), o1.getMessageId());
         }
     }
 }

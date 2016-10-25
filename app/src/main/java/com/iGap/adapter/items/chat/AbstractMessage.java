@@ -84,9 +84,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             mMessage.downloadAttachment = new StructDownloadAttachment(mMessage.senderAvatar.token);
         }
 
-        // request avatar
+        // request thumbnail
         if (!MessagesAdapter.avatarsRequested.contains(mMessage.senderID)) {
-            onRequestDownloadAvatar();
+            onRequestDownloadAvatar(mMessage.downloadAttachment.offset, mMessage.downloadAttachment.progress);
             // prevent from multiple requesting thumbnail
             MessagesAdapter.avatarsRequested.add(mMessage.senderID);
         }
@@ -102,16 +102,23 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     }
 
     @Override
-    public void onRequestDownloadAvatar() {
-        ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
-        if (mMessage.senderAvatar != null && (mMessage.senderAvatar.getLocalThumbnailPath() == null || mMessage.senderAvatar.getLocalThumbnailPath().isEmpty())) {
-            mMessage.senderAvatar.setLocalThumbnailPathForAvatar(Long.parseLong(mMessage.senderID), Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + mMessage.downloadAttachment.token + System.nanoTime() + mMessage.senderAvatar.name, selector);
+    public void onRequestDownloadAvatar(int offset, int progress) {
+        ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL;
+        String fileName = mMessage.downloadAttachment.token + "_" + mMessage.senderAvatar.name;
+        if (progress == 100) {
+            mMessage.senderAvatar.setLocalThumbnailPath(Long.parseLong(mMessage.senderID), G.DIR_IMAGE_USER + "/" + fileName);
+
+            try {
+                AndroidUtils.cutFromTemp(fileName);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         // I don't use offset in getting thumbnail
-        String identity = mMessage.downloadAttachment.token + '*' + selector.toString() + '*' + mMessage.senderAvatar.smallThumbnail.size + '*' + mMessage.senderAvatar.getLocalThumbnailPath() + '*' + mMessage.downloadAttachment.offset + '*' + Boolean.toString(true) + '*' + mMessage.senderID;
+        String identity = mMessage.downloadAttachment.token + '*' + selector.toString() + '*' + mMessage.senderAvatar.largeThumbnail.size + '*' + fileName + '*' + mMessage.downloadAttachment.offset + "*" + Boolean.toString(true) + "*" + mMessage.senderID + "*" + type.toString();
 
-        new RequestFileDownload().download(mMessage.downloadAttachment.token, 0, (int) mMessage.senderAvatar.smallThumbnail.size, selector, identity);
+        new RequestFileDownload().download(mMessage.downloadAttachment.token, offset, (int) mMessage.senderAvatar.largeThumbnail.size, selector, identity);
     }
 
     @Override

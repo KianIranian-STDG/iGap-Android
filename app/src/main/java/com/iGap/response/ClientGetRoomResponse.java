@@ -1,6 +1,5 @@
 package com.iGap.response;
 
-import android.text.format.DateUtils;
 import android.util.Log;
 
 import com.iGap.G;
@@ -58,7 +57,7 @@ public class ClientGetRoomResponse extends MessageHandler {
                         if (room.getLastMessageTime() < roomMessage.getUpdateTime()) {
                             room.setUnreadCount(room.getUnreadCount() + 1);
                             room.setLastMessageId(roomMessage.getMessageId());
-                            room.setLastMessageTime((int) (roomMessage.getUpdateTime() / DateUtils.SECOND_IN_MILLIS));
+                            room.setLastMessageTime(roomMessage.getUpdateTimeAsSeconds());
 
                             realm.copyToRealmOrUpdate(room);
                         }

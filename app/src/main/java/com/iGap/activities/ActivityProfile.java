@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
+import com.iGap.IntentRequests;
 import com.iGap.R;
 import com.iGap.interface_package.OnFileUploadForActivities;
 import com.iGap.interface_package.OnUserAvatarResponse;
@@ -47,12 +48,9 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
     private TextView txtTitle, txtTitlInformation, txtDesc, txtAddPhoto;
     private Button btnLetsGo;
     private com.iGap.module.CircleImageView btnSetImage;
-    private int myResultCodeCamera = 1;
-    private int myResultCodeGallery = 0;
     private EditTextAdjustPan edtNikName;
     private Uri uriIntent;
     private String pathImageUser;
-    private int myResultCrop = 3;
     public static boolean IsDeleteFile;
     private File pathImageFromCamera = new File(G.imageFile.toString() + "_" + 0 + ".jpg");
     public final static String ARG_USER_ID = "arg_user_id";
@@ -207,13 +205,13 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
         uriIntent = Uri.fromFile(pathImageFromCamera);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
 
-        startActivityForResult(intent, myResultCodeCamera);
+        startActivityForResult(intent, IntentRequests.REQ_CAMERA);
 
     }
 
     public void useGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, myResultCodeGallery);
+        startActivityForResult(intent, IntentRequests.REQ_GALLERY);
     }
 
 
@@ -256,23 +254,23 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == myResultCodeCamera && resultCode == RESULT_OK) {// result for camera
+        if (requestCode == IntentRequests.REQ_CAMERA && resultCode == RESULT_OK) {// result for camera
 
             Intent intent = new Intent(ActivityProfile.this, ActivityCrop.class);
             intent.putExtra("IMAGE_CAMERA", uriIntent.toString());
             intent.putExtra("TYPE", "camera");
             intent.putExtra("PAGE", "profile");
             intent.putExtra("ID", (int) getIntent().getLongExtra(ARG_USER_ID, -1));
-            startActivityForResult(intent, myResultCrop);
+            startActivityForResult(intent, IntentRequests.REQ_CROP);
 
-        } else if (requestCode == myResultCodeGallery && resultCode == RESULT_OK) {// result for gallery
+        } else if (requestCode == IntentRequests.REQ_GALLERY && resultCode == RESULT_OK) {// result for gallery
             Intent intent = new Intent(ActivityProfile.this, ActivityCrop.class);
             intent.putExtra("IMAGE_CAMERA", data.getData().toString());
             intent.putExtra("TYPE", "gallery");
             intent.putExtra("PAGE", "profile");
             intent.putExtra("ID", (int) getIntent().getLongExtra(ARG_USER_ID, -1));
-            startActivityForResult(intent, myResultCrop);
-        } else if (requestCode == myResultCrop && resultCode == RESULT_OK) {
+            startActivityForResult(intent, IntentRequests.REQ_CROP);
+        } else if (requestCode == IntentRequests.REQ_CROP && resultCode == RESULT_OK) {
 
             Log.i("ZZZZ", "ActivityProfile crop: " + data.getData().toString());
 
