@@ -1,6 +1,5 @@
 package com.iGap.module;
 
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -17,6 +16,8 @@ import com.iGap.request.RequestFileUploadStatus;
 
 import java.io.IOException;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import static com.iGap.G.handler;
 
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 8/30/2016.
@@ -197,10 +198,11 @@ public class UploaderUtil implements OnFileUpload, OnFileUploadStatusResponse {
                 e.printStackTrace();
             }
         } else if (status == ProtoFileUploadStatus.FileUploadStatusResponse.Status.PROCESSING || (status == ProtoFileUploadStatus.FileUploadStatusResponse.Status.UPLOADING) && progress == 100D) {
-            new Handler().postDelayed(new Runnable() {
+            handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     new RequestFileUploadStatus().fileUploadStatus(fileUploadStructure.token, identity);
+
                 }
             }, recheckDelayMS);
         } else {
