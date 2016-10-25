@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.MessagesAdapter;
+import com.iGap.helper.HelperStringAnalayser;
 import com.iGap.interface_package.IChatItemAttachment;
 import com.iGap.interface_package.IChatItemAvatar;
 import com.iGap.interface_package.OnMessageViewClick;
@@ -66,7 +67,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     protected void setTextIfNeeded(TextView view) {
         if (mMessage.messageText != null && !mMessage.messageText.isEmpty()) {
-            view.setText(mMessage.messageText);
+            view.setText(HelperStringAnalayser.analaysHash(mMessage.messageText, mMessage.messageID));
             view.setVisibility(View.VISIBLE);
         } else {
             view.setVisibility(View.GONE);

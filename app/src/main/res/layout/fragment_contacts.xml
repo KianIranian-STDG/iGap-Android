@@ -1,131 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.iGap.module.NotTouchableCoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/menu_parent_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    android:fitsSystemWindows="true"
     android:layoutDirection="ltr">
 
-    <com.iGap.module.MyAppBarLayout
-        android:id="@+id/appBarLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:popupTheme="@style/ThemeOverlay.AppCompat">
 
-        <LinearLayout
+    <LinearLayout
+        android:id="@+id/fc_layot_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp60"
+        android:layout_marginTop="@dimen/dp24"
+        android:background="@color/green"
+        android:gravity="bottom"
+        android:orientation="horizontal">
+
+        <com.iGap.libs.rippleeffect.RippleView
+            android:id="@+id/menu_ripple_txtBack"
+            rv_centered="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:rv_alpha="200"
+            app:rv_centered="true"
+            app:rv_rippleDuration="150"
+            app:rv_ripplePadding="5dp">
+
+            <com.iGap.module.MaterialDesignTextView
+                android:id="@+id/menu_txtBack"
+                android:layout_width="@dimen/dp60"
+                android:layout_height="match_parent"
+                android:layout_gravity="left"
+                android:gravity="center"
+                android:text="@string/md_back_arrow"
+                android:textColor="@color/whit_background"
+                android:textSize="@dimen/sp18" />
+        </com.iGap.libs.rippleeffect.RippleView>
+
+        <RelativeLayout
+            android:id="@+id/menu_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.SearchView
+                android:id="@+id/menu_edtSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:theme="@style/SearchViewToolbar"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/menu_txt_titleToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingBottom="@dimen/dp4"
+                android:paddingRight="@dimen/dp40"
+                android:singleLine="true"
+                android:text="@string/igap"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp20" />
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+
+    <android.support.design.widget.CoordinatorLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/fc_layot_title">
+
+        <com.iGap.module.MyAppBarLayout
+            android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_scrollFlags="scroll|enterAlways">
+            app:popupTheme="@style/ThemeOverlay.AppCompat">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp60"
-                android:gravity="bottom"
-
-                android:orientation="horizontal">
-
-                <com.iGap.libs.rippleeffect.RippleView
-                    android:id="@+id/menu_ripple_txtBack"
-                    rv_centered="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:rv_alpha="200"
-                    app:rv_centered="true"
-                    app:rv_rippleDuration="150"
-                    app:rv_ripplePadding="5dp">
-
-                    <com.iGap.module.MaterialDesignTextView
-                        android:id="@+id/menu_txtBack"
-                        android:layout_width="@dimen/dp60"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="left"
-                        android:gravity="center"
-                        android:text="@string/md_back_arrow"
-                        android:textColor="@color/whit_background"
-                        android:textSize="@dimen/sp18" />
-                </com.iGap.libs.rippleeffect.RippleView>
-
-                <RelativeLayout
-                    android:id="@+id/menu_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <android.support.v7.widget.SearchView
-                        android:id="@+id/menu_edtSearch"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentRight="true"
-                        android:theme="@style/SearchViewToolbar"
-                        android:visibility="visible" />
-
-                    <TextView
-                        android:id="@+id/menu_txt_titleToolbar"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_centerInParent="true"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:paddingBottom="@dimen/dp4"
-                        android:paddingRight="@dimen/dp40"
-                        android:singleLine="true"
-                        android:text="@string/igap"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textColor="@android:color/white"
-                        android:textSize="@dimen/sp20" />
-                </RelativeLayout>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/menu_layout_addContact"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:paddingBottom="@dimen/dp6"
-                android:paddingEnd="@dimen/dp52"
-                android:paddingLeft="@dimen/dp52"
-                android:paddingRight="@dimen/dp52"
-                android:paddingStart="@dimen/dp52"
-                android:paddingTop="@dimen/dp6">
-
-                <com.iGap.module.CircleImageView
-                    android:layout_width="@dimen/dp48"
-                    android:layout_height="@dimen/dp48"
-                    android:src="@mipmap/add_chat_background3" />
+                android:orientation="vertical"
+                app:layout_scrollFlags="scroll|enterAlways">
 
 
-                <com.iGap.module.CustomTextViewMedium
-                    android:id="@+id/title"
+                <LinearLayout
+                    android:id="@+id/menu_layout_addContact"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/dp8"
-                    android:layout_marginStart="@dimen/dp8"
-                    android:gravity="left|center_vertical"
-                    android:singleLine="true"
-                    android:text="@string/menu_add_contact"
-                    android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
-                    android:textColor="@color/cardview_dark_background"
-                    android:textSize="@dimen/sp16" />
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingBottom="@dimen/dp6"
+                    android:paddingEnd="@dimen/dp52"
+                    android:paddingLeft="@dimen/dp52"
+                    android:paddingRight="@dimen/dp52"
+                    android:paddingStart="@dimen/dp52"
+                    android:paddingTop="@dimen/dp6">
+
+                    <com.iGap.module.CircleImageView
+                        android:layout_width="@dimen/dp48"
+                        android:layout_height="@dimen/dp48"
+                        android:src="@mipmap/add_chat_background3" />
+
+
+                    <com.iGap.module.CustomTextViewMedium
+                        android:id="@+id/title"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/dp8"
+                        android:layout_marginStart="@dimen/dp8"
+                        android:gravity="left|center_vertical"
+                        android:singleLine="true"
+                        android:text="@string/menu_add_contact"
+                        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+                        android:textColor="@color/cardview_dark_background"
+                        android:textSize="@dimen/sp16" />
+
+                </LinearLayout>
+
 
             </LinearLayout>
 
 
-        </LinearLayout>
+        </com.iGap.module.MyAppBarLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 
-    </com.iGap.module.MyAppBarLayout>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:layout_height="match_parent" />
+    </android.support.design.widget.CoordinatorLayout>
 
 
-</com.iGap.module.NotTouchableCoordinatorLayout>
+</RelativeLayout>

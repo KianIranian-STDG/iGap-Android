@@ -372,6 +372,59 @@
             android:textSize="@dimen/sp22" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/ac_ll_hash_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp48"
+        android:layout_gravity="bottom"
+        android:background="@color/white"
+        android:clickable="true"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/ac_btn_hash_up"
+            android:layout_width="@dimen/dp48"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:text="@string/md_expand_arrow"
+            android:textColor="@color/green"
+            android:textSize="@dimen/sp22" />
+
+        <TextView
+            android:id="@+id/ac_txt_hash_counter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:maxWidth="@dimen/dp100"
+            android:padding="@dimen/dp8"
+            android:singleLine="true"
+            android:text="0 of 0"
+            android:textColor="@color/green"
+            android:textSize="@dimen/sp16" />
+
+        <Button
+            android:id="@+id/ac_btn_hash_down"
+            android:layout_width="@dimen/dp40"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:text="@string/md_downwards_arrow"
+            android:textColor="@color/green"
+            android:textSize="@dimen/sp22" />
+
+
+        <Button
+            android:id="@+id/ac_btn_hash_close"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="close"
+            android:layout_marginLeft="@dimen/dp60"
+            android:textColor="@color/red"
+            android:textSize="@dimen/sp14" />
+
+    </LinearLayout>
+
 
     <include
         android:id="@+id/layout_mic_recorde"

@@ -228,12 +228,19 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     Button btnCloseLayoutSearch;
     EditText edtSearchMessage;
 
-    LinearLayout ll_navigate_Message;
-    Button btnUpMessage;
-    Button btnDownMessage;
-    TextView txtMessageCounter;
-    int messageCounter = 0;
-    int selectedPosition = 0;
+    private LinearLayout ll_navigate_Message;
+    private Button btnUpMessage;
+    private Button btnDownMessage;
+    private TextView txtMessageCounter;
+    private int messageCounter = 0;
+    private int selectedPosition = 0;
+
+    private LinearLayout ll_navigateHash;
+    private Button btnUpHash;
+    private Button btnDownHash;
+    private TextView txtHashCounter;
+    private Button btnHashLayoutClose;
+    private SearhHash searhHash;
 
     public static ActivityChat activityChat;
 
@@ -782,41 +789,8 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
     private void initComponent() {
 
-        ll_navigate_Message = (LinearLayout) findViewById(R.id.ac_ll_message_navigation);
-        btnUpMessage = (Button) findViewById(R.id.ac_btn_message_up);
-        btnUpMessage.setTypeface(G.flaticon);
-        btnDownMessage = (Button) findViewById(R.id.ac_btn_message_down);
-        btnDownMessage.setTypeface(G.flaticon);
-        txtMessageCounter = (TextView) findViewById(R.id.ac_txt_message_counter);
-
-        btnUpMessage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (selectedPosition > 0) {
-                    deSelectMessage(selectedPosition);
-                    selectedPosition--;
-                    selectMessage(selectedPosition);
-                    recyclerView.scrollToPosition(selectedPosition);
-                    txtMessageCounter.setText(selectedPosition + 1 + " " + getString(R.string.of) + messageCounter);
-                }
-
-            }
-        });
-
-        btnDownMessage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (selectedPosition < messageCounter - 1) {
-                    deSelectMessage(selectedPosition);
-                    selectedPosition++;
-                    selectMessage(selectedPosition);
-                    recyclerView.scrollToPosition(selectedPosition);
-                    txtMessageCounter.setText(selectedPosition + 1 + " " + getString(R.string.of) + messageCounter);
-                }
-            }
-        });
-
+        initLayoutSearchNavigation();
+        initLayoutHashNavigation();
 
         toolbar = (LinearLayout) findViewById(R.id.toolbar);
         MaterialDesignTextView imvBackButton = (MaterialDesignTextView) findViewById(R.id.chl_imv_back_Button);
@@ -868,62 +842,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         txtName.setTypeface(G.arialBold);
         if (title != null)
             txtName.setText(title);
-
-
-        ll_Search = (LinearLayout) findViewById(R.id.ac_ll_search_message);
-        btnCloseLayoutSearch = (Button) findViewById(R.id.ac_btn_close_layout_search_message);
-        btnCloseLayoutSearch.setTypeface(G.flaticon);
-        edtSearchMessage = (EditText) findViewById(R.id.ac_edt_search_message);
-
-        btnCloseLayoutSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                deSelectMessage(selectedPosition);
-                edtSearchMessage.setText("");
-                ll_Search.setVisibility(View.GONE);
-                findViewById(R.id.toolbarContainer).setVisibility(View.VISIBLE);
-                ll_navigate_Message.setVisibility(View.GONE);
-                viewAttachFile.setVisibility(View.VISIBLE);
-
-            }
-        });
-
-        edtSearchMessage.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                mAdapter.filter(charSequence);
-
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        messageCounter = mAdapter.getAdapterItemCount();
-
-                        if (messageCounter > 0) {
-                            selectedPosition = messageCounter - 1;
-                            recyclerView.scrollToPosition(selectedPosition);
-                            txtMessageCounter.setText(messageCounter + " " + getString(R.string.of) + messageCounter);
-                            selectMessage(selectedPosition);
-                        } else {
-                            txtMessageCounter.setText("0 " + getString(R.string.of) + messageCounter);
-                            selectedPosition = 0;
-                        }
-                    }
-                }, 1000);
-
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
 
 
         txtLastSeen = (TextView) findViewById(R.id.chl_txt_last_seen);
@@ -1499,6 +1417,219 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 }
             }
         });
+    }
+
+    private void initLayoutSearchNavigation() {
+
+        ll_navigate_Message = (LinearLayout) findViewById(R.id.ac_ll_message_navigation);
+        btnUpMessage = (Button) findViewById(R.id.ac_btn_message_up);
+        btnUpMessage.setTypeface(G.flaticon);
+        btnDownMessage = (Button) findViewById(R.id.ac_btn_message_down);
+        btnDownMessage.setTypeface(G.flaticon);
+        txtMessageCounter = (TextView) findViewById(R.id.ac_txt_message_counter);
+
+        btnUpMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (selectedPosition > 0) {
+                    deSelectMessage(selectedPosition);
+                    selectedPosition--;
+                    selectMessage(selectedPosition);
+                    recyclerView.scrollToPosition(selectedPosition);
+                    txtMessageCounter.setText(selectedPosition + 1 + " " + getString(R.string.of) + messageCounter);
+                }
+
+            }
+        });
+
+        btnDownMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (selectedPosition < messageCounter - 1) {
+                    deSelectMessage(selectedPosition);
+                    selectedPosition++;
+                    selectMessage(selectedPosition);
+                    recyclerView.scrollToPosition(selectedPosition);
+                    txtMessageCounter.setText(selectedPosition + 1 + " " + getString(R.string.of) + messageCounter);
+                }
+            }
+        });
+
+
+        ll_Search = (LinearLayout) findViewById(R.id.ac_ll_search_message);
+        btnCloseLayoutSearch = (Button) findViewById(R.id.ac_btn_close_layout_search_message);
+        btnCloseLayoutSearch.setTypeface(G.flaticon);
+        edtSearchMessage = (EditText) findViewById(R.id.ac_edt_search_message);
+
+        btnCloseLayoutSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                deSelectMessage(selectedPosition);
+                edtSearchMessage.setText("");
+                ll_Search.setVisibility(View.GONE);
+                findViewById(R.id.toolbarContainer).setVisibility(View.VISIBLE);
+                ll_navigate_Message.setVisibility(View.GONE);
+                viewAttachFile.setVisibility(View.VISIBLE);
+
+            }
+        });
+
+        edtSearchMessage.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                mAdapter.filter(charSequence);
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        messageCounter = mAdapter.getAdapterItemCount();
+
+                        if (messageCounter > 0) {
+                            selectedPosition = messageCounter - 1;
+                            recyclerView.scrollToPosition(selectedPosition);
+                            txtMessageCounter.setText(messageCounter + " " + getString(R.string.of) + messageCounter);
+                            selectMessage(selectedPosition);
+                        } else {
+                            txtMessageCounter.setText("0 " + getString(R.string.of) + messageCounter);
+                            selectedPosition = 0;
+                        }
+                    }
+                }, 1000);
+
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+
+    }
+
+    public static OnComplete hashListener;
+
+    private void initLayoutHashNavigation() {
+
+
+        hashListener = new OnComplete() {
+            @Override
+            public void complete(boolean result, String text, String messageId) {
+
+                searhHash.setHashString(text);
+                searhHash.setPosition(messageId);
+                ll_navigateHash.setVisibility(View.VISIBLE);
+                viewAttachFile.setVisibility(View.GONE);
+
+            }
+        };
+
+
+        ll_navigateHash = (LinearLayout) findViewById(R.id.ac_ll_hash_navigation);
+        btnUpHash = (Button) findViewById(R.id.ac_btn_hash_up);
+        btnUpHash.setTypeface(G.flaticon);
+        btnDownHash = (Button) findViewById(R.id.ac_btn_hash_down);
+        btnDownHash.setTypeface(G.flaticon);
+        txtHashCounter = (TextView) findViewById(R.id.ac_txt_hash_counter);
+
+        searhHash = new SearhHash();
+
+        btnHashLayoutClose = (Button) findViewById(R.id.ac_btn_hash_close);
+        btnHashLayoutClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                ll_navigateHash.setVisibility(View.GONE);
+                viewAttachFile.setVisibility(View.VISIBLE);
+
+            }
+        });
+
+        btnUpHash.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                searhHash.upHash();
+
+            }
+        });
+
+        btnDownHash.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searhHash.downHash();
+
+            }
+        });
+
+
+    }
+
+    private class SearhHash {
+
+
+        private String hashString = "";
+
+        private int curentHashposition = 0;
+
+        private ArrayList<Integer> hashList = new ArrayList<>();
+
+        public void setHashString(String hashString) {
+            this.hashString = "#" + hashString;
+        }
+
+        public void setPosition(String messageId) {
+
+            curentHashposition = 0;
+            hashList.clear();
+
+            for (int i = 0; i < mAdapter.getAdapterItemCount(); i++) {
+
+                if (mAdapter.getItem(i).mMessage.messageID.equals(messageId)) {
+                    curentHashposition = hashList.size() + 1;
+                }
+
+                if (mAdapter.getItem(i).mMessage.messageText.contains(hashString)) {
+                    hashList.add(i);
+                }
+
+            }
+
+            txtHashCounter.setText(curentHashposition + " / " + hashList.size());
+
+        }
+
+        public void downHash() {
+
+            if (curentHashposition < hashList.size()) {
+                goToSelectedPosition(hashList.get(curentHashposition));
+                curentHashposition++;
+                txtHashCounter.setText(curentHashposition + " / " + hashList.size());
+            }
+        }
+
+        public void upHash() {
+
+            if (curentHashposition > 1) {
+                curentHashposition--;
+                goToSelectedPosition(hashList.get(curentHashposition - 1));
+                txtHashCounter.setText(curentHashposition + " / " + hashList.size());
+            }
+        }
+
+        private void goToSelectedPosition(int position) {
+            recyclerView.scrollToPosition(position);
+        }
+
+
     }
 
 
@@ -3089,4 +3220,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             e.printStackTrace();
         }
     }
+
+
 }

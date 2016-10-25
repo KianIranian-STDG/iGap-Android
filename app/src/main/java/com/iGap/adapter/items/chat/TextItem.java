@@ -1,6 +1,7 @@
 package com.iGap.adapter.items.chat;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
 
 import com.iGap.G;
@@ -38,7 +39,8 @@ public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
 
         setTextIfNeeded(holder.messageText);
 
-        setOnClick(holder, holder.messageText, ProtoGlobal.RoomMessageType.TEXT);
+        if (!mMessage.messageText.contains("#"))
+            setOnClick(holder, holder.messageText, ProtoGlobal.RoomMessageType.TEXT);
     }
 
     @Override
@@ -60,6 +62,8 @@ public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
 
             messageText = (EmojiTextView) view.findViewById(R.id.messageText);
             messageText.setTextSize(G.userTextSize);
+            messageText.setMovementMethod(LinkMovementMethod.getInstance());
+
         }
     }
 }
