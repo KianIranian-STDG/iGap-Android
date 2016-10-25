@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_setAdmin"
+        android:icon="@mipmap/alert"
+        android:title="@string/set_admin"
+        android:numericShortcut="1" />
+    <item
+        android:id="@+id/menu_kick"
+        android:icon="@mipmap/cross"
+        android:title="@string/set_kick"
+        android:numericShortcut="1" />
+
+
+</menu>

@@ -63,6 +63,8 @@
 
     <color name="pu_edtHintText">#cacaca</color>
 
+    <color name="black_progressBackground">#dbffffff</color>
+
     <!--REGISTER PAGE-->
 
     <color name="rg_background_verify">#e7e7e7</color>

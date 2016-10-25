@@ -1079,7 +1079,7 @@ public class ActivityRegister extends ActivityEnhanced {
 
         rg_prg_verify_sms.setVisibility(View.GONE);
         rg_img_verify_sms.setVisibility(View.VISIBLE);
-        rg_txt_verify_sms.setTextColor(getResources().getColor(R.color.rg_start_background));
+        rg_txt_verify_sms.setTextColor(getResources().getColor(R.color.rg_text_verify));
         userVerify(userName, verificationCode);
     }
 
@@ -1130,7 +1130,7 @@ public class ActivityRegister extends ActivityEnhanced {
             public void run() {
                 rg_prg_verify_sms.setVisibility(View.GONE);
                 rg_img_verify_sms.setVisibility(View.VISIBLE);
-                rg_txt_verify_sms.setTextColor(getResources().getColor(R.color.rg_start_background));
+                rg_txt_verify_sms.setTextColor(getResources().getColor(R.color.rg_text_verify));
 
                 receiveVerifySms("Your login code is : 12345 This code can be used to login to your account.");
             }

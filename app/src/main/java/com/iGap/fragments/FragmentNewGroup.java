@@ -97,6 +97,9 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
     public void initComponent(View view) {
 
         prgWaiting = (ProgressBar) view.findViewById(R.id.prgWaiting);
+        prgWaiting.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
+
+        prgWaiting.setVisibility(View.GONE);
 
         txtBack = (MaterialDesignTextView) view.findViewById(R.id.ng_txt_back);
         RippleView rippleBack = (RippleView) view.findViewById(R.id.ng_ripple_back);
@@ -299,6 +302,12 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
             public void onErrorGroupCreate() {
 
                 prgWaiting.setVisibility(View.GONE);
+                txtNextStep.setEnabled(true);
+                txtBack.setEnabled(true);
+                txtCancel.setEnabled(true);
+                edtDescription.setEnabled(true);
+                edtGroupName.setEnabled(true);
+                imgCircleImageView.setEnabled(true);
             }
 
         };

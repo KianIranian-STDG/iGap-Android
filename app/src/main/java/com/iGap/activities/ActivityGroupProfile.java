@@ -16,11 +16,13 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -506,10 +508,39 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         });
         fastAdapter.withOnClickListener(new FastAdapter.OnClickListener<ContatItemGroupProfile>() {
             @Override
-            public boolean onClick(View v, IAdapter adapter, ContatItemGroupProfile item, int position) {
+            public boolean onClick(View v, IAdapter adapter, ContatItemGroupProfile item, final int position) {
 
                 Log.e("dddd", " invite click  " + position);
                 // TODO: 9/14/2016 nejati     go into clicked user page
+
+                MaterialDesignTextView moreButton = (MaterialDesignTextView) v.findViewById(R.id.cigp_moreButton);
+                moreButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        PopupMenu popup = new PopupMenu(ActivityGroupProfile.this, view, Gravity.TOP);
+                        // Inflate the menu from xml
+                        popup.getMenuInflater().inflate(R.menu.chi_popup_menu, popup.getMenu());
+                        // Setup menu item selection
+                        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                            public boolean onMenuItemClick(MenuItem item) {
+                                switch (item.getItemId()) {
+                                    case R.id.menu_setAdmin:
+                                        Toast.makeText(ActivityGroupProfile.this, "Keyword!", Toast.LENGTH_SHORT).show();
+                                        return true;
+                                    case R.id.menu_kick:
+                                        kickMember(contacts.get(position).peerId);
+                                        return true;
+                                    default:
+                                        return false;
+                                }
+                            }
+                        });
+                        // Handle dismissal with: popup.setOnDismissListener(...);
+                        // Show the menu
+                        popup.show();
+
+                    }
+                });
 
                 return false;
             }

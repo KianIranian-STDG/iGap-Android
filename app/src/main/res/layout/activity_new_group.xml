@@ -8,14 +8,6 @@
     android:fitsSystemWindows="false"
     android:layoutDirection="ltr">
 
-    <ProgressBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:id="@+id/prgWaiting"
-        android:visibility="gone" />
-
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -174,5 +166,18 @@
             </com.iGap.libs.rippleeffect.RippleView>
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
+    <!--<View-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:id="@+id/progressBackground"-->
+    <!--android:background="@color/black_progressBackground"/>-->
 
+    <ProgressBar
+        android:id="@+id/prgWaiting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/pu_circle_dialog_give_image_gallery"
+        android:indeterminate="true"
+        android:visibility="visible" />
 </RelativeLayout>

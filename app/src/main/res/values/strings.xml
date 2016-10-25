@@ -475,6 +475,7 @@
     <string name="add_new_member">Add New Member</string>
     <string name="set_admin">Set Admin</string>
     <string name="set_modereator">Set Moderator</string>
+    <string name="set_kick">KICK</string>
     <string name="member_can_add_new_member">Member Can Add New Member</string>
     <string name="notificaion_and_sound">Notification and Sound</string>
     <string name="last_msg_format_chat">%s</string>
