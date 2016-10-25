@@ -49,15 +49,15 @@ public class RequestQueue {
 
 
     protected static synchronized void prepareRequest(String randomId, RequestWrapper requestWrapper) {
-//        if (!G.pullRequestQueueRunned.get()) {
-//            G.pullRequestQueueRunned.getAndSet(true);
-//            G.handler.postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    requestQueuePullFunction();
-//                }
-//            }, Config.TIME_OUT_DELAY_MS);
-//        }
+        if (!G.pullRequestQueueRunned.get()) {
+            G.pullRequestQueueRunned.getAndSet(true);
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    requestQueuePullFunction();
+                }
+            }, Config.TIME_OUT_DELAY_MS);
+        }
 
         requestWrapper.time = System.currentTimeMillis();
         ProtoRequest.Request.Builder requestBuilder = ProtoRequest.Request.newBuilder();
