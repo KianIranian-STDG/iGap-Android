@@ -776,6 +776,8 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     mAdapter.add(0, new TimeItem(this).setMessage(messageInfo).withIdentifier(identifier));
                 }
             }
+
+            identifier++; //required
         }
     }
 
@@ -2892,7 +2894,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             @Override
             public void run() {
                 Realm realm = Realm.getDefaultInstance();
-                mAdapter.downloadingAvatar(userId, progress, offset, StructMessageAttachment.convert(realm.where(RealmRoom.class).equalTo("id", userId).findFirst().getAvatar()));
+                mAdapter.downloadingAvatar(userId, progress, offset, StructMessageAttachment.convert(realm.where(RealmRegisteredInfo.class).equalTo("id", userId).findFirst().getLastAvatar()));
                 realm.close();
             }
         });
@@ -2957,7 +2959,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 Realm realm = Realm.getDefaultInstance();
                 RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, user.getId()).findFirst();
                 if (realmRegisteredInfo != null) {
-                    mAdapter.updateChatAvatar(user.getId(), StructMessageAttachment.convert(realmRegisteredInfo.getLastAvatar()));
+                    mAdapter.updateChatAvatar(user.getId(), realmRegisteredInfo);
                 }
                 realm.close();
             }

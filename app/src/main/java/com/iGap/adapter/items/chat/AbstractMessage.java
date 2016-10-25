@@ -114,12 +114,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        } else {
+            // I don't use offset in getting thumbnail
+            String identity = mMessage.downloadAttachment.token + '*' + selector.toString() + '*' + mMessage.senderAvatar.largeThumbnail.size + '*' + fileName + '*' + mMessage.downloadAttachment.offset + "*" + Boolean.toString(true) + "*" + mMessage.senderID + "*" + type.toString();
+
+            new RequestFileDownload().download(mMessage.downloadAttachment.token, offset, (int) mMessage.senderAvatar.largeThumbnail.size, selector, identity);
+
         }
-
-        // I don't use offset in getting thumbnail
-        String identity = mMessage.downloadAttachment.token + '*' + selector.toString() + '*' + mMessage.senderAvatar.largeThumbnail.size + '*' + fileName + '*' + mMessage.downloadAttachment.offset + "*" + Boolean.toString(true) + "*" + mMessage.senderID + "*" + type.toString();
-
-        new RequestFileDownload().download(mMessage.downloadAttachment.token, offset, (int) mMessage.senderAvatar.largeThumbnail.size, selector, identity);
     }
 
     @Override
@@ -163,6 +164,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         // display user avatar only if chat type is GROUP
         if (type == ProtoGlobal.Room.Type.GROUP) {
             if (!mMessage.isSenderMe()) {
+                holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.VISIBLE);
+
                 holder.itemView.findViewById(R.id.messageSenderAvatar).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

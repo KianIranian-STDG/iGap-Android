@@ -233,7 +233,7 @@ public class StructMessageInfo implements Parcelable {
         }
 
         // contact exclusive
-        info.userInfo = new StructRegisteredInfo(lastName,firstName,number,username,senderID);
+        info.userInfo = new StructRegisteredInfo(lastName, firstName, number, username, senderID);
         return info;
     }
 
@@ -260,8 +260,14 @@ public class StructMessageInfo implements Parcelable {
         StructMessageInfo messageInfo = new StructMessageInfo();
         messageInfo.status = message.getStatus().toString();
         messageInfo.messageID = Long.toString(message.getMessageId());
-        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, message.getUserId()).findFirst();
-        messageInfo.senderAvatar = realmRegisteredInfo != null ? StructMessageAttachment.convert(realmRegisteredInfo.getLastAvatar()) : null;
+        if (message.getUserId() != userId) {
+            RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, message.getUserId()).findFirst();
+            if (realmRegisteredInfo != null) {
+                messageInfo.senderAvatar = StructMessageAttachment.convert(realmRegisteredInfo.getLastAvatar());
+                messageInfo.senderColor = realmRegisteredInfo.getColor();
+                messageInfo.initials = realmRegisteredInfo.getInitials();
+            }
+        }
         messageInfo.messageType = message.getMessageType();
         messageInfo.time = message.getUpdateTime() * DateUtils.SECOND_IN_MILLIS;
         messageInfo.messageText = message.getMessage();
@@ -285,9 +291,15 @@ public class StructMessageInfo implements Parcelable {
         StructMessageInfo messageInfo = new StructMessageInfo();
         messageInfo.status = roomMessage.getStatus();
         messageInfo.messageID = Long.toString(roomMessage.getMessageId());
-        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, roomMessage.getUserId()).findFirst();
-        messageInfo.senderAvatar = realmRegisteredInfo != null ? StructMessageAttachment.convert(realmRegisteredInfo.getLastAvatar()) : null;
         messageInfo.isEdited = roomMessage.isEdited();
+        if (!roomMessage.isSenderMe()) {
+            RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, roomMessage.getUserId()).findFirst();
+            if (realmRegisteredInfo != null) {
+                messageInfo.senderAvatar = StructMessageAttachment.convert(realmRegisteredInfo.getLastAvatar());
+                messageInfo.senderColor = realmRegisteredInfo.getColor();
+                messageInfo.initials = realmRegisteredInfo.getInitials();
+            }
+        }
         messageInfo.messageType = ProtoGlobal.RoomMessageType.valueOf(roomMessage.getMessageType());
         messageInfo.time = roomMessage.getUpdateTime();
         if (roomMessage.getAttachment() != null) {

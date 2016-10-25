@@ -13,6 +13,7 @@ import com.iGap.interface_package.OnChatMessageSelectionChanged;
 import com.iGap.interface_package.OnMessageViewClick;
 import com.iGap.module.StructMessageAttachment;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.realm.RealmRegisteredInfo;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.adapters.FastItemAdapter;
@@ -45,14 +46,13 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
 
     public void downloadingAvatar(long peerId, int progress, int offset, StructMessageAttachment avatar) {
         for (Item item : getAdapterItems()) {
-            if (Long.parseLong(item.mMessage.senderID) == peerId) {
+            if (item.mMessage.downloadAttachment != null && Long.parseLong(item.mMessage.senderID) == peerId) {
                 int pos = getAdapterItems().indexOf(item);
                 item.mMessage.senderAvatar = avatar;
                 item.mMessage.downloadAttachment.progress = progress;
                 item.mMessage.downloadAttachment.offset = offset;
                 item.onRequestDownloadAvatar(offset, progress);
                 notifyItemChanged(pos);
-                break;
             }
         }
     }
@@ -87,11 +87,13 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         }
     }
 
-    public void updateChatAvatar(long userId, StructMessageAttachment avatar) {
+    public void updateChatAvatar(long userId, RealmRegisteredInfo registeredInfo) {
         for (Item item : getAdapterItems()) {
             if (!item.mMessage.isSenderMe() && item.mMessage.senderID.equalsIgnoreCase(Long.toString(userId))) {
                 int pos = getAdapterItems().indexOf(item);
-                item.mMessage.senderAvatar = avatar;
+                item.mMessage.senderAvatar = StructMessageAttachment.convert(registeredInfo.getLastAvatar());
+                item.mMessage.initials = registeredInfo.getInitials();
+                item.mMessage.senderColor = registeredInfo.getColor();
                 notifyItemChanged(pos);
             }
         }
