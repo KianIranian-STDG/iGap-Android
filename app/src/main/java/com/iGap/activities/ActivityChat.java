@@ -115,6 +115,7 @@ import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.MusicPlayer;
 import com.iGap.module.MyType;
 import com.iGap.module.OnComplete;
+import com.iGap.module.RecyclerViewPauseOnScrollListener;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.ShouldScrolledBehavior;
 import com.iGap.module.SortMessages;
@@ -2279,7 +2280,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
         Collections.sort(lastResultMessages, SortMessages.DESC);
 
-        EndlessRecyclerOnScrollListener endlessRecyclerOnScrollListener = new EndlessRecyclerOnScrollListener(lastResultMessages, mAdapter, ImageLoader.getInstance(), false, true) {
+        EndlessRecyclerOnScrollListener endlessRecyclerOnScrollListener = new EndlessRecyclerOnScrollListener(lastResultMessages, mAdapter) {
             @Override
             public void onLoadMore(EndlessRecyclerOnScrollListener listener, int page) {
                 List<RealmRoomMessage> roomMessages = listener.loadMore(page);
@@ -2304,7 +2305,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             }
         };
 
-        recyclerView.addOnScrollListener(endlessRecyclerOnScrollListener);
+        recyclerView.addOnScrollListener(new RecyclerViewPauseOnScrollListener(ImageLoader.getInstance(), false, true, endlessRecyclerOnScrollListener));
 
         ArrayList<StructMessageInfo> messageInfos = new ArrayList<>();
         for (RealmRoomMessage realmRoomMessage : endlessRecyclerOnScrollListener.loadMore(0)) {
@@ -2759,7 +2760,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     }
 
     @Override
-    public void onAvatarDownload(final String token, final int offset, final ProtoFileDownload.FileDownload.Selector selector, final int progress, final long userId) {
+    public void onAvatarDownload(final String token, final int offset, final ProtoFileDownload.FileDownload.Selector selector, final int progress, final long userId, RoomType roomType) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {

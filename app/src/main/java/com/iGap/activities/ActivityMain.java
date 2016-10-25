@@ -643,6 +643,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             info.chatId = realmRoom.getId();
             info.chatTitle = realmRoom.getTitle();
             info.initials = realmRoom.getInitials();
+            info.ownerId = realmRoom.getId();
             info.readOnly = realmRoom.getReadOnly();
             switch (realmRoom.getType()) {
                 case CHAT:
@@ -800,23 +801,23 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
     @Override
     public void onFileDownload(final String token, final int offset, final ProtoFileDownload.FileDownload.Selector selector, final int progress) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                // if thumbnail
-                if (selector != ProtoFileDownload.FileDownload.Selector.FILE) {
-                    mAdapter.updateThumbnail(token);
-                } else {
-                    // else file
-                    mAdapter.updateDownloadFields(token, progress, offset);
-                }
-            }
-        });
+        // empty
     }
 
     @Override
-    public void onAvatarDownload(String token, int offset, ProtoFileDownload.FileDownload.Selector selector, int progress, long userId) {
-        // empty
+    public void onAvatarDownload(final String token, final int offset, final ProtoFileDownload.FileDownload.Selector selector, final int progress, final long userId, final RoomType roomType) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Realm realm = Realm.getDefaultInstance();
+                if (roomType == RoomType.CHAT) {
+                    mAdapter.downloadingAvatar(userId, progress, offset, StructMessageAttachment.convert(realm.where(RealmRegisteredInfo.class).equalTo("id", userId).findFirst().getLastAvatar()));
+                } else {
+                    mAdapter.downloadingAvatar(userId, progress, offset, StructMessageAttachment.convert(realm.where(RealmRoom.class).equalTo("id", userId).findFirst().getAvatar()));
+                }
+                realm.close();
+            }
+        });
     }
 
     @Override
@@ -943,13 +944,14 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
     @Override
     public void onUserInfo(final ProtoGlobal.RegisteredUser user, ProtoResponse.Response response) {
-        runOnUiThread(new Runnable() {
+        // FIXME: 10/23/2016 Alireza uncomment
+        /*runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 Realm realm = Realm.getDefaultInstance();
-                mAdapter.updateChatAvatar(user.getId(), StructMessageAttachment.convert(realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, user.getId()).findFirst().getLastAvatar()));
+                mAdapter.downloadingAvatar(user.getId(), StructMessageAttachment.convert(realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, user.getId()).findFirst().getLastAvatar()));
                 realm.close();
             }
-        });
+        });*/
     }
 }
