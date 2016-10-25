@@ -2999,11 +2999,11 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     }
 
     @Override
-    public void onFileUploading(FileUploadStructure uploadStructure, final String identity, double progress) {
+    public void onFileUploading(FileUploadStructure uploadStructure, final String identity, final double progress) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mAdapter.updateProgress(Long.parseLong(identity), 100);
+                mAdapter.updateProgress(Long.parseLong(identity), (int) progress);
             }
         });
     }
