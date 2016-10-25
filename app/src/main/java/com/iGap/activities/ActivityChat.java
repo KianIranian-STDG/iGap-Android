@@ -50,6 +50,7 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
+import com.iGap.IntentRequests;
 import com.iGap.R;
 import com.iGap.adapter.MessagesAdapter;
 import com.iGap.adapter.items.chat.AbstractMessage;
@@ -266,7 +267,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     private int tmpRequestCode;
     private int tmpResultCode;
     private Intent tmpData;
-    public static final int myResultCrop = 3;
 
     //chat
     private long chatPeerId;
@@ -1833,7 +1833,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             intent.putExtra("IMAGE_CAMERA", data.getData().toString());
             intent.putExtra("TYPE", "gallery");
             intent.putExtra("PAGE", "chat");
-            startActivityForResult(intent, myResultCrop);
+            startActivityForResult(intent, IntentRequests.REQ_CROP);
 
             return;
         } else if (resultCode == Activity.RESULT_OK && sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 0) == 1 && requestCode == AttachFile.request_code_TAKE_PICTURE) {
@@ -1843,7 +1843,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             intent.putExtra("IMAGE_CAMERA", AttachFile.imagePath);
             intent.putExtra("TYPE", "camera");
             intent.putExtra("PAGE", "chat");
-            startActivityForResult(intent, myResultCrop);
+            startActivityForResult(intent, IntentRequests.REQ_CROP);
             return;
 
         } else if (resultCode == Activity.RESULT_OK && ll_attach_text.getVisibility() == View.GONE) {
@@ -1886,7 +1886,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 case AttachFile.request_code_contact_phone:
                     txtFileNameForSend.setText("send phone contact");
                     break;
-                case myResultCrop:
+                case IntentRequests.REQ_CROP:
                     txtFileNameForSend.setText("crop image");
                     break;
 
@@ -1919,7 +1919,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             StructMessageInfo messageInfo = null;
 
             switch (requestCode) {
-                case myResultCrop:
+                case IntentRequests.REQ_CROP:
                     filePath = data.getData().toString();
                     fileName = new File(filePath).getName();
                     fileSize = new File(filePath).length();

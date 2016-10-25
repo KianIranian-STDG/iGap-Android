@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
+import com.iGap.IntentRequests;
 import com.iGap.R;
 import com.iGap.activities.ActivityChatBackground;
 import com.iGap.fragments.FragmentFullChatBackground;
@@ -35,8 +36,6 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
     private final int CHOOSE = 0;
     private final int ALL = 1;
 
-    private int myResultCodeCamera = 1;
-    private int myResultCodeGallery = 0;
     private Uri uriIntent;
     public static ImageLoader imageLoader;
 
@@ -132,14 +131,14 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
                                             uriIntent = Uri.fromFile(G.chatBackground);
                                             ActivityChatBackground.uriIntent = uriIntent;
                                             intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
-                                            G.currentActivity.startActivityForResult(intent, myResultCodeCamera);
+                                            G.currentActivity.startActivityForResult(intent, IntentRequests.REQ_CAMERA);
                                             dialog.dismiss();
                                         } else {
                                             Toast.makeText(G.currentActivity, "Please check your Camera", Toast.LENGTH_SHORT).show();
                                         }
                                     } else {
                                         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                                        G.currentActivity.startActivityForResult(intent, myResultCodeGallery);
+                                        G.currentActivity.startActivityForResult(intent, IntentRequests.REQ_GALLERY);
                                         dialog.dismiss();
                                     }
                                 }

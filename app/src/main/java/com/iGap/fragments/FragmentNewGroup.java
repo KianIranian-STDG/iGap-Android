@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
+import com.iGap.IntentRequests;
 import com.iGap.R;
 import com.iGap.activities.ActivityCrop;
 import com.iGap.activities.ActivityMain;
@@ -49,9 +50,6 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
 
     private MaterialDesignTextView txtBack;
     private CircleImageView imgCircleImageView;
-    private int myResultCodeCamera = 1;
-    private int myResultCodeGallery = 0;
-    private int myResultFragment = 2;
     private Uri uriIntent;
     public static Bitmap decodeBitmapProfile = null;
     private TextView txtNextStep, txtCancel, txtTitleToolbar;
@@ -160,7 +158,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
                                         }
 
                                         intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
-                                        startActivityForResult(intent, myResultCodeCamera);
+                                        startActivityForResult(intent, IntentRequests.REQ_CAMERA);
                                         dialog.dismiss();
 
                                     } else {
@@ -169,7 +167,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
 
                                 } else {
                                     Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                                    startActivityForResult(intent, myResultCodeGallery);
+                                    startActivityForResult(intent, IntentRequests.REQ_GALLERY);
                                     dialog.dismiss();
                                 }
                             }
@@ -342,26 +340,26 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == myResultCodeCamera && resultCode == getActivity().RESULT_OK) {// result for camera
+        if (requestCode == IntentRequests.REQ_CAMERA && resultCode == getActivity().RESULT_OK) {// result for camera
 
             Intent intent = new Intent(getActivity(), ActivityCrop.class);
             if (uriIntent != null) {
                 intent.putExtra("IMAGE_CAMERA", uriIntent.toString());
                 intent.putExtra("TYPE", "camera");
                 intent.putExtra("PAGE", prefix);
-                startActivityForResult(intent, myResultFragment);
+                startActivityForResult(intent, IntentRequests.REQ_CROP);
             } else {
                 Toast.makeText(G.context, R.string.can_not_save_picture_pleas_try_again, Toast.LENGTH_SHORT).show();
             }
-        } else if (requestCode == myResultCodeGallery && resultCode == getActivity().RESULT_OK) {// result for gallery
+        } else if (requestCode == IntentRequests.REQ_GALLERY && resultCode == getActivity().RESULT_OK) {// result for gallery
             if (data != null) {
                 Intent intent = new Intent(getActivity(), ActivityCrop.class);
                 intent.putExtra("IMAGE_CAMERA", data.getData().toString());
                 intent.putExtra("TYPE", "gallery");
                 intent.putExtra("PAGE", prefix);
-                startActivityForResult(intent, myResultFragment);
+                startActivityForResult(intent, IntentRequests.REQ_CROP);
             }
-        } else if (requestCode == myResultFragment) {
+        } else if (requestCode == IntentRequests.REQ_CROP) {
 
             if (data != null) {
                 data.getData().toString();

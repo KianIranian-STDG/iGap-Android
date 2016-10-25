@@ -39,6 +39,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
+import com.iGap.IntentRequests;
 import com.iGap.R;
 import com.iGap.fragments.FragmentShowImage;
 import com.iGap.fragments.FragmentSticker;
@@ -99,9 +100,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
     private AppBarLayout appBarLayout;
 
-    private int myResultCodeCamera = 1;
-    private int myResultCodeGallery = 0;
-    private int myResultCrop = 3;
     private Uri uriIntent;
     private long idAvatar;
     private File nameImageFile;
@@ -1235,7 +1233,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                                 uriIntent = Uri.fromFile(nameImageFile);
                                 intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
-                                startActivityForResult(intent, myResultCodeCamera);
+                                startActivityForResult(intent, IntentRequests.REQ_CAMERA);
 //                                realm.close();
                                 dialog.dismiss();
 
@@ -1292,7 +1290,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                         } else {
                             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                             idAvatar = System.nanoTime();
-                            startActivityForResult(intent, myResultCodeGallery);
+                            startActivityForResult(intent, IntentRequests.REQ_GALLERY);
                             dialog.dismiss();
                         }
                     }
@@ -1307,7 +1305,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == myResultCodeCamera && resultCode == RESULT_OK) {// result for camera
+        if (requestCode == IntentRequests.REQ_CAMERA && resultCode == RESULT_OK) {// result for camera
 
             Intent intent = new Intent(ActivitySetting.this, ActivityCrop.class);
             if (uriIntent != null) {
@@ -1316,20 +1314,20 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 intent.putExtra("TYPE", "camera");
                 intent.putExtra("PAGE", "setting");
                 intent.putExtra("ID", (int) (idAvatar + 1L));
-                startActivityForResult(intent, myResultCrop);
+                startActivityForResult(intent, IntentRequests.REQ_CROP);
             }
 
-        } else if (requestCode == myResultCodeGallery && resultCode == RESULT_OK) {// result for gallery
+        } else if (requestCode == IntentRequests.REQ_GALLERY && resultCode == RESULT_OK) {// result for gallery
             if (data != null) {
                 Intent intent = new Intent(ActivitySetting.this, ActivityCrop.class);
                 intent.putExtra("IMAGE_CAMERA", data.getData().toString());
                 intent.putExtra("TYPE", "gallery");
                 intent.putExtra("PAGE", "setting");
                 intent.putExtra("ID", (int) (idAvatar + 1L));
-                startActivityForResult(intent, myResultCrop);
+                startActivityForResult(intent, IntentRequests.REQ_CROP);
             }
 
-        } else if (requestCode == myResultCrop && resultCode == RESULT_OK) { // save path image on data base ( realm )
+        } else if (requestCode == IntentRequests.REQ_CROP && resultCode == RESULT_OK) { // save path image on data base ( realm )
 
             if (data != null) {
                 pathSaveImage = data.getData().toString();
