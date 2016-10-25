@@ -133,7 +133,8 @@ public class G extends Application {
     public static boolean isScrInFg = false;
     public static boolean isChangeScrFg = false;
 
-    public static ArrayList<String> unSecure = new ArrayList<>();
+    public static ArrayList<String> unSecure = new ArrayList<>(); // list of actionId that can be doing without secure
+    public static ArrayList<String> unLogin = new ArrayList<>(); // list of actionId that can be doing without login
 
     public static HashMap<Integer, String> lookupMap = new HashMap<>();
     public static ConcurrentHashMap<String, RequestWrapper> requestQueueMap = new ConcurrentHashMap<>();
@@ -292,6 +293,7 @@ public class G extends Application {
 
         HelperFillLookUpClass.fillLookUpClassArray();
         fillUnSecureList();
+        fillUnLoginList();
         fillSecuringInterface();
         WebSocketClient.getInstance();
 
@@ -447,9 +449,24 @@ public class G extends Application {
         realm.close();
     }
 
+    /**
+     * list of actionId that can be doing without secure
+     */
     private void fillUnSecureList() {
         unSecure.add("2");
-        unSecure.add("102");
+    }
+
+    /**
+     * list of actionId that can be doing without login
+     */
+    private void fillUnLoginList() {
+        unLogin.add("100");
+        unLogin.add("101");
+        unLogin.add("102");
+        unLogin.add("500");
+        unLogin.add("501");
+        unLogin.add("502");
+        unLogin.add("503");
     }
 
     private void fillSecuringInterface() {
