@@ -61,11 +61,13 @@ public class UserAvatarGetListResponse extends MessageHandler {
     @Override
     public void timeOut() {
         super.timeOut();
+        Log.i("VVV", "timeOut*****");
     }
 
     @Override
     public void error() {
         super.error();
+        Log.i("VVV", "error*****");
     }
 }
 

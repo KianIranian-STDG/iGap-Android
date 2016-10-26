@@ -52,4 +52,19 @@ public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
             }
         }
     }
+
+    public void notifyRoomItem(long chatId) {
+        notifyAdapterItemChanged(getItemPosition(chatId));
+    }
+
+    private int getItemPosition(long chatId) {
+        List<Item> items = getAdapterItems();
+        for (Item chat : items) {
+            if (chat.mInfo.chatId == chatId) {
+                return items.indexOf(chat);
+            }
+        }
+        return -1;
+    }
+
 }

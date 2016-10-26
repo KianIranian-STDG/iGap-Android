@@ -33,6 +33,7 @@ import com.iGap.interface_package.OnClientGetRoomListResponse;
 import com.iGap.interface_package.OnClientGetRoomResponse;
 import com.iGap.interface_package.OnConnectionChangeState;
 import com.iGap.interface_package.OnDeleteChatFinishActivity;
+import com.iGap.interface_package.OnDraftMessage;
 import com.iGap.interface_package.OnFileDownloadResponse;
 import com.iGap.interface_package.OnFileUploadStatusResponse;
 import com.iGap.interface_package.OnGroupAddAdmin;
@@ -224,6 +225,7 @@ public class G extends Application {
     public static OnClientGetRoomHistoryResponse onClientGetRoomHistoryResponse;
     public static OnUserAvatarDelete onUserAvatarDelete;
     public static OnUserAvatarGetList onUserAvatarGetList;
+    public static OnDraftMessage onDraftMessage;
 
     public static final String DIR_SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static final String DIR_APP = DIR_SDCARD + "/iGap";

@@ -1,5 +1,6 @@
 package com.iGap.adapter.items;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -18,6 +19,12 @@ import com.iGap.module.StructChatInfo;
 import com.iGap.module.StructDownloadAttachment;
 import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoFileDownload;
+import com.iGap.realm.RealmChatHistory;
+import com.iGap.realm.RealmChatHistoryFields;
+import com.iGap.realm.RealmRegisteredInfo;
+import com.iGap.realm.RealmRegisteredInfoFields;
+import com.iGap.realm.RealmRoom;
+import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestFileDownload;
 import com.iGap.request.RequestUserInfo;
@@ -27,6 +34,10 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.IOException;
 import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
+import io.realm.Sort;
 
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/``016.
@@ -144,22 +155,74 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> implem
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        String lastMessage = AppUtils.rightLastMessage(holder.itemView.getResources(), mInfo.chatType, mInfo.lastMessageId);
-        if (lastMessage == null || lastMessage.isEmpty()) {
-            holder.messageStatus.setVisibility(View.GONE);
-            holder.lastMessage.setVisibility(View.GONE);
-        } else {
-            if (mInfo.lastMessageSenderIsMe) {
-                AppUtils.rightMessageStatus(holder.messageStatus, mInfo.lastMessageStatus);
-
-                holder.messageStatus.setVisibility(View.VISIBLE);
-            } else {
-                holder.messageStatus.setVisibility(View.GONE);
-            }
-
-            holder.lastMessage.setVisibility(View.VISIBLE);
-            holder.lastMessage.setText(lastMessage);
+        String draft = null;
+        Realm realm = Realm.getDefaultInstance();
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mInfo.chatId).findFirst();
+        if (realmRoom != null) {
+            draft = realmRoom.getDraft();
         }
+        realm.close();
+
+        if (draft != null && !draft.isEmpty()) {
+            holder.lastMessage.setVisibility(View.VISIBLE);
+            holder.messageStatus.setVisibility(View.GONE);
+            holder.lastMessageSender.setVisibility(View.VISIBLE);
+            holder.lastMessageSender.setText("Draft : ");
+            holder.lastMessageSender.setTextColor(Color.parseColor("#ff4644"));
+            holder.lastMessage.setText(draft);
+        } else {
+            String lastMessage = AppUtils.rightLastMessage(holder.itemView.getResources(), mInfo.chatType, mInfo.lastMessageId);
+            if (lastMessage == null || lastMessage.isEmpty()) {
+                holder.messageStatus.setVisibility(View.GONE);
+                holder.lastMessage.setVisibility(View.GONE);
+                holder.lastMessageSender.setVisibility(View.GONE);
+            } else {
+                if (mInfo.lastMessageSenderIsMe) {
+                    AppUtils.rightMessageStatus(holder.messageStatus, mInfo.lastMessageStatus);
+                    holder.messageStatus.setVisibility(View.VISIBLE);
+                } else {
+                    holder.messageStatus.setVisibility(View.GONE);
+                }
+
+                 /*
+                 * here i get latest message from chat history with chatId and
+                 * get DisplayName with that . when login app client get latest
+                 * message for each group from server , if latest message that
+                 * send server and latest message that exist in client for that
+                 * room be different latest message sender showing will be wrong
+                 */
+
+                String lastMessageSender = "";
+                if (mInfo.lastMessageSenderIsMe) {
+                    lastMessageSender = "You : ";
+                } else {
+                    Realm realm1 = Realm.getDefaultInstance();
+                    RealmResults<RealmChatHistory> results = realm1.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, mInfo.chatId).findAllSorted(RealmChatHistoryFields.ID, Sort.DESCENDING);
+                    if (results != null) {
+                        RealmChatHistory realmChatHistory = results.first();
+                        if (realmChatHistory != null && realmChatHistory.getRoomMessage() != null) {
+                            RealmRegisteredInfo realmRegisteredInfo = realm1.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, realmChatHistory.getRoomMessage().getUserId()).findFirst();
+                            if (realmRegisteredInfo != null) {
+                                lastMessageSender = realmRegisteredInfo.getDisplayName() + " : ";
+                            }
+                        }
+                    }
+                    realm1.close();
+                }
+
+                if (mInfo.chatType == RoomType.GROUP) {
+                    holder.lastMessageSender.setText(lastMessageSender);
+                    holder.lastMessageSender.setTextColor(Color.parseColor("#2bbfbd"));
+                    holder.lastMessageSender.setVisibility(View.VISIBLE);
+                } else {
+                    holder.lastMessageSender.setVisibility(View.GONE);
+                }
+
+                holder.lastMessage.setVisibility(View.VISIBLE);
+                holder.lastMessage.setText(lastMessage);
+            }
+        }
+
 
         if (mInfo.avatar != null) {
             if (mInfo.avatar.isFileExistsOnLocal()) {
@@ -192,20 +255,18 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> implem
         }
 
         if (mInfo.chatType == RoomType.CHAT) {
-            holder.chatIcon.setText(getStringChatIcon(RoomType.CHAT));
-            holder.chatIcon.setTypeface(G.flaticon);
+            holder.chatIcon.setVisibility(View.GONE);
         } else if (mInfo.chatType == RoomType.GROUP) {
+            holder.chatIcon.setVisibility(View.VISIBLE);
             holder.chatIcon.setText(getStringChatIcon(RoomType.GROUP));
             holder.chatIcon.setTypeface(G.flaticon);
-
         } else if (mInfo.chatType == RoomType.CHANNEL) {
+            holder.chatIcon.setVisibility(View.VISIBLE);
             holder.chatIcon.setText(getStringChatIcon(RoomType.CHANNEL));
             holder.chatIcon.setTypeface(G.fontawesome);
-
         }
 
         holder.name.setText(mInfo.chatTitle);
-
 
         if (mInfo.lastMessageTime != 0) {
             holder.lastSeen.setText(TimeUtils.toLocal(mInfo.lastMessageTime, G.ROOM_LAST_MESSAGE_TIME));
@@ -245,6 +306,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> implem
         protected View distanceColor;
         protected TextView chatIcon;
         protected EmojiTextView name;
+        protected EmojiTextView lastMessageSender;
         protected TextView mute;
         protected EmojiTextView lastMessage;
         protected TextView lastSeen;
@@ -259,11 +321,11 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> implem
             chatIcon = (TextView) view.findViewById(R.id.cs_txt_contact_icon);
             name = (EmojiTextView) view.findViewById(R.id.cs_txt_contact_name);
             lastMessage = (EmojiTextView) view.findViewById(R.id.cs_txt_last_message);
+            lastMessageSender = (EmojiTextView) view.findViewById(R.id.cs_txt_last_message_sender);
             lastSeen = (TextView) view.findViewById(R.id.cs_txt_contact_time);
             unreadMessage = (TextView) view.findViewById(R.id.cs_txt_unread_message);
             mute = (TextView) view.findViewById(R.id.cs_txt_mute);
             messageStatus = (MaterialDesignTextView) view.findViewById(R.id.cslr_txt_tic);
-
 
             mute.setTypeface(G.fontawesome);
             lastSeen.setTypeface(G.arial);

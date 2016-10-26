@@ -29,6 +29,7 @@ public class RealmRoom extends RealmObject {
     private long lastMessageTime;
     private String lastMessage;
     private String lastMessageStatus;
+    private String draft = "";
     private RealmAvatar avatar;
 
     public long getLastMessageTime() {
@@ -149,6 +150,14 @@ public class RealmRoom extends RealmObject {
 
     public void setLastMessageStatus(String lastMessageStatus) {
         this.lastMessageStatus = lastMessageStatus;
+    }
+
+    public String getDraft() {
+        return draft;
+    }
+
+    public void setDraft(String draft) {
+        this.draft = draft;
     }
 
     public RealmAvatar getAvatar() {

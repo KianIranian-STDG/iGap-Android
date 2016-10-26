@@ -37,6 +37,7 @@ import com.iGap.interface_package.OnChatUpdateStatusResponse;
 import com.iGap.interface_package.OnClientGetRoomListResponse;
 import com.iGap.interface_package.OnClientGetRoomResponse;
 import com.iGap.interface_package.OnConnectionChangeState;
+import com.iGap.interface_package.OnDraftMessage;
 import com.iGap.interface_package.OnFileDownloadResponse;
 import com.iGap.interface_package.OnUserInfoResponse;
 import com.iGap.libs.floatingAddButton.ArcMenu;
@@ -142,7 +143,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         initRecycleView();
         initFloatingButtonCreateNew();
         initDrawerMenu();
-
+        onDraftMessage();
         Contacts.FillRealmInviteFriend();
     }
 
@@ -987,4 +988,14 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     public void onUserInfoError() {
 
     }
+
+    private void onDraftMessage() {
+        G.onDraftMessage = new OnDraftMessage() {
+            @Override
+            public void onDraftMessage(long roomId, String messageText) {
+                mAdapter.notifyRoomItem(roomId);
+            }
+        };
+    }
+
 }

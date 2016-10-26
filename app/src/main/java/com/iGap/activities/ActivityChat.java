@@ -498,6 +498,11 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         clearHistoryFromContactsProfileInterface();
         onDeleteChatFinishActivityInterface();
 
+        String draft = getDraft();
+        if (draft != null && !draft.isEmpty()) {
+            edtChat.setText(draft);
+        }
+
         setAvatar();
     }
 
@@ -586,14 +591,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 }
             }
         };
-    }
-
-    @Override
-    protected void onDestroy() {
-        // room id have to be set to default, otherwise I'm in the room always!
-        mRoomId = -1;
-
-        super.onDestroy();
     }
 
     private void switchAddItem(ArrayList<StructMessageInfo> messageInfos, boolean addTop) {
@@ -3233,5 +3230,62 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         }
     }
 
+    private void setDraft() {
+        final String message = edtChat.getText().toString();
+        if (!message.isEmpty()) {
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                    realmRoom.setDraft(message);
+                    G.onDraftMessage.onDraftMessage(mRoomId, message);
+                }
+            });
+            realm.close();
+        } else {
+            clearDraft();
+        }
+    }
+
+    private String getDraft() {
+        String draft;
+        Realm realm = Realm.getDefaultInstance();
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+        draft = realmRoom.getDraft();
+        realm.close();
+
+        clearDraft();
+
+        return draft;
+    }
+
+    private void clearDraft() {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                realmRoom.setDraft("");
+            }
+        });
+        realm.close();
+    }
+
+    @Override
+    protected void onStop() {
+        Log.i("TTT", "onStop");
+        setDraft();
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.i("TTT", "onDestroy");
+        // room id have to be set to default, otherwise I'm in the room always!
+        mRoomId = -1;
+
+        super.onDestroy();
+    }
 
 }
