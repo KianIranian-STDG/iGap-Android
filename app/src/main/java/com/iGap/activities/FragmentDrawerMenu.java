@@ -261,6 +261,11 @@ public class FragmentDrawerMenu extends MenuFragment {
                     }
                 });
             }
+
+            @Override
+            public void onChangeInitials(String initials, String color) {
+                imgUserPhoto.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) imgUserPhoto.getContext().getResources().getDimension(R.dimen.dp100), initials, color));
+            }
         };
 
         realm.close();
