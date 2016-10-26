@@ -25,6 +25,8 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityExplorer;
 import com.iGap.activities.ActivityPaint;
+import com.iGap.helper.HelperPermision;
+import com.iGap.interface_package.OnGetPermision;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -53,6 +55,7 @@ public class AttachFile {
 
     private Context context;
 
+
     private LocationManager locationManager;
     private ProgressDialog pd;
     private Boolean sendPosition = false;
@@ -66,13 +69,22 @@ public class AttachFile {
     //*************************************************************************************************************
 
     public void requestPaint() {
-        Intent intent = new Intent(context, ActivityPaint.class);
-        ((Activity) context).startActivityForResult(intent, request_code_paint);
+
+        HelperPermision.getStoragePermision(context, new OnGetPermision() {
+            @Override
+            public void Allow() {
+                Intent intent = new Intent(context, ActivityPaint.class);
+                ((Activity) context).startActivityForResult(intent, request_code_paint);
+            }
+        });
+
     }
 
     //*************************************************************************************************************
 
     public void requestTakePicture() {
+
+
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         Uri outPath = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
 
@@ -116,11 +128,12 @@ public class AttachFile {
         return mediaFile;
     }
 
-//*************************************************************************************************************
+    //*************************************************************************************************************
     public void requestOpenGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK, Uri.parse("content://media/internal/images/media"));
         ((Activity) context).startActivityForResult(intent, request_code_media_from_gallary);
     }
+
     public void requestOpenGalleryForImage() {
 
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -153,8 +166,13 @@ public class AttachFile {
     //*************************************************************************************************************
 
     public void requestPickFile() {
-        Intent intent = new Intent(context, ActivityExplorer.class);
-        ((Activity) context).startActivityForResult(intent, request_code_pic_file);
+        HelperPermision.getStoragePermision(context, new OnGetPermision() {
+            @Override
+            public void Allow() {
+                Intent intent = new Intent(context, ActivityExplorer.class);
+                ((Activity) context).startActivityForResult(intent, request_code_pic_file);
+            }
+        });
     }
 
     //*************************************************************************************************************
@@ -171,7 +189,12 @@ public class AttachFile {
 
         this.complete = complete;
 
-        getPosition();
+        HelperPermision.getLocationPermision(context, new OnGetPermision() {
+            @Override
+            public void Allow() {
+                getPosition();
+            }
+        });
 
     }
 
