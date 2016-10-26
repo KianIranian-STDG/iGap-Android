@@ -954,4 +954,14 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             }
         });*/
     }
+
+    @Override
+    public void onUserInfoTimeOut() {
+
+    }
+
+    @Override
+    public void onUserInfoError() {
+
+    }
 }

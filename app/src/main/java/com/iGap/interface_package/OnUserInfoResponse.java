@@ -10,4 +10,9 @@ import com.iGap.proto.ProtoResponse;
 
 public interface OnUserInfoResponse {
     void onUserInfo(ProtoGlobal.RegisteredUser user, ProtoResponse.Response response);
+
+    void onUserInfoTimeOut();
+
+    void onUserInfoError();
+
 }

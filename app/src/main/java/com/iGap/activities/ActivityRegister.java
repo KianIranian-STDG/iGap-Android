@@ -10,6 +10,7 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.SearchView;
 import android.text.Editable;
 import android.text.Html;
@@ -187,7 +188,7 @@ public class ActivityRegister extends ActivityEnhanced {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().equals("0")) {
-                    Toast.makeText(ActivityRegister.this, "نیازی به 0 اول نیست", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ActivityRegister.this, getResources().getString(R.string.Toast_First_0), Toast.LENGTH_SHORT).show();
                     edtPhoneNumber.setText("");
                 }
             }
@@ -404,7 +405,14 @@ public class ActivityRegister extends ActivityEnhanced {
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(G.context, "waiting for get info country", Toast.LENGTH_SHORT).show();
+                                final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.Toast_waiting_for_get_info_country), Snackbar.LENGTH_LONG);
+                                snack.setAction("CANCEL", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        snack.dismiss();
+                                    }
+                                });
+                                snack.show();
                             }
                         });
 
@@ -503,7 +511,14 @@ public class ActivityRegister extends ActivityEnhanced {
                     dialog.show();
 
                 } else {
-                    Toast.makeText(ActivityRegister.this, "Please Enter your Phone Number", Toast.LENGTH_SHORT).show();
+                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.Toast_Enter_Phone_Number), Snackbar.LENGTH_LONG);
+                    snack.setAction("CANCEL", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            snack.dismiss();
+                        }
+                    });
+                    snack.show();
                 }
             }
         });
@@ -681,7 +696,14 @@ public class ActivityRegister extends ActivityEnhanced {
                     userVerify(userName, edtEnterCodeVerify.getText().toString());
                     dialog.dismiss();
                 } else {
-                    Toast.makeText(ActivityRegister.this, "Please Enter Code", Toast.LENGTH_SHORT).show();
+                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.Toast_Enter_Code), Snackbar.LENGTH_LONG);
+                    snack.setAction("CANCEL", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            snack.dismiss();
+                        }
+                    });
+                    snack.show();
                 }
             }
         });
@@ -927,6 +949,14 @@ public class ActivityRegister extends ActivityEnhanced {
                             // TODO: 9/25/2016 Error 105 - USER_VERIFY_BLOCKED_USER
 
                             Toast.makeText(ActivityRegister.this, "This Number is Block", Toast.LENGTH_SHORT).show();
+                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.Toast_Number_Block), Snackbar.LENGTH_LONG);
+                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                            snack.show();
 
 
                         }

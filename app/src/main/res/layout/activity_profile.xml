@@ -119,7 +119,7 @@
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/pu_txtInput_nikeName"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:foregroundGravity="center"
@@ -144,19 +144,19 @@
                 android:textColorHint="@color/pu_edtHintText"
                 android:textSize="@dimen/sp22" />
 
+            <View
+                android:id="@+id/pu_line_below_editText"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/border_editText"
+                android:layout_below="@+id/pu_edt_nikeName" />
+
         </android.support.design.widget.TextInputLayout>
+
+
     </RelativeLayout>
 
-    <View
-        android:id="@+id/pu_line_below_editText"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginBottom="@dimen/dp32"
-        android:layout_marginLeft="@dimen/dp52"
-        android:layout_marginRight="@dimen/dp52"
-        android:background="@color/border_editText"
 
-        />
 
     <!--</LinearLayout>-->
 

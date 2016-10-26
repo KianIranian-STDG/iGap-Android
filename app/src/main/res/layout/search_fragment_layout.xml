@@ -53,8 +53,9 @@
                     android:layout_weight="1"
                     android:autoText="false"
                     android:background="@null"
-                    android:hint="Search"
+                    android:hint="@string/search"
                     android:textColor="@color/white"
+                    android:textColorHint="@color/colorEmojiPopupCategoryBottomBorder"
                     android:textCursorDrawable="@drawable/white_cursor_color" />
 
                 <com.iGap.libs.rippleeffect.RippleView

@@ -9,13 +9,15 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
@@ -115,7 +117,14 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
                         public void run() {
                             // TODO: 9/25/2016 Error 112 - USER_PROFILE_SET_NICKNAME_BAD_PAYLOAD
                             //Invalid nickname
-                            Toast.makeText(ActivityProfile.this, "Invalid nickname. Please change nickname", Toast.LENGTH_SHORT).show();
+                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.Toast_Invalid_nickname), Snackbar.LENGTH_LONG);
+                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                            snack.show();
 
                         }
                     });
@@ -143,19 +152,38 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
-        TextInputLayout txtInputNickName = (TextInputLayout) findViewById(R.id.pu_txtInput_nikeName);
+        final TextInputLayout txtInputNickName = (TextInputLayout) findViewById(R.id.pu_txtInput_nikeName);
 //        txtInputNickName.setHint("Nickname");
 
         edtNikName = (EditTextAdjustPan) findViewById(R.id.pu_edt_nikeName); // edit Text for NikName
         edtNikName.setTypeface(G.arial);
         btnLetsGo = (Button) findViewById(R.id.pu_btn_letsGo);
         btnLetsGo.setTypeface(G.arial);
+
+        edtNikName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                txtInputNickName.setError("");
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
         btnLetsGo.setOnClickListener(new View.OnClickListener() { // button for save data and go to next page
             @Override
             public void onClick(View view) {
 
                 Realm realm = Realm.getDefaultInstance();
                 final String nickName = edtNikName.getText().toString();
+
 
                 if (!nickName.equals("")) {
                     btnLetsGo.setEnabled(false);
@@ -188,7 +216,9 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(G.context, "Please Write Your NickName", Toast.LENGTH_SHORT).show();
+
+                            txtInputNickName.setErrorEnabled(true);
+                            txtInputNickName.setError(getResources().getString(R.string.Toast_Write_NickName));
                         }
                     });
                 }
@@ -236,7 +266,15 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
                                 dialog.dismiss();
 
                             } else {
-                                Toast.makeText(ActivityProfile.this, "Please check your Camera", Toast.LENGTH_SHORT).show();
+                                final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.please_check_your_camera), Snackbar.LENGTH_LONG);
+
+                                snack.setAction("CANCEL", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        snack.dismiss();
+                                    }
+                                });
+                                snack.show();
                             }
 
                         } else {

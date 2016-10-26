@@ -9,4 +9,8 @@ public interface OnChatGetRoom {
 
     void onChatGetRoom(long roomId);
 
+    void onChatGetRoomTimeOut();
+
+    void onChatGetRoomError();
+
 }

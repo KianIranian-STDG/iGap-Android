@@ -624,6 +624,17 @@ public class G extends Application {
                     realm.close();
                 }
             }
+
+            @Override
+            public void onUserInfoTimeOut() {
+
+            }
+
+            @Override
+            public void onUserInfoError() {
+
+            }
+
         };
         new RequestUserInfo().userInfo(userId);
     }

@@ -7,20 +7,16 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewPager;
 import android.text.Html;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.iGap.G;
 import com.iGap.R;
@@ -410,11 +406,14 @@ public class ActivityIntroduce extends ActivityEnhanced {
                             public void run() {
 //                                Toast.makeText(G.context, "waiting fot get info", Toast.LENGTH_SHORT).show();
 
-                                Snackbar snack = Snackbar.make(findViewById(android.R.id.content), "waiting fot get info", Snackbar.LENGTH_LONG);
-                                View view = snack.getView();
-                                FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
-                                params.gravity = Gravity.TOP;
-                                view.setLayoutParams(params);
+                                final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.Toast_waiting_fot_get_info), Snackbar.LENGTH_LONG);
+
+                                snack.setAction("CANCEL", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        snack.dismiss();
+                                    }
+                                });
                                 snack.show();
 
                             }
@@ -427,13 +426,15 @@ public class ActivityIntroduce extends ActivityEnhanced {
                         public void run() {
 
 
-                            CoordinatorLayout coordinatorLayout = (CoordinatorLayout) findViewById(R.id.snackbarlocation);
-                            Snackbar snackbar = Snackbar.make(coordinatorLayout, "Text", Snackbar.LENGTH_LONG);
-                            View view = snackbar.getView();
-                            CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) view.getLayoutParams();
-                            params.gravity = Gravity.TOP;
-                            view.setLayoutParams(params);
-                            snackbar.show();
+                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.Toast_waiting_fot_get_info), Snackbar.LENGTH_LONG);
+
+                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                            snack.show();
 
                         }
                     });
@@ -479,7 +480,15 @@ public class ActivityIntroduce extends ActivityEnhanced {
                         @Override
                         public void run() {
                             locationFound = false;
-                            Toast.makeText(G.context, "Location Not Found", Toast.LENGTH_SHORT).show();
+                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.Toast_Location_Not_Found), Snackbar.LENGTH_LONG);
+
+                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                            snack.show();
                         }
                     });
                 }
@@ -532,7 +541,18 @@ public class ActivityIntroduce extends ActivityEnhanced {
                 @Override
                 public void run() {
                     locationFound = false;
-                    Toast.makeText(G.context, "autoRegistration", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(G.context, "autoRegistration", Toast.LENGTH_SHORT).show();
+//
+//                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.Toast_Location_Not_Found), Snackbar.LENGTH_LONG);
+//
+//                    snack.setAction("CANCEL", new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                            snack.dismiss();
+//                        }
+//                    });
+//                    snack.show();
+
                 }
             });
             startRegistration();

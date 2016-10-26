@@ -135,7 +135,6 @@
             android:layout_marginTop="@dimen/dp8"
             android:hint="@string/fac_Phone_Number"
             android:inputType="phone"
-            android:maxLength="12"
             android:singleLine="true" />
 
     </android.support.design.widget.TextInputLayout>

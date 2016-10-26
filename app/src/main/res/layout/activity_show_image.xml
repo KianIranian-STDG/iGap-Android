@@ -17,7 +17,8 @@
         android:layout_height="@dimen/dp60"
         android:background="#55000000"
         android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center"
+        android:id="@+id/toolbarShowImage">
 
         <com.iGap.libs.rippleeffect.RippleView
             android:id="@+id/asi_ripple_back"

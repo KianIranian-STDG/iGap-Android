@@ -166,11 +166,7 @@
             </com.iGap.libs.rippleeffect.RippleView>
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
-    <!--<View-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:id="@+id/progressBackground"-->
-    <!--android:background="@color/black_progressBackground"/>-->
+
 
     <ProgressBar
         android:id="@+id/prgWaiting"

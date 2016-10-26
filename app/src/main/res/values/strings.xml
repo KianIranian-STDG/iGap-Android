@@ -234,7 +234,7 @@
     <string name="rg_verify_dialog_enter_code">iGap App try to detect sms via your phone but maybe you used other phone or another reason happen app cannot detect number of verification code , you can wrote manually and try or resend again .</string>
     <string name="rg_verify_dialog_try_code">Try</string>
     <string name="rg_verify_dialog_resend_code">Resend Code</string>
-    <string name="search">rg_search</string>
+    <string name="search">Search</string>
     <string name="Re_dialog_verify_number_part1">We will Verifying the phone number: \n</string>
     <string name="Re_dialog_verify_number_part2">Is this OK , or would you like to edit the number?</string>
     <string name="Re_Enter_Verify_Code_Please">Enter Verify Code Please</string>
@@ -479,6 +479,18 @@
     <string name="member_can_add_new_member">Member Can Add New Member</string>
     <string name="notificaion_and_sound">Notification and Sound</string>
     <string name="last_msg_format_chat">%s</string>
+
+    <!--Toast-->
+    <string name="Toast_waiting_fot_get_info">waiting fot get info</string>
+    <string name="Toast_waiting_for_get_info_country">waiting for get info country</string>
+    <string name="Toast_check_internet">Check your Internet Please</string>
+    <string name="Toast_Location_Not_Found">Location_Not_Found</string>
+    <string name="Toast_First_0">Don\'t need First 0</string>
+    <string name="Toast_Enter_Phone_Number">Please Enter your Phone Number</string>
+    <string name="Toast_Enter_Code">Please Enter Code</string>
+    <string name="Toast_Number_Block">This Number is Block</string>
+    <string name="Toast_Invalid_nickname">Invalid nickname. Please change nickname</string>
+    <string name="Toast_Write_NickName">Please Write Your NickName</string>
 
 
 </resources>

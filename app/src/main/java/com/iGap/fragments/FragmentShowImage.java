@@ -56,6 +56,8 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
     private TextView txtImageNumber;
     private TextView txtImageName;
     private TextView txtImageDate;
+    private LinearLayout toolbarShowImage;
+    private boolean isShowToolbar = true;
 
     private ViewPager viewPager;
 
@@ -139,6 +141,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
         txtImageNumber = (TextView) view.findViewById(R.id.asi_txt_image_number);
         txtImageName = (TextView) view.findViewById(R.id.asi_txt_image_name);
         txtImageDate = (TextView) view.findViewById(R.id.asi_txt_image_date);
+        toolbarShowImage = (LinearLayout) view.findViewById(R.id.toolbarShowImage);
 
         G.onFileDownloadResponse = this;
 
@@ -161,6 +164,16 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
         if (list.get(selectedFile).time != 0) {
             txtImageDate.setText(TimeUtils.toLocal(list.get(selectedFile).time, G.CHAT_MESSAGE_TIME));
         }
+
+        viewPager.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Log.i("ZZZZ", "setOnClickListener: ");
+
+            }
+        });
+
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -192,6 +205,8 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
         viewPager.setPageTransformer(false, new ViewPager.PageTransformer() {
             @Override
             public void transformPage(View view, float position) {
+                Log.i("ZZZZ", "setPageTransformer: ");
+
                 final float normalizedPosition = Math.abs(Math.abs(position) - 1);
                 view.setScaleX(normalizedPosition / 2 + 0.5f);
                 view.setScaleY(normalizedPosition / 2 + 0.5f);
@@ -305,6 +320,21 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
             final ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.show_image_sub_layout, (ViewGroup) container, false);
 
             TouchImageView touchImageView = (TouchImageView) layout.findViewById(R.id.sisl_touch_image_view);
+            touchImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (isShowToolbar) {
+                        toolbarShowImage.animate().setDuration(150).alpha(0F).start();
+                        toolbarShowImage.setVisibility(View.GONE);
+                        isShowToolbar = false;
+                    } else {
+                        toolbarShowImage.animate().setDuration(150).alpha(1F).start();
+                        toolbarShowImage.setVisibility(View.VISIBLE);
+                        isShowToolbar = true;
+                    }
+                }
+            });
+
 
             final StructMessageInfo media = list.get(position);
 
@@ -324,6 +354,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
 //                            view.setLayoutParams(new LinearLayout.LayoutParams(dimens[0], dimens[1]));
 //                            view.requestLayout();
 //                        }
+
 
                         // load thumbnail from local
                         onLoadFromLocal(touchImageView, media.attachment.getLocalThumbnailPath(), LocalFileType.THUMBNAIL);

@@ -224,6 +224,16 @@ public class FragmentDrawerMenu extends MenuFragment {
             public void onUserInfo(ProtoGlobal.RegisteredUser user, ProtoResponse.Response response) {
 
             }
+
+            @Override
+            public void onUserInfoTimeOut() {
+
+            }
+
+            @Override
+            public void onUserInfoError() {
+
+            }
         };
 
         //new RequestUserInfo().userInfo(realm.where(RealmUserInfo.class).findFirst().getUserId());

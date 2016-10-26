@@ -70,7 +70,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="@string/md_show_more_button"
-                android:textColor="@color/whit_background"
+                android:textColor="@color/border_editText"
                 android:textSize="@dimen/sp18" />
 
         </LinearLayout>

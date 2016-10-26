@@ -238,6 +238,16 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                                     }
                                 });
                             }
+
+                            @Override
+                            public void onChatGetRoomTimeOut() {
+
+                            }
+
+                            @Override
+                            public void onChatGetRoomError() {
+
+                            }
                         };
 
                         new RequestChatGetRoom().chatGetRoom(userId);

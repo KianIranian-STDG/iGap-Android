@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.iGap.G;
@@ -58,6 +59,9 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
     private TextView menu_txt_titleToolbar;
     private ViewGroup vgAddContact;
     private List<StructContactInfo> contacts;
+    private RecyclerView rv;
+
+    private ProgressBar prgWaiting;
 
     public static RegisteredContactsFragment newInstance() {
         return new RegisteredContactsFragment();
@@ -74,6 +78,10 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
         super.onViewCreated(view, savedInstanceState);
 
         //set interface for get callback here
+        prgWaiting = (ProgressBar) view.findViewById(R.id.prgWaiting_addContact);
+        prgWaiting.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
+        prgWaiting.setVisibility(View.GONE);
+
         G.onFileDownloadResponse = this;
 
         Bundle bundle = this.getArguments();
@@ -99,6 +107,11 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
             @Override
             public boolean onClick(View v, IAdapter adapter, ContactItem item, int position) {
                 chatGetRoom(item.mContact.peerId);
+                prgWaiting.setVisibility(View.VISIBLE);
+                rv.setEnabled(false);
+                vgAddContact.setEnabled(false);
+                searchView.setEnabled(false);
+
                 return false;
             }
         });
@@ -168,7 +181,7 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
         fastAdapter.setHasStableIds(true);
 
         //get our recyclerView and do basic setup
-        RecyclerView rv = (RecyclerView) view.findViewById(R.id.recycler_view);
+        rv = (RecyclerView) view.findViewById(R.id.recycler_view);
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
         rv.setItemAnimator(new DefaultItemAnimator());
         rv.setAdapter(stickyHeaderAdapter.wrap(itemAdapter.wrap(headerAdapter.wrap(fastAdapter))));
@@ -213,7 +226,30 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                 @Override
                 public void onChatGetRoom(final long roomId) {
                     getUserInfo(peerId, roomId);
+
+
                 }
+
+                @Override
+                public void onChatGetRoomTimeOut() {
+                    prgWaiting.setVisibility(View.GONE);
+                    rv.setEnabled(true);
+                    vgAddContact.setEnabled(true);
+                    searchView.setEnabled(true);
+
+
+                }
+
+                @Override
+                public void onChatGetRoomError() {
+                    prgWaiting.setVisibility(View.GONE);
+                    rv.setEnabled(true);
+                    vgAddContact.setEnabled(true);
+                    searchView.setEnabled(true);
+
+                }
+
+
             };
 
             new RequestChatGetRoom().chatGetRoom(peerId);
@@ -260,6 +296,7 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                             }, new Realm.Transaction.OnSuccess() {
                                 @Override
                                 public void onSuccess() {
+                                    prgWaiting.setVisibility(View.GONE);
                                     Intent intent = new Intent(G.context, ActivityChat.class);
                                     intent.putExtra("peerId", peerId);
                                     intent.putExtra("RoomId", roomId);
@@ -273,6 +310,23 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                         }
                     }
                 });
+            }
+
+            @Override
+            public void onUserInfoTimeOut() {
+                prgWaiting.setVisibility(View.GONE);
+                rv.setEnabled(true);
+                vgAddContact.setEnabled(true);
+                searchView.setEnabled(true);
+
+            }
+
+            @Override
+            public void onUserInfoError() {
+                prgWaiting.setVisibility(View.GONE);
+                rv.setEnabled(true);
+                vgAddContact.setEnabled(true);
+                searchView.setEnabled(true);
             }
         };
 

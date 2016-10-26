@@ -203,33 +203,36 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     firsName = splitNickname[0];
 
                 }
+                View viewFirstName = new View(ActivitySetting.this);
+                viewFirstName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
+                LinearLayout.LayoutParams viewParams = new AppBarLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2);
 
 
                 TextInputLayout inputFirstName = new TextInputLayout(ActivitySetting.this);
                 final EditText edtFirstName = new EditText(ActivitySetting.this);
                 edtFirstName.setHint(firsName);
+                edtFirstName.setPadding(0, 0, 0, 0);
 
                 edtFirstName.setSingleLine(true);
                 inputFirstName.addView(edtFirstName);
+                inputFirstName.addView(viewFirstName, viewParams);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    edtFirstName.setBackground(getResources().getDrawable(R.drawable.edittext_bg));
+                    edtFirstName.setBackground(getResources().getDrawable(android.R.color.transparent));
                 }
 
-                View viewFirstName = new View(ActivitySetting.this);
-                viewFirstName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
+                View viewLastName = new View(ActivitySetting.this);
+                viewLastName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
 
                 TextInputLayout inputLastName = new TextInputLayout(ActivitySetting.this);
                 final EditText edtLastName = new EditText(ActivitySetting.this);
                 edtLastName.setHint(lastName);
+                edtLastName.setPadding(0, 0, 0, 0);
                 edtLastName.setSingleLine(true);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    edtLastName.setBackground(getResources().getDrawable(R.drawable.edittext_bg));
+                    edtLastName.setBackground(getResources().getDrawable(android.R.color.transparent));
                 }
                 inputLastName.addView(edtLastName);
-
-
-                View viewLastName = new View(ActivitySetting.this);
-                viewLastName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
+                inputLastName.addView(viewLastName, viewParams);
 
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutParams.setMargins(0, 0, 0, 30);

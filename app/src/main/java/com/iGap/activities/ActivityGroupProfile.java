@@ -519,7 +519,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                     public void onClick(View view) {
                         PopupMenu popup = new PopupMenu(ActivityGroupProfile.this, view, Gravity.TOP);
                         // Inflate the menu from xml
-                        popup.getMenuInflater().inflate(R.menu.chi_popup_menu, popup.getMenu());
+                        popup.getMenuInflater().inflate(R.menu.menu_item_group_profile, popup.getMenu());
                         // Setup menu item selection
                         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                             public boolean onMenuItemClick(MenuItem item) {

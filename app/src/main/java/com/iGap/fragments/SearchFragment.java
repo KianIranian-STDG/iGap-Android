@@ -332,6 +332,16 @@ public class SearchFragment extends Fragment {
                         }
                     });
                 }
+
+                @Override
+                public void onChatGetRoomTimeOut() {
+
+                }
+
+                @Override
+                public void onChatGetRoomError() {
+
+                }
             };
 
             new RequestChatGetRoom().chatGetRoom(id);

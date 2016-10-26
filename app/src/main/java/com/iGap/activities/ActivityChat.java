@@ -2967,6 +2967,16 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     }
 
     @Override
+    public void onUserInfoTimeOut() {
+
+    }
+
+    @Override
+    public void onUserInfoError() {
+
+    }
+
+    @Override
     public void onGetRoomHistory(final long roomId, String message, String messageType, final ProtoGlobal.RoomMessage roomMessage) {
         final Realm realm = Realm.getDefaultInstance();
 

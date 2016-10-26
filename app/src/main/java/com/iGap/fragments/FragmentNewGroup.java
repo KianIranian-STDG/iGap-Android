@@ -232,11 +232,9 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
                                            @Override
                                            public void onClick(View view) {
 
-                                               prgWaiting.setVisibility(View.VISIBLE);
-
                                                if (edtDescription.getText().toString().length() > 0) {
                                                    if (edtGroupName.getText().toString().length() > 0) {
-
+                                                       prgWaiting.setVisibility(View.VISIBLE);
                                                        txtNextStep.setEnabled(false);
                                                        txtBack.setEnabled(false);
                                                        txtCancel.setEnabled(false);

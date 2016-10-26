@@ -28,15 +28,17 @@ public class ChatGetRoomResponse extends MessageHandler {
         G.onChatGetRoom.onChatGetRoom(chatGetRoomResponse.getRoomId());
     }
 
-    @Override
-    public void timeOut() {
-        super.timeOut();
-    }
-
-    @Override
-    public void error() {
-        super.error();
-    }
+//    @Override
+//    public void timeOut() {
+//        super.timeOut();
+//        G.onChatGetRoom.onChatGetRoomTimeOut();
+//    }
+//
+//    @Override
+//    public void error() {
+//        super.error();
+//        G.onChatGetRoom.onChatGetRoomError();
+//    }
 }
 
 

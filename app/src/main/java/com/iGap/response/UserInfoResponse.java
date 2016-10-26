@@ -61,6 +61,8 @@ public class UserInfoResponse extends MessageHandler {
     @Override
     public void timeOut() {
         Log.i("SOCA", "UserInfoResponse timeout");
+
+        G.onUserInfoResponse.onUserInfoTimeOut();
     }
 
     @Override
@@ -71,6 +73,7 @@ public class UserInfoResponse extends MessageHandler {
 
         Log.i("SOCA", "UserInfoResponse response.majorCode() : " + majorCode);
         Log.i("SOCA", "UserInfoResponse response.minorCode() : " + minorCode);
+        G.onUserInfoResponse.onUserInfoError();
     }
 }
 
