@@ -120,13 +120,15 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> implem
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        } else {
-            // I don't use offset in getting thumbnail
-            String identity = mInfo.downloadAttachment.token + '*' + selector.toString() + '*' + mInfo.avatar.largeThumbnail.size + '*' + fileName + '*' + mInfo.downloadAttachment.offset + "*" + Boolean.toString(true) + "*" + mInfo.chatId + "*" + mInfo.chatType.toString();
 
-            new RequestFileDownload().download(mInfo.downloadAttachment.token, offset, (int) mInfo.avatar.largeThumbnail.size, selector, identity);
-
+            return; // necessary
         }
+
+        // I don't use offset in getting thumbnail
+        String identity = mInfo.downloadAttachment.token + '*' + selector.toString() + '*' + mInfo.avatar.largeThumbnail.size + '*' + fileName + '*' + mInfo.downloadAttachment.offset + "*" + Boolean.toString(true) + "*" + mInfo.chatId + "*" + mInfo.chatType.toString();
+
+        new RequestFileDownload().download(mInfo.downloadAttachment.token, offset, (int) mInfo.avatar.largeThumbnail.size, selector, identity);
+
     }
 
     private void requestForUserInfo() {
