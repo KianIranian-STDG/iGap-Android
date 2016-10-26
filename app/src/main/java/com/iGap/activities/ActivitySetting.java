@@ -48,6 +48,7 @@ import com.iGap.helper.HelperLogout;
 import com.iGap.interface_package.OnFileUploadForActivities;
 import com.iGap.interface_package.OnUserAvatarDelete;
 import com.iGap.interface_package.OnUserAvatarResponse;
+import com.iGap.interface_package.OnUserInfoResponse;
 import com.iGap.interface_package.OnUserProfileSetNickNameResponse;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.AndroidUtils;
@@ -63,6 +64,7 @@ import com.iGap.realm.RealmAvatarToken;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestUserAvatarAdd;
 import com.iGap.request.RequestUserAvatarDelete;
+import com.iGap.request.RequestUserInfo;
 import com.iGap.request.RequestUserProfileSetNickname;
 
 import java.io.File;
@@ -326,7 +328,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                         G.onUserProfileSetNickNameResponse = new OnUserProfileSetNickNameResponse() {
                             @Override
                             public void onUserProfileNickNameResponse(final String nickName, ProtoResponse.Response response) {
-                                Log.i("CCCC", "1212: " + nickName);
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -338,7 +339,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                                 realm.where(RealmUserInfo.class).findFirst().setNickName(nickName);
                                                 txtNickNameTitle.setText(nickName);
                                                 FragmentDrawerMenu.txtUserName.setText(nickName);
-                                                Log.i("CCCC", "5445: " + nickName);
+                                                getUserInfo();
                                             }
                                         });
 
@@ -1214,6 +1215,45 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         realm.close();
     }
 
+    private void getUserInfo() {
+        G.onUserInfoResponse = new OnUserInfoResponse() {
+            @Override
+            public void onUserInfo(final ProtoGlobal.RegisteredUser user, ProtoResponse.Response response) {
+
+                // if response is for own user do this action
+                if (user.getId() == userId) {
+
+                    Realm realm = Realm.getDefaultInstance();
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            realm.where(RealmUserInfo.class).findFirst().setInitials(user.getInitials());
+                        }
+                    });
+                    realm.close();
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            setInitials(user.getInitials(), user.getColor());
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onUserInfoTimeOut() {
+
+            }
+
+            @Override
+            public void onUserInfoError() {
+
+            }
+        };
+
+        new RequestUserInfo().userInfo(userId);
+    }
 
     //dialog for choose pic from gallery or camera
     private void startDialog(int r) {
@@ -1418,7 +1458,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
         if (realmAvatarPaths.size() > 0) {
             pathImageDecode = realmAvatarPaths.first().getPathImage();
-            Log.i("VVV", "pathImageDecode : " + pathImageDecode);
             decodeBitmapProfile = HelperDecodeFile.decodeFile(new File(pathImageDecode));
             circleImageView.setImageBitmap(decodeBitmapProfile);
             G.onChangeUserPhotoListener.onChangePhoto(pathImageDecode);
@@ -1428,6 +1467,13 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             G.onChangeUserPhotoListener.onChangePhoto(null);
         }
         realm.close();
+    }
+
+    private void setInitials(String initials, String color) {
+        Log.i("VVV", "initials : " + initials);
+        Log.i("VVV", "color : " + color);
+        circleImageView.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp88), initials, color));
+        G.onChangeUserPhotoListener.onChangeInitials(initials, color);
     }
 
     public ArrayList<StructMessageInfo> setItem() {
@@ -1440,7 +1486,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         for (int i = 0; i < realmItemList.size(); i++) {
             StructMessageInfo item = new StructMessageInfo();
             item.filePath = realmItemList.get(i).getPathImage();
-            Log.i("VVV", "filePath : " + realmItemList.get(i).getPathImage());
             item.messageID = realmItemList.get(i).getId() + "";
             items.add(item);
         }
