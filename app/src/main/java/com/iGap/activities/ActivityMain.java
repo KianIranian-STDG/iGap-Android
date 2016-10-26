@@ -14,6 +14,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -145,9 +146,12 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         Contacts.FillRealmInviteFriend();
     }
 
+
+    private static int drawerWith = 0;
     /**
      * init floating menu drawer
      */
+
     private void initDrawerMenu() {
 
         mLeftDrawerLayout = (LeftDrawerLayout) findViewById(R.id.id_drawerlayout);
@@ -160,9 +164,28 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
         mLeftDrawerLayout.setFluidView(mFlowingView);
         mLeftDrawerLayout.setMenuFragment(mMenuFragment);
+        drawerWith = (int) getResources().getDimension(R.dimen.dp200);
+    }
+
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+
+        if (ev.getAction() == MotionEvent.ACTION_UP) {
+            if (ev.getX() > drawerWith) {
+                mLeftDrawerLayout.closeDrawer();
+            }
+        }
+
+
+        return super.dispatchTouchEvent(ev);
     }
 
     private void initComponent() {
+
+        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.fragmentContainer);
+
+
         final MaterialDesignTextView btnMenu = (MaterialDesignTextView) findViewById(R.id.cl_btn_menu);
         RippleView rippleMenu = (RippleView) findViewById(R.id.cl_ripple_menu);
 

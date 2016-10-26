@@ -39,6 +39,7 @@ public class InfoPageResponse extends MessageHandler {
 
     @Override
     public void timeOut() {
+        super.timeOut();
     }
 
     @Override

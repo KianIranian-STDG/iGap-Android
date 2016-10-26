@@ -12,7 +12,6 @@
         android:id="@+id/fc_layot_title"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp60"
-        android:layout_marginTop="@dimen/dp24"
         android:background="@color/green"
         android:gravity="bottom"
         android:orientation="horizontal">
