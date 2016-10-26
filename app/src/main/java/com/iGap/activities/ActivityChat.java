@@ -3238,8 +3238,10 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 @Override
                 public void execute(Realm realm) {
                     RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-                    realmRoom.setDraft(message);
-                    G.onDraftMessage.onDraftMessage(mRoomId, message);
+                    if (realmRoom != null) {
+                        realmRoom.setDraft(message);
+                        G.onDraftMessage.onDraftMessage(mRoomId, message);
+                    }
                 }
             });
             realm.close();
@@ -3249,10 +3251,12 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     }
 
     private String getDraft() {
-        String draft;
+        String draft = "";
         Realm realm = Realm.getDefaultInstance();
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-        draft = realmRoom.getDraft();
+        if (realmRoom != null) {
+            draft = realmRoom.getDraft();
+        }
         realm.close();
 
         clearDraft();
@@ -3266,7 +3270,9 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             @Override
             public void execute(Realm realm) {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-                realmRoom.setDraft("");
+                if (realmRoom != null) {
+                    realmRoom.setDraft("");
+                }
             }
         });
         realm.close();

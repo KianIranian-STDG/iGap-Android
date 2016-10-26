@@ -42,12 +42,15 @@ import com.iGap.fragments.FragmentShowImage;
 import com.iGap.interface_package.OnChatDelete;
 import com.iGap.interface_package.OnChatGetRoom;
 import com.iGap.interface_package.OnUserAvatarGetList;
+import com.iGap.interface_package.OnUserContactDelete;
 import com.iGap.interface_package.OnUserContactEdit;
+import com.iGap.interface_package.OnUserInfoResponse;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.StructMessageAttachment;
 import com.iGap.module.StructMessageInfo;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmChatHistory;
 import com.iGap.realm.RealmChatHistoryFields;
@@ -65,6 +68,8 @@ import com.iGap.realm.RealmRoomMessage;
 import com.iGap.request.RequestChatDelete;
 import com.iGap.request.RequestChatGetRoom;
 import com.iGap.request.RequestUserAvatarGetList;
+import com.iGap.request.RequestUserContactsDelete;
+import com.iGap.request.RequestUserInfo;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -266,7 +271,7 @@ public class ActivityContactsProfile extends ActivityEnhanced {
         if (displayName != null && !displayName.equals("")) {
             txtNickname.setText(displayName);
         } else {
-            txtNickname.setText("info not exist");
+            txtNickname.setText("nick name not exist");
         }
 
 
@@ -402,7 +407,7 @@ public class ActivityContactsProfile extends ActivityEnhanced {
 
                 text1.setText(getResources().getString(R.string.Search));
                 text2.setText(getResources().getString(R.string.clear_history));
-                text3.setText(getResources().getString(R.string.delete_chat));
+                text3.setText(getResources().getString(R.string.delete_contact));
 
                 int dim20 = (int) getResources().getDimension(R.dimen.dp20);
                 int dim12 = (int) getResources().getDimension(R.dimen.dp12);
@@ -459,7 +464,9 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                 text3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(G.context, "Add Shortcut", Toast.LENGTH_SHORT).show();
+
+                        deleteContact();
+                        //delete contact
                         popupWindow.dismiss();
                     }
                 });
@@ -766,6 +773,46 @@ public class ActivityContactsProfile extends ActivityEnhanced {
         if (G.onClearChatHistory != null) {
             G.onClearChatHistory.onClearChatHistory();
         }
+    }
+
+    private void deleteContact() {
+        G.onUserContactdelete = new OnUserContactDelete() {
+            @Override
+            public void onContactDelete() {
+                // get user info after delete it for show nickname
+                getUserInfo();
+            }
+        };
+        new RequestUserContactsDelete().contactsDelete(phone);
+    }
+
+    private void getUserInfo() {
+
+        G.onUserInfoResponse = new OnUserInfoResponse() {
+            @Override
+            public void onUserInfo(final ProtoGlobal.RegisteredUser user, ProtoResponse.Response response) {
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        txtNickname.setText(user.getDisplayName());
+                    }
+                });
+
+            }
+
+            @Override
+            public void onUserInfoTimeOut() {
+
+            }
+
+            @Override
+            public void onUserInfoError() {
+
+            }
+        };
+
+        new RequestUserInfo().userInfo(userId);
     }
 
     private void deleteChat() {

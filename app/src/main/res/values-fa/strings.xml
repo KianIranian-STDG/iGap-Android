@@ -49,6 +49,7 @@
     <string name="igap">iGAP</string>
     <string name="clear_history">Clear history</string>
     <string name="delete_chat">Delete Chat</string>
+    <string name="delete_contact">Delete Contact</string>
     <string name="cancel">Cancel</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>

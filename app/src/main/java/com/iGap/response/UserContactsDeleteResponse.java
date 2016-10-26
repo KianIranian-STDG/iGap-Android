@@ -25,20 +25,22 @@ public class UserContactsDeleteResponse extends MessageHandler {
 
     @Override
     public void handler() {
-        Realm realm = Realm.getDefaultInstance();
-        Log.i("XXX", "UserContactsDeleteResponse handler 3");
         ProtoUserContactsDelete.UserContactsDeleteResponse.Builder builder = (ProtoUserContactsDelete.UserContactsDeleteResponse.Builder) message;
-        long phone = builder.getPhone();
-        RealmContacts realmUserContactsGetListResponse = realm
-                .where(RealmContacts.class)
-                .equalTo("phone", phone)
-                .findFirst();
-        realmUserContactsGetListResponse.deleteFromRealm();
+        final long phone = builder.getPhone();
 
-        Log.i("XXX", "UserContactsDeleteResponse handler 3.1");
-        G.onUserContactdelete.onContactDelete();
-
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmContacts realmUserContactsGetListResponse = realm.where(RealmContacts.class).equalTo("phone", phone).findFirst();
+                if (realmUserContactsGetListResponse != null) {
+                    realmUserContactsGetListResponse.deleteFromRealm();
+                }
+            }
+        });
         realm.close();
+
+        G.onUserContactdelete.onContactDelete();
     }
 
     @Override
