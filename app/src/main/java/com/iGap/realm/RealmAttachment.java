@@ -2,6 +2,7 @@ package com.iGap.realm;
 
 import android.support.annotation.Nullable;
 
+import com.iGap.G;
 import com.iGap.proto.ProtoGlobal;
 
 import java.io.File;
@@ -27,30 +28,35 @@ public class RealmAttachment extends RealmObject {
 
     public static RealmAttachment build(ProtoGlobal.File file) {
         Realm realm = Realm.getDefaultInstance();
-        RealmAttachment realmAttachment = realm.createObject(RealmAttachment.class);
-        long id = System.nanoTime();
 
-        realmAttachment.setId(id);
-        realmAttachment.setCacheId(file.getCacheId());
-        realmAttachment.setDuration(file.getDuration());
-        realmAttachment.setHeight(file.getHeight());
+        RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, file.getToken()).findFirst();
+        if (realmAttachment == null) {
+            realmAttachment = realm.createObject(RealmAttachment.class);
+            long id = System.nanoTime();
 
-        long largeId = System.nanoTime();
-        RealmThumbnail.create(largeId, id, file.getLargeThumbnail());
-        long smallId = System.nanoTime();
-        RealmThumbnail.create(smallId, id, file.getSmallThumbnail());
+            realmAttachment.setId(id);
 
-        RealmThumbnail largeThumbnail = realm.where(RealmThumbnail.class).equalTo("id", largeId).findFirst();
-        realmAttachment.setLargeThumbnail(largeThumbnail);
-        RealmThumbnail smallThumbnail = realm.where(RealmThumbnail.class).equalTo("id", smallId).findFirst();
-        realmAttachment.setSmallThumbnail(smallThumbnail);
+            realmAttachment.setCacheId(file.getCacheId());
+            realmAttachment.setDuration(file.getDuration());
+            realmAttachment.setHeight(file.getHeight());
 
-        realmAttachment.setLocalFilePath("");
-        realmAttachment.setLocalThumbnailPath("");
-        realmAttachment.setName(file.getName());
-        realmAttachment.setSize(file.getSize());
-        realmAttachment.setToken(file.getToken());
-        realmAttachment.setWidth(file.getWidth());
+            long largeId = System.nanoTime();
+            RealmThumbnail.create(largeId, id, file.getLargeThumbnail());
+            long smallId = System.nanoTime();
+            RealmThumbnail.create(smallId, id, file.getSmallThumbnail());
+
+            RealmThumbnail largeThumbnail = realm.where(RealmThumbnail.class).equalTo("id", largeId).findFirst();
+            realmAttachment.setLargeThumbnail(largeThumbnail);
+            RealmThumbnail smallThumbnail = realm.where(RealmThumbnail.class).equalTo("id", smallId).findFirst();
+            realmAttachment.setSmallThumbnail(smallThumbnail);
+
+            realmAttachment.setLocalFilePath(G.DIR_IMAGE_USER + "/" + file.getToken() + "_" + file.getName());
+            realmAttachment.setLocalThumbnailPath(G.DIR_TEMP + "/" + file.getToken() + "_" + file.getName());
+            realmAttachment.setName(file.getName());
+            realmAttachment.setSize(file.getSize());
+            realmAttachment.setToken(file.getToken());
+            realmAttachment.setWidth(file.getWidth());
+        }
 
         return realmAttachment;
     }
@@ -167,5 +173,13 @@ public class RealmAttachment extends RealmObject {
 
     public void setCacheId(String cacheId) {
         this.cacheId = cacheId;
+    }
+
+    public boolean isFileExistsOnLocal() {
+        return localFilePath != null && new File(localFilePath).exists();
+    }
+
+    public boolean isThumbnailExistsOnLocal() {
+        return localThumbnailPath != null && new File(localThumbnailPath).exists();
     }
 }

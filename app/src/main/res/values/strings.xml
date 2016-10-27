@@ -492,6 +492,7 @@
     <string name="Toast_Number_Block">This Number is Block</string>
     <string name="Toast_Invalid_nickname">Invalid nickname. Please change nickname</string>
     <string name="Toast_Write_NickName">Please Write Your NickName</string>
+    <string name="d_of_d" formatted="false">%d of %d</string>
 
 
 </resources>

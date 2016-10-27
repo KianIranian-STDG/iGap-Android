@@ -106,7 +106,7 @@ public final class AndroidUtils {
         return result;
     }
 
-    public static void writeBytesToFile(String filePath, byte[] chunk, int offset) {
+    public static void writeBytesToFile(String filePath, byte[] chunk) {
         FileOutputStream fop = null;
         File file;
         try {
