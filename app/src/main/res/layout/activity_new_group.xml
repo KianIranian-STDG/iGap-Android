@@ -79,8 +79,7 @@
                     android:lineSpacingMultiplier="1.2"
                     android:lines="4"
                     android:maxLength="500"
-                    android:maxLines="4"
-                    android:paddingTop="0dp" />
+                    android:maxLines="4" />
 
             </android.support.design.widget.TextInputLayout>
 

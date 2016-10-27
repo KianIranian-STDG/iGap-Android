@@ -1,10 +1,13 @@
 package com.iGap.response;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.text.format.DateUtils;
 import android.util.Log;
 
 import com.iGap.G;
 import com.iGap.helper.HelperCheckUserInfoExist;
+import com.iGap.module.SHP_SETTING;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoGroupSendMessage;
@@ -117,8 +120,13 @@ public class GroupSendMessageResponse extends MessageHandler {
 
                     realm.copyToRealm(realmChatHistory);
 
-                    if (!G.isAppInFg)
-                        G.helperNotificationAndBadge.updateNotificationAndBadge(true);
+                    SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
+                    int checkAlert = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_ALERT_GROUP, 1);
+
+                    if (checkAlert == 1) {
+                        G.helperNotificationAndBadge.updateNotificationAndBadge(true, 1);
+                    }
+
 
                 } else {
                     // i'm the sender

@@ -185,6 +185,8 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
         TextInputLayout txtInputNewGroup = (TextInputLayout) view.findViewById(R.id.ng_txtInput_newGroup);
 
         edtGroupName = (EditText) view.findViewById(R.id.ng_edt_newGroup);
+        edtGroupName.setPadding(0, 8, 0, 8);
+
         if (prefix.equals("NewChanel")) {
             txtInputNewGroup.setHint(getResources().getString(R.string.New_Chanel));
         } else {
@@ -193,6 +195,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
 
         //=======================description group
         edtDescription = (LinedEditText) view.findViewById(R.id.ng_edt_description);
+        edtDescription.setPadding(0, 8, 0, 8);
 
 
         edtDescription.addTextChangedListener(new TextWatcher() {

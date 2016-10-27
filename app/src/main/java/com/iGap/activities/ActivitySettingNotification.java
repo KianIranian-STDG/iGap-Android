@@ -288,12 +288,12 @@ public class ActivitySettingNotification extends AppCompatActivity {
                                 switch (which) {
                                     case 0:
                                         txtPopupNotification.setText("No popup");
-                                        editor.putString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, "No popup");
+                                        editor.putInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, 0);
                                         editor.apply();
                                         break;
                                     case 1:
                                         txtPopupNotification.setText("Only when screen \"on\"");
-                                        editor.putString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, "Only when screen \"on\"");
+                                        editor.putInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, 1);
                                         editor.apply();
 
                                         PowerManager pmOn = (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -309,7 +309,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
                                         break;
                                     case 2:
                                         txtPopupNotification.setText("Only when screen \"off\"");
-                                        editor.putString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, "Only when screen \"off\"");
+                                        editor.putInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, 2);
                                         editor.apply();
 
                                         PowerManager pmOff = (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -325,7 +325,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
                                         break;
                                     case 3:
                                         txtPopupNotification.setText("Always show popup");
-                                        editor.putString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, "Always show popup");
+                                        editor.putInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, 3);
                                         editor.apply();
                                         break;
                                 }
@@ -481,7 +481,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
             }
         });
 
-        final int ledColorGroup = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, 0);
+        final int ledColorGroup = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, -8257792);
         imgLedColor_group = (ImageView) findViewById(R.id.stns_img_ledColor_group);
 
         GradientDrawable bgShapeGroup = (GradientDrawable) imgLedColor_group.getBackground();

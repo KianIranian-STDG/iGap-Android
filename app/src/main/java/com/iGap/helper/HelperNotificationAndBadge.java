@@ -6,8 +6,11 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.AudioManager;
+import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.view.View;
@@ -17,6 +20,7 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityChat;
 import com.iGap.activities.ActivityMain;
+import com.iGap.module.SHP_SETTING;
 import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAvatarPath;
@@ -34,6 +38,8 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
 import me.leolin.shortcutbadger.ShortcutBadger;
+
+import static com.iGap.G.context;
 
 /**
  * Created by android3 on 10/1/2016.
@@ -55,6 +61,17 @@ public class HelperNotificationAndBadge {
     private RemoteViews remoteViews;
     private RemoteViews remoteViewsLarge;
 
+    private SharedPreferences sharedPreferences;
+    private int led;
+    private String vibrator;
+    private int popupNotification;
+    private int sound;
+
+    private int inAppSound;
+    private int inVibrator;
+    private int inAppPreview;
+    private int inChat_Sound;
+
     private int countUnicChat = 0;
 
     private static final String strClose = "close";
@@ -74,13 +91,13 @@ public class HelperNotificationAndBadge {
     }
 
     public HelperNotificationAndBadge() {
-        notificationManager = (NotificationManager) G.context.getSystemService(Context.NOTIFICATION_SERVICE);
-        remoteViews = new RemoteViews(G.context.getPackageName(), R.layout.layout_notification_small);
-        remoteViewsLarge = new RemoteViews(G.context.getPackageName(), R.layout.layout_notification);
+        notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        remoteViews = new RemoteViews(context.getPackageName(), R.layout.layout_notification_small);
+        remoteViewsLarge = new RemoteViews(context.getPackageName(), R.layout.layout_notification);
 
-        Intent intentClose = new Intent(G.context, RemoteActionReciver.class);
+        Intent intentClose = new Intent(context, RemoteActionReciver.class);
         intentClose.putExtra("Action", "strClose");
-        PendingIntent pendingIntentClose = PendingIntent.getBroadcast(G.context, 1, intentClose, 0);
+        PendingIntent pendingIntentClose = PendingIntent.getBroadcast(context, 1, intentClose, 0);
         remoteViewsLarge.setOnClickPendingIntent(R.id.mln_btn_close, pendingIntentClose);
     }
 
@@ -104,18 +121,18 @@ public class HelperNotificationAndBadge {
 
         } else {
 
-            remoteViews.setTextViewText(R.id.ln_txt_header, G.context.getString(R.string.igap));
+            remoteViews.setTextViewText(R.id.ln_txt_header, context.getString(R.string.igap));
             remoteViews.setTextViewText(R.id.ln_txt_time, list.get(list.size() - 1).time);
 
             String s = "";
             if (countUnicChat == 1) {
-                s = " " + G.context.getString(R.string.chat);
+                s = " " + context.getString(R.string.chat);
             } else if (countUnicChat > 1) {
-                s = " " + G.context.getString(R.string.chats);
+                s = " " + context.getString(R.string.chats);
             }
 
 
-            remoteViews.setTextViewText(R.id.ln_txt_message_notification, unreadMessageCount + G.context.getString(R.string.new_messages_from) + countUnicChat + s);
+            remoteViews.setTextViewText(R.id.ln_txt_message_notification, unreadMessageCount + context.getString(R.string.new_messages_from) + countUnicChat + s);
         }
 
         if (isFromOnRoom) {
@@ -248,18 +265,18 @@ public class HelperNotificationAndBadge {
         String chatCount = "";
 
         if (countUnicChat == 1) {
-            chatCount = G.context.getString(R.string.from) + " " + countUnicChat + " " + G.context.getString(R.string.chat);
+            chatCount = context.getString(R.string.from) + " " + countUnicChat + " " + context.getString(R.string.chat);
         } else if (countUnicChat > 1) {
-            chatCount = G.context.getString(R.string.from) + " " + countUnicChat + " " + G.context.getString(R.string.chats);
+            chatCount = context.getString(R.string.from) + " " + countUnicChat + " " + context.getString(R.string.chats);
         }
 
 
         String newmess = "";
         if (unreadMessageCount == 1) {
-            newmess = G.context.getString(R.string.new_message);
+            newmess = context.getString(R.string.new_message);
             chatCount = "";
         } else {
-            newmess = G.context.getString(R.string.new_messages);
+            newmess = context.getString(R.string.new_messages);
         }
 
         remoteViewsLarge.setTextViewText(R.id.ln_txt_unread_message, unreadMessageCount + newmess + chatCount);
@@ -279,12 +296,12 @@ public class HelperNotificationAndBadge {
         PendingIntent pi;
 
         if (isFromOnRoom) {
-            Intent intent = new Intent(G.context, ActivityChat.class);
+            Intent intent = new Intent(context, ActivityChat.class);
             intent.putExtra("RoomId", roomId);
-            pi = PendingIntent.getActivity(G.context, 10, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            pi = PendingIntent.getActivity(context, 10, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         } else {
-            pi = PendingIntent.getActivity(G.context, 10, new Intent(G.context, ActivityMain.class), PendingIntent.FLAG_UPDATE_CURRENT);
+            pi = PendingIntent.getActivity(context, 10, new Intent(context, ActivityMain.class), PendingIntent.FLAG_UPDATE_CURRENT);
         }
 
         setRemoteViewsNormal();
@@ -295,14 +312,45 @@ public class HelperNotificationAndBadge {
             messageToshow = messageToshow.substring(0, 40);
         }
 
-        notification = new NotificationCompat.Builder(G.context)
-                .setTicker(list.get(0).name + " " + messageToshow)
+        notification = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.mipmap.logo)
-                .setContentTitle(G.context.getString(R.string.new_message_recicve))
+                .setContentTitle(context.getString(R.string.new_message_recicve))
                 .setContent(remoteViews)
                 .setContentIntent(pi)
                 .setAutoCancel(false)
+                .setOngoing(true)
                 .build();
+
+
+        if (inAppPreview == 0 && G.isAppInFg) {
+            notification.tickerText = "";
+
+        } else {
+            notification.tickerText = list.get(0).name + " " + messageToshow;
+        }
+        //=======================================================
+        if (inAppSound == 0 && G.isAppInFg) {
+            notification.sound = Uri.parse("android.resource://" + context.getPackageName() + "/raw/" + R.raw.none);
+        } else {
+            notification.sound = Uri.parse("android.resource://" + context.getPackageName() + "/raw/" + setSound(sound));
+        }
+        //=======================================================
+        if (inVibrator == 0 && G.isAppInFg) {
+            notification.vibrate = new long[]{0, 0, 0};
+        } else {
+            notification.vibrate = setVibrator(vibrator);
+        }
+        //=======================================================
+        if (inChat_Sound == 0 && G.isAppInFg) {
+
+        } else {
+
+        }
+        notification.flags |= Notification.FLAG_SHOW_LIGHTS;
+        notification.ledARGB = led;
+        notification.ledOnMS = 1000;
+        notification.ledOffMS = 1000;
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             setRemoteViewsLarge();
@@ -314,7 +362,38 @@ public class HelperNotificationAndBadge {
 
     }
 
-    public void updateNotificationAndBadge(boolean updateNotification) {
+    public void updateNotificationAndBadge(boolean updateNotification, int type) {
+
+        sharedPreferences = context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
+
+
+        switch (type) {
+            case 0:
+
+                led = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_LED_COLOR_MESSAGE, -8257792);
+                vibrator = sharedPreferences.getString(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, "Default");
+                popupNotification = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, 3);
+                sound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_MESSAGE_POSITION, 3);
+
+                break;
+
+            case 1:
+                led = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, -8257792);
+                vibrator = sharedPreferences.getString(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, "Default");
+                popupNotification = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, 3);
+                sound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, 3);
+
+                break;
+            case 2:
+
+                break;
+
+        }
+
+        inAppSound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_APP_SOUND, 1);
+        inVibrator = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_APP_VIBRATE, 1);
+        inAppPreview = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_APP_PREVIEW, 1);
+        inChat_Sound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_CHAT_SOUND, 1);
 
         unreadMessageCount = 0;
         isFromOnRoom = true;
@@ -382,7 +461,7 @@ public class HelperNotificationAndBadge {
                 notificationManager.cancel(notificationId);
             }
             try {
-                ShortcutBadger.applyCount(G.context, 0);
+                ShortcutBadger.applyCount(context, 0);
             } catch (RuntimeException e) {
             }
         } else {
@@ -390,7 +469,7 @@ public class HelperNotificationAndBadge {
                 setNotification();
             }
             try {
-                ShortcutBadger.applyCount(G.context, unreadMessageCount);
+                ShortcutBadger.applyCount(context, unreadMessageCount);
             } catch (RuntimeException e) {
             }
         }
@@ -400,5 +479,85 @@ public class HelperNotificationAndBadge {
         notificationManager.cancel(notificationId);
     }
 
+    public int setSound(int which) {
+        int sound = R.raw.igap;
+        switch (which) {
+            case 0:
+
+                sound = R.raw.igap;
+                break;
+            case 1:
+                sound = R.raw.aooow;
+                break;
+            case 2:
+                sound = R.raw.bbalert;
+                break;
+            case 3:
+                sound = R.raw.boom;
+                break;
+            case 4:
+                sound = R.raw.bounce;
+                break;
+            case 5:
+                sound = R.raw.doodoo;
+                break;
+            case 6:
+                sound = R.raw.igap;
+                break;
+            case 7:
+                sound = R.raw.jing;
+                break;
+            case 8:
+                sound = R.raw.lili;
+                break;
+            case 9:
+                sound = R.raw.msg;
+                break;
+            case 10:
+                sound = R.raw.newa;
+                break;
+            case 11:
+                sound = R.raw.none;
+                break;
+            case 12:
+                sound = R.raw.onelime;
+                break;
+            case 13:
+                sound = R.raw.tone;
+                break;
+            case 14:
+                sound = R.raw.woow;
+                break;
+        }
+        return sound;
+    }
+
+    public long[] setVibrator(String vibre) {
+        long[] intVibrator = new long[]{};
+
+        switch (vibre) {
+            case "Disable":
+                intVibrator = new long[]{0, 0, 0};
+                break;
+            case "Default":
+                intVibrator = new long[]{0, 500, 0};
+                break;
+            case "Short":
+                intVibrator = new long[]{0, 200, 0};
+                break;
+            case "Long":
+                intVibrator = new long[]{0, 1000, 0};
+                break;
+            case "Only if silent":
+                AudioManager am2 = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
+                switch (am2.getRingerMode()) {
+                    case AudioManager.RINGER_MODE_SILENT:
+                        intVibrator = new long[]{0, 500, 0};
+                        break;
+                }
+                break;
+        }
+        return intVibrator;
+    }
 
 }
