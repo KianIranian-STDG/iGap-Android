@@ -2,7 +2,9 @@ package com.iGap.helper;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -339,8 +341,30 @@ public class HelperPermision {
     }
 
     //************************************************************************************************************
-    private static void getPremision(Context context, String[] needPermision, int requestCode) {
+    private static void getPremision(final Context context, final String[] needPermision, final int requestCode) {
+
+
+        if (!ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, needPermision[0])) {
+            showMessageOKCancel(context, "You need to allow " + needPermision[0],
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ActivityCompat.requestPermissions((Activity) context, needPermision, requestCode);
+                        }
+                    });
+            return;
+        }
+
         ActivityCompat.requestPermissions((Activity) context, needPermision, requestCode);
+    }
+
+    private static void showMessageOKCancel(Context context, String message, DialogInterface.OnClickListener okListener) {
+        new AlertDialog.Builder(context)
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();
     }
 
     //************************************************************************************************************

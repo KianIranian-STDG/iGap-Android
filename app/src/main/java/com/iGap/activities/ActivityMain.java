@@ -29,6 +29,7 @@ import com.iGap.adapter.items.RoomItem;
 import com.iGap.fragments.FragmentNewGroup;
 import com.iGap.fragments.RegisteredContactsFragment;
 import com.iGap.fragments.SearchFragment;
+import com.iGap.helper.HelperGetDataFromOtherApp;
 import com.iGap.helper.ServiceContact;
 import com.iGap.interface_package.OnChatClearMessageResponse;
 import com.iGap.interface_package.OnChatDelete;
@@ -113,6 +114,8 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        HelperGetDataFromOtherApp getShearedData = new HelperGetDataFromOtherApp(getIntent());
+
         mediaLayout = (LinearLayout) findViewById(R.id.amr_ll_music_layout);
         musicPlayer = new MusicPlayer(mediaLayout);
 
@@ -149,6 +152,8 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
 
     private static int drawerWith = 0;
+    private int clickPosition = 0;
+
     /**
      * init floating menu drawer
      */
@@ -172,9 +177,15 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
 
+
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            clickPosition = (int) ev.getX();
+        }
+
         if (ev.getAction() == MotionEvent.ACTION_UP) {
             if (ev.getX() > drawerWith) {
-                mLeftDrawerLayout.closeDrawer();
+                if (ev.getX() <= clickPosition + 20)
+                    mLeftDrawerLayout.closeDrawer();
             }
         }
 

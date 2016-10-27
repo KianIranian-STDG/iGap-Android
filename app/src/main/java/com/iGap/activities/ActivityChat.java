@@ -76,6 +76,7 @@ import com.iGap.adapter.items.chat.VideoWithTextItem;
 import com.iGap.adapter.items.chat.VoiceItem;
 import com.iGap.fragments.FragmentShowImage;
 import com.iGap.helper.Emojione;
+import com.iGap.helper.HelperGetDataFromOtherApp;
 import com.iGap.helper.HelperMimeType;
 import com.iGap.interface_package.IEmojiBackspaceClick;
 import com.iGap.interface_package.IEmojiClickListener;
@@ -1631,6 +1632,83 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
     }
 
+    private void insertShearedData() {
+
+        if (HelperGetDataFromOtherApp.hasSharedData) {
+            HelperGetDataFromOtherApp.hasSharedData = false;
+
+            if (HelperGetDataFromOtherApp.messageType == HelperGetDataFromOtherApp.FileType.message) {
+                String message = HelperGetDataFromOtherApp.message;
+
+            } else if (HelperGetDataFromOtherApp.messageType == HelperGetDataFromOtherApp.FileType.image) {
+
+
+            } else if (HelperGetDataFromOtherApp.messageType == HelperGetDataFromOtherApp.FileType.video) {
+
+
+            } else if (HelperGetDataFromOtherApp.messageType == HelperGetDataFromOtherApp.FileType.audio) {
+
+
+            } else if (HelperGetDataFromOtherApp.messageType == HelperGetDataFromOtherApp.FileType.file) {
+
+                for (int i = 0; i < HelperGetDataFromOtherApp.messageFileAddress.size(); i++) {
+
+                    HelperGetDataFromOtherApp.FileType fileType = HelperGetDataFromOtherApp.fileTypeArray.get(i);
+
+                    if (fileType == HelperGetDataFromOtherApp.FileType.image) {
+
+
+                    } else if (fileType == HelperGetDataFromOtherApp.FileType.video) {
+
+
+                    } else if (fileType == HelperGetDataFromOtherApp.FileType.audio) {
+
+
+                    } else if (fileType == HelperGetDataFromOtherApp.FileType.file) {
+
+                    }
+                }
+            }
+        }
+    }
+
+    private void sheareDataToOtherProgram(StructMessageInfo messageInfo) {
+
+        if (messageInfo == null)
+            return;
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        String choserDialogText = "";
+
+        if (messageInfo.messageType.toString().equals("TEXT")) {
+            intent.setType("text/plain");
+        } else if (messageInfo.messageType.toString().equals("VOICE") || messageInfo.messageType.toString().equals("AUDIO") || messageInfo.messageType.toString().equals("AUDIO_TEXT")) {
+            intent.setType("audio/*");
+            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(messageInfo.getAttachment().getLocalFilePath())));
+            choserDialogText = "Share audio file";
+
+        } else if (messageInfo.messageType.toString().equals("IMAGE") || messageInfo.messageType.toString().equals("IMAGE_TEXT")) {
+            intent.setType("image/*");
+            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(messageInfo.getAttachment().getLocalFilePath())));
+            choserDialogText = "Share image";
+
+        } else if (messageInfo.messageType.toString().equals("FILE") || messageInfo.messageType.toString().equals("FILE_TEXT")) {
+            intent.setType("audio/*");
+            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(messageInfo.getAttachment().getLocalFilePath())));
+            choserDialogText = "Share  file";
+
+        } else if (messageInfo.messageType.toString().equals("VIDEO") || messageInfo.messageType.toString().equals("VIDEO_TEXT")) {
+            intent.setType("video/*");
+            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(messageInfo.getAttachment().getLocalFilePath())));
+            choserDialogText = "Share video file";
+        }
+
+        startActivity(Intent.createChooser(intent, choserDialogText));
+
+    }
+
+
+
 
     private void setAvatar() {
         Realm realm = Realm.getDefaultInstance();
@@ -2588,6 +2666,8 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                                         if (mAdapter != null) {
                                             startActivity(makeIntentForForwardMessages(messageInfo));
                                         }
+                                    } else if (text.toString().equalsIgnoreCase(getString(R.string.share_item_dialog))) {
+                                        sheareDataToOtherProgram(messageInfo);
                                     }
                                 }
                             })

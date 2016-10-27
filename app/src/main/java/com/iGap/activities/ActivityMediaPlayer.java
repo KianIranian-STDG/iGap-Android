@@ -26,6 +26,8 @@ import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.MusicPlayer;
 import com.iGap.module.OnComplete;
 
+import java.io.File;
+
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityMediaPlayer extends ActivityEnhanced {
@@ -194,7 +196,7 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
 
 
         MaterialDesignTextView btnMusicMenu = (MaterialDesignTextView) findViewById(R.id.ml_btn_music_menu);
-        RippleView rippleMusicMenu = (RippleView) findViewById(R.id.ml_ripple_back);
+        RippleView rippleMusicMenu = (RippleView) findViewById(R.id.amp_ripple_menu);
         rippleMusicMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
@@ -295,7 +297,7 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
 
         String sharePath = MusicPlayer.musicPath;
 
-        Uri uri = Uri.parse(sharePath);
+        Uri uri = Uri.fromFile(new File(sharePath));
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("audio/*");
         share.putExtra(Intent.EXTRA_STREAM, uri);
