@@ -212,8 +212,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                 TextInputLayout inputFirstName = new TextInputLayout(ActivitySetting.this);
                 final EditText edtFirstName = new EditText(ActivitySetting.this);
-                edtFirstName.setHint(firsName);
-                edtFirstName.setPadding(0, 0, 0, 0);
+                edtFirstName.setHint("First Name");
+                edtFirstName.setText(firsName);
+                edtFirstName.setPadding(0, 8, 0, 8);
 
                 edtFirstName.setSingleLine(true);
                 inputFirstName.addView(edtFirstName);
@@ -227,8 +228,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                 TextInputLayout inputLastName = new TextInputLayout(ActivitySetting.this);
                 final EditText edtLastName = new EditText(ActivitySetting.this);
-                edtLastName.setHint(lastName);
-                edtLastName.setPadding(0, 0, 0, 0);
+                edtLastName.setHint("Last Name");
+                edtLastName.setText(lastName);
+                edtLastName.setPadding(0, 8, 0, 8);
                 edtLastName.setSingleLine(true);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     edtLastName.setBackground(getResources().getDrawable(android.R.color.transparent));

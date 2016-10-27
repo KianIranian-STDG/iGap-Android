@@ -81,7 +81,7 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
 
                     if (roomMessage.getUserId() != userId) { // show notification if this message isn't for another account
                         if (!G.isAppInFg) {
-                            G.helperNotificationAndBadge.updateNotificationAndBadge(true);
+                            G.helperNotificationAndBadge.updateNotificationAndBadge(true, 0);
                         }
                     }
 
