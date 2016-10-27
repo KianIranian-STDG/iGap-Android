@@ -25,6 +25,7 @@ import com.iGap.IntentRequests;
 import com.iGap.R;
 import com.iGap.interface_package.OnFileUploadForActivities;
 import com.iGap.interface_package.OnUserAvatarResponse;
+import com.iGap.interface_package.OnUserInfoResponse;
 import com.iGap.interface_package.OnUserProfileSetNickNameResponse;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.EditTextAdjustPan;
@@ -35,6 +36,7 @@ import com.iGap.realm.RealmAvatarPath;
 import com.iGap.realm.RealmAvatarToken;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestUserAvatarAdd;
+import com.iGap.request.RequestUserInfo;
 import com.iGap.request.RequestUserProfileSetNickname;
 
 import java.io.File;
@@ -80,64 +82,6 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
 
         G.uploaderUtil.setActivityCallbacks(this);
         G.onUserAvatarResponse = this;
-        G.onUserProfileSetNickNameResponse = new OnUserProfileSetNickNameResponse() {
-            @Override
-            public void onUserProfileNickNameResponse(final String nickName, ProtoResponse.Response response) {
-
-                Realm realm = Realm.getDefaultInstance();
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-                        userInfo.setUserRegistrationState(true);
-                    }
-                });
-                realm.close();
-
-                Intent intent = new Intent(G.context, ActivityMain.class);
-                startActivity(intent);
-                finish();
-            }
-
-            @Override
-            public void onUserProfileNickNameError(int majorCode, int minorCode) {
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        btnLetsGo.setEnabled(true);
-                        btnSetImage.setEnabled(true);
-                        edtNikName.setEnabled(true);
-                    }
-                });
-
-                if (majorCode == 112 && minorCode == 1) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            // TODO: 9/25/2016 Error 112 - USER_PROFILE_SET_NICKNAME_BAD_PAYLOAD
-                            //Invalid nickname
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.Toast_Invalid_nickname), Snackbar.LENGTH_LONG);
-                            snack.setAction("CANCEL", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                            snack.show();
-
-                        }
-                    });
-                } else if (majorCode == 113) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            // TODO: 9/25/2016 Error 113 - USER_PROFILE_SET_NICKNAME_INTERNAL_SERVER_ERROR
-                        }
-                    });
-                }
-            }
-        };
 
         txtTitle = (TextView) findViewById(R.id.rg_txt_titleToolbar);
 
@@ -192,23 +136,7 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
-                            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                            if (realmUserInfo != null) {
-                                realmUserInfo.setNickName(nickName);
-
-                                if (!realmUserInfo.getNickName().equalsIgnoreCase(nickName)) {
-                                    new RequestUserProfileSetNickname().userProfileNickName(nickName);
-                                } else {
-                                    RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-                                    userInfo.setUserRegistrationState(true);
-
-                                    Intent intent = new Intent(G.context, ActivityMain.class);
-                                    startActivity(intent);
-                                    finish();
-                                }
-                            } else {
-                                new RequestUserProfileSetNickname().userProfileNickName(nickName);
-                            }
+                            setNickName();
                         }
                     });
                     realm.close();
@@ -227,6 +155,109 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
     }
+
+    private void setNickName() {
+
+        G.onUserProfileSetNickNameResponse = new OnUserProfileSetNickNameResponse() {
+            @Override
+            public void onUserProfileNickNameResponse(final String nickName, ProtoResponse.Response response) {
+                getUserInfo();
+            }
+
+            @Override
+            public void onUserProfileNickNameError(int majorCode, int minorCode) {
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        btnLetsGo.setEnabled(true);
+                        btnSetImage.setEnabled(true);
+                        edtNikName.setEnabled(true);
+                    }
+                });
+
+                if (majorCode == 112 && minorCode == 1) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // TODO: 9/25/2016 Error 112 - USER_PROFILE_SET_NICKNAME_BAD_PAYLOAD
+                            //Invalid nickname
+                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.Toast_Invalid_nickname), Snackbar.LENGTH_LONG);
+                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                            snack.show();
+
+                        }
+                    });
+                } else if (majorCode == 113) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // TODO: 9/25/2016 Error 113 - USER_PROFILE_SET_NICKNAME_INTERNAL_SERVER_ERROR
+                        }
+                    });
+                }
+            }
+        };
+
+        new RequestUserProfileSetNickname().userProfileNickName(edtNikName.getText().toString());
+    }
+
+    private void getUserInfo() {
+
+        G.onUserInfoResponse = new OnUserInfoResponse() {
+            @Override
+            public void onUserInfo(final ProtoGlobal.RegisteredUser user, ProtoResponse.Response response) {
+
+                Realm realm = Realm.getDefaultInstance();
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                        realmUserInfo.setNickName(user.getDisplayName());
+                        realmUserInfo.setInitials(user.getInitials());
+                        Log.i("UUU", "user.getInitials() : " + user.getInitials());
+                        realmUserInfo.setColor(user.getColor());
+                        realmUserInfo.setUserRegistrationState(true);
+
+                        final long userId = realmUserInfo.getUserId();
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Intent intent = new Intent(G.context, ActivityMain.class);
+                                intent.putExtra(ActivityProfile.ARG_USER_ID, userId);
+                                startActivity(intent);
+                                finish();
+                            }
+                        });
+                    }
+                });
+                realm.close();
+
+            }
+
+            @Override
+            public void onUserInfoTimeOut() {
+
+            }
+
+            @Override
+            public void onUserInfoError() {
+
+            }
+        };
+
+        Realm realm = Realm.getDefaultInstance();
+        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+        new RequestUserInfo().userInfo(realmUserInfo.getUserId());
+        realm.close();
+    }
+
 
     public void useCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);

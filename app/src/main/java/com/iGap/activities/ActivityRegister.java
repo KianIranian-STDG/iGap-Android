@@ -38,9 +38,11 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AdapterDialog;
+import com.iGap.helper.HelperLogout;
 import com.iGap.helper.HelperString;
 import com.iGap.interface_package.OnInfoCountryResponse;
 import com.iGap.interface_package.OnSmsReceive;
+import com.iGap.interface_package.OnUserInfoResponse;
 import com.iGap.interface_package.OnUserLogin;
 import com.iGap.interface_package.OnUserRegistration;
 import com.iGap.interface_package.OnUserVerification;
@@ -49,13 +51,16 @@ import com.iGap.module.CountryReader;
 import com.iGap.module.IncomingSms;
 import com.iGap.module.SoftKeyboard;
 import com.iGap.module.StructCountry;
+import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoRequest;
+import com.iGap.proto.ProtoResponse;
 import com.iGap.proto.ProtoUserRegister;
 import com.iGap.proto.ProtoUserVerify;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.realm.RealmUserInfoFields;
 import com.iGap.request.RequestInfoCountry;
 import com.iGap.request.RequestQueue;
+import com.iGap.request.RequestUserInfo;
 import com.iGap.request.RequestUserLogin;
 import com.iGap.request.RequestWrapper;
 import com.vicmikhailau.maskededittext.MaskedEditText;
@@ -1031,17 +1036,16 @@ public class ActivityRegister extends ActivityEnhanced {
                         rg_img_verify_register.setVisibility(View.VISIBLE);
                         rg_txt_verify_register.setTextColor(getResources().getColor(R.color.rg_text_verify));
 
-                        Class<?> className;
                         if (newUser) {
-                            className = ActivityProfile.class;
+                            Intent intent = new Intent(G.context, ActivityProfile.class);
+                            intent.putExtra(ActivityProfile.ARG_USER_ID, userId);
+                            startActivity(intent);
+                            finish();
                         } else {
-                            className = ActivityMain.class;
+                            // get user info for set nick name and after from that go to ActivityMain
+                            getUserInfo();
                         }
                         realm.close();
-                        Intent intent = new Intent(G.context, className);
-                        intent.putExtra(ActivityProfile.ARG_USER_ID, userId);
-                        startActivity(intent);
-                        finish();
                     }
                 });
             }
@@ -1069,14 +1073,13 @@ public class ActivityRegister extends ActivityEnhanced {
                         @Override
                         public void run() {
 
-                            // TODO: 9/25/2016 USER_LOGIN_FAILED
+                            HelperLogout.logout();
                         }
                     });
                 } else if (majorCode == 111) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-
                             requestLogin();
                         }
                     });
@@ -1085,17 +1088,56 @@ public class ActivityRegister extends ActivityEnhanced {
         };
 
         requestLogin();
+    }
 
+    private void getUserInfo() {
+
+        G.onUserInfoResponse = new OnUserInfoResponse() {
+            @Override
+            public void onUserInfo(final ProtoGlobal.RegisteredUser user, ProtoResponse.Response response) {
+
+                Realm realm = Realm.getDefaultInstance();
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                        realmUserInfo.setNickName(user.getDisplayName());
+                        realmUserInfo.setInitials(user.getInitials());
+                        Log.i("UUU", "user.getInitials() : " + user.getInitials());
+                        realmUserInfo.setColor(user.getColor());
+                        realmUserInfo.setUserRegistrationState(true);
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Intent intent = new Intent(G.context, ActivityMain.class);
+                                intent.putExtra(ActivityProfile.ARG_USER_ID, userId);
+                                startActivity(intent);
+                                finish();
+                            }
+                        });
+                    }
+                });
+                realm.close();
+
+            }
+
+            @Override
+            public void onUserInfoTimeOut() {
+
+            }
+
+            @Override
+            public void onUserInfoError() {
+
+            }
+        };
+
+        new RequestUserInfo().userInfo(userId);
     }
 
     private void requestLogin() {
         new RequestUserLogin().userLogin(token);
-//        G.handler.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//
-//            }
-//        }, 2000);
     }
 
     private void receiveVerifySms(String message) {
