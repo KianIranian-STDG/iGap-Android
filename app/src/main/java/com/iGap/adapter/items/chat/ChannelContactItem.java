@@ -3,7 +3,7 @@ package com.iGap.adapter.items.chat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import com.iGap.R;
-import com.iGap.interfaces.OnMessageViewClick;
+import com.iGap.interfaces.IMessageItem;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.List;
 public class ChannelContactItem extends AbstractMessage<ChannelContactItem, ChannelContactItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
-    public ChannelContactItem(ProtoGlobal.Room.Type type, OnMessageViewClick messageClickListener) {
+    public ChannelContactItem(ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         super(true, type, messageClickListener);
     }
 

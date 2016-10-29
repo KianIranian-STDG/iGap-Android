@@ -4,7 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 import com.iGap.R;
-import com.iGap.interfaces.OnMessageViewClick;
+import com.iGap.interfaces.IMessageItem;
 import com.iGap.module.CircleImageView;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
@@ -16,7 +16,7 @@ import java.util.List;
 public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
-    public ContactItem(ProtoGlobal.Room.Type type, OnMessageViewClick messageClickListener) {
+    public ContactItem(ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         super(true, type, messageClickListener);
     }
 

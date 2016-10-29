@@ -8,7 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.interfaces.OnMessageViewClick;
+import com.iGap.interfaces.IMessageItem;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.EmojiTextView;
 import com.iGap.module.enums.LocalFileType;
@@ -25,7 +25,7 @@ import static com.iGap.module.AndroidUtils.suitablePath;
 public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoWithTextItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
-    public VideoWithTextItem(ProtoGlobal.Room.Type type, OnMessageViewClick messageClickListener) {
+    public VideoWithTextItem(ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         super(true, type, messageClickListener);
     }
 

@@ -32,4 +32,6 @@ public interface IMessageProgress {
     void withOnProgress(OnProgress listener);
 
     void performProgress();
+
+    @ProgressProcess int getProcessType();
 }

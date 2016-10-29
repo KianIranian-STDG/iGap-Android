@@ -7,9 +7,9 @@ import android.view.View;
 import android.widget.FrameLayout;
 import com.iGap.R;
 import com.iGap.adapter.items.chat.AbstractMessage;
+import com.iGap.interfaces.IMessageItem;
 import com.iGap.interfaces.OnChatMessageRemove;
 import com.iGap.interfaces.OnChatMessageSelectionChanged;
-import com.iGap.interfaces.OnMessageViewClick;
 import com.iGap.module.StructMessageAttachment;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRegisteredInfo;
@@ -22,9 +22,10 @@ import java.util.List;
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/6/2016.
  */
-public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapter<Item> implements FastAdapter.OnLongClickListener<Item> {
+public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapter<Item>
+    implements FastAdapter.OnLongClickListener<Item> {
     private OnChatMessageSelectionChanged<Item> onChatMessageSelectionChanged;
-    private OnMessageViewClick onMessageViewClick;
+    private IMessageItem iMessageItem;
     private OnChatMessageRemove onChatMessageRemove;
     // contain sender id
     public static List<String> avatarsRequested = new ArrayList<>();
@@ -36,15 +37,18 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         @Override
         public boolean onLongClick(View v, IAdapter<Item> adapter, Item item, int position) {
             if (onChatMessageSelectionChanged != null) {
-                onChatMessageSelectionChanged.onChatMessageSelectionChanged(getSelectedItems().size(), getSelectedItems());
+                onChatMessageSelectionChanged.onChatMessageSelectionChanged(
+                    getSelectedItems().size(), getSelectedItems());
             }
             return true;
         }
     };
 
-    public void downloadingAvatar(long peerId, int progress, int offset, StructMessageAttachment avatar) {
+    public void downloadingAvatar(long peerId, int progress, int offset,
+        StructMessageAttachment avatar) {
         for (Item item : getAdapterItems()) {
-            if (item.mMessage.downloadAttachment != null && Long.parseLong(item.mMessage.senderID) == peerId) {
+            if (item.mMessage.downloadAttachment != null
+                && Long.parseLong(item.mMessage.senderID) == peerId) {
                 int pos = getAdapterItems().indexOf(item);
                 item.mMessage.senderAvatar = avatar;
                 item.mMessage.downloadAttachment.progress = progress;
@@ -57,7 +61,8 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
 
     public void updateDownloadFields(String token, int progress, int offset) {
         for (Item item : getAdapterItems()) {
-            if (item.mMessage.downloadAttachment != null && item.mMessage.downloadAttachment.token.equalsIgnoreCase(token)) {
+            if (item.mMessage.downloadAttachment != null
+                && item.mMessage.downloadAttachment.token.equalsIgnoreCase(token)) {
                 int pos = getAdapterItems().indexOf(item);
                 item.mMessage.downloadAttachment.offset = offset;
                 item.mMessage.downloadAttachment.progress = progress;
@@ -78,7 +83,8 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
 
     public void updateThumbnail(String token) {
         for (Item item : getAdapterItems()) {
-            if (item.mMessage.downloadAttachment != null && item.mMessage.downloadAttachment.token.equalsIgnoreCase(token)) {
+            if (item.mMessage.downloadAttachment != null
+                && item.mMessage.downloadAttachment.token.equalsIgnoreCase(token)) {
                 int pos = getAdapterItems().indexOf(item);
                 notifyItemChanged(pos);
             }
@@ -87,9 +93,11 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
 
     public void updateChatAvatar(long userId, RealmRegisteredInfo registeredInfo) {
         for (Item item : getAdapterItems()) {
-            if (!item.mMessage.isSenderMe() && item.mMessage.senderID.equalsIgnoreCase(Long.toString(userId))) {
+            if (!item.mMessage.isSenderMe() && item.mMessage.senderID.equalsIgnoreCase(
+                Long.toString(userId))) {
                 int pos = getAdapterItems().indexOf(item);
-                item.mMessage.senderAvatar = StructMessageAttachment.convert(registeredInfo.getLastAvatar());
+                item.mMessage.senderAvatar =
+                    StructMessageAttachment.convert(registeredInfo.getLastAvatar());
                 item.mMessage.initials = registeredInfo.getInitials();
                 item.mMessage.senderColor = registeredInfo.getColor();
                 notifyItemChanged(pos);
@@ -100,7 +108,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
     /**
      * update message text
      *
-     * @param messageId   message id
+     * @param messageId message id
      * @param updatedText new message text
      */
     public void updateMessageText(long messageId, String updatedText) {
@@ -118,10 +126,8 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
 
     /**
      * update progress while file uploading
-     * NOTE: it needs rewriting, because currently updates whole item view not just the progress (almost)
-     *
-     * @param messageId
-     * @param progress
+     * NOTE: it needs rewriting, because currently updates whole item view not just the progress
+     * (almost)
      */
     public void updateProgress(long messageId, int progress) {
         Item item = getItemByFileIdentity(messageId);
@@ -156,9 +162,12 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         return null;
     }
 
-    public MessagesAdapter(OnChatMessageSelectionChanged<Item> OnChatMessageSelectionChangedListener, final OnMessageViewClick onMessageViewClickListener, final OnChatMessageRemove chatMessageRemoveListener) {
+    public MessagesAdapter(
+        OnChatMessageSelectionChanged<Item> OnChatMessageSelectionChangedListener,
+        final IMessageItem iMessageItemListener,
+        final OnChatMessageRemove chatMessageRemoveListener) {
         onChatMessageSelectionChanged = OnChatMessageSelectionChangedListener;
-        onMessageViewClick = onMessageViewClickListener;
+        iMessageItem = iMessageItemListener;
         onChatMessageRemove = chatMessageRemoveListener;
 
         // as we provide id's for the items we want the hasStableIds enabled to speed up things
@@ -173,8 +182,8 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
             @Override
             public boolean onClick(View v, IAdapter<Item> adapter, Item item, int position) {
                 if (getSelectedItems().size() == 0) {
-                    if (onMessageViewClick != null) {
-                        onMessageViewClick.onMessageFileClick(v, item.mMessage, position, ProtoGlobal.RoomMessageType.TEXT);
+                    if (iMessageItem != null) {
+                        iMessageItem.onContainerClick(v, item.mMessage, position);
                     }
                 } /*else {
                     if (!item.isSelected()){
@@ -210,7 +219,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
      * update message status
      *
      * @param messageId message id
-     * @param status    ProtoGlobal.RoomMessageStatus
+     * @param status ProtoGlobal.RoomMessageStatus
      */
     public void updateMessageStatus(long messageId, ProtoGlobal.RoomMessageStatus status) {
         List<Item> items = getAdapterItems();
@@ -228,10 +237,11 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
      * update message id and its status
      *
      * @param messageId new message id
-     * @param identity  old manually defined as identity id
-     * @param status    ProtoGlobal.RoomMessageStatus
+     * @param identity old manually defined as identity id
+     * @param status ProtoGlobal.RoomMessageStatus
      */
-    public void updateMessageIdAndStatus(long messageId, String identity, ProtoGlobal.RoomMessageStatus status) {
+    public void updateMessageIdAndStatus(long messageId, String identity,
+        ProtoGlobal.RoomMessageStatus status) {
         List<Item> items = getAdapterItems();
         for (Item messageInfo : items) {
             if (messageInfo.mMessage.messageID.equals(identity)) {
@@ -244,27 +254,28 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         }
     }
 
-    @Override
-    public void notifyAdapterItemRemoved(int position) {
+    @Override public void notifyAdapterItemRemoved(int position) {
         super.notifyAdapterItemRemoved(position);
 
         if (onChatMessageSelectionChanged != null) {
-            onChatMessageSelectionChanged.onChatMessageSelectionChanged(getSelectedItems().size(), getSelectedItems());
+            onChatMessageSelectionChanged.onChatMessageSelectionChanged(getSelectedItems().size(),
+                getSelectedItems());
         }
     }
 
-    @Override
-    public void deselect() {
+    @Override public void deselect() {
         super.deselect();
 
         if (onChatMessageSelectionChanged != null) {
-            onChatMessageSelectionChanged.onChatMessageSelectionChanged(getSelectedItems().size(), getSelectedItems());
+            onChatMessageSelectionChanged.onChatMessageSelectionChanged(getSelectedItems().size(),
+                getSelectedItems());
         }
     }
 
     private void makeSelected(View v) {
         //noinspection RedundantCast
-        ((FrameLayout) v).setForeground(new ColorDrawable(v.getResources().getColor(R.color.colorChatMessageSelectableItemBg)));
+        ((FrameLayout) v).setForeground(
+            new ColorDrawable(v.getResources().getColor(R.color.colorChatMessageSelectableItemBg)));
     }
 
     private void makeDeselected(View v) {
@@ -272,8 +283,15 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         ((FrameLayout) v).setForeground(new ColorDrawable(Color.TRANSPARENT));
     }
 
-    @Override
-    public boolean onLongClick(View v, IAdapter<Item> adapter, Item item, int position) {
+    public static boolean hasDownloadRequested(String token) {
+        return downloading.containsKey(token);
+    }
+
+    public static boolean hasUploadRequested(long messageId) {
+        return uploading.containsKey(messageId);
+    }
+
+    @Override public boolean onLongClick(View v, IAdapter<Item> adapter, Item item, int position) {
         if (!item.isSelected()) {
             makeSelected(v);
         } else {

@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityComment;
-import com.iGap.interfaces.OnMessageViewClick;
+import com.iGap.interfaces.IMessageItem;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import java.util.List;
@@ -22,7 +22,7 @@ import java.util.List;
 public class ChannelVideoItem extends AbstractMessage<ChannelVideoItem, ChannelVideoItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
-    public ChannelVideoItem(ProtoGlobal.Room.Type type, OnMessageViewClick messageClickListener) {
+    public ChannelVideoItem(ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         super(false, type, messageClickListener);
     }
 

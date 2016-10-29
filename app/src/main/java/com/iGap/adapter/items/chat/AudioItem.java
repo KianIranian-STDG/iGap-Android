@@ -7,7 +7,7 @@ import android.widget.MediaController;
 import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.interfaces.OnMessageViewClick;
+import com.iGap.interfaces.IMessageItem;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.EmojiTextView;
 import com.iGap.module.enums.LocalFileType;
@@ -21,22 +21,19 @@ import java.util.List;
 public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
-    public AudioItem(ProtoGlobal.Room.Type type, OnMessageViewClick messageClickListener) {
+    public AudioItem(ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         super(true, type, messageClickListener);
     }
 
-    @Override
-    public int getType() {
+    @Override public int getType() {
         return R.id.chatSubLayoutAudio;
     }
 
-    @Override
-    public int getLayoutRes() {
+    @Override public int getLayoutRes() {
         return R.layout.chat_sub_layout_audio;
     }
 
-    @Override
-    public ViewHolderFactory<? extends ViewHolder> getFactory() {
+    @Override public ViewHolderFactory<? extends ViewHolder> getFactory() {
         return FACTORY;
     }
 
@@ -45,11 +42,11 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         super.onLoadFromLocal(holder, localPath, fileType);
     }
 
-    @Override
-    public void bindView(ViewHolder holder, List payloads) {
+    @Override public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        holder.fileSize.setText(AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true));
+        holder.fileSize.setText(
+            AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true));
         holder.fileName.setText(mMessage.attachment.name);
         holder.songArtist.setText(mMessage.songArtist);
         holder.elapsedTime.setText("0");

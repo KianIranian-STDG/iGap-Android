@@ -7,7 +7,7 @@ import android.widget.MediaController;
 import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.interfaces.OnMessageViewClick;
+import com.iGap.interfaces.IMessageItem;
 import com.iGap.module.EmojiTextView;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
@@ -20,7 +20,7 @@ import java.util.List;
 public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
-    public VoiceItem(ProtoGlobal.Room.Type type, OnMessageViewClick messageClickListener) {
+    public VoiceItem(ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         super(true, type, messageClickListener);
     }
 

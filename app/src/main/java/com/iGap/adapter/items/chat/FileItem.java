@@ -6,7 +6,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.interfaces.OnMessageViewClick;
+import com.iGap.interfaces.IMessageItem;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.EmojiTextView;
 import com.iGap.module.enums.LocalFileType;
@@ -23,7 +23,7 @@ import static com.iGap.module.AndroidUtils.suitablePath;
 public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
-    public FileItem(ProtoGlobal.Room.Type type, OnMessageViewClick messageClickListener) {
+    public FileItem(ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         super(true, type, messageClickListener);
     }
 

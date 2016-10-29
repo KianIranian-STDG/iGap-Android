@@ -5,7 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import com.iGap.R;
-import com.iGap.interfaces.OnMessageViewClick;
+import com.iGap.interfaces.IMessageItem;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
@@ -22,22 +22,19 @@ import static com.iGap.module.AndroidUtils.suitablePath;
 public class ImageItem extends AbstractMessage<ImageItem, ImageItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
-    public ImageItem(ProtoGlobal.Room.Type type, OnMessageViewClick messageClickListener) {
+    public ImageItem(ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         super(true, type, messageClickListener);
     }
 
-    @Override
-    public int getType() {
+    @Override public int getType() {
         return R.id.chatSubLayoutImage;
     }
 
-    @Override
-    public int getLayoutRes() {
+    @Override public int getLayoutRes() {
         return R.layout.chat_sub_layout_image;
     }
 
-    @Override
-    public ViewHolderFactory<? extends ViewHolder> getFactory() {
+    @Override public ViewHolderFactory<? extends ViewHolder> getFactory() {
         return FACTORY;
     }
 
@@ -47,18 +44,22 @@ public class ImageItem extends AbstractMessage<ImageItem, ImageItem.ViewHolder> 
         ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.image);
     }
 
-    @Override
-    public void bindView(final ViewHolder holder, List payloads) {
+    @Override public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
         if (mMessage.attachment != null) {
-            int[] dimens = AndroidUtils.scaleDimenWithSavedRatio(holder.itemView.getContext(), mMessage.attachment.width, mMessage.attachment.height);
-            ((ViewGroup) holder.image.getParent()).setLayoutParams(new LinearLayout.LayoutParams(dimens[0], dimens[1]));
+            int[] dimens = AndroidUtils.scaleDimenWithSavedRatio(holder.itemView.getContext(),
+                mMessage.attachment.width, mMessage.attachment.height);
+            ((ViewGroup) holder.image.getParent()).setLayoutParams(
+                new LinearLayout.LayoutParams(dimens[0], dimens[1]));
             holder.image.getParent().requestLayout();
         }
 
-
-        setOnClick(holder, holder.image, ProtoGlobal.RoomMessageType.IMAGE);
+        holder.image.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                messageClickListener.onOpenClick(v, mMessage, holder.getAdapterPosition());
+            }
+        });
     }
 
     protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {

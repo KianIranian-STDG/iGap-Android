@@ -5,7 +5,7 @@ import android.text.method.LinkMovementMethod;
 import android.view.View;
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.interfaces.OnMessageViewClick;
+import com.iGap.interfaces.IMessageItem;
 import com.iGap.module.EmojiTextView;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
@@ -17,32 +17,33 @@ import java.util.List;
 public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
-    public TextItem(ProtoGlobal.Room.Type type, OnMessageViewClick messageClickListener) {
+    public TextItem(ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         super(true, type, messageClickListener);
     }
 
-    @Override
-    public int getType() {
+    @Override public int getType() {
         return R.id.chatSubLayoutMessage;
     }
 
-    @Override
-    public int getLayoutRes() {
+    @Override public int getLayoutRes() {
         return R.layout.chat_sub_layout_message;
     }
 
-    @Override
-    public void bindView(final ViewHolder holder, List payloads) {
+    @Override public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
         setTextIfNeeded(holder.messageText);
 
-        if (!mMessage.messageText.contains("#"))
-            setOnClick(holder, holder.messageText, ProtoGlobal.RoomMessageType.TEXT);
+        if (!mMessage.messageText.contains("#")) {
+            holder.messageText.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    messageClickListener.onContainerClick(v, mMessage, holder.getAdapterPosition());
+                }
+            });
+        }
     }
 
-    @Override
-    public ViewHolderFactory<? extends ViewHolder> getFactory() {
+    @Override public ViewHolderFactory<? extends ViewHolder> getFactory() {
         return FACTORY;
     }
 
@@ -61,7 +62,6 @@ public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
             messageText = (EmojiTextView) view.findViewById(R.id.messageText);
             messageText.setTextSize(G.userTextSize);
             messageText.setMovementMethod(LinkMovementMethod.getInstance());
-
         }
     }
 }

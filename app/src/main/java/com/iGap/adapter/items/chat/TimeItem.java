@@ -4,7 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 import com.iGap.R;
-import com.iGap.interfaces.OnMessageViewClick;
+import com.iGap.interfaces.IMessageItem;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
 public class TimeItem extends AbstractMessage<TimeItem, TimeItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
-    public TimeItem(OnMessageViewClick messageClickListener) {
+    public TimeItem(IMessageItem messageClickListener) {
         super(false, ProtoGlobal.Room.Type.CHAT, messageClickListener);
     }
 
