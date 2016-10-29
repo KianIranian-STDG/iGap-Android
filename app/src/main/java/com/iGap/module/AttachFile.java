@@ -19,7 +19,6 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
@@ -27,7 +26,6 @@ import com.iGap.activities.ActivityExplorer;
 import com.iGap.activities.ActivityPaint;
 import com.iGap.helper.HelperPermision;
 import com.iGap.interface_package.OnGetPermision;
-
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -39,7 +37,7 @@ import java.util.Locale;
 public class AttachFile {
 
     public static final int request_code_TAKE_PICTURE = 10;
-    public static final int request_code_media_from_gallary = 11;
+    public static final int request_code_media_from_gallery = 11;
     public static final int request_code_VIDEO_CAPTURED = 12;
     public static final int request_code_pic_audi = 13;
     public static final int request_code_pic_file = 14;
@@ -131,14 +129,14 @@ public class AttachFile {
     //*************************************************************************************************************
     public void requestOpenGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK, Uri.parse("content://media/internal/images/media"));
-        ((Activity) context).startActivityForResult(intent, request_code_media_from_gallary);
+        ((Activity) context).startActivityForResult(intent, request_code_media_from_gallery);
     }
 
     public void requestOpenGalleryForImage() {
 
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setType("image/*");
-        ((Activity) context).startActivityForResult(Intent.createChooser(intent, context.getString(R.string.select_picture_en)), request_code_media_from_gallary);
+        ((Activity) context).startActivityForResult(Intent.createChooser(intent, context.getString(R.string.select_picture_en)), request_code_media_from_gallery);
     }
 
     //*************************************************************************************************************

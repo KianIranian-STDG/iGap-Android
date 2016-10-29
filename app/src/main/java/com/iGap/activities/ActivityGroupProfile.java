@@ -30,7 +30,6 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
@@ -90,17 +89,15 @@ import com.mikepenz.fastadapter.adapters.HeaderAdapter;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
-
+import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmResults;
+import io.realm.Sort;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
-
-import io.realm.Realm;
-import io.realm.RealmList;
-import io.realm.RealmResults;
-import io.realm.Sort;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
@@ -688,7 +685,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                     filePath = AttachFile.imagePath;
                     Log.e("ddd", filePath + "     image path");
                     break;
-                case AttachFile.request_code_media_from_gallary:
+                case AttachFile.request_code_media_from_gallery:
                     filePath = AttachFile.getFilePathFromUri(data.getData());
                     Log.e("ddd", filePath + "    gallary file path");
                     break;

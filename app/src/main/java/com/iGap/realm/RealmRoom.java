@@ -1,10 +1,8 @@
 package com.iGap.realm;
 
 import android.text.format.DateUtils;
-
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.enums.RoomType;
-
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -30,6 +28,7 @@ public class RealmRoom extends RealmObject {
     private String lastMessage;
     private String lastMessageStatus;
     private String draft = "";
+    private RealmDraftFile draftFile;
     private RealmAvatar avatar;
 
     public long getLastMessageTime() {
@@ -158,6 +157,14 @@ public class RealmRoom extends RealmObject {
 
     public void setDraft(String draft) {
         this.draft = draft;
+    }
+
+    public RealmDraftFile getDraftFile() {
+        return draftFile;
+    }
+
+    public void setDraftFile(RealmDraftFile draftFile) {
+        this.draftFile = draftFile;
     }
 
     public RealmAvatar getAvatar() {

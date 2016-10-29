@@ -18,7 +18,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.IntentRequests;
@@ -38,13 +37,11 @@ import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestUserAvatarAdd;
 import com.iGap.request.RequestUserInfo;
 import com.iGap.request.RequestUserProfileSetNickname;
-
+import io.realm.Realm;
+import io.realm.RealmResults;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-
-import io.realm.Realm;
-import io.realm.RealmResults;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarResponse, OnFileUploadForActivities {
@@ -220,7 +217,6 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
                         RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                         realmUserInfo.setNickName(user.getDisplayName());
                         realmUserInfo.setInitials(user.getInitials());
-                        Log.i("UUU", "user.getInitials() : " + user.getInitials());
                         realmUserInfo.setColor(user.getColor());
                         realmUserInfo.setUserRegistrationState(true);
 

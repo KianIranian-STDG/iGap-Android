@@ -33,17 +33,14 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.interface_package.OnColorChangedListenerSelect;
 import com.iGap.module.AttachFile;
 import com.iGap.module.ColorPiker;
-
 import java.io.File;
 import java.io.FileOutputStream;
-
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
@@ -471,7 +468,7 @@ public class ActivityPaint extends Activity {
         if (resultCode == Activity.RESULT_OK) {
 
             switch (requestCode) {
-                case AttachFile.request_code_media_from_gallary:
+                case AttachFile.request_code_media_from_gallery:
 
                     try {
                         setImageToBitmap(data);

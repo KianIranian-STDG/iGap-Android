@@ -32,7 +32,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
@@ -64,12 +63,10 @@ import com.iGap.request.RequestUserInfo;
 import com.iGap.request.RequestUserLogin;
 import com.iGap.request.RequestWrapper;
 import com.vicmikhailau.maskededittext.MaskedEditText;
-
+import io.realm.Realm;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import io.realm.Realm;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityRegister extends ActivityEnhanced {
@@ -1103,7 +1100,6 @@ public class ActivityRegister extends ActivityEnhanced {
                         RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                         realmUserInfo.setNickName(user.getDisplayName());
                         realmUserInfo.setInitials(user.getInitials());
-                        Log.i("UUU", "user.getInitials() : " + user.getInitials());
                         realmUserInfo.setColor(user.getColor());
                         realmUserInfo.setUserRegistrationState(true);
 
