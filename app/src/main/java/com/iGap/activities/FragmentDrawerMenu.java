@@ -18,7 +18,9 @@ import com.iGap.R;
 import com.iGap.fragments.FragmentNewGroup;
 import com.iGap.fragments.RegisteredContactsFragment;
 import com.iGap.helper.HelperImageBackColor;
+import com.iGap.helper.HelperPermision;
 import com.iGap.interfaces.OnChangeUserPhotoListener;
+import com.iGap.interfaces.OnGetPermision;
 import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.libs.flowingdrawer.MenuFragment;
 import com.iGap.module.HelperDecodeFile;
@@ -179,9 +181,13 @@ public class FragmentDrawerMenu extends MenuFragment {
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(G.context, ActivitySetting.class);
-                startActivity(intent);
-                ActivityMain.mLeftDrawerLayout.closeDrawer();
+                HelperPermision.getStoragePermision(getActivity(), new OnGetPermision() {
+                    @Override public void Allow() {
+                        Intent intent = new Intent(G.context, ActivitySetting.class);
+                        startActivity(intent);
+                        ActivityMain.mLeftDrawerLayout.closeDrawer();
+                    }
+                });
 
             }
         });

@@ -29,6 +29,7 @@ import com.iGap.fragments.FragmentNewGroup;
 import com.iGap.fragments.RegisteredContactsFragment;
 import com.iGap.fragments.SearchFragment;
 import com.iGap.helper.HelperGetDataFromOtherApp;
+import com.iGap.helper.HelperPermision;
 import com.iGap.helper.ServiceContact;
 import com.iGap.interfaces.OnChatClearMessageResponse;
 import com.iGap.interfaces.OnChatDelete;
@@ -39,6 +40,7 @@ import com.iGap.interfaces.OnClientGetRoomResponse;
 import com.iGap.interfaces.OnConnectionChangeState;
 import com.iGap.interfaces.OnDraftMessage;
 import com.iGap.interfaces.OnFileDownloadResponse;
+import com.iGap.interfaces.OnGetPermision;
 import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.libs.floatingAddButton.ArcMenu;
 import com.iGap.libs.floatingAddButton.StateChangeListener;
@@ -139,7 +141,13 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         initFloatingButtonCreateNew();
         initDrawerMenu();
         onDraftMessage();
-        Contacts.FillRealmInviteFriend();
+
+        HelperPermision.getContactPermision(ActivityMain.this, new OnGetPermision() {
+            @Override public void Allow() {
+                Contacts.FillRealmInviteFriend();
+            }
+        });
+
     }
 
     private static int drawerWith = 0;

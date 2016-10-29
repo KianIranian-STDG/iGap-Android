@@ -1,5 +1,6 @@
 package com.iGap.activities;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
@@ -8,6 +9,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -76,6 +78,7 @@ import com.iGap.fragments.FragmentShowImageMessages;
 import com.iGap.helper.Emojione;
 import com.iGap.helper.HelperGetDataFromOtherApp;
 import com.iGap.helper.HelperMimeType;
+import com.iGap.helper.HelperPermision;
 import com.iGap.interfaces.IEmojiBackspaceClick;
 import com.iGap.interfaces.IEmojiClickListener;
 import com.iGap.interfaces.IEmojiLongClickListener;
@@ -180,6 +183,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
+import static com.iGap.G.context;
 
 public class ActivityChat extends ActivityEnhanced
     implements IEmojiViewCreate, IRecentsLongClick, IMessageItem, OnChatClearMessageResponse,
@@ -1146,13 +1151,13 @@ public class ActivityChat extends ActivityEnhanced
                 if (chatType == ProtoGlobal.Room.Type.CHAT
                     && chatPeerId
                     != 134) {//TODO [Saeed Mozaffari] [2016-09-07 11:46 AM] -  in if eshtebah ast check for iGap message ==> chatPeerId == 134(alan baraye check kardane) , waiting for userDetail proto
-                    Intent intent = new Intent(G.context, ActivityContactsProfile.class);
+                    Intent intent = new Intent(context, ActivityContactsProfile.class);
                     intent.putExtra("peerId", chatPeerId);
                     intent.putExtra("RoomId", mRoomId);
                     intent.putExtra("enterFrom", ProtoGlobal.Room.Type.CHAT.toString());
                     startActivity(intent);
                 } else if (chatType == ProtoGlobal.Room.Type.GROUP) {
-                    Intent intent = new Intent(G.context, ActivityGroupProfile.class);
+                    Intent intent = new Intent(context, ActivityGroupProfile.class);
                     intent.putExtra("RoomId", mRoomId);
                     startActivity(intent);
                 }
@@ -1303,7 +1308,7 @@ public class ActivityChat extends ActivityEnhanced
                             mReplayLayout.setVisibility(View.GONE);
                         }
                     } else {
-                        Toast.makeText(G.context, "Please Write Your message!", Toast.LENGTH_LONG)
+                        Toast.makeText(context, "Please Write Your message!", Toast.LENGTH_LONG)
                             .show();
                     }
                 }
@@ -1328,10 +1333,19 @@ public class ActivityChat extends ActivityEnhanced
         imvMicButton.setOnLongClickListener(new View.OnLongClickListener() {
             @Override public boolean onLongClick(View view) {
 
-                voiceRecord.setItemTag("ivVoice");
-                viewAttachFile.setVisibility(View.GONE);
-                viewMicRecorder.setVisibility(View.VISIBLE);
-                voiceRecord.startVoiceRecord();
+                int permissionCheck =
+                    ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO);
+
+                if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                    HelperPermision.getMicroPhonePermision(ActivityChat.this, null);
+                } else {
+                    voiceRecord.setItemTag("ivVoice");
+                    viewAttachFile.setVisibility(View.GONE);
+                    viewMicRecorder.setVisibility(View.VISIBLE);
+                    voiceRecord.startVoiceRecord();
+                }
+
+
 
                 return true;
             }
@@ -1868,42 +1882,42 @@ public class ActivityChat extends ActivityEnhanced
             R.mipmap.am_contact
         };
         for (int i = 0; i < 3; i++)
-            subButtonDrawables[i] = ContextCompat.getDrawable(G.context, drawablesResource[i]);
+            subButtonDrawables[i] = ContextCompat.getDrawable(context, drawablesResource[i]);
 
         int[][] subButtonColors = new int[3][2];
         for (int i = 0; i < 3; i++) {
-            subButtonColors[i][1] = ContextCompat.getColor(G.context, R.color.start_background);
+            subButtonColors[i][1] = ContextCompat.getColor(context, R.color.start_background);
             subButtonColors[i][0] = Util.getInstance().getPressedColor(subButtonColors[i][1]);
         }
 
         BoomMenuButton.Builder bb = new BoomMenuButton.Builder();
 
-        bb.addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_camera),
+        bb.addSubButton(ContextCompat.getDrawable(context, R.mipmap.am_camera),
             subButtonColors[0], getResources().getString(R.string.am_camera))
-            .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_picture),
+            .addSubButton(ContextCompat.getDrawable(context, R.mipmap.am_picture),
                 subButtonColors[0], getResources().getString(R.string.am_picture))
-            .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_video),
+            .addSubButton(ContextCompat.getDrawable(context, R.mipmap.am_video),
                 subButtonColors[0], getResources().getString(R.string.am_video))
-            .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_music),
+            .addSubButton(ContextCompat.getDrawable(context, R.mipmap.am_music),
                 subButtonColors[0], getResources().getString(R.string.am_music))
-            .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_document),
+            .addSubButton(ContextCompat.getDrawable(context, R.mipmap.am_document),
                 subButtonColors[0], getResources().getString(R.string.am_document))
-            .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_file),
+            .addSubButton(ContextCompat.getDrawable(context, R.mipmap.am_file),
                 subButtonColors[0], getResources().getString(R.string.am_file))
-            .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_paint),
+            .addSubButton(ContextCompat.getDrawable(context, R.mipmap.am_paint),
                 subButtonColors[0], getResources().getString(R.string.am_paint))
-            .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_location),
+            .addSubButton(ContextCompat.getDrawable(context, R.mipmap.am_location),
                 subButtonColors[0], getResources().getString(R.string.am_location))
-            .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_contact),
+            .addSubButton(ContextCompat.getDrawable(context, R.mipmap.am_contact),
                 subButtonColors[0], getResources().getString(R.string.am_contact))
             .autoDismiss(true)
             .cancelable(true)
             .boomButtonShadow(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2))
-            .subButtonTextColor(ContextCompat.getColor(G.context, R.color.am_iconFab_black))
+            .subButtonTextColor(ContextCompat.getColor(context, R.color.am_iconFab_black))
             .button(ButtonType.CIRCLE)
             .boom(BoomType.PARABOLA)
             .place(PlaceType.CIRCLE_9_1)
-            .subButtonTextColor(ContextCompat.getColor(G.context, R.color.colorAccent))
+            .subButtonTextColor(ContextCompat.getColor(context, R.color.colorAccent))
             .subButtonsShadow(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2))
             .init(boomMenuButton);
         boomMenuButton.setTextViewColor(getResources().getColor(R.color.am_iconFab_black));
@@ -1947,8 +1961,7 @@ public class ActivityChat extends ActivityEnhanced
             }
         });
 
-        boomMenuButton.setTextViewColor(
-            ContextCompat.getColor(G.context, R.color.am_iconFab_black));
+        boomMenuButton.setTextViewColor(ContextCompat.getColor(context, R.color.am_iconFab_black));
     }
 
     private boolean userTriesReplay() {
@@ -2645,7 +2658,7 @@ public class ActivityChat extends ActivityEnhanced
 
     @Override
     public void onSenderAvatarClick(View view, StructMessageInfo messageInfo, int position) {
-        Intent intent = new Intent(G.context, ActivityContactsProfile.class);
+        Intent intent = new Intent(context, ActivityContactsProfile.class);
         intent.putExtra("peerId", Long.parseLong(messageInfo.senderID));
         intent.putExtra("RoomId", mRoomId);
         intent.putExtra("enterFrom", ProtoGlobal.Room.Type.GROUP.toString());

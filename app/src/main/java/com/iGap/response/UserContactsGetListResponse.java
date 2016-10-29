@@ -1,6 +1,9 @@
 package com.iGap.response;
 
+import android.content.Context;
 import com.iGap.G;
+import com.iGap.helper.HelperPermision;
+import com.iGap.interfaces.OnGetPermision;
 import com.iGap.module.Contacts;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoUserContactsGetList;
@@ -12,7 +15,6 @@ import com.iGap.realm.RealmContacts;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmThumbnail;
-
 import io.realm.Realm;
 
 public class UserContactsGetListResponse extends MessageHandler {
@@ -20,13 +22,16 @@ public class UserContactsGetListResponse extends MessageHandler {
     public int actionId;
     public Object message;
     public String identity;
+    public Context context;
 
-    public UserContactsGetListResponse(int actionId, Object protoClass, String identity) {
+    public UserContactsGetListResponse(int actionId, Object protoClass, String identity,
+        Context context) { // context shuld be activity for permision in api 6+
         super(actionId, protoClass, identity);
 
         this.message = protoClass;
         this.actionId = actionId;
         this.identity = identity;
+        this.context = context;
     }
 
 
@@ -117,7 +122,11 @@ public class UserContactsGetListResponse extends MessageHandler {
 
         realm.close();
 
-        Contacts.FillRealmInviteFriend();
+        HelperPermision.getContactPermision(context, new OnGetPermision() {
+            @Override public void Allow() {
+                Contacts.FillRealmInviteFriend();
+            }
+        });
     }
 
     @Override

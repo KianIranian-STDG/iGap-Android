@@ -51,9 +51,9 @@ public class SearchFragment extends Fragment {
     private RecyclerView recyclerView;
     private ItemAdapter itemAdapter;
     private boolean isFillList = false;
-    private boolean chatHeaderGone = false;
-    private boolean contactHeaderGone = false;
-    private boolean messageHeaderGone = false;
+    private boolean chatHeaderGone = true;
+    private boolean contactHeaderGone = true;
+    private boolean messageHeaderGone = true;
 
 
 
@@ -113,14 +113,11 @@ public class SearchFragment extends Fragment {
                                     messageHeaderGone = false;
                                 }
 
-                                if (messageHeaderGone
-                                    == chatHeaderGone
-                                    == chatHeaderGone
-                                    == false) {
-                                    break;
-                                }
                             }
                         }
+
+                        Log.e("ddd",
+                            chatHeaderGone + "  " + contactHeaderGone + "  " + messageHeaderGone);
 
                         itemAdapter.filter(edtSearch.getText().toString());
                     }
@@ -248,6 +245,8 @@ public class SearchFragment extends Fragment {
 
         Realm realm = Realm.getDefaultInstance();
 
+        int size = list.size();
+
         for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAll()) {
             StructSearch item = new StructSearch();
 
@@ -262,10 +261,14 @@ public class SearchFragment extends Fragment {
 
             list.add(item);
         }
+
+        if (size == list.size()) list.remove(size - 1);
+
         realm.close();
     }
 
     private void fillContacts() {
+        int size = list.size();
 
         Realm realm = Realm.getDefaultInstance();
         final RealmResults<RealmContacts> results = realm.where(RealmContacts.class).findAll();
@@ -288,10 +291,11 @@ public class SearchFragment extends Fragment {
                 item.initials = contact.getInitials();
                 item.color = contact.getColor();
                 item.avatar = contact.getAvatar();
-
                 list.add(item);
             }
         }
+
+        if (size == list.size()) list.remove(size - 1);
         realm.close();
     }
 
@@ -305,7 +309,7 @@ public class SearchFragment extends Fragment {
     private void fillMessages() {
 
         //TODO [Saeed Mozaffari] [2016-10-18 10:19 AM] - now load avatar just from local . shayad avatar download nashode bashe. inja download nemikonim faghat agar vojud dashte bashe neshun midim
-
+        int size = list.size();
         Realm realm = Realm.getDefaultInstance();
 
         for (RealmChatHistory realmChatHistory : realm.where(RealmChatHistory.class).findAll()) {
@@ -332,6 +336,8 @@ public class SearchFragment extends Fragment {
                 list.add(item);
             }
         }
+
+        if (size == list.size()) list.remove(size - 1);
     }
 
     private void goToRoom(final long id, SearchType type, long messageId) {

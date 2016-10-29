@@ -110,7 +110,7 @@ public class HelperPermision {
 
         int permissionReadContact = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS);
         int permissionWriteContact = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CONTACTS);
-        int permissionWritGetAccunt = ContextCompat.checkSelfPermission(context, Manifest.permission.GET_ACCOUNTS);
+        //  int permissionWritGetAccunt = ContextCompat.checkSelfPermission(context, Manifest.permission.GET_ACCOUNTS);
 
         if (permissionReadContact != PackageManager.PERMISSION_GRANTED) {
             needPermosion = new ArrayList<>();
@@ -125,13 +125,13 @@ public class HelperPermision {
 
         }
 
-        if (permissionWritGetAccunt != PackageManager.PERMISSION_GRANTED) {
-            if (needPermosion == null) {
-                needPermosion = new ArrayList<>();
-            }
-            needPermosion.add(Manifest.permission.GET_ACCOUNTS);
-
-        }
+        //if (permissionWritGetAccunt != PackageManager.PERMISSION_GRANTED) {
+        //    if (needPermosion == null) {
+        //        needPermosion = new ArrayList<>();
+        //    }
+        //    needPermosion.add(Manifest.permission.GET_ACCOUNTS);
+        //
+        //}
 
         if (needPermosion != null) {
             String[] mStringArray = new String[needPermosion.size()];
@@ -339,7 +339,8 @@ public class HelperPermision {
     }
 
     //************************************************************************************************************
-    private static void getPremision(final Context context, final String[] needPermision, final int requestCode) {
+    public static void getPremision(final Context context, final String[] needPermision,
+        final int requestCode) {
 
 
         if (!ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, needPermision[0])) {

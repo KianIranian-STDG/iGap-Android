@@ -1,9 +1,12 @@
 package com.iGap.fragments;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +23,7 @@ import com.iGap.R;
 import com.iGap.activities.ActivityChat;
 import com.iGap.adapter.StickyHeaderAdapter;
 import com.iGap.adapter.items.ContactItem;
+import com.iGap.helper.HelperPermision;
 import com.iGap.interfaces.OnChatGetRoom;
 import com.iGap.interfaces.OnFileDownloadResponse;
 import com.iGap.interfaces.OnUserInfoResponse;
@@ -49,6 +53,8 @@ import io.realm.Realm;
 import io.realm.RealmList;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.iGap.G.context;
 
 public class RegisteredContactsFragment extends Fragment implements OnFileDownloadResponse {
     private FastAdapter fastAdapter;
@@ -154,11 +160,25 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
             @Override
             public void onClick(View view) {
 
-                FragmentAddContact fragment = FragmentAddContact.newInstance();
-                Bundle bundle = new Bundle();
-                bundle.putString("TITLE", "add_contact");
-                fragment.setArguments(bundle);
-                getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
+                int permissionWriteContact =
+                    ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CONTACTS);
+
+                if (permissionWriteContact != PackageManager.PERMISSION_GRANTED) {
+                    HelperPermision.getContactPermision(getActivity(), null);
+                } else {
+                    FragmentAddContact fragment = FragmentAddContact.newInstance();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("TITLE", "add_contact");
+                    fragment.setArguments(bundle);
+                    getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
+                            R.anim.slide_in_right, R.anim.slide_out_left)
+                        .addToBackStack(null)
+                        .replace(R.id.fragmentContainer, fragment)
+                        .commit();
+                }
+
             }
         });
 
@@ -212,10 +232,10 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
         final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
 
         if (realmRoom != null) {
-            Intent intent = new Intent(G.context, ActivityChat.class);
+            Intent intent = new Intent(context, ActivityChat.class);
             intent.putExtra("RoomId", realmRoom.getId());
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            G.context.startActivity(intent);
+            context.startActivity(intent);
             getActivity().getSupportFragmentManager().popBackStack();
 
         } else {
@@ -294,11 +314,11 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                                 @Override
                                 public void onSuccess() {
                                     prgWaiting.setVisibility(View.GONE);
-                                    Intent intent = new Intent(G.context, ActivityChat.class);
+                                    Intent intent = new Intent(context, ActivityChat.class);
                                     intent.putExtra("peerId", peerId);
                                     intent.putExtra("RoomId", roomId);
                                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    G.context.startActivity(intent);
+                                    context.startActivity(intent);
                                     getActivity().getSupportFragmentManager().popBackStack();
                                 }
                             });
