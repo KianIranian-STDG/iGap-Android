@@ -11,9 +11,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
 import android.util.Log;
-
 import com.iGap.G;
-import com.iGap.interface_package.OnSmsReceive;
+import com.iGap.interfaces.OnSmsReceive;
 
 
 /**

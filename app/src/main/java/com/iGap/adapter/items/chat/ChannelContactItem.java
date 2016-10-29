@@ -2,12 +2,10 @@ package com.iGap.adapter.items.chat;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-
 import com.iGap.R;
-import com.iGap.interface_package.OnMessageViewClick;
+import com.iGap.interfaces.OnMessageViewClick;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
-
 import java.util.List;
 
 /**

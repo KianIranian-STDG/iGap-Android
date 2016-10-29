@@ -17,21 +17,18 @@ import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AdapterViewPager;
-import com.iGap.interface_package.OnReceiveInfoLocation;
-import com.iGap.interface_package.OnReceivePageInfoTOS;
+import com.iGap.interfaces.OnReceiveInfoLocation;
+import com.iGap.interfaces.OnReceivePageInfoTOS;
 import com.iGap.module.CustomCircleImage;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestInfoLocation;
 import com.iGap.request.RequestInfoPage;
 import com.uncopt.android.widget.text.justify.JustifiedTextView;
-
-import java.util.Locale;
-
 import io.realm.Realm;
+import java.util.Locale;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityIntroduce extends ActivityEnhanced {

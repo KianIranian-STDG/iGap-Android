@@ -32,7 +32,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
@@ -40,12 +39,12 @@ import com.iGap.R;
 import com.iGap.adapter.AdapterDialog;
 import com.iGap.helper.HelperLogout;
 import com.iGap.helper.HelperString;
-import com.iGap.interface_package.OnInfoCountryResponse;
-import com.iGap.interface_package.OnSmsReceive;
-import com.iGap.interface_package.OnUserInfoResponse;
-import com.iGap.interface_package.OnUserLogin;
-import com.iGap.interface_package.OnUserRegistration;
-import com.iGap.interface_package.OnUserVerification;
+import com.iGap.interfaces.OnInfoCountryResponse;
+import com.iGap.interfaces.OnSmsReceive;
+import com.iGap.interfaces.OnUserInfoResponse;
+import com.iGap.interfaces.OnUserLogin;
+import com.iGap.interfaces.OnUserRegistration;
+import com.iGap.interfaces.OnUserVerification;
 import com.iGap.module.CountryListComparator;
 import com.iGap.module.CountryReader;
 import com.iGap.module.IncomingSms;
@@ -64,12 +63,10 @@ import com.iGap.request.RequestUserInfo;
 import com.iGap.request.RequestUserLogin;
 import com.iGap.request.RequestWrapper;
 import com.vicmikhailau.maskededittext.MaskedEditText;
-
+import io.realm.Realm;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import io.realm.Realm;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityRegister extends ActivityEnhanced {

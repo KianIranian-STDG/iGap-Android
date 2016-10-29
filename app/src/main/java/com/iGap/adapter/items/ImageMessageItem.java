@@ -5,7 +5,7 @@ import android.view.View;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AvatarsAdapter;
-import com.iGap.interface_package.IChatItemAvatar;
+import com.iGap.interfaces.IChatItemAvatar;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.TouchImageView;
 import com.iGap.proto.ProtoFileDownload;

@@ -5,16 +5,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.iGap.R;
-import com.iGap.interface_package.OnMessageViewClick;
+import com.iGap.interfaces.OnMessageViewClick;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
 import java.util.List;
 
 import static com.iGap.module.AndroidUtils.suitablePath;

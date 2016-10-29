@@ -10,14 +10,13 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.MessagesAdapter;
 import com.iGap.helper.HelperStringAnalayser;
-import com.iGap.interface_package.IChatItemAttachment;
-import com.iGap.interface_package.IChatItemAvatar;
-import com.iGap.interface_package.OnMessageViewClick;
+import com.iGap.interfaces.IChatItemAttachment;
+import com.iGap.interfaces.IChatItemAvatar;
+import com.iGap.interfaces.OnMessageViewClick;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.AppUtils;
 import com.iGap.module.MyType;
@@ -31,13 +30,11 @@ import com.iGap.request.RequestFileDownload;
 import com.iGap.request.RequestUserInfo;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
-import java.io.IOException;
-import java.util.List;
-
 import io.meness.github.messageprogress.MessageProgress;
 import io.meness.github.messageprogress.OnMessageProgressClick;
 import io.meness.github.messageprogress.OnProgress;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/6/2016.

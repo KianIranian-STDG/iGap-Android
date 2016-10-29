@@ -18,27 +18,24 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AdapterComment;
 import com.iGap.helper.Emojione;
-import com.iGap.interface_package.IEmojiBackspaceClick;
-import com.iGap.interface_package.IEmojiClickListener;
-import com.iGap.interface_package.IEmojiLongClickListener;
-import com.iGap.interface_package.IEmojiStickerClick;
-import com.iGap.interface_package.IEmojiViewCreate;
-import com.iGap.interface_package.IRecentsLongClick;
-import com.iGap.interface_package.ISoftKeyboardOpenClose;
+import com.iGap.interfaces.IEmojiBackspaceClick;
+import com.iGap.interfaces.IEmojiClickListener;
+import com.iGap.interfaces.IEmojiLongClickListener;
+import com.iGap.interfaces.IEmojiStickerClick;
+import com.iGap.interfaces.IEmojiViewCreate;
+import com.iGap.interfaces.IRecentsLongClick;
+import com.iGap.interfaces.ISoftKeyboardOpenClose;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.EmojiEditText;
 import com.iGap.module.EmojiPopup;
 import com.iGap.module.EmojiRecentsManager;
 import com.iGap.module.StructCommentInfo;
-
 import java.util.ArrayList;
-
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**

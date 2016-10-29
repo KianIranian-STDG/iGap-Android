@@ -1,6 +1,6 @@
 package com.iGap.module;
 
-import com.iGap.interface_package.OnChatClearMessageResponse;
+import com.iGap.interfaces.OnChatClearMessageResponse;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.request.RequestChatClearMessage;
 

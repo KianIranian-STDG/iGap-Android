@@ -20,9 +20,8 @@ import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
-
 import com.iGap.R;
-import com.iGap.interface_package.OnColorChangedListenerSelect;
+import com.iGap.interfaces.OnColorChangedListenerSelect;
 
 
 /**

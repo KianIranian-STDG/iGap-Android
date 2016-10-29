@@ -19,15 +19,13 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityExplorer;
 import com.iGap.activities.ActivityPaint;
 import com.iGap.helper.HelperPermision;
-import com.iGap.interface_package.OnGetPermision;
-
+import com.iGap.interfaces.OnGetPermision;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;

@@ -1,6 +1,6 @@
 package com.iGap.module;
 
-import com.iGap.interface_package.OnChatUpdateStatusResponse;
+import com.iGap.interfaces.OnChatUpdateStatusResponse;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.request.RequestChatUpdateStatus;
 import com.iGap.request.RequestGroupUpdateStatus;

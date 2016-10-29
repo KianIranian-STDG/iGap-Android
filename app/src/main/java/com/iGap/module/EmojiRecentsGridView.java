@@ -19,11 +19,10 @@ package com.iGap.module;
 import android.content.Context;
 import android.view.View;
 import android.widget.GridView;
-
 import com.iGap.R;
 import com.iGap.adapter.EmojiAdapter;
-import com.iGap.interface_package.IEmojiClickListener;
-import com.iGap.interface_package.IRecents;
+import com.iGap.interfaces.IEmojiClickListener;
+import com.iGap.interfaces.IRecents;
 
 public class EmojiRecentsGridView extends EmojiGridView implements IRecents {
     private final EmojiAdapter mAdapter;

@@ -5,19 +5,17 @@ import android.graphics.drawable.ColorDrawable;
 import android.support.v4.util.ArrayMap;
 import android.view.View;
 import android.widget.FrameLayout;
-
 import com.iGap.R;
 import com.iGap.adapter.items.chat.AbstractMessage;
-import com.iGap.interface_package.OnChatMessageRemove;
-import com.iGap.interface_package.OnChatMessageSelectionChanged;
-import com.iGap.interface_package.OnMessageViewClick;
+import com.iGap.interfaces.OnChatMessageRemove;
+import com.iGap.interfaces.OnChatMessageSelectionChanged;
+import com.iGap.interfaces.OnMessageViewClick;
 import com.iGap.module.StructMessageAttachment;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.adapters.FastItemAdapter;
-
 import java.util.ArrayList;
 import java.util.List;
 

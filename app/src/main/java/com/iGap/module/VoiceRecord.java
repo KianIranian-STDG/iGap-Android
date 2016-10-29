@@ -7,11 +7,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.interface_package.OnVoiceRecord;
-
+import com.iGap.interfaces.OnVoiceRecord;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;

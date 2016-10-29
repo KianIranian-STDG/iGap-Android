@@ -1,6 +1,6 @@
 package com.iGap.module;
 
-import com.iGap.interface_package.OnChatSendMessageResponse;
+import com.iGap.interfaces.OnChatSendMessageResponse;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.request.RequestChatSendMessage;
 import com.iGap.request.RequestGroupSendMessage;

@@ -20,7 +20,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.R;
@@ -31,16 +30,16 @@ import com.iGap.fragments.RegisteredContactsFragment;
 import com.iGap.fragments.SearchFragment;
 import com.iGap.helper.HelperGetDataFromOtherApp;
 import com.iGap.helper.ServiceContact;
-import com.iGap.interface_package.OnChatClearMessageResponse;
-import com.iGap.interface_package.OnChatDelete;
-import com.iGap.interface_package.OnChatSendMessageResponse;
-import com.iGap.interface_package.OnChatUpdateStatusResponse;
-import com.iGap.interface_package.OnClientGetRoomListResponse;
-import com.iGap.interface_package.OnClientGetRoomResponse;
-import com.iGap.interface_package.OnConnectionChangeState;
-import com.iGap.interface_package.OnDraftMessage;
-import com.iGap.interface_package.OnFileDownloadResponse;
-import com.iGap.interface_package.OnUserInfoResponse;
+import com.iGap.interfaces.OnChatClearMessageResponse;
+import com.iGap.interfaces.OnChatDelete;
+import com.iGap.interfaces.OnChatSendMessageResponse;
+import com.iGap.interfaces.OnChatUpdateStatusResponse;
+import com.iGap.interfaces.OnClientGetRoomListResponse;
+import com.iGap.interfaces.OnClientGetRoomResponse;
+import com.iGap.interfaces.OnConnectionChangeState;
+import com.iGap.interfaces.OnDraftMessage;
+import com.iGap.interfaces.OnFileDownloadResponse;
+import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.libs.floatingAddButton.ArcMenu;
 import com.iGap.libs.floatingAddButton.StateChangeListener;
 import com.iGap.libs.flowingdrawer.FlowingView;
@@ -77,13 +76,11 @@ import com.iGap.request.RequestClientGetRoomList;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItemAdapter;
-
-import java.util.List;
-
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import java.util.List;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnFileDownloadResponse, OnUserInfoResponse {

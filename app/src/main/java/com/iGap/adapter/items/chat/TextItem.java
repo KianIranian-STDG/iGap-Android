@@ -3,14 +3,12 @@ package com.iGap.adapter.items.chat;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
-
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.interface_package.OnMessageViewClick;
+import com.iGap.interfaces.OnMessageViewClick;
 import com.iGap.module.EmojiTextView;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
-
 import java.util.List;
 
 /**

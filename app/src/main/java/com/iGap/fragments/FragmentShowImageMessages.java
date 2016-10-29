@@ -21,7 +21,7 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.ImageMessagesAdapter;
 import com.iGap.adapter.items.ImageMessageItem;
-import com.iGap.interface_package.OnFileDownloadResponse;
+import com.iGap.interfaces.OnFileDownloadResponse;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoFileDownload;

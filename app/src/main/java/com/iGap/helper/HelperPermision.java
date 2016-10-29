@@ -10,9 +10,7 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-
-import com.iGap.interface_package.OnGetPermision;
-
+import com.iGap.interfaces.OnGetPermision;
 import java.util.ArrayList;
 
 /**

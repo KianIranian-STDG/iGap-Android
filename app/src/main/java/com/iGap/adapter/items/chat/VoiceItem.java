@@ -5,15 +5,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.TextView;
-
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.interface_package.OnMessageViewClick;
+import com.iGap.interfaces.OnMessageViewClick;
 import com.iGap.module.EmojiTextView;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
-
 import java.util.List;
 
 /**

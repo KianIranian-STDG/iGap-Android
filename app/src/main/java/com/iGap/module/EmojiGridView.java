@@ -20,13 +20,12 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.GridView;
-
 import com.iGap.R;
 import com.iGap.adapter.EmojiAdapter;
 import com.iGap.emoji.People;
-import com.iGap.interface_package.IEmojiClickListener;
-import com.iGap.interface_package.IEmojiLongClickListener;
-import com.iGap.interface_package.IRecents;
+import com.iGap.interfaces.IEmojiClickListener;
+import com.iGap.interfaces.IEmojiLongClickListener;
+import com.iGap.interfaces.IRecents;
 
 public class EmojiGridView {
     public final View rootView;

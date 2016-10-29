@@ -2,18 +2,16 @@ package com.iGap.module;
 
 import android.support.annotation.Nullable;
 import android.util.Log;
-
 import com.iGap.G;
-import com.iGap.interface_package.OnFileUpload;
-import com.iGap.interface_package.OnFileUploadForActivities;
-import com.iGap.interface_package.OnFileUploadStatusResponse;
+import com.iGap.interfaces.OnFileUpload;
+import com.iGap.interfaces.OnFileUploadForActivities;
+import com.iGap.interfaces.OnFileUploadStatusResponse;
 import com.iGap.proto.ProtoFileUploadStatus;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.request.RequestFileUpload;
 import com.iGap.request.RequestFileUploadInit;
 import com.iGap.request.RequestFileUploadOption;
 import com.iGap.request.RequestFileUploadStatus;
-
 import java.io.IOException;
 import java.util.concurrent.CopyOnWriteArrayList;
 

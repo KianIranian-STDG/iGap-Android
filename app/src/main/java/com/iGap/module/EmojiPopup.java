@@ -31,7 +31,6 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.PopupWindow;
-
 import com.iGap.R;
 import com.iGap.adapter.EmojiPagerAdapter;
 import com.iGap.emoji.Food;
@@ -39,15 +38,14 @@ import com.iGap.emoji.Nature;
 import com.iGap.emoji.Objects;
 import com.iGap.emoji.People;
 import com.iGap.emoji.Places;
-import com.iGap.interface_package.IEmojiBackspaceClick;
-import com.iGap.interface_package.IEmojiClickListener;
-import com.iGap.interface_package.IEmojiLongClickListener;
-import com.iGap.interface_package.IEmojiStickerClick;
-import com.iGap.interface_package.IEmojiViewCreate;
-import com.iGap.interface_package.IRecents;
-import com.iGap.interface_package.IRecentsLongClick;
-import com.iGap.interface_package.ISoftKeyboardOpenClose;
-
+import com.iGap.interfaces.IEmojiBackspaceClick;
+import com.iGap.interfaces.IEmojiClickListener;
+import com.iGap.interfaces.IEmojiLongClickListener;
+import com.iGap.interfaces.IEmojiStickerClick;
+import com.iGap.interfaces.IEmojiViewCreate;
+import com.iGap.interfaces.IRecents;
+import com.iGap.interfaces.IRecentsLongClick;
+import com.iGap.interfaces.ISoftKeyboardOpenClose;
 import java.util.Arrays;
 
 public class EmojiPopup extends PopupWindow implements ViewPager.OnPageChangeListener, IRecents {

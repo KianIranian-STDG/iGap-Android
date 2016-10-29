@@ -24,7 +24,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.IntentRequests;
@@ -32,8 +31,8 @@ import com.iGap.R;
 import com.iGap.activities.ActivityCrop;
 import com.iGap.activities.ActivityMain;
 import com.iGap.activities.ActivityNewChanelFinish;
-import com.iGap.interface_package.OnClientGetRoomResponse;
-import com.iGap.interface_package.OnGroupCreate;
+import com.iGap.interfaces.OnClientGetRoomResponse;
+import com.iGap.interfaces.OnGroupCreate;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.LinedEditText;
@@ -42,7 +41,6 @@ import com.iGap.proto.ProtoClientGetRoom;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.request.RequestClientGetRoom;
 import com.iGap.request.RequestGroupCreate;
-
 import java.io.File;
 
 

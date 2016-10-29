@@ -13,26 +13,23 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.fragments.FragmentNewGroup;
 import com.iGap.fragments.RegisteredContactsFragment;
 import com.iGap.helper.HelperImageBackColor;
-import com.iGap.interface_package.OnChangeUserPhotoListener;
-import com.iGap.interface_package.OnUserInfoResponse;
+import com.iGap.interfaces.OnChangeUserPhotoListener;
+import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.libs.flowingdrawer.MenuFragment;
 import com.iGap.module.HelperDecodeFile;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmAvatarPath;
 import com.iGap.realm.RealmUserInfo;
-
-import java.io.File;
-
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import java.io.File;
 
 
 public class FragmentDrawerMenu extends MenuFragment {

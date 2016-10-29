@@ -30,7 +30,6 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
@@ -39,17 +38,17 @@ import com.iGap.adapter.AdapterShearedMedia;
 import com.iGap.adapter.items.ContatItemGroupProfile;
 import com.iGap.fragments.FragmentNotification;
 import com.iGap.fragments.ShowCustomList;
-import com.iGap.interface_package.OnFileUploadForActivities;
-import com.iGap.interface_package.OnGroupAddAdmin;
-import com.iGap.interface_package.OnGroupAddMember;
-import com.iGap.interface_package.OnGroupAddModerator;
-import com.iGap.interface_package.OnGroupAvatarResponse;
-import com.iGap.interface_package.OnGroupEdit;
-import com.iGap.interface_package.OnGroupKickAdmin;
-import com.iGap.interface_package.OnGroupKickMember;
-import com.iGap.interface_package.OnGroupKickModerator;
-import com.iGap.interface_package.OnGroupLeft;
-import com.iGap.interface_package.OnSelectedList;
+import com.iGap.interfaces.OnFileUploadForActivities;
+import com.iGap.interfaces.OnGroupAddAdmin;
+import com.iGap.interfaces.OnGroupAddMember;
+import com.iGap.interfaces.OnGroupAddModerator;
+import com.iGap.interfaces.OnGroupAvatarResponse;
+import com.iGap.interfaces.OnGroupEdit;
+import com.iGap.interfaces.OnGroupKickAdmin;
+import com.iGap.interfaces.OnGroupKickMember;
+import com.iGap.interfaces.OnGroupKickModerator;
+import com.iGap.interfaces.OnGroupLeft;
+import com.iGap.interfaces.OnSelectedList;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.AttachFile;
@@ -90,17 +89,15 @@ import com.mikepenz.fastadapter.adapters.HeaderAdapter;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
-
+import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmResults;
+import io.realm.Sort;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
-
-import io.realm.Realm;
-import io.realm.RealmList;
-import io.realm.RealmResults;
-import io.realm.Sort;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 

@@ -23,11 +23,9 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-
 import com.iGap.R;
-import com.iGap.interface_package.IEmojiClickListener;
-import com.iGap.interface_package.IEmojiLongClickListener;
-
+import com.iGap.interfaces.IEmojiClickListener;
+import com.iGap.interfaces.IEmojiLongClickListener;
 import java.util.List;
 
 public class EmojiAdapter extends ArrayAdapter<String> {

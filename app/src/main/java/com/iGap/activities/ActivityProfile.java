@@ -18,15 +18,14 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.IntentRequests;
 import com.iGap.R;
-import com.iGap.interface_package.OnFileUploadForActivities;
-import com.iGap.interface_package.OnUserAvatarResponse;
-import com.iGap.interface_package.OnUserInfoResponse;
-import com.iGap.interface_package.OnUserProfileSetNickNameResponse;
+import com.iGap.interfaces.OnFileUploadForActivities;
+import com.iGap.interfaces.OnUserAvatarResponse;
+import com.iGap.interfaces.OnUserInfoResponse;
+import com.iGap.interfaces.OnUserProfileSetNickNameResponse;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.EditTextAdjustPan;
 import com.iGap.module.FileUploadStructure;
@@ -38,13 +37,11 @@ import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestUserAvatarAdd;
 import com.iGap.request.RequestUserInfo;
 import com.iGap.request.RequestUserProfileSetNickname;
-
+import io.realm.Realm;
+import io.realm.RealmResults;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-
-import io.realm.Realm;
-import io.realm.RealmResults;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarResponse, OnFileUploadForActivities {
