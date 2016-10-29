@@ -685,7 +685,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                     filePath = AttachFile.imagePath;
                     Log.e("ddd", filePath + "     image path");
                     break;
-                case AttachFile.request_code_media_from_gallary:
+                case AttachFile.request_code_media_from_gallery:
                     filePath = AttachFile.getFilePathFromUri(data.getData());
                     Log.e("ddd", filePath + "    gallary file path");
                     break;

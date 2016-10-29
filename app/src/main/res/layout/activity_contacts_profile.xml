@@ -280,7 +280,6 @@
                         android:layout_width="@dimen/dp200"
                         android:layout_height="@dimen/dp40"
                         android:gravity="center_vertical"
-                        android:maxLength="11"
                         android:paddingLeft="@dimen/dp4"
                         android:paddingStart="@dimen/dp4"
                         android:text="09125554433"

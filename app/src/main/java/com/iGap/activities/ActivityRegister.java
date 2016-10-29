@@ -1100,7 +1100,6 @@ public class ActivityRegister extends ActivityEnhanced {
                         RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                         realmUserInfo.setNickName(user.getDisplayName());
                         realmUserInfo.setInitials(user.getInitials());
-                        Log.i("UUU", "user.getInitials() : " + user.getInitials());
                         realmUserInfo.setColor(user.getColor());
                         realmUserInfo.setUserRegistrationState(true);
 
