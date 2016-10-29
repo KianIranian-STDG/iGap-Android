@@ -47,7 +47,6 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.IntentRequests;
@@ -165,7 +164,10 @@ import com.nightonke.boommenu.Types.ButtonType;
 import com.nightonke.boommenu.Types.PlaceType;
 import com.nightonke.boommenu.Util;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmResults;
+import io.realm.Sort;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -177,11 +179,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-
-import io.realm.Realm;
-import io.realm.RealmChangeListener;
-import io.realm.RealmResults;
-import io.realm.Sort;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, IRecentsLongClick, OnMessageViewClick, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnFileDownloadResponse, OnVoiceRecord, OnUserInfoResponse, OnClientGetRoomHistoryResponse, OnFileUploadForActivities {
@@ -1682,6 +1679,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
         if (messageInfo.messageType.toString().equals("TEXT")) {
             intent.setType("text/plain");
+            intent.putExtra(android.content.Intent.EXTRA_TEXT, messageInfo.messageText);
         } else if (messageInfo.messageType.toString().equals("VOICE") || messageInfo.messageType.toString().equals("AUDIO") || messageInfo.messageType.toString().equals("AUDIO_TEXT")) {
             intent.setType("audio/*");
             intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(messageInfo.getAttachment().getLocalFilePath())));
@@ -1691,16 +1689,17 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             intent.setType("image/*");
             intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(messageInfo.getAttachment().getLocalFilePath())));
             choserDialogText = "Share image";
-
-        } else if (messageInfo.messageType.toString().equals("FILE") || messageInfo.messageType.toString().equals("FILE_TEXT")) {
-            intent.setType("audio/*");
-            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(messageInfo.getAttachment().getLocalFilePath())));
-            choserDialogText = "Share  file";
-
-        } else if (messageInfo.messageType.toString().equals("VIDEO") || messageInfo.messageType.toString().equals("VIDEO_TEXT")) {
+        } else if (messageInfo.messageType.toString().equals("VIDEO")
+            || messageInfo.messageType.toString().equals("VIDEO_TEXT")) {
             intent.setType("video/*");
             intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(messageInfo.getAttachment().getLocalFilePath())));
             choserDialogText = "Share video file";
+        } else if (messageInfo.messageType.toString().equals("FILE")
+            || messageInfo.messageType.toString().equals("FILE_TEXT")) {
+            Uri uri = Uri.fromFile(new File(messageInfo.getAttachment().getLocalFilePath()));
+            intent.setType(getContentResolver().getType(uri));
+            intent.putExtra(Intent.EXTRA_STREAM, uri);
+            choserDialogText = "Share  file";
         }
 
         startActivity(Intent.createChooser(intent, choserDialogText));
