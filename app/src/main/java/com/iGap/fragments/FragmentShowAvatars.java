@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
@@ -29,7 +28,6 @@ import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.enums.RoomType;
-
 import io.realm.Realm;
 import io.realm.RealmList;
 
@@ -39,7 +37,7 @@ import io.realm.RealmList;
 
 public class FragmentShowAvatars extends Fragment implements OnFileDownloadResponse {
     private static final String ARG_PEER_ID = "arg_peer_id";
-    private long peerId = -1;
+    private long mPeerId = -1;
 
     private LinearLayout mToolbar;
     private TextView mCount;
@@ -59,8 +57,8 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // init peer id
-        peerId = getArguments().getLong(ARG_PEER_ID, -1);
+        // init passed data through bundle
+        mPeerId = getArguments().getLong(ARG_PEER_ID, -1);
 
         // init callbacks
         G.onFileDownloadResponse = this;
@@ -99,14 +97,17 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
         });
 
         Realm realm = Realm.getDefaultInstance();
-        RealmRegisteredInfo user = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, peerId).findFirst();
+        RealmRegisteredInfo user = realm.where(RealmRegisteredInfo.class)
+            .equalTo(RealmRegisteredInfoFields.ID, mPeerId)
+            .findFirst();
         if (user != null) {
             // user exists in DB
             final RealmList<RealmAvatar> userAvatars = user.getAvatar();
 
             long identifier = System.nanoTime();
             for (RealmAvatar avatar : userAvatars) {
-                mAdapter.add(new AvatarItem().setAvatar(avatar.getFile()).setPeerId(peerId).withIdentifier(identifier));
+                mAdapter.add(
+                    new AvatarItem().setAvatar(avatar.getFile()).withIdentifier(identifier));
                 identifier++;
             }
 
@@ -123,7 +124,9 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
                 @Override
                 public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                     super.onScrollStateChanged(recyclerView, newState);
-                    mCount.setText(String.format(getString(R.string.d_of_d), ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition() + 1, userAvatars.size()));
+                    mCount.setText(String.format(getString(R.string.d_of_d),
+                        ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition()
+                            + 1, mAdapter.getAdapterItemCount()));
                 }
             });
 
@@ -131,7 +134,8 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
             SnapHelper helper = new LinearSnapHelper();
             helper.attachToRecyclerView(mRecyclerView);
 
-            mCount.setText(String.format(getString(R.string.d_of_d), 1, userAvatars.size()));
+            mCount.setText(
+                String.format(getString(R.string.d_of_d), 1, mAdapter.getAdapterItemCount()));
         } else {
             // user doesn't exist in DB
         }

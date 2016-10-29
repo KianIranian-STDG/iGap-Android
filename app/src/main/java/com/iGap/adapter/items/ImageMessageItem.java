@@ -9,7 +9,7 @@ import com.iGap.interface_package.IChatItemAvatar;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.TouchImageView;
 import com.iGap.proto.ProtoFileDownload;
-import com.iGap.realm.RealmAttachment;
+import com.iGap.realm.RealmRoomMessage;
 import com.iGap.request.RequestFileDownload;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
@@ -26,23 +26,22 @@ import static com.iGap.module.AndroidUtils.suitablePath;
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 10/26/2016.
  */
 
-public class AvatarItem extends AbstractItem<AvatarItem, AvatarItem.ViewHolder> implements IChatItemAvatar {
-    public RealmAttachment avatar;
+public class ImageMessageItem extends AbstractItem<ImageMessageItem, ImageMessageItem.ViewHolder>
+    implements IChatItemAvatar {
+    public RealmRoomMessage message;
 
-    public AvatarItem setAvatar(RealmAttachment avatar) {
-        this.avatar = avatar;
+    public ImageMessageItem setMessage(RealmRoomMessage message) {
+        this.message = message;
         return this;
     }
 
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
-    @Override
-    public int getType() {
+    @Override public int getType() {
         return 0;
     }
 
-    @Override
-    public int getLayoutRes() {
+    @Override public int getLayoutRes() {
         return R.layout.show_image_sub_layout;
     }
 
@@ -70,13 +69,12 @@ public class AvatarItem extends AbstractItem<AvatarItem, AvatarItem.ViewHolder> 
     }
 
     public void onRequestDownloadThumbnail(String token, boolean done) {
-        final String fileName = token + "_" + avatar.getName();
+        final String fileName = token + "_" + message.getAttachment().getName();
         if (done) {
             Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    avatar.setLocalThumbnailPath(G.DIR_TEMP + "/" + fileName);
+                @Override public void execute(Realm realm) {
+                    message.getAttachment().setLocalThumbnailPath(G.DIR_TEMP + "/" + fileName);
                 }
             });
             realm.close();
@@ -84,27 +82,37 @@ public class AvatarItem extends AbstractItem<AvatarItem, AvatarItem.ViewHolder> 
             return; // necessary
         }
 
-        ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
-        String identity = avatar.getToken() + '*' + selector.toString() + '*' + avatar.getSmallThumbnail().getSize() + '*' + fileName + '*' + 0;
+        ProtoFileDownload.FileDownload.Selector selector =
+            ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
+        String identity = message.getAttachment().getToken()
+            + '*'
+            + selector.toString()
+            + '*'
+            + message.getAttachment().getSmallThumbnail().getSize()
+            + '*'
+            + fileName
+            + '*'
+            + 0;
 
-        new RequestFileDownload().download(token, 0, (int) avatar.getSmallThumbnail().getSize(), selector, identity);
+        new RequestFileDownload().download(token, 0,
+            (int) message.getAttachment().getSmallThumbnail().getSize(), selector, identity);
     }
 
     public void onLoadFromLocal(ViewHolder holder, String localPath) {
         ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.image);
     }
 
-    @Override
-    public void onRequestDownloadAvatar(int offset, int progress) {
-        ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
-        final String fileName = avatar.getToken() + "_" + avatar.getName();
+    @Override public void onRequestDownloadAvatar(int offset, int progress) {
+        ProtoFileDownload.FileDownload.Selector selector =
+            ProtoFileDownload.FileDownload.Selector.FILE;
+        final String fileName =
+            message.getAttachment().getToken() + "_" + message.getAttachment().getName();
 
         if (progress == 100) {
             Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    avatar.setLocalFilePath(G.DIR_IMAGE_USER + "/" + fileName);
+                @Override public void execute(Realm realm) {
+                    message.getAttachment().setLocalFilePath(G.DIR_IMAGE_USER + "/" + fileName);
                 }
             });
             realm.close();
@@ -116,48 +124,55 @@ public class AvatarItem extends AbstractItem<AvatarItem, AvatarItem.ViewHolder> 
             }
 
             // remove from requests when downloading has finished
-            AvatarsAdapter.removeFileRequest(avatar.getToken());
+            AvatarsAdapter.removeFileRequest(message.getAttachment().getToken());
 
             return; // necessary
         }
 
-        String identity = avatar.getToken() + '*' + selector.toString() + '*' + avatar.getSize() + '*' + fileName + '*' + offset;
-        new RequestFileDownload().download(avatar.getToken(), offset, (int) avatar.getSize(), selector, identity);
+        String identity = message.getAttachment().getToken()
+            + '*'
+            + selector.toString()
+            + '*'
+            + message.getAttachment().getSize()
+            + '*'
+            + fileName
+            + '*'
+            + offset;
+        new RequestFileDownload().download(message.getAttachment().getToken(), offset,
+            (int) message.getAttachment().getSize(), selector, identity);
     }
 
-    protected static class ItemFactory implements ViewHolderFactory<AvatarItem.ViewHolder> {
-        public AvatarItem.ViewHolder create(View v) {
-            return new AvatarItem.ViewHolder(v);
+    protected static class ItemFactory implements ViewHolderFactory<ImageMessageItem.ViewHolder> {
+        public ImageMessageItem.ViewHolder create(View v) {
+            return new ImageMessageItem.ViewHolder(v);
         }
     }
 
-    @Override
-    public void bindView(final ViewHolder holder, List payloads) {
+    @Override public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
         // if file already exists, simply show the local one
-        if (avatar.isFileExistsOnLocal()) {
+        if (message.getAttachment().isFileExistsOnLocal()) {
             // load file from local
-            onLoadFromLocal(holder, avatar.getLocalFilePath());
+            onLoadFromLocal(holder, message.getAttachment().getLocalFilePath());
         } else {
             // file doesn't exist on local, I check for a thumbnail
             // if thumbnail exists, I load it into the view
-            if (avatar.isThumbnailExistsOnLocal()) {
+            if (message.getAttachment().isThumbnailExistsOnLocal()) {
                 // load thumbnail from local
-                onLoadFromLocal(holder, avatar.getLocalThumbnailPath());
+                onLoadFromLocal(holder, message.getAttachment().getLocalThumbnailPath());
             } else {
-                requestForAvatarThumbnail(avatar.getToken());
+                requestForAvatarThumbnail(message.getAttachment().getToken());
             }
 
             holder.progress.withOnMessageProgress(new OnMessageProgressClick() {
-                @Override
-                public void onMessageProgressClick(MessageProgress progress) {
+                @Override public void onMessageProgressClick(MessageProgress progress) {
                     holder.progress.withDrawable(R.drawable.ic_cancel);
                     holder.progress.withIndeterminate(true);
 
                     // make sure to not request multiple times by checking last offset with the new one
-                    if (!AvatarsAdapter.hasFileRequested(avatar.getToken())) {
-                        requestForAvatarFile(avatar.getToken());
+                    if (!AvatarsAdapter.hasFileRequested(message.getAttachment().getToken())) {
+                        requestForAvatarFile(message.getAttachment().getToken());
                     }
                 }
             });
@@ -167,13 +182,14 @@ public class AvatarItem extends AbstractItem<AvatarItem, AvatarItem.ViewHolder> 
     }
 
     private void prepareProgress(ViewHolder holder) {
-        if (avatar.isFileExistsOnLocal()) {
+        if (message.getAttachment().isFileExistsOnLocal()) {
             holder.progress.setVisibility(View.INVISIBLE);
         } else {
-            if (AvatarsAdapter.hasFileRequested(avatar.getToken())) {
+            if (AvatarsAdapter.hasFileRequested(message.getAttachment().getToken())) {
                 holder.progress.setVisibility(View.VISIBLE);
                 holder.progress.withDrawable(R.drawable.ic_cancel);
-                holder.progress.withProgress(AvatarsAdapter.requestsProgress.get(avatar.getToken()));
+                holder.progress.withProgress(
+                    AvatarsAdapter.requestsProgress.get(message.getAttachment().getToken()));
             } else {
                 holder.progress.setVisibility(View.VISIBLE);
                 holder.progress.withDrawable(R.drawable.ic_download);
@@ -181,8 +197,7 @@ public class AvatarItem extends AbstractItem<AvatarItem, AvatarItem.ViewHolder> 
         }
     }
 
-    @Override
-    public ViewHolderFactory<? extends ViewHolder> getFactory() {
+    @Override public ViewHolderFactory<? extends ViewHolder> getFactory() {
         return FACTORY;
     }
 

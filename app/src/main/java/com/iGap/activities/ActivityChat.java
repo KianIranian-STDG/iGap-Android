@@ -3,7 +3,6 @@ package com.iGap.activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -74,6 +73,7 @@ import com.iGap.adapter.items.chat.VideoItem;
 import com.iGap.adapter.items.chat.VideoWithTextItem;
 import com.iGap.adapter.items.chat.VoiceItem;
 import com.iGap.fragments.FragmentShowImage;
+import com.iGap.fragments.FragmentShowImageMessages;
 import com.iGap.helper.Emojione;
 import com.iGap.helper.HelperGetDataFromOtherApp;
 import com.iGap.helper.HelperMimeType;
@@ -2543,7 +2543,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 messageInfo.messageType.toString().equals("AUDIO_TEXT")) {
             MusicPlayer.startPlayer(messageInfo.getAttachment().getLocalFilePath(), title, mRoomId, true);
         } else if (messageInfo.messageType.toString().equals("IMAGE") || messageInfo.messageType.toString().equals("IMAGE_TEXT")) {
-            showImage(messageInfo.getAttachment().getLocalFilePath(), messageInfo.getAttachment().getLocalThumbnailPath());
+            showImage(messageInfo);
         } else if (messageInfo.messageType.toString().equals("FILE") || messageInfo.messageType.toString().equals("FILE_TEXT") ||
                 messageInfo.messageType.toString().equals("VIDEO") || messageInfo.messageType.toString().equals("VIDEO_TEXT")) {
             Intent intent = HelperMimeType.appropriateProgram(messageInfo.getAttachment().getLocalFilePath());
@@ -2685,33 +2685,12 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         startActivity(intent);
     }
 
-
-    private void showImage(String filePath, String thumpnailPath) {
-
-        ArrayList<StructMessageInfo> listPic = new ArrayList<>();
-        int selectedPicture = 0;
-
-        for (AbstractMessage chatItem : mAdapter.getAdapterItems()) {
-            if (chatItem.mMessage.messageType == ProtoGlobal.RoomMessageType.IMAGE || chatItem.mMessage.messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
-                if (chatItem.mMessage.attachment.getLocalFilePath() != null) {
-                    if (chatItem.mMessage.attachment.getLocalFilePath().equals(filePath))
-                        selectedPicture = listPic.size();
-                } else if (chatItem.mMessage.attachment.getLocalThumbnailPath() != null) {
-                    if (chatItem.mMessage.attachment.getLocalThumbnailPath().equals(thumpnailPath))
-                        selectedPicture = listPic.size();
-                }
-
-                listPic.add(chatItem.mMessage);
-            }
-        }
-
-        Fragment fragment = FragmentShowImage.newInstance();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("listPic", listPic);
-        bundle.putInt("SelectedImage", selectedPicture);
-        fragment.setArguments(bundle);
-        getFragmentManager().beginTransaction().replace(R.id.ac_ll_parent, fragment, "Show_Image_fragment").commit();
-
+    private void showImage(StructMessageInfo messageInfo) {
+        FragmentShowImageMessages fragment =
+            FragmentShowImageMessages.newInstance(mRoomId, messageInfo.attachment.token);
+        getSupportFragmentManager().beginTransaction()
+            .replace(R.id.ac_ll_parent, fragment, "Show_Image_fragment")
+            .commit();
     }
 
     @Override
