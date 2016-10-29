@@ -3,7 +3,6 @@ package com.iGap.adapter;
 import com.iGap.adapter.items.RoomItem;
 import com.iGap.module.StructMessageAttachment;
 import com.mikepenz.fastadapter.adapters.FastItemAdapter;
-
 import java.util.List;
 
 /**
@@ -57,6 +56,18 @@ public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
         notifyAdapterItemChanged(getItemPosition(chatId));
     }
 
+    public void goToTop(long chatId) {
+        Item item = null;
+        List<Item> items = getAdapterItems();
+        for (Item chat : items) {
+            if (chat.mInfo.chatId == chatId) {
+                item = chat;
+                break;
+            }
+        }
+        updateChat(chatId, item);
+    }
+
     private int getItemPosition(long chatId) {
         List<Item> items = getAdapterItems();
         for (Item chat : items) {
@@ -66,5 +77,4 @@ public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
         }
         return -1;
     }
-
 }

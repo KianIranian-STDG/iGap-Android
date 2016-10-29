@@ -100,14 +100,11 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
     public static boolean isMenuButtonAddShown = false;
 
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
+    @Override protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
+    @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -124,13 +121,11 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         G.chatSendMessageUtil.setOnChatSendMessageResponse(this);
         G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
         G.onClientGetRoomResponse = new OnClientGetRoomResponse() {
-            @Override
-            public void onClientGetRoomResponse(ProtoGlobal.Room room, final ProtoClientGetRoom.ClientGetRoomResponse.Builder builder) {
+            @Override public void onClientGetRoomResponse(ProtoGlobal.Room room, final ProtoClientGetRoom.ClientGetRoomResponse.Builder builder) {
                 if (G.currentActivity == ActivityMain.this) {
                     if (mAdapter != null) {
                         runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
+                            @Override public void run() {
                                 mAdapter.add(new RoomItem().setInfo(StructChatInfo.convert(builder.getRoom())));
                             }
                         });
@@ -146,7 +141,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         onDraftMessage();
         Contacts.FillRealmInviteFriend();
     }
-
 
     private static int drawerWith = 0;
     private int clickPosition = 0;
@@ -170,10 +164,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         drawerWith = (int) getResources().getDimension(R.dimen.dp200);
     }
 
-
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-
+    @Override public boolean dispatchTouchEvent(MotionEvent ev) {
 
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
             clickPosition = (int) ev.getX();
@@ -181,11 +172,9 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
         if (ev.getAction() == MotionEvent.ACTION_UP) {
             if (ev.getX() > drawerWith) {
-                if (ev.getX() <= clickPosition + 20)
-                    mLeftDrawerLayout.closeDrawer();
+                if (ev.getX() <= clickPosition + 20) mLeftDrawerLayout.closeDrawer();
             }
         }
-
 
         return super.dispatchTouchEvent(ev);
     }
@@ -193,7 +182,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     private void initComponent() {
 
         RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.fragmentContainer);
-
 
         final MaterialDesignTextView btnMenu = (MaterialDesignTextView) findViewById(R.id.cl_btn_menu);
         RippleView rippleMenu = (RippleView) findViewById(R.id.cl_ripple_menu);
@@ -203,13 +191,11 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
         RippleView rippleSearch = (RippleView) findViewById(R.id.amr_ripple_search);
         rippleSearch.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
+            @Override public void onComplete(RippleView rippleView) {
                 Fragment fragment = SearchFragment.newInstance();
                 getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragment, "Search_fragment").commit();
             }
         });
-
 
         final TextView txtIgap = (TextView) findViewById(R.id.cl_txt_igap);
         txtIgap.setTypeface(G.neuroplp);
@@ -227,11 +213,9 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         }
 
         G.onConnectionChangeState = new OnConnectionChangeState() {
-            @Override
-            public void onChangeState(final Config.ConnectionState connectionState) {
+            @Override public void onChangeState(final Config.ConnectionState connectionState) {
                 runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+                    @Override public void run() {
                         txtIgap.setTypeface(null, Typeface.BOLD);
                         if (connectionState == Config.ConnectionState.WAITING_FOR_NETWORK) {
                             txtIgap.setText(R.string.waiting_for_network);
@@ -250,29 +234,23 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
         rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
-            @Override
-            public void onComplete(RippleView rippleView) {
+            @Override public void onComplete(RippleView rippleView) {
 
                 mLeftDrawerLayout.toggle();
             }
-
         });
-
     }
 
     private void initFloatingButtonCreateNew() {
 
-
         arcMenu = (ArcMenu) findViewById(R.id.ac_arc_button_add);
 
         arcMenu.setStateChangeListener(new StateChangeListener() {
-            @Override
-            public void onMenuOpened() {
+            @Override public void onMenuOpened() {
 
             }
 
-            @Override
-            public void onMenuClosed() {
+            @Override public void onMenuClosed() {
 
                 isMenuButtonAddShown = false;
             }
@@ -280,8 +258,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
         btnStartNewChat = (FloatingActionButton) findViewById(R.id.ac_fab_start_new_chat);
         btnStartNewChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
 
                 Fragment fragment = RegisteredContactsFragment.newInstance();
                 Bundle bundle = new Bundle();
@@ -291,16 +268,15 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
                 arcMenu.toggleMenu();
 
-//                isMenuButtonAddShown = true;
-//
+                //                isMenuButtonAddShown = true;
+                //
 
             }
         });
 
         btnCreateNewGroup = (FloatingActionButton) findViewById(R.id.ac_fab_crate_new_group);
         btnCreateNewGroup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 FragmentNewGroup fragment = FragmentNewGroup.newInstance();
                 Bundle bundle = new Bundle();
                 bundle.putString("TYPE", "NewGroup");
@@ -312,9 +288,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
         btnCreateNewChannel = (FloatingActionButton) findViewById(R.id.ac_fab_crate_new_channel);
         btnCreateNewChannel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
+            @Override public void onClick(View view) {
 
                 Fragment fragment = FragmentNewGroup.newInstance();
                 Bundle bundle = new Bundle();
@@ -322,10 +296,8 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                 fragment.setArguments(bundle);
                 ActivityMain.this.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
                 arcMenu.toggleMenu();
-
             }
         });
-
     }
 
     private void initRecycleView() {
@@ -335,8 +307,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         recyclerView.setHasFixedSize(true);
         mAdapter = new RoomsAdapter<>();
         mAdapter.withOnClickListener(new FastAdapter.OnClickListener<RoomItem>() {
-            @Override
-            public boolean onClick(View v, IAdapter<RoomItem> adapter, RoomItem item, int position) {
+            @Override public boolean onClick(View v, IAdapter<RoomItem> adapter, RoomItem item, int position) {
                 if (ActivityMain.isMenuButtonAddShown) {
                     item.mComplete.complete(true, "closeMenuButton", "");
                 } else {
@@ -350,14 +321,12 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         });
 
         mAdapter.withOnLongClickListener(new FastAdapter.OnLongClickListener<RoomItem>() {
-            @Override
-            public boolean onLongClick(View v, IAdapter<RoomItem> adapter, final RoomItem item, final int position) {
+            @Override public boolean onLongClick(View v, IAdapter<RoomItem> adapter, final RoomItem item, final int position) {
                 if (ActivityMain.isMenuButtonAddShown) {
                     item.mComplete.complete(true, "closeMenuButton", "");
                 } else {
                     MyDialog.showDialogMenuItemRooms(ActivityMain.this, item.mInfo.chatType, item.mInfo.muteNotification, new OnComplete() {
-                        @Override
-                        public void complete(boolean result, String messageOne, String MessageTow) {
+                        @Override public void complete(boolean result, String messageOne, String MessageTow) {
                             onSelectRoomMenu(messageOne, position, item);
                         }
                     });
@@ -376,8 +345,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         MyAppBarLayout appBarLayout = (MyAppBarLayout) findViewById(R.id.appBarLayout);
         final RelativeLayout toolbar = (RelativeLayout) findViewById(R.id.toolbar);
         appBarLayout.addOnMoveListener(new MyAppBarLayout.OnMoveListener() {
-            @Override
-            public void onAppBarLayoutMove(AppBarLayout appBarLayout, int verticalOffset, boolean moveUp) {
+            @Override public void onAppBarLayoutMove(AppBarLayout appBarLayout, int verticalOffset, boolean moveUp) {
                 toolbar.clearAnimation();
                 if (moveUp) {
                     if (toolbar.getAlpha() != 0F) {
@@ -391,15 +359,11 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             }
         });
 
-
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                if (arcMenu.isMenuOpened())
-                    arcMenu.toggleMenu();
-
+                if (arcMenu.isMenuOpened()) arcMenu.toggleMenu();
 
                 if (dy > 0) {
                     // Scroll Down
@@ -415,14 +379,12 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             }
         });
         mAdapter.withFilterPredicate(new IItemAdapter.Predicate<RoomItem>() {
-            @Override
-            public boolean filter(RoomItem item, CharSequence constraint) {
+            @Override public boolean filter(RoomItem item, CharSequence constraint) {
                 //return true if we should filter it out
                 //return false to keep it
                 return !item.mInfo.chatTitle.toLowerCase().startsWith(String.valueOf(constraint).toLowerCase());
             }
         });
-
 
         loadLocalChatList();
         getChatsList();
@@ -436,16 +398,14 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     private void putChatToDatabase(final ProtoGlobal.Room room) {
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
+            @Override public void execute(Realm realm) {
                 realm.copyToRealmOrUpdate(RealmRoom.convert(room, realm));
             }
         });
         realm.close();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    @Override public boolean onCreateOptionsMenu(Menu menu) {
         mLeftDrawerLayout.toggle();
         return false;
     }
@@ -455,8 +415,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
         item.mInfo.muteNotification = !item.mInfo.muteNotification;
         realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
+            @Override public void execute(Realm realm) {
                 realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, item.getInfo().chatId).findFirst().setMute(item.mInfo.muteNotification);
             }
         });
@@ -474,11 +433,9 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
         final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, chatId).findFirstAsync();
         realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
-            @Override
-            public void onChange(final RealmClientCondition element) {
+            @Override public void onChange(final RealmClientCondition element) {
                 realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
+                    @Override public void execute(Realm realm) {
                         final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatId).findFirst();
 
                         if (realmRoom.getLastMessageId() != -1) {
@@ -510,8 +467,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                         realmChatHistories.deleteAllFromRealm();
 
                         runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
+                            @Override public void run() {
                                 if (mAdapter != null) {
                                     mAdapter.updateChat(chatId, convertToChatItem(chatId));
                                 }
@@ -528,18 +484,15 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
     private void deleteChat(final RoomItem item) {
         G.onChatDelete = new OnChatDelete() {
-            @Override
-            public void onChatDelete(long roomId) {
+            @Override public void onChatDelete(long roomId) {
                 Log.i(ActivityMain.class.getSimpleName(), "chat delete response > " + roomId);
             }
 
-            @Override
-            public void onChatDeleteError(int majorCode, int minorCode) {
+            @Override public void onChatDeleteError(int majorCode, int minorCode) {
 
                 if (majorCode == 218 && minorCode == 1) {
                     runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
+                        @Override public void run() {
                             // TODO: 9/25/2016 Error 218 - CHAT_DELETE_BAD_PAYLOAD
                             //Invalid roomId
 
@@ -547,8 +500,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                     });
                 } else if (majorCode == 219) {
                     runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
+                        @Override public void run() {
                             // TODO: 9/25/2016 Error 219 - CHAT_DELETE_INTERNAL_SERVER_ERROR
                             //Invalid roomId
 
@@ -556,8 +508,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                     });
                 } else if (majorCode == 220) {
                     runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
+                        @Override public void run() {
                             // TODO: 9/25/2016 Error 220 - CHAT_DELETE_FORBIDDEN
                             //Invalid roomId
 
@@ -570,11 +521,9 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         final Realm realm = Realm.getDefaultInstance();
         final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, item.getInfo().chatId).findFirstAsync();
         realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
-            @Override
-            public void onChange(final RealmClientCondition element) {
+            @Override public void onChange(final RealmClientCondition element) {
                 realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(final Realm realm) {
+                    @Override public void execute(final Realm realm) {
                         if (realm.where(RealmOfflineDelete.class).equalTo(RealmOfflineDeleteFields.OFFLINE_DELETE, item.getInfo().chatId).findFirst() == null) {
                             RealmOfflineDelete realmOfflineDelete = realm.createObject(RealmOfflineDelete.class);
                             realmOfflineDelete.setId(System.nanoTime());
@@ -583,8 +532,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                             element.getOfflineDeleted().add(realmOfflineDelete);
 
                             runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
+                                @Override public void run() {
                                     mAdapter.remove(mAdapter.getPosition(item));
                                 }
                             });
@@ -597,7 +545,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                     }
                 });
 
-
                 element.removeChangeListeners();
                 realm.close();
             }
@@ -607,7 +554,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     /**
      * on select room menu
      *
-     * @param message  message text
+     * @param message message text
      * @param position position dfdfdfdf
      */
     private void onSelectRoomMenu(String message, int position, RoomItem item) {
@@ -628,8 +575,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     // TODO ghable pak kardan, request ro bear jaye jaee ke invoke kardi
     private void testIsSecure() {
         new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 if (G.isSecure && G.userLogin) {
                     new RequestClientGetRoomList().clientGetRoomList();
                 } else {
@@ -643,11 +589,9 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     private void getChatsList() {
 
         G.onClientGetRoomListResponse = new OnClientGetRoomListResponse() {
-            @Override
-            public void onClientGetRoomList(final List<ProtoGlobal.Room> roomList, ProtoResponse.Response response) {
+            @Override public void onClientGetRoomList(final List<ProtoGlobal.Room> roomList, ProtoResponse.Response response) {
                 runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+                    @Override public void run() {
 
                         Toast.makeText(ActivityMain.this, "rooms list fetched: " + Integer.toString(roomList.size()), Toast.LENGTH_LONG).show();
                         Log.i(ActivityMain.class.getSimpleName(), "rooms list fetched: " + Integer.toString(roomList.size()));
@@ -714,8 +658,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             roomItem.setInfo(info);
             roomItem.setComplete(ActivityMain.this);
             runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
+                @Override public void run() {
                     mAdapter.add(roomItem);
                 }
             });
@@ -724,8 +667,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         realm.close();
     }
 
-    @Override
-    public void onBackPressed() {
+    @Override public void onBackPressed() {
 
         SearchFragment myFragment = (SearchFragment) getSupportFragmentManager().findFragmentByTag("Search_fragment");
         if (myFragment != null && myFragment.isVisible()) {
@@ -737,9 +679,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         }
     }
 
-
-    @Override
-    protected void onResume() {
+    @Override protected void onResume() {
         super.onResume();
 
         if (MusicPlayer.mp != null) {
@@ -757,8 +697,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             // loadLocalChatList();
             final Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
+                @Override public void execute(Realm realm) {
                     RealmResults<RealmRoom> rooms = realm.where(RealmRoom.class).findAllSorted(RealmRoomFields.LAST_MESSAGE_TIME, Sort.DESCENDING);
                     for (final RealmRoom room : rooms) {
                         mAdapter.add(convertToChatItem(room.getId()));
@@ -831,16 +770,13 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         return roomItem;
     }
 
-    @Override
-    public void onFileDownload(final String token, final int offset, final ProtoFileDownload.FileDownload.Selector selector, final int progress) {
+    @Override public void onFileDownload(final String token, final int offset, final ProtoFileDownload.FileDownload.Selector selector, final int progress) {
         // empty
     }
 
-    @Override
-    public void onAvatarDownload(final String token, final int offset, final ProtoFileDownload.FileDownload.Selector selector, final int progress, final long userId, final RoomType roomType) {
+    @Override public void onAvatarDownload(final String token, final int offset, final ProtoFileDownload.FileDownload.Selector selector, final int progress, final long userId, final RoomType roomType) {
         runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 Realm realm = Realm.getDefaultInstance();
                 if (roomType == RoomType.CHAT) {
                     mAdapter.downloadingAvatar(userId, progress, offset, StructMessageAttachment.convert(realm.where(RealmRegisteredInfo.class).equalTo("id", userId).findFirst().getLastAvatar()));
@@ -852,15 +788,13 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         });
     }
 
-    @Override
-    public void complete(boolean result, String messageOne, String MessageTow) {
+    @Override public void complete(boolean result, String messageOne, String MessageTow) {
         if (messageOne.equals("closeMenuButton")) {
             arcMenu.toggleMenu();
         }
     }
 
-    @Override
-    public void onChatClearMessage(final long roomId, long clearId, final ProtoResponse.Response response) {
+    @Override public void onChatClearMessage(final long roomId, long clearId, final ProtoResponse.Response response) {
         if (response.getId().isEmpty()) {// another account cleared message
             // if have message show last message otherwise clear item from message and time and last seen state
             Realm realm = Realm.getDefaultInstance();
@@ -876,8 +810,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
                 if (clearMessage) {
                     realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
+                        @Override public void execute(Realm realm) {
                             if (chatHistory.getRoomMessage() != null) {
                                 chatHistory.getRoomMessage().deleteFromRealm();
                             }
@@ -898,8 +831,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
                 // clear item
                 realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
+                    @Override public void execute(Realm realm) {
                         RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                         if (room != null) {
                             room.setUnreadCount(0);
@@ -913,8 +845,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                 });
 
                 runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+                    @Override public void run() {
                         if (mAdapter != null) {
                             mAdapter.updateChat(roomId, convertToChatItem(roomId));
                         }
@@ -922,24 +853,20 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                 });
             }
             realm.close();
-
         }
     }
 
-    @Override
-    public void onMessageUpdate(long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, String identity, ProtoGlobal.RoomMessage roomMessage) {
+    @Override public void onMessageUpdate(long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, String identity, ProtoGlobal.RoomMessage roomMessage) {
         // TODO
     }
 
-    @Override
-    public void onMessageReceive(final long roomId, String message, String messageType, final ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType) {
+    @Override public void onMessageReceive(final long roomId, String message, String messageType, final ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType) {
         // I'm not in the room, so I have to add 1 to the unread messages count
         Realm realm = Realm.getDefaultInstance();
         if (roomMessage.getUserId() != realm.where(RealmUserInfo.class).findFirst().getUserId()) {
             //if another account not send this message , and really i'm recipient not sender update unread count
             realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
+                @Override public void execute(Realm realm) {
                     final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                     if (room != null) {
                         final int updatedUnreadCount = room.getUnreadCount() + 1;
@@ -951,11 +878,9 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         }
         realm.close();
 
-
         if (mAdapter != null) {
             runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
+                @Override public void run() {
                     mAdapter.updateChat(roomId, convertToChatItem(roomId));
                 }
             });
@@ -969,13 +894,11 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         }
     }
 
-    @Override
-    public void onChatUpdateStatus(long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, long statusVersion) {
+    @Override public void onChatUpdateStatus(long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, long statusVersion) {
         mAdapter.updateChatStatus(roomId, status.toString());
     }
 
-    @Override
-    public void onUserInfo(final ProtoGlobal.RegisteredUser user, ProtoResponse.Response response) {
+    @Override public void onUserInfo(final ProtoGlobal.RegisteredUser user, ProtoResponse.Response response) {
         // FIXME: 10/23/2016 Alireza uncomment
         /*runOnUiThread(new Runnable() {
             @Override
@@ -987,13 +910,11 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         });*/
     }
 
-    @Override
-    public void onUserInfoTimeOut() {
+    @Override public void onUserInfoTimeOut() {
 
     }
 
-    @Override
-    public void onUserInfoError() {
+    @Override public void onUserInfoError() {
 
     }
 
@@ -1001,8 +922,8 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         G.onDraftMessage = new OnDraftMessage() {
             @Override public void onDraftMessage(long roomId) {
                 mAdapter.notifyRoomItem(roomId);
+                mAdapter.goToTop(roomId);
             }
         };
     }
-
 }

@@ -1027,7 +1027,6 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             @Override public void onClick(View view) {
 
                 if (ll_attach_text.getVisibility() == View.VISIBLE) {
-                    //onActivityResult(tmpRequestCode, tmpResultCode, tmpData);
                     sendMessage(tmpRequestCode, tmpUri);
                     ll_attach_text.setVisibility(View.GONE);
                     edtChat.setText("");
@@ -1516,15 +1515,11 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
             if (HelperGetDataFromOtherApp.messageType == HelperGetDataFromOtherApp.FileType.message) {
                 String message = HelperGetDataFromOtherApp.message;
-
             } else if (HelperGetDataFromOtherApp.messageType == HelperGetDataFromOtherApp.FileType.image) {
-
 
             } else if (HelperGetDataFromOtherApp.messageType == HelperGetDataFromOtherApp.FileType.video) {
 
-
             } else if (HelperGetDataFromOtherApp.messageType == HelperGetDataFromOtherApp.FileType.audio) {
-
 
             } else if (HelperGetDataFromOtherApp.messageType == HelperGetDataFromOtherApp.FileType.file) {
 
@@ -1534,12 +1529,9 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
                     if (fileType == HelperGetDataFromOtherApp.FileType.image) {
 
-
                     } else if (fileType == HelperGetDataFromOtherApp.FileType.video) {
 
-
                     } else if (fileType == HelperGetDataFromOtherApp.FileType.audio) {
-
 
                     } else if (fileType == HelperGetDataFromOtherApp.FileType.file) {
 
@@ -1551,8 +1543,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
     private void sheareDataToOtherProgram(StructMessageInfo messageInfo) {
 
-        if (messageInfo == null)
-            return;
+        if (messageInfo == null) return;
 
         Intent intent = new Intent(Intent.ACTION_SEND);
         String choserDialogText = "";
@@ -1564,18 +1555,15 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             intent.setType("audio/*");
             intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(messageInfo.getAttachment().getLocalFilePath())));
             choserDialogText = "Share audio file";
-
         } else if (messageInfo.messageType.toString().equals("IMAGE") || messageInfo.messageType.toString().equals("IMAGE_TEXT")) {
             intent.setType("image/*");
             intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(messageInfo.getAttachment().getLocalFilePath())));
             choserDialogText = "Share image";
-        } else if (messageInfo.messageType.toString().equals("VIDEO")
-            || messageInfo.messageType.toString().equals("VIDEO_TEXT")) {
+        } else if (messageInfo.messageType.toString().equals("VIDEO") || messageInfo.messageType.toString().equals("VIDEO_TEXT")) {
             intent.setType("video/*");
             intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(messageInfo.getAttachment().getLocalFilePath())));
             choserDialogText = "Share video file";
-        } else if (messageInfo.messageType.toString().equals("FILE")
-            || messageInfo.messageType.toString().equals("FILE_TEXT")) {
+        } else if (messageInfo.messageType.toString().equals("FILE") || messageInfo.messageType.toString().equals("FILE_TEXT")) {
             Uri uri = Uri.fromFile(new File(messageInfo.getAttachment().getLocalFilePath()));
             intent.setType(getContentResolver().getType(uri));
             intent.putExtra(Intent.EXTRA_STREAM, uri);
@@ -1583,11 +1571,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         }
 
         startActivity(Intent.createChooser(intent, choserDialogText));
-
     }
-
-
-
 
     private void setAvatar() {
         Realm realm = Realm.getDefaultInstance();
@@ -1652,8 +1636,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         imvSmileButton.setText(drawableResourceId);
     }
 
-    @Override
-    public void onBackPressed() {
+    @Override public void onBackPressed() {
         if (mAdapter != null && mAdapter.getSelections().size() > 0) {
             mAdapter.deselect();
         } else {
@@ -1673,16 +1656,8 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         boomMenuButton = (BoomMenuButton) findViewById(R.id.am_boom);
 
         Drawable[] subButtonDrawables = new Drawable[3];
-        int[] drawablesResource = new int[]{
-                R.mipmap.am_camera,
-                R.mipmap.am_music,
-                R.mipmap.am_paint,
-                R.mipmap.am_picture,
-                R.mipmap.am_document,
-                R.mipmap.am_location,
-                R.mipmap.am_video,
-                R.mipmap.am_file,
-                R.mipmap.am_contact
+        int[] drawablesResource = new int[] {
+            R.mipmap.am_camera, R.mipmap.am_music, R.mipmap.am_paint, R.mipmap.am_picture, R.mipmap.am_document, R.mipmap.am_location, R.mipmap.am_video, R.mipmap.am_file, R.mipmap.am_contact
         };
         for (int i = 0; i < 3; i++)
             subButtonDrawables[i] = ContextCompat.getDrawable(G.context, drawablesResource[i]);
@@ -1696,29 +1671,28 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         BoomMenuButton.Builder bb = new BoomMenuButton.Builder();
 
         bb.addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_camera), subButtonColors[0], getResources().getString(R.string.am_camera))
-                .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_picture), subButtonColors[0], getResources().getString(R.string.am_picture))
-                .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_video), subButtonColors[0], getResources().getString(R.string.am_video))
-                .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_music), subButtonColors[0], getResources().getString(R.string.am_music))
-                .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_document), subButtonColors[0], getResources().getString(R.string.am_document))
-                .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_file), subButtonColors[0], getResources().getString(R.string.am_file))
-                .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_paint), subButtonColors[0], getResources().getString(R.string.am_paint))
-                .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_location), subButtonColors[0], getResources().getString(R.string.am_location))
-                .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_contact), subButtonColors[0], getResources().getString(R.string.am_contact))
-                .autoDismiss(true)
-                .cancelable(true)
-                .boomButtonShadow(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2))
-                .subButtonTextColor(ContextCompat.getColor(G.context, R.color.am_iconFab_black))
-                .button(ButtonType.CIRCLE)
-                .boom(BoomType.PARABOLA)
-                .place(PlaceType.CIRCLE_9_1)
-                .subButtonTextColor(ContextCompat.getColor(G.context, R.color.colorAccent))
-                .subButtonsShadow(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2))
-                .init(boomMenuButton);
+            .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_picture), subButtonColors[0], getResources().getString(R.string.am_picture))
+            .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_video), subButtonColors[0], getResources().getString(R.string.am_video))
+            .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_music), subButtonColors[0], getResources().getString(R.string.am_music))
+            .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_document), subButtonColors[0], getResources().getString(R.string.am_document))
+            .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_file), subButtonColors[0], getResources().getString(R.string.am_file))
+            .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_paint), subButtonColors[0], getResources().getString(R.string.am_paint))
+            .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_location), subButtonColors[0], getResources().getString(R.string.am_location))
+            .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_contact), subButtonColors[0], getResources().getString(R.string.am_contact))
+            .autoDismiss(true)
+            .cancelable(true)
+            .boomButtonShadow(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2))
+            .subButtonTextColor(ContextCompat.getColor(G.context, R.color.am_iconFab_black))
+            .button(ButtonType.CIRCLE)
+            .boom(BoomType.PARABOLA)
+            .place(PlaceType.CIRCLE_9_1)
+            .subButtonTextColor(ContextCompat.getColor(G.context, R.color.colorAccent))
+            .subButtonsShadow(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2))
+            .init(boomMenuButton);
         boomMenuButton.setTextViewColor(getResources().getColor(R.color.am_iconFab_black));
 
         boomMenuButton.setOnSubButtonClickListener(new BoomMenuButton.OnSubButtonClickListener() {
-            @Override
-            public void onClick(int buttonIndex) {
+            @Override public void onClick(int buttonIndex) {
 
                 Log.i("TAG123", "onClick: " + buttonIndex);
 
@@ -1763,8 +1737,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         return mReplayLayout != null && mReplayLayout.getTag() instanceof StructMessageInfo;
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         latestUri = data.getData();
         latestRequestCode = requestCode;
@@ -1864,8 +1837,8 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 break;
             case AttachFile.request_code_TAKE_PICTURE:
 
-                    filePath = AttachFile.imagePath;
-                    resizeImage(filePath);
+                filePath = AttachFile.imagePath;
+                resizeImage(filePath);
 
                 fileName = new File(filePath).getName();
                 fileSize = new File(filePath).length();
@@ -2073,13 +2046,11 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         }
     }
 
-    @Override
-    public void onEmojiViewCreate(View view, EmojiPopup emojiPopup) {
+    @Override public void onEmojiViewCreate(View view, EmojiPopup emojiPopup) {
 
     }
 
-    @Override
-    public boolean onRecentsLongClick(View view, EmojiRecentsManager recentsManager) {
+    @Override public boolean onRecentsLongClick(View view, EmojiRecentsManager recentsManager) {
         // TODO useful for clearing recents
         return false;
     }
@@ -2116,8 +2087,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         btnCloseAppBarSelected = (Button) findViewById(R.id.chl_btn_close_layout);
         btnCloseAppBarSelected.setTypeface(G.fontawesome);
         btnCloseAppBarSelected.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 mAdapter.deselect();
                 toolbar.setVisibility(View.VISIBLE);
                 ll_AppBarSelected.setVisibility(View.GONE);
@@ -2131,8 +2101,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         btnReplaySelected = (Button) findViewById(R.id.chl_btn_replay_selected);
         btnReplaySelected.setTypeface(G.fontawesome);
         btnReplaySelected.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 Log.e("ddd", "btnReplaySelected");
                 replay(null);
             }
@@ -2141,8 +2110,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         btnCopySelected = (Button) findViewById(R.id.chl_btn_copy_selected);
         btnCopySelected.setTypeface(G.fontawesome);
         btnCopySelected.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
 
                 for (AbstractMessage messageID : mAdapter.getSelectedItems()) {////TODO [Saeed Mozaffari] [2016-09-13 6:39 PM] - code is wrong
                     ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
@@ -2155,8 +2123,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         btnForwardSelected = (Button) findViewById(R.id.chl_btn_forward_selected);
         btnForwardSelected.setTypeface(G.fontawesome);
         btnForwardSelected.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 Log.e("ddd", "btnForwardSelected");
                 // forward selected messages to room list for selecting room
                 if (mAdapter != null && mAdapter.getSelectedItems().size() > 0) {
@@ -2169,13 +2136,11 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         btnDeleteSelected.setTypeface(G.fontawesome);
 
         btnDeleteSelected.setOnClickListener(new View.OnClickListener() { //TODO [Saeed Mozaffari] [2016-09-17 2:58 PM] - FORCE - add item to delete list
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
 
                 Realm realm = Realm.getDefaultInstance();
                 realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
+                    @Override public void execute(Realm realm) {
                         // get offline delete list , add new deleted list and update in client condition , then send request for delete message to server
                         RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirst();
 
@@ -2193,8 +2158,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                             realmClientCondition.getOfflineDeleted().add(realmOfflineDelete);
 
                             runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
+                                @Override public void run() {
                                     // remove deleted message from adapter
                                     mAdapter.removeMessage(Long.parseLong(messageID.mMessage.messageID));
 
@@ -2239,30 +2203,25 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         btnUp = (Button) findViewById(R.id.chl_btn_up);
         btnUp.setTypeface(G.fontawesome);
         btnUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 Log.e("ddd", "up click");
                 int position = recyclerView.getAdapter().getItemCount();
-                if (position > 0)
-                    recyclerView.scrollToPosition(0);
+                if (position > 0) recyclerView.scrollToPosition(0);
             }
         });
 
         btnDown = (Button) findViewById(R.id.chl_btn_down);
         btnDown.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 Log.e("ddd", "btnDown");
                 int position = recyclerView.getAdapter().getItemCount();
-                if (position > 0)
-                    recyclerView.scrollToPosition(position - 1);
+                if (position > 0) recyclerView.scrollToPosition(position - 1);
             }
         });
 
         txtChannelMute = (TextView) findViewById(R.id.chl_txt_mute_channel);
         txtChannelMute.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 isMute = !isMute;
                 if (isMute) {
                     txtChannelMute.setText("UnMute");
@@ -2315,8 +2274,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         Collections.sort(lastResultMessages, SortMessages.DESC);
 
         EndlessRecyclerOnScrollListener endlessRecyclerOnScrollListener = new EndlessRecyclerOnScrollListener(lastResultMessages, mAdapter) {
-            @Override
-            public void onLoadMore(EndlessRecyclerOnScrollListener listener, int page) {
+            @Override public void onLoadMore(EndlessRecyclerOnScrollListener listener, int page) {
                 List<RealmRoomMessage> roomMessages = listener.loadMore(page);
                 for (RealmRoomMessage roomMessage : roomMessages) {
                     StructMessageInfo messageInfo = StructMessageInfo.convert(roomMessage);
@@ -2324,8 +2282,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 }
             }
 
-            @Override
-            public void onNoMore(EndlessRecyclerOnScrollListener listener) {
+            @Override public void onNoMore(EndlessRecyclerOnScrollListener listener) {
                 // find last item from adapter (not database for better performance!)
                 // TODO: 10/17/2016 [Alireza] todo something to not request everytime
                 for (int p = mAdapter.getAdapterItemCount() - 1; p >= 0; p--) {
@@ -2367,26 +2324,23 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         return null;
     }
 
-    @Override
-    public void onMessageFileClick(View view, final StructMessageInfo messageInfo, int position, ProtoGlobal.RoomMessageType fileType) {
+    @Override public void onMessageFileClick(View view, final StructMessageInfo messageInfo, int position, ProtoGlobal.RoomMessageType fileType) {
 
         if (messageInfo.messageType.toString().equals("VOICE") || messageInfo.messageType.toString().equals("AUDIO") ||
-                messageInfo.messageType.toString().equals("AUDIO_TEXT")) {
+            messageInfo.messageType.toString().equals("AUDIO_TEXT")) {
             MusicPlayer.startPlayer(messageInfo.getAttachment().getLocalFilePath(), title, mRoomId, true);
         } else if (messageInfo.messageType.toString().equals("IMAGE") || messageInfo.messageType.toString().equals("IMAGE_TEXT")) {
             showImage(messageInfo);
         } else if (messageInfo.messageType.toString().equals("FILE") || messageInfo.messageType.toString().equals("FILE_TEXT") ||
-                messageInfo.messageType.toString().equals("VIDEO") || messageInfo.messageType.toString().equals("VIDEO_TEXT")) {
+            messageInfo.messageType.toString().equals("VIDEO") || messageInfo.messageType.toString().equals("VIDEO_TEXT")) {
             Intent intent = HelperMimeType.appropriateProgram(messageInfo.getAttachment().getLocalFilePath());
-            if (intent != null)
-                startActivity(intent);
+            if (intent != null) startActivity(intent);
         } else {
             switch (fileType) {
                 case TEXT:
                     Log.i(ActivityChat.class.getSimpleName(), "Message clicked");
 
-                    @ArrayRes
-                    int itemsRes = 0;
+                    @ArrayRes int itemsRes = 0;
                     switch (messageInfo.messageType) {
                         case TEXT:
                             itemsRes = R.array.textMessageDialogItems;
@@ -2418,97 +2372,87 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     }
                     realm.close();
 
-                    new MaterialDialog.Builder(this)
-                            .title("Message")
-                            .negativeText("CANCEL")
-                            .items(items)
-                            .itemsCallback(new MaterialDialog.ListCallback() {
-                                @Override
-                                public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                                    // TODO: 9/14/2016 [Alireza Eskandarpour Shoferi] implement other items
-                                    if (text.toString().equalsIgnoreCase(getString(R.string.copy_item_dialog))) {
-                                        // copy message
-                                        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                                        ClipData clip = ClipData.newPlainText("Copied Text", messageInfo.messageText);
-                                        clipboard.setPrimaryClip(clip);
-                                    } else if (text.toString().equalsIgnoreCase(getString(R.string.delete_item_dialog))) {
-                                        final Realm realmCondition = Realm.getDefaultInstance();
-                                        final RealmClientCondition realmClientCondition = realmCondition.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirstAsync();
-                                        realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
-                                            @Override
-                                            public void onChange(final RealmClientCondition element) {
-                                                realmCondition.executeTransaction(new Realm.Transaction() {
-                                                    @Override
-                                                    public void execute(Realm realm) {
-                                                        if (element != null) {
-                                                            if (realmCondition.where(RealmOfflineDelete.class).equalTo(RealmOfflineDeleteFields.OFFLINE_DELETE, Long.parseLong(messageInfo.messageID)).findFirst() == null) {
+                    new MaterialDialog.Builder(this).title("Message").negativeText("CANCEL").items(items).itemsCallback(new MaterialDialog.ListCallback() {
+                        @Override public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                            // TODO: 9/14/2016 [Alireza Eskandarpour Shoferi] implement other items
+                            if (text.toString().equalsIgnoreCase(getString(R.string.copy_item_dialog))) {
+                                // copy message
+                                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                                ClipData clip = ClipData.newPlainText("Copied Text", messageInfo.messageText);
+                                clipboard.setPrimaryClip(clip);
+                            } else if (text.toString().equalsIgnoreCase(getString(R.string.delete_item_dialog))) {
+                                final Realm realmCondition = Realm.getDefaultInstance();
+                                final RealmClientCondition realmClientCondition = realmCondition.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirstAsync();
+                                realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
+                                    @Override public void onChange(final RealmClientCondition element) {
+                                        realmCondition.executeTransaction(new Realm.Transaction() {
+                                            @Override public void execute(Realm realm) {
+                                                if (element != null) {
+                                                    if (realmCondition.where(RealmOfflineDelete.class).equalTo(RealmOfflineDeleteFields.OFFLINE_DELETE, Long.parseLong(messageInfo.messageID)).findFirst() == null) {
 
-                                                                RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageInfo.messageID)).findFirst();
-                                                                if (roomMessage != null) {
-                                                                    // delete message from database
-                                                                    roomMessage.deleteFromRealm();
-                                                                }
-
-                                                                RealmOfflineDelete realmOfflineDelete = realmCondition.createObject(RealmOfflineDelete.class);
-                                                                realmOfflineDelete.setId(System.nanoTime());
-                                                                realmOfflineDelete.setOfflineDelete(Long.parseLong(messageInfo.messageID));
-                                                                element.getOfflineDeleted().add(realmOfflineDelete);
-
-                                                                runOnUiThread(new Runnable() {
-                                                                    @Override
-                                                                    public void run() {
-                                                                        // remove deleted message from adapter
-                                                                        mAdapter.removeMessage(Long.parseLong(messageInfo.messageID));
-
-                                                                        // remove tag from edtChat if the message has deleted
-                                                                        if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
-                                                                            if (Long.toString(Long.parseLong(messageInfo.messageID)).equals(((StructMessageInfo) edtChat.getTag()).messageID)) {
-                                                                                edtChat.setTag(null);
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                });
-                                                                // delete message
-                                                                new RequestChatDeleteMessage().chatDeleteMessage(mRoomId, Long.parseLong(messageInfo.messageID));
-                                                            }
-                                                            element.removeChangeListeners();
+                                                        RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageInfo.messageID)).findFirst();
+                                                        if (roomMessage != null) {
+                                                            // delete message from database
+                                                            roomMessage.deleteFromRealm();
                                                         }
-                                                    }
-                                                });
 
-                                                realmCondition.close();
+                                                        RealmOfflineDelete realmOfflineDelete = realmCondition.createObject(RealmOfflineDelete.class);
+                                                        realmOfflineDelete.setId(System.nanoTime());
+                                                        realmOfflineDelete.setOfflineDelete(Long.parseLong(messageInfo.messageID));
+                                                        element.getOfflineDeleted().add(realmOfflineDelete);
+
+                                                        runOnUiThread(new Runnable() {
+                                                            @Override public void run() {
+                                                                // remove deleted message from adapter
+                                                                mAdapter.removeMessage(Long.parseLong(messageInfo.messageID));
+
+                                                                // remove tag from edtChat if the message has deleted
+                                                                if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
+                                                                    if (Long.toString(Long.parseLong(messageInfo.messageID)).equals(((StructMessageInfo) edtChat.getTag()).messageID)) {
+                                                                        edtChat.setTag(null);
+                                                                    }
+                                                                }
+                                                            }
+                                                        });
+                                                        // delete message
+                                                        new RequestChatDeleteMessage().chatDeleteMessage(mRoomId, Long.parseLong(messageInfo.messageID));
+                                                    }
+                                                    element.removeChangeListeners();
+                                                }
                                             }
                                         });
-                                    } else if (text.toString().equalsIgnoreCase(getString(R.string.edit_item_dialog))) {
-                                        // edit message
-                                        // put message text to EditText
-                                        if (!messageInfo.messageText.isEmpty()) {
-                                            edtChat.setText(messageInfo.messageText);
-                                            edtChat.setSelection(0, edtChat.getText().length());
-                                            // put message object to edtChat's tag to obtain it later and
-                                            // found is user trying to edit a message
-                                            edtChat.setTag(messageInfo);
-                                        }
-                                    } else if (text.toString().equalsIgnoreCase(getString(R.string.replay_item_dialog))) {
-                                        replay(messageInfo);
-                                    } else if (text.toString().equalsIgnoreCase(getString(R.string.forward_item_dialog))) {
-                                        // forward selected messages to room list for selecting room
-                                        if (mAdapter != null) {
-                                            startActivity(makeIntentForForwardMessages(messageInfo));
-                                        }
-                                    } else if (text.toString().equalsIgnoreCase(getString(R.string.share_item_dialog))) {
-                                        sheareDataToOtherProgram(messageInfo);
+
+                                        realmCondition.close();
                                     }
+                                });
+                            } else if (text.toString().equalsIgnoreCase(getString(R.string.edit_item_dialog))) {
+                                // edit message
+                                // put message text to EditText
+                                if (!messageInfo.messageText.isEmpty()) {
+                                    edtChat.setText(messageInfo.messageText);
+                                    edtChat.setSelection(0, edtChat.getText().length());
+                                    // put message object to edtChat's tag to obtain it later and
+                                    // found is user trying to edit a message
+                                    edtChat.setTag(messageInfo);
                                 }
-                            })
-                            .show();
+                            } else if (text.toString().equalsIgnoreCase(getString(R.string.replay_item_dialog))) {
+                                replay(messageInfo);
+                            } else if (text.toString().equalsIgnoreCase(getString(R.string.forward_item_dialog))) {
+                                // forward selected messages to room list for selecting room
+                                if (mAdapter != null) {
+                                    startActivity(makeIntentForForwardMessages(messageInfo));
+                                }
+                            } else if (text.toString().equalsIgnoreCase(getString(R.string.share_item_dialog))) {
+                                sheareDataToOtherProgram(messageInfo);
+                            }
+                        }
+                    }).show();
                     break;
             }
         }
     }
 
-    @Override
-    public void onSenderAvatarClick(View view, StructMessageInfo messageInfo, int position) {
+    @Override public void onSenderAvatarClick(View view, StructMessageInfo messageInfo, int position) {
         Intent intent = new Intent(G.context, ActivityContactsProfile.class);
         intent.putExtra("peerId", Long.parseLong(messageInfo.senderID));
         intent.putExtra("RoomId", mRoomId);
@@ -2517,15 +2461,11 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     }
 
     private void showImage(StructMessageInfo messageInfo) {
-        FragmentShowImageMessages fragment =
-            FragmentShowImageMessages.newInstance(mRoomId, messageInfo.attachment.token);
-        getSupportFragmentManager().beginTransaction()
-            .replace(R.id.ac_ll_parent, fragment, "Show_Image_fragment")
-            .commit();
+        FragmentShowImageMessages fragment = FragmentShowImageMessages.newInstance(mRoomId, messageInfo.attachment.token);
+        getSupportFragmentManager().beginTransaction().replace(R.id.ac_ll_parent, fragment, "Show_Image_fragment").commit();
     }
 
-    @Override
-    public void onChatClearMessage(long roomId, long clearId, ProtoResponse.Response response) {
+    @Override public void onChatClearMessage(long roomId, long clearId, ProtoResponse.Response response) {
 
         boolean clearMessage = false;
 
@@ -2541,15 +2481,13 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             if (clearMessage) {
                 final long messageId = chatHistory.getRoomMessage().getMessageId();
                 realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
+                    @Override public void execute(Realm realm) {
                         chatHistory.getRoomMessage().deleteFromRealm();
                     }
                 });
 
                 runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+                    @Override public void run() {
                         // remove deleted message from adapter
                         Log.i("CLEAR", "mAdapter.removeMessage");
                         mAdapter.removeMessage(messageId);
@@ -2569,22 +2507,19 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
     private void scrollToEnd() {
         recyclerView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount());
             }
         }, 300);
     }
 
-    @Override
-    public void onChatUpdateStatus(long roomId, final long messageId, final ProtoGlobal.RoomMessageStatus status, long statusVersion) {
+    @Override public void onChatUpdateStatus(long roomId, final long messageId, final ProtoGlobal.RoomMessageStatus status, long statusVersion) {
         Log.i(ActivityChat.class.getSimpleName(), "onChatUpdateStatus called");
 
         // I'm in the room
         if (mRoomId == roomId) {
             runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
+                @Override public void run() {
                     // so update the message status ina adapter
                     mAdapter.updateMessageStatus(messageId, status);
                     Log.i(ActivityChat.class.getSimpleName(), status.toString());
@@ -2593,8 +2528,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         }
     }
 
-    @Override
-    public void onChatMessageSelectionChanged(int selectedCount, Set<AbstractMessage> selectedItems) {
+    @Override public void onChatMessageSelectionChanged(int selectedCount, Set<AbstractMessage> selectedItems) {
         Toast.makeText(ActivityChat.this, "selected: " + Integer.toString(selectedCount), Toast.LENGTH_SHORT).show();
         if (selectedCount > 0) {
             toolbar.setVisibility(View.GONE);
@@ -2614,15 +2548,13 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         }
     }
 
-    @Override
-    public void onPreChatMessageRemove(final StructMessageInfo messageInfo, int position) {
+    @Override public void onPreChatMessageRemove(final StructMessageInfo messageInfo, int position) {
         if (mAdapter.getAdapterItemCount() > 1 && position == mAdapter.getAdapterItemCount() - 1) {
             // if was last message removed
             // update room last message
             final Realm realm = Realm.getDefaultInstance();
             realm.executeTransactionAsync(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
+                @Override public void execute(Realm realm) {
                     RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
 
                     AbstractMessage lastMessageBeforeDeleted = mAdapter.getAdapterItem(mAdapter.getAdapterItemCount() - 1);
@@ -2634,30 +2566,26 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     }
                 }
             }, new Realm.Transaction.OnSuccess() {
-                @Override
-                public void onSuccess() {
+                @Override public void onSuccess() {
                     realm.close();
                 }
             });
         }
     }
 
-    @Override
-    public void onMessageUpdate(long roomId, final long messageId, final ProtoGlobal.RoomMessageStatus status, final String identity, ProtoGlobal.RoomMessage roomMessage) {
+    @Override public void onMessageUpdate(long roomId, final long messageId, final ProtoGlobal.RoomMessageStatus status, final String identity, ProtoGlobal.RoomMessage roomMessage) {
         // I'm in the room
         if (roomId == mRoomId) {
             // update message status in telegram
             runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
+                @Override public void run() {
                     mAdapter.updateMessageIdAndStatus(messageId, identity, status);
                 }
             });
         }
     }
 
-    @Override
-    public void onMessageReceive(final long roomId, String message, String messageType, final ProtoGlobal.RoomMessage roomMessage, final ProtoGlobal.Room.Type roomType) {
+    @Override public void onMessageReceive(final long roomId, String message, String messageType, final ProtoGlobal.RoomMessage roomMessage, final ProtoGlobal.Room.Type roomType) {
         Log.i(ActivityChat.class.getSimpleName(), "onMessageReceive called for group");
 
         final Realm realm = Realm.getDefaultInstance();
@@ -2667,8 +2595,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             if (roomId == mRoomId) {
                 // I'm in the room, so unread messages count is 0. it means, I read all messages
                 realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
+                    @Override public void execute(Realm realm) {
                         RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                         if (room != null) {
                             room.setUnreadCount(0);
@@ -2684,8 +2611,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
                 //Start ClientCondition OfflineSeen
                 realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
+                    @Override public void execute(Realm realm) {
                         final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirst();
 
                         if (realmRoomMessage != null) {
@@ -2715,8 +2641,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 });
 
                 runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+                    @Override public void run() {
                         switchAddItem(new ArrayList<>(Arrays.asList(StructMessageInfo.convert(roomMessage))), false);
                         scrollToEnd();
                     }
@@ -2730,8 +2655,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 }
                 // I'm not in the room, but I have to add 1 to unread messages count
                 realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
+                    @Override public void execute(Realm realm) {
                         RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                         if (room != null) {
                             room.setUnreadCount(room.getUnreadCount() + 1);
@@ -2744,8 +2668,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
             // I'm sender . but another account sent this message and i received it.
             runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
+                @Override public void run() {
                     switchAddItem(new ArrayList<>(Arrays.asList(StructMessageInfo.convert(roomMessage))), false);
                     scrollToEnd();
                 }
@@ -2755,11 +2678,9 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         realm.close();
     }
 
-    @Override
-    public void onFileDownload(final String token, final int offset, final ProtoFileDownload.FileDownload.Selector selector, final int progress) {
+    @Override public void onFileDownload(final String token, final int offset, final ProtoFileDownload.FileDownload.Selector selector, final int progress) {
         runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 // if thumbnail
                 if (selector != ProtoFileDownload.FileDownload.Selector.FILE) {
                     mAdapter.updateThumbnail(token);
@@ -2771,11 +2692,9 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         });
     }
 
-    @Override
-    public void onAvatarDownload(final String token, final int offset, final ProtoFileDownload.FileDownload.Selector selector, final int progress, final long userId, final RoomType roomType) {
+    @Override public void onAvatarDownload(final String token, final int offset, final ProtoFileDownload.FileDownload.Selector selector, final int progress, final long userId, final RoomType roomType) {
         runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 Realm realm = Realm.getDefaultInstance();
                 mAdapter.downloadingAvatar(userId, progress, offset, StructMessageAttachment.convert(realm.where(RealmRegisteredInfo.class).equalTo("id", userId).findFirst().getLastAvatar()));
                 realm.close();
@@ -2783,8 +2702,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         });
     }
 
-    @Override
-    public void onVoiceRecordDone(final String savedPath) {
+    @Override public void onVoiceRecordDone(final String savedPath) {
         Realm realm = Realm.getDefaultInstance();
         final long messageId = System.nanoTime();
         final long updateTime = System.currentTimeMillis();
@@ -2801,8 +2719,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         }
 
         realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
+            @Override public void execute(Realm realm) {
                 RealmChatHistory chatHistory = realm.createObject(RealmChatHistory.class);
                 RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class);
 
@@ -2829,16 +2746,13 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         realm.close();
     }
 
-    @Override
-    public void onVoiceRecordCancel() {
+    @Override public void onVoiceRecordCancel() {
 
     }
 
-    @Override
-    public void onUserInfo(final ProtoGlobal.RegisteredUser user, ProtoResponse.Response response) {
+    @Override public void onUserInfo(final ProtoGlobal.RegisteredUser user, ProtoResponse.Response response) {
         runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 Realm realm = Realm.getDefaultInstance();
                 RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, user.getId()).findFirst();
                 if (realmRegisteredInfo != null) {
@@ -2849,25 +2763,21 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         });
     }
 
-    @Override
-    public void onUserInfoTimeOut() {
+    @Override public void onUserInfoTimeOut() {
 
     }
 
-    @Override
-    public void onUserInfoError() {
+    @Override public void onUserInfoError() {
 
     }
 
-    @Override
-    public void onGetRoomHistory(final long roomId, String message, String messageType, final ProtoGlobal.RoomMessage roomMessage) {
+    @Override public void onGetRoomHistory(final long roomId, String message, String messageType, final ProtoGlobal.RoomMessage roomMessage) {
         final Realm realm = Realm.getDefaultInstance();
 
         // I'm in the room
         if (roomId == mRoomId) {
             runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
+                @Override public void run() {
                     switchAddItem(new ArrayList<>(Arrays.asList(StructMessageInfo.convert(roomMessage))), false);
                     scrollToEnd();
                 }
@@ -2877,35 +2787,26 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         realm.close();
     }
 
-    @Override
-    public void onFileUploaded(FileUploadStructure uploadStructure, final String identity) {
-        new ChatSendMessageUtil()
-                .newBuilder(chatType, uploadStructure.messageType, uploadStructure.roomId)
-                .attachment(uploadStructure.token)
-                .message(uploadStructure.text)
-                .sendMessage(Long.toString(uploadStructure.messageId));
+    @Override public void onFileUploaded(FileUploadStructure uploadStructure, final String identity) {
+        new ChatSendMessageUtil().newBuilder(chatType, uploadStructure.messageType, uploadStructure.roomId).attachment(uploadStructure.token).message(uploadStructure.text).sendMessage(Long.toString(uploadStructure.messageId));
 
         runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 mAdapter.updateProgress(Long.parseLong(identity), 100);
             }
         });
     }
 
-    @Override
-    public void onFileUploading(FileUploadStructure uploadStructure, final String identity, final double progress) {
+    @Override public void onFileUploading(FileUploadStructure uploadStructure, final String identity, final double progress) {
         runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 mAdapter.updateProgress(Long.parseLong(identity), (int) progress);
             }
         });
     }
 
     private static class UploadTask extends AsyncTask<Object, FileUploadStructure, FileUploadStructure> {
-        @Override
-        protected FileUploadStructure doInBackground(Object... params) {
+        @Override protected FileUploadStructure doInBackground(Object... params) {
             try {
                 String filePath = (String) params[0];
                 long messageId = (long) params[1];
@@ -2931,8 +2832,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
             return null;
         }
 
-        @Override
-        protected void onPostExecute(FileUploadStructure result) {
+        @Override protected void onPostExecute(FileUploadStructure result) {
             super.onPostExecute(result);
             MessagesAdapter.uploading.put(result.messageId, 0);
             G.uploaderUtil.startUploading(result, Long.toString(result.messageId));
@@ -2959,8 +2859,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
         isMuteNotification = !isMuteNotification;
         realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
+            @Override public void execute(Realm realm) {
                 realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, item).findFirst().setMute(isMuteNotification);
             }
         });
@@ -2975,11 +2874,9 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
         final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, chatId).findFirstAsync();
         realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
-            @Override
-            public void onChange(final RealmClientCondition element) {
+            @Override public void onChange(final RealmClientCondition element) {
                 realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
+                    @Override public void execute(Realm realm) {
                         final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatId).findFirst();
 
                         if (realmRoom.getLastMessageId() != -1) {
@@ -3011,8 +2908,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                         realmChatHistories.deleteAllFromRealm();
 
                         runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
+                            @Override public void run() {
                                 if (mAdapter != null) {
                                     mAdapter.clear();
                                 }
@@ -3029,18 +2925,15 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
     private void deleteChat(final int item) {
         G.onChatDelete = new OnChatDelete() {
-            @Override
-            public void onChatDelete(long roomId) {
+            @Override public void onChatDelete(long roomId) {
                 Log.i(ActivityMain.class.getSimpleName(), "chat delete response > " + roomId);
             }
 
-            @Override
-            public void onChatDeleteError(int majorCode, int minorCode) {
+            @Override public void onChatDeleteError(int majorCode, int minorCode) {
 
                 if (majorCode == 218 && minorCode == 1) {
                     runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
+                        @Override public void run() {
                             // TODO: 9/25/2016 Error 218 - CHAT_DELETE_BAD_PAYLOAD
                             //Invalid roomId
 
@@ -3048,8 +2941,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     });
                 } else if (majorCode == 219) {
                     runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
+                        @Override public void run() {
                             // TODO: 9/25/2016 Error 219 - CHAT_DELETE_INTERNAL_SERVER_ERROR
                             //Invalid roomId
 
@@ -3057,8 +2949,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                     });
                 } else if (majorCode == 220) {
                     runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
+                        @Override public void run() {
                             // TODO: 9/25/2016 Error 220 - CHAT_DELETE_FORBIDDEN
                             //Invalid roomId
 
@@ -3071,11 +2962,9 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         final Realm realm = Realm.getDefaultInstance();
         final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, item).findFirstAsync();
         realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
-            @Override
-            public void onChange(final RealmClientCondition element) {
+            @Override public void onChange(final RealmClientCondition element) {
                 realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(final Realm realm) {
+                    @Override public void execute(final Realm realm) {
                         if (realm.where(RealmOfflineDelete.class).equalTo(RealmOfflineDeleteFields.OFFLINE_DELETE, item).findFirst() == null) {
                             RealmOfflineDelete realmOfflineDelete = realm.createObject(RealmOfflineDelete.class);
                             realmOfflineDelete.setId(System.nanoTime());
@@ -3193,15 +3082,11 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 @Override public void execute(Realm realm) {
                     RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
 
-                    String filePath = latestUri.toString();
-                    File file = new File(filePath);
-
                     RealmDraftFile realmDraftFile = realm.createObject(RealmDraftFile.class);
                     realmDraftFile.setUri(latestUri.toString());
                     realmDraftFile.setRequestCode(latestRequestCode);
 
                     if (isMessageWrote()) {
-                        Log.i("EEE", "isMessageWrote 1");
                         realmRoom.setDraft(edtChat.getText().toString());
                         G.onDraftMessage.onDraftMessage(mRoomId);
                     } else {
@@ -3273,8 +3158,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     private void clearDraft() {
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
+            @Override public void execute(Realm realm) {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                 if (realmRoom != null) {
                     realmRoom.setDraft("");
@@ -3285,14 +3169,12 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         realm.close();
     }
 
-    @Override
-    protected void onStop() {
+    @Override protected void onStop() {
         setDraft();
         super.onStop();
     }
 
-    @Override
-    protected void onDestroy() {
+    @Override protected void onDestroy() {
         // room id have to be set to default, otherwise I'm in the room always!
         mRoomId = -1;
         super.onDestroy();
