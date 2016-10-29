@@ -1,11 +1,9 @@
 package com.iGap.response;
 
 import android.util.Log;
-
+import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoUserContactsEdit;
-
-import io.realm.Realm;
 
 public class UserContactsEditResponse extends MessageHandler {
 
@@ -19,33 +17,29 @@ public class UserContactsEditResponse extends MessageHandler {
         this.message = protoClass;
         this.actionId = actionId;
         this.identity = identity;
+
     }
 
 
     @Override
     public void handler() {
-        Realm realm = Realm.getDefaultInstance();
         Log.i("XXX", "UserContactsEditResponse handler");
-        ProtoUserContactsEdit.UserContactsEdit.Builder builder = (ProtoUserContactsEdit.UserContactsEdit.Builder) message;
+        ProtoUserContactsEdit.UserContactsEditResponse.Builder builder =
+            (ProtoUserContactsEdit.UserContactsEditResponse.Builder) message;
 
         long phone = builder.getPhone();
         String first_name = builder.getFirstName();
         String last_name = builder.getLastName();
+        Log.i("XXX", "first_name handler" + first_name);
+        Log.i("XXX", "last_name handler" + last_name);
+        G.onUserContactEdit.onContactEdit(first_name, last_name);
 
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-
-            }
-        });
-
-        realm.close();
     }
 
     @Override
     public void timeOut() {
         Log.i("XXX", "UserContactsEditResponse timeOut");
-
+        G.onUserContactEdit.onContactEditTimeOut();
     }
 
     @Override
@@ -54,6 +48,7 @@ public class UserContactsEditResponse extends MessageHandler {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         errorResponse.getMajorCode();
         errorResponse.getMinorCode();
+        G.onUserContactEdit.onContactEditError();
 
         Log.i("XXX", "UserContactsEditResponse errorReponse.getMajorCode() : " + errorResponse.getMajorCode());
         Log.i("XXX", "UserContactsEditResponse errorReponse.getMinorCode() : " + errorResponse.getMinorCode());

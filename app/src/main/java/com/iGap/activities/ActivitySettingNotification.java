@@ -18,7 +18,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -26,32 +25,25 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.helper.MyService;
 import com.iGap.libs.rippleeffect.RippleView;
-import com.iGap.module.CircleImageView;
 import com.iGap.module.SHP_SETTING;
 import com.larswerkman.holocolorpicker.ColorPicker;
 import com.larswerkman.holocolorpicker.OpacityBar;
 import com.larswerkman.holocolorpicker.SVBar;
-
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivitySettingNotification extends AppCompatActivity {
 
-    private TextView txtBack, txtVibrateMessage, txtPopupNotification, txtVibrateGroup, txtPopupNotificationGroup, txtSoundGroup, txtSoundMessage, txtRepeat_Notifications;
-    private CircleImageView imgLedColor_message;
+    private TextView txtBack, txtVibrateMessage, txtPopupNotification, txtVibrateGroup,
+        txtPopupNotificationGroup, txtSoundGroup, txtSoundMessage, txtRepeat_Notifications, ltAlert,
+        ltMessagePreview, ltAlert_group, ltMessagePreview_group;
     private ImageView imgLedMessage, imgLedColor_group;
 
     private int poRbDialogSoundGroup = -1;
     private int poRbDialogSoundMessage = -1;
 
-    private ViewGroup ltAlert, ltMessagePreview,
-            ltLedColorMessage, ltPopupNotification,
-            ltAlert_group, ltMessagePreview_group,
-            ltSoundMessage,
-            ltVibrate_message, ltLedColor_group, ltVibrateGroup,
-            ltPopupNotificationGroup, ltSoundGroup, ltApp_sound, ltApp_Vibrate, ltApp_preview, ltChat_sound,
-            ltContact_joined, ltPinned_message,
-            ltKeep_alive_service, ltBackground_connection,
-            ltBadge_content, ltRepeat_Notifications, ltReset_all_notification;
+    private ViewGroup ltLedColorMessage, ltPopupNotification, ltSoundMessage,
+            ltVibrate_message, ltLedColor_group, ltVibrateGroup, ltPopupNotificationGroup,
+        ltSoundGroup, ltRepeat_Notifications, ltReset_all_notification;
 
     private ToggleButton tgAlert, tgMessagePreview, tgAlert_group, tgMessagePreview_group, tgApp_sound, tgApp_Vibrate, tgApp_preview, tgChat_sound, tgContact_joined, tgPinned_message, tgKeep_alive_service, tgBackground_connection, tgBadge_content;
 
@@ -91,7 +83,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
             tgAlert.setChecked(false);
         }
 
-        ltAlert = (ViewGroup) findViewById(R.id.stns_layout_alert);
+        ltAlert = (TextView) findViewById(R.id.stns_txt_alert);
         ltAlert.setOnClickListener(new View.OnClickListener() { // alert 1
             @Override
             public void onClick(View view) {
@@ -119,7 +111,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
         } else {
             tgMessagePreview.setChecked(false);
         }
-        ltMessagePreview = (ViewGroup) findViewById(R.id.stns_layout_messagePreview);
+        ltMessagePreview = (TextView) findViewById(R.id.stns_txt_messagePreview);
         ltMessagePreview.setOnClickListener(new View.OnClickListener() { // 2
             @Override
             public void onClick(View view) {
@@ -432,7 +424,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
         } else {
             tgAlert_group.setChecked(false);
         }
-        ltAlert_group = (ViewGroup) findViewById(R.id.stns_layout_alert_group);
+        ltAlert_group = (TextView) findViewById(R.id.stns_txt_alert_group);
         ltAlert_group.setOnClickListener(new View.OnClickListener() { // 2
             @Override
             public void onClick(View view) {
@@ -461,7 +453,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
         } else {
             tgMessagePreview_group.setChecked(false);
         }
-        ltMessagePreview_group = (ViewGroup) findViewById(R.id.stns_layout_messagePreview_group);
+        ltMessagePreview_group = (TextView) findViewById(R.id.stns_txt_messagePreview_group);
         ltMessagePreview_group.setOnClickListener(new View.OnClickListener() { // 2
             @Override
             public void onClick(View view) {
@@ -774,7 +766,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
         } else {
             tgApp_sound.setChecked(false);
         }
-        ltApp_sound = (ViewGroup) findViewById(R.id.stns_layout_app_sound);
+        TextView ltApp_sound = (TextView) findViewById(R.id.stns_txt_app_sound);
         ltApp_sound.setOnClickListener(new View.OnClickListener() { // 2
             @Override
             public void onClick(View view) {
@@ -802,7 +794,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
         } else {
             tgApp_Vibrate.setChecked(false);
         }
-        ltApp_Vibrate = (ViewGroup) findViewById(R.id.stns_layout_app_vibrate);
+        TextView ltApp_Vibrate = (TextView) findViewById(R.id.stns_txt_app_vibrate);
         ltApp_Vibrate.setOnClickListener(new View.OnClickListener() { // 2
             @Override
             public void onClick(View view) {
@@ -829,7 +821,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
         } else {
             tgApp_preview.setChecked(false);
         }
-        ltApp_preview = (ViewGroup) findViewById(R.id.stns_layout_app_preview);
+        TextView ltApp_preview = (TextView) findViewById(R.id.stns_txt_app_preview);
         ltApp_preview.setOnClickListener(new View.OnClickListener() { // 2
             @Override
             public void onClick(View view) {
@@ -856,7 +848,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
         } else {
             tgChat_sound.setChecked(false);
         }
-        ltChat_sound = (ViewGroup) findViewById(R.id.stns_layout_chat_sound);
+        TextView ltChat_sound = (TextView) findViewById(R.id.stns_txt_chat_sound);
         ltChat_sound.setOnClickListener(new View.OnClickListener() { // 2
             @Override
             public void onClick(View view) {
@@ -886,7 +878,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
         } else {
             tgContact_joined.setChecked(false);
         }
-        ltContact_joined = (ViewGroup) findViewById(R.id.stns_layout_Contact_joined);
+        TextView ltContact_joined = (TextView) findViewById(R.id.stns_txt_Contact_joined);
         ltContact_joined.setOnClickListener(new View.OnClickListener() { // 2
             @Override
             public void onClick(View view) {
@@ -914,7 +906,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
         } else {
             tgPinned_message.setChecked(false);
         }
-        ltPinned_message = (ViewGroup) findViewById(R.id.stns_layout_pinned_message);
+        TextView ltPinned_message = (TextView) findViewById(R.id.stns_txt_pinned_message);
         ltPinned_message.setOnClickListener(new View.OnClickListener() { // 2
             @Override
             public void onClick(View view) {
@@ -943,7 +935,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
         } else {
             tgKeep_alive_service.setChecked(false);
         }
-        ltKeep_alive_service = (ViewGroup) findViewById(R.id.stns_layout_keep_alive_service);
+        TextView ltKeep_alive_service = (TextView) findViewById(R.id.stns_txt_keep_alive_service);
         ltKeep_alive_service.setOnClickListener(new View.OnClickListener() { // 2
             @Override
             public void onClick(View view) {
@@ -975,7 +967,8 @@ public class ActivitySettingNotification extends AppCompatActivity {
         } else {
             tgBackground_connection.setChecked(false);
         }
-        ltBackground_connection = (ViewGroup) findViewById(R.id.stns_layout_background_connection);
+        TextView ltBackground_connection =
+            (TextView) findViewById(R.id.stns_txt_background_connection);
         ltBackground_connection.setOnClickListener(new View.OnClickListener() { // 2
             @Override
             public void onClick(View view) {
@@ -1001,7 +994,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
         } else {
             tgBadge_content.setChecked(false);
         }
-        ltBadge_content = (ViewGroup) findViewById(R.id.stns_layout_badge_countent);
+        TextView ltBadge_content = (TextView) findViewById(R.id.stns_txt_badge_countent);
         ltBadge_content.setOnClickListener(new View.OnClickListener() { // 2
             @Override
             public void onClick(View view) {

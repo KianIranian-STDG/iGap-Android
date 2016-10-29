@@ -101,6 +101,7 @@
     <string name="clear_history">Clear History</string>
     <string name="delete_chat">Delete Chat</string>
     <string name="delete_contact">Delete Contact</string>
+    <string name="delete_text">Are you sure delete this contact?</string>
     <string name="cancel">Cancel</string>
     <string name="B_cancel">CANCEL</string>
     <string name="yes">Yes</string>
@@ -493,6 +494,8 @@
     <string name="Toast_Invalid_nickname">Invalid nickname. Please change nickname</string>
     <string name="Toast_Write_NickName">Please Write Your NickName</string>
     <string name="d_of_d" formatted="false">%d of %d</string>
+
+    <string name="add_to_contact">Add to Contact</string>
 
 
 </resources>

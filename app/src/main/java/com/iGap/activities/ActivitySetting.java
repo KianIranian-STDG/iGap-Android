@@ -93,8 +93,11 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     private String textLanguage = "English";
     private int poRbDialogTextSize = -1;
 
-    private ViewGroup ltMessageTextSize, ltLanguage, ltInAppBrowser, ltSentByEnter, ltEnableAnimation, ltAutoGifs, ltSaveToGallery;
-    private TextView txtNickName, txtUserName, txtPhoneNumber, txtNotifyAndSound, txtFaq, txtPrivacyPolicy, txtSticker;
+    private ViewGroup ltMessageTextSize, ltLanguage;
+    private TextView txtNickName, txtUserName, txtPhoneNumber, txtNotifyAndSound, txtFaq,
+        txtPrivacyPolicy, txtSticker, ltInAppBrowser, ltSentByEnter, ltEnableAnimation, ltAutoGifs,
+        ltSaveToGallery;
+    ;
     private ToggleButton toggleSentByEnter, toggleEnableAnimation, toggleAutoGifs, toggleSaveToGallery, toggleInAppBrowser, toggleCrop;
 
     private AppBarLayout appBarLayout;
@@ -175,8 +178,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         if (userName != null) txtUserName.setText(userName);
         if (phoneName != null) txtPhoneNumber.setText(phoneName);
 
-
-        txtNickName.setOnClickListener(new View.OnClickListener() {
+        ViewGroup layoutNickname = (ViewGroup) findViewById(R.id.st_layout_nickname);
+        layoutNickname.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -313,11 +316,10 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                         String fullName = "";
                         if (edtFirstName.length() == 0) {
-
-                            fullName = finalFirsName1 + " " + edtLastName.getText().toString();
+                            fullName = " " + " " + edtLastName.getText().toString();
                         }
                         if (edtLastName.length() == 0) {
-                            fullName = edtFirstName.getText().toString() + " " + finalLastName1;
+                            fullName = edtFirstName.getText().toString() + " " + " ";
                         }
                         if (edtLastName.length() > 0 && edtFirstName.length() > 0) {
                             fullName = edtFirstName.getText().toString() + " " + edtLastName.getText().toString();
@@ -362,7 +364,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
-        txtUserName.setOnClickListener(new View.OnClickListener() {
+        ViewGroup layoutUserName = (ViewGroup) findViewById(R.id.st_layout_username);
+        layoutUserName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -721,8 +724,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
-
-        ltInAppBrowser = (ViewGroup) findViewById(R.id.st_layout_inAppBrowser);
+        ltInAppBrowser = (TextView) findViewById(R.id.st_txt_inAppBrowser);
         toggleInAppBrowser = (ToggleButton) findViewById(R.id.st_toggle_inAppBrowser);
         int checkedInappBrowser = sharedPreferences.getInt(SHP_SETTING.KEY_IN_APP_BROWSER, 0);
         if (checkedInappBrowser == 1) {
@@ -731,24 +733,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             toggleInAppBrowser.setChecked(false);
         }
 
-        toggleInAppBrowser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                if (toggleInAppBrowser.isChecked()) {
-                    toggleInAppBrowser.setChecked(false);
-                    editor.putInt(SHP_SETTING.KEY_IN_APP_BROWSER, 0);
-                    editor.apply();
-
-                } else {
-                    toggleInAppBrowser.setChecked(true);
-                    editor.putInt(SHP_SETTING.KEY_IN_APP_BROWSER, 1);
-                    editor.apply();
-                }
-            }
-        });
+        ;
 
 
         ltInAppBrowser.setOnClickListener(new View.OnClickListener() {
@@ -779,8 +764,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
-
-        ltSentByEnter = (ViewGroup) findViewById(R.id.st_layout_sendEnter);
+        ltSentByEnter = (TextView) findViewById(R.id.st_txt_sendEnter);
         toggleSentByEnter = (ToggleButton) findViewById(R.id.st_toggle_sendEnter);
         int checkedSendByEnter = sharedPreferences.getInt(SHP_SETTING.KEY_SEND_BT_ENTER, 0);
         if (checkedSendByEnter == 1) {
@@ -789,25 +773,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             toggleSentByEnter.setChecked(false);
         }
 
-        toggleSentByEnter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                if (toggleSentByEnter.isChecked()) {
-
-                    toggleSentByEnter.setChecked(false);
-                    editor.putInt(SHP_SETTING.KEY_SEND_BT_ENTER, 0);
-                    editor.apply();
-
-                } else {
-                    toggleSentByEnter.setChecked(true);
-                    editor.putInt(SHP_SETTING.KEY_SEND_BT_ENTER, 1);
-                    editor.apply();
-                }
-            }
-        });
 
 
         ltSentByEnter.setOnClickListener(new View.OnClickListener() {
@@ -1043,7 +1008,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
-        ltEnableAnimation = (ViewGroup) findViewById(R.id.st_layout_enableAnimation);
+        ltEnableAnimation = (TextView) findViewById(R.id.st_txt_enableAnimation);
         toggleEnableAnimation = (ToggleButton) findViewById(R.id.st_toggle_enableAnimation);
         int checkedEnableAnimation = sharedPreferences.getInt(SHP_SETTING.KEY_ENABLE_ANIMATION, 0);
         if (checkedEnableAnimation == 1) {
@@ -1052,24 +1017,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             toggleEnableAnimation.setChecked(false);
         }
 
-        toggleEnableAnimation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                if (toggleEnableAnimation.isChecked()) {
-                    toggleEnableAnimation.setChecked(false);
-                    editor.putInt(SHP_SETTING.KEY_ENABLE_ANIMATION, 0);
-                    editor.apply();
-
-                } else {
-                    toggleEnableAnimation.setChecked(true);
-                    editor.putInt(SHP_SETTING.KEY_ENABLE_ANIMATION, 1);
-                    editor.apply();
-                }
-            }
-        });
 
         ltEnableAnimation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1090,7 +1037,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
-        ltAutoGifs = (ViewGroup) findViewById(R.id.st_layout_autoGif);
+        ltAutoGifs = (TextView) findViewById(R.id.st_txt_autoGif);
         toggleAutoGifs = (ToggleButton) findViewById(R.id.st_toggle_autoGif);
         int checkedAutoGif = sharedPreferences.getInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, 0);
         if (checkedAutoGif == 1) {
@@ -1099,24 +1046,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             toggleAutoGifs.setChecked(false);
         }
 
-        toggleAutoGifs.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
 
-                if (toggleAutoGifs.isChecked()) {
-                    toggleAutoGifs.setChecked(false);
-                    editor.putInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, 0);
-                    editor.apply();
-
-                } else {
-                    toggleAutoGifs.setChecked(true);
-                    editor.putInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, 1);
-                    editor.apply();
-                }
-            }
-        });
         ltAutoGifs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1136,7 +1066,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
-        ltSaveToGallery = (ViewGroup) findViewById(R.id.st_layout_saveGallery);
+        ltSaveToGallery = (TextView) findViewById(R.id.st_txt_saveGallery);
         toggleSaveToGallery = (ToggleButton) findViewById(R.id.st_toggle_saveGallery);
         int checkedSaveToGallery = sharedPreferences.getInt(SHP_SETTING.KEY_SAVE_TO_GALLERY, 0);
         if (checkedSaveToGallery == 1) {
@@ -1146,26 +1076,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             toggleSaveToGallery.setChecked(false);
         }
 
-        toggleSaveToGallery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                if (toggleSaveToGallery.isChecked()) {
-
-                    toggleSaveToGallery.setChecked(false);
-
-                    editor.putInt(SHP_SETTING.KEY_SAVE_TO_GALLERY, 0);
-                    editor.apply();
-
-                } else {
-                    toggleSaveToGallery.setChecked(true);
-                    editor.putInt(SHP_SETTING.KEY_SAVE_TO_GALLERY, 1);
-                    editor.apply();
-                }
-            }
-        });
 
         ltSaveToGallery.setOnClickListener(new View.OnClickListener() {
             @Override

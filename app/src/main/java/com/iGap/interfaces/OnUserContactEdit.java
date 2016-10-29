@@ -7,6 +7,10 @@ package com.iGap.interfaces;
 
 public interface OnUserContactEdit {
 
-    void onContactEdit();
+    void onContactEdit(String firstName, String lastName);
+
+    void onContactEditTimeOut();
+
+    void onContactEditError();
 
 }

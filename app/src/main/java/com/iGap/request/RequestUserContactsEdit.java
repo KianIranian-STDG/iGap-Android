@@ -3,7 +3,6 @@ package com.iGap.request;
 import com.iGap.proto.ProtoUserContactsEdit;
 import com.iGap.realm.RealmContacts;
 import com.iGap.realm.RealmContactsFields;
-
 import io.realm.Realm;
 
 public class RequestUserContactsEdit {
@@ -15,9 +14,9 @@ public class RequestUserContactsEdit {
 
         if (realmItem != null) {
 
-            builder.setPhone(realmItem.getPhone());
-            builder.setFirstName(realmItem.getFirst_name());
-            builder.setLastName(realmItem.getLast_name());
+            builder.setPhone(phone);
+            builder.setFirstName(first_name);
+            builder.setLastName(last_name);
         }
 
         RequestWrapper requestWrapper = new RequestWrapper(109, builder);

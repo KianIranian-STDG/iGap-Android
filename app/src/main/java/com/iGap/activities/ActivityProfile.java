@@ -55,9 +55,7 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
     public static boolean IsDeleteFile;
     private File pathImageFromCamera = new File(G.imageFile.toString() + "_" + 0 + ".jpg");
     public final static String ARG_USER_ID = "arg_user_id";
-
     private int idAvatar;
-
     public static Bitmap decodeBitmapProfile = null;
 
     @Override
@@ -147,8 +145,6 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
                         }
                     });
                 }
-
-
             }
         });
     }

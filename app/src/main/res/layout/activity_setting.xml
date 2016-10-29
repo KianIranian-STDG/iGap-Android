@@ -179,52 +179,75 @@
                     android:textSize="@dimen/sp22"
                     android:textStyle="bold" />
 
-                <TextView
+                <LinearLayout
+                    android:id="@+id/st_layout_nickname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="@dimen/dp4"
-                    android:paddingStart="@dimen/dp4"
-                    android:text="@string/st_nickname"
-                    android:textColor="@color/black_register"
-                    android:textSize="@dimen/sp18"
-                    android:textStyle="normal" />
+                    android:orientation="vertical"
+                    >
 
-                <TextView
-                    android:id="@+id/st_txt_nikName"
-                    android:layout_width="@dimen/dp200"
-                    android:layout_height="@dimen/dp28"
-                    android:gravity="center_vertical"
-                    android:maxLength="25"
-                    android:paddingLeft="@dimen/dp4"
-                    android:paddingStart="@dimen/dp4"
-                    android:text="Alexander Smith"
-                    android:textColor="@color/colorChatMessageTime"
-                    android:textSize="@dimen/sp16"
-                    android:theme="@style/Setting_editText" />
 
-                <TextView
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="@dimen/dp4"
+                        android:paddingStart="@dimen/dp4"
+                        android:text="@string/st_nickname"
+                        android:textColor="@color/black_register"
+                        android:textSize="@dimen/sp18"
+                        android:textStyle="normal"
+                        />
+
+                    <TextView
+                        android:id="@+id/st_txt_nikName"
+                        android:layout_width="@dimen/dp200"
+                        android:layout_height="@dimen/dp28"
+                        android:gravity="center_vertical"
+                        android:maxLength="25"
+                        android:paddingLeft="@dimen/dp4"
+                        android:paddingStart="@dimen/dp4"
+                        android:text="Alexander Smith"
+                        android:textColor="@color/colorChatMessageTime"
+                        android:textSize="@dimen/sp16"
+                        android:theme="@style/Setting_editText"
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/st_layout_username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp20"
-                    android:paddingLeft="@dimen/dp4"
-                    android:paddingStart="@dimen/dp4"
-                    android:text="@string/st_username"
-                    android:textColor="@color/black_register"
-                    android:textSize="@dimen/sp18"
-                    android:textStyle="normal" />
+                    android:orientation="vertical"
+                    >
 
-                <TextView
-                    android:id="@+id/st_txt_userName"
-                    android:layout_width="@dimen/dp200"
-                    android:layout_height="@dimen/dp28"
-                    android:gravity="center_vertical"
-                    android:maxLength="25"
-                    android:paddingLeft="@dimen/dp4"
-                    android:paddingStart="@dimen/dp4"
-                    android:text="Alexander Smith:"
-                    android:textColor="@color/colorChatMessageTime"
-                    android:textSize="@dimen/sp16"
-                    android:theme="@style/Setting_editText" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp20"
+                        android:paddingLeft="@dimen/dp4"
+                        android:paddingStart="@dimen/dp4"
+                        android:text="@string/st_username"
+                        android:textColor="@color/black_register"
+                        android:textSize="@dimen/sp18"
+                        android:textStyle="normal"
+                        />
+
+                    <TextView
+                        android:id="@+id/st_txt_userName"
+                        android:layout_width="@dimen/dp200"
+                        android:layout_height="@dimen/dp28"
+                        android:gravity="center_vertical"
+                        android:maxLength="25"
+                        android:paddingLeft="@dimen/dp4"
+                        android:paddingStart="@dimen/dp4"
+                        android:text="Alexander Smith:"
+                        android:textColor="@color/colorChatMessageTime"
+                        android:textSize="@dimen/sp16"
+                        android:theme="@style/Setting_editText"
+                        />
+                </LinearLayout>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -463,67 +486,85 @@
                     android:layout_height="1dp"
                     android:background="@color/background_editText" />
 
-                <LinearLayout
-                    android:id="@+id/st_layout_inAppBrowser"
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp60"
-                    android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="@dimen/dp16">
-
-                    <TextView
-
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight=".5"
-                        android:text="@string/st_inApp_Browser"
-                        android:textColor="@color/black_register"
-                        android:textSize="@dimen/sp18"
-                        android:textStyle="normal" />
+                    android:paddingEnd="@dimen/dp16"
+                    android:paddingLeft="@dimen/dp16"
+                    android:paddingRight="@dimen/dp16"
+                    android:paddingStart="@dimen/dp16"
+                    >
 
                     <ToggleButton
                         android:id="@+id/st_toggle_inAppBrowser"
                         android:layout_width="@dimen/dp40"
                         android:layout_height="@dimen/dp40"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
                         android:background="@drawable/st_switch_button"
                         android:paddingRight="@dimen/dp4"
                         android:textOff=""
                         android:textOn="" />
 
-                </LinearLayout>
+                    <TextView
+                        android:id="@+id/st_txt_inAppBrowser"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        android:gravity="center_vertical"
+                        android:text="@string/st_inApp_Browser"
+                        android:textColor="@color/black_register"
+                        android:textSize="@dimen/sp18"
+                        android:textStyle="normal"
+                        />
+
+                </RelativeLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/background_editText" />
 
-                <LinearLayout
-                    android:id="@+id/st_layout_sendEnter"
+
+                <RelativeLayout
+
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp60"
-                    android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="@dimen/dp16">
+                    android:paddingEnd="@dimen/dp16"
+                    android:paddingLeft="@dimen/dp16"
+                    android:paddingRight="@dimen/dp16"
+                    android:paddingStart="@dimen/dp16"
+                    >
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight=".5"
-                        android:text="@string/st_send_by_enter"
-                        android:textColor="@color/black_register"
-                        android:textSize="@dimen/sp18"
-                        android:textStyle="normal" />
 
                     <ToggleButton
                         android:id="@+id/st_toggle_sendEnter"
                         android:layout_width="@dimen/dp40"
                         android:layout_height="@dimen/dp40"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
                         android:background="@drawable/st_switch_button"
                         android:paddingRight="@dimen/dp4"
                         android:textOff=""
                         android:textOn="" />
+                    <TextView
+                        android:id="@+id/st_txt_sendEnter"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        android:gravity="center_vertical"
+                        android:text="@string/st_send_by_enter"
+                        android:textColor="@color/black_register"
+                        android:textSize="@dimen/sp18"
+                        android:textStyle="normal"
+                        />
 
-                </LinearLayout>
+                </RelativeLayout>
+
 
             </LinearLayout>
 
@@ -611,99 +652,130 @@
                     android:layout_height="1dp"
                     android:background="@color/background_editText" />
 
-                <LinearLayout
-                    android:id="@+id/st_layout_enableAnimation"
+
+                <RelativeLayout
+
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp60"
-                    android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="@dimen/dp16">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight=".5"
-                        android:text="@string/st_Enable_Animation"
-                        android:textColor="@color/black_register"
-                        android:textSize="@dimen/sp18"
-                        android:textStyle="normal" />
+                    android:paddingEnd="@dimen/dp16"
+                    android:paddingLeft="@dimen/dp16"
+                    android:paddingRight="@dimen/dp16"
+                    android:paddingStart="@dimen/dp16"
+                    >
 
                     <ToggleButton
                         android:id="@+id/st_toggle_enableAnimation"
                         android:layout_width="@dimen/dp40"
                         android:layout_height="@dimen/dp40"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
                         android:background="@drawable/st_switch_button"
                         android:paddingRight="@dimen/dp4"
                         android:textOff=""
                         android:textOn="" />
 
-                </LinearLayout>
+                    <TextView
+                        android:id="@+id/st_txt_enableAnimation"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        android:gravity="center_vertical"
+                        android:text="@string/st_Enable_Animation"
+                        android:textColor="@color/black_register"
+                        android:textSize="@dimen/sp18"
+                        android:textStyle="normal"
+                        />
+
+
+                </RelativeLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/background_editText" />
 
-                <LinearLayout
-                    android:id="@+id/st_layout_autoGif"
+                <RelativeLayout
+
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp60"
-                    android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="@dimen/dp16">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight=".5"
-                        android:text="@string/st_auto_gif"
-                        android:textColor="@color/black_register"
-                        android:textSize="@dimen/sp18"
-                        android:textStyle="normal" />
+                    android:paddingEnd="@dimen/dp16"
+                    android:paddingLeft="@dimen/dp16"
+                    android:paddingRight="@dimen/dp16"
+                    android:paddingStart="@dimen/dp16"
+                    >
 
                     <ToggleButton
                         android:id="@+id/st_toggle_autoGif"
                         android:layout_width="@dimen/dp40"
                         android:layout_height="@dimen/dp40"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
                         android:background="@drawable/st_switch_button"
                         android:paddingRight="@dimen/dp4"
                         android:textOff=""
                         android:textOn="" />
 
-                </LinearLayout>
+                    <TextView
+                        android:id="@+id/st_txt_autoGif"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        android:gravity="center_vertical"
+                        android:text="@string/st_auto_gif"
+                        android:textColor="@color/black_register"
+                        android:textSize="@dimen/sp18"
+                        android:textStyle="normal"
+                        />
+
+
+                </RelativeLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/background_editText" />
 
-                <LinearLayout
-                    android:id="@+id/st_layout_saveGallery"
+                <RelativeLayout
+
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp60"
-                    android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="@dimen/dp16">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight=".5"
-                        android:text="@string/st_save_to_gallery"
-                        android:textColor="@color/black_register"
-                        android:textSize="@dimen/sp18"
-                        android:textStyle="normal" />
+                    android:paddingEnd="@dimen/dp16"
+                    android:paddingLeft="@dimen/dp16"
+                    android:paddingRight="@dimen/dp16"
+                    android:paddingStart="@dimen/dp16"
+                    >
 
                     <ToggleButton
                         android:id="@+id/st_toggle_saveGallery"
                         android:layout_width="@dimen/dp40"
                         android:layout_height="@dimen/dp40"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
                         android:background="@drawable/st_switch_button"
                         android:paddingRight="@dimen/dp4"
                         android:textOff=""
                         android:textOn="" />
 
-                </LinearLayout>
+                    <TextView
+                        android:id="@+id/st_txt_saveGallery"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        android:gravity="center_vertical"
+                        android:text="@string/st_save_to_gallery"
+                        android:textColor="@color/black_register"
+                        android:textSize="@dimen/sp18"
+                        android:textStyle="normal"
+                        />
+
+
+                </RelativeLayout>
             </LinearLayout>
 
 
@@ -783,10 +855,10 @@
         android:layout_margin="@dimen/dp20"
         android:background="?attr/selectableItemBackground"
         android:clickable="true"
-        app:fabSize="normal"
         android:src="@mipmap/pu_camera"
         android:theme="@style/FabButton"
         android:tint="@color/gray"
+        app:fabSize="mini"
         app:layout_anchor="@+id/st_appbar"
         app:layout_anchorGravity="bottom|right|end" />
 

@@ -88,6 +88,16 @@
         <item>@string/array_Delete_photo</item>
     </string-array>
 
+    <string-array name="phone_number">
+        <item>@string/add_to_contact</item>
+        <item>@string/chi_popup_call</item>
+        <item>@string/chi_popup_copy</item>
+    </string-array>
+
+    <string-array name="phone_number2">
+        <item>@string/chi_popup_call</item>
+        <item>@string/chi_popup_copy</item>
+    </string-array>
     <!--<string-array name="st_popup">-->
     <!--<item>@string/array_Log_Out</item>-->
     <!--</string-array>-->
