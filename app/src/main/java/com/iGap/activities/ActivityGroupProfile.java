@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -58,6 +60,7 @@ import com.iGap.module.CustomTextViewMedium;
 import com.iGap.module.FileUploadStructure;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.StructContactInfo;
+import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmAvatar;
@@ -71,6 +74,7 @@ import com.iGap.realm.RealmMember;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.enums.GroupChatRole;
+import com.iGap.request.RequestFileDownload;
 import com.iGap.request.RequestGroupAddAdmin;
 import com.iGap.request.RequestGroupAddMember;
 import com.iGap.request.RequestGroupAddModerator;
@@ -478,13 +482,67 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
         });
 
-        imvGroupAvatar.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvGroupAvatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+        setAvatar();
         txtMemberNumber.setText(participantsCountLabel);
 
 
         setUiIndependRole();
 
         initRecycleView();
+    }
+
+    private void setAvatar() {
+        Realm realm = Realm.getDefaultInstance();
+
+        imvGroupAvatar.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture(
+            (int) imvGroupAvatar.getContext().getResources().getDimension(R.dimen.dp60), initials,
+            color));
+
+        RealmAvatar avatar = realm.where(RealmRoom.class)
+            .equalTo(RealmRoomFields.ID, roomId)
+            .findFirst()
+            .getAvatar();
+
+        if (avatar != null && avatar.getFile() != null && !avatar.getFile().getToken().isEmpty()) {
+            if (avatar.getFile().isFileExistsOnLocal()) {
+                Bitmap myBitmap = BitmapFactory.decodeFile(avatar.getFile().getLocalFilePath());
+                imvGroupAvatar.setImageBitmap(myBitmap);
+            } else {
+                if (avatar.getFile().isThumbnailExistsOnLocal()) {
+                    Bitmap myBitmap =
+                        BitmapFactory.decodeFile(avatar.getFile().getLocalThumbnailPath());
+                    imvGroupAvatar.setImageBitmap(myBitmap);
+                } else {
+                    onRequestDownloadAvatar(avatar.getFile(), false);
+                }
+            }
+        }
+
+        realm.close();
+    }
+
+    public void onRequestDownloadAvatar(final RealmAttachment avatar, boolean done) {
+        final String fileName = avatar.getToken() + "_" + avatar.getName();
+        if (done) {
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override public void execute(Realm realm) {
+                    avatar.setLocalThumbnailPath(G.DIR_TEMP + "/" + fileName);
+                }
+            });
+            realm.close();
+
+            return; // necessary
+        }
+
+        ProtoFileDownload.FileDownload.Selector selector =
+            ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
+        String identity =
+            avatar.getToken() + '*' + selector.toString() + '*' + avatar.getSmallThumbnail()
+                .getSize() + '*' + fileName + '*' + 0;
+
+        new RequestFileDownload().download(avatar.getToken(), 0,
+            (int) avatar.getSmallThumbnail().getSize(), selector, identity);
     }
 
     private void initRecycleView() {

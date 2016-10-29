@@ -633,14 +633,14 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                     info.memberCount = realmRoom.getChannelRoom().getParticipantsCountLabel();
                     info.description = realmRoom.getChannelRoom().getDescription();
                     info.avatarCount = realmRoom.getChannelRoom().getAvatarCount();
-                    info.avatar = StructMessageAttachment.convert(realmRoom.getChannelRoom().getAvatar());
+                    info.avatar = StructMessageAttachment.convert(realmRoom.getAvatar());
                     break;
                 case GROUP:
                     info.chatType = RoomType.GROUP;
                     info.memberCount = realmRoom.getGroupRoom().getParticipantsCountLabel();
                     info.description = realmRoom.getGroupRoom().getDescription();
                     info.avatarCount = realmRoom.getGroupRoom().getAvatarCount();
-                    info.avatar = StructMessageAttachment.convert(realmRoom.getGroupRoom().getAvatar());
+                    info.avatar = StructMessageAttachment.convert(realmRoom.getAvatar());
                     break;
             }
             info.color = realmRoom.getColor();
@@ -749,13 +749,13 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                 chatInfo.memberCount = room.getGroupRoom().getParticipantsCountLabel();
                 chatInfo.description = room.getGroupRoom().getDescription();
                 chatInfo.avatarCount = room.getGroupRoom().getAvatarCount();
-                chatInfo.avatar = StructMessageAttachment.convert(room.getGroupRoom().getAvatar());
+                chatInfo.avatar = StructMessageAttachment.convert(room.getAvatar());
                 break;
             case CHANNEL:
                 chatInfo.memberCount = room.getChannelRoom().getParticipantsCountLabel();
                 chatInfo.description = room.getChannelRoom().getDescription();
                 chatInfo.avatarCount = room.getChannelRoom().getAvatarCount();
-                chatInfo.avatar = StructMessageAttachment.convert(room.getChannelRoom().getAvatar());
+                chatInfo.avatar = StructMessageAttachment.convert(room.getAvatar());
                 break;
         }
         chatInfo.muteNotification = room.getMute();
