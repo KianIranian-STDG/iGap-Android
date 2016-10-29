@@ -999,8 +999,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
     private void onDraftMessage() {
         G.onDraftMessage = new OnDraftMessage() {
-            @Override
-            public void onDraftMessage(long roomId, String messageText) {
+            @Override public void onDraftMessage(long roomId) {
                 mAdapter.notifyRoomItem(roomId);
             }
         };

@@ -281,7 +281,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     private String avatarPath;
 
     // save latest intent data and requestCode from result activity for set draft if not send file yet
-    private Intent latestData;
+    private Uri latestUri;
     private int latestRequestCode;
 
     @Override protected void onStart() {
@@ -486,11 +486,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         clearHistoryFromContactsProfileInterface();
         onDeleteChatFinishActivityInterface();
 
-        String draft = getDraft();
-        if (draft != null && !draft.isEmpty()) {
-            edtChat.setText(draft);
-        }
-
+        getDraft();
         setAvatar();
     }
 
@@ -1770,8 +1766,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        latestData = data;
+        latestUri = data.getData();
         latestRequestCode = requestCode;
 
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
@@ -1800,29 +1795,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
             showDraftLayout();
 
-            switch (requestCode) {
-                case AttachFile.request_code_TAKE_PICTURE:
-                    txtFileNameForSend.setText("Send Picture From Camera");
-                    break;
-                case AttachFile.request_code_media_from_gallery:
-                    txtFileNameForSend.setText("Send Music");
-                    break;
-                //                case AttachFile.request_code_media_from_gallery:
-                case AttachFile.request_code_VIDEO_CAPTURED:
-                case AttachFile.request_code_pic_audi:
-                    txtFileNameForSend.setText(AttachFile.getFilePathFromUri(data.getData()));
-                    break;
-                case AttachFile.request_code_pic_file:
-                case AttachFile.request_code_paint:
-                    txtFileNameForSend.setText("Send Paint");
-                    break;
-                case AttachFile.request_code_contact_phone:
-                    txtFileNameForSend.setText("Send Phone Contact");
-                    break;
-                case IntentRequests.REQ_CROP:
-                    txtFileNameForSend.setText("Crop Image");
-                    break;
-            }
+            setDraftMessage(requestCode, data.getData());
 
             return;
         }
@@ -1830,6 +1803,32 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         //if (requestCode == AttachFile.request_code_position && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
         //    attachFile.requestGetPosition(complete);
         //}
+    }
+
+    private void setDraftMessage(int requestCode, Uri uri) {
+        switch (requestCode) {
+            case AttachFile.request_code_TAKE_PICTURE:
+                txtFileNameForSend.setText("Send Picture From Camera");
+                break;
+            case AttachFile.request_code_media_from_gallery:
+                txtFileNameForSend.setText("Send Music");
+                break;
+            //                case AttachFile.request_code_media_from_gallery:
+            case AttachFile.request_code_VIDEO_CAPTURED:
+            case AttachFile.request_code_pic_audi:
+                txtFileNameForSend.setText(AttachFile.getFilePathFromUri(uri));
+                break;
+            case AttachFile.request_code_pic_file:
+            case AttachFile.request_code_paint:
+                txtFileNameForSend.setText("Send Paint");
+                break;
+            case AttachFile.request_code_contact_phone:
+                txtFileNameForSend.setText("Send Phone Contact");
+                break;
+            case IntentRequests.REQ_CROP:
+                txtFileNameForSend.setText("Crop Image");
+                break;
+        }
     }
 
     //TODO [Saeed Mozaffari] [2016-10-29 10:45 AM] - work on gps
@@ -3194,17 +3193,21 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                 @Override public void execute(Realm realm) {
                     RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
 
-                    String filePath = latestData.getData().toString();
+                    String filePath = latestUri.toString();
                     File file = new File(filePath);
 
                     RealmDraftFile realmDraftFile = realm.createObject(RealmDraftFile.class);
-                    realmDraftFile.setUri(latestData.toString());
+                    realmDraftFile.setUri(latestUri.toString());
                     realmDraftFile.setRequestCode(latestRequestCode);
-                    //realmDraftFile.setFileName(file.getName());
-                    //realmDraftFile.setFileSize(file.length());
-                    //realmDraftFile.setImageDimens(AndroidUtils.getImageDimens(filePath));
 
-                    G.onDraftMessage.onDraftMessage(mRoomId, file.getName());
+                    if (isMessageWrote()) {
+                        Log.i("EEE", "isMessageWrote 1");
+                        realmRoom.setDraft(edtChat.getText().toString());
+                        G.onDraftMessage.onDraftMessage(mRoomId);
+                    } else {
+                        realmRoom.setDraft("");
+                        G.onDraftMessage.onDraftMessage(mRoomId);
+                    }
 
                     realmRoom.setDraftFile(realmDraftFile);
                 }
@@ -3219,7 +3222,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
                         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                         if (realmRoom != null) {
                             realmRoom.setDraft(message);
-                            G.onDraftMessage.onDraftMessage(mRoomId, message);
+                            G.onDraftMessage.onDraftMessage(mRoomId);
                         }
                     }
                 });
@@ -3230,33 +3233,41 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
         }
     }
 
-    private String getDraft() {
-        String draft = "";
+    private void getDraft() {
         Realm realm = Realm.getDefaultInstance();
 
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
 
         if (realmRoom != null) {
             if (realmRoom.getDraftFile() != null) {
-                showDraftLayout();
 
                 RealmDraftFile realmDraftFile = realmRoom.getDraftFile();
-                String fileName = realmDraftFile.getFileName();
-                Uri uri = Uri.parse(realmDraftFile.getUri());
-                long fileSize = realmDraftFile.getFileSize();
-                int[] imageDimens = realmDraftFile.getImageDimens();
 
                 tmpRequestCode = realmDraftFile.getRequestCode();
                 tmpUri = Uri.parse(realmDraftFile.getUri());
+
+                if (new File(tmpUri.toString()).exists()) {
+                    showDraftLayout();
+                    String message = realmRoom.getDraft();
+
+                    if (!message.isEmpty()) {
+                        edtChat.setText(message);
+                    }
+                    setDraftMessage(tmpRequestCode, tmpUri);
+
+                    latestUri = tmpUri;
+                    latestRequestCode = tmpRequestCode;
+                }
             } else {
-                draft = realmRoom.getDraft();
+                String draft = realmRoom.getDraft();
+                if (draft != null && !draft.isEmpty()) {
+                    edtChat.setText(draft);
+                }
             }
         }
         realm.close();
 
         clearDraft();
-
-        return draft;
     }
 
     private void clearDraft() {
