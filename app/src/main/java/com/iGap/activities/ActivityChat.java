@@ -72,7 +72,6 @@ import com.iGap.adapter.items.chat.TimeItem;
 import com.iGap.adapter.items.chat.VideoItem;
 import com.iGap.adapter.items.chat.VideoWithTextItem;
 import com.iGap.adapter.items.chat.VoiceItem;
-import com.iGap.fragments.FragmentShowImage;
 import com.iGap.fragments.FragmentShowImageMessages;
 import com.iGap.helper.Emojione;
 import com.iGap.helper.HelperGetDataFromOtherApp;
@@ -1776,11 +1775,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
     @Override
     public void onBackPressed() {
-
-        FragmentShowImage myFragment = (FragmentShowImage) getFragmentManager().findFragmentByTag("Show_Image_fragment");
-        if (myFragment != null && myFragment.isVisible()) {
-            getFragmentManager().beginTransaction().remove(myFragment).commit();
-        } else if (mAdapter != null && mAdapter.getSelections().size() > 0) {
+        if (mAdapter != null && mAdapter.getSelections().size() > 0) {
             mAdapter.deselect();
         } else {
             super.onBackPressed();

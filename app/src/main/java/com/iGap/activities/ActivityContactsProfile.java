@@ -30,7 +30,6 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
@@ -69,16 +68,14 @@ import com.iGap.request.RequestChatGetRoom;
 import com.iGap.request.RequestUserAvatarGetList;
 import com.iGap.request.RequestUserContactsDelete;
 import com.iGap.request.RequestUserInfo;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.util.ArrayList;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmList;
 import io.realm.RealmResults;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.util.ArrayList;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityContactsProfile extends ActivityEnhanced {
@@ -183,7 +180,10 @@ public class ActivityContactsProfile extends ActivityEnhanced {
 
                 if (avatarList != null) {
                     android.support.v4.app.Fragment fragment = FragmentShowAvatars.newInstance(userId);
-                    ActivityContactsProfile.this.getSupportFragmentManager().beginTransaction().add(R.id.chi_layoutParent, fragment, "Show_Image_fragment").commit();
+                    ActivityContactsProfile.this.getSupportFragmentManager()
+                        .beginTransaction()
+                        .add(R.id.chi_layoutParent, fragment, null)
+                        .commit();
                 } else {
                     Toast.makeText(G.context, "Avatar Not exist!", Toast.LENGTH_SHORT).show();
                 }

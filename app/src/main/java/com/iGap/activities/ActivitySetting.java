@@ -1,6 +1,5 @@
 package com.iGap.activities;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -34,14 +33,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.IntentRequests;
 import com.iGap.R;
-import com.iGap.fragments.FragmentShowImage;
+import com.iGap.fragments.FragmentShowAvatars;
 import com.iGap.fragments.FragmentSticker;
 import com.iGap.helper.HelperImageBackColor;
 import com.iGap.helper.HelperLogout;
@@ -66,18 +64,16 @@ import com.iGap.request.RequestUserAvatarAdd;
 import com.iGap.request.RequestUserAvatarDelete;
 import com.iGap.request.RequestUserInfo;
 import com.iGap.request.RequestUserProfileSetNickname;
-
+import de.hdodenhof.circleimageview.CircleImageView;
+import io.realm.Realm;
+import io.realm.RealmResults;
+import io.realm.Sort;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Locale;
-
-import de.hdodenhof.circleimageview.CircleImageView;
-import io.realm.Realm;
-import io.realm.RealmResults;
-import io.realm.Sort;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarResponse, OnFileUploadForActivities {
@@ -527,12 +523,11 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 ArrayList<StructMessageInfo> items = setItem();
                 // Collections.reverse(items);
 
-                Fragment fragment = FragmentShowImage.newInstance();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("listPic", items);
-                bundle.putInt("SelectedImage", 0);
-                fragment.setArguments(bundle);
-                ActivitySetting.this.getFragmentManager().beginTransaction().add(R.id.st_layoutParent, fragment, "Show_Image_fragment").commit();
+                FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(userId);
+                ActivitySetting.this.getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.st_layoutParent, fragment, null)
+                    .commit();
             }
 
         });
@@ -1493,15 +1488,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         }
 
         return items;
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        FragmentShowImage myFragment = (FragmentShowImage) getFragmentManager().findFragmentByTag("Show_Image_fragment");
-        if (myFragment != null && myFragment.isVisible()) {
-            getFragmentManager().beginTransaction().remove(myFragment).commit();
-        }
     }
 
     @Override
