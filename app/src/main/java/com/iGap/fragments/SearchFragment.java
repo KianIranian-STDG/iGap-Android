@@ -3,6 +3,7 @@ package com.iGap.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -50,6 +51,10 @@ public class SearchFragment extends Fragment {
     private RecyclerView recyclerView;
     private ItemAdapter itemAdapter;
     private boolean isFillList = false;
+    private boolean chatHeaderGone = false;
+    private boolean contactHeaderGone = false;
+    private boolean messageHeaderGone = false;
+
 
 
     public static SearchFragment newInstance() {
@@ -91,6 +96,37 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override public void run() {
+
+                        chatHeaderGone = contactHeaderGone = messageHeaderGone = true;
+
+                        for (int i = 0; i < itemAdapter.getAdapterItemCount(); i++) {
+                            if (itemAdapter.getItem(i) instanceof SearchItem) {
+                                SearchItem s = (SearchItem) itemAdapter.getItem(i);
+                                if (s.item.type == SearchType.room) {
+                                    chatHeaderGone = false;
+                                } else if (s.item.type == SearchType.contact) {
+                                    contactHeaderGone = false;
+                                } else if (s.item.type == SearchType.message) {
+                                    messageHeaderGone = false;
+                                }
+
+                                if (messageHeaderGone
+                                    == chatHeaderGone
+                                    == chatHeaderGone
+                                    == false) {
+                                    break;
+                                }
+                            }
+                        }
+
+                        itemAdapter.filter(edtSearch.getText().toString());
+                    }
+                }, 100);
+
+
             }
         });
         edtSearch.requestFocus();
@@ -132,6 +168,15 @@ public class SearchFragment extends Fragment {
             @Override
             public boolean filter(IItem currentItem, CharSequence constraint) {
                 if (currentItem instanceof SearchItemHeader) {
+                    SearchItemHeader sih = (SearchItemHeader) currentItem;
+                    if (sih.text.equals(getString(R.string.chats)) && chatHeaderGone) {
+                        return true;
+                    } else if (sih.text.equals(getString(R.string.contacts)) && contactHeaderGone) {
+                        return true;
+                    } else if (sih.text.equals(getString(R.string.messages)) && messageHeaderGone) {
+                        return true;
+                    }
+
                     return false;
                 } else {
                     SearchItem si = (SearchItem) currentItem;
