@@ -5,6 +5,7 @@ import io.realm.RealmObject;
 public class RealmDraftFile extends RealmObject {
 
     private String uri;
+    private String filePath;
     private int requestCode;
 
     public String getUri() {
@@ -13,6 +14,14 @@ public class RealmDraftFile extends RealmObject {
 
     public void setUri(String uri) {
         this.uri = uri;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 
     public int getRequestCode() {
