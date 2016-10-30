@@ -6,6 +6,7 @@ public class RealmNotificationSetting extends RealmObject {
 
     private String notification;
     private String vibrate;
+    private boolean mute;
     private String sound;
     private int idRadioButtonSound;
     private String smartNotification;
@@ -19,6 +20,14 @@ public class RealmNotificationSetting extends RealmObject {
 
     public void setNotification(String notification) {
         this.notification = notification;
+    }
+
+    public boolean getMute() {
+        return mute;
+    }
+
+    public void setMute(boolean mute) {
+        this.mute = mute;
     }
 
     public String getVibrate() {

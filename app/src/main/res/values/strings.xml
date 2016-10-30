@@ -99,7 +99,9 @@
   <string name="do_you_want_delete_this">"Do you want delete this "</string>
   <string name="igap">iGap</string>
   <string name="clear_history">Clear History</string>
+  <string name="clear_history_content">Are you sure clear history?</string>
   <string name="delete_chat">Delete Chat</string>
+  <string name="delete_chat_content">Are you sure delete this chat?</string>
   <string name="delete_contact">Delete Contact</string>
   <string name="delete_text">Are you sure delete this contact?</string>
   <string name="cancel">Cancel</string>
@@ -308,7 +310,7 @@
   <string name="st_dialog_reset_all_notification">Are you sure for undo all custom notifications setting?</string>
   <string name="st_dialog_reset_all_notification_yes">YES</string>
   <string name="st_dialog_reset_all_notification_no">NO</string>
-  <string name="st_popup_logout">Are you sure you want to log out? \n Note that you can seamLesly use iGap on all your devices at once. \n Remember,logging out kills all your Secret Chats.</string>
+  <string name="st_popup_logout">Are you sure you want to log out? \n Note that you can seamLesly use iGap on all your devices at once. \n Remembers,logging out kills all your Secret Chats.</string>
   <string name="st_title_Background">Chat Background</string>
   <string name="st_stickers_and_picture">Stickers and Picture</string>
 
@@ -445,14 +447,14 @@
   <string name="group_description">Group Description</string>
   <string name="please_enter_group_description">Please Enter Group Description</string>
   <string name="do_you_want_to_delete_this_group">"Do you want to delete this group? "</string>
-  <string name="do_you_want_to_set_admin_role_to_member">Do you want to set admin role to member?</string>
-  <string name="do_you_want_to_kick_this_member">"Do you want to kick this member? "</string>
-  <string name="do_you_want_to_set_modereator_role_to_member">Do you want to set moderator role to member?</string>
+  <string name="do_you_want_to_set_admin_role_to_member">Do you want to set admin role to members?</string>
+  <string name="do_you_want_to_kick_this_member">"Do you want to kick this members? "</string>
+  <string name="do_you_want_to_set_modereator_role_to_member">Do you want to set moderator role to members?</string>
   <string name="waiting_for_network">Waiting For Network...</string>
   <string name="connecting">Connecting...</string>
   <string name="updating">Updating...</string>
   <string name="last_seen_recently">Last seen Recently</string>
-  <string name="member">" Member"</string>
+  <string name="member">" Members"</string>
   <string name="save_ok">"Save Ok: "</string>
   <string name="exception">"Exception: "</string>
   <string name="please_enter_phone_number">Please Enter PhoneNumber</string>
@@ -474,11 +476,11 @@
   <string name="latitude">"Latitude : "</string>
   <string name="longitude">"Longitude : "</string>
   <string name="unknown_artist">Unknown Artist</string>
-  <string name="add_new_member">Add New Member</string>
+  <string name="add_new_member">Add New Members</string>
   <string name="set_admin">Set Admin</string>
   <string name="set_modereator">Set Moderator</string>
   <string name="set_kick">KICK</string>
-  <string name="member_can_add_new_member">Member Can Add New Member</string>
+  <string name="member_can_add_new_member">Members Can Add New Members</string>
   <string name="notificaion_and_sound">Notifications and Sound</string>
   <string name="last_msg_format_chat">%s</string>
 

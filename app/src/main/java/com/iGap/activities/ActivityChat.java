@@ -21,6 +21,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.ArrayRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.CoordinatorLayout;
@@ -49,6 +50,7 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.IntentRequests;
@@ -274,6 +276,8 @@ public class ActivityChat extends ActivityEnhanced
     private String latestFilePath;
     private Calendar lastDateCalendar = Calendar.getInstance();
     private LinearLayout mReplayLayout;
+
+    private MaterialDesignTextView iconMute;
 
     @Override protected void onStart() {
         super.onStart();
@@ -884,14 +888,15 @@ public class ActivityChat extends ActivityEnhanced
         MaterialDesignTextView imvBackButton =
             (MaterialDesignTextView) findViewById(R.id.chl_imv_back_Button);
 
+        iconMute = (MaterialDesignTextView) findViewById(R.id.imgMutedRoom);
         RippleView rippleBackButton = (RippleView) findViewById(R.id.chl_ripple_back_Button);
 
         final Realm realm = Realm.getDefaultInstance();
         RealmRoom realmRoom =
             realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
         if (realmRoom != null) {
-            findViewById(R.id.imgMutedRoom).setVisibility(
-                realmRoom.getMute() ? View.VISIBLE : View.GONE);
+
+            iconMute.setVisibility(realmRoom.getMute() ? View.VISIBLE : View.GONE);
         }
         realm.close();
 
@@ -973,7 +978,7 @@ public class ActivityChat extends ActivityEnhanced
                 TextView text1 = new TextView(ActivityChat.this);
                 TextView text2 = new TextView(ActivityChat.this);
                 TextView text3 = new TextView(ActivityChat.this);
-                TextView text4 = new TextView(ActivityChat.this);
+                final TextView text4 = new TextView(ActivityChat.this);
 
                 text1.setTextColor(getResources().getColor(android.R.color.black));
                 text2.setTextColor(getResources().getColor(android.R.color.black));
@@ -1004,6 +1009,21 @@ public class ActivityChat extends ActivityEnhanced
                 layoutDialog.addView(text2, params);
                 layoutDialog.addView(text3, params);
                 layoutDialog.addView(text4, params);
+
+                final Realm realm = Realm.getDefaultInstance();
+                RealmRoom realmRoom =
+                    realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                if (realmRoom != null) {
+
+                    if (realmRoom.getMute()) {
+                        iconMute.setVisibility(View.VISIBLE);
+                        text4.setText(getResources().getString(R.string.unmute_notification));
+                    } else {
+                        iconMute.setVisibility(View.GONE);
+                        text4.setText(getResources().getString(R.string.mute_notification));
+                    }
+                }
+                realm.close();
 
                 popupWindow =
                     new PopupWindow(layoutDialog, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -1046,18 +1066,104 @@ public class ActivityChat extends ActivityEnhanced
                 text2.setOnClickListener(new View.OnClickListener() {
                     @Override public void onClick(View view) {
                         onSelectRoomMenu("txtClearHistory", (int) mRoomId);
+
+                        new MaterialDialog.Builder(ActivityChat.this).title(R.string.clear_history)
+                            .content(R.string.clear_history_content)
+                            .positiveText(R.string.B_ok)
+                            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override public void onClick(@NonNull MaterialDialog dialog,
+                                    @NonNull DialogAction which) {
+                                    onSelectRoomMenu("txtClearHistory", (int) mRoomId);
+                                }
+                            })
+                            .negativeText(R.string.B_cancel)
+                            .show();
                         popupWindow.dismiss();
                     }
                 });
                 text3.setOnClickListener(new View.OnClickListener() {
                     @Override public void onClick(View view) {
-                        onSelectRoomMenu("txtDeleteChat", (int) mRoomId);
+
+                        new MaterialDialog.Builder(ActivityChat.this).title(R.string.delete_chat)
+                            .content(R.string.delete_chat_content)
+                            .positiveText(R.string.B_ok)
+                            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override public void onClick(@NonNull MaterialDialog dialog,
+                                    @NonNull DialogAction which) {
+                                    onSelectRoomMenu("txtDeleteChat", (int) mRoomId);
+                                }
+                            })
+                            .negativeText(R.string.B_cancel)
+                            .show();
                         popupWindow.dismiss();
                     }
                 });
                 text4.setOnClickListener(new View.OnClickListener() {
                     @Override public void onClick(View view) {
+
                         onSelectRoomMenu("txtMuteNotification", (int) mRoomId);
+
+                        final Realm realm = Realm.getDefaultInstance();
+                        final RealmRoom realmRoom = realm.where(RealmRoom.class)
+                            .equalTo(RealmRoomFields.ID, mRoomId)
+                            .findFirst();
+                        if (realmRoom != null) {
+                            if (realmRoom.getMute()) {
+                                iconMute.setVisibility(View.VISIBLE);
+                                text4.setText(
+                                    getResources().getString(R.string.unmute_notification));
+                                realm.executeTransaction(new Realm.Transaction() {
+                                    @Override public void execute(Realm realm) {
+
+                                        if (realmRoom.getType() == RoomType.GROUP) {
+
+                                            RealmGroupRoom realmGroupRoom =
+                                                realmRoom.getGroupRoom();
+                                            realmGroupRoom.getRealmNotificationSetting()
+                                                .setMute(true);
+                                        } else if (realmRoom.getType() == RoomType.CHAT) {
+
+                                            RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
+                                            realmChatRoom.getRealmNotificationSetting()
+                                                .setMute(true);
+                                        } else if (realmRoom.getType() == RoomType.CHANNEL) {
+
+                                            RealmChannelRoom realmChannelRoom =
+                                                realmRoom.getChannelRoom();
+                                            realmChannelRoom.getRealmNotificationSetting()
+                                                .setMute(true);
+                                        }
+                                    }
+                                });
+                            } else {
+                                iconMute.setVisibility(View.GONE);
+                                text4.setText(getResources().getString(R.string.mute_notification));
+                                realm.executeTransaction(new Realm.Transaction() {
+                                    @Override public void execute(Realm realm) {
+
+                                        if (realmRoom.getType() == RoomType.GROUP) {
+
+                                            RealmGroupRoom realmGroupRoom =
+                                                realmRoom.getGroupRoom();
+                                            realmGroupRoom.getRealmNotificationSetting()
+                                                .setMute(false);
+                                        } else if (realmRoom.getType() == RoomType.CHAT) {
+
+                                            RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
+                                            realmChatRoom.getRealmNotificationSetting()
+                                                .setMute(false);
+                                        } else if (realmRoom.getType() == RoomType.CHANNEL) {
+
+                                            RealmChannelRoom realmChannelRoom =
+                                                realmRoom.getChannelRoom();
+                                            realmChannelRoom.getRealmNotificationSetting()
+                                                .setMute(false);
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                        realm.close();
                         popupWindow.dismiss();
                     }
                 });
@@ -1544,13 +1650,18 @@ public class ActivityChat extends ActivityEnhanced
                 }
             }
         });
+        RippleView rippleClose =
+            (RippleView) findViewById(R.id.chl_btn_close_ripple_search_message);
+        rippleClose.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                deSelectMessage(selectedPosition);
+                edtSearchMessage.setText("");
+            }
+        });
 
         ll_Search = (LinearLayout) findViewById(R.id.ac_ll_search_message);
-        btnCloseLayoutSearch = (Button) findViewById(R.id.ac_btn_close_layout_search_message);
-        btnCloseLayoutSearch.setTypeface(G.flaticon);
-        edtSearchMessage = (EditText) findViewById(R.id.ac_edt_search_message);
-
-        btnCloseLayoutSearch.setOnClickListener(new View.OnClickListener() {
+        RippleView rippleBack = (RippleView) findViewById(R.id.chl_ripple_back);
+        rippleBack.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
                 deSelectMessage(selectedPosition);
                 edtSearchMessage.setText("");
@@ -1558,9 +1669,14 @@ public class ActivityChat extends ActivityEnhanced
                 findViewById(R.id.toolbarContainer).setVisibility(View.VISIBLE);
                 ll_navigate_Message.setVisibility(View.GONE);
                 viewAttachFile.setVisibility(View.VISIBLE);
+                InputMethodManager imm =
+                    (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
         });
-
+        //btnCloseLayoutSearch = (Button) findViewById(R.id.ac_btn_close_layout_search_message);
+        //btnCloseLayoutSearch.setTypeface(G.flaticon);
+        edtSearchMessage = (EditText) findViewById(R.id.chl_edt_search_message);
         edtSearchMessage.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {

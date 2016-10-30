@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
@@ -96,6 +97,18 @@ public class FragmentDrawerMenu extends MenuFragment {
         txtPhoneNumber.setText(phoneNumber);
 
         setImage();
+
+        RelativeLayout layoutUserPicture =
+            (RelativeLayout) v.findViewById(R.id.lm_layout_user_picture);
+        layoutUserPicture.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+
+                Intent intent = new Intent(G.context, ActivitySetting.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                G.context.startActivity(intent);
+                ActivityMain.mLeftDrawerLayout.closeDrawer();
+            }
+        });
 
         LinearLayout layoutNewGroup = (LinearLayout) v.findViewById(R.id.lm_ll_new_group);
         layoutNewGroup.setOnClickListener(new View.OnClickListener() {
@@ -193,6 +206,7 @@ public class FragmentDrawerMenu extends MenuFragment {
                 HelperPermision.getStoragePermision(getActivity(), new OnGetPermision() {
                     @Override public void Allow() {
                         Intent intent = new Intent(G.context, ActivitySetting.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
                         ActivityMain.mLeftDrawerLayout.closeDrawer();
                     }

@@ -1010,10 +1010,6 @@ public class ActivityContactsProfile extends ActivityEnhanced {
         TextView text2 = new TextView(ActivityContactsProfile.this);
         TextView text3 = new TextView(ActivityContactsProfile.this);
 
-        text1.setText(getResources().getString(R.string.share_item_dialog));
-        text2.setText(getResources().getString(R.string.chi_popup_delete));
-        text3.setText(getResources().getString(R.string.chi_popup_shortcut));
-
         text1.setTextColor(getResources().getColor(android.R.color.black));
         text2.setTextColor(getResources().getColor(android.R.color.black));
         text3.setTextColor(getResources().getColor(android.R.color.black));
@@ -1022,15 +1018,16 @@ public class ActivityContactsProfile extends ActivityEnhanced {
         text2.setText(getResources().getString(R.string.clear_history));
         text3.setText(getResources().getString(R.string.delete_contact));
 
+        int dim20 = (int) getResources().getDimension(R.dimen.dp20);
         int dim12 = (int) getResources().getDimension(R.dimen.dp12);
 
         text1.setTextSize(16);
         text2.setTextSize(16);
         text3.setTextSize(16);
 
-        text1.setPadding(0, 0, dim12, 0);
-        text2.setPadding(0, 0, dim12, 0);
-        text3.setPadding(0, 0, 0, 0);
+        text1.setPadding(dim20, dim12, dim12, dim20);
+        text2.setPadding(dim20, 0, dim12, dim20);
+        text3.setPadding(dim20, 0, dim12, dim20);
 
         layoutDialog.addView(text1, params);
         layoutDialog.addView(text2, params);
@@ -1063,13 +1060,25 @@ public class ActivityContactsProfile extends ActivityEnhanced {
 
         text1.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
-                Toast.makeText(context, "Log out", Toast.LENGTH_SHORT).show();
                 popupWindow.dismiss();
             }
         });
         text2.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
-                Toast.makeText(context, "Delete", Toast.LENGTH_SHORT).show();
+
+                new MaterialDialog.Builder(ActivityContactsProfile.this).title(
+                    R.string.clear_history)
+                    .content(R.string.clear_history_content)
+                    .positiveText(R.string.B_ok)
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override public void onClick(@NonNull MaterialDialog dialog,
+                            @NonNull DialogAction which) {
+
+                        }
+                    })
+                    .negativeText(R.string.B_cancel)
+                    .show();
+
                 popupWindow.dismiss();
             }
         });
