@@ -1808,7 +1808,7 @@ public class ActivityChat extends ActivityEnhanced implements IEmojiViewCreate, 
 
     //TODO [Saeed Mozaffari] [2016-10-29 10:45 AM] - work on gps
     private void sendMessage(int requestCode, Uri uri) {
-
+        // TODO: 10/30/2016 [Alireza]  test
         final long messageId = System.nanoTime();
         String filePath;
         if (AttachFile.request_code_TAKE_PICTURE == requestCode) {
