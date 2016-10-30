@@ -19,6 +19,7 @@ public class RealmRegisteredInfo extends RealmObject {
     private String status;
     private int lastSeen;
     private int avatarCount;
+    private boolean mutual;
     private RealmList<RealmAvatar> avatar = new RealmList<>();
 
     public long getId() {
@@ -107,6 +108,14 @@ public class RealmRegisteredInfo extends RealmObject {
 
     public void setAvatarCount(int avatarCount) {
         this.avatarCount = avatarCount;
+    }
+
+    public boolean isMutual() {
+        return mutual;
+    }
+
+    public void setMutual(boolean mutual) {
+        this.mutual = mutual;
     }
 
     public RealmList<RealmAvatar> getAvatar() {
@@ -200,6 +209,7 @@ public class RealmRegisteredInfo extends RealmObject {
         info.setStatus(registeredUser.getStatus().toString());
         info.setLastName(registeredUser.getLastName());
         info.setAvatarCount(registeredUser.getAvatarCount());
+        info.setMutual(registeredUser.getMutual());
 
         if (registeredUser.getAvatarCount() > 0) {
             Log.i("SSS", "Avatar Exist");

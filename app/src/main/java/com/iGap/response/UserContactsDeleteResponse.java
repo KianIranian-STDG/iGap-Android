@@ -5,6 +5,8 @@ import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoUserContactsDelete;
 import com.iGap.realm.RealmContacts;
+import com.iGap.realm.RealmRegisteredInfo;
+import com.iGap.realm.RealmRegisteredInfoFields;
 import io.realm.Realm;
 
 public class UserContactsDeleteResponse extends MessageHandler {
@@ -33,6 +35,13 @@ public class UserContactsDeleteResponse extends MessageHandler {
                     realm.where(RealmContacts.class).equalTo("phone", phone).findFirst();
                 if (realmUserContactsGetListResponse != null) {
                     realmUserContactsGetListResponse.deleteFromRealm();
+                }
+
+                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class)
+                    .equalTo(RealmRegisteredInfoFields.PHONE, phone)
+                    .findFirst();
+                if (realmRegisteredInfo != null) {
+                    realmRegisteredInfo.setMutual(false);
                 }
             }
         });

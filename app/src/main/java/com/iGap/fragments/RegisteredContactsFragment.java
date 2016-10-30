@@ -295,6 +295,7 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                                     realmRegisteredInfo.setColor(user.getColor());
                                     realmRegisteredInfo.setStatus(user.getStatus().toString());
                                     realmRegisteredInfo.setAvatarCount(user.getAvatarCount());
+                                    realmRegisteredInfo.setMutual(user.getMutual());
 
                                     RealmList<RealmAvatar> avatars = new RealmList<>();
                                     avatars.add(RealmAvatar.convert(user, realm));

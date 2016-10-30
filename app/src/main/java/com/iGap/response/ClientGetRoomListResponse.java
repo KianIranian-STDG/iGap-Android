@@ -29,9 +29,11 @@ public class ClientGetRoomListResponse extends MessageHandler {
     }
 
     @Override public void timeOut() {
+        Log.i("XXX", "ClientGetRoomListResponse timeOut : " + message);
     }
 
     @Override public void error() {
+        Log.i("XXX", "ClientGetRoomListResponse error : " + message);
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
