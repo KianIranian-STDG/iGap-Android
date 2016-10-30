@@ -2,6 +2,7 @@ package com.iGap.response;
 
 import android.util.Log;
 import com.iGap.G;
+import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoGroupKickAdmin;
 import com.iGap.realm.RealmMember;
@@ -57,12 +58,19 @@ public class GroupKickAdminResponse extends MessageHandler {
     }
 
     @Override public void error() {
-        Log.e("ddd", "hhhhhhhhhh      erore      " + message);
+
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        int majorCode = errorResponse.getMajorCode();
+        int minorCode = errorResponse.getMinorCode();
+        Log.i("XXX", "GroupKickAdminResponse majorCode : " + majorCode);
+        Log.i("XXX", "GroupKickAdminResponse minorCode : " + minorCode);
+
+        G.onGroupAddMember.onError(majorCode, minorCode);
     }
 
     @Override public void timeOut() {
 
-        Log.e("ddd", "hhhhhhhhhh      timout      " + message);
+        Log.e("XXX", "GroupKickAdminResponse      timout      " + message);
         super.timeOut();
     }
 }

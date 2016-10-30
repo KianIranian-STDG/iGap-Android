@@ -2,6 +2,7 @@ package com.iGap.response;
 
 import android.util.Log;
 import com.iGap.G;
+import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGroupKickMember;
 import com.iGap.realm.RealmMember;
 import com.iGap.realm.RealmRoom;
@@ -30,6 +31,7 @@ public class GroupKickMemberResponse extends MessageHandler {
         final long roomId = builder.getRoomId();
         final long memberId = builder.getMemberId();
 
+
         Realm realm = Realm.getDefaultInstance();
         RealmRoom realmRoom =
             realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
@@ -53,12 +55,18 @@ public class GroupKickMemberResponse extends MessageHandler {
     }
 
     @Override public void error() {
-        Log.e("ddd", "hhhhhhhhhh      erore      " + message);
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        int majorCode = errorResponse.getMajorCode();
+        int minorCode = errorResponse.getMinorCode();
+        Log.i("XXX", "GroupKickMemberResponse majorCode : " + majorCode);
+        Log.i("XXX", "GroupKickMemberResponse minorCode : " + minorCode);
+
+        G.onGroupKickMember.onError(majorCode, minorCode);
     }
 
     @Override public void timeOut() {
 
-        Log.e("ddd", "hhhhhhhhhh      timout      " + message);
+        Log.e("ddd", "GroupKickMemberResponse      timout      " + message);
         super.timeOut();
     }
 }

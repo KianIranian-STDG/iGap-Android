@@ -8,4 +8,7 @@ package com.iGap.interfaces;
 public interface OnGroupEdit {
 
     void onGroupEdit(long roomId, String name, String description);
+
+    void onError(int majorCode, int minorCode);
+
 }

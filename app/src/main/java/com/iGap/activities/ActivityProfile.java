@@ -7,8 +7,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
@@ -47,18 +49,17 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class ActivityProfile extends ActivityEnhanced
     implements OnUserAvatarResponse, OnFileUploadForActivities {
 
-    public final static String ARG_USER_ID = "arg_user_id";
-    public static boolean IsDeleteFile;
-    public static Bitmap decodeBitmapProfile = null;
     private TextView txtTitle, txtTitlInformation, txtDesc, txtAddPhoto;
     private Button btnLetsGo;
     private com.iGap.module.CircleImageView btnSetImage;
     private EditTextAdjustPan edtNikName;
     private Uri uriIntent;
     private String pathImageUser;
+    public static boolean IsDeleteFile;
     private File pathImageFromCamera = new File(G.imageFile.toString() + "_" + 0 + ".jpg");
+    public final static String ARG_USER_ID = "arg_user_id";
     private int idAvatar;
-    private int lastUploadedAvatarId;
+    public static Bitmap decodeBitmapProfile = null;
 
     @Override protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
@@ -83,6 +84,7 @@ public class ActivityProfile extends ActivityEnhanced
         txtTitle = (TextView) findViewById(R.id.pu_titleToolbar);
         txtTitle.setTypeface(G.FONT_IGAP);
 
+        final View lineEditText = findViewById(R.id.pu_line_below_editText);
         btnSetImage = (com.iGap.module.CircleImageView) findViewById(R.id.pu_profile_circle_image);
         btnSetImage.setOnClickListener(new View.OnClickListener() { // button for set image
             @Override public void onClick(View view) {
@@ -107,7 +109,13 @@ public class ActivityProfile extends ActivityEnhanced
             }
 
             @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                txtInputNickName.setErrorEnabled(true);
                 txtInputNickName.setError("");
+                txtInputNickName.setHintTextAppearance(R.style.remove_error_appearance);
+                txtInputNickName.setError(getResources().getString(R.string.Toast_Write_NickName));
+                edtNikName.setTextColor(getResources().getColor(R.color.border_editText));
+                lineEditText.setBackgroundColor(getResources().getColor(android.R.color.black));
+
             }
 
             @Override public void afterTextChanged(Editable editable) {
@@ -133,14 +141,19 @@ public class ActivityProfile extends ActivityEnhanced
                         realm.close();
                     } else {
                         runOnUiThread(new Runnable() {
-                            @Override public void run() {
+                            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN) @Override
+                            public void run() {
 
                                 txtInputNickName.setErrorEnabled(true);
                                 txtInputNickName.setError(
                                     getResources().getString(R.string.Toast_Write_NickName));
+                                txtInputNickName.setHintTextAppearance(R.style.error_appearance);
+                                edtNikName.setTextColor(getResources().getColor(R.color.red));
+                                lineEditText.setBackgroundColor(
+                                    getResources().getColor(R.color.red));
                             }
                         });
-                    }
+                }
                 }
             });
     }
@@ -177,6 +190,7 @@ public class ActivityProfile extends ActivityEnhanced
                                 }
                             });
                             snack.show();
+
                         }
                     });
                 } else if (majorCode == 113) {
@@ -220,6 +234,7 @@ public class ActivityProfile extends ActivityEnhanced
                     }
                 });
                 realm.close();
+
             }
 
             @Override public void onUserInfoTimeOut() {
@@ -237,6 +252,7 @@ public class ActivityProfile extends ActivityEnhanced
         realm.close();
     }
 
+
     public void useCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         pathImageUser = G.imageFile.toString() + "_" + 0 + ".jpg";
@@ -245,15 +261,17 @@ public class ActivityProfile extends ActivityEnhanced
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
 
         startActivityForResult(intent, IntentRequests.REQ_CAMERA);
-    }
 
-    //======================================================================================================dialog for choose image
+    }
 
     public void useGallery() {
         Intent intent =
             new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, IntentRequests.REQ_GALLERY);
     }
+
+    //======================================================================================================dialog for choose image
+
 
     private void startDialog() {
 
@@ -285,8 +303,9 @@ public class ActivityProfile extends ActivityEnhanced
                     } else {
                         useGallery();
                         dialog.dismiss();
+                        }
+
                     }
-                }
             })
             .show();
     }
@@ -329,6 +348,7 @@ public class ActivityProfile extends ActivityEnhanced
                     realmAvatarPath.setId(idAvatar + 1);
                     realmAvatarPath.setPathImage(pathImageUser);
                     realmUserInfo.getAvatarPath().add(realmAvatarPath);
+
                 }
             });
             realm.close();
@@ -338,6 +358,8 @@ public class ActivityProfile extends ActivityEnhanced
             new UploadTask().execute(pathImageUser, lastUploadedAvatarId);
         }
     }
+
+    private int lastUploadedAvatarId;
 
     @Override
     public void onFileUploaded(final FileUploadStructure uploadStructure, String identity) {
@@ -353,6 +375,37 @@ public class ActivityProfile extends ActivityEnhanced
     @Override public void onFileUploading(FileUploadStructure uploadStructure, String identity,
         double progress) {
         // TODO: 10/20/2016 [Alireza] update view something like updating progress
+    }
+
+    private static class UploadTask
+        extends AsyncTask<Object, FileUploadStructure, FileUploadStructure> {
+        @Override protected FileUploadStructure doInBackground(Object... params) {
+            try {
+                String filePath = (String) params[0];
+                int avatarId = (int) params[1];
+                File file = new File(filePath);
+                String fileName = file.getName();
+                long fileSize = file.length();
+                FileUploadStructure fileUploadStructure =
+                    new FileUploadStructure(fileName, fileSize, filePath, avatarId);
+                fileUploadStructure.openFile(filePath);
+
+                byte[] fileHash = AndroidUtils.getFileHash(fileUploadStructure);
+                fileUploadStructure.setFileHash(fileHash);
+
+                return fileUploadStructure;
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override protected void onPostExecute(FileUploadStructure result) {
+            super.onPostExecute(result);
+            G.uploaderUtil.startUploading(result, Long.toString(result.messageId));
+        }
     }
 
     private void setImage(String path) {
@@ -399,36 +452,5 @@ public class ActivityProfile extends ActivityEnhanced
             }
         });
         realm.close();
-    }
-
-    private static class UploadTask
-        extends AsyncTask<Object, FileUploadStructure, FileUploadStructure> {
-        @Override protected FileUploadStructure doInBackground(Object... params) {
-            try {
-                String filePath = (String) params[0];
-                int avatarId = (int) params[1];
-                File file = new File(filePath);
-                String fileName = file.getName();
-                long fileSize = file.length();
-                FileUploadStructure fileUploadStructure =
-                    new FileUploadStructure(fileName, fileSize, filePath, avatarId);
-                fileUploadStructure.openFile(filePath);
-
-                byte[] fileHash = AndroidUtils.getFileHash(fileUploadStructure);
-                fileUploadStructure.setFileHash(fileHash);
-
-                return fileUploadStructure;
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override protected void onPostExecute(FileUploadStructure result) {
-            super.onPostExecute(result);
-            G.uploaderUtil.startUploading(result, Long.toString(result.messageId));
-        }
     }
 }

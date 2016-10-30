@@ -49,8 +49,10 @@ public class UserContactsDeleteResponse extends MessageHandler {
     @Override public void error() {
 
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
-        errorResponse.getMajorCode();
-        errorResponse.getMinorCode();
+        int MajorCode = errorResponse.getMajorCode();
+        int MinorCode = errorResponse.getMinorCode();
+
+        G.onUserContactdelete.onError(MajorCode, MinorCode);
 
         Log.i("XXX", "UserContactsGetListResponse errorReponse.getMajorCode() : "
             + errorResponse.getMajorCode());

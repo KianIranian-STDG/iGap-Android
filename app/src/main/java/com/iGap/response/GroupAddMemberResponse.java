@@ -2,6 +2,7 @@ package com.iGap.response;
 
 import android.util.Log;
 import com.iGap.G;
+import com.iGap.proto.ProtoError;
 
 public class GroupAddMemberResponse extends MessageHandler {
 
@@ -25,6 +26,13 @@ public class GroupAddMemberResponse extends MessageHandler {
     }
 
     @Override public void error() {
-        Log.i("XXX", "GroupAddMemberResponse Error : " + message);
+
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        int majorCode = errorResponse.getMajorCode();
+        int minorCode = errorResponse.getMinorCode();
+        Log.i("XXX", "GroupAddMemberResponse majorCode : " + majorCode);
+        Log.i("XXX", "GroupAddMemberResponse minorCode : " + minorCode);
+
+        G.onGroupAddMember.onError(majorCode, minorCode);
     }
 }

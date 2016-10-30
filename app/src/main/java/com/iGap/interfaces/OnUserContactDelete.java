@@ -8,4 +8,6 @@ package com.iGap.interfaces;
 public interface OnUserContactDelete {
 
     void onContactDelete();
+
+    void onError(int majorCode, int minorCode);
 }

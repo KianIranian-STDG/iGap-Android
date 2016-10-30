@@ -8,4 +8,7 @@ package com.iGap.interfaces;
 public interface OnGroupAddAdmin {
 
     void onGroupAddAdmin(long roomId, long memberId);
+
+    void onError(int majorCode, int minorCode);
+
 }

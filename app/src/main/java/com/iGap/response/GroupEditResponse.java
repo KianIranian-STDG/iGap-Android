@@ -1,6 +1,8 @@
 package com.iGap.response;
 
+import android.util.Log;
 import com.iGap.G;
+import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGroupEdit;
 import com.iGap.realm.RealmGroupRoom;
 import com.iGap.realm.RealmRoom;
@@ -29,6 +31,7 @@ public class GroupEditResponse extends MessageHandler {
         final String name = builder.getName();
         final String descriptions = builder.getDescription();
 
+
         Realm realm = Realm.getDefaultInstance();
         final RealmRoom realmRoom =
             realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
@@ -40,17 +43,27 @@ public class GroupEditResponse extends MessageHandler {
                     realmRoom.setTitle(name);
                     RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
                     realmGroupRoom.setDescription(descriptions);
+
                 }
             });
 
             G.onGroupEdit.onGroupEdit(builder.getRoomId(), builder.getName(),
                 builder.getDescription());
+
         }
 
         realm.close();
     }
 
     @Override public void error() {
+
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        int majorCode = errorResponse.getMajorCode();
+        int minorCode = errorResponse.getMinorCode();
+        Log.i("XXX", "GroupEditResponse majorCode : " + majorCode);
+        Log.i("XXX", "GroupEditResponse minorCode : " + minorCode);
+
+        G.onGroupEdit.onError(majorCode, minorCode);
 
     }
 }

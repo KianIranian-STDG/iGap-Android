@@ -2,6 +2,7 @@ package com.iGap.response;
 
 import android.util.Log;
 import com.iGap.G;
+import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoGroupAddModerator;
 import com.iGap.realm.RealmGroupRoom;
@@ -32,6 +33,7 @@ public class GroupAddModeratorResponse extends MessageHandler {
             (ProtoGroupAddModerator.GroupAddModeratorResponse.Builder) message;
         builder.getRoomId();
         builder.getMemberId();
+
 
         Realm realm = Realm.getDefaultInstance();
 
@@ -65,6 +67,12 @@ public class GroupAddModeratorResponse extends MessageHandler {
     }
 
     @Override public void error() {
-        Log.e("ddd", "error : " + message);
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        int majorCode = errorResponse.getMajorCode();
+        int minorCode = errorResponse.getMinorCode();
+        Log.i("XXX", "GroupAddModeratorResponse majorCode : " + majorCode);
+        Log.i("XXX", "GroupAddModeratorResponse minorCode : " + minorCode);
+
+        G.onGroupAddModerator.onError(majorCode, minorCode);
     }
 }

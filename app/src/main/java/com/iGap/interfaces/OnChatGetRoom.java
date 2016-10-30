@@ -11,5 +11,5 @@ public interface OnChatGetRoom {
 
     void onChatGetRoomTimeOut();
 
-    void onChatGetRoomError();
+    void onChatGetRoomError(int majorCode, int minorCode);
 }

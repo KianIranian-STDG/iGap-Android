@@ -128,4 +128,18 @@
     <item name="android:textColor">@color/green</item>
   </style>
 
+  <style name="error_appearance" parent="@android:style/TextAppearance">
+    <item name="android:textColor">@color/red</item>
+    <item name="android:textColorHint">@color/red</item>
+    <item name="android:textSize">12sp</item>
+
+  </style>
+
+  <style name="remove_error_appearance" parent="@android:style/TextAppearance">
+    <item name="android:textColor">@color/border_editText</item>
+    <item name="android:textColorHint">@color/border_editText</item>
+    <item name="android:textSize">12sp</item>
+
+  </style>
+
 </resources>

@@ -2,6 +2,7 @@ package com.iGap.response;
 
 import android.util.Log;
 import com.iGap.G;
+import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoGroupAddAdmin;
 import com.iGap.realm.RealmGroupRoom;
@@ -34,6 +35,7 @@ public class GroupAddAdminResponse extends MessageHandler {
 
         // RealmRoom , RealmGroupRoom , RealmList<RealmMember> wher id =memberId , role = ADMIN
 
+
         Log.e("dddd", builder.getRoomId() + "    xxxxxxx");
 
         Realm realm = Realm.getDefaultInstance();
@@ -62,9 +64,16 @@ public class GroupAddAdminResponse extends MessageHandler {
         }
 
         realm.close();
+
     }
 
     @Override public void error() {
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        int majorCode = errorResponse.getMajorCode();
+        int minorCode = errorResponse.getMinorCode();
+        Log.i("XXX", "GroupAddAdminResponse majorCode : " + majorCode);
+        Log.i("XXX", "GroupAddAdminResponse minorCode : " + minorCode);
 
+        G.onGroupAddAdmin.onError(majorCode, minorCode);
     }
 }

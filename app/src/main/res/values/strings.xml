@@ -497,5 +497,58 @@
 
   <string name="add_to_contact">Add to Contact</string>
 
+  <!--Error-->
+  <string name="USER_VERIFY_BLOCKED_USER">USER VERIFY BLOCKED USER</string>
+  <string name="Enter_Code">Code</string>
+
+  <string name="E_335">Bad payload for request</string>
+  <string name="E_336">Internal server error for request</string>
+  <string name="E_337">This operation is not permitted for request</string>
+  <string name="E_327_A">Bad payload for request ; Invalid roomId</string>
+  <string name="E_327_B">Bad payload for request ; Invalid memberId</string>
+  <string name="E_328">Internal server error for request</string>
+  <string name="E_329">This operation is not permitted for request</string>
+  <string name="E_332_1">Bad payload for request ; Invalid roomId</string>
+  <string name="E_332_2">Bad payload for request ; Invalid memberId</string>
+  <string name="E_333">Internal server error for request</string>
+  <string name="E_334">This operation is not permitted for request</string>
+  <string name="E_324_1">Bad payload for request ; Invalid roomId</string>
+  <string name="E_324_2">Bad payload for request ; Invalid memberId</string>
+  <string name="E_325">Bad payload for request ; Invalid memberId</string>
+  <string name="E_326">Bad payload for request ; Invalid memberId</string>
+  <string name="E_318_1">Bad payload for request ; Invalid roomId</string>
+  <string name="E_318_2">Bad payload for request ; Invalid memberId</string>
+  <string name="E_319">Internal server error for request</string>
+  <string name="E_320">This operation is not permitted for request</string>
+  <string name="E_321">Bad payload for request</string>
+  <string name="E_322">Internal server error for request</string>
+  <string name="E_323">This operation is not permitted for request</string>
+  <string name="E_302_1">Bad payload for request ; Invalid roomId</string>
+  <string name="E_302_2">Bad payload for request ; Invalid userId </string>
+  <string name="E_302_3">Bad payload for request ; Invalid startMessageId</string>
+  <string name="E_302_4">Bad payload for request ; Invalid role</string>
+  <string name="E_303">Internal server error for request</string>
+  <string name="E_304">User is already in this room for request</string>
+  <string name="E_305">This operation is not permitted for request</string>
+  <string name="E_330_1">Bad payload for request ; Invalid roomId</string>
+  <string name="E_330_2">Bad payload for request ; Invalid username </string>
+  <string name="E_330_3">Bad payload for request ; Invalid description</string>
+  <string name="E_331">Internal server error for request</string>
+  <string name="E_112">Bad payload for request : Invalid nickname</string>
+  <string name="E_113">Internal server error for request</string>
+  <string name="E_200">Bad payload for request ; Invalid peerId</string>
+  <string name="E_201">Internal server error for request</string>
+  <string name="E_202">There is no active user with given peerId ; It is not permitted to be peered yourself</string>
+  <string name="E_124_1">Bad payload for request ; Invalid phone</string>
+  <string name="E_124_2">Bad payload for request ; Invalid first_name</string>
+  <string name="E_124_3">Bad payload for request ; Invalid last_name</string>
+  <string name="E_124_4">Bad payload for request  first_name or last_name is required</string>
+  <string name="E_125">Internal server error for request</string>
+  <string name="E_122">Bad payload for request ; Invalid phone</string>
+  <string name="E_123">Internal server error for request </string>
+  <string name="E_218">Bad payload for request ; Invalid roomId</string>
+  <string name="E_219">Internal server error for request</string>
+  <string name="E_220">This operation is not permitted for request </string>
+
 
 </resources>

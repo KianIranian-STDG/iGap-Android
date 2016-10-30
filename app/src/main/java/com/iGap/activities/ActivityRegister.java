@@ -71,20 +71,14 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityRegister extends ActivityEnhanced {
 
-    static final String KEY_SAVE_CODENUMBER = "SAVE_CODENUMBER";
-    static final String KEY_SAVE_PHONENUMBER_MASK = "SAVE_PHONENUMBER_MASK";
-    static final String KEY_SAVE_PHONENUMBER_NUMBER = "SAVE_PHONENUMBER_NUMBER";
-    static final String KEY_SAVE_NAMECOUNTRY = "SAVE_NAMECOUNTRY";
+    private SoftKeyboard softKeyboard;
+
+    private Button btnStart;
     public static Button btnChoseCountry;
     public static EditText edtCodeNumber;
+
     public static MaskedEditText edtPhoneNumber;
-    public static String isoCode = "IR";
-    public static TextView btnOk;
-    public static Dialog dialogChooseCountry;
-    public static int positionRadioButton = -1;
-    ArrayList<StructCountry> structCountryArrayList = new ArrayList();
-    private SoftKeyboard softKeyboard;
-    private Button btnStart;
+
     private TextView txtAgreement_register, txtTitleToolbar, txtTitleRegister, txtDesc,
         txtTitleAgreement;
     private ProgressBar rg_prg_verify_connect, rg_prg_verify_sms, rg_prg_verify_generate,
@@ -95,21 +89,39 @@ public class ActivityRegister extends ActivityEnhanced {
         rg_img_verify_register;
     private ViewGroup layout_agreement;
     private ViewGroup layout_verify;
+
     private String phoneNumber;
-    //Array List for Store List of StructCountry Object
+    public static String isoCode = "IR";
     private String regex;
     private String userName;
     private String token;
     private String regexFetchCodeVerification;
+
     private long userId;
+    public static TextView btnOk;
     private boolean newUser;
+
+    ArrayList<StructCountry> structCountryArrayList = new ArrayList();
+    //Array List for Store List of StructCountry Object
+
     private ArrayList<StructCountry> items = new ArrayList<>();
     private AdapterDialog adapterDialog;
+
     private Dialog dialogVerifyLandScape;
     private IncomingSms smsReceiver;
+
     private CountDownTimer countDownTimer;
+    public static Dialog dialogChooseCountry;
     private SearchView edtSearchView;
+
+    public static int positionRadioButton = -1;
+
     private Dialog dialog;
+
+    static final String KEY_SAVE_CODENUMBER = "SAVE_CODENUMBER";
+    static final String KEY_SAVE_PHONENUMBER_MASK = "SAVE_PHONENUMBER_MASK";
+    static final String KEY_SAVE_PHONENUMBER_NUMBER = "SAVE_PHONENUMBER_NUMBER";
+    static final String KEY_SAVE_NAMECOUNTRY = "SAVE_NAMECOUNTRY";
 
     @Override protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
@@ -382,8 +394,10 @@ public class ActivityRegister extends ActivityEnhanced {
 
                         btnStart.setEnabled(false);
                         new RequestInfoCountry().infoCountry(isoCode);
+
                         G.handler.post(new Runnable() {
                             @Override public void run() {
+
                                 final Snackbar snack =
                                     Snackbar.make(findViewById(android.R.id.content),
                                         getResources().getString(
@@ -500,15 +514,11 @@ public class ActivityRegister extends ActivityEnhanced {
                     phone.setText(edtPhoneNumber.getText().toString());
                     dialog.show();
                 } else {
-                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
-                        getResources().getString(R.string.Toast_Enter_Phone_Number),
-                        Snackbar.LENGTH_LONG);
-                    snack.setAction("CANCEL", new View.OnClickListener() {
-                        @Override public void onClick(View view) {
-                            snack.dismiss();
-                        }
-                    });
-                    snack.show();
+
+                    new MaterialDialog.Builder(ActivityRegister.this).title(R.string.phone_number)
+                        .content(R.string.Toast_Enter_Phone_Number)
+                        .positiveText(R.string.B_ok)
+                        .show();
                 }
             }
         });
@@ -703,14 +713,12 @@ public class ActivityRegister extends ActivityEnhanced {
                     userVerify(userName, edtEnterCodeVerify.getText().toString());
                     dialog.dismiss();
                 } else {
-                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
-                        getResources().getString(R.string.Toast_Enter_Code), Snackbar.LENGTH_LONG);
-                    snack.setAction("CANCEL", new View.OnClickListener() {
-                        @Override public void onClick(View view) {
-                            snack.dismiss();
-                        }
-                    });
-                    snack.show();
+
+                    new MaterialDialog.Builder(ActivityRegister.this).title(R.string.Enter_Code)
+                        .content(R.string.Toast_Enter_Code)
+                        .positiveText(R.string.B_ok)
+                        .show();
+
                 }
             }
         });
@@ -939,17 +947,11 @@ public class ActivityRegister extends ActivityEnhanced {
                             // User is blocked , You cannot verify the user
                             // TODO: 9/25/2016 Error 105 - USER_VERIFY_BLOCKED_USER
 
-                            Toast.makeText(ActivityRegister.this, "This Number is Block",
-                                Toast.LENGTH_SHORT).show();
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
-                                getResources().getString(R.string.Toast_Number_Block),
-                                Snackbar.LENGTH_LONG);
-                            snack.setAction("CANCEL", new View.OnClickListener() {
-                                @Override public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                            snack.show();
+                            new MaterialDialog.Builder(ActivityRegister.this).title(
+                                R.string.USER_VERIFY_BLOCKED_USER)
+                                .content(R.string.Toast_Number_Block)
+                                .positiveText(R.string.B_ok)
+                                .show();
                         }
                     });
                 } else if (majorCode == 106) {

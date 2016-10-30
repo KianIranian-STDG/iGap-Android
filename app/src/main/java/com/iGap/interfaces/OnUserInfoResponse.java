@@ -13,5 +13,6 @@ public interface OnUserInfoResponse {
 
     void onUserInfoTimeOut();
 
-    void onUserInfoError();
+    void onUserInfoError(int majorCode, int minorCode);
+
 }

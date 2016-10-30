@@ -16,6 +16,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
 import android.text.InputType;
@@ -79,95 +80,70 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class ActivitySetting extends ActivityEnhanced
     implements OnUserAvatarResponse, OnFileUploadForActivities {
 
+    private SharedPreferences sharedPreferences;
+    private int messageTextSize = 16;
+
+    private TextView txtMenu, txtMessageTextSize, txtAutoDownloadData, txtAutoDownloadWifi,
+        txtChatBackground, txtAutoDownloadRoaming, txtKeepMedia, txtLanguage, txtSizeClearCach;
+    private MaterialDesignTextView imgMenu, txtBack;
+
+    private RelativeLayout ltClearCache;
+
+    private PopupWindow popupWindow;
+
+    private int poRbDialogLangouage = -1;
+    private String textLanguage = "English";
+    private int poRbDialogTextSize = -1;
+
+    private ViewGroup ltMessageTextSize, ltLanguage;
+    private TextView txtNickName, txtUserName, txtPhoneNumber, txtNotifyAndSound, txtFaq,
+        txtPrivacyPolicy, txtSticker, ltInAppBrowser, ltSentByEnter, ltEnableAnimation, ltAutoGifs,
+        ltSaveToGallery;
+    ;
+    private ToggleButton toggleSentByEnter, toggleEnableAnimation, toggleAutoGifs,
+        toggleSaveToGallery, toggleInAppBrowser, toggleCrop;
+
+    private AppBarLayout appBarLayout;
+
+    private Uri uriIntent;
+    private long idAvatar;
+    private File nameImageFile;
+    private String pathImageDecode;
+    private RealmResults<RealmAvatarPath> realmAvatarPaths;
     public static String pathSaveImage;
+
+
+    private FloatingActionButton fab;
+    private CircleImageView circleImageView;
     public static Bitmap decodeBitmapProfile = null;
+
+    private String nickName;
+    private String userName;
+    private String phoneName;
+    private long userId;
+
     public static int KEY_AD_DATA_PHOTO = -1;
     public static int KEY_AD_DATA_VOICE_MESSAGE = -1;
     public static int KEY_AD_DATA_VIDEO = -1;
     public static int KEY_AD_DATA_FILE = -1;
     public static int KEY_AD_DATA_MUSIC = -1;
     public static int KEY_AD_DATA_GIF = -1;
+
     public static int KEY_AD_WIFI_PHOTO = -1;
     public static int KEY_AD_WIFI_VOICE_MESSAGE = -1;
     public static int KEY_AD_WIFI_VIDEO = -1;
-    ;
     public static int KEY_AD_WIFI_FILE = -1;
     public static int KEY_AD_WIFI_MUSIC = -1;
     public static int KEY_AD_WIFI_GIF = -1;
+
     public static int KEY_AD_ROAMING_PHOTO = -1;
     public static int KEY_AD_ROAMING_VOICE_MESSAGE = -1;
     public static int KEY_AD_ROAMING_VIDEO = -1;
     public static int KEY_AD_ROAMING_FILE = -1;
     public static int KEY_AD_ROAMING_MUSIC = -1;
     public static int KEY_AD_ROAMINGN_GIF = -1;
-    private SharedPreferences sharedPreferences;
-    private int messageTextSize = 16;
-    private TextView txtMenu, txtMessageTextSize, txtAutoDownloadData, txtAutoDownloadWifi,
-        txtChatBackground, txtAutoDownloadRoaming, txtKeepMedia, txtLanguage, txtSizeClearCach;
-    private MaterialDesignTextView imgMenu, txtBack;
-    private RelativeLayout ltClearCache;
-    private PopupWindow popupWindow;
-    private int poRbDialogLangouage = -1;
-    private String textLanguage = "English";
-    private int poRbDialogTextSize = -1;
-    private ViewGroup ltMessageTextSize, ltLanguage;
-    private TextView txtNickName, txtUserName, txtPhoneNumber, txtNotifyAndSound, txtFaq,
-        txtPrivacyPolicy, txtSticker, ltInAppBrowser, ltSentByEnter, ltEnableAnimation, ltAutoGifs,
-        ltSaveToGallery;
-    private ToggleButton toggleSentByEnter, toggleEnableAnimation, toggleAutoGifs,
-        toggleSaveToGallery, toggleInAppBrowser, toggleCrop;
-    private AppBarLayout appBarLayout;
-    private Uri uriIntent;
-    private long idAvatar;
-    private File nameImageFile;
-    private String pathImageDecode;
-    private RealmResults<RealmAvatarPath> realmAvatarPaths;
-    private FloatingActionButton fab;
-    private CircleImageView circleImageView;
-    private String nickName;
-    private String userName;
-    private String phoneName;
-    private long userId;
+
     private CharSequence inputText = "";
-    private long lastUploadedAvatarId;
-
-    public static long getFolderSize(File dir) {
-        long size = 0;
-        for (File file : dir.listFiles()) {
-            if (file.isFile()) {
-                System.out.println(file.getName() + " " + file.length());
-                size += file.length();
-            } else {
-                size += getFolderSize(file);
-            }
-        }
-        return size;
-    }
-
-    public static String formatFileSize(long size) {
-        String hrSize = null;
-
-        double b = size;
-        double k = size / 1024.0;
-        double m = ((size / 1024.0) / 1024.0);
-        double g = (((size / 1024.0) / 1024.0) / 1024.0);
-        double t = ((((size / 1024.0) / 1024.0) / 1024.0) / 1024.0);
-
-        DecimalFormat dec = new DecimalFormat("0.0");
-
-        if (t > 1) {
-            hrSize = dec.format(t).concat(" TB");
-        } else if (g > 1) {
-            hrSize = dec.format(g).concat(" GB");
-        } else if (m > 1) {
-            hrSize = dec.format(m).concat(" MB");
-        } else if (k > 1) {
-            hrSize = dec.format(k).concat(" KB");
-        } else {
-            hrSize = dec.format(b).concat(" Bytes");
-        }
-        return hrSize;
-    }
 
     @Override protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
@@ -221,16 +197,19 @@ public class ActivitySetting extends ActivityEnhanced
                     for (int i = 0; i < splitNickname.length - 1; i++) {
 
                         stringBuilder.append(splitNickname[i]).append(" ");
+
                     }
                     firsName = stringBuilder.toString();
                 } else {
                     firsName = splitNickname[0];
+
                 }
                 View viewFirstName = new View(ActivitySetting.this);
                 viewFirstName.setBackgroundColor(
                     getResources().getColor(R.color.toolbar_background));
                 LinearLayout.LayoutParams viewParams =
                     new AppBarLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2);
+
 
                 TextInputLayout inputFirstName = new TextInputLayout(ActivitySetting.this);
                 final EditText edtFirstName = new EditText(ActivitySetting.this);
@@ -305,8 +284,10 @@ public class ActivitySetting extends ActivityEnhanced
                             positive.setClickable(false);
                             positive.setAlpha(0.5f);
                         }
+
                     }
                 });
+
 
                 final String finalLastName = lastName;
                 edtLastName.addTextChangedListener(new TextWatcher() {
@@ -318,6 +299,7 @@ public class ActivitySetting extends ActivityEnhanced
 
                     @Override
                     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
 
                     }
 
@@ -380,6 +362,40 @@ public class ActivitySetting extends ActivityEnhanced
                                 @Override public void onUserProfileNickNameError(int majorCode,
                                     int minorCode) {
 
+                                    if (majorCode == 112) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override public void run() {
+                                            final Snackbar snack =
+                                                Snackbar.make(findViewById(android.R.id.content),
+                                                    getResources().getString(R.string.E_112),
+                                                    Snackbar.LENGTH_LONG);
+
+                                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                                @Override public void onClick(View view) {
+                                                    snack.dismiss();
+                                                }
+                                            });
+                                            snack.show();
+                                        }
+                                    });
+                                    } else if (majorCode == 113) {
+                                        runOnUiThread(new Runnable() {
+                                            @Override public void run() {
+                                                final Snackbar snack = Snackbar.make(
+                                                    findViewById(android.R.id.content),
+                                                    getResources().getString(R.string.E_113),
+                                                    Snackbar.LENGTH_LONG);
+
+                                                snack.setAction("CANCEL",
+                                                    new View.OnClickListener() {
+                                                        @Override public void onClick(View view) {
+                                                            snack.dismiss();
+                                                        }
+                                                    });
+                                                snack.show();
+                                        }
+                                    });
+                                }
                                 }
                             };
                         new RequestUserProfileSetNickname().userProfileNickName(fullName);
@@ -443,6 +459,7 @@ public class ActivitySetting extends ActivityEnhanced
                     viewGroup.setVisibility(View.GONE);
                     titleToolbar.setVisibility(View.VISIBLE);
                     titleToolbar.animate().alpha(1).setDuration(300);
+
                 } else {
                     titleToolbar.setVisibility(View.GONE);
                     viewGroup.setVisibility(View.VISIBLE);
@@ -459,6 +476,7 @@ public class ActivitySetting extends ActivityEnhanced
             @Override public void onComplete(RippleView rippleView) {
                 finish();
             }
+
         });
 
         final int screenWidth = (int) (getResources().getDisplayMetrics().widthPixels / 1.7);
@@ -520,6 +538,7 @@ public class ActivitySetting extends ActivityEnhanced
                     }
                 });
             }
+
         });
         imgMenu = (MaterialDesignTextView) findViewById(R.id.st_img_menuPopup);
 
@@ -532,6 +551,7 @@ public class ActivitySetting extends ActivityEnhanced
                 Realm realm = Realm.getDefaultInstance();
                 RealmResults<RealmAvatarPath> realmAvatarPaths =
                     realm.where(RealmAvatarPath.class).findAll();
+
 
                 if (realmAvatarPaths.size() > 0) {
                     startDialog(R.array.profile_delete);
@@ -556,6 +576,7 @@ public class ActivitySetting extends ActivityEnhanced
                     .add(R.id.st_layoutParent, fragment, null)
                     .commit();
             }
+
         });
         setAvatar();
         textLanguage = sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, "English");
@@ -673,7 +694,7 @@ public class ActivitySetting extends ActivityEnhanced
                             if (checkBoxPhoto.isChecked()) {
                                 for (File file : filePhoto.listFiles())
                                     if (!file.isDirectory()) file.delete();
-                            }
+                        }
                             if (checkBoxVideo.isChecked()) {
                                 for (File file : fileVideo.listFiles())
                                     if (!file.isDirectory()) file.delete();
@@ -767,6 +788,7 @@ public class ActivitySetting extends ActivityEnhanced
 
         ;
 
+
         ltInAppBrowser.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
                 sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
@@ -776,6 +798,7 @@ public class ActivitySetting extends ActivityEnhanced
                     toggleInAppBrowser.setChecked(false);
                     editor.putInt(SHP_SETTING.KEY_IN_APP_BROWSER, 0);
                     editor.apply();
+
                 } else {
                     toggleInAppBrowser.setChecked(true);
                     editor.putInt(SHP_SETTING.KEY_IN_APP_BROWSER, 1);
@@ -783,6 +806,7 @@ public class ActivitySetting extends ActivityEnhanced
                 }
             }
         });
+
 
         txtNotifyAndSound = (TextView) findViewById(R.id.st_txt_notifyAndSound);
         txtNotifyAndSound.setOnClickListener(new View.OnClickListener() {
@@ -811,6 +835,7 @@ public class ActivitySetting extends ActivityEnhanced
                     toggleSentByEnter.setChecked(false);
                     editor.putInt(SHP_SETTING.KEY_SEND_BT_ENTER, 0);
                     editor.apply();
+
                 } else {
                     toggleSentByEnter.setChecked(true);
                     editor.putInt(SHP_SETTING.KEY_SEND_BT_ENTER, 1);
@@ -818,6 +843,7 @@ public class ActivitySetting extends ActivityEnhanced
                 }
             }
         });
+
 
         txtKeepMedia = (TextView) findViewById(R.id.st_txt_keepMedia);
         txtKeepMedia.setOnClickListener(new View.OnClickListener() {
@@ -838,6 +864,7 @@ public class ActivitySetting extends ActivityEnhanced
                         }
                     })
                     .show();
+
             }
         });
 
@@ -877,7 +904,7 @@ public class ActivitySetting extends ActivityEnhanced
                                 } else if (which[i] == 5) {
                                     KEY_AD_DATA_GIF = which[i];
                                 }
-                            }
+                                }
 
                             sharedPreferences =
                                 getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
@@ -900,6 +927,7 @@ public class ActivitySetting extends ActivityEnhanced
             }
         });
 
+
         KEY_AD_WIFI_PHOTO = sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_PHOTO, -1);
         KEY_AD_WIFI_VOICE_MESSAGE =
             sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_VOICE_MESSAGE, -1);
@@ -907,6 +935,7 @@ public class ActivitySetting extends ActivityEnhanced
         KEY_AD_WIFI_FILE = sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_FILE, -1);
         KEY_AD_WIFI_MUSIC = sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_MUSIC, -1);
         KEY_AD_WIFI_GIF = sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_GIF, -1);
+
 
         txtAutoDownloadWifi = (TextView) findViewById(R.id.st_txt_autoDownloadWifi);
         txtAutoDownloadWifi.setOnClickListener(new View.OnClickListener() {
@@ -938,7 +967,7 @@ public class ActivitySetting extends ActivityEnhanced
                                 } else if (which[i] == 5) {
                                     KEY_AD_WIFI_GIF = which[i];
                                 }
-                            }
+                                }
 
                             sharedPreferences =
                                 getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
@@ -960,6 +989,7 @@ public class ActivitySetting extends ActivityEnhanced
                     .show();
             }
         });
+
 
         KEY_AD_ROAMING_PHOTO = sharedPreferences.getInt(SHP_SETTING.KEY_AD_ROAMING_PHOTO, -1);
         KEY_AD_ROAMING_VOICE_MESSAGE =
@@ -998,7 +1028,7 @@ public class ActivitySetting extends ActivityEnhanced
                                 } else if (which[i] == 5) {
                                     KEY_AD_ROAMINGN_GIF = which[i];
                                 }
-                            }
+                                }
 
                             sharedPreferences =
                                 getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
@@ -1030,6 +1060,7 @@ public class ActivitySetting extends ActivityEnhanced
             toggleEnableAnimation.setChecked(false);
         }
 
+
         ltEnableAnimation.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
                 sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
@@ -1039,6 +1070,7 @@ public class ActivitySetting extends ActivityEnhanced
                     toggleEnableAnimation.setChecked(false);
                     editor.putInt(SHP_SETTING.KEY_ENABLE_ANIMATION, 0);
                     editor.apply();
+
                 } else {
                     toggleEnableAnimation.setChecked(true);
                     editor.putInt(SHP_SETTING.KEY_ENABLE_ANIMATION, 1);
@@ -1056,6 +1088,7 @@ public class ActivitySetting extends ActivityEnhanced
             toggleAutoGifs.setChecked(false);
         }
 
+
         ltAutoGifs.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
                 sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
@@ -1065,6 +1098,7 @@ public class ActivitySetting extends ActivityEnhanced
                     toggleAutoGifs.setChecked(false);
                     editor.putInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, 0);
                     editor.apply();
+
                 } else {
                     toggleAutoGifs.setChecked(true);
                     editor.putInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, 1);
@@ -1078,9 +1112,11 @@ public class ActivitySetting extends ActivityEnhanced
         int checkedSaveToGallery = sharedPreferences.getInt(SHP_SETTING.KEY_SAVE_TO_GALLERY, 0);
         if (checkedSaveToGallery == 1) {
             toggleSaveToGallery.setChecked(true);
+
         } else {
             toggleSaveToGallery.setChecked(false);
         }
+
 
         ltSaveToGallery.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
@@ -1093,6 +1129,7 @@ public class ActivitySetting extends ActivityEnhanced
 
                     editor.putInt(SHP_SETTING.KEY_SAVE_TO_GALLERY, 0);
                     editor.apply();
+
                 } else {
                     toggleSaveToGallery.setChecked(true);
                     editor.putInt(SHP_SETTING.KEY_SAVE_TO_GALLERY, 1);
@@ -1107,6 +1144,7 @@ public class ActivitySetting extends ActivityEnhanced
                 Intent intent = new Intent(ActivitySetting.this, ActivityWebView.class);
                 intent.putExtra("PATH", "Policy");
                 startActivity(intent);
+
             }
         });
 
@@ -1152,7 +1190,7 @@ public class ActivitySetting extends ActivityEnhanced
 
             }
 
-            @Override public void onUserInfoError() {
+            @Override public void onUserInfoError(int majorCode, int minorCode) {
 
             }
         };
@@ -1216,8 +1254,8 @@ public class ActivitySetting extends ActivityEnhanced
 
                                                         //realm.where(RealmAvatarToken.class).equalTo(RealmAvatarTokenFields.TOKEN, token).findFirst().deleteFromRealm();
                                                     }
+                                                    }
                                                 }
-                                            }
                                         });
                                         realm.close();
                                         setAvatar();
@@ -1252,10 +1290,12 @@ public class ActivitySetting extends ActivityEnhanced
                         startActivityForResult(intent, IntentRequests.REQ_GALLERY);
                         dialog.dismiss();
                     }
-                }
+                    }
             })
             .show();
     }
+
+    private long lastUploadedAvatarId;
 
     //=====================================================================================result from camera , gallery and crop
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -1324,6 +1364,44 @@ public class ActivitySetting extends ActivityEnhanced
         Intent refresh = new Intent(this, ActivitySetting.class);
         startActivity(refresh);
         finish();
+    }
+
+    public static long getFolderSize(File dir) {
+        long size = 0;
+        for (File file : dir.listFiles()) {
+            if (file.isFile()) {
+                System.out.println(file.getName() + " " + file.length());
+                size += file.length();
+            } else {
+                size += getFolderSize(file);
+            }
+        }
+        return size;
+    }
+
+    public static String formatFileSize(long size) {
+        String hrSize = null;
+
+        double b = size;
+        double k = size / 1024.0;
+        double m = ((size / 1024.0) / 1024.0);
+        double g = (((size / 1024.0) / 1024.0) / 1024.0);
+        double t = ((((size / 1024.0) / 1024.0) / 1024.0) / 1024.0);
+
+        DecimalFormat dec = new DecimalFormat("0.0");
+
+        if (t > 1) {
+            hrSize = dec.format(t).concat(" TB");
+        } else if (g > 1) {
+            hrSize = dec.format(g).concat(" GB");
+        } else if (m > 1) {
+            hrSize = dec.format(m).concat(" MB");
+        } else if (k > 1) {
+            hrSize = dec.format(k).concat(" KB");
+        } else {
+            hrSize = dec.format(b).concat(" Bytes");
+        }
+        return hrSize;
     }
 
     public void setAvatar() {

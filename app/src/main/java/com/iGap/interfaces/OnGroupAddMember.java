@@ -8,4 +8,6 @@ package com.iGap.interfaces;
 public interface OnGroupAddMember {
 
     void onGroupAddMember();
+
+    void onError(int majorCode, int minorCode);
 }
