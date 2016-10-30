@@ -249,7 +249,7 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                     searchView.setEnabled(true);
                 }
 
-                @Override public void onChatGetRoomError() {
+                @Override public void onChatGetRoomError(int majorCode, int minorCode) {
                     prgWaiting.setVisibility(View.GONE);
                     rv.setEnabled(true);
                     vgAddContact.setEnabled(true);
@@ -325,7 +325,7 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                 searchView.setEnabled(true);
             }
 
-            @Override public void onUserInfoError() {
+            @Override public void onUserInfoError(int majorCode, int minorCode) {
                 prgWaiting.setVisibility(View.GONE);
                 rv.setEnabled(true);
                 vgAddContact.setEnabled(true);

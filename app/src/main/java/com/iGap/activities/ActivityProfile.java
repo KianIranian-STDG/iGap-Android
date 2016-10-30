@@ -241,7 +241,7 @@ public class ActivityProfile extends ActivityEnhanced
 
             }
 
-            @Override public void onUserInfoError() {
+            @Override public void onUserInfoError(int majorCode, int minorCode) {
 
             }
         };

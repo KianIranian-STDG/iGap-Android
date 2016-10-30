@@ -40,9 +40,9 @@ public class UserContactsEditResponse extends MessageHandler {
     @Override public void error() {
 
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
-        errorResponse.getMajorCode();
-        errorResponse.getMinorCode();
-        G.onUserContactEdit.onContactEditError();
+        int MajorCode = errorResponse.getMajorCode();
+        int MinorCode = errorResponse.getMinorCode();
+        G.onUserContactEdit.onContactEditError(MajorCode, MinorCode);
 
         Log.i("XXX", "UserContactsEditResponse errorReponse.getMajorCode() : "
             + errorResponse.getMajorCode());

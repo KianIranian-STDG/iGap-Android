@@ -383,7 +383,7 @@ public class SearchFragment extends Fragment {
 
                 }
 
-                @Override public void onChatGetRoomError() {
+                @Override public void onChatGetRoomError(int majorCode, int minorCode) {
 
                 }
             };

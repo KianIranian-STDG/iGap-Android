@@ -70,7 +70,7 @@ public class UserInfoResponse extends MessageHandler {
 
         Log.i("SOCA", "UserInfoResponse response.majorCode() : " + majorCode);
         Log.i("SOCA", "UserInfoResponse response.minorCode() : " + minorCode);
-        G.onUserInfoResponse.onUserInfoError();
+        G.onUserInfoResponse.onUserInfoError(majorCode, minorCode);
     }
 }
 

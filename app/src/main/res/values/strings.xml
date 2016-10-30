@@ -91,8 +91,8 @@
   <string name="fa_question_circle">&#xf059;</string>
 
 
-  <string name="unmute_notification">UnMute Notification</string>
-  <string name="mute_notification">Mute Notification</string>
+  <string name="unmute_notification">UnMute Notifications</string>
+  <string name="mute_notification">Mute Notifications</string>
   <string name="chat">Chat</string>
   <string name="group">Group</string>
   <string name="channel">Channel</string>
@@ -253,7 +253,7 @@
   <string name="st_contactName">Contact Name:</string>
   <string name="st_phoneNumber">Phone Number:</string>
   <string name="st_title_info">Info</string>
-  <string name="st_title_notification_sounds">Notification and Sounds</string>
+  <string name="st_title_notification_sounds">Notifications and Sounds</string>
   <string name="st_title_Clear_Cache">Clear Cache</string>
   <string name="st_title_Privacy_Security">Privacy and Security</string>
   <string name="st_title_message">Message</string>
@@ -278,15 +278,15 @@
     <string name="st_dialog_content_keepMedia">Photo , video and other files from cloud chats that ypo have not accessed during this period
         will be removed from this device to save disc space. \n all media will staying the iGap cloud and can be reDownloaded if you need it again.
     </string>
-  <string name="st_titleToolbar_page_Notification_and_sounds">Message Notification</string>
-  <string name="st_title_messageNotification">Message Notification</string>
+  <string name="st_titleToolbar_page_Notification_and_sounds">Message Notifications</string>
+  <string name="st_title_messageNotification">Message Notifications</string>
   <string name="st_alert">Alert</string>
   <string name="st_messagePreview">Message Preview</string>
   <string name="st_led_color">LED Color</string>
   <string name="st_vibrate">Vibrate</string>
-  <string name="st_popupNotification">Popup Notification</string>
+  <string name="st_popupNotification">Popup Notifications</string>
   <string name="st_sound">Sound</string>
-  <string name="st_title_groupNotification">Group Notification</string>
+  <string name="st_title_groupNotification">Group Notifications</string>
   <string name="st_title_in_app_notification">In-App Notifications</string>
   <string name="st_in_app_sound">In-App Sounds</string>
   <string name="st_in_app_vibrate">In-App Vibrate</string>
@@ -296,16 +296,16 @@
   <string name="st_Contact_joined_igap">Contact joined iGap</string>
   <string name="st_pinned_message">Pinned Message</string>
   <string name="st_title_other">Other</string>
-  <string name="st_text_keep_alive_service">Relaunch app when down by user or system. this will ensure app can show notification</string>
+  <string name="st_text_keep_alive_service">Relaunch app when down by user or system. this will ensure app can show notifications</string>
   <string name="st_keep_alive_service">Keep-Alive Service</string>
   <string name="st_background_connection">Background Connection</string>
-  <string name="st_text_background_connection">Keep a low impact background connection to iGap to receive notification. Enable for reliable notification  </string>
+  <string name="st_text_background_connection">Keep a low impact background connection to iGap to receive notifications. Enable for reliable notifications  </string>
   <string name="st_badge_counter">Pinned Message</string>
   <string name="st_Repeat_Notifications">Pinned Message</string>
   <string name="st_title_reset">Reset</string>
-  <string name="st_reset_all_notification">Reset all Notification</string>
-  <string name="st_text_reset_all_notification">Undo all custom notification settings for all your contacts and groups</string>
-  <string name="st_dialog_reset_all_notification">Are you sure for undo all custom notification setting?</string>
+  <string name="st_reset_all_notification">Reset all Notifications</string>
+  <string name="st_text_reset_all_notification">Undo all custom notifications settings for all your contacts and groups</string>
+  <string name="st_dialog_reset_all_notification">Are you sure for undo all custom notifications setting?</string>
   <string name="st_dialog_reset_all_notification_yes">YES</string>
   <string name="st_dialog_reset_all_notification_no">NO</string>
   <string name="st_popup_logout">Are you sure you want to log out? \n Note that you can seamLesly use iGap on all your devices at once. \n Remember,logging out kills all your Secret Chats.</string>
@@ -401,7 +401,7 @@
   <string name="array_1_hour">1 Hour</string>
   <string name="array_2_hour">2 Hours</string>
   <string name="array_4_hour">4 Hours</string>
-  <string name="array_Default_Notification_tone">Default Notification Tone</string>
+  <string name="array_Default_Notification_tone">Default Notifications Tone</string>
 
   <string name="replay_item_dialog">Replay</string>
   <string name="copy_item_dialog">Copy</string>
@@ -479,7 +479,7 @@
   <string name="set_modereator">Set Moderator</string>
   <string name="set_kick">KICK</string>
   <string name="member_can_add_new_member">Member Can Add New Member</string>
-  <string name="notificaion_and_sound">Notification and Sound</string>
+  <string name="notificaion_and_sound">Notifications and Sound</string>
   <string name="last_msg_format_chat">%s</string>
 
   <!--Toast-->

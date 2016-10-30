@@ -327,7 +327,7 @@ public class G extends Application {
 
             }
 
-            @Override public void onUserInfoError() {
+            @Override public void onUserInfoError(int majorCode, int minorCode) {
 
             }
         };

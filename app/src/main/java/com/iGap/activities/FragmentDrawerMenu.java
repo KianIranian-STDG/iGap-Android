@@ -243,7 +243,7 @@ public class FragmentDrawerMenu extends MenuFragment {
 
             }
 
-            @Override public void onUserInfoError() {
+            @Override public void onUserInfoError(int majorCode, int minorCode) {
 
             }
         };

@@ -118,6 +118,10 @@ public class ContactGroupFragment extends Fragment {
                             getActivity().getSupportFragmentManager().popBackStack();
                         }
                     }
+
+                    @Override public void onError(int majorCode, int minorCode) {
+
+                    }
                 };
 
                 Realm realm = Realm.getDefaultInstance();
