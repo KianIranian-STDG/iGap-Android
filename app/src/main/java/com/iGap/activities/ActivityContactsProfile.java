@@ -52,6 +52,7 @@ import com.iGap.interfaces.OnUserContactEdit;
 import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.MaterialDesignTextView;
+import com.iGap.module.StructListOfContact;
 import com.iGap.module.StructMessageAttachment;
 import com.iGap.module.StructMessageInfo;
 import com.iGap.proto.ProtoGlobal;
@@ -73,6 +74,7 @@ import com.iGap.realm.RealmRoomMessage;
 import com.iGap.request.RequestChatDelete;
 import com.iGap.request.RequestChatGetRoom;
 import com.iGap.request.RequestUserAvatarGetList;
+import com.iGap.request.RequestUserContactImport;
 import com.iGap.request.RequestUserContactsDelete;
 import com.iGap.request.RequestUserContactsEdit;
 import com.iGap.request.RequestUserInfo;
@@ -90,9 +92,11 @@ import static com.iGap.G.context;
 public class ActivityContactsProfile extends ActivityEnhanced {
     private long userId = 0;
     private long roomId;
-    private long phone = 912123456;
-    private String displayName = "Alexander Smith";
-    private String username = "Alexander Smith";
+    private long phone = 0;
+    private String displayName = "";
+    private String username = "";
+    private String firstName;
+    private String lastName;
     private long lastSeen;
     private String initials;
     private String color;
@@ -153,6 +157,8 @@ public class ActivityContactsProfile extends ActivityEnhanced {
         if (realmUser != null) {
             phone = realmUser.getPhone();
             displayName = realmUser.getDisplay_name();
+            firstName = realmUser.getFirst_name();
+            lastName = realmUser.getLast_name();
             username = realmUser.getUsername();
             lastSeen = realmUser.getLast_seen();
             color = realmUser.getColor();
@@ -160,6 +166,8 @@ public class ActivityContactsProfile extends ActivityEnhanced {
         } else {
             phone = realmRegisteredInfo.getPhone();
             displayName = realmRegisteredInfo.getDisplayName();
+            firstName = realmRegisteredInfo.getFirstName();
+            lastName = realmRegisteredInfo.getLastName();
             username = realmRegisteredInfo.getUsername();
             lastSeen = realmRegisteredInfo.getLastSeen();
             color = realmRegisteredInfo.getColor();
@@ -817,7 +825,7 @@ public class ActivityContactsProfile extends ActivityEnhanced {
 
     private void showPopupPhoneNumber(View v, String number) {
 
-        boolean isExict;
+        boolean isExist;
         Uri lookupUri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI,
             Uri.encode(number));
         String[] mPhoneNumberProjection = {
@@ -829,16 +837,16 @@ public class ActivityContactsProfile extends ActivityEnhanced {
         try {
             if (cur.moveToFirst()) {
 
-                isExict = true;
+                isExist = true;
             } else {
 
-                isExict = false;
+                isExist = false;
             }
         } finally {
             if (cur != null) cur.close();
         }
 
-        if (isExict) {
+        if (isExist) {
             new MaterialDialog.Builder(this).title(R.string.phone_number)
                 .items(R.array.phone_number2)
                 .itemsCallback(new MaterialDialog.ListCallback() {
@@ -919,6 +927,7 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                                 try {
                                     G.context.getContentResolver()
                                         .applyBatch(ContactsContract.AUTHORITY, ops);
+                                    addContactToServer();
                                     Toast.makeText(G.context, R.string.save_ok, Toast.LENGTH_SHORT)
                                         .show();
                                 } catch (Exception e) {
@@ -973,6 +982,21 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                 })
                 .show();
         }
+    }
+
+    /**
+     * import contact to server with True force
+     */
+    private void addContactToServer() {
+        ArrayList<StructListOfContact> contacts = new ArrayList<>();
+        StructListOfContact contact = new StructListOfContact();
+        contact.firstName = firstName;
+        contact.lastName = lastName;
+        contact.phone = phone + "";
+
+        contacts.add(contact);
+
+        new RequestUserContactImport().contactImport(contacts, true);
     }
 
     private void showPopUp() {

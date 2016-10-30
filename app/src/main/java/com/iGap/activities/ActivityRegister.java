@@ -117,6 +117,7 @@ public class ActivityRegister extends ActivityEnhanced {
     public static int positionRadioButton = -1;
 
     private Dialog dialog;
+    private int digitCount;
 
     static final String KEY_SAVE_CODENUMBER = "SAVE_CODENUMBER";
     static final String KEY_SAVE_PHONENUMBER_MASK = "SAVE_PHONENUMBER_MASK";
@@ -744,7 +745,8 @@ public class ActivityRegister extends ActivityEnhanced {
 
             @Override public void onRegister(final String userNameR, final long userIdR,
                 final ProtoUserRegister.UserRegisterResponse.Method methodValue,
-                final List<Long> smsNumbersR, String regex) {
+                final List<Long> smsNumbersR, String regex, int verifyCodeDigitCount) {
+                digitCount = verifyCodeDigitCount;
                 countDownTimer.start();
                 regexFetchCodeVerification = regex;
                 runOnUiThread(new Runnable() {

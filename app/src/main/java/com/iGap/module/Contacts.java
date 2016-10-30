@@ -139,7 +139,7 @@ public class Contacts {
         }
         if (sendToServer) {
             RequestUserContactImport listContact = new RequestUserContactImport();
-            listContact.contactImport(resultContactList);
+            listContact.contactImport(resultContactList, false);
         }
         return resultContactList;
     }

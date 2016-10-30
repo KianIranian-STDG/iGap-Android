@@ -1,5 +1,6 @@
 package com.iGap.request;
 
+import android.util.Log;
 import com.iGap.proto.ProtoUserContactsGetList;
 
 public class RequestUserContactsGetList {
@@ -8,6 +9,7 @@ public class RequestUserContactsGetList {
 
         ProtoUserContactsGetList.UserContactsGetList.Builder builder =
             ProtoUserContactsGetList.UserContactsGetList.newBuilder();
+        Log.i("WWW", "RequestUserContactsGetList");
         RequestWrapper requestWrapper = new RequestWrapper(107, builder);
 
         try {

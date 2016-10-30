@@ -112,7 +112,7 @@ public class ServiceContact extends Service {
                 }
             }
             RequestUserContactImport listContact = new RequestUserContactImport();
-            listContact.contactImport(resultContactList);
+            listContact.contactImport(resultContactList, false);
         }
     }
 }

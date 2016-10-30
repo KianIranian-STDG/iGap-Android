@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class RequestUserContactImport {
 
-    public void contactImport(ArrayList<StructListOfContact> itemContactList) {
+    public void contactImport(ArrayList<StructListOfContact> itemContactList, boolean force) {
 
         ProtoUserContactsImport.UserContactsImport.Builder userContactsImport =
             ProtoUserContactsImport.UserContactsImport.newBuilder();
@@ -24,6 +24,7 @@ public class RequestUserContactImport {
             contact.setFirstName(first_name);
             contact.setLastName(last_name);
 
+            userContactsImport.setForce(force);
             userContactsImport.addContacts(i, contact);
         }
 

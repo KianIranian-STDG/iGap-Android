@@ -24,21 +24,17 @@ public class UserContactsGetListResponse extends MessageHandler {
     public String identity;
     public Context context;
 
-    public UserContactsGetListResponse(int actionId, Object protoClass, String identity,
-        Context context) { // context shuld be activity for permision in api 6+
+    public UserContactsGetListResponse(int actionId, Object protoClass, String identity) {
         super(actionId, protoClass, identity);
 
         this.message = protoClass;
         this.actionId = actionId;
         this.identity = identity;
-        this.context = context;
     }
 
     @Override public void handler() {
-
         final ProtoUserContactsGetList.UserContactsGetListResponse.Builder builder =
             (ProtoUserContactsGetList.UserContactsGetListResponse.Builder) message;
-        builder.toString().length();
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override public void execute(Realm realm) {

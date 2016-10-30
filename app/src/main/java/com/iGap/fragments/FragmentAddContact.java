@@ -14,6 +14,8 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.MaterialDesignTextView;
+import com.iGap.module.StructListOfContact;
+import com.iGap.request.RequestUserContactImport;
 import java.util.ArrayList;
 
 public class FragmentAddContact extends android.support.v4.app.Fragment {
@@ -121,6 +123,7 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
                         try {
                             G.context.getContentResolver()
                                 .applyBatch(ContactsContract.AUTHORITY, ops);
+                            addContactToServer();
                             Toast.makeText(G.context, R.string.save_ok, Toast.LENGTH_SHORT).show();
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -143,6 +146,21 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
                 }
             }
         });
+    }
+
+    /**
+     * import contact to server with True force
+     */
+    private void addContactToServer() {
+        ArrayList<StructListOfContact> contacts = new ArrayList<>();
+        StructListOfContact contact = new StructListOfContact();
+        contact.firstName = txtFirstName.getText().toString();
+        contact.lastName = txtLastName.getText().toString();
+        contact.phone = txtPhoneNumber.getText().toString();
+
+        contacts.add(contact);
+
+        new RequestUserContactImport().contactImport(contacts, true);
     }
 
     //***************************************************************************************

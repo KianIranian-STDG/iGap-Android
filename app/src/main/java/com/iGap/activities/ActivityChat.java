@@ -434,8 +434,7 @@ public class ActivityChat extends ActivityEnhanced
                 initialize = realmRoom.getInitials();
                 color = realmRoom.getColor();
 
-                if (realmRoom.getType()
-                    == RoomType.CHAT) { //TODO [Saeed Mozaffari] [2016-10-10 2:32 PM] - get info from registered userInfo
+                if (realmRoom.getType() == RoomType.CHAT) {
 
                     chatType = ProtoGlobal.Room.Type.CHAT;
                     RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
@@ -443,7 +442,17 @@ public class ActivityChat extends ActivityEnhanced
                     RealmContacts realmContacts = realm.where(RealmContacts.class)
                         .equalTo(RealmContactsFields.ID, chatPeerId)
                         .findFirst();
-                    if (realmContacts != null) {
+
+                    RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class)
+                        .equalTo(RealmRegisteredInfoFields.ID, chatPeerId)
+                        .findFirst();
+
+                    if (realmRegisteredInfo != null) {
+                        title = realmRegisteredInfo.getDisplayName();
+                        initialize = realmRegisteredInfo.getInitials();
+                        color = realmRegisteredInfo.getColor();
+                        lastSeen = Long.toString(realmRegisteredInfo.getLastSeen());
+                    } else if (realmContacts != null) {
                         title = realmContacts.getDisplay_name();
                         initialize = realmContacts.getInitials();
                         color = realmContacts.getColor();
@@ -469,13 +478,15 @@ public class ActivityChat extends ActivityEnhanced
             } else {
                 chatPeerId = extras.getLong("peerId");
                 chatType = ProtoGlobal.Room.Type.CHAT;
-                RealmContacts realmContacts = realm.where(RealmContacts.class)
-                    .equalTo(RealmContactsFields.ID, chatPeerId)
+                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class)
+                    .equalTo(RealmRegisteredInfoFields.ID, chatPeerId)
                     .findFirst();
-                title = realmContacts.getDisplay_name();
-                initialize = realmContacts.getInitials();
-                color = realmContacts.getColor();
-                lastSeen = Long.toString(realmContacts.getLast_seen());
+                if (realmRegisteredInfo != null) {
+                    title = realmRegisteredInfo.getDisplayName();
+                    initialize = realmRegisteredInfo.getInitials();
+                    color = realmRegisteredInfo.getColor();
+                    lastSeen = Long.toString(realmRegisteredInfo.getLastSeen());
+                }
             }
             realm.close();
         }
@@ -1935,12 +1946,18 @@ public class ActivityChat extends ActivityEnhanced
 
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == AttachFile.request_code_position && locationManager.isProviderEnabled(
+            LocationManager.GPS_PROVIDER)) {
+            attachFile.requestGetPosition(complete);
+            return;
+        }
+
         if (AttachFile.request_code_TAKE_PICTURE == requestCode) {
             latestFilePath = AttachFile.imagePath;
             latestUri = null;
         } else {
             latestUri = data.getData();
-            String filePath = AttachFile.getFilePathFromUri(data.getData());
             latestFilePath = "";
         }
         latestRequestCode = requestCode;
@@ -1978,10 +1995,6 @@ public class ActivityChat extends ActivityEnhanced
 
             return;
         }
-
-        //if (requestCode == AttachFile.request_code_position && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-        //    attachFile.requestGetPosition(complete);
-        //}
     }
 
     private void setDraftMessage(int requestCode) {
@@ -2280,7 +2293,8 @@ public class ActivityChat extends ActivityEnhanced
 
                 switchAddItem(new ArrayList<>(Arrays.asList(finalMessageInfo)), false);
 
-                if (finalFilePath != null) {
+                if (finalFilePath != null
+                    && finalMessageType != ProtoGlobal.RoomMessageType.CONTACT) {
                     new UploadTask().execute(finalFilePath, messageId, finalMessageType, mRoomId,
                         getWrittenMessage());
                 } else {

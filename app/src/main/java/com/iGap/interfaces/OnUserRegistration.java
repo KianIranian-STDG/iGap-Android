@@ -7,7 +7,7 @@ public interface OnUserRegistration {
 
     void onRegister(String userName, long userId,
         ProtoUserRegister.UserRegisterResponse.Method methodValue, List<Long> smsNumbers,
-        String regex);
+        String regex, int verifyCodeDigitCount);
 
     void onRegisterError(int majorCode, int minorCode);
 }

@@ -262,8 +262,8 @@ public class G extends Application {
                 getContactListFromServer();
             }
         };
-        Contacts.getListOfContact(
-            true);  // this can be go in the activity for cheke permision in api 6+
+        // this can be go in the activity for cheke permision in api 6+
+        Contacts.getListOfContact(true);
     }
 
     public static void getContactListFromServer() {
