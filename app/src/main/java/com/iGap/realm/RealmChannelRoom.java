@@ -2,7 +2,6 @@ package com.iGap.realm;
 
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.enums.ChannelChatRole;
-
 import io.realm.Realm;
 import io.realm.RealmObject;
 
@@ -13,6 +12,22 @@ public class RealmChannelRoom extends RealmObject {
     private int avatarCount;
     private RealmAvatar avatar;
     private RealmNotificationSetting realmNotificationSetting;
+
+    /**
+     * convert ProtoGlobal.ChannelRoom to RealmChannelRoom
+     *
+     * @param room ProtoGlobal.ChannelRoom
+     * @return RealmChannelRoom
+     */
+    public static RealmChannelRoom convert(ProtoGlobal.ChannelRoom room,
+        RealmChannelRoom realmChannelRoom, Realm realm) {
+        if (realmChannelRoom == null) {
+            realmChannelRoom = realm.createObject(RealmChannelRoom.class);
+        }
+        realmChannelRoom.setParticipantsCountLabel(room.getParticipantsCountLabel());
+        realmChannelRoom.setRole(ChannelChatRole.convert(room.getRole()));
+        return realmChannelRoom;
+    }
 
     public ChannelChatRole getRole() {
         return (role != null) ? ChannelChatRole.valueOf(role) : null;
@@ -50,7 +65,6 @@ public class RealmChannelRoom extends RealmObject {
         return avatar;
     }
 
-
     public void setAvatar(RealmAvatar avatar) {
         this.avatar = avatar;
     }
@@ -61,20 +75,5 @@ public class RealmChannelRoom extends RealmObject {
 
     public void setRealmNotificationSetting(RealmNotificationSetting realmNotificationSetting) {
         this.realmNotificationSetting = realmNotificationSetting;
-    }
-
-    /**
-     * convert ProtoGlobal.ChannelRoom to RealmChannelRoom
-     *
-     * @param room ProtoGlobal.ChannelRoom
-     * @return RealmChannelRoom
-     */
-    public static RealmChannelRoom convert(ProtoGlobal.ChannelRoom room, RealmChannelRoom realmChannelRoom, Realm realm) {
-        if (realmChannelRoom == null) {
-            realmChannelRoom = realm.createObject(RealmChannelRoom.class);
-        }
-        realmChannelRoom.setParticipantsCountLabel(room.getParticipantsCountLabel());
-        realmChannelRoom.setRole(ChannelChatRole.convert(room.getRole()));
-        return realmChannelRoom;
     }
 }

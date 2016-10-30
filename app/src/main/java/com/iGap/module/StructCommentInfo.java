@@ -19,6 +19,4 @@ public class StructCommentInfo {
     public ArrayList<String> allChanges = new ArrayList<>();
 
     public ArrayList<StructCommentInfo> replayMessageList;
-
-
 }

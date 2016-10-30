@@ -21,30 +21,30 @@ import static com.iGap.module.AndroidUtils.suitablePath;
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/2016.
  */
-public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageWithTextItem.ViewHolder> {
+public class ImageWithTextItem
+    extends AbstractMessage<ImageWithTextItem, ImageWithTextItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
     public ImageWithTextItem(ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         super(true, type, messageClickListener);
     }
 
-    @Override
-    public int getType() {
+    @Override public int getType() {
         return R.id.chatSubLayoutImageWithText;
     }
 
-    @Override
-    public int getLayoutRes() {
+    @Override public int getLayoutRes() {
         return R.layout.chat_sub_layout_image_with_text;
     }
 
-    @Override
-    public void bindView(final ViewHolder holder, List payloads) {
+    @Override public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
         if (mMessage.attachment != null) {
-            int[] dimens = AndroidUtils.scaleDimenWithSavedRatio(holder.itemView.getContext(), mMessage.attachment.width, mMessage.attachment.height);
-            ((ViewGroup) holder.image.getParent()).setLayoutParams(new LinearLayout.LayoutParams(dimens[0], dimens[1]));
+            int[] dimens = AndroidUtils.scaleDimenWithSavedRatio(holder.itemView.getContext(),
+                mMessage.attachment.width, mMessage.attachment.height);
+            ((ViewGroup) holder.image.getParent()).setLayoutParams(
+                new LinearLayout.LayoutParams(dimens[0], dimens[1]));
             holder.image.getParent().requestLayout();
         }
 
@@ -69,8 +69,7 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
         ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.image);
     }
 
-    @Override
-    public ViewHolderFactory<? extends ViewHolder> getFactory() {
+    @Override public ViewHolderFactory<? extends ViewHolder> getFactory() {
         return FACTORY;
     }
 

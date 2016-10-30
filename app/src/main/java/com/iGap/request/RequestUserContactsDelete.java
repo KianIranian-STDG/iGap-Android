@@ -6,7 +6,8 @@ public class RequestUserContactsDelete {
 
     public void contactsDelete(long phone) {
 
-        ProtoUserContactsDelete.UserContactsDelete.Builder builder = ProtoUserContactsDelete.UserContactsDelete.newBuilder();
+        ProtoUserContactsDelete.UserContactsDelete.Builder builder =
+            ProtoUserContactsDelete.UserContactsDelete.newBuilder();
         builder.setPhone(phone);
         RequestWrapper requestWrapper = new RequestWrapper(108, builder);
         try {

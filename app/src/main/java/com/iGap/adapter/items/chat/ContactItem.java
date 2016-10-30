@@ -20,18 +20,15 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
         super(true, type, messageClickListener);
     }
 
-    @Override
-    public int getType() {
+    @Override public int getType() {
         return R.id.chatSubLayoutContact;
     }
 
-    @Override
-    public int getLayoutRes() {
+    @Override public int getLayoutRes() {
         return R.layout.chat_sub_layout_contact;
     }
 
-    @Override
-    public void bindView(ViewHolder holder, List payloads) {
+    @Override public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
         holder.name.setText(mMessage.userInfo.displayName);
@@ -46,8 +43,7 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
             }*/
     }
 
-    @Override
-    public ViewHolderFactory<? extends ViewHolder> getFactory() {
+    @Override public ViewHolderFactory<? extends ViewHolder> getFactory() {
         return FACTORY;
     }
 

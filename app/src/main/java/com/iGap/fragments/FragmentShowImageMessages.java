@@ -73,7 +73,9 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
         G.onFileDownloadResponse = this;
     }
 
-    @Nullable @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    @Nullable @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+        @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_show_image_messages, container, false);
     }
 
@@ -89,28 +91,38 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
         mAdapter = new ImageMessagesAdapter<>();
 
         // ripple back
-        ((RippleView) view.findViewById(R.id.back)).setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
-                getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentShowImageMessages.this).commit();
-            }
-        });
+        ((RippleView) view.findViewById(R.id.back)).setOnRippleCompleteListener(
+            new RippleView.OnRippleCompleteListener() {
+                @Override public void onComplete(RippleView rippleView) {
+                    getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .remove(FragmentShowImageMessages.this)
+                        .commit();
+                }
+            });
 
         // ripple menu
-        ((RippleView) view.findViewById(R.id.menu)).setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
-                showPopupMenu();
-            }
-        });
+        ((RippleView) view.findViewById(R.id.menu)).setOnRippleCompleteListener(
+            new RippleView.OnRippleCompleteListener() {
+                @Override public void onComplete(RippleView rippleView) {
+                    showPopupMenu();
+                }
+            });
 
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmChatHistory> histories = realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, mRoomId).findAll();
+        RealmResults<RealmChatHistory> histories = realm.where(RealmChatHistory.class)
+            .equalTo(RealmChatHistoryFields.ROOM_ID, mRoomId)
+            .findAll();
         if (!histories.isEmpty()) {
             // there is at least on history in DB
             long identifier = System.nanoTime();
             for (RealmChatHistory history : histories) {
-                ProtoGlobal.RoomMessageType messageType = ProtoGlobal.RoomMessageType.valueOf(history.getRoomMessage().getMessageType());
-                if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
-                    mAdapter.add(new ImageMessageItem().setMessage(history.getRoomMessage()).withIdentifier(identifier));
+                ProtoGlobal.RoomMessageType messageType =
+                    ProtoGlobal.RoomMessageType.valueOf(history.getRoomMessage().getMessageType());
+                if (messageType == ProtoGlobal.RoomMessageType.IMAGE
+                    || messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
+                    mAdapter.add(new ImageMessageItem().setMessage(history.getRoomMessage())
+                        .withIdentifier(identifier));
                     identifier++;
                 }
             }
@@ -120,19 +132,24 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
             mRecyclerView.setHasFixedSize(true);
             mRecyclerView.setItemViewCacheSize(20);
             mRecyclerView.setDrawingCacheEnabled(true);
-            LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+            LinearLayoutManager layoutManager =
+                new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
             mRecyclerView.setLayoutManager(layoutManager);
             mRecyclerView.setAdapter(mAdapter);
 
             mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                @Override
+                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                     super.onScrollStateChanged(recyclerView, newState);
 
-                    int currentlyViewedPos = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                    int currentlyViewedPos =
+                        ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
                     ImageMessageItem item = mAdapter.getAdapterItem(currentlyViewedPos);
-                    mCount.setText(String.format(getString(R.string.d_of_d), currentlyViewedPos + 1, mAdapter.getAdapterItemCount()));
+                    mCount.setText(String.format(getString(R.string.d_of_d), currentlyViewedPos + 1,
+                        mAdapter.getAdapterItemCount()));
                     mFileName.setText(item.message.getAttachment().getName());
-                    mMessageTime.setText(TimeUtils.getChatSettingsTimeAgo(getContext(), new Date(item.message.getUpdateTime())));
+                    mMessageTime.setText(TimeUtils.getChatSettingsTimeAgo(getContext(),
+                        new Date(item.message.getUpdateTime())));
                 }
             });
 
@@ -141,9 +158,11 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
             helper.attachToRecyclerView(mRecyclerView);
 
             ImageMessageItem selectedItem = findByToken(mSelectedToken);
-            mCount.setText(String.format(getString(R.string.d_of_d), 1, mAdapter.getAdapterItemCount()));
+            mCount.setText(
+                String.format(getString(R.string.d_of_d), 1, mAdapter.getAdapterItemCount()));
             mFileName.setText(selectedItem.message.getAttachment().getName());
-            mMessageTime.setText(TimeUtils.getChatSettingsTimeAgo(getContext(), new Date(selectedItem.message.getUpdateTime())));
+            mMessageTime.setText(TimeUtils.getChatSettingsTimeAgo(getContext(),
+                new Date(selectedItem.message.getUpdateTime())));
 
             preSelect();
         } else {
@@ -176,14 +195,18 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
     }
 
     private void showPopupMenu() {
-        MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).items(R.array.pop_up_menu_show_image).contentColor(Color.BLACK).itemsCallback(new MaterialDialog.ListCallback() {
-            @Override public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                if (which == 0) {
-                    showAllMedia();
-                } else if (which == 1) {
-                    saveToGallery();
-                }
-                // TODO: 10/26/2016 [Alireza] implement delete
+        MaterialDialog dialog =
+            new MaterialDialog.Builder(getActivity()).items(R.array.pop_up_menu_show_image)
+                .contentColor(Color.BLACK)
+                .itemsCallback(new MaterialDialog.ListCallback() {
+                    @Override public void onSelection(MaterialDialog dialog, View view, int which,
+                        CharSequence text) {
+                        if (which == 0) {
+                            showAllMedia();
+                        } else if (which == 1) {
+                            saveToGallery();
+                        }
+                        // TODO: 10/26/2016 [Alireza] implement delete
                         /*else if (which == 2) {
                             int pos = mRecyclerView.getCurrentItem();
                             if (deleteFromGallery(pos)) {
@@ -193,8 +216,9 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
                                 }
                             }
                         }*/
-            }
-        }).show();
+                    }
+                })
+                .show();
 
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
         layoutParams.copyFrom(dialog.getWindow().getAttributes());
@@ -211,7 +235,8 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
         Log.i(FragmentShowImageMessages.class.getSimpleName(), "Save to gallery");
     }
 
-    @Override public void onFileDownload(final String token, final int offset, final ProtoFileDownload.FileDownload.Selector selector, final int progress) {
+    @Override public void onFileDownload(final String token, final int offset,
+        final ProtoFileDownload.FileDownload.Selector selector, final int progress) {
         getActivity().runOnUiThread(new Runnable() {
             @Override public void run() {
                 if (selector != ProtoFileDownload.FileDownload.Selector.FILE) {
@@ -225,7 +250,9 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
         });
     }
 
-    @Override public void onAvatarDownload(String token, int offset, ProtoFileDownload.FileDownload.Selector selector, int progress, long userId, RoomType roomType) {
+    @Override public void onAvatarDownload(String token, int offset,
+        ProtoFileDownload.FileDownload.Selector selector, int progress, long userId,
+        RoomType roomType) {
         // empty
     }
 }

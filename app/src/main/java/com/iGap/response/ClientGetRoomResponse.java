@@ -1,7 +1,6 @@
 package com.iGap.response;
 
 import android.util.Log;
-
 import com.iGap.G;
 import com.iGap.helper.HelperRealm;
 import com.iGap.proto.ProtoClientGetRoom;
@@ -9,7 +8,6 @@ import com.iGap.proto.ProtoError;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
-
 import io.realm.Realm;
 
 public class ClientGetRoomResponse extends MessageHandler {
@@ -26,20 +24,20 @@ public class ClientGetRoomResponse extends MessageHandler {
         this.identity = identity;
     }
 
-
-    @Override
-    public void handler() {
+    @Override public void handler() {
 
         Log.i("SOC", "ClientGetRoomResponse handler : " + message);
 
-        final ProtoClientGetRoom.ClientGetRoomResponse.Builder clientGetRoom = (ProtoClientGetRoom.ClientGetRoomResponse.Builder) message;
+        final ProtoClientGetRoom.ClientGetRoomResponse.Builder clientGetRoom =
+            (ProtoClientGetRoom.ClientGetRoomResponse.Builder) message;
 
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
+            @Override public void execute(Realm realm) {
                 // check if room doesn't exist, add room to database
-                RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, clientGetRoom.getRoom().getId()).findFirst();
+                RealmRoom room = realm.where(RealmRoom.class)
+                    .equalTo(RealmRoomFields.ID, clientGetRoom.getRoom().getId())
+                    .findFirst();
                 if (room == null) {
                     realm.copyToRealmOrUpdate(RealmRoom.convert(clientGetRoom.getRoom(), realm));
                 }
@@ -47,13 +45,15 @@ public class ClientGetRoomResponse extends MessageHandler {
         });
 
         realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, clientGetRoom.getRoom().getId()).findFirst();
+            @Override public void execute(Realm realm) {
+                RealmRoom room = realm.where(RealmRoom.class)
+                    .equalTo(RealmRoomFields.ID, clientGetRoom.getRoom().getId())
+                    .findFirst();
                 // update last message sent/received in room table
                 if (room != null) {
                     RealmRoomMessage roomMessage = HelperRealm.getLastMessage(room.getId());
-                    if (room.getLastMessageTime() != 0) { //TODO [Saeed Mozaffari] [2016-09-19 12:50 PM] - clear this if
+                    if (room.getLastMessageTime()
+                        != 0) { //TODO [Saeed Mozaffari] [2016-09-19 12:50 PM] - clear this if
                         if (room.getLastMessageTime() < roomMessage.getUpdateTime()) {
                             room.setUnreadCount(room.getUnreadCount() + 1);
                             room.setLastMessageId(roomMessage.getMessageId());
@@ -71,13 +71,11 @@ public class ClientGetRoomResponse extends MessageHandler {
         G.onClientGetRoomResponse.onClientGetRoomResponse(clientGetRoom.getRoom(), clientGetRoom);
     }
 
-    @Override
-    public void timeOut() {
+    @Override public void timeOut() {
         Log.i("SOC", "ClientGetRoomResponse timeout");
     }
 
-    @Override
-    public void error() {
+    @Override public void error() {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();

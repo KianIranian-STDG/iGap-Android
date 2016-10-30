@@ -10,11 +10,11 @@ import android.view.View;
  */
 public class MoveUpwardBehaviour extends CoordinatorLayout.Behavior<View> {
 
+    private static final boolean SNACKBAR_BEHAVIOR_ENABLED;
+
     static {
         SNACKBAR_BEHAVIOR_ENABLED = Build.VERSION.SDK_INT >= 11;
     }
-
-    private static final boolean SNACKBAR_BEHAVIOR_ENABLED;
 
     @Override
     public boolean layoutDependsOn(CoordinatorLayout parent, View child, View dependency) {
@@ -27,6 +27,4 @@ public class MoveUpwardBehaviour extends CoordinatorLayout.Behavior<View> {
         child.setTranslationY(translationY);
         return true;
     }
-
-
 }

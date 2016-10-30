@@ -12,7 +12,6 @@ public class RealmInviteFriend extends RealmObject {
     private String lastName;
     private String displayName;
 
-
     public String getPhone() {
         return phone;
     }

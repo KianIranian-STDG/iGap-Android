@@ -15,21 +15,19 @@ public class GroupAvatarGetListResponse extends MessageHandler {
         this.actionId = actionId;
     }
 
-    @Override
-    public void handler() {
+    @Override public void handler() {
         super.handler();
 
-        ProtoGroupAvatarGetList.GroupAvatarGetListResponse.Builder userAvatarGetListResponse = (ProtoGroupAvatarGetList.GroupAvatarGetListResponse.Builder) message;
+        ProtoGroupAvatarGetList.GroupAvatarGetListResponse.Builder userAvatarGetListResponse =
+            (ProtoGroupAvatarGetList.GroupAvatarGetListResponse.Builder) message;
         userAvatarGetListResponse.getAvatarList();
     }
 
-    @Override
-    public void timeOut() {
+    @Override public void timeOut() {
         super.timeOut();
     }
 
-    @Override
-    public void error() {
+    @Override public void error() {
         super.error();
     }
 }

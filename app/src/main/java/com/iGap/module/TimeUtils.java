@@ -17,9 +17,7 @@ package com.iGap.module;
  */
 
 import android.content.Context;
-
 import com.iGap.R;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -33,9 +31,10 @@ public final class TimeUtils {
     /**
      * convert unix time to local time
      *
-     * @param unixTime unix time is 13 characters (milliseconds), if you passed seconds, remember to
-     *                 multiply by 1000L
-     * @param format   String format
+     * @param unixTime unix time is 13 characters (milliseconds), if you passed seconds, remember
+     * to
+     * multiply by 1000L
+     * @param format String format
      * @return String formatted time in local
      */
     public static String toLocal(long unixTime, String format) {
@@ -62,17 +61,22 @@ public final class TimeUtils {
 
         if ((time > now)) {
             if (time - now > 10000) {
-                return String.format("%1$s %2$s", new SimpleDateFormat("MMMM", Locale.getDefault()).format(date.getTimeInMillis()), date.get(Calendar.DAY_OF_MONTH));
+                return String.format("%1$s %2$s",
+                    new SimpleDateFormat("MMMM", Locale.getDefault()).format(
+                        date.getTimeInMillis()), date.get(Calendar.DAY_OF_MONTH));
             }
         }
 
         String output;
         if (current.get(Calendar.DAY_OF_MONTH) == date.get(Calendar.DAY_OF_MONTH)) {
             output = context.getString(R.string.today);
-        } else if (getYesterdayCalendar().get(Calendar.DAY_OF_MONTH) == date.get(Calendar.DAY_OF_MONTH)) {
+        } else if (getYesterdayCalendar().get(Calendar.DAY_OF_MONTH) == date.get(
+            Calendar.DAY_OF_MONTH)) {
             output = context.getString(R.string.yesterday);
         } else {
-            output = String.format("%1$s %2$s", new SimpleDateFormat("MMMM", Locale.getDefault()).format(date.getTimeInMillis()), date.get(Calendar.DAY_OF_MONTH));
+            output = String.format("%1$s %2$s",
+                new SimpleDateFormat("MMMM", Locale.getDefault()).format(date.getTimeInMillis()),
+                date.get(Calendar.DAY_OF_MONTH));
         }
 
         return output;

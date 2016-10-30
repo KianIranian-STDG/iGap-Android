@@ -7,20 +7,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
 public class MenuFragment extends Fragment {
 
     private boolean isShown;
     private RevealLayout mRevealLayout;
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    @Override public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
+        Bundle savedInstanceState) {
         return null;
     }
 
@@ -39,7 +36,6 @@ public class MenuFragment extends Fragment {
         //event call back
         onCloseMenu();
     }
-
 
     public View setupReveal(View view) {
         mRevealLayout = new RevealLayout(view.getContext());

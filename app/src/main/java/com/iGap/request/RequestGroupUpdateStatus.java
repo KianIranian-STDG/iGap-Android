@@ -5,9 +5,11 @@ import com.iGap.proto.ProtoGroupUpdateStatus;
 
 public class RequestGroupUpdateStatus {
 
-    public void groupUpdateStatus(long roomId, long messageId, ProtoGlobal.RoomMessageStatus status) {
+    public void groupUpdateStatus(long roomId, long messageId,
+        ProtoGlobal.RoomMessageStatus status) {
 
-        ProtoGroupUpdateStatus.GroupUpdateStatus.Builder builder = ProtoGroupUpdateStatus.GroupUpdateStatus.newBuilder();
+        ProtoGroupUpdateStatus.GroupUpdateStatus.Builder builder =
+            ProtoGroupUpdateStatus.GroupUpdateStatus.newBuilder();
         builder.setRoomId(roomId);
         builder.setMessageId(messageId);
         builder.setStatus(status);
@@ -19,6 +21,5 @@ public class RequestGroupUpdateStatus {
             e.printStackTrace();
         }
     }
-
 }
 

@@ -16,21 +16,20 @@ public class GroupAvatarAddResponse extends MessageHandler {
         this.actionId = actionId;
     }
 
-    @Override
-    public void handler() {
+    @Override public void handler() {
         super.handler();
 
-        ProtoGroupAvatarAdd.GroupAvatarAddResponse.Builder groupAvatarAddResponse = (ProtoGroupAvatarAdd.GroupAvatarAddResponse.Builder) message;
-        G.onGroupAvatarResponse.onAvatarAdd(groupAvatarAddResponse.getRoomId(), groupAvatarAddResponse.getAvatar());
+        ProtoGroupAvatarAdd.GroupAvatarAddResponse.Builder groupAvatarAddResponse =
+            (ProtoGroupAvatarAdd.GroupAvatarAddResponse.Builder) message;
+        G.onGroupAvatarResponse.onAvatarAdd(groupAvatarAddResponse.getRoomId(),
+            groupAvatarAddResponse.getAvatar());
     }
 
-    @Override
-    public void timeOut() {
+    @Override public void timeOut() {
         super.timeOut();
     }
 
-    @Override
-    public void error() {
+    @Override public void error() {
         super.error();
     }
 }

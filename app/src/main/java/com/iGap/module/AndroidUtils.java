@@ -1,6 +1,5 @@
 package com.iGap.module;
 
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -11,11 +10,9 @@ import android.net.Uri;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.proto.ProtoGlobal;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -58,7 +55,7 @@ public final class AndroidUtils {
         Bitmap bitmap = BitmapFactory.decodeFile(filePath);
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
-        return new int[]{width, height};
+        return new int[] { width, height };
     }
 
     /**
@@ -79,11 +76,12 @@ public final class AndroidUtils {
      * get n bytes from file, starts from beginning
      *
      * @param uploadStructure FileUploadStructure
-     * @param bytesCount      total bytes
+     * @param bytesCount total bytes
      * @return bytes
      * @throws IOException
      */
-    public static byte[] getBytesFromStart(FileUploadStructure uploadStructure, int bytesCount) throws IOException {
+    public static byte[] getBytesFromStart(FileUploadStructure uploadStructure, int bytesCount)
+        throws IOException {
         // FileChannel has better performance than BufferedInputStream
         uploadStructure.fileChannel.position(0);
         ByteBuffer byteBuffer = ByteBuffer.allocate(bytesCount);
@@ -99,7 +97,8 @@ public final class AndroidUtils {
 
     public static int getStatusBarHeight(Context context) {
         int result = 0;
-        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        int resourceId =
+            context.getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {
             result = context.getResources().getDimensionPixelSize(resourceId);
         }
@@ -134,11 +133,12 @@ public final class AndroidUtils {
      * get n bytes from file, starts from end
      *
      * @param uploadStructure FileUploadStructure
-     * @param bytesCount      total bytes
+     * @param bytesCount total bytes
      * @return bytes
      * @throws IOException
      */
-    public static byte[] getBytesFromEnd(FileUploadStructure uploadStructure, int bytesCount) throws IOException {
+    public static byte[] getBytesFromEnd(FileUploadStructure uploadStructure, int bytesCount)
+        throws IOException {
         // FileChannel has better performance than RandomAccessFile
         uploadStructure.fileChannel.position(uploadStructure.fileChannel.size() - bytesCount);
         ByteBuffer byteBuffer = ByteBuffer.allocate(bytesCount);
@@ -156,12 +156,13 @@ public final class AndroidUtils {
      * get n bytes from specified offset
      *
      * @param uploadStructure FileUploadStructure
-     * @param offset          start reading from
-     * @param bytesCount      total reading bytes
+     * @param offset start reading from
+     * @param bytesCount total reading bytes
      * @return bytes
      * @throws IOException
      */
-    public static byte[] getNBytesFromOffset(FileUploadStructure uploadStructure, int offset, int bytesCount) throws IOException {
+    public static byte[] getNBytesFromOffset(FileUploadStructure uploadStructure, int offset,
+        int bytesCount) throws IOException {
         // FileChannel has better performance than RandomAccessFile
         uploadStructure.fileChannel.position(offset);
         ByteBuffer byteBuffer = ByteBuffer.allocate(bytesCount);
@@ -181,7 +182,8 @@ public final class AndroidUtils {
      *
      * @param uploadStructure FileUploadStructure
      */
-    public static byte[] getFileHash(FileUploadStructure uploadStructure) throws NoSuchAlgorithmException, IOException {
+    public static byte[] getFileHash(FileUploadStructure uploadStructure)
+        throws NoSuchAlgorithmException, IOException {
         try {
             MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
             byte[] fileBytes = fileToBytes(uploadStructure);
@@ -192,7 +194,8 @@ public final class AndroidUtils {
         return null;
     }
 
-    public static void cutFromTemp(ProtoGlobal.RoomMessageType messageType, String fileName) throws IOException {
+    public static void cutFromTemp(ProtoGlobal.RoomMessageType messageType, String fileName)
+        throws IOException {
         File cutTo = new File(suitableAppFilePath(messageType) + "/" + fileName);
         File cutFrom = new File(G.DIR_TEMP + "/" + fileName);
 
@@ -250,7 +253,7 @@ public final class AndroidUtils {
      * convert bytes to human readable length
      *
      * @param bytes bytes
-     * @param si    Boolean
+     * @param si Boolean
      * @return String
      */
     public static String humanReadableByteCount(long bytes, boolean si) {
@@ -285,7 +288,9 @@ public final class AndroidUtils {
         int density = Math.round(display.density * 0.9f);
         float newWidth;
         int newHeight;
-        float maxWidth = context.getResources().getDimension(R.dimen.dp300) - (context.getResources().getDimension(R.dimen.messageContainerPadding) * 4);
+        float maxWidth =
+            context.getResources().getDimension(R.dimen.dp300) - (context.getResources()
+                .getDimension(R.dimen.messageContainerPadding) * 4);
 
         if (width < maxWidth) {
             newHeight = height * density;
@@ -295,15 +300,13 @@ public final class AndroidUtils {
                 newHeight = (int) (height * (newWidth / width)) / density;
                 newWidth = maxWidth;
             }
-
         } else {
             newWidth = maxWidth;
             int calculatedFromWidth = (int) (width - maxWidth);
             newHeight = height - calculatedFromWidth;
         }
 
-
-        return new int[]{(int) newWidth, newHeight};
+        return new int[] { (int) newWidth, newHeight };
     }
 
     /**

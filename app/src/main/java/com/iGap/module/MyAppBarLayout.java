@@ -31,24 +31,22 @@ public class MyAppBarLayout extends AppBarLayout implements AppBarLayout.OnOffse
         init();
     }
 
-    private void init() {
-        addOnOffsetChangedListener(this);
-    }
-
     public MyAppBarLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
+    }
+
+    private void init() {
+        addOnOffsetChangedListener(this);
     }
 
     public void addOnMoveListener(OnMoveListener listener) {
         this.mListener = listener;
     }
 
-    @Override
-    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+    @Override public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
         int verticalOffsetAbs = Math.abs(verticalOffset);
         int appBarLayoutHeight = appBarLayout.getHeight();
-
 
         if (verticalOffset == 0) {
             if (mListener != null) {
@@ -62,10 +60,11 @@ public class MyAppBarLayout extends AppBarLayout implements AppBarLayout.OnOffse
             return;
         }
 
-
         if (mListener != null) {
             // FIXME: 9/24/2016 [Alireza Eskandarpour Shoferi] bad tashkhis mide ke be bala scroll mishe ya paeen
-            mListener.onAppBarLayoutMove(appBarLayout, verticalOffset, verticalOffsetAbs > appBarLayoutHeight - AndroidUtils.getStatusBarHeight(getContext()));
+            mListener.onAppBarLayoutMove(appBarLayout, verticalOffset,
+                verticalOffsetAbs > appBarLayoutHeight - AndroidUtils.getStatusBarHeight(
+                    getContext()));
         }
     }
 

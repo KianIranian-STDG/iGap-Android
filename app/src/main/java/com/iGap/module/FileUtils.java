@@ -31,7 +31,6 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileFilter;
@@ -44,27 +43,59 @@ import java.util.Comparator;
  * @version 2013-12-11
  */
 public class FileUtils {
-    private FileUtils() {
-    } //private constructor to enforce Singleton pattern
-
-    /**
-     * TAG for log messages.
-     */
-    static final String TAG = "FileUtils";
-    private static final boolean DEBUG = false; // Set to true to enable logging
-
     public static final String MIME_TYPE_AUDIO = "audio/*";
     public static final String MIME_TYPE_TEXT = "text/*";
     public static final String MIME_TYPE_IMAGE = "image/*";
     public static final String MIME_TYPE_VIDEO = "video/*";
     public static final String MIME_TYPE_APP = "application/*";
-
     public static final String HIDDEN_PREFIX = ".";
+    /**
+     * TAG for log messages.
+     */
+    static final String TAG = "FileUtils";
+    private static final boolean DEBUG = false; // Set to true to enable logging
+    /**
+     * File and folder comparator. TODO Expose sorting option method
+     *
+     * @author paulburke
+     */
+    public static Comparator<File> sComparator = new Comparator<File>() {
+        @Override public int compare(File f1, File f2) {
+            // Sort alphabetically by lower case, which is much cleaner
+            return f1.getName().toLowerCase().compareTo(f2.getName().toLowerCase());
+        }
+    };
+    /**
+     * File (not directories) filter.
+     *
+     * @author paulburke
+     */
+    public static FileFilter sFileFilter = new FileFilter() {
+        @Override public boolean accept(File file) {
+            final String fileName = file.getName();
+            // Return files only (not directories) and skip hidden files
+            return file.isFile() && !fileName.startsWith(HIDDEN_PREFIX);
+        }
+    };
+    /**
+     * Folder (directories) filter.
+     *
+     * @author paulburke
+     */
+    public static FileFilter sDirFilter = new FileFilter() {
+        @Override public boolean accept(File file) {
+            final String fileName = file.getName();
+            // Return directories only and skip hidden directories
+            return file.isDirectory() && !fileName.startsWith(HIDDEN_PREFIX);
+        }
+    };
+
+    private FileUtils() {
+    } //private constructor to enforce Singleton pattern
 
     /**
      * Gets the extension of a file name, like ".png" or ".jpg".
      *
-     * @param uri
      * @return Extension including the dot("."); "" if there is no extension;
      * null if uri was null.
      */
@@ -82,7 +113,7 @@ public class FileUtils {
         }
     }
 
-    public static byte[] toByteArray(Bitmap bitmap){
+    public static byte[] toByteArray(Bitmap bitmap) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
         return stream.toByteArray();
@@ -92,14 +123,13 @@ public class FileUtils {
      * decrease iamge size of file to request size
      *
      * @param f image file
-     * @return
      */
     public static Bitmap decodeFile(byte[] f) {
         //decode image size
         return BitmapFactory.decodeByteArray(f, 0, f.length);
     }
 
-    public static Bitmap toBitmap(String photoPath){
+    public static Bitmap toBitmap(String photoPath) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
         return BitmapFactory.decodeFile(photoPath, options);
@@ -126,7 +156,6 @@ public class FileUtils {
     /**
      * Convert File into Uri.
      *
-     * @param file
      * @return uri
      */
     public static Uri getUri(File file) {
@@ -138,9 +167,6 @@ public class FileUtils {
 
     /**
      * Returns the path only (without file name).
-     *
-     * @param file
-     * @return
      */
     public static File getPathWithoutFilename(File file) {
         if (file != null) {
@@ -152,8 +178,8 @@ public class FileUtils {
                 String filepath = file.getAbsolutePath();
 
                 // Construct path without file name.
-                String pathwithoutname = filepath.substring(0,
-                        filepath.length() - filename.length());
+                String pathwithoutname =
+                    filepath.substring(0, filepath.length() - filename.length());
                 if (pathwithoutname.endsWith("/")) {
                     pathwithoutname = pathwithoutname.substring(0, pathwithoutname.length() - 1);
                 }
@@ -170,8 +196,9 @@ public class FileUtils {
 
         String extension = getExtension(file.getName());
 
-        if (extension.length() > 0)
+        if (extension.length() > 0) {
             return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension.substring(1));
+        }
 
         return "application/octet-stream";
     }
@@ -223,35 +250,33 @@ public class FileUtils {
      * Get the value of the data column for this Uri. This is useful for
      * MediaStore Uris, and other file-based ContentProviders.
      *
-     * @param context       The context.
-     * @param uri           The Uri to query.
-     * @param selection     (Optional) Filter used in the query.
+     * @param context The context.
+     * @param uri The Uri to query.
+     * @param selection (Optional) Filter used in the query.
      * @param selectionArgs (Optional) Selection arguments used in the query.
      * @return The value of the _data column, which is typically a file path.
      * @author paulburke
      */
     public static String getDataColumn(Context context, Uri uri, String selection,
-                                       String[] selectionArgs) {
+        String[] selectionArgs) {
 
         Cursor cursor = null;
         final String column = "_data";
         final String[] projection = {
-                column
+            column
         };
 
         try {
-            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs,
-                    null);
+            cursor =
+                context.getContentResolver().query(uri, projection, selection, selectionArgs, null);
             if (cursor != null && cursor.moveToFirst()) {
-                if (DEBUG)
-                    DatabaseUtils.dumpCursor(cursor);
+                if (DEBUG) DatabaseUtils.dumpCursor(cursor);
 
                 final int column_index = cursor.getColumnIndexOrThrow(column);
                 return cursor.getString(column_index);
             }
         } finally {
-            if (cursor != null)
-                cursor.close();
+            if (cursor != null) cursor.close();
         }
         return null;
     }
@@ -265,23 +290,22 @@ public class FileUtils {
      * represents a local file.
      *
      * @param context The context.
-     * @param uri     The Uri to query.
+     * @param uri The Uri to query.
      * @author paulburke
      * @see #isLocal(String)
      * @see #getFile(Context, Uri)
      */
     public static String getPath(final Context context, final Uri uri) {
 
-        if (DEBUG)
-            Log.d(TAG + " File -",
-                    "Authority: " + uri.getAuthority() +
-                            ", Fragment: " + uri.getFragment() +
-                            ", Port: " + uri.getPort() +
-                            ", Query: " + uri.getQuery() +
-                            ", Scheme: " + uri.getScheme() +
-                            ", Host: " + uri.getHost() +
-                            ", Segments: " + uri.getPathSegments().toString()
-            );
+        if (DEBUG) {
+            Log.d(TAG + " File -", "Authority: " + uri.getAuthority() +
+                ", Fragment: " + uri.getFragment() +
+                ", Port: " + uri.getPort() +
+                ", Query: " + uri.getQuery() +
+                ", Scheme: " + uri.getScheme() +
+                ", Host: " + uri.getHost() +
+                ", Segments: " + uri.getPathSegments().toString());
+        }
 
         final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
 
@@ -302,8 +326,9 @@ public class FileUtils {
             else if (isDownloadsDocument(uri)) {
 
                 final String id = DocumentsContract.getDocumentId(uri);
-                final Uri contentUri = ContentUris.withAppendedId(
-                        Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+                final Uri contentUri =
+                    ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"),
+                        Long.valueOf(id));
 
                 return getDataColumn(context, contentUri, null, null);
             }
@@ -323,8 +348,8 @@ public class FileUtils {
                 }
 
                 final String selection = "_id=?";
-                final String[] selectionArgs = new String[]{
-                        split[1]
+                final String[] selectionArgs = new String[] {
+                    split[1]
                 };
 
                 return getDataColumn(context, contentUri, selection, selectionArgs);
@@ -334,8 +359,7 @@ public class FileUtils {
         else if ("content".equalsIgnoreCase(uri.getScheme())) {
 
             // Return the remote address
-            if (isGooglePhotosUri(uri))
-                return uri.getLastPathSegment();
+            if (isGooglePhotosUri(uri)) return uri.getLastPathSegment();
 
             return getDataColumn(context, uri, null, null);
         }
@@ -368,8 +392,6 @@ public class FileUtils {
     /**
      * Get the file size in a human-readable string.
      *
-     * @param size
-     * @return
      * @author paulburke
      */
     public static String getReadableFileSize(int size) {
@@ -400,9 +422,6 @@ public class FileUtils {
      * Attempt to retrieve the thumbnail of given File from the MediaStore. This
      * should not be called on the UI thread.
      *
-     * @param context
-     * @param file
-     * @return
      * @author paulburke
      */
     public static Bitmap getThumbnail(Context context, File file) {
@@ -413,9 +432,6 @@ public class FileUtils {
      * Attempt to retrieve the thumbnail of given Uri from the MediaStore. This
      * should not be called on the UI thread.
      *
-     * @param context
-     * @param uri
-     * @return
      * @author paulburke
      */
     public static Bitmap getThumbnail(Context context, Uri uri) {
@@ -426,15 +442,10 @@ public class FileUtils {
      * Attempt to retrieve the thumbnail of given Uri from the MediaStore. This
      * should not be called on the UI thread.
      *
-     * @param context
-     * @param uri
-     * @param mimeType
-     * @return
      * @author paulburke
      */
     public static Bitmap getThumbnail(Context context, Uri uri, String mimeType) {
-        if (DEBUG)
-            Log.d(TAG, "Attempting to get thumbnail");
+        if (DEBUG) Log.d(TAG, "Attempting to get thumbnail");
 
         if (!isMediaUri(uri)) {
             Log.e(TAG, "You can only retrieve thumbnails for images and videos.");
@@ -449,75 +460,24 @@ public class FileUtils {
                 cursor = resolver.query(uri, null, null, null, null);
                 if (cursor.moveToFirst()) {
                     final int id = cursor.getInt(0);
-                    if (DEBUG)
-                        Log.d(TAG, "Got thumb ID: " + id);
+                    if (DEBUG) Log.d(TAG, "Got thumb ID: " + id);
 
                     if (mimeType.contains("video")) {
-                        bm = MediaStore.Video.Thumbnails.getThumbnail(
-                                resolver,
-                                id,
-                                MediaStore.Video.Thumbnails.MINI_KIND,
-                                null);
+                        bm = MediaStore.Video.Thumbnails.getThumbnail(resolver, id,
+                            MediaStore.Video.Thumbnails.MINI_KIND, null);
                     } else if (mimeType.contains(FileUtils.MIME_TYPE_IMAGE)) {
-                        bm = MediaStore.Images.Thumbnails.getThumbnail(
-                                resolver,
-                                id,
-                                MediaStore.Images.Thumbnails.MINI_KIND,
-                                null);
+                        bm = MediaStore.Images.Thumbnails.getThumbnail(resolver, id,
+                            MediaStore.Images.Thumbnails.MINI_KIND, null);
                     }
                 }
             } catch (Exception e) {
-                if (DEBUG)
-                    Log.e(TAG, "getThumbnail", e);
+                if (DEBUG) Log.e(TAG, "getThumbnail", e);
             } finally {
-                if (cursor != null)
-                    cursor.close();
+                if (cursor != null) cursor.close();
             }
         }
         return bm;
     }
-
-    /**
-     * File and folder comparator. TODO Expose sorting option method
-     *
-     * @author paulburke
-     */
-    public static Comparator<File> sComparator = new Comparator<File>() {
-        @Override
-        public int compare(File f1, File f2) {
-            // Sort alphabetically by lower case, which is much cleaner
-            return f1.getName().toLowerCase().compareTo(
-                    f2.getName().toLowerCase());
-        }
-    };
-
-    /**
-     * File (not directories) filter.
-     *
-     * @author paulburke
-     */
-    public static FileFilter sFileFilter = new FileFilter() {
-        @Override
-        public boolean accept(File file) {
-            final String fileName = file.getName();
-            // Return files only (not directories) and skip hidden files
-            return file.isFile() && !fileName.startsWith(HIDDEN_PREFIX);
-        }
-    };
-
-    /**
-     * Folder (directories) filter.
-     *
-     * @author paulburke
-     */
-    public static FileFilter sDirFilter = new FileFilter() {
-        @Override
-        public boolean accept(File file) {
-            final String fileName = file.getName();
-            // Return directories only and skip hidden directories
-            return file.isDirectory() && !fileName.startsWith(HIDDEN_PREFIX);
-        }
-    };
 
     /**
      * Get the Intent for selecting content to be used in an Intent Chooser.

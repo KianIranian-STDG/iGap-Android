@@ -43,47 +43,30 @@ import static com.iGap.G.context;
  */
 public class HelperNotificationAndBadge {
 
+    private static final String strClose = "close";
     private int unreadMessageCount = 0;
     private String messageOne = "";
     private boolean isFromOnRoom = true;
     private long roomId = 0;
     private long senderId = 0;
-
     private ArrayList<Item> list = new ArrayList<>();
     private ArrayList<Long> senderList = new ArrayList<>();
-
     private NotificationManager notificationManager;
     private Notification notification;
     private int notificationId = 20;
     private RemoteViews remoteViews;
     private RemoteViews remoteViewsLarge;
-
     private SharedPreferences sharedPreferences;
     private int led;
     private String vibrator;
     private int popupNotification;
     private int sound;
     private int messagePeriview;
-
     private int inAppSound;
     private int inVibrator;
     private int inAppPreview;
     private int inChat_Sound;
-
     private int countUnicChat = 0;
-
-    private static final String strClose = "close";
-
-    public static class RemoteActionReciver extends BroadcastReceiver {
-
-        public RemoteActionReciver() {
-        }
-
-        @Override public void onReceive(Context context, Intent intent) {
-
-            G.helperNotificationAndBadge.cancelNotification();
-        }
-    }
 
     public HelperNotificationAndBadge() {
         notificationManager =
@@ -96,15 +79,6 @@ public class HelperNotificationAndBadge {
         PendingIntent pendingIntentClose = PendingIntent.getBroadcast(context, 1, intentClose, 0);
         remoteViewsLarge.setOnClickPendingIntent(R.id.mln_btn_close, pendingIntentClose);
     }
-
-    private class Item {
-
-        String name = "";
-        String message = "";
-        String time = "";
-    }
-
-    //*****************************************************************************************   notification ***********************
 
     private void setRemoteViewsNormal() {
 
@@ -279,6 +253,8 @@ public class HelperNotificationAndBadge {
             remoteViewsLarge.setViewVisibility(R.id.ln_txt_replay, View.GONE);
         }
     }
+
+    //*****************************************************************************************   notification ***********************
 
     private void setNotification() {
 
@@ -561,5 +537,23 @@ public class HelperNotificationAndBadge {
                 break;
         }
         return intVibrator;
+    }
+
+    public static class RemoteActionReciver extends BroadcastReceiver {
+
+        public RemoteActionReciver() {
+        }
+
+        @Override public void onReceive(Context context, Intent intent) {
+
+            G.helperNotificationAndBadge.cancelNotification();
+        }
+    }
+
+    private class Item {
+
+        String name = "";
+        String message = "";
+        String time = "";
     }
 }

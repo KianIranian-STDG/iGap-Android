@@ -6,7 +6,8 @@ public class RequestUserAvatarDelete {
 
     public void userAvatarDelete(long id, String identity) { // here ==> identity == token
 
-        ProtoUserAvatarDelete.UserAvatarDelete.Builder builder = ProtoUserAvatarDelete.UserAvatarDelete.newBuilder();
+        ProtoUserAvatarDelete.UserAvatarDelete.Builder builder =
+            ProtoUserAvatarDelete.UserAvatarDelete.newBuilder();
         builder.setId(id);
 
         RequestWrapper requestWrapper = new RequestWrapper(115, builder, identity);
@@ -16,6 +17,5 @@ public class RequestUserAvatarDelete {
             e.printStackTrace();
         }
     }
-
 }
 

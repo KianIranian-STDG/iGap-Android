@@ -1,50 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="@dimen/dp240"
+    android:layout_height="wrap_content"
     android:background="@android:color/white"
     android:layoutDirection="ltr"
+    android:orientation="vertical"
     android:padding="@dimen/dp4"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    >
 
 
-    <TextView
-        android:id="@+id/cm_txt_mute_notification"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp12"
-        android:padding="@dimen/dp12"
-        android:text="@string/mute_notification"
-        android:textColor="@android:color/black"
-        android:textSize="@dimen/sp20" />
+  <TextView
+      android:id="@+id/cm_txt_mute_notification"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/dp12"
+      android:padding="@dimen/dp12"
+      android:text="@string/mute_notification"
+      android:textColor="@android:color/black"
+      android:textSize="@dimen/sp20"
+      />
 
-    <TextView
-        android:id="@+id/cm_txt_clear_history"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/dp12"
-        android:text="@string/clear_history"
-        android:textColor="@android:color/black"
-        android:textSize="@dimen/sp20" />
+  <TextView
+      android:id="@+id/cm_txt_clear_history"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:padding="@dimen/dp12"
+      android:text="@string/clear_history"
+      android:textColor="@android:color/black"
+      android:textSize="@dimen/sp20"
+      />
 
-    <TextView
-        android:id="@+id/cm_txt_delete_chat"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/dp12"
-        android:text="@string/delete_chat"
-        android:textColor="@android:color/black"
-        android:textSize="@dimen/sp20" />
+  <TextView
+      android:id="@+id/cm_txt_delete_chat"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:padding="@dimen/dp12"
+      android:text="@string/delete_chat"
+      android:textColor="@android:color/black"
+      android:textSize="@dimen/sp20"
+      />
 
-    <TextView
-        android:id="@+id/cm_txt_cancle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:padding="@dimen/dp12"
-        android:text="@string/cancel"
-        android:textColor="@color/green"
-        android:textSize="@dimen/sp22" />
+  <TextView
+      android:id="@+id/cm_txt_cancle"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:gravity="right"
+      android:padding="@dimen/dp12"
+      android:text="@string/cancel"
+      android:textColor="@color/green"
+      android:textSize="@dimen/sp22"
+      />
 
 
 </LinearLayout>

@@ -11,8 +11,7 @@ import io.realm.annotations.PrimaryKey;
 // as a workaround, we save its toString() value
 // https://github.com/realm/realm-java/issues/776
 public class RealmRoom extends RealmObject {
-    @PrimaryKey
-    private long id;
+    @PrimaryKey private long id;
     private String type;
     private String title;
     private String initials;
@@ -30,6 +29,74 @@ public class RealmRoom extends RealmObject {
     private String draft = "";
     private RealmDraftFile draftFile;
     private RealmAvatar avatar;
+
+    /**
+     * convert ProtoGlobal.Room to RealmRoom for saving into database
+     *
+     * @param room ProtoGlobal.Room
+     * @return RealmRoom
+     */
+    public static RealmRoom convert(ProtoGlobal.Room room, Realm realm) {
+        putChatToClientCondition(room, realm);
+
+        RealmRoom realmRoom =
+            realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst();
+        if (realmRoom == null) {
+            realmRoom = new RealmRoom();
+        }
+        realmRoom.setColor(room.getColor());
+        realmRoom.setId(room.getId());
+        realmRoom.setInitials(room.getInitials());
+        realmRoom.setTitle(room.getTitle());
+        realmRoom.setType(RoomType.convert(room.getType()));
+        realmRoom.setUnreadCount(room.getUnreadCount());
+        realmRoom.setReadOnly(room.getReadOnly());
+        realmRoom.setMute(
+            false); //TODO [Saeed Mozaffari] [2016-09-07 9:59 AM] - agar mute ro az server gereftim be jaye false sabt mikonim
+        switch (room.getType()) {
+            case CHANNEL:
+                realmRoom.setType(RoomType.CHANNEL);
+                realmRoom.setChannelRoom(
+                    RealmChannelRoom.convert(room.getChannelRoom(), realmRoom.getChannelRoom(),
+                        realm));
+                realmRoom.setAvatar(RealmAvatar.convert(room, realm));
+                break;
+            case CHAT:
+                realmRoom.setType(RoomType.CHAT);
+                realmRoom.setChatRoom(
+                    RealmChatRoom.convert(room.getChatRoom(), realmRoom.getChatRoom(), realm));
+                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class)
+                    .equalTo(RealmRegisteredInfoFields.ID, room.getChatRoom().getPeer().getId())
+                    .findFirst();
+                realmRoom.setAvatar(
+                    realmRegisteredInfo != null ? realmRegisteredInfo.getLastAvatar() : null);
+                break;
+            case GROUP:
+                realmRoom.setType(RoomType.GROUP);
+                realmRoom.setGroupRoom(
+                    RealmGroupRoom.convert(room.getGroupRoom(), realmRoom.getGroupRoom(), realm));
+                realmRoom.getGroupRoom().setDescription(room.getGroupRoom().getDescription());
+                realmRoom.setAvatar(RealmAvatar.convert(room, realm));
+                break;
+        }
+        realmRoom.setLastMessageTime(room.getLastMessage().getUpdateTime());
+        realmRoom.setLastMessage(room.getLastMessage().getMessage());
+        realmRoom.setLastMessageId(room.getLastMessage().getMessageId());
+        realmRoom.setLastMessageStatus(room.getLastMessage().getStatus().toString());
+
+        return realmRoom;
+    }
+
+    private static void putChatToClientCondition(final ProtoGlobal.Room room, Realm realm) {
+
+        if (realm.where(RealmClientCondition.class)
+            .equalTo(RealmClientConditionFields.ROOM_ID, room.getId())
+            .findFirst() == null) {
+            RealmClientCondition realmClientCondition =
+                realm.createObject(RealmClientCondition.class);
+            realmClientCondition.setRoomId(room.getId());
+        }
+    }
 
     public long getLastMessageTime() {
         return lastMessageTime;
@@ -173,61 +240,5 @@ public class RealmRoom extends RealmObject {
 
     public void setAvatar(RealmAvatar avatar) {
         this.avatar = avatar;
-    }
-
-    /**
-     * convert ProtoGlobal.Room to RealmRoom for saving into database
-     *
-     * @param room ProtoGlobal.Room
-     * @return RealmRoom
-     */
-    public static RealmRoom convert(ProtoGlobal.Room room, Realm realm) {
-        putChatToClientCondition(room, realm);
-
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst();
-        if (realmRoom == null) {
-            realmRoom = new RealmRoom();
-        }
-        realmRoom.setColor(room.getColor());
-        realmRoom.setId(room.getId());
-        realmRoom.setInitials(room.getInitials());
-        realmRoom.setTitle(room.getTitle());
-        realmRoom.setType(RoomType.convert(room.getType()));
-        realmRoom.setUnreadCount(room.getUnreadCount());
-        realmRoom.setReadOnly(room.getReadOnly());
-        realmRoom.setMute(false); //TODO [Saeed Mozaffari] [2016-09-07 9:59 AM] - agar mute ro az server gereftim be jaye false sabt mikonim
-        switch (room.getType()) {
-            case CHANNEL:
-                realmRoom.setType(RoomType.CHANNEL);
-                realmRoom.setChannelRoom(RealmChannelRoom.convert(room.getChannelRoom(), realmRoom.getChannelRoom(), realm));
-                realmRoom.setAvatar(RealmAvatar.convert(room, realm));
-                break;
-            case CHAT:
-                realmRoom.setType(RoomType.CHAT);
-                realmRoom.setChatRoom(RealmChatRoom.convert(room.getChatRoom(), realmRoom.getChatRoom(), realm));
-                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, room.getChatRoom().getPeer().getId()).findFirst();
-                realmRoom.setAvatar(realmRegisteredInfo != null ? realmRegisteredInfo.getLastAvatar() : null);
-                break;
-            case GROUP:
-                realmRoom.setType(RoomType.GROUP);
-                realmRoom.setGroupRoom(RealmGroupRoom.convert(room.getGroupRoom(), realmRoom.getGroupRoom(), realm));
-                realmRoom.getGroupRoom().setDescription(room.getGroupRoom().getDescription());
-                realmRoom.setAvatar(RealmAvatar.convert(room, realm));
-                break;
-        }
-        realmRoom.setLastMessageTime(room.getLastMessage().getUpdateTime());
-        realmRoom.setLastMessage(room.getLastMessage().getMessage());
-        realmRoom.setLastMessageId(room.getLastMessage().getMessageId());
-        realmRoom.setLastMessageStatus(room.getLastMessage().getStatus().toString());
-
-        return realmRoom;
-    }
-
-    private static void putChatToClientCondition(final ProtoGlobal.Room room, Realm realm) {
-
-        if (realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, room.getId()).findFirst() == null) {
-            RealmClientCondition realmClientCondition = realm.createObject(RealmClientCondition.class);
-            realmClientCondition.setRoomId(room.getId());
-        }
     }
 }

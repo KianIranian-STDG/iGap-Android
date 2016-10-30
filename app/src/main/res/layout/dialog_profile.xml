@@ -3,30 +3,32 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    >
 
 
+  <TextView
+      android:id="@+id/pu_layout_dialog_picGallery"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:gravity="start"
+      android:text="From Gallery"
+      android:textColor="@color/cardview_dark_background"
+      android:textSize="@dimen/sp16"
+      android:textStyle="normal"
+      />
 
-    <TextView
-        android:id="@+id/pu_layout_dialog_picGallery"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="start"
-        android:text="From Gallery"
-        android:textSize="@dimen/sp16"
-        android:textStyle="normal"
-        android:textColor="@color/cardview_dark_background" />
-
-    <TextView
-        android:id="@+id/pu_layout_dialog_picCamera"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="start"
-        android:layout_marginTop="@dimen/dp16"
-        android:text="From Camera"
-        android:textStyle="normal"
-        android:textSize="@dimen/sp16"
-        android:textColor="@color/cardview_dark_background" />
+  <TextView
+      android:id="@+id/pu_layout_dialog_picCamera"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/dp16"
+      android:gravity="start"
+      android:text="From Camera"
+      android:textColor="@color/cardview_dark_background"
+      android:textSize="@dimen/sp16"
+      android:textStyle="normal"
+      />
 
 
 </LinearLayout>

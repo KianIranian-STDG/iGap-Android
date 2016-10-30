@@ -9,22 +9,19 @@ import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.RadioButton;
-
 import com.iGap.R;
 import com.iGap.activities.ActivityRegister;
 import com.iGap.module.StructCountry;
-
 import java.util.ArrayList;
 
 public class AdapterDialog extends BaseAdapter implements Filterable {
 
+    public static int mSelectedVariation = -1;
+    public static boolean po = false;
     Context context;
     ArrayList<StructCountry> countrylist;
     ArrayList<StructCountry> mStringFilterList;
     ValueFilter valueFilter;
-    public static int mSelectedVariation = -1;
-    public static boolean po = false;
-
     private RadioButton name_tv;
 
     public AdapterDialog(Context context, ArrayList<StructCountry> countrylist) {
@@ -33,25 +30,22 @@ public class AdapterDialog extends BaseAdapter implements Filterable {
         mStringFilterList = countrylist;
     }
 
-    @Override
-    public int getCount() {
+    @Override public int getCount() {
         return countrylist.size();
     }
 
-    @Override
-    public Object getItem(int position) {
+    @Override public Object getItem(int position) {
         return countrylist.get(position);
     }
 
-    @Override
-    public long getItemId(int position) {
+    @Override public long getItemId(int position) {
         return countrylist.indexOf(getItem(position));
     }
 
-    @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    @Override public View getView(final int position, View convertView, ViewGroup parent) {
 
-        LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater mInflater =
+            (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
 
         convertView = null;
         if (convertView == null) {
@@ -64,8 +58,7 @@ public class AdapterDialog extends BaseAdapter implements Filterable {
         name_tv.setChecked(countrylist.get(position).getId() == mSelectedVariation);
         name_tv.setTag(position);
         name_tv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            @Override public void onClick(View v) {
 
                 mSelectedVariation = (Integer) v.getTag();
 
@@ -73,16 +66,18 @@ public class AdapterDialog extends BaseAdapter implements Filterable {
                 mSelectedVariation = countrylist.get(position).getId();
                 notifyDataSetChanged();
 
-                ActivityRegister.edtCodeNumber.setText(("+ " + countrylist.get(position).getCountryCode()));
+                ActivityRegister.edtCodeNumber.setText(
+                    ("+ " + countrylist.get(position).getCountryCode()));
                 if (countrylist.get(position).getPhonePattern() != null) {
                     if (countrylist.get(position).getPhonePattern().equals(" ")) {
                         ActivityRegister.edtPhoneNumber.setMask("###-###-####");
-
                     } else {
 
-                        ActivityRegister.edtPhoneNumber.setMask((countrylist.get(position).getPhonePattern().replace("X", "#").replace(" ", "-")));
+                        ActivityRegister.edtPhoneNumber.setMask((countrylist.get(position)
+                            .getPhonePattern()
+                            .replace("X", "#")
+                            .replace(" ", "-")));
                     }
-
                 } else {
                     ActivityRegister.edtPhoneNumber.setMask("###-###-####");
                 }
@@ -91,15 +86,12 @@ public class AdapterDialog extends BaseAdapter implements Filterable {
                 ActivityRegister.btnOk.performClick();
                 ActivityRegister.dialogChooseCountry.dismiss();
             }
-
-
         });
 
         return convertView;
     }
 
-    @Override
-    public Filter getFilter() {
+    @Override public Filter getFilter() {
         if (valueFilter == null) {
             valueFilter = new ValueFilter();
         }
@@ -107,14 +99,13 @@ public class AdapterDialog extends BaseAdapter implements Filterable {
     }
 
     private class ValueFilter extends Filter {
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
+        @Override protected FilterResults performFiltering(CharSequence constraint) {
             FilterResults results = new FilterResults();
             if (constraint != null && constraint.length() > 0) {
                 ArrayList<StructCountry> filterList = new ArrayList<StructCountry>();
                 for (int i = 0; i < mStringFilterList.size(); i++) {
-                    if ((mStringFilterList.get(i).getName().toUpperCase())
-                            .contains(constraint.toString().toUpperCase())) {
+                    if ((mStringFilterList.get(i).getName().toUpperCase()).contains(
+                        constraint.toString().toUpperCase())) {
 
                         StructCountry structCountry = new StructCountry();
                         structCountry.setId(mStringFilterList.get(i).getId());
@@ -127,7 +118,6 @@ public class AdapterDialog extends BaseAdapter implements Filterable {
                 }
                 results.count = filterList.size();
                 results.values = filterList;
-
             } else {
                 results.count = mStringFilterList.size();
                 results.values = mStringFilterList;
@@ -135,13 +125,9 @@ public class AdapterDialog extends BaseAdapter implements Filterable {
             return results;
         }
 
-        @Override
-        protected void publishResults(CharSequence constraint,
-                                      FilterResults results) {
+        @Override protected void publishResults(CharSequence constraint, FilterResults results) {
             countrylist = (ArrayList<StructCountry>) results.values;
             notifyDataSetChanged();
         }
-
     }
-
 }

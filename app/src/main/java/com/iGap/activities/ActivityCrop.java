@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.libs.rippleeffect.RippleView;
@@ -21,41 +20,35 @@ import com.iGap.module.HelperCopyFile;
 import com.iGap.module.HelperDecodeFile;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityCrop extends ActivityEnhanced {
 
+    public final String IMAGE_DIRECTORY_NAME = "Upload";
     private ImageView imgPic;
     private Uri uri;
     private TextView txtCancel, txtSet, txtCrop, txtAgreeImage;
     private int idAvatar;
     private String pathSaveImage;
-
     private String page;
     private String type;
     private int id;
     private String pathImageUser;
-    public final String IMAGE_DIRECTORY_NAME = "Upload";
     private File mediaStorageDir;
     private File fileChat;
     private String result;
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
+    @Override protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
+    @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crop);
 
@@ -72,7 +65,6 @@ public class ActivityCrop extends ActivityEnhanced {
             page = bundle.getString("PAGE");
             type = bundle.getString("TYPE");
             id = bundle.getInt("ID");
-
         }
         if (uri != null) {
 
@@ -81,55 +73,45 @@ public class ActivityCrop extends ActivityEnhanced {
 
         txtCrop = (TextView) findViewById(R.id.pu_txt_crop);
 
-
         RippleView rippleCrop = (RippleView) findViewById(R.id.pu_ripple_crop);
         rippleCrop.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
-            @Override
-            public void onComplete(RippleView rippleView) {
-                CropImage.activity(uri).setGuidelines(CropImageView.Guidelines.ON)
-                        .setMinCropResultSize(120, 120)
-                        .setAutoZoomEnabled(false)
-                        .setInitialCropWindowPaddingRatio(.08f) // padding window from all
-                        .setBorderCornerLength(50)
-                        .setBorderCornerOffset(0)
-                        .setAllowCounterRotation(true)
-                        .setBorderCornerThickness(8.0f)
-                        .setShowCropOverlay(true)
-                        .setAspectRatio(1, 1)
-                        .setFixAspectRatio(true)
-                        .setBorderCornerColor(getResources().getColor(R.color.whit_background))
-                        .setBackgroundColor(getResources().getColor(R.color.ou_background_crop))
-                        .setScaleType(CropImageView.ScaleType.FIT_CENTER)
-                        .start(ActivityCrop.this);
+            @Override public void onComplete(RippleView rippleView) {
+                CropImage.activity(uri)
+                    .setGuidelines(CropImageView.Guidelines.ON)
+                    .setMinCropResultSize(120, 120)
+                    .setAutoZoomEnabled(false)
+                    .setInitialCropWindowPaddingRatio(.08f) // padding window from all
+                    .setBorderCornerLength(50)
+                    .setBorderCornerOffset(0)
+                    .setAllowCounterRotation(true)
+                    .setBorderCornerThickness(8.0f)
+                    .setShowCropOverlay(true)
+                    .setAspectRatio(1, 1)
+                    .setFixAspectRatio(true)
+                    .setBorderCornerColor(getResources().getColor(R.color.whit_background))
+                    .setBackgroundColor(getResources().getColor(R.color.ou_background_crop))
+                    .setScaleType(CropImageView.ScaleType.FIT_CENTER)
+                    .start(ActivityCrop.this);
             }
-
         });
 
         RippleView rippleBack = (RippleView) findViewById(R.id.pu_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
+            @Override public void onComplete(RippleView rippleView) {
 
                 finish();
-
             }
-
-
         });
         txtCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
+            @Override public void onClick(View view) {
 
                 finish();
-
             }
         });
 
         txtSet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 if (uri != null && type.equals("crop") || type.equals("gallery")) {
                     pathImageUser = getRealPathFromURI(uri);
                     switch (page) {
@@ -145,9 +127,17 @@ public class ActivityCrop extends ActivityEnhanced {
 
                             break;
                         case "chat":
-                            mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), IMAGE_DIRECTORY_NAME);
-                            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-                            fileChat = new File(mediaStorageDir.getPath() + File.separator + "IMG_" + timeStamp + ".jpg");
+                            mediaStorageDir = new File(
+                                Environment.getExternalStoragePublicDirectory(
+                                    Environment.DIRECTORY_PICTURES), IMAGE_DIRECTORY_NAME);
+                            String timeStamp =
+                                new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(
+                                    new Date());
+                            fileChat = new File(mediaStorageDir.getPath()
+                                + File.separator
+                                + "IMG_"
+                                + timeStamp
+                                + ".jpg");
                             result = fileChat.toString();
                             HelperCopyFile.copyFile(pathImageUser, result);
                             break;
@@ -167,7 +157,6 @@ public class ActivityCrop extends ActivityEnhanced {
                     data.setData(Uri.parse(result));
                     setResult(Activity.RESULT_OK, data);
                     finish();
-
                 }
             }
         });
@@ -175,9 +164,7 @@ public class ActivityCrop extends ActivityEnhanced {
 
     //======================================================================================================// result from crop
 
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) { // result for crop
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
@@ -186,7 +173,6 @@ public class ActivityCrop extends ActivityEnhanced {
                 type = "crop";
                 uri = result.getUri();
                 imgPic.setImageURI(uri);
-
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
             }
@@ -226,6 +212,4 @@ public class ActivityCrop extends ActivityEnhanced {
             e.printStackTrace();
         }
     }
-
-
 }

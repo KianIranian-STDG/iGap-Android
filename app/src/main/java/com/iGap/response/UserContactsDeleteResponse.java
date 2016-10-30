@@ -1,12 +1,10 @@
 package com.iGap.response;
 
 import android.util.Log;
-
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoUserContactsDelete;
 import com.iGap.realm.RealmContacts;
-
 import io.realm.Realm;
 
 public class UserContactsDeleteResponse extends MessageHandler {
@@ -23,16 +21,16 @@ public class UserContactsDeleteResponse extends MessageHandler {
         this.identity = identity;
     }
 
-    @Override
-    public void handler() {
-        ProtoUserContactsDelete.UserContactsDeleteResponse.Builder builder = (ProtoUserContactsDelete.UserContactsDeleteResponse.Builder) message;
+    @Override public void handler() {
+        ProtoUserContactsDelete.UserContactsDeleteResponse.Builder builder =
+            (ProtoUserContactsDelete.UserContactsDeleteResponse.Builder) message;
         final long phone = builder.getPhone();
 
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmContacts realmUserContactsGetListResponse = realm.where(RealmContacts.class).equalTo("phone", phone).findFirst();
+            @Override public void execute(Realm realm) {
+                RealmContacts realmUserContactsGetListResponse =
+                    realm.where(RealmContacts.class).equalTo("phone", phone).findFirst();
                 if (realmUserContactsGetListResponse != null) {
                     realmUserContactsGetListResponse.deleteFromRealm();
                 }
@@ -43,25 +41,22 @@ public class UserContactsDeleteResponse extends MessageHandler {
         G.onUserContactdelete.onContactDelete();
     }
 
-    @Override
-    public void timeOut() {
+    @Override public void timeOut() {
 
         Log.i("XXX", "UserContactsDeleteResponse timeOut");
     }
 
-    @Override
-    public void error() {
+    @Override public void error() {
 
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         errorResponse.getMajorCode();
         errorResponse.getMinorCode();
 
-        Log.i("XXX", "UserContactsGetListResponse errorReponse.getMajorCode() : " + errorResponse.getMajorCode());
-        Log.i("XXX", "UserContactsGetListResponse errorReponse.getMinorCode() : " + errorResponse.getMinorCode());
-
+        Log.i("XXX", "UserContactsGetListResponse errorReponse.getMajorCode() : "
+            + errorResponse.getMajorCode());
+        Log.i("XXX", "UserContactsGetListResponse errorReponse.getMinorCode() : "
+            + errorResponse.getMinorCode());
     }
-
-
 }
 
 

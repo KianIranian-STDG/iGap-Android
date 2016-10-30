@@ -10,5 +10,4 @@ public interface OnUserLogin {
     void onLogin();
 
     void onLoginError(int majorCode, int minorCode);
-
 }

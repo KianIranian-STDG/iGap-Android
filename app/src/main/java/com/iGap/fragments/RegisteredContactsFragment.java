@@ -70,19 +70,20 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
         return new RegisteredContactsFragment();
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    @Nullable @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+        @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_contacts, container, false);
     }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         //set interface for get callback here
         prgWaiting = (ProgressBar) view.findViewById(R.id.prgWaiting_addContact);
-        prgWaiting.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
+        prgWaiting.getIndeterminateDrawable()
+            .setColorFilter(getResources().getColor(R.color.toolbar_background),
+                android.graphics.PorterDuff.Mode.MULTIPLY);
         prgWaiting.setVisibility(View.GONE);
 
         G.onFileDownloadResponse = this;
@@ -101,9 +102,9 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
         final HeaderAdapter headerAdapter = new HeaderAdapter();
         final ItemAdapter itemAdapter = new ItemAdapter();
         itemAdapter.withFilterPredicate(new IItemAdapter.Predicate<ContactItem>() {
-            @Override
-            public boolean filter(ContactItem item, CharSequence constraint) {
-                return !item.mContact.displayName.toLowerCase().startsWith(String.valueOf(constraint).toLowerCase());
+            @Override public boolean filter(ContactItem item, CharSequence constraint) {
+                return !item.mContact.displayName.toLowerCase()
+                    .startsWith(String.valueOf(constraint).toLowerCase());
             }
         });
         fastAdapter.withOnClickListener(new FastAdapter.OnClickListener<ContactItem>() {
@@ -123,21 +124,18 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
 
         searchView = (android.support.v7.widget.SearchView) view.findViewById(R.id.menu_edtSearch);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
+            @Override public boolean onQueryTextSubmit(String query) {
                 return false;
             }
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
+            @Override public boolean onQueryTextChange(String newText) {
                 itemAdapter.filter(newText);
                 return false;
             }
         });
 
         searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
+            @Override public void onFocusChange(View view, boolean b) {
                 if (b && menu_txt_titleToolbar.getVisibility() == View.VISIBLE) {
                     menu_txt_titleToolbar.setVisibility(View.GONE);
                 }
@@ -145,20 +143,19 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
         });
 
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
+            @Override public boolean onClose() {
                 menu_txt_titleToolbar.setVisibility(View.VISIBLE);
                 return false;
             }
         });
 
-        final EditText searchBox = ((EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text));
+        final EditText searchBox =
+            ((EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text));
         searchBox.setTextColor(getResources().getColor(R.color.white));
 
         vgAddContact = (ViewGroup) view.findViewById(R.id.menu_layout_addContact);
         vgAddContact.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
 
                 int permissionWriteContact =
                     ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CONTACTS);
@@ -178,15 +175,14 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                         .replace(R.id.fragmentContainer, fragment)
                         .commit();
                 }
-
             }
         });
 
-        MaterialDesignTextView txtMenu = (MaterialDesignTextView) view.findViewById(R.id.menu_txtBack);
+        MaterialDesignTextView txtMenu =
+            (MaterialDesignTextView) view.findViewById(R.id.menu_txtBack);
         RippleView rippleMenu = (RippleView) view.findViewById(R.id.menu_ripple_txtBack);
         rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
+            @Override public void onComplete(RippleView rippleView) {
                 // close and remove fragment from stack
                 if (!searchView.isIconified()) {
                     searchView.onActionViewCollapsed();
@@ -204,20 +200,21 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
         rv.setAdapter(stickyHeaderAdapter.wrap(itemAdapter.wrap(headerAdapter.wrap(fastAdapter))));
 
         //this adds the Sticky Headers within our list
-        final StickyRecyclerHeadersDecoration decoration = new StickyRecyclerHeadersDecoration(stickyHeaderAdapter);
+        final StickyRecyclerHeadersDecoration decoration =
+            new StickyRecyclerHeadersDecoration(stickyHeaderAdapter);
         rv.addItemDecoration(decoration);
 
         List<IItem> items = new ArrayList<>();
         contacts = Contacts.retrieve(null);
         for (StructContactInfo contact : contacts) {
-            items.add(new ContactItem().setContact(contact).withIdentifier(100 + contacts.indexOf(contact)));
+            items.add(new ContactItem().setContact(contact)
+                .withIdentifier(100 + contacts.indexOf(contact)));
         }
         itemAdapter.add(items);
 
         //so the headers are aware of changes
         stickyHeaderAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onChanged() {
+            @Override public void onChanged() {
                 decoration.invalidateHeaders();
             }
         });
@@ -229,7 +226,9 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
     private void chatGetRoom(final long peerId) {
 
         final Realm realm = Realm.getDefaultInstance();
-        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
+        final RealmRoom realmRoom = realm.where(RealmRoom.class)
+            .equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId)
+            .findFirst();
 
         if (realmRoom != null) {
             Intent intent = new Intent(context, ActivityChat.class);
@@ -237,36 +236,25 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
             getActivity().getSupportFragmentManager().popBackStack();
-
         } else {
             G.onChatGetRoom = new OnChatGetRoom() {
-                @Override
-                public void onChatGetRoom(final long roomId) {
+                @Override public void onChatGetRoom(final long roomId) {
                     getUserInfo(peerId, roomId);
-
-
                 }
 
-                @Override
-                public void onChatGetRoomTimeOut() {
+                @Override public void onChatGetRoomTimeOut() {
                     prgWaiting.setVisibility(View.GONE);
                     rv.setEnabled(true);
                     vgAddContact.setEnabled(true);
                     searchView.setEnabled(true);
-
-
                 }
 
-                @Override
-                public void onChatGetRoomError() {
+                @Override public void onChatGetRoomError() {
                     prgWaiting.setVisibility(View.GONE);
                     rv.setEnabled(true);
                     vgAddContact.setEnabled(true);
                     searchView.setEnabled(true);
-
                 }
-
-
             };
 
             new RequestChatGetRoom().chatGetRoom(peerId);
@@ -277,22 +265,24 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
     private void getUserInfo(final long peerId, final long roomId) {
 
         G.onUserInfoResponse = new OnUserInfoResponse() {
-            @Override
-            public void onUserInfo(final ProtoGlobal.RegisteredUser user, ProtoResponse.Response response) {
+            @Override public void onUserInfo(final ProtoGlobal.RegisteredUser user,
+                ProtoResponse.Response response) {
 
                 G.currentActivity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+                    @Override public void run() {
 
                         if (user.getId() == peerId) {
                             Realm realm = Realm.getDefaultInstance();
 
                             realm.executeTransactionAsync(new Realm.Transaction() {
-                                @Override
-                                public void execute(Realm realm) {
-                                    RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, user.getId()).findFirst();
+                                @Override public void execute(Realm realm) {
+                                    RealmRegisteredInfo realmRegisteredInfo =
+                                        realm.where(RealmRegisteredInfo.class)
+                                            .equalTo(RealmRegisteredInfoFields.ID, user.getId())
+                                            .findFirst();
                                     if (realmRegisteredInfo == null) {
-                                        realmRegisteredInfo = realm.createObject(RealmRegisteredInfo.class);
+                                        realmRegisteredInfo =
+                                            realm.createObject(RealmRegisteredInfo.class);
                                         realmRegisteredInfo.setId(user.getId());
                                     }
 
@@ -311,8 +301,7 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                                     realmRegisteredInfo.setAvatar(avatars);
                                 }
                             }, new Realm.Transaction.OnSuccess() {
-                                @Override
-                                public void onSuccess() {
+                                @Override public void onSuccess() {
                                     prgWaiting.setVisibility(View.GONE);
                                     Intent intent = new Intent(context, ActivityChat.class);
                                     intent.putExtra("peerId", peerId);
@@ -329,17 +318,14 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                 });
             }
 
-            @Override
-            public void onUserInfoTimeOut() {
+            @Override public void onUserInfoTimeOut() {
                 prgWaiting.setVisibility(View.GONE);
                 rv.setEnabled(true);
                 vgAddContact.setEnabled(true);
                 searchView.setEnabled(true);
-
             }
 
-            @Override
-            public void onUserInfoError() {
+            @Override public void onUserInfoError() {
                 prgWaiting.setVisibility(View.GONE);
                 rv.setEnabled(true);
                 vgAddContact.setEnabled(true);
@@ -368,23 +354,22 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
         return -1;
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
+    @Override public void onSaveInstanceState(Bundle outState) {
         //add the values which need to be saved from the adapter to the bundle
         outState = fastAdapter.saveInstanceState(outState);
         super.onSaveInstanceState(outState);
     }
 
-    @Override
-    public void onFileDownload(String token, int offset, ProtoFileDownload.FileDownload.Selector selector, int progress) {
+    @Override public void onFileDownload(String token, int offset,
+        ProtoFileDownload.FileDownload.Selector selector, int progress) {
         // empty
     }
 
-    @Override
-    public void onAvatarDownload(String token, int offset, final ProtoFileDownload.FileDownload.Selector selector, int progress, final long userId, RoomType roomType) {
+    @Override public void onAvatarDownload(String token, int offset,
+        final ProtoFileDownload.FileDownload.Selector selector, int progress, final long userId,
+        RoomType roomType) {
         G.currentActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 // if thumbnail
                 if (selector != ProtoFileDownload.FileDownload.Selector.FILE) {
                     //fastAdapter.downloadingAvatar(userId, StructMessageAttachment.convert(realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst().getLastAvatar()));

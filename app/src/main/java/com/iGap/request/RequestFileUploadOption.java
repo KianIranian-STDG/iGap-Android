@@ -8,8 +8,10 @@ public class RequestFileUploadOption {
 
     public void fileUploadOption(long size, String identity) {
 
-        ProtoFileUploadOption.FileUploadOption.Builder fileUploadOption = ProtoFileUploadOption.FileUploadOption.newBuilder();
-        fileUploadOption.setRequest(ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
+        ProtoFileUploadOption.FileUploadOption.Builder fileUploadOption =
+            ProtoFileUploadOption.FileUploadOption.newBuilder();
+        fileUploadOption.setRequest(
+            ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
         fileUploadOption.setSize(size);
 
         try {

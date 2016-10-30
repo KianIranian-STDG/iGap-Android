@@ -55,26 +55,22 @@ public class SearchFragment extends Fragment {
     private boolean contactHeaderGone = true;
     private boolean messageHeaderGone = true;
 
-
-
     public static SearchFragment newInstance() {
         return new SearchFragment();
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    @Nullable @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+        @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.search_fragment_layout, container, false);
     }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         initComponent(view);
         initRecycleView();
     }
-
 
     private void initComponent(View view) {
 
@@ -85,17 +81,14 @@ public class SearchFragment extends Fragment {
 
             }
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                if (charSequence.length() == 1 && !isFillList)
-                    fillList();
+                if (charSequence.length() == 1 && !isFillList) fillList();
 
                 itemAdapter.filter(charSequence);
             }
 
-            @Override
-            public void afterTextChanged(Editable editable) {
+            @Override public void afterTextChanged(Editable editable) {
 
                 new Handler().postDelayed(new Runnable() {
                     @Override public void run() {
@@ -112,7 +105,6 @@ public class SearchFragment extends Fragment {
                                 } else if (s.item.type == SearchType.message) {
                                     messageHeaderGone = false;
                                 }
-
                             }
                         }
 
@@ -122,48 +114,47 @@ public class SearchFragment extends Fragment {
                         itemAdapter.filter(edtSearch.getText().toString());
                     }
                 }, 100);
-
-
             }
         });
         edtSearch.requestFocus();
-        InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm =
+            (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(edtSearch, InputMethodManager.SHOW_IMPLICIT);
 
-        MaterialDesignTextView btnBack = (MaterialDesignTextView) view.findViewById(R.id.sfl_btn_back);
+        MaterialDesignTextView btnBack =
+            (MaterialDesignTextView) view.findViewById(R.id.sfl_btn_back);
         final RippleView rippleBack = (RippleView) view.findViewById(R.id.sfl_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
+            @Override public void onComplete(RippleView rippleView) {
 
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(
+                    Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(rippleBack.getWindowToken(), 0);
-                getActivity().getSupportFragmentManager().beginTransaction().remove(SearchFragment.this).commit();
-
+                getActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .remove(SearchFragment.this)
+                    .commit();
             }
         });
 
-        MaterialDesignTextView btnClose = (MaterialDesignTextView) view.findViewById(R.id.sfl_btn_close);
+        MaterialDesignTextView btnClose =
+            (MaterialDesignTextView) view.findViewById(R.id.sfl_btn_close);
         RippleView rippleDown = (RippleView) view.findViewById(R.id.sfl_ripple_done);
         rippleDown.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
+            @Override public void onComplete(RippleView rippleView) {
                 edtSearch.setText("");
             }
         });
 
-
         recyclerView = (RecyclerView) view.findViewById(R.id.sfl_recycleview);
     }
-
 
     private void initRecycleView() {
 
         fastAdapter = new FastAdapter();
         itemAdapter = new ItemAdapter();
         itemAdapter.withFilterPredicate(new IItemAdapter.Predicate<IItem>() {
-            @Override
-            public boolean filter(IItem currentItem, CharSequence constraint) {
+            @Override public boolean filter(IItem currentItem, CharSequence constraint) {
                 if (currentItem instanceof SearchItemHeader) {
                     SearchItemHeader sih = (SearchItemHeader) currentItem;
                     if (sih.text.equals(getString(R.string.chats)) && chatHeaderGone) {
@@ -179,9 +170,11 @@ public class SearchFragment extends Fragment {
                     SearchItem si = (SearchItem) currentItem;
 
                     if (si.item.type == SearchType.message) {
-                        return !si.item.comment.toLowerCase().contains(String.valueOf(constraint).toLowerCase());
+                        return !si.item.comment.toLowerCase()
+                            .contains(String.valueOf(constraint).toLowerCase());
                     } else {
-                        return !si.item.name.toLowerCase().contains(String.valueOf(constraint).toLowerCase());
+                        return !si.item.name.toLowerCase()
+                            .contains(String.valueOf(constraint).toLowerCase());
                     }
                 }
             }
@@ -197,7 +190,8 @@ public class SearchFragment extends Fragment {
                     SearchItem si = (SearchItem) currentItem;
                     goToRoom(si.item.id, si.item.type, si.item.messageId);
 
-                    InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    InputMethodManager imm = (InputMethodManager) G.context.getSystemService(
+                        Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(edtSearch.getWindowToken(), 0);
                 }
 
@@ -207,13 +201,10 @@ public class SearchFragment extends Fragment {
             }
         });
 
-
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(itemAdapter.wrap(fastAdapter));
-
     }
-
 
     private void fillList() {
 
@@ -229,16 +220,17 @@ public class SearchFragment extends Fragment {
 
         for (StructSearch item : list) {
             if (item.type == SearchType.header) {
-                items.add(new SearchItemHeader().setText(item.name).withIdentifier(100 + list.indexOf(item)));
+                items.add(new SearchItemHeader().setText(item.name)
+                    .withIdentifier(100 + list.indexOf(item)));
             } else {
-                items.add(new SearchItem().setContact(item).withIdentifier(100 + list.indexOf(item)));
+                items.add(
+                    new SearchItem().setContact(item).withIdentifier(100 + list.indexOf(item)));
             }
         }
 
         itemAdapter.add(items);
 
         isFillList = true;
-
     }
 
     private void fillRoomList() {
@@ -323,7 +315,9 @@ public class SearchFragment extends Fragment {
                 item.type = SearchType.message;
                 item.messageId = roomMessage.getMessageId();
 
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, realmChatHistory.getRoomId()).findFirst();
+                RealmRoom realmRoom = realm.where(RealmRoom.class)
+                    .equalTo(RealmRoomFields.ID, realmChatHistory.getRoomId())
+                    .findFirst();
 
                 if (realmRoom != null) { // room exist
                     item.name = realmRoom.getTitle();
@@ -348,27 +342,28 @@ public class SearchFragment extends Fragment {
         if (type == SearchType.room || type == SearchType.message) {
             realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst();
         } else if (type == SearchType.contact) {
-            realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, id).findFirst();
+            realmRoom = realm.where(RealmRoom.class)
+                .equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, id)
+                .findFirst();
         }
 
         if (realmRoom != null) {
             Intent intent = new Intent(G.context, ActivityChat.class);
 
-            if (type == SearchType.message)
-                intent.putExtra("MessageId", messageId);
+            if (type == SearchType.message) intent.putExtra("MessageId", messageId);
 
             intent.putExtra("RoomId", realmRoom.getId());
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             G.context.startActivity(intent);
-            getActivity().getSupportFragmentManager().beginTransaction().remove(SearchFragment.this).commit();
-
+            getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .remove(SearchFragment.this)
+                .commit();
         } else {
             G.onChatGetRoom = new OnChatGetRoom() {
-                @Override
-                public void onChatGetRoom(final long roomId) {
+                @Override public void onChatGetRoom(final long roomId) {
                     G.currentActivity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
+                        @Override public void run() {
                             Realm realm = Realm.getDefaultInstance();
                             Intent intent = new Intent(G.context, ActivityChat.class);
                             intent.putExtra("peerId", id);
@@ -376,18 +371,19 @@ public class SearchFragment extends Fragment {
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             realm.close();
                             G.context.startActivity(intent);
-                            getActivity().getSupportFragmentManager().beginTransaction().remove(SearchFragment.this).commit();
+                            getActivity().getSupportFragmentManager()
+                                .beginTransaction()
+                                .remove(SearchFragment.this)
+                                .commit();
                         }
                     });
                 }
 
-                @Override
-                public void onChatGetRoomTimeOut() {
+                @Override public void onChatGetRoomTimeOut() {
 
                 }
 
-                @Override
-                public void onChatGetRoomError() {
+                @Override public void onChatGetRoomError() {
 
                 }
             };
@@ -398,6 +394,13 @@ public class SearchFragment extends Fragment {
     }
 
     //*********************************************************************************************
+
+    public enum SearchType {
+        header,
+        room,
+        contact,
+        message;
+    }
 
     public class StructSearch {
         public String name = "";
@@ -411,13 +414,4 @@ public class SearchFragment extends Fragment {
         public RoomType roomType;
         public SearchType type = SearchType.header;
     }
-
-    public enum SearchType {
-        header,
-        room,
-        contact,
-        message;
-    }
-
-
 }

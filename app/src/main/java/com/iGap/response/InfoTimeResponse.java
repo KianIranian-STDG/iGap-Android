@@ -18,21 +18,18 @@ public class InfoTimeResponse extends MessageHandler {
         this.identity = identity;
     }
 
-
-    @Override
-    public void handler() {
+    @Override public void handler() {
         //G.handlerCount += 1;
-        ProtoInfoTime.InfoTimeResponse.Builder infoTime = (ProtoInfoTime.InfoTimeResponse.Builder) message;
+        ProtoInfoTime.InfoTimeResponse.Builder infoTime =
+            (ProtoInfoTime.InfoTimeResponse.Builder) message;
         G.onInfoTime.onInfoTime(infoTime.getTimestamp(), infoTime.getResponse());
     }
 
-    @Override
-    public void timeOut() {
+    @Override public void timeOut() {
         //G.timeoutCount += 1;
     }
 
-    @Override
-    public void error() {
+    @Override public void error() {
         //G.errorCount += 1;
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();

@@ -27,18 +27,15 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
         super(true, type, messageClickListener);
     }
 
-    @Override
-    public int getType() {
+    @Override public int getType() {
         return R.id.chatSubLayoutFile;
     }
 
-    @Override
-    public int getLayoutRes() {
+    @Override public int getLayoutRes() {
         return R.layout.chat_sub_layout_file;
     }
 
-    @Override
-    public ViewHolderFactory<? extends ViewHolder> getFactory() {
+    @Override public ViewHolderFactory<? extends ViewHolder> getFactory() {
         return FACTORY;
     }
 
@@ -49,12 +46,12 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
         ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.image);
     }
 
-    @Override
-    public void bindView(ViewHolder holder, List payloads) {
+    @Override public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
         holder.cslf_txt_file_name.setText(mMessage.attachment.name);
-        holder.cslf_txt_file_size.setText(AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true));
+        holder.cslf_txt_file_size.setText(
+            AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true));
 
         setTextIfNeeded(holder.messageText);
     }

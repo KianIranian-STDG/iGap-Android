@@ -9,8 +9,10 @@ public class RequestUserContactsEdit {
 
     public void contactsEdit(long phone, String first_name, String last_name) {
         Realm realm = Realm.getDefaultInstance();
-        ProtoUserContactsEdit.UserContactsEdit.Builder builder = ProtoUserContactsEdit.UserContactsEdit.newBuilder();
-        RealmContacts realmItem = realm.where(RealmContacts.class).equalTo(RealmContactsFields.PHONE, phone).findFirst();
+        ProtoUserContactsEdit.UserContactsEdit.Builder builder =
+            ProtoUserContactsEdit.UserContactsEdit.newBuilder();
+        RealmContacts realmItem =
+            realm.where(RealmContacts.class).equalTo(RealmContactsFields.PHONE, phone).findFirst();
 
         if (realmItem != null) {
 
@@ -28,5 +30,4 @@ public class RequestUserContactsEdit {
 
         realm.close();
     }
-
 }

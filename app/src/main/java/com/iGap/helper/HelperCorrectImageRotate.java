@@ -1,17 +1,14 @@
 package com.iGap.helper;
 
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class HelperCorrectImageRotate {
-
 
     /**
      * if picture has a wrong rotate correct rotate and save it to file
@@ -33,32 +30,28 @@ public class HelperCorrectImageRotate {
             }
 
             ExifInterface ei = new ExifInterface(filepath);
-            int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+            int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_UNDEFINED);
 
             switch (orientation) {
                 case ExifInterface.ORIENTATION_ROTATE_90:
                     bitmap = rotateImage(bitmap, 90);
-                    if (filepath.length() > 0)
-                        SaveBitmapToFile(filepath, bitmap);
+                    if (filepath.length() > 0) SaveBitmapToFile(filepath, bitmap);
                     break;
                 case ExifInterface.ORIENTATION_ROTATE_180:
                     bitmap = rotateImage(bitmap, 180);
-                    if (filepath.length() > 0)
-                        SaveBitmapToFile(filepath, bitmap);
+                    if (filepath.length() > 0) SaveBitmapToFile(filepath, bitmap);
                     break;
                 case ExifInterface.ORIENTATION_ROTATE_270:
                     bitmap = rotateImage(bitmap, 270);
-                    if (filepath.length() > 0)
-                        SaveBitmapToFile(filepath, bitmap);
+                    if (filepath.length() > 0) SaveBitmapToFile(filepath, bitmap);
                     break;
             }
         } catch (IOException e) {
         }
 
-
         return bitmap;
     }
-
 
     private static void SaveBitmapToFile(String filepath, Bitmap bitmap) {
 
@@ -80,15 +73,14 @@ public class HelperCorrectImageRotate {
         }
     }
 
-
     private static Bitmap rotateImage(Bitmap source, float angle) {
         Bitmap retVal;
 
         Matrix matrix = new Matrix();
         matrix.postRotate(angle);
-        retVal = Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
+        retVal =
+            Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
 
         return retVal;
     }
-
 }

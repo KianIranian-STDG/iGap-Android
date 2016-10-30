@@ -6,7 +6,6 @@ import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.enums.RoomType;
-
 import io.realm.Realm;
 
 /**
@@ -55,20 +54,23 @@ public class StructChatInfo {
         switch (builder.getType()) {
             case CHAT:
                 chatInfo.memberCount = "1";
-                chatInfo.avatar = StructMessageAttachment.convert(builder.getChatRoom().getPeer().getAvatar());
+                chatInfo.avatar =
+                    StructMessageAttachment.convert(builder.getChatRoom().getPeer().getAvatar());
                 chatInfo.ownerId = builder.getChatRoom().getPeer().getId();
                 break;
             case GROUP:
                 chatInfo.memberCount = builder.getGroupRoom().getParticipantsCountLabel();
                 chatInfo.description = builder.getGroupRoom().getDescription();
                 chatInfo.avatarCount = builder.getChannelRoom().getAvatarCount();
-                chatInfo.avatar = StructMessageAttachment.convert(builder.getGroupRoom().getAvatar().getFile());
+                chatInfo.avatar =
+                    StructMessageAttachment.convert(builder.getGroupRoom().getAvatar().getFile());
                 break;
             case CHANNEL:
                 chatInfo.memberCount = builder.getChannelRoom().getParticipantsCountLabel();
                 chatInfo.description = builder.getChannelRoom().getDescription();
                 chatInfo.avatarCount = builder.getGroupRoom().getAvatarCount();
-                chatInfo.avatar = StructMessageAttachment.convert(builder.getChannelRoom().getAvatar().getFile());
+                chatInfo.avatar =
+                    StructMessageAttachment.convert(builder.getChannelRoom().getAvatar().getFile());
                 break;
         }
         chatInfo.readOnly = builder.getReadOnly();
@@ -79,9 +81,12 @@ public class StructChatInfo {
         chatInfo.lastMessageStatus = builder.getLastMessage().getStatus().toString();
         chatInfo.unreadMessagesCount = builder.getUnreadCount();
         Realm realm = Realm.getDefaultInstance();
-        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getId()).findFirst();
+        RealmRoom room =
+            realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getId()).findFirst();
         if (room != null) {
-            RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, room.getLastMessageId()).findFirst();
+            RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class)
+                .equalTo(RealmRoomMessageFields.MESSAGE_ID, room.getLastMessageId())
+                .findFirst();
             if (roomMessage != null) {
                 chatInfo.lastMessageId = roomMessage.getMessageId();
                 chatInfo.lastMessageTime = roomMessage.getUpdateTime();

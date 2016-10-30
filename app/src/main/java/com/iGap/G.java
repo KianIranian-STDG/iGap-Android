@@ -108,8 +108,27 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 public class G extends Application {
 
+    public static final String FAQ = "http://www.digikala.com";
+    public static final String POLICY = "http://www.digikala.com";
+    public static final String DIR_SDCARD =
+        Environment.getExternalStorageDirectory().getAbsolutePath();
+    public static final String DIR_APP = DIR_SDCARD + "/iGap";
+    public static final String DIR_IMAGES = DIR_APP + "/images";
+    public static final String DIR_VIDEOS = DIR_APP + "/videos";
+    public static final String DIR_AUDIOS = DIR_APP + "/audios";
+    public static final String DIR_DOCUMENT = DIR_APP + "/document";
+    public static final String DIR_SOUND_NOTIFICATION = DIR_APP + "/.sound";
+    public static final String DIR_CHAT_BACKGROUND = DIR_APP + "/.chat_background";
+    public static final String DIR_NEW_GROUP = DIR_APP + "/.new_group";
+    public static final String DIR_NEW_CHANEL = DIR_APP + "/.new_chanel";
+    public static final String DIR_ALL_IMAGE_USER_CONTACT = DIR_APP + "/.all_image_user_contact";
+    public static final String DIR_IMAGE_USER = DIR_APP + "/image_user";
+    public static final String DIR_TEMP = DIR_APP + "/.temp";
+    public static final String CHAT_MESSAGE_TIME = "H:mm";
+    public static final String ROOM_LAST_MESSAGE_TIME = "h:mm a";
     public static Typeface neuroplp;
     public static Typeface robotoBold;
+    // list of actionId that can be doing without login
     public static Typeface robotoLight;
     public static Typeface robotoRegular;
     public static Typeface arialBold;
@@ -119,41 +138,33 @@ public class G extends Application {
     public static Typeface VerdanaBold;
     public static Typeface fontawesome;
     public static Typeface flaticon;
-
     public static Context context;
     public static Handler handler;
-
     public static HelperNotificationAndBadge helperNotificationAndBadge;
     public static boolean isAppInFg = false;
     public static boolean isScrInFg = false;
     public static boolean isChangeScrFg = false;
-
-    public static ArrayList<String> unSecure = new ArrayList<>(); // list of actionId that can be doing without secure
-    public static ArrayList<String> unLogin = new ArrayList<>(); // list of actionId that can be doing without login
-
+    public static ArrayList<String> unSecure = new ArrayList<>();
+    // list of actionId that can be doing without secure
+    public static ArrayList<String> unLogin = new ArrayList<>();
     public static HashMap<Integer, String> lookupMap = new HashMap<>();
-    public static ConcurrentHashMap<String, RequestWrapper> requestQueueMap = new ConcurrentHashMap<>();
+    public static ConcurrentHashMap<String, RequestWrapper> requestQueueMap =
+        new ConcurrentHashMap<>();
     public static HashMap<String, ArrayList<Object>> requestQueueRelationMap = new HashMap<>();
     public static List<Long> smsNumbers = new ArrayList<>();
-
-
     public static AtomicBoolean pullRequestQueueRunned = new AtomicBoolean(false);
     public static boolean isSecure = false;
-    public static boolean allowForConnect = true;//TODO [Saeed Mozaffari] [2016-08-18 12:09 PM] - set allowForConnect to realm
+    public static boolean allowForConnect = true;
+    //TODO [Saeed Mozaffari] [2016-08-18 12:09 PM] - set allowForConnect to realm
     public static boolean userLogin = false;
     public static boolean socketConnection = false;
     public static boolean canRunReceiver = false;
-
     public static SecretKeySpec symmetricKey;
     public static String symmetricMethod;
-
     public static int ivSize;
-
     public static int userTextSize = 0;
-
     public static Activity currentActivity;
     public static LayoutInflater inflater;
-
     public static Typeface FONT_IGAP;
     public static Typeface HELETICBLK_TITR;
     public static Typeface ARIAL_TEXT;
@@ -161,18 +172,12 @@ public class G extends Application {
     public static Typeface YEKAN_BOLD;
     public static File imageFile;
     public static int COPY_BUFFER_SIZE = 1024;
-
-    public static final String FAQ = "http://www.digikala.com";
-    public static final String POLICY = "http://www.digikala.com";
-
     public static UploaderUtil uploaderUtil = new UploaderUtil();
     public static ClearMessagesUtil clearMessagesUtil = new ClearMessagesUtil();
     public static ChatSendMessageUtil chatSendMessageUtil = new ChatSendMessageUtil();
     public static ChatUpdateStatusUtil chatUpdateStatusUtil = new ChatUpdateStatusUtil();
     public static OnFileUploadStatusResponse onFileUploadStatusResponse;
-
     public static Config.ConnectionState connectionState;
-
     public static OnConnectionChangeState onConnectionChangeState;
     public static OnReceiveInfoLocation onReceiveInfoLocation;
     public static OnUserRegistration onUserRegistration;
@@ -220,38 +225,116 @@ public class G extends Application {
     public static OnUserAvatarDelete onUserAvatarDelete;
     public static OnUserAvatarGetList onUserAvatarGetList;
     public static OnDraftMessage onDraftMessage;
-
-    public static final String DIR_SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();
-    public static final String DIR_APP = DIR_SDCARD + "/iGap";
-    public static final String DIR_IMAGES = DIR_APP + "/images";
-    public static final String DIR_VIDEOS = DIR_APP + "/videos";
-    public static final String DIR_AUDIOS = DIR_APP + "/audios";
-    public static final String DIR_DOCUMENT = DIR_APP + "/document";
-    public static final String DIR_SOUND_NOTIFICATION = DIR_APP + "/.sound";
-    public static final String DIR_CHAT_BACKGROUND = DIR_APP + "/.chat_background";
-    public static final String DIR_NEW_GROUP = DIR_APP + "/.new_group";
-    public static final String DIR_NEW_CHANEL = DIR_APP + "/.new_chanel";
-    public static final String DIR_ALL_IMAGE_USER_CONTACT = DIR_APP + "/.all_image_user_contact";
-    public static final String DIR_IMAGE_USER = DIR_APP + "/image_user";
-    public static final String DIR_TEMP = DIR_APP + "/.temp";
-
     public static File chatBackground;
     public static File IMAGE_NEW_GROUP;
     public static File IMAGE_NEW_CHANEL;
-
-
-    public static final String CHAT_MESSAGE_TIME = "H:mm";
-    public static final String ROOM_LAST_MESSAGE_TIME = "h:mm a";
-
     public static String connectionMode;
     public static boolean isNetworkRoaming;
 
+    public static void setUserTextSize() {
 
-    @Override
-    public void onCreate() {
+        SharedPreferences sharedPreferencesSetting =
+            context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        userTextSize = sharedPreferencesSetting.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 16);
+
+        int screenLayout = context.getResources().getConfiguration().screenLayout;
+        screenLayout &= Configuration.SCREENLAYOUT_SIZE_MASK;
+
+        switch (screenLayout) {
+            case Configuration.SCREENLAYOUT_SIZE_SMALL:
+                userTextSize = (userTextSize * 3) / 4;
+                break;
+            case Configuration.SCREENLAYOUT_SIZE_NORMAL:
+                break;
+            case Configuration.SCREENLAYOUT_SIZE_LARGE:
+                userTextSize = (userTextSize * 3) / 2;
+                break;
+            case Configuration.SCREENLAYOUT_SIZE_XLARGE:// or 4
+                userTextSize *= 2;
+        }
+    }
+
+    public static void importContact() {
+
+        G.onContactImport = new OnUserContactImport() {
+            @Override public void onContactImport() {
+                getContactListFromServer();
+            }
+        };
+        //    Contacts.getListOfContact(true);  // this can be go in the activity for cheke permision in api 6+
+    }
+
+    public static void getContactListFromServer() {
+        G.onUserContactGetList = new OnUserContactGetList() {
+            @Override public void onContactGetList() {
+
+                G.handler.post(new Runnable() {
+                    @Override public void run() {
+                        Toast.makeText(G.context, "Get Contact List!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        };
+
+        new RequestUserContactsGetList().userContactGetList();
+    }
+
+    public static void getUserInfo() {
+        Log.i("FFF", "getUserInfo 1");
+        //TODO [Saeed Mozaffari] [2016-10-15 1:51 PM] - nabayad har bar etella'ate khodam ro begiram. agar ham digar account taghiri dadae bashe response hamun zaman miayad va man ba accountam yeki misham
+        //TODO [Saeed Mozaffari] [2016-10-15 1:52 PM] - bayad zamani ke register kardam userInfo ro begiram , fekr nemikonam ke deige niaz be har bar gereftan bashe
+        Realm realm = Realm.getDefaultInstance();
+        final long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
+        realm.close();
+
+        G.onUserInfoResponse = new OnUserInfoResponse() {
+            @Override public void onUserInfo(final ProtoGlobal.RegisteredUser user,
+                ProtoResponse.Response response) {
+                // fill own user info
+                if (userId == user.getId()) {
+                    Realm realm = Realm.getDefaultInstance();
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override public void execute(Realm realm) {
+                            RealmUserInfo realmUserInfo =
+                                realm.where(RealmUserInfo.class).findFirst();
+                            realmUserInfo.setColor(user.getColor());
+                            realmUserInfo.setInitials(user.getInitials());
+                        }
+                    });
+
+                    RealmResults<RealmAvatarPath> realmAvatarPaths =
+                        realm.where(RealmAvatarPath.class).findAll();
+
+                    if (G.onChangeUserPhotoListener != null) {
+                        if (realmAvatarPaths != null) {
+                            realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
+                        }
+                        if (realmAvatarPaths != null && realmAvatarPaths.size() > 0) {
+                            String pathImageDecode = realmAvatarPaths.first().getPathImage();
+                            G.onChangeUserPhotoListener.onChangePhoto(pathImageDecode);
+                        } else {
+                            G.onChangeUserPhotoListener.onChangePhoto(null);
+                        }
+                    }
+
+                    realm.close();
+                }
+            }
+
+            @Override public void onUserInfoTimeOut() {
+
+            }
+
+            @Override public void onUserInfoError() {
+
+            }
+        };
+        new RequestUserInfo().userInfo(userId);
+    }
+
+    @Override public void onCreate() {
         MultiDex.install(getApplicationContext());
         super.onCreate();
-
 
         SharedPreferences shKeepAlive = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         int isStart = shKeepAlive.getInt(SHP_SETTING.KEY_STNS_KEEP_ALIVE_SERVICE, 1);
@@ -279,7 +362,6 @@ public class G extends Application {
         IMAGE_NEW_GROUP = new File(G.DIR_NEW_GROUP, "image_new_group.jpg");
         IMAGE_NEW_CHANEL = new File(G.DIR_NEW_CHANEL, "image_new_chanel.jpg");
         imageFile = new File(DIR_IMAGE_USER, "image_user");
-
 
         context = getApplicationContext();
         handler = new Handler();
@@ -310,8 +392,8 @@ public class G extends Application {
         YEKAN_FARSI = Typeface.createFromAsset(context.getAssets(), "fonts/yekan.ttf");
         YEKAN_BOLD = Typeface.createFromAsset(context.getAssets(), "fonts/yekan_bold.ttf");
 
-        Realm.setDefaultConfiguration(new RealmConfiguration.Builder(getApplicationContext())
-                .name("iGapLocalDatabase.realm")
+        Realm.setDefaultConfiguration(
+            new RealmConfiguration.Builder(getApplicationContext()).name("iGapLocalDatabase.realm")
                 .schemaVersion(1)
                 .migration(new RealmMigrationClass())
                 .deleteRealmIfMigrationNeeded()
@@ -321,15 +403,15 @@ public class G extends Application {
         // https://github.com/nostra13/Android-Universal-Image-Loader/wiki/Configuration
         // https://github.com/nostra13/Android-Universal-Image-Loader/wiki/Display-Options
         // https://github.com/nostra13/Android-Universal-Image-Loader/wiki/Useful-Info
-        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
-                .cacheInMemory(true)
-                .cacheOnDisk(true)
-                .displayer(new FadeInBitmapDisplayer(500))
-                .build();
-        ImageLoader.getInstance().init(new ImageLoaderConfiguration.Builder(this).defaultDisplayImageOptions(defaultOptions).build());
+        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder().cacheInMemory(true)
+            .cacheOnDisk(true)
+            .displayer(new FadeInBitmapDisplayer(500))
+            .build();
+        ImageLoader.getInstance()
+            .init(new ImageLoaderConfiguration.Builder(this).defaultDisplayImageOptions(
+                defaultOptions).build());
 
         FONT_IGAP = Typeface.createFromAsset(context.getAssets(), "fonts/neuropolitical.ttf");
-
 
         SharedPreferences sharedPreferences = getSharedPreferences("CopyDataBase", MODE_PRIVATE);
         boolean isCopyFromAsset = sharedPreferences.getBoolean("isCopyRealm", true);
@@ -340,54 +422,45 @@ public class G extends Application {
             editor.apply();
             try {
                 copyFromAsset();
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
         setUserTextSize();
-
     }
 
     private void setFont() {
 
-        SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        SharedPreferences sharedPreferences =
+            getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
         String language = sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, "en");
 
         switch (language) {
             case "فارسی":
-                CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                        .setDefaultFontPath("fonts/iransanslite.ttf")
-                        .setFontAttrId(R.attr.fontPath)
-                        .build()
-                );
+                CalligraphyConfig.initDefault(
+                    new CalligraphyConfig.Builder().setDefaultFontPath("fonts/iransanslite.ttf")
+                        .setFontAttrId(R.attr.fontPath).build());
                 setLocale("fa");
 
                 break;
             case "English":
-                CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                        .setDefaultFontPath("fonts/iransanslite.ttf")
-                        .setFontAttrId(R.attr.fontPath)
-                        .build()
-                );
+                CalligraphyConfig.initDefault(
+                    new CalligraphyConfig.Builder().setDefaultFontPath("fonts/iransanslite.ttf")
+                        .setFontAttrId(R.attr.fontPath).build());
                 setLocale("en");
                 break;
             case "العربی":
-                CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                        .setDefaultFontPath("fonts/iransanslite.ttf")
-                        .setFontAttrId(R.attr.fontPath)
-                        .build()
-                );
+                CalligraphyConfig.initDefault(
+                    new CalligraphyConfig.Builder().setDefaultFontPath("fonts/iransanslite.ttf")
+                        .setFontAttrId(R.attr.fontPath).build());
                 setLocale("ar");
 
                 break;
             case "Deutsch":
-                CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                        .setDefaultFontPath("fonts/iransanslite.ttf")
-                        .setFontAttrId(R.attr.fontPath)
-                        .build()
-                );
+                CalligraphyConfig.initDefault(
+                    new CalligraphyConfig.Builder().setDefaultFontPath("fonts/iransanslite.ttf")
+                        .setFontAttrId(R.attr.fontPath).build());
                 setLocale("nl");
 
                 break;
@@ -402,31 +475,6 @@ public class G extends Application {
         Configuration conf = res.getConfiguration();
         conf.locale = myLocale;
         res.updateConfiguration(conf, dm);
-
-    }
-
-    public static void setUserTextSize() {
-
-        SharedPreferences sharedPreferencesSetting = context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-        userTextSize = sharedPreferencesSetting.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 16);
-
-        int screenLayout = context.getResources().getConfiguration().screenLayout;
-        screenLayout &= Configuration.SCREENLAYOUT_SIZE_MASK;
-
-        switch (screenLayout) {
-            case Configuration.SCREENLAYOUT_SIZE_SMALL:
-                userTextSize = (userTextSize * 3) / 4;
-                break;
-            case Configuration.SCREENLAYOUT_SIZE_NORMAL:
-                break;
-            case Configuration.SCREENLAYOUT_SIZE_LARGE:
-                userTextSize = (userTextSize * 3) / 2;
-                break;
-            case Configuration.SCREENLAYOUT_SIZE_XLARGE:// or 4
-                userTextSize *= 2;
-        }
-
-
     }
 
     private void copyFromAsset() throws IOException {
@@ -467,12 +515,12 @@ public class G extends Application {
 
     private void fillSecuringInterface() {
         G.onSecuring = new OnSecuring() {
-            @Override
-            public void onSecure() {
+            @Override public void onSecure() {
                 Log.i("FFF", "Secure");
                 login();
 
-                ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                ConnectivityManager cm =
+                    (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
 
                 switch (activeNetwork.getType()) {
@@ -492,8 +540,6 @@ public class G extends Application {
                 if (tm.isNetworkRoaming()) {
                     isNetworkRoaming = tm.isNetworkRoaming();
                 }
-
-
             }
         };
     }
@@ -511,11 +557,9 @@ public class G extends Application {
     private void login() { //TODO [Saeed Mozaffari] [2016-09-07 10:24 AM] - mitonim karhaie ke hamishe bad az login bayad anjam beshe ro dar classe login response gharar bedim
 
         G.onUserLogin = new OnUserLogin() {
-            @Override
-            public void onLogin() {
+            @Override public void onLogin() {
                 G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
+                    @Override public void run() {
                         Log.i("FFF", "Login");
                         Toast.makeText(G.context, "User Login!", Toast.LENGTH_SHORT).show();
                         //new RequestClientCondition().clientCondition();
@@ -526,15 +570,13 @@ public class G extends Application {
                 });
             }
 
-            @Override
-            public void onLoginError(int majorCode, int minorCode) {
+            @Override public void onLoginError(int majorCode, int minorCode) {
 
             }
         };
 
         G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 if (G.isSecure) {
                     Log.i("FFF", "Login 1");
                     Realm realm = Realm.getDefaultInstance();
@@ -550,88 +592,5 @@ public class G extends Application {
                 }
             }
         }, 1000);
-    }
-
-    public static void importContact() {
-
-        G.onContactImport = new OnUserContactImport() {
-            @Override
-            public void onContactImport() {
-                getContactListFromServer();
-            }
-        };
-        //    Contacts.getListOfContact(true);  // this can be go in the activity for cheke permision in api 6+
-    }
-
-    public static void getContactListFromServer() {
-        G.onUserContactGetList = new OnUserContactGetList() {
-            @Override
-            public void onContactGetList() {
-
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(G.context, "Get Contact List!", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        };
-
-        new RequestUserContactsGetList().userContactGetList();
-    }
-
-    public static void getUserInfo() {
-        Log.i("FFF", "getUserInfo 1");
-        //TODO [Saeed Mozaffari] [2016-10-15 1:51 PM] - nabayad har bar etella'ate khodam ro begiram. agar ham digar account taghiri dadae bashe response hamun zaman miayad va man ba accountam yeki misham
-        //TODO [Saeed Mozaffari] [2016-10-15 1:52 PM] - bayad zamani ke register kardam userInfo ro begiram , fekr nemikonam ke deige niaz be har bar gereftan bashe
-        Realm realm = Realm.getDefaultInstance();
-        final long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
-        realm.close();
-
-        G.onUserInfoResponse = new OnUserInfoResponse() {
-            @Override
-            public void onUserInfo(final ProtoGlobal.RegisteredUser user, ProtoResponse.Response response) {
-                // fill own user info
-                if (userId == user.getId()) {
-                    Realm realm = Realm.getDefaultInstance();
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                            realmUserInfo.setColor(user.getColor());
-                            realmUserInfo.setInitials(user.getInitials());
-                        }
-                    });
-
-                    RealmResults<RealmAvatarPath> realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
-
-                    if (G.onChangeUserPhotoListener != null) {
-                        if (realmAvatarPaths != null) {
-                            realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
-                        }
-                        if (realmAvatarPaths != null && realmAvatarPaths.size() > 0) {
-                            String pathImageDecode = realmAvatarPaths.first().getPathImage();
-                            G.onChangeUserPhotoListener.onChangePhoto(pathImageDecode);
-                        } else {
-                            G.onChangeUserPhotoListener.onChangePhoto(null);
-                        }
-                    }
-
-                    realm.close();
-                }
-            }
-
-            @Override
-            public void onUserInfoTimeOut() {
-
-            }
-
-            @Override
-            public void onUserInfoError() {
-
-            }
-
-        };
-        new RequestUserInfo().userInfo(userId);
     }
 }

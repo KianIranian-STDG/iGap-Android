@@ -2,7 +2,6 @@ package com.iGap.realm;
 
 import io.realm.RealmObject;
 
-
 public class RealmNotificationSetting extends RealmObject {
 
     private String notification;
@@ -13,7 +12,6 @@ public class RealmNotificationSetting extends RealmObject {
     private int minutes;
     private int times;
     private int ledColor;
-
 
     public String getNotification() {
         return notification;

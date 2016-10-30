@@ -6,180 +6,196 @@
     android:layout_height="match_parent"
     android:background="@color/whit_background"
     android:layoutDirection="ltr"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    >
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/pu_toolbarRegister"
+  <android.support.v7.widget.Toolbar
+      android:id="@+id/pu_toolbarRegister"
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/dp60"
+      android:background="@color/toolbar_background"
+      app:contentInsetLeft="0dp"
+      app:contentInsetStart="0dp"
+      >
+
+    <TextView
+        android:id="@+id/pu_titleToolbar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp60"
-        android:background="@color/toolbar_background"
-        app:contentInsetLeft="0dp"
-        app:contentInsetStart="0dp">
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="iGAP"
+        android:textColor="@color/whit_background"
+        android:textSize="@dimen/sp20"
+        />
 
-        <TextView
-            android:id="@+id/pu_titleToolbar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="iGAP"
-            android:textColor="@color/whit_background"
-            android:textSize="@dimen/sp20" />
+  </android.support.v7.widget.Toolbar>
 
-    </android.support.v7.widget.Toolbar>
+  <View
+      android:layout_width="match_parent"
+      android:layout_height="1dp"
+      android:background="@color/line1_background"
+      />
+
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layoutDirection="ltr"
+      android:orientation="vertical"
+      >
+
+    <TextView
+        android:id="@+id/pu_txt_title_information"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp16"
+        android:background="@android:color/transparent"
+        android:gravity="center"
+        android:text="@string/pu_title_profileUser"
+        android:textColor="@color/black_register"
+        android:textSize="@dimen/sp22"
+        android:textStyle="bold"
+        />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/line1_background" />
+        android:layout_marginLeft="@dimen/dp52"
+        android:layout_marginRight="@dimen/dp52"
+        android:layout_marginTop="@dimen/dp8"
+        android:background="@color/line2_background"
+        />
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layoutDirection="ltr"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/pu_txt_title_information"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp16"
-            android:background="@android:color/transparent"
-            android:gravity="center"
-            android:text="@string/pu_title_profileUser"
-            android:textColor="@color/black_register"
-            android:textSize="@dimen/sp22"
-            android:textStyle="bold" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="@dimen/dp52"
-            android:layout_marginRight="@dimen/dp52"
-            android:layout_marginTop="@dimen/dp8"
-            android:background="@color/line2_background" />
-
-        <TextView
-            android:id="@+id/pu_txt_title_desc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp52"
-            android:layout_marginRight="@dimen/dp52"
-            android:layout_marginTop="@dimen/dp8"
-            android:gravity="center"
-            android:text="@string/pu_desc_profileUser"
-            android:textColor="@color/confirm_country"
-            android:textSize="@dimen/sp16" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_gravity="center"
-        android:layout_weight=".42"
-        android:gravity="center"
-        android:orientation="vertical">
-
-        <com.iGap.module.CircleImageView
-            android:id="@+id/pu_profile_circle_image"
-            android:layout_width="@dimen/dp105"
-            android:layout_height="@dimen/dp105"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/dp12"
-            android:background="@drawable/circle_color_notificatin_setting"
-            android:gravity="center"
-            android:padding="@dimen/dp32"
-            android:src="@mipmap/plus"
-            app:civ_border_width="0dp" />
-
-
-        <TextView
-            android:id="@+id/pu_txt_addPhoto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="@dimen/dp52"
-            android:layout_marginRight="@dimen/dp52"
-            android:layout_marginTop="@dimen/dp8"
-            android:gravity="center"
-            android:text="@string/pu_addPhoto_profileUser"
-            android:textColor="@color/text_dark_verify"
-            android:textSize="@dimen/sp16" />
-
-    </LinearLayout>
-
-    <RelativeLayout
-        android:id="@+id/mainLayout"
+    <TextView
+        android:id="@+id/pu_txt_title_desc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp52"
         android:layout_marginRight="@dimen/dp52"
-        android:descendantFocusability="beforeDescendants"
-        android:focusableInTouchMode="true">
+        android:layout_marginTop="@dimen/dp8"
+        android:gravity="center"
+        android:text="@string/pu_desc_profileUser"
+        android:textColor="@color/confirm_country"
+        android:textSize="@dimen/sp16"
+        />
+  </LinearLayout>
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/pu_txtInput_nikeName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:foregroundGravity="center"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true">
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_gravity="center"
+      android:layout_weight=".42"
+      android:gravity="center"
+      android:orientation="vertical"
+      >
 
-            <com.iGap.module.EditTextAdjustPan
-                android:id="@+id/pu_edt_nikeName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:hint="@string/pu_nikname_profileUser"
-                android:lines="1"
-                android:maxLength="20"
-                android:maxLines="1"
-                android:gravity="center"
-                android:minWidth="104dp"
-                android:singleLine="true"
-                android:textColor="@color/black_register"
-                android:textColorHint="@color/pu_edtHintText"
-                android:textSize="@dimen/sp22" />
-
-            <View
-                android:id="@+id/pu_line_below_editText"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/border_editText"
-                android:layout_below="@+id/pu_edt_nikeName" />
-
-        </android.support.design.widget.TextInputLayout>
+    <com.iGap.module.CircleImageView
+        android:id="@+id/pu_profile_circle_image"
+        android:layout_width="@dimen/dp105"
+        android:layout_height="@dimen/dp105"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/dp12"
+        android:background="@drawable/circle_color_notificatin_setting"
+        android:gravity="center"
+        android:padding="@dimen/dp32"
+        android:src="@mipmap/plus"
+        app:civ_border_width="0dp"
+        />
 
 
-    </RelativeLayout>
+    <TextView
+        android:id="@+id/pu_txt_addPhoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/dp52"
+        android:layout_marginRight="@dimen/dp52"
+        android:layout_marginTop="@dimen/dp8"
+        android:gravity="center"
+        android:text="@string/pu_addPhoto_profileUser"
+        android:textColor="@color/text_dark_verify"
+        android:textSize="@dimen/sp16"
+        />
 
+  </LinearLayout>
 
+  <RelativeLayout
+      android:id="@+id/mainLayout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="@dimen/dp52"
+      android:layout_marginRight="@dimen/dp52"
+      android:descendantFocusability="beforeDescendants"
+      android:focusableInTouchMode="true"
+      >
 
-    <!--</LinearLayout>-->
-
-    <RelativeLayout
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/pu_txtInput_nikeName"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight=".15"
-        android:gravity="center">
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:foregroundGravity="center"
+        android:gravity="center"
+        >
 
-        <Button
-            android:id="@+id/pu_btn_letsGo"
-            android:layout_width="@dimen/dp120"
-            android:layout_height="@dimen/dp40"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center"
-            android:background="@drawable/pu_background_button_start_register"
-            android:gravity="center"
-            android:text="@string/pu_Lets_Go"
-            android:textAllCaps="false"
-            android:textColor="@color/whit_background"
-            android:textSize="@dimen/sp16" />
+      <com.iGap.module.EditTextAdjustPan
+          android:id="@+id/pu_edt_nikeName"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:background="@android:color/transparent"
+          android:gravity="center"
+          android:hint="@string/pu_nikname_profileUser"
+          android:lines="1"
+          android:maxLength="20"
+          android:maxLines="1"
+          android:minWidth="104dp"
+          android:singleLine="true"
+          android:textColor="@color/black_register"
+          android:textColorHint="@color/pu_edtHintText"
+          android:textSize="@dimen/sp22"
+          />
 
-    </RelativeLayout>
+      <View
+          android:id="@+id/pu_line_below_editText"
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:layout_below="@+id/pu_edt_nikeName"
+          android:background="@color/border_editText"
+          />
+
+    </android.support.design.widget.TextInputLayout>
+
+
+  </RelativeLayout>
+
+
+  <!--</LinearLayout>-->
+
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_weight=".15"
+      android:gravity="center"
+      >
+
+    <Button
+        android:id="@+id/pu_btn_letsGo"
+        android:layout_width="@dimen/dp120"
+        android:layout_height="@dimen/dp40"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:background="@drawable/pu_background_button_start_register"
+        android:gravity="center"
+        android:text="@string/pu_Lets_Go"
+        android:textAllCaps="false"
+        android:textColor="@color/whit_background"
+        android:textSize="@dimen/sp16"
+        />
+
+  </RelativeLayout>
 
 </LinearLayout>
 

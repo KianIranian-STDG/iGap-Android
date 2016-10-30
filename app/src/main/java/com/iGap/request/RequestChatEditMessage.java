@@ -4,10 +4,10 @@ import com.iGap.proto.ProtoChatEditMessage;
 
 public class RequestChatEditMessage {
 
-
     public void chatEditMessage(long roomId, long messageId, String message) {
 
-        ProtoChatEditMessage.ChatEditMessage.Builder chatEditMessage = ProtoChatEditMessage.ChatEditMessage.newBuilder();
+        ProtoChatEditMessage.ChatEditMessage.Builder chatEditMessage =
+            ProtoChatEditMessage.ChatEditMessage.newBuilder();
         chatEditMessage.setRoomId(roomId);
         chatEditMessage.setMessageId(messageId);
         chatEditMessage.setMessage(message);
@@ -19,6 +19,5 @@ public class RequestChatEditMessage {
             e.printStackTrace();
         }
     }
-
 }
 

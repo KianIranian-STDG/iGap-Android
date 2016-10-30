@@ -48,8 +48,7 @@ public class EmojiAdapter extends ArrayAdapter<String> {
         this.mEmojiClickListener = listener;
     }
 
-    @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    @Override public View getView(final int position, View convertView, ViewGroup parent) {
         View v = convertView;
         if (v == null) {
             v = LayoutInflater.from(getContext()).inflate(R.layout.item_emoji, null, false);
@@ -62,14 +61,13 @@ public class EmojiAdapter extends ArrayAdapter<String> {
         ViewHolder holder = (ViewHolder) v.getTag();
         holder.emoji.setText(emoji);
         holder.emoji.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                return mEmojiLongClickListener != null && mEmojiLongClickListener.onEmojiLongClick(view, getItem(position));
+            @Override public boolean onLongClick(View view) {
+                return mEmojiLongClickListener != null && mEmojiLongClickListener.onEmojiLongClick(
+                    view, getItem(position));
             }
         });
         holder.emoji.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            @Override public void onClick(View v) {
                 if (mEmojiClickListener != null) {
                     mEmojiClickListener.onEmojiClick(v, getItem(position));
                 }

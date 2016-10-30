@@ -1,7 +1,6 @@
 package com.iGap.request;
 
 import android.util.Log;
-
 import com.iGap.AESCrypt;
 import com.iGap.Config;
 import com.iGap.G;
@@ -12,7 +11,6 @@ import com.iGap.helper.HelperString;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoRequest;
 import com.iGap.proto.ProtoResponse;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.security.GeneralSecurityException;
@@ -21,12 +19,13 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-
 public class RequestQueue {
 
-    public static final CopyOnWriteArrayList<RequestWrapper> WAITING_REQUEST_WRAPPERS = new CopyOnWriteArrayList<>();
+    public static final CopyOnWriteArrayList<RequestWrapper> WAITING_REQUEST_WRAPPERS =
+        new CopyOnWriteArrayList<>();
 
-    public static synchronized void sendRequest(RequestWrapper... requestWrappers) throws IllegalAccessException {
+    public static synchronized void sendRequest(RequestWrapper... requestWrappers)
+        throws IllegalAccessException {
         int length = requestWrappers.length;
         String randomId = HelperString.generateKey();
         if (length == 1) {
@@ -47,13 +46,12 @@ public class RequestQueue {
         }
     }
 
-
-    protected static synchronized void prepareRequest(String randomId, RequestWrapper requestWrapper) {
+    protected static synchronized void prepareRequest(String randomId,
+        RequestWrapper requestWrapper) {
         if (!G.pullRequestQueueRunned.get()) {
             G.pullRequestQueueRunned.getAndSet(true);
             G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
+                @Override public void run() {
                     requestQueuePullFunction();
                 }
             }, Config.TIME_OUT_DELAY_MS);
@@ -67,7 +65,8 @@ public class RequestQueue {
             Object protoObject = requestWrapper.getProtoObject();
             Object protoInstance = null;
             try {
-                Method setRequestMethod = protoObject.getClass().getMethod("setRequest", ProtoRequest.Request.Builder.class);
+                Method setRequestMethod = protoObject.getClass()
+                    .getMethod("setRequest", ProtoRequest.Request.Builder.class);
                 protoInstance = setRequestMethod.invoke(protoObject, requestBuilder);
                 Method method2 = protoInstance.getClass().getMethod("build");
                 protoInstance = method2.invoke(protoInstance);
@@ -87,21 +86,22 @@ public class RequestQueue {
                 if (G.userLogin || G.unLogin.contains(requestWrapper.actionId + "")) {
                     message = AESCrypt.encrypt(G.symmetricKey, message);
                     WebSocketClient.getInstance().sendBinary(message);
-                    Log.i("SOC_REQ", "RequestQueue ********** sendRequest Secure successful **********");
+                    Log.i("SOC_REQ",
+                        "RequestQueue ********** sendRequest Secure successful **********");
 
                     // remove from waiting request wrappers while user logged-in and send request
                     WAITING_REQUEST_WRAPPERS.remove(requestWrapper);
                 } else {
                     // add to waiting request wrappers while user not logged-in yet
                     WAITING_REQUEST_WRAPPERS.add(requestWrapper);
-                    Log.i("SOC_REQ", "RequestQueue ********** sendRequest Secure successful **********");
+                    Log.i("SOC_REQ",
+                        "RequestQueue ********** sendRequest Secure successful **********");
                 }
-
             } else if (G.unSecure.contains(requestWrapper.actionId + "")) {
                 WebSocketClient.getInstance().sendBinary(message);
-                Log.i("SOC_REQ", "RequestQueue ********** sendRequest unSecure successful **********");
+                Log.i("SOC_REQ",
+                    "RequestQueue ********** sendRequest unSecure successful **********");
             }
-
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
@@ -115,7 +115,8 @@ public class RequestQueue {
 
     private static synchronized void requestQueuePullFunction() {
 
-        for (Iterator<Map.Entry<String, RequestWrapper>> it = G.requestQueueMap.entrySet().iterator(); it.hasNext(); ) {
+        for (Iterator<Map.Entry<String, RequestWrapper>> it =
+            G.requestQueueMap.entrySet().iterator(); it.hasNext(); ) {
             Map.Entry<String, RequestWrapper> entry = it.next();
             String key = entry.getKey();
             RequestWrapper requestWrapper = entry.getValue();
@@ -125,8 +126,7 @@ public class RequestQueue {
                 if (key.contains(".")) {
                     String randomId = key.split("\\.")[0];
 
-                    if (!G.requestQueueRelationMap.containsKey(randomId))
-                        continue;
+                    if (!G.requestQueueRelationMap.containsKey(randomId)) continue;
 
                     ArrayList<Object> array = G.requestQueueRelationMap.get(randomId);
 
@@ -135,18 +135,15 @@ public class RequestQueue {
                     for (int i = 0; i < array.size(); i++) {
                         requestQueueMapRemover(randomId + "." + i);
                     }
-
                 } else {
                     requestQueueMapRemover(key);
                 }
             }
         }
 
-
         if (G.requestQueueMap.size() > 0) {
             G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
+                @Override public void run() {
                     requestQueuePullFunction();
                 }
             }, Config.TIME_OUT_DELAY_MS);
@@ -154,7 +151,6 @@ public class RequestQueue {
             G.pullRequestQueueRunned.getAndSet(false);
         }
     }
-
 
     private static void requestQueueMapRemover(String key) {
 
@@ -165,7 +161,8 @@ public class RequestQueue {
 
             int actionId = requestWrapper.getActionId();
             String className = G.lookupMap.get(actionId + Config.LOOKUP_MAP_RESPONSE_OFFSET);
-            String responseClassName = HelperClassNamePreparation.preparationResponseClassName(className);
+            String responseClassName =
+                HelperClassNamePreparation.preparationResponseClassName(className);
 
             ProtoResponse.Response.Builder responseBuilder = ProtoResponse.Response.newBuilder();
             responseBuilder.setTimestamp((int) System.currentTimeMillis());
@@ -179,11 +176,10 @@ public class RequestQueue {
             errorBuilder.build();
 
             Class<?> c = Class.forName(responseClassName);
-            Object object = c.getConstructor(int.class, Object.class, String.class).newInstance(actionId, errorBuilder, requestWrapper.identity);
+            Object object = c.getConstructor(int.class, Object.class, String.class)
+                .newInstance(actionId, errorBuilder, requestWrapper.identity);
             Method setTimeoutMethod = object.getClass().getMethod("timeOut");
             setTimeoutMethod.invoke(object);
-
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -202,5 +198,4 @@ public class RequestQueue {
 
         return false;
     }
-
 }

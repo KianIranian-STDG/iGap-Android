@@ -17,19 +17,17 @@ public class UserProfileSetGenderResponse extends MessageHandler {
         this.identity = identity;
     }
 
-
-    @Override
-    public void handler() {
-        ProtoUserProfileGender.UserProfileSetGenderResponse.Builder userProfileGenderResponse = ProtoUserProfileGender.UserProfileSetGenderResponse.newBuilder();
-        G.onUserProfileSetGenderResponse.onUserProfileEmailResponse(userProfileGenderResponse.getGender(), userProfileGenderResponse.getResponse());
+    @Override public void handler() {
+        ProtoUserProfileGender.UserProfileSetGenderResponse.Builder userProfileGenderResponse =
+            ProtoUserProfileGender.UserProfileSetGenderResponse.newBuilder();
+        G.onUserProfileSetGenderResponse.onUserProfileEmailResponse(
+            userProfileGenderResponse.getGender(), userProfileGenderResponse.getResponse());
     }
 
-    @Override
-    public void timeOut() {
+    @Override public void timeOut() {
     }
 
-    @Override
-    public void error() {
+    @Override public void error() {
     }
 }
 

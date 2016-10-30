@@ -33,14 +33,6 @@ public class MessageProgress extends FrameLayout
         init(context);
     }
 
-    @Override public void withOnMessageProgress(OnMessageProgressClick listener) {
-        this.mOnMessageProgressClick = listener;
-    }
-
-    @Override public void withOnProgress(OnProgress listener) {
-        this.mOnProgress = listener;
-    }
-
     public MessageProgress(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
@@ -55,6 +47,14 @@ public class MessageProgress extends FrameLayout
     public MessageProgress(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(context);
+    }
+
+    @Override public void withOnMessageProgress(OnMessageProgressClick listener) {
+        this.mOnMessageProgressClick = listener;
+    }
+
+    @Override public void withOnProgress(OnProgress listener) {
+        this.mOnProgress = listener;
     }
 
     private void init(Context context) {

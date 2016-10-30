@@ -19,7 +19,6 @@ public class MyType {
     public static final int uploading = 5;
     public static final int uploaded = 6;
 
-
     public enum SendType {
 
         send(MyType.sendLayot),
@@ -63,7 +62,6 @@ public class MyType {
         uploading(MyType.uploading),
         uploaded(MyType.uploaded);
 
-
         private int value;
 
         FileState(int value) {
@@ -74,6 +72,4 @@ public class MyType {
             return value;
         }
     }
-
-
 }

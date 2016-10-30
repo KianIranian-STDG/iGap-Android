@@ -34,27 +34,29 @@ public class UserContactsGetListResponse extends MessageHandler {
         this.context = context;
     }
 
+    @Override public void handler() {
 
-    @Override
-    public void handler() {
-
-        final ProtoUserContactsGetList.UserContactsGetListResponse.Builder builder = (ProtoUserContactsGetList.UserContactsGetListResponse.Builder) message;
+        final ProtoUserContactsGetList.UserContactsGetListResponse.Builder builder =
+            (ProtoUserContactsGetList.UserContactsGetListResponse.Builder) message;
         builder.toString().length();
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
+            @Override public void execute(Realm realm) {
 
                 realm.delete(RealmContacts.class);
 
                 for (ProtoGlobal.RegisteredUser registerUser : builder.getRegisteredUserList()) {
 
-                    RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, registerUser.getId()).findFirst();
+                    RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class)
+                        .equalTo(RealmRegisteredInfoFields.ID, registerUser.getId())
+                        .findFirst();
                     if (realmRegisteredInfo == null) {
                         realmRegisteredInfo = realm.createObject(RealmRegisteredInfo.class);
-                        realmRegisteredInfo.setRegisteredUserInfo(registerUser, realmRegisteredInfo, realm);
+                        realmRegisteredInfo.setRegisteredUserInfo(registerUser, realmRegisteredInfo,
+                            realm);
                     } else {
-                        realmRegisteredInfo.updateRegisteredUserInfo(registerUser, realmRegisteredInfo, realm);
+                        realmRegisteredInfo.updateRegisteredUserInfo(registerUser,
+                            realmRegisteredInfo, realm);
                     }
 
                     RealmContacts listResponse = realm.createObject(RealmContacts.class);
@@ -70,14 +72,18 @@ public class UserContactsGetListResponse extends MessageHandler {
                     listResponse.setLast_seen(registerUser.getLastSeen());
                     listResponse.setAvatarCount(registerUser.getAvatarCount());
 
-                    RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, registerUser.getId()).findFirst();
+                    RealmAvatar realmAvatar = realm.where(RealmAvatar.class)
+                        .equalTo(RealmAvatarFields.OWNER_ID, registerUser.getId())
+                        .findFirst();
                     if (realmAvatar == null) {
                         realmAvatar = realm.createObject(RealmAvatar.class);
                         realmAvatar.setOwnerId(registerUser.getId());
                         realmAvatar.setId(System.nanoTime());
                     }
 
-                    RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, registerUser.getId()).findFirst();
+                    RealmAttachment realmAttachment = realm.where(RealmAttachment.class)
+                        .equalTo(RealmAttachmentFields.ID, registerUser.getId())
+                        .findFirst();
                     if (realmAttachment == null) {
                         realmAttachment = realm.createObject(RealmAttachment.class);
                         realmAttachment.setId(registerUser.getId());
@@ -129,13 +135,11 @@ public class UserContactsGetListResponse extends MessageHandler {
         });
     }
 
-    @Override
-    public void timeOut() {
+    @Override public void timeOut() {
         super.timeOut();
     }
 
-    @Override
-    public void error() {
+    @Override public void error() {
         super.error();
     }
 }

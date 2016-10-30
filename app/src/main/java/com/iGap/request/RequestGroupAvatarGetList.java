@@ -6,7 +6,8 @@ public class RequestGroupAvatarGetList {
 
     public void groupAvatarGetList(long roomId) {
 
-        ProtoGroupAvatarAdd.GroupAvatarAdd.Builder builder = ProtoGroupAvatarAdd.GroupAvatarAdd.newBuilder();
+        ProtoGroupAvatarAdd.GroupAvatarAdd.Builder builder =
+            ProtoGroupAvatarAdd.GroupAvatarAdd.newBuilder();
         builder.setRoomId(roomId);
 
         RequestWrapper requestWrapper = new RequestWrapper(314, builder);
@@ -16,6 +17,5 @@ public class RequestGroupAvatarGetList {
             e.printStackTrace();
         }
     }
-
 }
 

@@ -1,13 +1,11 @@
 package com.iGap.response;
 
 import android.util.Log;
-
 import com.iGap.G;
 import com.iGap.proto.ProtoChatDelete;
 import com.iGap.proto.ProtoError;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmClientConditionFields;
-
 import io.realm.Realm;
 
 public class ChatDeleteResponse extends MessageHandler {
@@ -24,19 +22,20 @@ public class ChatDeleteResponse extends MessageHandler {
         this.identity = identity;
     }
 
-
-    @Override
-    public void handler() {
+    @Override public void handler() {
         super.handler();
         Log.i("RRR", "ChatDeleteResponse delete 1");
-        ProtoChatDelete.ChatDeleteResponse.Builder builder = (ProtoChatDelete.ChatDeleteResponse.Builder) message;
+        ProtoChatDelete.ChatDeleteResponse.Builder builder =
+            (ProtoChatDelete.ChatDeleteResponse.Builder) message;
         Log.i("RRR", "ChatDeleteResponse delete 2");
 
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, ((ProtoChatDelete.ChatDeleteResponse.Builder) message).getRoomId()).findFirst();
+            @Override public void execute(Realm realm) {
+                RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class)
+                    .equalTo(RealmClientConditionFields.ROOM_ID,
+                        ((ProtoChatDelete.ChatDeleteResponse.Builder) message).getRoomId())
+                    .findFirst();
                 if (realmClientCondition != null) {
                     realmClientCondition.deleteFromRealm();
                 }
@@ -48,13 +47,11 @@ public class ChatDeleteResponse extends MessageHandler {
         G.onChatDelete.onChatDelete(builder.getRoomId());
     }
 
-    @Override
-    public void timeOut() {
+    @Override public void timeOut() {
         super.timeOut();
     }
 
-    @Override
-    public void error() {
+    @Override public void error() {
         super.error();
         ProtoError.ErrorResponse.Builder builder = (ProtoError.ErrorResponse.Builder) message;
         Log.i("RRR", "ChatDeleteResponse error builder.getMajorCode() : " + builder.getMajorCode());

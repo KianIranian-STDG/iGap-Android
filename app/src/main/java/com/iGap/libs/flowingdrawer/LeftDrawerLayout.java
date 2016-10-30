@@ -13,9 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
 import com.nineoldandroids.view.ViewHelper;
-
 
 public class LeftDrawerLayout extends ViewGroup {
 
@@ -50,22 +48,6 @@ public class LeftDrawerLayout extends ViewGroup {
 
     private int rightMargin;
 
-
-    public void setFluidView(FlowingView mFlowingView) {
-        this.mFlowingView = mFlowingView;
-        mFlowingView.setRightMargin(rightMargin);
-        ViewCompat.setLayerType(this, ViewCompat.LAYER_TYPE_NONE, null);
-        final int childCount = getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            ViewCompat.setLayerType(getChildAt(i), ViewCompat.LAYER_TYPE_NONE,
-                    null);
-        }
-    }
-
-    public void setMenuFragment(MenuFragment mMenuFragment) {
-        mFlowingView.setMenuFragment(mMenuFragment);
-    }
-
     public LeftDrawerLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -75,24 +57,19 @@ public class LeftDrawerLayout extends ViewGroup {
         mMinDrawerMargin = (int) (MIN_DRAWER_MARGIN * density + 0.5f);
 
         mHelper = ViewDragHelper.create(this, 1.0f, new ViewDragHelper.Callback() {
-            @Override
-            public int clampViewPositionHorizontal(View child, int left, int dx) {
+            @Override public int clampViewPositionHorizontal(View child, int left, int dx) {
                 return Math.max(-child.getWidth(), Math.min(left, 0));
             }
 
-            @Override
-            public boolean tryCaptureView(View child, int pointerId) {
+            @Override public boolean tryCaptureView(View child, int pointerId) {
                 return child == mLeftMenuView;
             }
 
-            @Override
-            public void onEdgeDragStarted(int edgeFlags, int pointerId) {
+            @Override public void onEdgeDragStarted(int edgeFlags, int pointerId) {
                 mHelper.captureChildView(mLeftMenuView, pointerId);
             }
 
-
-            @Override
-            public void onViewReleased(View releasedChild, float xvel, float yvel) {
+            @Override public void onViewReleased(View releasedChild, float xvel, float yvel) {
                 final int childWidth = releasedChild.getWidth();
                 float offset = (childWidth + releasedChild.getLeft()) * 1.0f / childWidth;
                 boolean openMark = xvel > 0 || xvel == 0 && offset > 0.5f;
@@ -140,8 +117,7 @@ public class LeftDrawerLayout extends ViewGroup {
                 invalidate();
             }
 
-            @Override
-            public int getViewHorizontalDragRange(View child) {
+            @Override public int getViewHorizontalDragRange(View child) {
                 return mLeftMenuView == child ? child.getWidth() : 0;
             }
         });
@@ -151,31 +127,43 @@ public class LeftDrawerLayout extends ViewGroup {
         mHelper.setMinVelocity(minVel);
     }
 
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    public void setFluidView(FlowingView mFlowingView) {
+        this.mFlowingView = mFlowingView;
+        mFlowingView.setRightMargin(rightMargin);
+        ViewCompat.setLayerType(this, ViewCompat.LAYER_TYPE_NONE, null);
+        final int childCount = getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            ViewCompat.setLayerType(getChildAt(i), ViewCompat.LAYER_TYPE_NONE, null);
+        }
+    }
+
+    public void setMenuFragment(MenuFragment mMenuFragment) {
+        mFlowingView.setMenuFragment(mMenuFragment);
+    }
+
+    @Override protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
         int heightSize = MeasureSpec.getSize(heightMeasureSpec);
 
         setMeasuredDimension(widthSize, heightSize);
 
         View leftMenuView = getChildAt(1);
-        MarginLayoutParams lp = (MarginLayoutParams)
-                leftMenuView.getLayoutParams();
-        final int drawerWidthSpec = getChildMeasureSpec(widthMeasureSpec,
-                mMinDrawerMargin + lp.leftMargin + lp.rightMargin,
+        MarginLayoutParams lp = (MarginLayoutParams) leftMenuView.getLayoutParams();
+        final int drawerWidthSpec =
+            getChildMeasureSpec(widthMeasureSpec, mMinDrawerMargin + lp.leftMargin + lp.rightMargin,
                 lp.width);
-        final int drawerHeightSpec = getChildMeasureSpec(heightMeasureSpec,
-                lp.topMargin + lp.bottomMargin,
-                lp.height);
+        final int drawerHeightSpec =
+            getChildMeasureSpec(heightMeasureSpec, lp.topMargin + lp.bottomMargin, lp.height);
         leftMenuView.measure(drawerWidthSpec, drawerHeightSpec);
-
 
         View contentView = getChildAt(0);
         lp = (MarginLayoutParams) contentView.getLayoutParams();
-        final int contentWidthSpec = MeasureSpec.makeMeasureSpec(
-                widthSize - lp.leftMargin - lp.rightMargin, MeasureSpec.EXACTLY);
-        final int contentHeightSpec = MeasureSpec.makeMeasureSpec(
-                heightSize - lp.topMargin - lp.bottomMargin, MeasureSpec.EXACTLY);
+        final int contentWidthSpec =
+            MeasureSpec.makeMeasureSpec(widthSize - lp.leftMargin - lp.rightMargin,
+                MeasureSpec.EXACTLY);
+        final int contentHeightSpec =
+            MeasureSpec.makeMeasureSpec(heightSize - lp.topMargin - lp.bottomMargin,
+                MeasureSpec.EXACTLY);
         contentView.measure(contentWidthSpec, contentHeightSpec);
 
         mLeftMenuView = leftMenuView;
@@ -185,59 +173,50 @@ public class LeftDrawerLayout extends ViewGroup {
         View fragmentLayout = mLeftView.getChildAt(1);
         MarginLayoutParams mlp = (MarginLayoutParams) fragmentLayout.getLayoutParams();
         rightMargin = mlp.rightMargin;
-        if (mFlowingView != null)
-            mFlowingView.setRightMargin(rightMargin);
+        if (mFlowingView != null) mFlowingView.setRightMargin(rightMargin);
     }
 
-    @Override
-    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+    @Override protected void onLayout(boolean changed, int l, int t, int r, int b) {
         View menuView = mLeftMenuView;
         View contentView = mContentView;
 
         MarginLayoutParams lp = (MarginLayoutParams) contentView.getLayoutParams();
         contentView.layout(lp.leftMargin, lp.topMargin,
-                lp.leftMargin + contentView.getMeasuredWidth(),
-                lp.topMargin + contentView.getMeasuredHeight());
+            lp.leftMargin + contentView.getMeasuredWidth(),
+            lp.topMargin + contentView.getMeasuredHeight());
 
         lp = (MarginLayoutParams) menuView.getLayoutParams();
 
         final int menuWidth = menuView.getMeasuredWidth();
         int childLeft = -menuWidth + (int) (menuWidth * mLeftMenuOnScrren);
         menuView.layout(childLeft, lp.topMargin, childLeft + menuWidth,
-                lp.topMargin + menuView.getMeasuredHeight());
+            lp.topMargin + menuView.getMeasuredHeight());
     }
 
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
+    @Override public boolean onInterceptTouchEvent(MotionEvent ev) {
         return mHelper.shouldInterceptTouchEvent(ev);
     }
 
-
-    @Override
-    public boolean onTouchEvent(@NonNull MotionEvent event) {
+    @Override public boolean onTouchEvent(@NonNull MotionEvent event) {
         mHelper.processTouchEvent(event);
         pointY = event.getY();
         return true;
     }
 
-
-    @Override
-    public void computeScroll() {
+    @Override public void computeScroll() {
         if (mHelper.continueSettling(true)) {
             invalidate();
         }
     }
 
-    @Override
-    protected void dispatchDraw(@NonNull Canvas canvas) {
-        PaintFlagsDrawFilter pfd = new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG | Paint
-                .FILTER_BITMAP_FLAG);
+    @Override protected void dispatchDraw(@NonNull Canvas canvas) {
+        PaintFlagsDrawFilter pfd =
+            new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
         canvas.setDrawFilter(pfd);
         final int count = getChildCount();
         for (int i = 0; i < count; i++) {
             final View child = getChildAt(i);
-            if (child == null)
-                return;
+            if (child == null) return;
         }
         super.dispatchDraw(canvas);
     }
@@ -245,7 +224,6 @@ public class LeftDrawerLayout extends ViewGroup {
     public boolean isShownMenu() {
         return mLeftMenuOnScrren > 0.5;
     }
-
 
     public void toggle() {
         if (isShownMenu()) {
@@ -273,8 +251,7 @@ public class LeftDrawerLayout extends ViewGroup {
         postInvalidate();
     }
 
-    @Override
-    protected LayoutParams generateDefaultLayoutParams() {
+    @Override protected LayoutParams generateDefaultLayoutParams() {
         return new MarginLayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
     }
 
@@ -286,17 +263,16 @@ public class LeftDrawerLayout extends ViewGroup {
         return new MarginLayoutParams(p);
     }
 
-
     protected void showShadow(float per) {
         if (mBg == null) {
             mBg = new ImageView(mContentView.getContext());
             mBg.setBackgroundColor(Color.argb(150, 20, 20, 20));
             ViewGroup.LayoutParams lp =
-                    new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT);
             mContentView.addView(mBg, lp);
         }
         ViewHelper.setAlpha(mBg, per);
         mBg.setClickable(per > 0);
     }
-
 }

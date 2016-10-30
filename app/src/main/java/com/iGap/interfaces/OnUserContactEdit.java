@@ -12,5 +12,4 @@ public interface OnUserContactEdit {
     void onContactEditTimeOut();
 
     void onContactEditError();
-
 }

@@ -1,7 +1,6 @@
 package com.iGap.response;
 
 import android.util.Log;
-
 import com.iGap.G;
 import com.iGap.WebSocketClient;
 import com.iGap.helper.HelperLogout;
@@ -21,9 +20,7 @@ public class UserLoginResponse extends MessageHandler {
         this.actionId = actionId;
     }
 
-
-    @Override
-    public void handler() {
+    @Override public void handler() {
         super.handler();
         G.userLogin = true;
         WebSocketClient.waitingForReconnecting = false;
@@ -31,13 +28,11 @@ public class UserLoginResponse extends MessageHandler {
         G.onUserLogin.onLogin();
     }
 
-    @Override
-    public void timeOut() {
+    @Override public void timeOut() {
         super.timeOut();
     }
 
-    @Override
-    public void error() {
+    @Override public void error() {
         super.error();
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();

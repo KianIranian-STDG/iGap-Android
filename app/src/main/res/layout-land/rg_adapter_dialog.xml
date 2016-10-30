@@ -3,17 +3,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layoutDirection="ltr"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    >
 
-    <RadioButton
-        android:id="@+id/rg_radioButton"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp40"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="@dimen/dp12"
-        android:checked="false"
-        android:paddingLeft="@dimen/dp20"
-        android:text="New RadioButton"
+  <RadioButton
+      android:id="@+id/rg_radioButton"
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/dp40"
+      android:layout_gravity="center_horizontal"
+      android:layout_marginLeft="@dimen/dp12"
+      android:checked="false"
+      android:paddingLeft="@dimen/dp20"
+      android:text="New RadioButton"
 
-        />
+      />
 </LinearLayout>

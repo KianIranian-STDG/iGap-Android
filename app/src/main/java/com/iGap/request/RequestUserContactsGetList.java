@@ -6,7 +6,8 @@ public class RequestUserContactsGetList {
 
     public void userContactGetList() {
 
-        ProtoUserContactsGetList.UserContactsGetList.Builder builder = ProtoUserContactsGetList.UserContactsGetList.newBuilder();
+        ProtoUserContactsGetList.UserContactsGetList.Builder builder =
+            ProtoUserContactsGetList.UserContactsGetList.newBuilder();
         RequestWrapper requestWrapper = new RequestWrapper(107, builder);
 
         try {
@@ -15,5 +16,4 @@ public class RequestUserContactsGetList {
             e.printStackTrace();
         }
     }
-
 }

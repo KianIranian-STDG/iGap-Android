@@ -8,5 +8,4 @@ package com.iGap.interfaces;
 public interface OnUserContactImport {
 
     void onContactImport();
-
 }

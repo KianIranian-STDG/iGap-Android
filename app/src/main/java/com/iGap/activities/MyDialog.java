@@ -8,7 +8,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.module.OnComplete;
@@ -19,8 +18,8 @@ import com.iGap.realm.enums.RoomType;
  */
 public class MyDialog {
 
-
-    public static void showDialogMenuItemRooms(final Context context, final RoomType mType, boolean isMute, final OnComplete complete) {
+    public static void showDialogMenuItemRooms(final Context context, final RoomType mType,
+        boolean isMute, final OnComplete complete) {
 
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -35,61 +34,55 @@ public class MyDialog {
         dialog.show();
         dialog.getWindow().setAttributes(layoutParams);
 
-
-        TextView txtMuteNotification = (TextView) dialog.findViewById(R.id.cm_txt_mute_notification);
+        TextView txtMuteNotification =
+            (TextView) dialog.findViewById(R.id.cm_txt_mute_notification);
         TextView txtClearHistory = (TextView) dialog.findViewById(R.id.cm_txt_clear_history);
         TextView txtDeleteChat = (TextView) dialog.findViewById(R.id.cm_txt_delete_chat);
         TextView txtCancle = (TextView) dialog.findViewById(R.id.cm_txt_cancle);
 
-        txtMuteNotification.setText(isMute ? context.getString(R.string.unmute_notification) : context.getString(R.string.mute_notification));
+        txtMuteNotification.setText(isMute ? context.getString(R.string.unmute_notification)
+            : context.getString(R.string.mute_notification));
 
         txtMuteNotification.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (complete != null)
-                    complete.complete(true, "txtMuteNotification", "");
+            @Override public void onClick(View view) {
+                if (complete != null) complete.complete(true, "txtMuteNotification", "");
                 dialog.cancel();
             }
         });
 
         txtClearHistory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (complete != null)
-                    complete.complete(true, "txtClearHistory", "");
+            @Override public void onClick(View view) {
+                if (complete != null) complete.complete(true, "txtClearHistory", "");
                 dialog.cancel();
             }
         });
 
         txtDeleteChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 String str = "";
-                if (mType == RoomType.CHAT)
+                if (mType == RoomType.CHAT) {
                     str = context.getString(R.string.chat);
-                else if (mType == RoomType.GROUP)
+                } else if (mType == RoomType.GROUP) {
                     str = context.getString(R.string.group);
-                else if (mType == RoomType.CHANNEL)
-                    str = context.getString(R.string.channel);
+                } else if (mType == RoomType.CHANNEL) str = context.getString(R.string.channel);
 
-                showDialogNotification(context, context.getString(R.string.do_you_want_delete_this) + str + " ?", complete, "txtDeleteChat");
+                showDialogNotification(context,
+                    context.getString(R.string.do_you_want_delete_this) + str + " ?", complete,
+                    "txtDeleteChat");
 
                 dialog.cancel();
             }
         });
 
         txtCancle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 dialog.cancel();
             }
         });
-
     }
 
-
-    public static void showDialogNotification(Context context, String Message, final OnComplete complete, final String result) {
-
+    public static void showDialogNotification(Context context, String Message,
+        final OnComplete complete, final String result) {
 
         final Dialog dialog = new Dialog(context);
         // dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -105,13 +98,10 @@ public class MyDialog {
         tvYes.setTypeface(G.robotoLight);
         tvYes.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                if (complete != null)
-                    complete.complete(true, result, "yes");
+            @Override public void onClick(View v) {
+                if (complete != null) complete.complete(true, result, "yes");
 
                 dialog.cancel();
-
             }
         });
 
@@ -119,13 +109,11 @@ public class MyDialog {
         tvNo.setTypeface(G.robotoLight);
         tvNo.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
+            @Override public void onClick(View v) {
 
                 dialog.cancel();
             }
         });
-
 
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
         lp.copyFrom(dialog.getWindow().getAttributes());
@@ -134,8 +122,5 @@ public class MyDialog {
         lp.gravity = Gravity.CENTER;
         dialog.getWindow().setAttributes(lp);
         dialog.show();
-
     }
-
-
 }

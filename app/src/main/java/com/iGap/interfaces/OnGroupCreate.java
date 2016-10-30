@@ -10,5 +10,4 @@ public interface OnGroupCreate {
     void onGroupCreate(long roomId);
 
     void onErrorGroupCreate();
-
 }

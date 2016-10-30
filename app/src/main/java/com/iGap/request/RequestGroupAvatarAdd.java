@@ -6,7 +6,8 @@ public class RequestGroupAvatarAdd {
 
     public void groupAvatarAdd(long roomId, String attachment) {
 
-        ProtoGroupAvatarAdd.GroupAvatarAdd.Builder builder = ProtoGroupAvatarAdd.GroupAvatarAdd.newBuilder();
+        ProtoGroupAvatarAdd.GroupAvatarAdd.Builder builder =
+            ProtoGroupAvatarAdd.GroupAvatarAdd.newBuilder();
         builder.setRoomId(roomId);
         builder.setAttachment(attachment);
 
@@ -17,6 +18,5 @@ public class RequestGroupAvatarAdd {
             e.printStackTrace();
         }
     }
-
 }
 

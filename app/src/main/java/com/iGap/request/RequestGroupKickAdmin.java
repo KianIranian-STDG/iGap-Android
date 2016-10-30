@@ -6,7 +6,8 @@ public class RequestGroupKickAdmin {
 
     public void groupKickAdmin(long roomId, long memberId) {
 
-        ProtoGroupKickAdmin.GroupKickAdmin.Builder builder = ProtoGroupKickAdmin.GroupKickAdmin.newBuilder();
+        ProtoGroupKickAdmin.GroupKickAdmin.Builder builder =
+            ProtoGroupKickAdmin.GroupKickAdmin.newBuilder();
         builder.setRoomId(roomId);
         builder.setMemberId(memberId);
 
@@ -17,6 +18,5 @@ public class RequestGroupKickAdmin {
             e.printStackTrace();
         }
     }
-
 }
 

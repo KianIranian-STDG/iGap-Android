@@ -1,13 +1,11 @@
 package com.iGap.response;
 
 import android.util.Log;
-
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoUserInfo;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
-
 import io.realm.Realm;
 
 public class UserInfoResponse extends MessageHandler {
@@ -23,22 +21,24 @@ public class UserInfoResponse extends MessageHandler {
         this.actionId = actionId;
     }
 
-    @Override
-    public void handler() {
-        final ProtoUserInfo.UserInfoResponse.Builder builder = (ProtoUserInfo.UserInfoResponse.Builder) message;
+    @Override public void handler() {
+        final ProtoUserInfo.UserInfoResponse.Builder builder =
+            (ProtoUserInfo.UserInfoResponse.Builder) message;
 
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, builder.getUser().getId()).findFirst();
+            @Override public void execute(Realm realm) {
+                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class)
+                    .equalTo(RealmRegisteredInfoFields.ID, builder.getUser().getId())
+                    .findFirst();
 
                 if (realmRegisteredInfo == null) {
                     realmRegisteredInfo = realm.createObject(RealmRegisteredInfo.class);
                     realmRegisteredInfo.setId(builder.getUser().getId());
                 }
 
-                realmRegisteredInfo.addAvatar(builder.getUser().getId(), builder.getUser().getAvatar());
+                realmRegisteredInfo.addAvatar(builder.getUser().getId(),
+                    builder.getUser().getAvatar());
                 realmRegisteredInfo.setAvatarCount(builder.getUser().getAvatarCount());
                 realmRegisteredInfo.setColor(builder.getUser().getColor());
                 realmRegisteredInfo.setDisplayName(builder.getUser().getDisplayName());
@@ -48,7 +48,6 @@ public class UserInfoResponse extends MessageHandler {
                 realmRegisteredInfo.setPhone(builder.getUser().getPhone());
                 realmRegisteredInfo.setStatus(builder.getUser().getStatus().toString());
                 realmRegisteredInfo.setUsername(builder.getUser().getUsername());
-
             }
         });
         realm.close();
@@ -58,15 +57,13 @@ public class UserInfoResponse extends MessageHandler {
         }
     }
 
-    @Override
-    public void timeOut() {
+    @Override public void timeOut() {
         Log.i("SOCA", "UserInfoResponse timeout");
 
         G.onUserInfoResponse.onUserInfoTimeOut();
     }
 
-    @Override
-    public void error() {
+    @Override public void error() {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();

@@ -1,7 +1,6 @@
 package com.iGap.module;
 
 import com.iGap.realm.RealmRoomMessage;
-
 import java.util.Comparator;
 
 /**
@@ -9,14 +8,12 @@ import java.util.Comparator;
  */
 public enum SortMessages implements Comparator<RealmRoomMessage> {
     ASC {
-        @Override
-        public int compare(RealmRoomMessage o1, RealmRoomMessage o2) {
+        @Override public int compare(RealmRoomMessage o1, RealmRoomMessage o2) {
             return Long.compare(o1.getMessageId(), o2.getMessageId());
         }
     },
     DESC {
-        @Override
-        public int compare(RealmRoomMessage o1, RealmRoomMessage o2) {
+        @Override public int compare(RealmRoomMessage o1, RealmRoomMessage o2) {
             return Long.compare(o2.getMessageId(), o1.getMessageId());
         }
     }

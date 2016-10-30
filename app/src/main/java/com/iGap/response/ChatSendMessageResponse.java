@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.format.DateUtils;
 import android.util.Log;
-
 import com.iGap.G;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.proto.ProtoChatSendMessage;
@@ -22,11 +21,9 @@ import com.iGap.realm.RealmRoomMessageLocation;
 import com.iGap.realm.RealmRoomMessageLog;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestClientGetRoom;
-
-import java.util.ArrayList;
-
 import io.realm.Realm;
 import io.realm.RealmResults;
+import java.util.ArrayList;
 
 public class ChatSendMessageResponse extends MessageHandler {
 
@@ -43,20 +40,21 @@ public class ChatSendMessageResponse extends MessageHandler {
         this.message = protoClass;
     }
 
-
-    @Override
-    public void handler() {
+    @Override public void handler() {
         Realm realm = Realm.getDefaultInstance();
-        final ProtoChatSendMessage.ChatSendMessageResponse.Builder chatSendMessageResponse = (ProtoChatSendMessage.ChatSendMessageResponse.Builder) message;
+        final ProtoChatSendMessage.ChatSendMessageResponse.Builder chatSendMessageResponse =
+            (ProtoChatSendMessage.ChatSendMessageResponse.Builder) message;
 
         final ProtoGlobal.RoomMessage roomMessage = chatSendMessageResponse.getRoomMessage();
         final long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
 
         realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
+            @Override public void execute(Realm realm) {
                 // set info for clientCondition
-                RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, chatSendMessageResponse.getRoomId()).findFirst();
+                RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class)
+                    .equalTo(RealmClientConditionFields.ROOM_ID,
+                        chatSendMessageResponse.getRoomId())
+                    .findFirst();
                 if (realmClientCondition != null) {
                     realmClientCondition.setMessageVersion(roomMessage.getMessageVersion());
                     realmClientCondition.setStatusVersion(roomMessage.getStatusVersion());
@@ -76,13 +74,16 @@ public class ChatSendMessageResponse extends MessageHandler {
                 Log.i("CLI", "send message MessageId : " + roomMessage.getMessageId());
 
                 // if first message received but the room doesn't exist, create new room
-                RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatSendMessageResponse.getRoomId()).findFirst();
+                RealmRoom room = realm.where(RealmRoom.class)
+                    .equalTo(RealmRoomFields.ID, chatSendMessageResponse.getRoomId())
+                    .findFirst();
                 if (room == null) {
                     // make get room request
                     new RequestClientGetRoom().clientGetRoom(chatSendMessageResponse.getRoomId());
                 } else {
                     // update last message sent/received in room table
-                    if (room.getLastMessageTime() < roomMessage.getUpdateTime() * DateUtils.SECOND_IN_MILLIS) {
+                    if (room.getLastMessageTime()
+                        < roomMessage.getUpdateTime() * DateUtils.SECOND_IN_MILLIS) {
                         room.setLastMessageId(roomMessage.getMessageId());
                         room.setLastMessageTime(roomMessage.getUpdateTime());
 
@@ -94,10 +95,14 @@ public class ChatSendMessageResponse extends MessageHandler {
                 // but sender. so I check current userId with room message user id, and if not equals
                 // and response is null, so we sure recipient is another user
 
-                if (chatSendMessageResponse.getResponse().getId().isEmpty()) {//TODO [Saeed Mozaffari] [2016-10-06 12:35 PM] - check this comment Alireza added and removed with saeed ==> //userId != roomMessage.getUserId() &&
+                if (chatSendMessageResponse.getResponse()
+                    .getId()
+                    .isEmpty()) {//TODO [Saeed Mozaffari] [2016-10-06 12:35 PM] - check this comment Alireza added and removed with saeed ==> //userId != roomMessage.getUserId() &&
                     // i'm the recipient
 
-                    RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
+                    RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class)
+                        .equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId())
+                        .findFirst();
 
                     /*
                      *  if this is new message and not exist this messageId createObject from RealmChatHistory
@@ -120,7 +125,10 @@ public class ChatSendMessageResponse extends MessageHandler {
                         */
                         messageId.add(roomMessage.getMessageId());
 
-                        realmChatHistory = realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_MESSAGE.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
+                        realmChatHistory = realm.where(RealmChatHistory.class)
+                            .equalTo(RealmChatHistoryFields.ROOM_MESSAGE.MESSAGE_ID,
+                                roomMessage.getMessageId())
+                            .findFirst();
                     }
 
                     realmRoomMessage.setMessageVersion(roomMessage.getMessageVersion());
@@ -128,11 +136,14 @@ public class ChatSendMessageResponse extends MessageHandler {
                     realmRoomMessage.setMessageType(roomMessage.getMessageType().toString());
                     realmRoomMessage.setMessage(roomMessage.getMessage());
 
-                    realmRoomMessage.setAttachment(roomMessage.getMessageId(), roomMessage.getAttachment());
+                    realmRoomMessage.setAttachment(roomMessage.getMessageId(),
+                        roomMessage.getAttachment());
                     realmRoomMessage.setUserId(roomMessage.getUserId());
-                    realmRoomMessage.setLocation(RealmRoomMessageLocation.build(roomMessage.getLocation()));
+                    realmRoomMessage.setLocation(
+                        RealmRoomMessageLocation.build(roomMessage.getLocation()));
                     realmRoomMessage.setLog(RealmRoomMessageLog.build(roomMessage.getLog()));
-                    realmRoomMessage.setRoomMessageContact(RealmRoomMessageContact.build(roomMessage.getContact()));
+                    realmRoomMessage.setRoomMessageContact(
+                        RealmRoomMessageContact.build(roomMessage.getContact()));
                     realmRoomMessage.setEdited(roomMessage.getEdited());
                     realmRoomMessage.setUpdateTime(roomMessage.getUpdateTime());
 
@@ -141,19 +152,26 @@ public class ChatSendMessageResponse extends MessageHandler {
 
                     realm.copyToRealm(realmChatHistory);
 
-                    if (roomMessage.getUserId() != userId) { // show notification if this message isn't for another account
+                    if (roomMessage.getUserId()
+                        != userId) { // show notification if this message isn't for another account
 
-                        SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
-                        int checkAlert = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_ALERT_MESSAGE, 1);
+                        SharedPreferences sharedPreferences =
+                            G.context.getSharedPreferences(SHP_SETTING.FILE_NAME,
+                                Context.MODE_PRIVATE);
+                        int checkAlert =
+                            sharedPreferences.getInt(SHP_SETTING.KEY_STNS_ALERT_MESSAGE, 1);
                         if (checkAlert == 1) {
                             G.helperNotificationAndBadge.updateNotificationAndBadge(true, 0);
                         }
                     }
-
                 } else {
                     // i'm the sender
                     // update message fields into database
-                    RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, chatSendMessageResponse.getRoomId()).findAll();
+                    RealmResults<RealmChatHistory> chatHistories =
+                        realm.where(RealmChatHistory.class)
+                            .equalTo(RealmChatHistoryFields.ROOM_ID,
+                                chatSendMessageResponse.getRoomId())
+                            .findAll();
                     for (RealmChatHistory history : chatHistories) {
                         RealmRoomMessage message = history.getRoomMessage();
                         // find the message using identity and update it
@@ -163,11 +181,14 @@ public class ChatSendMessageResponse extends MessageHandler {
                             message.setStatus(roomMessage.getStatus().toString());
                             message.setMessageType(roomMessage.getMessageType().toString());
                             message.setMessage(roomMessage.getMessage());
-                            message.setAttachment(roomMessage.getMessageId(), roomMessage.getAttachment());
+                            message.setAttachment(roomMessage.getMessageId(),
+                                roomMessage.getAttachment());
                             message.setUserId(roomMessage.getUserId());
-                            message.setLocation(RealmRoomMessageLocation.build(roomMessage.getLocation()));
+                            message.setLocation(
+                                RealmRoomMessageLocation.build(roomMessage.getLocation()));
                             message.setLog(RealmRoomMessageLog.build(roomMessage.getLog()));
-                            message.setRoomMessageContact(RealmRoomMessageContact.build(roomMessage.getContact()));
+                            message.setRoomMessageContact(
+                                RealmRoomMessageContact.build(roomMessage.getContact()));
                             message.setEdited(roomMessage.getEdited());
                             message.setUpdateTime(roomMessage.getUpdateTime());
 
@@ -179,30 +200,35 @@ public class ChatSendMessageResponse extends MessageHandler {
             }
         });
 
-        if (chatSendMessageResponse.getResponse().getId().isEmpty()) {//TODO [Saeed Mozaffari] [2016-10-06 12:35 PM] - check this comment Alireza added and removed with saeed ==> //userId != roomMessage.getUserId() &&
+        if (chatSendMessageResponse.getResponse()
+            .getId()
+            .isEmpty()) {//TODO [Saeed Mozaffari] [2016-10-06 12:35 PM] - check this comment Alireza added and removed with saeed ==> //userId != roomMessage.getUserId() &&
             // invoke following callback when i'm not the sender, because I already done everything after sending message
             if (!messageId.contains(roomMessage.getMessageId())) {
-                if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatSendMessageResponse.getRoomId()).findFirst() != null) {
-                    G.chatSendMessageUtil.onMessageReceive(chatSendMessageResponse.getRoomId(), roomMessage.getMessage(), roomMessage.getMessageType().toString(), roomMessage, ProtoGlobal.Room.Type.CHAT);
+                if (realm.where(RealmRoom.class)
+                    .equalTo(RealmRoomFields.ID, chatSendMessageResponse.getRoomId())
+                    .findFirst() != null) {
+                    G.chatSendMessageUtil.onMessageReceive(chatSendMessageResponse.getRoomId(),
+                        roomMessage.getMessage(), roomMessage.getMessageType().toString(),
+                        roomMessage, ProtoGlobal.Room.Type.CHAT);
                 }
             } else {
                 messageId.remove(messageId.indexOf(roomMessage.getMessageId()));
             }
         } else {
             // invoke following callback when I'm the sender and the message has updated
-            G.chatSendMessageUtil.onMessageUpdate(chatSendMessageResponse.getRoomId(), roomMessage.getMessageId(), roomMessage.getStatus(), identity, roomMessage);
+            G.chatSendMessageUtil.onMessageUpdate(chatSendMessageResponse.getRoomId(),
+                roomMessage.getMessageId(), roomMessage.getStatus(), identity, roomMessage);
         }
 
         realm.close();
     }
 
-    @Override
-    public void error() {
+    @Override public void error() {
         super.error();
     }
 
-    @Override
-    public void timeOut() {
+    @Override public void timeOut() {
         super.timeOut();
     }
 }

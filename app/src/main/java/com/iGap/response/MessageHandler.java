@@ -4,8 +4,8 @@ import android.util.Log;
 
 public abstract class MessageHandler {
 
-    int actionId;
     public Object message;
+    int actionId;
     String identity;
 
     public MessageHandler(int actionId, Object protoClass, String identity) {
@@ -27,5 +27,4 @@ public abstract class MessageHandler {
     public void error() {
         Log.i("MSGE", "MessageHandler error : " + message);
     }
-
 }

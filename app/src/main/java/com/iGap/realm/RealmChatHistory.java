@@ -5,8 +5,7 @@ import io.realm.annotations.PrimaryKey;
 
 public class RealmChatHistory extends RealmObject {
 
-    @PrimaryKey
-    private long id;
+    @PrimaryKey private long id;
 
     private long roomId;
     private RealmRoomMessage roomMessage;
@@ -34,6 +33,4 @@ public class RealmChatHistory extends RealmObject {
     public void setRoomId(long roomId) {
         this.roomId = roomId;
     }
-
-
 }

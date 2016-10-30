@@ -1,203 +1,225 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:context="com.iGap.activities.ActivityNewChanelFinish">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.iGap.activities.ActivityNewChanelFinish"
+    >
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/nclf_backgroundToolbar"
+  <android.support.v7.widget.Toolbar
+      android:id="@+id/nclf_backgroundToolbar"
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/dp60"
+      android:background="@color/toolbar_background"
+      app:contentInsetLeft="0dp"
+      app:contentInsetStart="0dp"
+      app:layout_collapseMode="pin"
+      >
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp60"
-        android:background="@color/toolbar_background"
-        app:contentInsetLeft="0dp"
-        app:contentInsetStart="0dp"
-        app:layout_collapseMode="pin">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
 
 
-            <TextView
-                android:id="@+id/nclf_txt_titleToolbar"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_centerInParent="true"
-                android:gravity="center"
-                android:text="New Chanel"
-                android:textColor="@color/whit_background"
-                android:textSize="@dimen/sp22"
-                android:textStyle="bold"
-                android:visibility="visible" />
+      <TextView
+          android:id="@+id/nclf_txt_titleToolbar"
+          android:layout_width="wrap_content"
+          android:layout_height="match_parent"
+          android:layout_centerInParent="true"
+          android:gravity="center"
+          android:text="New Chanel"
+          android:textColor="@color/whit_background"
+          android:textSize="@dimen/sp22"
+          android:textStyle="bold"
+          android:visibility="visible"
+          />
 
-            <com.iGap.libs.rippleeffect.RippleView
-                android:id="@+id/nclf_ripple_back"
-                rv_centered="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:rv_alpha="200"
-                app:rv_centered="true"
-                app:rv_rippleDuration="150"
-                app:rv_ripplePadding="5dp">
+      <com.iGap.libs.rippleeffect.RippleView
+          android:id="@+id/nclf_ripple_back"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          app:rv_alpha="200"
+          app:rv_centered="true"
+          app:rv_rippleDuration="150"
+          app:rv_ripplePadding="5dp"
+          rv_centered="true"
+          >
 
-                <com.iGap.module.MaterialDesignTextView
-                    android:id="@+id/nclf_txt_back"
-                    android:layout_width="@dimen/dp60"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentLeft="true"
-                    android:gravity="center"
-                    android:text="@string/md_back_arrow"
-                    fontPath="fonts/Flaticon.ttf"
-                    android:textColor="@color/whit_background"
-                    android:textSize="@dimen/sp18" />
+        <com.iGap.module.MaterialDesignTextView
+            android:id="@+id/nclf_txt_back"
+            android:layout_width="@dimen/dp60"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:gravity="center"
+            android:text="@string/md_back_arrow"
+            android:textColor="@color/whit_background"
+            android:textSize="@dimen/sp18"
+            fontPath="fonts/Flaticon.ttf"
+            />
 
-            </com.iGap.libs.rippleeffect.RippleView>
+      </com.iGap.libs.rippleeffect.RippleView>
 
-        </RelativeLayout>
-    </android.support.v7.widget.Toolbar>
+    </RelativeLayout>
+  </android.support.v7.widget.Toolbar>
 
-    <ScrollView
+  <ScrollView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@id/nclf_backgroundToolbar"
+      >
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/nclf_backgroundToolbar">
+        android:orientation="vertical"
+        >
+
+
+      <TextView
+          android:id="@+id/textView"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_horizontal"
+          android:layout_marginTop="@dimen/dp20"
+          android:text="Chanel Info"
+          android:textColor="@color/toolbar_background"
+          android:textSize="24sp"
+          android:textStyle="bold"
+          />
+
+      <RadioGroup
+          android:id="@+id/nclf_radioGroup"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/textView"
+          android:layout_marginTop="12dp"
+          android:padding="@dimen/dp12"
+          >
+
+        <RadioButton
+            android:id="@+id/nclf_radioButton_Public"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:gravity="left"
+            android:text="Public Chanel"
+            android:textColor="@android:color/black"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp8"
+            android:text="Public Chanels can be found in search , anyone can join them"
+            android:textSize="16sp"
+            />
+
+        <RadioButton
+            android:id="@+id/nclf_radioButton_private"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginTop="@dimen/dp8"
+            android:gravity="left"
+            android:text="Private Chanel"
+            android:textColor="@android:color/black"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp8"
+            android:text="Privet chanel can only be joined via an invite link"
+            android:textSize="16sp"
+            />
+      </RadioGroup>
+
+      <LinearLayout
+          android:id="@+id/nclf_layout_link"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_below="@id/nclf_radioGroup"
+          android:background="@color/background_editText"
+          android:orientation="vertical"
+          android:padding="@dimen/dp8"
+          >
+
+        <TextView
+            android:id="@+id/nclf_txt_title_Link"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="0dp"
+            android:text="Link"
+            android:textColor="@color/toolbar_background"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            />
+
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="@dimen/dp68"
+            android:orientation="horizontal"
+            >
 
+          <TextView
+              android:id="@+id/nclf_txt_titleIgap"
+              android:layout_width="wrap_content"
+              android:layout_height="match_parent"
+              android:layout_gravity="center_horizontal"
+              android:layout_marginLeft="@dimen/dp8"
+              android:gravity="center"
+              android:text="Igap / "
+              android:textSize="@dimen/sp20"
+              />
 
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/dp20"
-                android:text="Chanel Info"
-                android:textColor="@color/toolbar_background"
-                android:textSize="24sp"
-                android:textStyle="bold" />
-
-            <RadioGroup
-                android:id="@+id/nclf_radioGroup"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/textView"
-                android:layout_marginTop="12dp"
-                android:padding="@dimen/dp12">
-
-                <RadioButton
-                    android:id="@+id/nclf_radioButton_Public"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:gravity="left"
-                    android:text="Public Chanel"
-                    android:textColor="@android:color/black" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp8"
-                    android:text="Public Chanels can be found in search , anyone can join them"
-                    android:textSize="16sp" />
-
-                <RadioButton
-                    android:id="@+id/nclf_radioButton_private"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:layout_marginTop="@dimen/dp8"
-                    android:gravity="left"
-                    android:text="Private Chanel"
-                    android:textColor="@android:color/black" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp8"
-                    android:text="Privet chanel can only be joined via an invite link"
-                    android:textSize="16sp" />
-            </RadioGroup>
-
-            <LinearLayout
-                android:id="@+id/nclf_layout_link"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/nclf_radioGroup"
-                android:background="@color/background_editText"
-                android:orientation="vertical"
-                android:padding="@dimen/dp8">
-
-                <TextView
-                    android:id="@+id/nclf_txt_title_Link"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:padding="0dp"
-                    android:text="Link"
-                    android:textColor="@color/toolbar_background"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp68"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/nclf_txt_titleIgap"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginLeft="@dimen/dp8"
-                        android:gravity="center"
-                        android:text="Igap / "
-                        android:textSize="@dimen/sp20" />
-
-                    <EditText
-                        android:id="@+id/nclf_edt_link"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginRight="@dimen/dp32"
-                        android:hint="your Link" />
-
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp8"
-                android:gravity="right|center_horizontal"
-                android:padding="@dimen/dp20">
-
-                <TextView
-                    android:id="@+id/nclf_txt_cancel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/dp20"
-                    android:text="CANCEL"
-                    android:textColor="@color/toolbar_background"
-                    android:textSize="@dimen/dp16"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/nclf_txt_nextStep"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/dp20"
-                    android:text="FINISH"
-                    android:textColor="@color/toolbar_background"
-                    android:textSize="@dimen/dp16"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
+          <EditText
+              android:id="@+id/nclf_edt_link"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_gravity="center_horizontal"
+              android:layout_marginRight="@dimen/dp32"
+              android:hint="your Link"
+              />
 
         </LinearLayout>
-    </ScrollView>
+      </LinearLayout>
+
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/dp8"
+          android:gravity="right|center_horizontal"
+          android:padding="@dimen/dp20"
+          >
+
+        <TextView
+            android:id="@+id/nclf_txt_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp20"
+            android:text="CANCEL"
+            android:textColor="@color/toolbar_background"
+            android:textSize="@dimen/dp16"
+            android:textStyle="bold"
+            />
+
+        <TextView
+            android:id="@+id/nclf_txt_nextStep"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp20"
+            android:text="FINISH"
+            android:textColor="@color/toolbar_background"
+            android:textSize="@dimen/dp16"
+            android:textStyle="bold"
+            />
+
+      </LinearLayout>
+
+    </LinearLayout>
+  </ScrollView>
 </RelativeLayout>

@@ -5,7 +5,6 @@ import com.iGap.proto.ProtoGroupEdit;
 import com.iGap.realm.RealmGroupRoom;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
-
 import io.realm.Realm;
 
 public class GroupEditResponse extends MessageHandler {
@@ -22,45 +21,36 @@ public class GroupEditResponse extends MessageHandler {
         this.identity = identity;
     }
 
+    @Override public void handler() {
 
-    @Override
-    public void handler() {
-
-        ProtoGroupEdit.GroupEditResponse.Builder builder = (ProtoGroupEdit.GroupEditResponse.Builder) message;
+        ProtoGroupEdit.GroupEditResponse.Builder builder =
+            (ProtoGroupEdit.GroupEditResponse.Builder) message;
         long roomId = builder.getRoomId();
         final String name = builder.getName();
         final String descriptions = builder.getDescription();
 
-
         Realm realm = Realm.getDefaultInstance();
-        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        final RealmRoom realmRoom =
+            realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
         if (realmRoom != null) {
             realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
+                @Override public void execute(Realm realm) {
 
                     realmRoom.setTitle(name);
                     RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
                     realmGroupRoom.setDescription(descriptions);
-
                 }
             });
 
-            G.onGroupEdit.onGroupEdit(builder.getRoomId(), builder.getName(), builder.getDescription());
-
+            G.onGroupEdit.onGroupEdit(builder.getRoomId(), builder.getName(),
+                builder.getDescription());
         }
 
         realm.close();
-
-
-
-
-
     }
 
-    @Override
-    public void error() {
+    @Override public void error() {
 
     }
 }

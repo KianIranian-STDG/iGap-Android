@@ -19,18 +19,15 @@ public class GifItem extends AbstractMessage<GifItem, GifItem.ViewHolder> {
         super(true, type, messageClickListener);
     }
 
-    @Override
-    public int getType() {
+    @Override public int getType() {
         return R.id.chatSubLayoutAudio;
     }
 
-    @Override
-    public int getLayoutRes() {
+    @Override public int getLayoutRes() {
         return R.layout.chat_sub_layout_gif;
     }
 
-    @Override
-    public ViewHolderFactory<? extends ViewHolder> getFactory() {
+    @Override public ViewHolderFactory<? extends ViewHolder> getFactory() {
         return FACTORY;
     }
 
@@ -40,8 +37,7 @@ public class GifItem extends AbstractMessage<GifItem, GifItem.ViewHolder> {
         // TODO: 9/28/2016 [Alireza]
     }
 
-    @Override
-    public void bindView(ViewHolder holder, List payloads) {
+    @Override public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
     }
 

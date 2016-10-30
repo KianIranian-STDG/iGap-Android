@@ -2,17 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:divider="@null"
-    android:layoutDirection="ltr">
+    android:layoutDirection="ltr"
+    android:orientation="vertical"
+    >
 
-    <RadioButton
-        android:id="@+id/rg_radioButton"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp52"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="@dimen/dp12"
-        android:paddingLeft="@dimen/dp20"
-        android:text="New RadioButton"
-        android:checked="false" />
+  <RadioButton
+      android:id="@+id/rg_radioButton"
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/dp52"
+      android:layout_gravity="center_horizontal"
+      android:layout_marginLeft="@dimen/dp12"
+      android:checked="false"
+      android:paddingLeft="@dimen/dp20"
+      android:text="New RadioButton"
+      />
 </LinearLayout>

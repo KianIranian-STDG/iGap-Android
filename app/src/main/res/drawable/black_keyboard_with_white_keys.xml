@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:viewportWidth="510"
+    android:height="510dp"
     android:viewportHeight="510"
-    android:width="510dp"
-    android:height="510dp">
-    <path
-        android:pathData="M459 76.5l-408 0c-28.05 0 -51 22.95 -51 51l0 255c0 28.05 22.95 51 51 51l408 0c28.05 0 51 -22.95 51 -51l0 -255c0 -28.05 -22.95 -51 -51 -51zm-229.5 76.5l51 0 0 51 -51 0 0 -51zm0 76.5l51 0 0 51 -51 0 0 -51zM153 153l51 0 0 51 -51 0 0 -51zm0 76.5l51 0 0 51 -51 0 0 -51zm-25.5 51l-51 0 0 -51 51 0 0 51zm0 -76.5l-51 0 0 -51 51 0 0 51zm229.5 178.5l-204 0 0 -51 204 0 0 51zm0 -102l-51 0 0 -51 51 0 0 51zm0 -76.5l-51 0 0 -51 51 0 0 51zm76.5 76.5l-51 0 0 -51 51 0 0 51zm0 -76.5l-51 0 0 -51 51 0 0 51z"
-        android:fillColor="#000000" />
+    android:viewportWidth="510"
+    android:width="510dp">
+  <path
+      android:fillColor="#000000"
+      android:pathData="M459 76.5l-408 0c-28.05 0 -51 22.95 -51 51l0 255c0 28.05 22.95 51 51 51l408 0c28.05 0 51 -22.95 51 -51l0 -255c0 -28.05 -22.95 -51 -51 -51zm-229.5 76.5l51 0 0 51 -51 0 0 -51zm0 76.5l51 0 0 51 -51 0 0 -51zM153 153l51 0 0 51 -51 0 0 -51zm0 76.5l51 0 0 51 -51 0 0 -51zm-25.5 51l-51 0 0 -51 51 0 0 51zm0 -76.5l-51 0 0 -51 51 0 0 51zm229.5 178.5l-204 0 0 -51 204 0 0 51zm0 -102l-51 0 0 -51 51 0 0 51zm0 -76.5l-51 0 0 -51 51 0 0 51zm76.5 76.5l-51 0 0 -51 51 0 0 51zm0 -76.5l-51 0 0 -51 51 0 0 51z"/>
 </vector>

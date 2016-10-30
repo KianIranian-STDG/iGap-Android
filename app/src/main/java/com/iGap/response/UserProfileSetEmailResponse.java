@@ -17,19 +17,17 @@ public class UserProfileSetEmailResponse extends MessageHandler {
         this.identity = identity;
     }
 
-
-    @Override
-    public void handler() {
-        ProtoUserProfileEmail.UserProfileSetEmailResponse.Builder userProfileEmail = (ProtoUserProfileEmail.UserProfileSetEmailResponse.Builder) message;
-        G.onUserProfileSetEmailResponse.onUserProfileEmailResponse(userProfileEmail.getEmail(), userProfileEmail.getResponse());
+    @Override public void handler() {
+        ProtoUserProfileEmail.UserProfileSetEmailResponse.Builder userProfileEmail =
+            (ProtoUserProfileEmail.UserProfileSetEmailResponse.Builder) message;
+        G.onUserProfileSetEmailResponse.onUserProfileEmailResponse(userProfileEmail.getEmail(),
+            userProfileEmail.getResponse());
     }
 
-    @Override
-    public void timeOut() {
+    @Override public void timeOut() {
     }
 
-    @Override
-    public void error() {
+    @Override public void error() {
     }
 }
 

@@ -49,7 +49,6 @@ public class ContactGroupFragment extends Fragment {
     private EditText edtSearch;
     private String textString = "";
 
-
     private long roomId;
     private int countAddMemberResponse = 0;
     private int countAddMemberRequest = 0;
@@ -57,19 +56,17 @@ public class ContactGroupFragment extends Fragment {
     private int sizeTextEditText = 0;
     private List<StructContactInfo> contacts;
 
-
     public static ContactGroupFragment newInstance() {
         return new ContactGroupFragment();
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    @Nullable @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+        @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_contact_group, container, false);
     }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         Bundle bundle = this.getArguments();
@@ -77,27 +74,24 @@ public class ContactGroupFragment extends Fragment {
             roomId = bundle.getLong("RoomId");
         }
 
-
         txtStatus = (TextView) view.findViewById(R.id.fcg_txt_status);
         txtNumberOfMember = (TextView) view.findViewById(R.id.fcg_txt_number_of_member);
         edtSearch = (EditText) view.findViewById(R.id.fcg_edt_search);
 
-
-        MaterialDesignTextView btnBack = (MaterialDesignTextView) view.findViewById(R.id.fcg_btn_back);
+        MaterialDesignTextView btnBack =
+            (MaterialDesignTextView) view.findViewById(R.id.fcg_btn_back);
         RippleView rippleBack = (RippleView) view.findViewById(R.id.fcg_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
+            @Override public void onComplete(RippleView rippleView) {
                 getActivity().getSupportFragmentManager().popBackStack();
             }
         });
 
-
-        MaterialDesignTextView btnDone = (MaterialDesignTextView) view.findViewById(R.id.fcg_btn_done);
+        MaterialDesignTextView btnDone =
+            (MaterialDesignTextView) view.findViewById(R.id.fcg_btn_done);
         RippleView rippleDone = (RippleView) view.findViewById(R.id.fcg_ripple_done);
         rippleDone.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
+            @Override public void onComplete(RippleView rippleView) {
                 G.onGroupAddMember = new OnGroupAddMember() {
                     @Override
                     public void onGroupAddMember() { //TODO [Saeed Mozaffari] [2016-10-15 10:34 AM] - bayad id ra begirim ke daghighan motevajeh shavim ke chand nafar add shodeand
@@ -107,10 +101,12 @@ public class ContactGroupFragment extends Fragment {
                             Realm realm = Realm.getDefaultInstance();
 
                             realm.executeTransaction(new Realm.Transaction() {
-                                @Override
-                                public void execute(Realm realm) {
-                                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                                    realmRoom.getGroupRoom().setParticipantsCountLabel(countAddMemberResponse + "");
+                                @Override public void execute(Realm realm) {
+                                    RealmRoom realmRoom = realm.where(RealmRoom.class)
+                                        .equalTo(RealmRoomFields.ID, roomId)
+                                        .findFirst();
+                                    realmRoom.getGroupRoom()
+                                        .setParticipantsCountLabel(countAddMemberResponse + "");
                                 }
                             });
 
@@ -126,8 +122,7 @@ public class ContactGroupFragment extends Fragment {
 
                 Realm realm = Realm.getDefaultInstance();
                 realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
+                    @Override public void execute(Realm realm) {
                         final RealmList<RealmMember> members = new RealmList<>();
                         for (long peerId : getSelectedList()) {
 
@@ -135,7 +130,8 @@ public class ContactGroupFragment extends Fragment {
                             RealmMember realmMember = new RealmMember();
                             int autoIncrement = 0;
                             if (realm.where(RealmMember.class).max("id") != null) {
-                                autoIncrement = realm.where(RealmMember.class).max("id").intValue() + 1;
+                                autoIncrement =
+                                    realm.where(RealmMember.class).max("id").intValue() + 1;
                             }
                             realmMember.setId(autoIncrement);
                             realmMember.setPeerId(peerId);
@@ -145,10 +141,13 @@ public class ContactGroupFragment extends Fragment {
                             members.add(realmMember);
 
                             //request for add member
-                            new RequestGroupAddMember().groupAddMember(roomId, peerId, 0, ProtoGlobal.GroupRoom.Role.MEMBER);
+                            new RequestGroupAddMember().groupAddMember(roomId, peerId, 0,
+                                ProtoGlobal.GroupRoom.Role.MEMBER);
                         }
 
-                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                        RealmRoom realmRoom = realm.where(RealmRoom.class)
+                            .equalTo(RealmRoomFields.ID, roomId)
+                            .findFirst();
 
                         for (RealmMember member : realmRoom.getGroupRoom().getMembers()) {
                             members.add(member);
@@ -169,9 +168,9 @@ public class ContactGroupFragment extends Fragment {
         final HeaderAdapter headerAdapter = new HeaderAdapter();
         final ItemAdapter itemAdapter = new ItemAdapter();
         itemAdapter.withFilterPredicate(new IItemAdapter.Predicate<ContactItemGroup>() {
-            @Override
-            public boolean filter(ContactItemGroup item, CharSequence constraint) {
-                return !item.mContact.displayName.toLowerCase().startsWith(String.valueOf(constraint).toLowerCase());
+            @Override public boolean filter(ContactItemGroup item, CharSequence constraint) {
+                return !item.mContact.displayName.toLowerCase()
+                    .startsWith(String.valueOf(constraint).toLowerCase());
             }
         });
         fastAdapter.withOnClickListener(new FastAdapter.OnClickListener<ContactItemGroup>() {
@@ -187,23 +186,21 @@ public class ContactGroupFragment extends Fragment {
             }
         });
 
-
         edtSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-
             }
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                 if (charSequence.length() > sizeTextEditText) {
-                    String s = edtSearch.getText().toString().substring(sizeTextEditText, charSequence.length());
+                    String s = edtSearch.getText()
+                        .toString()
+                        .substring(sizeTextEditText, charSequence.length());
                     itemAdapter.filter(s);
                 } else {
                     itemAdapter.filter("");
-
                 }
 
                 edtSearch.setSelection(edtSearch.getText().length());
@@ -211,17 +208,13 @@ public class ContactGroupFragment extends Fragment {
 
             }
 
-            @Override
-            public void afterTextChanged(Editable editable) {
-
+            @Override public void afterTextChanged(Editable editable) {
 
             }
         });
 
-
         edtSearch.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+            @Override public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
                 if ((keyCode == KeyEvent.KEYCODE_DEL)) {
                     if (edtSearch.getText().length() <= sizeTextEditText) {
                         return true;
@@ -232,34 +225,34 @@ public class ContactGroupFragment extends Fragment {
             }
         });
 
-
         //configure our fastAdapter
         //as we provide id's for the items we want the hasStableIds enabled to speed up things
         fastAdapter.setHasStableIds(true);
 
         //get our recyclerView and do basic setup
-        RecyclerView rv = (RecyclerView) view.findViewById(R.id.fcg_recycler_view_add_item_to_group);
+        RecyclerView rv =
+            (RecyclerView) view.findViewById(R.id.fcg_recycler_view_add_item_to_group);
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
         rv.setItemAnimator(new DefaultItemAnimator());
         rv.setAdapter(stickyHeaderAdapter.wrap(itemAdapter.wrap(headerAdapter.wrap(fastAdapter))));
 
         //this adds the Sticky Headers within our list
-        final StickyRecyclerHeadersDecoration decoration = new StickyRecyclerHeadersDecoration(stickyHeaderAdapter);
+        final StickyRecyclerHeadersDecoration decoration =
+            new StickyRecyclerHeadersDecoration(stickyHeaderAdapter);
         rv.addItemDecoration(decoration);
 
         List<IItem> items = new ArrayList<>();
         contacts = Contacts.retrieve(null);
 
-
         for (StructContactInfo contact : contacts) {
-            items.add(new ContactItemGroup().setContact(contact).withIdentifier(100 + contacts.indexOf(contact)));
+            items.add(new ContactItemGroup().setContact(contact)
+                .withIdentifier(100 + contacts.indexOf(contact)));
         }
         itemAdapter.add(items);
 
         //so the headers are aware of changes
         stickyHeaderAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onChanged() {
+            @Override public void onChanged() {
                 decoration.invalidateHeaders();
             }
         });
@@ -280,11 +273,11 @@ public class ContactGroupFragment extends Fragment {
             }
         }
 
-        txtNumberOfMember.setText(selectedNumber + " / " + contacts.size() + getString(R.string.member));
+        txtNumberOfMember.setText(
+            selectedNumber + " / " + contacts.size() + getString(R.string.member));
         sizeTextEditText = textString.length();
         edtSearch.setText(textString);
     }
-
 
     private ArrayList<Long> getSelectedList() {
 
@@ -300,12 +293,9 @@ public class ContactGroupFragment extends Fragment {
         return list;
     }
 
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
+    @Override public void onSaveInstanceState(Bundle outState) {
         //add the values which need to be saved from the adapter to the bundle
         outState = fastAdapter.saveInstanceState(outState);
         super.onSaveInstanceState(outState);
     }
-
 }

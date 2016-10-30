@@ -28,7 +28,6 @@ public class HelperPermision {
     private static final int MY_PERMISSIONS_Phone = 207;
     private static final int MY_PERMISSIONS_Sms = 208;
 
-
     private static OnGetPermision ResultCamera;
     private static OnGetPermision ResultStorage;
     private static OnGetPermision ResultContact;
@@ -48,10 +47,12 @@ public class HelperPermision {
 
         ResultCamera = onGetPermision;
 
-        int permissionCheck = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA);
+        int permissionCheck =
+            ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA);
 
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-            getPremision(context, new String[]{Manifest.permission.CAMERA}, MY_PERMISSIONS_CAMERA);
+            getPremision(context, new String[] { Manifest.permission.CAMERA },
+                MY_PERMISSIONS_CAMERA);
         } else {
             onGetPermision.Allow();
         }
@@ -69,8 +70,10 @@ public class HelperPermision {
 
         ArrayList<String> needPermosion = null;
 
-        int permissionReadStorage = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE);
-        int permissionWriteStorage = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int permissionReadStorage =
+            ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE);
+        int permissionWriteStorage =
+            ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
         if (permissionReadStorage != PackageManager.PERMISSION_GRANTED) {
             needPermosion = new ArrayList<>();
@@ -82,7 +85,6 @@ public class HelperPermision {
                 needPermosion = new ArrayList<>();
             }
             needPermosion.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
         }
 
         if (needPermosion != null) {
@@ -92,8 +94,6 @@ public class HelperPermision {
         } else {
             onGetPermision.Allow();
         }
-
-
     }
 
     //************************************************************************************************************
@@ -108,8 +108,10 @@ public class HelperPermision {
 
         ArrayList<String> needPermosion = null;
 
-        int permissionReadContact = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS);
-        int permissionWriteContact = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CONTACTS);
+        int permissionReadContact =
+            ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS);
+        int permissionWriteContact =
+            ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CONTACTS);
         //  int permissionWritGetAccunt = ContextCompat.checkSelfPermission(context, Manifest.permission.GET_ACCOUNTS);
 
         if (permissionReadContact != PackageManager.PERMISSION_GRANTED) {
@@ -122,7 +124,6 @@ public class HelperPermision {
                 needPermosion = new ArrayList<>();
             }
             needPermosion.add(Manifest.permission.WRITE_CONTACTS);
-
         }
 
         //if (permissionWritGetAccunt != PackageManager.PERMISSION_GRANTED) {
@@ -140,7 +141,6 @@ public class HelperPermision {
         } else {
             onGetPermision.Allow();
         }
-
     }
 
     //************************************************************************************************************
@@ -155,8 +155,10 @@ public class HelperPermision {
 
         ArrayList<String> needPermosion = null;
 
-        int permissionReadCalendar = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR);
-        int permissionWriteCaledar = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALENDAR);
+        int permissionReadCalendar =
+            ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR);
+        int permissionWriteCaledar =
+            ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALENDAR);
 
         if (permissionReadCalendar != PackageManager.PERMISSION_GRANTED) {
             needPermosion = new ArrayList<>();
@@ -168,7 +170,6 @@ public class HelperPermision {
                 needPermosion = new ArrayList<>();
             }
             needPermosion.add(Manifest.permission.WRITE_CALENDAR);
-
         }
 
         if (needPermosion != null) {
@@ -178,8 +179,6 @@ public class HelperPermision {
         } else {
             onGetPermision.Allow();
         }
-
-
     }
 
     //************************************************************************************************************
@@ -194,8 +193,10 @@ public class HelperPermision {
 
         ArrayList<String> needPermosion = null;
 
-        int permissionFineLocation = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION);
-        int permissionCoreseLocation = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION);
+        int permissionFineLocation =
+            ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION);
+        int permissionCoreseLocation =
+            ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION);
 
         if (permissionFineLocation != PackageManager.PERMISSION_GRANTED) {
             needPermosion = new ArrayList<>();
@@ -207,7 +208,6 @@ public class HelperPermision {
                 needPermosion = new ArrayList<>();
             }
             needPermosion.add(Manifest.permission.ACCESS_COARSE_LOCATION);
-
         }
 
         if (needPermosion != null) {
@@ -217,8 +217,6 @@ public class HelperPermision {
         } else {
             onGetPermision.Allow();
         }
-
-
     }
 
     //************************************************************************************************************
@@ -231,10 +229,12 @@ public class HelperPermision {
 
         ResultRecordAudio = onGetPermision;
 
-        int permissionCheck = ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO);
+        int permissionCheck =
+            ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO);
 
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-            getPremision(context, new String[]{Manifest.permission.RECORD_AUDIO}, MY_PERMISSIONS_RECORD_AUDIO);
+            getPremision(context, new String[] { Manifest.permission.RECORD_AUDIO },
+                MY_PERMISSIONS_RECORD_AUDIO);
         } else {
             onGetPermision.Allow();
         }
@@ -252,14 +252,16 @@ public class HelperPermision {
 
         ArrayList<String> needPermosion = null;
 
-        int permissionCallPhone = ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE);
-        int permissionReadPhoneState = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE);
+        int permissionCallPhone =
+            ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE);
+        int permissionReadPhoneState =
+            ContextCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE);
 
-//        int permissionReadCallLog = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CALL_LOG);
-//        int permissionWriteCallLog = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALL_LOG);
-//        int permissionAddVoiceMaile = ContextCompat.checkSelfPermission(context, Manifest.permission.ADD_VOICEMAIL);
-//        int permissionUseSip = ContextCompat.checkSelfPermission(context, Manifest.permission.USE_SIP);
-//        int permissionProcessOutgoingCall = ContextCompat.checkSelfPermission(context, Manifest.permission.PROCESS_OUTGOING_CALLS);
+        //        int permissionReadCallLog = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CALL_LOG);
+        //        int permissionWriteCallLog = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALL_LOG);
+        //        int permissionAddVoiceMaile = ContextCompat.checkSelfPermission(context, Manifest.permission.ADD_VOICEMAIL);
+        //        int permissionUseSip = ContextCompat.checkSelfPermission(context, Manifest.permission.USE_SIP);
+        //        int permissionProcessOutgoingCall = ContextCompat.checkSelfPermission(context, Manifest.permission.PROCESS_OUTGOING_CALLS);
 
         if (permissionCallPhone != PackageManager.PERMISSION_GRANTED) {
             needPermosion = new ArrayList<>();
@@ -280,8 +282,6 @@ public class HelperPermision {
         } else {
             onGetPermision.Allow();
         }
-
-
     }
 
     //************************************************************************************************************
@@ -296,13 +296,14 @@ public class HelperPermision {
 
         ArrayList<String> needPermosion = null;
 
-        int permissionReciveSms = ContextCompat.checkSelfPermission(context, Manifest.permission.RECEIVE_SMS);
-        int permissionReadSms = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_SMS);
+        int permissionReciveSms =
+            ContextCompat.checkSelfPermission(context, Manifest.permission.RECEIVE_SMS);
+        int permissionReadSms =
+            ContextCompat.checkSelfPermission(context, Manifest.permission.READ_SMS);
 
-//        int permissionSendSms = ContextCompat.checkSelfPermission(context, Manifest.permission.SEND_SMS);
-//        int permissionReciveWashBush = ContextCompat.checkSelfPermission(context, Manifest.permission.RECEIVE_WAP_PUSH);
-//        int permissionMms = ContextCompat.checkSelfPermission(context, Manifest.permission.RECEIVE_MMS);
-
+        //        int permissionSendSms = ContextCompat.checkSelfPermission(context, Manifest.permission.SEND_SMS);
+        //        int permissionReciveWashBush = ContextCompat.checkSelfPermission(context, Manifest.permission.RECEIVE_WAP_PUSH);
+        //        int permissionMms = ContextCompat.checkSelfPermission(context, Manifest.permission.RECEIVE_MMS);
 
         if (permissionReciveSms != PackageManager.PERMISSION_GRANTED) {
             needPermosion = new ArrayList<>();
@@ -314,7 +315,6 @@ public class HelperPermision {
                 needPermosion = new ArrayList<>();
             }
             needPermosion.add(Manifest.permission.READ_SMS);
-
         }
 
         if (needPermosion != null) {
@@ -324,10 +324,7 @@ public class HelperPermision {
         } else {
             onGetPermision.Allow();
         }
-
-
     }
-
 
     //************************************************************************************************************
     //************************************************************************************************************
@@ -342,32 +339,33 @@ public class HelperPermision {
     public static void getPremision(final Context context, final String[] needPermision,
         final int requestCode) {
 
-
-        if (!ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, needPermision[0])) {
+        if (!ActivityCompat.shouldShowRequestPermissionRationale((Activity) context,
+            needPermision[0])) {
             showMessageOKCancel(context, "You need to allow " + needPermision[0],
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            ActivityCompat.requestPermissions((Activity) context, needPermision, requestCode);
-                        }
-                    });
+                new DialogInterface.OnClickListener() {
+                    @Override public void onClick(DialogInterface dialog, int which) {
+                        ActivityCompat.requestPermissions((Activity) context, needPermision,
+                            requestCode);
+                    }
+                });
             return;
         }
 
         ActivityCompat.requestPermissions((Activity) context, needPermision, requestCode);
     }
 
-    private static void showMessageOKCancel(Context context, String message, DialogInterface.OnClickListener okListener) {
-        new AlertDialog.Builder(context)
-                .setMessage(message)
-                .setPositiveButton("OK", okListener)
-                .setNegativeButton("Cancel", null)
-                .create()
-                .show();
+    private static void showMessageOKCancel(Context context, String message,
+        DialogInterface.OnClickListener okListener) {
+        new AlertDialog.Builder(context).setMessage(message)
+            .setPositiveButton("OK", okListener)
+            .setNegativeButton("Cancel", null)
+            .create()
+            .show();
     }
 
     //************************************************************************************************************
-    public static void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public static void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+        @NonNull int[] grantResults) {
 
         switch (requestCode) {
             case MY_PERMISSIONS_CAMERA:
@@ -395,7 +393,6 @@ public class HelperPermision {
                 actionResultBack(grantResults, ResultSms);
                 break;
         }
-
     }
 
     //************************************************************************************************************
@@ -404,17 +401,13 @@ public class HelperPermision {
 
         boolean allOk = true;
         for (int i = 0; i < grantResults.length; i++) {
-            if (grantResults[i] != PackageManager.PERMISSION_GRANTED)
-                allOk = false;
+            if (grantResults[i] != PackageManager.PERMISSION_GRANTED) allOk = false;
         }
 
         if (allOk) {
-            if (onGetPermision != null)
-                onGetPermision.Allow();
+            if (onGetPermision != null) onGetPermision.Allow();
         }
-
     }
 
     //************************************************************************************************************
-
 }

@@ -10,6 +10,4 @@ public interface OnColorChangedListenerSelect {
     void colorChanged(String key, int color);
 
     void Confirmation(Boolean result);
-
-
 }

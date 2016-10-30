@@ -5,6 +5,6 @@ import java.util.ArrayList;
 
 public interface OnSelectedList {
 
-    void getSelectedList(boolean result, String message, int countForShowLastMessage, ArrayList<StructContactInfo> list);
-
+    void getSelectedList(boolean result, String message, int countForShowLastMessage,
+        ArrayList<StructContactInfo> list);
 }

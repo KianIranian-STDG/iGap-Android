@@ -1,17 +1,14 @@
 package com.iGap.realm;
 
 import android.util.Log;
-
 import com.iGap.proto.ProtoGlobal;
-
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 public class RealmRegisteredInfo extends RealmObject {
-    @PrimaryKey
-    private long id;
+    @PrimaryKey private long id;
     private String username;
     private long phone;
     private String firstName;
@@ -116,6 +113,10 @@ public class RealmRegisteredInfo extends RealmObject {
         return avatar;
     }
 
+    public void setAvatar(RealmList<RealmAvatar> avatar) {
+        this.avatar = avatar;
+    }
+
     public RealmAvatar getLastAvatar() {
         if (avatar.isEmpty()) {
             return null;
@@ -123,21 +124,19 @@ public class RealmRegisteredInfo extends RealmObject {
         return avatar.last();
     }
 
-    public void setAvatar(RealmList<RealmAvatar> avatar) {
-        this.avatar = avatar;
-    }
-
     public void addAvatar(RealmAvatar avatar) {
         this.avatar.add(avatar);
     }
 
     public void addAvatar(long userId, ProtoGlobal.Avatar avatar) {
-        if (avatar == null || avatar.getFile() == null || (avatar.getFile().getToken() == null || avatar.getFile().getToken().isEmpty())) {
+        if (avatar == null || avatar.getFile() == null || (avatar.getFile().getToken() == null
+            || avatar.getFile().getToken().isEmpty())) {
             return;
         }
 
         Realm realm = Realm.getDefaultInstance();
-        RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findFirst();
+        RealmAvatar realmAvatar =
+            realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findFirst();
 
         if (realmAvatar == null) {
             realmAvatar = realm.createObject(RealmAvatar.class);
@@ -159,21 +158,23 @@ public class RealmRegisteredInfo extends RealmObject {
      * create new object from RealmRegisteredInfo and set all fields with registeredUser Proto
      *
      * @param registeredUser proto that get from server
-     * @param realm          realm that get from executeTransaction
+     * @param realm realm that get from executeTransaction
      */
 
-    public void setRegisteredUserInfo(ProtoGlobal.RegisteredUser registeredUser, RealmRegisteredInfo realmRegisteredInfo, Realm realm) {
+    public void setRegisteredUserInfo(ProtoGlobal.RegisteredUser registeredUser,
+        RealmRegisteredInfo realmRegisteredInfo, Realm realm) {
         fillRegisteredUserInfo(registeredUser, realmRegisteredInfo, realm);
     }
 
     /**
      * get exist row from RealmRegisteredInfo and set all fields with registeredUser Proto
      *
-     * @param registeredUser      proto that get from server
+     * @param registeredUser proto that get from server
      * @param realmRegisteredInfo current object from realm
-     * @param realm               realm that get from executeTransaction
+     * @param realm realm that get from executeTransaction
      */
-    public void updateRegisteredUserInfo(ProtoGlobal.RegisteredUser registeredUser, RealmRegisteredInfo realmRegisteredInfo, Realm realm) {
+    public void updateRegisteredUserInfo(ProtoGlobal.RegisteredUser registeredUser,
+        RealmRegisteredInfo realmRegisteredInfo, Realm realm) {
         fillRegisteredUserInfo(registeredUser, realmRegisteredInfo, realm);
     }
 
@@ -181,11 +182,12 @@ public class RealmRegisteredInfo extends RealmObject {
      * fill object from proto to realm
      *
      * @param registeredUser proto that get from server
-     * @param info           object from RealmRegisteredInfo
-     * @param realm          realm that get from executeTransaction
+     * @param info object from RealmRegisteredInfo
+     * @param realm realm that get from executeTransaction
      */
 
-    private void fillRegisteredUserInfo(ProtoGlobal.RegisteredUser registeredUser, RealmRegisteredInfo info, Realm realm) {
+    private void fillRegisteredUserInfo(ProtoGlobal.RegisteredUser registeredUser,
+        RealmRegisteredInfo info, Realm realm) {
 
         info.setId(registeredUser.getId());
         info.setUsername(registeredUser.getUsername());
@@ -201,7 +203,10 @@ public class RealmRegisteredInfo extends RealmObject {
 
         if (registeredUser.getAvatarCount() > 0) {
             Log.i("SSS", "Avatar Exist");
-            RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.FILE.TOKEN, registeredUser.getAvatar().getFile().getToken()).findFirst();
+            RealmAvatar realmAvatar = realm.where(RealmAvatar.class)
+                .equalTo(RealmAvatarFields.FILE.TOKEN,
+                    registeredUser.getAvatar().getFile().getToken())
+                .findFirst();
             Log.i("SSS", "realmAvatar : " + realmAvatar);
             if (realmAvatar == null) {
                 info.addAvatar(RealmAvatar.convert(registeredUser, realm));

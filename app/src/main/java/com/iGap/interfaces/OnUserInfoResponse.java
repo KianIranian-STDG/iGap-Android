@@ -14,5 +14,4 @@ public interface OnUserInfoResponse {
     void onUserInfoTimeOut();
 
     void onUserInfoError();
-
 }

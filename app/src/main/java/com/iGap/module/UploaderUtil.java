@@ -25,9 +25,10 @@ import static com.iGap.G.handler;
  * use this util for uploading files
  */
 public class UploaderUtil implements OnFileUpload, OnFileUploadStatusResponse {
-    private OnFileUploadForActivities activityCallbacks;
     // selected files (paths)
-    private static CopyOnWriteArrayList<FileUploadStructure> mSelectedFiles = new CopyOnWriteArrayList<>();
+    private static CopyOnWriteArrayList<FileUploadStructure> mSelectedFiles =
+        new CopyOnWriteArrayList<>();
+    private OnFileUploadForActivities activityCallbacks;
 
     public void setActivityCallbacks(OnFileUploadForActivities onFileUploadForActivities) {
         this.activityCallbacks = onFileUploadForActivities;
@@ -41,15 +42,20 @@ public class UploaderUtil implements OnFileUpload, OnFileUploadStatusResponse {
     }
 
     @Override
-    public void OnFileUploadOption(int firstBytesLimit, int lastBytesLimit, int maxConnection, String fileHashAsIdentity, ProtoResponse.Response response) {
+    public void OnFileUploadOption(int firstBytesLimit, int lastBytesLimit, int maxConnection,
+        String fileHashAsIdentity, ProtoResponse.Response response) {
         try {
             Log.d("INJARO", "INJARO response:" + response);
             FileUploadStructure fileUploadStructure = getSelectedFile(fileHashAsIdentity);
             // getting bytes from file as server said
-            byte[] bytesFromFirst = AndroidUtils.getBytesFromStart(fileUploadStructure, firstBytesLimit);
-            byte[] bytesFromLast = AndroidUtils.getBytesFromEnd(fileUploadStructure, lastBytesLimit);
+            byte[] bytesFromFirst =
+                AndroidUtils.getBytesFromStart(fileUploadStructure, firstBytesLimit);
+            byte[] bytesFromLast =
+                AndroidUtils.getBytesFromEnd(fileUploadStructure, lastBytesLimit);
             // make second request
-            new RequestFileUploadInit().fileUploadInit(bytesFromFirst, bytesFromLast, fileUploadStructure.fileSize, fileUploadStructure.fileHash, Long.toString(fileUploadStructure.messageId), fileUploadStructure.fileName);
+            new RequestFileUploadInit().fileUploadInit(bytesFromFirst, bytesFromLast,
+                fileUploadStructure.fileSize, fileUploadStructure.fileHash,
+                Long.toString(fileUploadStructure.messageId), fileUploadStructure.fileName);
         } catch (IOException e) {
             Log.i("BreakPoint", e.getMessage());
             e.printStackTrace();
@@ -57,7 +63,8 @@ public class UploaderUtil implements OnFileUpload, OnFileUploadStatusResponse {
     }
 
     @Override
-    public void OnFileUploadInit(String token, final double progress, long offset, int limit, final String identity, ProtoResponse.Response response) {
+    public void OnFileUploadInit(String token, final double progress, long offset, int limit,
+        final String identity, ProtoResponse.Response response) {
         // token needed for requesting upload
         // updating structure with new token
         FileUploadStructure fileUploadStructure = getSelectedFile(identity);
@@ -68,7 +75,8 @@ public class UploaderUtil implements OnFileUpload, OnFileUploadStatusResponse {
         // not already uploaded
         if (progress != 100.0) {
             try {
-                byte[] bytes = AndroidUtils.getNBytesFromOffset(fileUploadStructure, (int) offset, limit);
+                byte[] bytes =
+                    AndroidUtils.getNBytesFromOffset(fileUploadStructure, (int) offset, limit);
                 // make third request for first time
                 new RequestFileUpload().fileUpload(token, offset, bytes, identity);
             } catch (IOException e) {
@@ -102,8 +110,8 @@ public class UploaderUtil implements OnFileUpload, OnFileUploadStatusResponse {
         return false;
     }
 
-    @Override
-    public void onFileUpload(final double progress, long nextOffset, int nextLimit, final String identity, ProtoResponse.Response response) {
+    @Override public void onFileUpload(final double progress, long nextOffset, int nextLimit,
+        final String identity, ProtoResponse.Response response) {
         final long startOnFileUploadTime = System.currentTimeMillis();
 
         // for specific views, tags must be set with files hashes
@@ -112,7 +120,10 @@ public class UploaderUtil implements OnFileUpload, OnFileUploadStatusResponse {
 
         try {
             // update progress
-            Log.i("SOC", "************************************ identity : " + identity + "  ||  progress : " + progress);
+            Log.i("SOC", "************************************ identity : "
+                + identity
+                + "  ||  progress : "
+                + progress);
             Log.i("BreakPoint", identity + " > bad az update progress");
 
             if (progress != 100.0) {
@@ -120,19 +131,25 @@ public class UploaderUtil implements OnFileUpload, OnFileUploadStatusResponse {
                 activityCallbacks.onFileUploading(fileUploadStructure, identity, progress);
                 Log.i("BreakPoint", identity + " > fileUploadStructure");
                 final long startGetNBytesTime = System.currentTimeMillis();
-                byte[] bytes = AndroidUtils.getNBytesFromOffset(fileUploadStructure, (int) nextOffset, nextLimit);
+                byte[] bytes =
+                    AndroidUtils.getNBytesFromOffset(fileUploadStructure, (int) nextOffset,
+                        nextLimit);
 
-                fileUploadStructure.getNBytesTime += System.currentTimeMillis() - startGetNBytesTime;
+                fileUploadStructure.getNBytesTime +=
+                    System.currentTimeMillis() - startGetNBytesTime;
 
                 Log.i("BreakPoint", identity + " > after bytes");
                 // make request till uploading has finished
                 final long startSendReqTime = System.currentTimeMillis();
 
-                new RequestFileUpload().fileUpload(fileUploadStructure.token, nextOffset, bytes, identity);
-                fileUploadStructure.sendRequestsTime += System.currentTimeMillis() - startSendReqTime;
+                new RequestFileUpload().fileUpload(fileUploadStructure.token, nextOffset, bytes,
+                    identity);
+                fileUploadStructure.sendRequestsTime +=
+                    System.currentTimeMillis() - startSendReqTime;
                 Log.i("BreakPoint", identity + " > after fileUpload request");
 
-                fileUploadStructure.elapsedInOnFileUpload += System.currentTimeMillis() - startOnFileUploadTime;
+                fileUploadStructure.elapsedInOnFileUpload +=
+                    System.currentTimeMillis() - startOnFileUploadTime;
             } else {
                 if (isFileExistInList(Long.parseLong(identity))) {
                     // handle when the file has already uploaded
@@ -149,7 +166,8 @@ public class UploaderUtil implements OnFileUpload, OnFileUploadStatusResponse {
     public void onFileUploadComplete(String fileHashAsIdentity, ProtoResponse.Response response) {
         final FileUploadStructure fileUploadStructure = getSelectedFile(fileHashAsIdentity);
 
-        new RequestFileUploadStatus().fileUploadStatus(fileUploadStructure.token, fileHashAsIdentity);
+        new RequestFileUploadStatus().fileUploadStatus(fileUploadStructure.token,
+            fileHashAsIdentity);
     }
 
     /**
@@ -158,8 +176,7 @@ public class UploaderUtil implements OnFileUpload, OnFileUploadStatusResponse {
      * @param identity file hash
      * @return FileUploadStructure
      */
-    @Nullable
-    private FileUploadStructure getSelectedFile(String identity) {
+    @Nullable private FileUploadStructure getSelectedFile(String identity) {
         for (FileUploadStructure structure : mSelectedFiles) {
             if (structure.messageId == Long.parseLong(identity)) {
                 return structure;
@@ -169,7 +186,9 @@ public class UploaderUtil implements OnFileUpload, OnFileUploadStatusResponse {
     }
 
     @Override
-    public void onFileUploadStatus(ProtoFileUploadStatus.FileUploadStatusResponse.Status status, double progress, int recheckDelayMS, final String identity, ProtoResponse.Response response) {
+    public void onFileUploadStatus(ProtoFileUploadStatus.FileUploadStatusResponse.Status status,
+        double progress, int recheckDelayMS, final String identity,
+        ProtoResponse.Response response) {
         final FileUploadStructure fileUploadStructure = getSelectedFile(identity);
         if (fileUploadStructure == null) {
             return;
@@ -195,12 +214,13 @@ public class UploaderUtil implements OnFileUpload, OnFileUploadStatusResponse {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        } else if (status == ProtoFileUploadStatus.FileUploadStatusResponse.Status.PROCESSING || (status == ProtoFileUploadStatus.FileUploadStatusResponse.Status.UPLOADING) && progress == 100D) {
+        } else if (status == ProtoFileUploadStatus.FileUploadStatusResponse.Status.PROCESSING
+            || (status == ProtoFileUploadStatus.FileUploadStatusResponse.Status.UPLOADING)
+            && progress == 100D) {
             handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    new RequestFileUploadStatus().fileUploadStatus(fileUploadStructure.token, identity);
-
+                @Override public void run() {
+                    new RequestFileUploadStatus().fileUploadStatus(fileUploadStructure.token,
+                        identity);
                 }
             }, recheckDelayMS);
         } else {

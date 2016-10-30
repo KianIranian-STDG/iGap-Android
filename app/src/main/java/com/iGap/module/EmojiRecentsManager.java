@@ -18,7 +18,6 @@ package com.iGap.module;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
@@ -92,5 +91,4 @@ public class EmojiRecentsManager extends ArrayList<String> {
         SharedPreferences prefs = getPreferences();
         prefs.edit().putString(PREF_RECENTS, str.toString()).apply();
     }
-
 }

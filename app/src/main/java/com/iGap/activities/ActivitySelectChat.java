@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.items.RoomItem;
@@ -22,26 +21,22 @@ import com.iGap.realm.enums.RoomType;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.adapters.FastItemAdapter;
-
-import java.util.ArrayList;
-
 import io.realm.Realm;
+import java.util.ArrayList;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivitySelectChat extends ActivityEnhanced {
 
+    public static final String ARG_FORWARD_MESSAGE = "arg_forward_msg";
     private RecyclerView mRecyclerView;
     private FastItemAdapter<RoomItem> mAdapter;
-    public static final String ARG_FORWARD_MESSAGE = "arg_forward_msg";
     private ArrayList<StructMessageInfo> mForwardMessages;
 
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
+    @Override protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
+
+    @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -50,6 +45,7 @@ public class ActivitySelectChat extends ActivityEnhanced {
         initRecycleView();
         initComponent();
     }
+
     private void initComponent() {
         Button btnMenu = (Button) findViewById(R.id.cl_btn_menu);
         btnMenu.setTypeface(G.fontawesome);
@@ -61,17 +57,17 @@ public class ActivitySelectChat extends ActivityEnhanced {
         txtIgap.setTypeface(G.neuroplp);
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
             }
         });
     }
+
     private void initRecycleView() {
         mRecyclerView = (RecyclerView) findViewById(R.id.cl_recycler_view_contact);
         mAdapter = new FastItemAdapter<>();
         mAdapter.withOnClickListener(new FastAdapter.OnClickListener<RoomItem>() {
-            @Override
-            public boolean onClick(View v, IAdapter<RoomItem> adapter, RoomItem item, int position) {
+            @Override public boolean onClick(View v, IAdapter<RoomItem> adapter, RoomItem item,
+                int position) {
                 Intent intent = new Intent(ActivitySelectChat.this, ActivityChat.class);
                 intent.putExtra("RoomId", item.mInfo.chatId);
                 intent.putParcelableArrayListExtra(ARG_FORWARD_MESSAGE, mForwardMessages);
@@ -79,7 +75,8 @@ public class ActivitySelectChat extends ActivityEnhanced {
                 return false;
             }
         });
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(ActivitySelectChat.this);
+        RecyclerView.LayoutManager mLayoutManager =
+            new LinearLayoutManager(ActivitySelectChat.this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setAdapter(mAdapter);
@@ -111,7 +108,9 @@ public class ActivitySelectChat extends ActivityEnhanced {
                     break;
             }
             info.color = realmRoom.getColor();
-            RealmRoomMessage lastMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, realmRoom.getLastMessageId()).findFirst();
+            RealmRoomMessage lastMessage = realm.where(RealmRoomMessage.class)
+                .equalTo(RealmRoomMessageFields.MESSAGE_ID, realmRoom.getLastMessageId())
+                .findFirst();
             if (lastMessage != null) {
                 info.lastMessageTime = lastMessage.getUpdateTime();
                 info.lastMessageId = realmRoom.getLastMessageId();
@@ -122,8 +121,7 @@ public class ActivitySelectChat extends ActivityEnhanced {
 
             roomItem.setInfo(info);
             runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
+                @Override public void run() {
                     mAdapter.add(roomItem);
                 }
             });

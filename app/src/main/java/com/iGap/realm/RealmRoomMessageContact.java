@@ -1,7 +1,6 @@
 package com.iGap.realm;
 
 import com.iGap.proto.ProtoGlobal;
-
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
@@ -14,8 +13,25 @@ public class RealmRoomMessageContact extends RealmObject {
     private String nickName;
     private RealmList<RealmString> phones = new RealmList<>();
     private RealmList<RealmString> emails = new RealmList<>();
-    @PrimaryKey
-    private long id;
+    @PrimaryKey private long id;
+
+    public static RealmRoomMessageContact build(final ProtoGlobal.RoomMessageContact input) {
+        Realm realm = Realm.getDefaultInstance();
+        RealmRoomMessageContact messageContact = realm.createObject(RealmRoomMessageContact.class);
+        messageContact.setId(System.nanoTime());
+        for (String phone : input.getPhoneList()) {
+            messageContact.addPhone(phone);
+        }
+        messageContact.setLastName(input.getLastName());
+        messageContact.setFirstName(input.getFirstName());
+        for (String email : input.getEmailList()) {
+            messageContact.addEmail(email);
+        }
+        messageContact.setNickName(input.getNickname());
+        realm.close();
+
+        return messageContact;
+    }
 
     public long getId() {
         return id;
@@ -71,24 +87,6 @@ public class RealmRoomMessageContact extends RealmObject {
         realmString.setString(email);
         phones.add(realmString);
         realm.close();
-    }
-
-    public static RealmRoomMessageContact build(final ProtoGlobal.RoomMessageContact input) {
-        Realm realm = Realm.getDefaultInstance();
-        RealmRoomMessageContact messageContact = realm.createObject(RealmRoomMessageContact.class);
-        messageContact.setId(System.nanoTime());
-        for (String phone : input.getPhoneList()) {
-            messageContact.addPhone(phone);
-        }
-        messageContact.setLastName(input.getLastName());
-        messageContact.setFirstName(input.getFirstName());
-        for (String email : input.getEmailList()) {
-            messageContact.addEmail(email);
-        }
-        messageContact.setNickName(input.getNickname());
-        realm.close();
-
-        return messageContact;
     }
 
     public RealmList<RealmString> getEmails() {

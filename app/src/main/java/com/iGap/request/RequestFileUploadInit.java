@@ -4,15 +4,17 @@ import com.google.protobuf.ByteString;
 import com.iGap.helper.HelperString;
 import com.iGap.proto.ProtoFileUploadInit;
 import com.iGap.proto.ProtoRequest;
-
 import java.io.UnsupportedEncodingException;
 
 public class RequestFileUploadInit {
 
-    public void fileUploadInit(byte[] firstBytes, byte[] lastBytes, long size, byte[] fileHash, String identity, String fileName) throws UnsupportedEncodingException {
+    public void fileUploadInit(byte[] firstBytes, byte[] lastBytes, long size, byte[] fileHash,
+        String identity, String fileName) throws UnsupportedEncodingException {
 
-        ProtoFileUploadInit.FileUploadInit.Builder fileUploadInit = ProtoFileUploadInit.FileUploadInit.newBuilder();
-        fileUploadInit.setRequest(ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
+        ProtoFileUploadInit.FileUploadInit.Builder fileUploadInit =
+            ProtoFileUploadInit.FileUploadInit.newBuilder();
+        fileUploadInit.setRequest(
+            ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
         fileUploadInit.setFirstBytes(ByteString.copyFrom(firstBytes));
         fileUploadInit.setLastBytes(ByteString.copyFrom(lastBytes));
         fileUploadInit.setSize(size);

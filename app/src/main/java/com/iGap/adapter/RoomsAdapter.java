@@ -14,7 +14,8 @@ public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
         setHasStableIds(true);
     }
 
-    public void downloadingAvatar(long peerId, int progress, int offset, StructMessageAttachment avatar) {
+    public void downloadingAvatar(long peerId, int progress, int offset,
+        StructMessageAttachment avatar) {
         for (Item item : getAdapterItems()) {
             if (item.mInfo.chatId == peerId) {
                 int pos = getAdapterItems().indexOf(item);

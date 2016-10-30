@@ -9,6 +9,6 @@ import com.iGap.proto.ProtoResponse;
 
 public interface OnFileUploadInitResponse {
 
-    void OnFileUploadInit(String token, double progress, long offset, int limit, String server, ProtoResponse.Response response);
-
+    void OnFileUploadInit(String token, double progress, long offset, int limit, String server,
+        ProtoResponse.Response response);
 }

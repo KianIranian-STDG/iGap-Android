@@ -28,14 +28,13 @@ import static com.iGap.module.AndroidUtils.suitablePath;
 
 public class ImageMessageItem extends AbstractItem<ImageMessageItem, ImageMessageItem.ViewHolder>
     implements IChatItemAvatar {
+    private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
     public RealmRoomMessage message;
 
     public ImageMessageItem setMessage(RealmRoomMessage message) {
         this.message = message;
         return this;
     }
-
-    private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
     @Override public int getType() {
         return 0;
@@ -142,12 +141,6 @@ public class ImageMessageItem extends AbstractItem<ImageMessageItem, ImageMessag
             (int) message.getAttachment().getSize(), selector, identity);
     }
 
-    protected static class ItemFactory implements ViewHolderFactory<ImageMessageItem.ViewHolder> {
-        public ImageMessageItem.ViewHolder create(View v) {
-            return new ImageMessageItem.ViewHolder(v);
-        }
-    }
-
     @Override public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
@@ -199,6 +192,12 @@ public class ImageMessageItem extends AbstractItem<ImageMessageItem, ImageMessag
 
     @Override public ViewHolderFactory<? extends ViewHolder> getFactory() {
         return FACTORY;
+    }
+
+    protected static class ItemFactory implements ViewHolderFactory<ImageMessageItem.ViewHolder> {
+        public ImageMessageItem.ViewHolder create(View v) {
+            return new ImageMessageItem.ViewHolder(v);
+        }
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {

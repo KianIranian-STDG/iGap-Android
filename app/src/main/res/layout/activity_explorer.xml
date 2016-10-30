@@ -4,79 +4,88 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layoutDirection="ltr"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    >
 
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/ae_recycler_view_explorer"
+  <android.support.v7.widget.RecyclerView
+      android:id="@+id/ae_recycler_view_explorer"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:background="@android:color/white"
+      android:scrollbars="vertical"
+      app:layout_behavior="@string/appbar_scrolling_view_behavior"
+      />
+
+
+  <android.support.design.widget.AppBarLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      >
+
+    <LinearLayout
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/white"
-        android:scrollbars="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        android:orientation="vertical"
+        app:elevation="8dp"
+        app:layout_scrollFlags="scroll|enterAlways"
+        >
 
+      <LinearLayout
 
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+          android:layout_width="match_parent"
+          android:layout_height="@dimen/dp60"
+          android:background="@color/green"
+          android:orientation="horizontal"
+          >
 
-        <LinearLayout
-
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/ae_btn_back"
+            android:layout_width="@dimen/dp60"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            app:elevation="8dp"
-            app:layout_scrollFlags="scroll|enterAlways">
+            android:background="@null"
+            android:text="@string/fa_chevron_left"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/sp20"
+            />
 
-            <LinearLayout
+        <TextView
+            android:id="@+id/ae_txt_file_name"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text=""
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/sp18"
+            />
 
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp60"
-                android:background="@color/green"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/ae_btn_back"
-                    android:layout_width="@dimen/dp60"
-                    android:layout_height="match_parent"
-                    android:background="@null"
-                    android:text="@string/fa_chevron_left"
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/sp20" />
-
-                <TextView
-                    android:id="@+id/ae_txt_file_name"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text=""
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/sp18" />
-
-                <Button
-                    android:id="@+id/asm_btn_menu"
-                    android:layout_width="@dimen/dp60"
-                    android:layout_height="match_parent"
-                    android:background="@null"
-                    android:paddingTop="@dimen/dp12"
-                    android:visibility="gone"
-                    android:text="@string/fa_ellipsis_v"
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/sp20" />
+        <Button
+            android:id="@+id/asm_btn_menu"
+            android:layout_width="@dimen/dp60"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:paddingTop="@dimen/dp12"
+            android:text="@string/fa_ellipsis_v"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/sp20"
+            android:visibility="gone"
+            />
 
 
-            </LinearLayout>
+      </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#34a49f"></View>
-        </LinearLayout>
+      <View
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:background="#34a49f"
+          ></View>
+    </LinearLayout>
 
 
-    </android.support.design.widget.AppBarLayout>
+  </android.support.design.widget.AppBarLayout>
 
 
 </android.support.design.widget.CoordinatorLayout>

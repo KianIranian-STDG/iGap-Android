@@ -15,7 +15,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
@@ -29,12 +28,10 @@ import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmChatHistory;
 import com.iGap.realm.RealmChatHistoryFields;
 import com.iGap.realm.RealmRoomMessage;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-
 import io.realm.Realm;
 import io.realm.RealmResults;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
@@ -55,22 +52,18 @@ public class ActivityShearedMedia extends ActivityEnhanced {
     private LinearLayout mediaLayout;
     private MusicPlayer musicPlayer;
 
-
-    @Override
-    protected void onResume() {
+    @Override protected void onResume() {
         super.onResume();
         if (MusicPlayer.mp != null) {
             MusicPlayer.initLayoutTripMusic(mediaLayout);
         }
     }
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
+    @Override protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
-    
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
+
+    @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sheared_media);
 
@@ -82,9 +75,9 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         initComponent();
     }
 
-    @Override
-    public void onBackPressed() {
-        FragmentShowImage myFragment = (FragmentShowImage) getFragmentManager().findFragmentByTag("Show_Image_fragment_shared_media");
+    @Override public void onBackPressed() {
+        FragmentShowImage myFragment = (FragmentShowImage) getFragmentManager().findFragmentByTag(
+            "Show_Image_fragment_shared_media");
         if (myFragment != null && myFragment.isVisible()) {
             getFragmentManager().beginTransaction().remove(myFragment).commit();
         } else if (!mAdapter.resetSelected()) {
@@ -94,12 +87,10 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
     private void initComponent() {
 
-
         MaterialDesignTextView btnBack = (MaterialDesignTextView) findViewById(R.id.asm_btn_back);
         RippleView rippleBack = (RippleView) findViewById(R.id.asm_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
+            @Override public void onComplete(RippleView rippleView) {
                 finish();
             }
         });
@@ -107,8 +98,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         MaterialDesignTextView btnMenu = (MaterialDesignTextView) findViewById(R.id.asm_btn_menu);
         RippleView rippleMenu = (RippleView) findViewById(R.id.asm_ripple_menu);
         rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
+            @Override public void onComplete(RippleView rippleView) {
                 popUpMenuSharedMedai();
             }
         });
@@ -116,19 +106,16 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         txtSharedMedia = (TextView) findViewById(R.id.asm_txt_sheared_media);
 
         complete = new OnComplete() {
-            @Override
-            public void complete(boolean result, String messageOne, String MessageTow) {
+            @Override public void complete(boolean result, String messageOne, String MessageTow) {
 
                 int whatAction = 0;
                 String number = "0";
 
-                if (messageOne != null)
-                    if (messageOne.length() > 0)
-                        whatAction = Integer.parseInt(messageOne);
+                if (messageOne != null) {
+                    if (messageOne.length() > 0) whatAction = Integer.parseInt(messageOne);
+                }
 
-                if (MessageTow != null)
-                    if (MessageTow.length() > 0)
-                        number = MessageTow;
+                if (MessageTow != null) if (MessageTow.length() > 0) number = MessageTow;
 
                 callBack(result, whatAction, number);
             }
@@ -139,17 +126,16 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         showMedia();
 
         initAppbarSelected();
-
     }
 
     private void initAppbarSelected() {
 
         Button btnCloseAppBarSelected = (Button) findViewById(R.id.asm_btn_close_layout);
 
-        RippleView rippleCloseAppBarSelected = (RippleView) findViewById(R.id.asm_ripple_close_layout);
+        RippleView rippleCloseAppBarSelected =
+            (RippleView) findViewById(R.id.asm_ripple_close_layout);
         rippleCloseAppBarSelected.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 mAdapter.resetSelected();
             }
         });
@@ -157,8 +143,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         Button btnForwardSelected = (Button) findViewById(R.id.asm_btn_forward_selected);
         btnForwardSelected.setTypeface(G.fontawesome);
         btnForwardSelected.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 Log.e("ddd", "btnForwardSelected");
             }
         });
@@ -166,8 +151,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         Button btnDeleteSelected = (Button) findViewById(R.id.asm_btn_delete_selected);
         RippleView rippleDeleteSelected = (RippleView) findViewById(R.id.asm_ripple_close_layout);
         rippleDeleteSelected.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
+            @Override public void onComplete(RippleView rippleView) {
                 Log.e("ddd", "btnDeleteSelected");
             }
         });
@@ -175,11 +159,8 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         txtNumberOfSelected = (TextView) findViewById(R.id.asm_txt_number_of_selected);
         txtNumberOfSelected.setTypeface(G.fontawesome);
 
-
         ll_AppBarSelected = (LinearLayout) findViewById(R.id.asm_ll_appbar_selelected);
-
     }
-
 
     private void callBack(boolean result, int whatAction, String number) {
 
@@ -196,36 +177,33 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         }
     }
 
-
     //********************************************************************************************
 
     public void popUpMenuSharedMedai() {
 
-        MaterialDialog dialog = new MaterialDialog.Builder(this)
-                .items(R.array.pop_up_shared_media)
-                .contentColor(Color.BLACK)
-                .itemsCallback(new MaterialDialog.ListCallback() {
-                    @Override
-                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+        MaterialDialog dialog = new MaterialDialog.Builder(this).items(R.array.pop_up_shared_media)
+            .contentColor(Color.BLACK)
+            .itemsCallback(new MaterialDialog.ListCallback() {
+                @Override public void onSelection(MaterialDialog dialog, View view, int which,
+                    CharSequence text) {
 
-                        switch (which) {
-                            case 0:
-                                showMedia();
-                                break;
-                            case 1:
-                                showFile();
-                                break;
-                            case 2:
-                                showLink();
-                                break;
-                            case 3:
-                                showMusic();
-                                break;
-                        }
-
-
+                    switch (which) {
+                        case 0:
+                            showMedia();
+                            break;
+                        case 1:
+                            showFile();
+                            break;
+                        case 2:
+                            showLink();
+                            break;
+                        case 3:
+                            showMusic();
+                            break;
                     }
-                }).show();
+                }
+            })
+            .show();
 
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
         layoutParams.copyFrom(dialog.getWindow().getAttributes());
@@ -240,42 +218,42 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         txtSharedMedia.setText(getString(R.string.shared_media));
 
-        mAdapter = new AdapterShearedMedia(ActivityShearedMedia.this, mList, txtSharedMedia.getText().toString(), complete, musicPlayer, roomId);
-        final GridLayoutManager gLayoutManager = new GridLayoutManager(ActivityShearedMedia.this, spanItemCount);
+        mAdapter = new AdapterShearedMedia(ActivityShearedMedia.this, mList,
+            txtSharedMedia.getText().toString(), complete, musicPlayer, roomId);
+        final GridLayoutManager gLayoutManager =
+            new GridLayoutManager(ActivityShearedMedia.this, spanItemCount);
 
         gLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-            @Override
-            public int getSpanSize(int position) {
+            @Override public int getSpanSize(int position) {
 
-                if (mList.get(position).getMessageType().equals(ProtoGlobal.RoomMessageType.TEXT.toString()))
+                if (mList.get(position)
+                    .getMessageType()
+                    .equals(ProtoGlobal.RoomMessageType.TEXT.toString())) {
                     return spanItemCount;
-                else
+                } else {
                     return 1;
-
+                }
             }
         });
 
         recyclerView.setLayoutManager(gLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
-        recyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                recyclerView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                int viewWidth = recyclerView.getMeasuredWidth();
-                float cardViewWidth = getResources().getDimension(R.dimen.dp120);
-                int newSpanCount = (int) Math.floor(viewWidth / cardViewWidth);
+        recyclerView.getViewTreeObserver()
+            .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override public void onGlobalLayout() {
+                    recyclerView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                    int viewWidth = recyclerView.getMeasuredWidth();
+                    float cardViewWidth = getResources().getDimension(R.dimen.dp120);
+                    int newSpanCount = (int) Math.floor(viewWidth / cardViewWidth);
 
-                if (newSpanCount < 3)
-                    newSpanCount = 3;
+                    if (newSpanCount < 3) newSpanCount = 3;
 
-                spanItemCount = newSpanCount;
-                gLayoutManager.setSpanCount(newSpanCount);
-                gLayoutManager.requestLayout();
-            }
-        });
-
-
+                    spanItemCount = newSpanCount;
+                    gLayoutManager.setSpanCount(newSpanCount);
+                    gLayoutManager.requestLayout();
+                }
+            });
     }
 
     private void showFile() {
@@ -284,12 +262,12 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         fillListFile();
 
-        mAdapter = new AdapterShearedMedia(ActivityShearedMedia.this, mList, txtSharedMedia.getText().toString(), complete, musicPlayer, roomId);
+        mAdapter = new AdapterShearedMedia(ActivityShearedMedia.this, mList,
+            txtSharedMedia.getText().toString(), complete, musicPlayer, roomId);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(ActivityShearedMedia.this);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
-
     }
 
     private void showLink() {
@@ -300,23 +278,23 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         txtSharedMedia.setText(R.string.shared_music);
         fillListMusic();
 
-        mAdapter = new AdapterShearedMedia(ActivityShearedMedia.this, mList, txtSharedMedia.getText().toString(), complete, musicPlayer, roomId);
+        mAdapter = new AdapterShearedMedia(ActivityShearedMedia.this, mList,
+            txtSharedMedia.getText().toString(), complete, musicPlayer, roomId);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(ActivityShearedMedia.this);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
-
-
     }
 
     //********************************************************************************************
-
 
     private void fillListImage() {
 
         mList = new ArrayList<>();
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, roomId).findAllSorted(RealmChatHistoryFields.ID);
+        RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class)
+            .equalTo(RealmChatHistoryFields.ROOM_ID, roomId)
+            .findAllSorted(RealmChatHistoryFields.ID);
 
         String firstItmeTime = "";
         String secendItemTime = "";
@@ -328,8 +306,10 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 type = chatHistory.getRoomMessage().getMessageType();
             } catch (NullPointerException e) {
             }
-            if (type.equals(ProtoGlobal.RoomMessageType.VIDEO.toString()) || type.equals(ProtoGlobal.RoomMessageType.VIDEO_TEXT.toString()) ||
-                    type.equals(ProtoGlobal.RoomMessageType.IMAGE.toString()) || type.equals(ProtoGlobal.RoomMessageType.IMAGE_TEXT.toString())) {
+            if (type.equals(ProtoGlobal.RoomMessageType.VIDEO.toString()) || type.equals(
+                ProtoGlobal.RoomMessageType.VIDEO_TEXT.toString()) ||
+                type.equals(ProtoGlobal.RoomMessageType.IMAGE.toString()) || type.equals(
+                ProtoGlobal.RoomMessageType.IMAGE_TEXT.toString())) {
 
                 secendItemTime = month_date.format(chatHistory.getRoomMessage().getUpdateTime());
 
@@ -348,14 +328,15 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         }
 
         realm.close();
-
     }
 
     private void fillListFile() {
 
         mList = new ArrayList<>();
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, roomId).findAllSorted(RealmChatHistoryFields.ID);
+        RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class)
+            .equalTo(RealmChatHistoryFields.ROOM_ID, roomId)
+            .findAllSorted(RealmChatHistoryFields.ID);
 
         String firstItmeTime = "";
         String secendItemTime = "";
@@ -367,7 +348,8 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 type = chatHistory.getRoomMessage().getMessageType();
             } catch (NullPointerException e) {
             }
-            if (type.equals(ProtoGlobal.RoomMessageType.FILE.toString()) || type.equals(ProtoGlobal.RoomMessageType.FILE_TEXT.toString())) {
+            if (type.equals(ProtoGlobal.RoomMessageType.FILE.toString()) || type.equals(
+                ProtoGlobal.RoomMessageType.FILE_TEXT.toString())) {
 
                 secendItemTime = month_date.format(chatHistory.getRoomMessage().getUpdateTime());
 
@@ -386,14 +368,15 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         }
 
         realm.close();
-
     }
 
     private void fillListMusic() {
 
         mList = new ArrayList<>();
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, roomId).findAllSorted(RealmChatHistoryFields.ID);
+        RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class)
+            .equalTo(RealmChatHistoryFields.ROOM_ID, roomId)
+            .findAllSorted(RealmChatHistoryFields.ID);
 
         String firstItmeTime = "";
         String secendItemTime = "";
@@ -405,8 +388,9 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 type = chatHistory.getRoomMessage().getMessageType();
             } catch (NullPointerException e) {
             }
-            if (type.equals(ProtoGlobal.RoomMessageType.AUDIO.toString()) || type.equals(ProtoGlobal.RoomMessageType.AUDIO_TEXT.toString()) ||
-                    type.equals(ProtoGlobal.RoomMessageType.VOICE.toString())) {
+            if (type.equals(ProtoGlobal.RoomMessageType.AUDIO.toString()) || type.equals(
+                ProtoGlobal.RoomMessageType.AUDIO_TEXT.toString()) ||
+                type.equals(ProtoGlobal.RoomMessageType.VOICE.toString())) {
 
                 secendItemTime = month_date.format(chatHistory.getRoomMessage().getUpdateTime());
 
@@ -425,7 +409,5 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         }
 
         realm.close();
-
     }
-
 }

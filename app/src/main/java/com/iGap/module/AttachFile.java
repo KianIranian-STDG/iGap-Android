@@ -45,194 +45,13 @@ public class AttachFile {
     public static final int request_code_position = 16;
     public static final int request_code_paint = 17;
     public static final int MEDIA_TYPE_IMAGE = 20;
-
-    public static String imagePath = "";
     public static final String IMAGE_DIRECTORY_NAME = "Upload";
-
+    public static String imagePath = "";
+    OnComplete complete;
     private Context context;
-
     private LocationManager locationManager;
     private ProgressDialog pd;
     private Boolean sendPosition = false;
-    OnComplete complete;
-
-    public AttachFile(Context context) {
-        this.context = context;
-        locationManager = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
-    }
-
-    //*************************************************************************************************************
-
-    public void requestPaint() {
-
-        HelperPermision.getStoragePermision(context, new OnGetPermision() {
-            @Override public void Allow() {
-                Intent intent = new Intent(context, ActivityPaint.class);
-                ((Activity) context).startActivityForResult(intent, request_code_paint);
-            }
-        });
-    }
-
-    //*************************************************************************************************************
-
-    public void requestTakePicture() {
-
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        Uri outPath = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
-
-        if (outPath != null) {
-            imagePath = outPath.getPath();
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, outPath);
-            ((Activity) context).startActivityForResult(intent, request_code_TAKE_PICTURE);
-        } else {
-            Log.e("dddd", "file path is null");
-        }
-    }
-
-    private Uri getOutputMediaFileUri(int type) {
-        return Uri.fromFile(getOutputMediaFile(type));
-    }
-
-    private File getOutputMediaFile(int type) {
-
-        // External sdcard location
-        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), IMAGE_DIRECTORY_NAME);
-
-        // Create the storage directory if it does not exist
-        if (!mediaStorageDir.exists()) {
-            if (!mediaStorageDir.mkdirs()) {
-
-                return null;
-            }
-        }
-
-        File mediaFile;
-
-        // Create a media file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-
-        if (type == MEDIA_TYPE_IMAGE) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator + "IMG_" + timeStamp + ".jpg");
-        } else {
-            return null;
-        }
-
-        return mediaFile;
-    }
-
-    //*************************************************************************************************************
-    public void requestOpenGallery() {
-        Intent intent = new Intent(Intent.ACTION_PICK, Uri.parse("content://media/internal/images/media"));
-        ((Activity) context).startActivityForResult(intent, request_code_media_from_gallery);
-    }
-
-    public void requestOpenGalleryForImage() {
-
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        intent.setType("image/*");
-        ((Activity) context).startActivityForResult(Intent.createChooser(intent, context.getString(R.string.select_picture_en)), request_code_media_from_gallery);
-    }
-
-    //*************************************************************************************************************
-    public void requestVideoCapture() {
-
-        PackageManager packageManager = context.getPackageManager();
-        if (packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA) == false) {
-            Toast.makeText(context, context.getString(R.string.device_dosenot_camera_en), Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-        ((Activity) context).startActivityForResult(intent, request_code_VIDEO_CAPTURED);
-    }
-
-    //*************************************************************************************************************
-
-    public void requestPickAudio() {
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_PICK);
-        intent.setData(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
-        ((Activity) context).startActivityForResult(intent, request_code_pic_audi);
-    }
-
-    //*************************************************************************************************************
-
-    public void requestPickFile() {
-        HelperPermision.getStoragePermision(context, new OnGetPermision() {
-            @Override public void Allow() {
-                Intent intent = new Intent(context, ActivityExplorer.class);
-                ((Activity) context).startActivityForResult(intent, request_code_pic_file);
-            }
-        });
-    }
-
-    //*************************************************************************************************************
-
-    public void requestPickContact() {
-        Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-        intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
-        ((Activity) context).startActivityForResult(intent, request_code_contact_phone);
-    }
-
-    //*************************************************************************************************************
-
-    public void requestGetPosition(OnComplete complete) {
-
-        this.complete = complete;
-
-        HelperPermision.getLocationPermision(context, new OnGetPermision() {
-            @Override public void Allow() {
-                getPosition();
-            }
-        });
-    }
-
-    private void getPosition() {
-
-        try {
-            if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                showSettingsAlert();
-            } else {
-                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    return;
-                }
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-
-                Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                if (location == null) {
-                    location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                }
-                if (location != null) {
-                    location.getLatitude();
-                    location.getLongitude();
-
-                    String position = context.getString(R.string.my_Position_is) + "\n" + context.getString(R.string.latitude) + String.valueOf(location.getLatitude()) +
-                        "\n" + context.getString(R.string.longitude) + String.valueOf(location.getLongitude());
-
-                    if (complete != null) complete.complete(true, position, "");
-                } else {
-                    sendPosition = true;
-                    pd = new ProgressDialog(context);
-                    pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                    pd.setMessage(context.getString(R.string.just_wait_en));
-                    pd.setIndeterminate(false);
-                    pd.setCancelable(true);
-                    pd.show();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     LocationListener locationListener = new LocationListener() {
 
         @Override public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -259,13 +78,19 @@ public class AttachFile {
                 location.getLatitude();
                 location.getLongitude();
 
-                String position = context.getString(R.string.my_Position_is) + "\n" + context.getString(R.string.latitude) + String.valueOf(location.getLatitude()) +
-                    "\n" + context.getString(R.string.longitude) + String.valueOf(location.getLongitude());
+                String position =
+                    context.getString(R.string.my_Position_is) + "\n" + context.getString(
+                        R.string.latitude) + String.valueOf(location.getLatitude()) +
+                        "\n" + context.getString(R.string.longitude) + String.valueOf(
+                        location.getLongitude());
 
                 if (complete != null) complete.complete(true, position, "");
             }
 
-            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(context,
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(context,
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
                 //    ActivityCompat#requestPermissions
                 // here to request the missing permissions, and then overriding
@@ -279,19 +104,11 @@ public class AttachFile {
         }
     };
 
-    void showSettingsAlert() {
+    //*************************************************************************************************************
 
-        new MaterialDialog.Builder(context).title(context.getString(R.string.do_you_want_to_turn_on_gps)).positiveText(R.string.ok).negativeText(R.string.cancel).callback(new MaterialDialog.ButtonCallback() {
-            @Override public void onPositive(MaterialDialog dialog) {
-                super.onPositive(dialog);
-
-                turnOnGps();
-            }
-        }).show();
-    }
-
-    private void turnOnGps() {
-        ((Activity) context).startActivityForResult(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS), request_code_position);
+    public AttachFile(Context context) {
+        this.context = context;
+        locationManager = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
     }
 
     //*************************************************************************************************************
@@ -322,6 +139,218 @@ public class AttachFile {
         }
 
         return path;
+    }
+
+    public void requestPaint() {
+
+        HelperPermision.getStoragePermision(context, new OnGetPermision() {
+            @Override public void Allow() {
+                Intent intent = new Intent(context, ActivityPaint.class);
+                ((Activity) context).startActivityForResult(intent, request_code_paint);
+            }
+        });
+    }
+
+    public void requestTakePicture() {
+
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Uri outPath = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+
+        if (outPath != null) {
+            imagePath = outPath.getPath();
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, outPath);
+            ((Activity) context).startActivityForResult(intent, request_code_TAKE_PICTURE);
+        } else {
+            Log.e("dddd", "file path is null");
+        }
+    }
+
+    private Uri getOutputMediaFileUri(int type) {
+        return Uri.fromFile(getOutputMediaFile(type));
+    }
+
+    private File getOutputMediaFile(int type) {
+
+        // External sdcard location
+        File mediaStorageDir =
+            new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                IMAGE_DIRECTORY_NAME);
+
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+
+                return null;
+            }
+        }
+
+        File mediaFile;
+
+        // Create a media file name
+        String timeStamp =
+            new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+
+        if (type == MEDIA_TYPE_IMAGE) {
+            mediaFile =
+                new File(mediaStorageDir.getPath() + File.separator + "IMG_" + timeStamp + ".jpg");
+        } else {
+            return null;
+        }
+
+        return mediaFile;
+    }
+
+    //*************************************************************************************************************
+
+    //*************************************************************************************************************
+    public void requestOpenGallery() {
+        Intent intent =
+            new Intent(Intent.ACTION_PICK, Uri.parse("content://media/internal/images/media"));
+        ((Activity) context).startActivityForResult(intent, request_code_media_from_gallery);
+    }
+
+    //*************************************************************************************************************
+
+    public void requestOpenGalleryForImage() {
+
+        Intent intent =
+            new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/*");
+        ((Activity) context).startActivityForResult(
+            Intent.createChooser(intent, context.getString(R.string.select_picture_en)),
+            request_code_media_from_gallery);
+    }
+
+    //*************************************************************************************************************
+
+    //*************************************************************************************************************
+    public void requestVideoCapture() {
+
+        PackageManager packageManager = context.getPackageManager();
+        if (packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA) == false) {
+            Toast.makeText(context, context.getString(R.string.device_dosenot_camera_en),
+                Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+        ((Activity) context).startActivityForResult(intent, request_code_VIDEO_CAPTURED);
+    }
+
+    //*************************************************************************************************************
+
+    public void requestPickAudio() {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_PICK);
+        intent.setData(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
+        ((Activity) context).startActivityForResult(intent, request_code_pic_audi);
+    }
+
+    public void requestPickFile() {
+        HelperPermision.getStoragePermision(context, new OnGetPermision() {
+            @Override public void Allow() {
+                Intent intent = new Intent(context, ActivityExplorer.class);
+                ((Activity) context).startActivityForResult(intent, request_code_pic_file);
+            }
+        });
+    }
+
+    public void requestPickContact() {
+        Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+        intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
+        ((Activity) context).startActivityForResult(intent, request_code_contact_phone);
+    }
+
+    public void requestGetPosition(OnComplete complete) {
+
+        this.complete = complete;
+
+        HelperPermision.getLocationPermision(context, new OnGetPermision() {
+            @Override public void Allow() {
+                getPosition();
+            }
+        });
+    }
+
+    private void getPosition() {
+
+        try {
+            if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                showSettingsAlert();
+            } else {
+                if (ActivityCompat.checkSelfPermission(context,
+                    Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(context,
+                    Manifest.permission.ACCESS_COARSE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
+                }
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,
+                    locationListener);
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0,
+                    locationListener);
+
+                Location location =
+                    locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                if (location == null) {
+                    location =
+                        locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                }
+                if (location != null) {
+                    location.getLatitude();
+                    location.getLongitude();
+
+                    String position =
+                        context.getString(R.string.my_Position_is) + "\n" + context.getString(
+                            R.string.latitude) + String.valueOf(location.getLatitude()) +
+                            "\n" + context.getString(R.string.longitude) + String.valueOf(
+                            location.getLongitude());
+
+                    if (complete != null) complete.complete(true, position, "");
+                } else {
+                    sendPosition = true;
+                    pd = new ProgressDialog(context);
+                    pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                    pd.setMessage(context.getString(R.string.just_wait_en));
+                    pd.setIndeterminate(false);
+                    pd.setCancelable(true);
+                    pd.show();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //*************************************************************************************************************
+
+    void showSettingsAlert() {
+
+        new MaterialDialog.Builder(context).title(
+            context.getString(R.string.do_you_want_to_turn_on_gps))
+            .positiveText(R.string.ok)
+            .negativeText(R.string.cancel)
+            .callback(new MaterialDialog.ButtonCallback() {
+                @Override public void onPositive(MaterialDialog dialog) {
+                    super.onPositive(dialog);
+
+                    turnOnGps();
+                }
+            })
+            .show();
+    }
+
+    private void turnOnGps() {
+        ((Activity) context).startActivityForResult(
+            new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS),
+            request_code_position);
     }
 
     //*************************************************************************************************************

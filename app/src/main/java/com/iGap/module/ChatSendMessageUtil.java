@@ -14,13 +14,13 @@ import com.iGap.request.RequestGroupSendMessage;
  * useful for having callback from different activities
  */
 public class ChatSendMessageUtil implements OnChatSendMessageResponse {
-    private OnChatSendMessageResponse onChatSendMessageResponse;
-
     RequestChatSendMessage requestChatSendMessage;
     RequestGroupSendMessage requestGroupSendMessage;
     ProtoGlobal.Room.Type roomType;
+    private OnChatSendMessageResponse onChatSendMessageResponse;
 
-    public ChatSendMessageUtil newBuilder(ProtoGlobal.Room.Type roomType, ProtoGlobal.RoomMessageType messageType, long roomId) {
+    public ChatSendMessageUtil newBuilder(ProtoGlobal.Room.Type roomType,
+        ProtoGlobal.RoomMessageType messageType, long roomId) {
         this.roomType = roomType;
 
         if (roomType == ProtoGlobal.Room.Type.CHAT) {
@@ -107,16 +107,19 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
     }
 
     @Override
-    public void onMessageUpdate(long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, String identity, ProtoGlobal.RoomMessage roomMessage) {
+    public void onMessageUpdate(long roomId, long messageId, ProtoGlobal.RoomMessageStatus status,
+        String identity, ProtoGlobal.RoomMessage roomMessage) {
         if (onChatSendMessageResponse != null) {
-            onChatSendMessageResponse.onMessageUpdate(roomId, messageId, status, identity, roomMessage);
+            onChatSendMessageResponse.onMessageUpdate(roomId, messageId, status, identity,
+                roomMessage);
         }
     }
 
-    @Override
-    public void onMessageReceive(long roomId, String message, String messageType, ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType) {
+    @Override public void onMessageReceive(long roomId, String message, String messageType,
+        ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType) {
         if (onChatSendMessageResponse != null) {
-            onChatSendMessageResponse.onMessageReceive(roomId, message, messageType, roomMessage, roomType);
+            onChatSendMessageResponse.onMessageReceive(roomId, message, messageType, roomMessage,
+                roomType);
         }
     }
 }

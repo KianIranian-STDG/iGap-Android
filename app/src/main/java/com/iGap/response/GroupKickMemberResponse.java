@@ -1,13 +1,11 @@
 package com.iGap.response;
 
 import android.util.Log;
-
 import com.iGap.G;
 import com.iGap.proto.ProtoGroupKickMember;
 import com.iGap.realm.RealmMember;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
-
 import io.realm.Realm;
 import io.realm.RealmList;
 
@@ -25,22 +23,20 @@ public class GroupKickMemberResponse extends MessageHandler {
         this.identity = identity;
     }
 
+    @Override public void handler() {
 
-    @Override
-    public void handler() {
-
-        ProtoGroupKickMember.GroupKickMemberResponse.Builder builder = (ProtoGroupKickMember.GroupKickMemberResponse.Builder) message;
+        ProtoGroupKickMember.GroupKickMemberResponse.Builder builder =
+            (ProtoGroupKickMember.GroupKickMemberResponse.Builder) message;
         final long roomId = builder.getRoomId();
         final long memberId = builder.getMemberId();
 
-
         Realm realm = Realm.getDefaultInstance();
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        RealmRoom realmRoom =
+            realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         if (realmRoom != null) {
             final RealmList<RealmMember> realmMembers = realmRoom.getGroupRoom().getMembers();
             realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
+                @Override public void execute(Realm realm) {
                     for (int i = 0; i < realmMembers.size(); i++) {
                         RealmMember member = realmMembers.get(i);
                         if (member.getPeerId() == memberId) {
@@ -54,18 +50,13 @@ public class GroupKickMemberResponse extends MessageHandler {
         }
 
         realm.close();
-
-
-
     }
 
-    @Override
-    public void error() {
+    @Override public void error() {
         Log.e("ddd", "hhhhhhhhhh      erore      " + message);
     }
 
-    @Override
-    public void timeOut() {
+    @Override public void timeOut() {
 
         Log.e("ddd", "hhhhhhhhhh      timout      " + message);
         super.timeOut();

@@ -2,14 +2,14 @@ package com.iGap.request;
 
 import com.iGap.module.StructListOfContact;
 import com.iGap.proto.ProtoUserContactsImport;
-
 import java.util.ArrayList;
 
 public class RequestUserContactImport {
 
     public void contactImport(ArrayList<StructListOfContact> itemContactList) {
 
-        ProtoUserContactsImport.UserContactsImport.Builder userContactsImport = ProtoUserContactsImport.UserContactsImport.newBuilder();
+        ProtoUserContactsImport.UserContactsImport.Builder userContactsImport =
+            ProtoUserContactsImport.UserContactsImport.newBuilder();
 
         for (int i = 0; i < itemContactList.size(); i++) {
 
@@ -17,7 +17,8 @@ public class RequestUserContactImport {
             String first_name = itemContactList.get(i).getFirstName();
             String last_name = itemContactList.get(i).getLastName();
 
-            ProtoUserContactsImport.UserContactsImport.Contact.Builder contact = ProtoUserContactsImport.UserContactsImport.Contact.newBuilder();
+            ProtoUserContactsImport.UserContactsImport.Contact.Builder contact =
+                ProtoUserContactsImport.UserContactsImport.Contact.newBuilder();
 
             contact.setPhone(phone);
             contact.setFirstName(first_name);
@@ -33,5 +34,4 @@ public class RequestUserContactImport {
             e.printStackTrace();
         }
     }
-
 }

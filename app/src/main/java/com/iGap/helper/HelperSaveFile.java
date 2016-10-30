@@ -5,10 +5,8 @@ import android.graphics.Bitmap;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.widget.Toast;
-
 import com.iGap.G;
 import com.iGap.R;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -24,14 +22,13 @@ import java.util.Calendar;
  */
 public class HelperSaveFile {
 
-
     public static Boolean savePicToDownLoadFolder(Bitmap bitmap) {
 
         try {
-            if (bitmap == null)
-                return false;
+            if (bitmap == null) return false;
 
-            File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+            File path =
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
 
             Calendar calendar = Calendar.getInstance();
             java.util.Date now = calendar.getTime();
@@ -47,16 +44,13 @@ public class HelperSaveFile {
         } catch (FileNotFoundException e) {
             return false;
         }
-
     }
-
 
     public static void savePicToGallary(Bitmap bitmap, String name) {
 
-        MediaStore.Images.Media.insertImage(G.context.getContentResolver(), bitmap, name, "yourDescription");
-
+        MediaStore.Images.Media.insertImage(G.context.getContentResolver(), bitmap, name,
+            "yourDescription");
     }
-
 
     public static void savePicToGallary(String filePath) {
 
@@ -69,14 +63,13 @@ public class HelperSaveFile {
         G.context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
     }
 
-
     public static void saveToMusicFolder(String path, String name) {
         try {
-            if (path == null)
-                return;
+            if (path == null) return;
 
             InputStream is = new FileInputStream(path);
-            File mSavePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC);
+            File mSavePath =
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC);
             File file = new File(mSavePath + "/" + name);
             OutputStream os = new FileOutputStream(file);
 
@@ -89,13 +82,8 @@ public class HelperSaveFile {
             os.close();
 
             Toast.makeText(G.context, R.string.save_to_music_folder, Toast.LENGTH_SHORT).show();
-
         } catch (FileNotFoundException e) {
         } catch (IOException e) {
         }
-
-
     }
-
-
 }

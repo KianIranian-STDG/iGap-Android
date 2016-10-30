@@ -8,8 +8,7 @@ import io.realm.annotations.PrimaryKey;
 // as a workaround, we save its toString() value
 // https://github.com/realm/realm-java/issues/776
 public class RealmClientCondition extends RealmObject {
-    @PrimaryKey
-    private long roomId;
+    @PrimaryKey private long roomId;
     private long messageVersion;
     private long statusVersion;
     private long deleteVersion;

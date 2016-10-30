@@ -10,7 +10,8 @@ public class RequestFileUpload {
     public void fileUpload(String token, long offset, byte[] bytes, String identity) {
 
         ProtoFileUpload.FileUpload.Builder fileUploadInit = ProtoFileUpload.FileUpload.newBuilder();
-        fileUploadInit.setRequest(ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
+        fileUploadInit.setRequest(
+            ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
         fileUploadInit.setToken(token);
         fileUploadInit.setOffset(offset);
         fileUploadInit.setBytes(ByteString.copyFrom(bytes));

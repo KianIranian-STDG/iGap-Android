@@ -58,11 +58,9 @@ public class VoiceRecord {
         this.onVoiceRecordListener = listener;
     }
 
-
     public void setItemTag(String itemTag) {
         this.itemTag = itemTag;
     }
-
 
     public void stopVoiceRecord() {
         if (null != mediaRecorder) {
@@ -74,7 +72,6 @@ public class VoiceRecord {
             }
         }
     }
-
 
     private void startRecording() {
         final long currentTime = System.currentTimeMillis();
@@ -100,30 +97,25 @@ public class VoiceRecord {
         }
     }
 
-
     public void startVoiceRecord() {
         canStop = false;
         startRecording();
         timertask = new TimerTask() {
 
-            @Override
-            public void run() {
+            @Override public void run() {
                 if (state) {
 
                     imgPicRecord.post(new Runnable() {
 
-                        @Override
-                        public void run() {
+                        @Override public void run() {
                             imgPicRecord.setImageResource(R.mipmap.circle_white);
                             state = false;
                         }
                     });
-
                 } else {
                     imgPicRecord.post(new Runnable() {
 
-                        @Override
-                        public void run() {
+                        @Override public void run() {
                             imgPicRecord.setImageResource(R.mipmap.circle_red);
                             state = true;
                         }
@@ -142,8 +134,7 @@ public class VoiceRecord {
             secendTimer = new Timer();
             secendTimer.schedule(new TimerTask() {
 
-                @Override
-                public void run() {
+                @Override public void run() {
 
                     secend++;
                     if (secend >= 60) {
@@ -159,18 +150,19 @@ public class VoiceRecord {
 
                     txtTimeRecord.post(new Runnable() {
 
-                        @Override
-                        public void run() {
+                        @Override public void run() {
                             String s = "";
-                            if (minute < 10)
+                            if (minute < 10) {
                                 s += "0" + minute;
-                            else
+                            } else {
                                 s += minute;
+                            }
                             s += ":";
-                            if (secend < 10)
+                            if (secend < 10) {
                                 s += "0" + secend;
-                            else
+                            } else {
                                 s += secend;
+                            }
 
                             txtTimeRecord.setText(s);
                         }
@@ -180,7 +172,6 @@ public class VoiceRecord {
         }
     }
 
-
     public void dispatchTouchEvent(MotionEvent event) {
 
         switch (event.getAction()) {
@@ -188,17 +179,13 @@ public class VoiceRecord {
                 startMoving((int) event.getX());
                 break;
             case MotionEvent.ACTION_MOVE:
-                if (itemTag.equals("ivVoice"))
-                    moving((int) event.getX());
+                if (itemTag.equals("ivVoice")) moving((int) event.getX());
                 break;
             case MotionEvent.ACTION_UP:
-                if (itemTag.equals("ivVoice"))
-                    reset();
+                if (itemTag.equals("ivVoice")) reset();
                 break;
         }
-
     }
-
 
     private void startMoving(int x) {
         leftPading = layout3.getPaddingRight();
@@ -206,13 +193,13 @@ public class VoiceRecord {
         cansel = false;
     }
 
-
     private void moving(int x) {
         int i = lastX - x;
 
         if (i > 0 || Allmoving > 0) {
             Allmoving += i;
-            txt_slide_to_cancel.setAlpha(((float) (DistanceToCancel - Allmoving) / DistanceToCancel));
+            txt_slide_to_cancel.setAlpha(
+                ((float) (DistanceToCancel - Allmoving) / DistanceToCancel));
             layout3.setPadding(0, 0, layout3.getPaddingRight() + i, 0);
             lastX = x;
 
@@ -222,7 +209,6 @@ public class VoiceRecord {
             }
         }
     }
-
 
     private void reset() {
         layout3.setPadding(0, 0, leftPading, 0);
@@ -265,14 +251,10 @@ public class VoiceRecord {
                     if (onVoiceRecordListener != null) {
                         onVoiceRecordListener.onVoiceRecordDone(outputFile);
                     }
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-
         }
     }
-
-
 }

@@ -8,5 +8,4 @@ package com.iGap.interfaces;
 public interface OnSecuring {
 
     void onSecure();
-
 }

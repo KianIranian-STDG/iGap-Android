@@ -1,65 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="CircleImageView">
-        <attr name="civ_border_width" format="dimension" />
-        <attr name="civ_border_color" format="color" />
-        <attr name="civ_border_overlay" format="boolean" />
-        <attr name="civ_fill_color" format="color" />
-    </declare-styleable>
+  <declare-styleable name="CircleImageView">
+    <attr format="dimension" name="civ_border_width"/>
+    <attr format="color" name="civ_border_color"/>
+    <attr format="boolean" name="civ_border_overlay"/>
+    <attr format="color" name="civ_fill_color"/>
+  </declare-styleable>
 
-    <declare-styleable name="GifMoviewView">
-        <attr name="gif" format="reference" />
-        <attr name="paused" format="boolean" />
-    </declare-styleable>
+  <declare-styleable name="GifMoviewView">
+    <attr format="reference" name="gif"/>
+    <attr format="boolean" name="paused"/>
+  </declare-styleable>
 
-    <declare-styleable name="CustomTheme">
-        <attr name="gifMoviewViewStyle" format="reference" />
-    </declare-styleable>
+  <declare-styleable name="CustomTheme">
+    <attr format="reference" name="gifMoviewViewStyle"/>
+  </declare-styleable>
 
-    <declare-styleable name="ArcMenu">
-        <attr name="menu_scr" format="reference" />
-        <attr name="menu_color" format="reference|color" />
-        <attr name="menu_ripple_color" format="color" />
-        <attr name="menu_radius" format="dimension" />
-        <attr name="menu_margin" format="dimension" />
-        <attr name="menu_open" format="enum">
-            <enum name="arc_left" value="0" />
-            <enum name="arc_right" value="1" />
-        </attr>
-        <attr name="menu_animation_time" format="integer" />
-        <attr name="menu_elevation" format="dimension" />
-    </declare-styleable>
-
-
-    <declare-styleable name="SelectableRoundedImageView">
-        <attr name="sriv_left_top_corner_radius" format="dimension" />
-        <attr name="sriv_right_top_corner_radius" format="dimension" />
-        <attr name="sriv_left_bottom_corner_radius" format="dimension" />
-        <attr name="sriv_right_bottom_corner_radius" format="dimension" />
-        <attr name="sriv_border_width" format="dimension" />
-        <attr name="sriv_border_color" format="color" />
-        <attr name="sriv_oval" format="boolean" />
-        <attr name="android:scaleType" />
-    </declare-styleable>
+  <declare-styleable name="ArcMenu">
+    <attr format="reference" name="menu_scr"/>
+    <attr format="reference|color" name="menu_color"/>
+    <attr format="color" name="menu_ripple_color"/>
+    <attr format="dimension" name="menu_radius"/>
+    <attr format="dimension" name="menu_margin"/>
+    <attr format="enum" name="menu_open">
+      <enum name="arc_left" value="0"/>
+      <enum name="arc_right" value="1"/>
+    </attr>
+    <attr format="integer" name="menu_animation_time"/>
+    <attr format="dimension" name="menu_elevation"/>
+  </declare-styleable>
 
 
-    <!--ripple library-->
-    <declare-styleable name="RippleView">
-        <attr name="rv_alpha" format="integer" />
-        <attr name="rv_framerate" format="integer" />
-        <attr name="rv_rippleDuration" format="integer" />
-        <attr name="rv_zoomDuration" format="integer" />
-        <attr name="rv_color" format="color" />
-        <attr name="rv_centered" format="boolean" />
-        <attr name="rv_type" format="enum">
-            <enum name="simpleRipple" value="0" />
-            <enum name="doubleRipple" value="1" />
-            <enum name="rectangle" value="2" />
-        </attr>
-        <attr name="rv_ripplePadding" format="dimension" />
-        <attr name="rv_zoom" format="boolean" />
-        <attr name="rv_zoomScale" format="float" />
+  <declare-styleable name="SelectableRoundedImageView">
+    <attr format="dimension" name="sriv_left_top_corner_radius"/>
+    <attr format="dimension" name="sriv_right_top_corner_radius"/>
+    <attr format="dimension" name="sriv_left_bottom_corner_radius"/>
+    <attr format="dimension" name="sriv_right_bottom_corner_radius"/>
+    <attr format="dimension" name="sriv_border_width"/>
+    <attr format="color" name="sriv_border_color"/>
+    <attr format="boolean" name="sriv_oval"/>
+    <attr name="android:scaleType"/>
+  </declare-styleable>
 
-    </declare-styleable>
+
+  <!--ripple library-->
+  <declare-styleable name="RippleView">
+    <attr format="integer" name="rv_alpha"/>
+    <attr format="integer" name="rv_framerate"/>
+    <attr format="integer" name="rv_rippleDuration"/>
+    <attr format="integer" name="rv_zoomDuration"/>
+    <attr format="color" name="rv_color"/>
+    <attr format="boolean" name="rv_centered"/>
+    <attr format="enum" name="rv_type">
+      <enum name="simpleRipple" value="0"/>
+      <enum name="doubleRipple" value="1"/>
+      <enum name="rectangle" value="2"/>
+    </attr>
+    <attr format="dimension" name="rv_ripplePadding"/>
+    <attr format="boolean" name="rv_zoom"/>
+    <attr format="float" name="rv_zoomScale"/>
+
+  </declare-styleable>
 
 </resources>

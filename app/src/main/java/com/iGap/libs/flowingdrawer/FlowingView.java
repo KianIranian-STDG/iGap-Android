@@ -9,12 +9,9 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
-
 import com.iGap.R;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ValueAnimator;
-
-
 
 public class FlowingView extends View {
 
@@ -38,13 +35,6 @@ public class FlowingView extends View {
 
     private int rightMargin;
 
-    public enum Status {
-        NONE,
-        STATUS_SMOOTH_UP,
-        STATUS_UP,
-        STATUS_DOWN,
-    }
-
     public FlowingView(Context context) {
         super(context);
         init();
@@ -61,27 +51,24 @@ public class FlowingView extends View {
         init();
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public FlowingView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+    }
+
     private void init() {
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mPaint.setColor(getResources().getColor(R.color.white));
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public FlowingView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-    }
-
-
-    @Override
-    protected void onDraw(Canvas canvas) {
+    @Override protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         drawBG(canvas);
     }
 
     public void show(float x, float y, Status status) {
-        if (mStatus == Status.STATUS_SMOOTH_UP)
-            return;
+        if (mStatus == Status.STATUS_SMOOTH_UP) return;
         mStatus = status;
         if (mStatus == Status.STATUS_UP) {
             currentPointX = (int) x;
@@ -98,8 +85,7 @@ public class FlowingView extends View {
         final int w = getWidth();
         ValueAnimator valueAnimator = ValueAnimator.ofInt(w + 100, w - rightMargin);
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
+            @Override public void onAnimationUpdate(ValueAnimator animation) {
                 currentPointX = (int) animation.getAnimatedValue();
                 float fraction = animation.getAnimatedFraction();
                 autoUppingX = (int) (w - rightMargin * fraction);
@@ -107,8 +93,7 @@ public class FlowingView extends View {
             }
         });
         valueAnimator.addListener(new FlowingAnimationListener() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
+            @Override public void onAnimationEnd(Animator animation) {
                 isupping = false;
                 showContent = true;
             }
@@ -134,21 +119,21 @@ public class FlowingView extends View {
             case STATUS_UP:
                 if (isupping) return;
                 if (currentPointY - getHeight() / 2 >= 0) {
-                    topY = (int) (currentPointY - 1.5 * currentPointX * getHeight() / getWidth()) - currentPointY / 2 +
-                            getHeight() / 4;
-                    bottomY = (int) (currentPointY + 1.5 * currentPointX * getHeight() / getWidth());
+                    topY = (int) (currentPointY - 1.5 * currentPointX * getHeight() / getWidth())
+                        - currentPointY / 2 + getHeight() / 4;
+                    bottomY =
+                        (int) (currentPointY + 1.5 * currentPointX * getHeight() / getWidth());
                 } else {
                     topY = (int) (currentPointY - 1.5 * currentPointX * getHeight() / getWidth());
-                    bottomY = (int) (currentPointY + 1.5 * currentPointX * getHeight() / getWidth()) -
-                            currentPointY / 2 + getHeight() / 4;
+                    bottomY = (int) (currentPointY + 1.5 * currentPointX * getHeight() / getWidth())
+                        - currentPointY / 2 + getHeight() / 4;
                 }
                 mPath.moveTo(getWidth() - currentPointX, topY);
-                mPath.cubicTo(getWidth() - currentPointX, currentPointY / 4 + 3 * topY / 4, getWidth(), 3 * currentPointY / 4
-                                + topY / 4,
-                        getWidth()
-                        , currentPointY);
-                mPath.cubicTo(getWidth(), 5 * currentPointY / 4 - topY / 4, getWidth() - currentPointX,
-                        7 * currentPointY / 4 - 3 * topY / 4, getWidth() - currentPointX, bottomY);
+                mPath.cubicTo(getWidth() - currentPointX, currentPointY / 4 + 3 * topY / 4,
+                    getWidth(), 3 * currentPointY / 4 + topY / 4, getWidth(), currentPointY);
+                mPath.cubicTo(getWidth(), 5 * currentPointY / 4 - topY / 4,
+                    getWidth() - currentPointX, 7 * currentPointY / 4 - 3 * topY / 4,
+                    getWidth() - currentPointX, bottomY);
                 mPath.lineTo(getWidth() - currentPointX, topY);
                 canvas.drawPath(mPath, mPaint);
                 break;
@@ -156,24 +141,20 @@ public class FlowingView extends View {
                 topY = topY - downspeed;
                 bottomY = bottomY + downspeed;
                 mPath.moveTo(getWidth() - currentPointX, topY);
-                mPath.cubicTo(getWidth() - currentPointX, currentPointY / 4 + 3 * topY / 4, getWidth(), 3 * currentPointY / 4
-                                + topY / 4,
-                        getWidth()
-                        , currentPointY);
-                mPath.cubicTo(getWidth(), 5 * currentPointY / 4 - topY / 4, getWidth() - currentPointX,
-                        7 * currentPointY / 4 - 3 * topY / 4, getWidth() - currentPointX, bottomY);
+                mPath.cubicTo(getWidth() - currentPointX, currentPointY / 4 + 3 * topY / 4,
+                    getWidth(), 3 * currentPointY / 4 + topY / 4, getWidth(), currentPointY);
+                mPath.cubicTo(getWidth(), 5 * currentPointY / 4 - topY / 4,
+                    getWidth() - currentPointX, 7 * currentPointY / 4 - 3 * topY / 4,
+                    getWidth() - currentPointX, bottomY);
                 mPath.lineTo(getWidth() - currentPointX, topY);
                 canvas.drawPath(mPath, mPaint);
                 break;
         }
-
     }
-
 
     public boolean isStartAuto(float x) {
         return x >= getWidth() / 2;
     }
-
 
     public void autoUpping(float x) {
         mStatus = Status.STATUS_SMOOTH_UP;
@@ -200,12 +181,12 @@ public class FlowingView extends View {
         if (per == 1) {
             downing();
         }
-
     }
 
     public boolean isupping() {
         return isupping;
     }
+
     public void resetContent() {
         showContent = true;
         isupping = false;
@@ -218,7 +199,6 @@ public class FlowingView extends View {
         isupping = false;
     }
 
-
     public void setMenuFragment(MenuFragment mMenuFragment) {
         this.mMenuFragment = mMenuFragment;
     }
@@ -227,4 +207,10 @@ public class FlowingView extends View {
         this.rightMargin = rightMargin;
     }
 
+    public enum Status {
+        NONE,
+        STATUS_SMOOTH_UP,
+        STATUS_UP,
+        STATUS_DOWN,
+    }
 }

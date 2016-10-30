@@ -14,7 +14,6 @@ import android.util.Log;
 import com.iGap.G;
 import com.iGap.interfaces.OnSmsReceive;
 
-
 /**
  * get sms from igap sms center for register user in program
  */
@@ -31,8 +30,7 @@ public class IncomingSms extends BroadcastReceiver {
         this.listener = listener;
     }
 
-    @Override
-    public void onReceive(Context context, Intent intent) {
+    @Override public void onReceive(Context context, Intent intent) {
 
         Log.i("SSS", "Receive SMS");
         final Bundle bundle = intent.getExtras();

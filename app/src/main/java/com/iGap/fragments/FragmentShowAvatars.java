@@ -53,8 +53,7 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
         return fragment;
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    @Override public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // init passed data through bundle
@@ -64,14 +63,13 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
         G.onFileDownloadResponse = this;
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    @Nullable @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+        @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_show_avatars, container, false);
     }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         // init fields
@@ -81,20 +79,23 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
         mAdapter = new AvatarsAdapter<>();
 
         // ripple back
-        ((RippleView) view.findViewById(R.id.back)).setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
-                getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentShowAvatars.this).commit();
-            }
-        });
+        ((RippleView) view.findViewById(R.id.back)).setOnRippleCompleteListener(
+            new RippleView.OnRippleCompleteListener() {
+                @Override public void onComplete(RippleView rippleView) {
+                    getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .remove(FragmentShowAvatars.this)
+                        .commit();
+                }
+            });
 
         // ripple menu
-        ((RippleView) view.findViewById(R.id.menu)).setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
-                showPopupMenu();
-            }
-        });
+        ((RippleView) view.findViewById(R.id.menu)).setOnRippleCompleteListener(
+            new RippleView.OnRippleCompleteListener() {
+                @Override public void onComplete(RippleView rippleView) {
+                    showPopupMenu();
+                }
+            });
 
         Realm realm = Realm.getDefaultInstance();
         RealmRegisteredInfo user = realm.where(RealmRegisteredInfo.class)
@@ -116,7 +117,8 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
             mRecyclerView.setHasFixedSize(true);
             mRecyclerView.setItemViewCacheSize(20);
             mRecyclerView.setDrawingCacheEnabled(true);
-            LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+            LinearLayoutManager layoutManager =
+                new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
             mRecyclerView.setLayoutManager(layoutManager);
             mRecyclerView.setAdapter(mAdapter);
 
@@ -148,12 +150,12 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
     }
 
     private void showPopupMenu() {
-        MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
-                .items(R.array.pop_up_menu_show_image)
+        MaterialDialog dialog =
+            new MaterialDialog.Builder(getActivity()).items(R.array.pop_up_menu_show_image)
                 .contentColor(Color.BLACK)
                 .itemsCallback(new MaterialDialog.ListCallback() {
-                    @Override
-                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                    @Override public void onSelection(MaterialDialog dialog, View view, int which,
+                        CharSequence text) {
                         if (which == 0) {
                             showAllMedia();
                         } else if (which == 1) {
@@ -187,11 +189,10 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
         Log.i(FragmentShowAvatars.class.getSimpleName(), "Save to gallery");
     }
 
-    @Override
-    public void onFileDownload(final String token, final int offset, final ProtoFileDownload.FileDownload.Selector selector, final int progress) {
+    @Override public void onFileDownload(final String token, final int offset,
+        final ProtoFileDownload.FileDownload.Selector selector, final int progress) {
         getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 if (selector != ProtoFileDownload.FileDownload.Selector.FILE) {
                     // requested thumbnail
                     mAdapter.downloadingAvatarThumbnail(token);
@@ -203,8 +204,9 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
         });
     }
 
-    @Override
-    public void onAvatarDownload(String token, int offset, ProtoFileDownload.FileDownload.Selector selector, int progress, long userId, RoomType roomType) {
+    @Override public void onAvatarDownload(String token, int offset,
+        ProtoFileDownload.FileDownload.Selector selector, int progress, long userId,
+        RoomType roomType) {
         // empty
     }
 }

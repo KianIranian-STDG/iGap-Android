@@ -24,15 +24,14 @@ import java.util.List;
  */
 public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapter<Item>
     implements FastAdapter.OnLongClickListener<Item> {
-    private OnChatMessageSelectionChanged<Item> onChatMessageSelectionChanged;
-    private IMessageItem iMessageItem;
-    private OnChatMessageRemove onChatMessageRemove;
     // contain sender id
     public static List<String> avatarsRequested = new ArrayList<>();
     public static List<String> usersInfoRequested = new ArrayList<>();
     public static ArrayMap<Long, Integer> uploading = new ArrayMap<>();
     public static ArrayMap<String, Integer> downloading = new ArrayMap<>();
-
+    private OnChatMessageSelectionChanged<Item> onChatMessageSelectionChanged;
+    private IMessageItem iMessageItem;
+    private OnChatMessageRemove onChatMessageRemove;
     private OnLongClickListener longClickListener = new OnLongClickListener<Item>() {
         @Override
         public boolean onLongClick(View v, IAdapter<Item> adapter, Item item, int position) {
@@ -43,6 +42,53 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
             return true;
         }
     };
+
+    public MessagesAdapter(
+        OnChatMessageSelectionChanged<Item> OnChatMessageSelectionChangedListener,
+        final IMessageItem iMessageItemListener,
+        final OnChatMessageRemove chatMessageRemoveListener) {
+        onChatMessageSelectionChanged = OnChatMessageSelectionChangedListener;
+        iMessageItem = iMessageItemListener;
+        onChatMessageRemove = chatMessageRemoveListener;
+
+        // as we provide id's for the items we want the hasStableIds enabled to speed up things
+        setHasStableIds(true);
+
+        withSelectable(true);
+        withMultiSelect(true);
+        withSelectOnLongClick(true);
+        withOnPreLongClickListener(this);
+        withOnLongClickListener(longClickListener);
+        withOnClickListener(new OnClickListener<Item>() {
+            @Override
+            public boolean onClick(View v, IAdapter<Item> adapter, Item item, int position) {
+                if (getSelectedItems().size() == 0) {
+                    if (iMessageItem != null) {
+                        iMessageItem.onContainerClick(v, item.mMessage, position);
+                    }
+                } /*else {
+                    if (!item.isSelected()){
+                        select(position);
+                        makeSelected(v);
+                    }
+                    else{
+                        deselect(position);
+                        makeDeselected(v);
+                    }
+                }*/
+                // TODO: 9/17/2016 [Alireza Eskandarpour Shoferi] implement
+                return true;
+            }
+        });
+    }
+
+    public static boolean hasDownloadRequested(String token) {
+        return downloading.containsKey(token);
+    }
+
+    public static boolean hasUploadRequested(long messageId) {
+        return uploading.containsKey(messageId);
+    }
 
     public void downloadingAvatar(long peerId, int progress, int offset,
         StructMessageAttachment avatar) {
@@ -162,45 +208,6 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         return null;
     }
 
-    public MessagesAdapter(
-        OnChatMessageSelectionChanged<Item> OnChatMessageSelectionChangedListener,
-        final IMessageItem iMessageItemListener,
-        final OnChatMessageRemove chatMessageRemoveListener) {
-        onChatMessageSelectionChanged = OnChatMessageSelectionChangedListener;
-        iMessageItem = iMessageItemListener;
-        onChatMessageRemove = chatMessageRemoveListener;
-
-        // as we provide id's for the items we want the hasStableIds enabled to speed up things
-        setHasStableIds(true);
-
-        withSelectable(true);
-        withMultiSelect(true);
-        withSelectOnLongClick(true);
-        withOnPreLongClickListener(this);
-        withOnLongClickListener(longClickListener);
-        withOnClickListener(new OnClickListener<Item>() {
-            @Override
-            public boolean onClick(View v, IAdapter<Item> adapter, Item item, int position) {
-                if (getSelectedItems().size() == 0) {
-                    if (iMessageItem != null) {
-                        iMessageItem.onContainerClick(v, item.mMessage, position);
-                    }
-                } /*else {
-                    if (!item.isSelected()){
-                        select(position);
-                        makeSelected(v);
-                    }
-                    else{
-                        deselect(position);
-                        makeDeselected(v);
-                    }
-                }*/
-                // TODO: 9/17/2016 [Alireza Eskandarpour Shoferi] implement
-                return true;
-            }
-        });
-    }
-
     public void removeMessage(long messageId) {
         List<Item> items = getAdapterItems();
         for (Item messageInfo : items) {
@@ -281,14 +288,6 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
     private void makeDeselected(View v) {
         //noinspection RedundantCast
         ((FrameLayout) v).setForeground(new ColorDrawable(Color.TRANSPARENT));
-    }
-
-    public static boolean hasDownloadRequested(String token) {
-        return downloading.containsKey(token);
-    }
-
-    public static boolean hasUploadRequested(long messageId) {
-        return uploading.containsKey(messageId);
     }
 
     @Override public boolean onLongClick(View v, IAdapter<Item> adapter, Item item, int position) {

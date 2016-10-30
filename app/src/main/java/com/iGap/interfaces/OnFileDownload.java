@@ -9,5 +9,4 @@ package com.iGap.interfaces;
  */
 public interface OnFileDownload {
     void OnFileDownload(byte bytes);
-
 }

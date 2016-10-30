@@ -5,217 +5,240 @@
     android:layout_height="match_parent"
     android:background="@android:color/white"
     android:layoutDirection="ltr"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    >
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/chl_appbar_main"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
-
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp60"
-            android:orientation="vertical"
-            app:elevation="8dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:background="@color/green"
-                android:orientation="horizontal">
-
-                <com.iGap.libs.rippleeffect.RippleView
-                    android:id="@+id/fcg_ripple_back"
-                    rv_centered="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:rv_alpha="200"
-                    app:rv_centered="true"
-                    app:rv_rippleDuration="150"
-                    app:rv_ripplePadding="5dp">
-
-                    <com.iGap.module.MaterialDesignTextView
-                        android:id="@+id/fcg_btn_back"
-                        android:layout_width="@dimen/dp60"
-                        android:layout_height="match_parent"
-                        android:background="@null"
-                        android:gravity="center"
-                        android:text="@string/md_back_arrow"
-                        fontPath="fonts/Flaticon.ttf"
-                        android:textColor="@android:color/white"
-                        android:textSize="@dimen/sp18" />
-                </com.iGap.libs.rippleeffect.RippleView>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:paddingLeft="@dimen/dp8"
-                    android:paddingTop="@dimen/dp8">
-
-                    <TextView
-                        android:id="@+id/fcg_txt_status"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:singleLine="true"
-                        android:text="waiting for network"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textColor="@android:color/white"
-                        android:textSize="@dimen/sp18"
-                        android:textStyle="bold"
-                        android:visibility="gone" />
-
-                    <TextView
-                        android:id="@+id/fcg_txt_number_of_member"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:singleLine="true"
-                        android:text="0/5000 member"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textColor="@android:color/white"
-                        android:textSize="@dimen/sp18"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
-
-                <com.iGap.libs.rippleeffect.RippleView
-                    android:id="@+id/fcg_ripple_done"
-                    rv_centered="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:rv_alpha="200"
-                    app:rv_centered="true"
-                    app:rv_rippleDuration="150"
-                    app:rv_ripplePadding="5dp">
-
-                    <com.iGap.module.MaterialDesignTextView
-                        android:id="@+id/fcg_btn_done"
-                        android:layout_width="@dimen/dp60"
-                        android:layout_height="match_parent"
-                        android:background="@null"
-                        android:gravity="center"
-                        android:text="@string/md_check_symbol"
-                        fontPath="fonts/Flaticon.ttf"
-                        android:textColor="@android:color/white"
-                        android:textSize="@dimen/sp18" />
-                </com.iGap.libs.rippleeffect.RippleView>
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#34a49f" />
-
-        </LinearLayout>
-
-    </android.support.design.widget.AppBarLayout>
+  <android.support.design.widget.AppBarLayout
+      android:id="@+id/chl_appbar_main"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      >
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/fcg_edt_search"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:autoText="false"
-            android:hint="Search "
-            android:maxLines="5"
-            android:padding="@dimen/dp20" />
-    </LinearLayout>
-
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/fcg_recycler_view_add_item_to_group"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:paddingBottom="@dimen/dp8"
-        android:scrollbars="vertical" />
-
-
-    <LinearLayout
-        android:id="@+id/acs_ll_replay"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp60"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:visibility="gone">
+        android:orientation="vertical"
+        app:elevation="8dp"
+        >
 
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="0dp"
+          android:layout_weight="1"
+          android:background="@color/green"
+          android:orientation="horizontal"
+          >
 
-        <ImageView
-            android:layout_width="@dimen/dp40"
-            android:layout_height="@dimen/dp40"
-            android:layout_marginLeft="@dimen/dp8"
-            android:adjustViewBounds="true"
-            android:padding="@dimen/dp4"
-            android:src="@mipmap/reply"
-            android:visibility="visible" />
+        <com.iGap.libs.rippleeffect.RippleView
+            android:id="@+id/fcg_ripple_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:rv_alpha="200"
+            app:rv_centered="true"
+            app:rv_rippleDuration="150"
+            app:rv_ripplePadding="5dp"
+            rv_centered="true"
+            >
 
-        <View
-            android:layout_width="3dp"
-            android:layout_height="@dimen/dp40"
-            android:layout_marginLeft="@dimen/dp8"
-            android:background="@color/green" />
-
-
-        <com.iGap.module.CircleImageView
-            android:id="@+id/acs_imv_replay_pic"
-            android:layout_width="@dimen/dp40"
-            android:layout_height="@dimen/dp40"
-            android:layout_marginLeft="@dimen/dp8"
-            android:src="@mipmap/d"
-            android:visibility="visible" />
+          <com.iGap.module.MaterialDesignTextView
+              android:id="@+id/fcg_btn_back"
+              android:layout_width="@dimen/dp60"
+              android:layout_height="match_parent"
+              android:background="@null"
+              android:gravity="center"
+              android:text="@string/md_back_arrow"
+              android:textColor="@android:color/white"
+              android:textSize="@dimen/sp18"
+              fontPath="fonts/Flaticon.ttf"
+              />
+        </com.iGap.libs.rippleeffect.RippleView>
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/dp8"
             android:layout_weight="1"
-            android:gravity="left|center"
-            android:orientation="vertical">
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/dp8"
+            android:paddingTop="@dimen/dp8"
+            >
 
-            <TextView
-                android:id="@+id/acs_txt_replay_from"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxWidth="@dimen/dp280"
-                android:singleLine="true"
-                android:text="New Text"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/sp14" />
+          <TextView
+              android:id="@+id/fcg_txt_status"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:gravity="left"
+              android:singleLine="true"
+              android:text="waiting for network"
+              android:textAppearance="?android:attr/textAppearanceMedium"
+              android:textColor="@android:color/white"
+              android:textSize="@dimen/sp18"
+              android:textStyle="bold"
+              android:visibility="gone"
+              />
 
-            <TextView
-                android:id="@+id/acs_txt_replay_message"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp4"
-                android:maxWidth="@dimen/dp280"
-                android:singleLine="true"
-                android:text="New Text"
-                android:textSize="@dimen/sp14" />
+          <TextView
+              android:id="@+id/fcg_txt_number_of_member"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:gravity="left"
+              android:singleLine="true"
+              android:text="0/5000 member"
+              android:textAppearance="?android:attr/textAppearanceMedium"
+              android:textColor="@android:color/white"
+              android:textSize="@dimen/sp18"
+              android:textStyle="bold"
+              />
+
         </LinearLayout>
 
-        <Button
-            android:id="@+id/acs_btn_close"
-            android:layout_width="@dimen/dp40"
-            android:layout_height="match_parent"
-            android:background="@null"
-            android:text="@string/fa_close"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="@dimen/sp22"
-            android:visibility="visible" />
+        <com.iGap.libs.rippleeffect.RippleView
+            android:id="@+id/fcg_ripple_done"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:rv_alpha="200"
+            app:rv_centered="true"
+            app:rv_rippleDuration="150"
+            app:rv_ripplePadding="5dp"
+            rv_centered="true"
+            >
+
+          <com.iGap.module.MaterialDesignTextView
+              android:id="@+id/fcg_btn_done"
+              android:layout_width="@dimen/dp60"
+              android:layout_height="match_parent"
+              android:background="@null"
+              android:gravity="center"
+              android:text="@string/md_check_symbol"
+              android:textColor="@android:color/white"
+              android:textSize="@dimen/sp18"
+              fontPath="fonts/Flaticon.ttf"
+              />
+        </com.iGap.libs.rippleeffect.RippleView>
+
+      </LinearLayout>
+
+      <View
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:background="#34a49f"
+          />
 
     </LinearLayout>
+
+  </android.support.design.widget.AppBarLayout>
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      >
+
+    <EditText
+        android:id="@+id/fcg_edt_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:autoText="false"
+        android:hint="Search "
+        android:maxLines="5"
+        android:padding="@dimen/dp20"
+        />
+  </LinearLayout>
+
+
+  <android.support.v7.widget.RecyclerView
+      android:id="@+id/fcg_recycler_view_add_item_to_group"
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_weight="1"
+      android:paddingBottom="@dimen/dp8"
+      android:scrollbars="vertical"
+      />
+
+
+  <LinearLayout
+      android:id="@+id/acs_ll_replay"
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/dp60"
+      android:gravity="center"
+      android:orientation="horizontal"
+      android:visibility="gone"
+      >
+
+
+    <ImageView
+        android:layout_width="@dimen/dp40"
+        android:layout_height="@dimen/dp40"
+        android:layout_marginLeft="@dimen/dp8"
+        android:adjustViewBounds="true"
+        android:padding="@dimen/dp4"
+        android:src="@mipmap/reply"
+        android:visibility="visible"
+        />
+
+    <View
+        android:layout_width="3dp"
+        android:layout_height="@dimen/dp40"
+        android:layout_marginLeft="@dimen/dp8"
+        android:background="@color/green"
+        />
+
+
+    <com.iGap.module.CircleImageView
+        android:id="@+id/acs_imv_replay_pic"
+        android:layout_width="@dimen/dp40"
+        android:layout_height="@dimen/dp40"
+        android:layout_marginLeft="@dimen/dp8"
+        android:src="@mipmap/d"
+        android:visibility="visible"
+        />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/dp8"
+        android:layout_weight="1"
+        android:gravity="left|center"
+        android:orientation="vertical"
+        >
+
+      <TextView
+          android:id="@+id/acs_txt_replay_from"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:maxWidth="@dimen/dp280"
+          android:singleLine="true"
+          android:text="New Text"
+          android:textColor="@color/colorPrimary"
+          android:textSize="@dimen/sp14"
+          />
+
+      <TextView
+          android:id="@+id/acs_txt_replay_message"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/dp4"
+          android:maxWidth="@dimen/dp280"
+          android:singleLine="true"
+          android:text="New Text"
+          android:textSize="@dimen/sp14"
+          />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/acs_btn_close"
+        android:layout_width="@dimen/dp40"
+        android:layout_height="match_parent"
+        android:background="@null"
+        android:text="@string/fa_close"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="@dimen/sp22"
+        android:visibility="visible"
+        />
+
+  </LinearLayout>
 
 
 </LinearLayout>

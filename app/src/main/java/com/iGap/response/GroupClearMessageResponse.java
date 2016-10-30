@@ -16,18 +16,15 @@ public class GroupClearMessageResponse extends MessageHandler {
         this.identity = identity;
     }
 
+    @Override public void handler() {
 
-    @Override
-    public void handler() {
-
-        ProtoGroupClearMessage.GroupClearMessageResponse.Builder builder = (ProtoGroupClearMessage.GroupClearMessageResponse.Builder) message;
+        ProtoGroupClearMessage.GroupClearMessageResponse.Builder builder =
+            (ProtoGroupClearMessage.GroupClearMessageResponse.Builder) message;
         builder.getRoomId();
         builder.getClearId();
-
     }
 
-    @Override
-    public void error() {
+    @Override public void error() {
 
     }
 }

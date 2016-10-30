@@ -3,20 +3,16 @@ package com.iGap.module;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.provider.ContactsContract;
-
 import com.iGap.G;
 import com.iGap.realm.RealmContacts;
 import com.iGap.realm.RealmContactsFields;
 import com.iGap.realm.RealmInviteFriend;
 import com.iGap.realm.RealmInviteFriendFields;
 import com.iGap.request.RequestUserContactImport;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import io.realm.Realm;
 import io.realm.RealmResults;
-
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * work with saved contacts in database
@@ -35,12 +31,12 @@ public class Contacts {
 
         RealmResults<RealmContacts> contacts;
         if (filter == null) {
-            contacts = realm.where(RealmContacts.class).findAllSorted(RealmContactsFields.DISPLAY_NAME);
+            contacts =
+                realm.where(RealmContacts.class).findAllSorted(RealmContactsFields.DISPLAY_NAME);
         } else {
-            contacts = realm
-                    .where(RealmContacts.class)
-                    .contains(RealmContactsFields.DISPLAY_NAME, filter)
-                    .findAllSorted(RealmContactsFields.DISPLAY_NAME);
+            contacts = realm.where(RealmContacts.class)
+                .contains(RealmContactsFields.DISPLAY_NAME, filter)
+                .findAllSorted(RealmContactsFields.DISPLAY_NAME);
         }
 
         String lastHeader = "";
@@ -49,15 +45,19 @@ public class Contacts {
             long peerId = contacts.get(i).getId();
 
             // new header exists
-            if (lastHeader.isEmpty() || (!lastHeader.isEmpty() && !header.isEmpty() && lastHeader.toLowerCase().charAt(0) != header.toLowerCase().charAt(0))) {
+            if (lastHeader.isEmpty() || (!lastHeader.isEmpty()
+                && !header.isEmpty()
+                && lastHeader.toLowerCase().charAt(0) != header.toLowerCase().charAt(0))) {
                 // TODO: 9/5/2016 [Alireza Eskandarpour Shoferi] implement contact last seen
-                StructContactInfo structContactInfo = new StructContactInfo(peerId, header, "", true, false, "");
+                StructContactInfo structContactInfo =
+                    new StructContactInfo(peerId, header, "", true, false, "");
                 structContactInfo.initials = contacts.get(i).getInitials();
                 structContactInfo.color = contacts.get(i).getColor();
                 structContactInfo.avatar = contacts.get(i).getAvatar();
                 items.add(structContactInfo);
             } else {
-                StructContactInfo structContactInfo = new StructContactInfo(peerId, header, "", false, false, "");
+                StructContactInfo structContactInfo =
+                    new StructContactInfo(peerId, header, "", false, false, "");
                 structContactInfo.initials = contacts.get(i).getInitials();
                 structContactInfo.color = contacts.get(i).getColor();
                 structContactInfo.avatar = contacts.get(i).getAvatar();
@@ -70,7 +70,8 @@ public class Contacts {
         return items;
     }
 
-    public static ArrayList<StructListOfContact> getListOfContact(boolean sendToServer) { //get List Of Contact
+    public static ArrayList<StructListOfContact> getListOfContact(
+        boolean sendToServer) { //get List Of Contact
 
         ArrayList<StructListOfContact> contactList = new ArrayList<>();
         ContentResolver cr = G.context.getContentResolver();
@@ -79,16 +80,23 @@ public class Contacts {
         if (cur.getCount() > 0) {
             while (cur.moveToNext()) {
                 StructListOfContact itemContact = new StructListOfContact();
-                itemContact.setDisplayName(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
+                itemContact.setDisplayName(
+                    cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
                 String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
-                if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
-                    Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{
-                            id}, null);
+                if (Integer.parseInt(
+                    cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)))
+                    > 0) {
+                    Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[] {
+                            id
+                        }, null);
                     assert pCur != null;
                     while (pCur.moveToNext()) {
-                        int phoneType = pCur.getInt(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
+                        int phoneType = pCur.getInt(
+                            pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
                         if (phoneType == ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE) {
-                            itemContact.setPhone(pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
+                            itemContact.setPhone(pCur.getString(pCur.getColumnIndex(
+                                ContactsContract.CommonDataKinds.Phone.NUMBER)));
                         }
                     }
                     pCur.close();
@@ -109,13 +117,11 @@ public class Contacts {
                     itemContact.setLastName("");
                     itemContact.setPhone(contactList.get(i).getPhone());
                     itemContact.setDisplayName(contactList.get(i).displayName);
-
                 } else if (sp.length == 2) {
                     itemContact.setFirstName(sp[0]);
                     itemContact.setLastName(sp[1]);
                     itemContact.setPhone(contactList.get(i).getPhone());
                     itemContact.setDisplayName(contactList.get(i).displayName);
-
                 } else if (sp.length == 3) {
                     itemContact.setFirstName(sp[0]);
                     itemContact.setLastName(sp[1] + sp[2]);
@@ -146,9 +152,9 @@ public class Contacts {
         if (size > 0) {
             Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    realm.delete(RealmInviteFriend.class);  // delete all item in invite friend database
+                @Override public void execute(Realm realm) {
+                    realm.delete(
+                        RealmInviteFriend.class);  // delete all item in invite friend database
                     for (int i = 0; i < size; i++) {
                         RealmInviteFriend item = realm.createObject(RealmInviteFriend.class);
                         item.setDisplayName(contactList.get(i).getDisplayName());
@@ -164,8 +170,7 @@ public class Contacts {
             final RealmResults<RealmContacts> results = realm.where(RealmContacts.class).findAll();
             if (results != null) {
                 realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
+                    @Override public void execute(Realm realm) {
                         for (int i = 0; i < results.size(); i++) {
                             Long phone = results.get(i).getPhone();
                             String str = phone.toString().replaceAll(" ", "");
@@ -173,7 +178,10 @@ public class Contacts {
                                 str = str.substring(str.length() - 10, str.length());
                             }
 
-                            realm.where(RealmInviteFriend.class).contains(RealmInviteFriendFields.PHONE, str).findAll().deleteAllFromRealm();
+                            realm.where(RealmInviteFriend.class)
+                                .contains(RealmInviteFriendFields.PHONE, str)
+                                .findAll()
+                                .deleteAllFromRealm();
                         }
                     }
                 });
@@ -189,7 +197,8 @@ public class Contacts {
         ArrayList<StructContactInfo> list = new ArrayList<>();
 
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmInviteFriend> results = realm.where(RealmInviteFriend.class).findAllSorted(RealmInviteFriendFields.DISPLAY_NAME);
+        RealmResults<RealmInviteFriend> results = realm.where(RealmInviteFriend.class)
+            .findAllSorted(RealmInviteFriendFields.DISPLAY_NAME);
 
         if (results != null) {
             String lastHeader = "";
@@ -199,12 +208,17 @@ public class Contacts {
 
                 StructContactInfo item;
 
-
                 // new header exists
-                if (lastHeader.isEmpty() || (!lastHeader.isEmpty() && !header.isEmpty() && lastHeader.toLowerCase().charAt(0) != header.toLowerCase().charAt(0))) {
-                    item = new StructContactInfo(0, results.get(i).getDisplayName(), "", true, false, results.get(i).getPhone());
+                if (lastHeader.isEmpty() || (!lastHeader.isEmpty()
+                    && !header.isEmpty()
+                    && lastHeader.toLowerCase().charAt(0) != header.toLowerCase().charAt(0))) {
+                    item =
+                        new StructContactInfo(0, results.get(i).getDisplayName(), "", true, false,
+                            results.get(i).getPhone());
                 } else {
-                    item = new StructContactInfo(0, results.get(i).getDisplayName(), "", false, false, results.get(i).getPhone());
+                    item =
+                        new StructContactInfo(0, results.get(i).getDisplayName(), "", false, false,
+                            results.get(i).getPhone());
                 }
                 lastHeader = header;
 

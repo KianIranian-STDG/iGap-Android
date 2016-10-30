@@ -41,8 +41,8 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 /**
  * Created by android3 on 8/31/2016.
  */
-public class ActivityComment extends ActivityEnhanced implements IEmojiViewCreate, IRecentsLongClick {
-
+public class ActivityComment extends ActivityEnhanced
+    implements IEmojiViewCreate, IRecentsLongClick {
 
     private int numberOfComment = 0;
     private ArrayList<StructCommentInfo> list;
@@ -53,42 +53,38 @@ public class ActivityComment extends ActivityEnhanced implements IEmojiViewCreat
     private EmojiEditText edtChat;
     private ImageButton btnSmile;
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
+    @Override protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
+
+    @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment_show);
 
         String messageID = null;
         Bundle bundle = getIntent().getExtras();
 
-//        if (bundle != null) {
-//            messageID = bundle.getString("MessageID");
-//            if (messageID == null)
-//                finish();
-//        }
+        //        if (bundle != null) {
+        //            messageID = bundle.getString("MessageID");
+        //            if (messageID == null)
+        //                finish();
+        //        }
 
         getCommentList(messageID);
 
         initComponent();
 
         initRecycleView();
-
-
     }
 
-
     private void getCommentList(String messageID) {
-
 
         list = new ArrayList<>();
 
         StructCommentInfo info = new StructCommentInfo();
         info.date = "agust 24";
-        info.message = "this is a sample comment andu i ma goin gto the steori an dwer at egoid  he steori an dwer at egoid goin gto the ster wh goin o the steori an dwer at egoid goin gto ";
+        info.message =
+            "this is a sample comment andu i ma goin gto the steori an dwer at egoid  he steori an dwer at egoid goin gto the ster wh goin o the steori an dwer at egoid goin gto ";
         info.senderName = "ali";
         info.senderID = " ali@kjfkd.com";
         info.time = "10:25";
@@ -105,12 +101,12 @@ public class ActivityComment extends ActivityEnhanced implements IEmojiViewCreat
 
         StructCommentInfo info2 = new StructCommentInfo();
         info2.date = "agust 24";
-        info2.message = "this is a sample comment and hwo aare you i ma goin gto the steori an dwer at egoid goin gto the ster what is uout yout your name  ";
+        info2.message =
+            "this is a sample comment and hwo aare you i ma goin gto the steori an dwer at egoid goin gto the ster what is uout yout your name  ";
         info2.senderName = "hasan";
         info2.senderID = " hasan@kjfkd.com";
         info2.time = "10:25";
         info2.senderPicturePath = R.mipmap.b + "";
-
 
         list.add(info2);
         list.add(info2);
@@ -123,7 +119,6 @@ public class ActivityComment extends ActivityEnhanced implements IEmojiViewCreat
         list.add(info2);
 
         numberOfComment = list.size();
-
     }
 
     private void initComponent() {
@@ -135,8 +130,7 @@ public class ActivityComment extends ActivityEnhanced implements IEmojiViewCreat
         Button btnBack = (Button) findViewById(R.id.acs_btn_back);
         RippleView rippleBack = (RippleView) findViewById(R.id.acs_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
+            @Override public void onComplete(RippleView rippleView) {
                 finish();
             }
         });
@@ -144,19 +138,17 @@ public class ActivityComment extends ActivityEnhanced implements IEmojiViewCreat
         Button btnMenu = (Button) findViewById(R.id.acs_btn_menu);
         RippleView rippleMenu = (RippleView) findViewById(R.id.acs_ripple_menu);
         rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
+            @Override public void onComplete(RippleView rippleView) {
                 Log.e("ddd", "btnMenu  ");
             }
         });
 
-
         TextView txtNumberOfComment = (TextView) findViewById(R.id.acs_txt_number_of_comment);
-        if (numberOfComment > 0)
+        if (numberOfComment > 0) {
             txtNumberOfComment.setText(getString(R.string.comment) + " (" + numberOfComment + ")");
-        else
+        } else {
             txtNumberOfComment.setText(R.string.no_comment);
-
+        }
     }
 
     private void initRecycleView() {
@@ -167,17 +159,13 @@ public class ActivityComment extends ActivityEnhanced implements IEmojiViewCreat
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
-
     }
-
 
     private void initLayoutAttachText() {
 
-
         btnSend = (Button) findViewById(R.id.acs_btn_send);
         btnSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 Log.e("ddd", "btnSend  ");
             }
         });
@@ -185,35 +173,32 @@ public class ActivityComment extends ActivityEnhanced implements IEmojiViewCreat
         btnSmile = (ImageButton) findViewById(R.id.acs_btn_smile);
         edtChat = (EmojiEditText) findViewById(R.id.acs_edt_chat);
 
-
         // init emoji popup
         // give the topmost view of your activity layout hierarchy. this will be used to measure soft keyboard height
-        final EmojiPopup emojiPopup = new EmojiPopup(getWindow().findViewById(android.R.id.content), getApplicationContext(), this);
+        final EmojiPopup emojiPopup =
+            new EmojiPopup(getWindow().findViewById(android.R.id.content), getApplicationContext(),
+                this);
         emojiPopup.setRecentsLongClick(this);
         emojiPopup.setAnimationStyle(R.style.EmojiPopupAnimation);
         emojiPopup.setBackgroundDrawable(new ColorDrawable());
         // will automatically set size according to the soft keyboard size
         emojiPopup.setSizeForSoftKeyboard();
         emojiPopup.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
+            @Override public void onDismiss() {
                 // if the emoji popup is dismissed, change emoji image resource to smiley icon
                 changeEmojiButtonImageResource(R.drawable.emoticon_with_happy_face);
             }
         });
         emojiPopup.setEmojiStickerClickListener(new IEmojiStickerClick() {
-            @Override
-            public void onEmojiStickerClick(View view) {
+            @Override public void onEmojiStickerClick(View view) {
                 // TODO useful for showing stickers panel
             }
         });
         emojiPopup.setOnSoftKeyboardOpenCloseListener(new ISoftKeyboardOpenClose() {
-            @Override
-            public void onKeyboardOpen(int keyboardHeight) {
+            @Override public void onKeyboardOpen(int keyboardHeight) {
             }
 
-            @Override
-            public void onKeyboardClose() {
+            @Override public void onKeyboardClose() {
                 // if the keyboard closed, also dismiss the emoji popup
                 if (emojiPopup.isShowing()) {
                     emojiPopup.dismiss();
@@ -221,16 +206,14 @@ public class ActivityComment extends ActivityEnhanced implements IEmojiViewCreat
             }
         });
         emojiPopup.setEmojiLongClickListener(new IEmojiLongClickListener() {
-            @Override
-            public boolean onEmojiLongClick(View view, String emoji) {
+            @Override public boolean onEmojiLongClick(View view, String emoji) {
                 // TODO useful for showing a PopupWindow to select emoji in different colors
                 return false;
             }
         });
         emojiPopup.setOnEmojiClickListener(new IEmojiClickListener() {
 
-            @Override
-            public void onEmojiClick(View view, String emoji) {
+            @Override public void onEmojiClick(View view, String emoji) {
                 // on emoji clicked, add to EditText
                 if (edtChat == null || emoji == null) {
                     return;
@@ -242,15 +225,14 @@ public class ActivityComment extends ActivityEnhanced implements IEmojiViewCreat
                 if (start < 0) {
                     edtChat.append(emojiUnicode);
                 } else {
-                    edtChat.getText().replace(Math.min(start, end),
-                            Math.max(start, end), emojiUnicode, 0,
+                    edtChat.getText()
+                        .replace(Math.min(start, end), Math.max(start, end), emojiUnicode, 0,
                             emojiUnicode.length());
                 }
             }
         });
         emojiPopup.setOnEmojiBackspaceClickListener(new IEmojiBackspaceClick() {
-            @Override
-            public void onEmojiBackspaceClick(View v) {
+            @Override public void onEmojiBackspaceClick(View v) {
                 // on backspace clicked, emulate the KEYCODE_DEL key event
                 edtChat.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
             }
@@ -259,8 +241,7 @@ public class ActivityComment extends ActivityEnhanced implements IEmojiViewCreat
         // to toggle between keyboard and emoji popup
         btnSmile.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
+            @Override public void onClick(View v) {
 
                 // if popup is not showing => emoji keyboard is not visible, we need to show it
                 if (!emojiPopup.isShowing()) {
@@ -276,7 +257,8 @@ public class ActivityComment extends ActivityEnhanced implements IEmojiViewCreat
 
                         emojiPopup.showAtBottomPending();
 
-                        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        InputMethodManager inputMethodManager =
+                            (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         inputMethodManager.showSoftInput(edtChat, InputMethodManager.SHOW_IMPLICIT);
 
                         changeEmojiButtonImageResource(R.drawable.ic_keyboard);
@@ -290,8 +272,7 @@ public class ActivityComment extends ActivityEnhanced implements IEmojiViewCreat
         });
 
         edtChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 if (emojiPopup.isShowing()) {
                     emojiPopup.dismiss();
                 }
@@ -303,54 +284,46 @@ public class ActivityComment extends ActivityEnhanced implements IEmojiViewCreat
 
             }
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
 
-            @Override
-            public void afterTextChanged(Editable editable) {
+            @Override public void afterTextChanged(Editable editable) {
 
                 if (edtChat.getText().length() > 0 && mAdapter.replayCommentNumber >= 0) {
-                    btnSend.setBackgroundDrawable(getResources().getDrawable(R.drawable.send_button_blue));
+                    btnSend.setBackgroundDrawable(
+                        getResources().getDrawable(R.drawable.send_button_blue));
                 } else {
-                    btnSend.setBackgroundDrawable(getResources().getDrawable(R.drawable.send_button_gray));
-
+                    btnSend.setBackgroundDrawable(
+                        getResources().getDrawable(R.drawable.send_button_gray));
                 }
-
 
                 // android emojione doesn't support common space unicode
                 // to support space character, a new unicode will be replaced.
                 if (editable.toString().contains("\u0020")) {
-                    Editable ab = new SpannableStringBuilder(editable.toString().replace("\u0020", "\u2000"));
+                    Editable ab =
+                        new SpannableStringBuilder(editable.toString().replace("\u0020", "\u2000"));
                     editable.replace(0, editable.length(), ab);
                 }
             }
         });
-
-
     }
-
 
     private void changeEmojiButtonImageResource(@DrawableRes int drawableResourceId) {
         btnSmile.setImageResource(drawableResourceId);
     }
 
-    @Override
-    public void onEmojiViewCreate(View view, EmojiPopup emojiPopup) {
+    @Override public void onEmojiViewCreate(View view, EmojiPopup emojiPopup) {
 
     }
 
-    @Override
-    public boolean onRecentsLongClick(View view, EmojiRecentsManager recentsManager) {
+    @Override public boolean onRecentsLongClick(View view, EmojiRecentsManager recentsManager) {
         // TODO useful for clearing recents
         return false;
     }
 
-
     public class FragmentSubLayoutReplay {
 
         View subLayoutReplay;
-
 
         private CircleImageView imvReplayPicture;
         private TextView txtReplayFrom;
@@ -364,36 +337,34 @@ public class ActivityComment extends ActivityEnhanced implements IEmojiViewCreat
 
         private void initView() {
 
-            imvReplayPicture = (CircleImageView) subLayoutReplay.findViewById(R.id.acs_imv_replay_pic);
+            imvReplayPicture =
+                (CircleImageView) subLayoutReplay.findViewById(R.id.acs_imv_replay_pic);
             txtReplayFrom = (TextView) subLayoutReplay.findViewById(R.id.acs_txt_replay_from);
             txtReplayMessage = (TextView) subLayoutReplay.findViewById(R.id.acs_txt_replay_message);
 
             btnCloseLayout = (Button) subLayoutReplay.findViewById(R.id.acs_btn_close);
             btnCloseLayout.setTypeface(G.fontawesome);
             btnCloseLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+                @Override public void onClick(View view) {
                     setLayoutVisible(false);
                     mAdapter.closeLayoutReplay();
                 }
             });
-
         }
-
 
         public void setLayoutVisible(boolean visible) {
 
             if (visible) {
                 subLayoutReplay.setVisibility(View.VISIBLE);
                 if (edtChat.getText().length() > 0) {
-                    btnSend.setBackgroundDrawable(getResources().getDrawable(R.drawable.send_button_blue));
+                    btnSend.setBackgroundDrawable(
+                        getResources().getDrawable(R.drawable.send_button_blue));
                 }
             } else {
                 subLayoutReplay.setVisibility(View.GONE);
-                btnSend.setBackgroundDrawable(getResources().getDrawable(R.drawable.send_button_gray));
+                btnSend.setBackgroundDrawable(
+                    getResources().getDrawable(R.drawable.send_button_gray));
             }
-
-
         }
 
         public void setLayoutParameter(String imagePath, String replayFrom, String replayMessage) {
@@ -401,7 +372,6 @@ public class ActivityComment extends ActivityEnhanced implements IEmojiViewCreat
             if (imagePath != null) {
                 imvReplayPicture.setVisibility(View.VISIBLE);
                 imvReplayPicture.setImageResource(Integer.parseInt(imagePath));
-
             } else {
                 imvReplayPicture.setVisibility(View.GONE);
             }
@@ -417,10 +387,6 @@ public class ActivityComment extends ActivityEnhanced implements IEmojiViewCreat
             } else {
                 txtReplayMessage.setText("");
             }
-
         }
-
     }
-
-
 }

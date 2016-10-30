@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:id="@+id/chatSubLayoutTime"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content">
+    android:id="@+id/chatSubLayoutTime"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
 
-    <TextView
-        android:id="@+id/text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_margin="@dimen/dp12"
-        android:background="@drawable/recangle_gray_tranceparent"
-        android:paddingBottom="@dimen/dp4"
-        android:paddingLeft="@dimen/dp12"
-        android:paddingRight="@dimen/dp12"
-        android:paddingTop="@dimen/dp4"
-        android:singleLine="true"
-        android:text="21/2/2014"
-        android:textColor="@android:color/white" />
+  <TextView
+      android:id="@+id/text"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_horizontal"
+      android:layout_margin="@dimen/dp12"
+      android:background="@drawable/recangle_gray_tranceparent"
+      android:paddingBottom="@dimen/dp4"
+      android:paddingLeft="@dimen/dp12"
+      android:paddingRight="@dimen/dp12"
+      android:paddingTop="@dimen/dp4"
+      android:singleLine="true"
+      android:text="21/2/2014"
+      android:textColor="@android:color/white"
+      />
 </FrameLayout>

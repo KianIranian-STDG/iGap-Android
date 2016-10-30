@@ -187,15 +187,24 @@ public class ActivityChat extends ActivityEnhanced
     OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnFileDownloadResponse,
     OnVoiceRecord, OnUserInfoResponse, OnClientGetRoomHistoryResponse, OnFileUploadForActivities {
 
+    public static ActivityChat activityChat;
+    public static OnComplete hashListener;
+    AttachFile attachFile;
+    BoomMenuButton boomMenuButton;
+    LinearLayout mediaLayout;
+    MusicPlayer musicPlayer;
+    LinearLayout ll_Search;
+    Button btnCloseLayoutSearch;
+    EditText edtSearchMessage;
+    long messageId;
+    int scroolPosition = 0;
     private RelativeLayout parentLayout;
     private SharedPreferences sharedPreferences;
-
     private EmojiEditText edtChat;
     private MaterialDesignTextView imvSendButton;
     private MaterialDesignTextView imvAttachFileButton;
     private LinearLayout layoutAttachBottom;
     private MaterialDesignTextView imvMicButton;
-
     private Button btnCloseAppBarSelected;
     private Button btnReplaySelected;
     private Button btnCopySelected;
@@ -207,83 +216,59 @@ public class ActivityChat extends ActivityEnhanced
     private TextView txtNumberOfSelected;
     private LinearLayout ll_AppBarSelected;
     private LinearLayout toolbar;
-
     private TextView txtName;
     private TextView txtLastSeen;
     private TextView txt_mute;
     private ImageView imvUserPicture;
     private RecyclerView recyclerView;
     private MaterialDesignTextView imvSmileButton;
-
-    AttachFile attachFile;
     private LocationManager locationManager;
     private OnComplete complete;
-    BoomMenuButton boomMenuButton;
     private View viewAttachFile;
     private View viewMicRecorder;
     private VoiceRecord voiceRecord;
     private boolean sendByEnter = false;
-
-    LinearLayout mediaLayout;
-    MusicPlayer musicPlayer;
-
-    LinearLayout ll_Search;
-    Button btnCloseLayoutSearch;
-    EditText edtSearchMessage;
-
     private LinearLayout ll_navigate_Message;
     private Button btnUpMessage;
     private Button btnDownMessage;
     private TextView txtMessageCounter;
     private int messageCounter = 0;
     private int selectedPosition = 0;
-
     private LinearLayout ll_navigateHash;
     private Button btnUpHash;
     private Button btnDownHash;
     private TextView txtHashCounter;
     private Button btnHashLayoutClose;
     private SearhHash searhHash;
-
-    public static ActivityChat activityChat;
-
     private MessagesAdapter<AbstractMessage> mAdapter;
     private ProtoGlobal.Room.Type chatType;
-
     private String lastSeen;
     private long mRoomId;
-    long messageId;
-    int scroolPosition = 0;
-
     private Button btnUp;
     private Button btnDown;
     private TextView txtChannelMute;
-
     //popular (chat , group , channel)
     private String title;
     private String initialize;
     private String color;
     private boolean isMute = false;
-
     //chat
     private long chatPeerId;
     private boolean isMuteNotification;
-
     //group
     private GroupChatRole groupRole;
     private String groupParticipantsCountLabel;
-
     //channel
     private ChannelChatRole channelRole;
     private String channelParticipantsCountLabel;
-
     private PopupWindow popupWindow;
     private String avatarPath;
-
     // save latest intent data and requestCode from result activity for set draft if not send file yet
     private Uri latestUri;
     private int latestRequestCode;
     private String latestFilePath;
+    private Calendar lastDateCalendar = Calendar.getInstance();
+    private LinearLayout mReplayLayout;
 
     @Override protected void onStart() {
         super.onStart();
@@ -366,8 +351,6 @@ public class ActivityChat extends ActivityEnhanced
             }
         });
     }
-
-    private Calendar lastDateCalendar = Calendar.getInstance();
 
     @Override protected void onResume() {
         super.onResume();
@@ -1596,8 +1579,6 @@ public class ActivityChat extends ActivityEnhanced
         });
     }
 
-    public static OnComplete hashListener;
-
     private void initLayoutHashNavigation() {
 
         hashListener = new OnComplete() {
@@ -1640,60 +1621,6 @@ public class ActivityChat extends ActivityEnhanced
                 searhHash.downHash();
             }
         });
-    }
-
-    private class SearhHash {
-
-        private String hashString = "";
-
-        private int curentHashposition = 0;
-
-        private ArrayList<Integer> hashList = new ArrayList<>();
-
-        public void setHashString(String hashString) {
-            this.hashString = "#" + hashString;
-        }
-
-        public void setPosition(String messageId) {
-
-            curentHashposition = 0;
-            hashList.clear();
-
-            for (int i = 0; i < mAdapter.getAdapterItemCount(); i++) {
-
-                if (mAdapter.getItem(i).mMessage.messageID.equals(messageId)) {
-                    curentHashposition = hashList.size() + 1;
-                }
-
-                if (mAdapter.getItem(i).mMessage.messageText.contains(hashString)) {
-                    hashList.add(i);
-                }
-            }
-
-            txtHashCounter.setText(curentHashposition + " / " + hashList.size());
-        }
-
-        public void downHash() {
-
-            if (curentHashposition < hashList.size()) {
-                goToSelectedPosition(hashList.get(curentHashposition));
-                curentHashposition++;
-                txtHashCounter.setText(curentHashposition + " / " + hashList.size());
-            }
-        }
-
-        public void upHash() {
-
-            if (curentHashposition > 1) {
-                curentHashposition--;
-                goToSelectedPosition(hashList.get(curentHashposition - 1));
-                txtHashCounter.setText(curentHashposition + " / " + hashList.size());
-            }
-        }
-
-        private void goToSelectedPosition(int position) {
-            recyclerView.scrollToPosition(position);
-        }
     }
 
     private void insertShearedData() {
@@ -2364,8 +2291,6 @@ public class ActivityChat extends ActivityEnhanced
     private String getWrittenMessage() {
         return edtChat.getText().toString().trim();
     }
-
-    private LinearLayout mReplayLayout;
 
     private void inflateReplayLayoutIntoStub(StructMessageInfo chatItem) {
         if (findViewById(R.id.replayLayoutAboveEditText) == null) {
@@ -3126,44 +3051,6 @@ public class ActivityChat extends ActivityEnhanced
         });
     }
 
-    private static class UploadTask
-        extends AsyncTask<Object, FileUploadStructure, FileUploadStructure> {
-        @Override protected FileUploadStructure doInBackground(Object... params) {
-            try {
-                String filePath = (String) params[0];
-                long messageId = (long) params[1];
-                ProtoGlobal.RoomMessageType messageType = (ProtoGlobal.RoomMessageType) params[2];
-                long roomId = (long) params[3];
-                String messageText = (String) params[4];
-                File file = new File(filePath);
-                String fileName = file.getName();
-                long fileSize = file.length();
-                FileUploadStructure fileUploadStructure =
-                    new FileUploadStructure(fileName, fileSize, filePath, messageId, messageType,
-                        roomId);
-                fileUploadStructure.openFile(filePath);
-                fileUploadStructure.text = messageText;
-
-                byte[] fileHash = AndroidUtils.getFileHash(fileUploadStructure);
-                fileUploadStructure.setFileHash(fileHash);
-
-                return fileUploadStructure;
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override protected void onPostExecute(FileUploadStructure result) {
-            super.onPostExecute(result);
-            MessagesAdapter.uploading.put(result.messageId, 0);
-            G.uploaderUtil.startUploading(result, Long.toString(result.messageId));
-        }
-    }
-    //    delete & clear History & mutNotification
-
     private void onSelectRoomMenu(String message, int item) {
         switch (message) {
             case "txtMuteNotification":
@@ -3192,6 +3079,7 @@ public class ActivityChat extends ActivityEnhanced
         });
         realm.close();
     }
+    //    delete & clear History & mutNotification
 
     private void clearHistory(int item) {
         final long chatId = item;
@@ -3731,5 +3619,96 @@ public class ActivityChat extends ActivityEnhanced
 
     @Override public void onDownloadStart(View view, StructMessageInfo message, int pos) {
         // TODO: 10/29/2016 [Alireza] implement
+    }
+
+    private static class UploadTask
+        extends AsyncTask<Object, FileUploadStructure, FileUploadStructure> {
+        @Override protected FileUploadStructure doInBackground(Object... params) {
+            try {
+                String filePath = (String) params[0];
+                long messageId = (long) params[1];
+                ProtoGlobal.RoomMessageType messageType = (ProtoGlobal.RoomMessageType) params[2];
+                long roomId = (long) params[3];
+                String messageText = (String) params[4];
+                File file = new File(filePath);
+                String fileName = file.getName();
+                long fileSize = file.length();
+                FileUploadStructure fileUploadStructure =
+                    new FileUploadStructure(fileName, fileSize, filePath, messageId, messageType,
+                        roomId);
+                fileUploadStructure.openFile(filePath);
+                fileUploadStructure.text = messageText;
+
+                byte[] fileHash = AndroidUtils.getFileHash(fileUploadStructure);
+                fileUploadStructure.setFileHash(fileHash);
+
+                return fileUploadStructure;
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override protected void onPostExecute(FileUploadStructure result) {
+            super.onPostExecute(result);
+            MessagesAdapter.uploading.put(result.messageId, 0);
+            G.uploaderUtil.startUploading(result, Long.toString(result.messageId));
+        }
+    }
+
+    private class SearhHash {
+
+        private String hashString = "";
+
+        private int curentHashposition = 0;
+
+        private ArrayList<Integer> hashList = new ArrayList<>();
+
+        public void setHashString(String hashString) {
+            this.hashString = "#" + hashString;
+        }
+
+        public void setPosition(String messageId) {
+
+            curentHashposition = 0;
+            hashList.clear();
+
+            for (int i = 0; i < mAdapter.getAdapterItemCount(); i++) {
+
+                if (mAdapter.getItem(i).mMessage.messageID.equals(messageId)) {
+                    curentHashposition = hashList.size() + 1;
+                }
+
+                if (mAdapter.getItem(i).mMessage.messageText.contains(hashString)) {
+                    hashList.add(i);
+                }
+            }
+
+            txtHashCounter.setText(curentHashposition + " / " + hashList.size());
+        }
+
+        public void downHash() {
+
+            if (curentHashposition < hashList.size()) {
+                goToSelectedPosition(hashList.get(curentHashposition));
+                curentHashposition++;
+                txtHashCounter.setText(curentHashposition + " / " + hashList.size());
+            }
+        }
+
+        public void upHash() {
+
+            if (curentHashposition > 1) {
+                curentHashposition--;
+                goToSelectedPosition(hashList.get(curentHashposition - 1));
+                txtHashCounter.setText(curentHashposition + " / " + hashList.size());
+            }
+        }
+
+        private void goToSelectedPosition(int position) {
+            recyclerView.scrollToPosition(position);
+        }
     }
 }

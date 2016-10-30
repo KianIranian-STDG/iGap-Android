@@ -104,13 +104,23 @@ import java.util.ArrayList;
 import java.util.List;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-
 /**
  * Created by android3 on 9/18/2016.
  */
-public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAvatarResponse, OnFileUploadForActivities {
+public class ActivityGroupProfile extends ActivityEnhanced
+    implements OnGroupAvatarResponse, OnFileUploadForActivities {
 
-
+    LinearLayout layoutSetting;
+    LinearLayout layoutSetAdmin;
+    LinearLayout layoutSetModereator;
+    LinearLayout layoutMemberCanAddMember;
+    LinearLayout layoutNotificatin;
+    LinearLayout layoutDeleteAndLeftGroup;
+    List<StructContactInfo> contacts;
+    List<IItem> items;
+    ItemAdapter itemAdapter;
+    RecyclerView recyclerView;
+    AttachFile attachFile;
     private CircleImageView imvGroupAvatar;
     private TextView txtGroupNameTitle;
     private TextView txtGroupName;
@@ -120,26 +130,9 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     private TextView txtMore;
     private AppBarLayout appBarLayout;
     private FloatingActionButton fab;
-
-    LinearLayout layoutSetting;
-    LinearLayout layoutSetAdmin;
-    LinearLayout layoutSetModereator;
-    LinearLayout layoutMemberCanAddMember;
-    LinearLayout layoutNotificatin;
-    LinearLayout layoutDeleteAndLeftGroup;
-
     private String tmp = "";
-
     private int numberUploadItem = 5;
-
-    List<StructContactInfo> contacts;
-    List<IItem> items;
-    ItemAdapter itemAdapter;
-    RecyclerView recyclerView;
     private FastAdapter fastAdapter;
-
-    AttachFile attachFile;
-
     private long roomId;
     private String title;
     private String description;
@@ -156,14 +149,11 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
     private PopupWindow popupWindow;
 
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
+    @Override protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    @Override public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_profile);
 
@@ -173,7 +163,8 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         Realm realm = Realm.getDefaultInstance();
 
         //group info
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        RealmRoom realmRoom =
+            realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
         title = realmRoom.getTitle();
         initials = realmRoom.getInitials();
@@ -198,11 +189,9 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         RippleView rippleBack = (RippleView) findViewById(R.id.agp_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
-            @Override
-            public void onComplete(RippleView rippleView) {
+            @Override public void onComplete(RippleView rippleView) {
                 finish();
             }
-
         });
 
         MaterialDesignTextView btnMenu = (MaterialDesignTextView) findViewById(R.id.agp_btn_menu);
@@ -210,11 +199,12 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         RippleView rippleMenu = (RippleView) findViewById(R.id.agp_ripple_menu);
         rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
-            @Override
-            public void onComplete(RippleView rippleView) {
+            @Override public void onComplete(RippleView rippleView) {
 
                 LinearLayout layoutDialog = new LinearLayout(ActivityGroupProfile.this);
-                ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                ViewGroup.LayoutParams params =
+                    new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutDialog.setOrientation(LinearLayout.VERTICAL);
                 layoutDialog.setBackgroundColor(getResources().getColor(android.R.color.white));
                 TextView text1 = new TextView(ActivityGroupProfile.this);
@@ -248,59 +238,59 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                 layoutDialog.addView(text2, params);
                 layoutDialog.addView(text3, params);
 
-                popupWindow = new PopupWindow(layoutDialog, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+                popupWindow =
+                    new PopupWindow(layoutDialog, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT,
+                        true);
                 popupWindow.setBackgroundDrawable(new BitmapDrawable());
                 popupWindow.setOutsideTouchable(true);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    popupWindow.setBackgroundDrawable(getResources().getDrawable(R.mipmap.shadow3, ActivityGroupProfile.this.getTheme()));
+                    popupWindow.setBackgroundDrawable(getResources().getDrawable(R.mipmap.shadow3,
+                        ActivityGroupProfile.this.getTheme()));
                 } else {
-                    popupWindow.setBackgroundDrawable((getResources().getDrawable(R.mipmap.shadow3)));
+                    popupWindow.setBackgroundDrawable(
+                        (getResources().getDrawable(R.mipmap.shadow3)));
                 }
                 if (popupWindow.isOutsideTouchable()) {
                     popupWindow.dismiss();
                 }
                 popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-                    @Override
-                    public void onDismiss() {
+                    @Override public void onDismiss() {
                         //TODO do sth here on dismiss
                     }
                 });
 
                 popupWindow.setAnimationStyle(android.R.style.Animation_InputMethod);
-                popupWindow.showAtLocation(layoutDialog,
-                        Gravity.RIGHT | Gravity.TOP, (int) getResources().getDimension(R.dimen.dp16), (int) getResources().getDimension(R.dimen.dp32));
-//                popupWindow.showAsDropDown(v);
+                popupWindow.showAtLocation(layoutDialog, Gravity.RIGHT | Gravity.TOP,
+                    (int) getResources().getDimension(R.dimen.dp16),
+                    (int) getResources().getDimension(R.dimen.dp32));
+                //                popupWindow.showAsDropDown(v);
 
                 text1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+                    @Override public void onClick(View view) {
                         Toast.makeText(G.context, R.string.edit_name, Toast.LENGTH_SHORT).show();
                         popupWindow.dismiss();
                     }
                 });
                 text2.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Toast.makeText(G.context, R.string.delete_and_leave_group, Toast.LENGTH_SHORT).show();
+                    @Override public void onClick(View view) {
+                        Toast.makeText(G.context, R.string.delete_and_leave_group,
+                            Toast.LENGTH_SHORT).show();
                         popupWindow.dismiss();
                     }
                 });
                 text3.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+                    @Override public void onClick(View view) {
                         Toast.makeText(G.context, R.string.add_shortcut, Toast.LENGTH_SHORT).show();
                         popupWindow.dismiss();
                     }
                 });
             }
-
         });
-//        btnMenu.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//            }
-//        });
-
+        //        btnMenu.setOnClickListener(new View.OnClickListener() {
+        //            @Override
+        //            public void onClick(View view) {
+        //            }
+        //        });
 
         layoutSetting = (LinearLayout) findViewById(R.id.agp_ll_seetting);
         layoutSetAdmin = (LinearLayout) findViewById(R.id.agp_ll_set_admin);
@@ -308,7 +298,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         layoutMemberCanAddMember = (LinearLayout) findViewById(R.id.agp_ll_member_can_add_member);
         layoutNotificatin = (LinearLayout) findViewById(R.id.agp_ll_notification);
         layoutDeleteAndLeftGroup = (LinearLayout) findViewById(R.id.agp_ll_delete_and_left_group);
-
 
         imvGroupAvatar = (CircleImageView) findViewById(R.id.agp_imv_group_avatar);
 
@@ -326,46 +315,39 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         txtMemberNumber = (TextView) findViewById(R.id.agp_txt_member_number);
         appBarLayout = (AppBarLayout) findViewById(R.id.agp_appbar);
 
-
         LinearLayout llGroupName = (LinearLayout) findViewById(R.id.agp_ll_group_name);
         llGroupName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 ChangeGroupName();
             }
         });
 
-        LinearLayout llGroupDescription = (LinearLayout) findViewById(R.id.agp_ll_group_description);
+        LinearLayout llGroupDescription =
+            (LinearLayout) findViewById(R.id.agp_ll_group_description);
         llGroupDescription.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 ChangeGroupDescription();
             }
         });
 
-
         LinearLayout llSharedMedia = (LinearLayout) findViewById(R.id.agp_ll_sheared_media);
         llSharedMedia.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
 
                 Intent intent = new Intent(ActivityGroupProfile.this, ActivityShearedMedia.class);
                 intent.putExtra("RoomID", roomId);
                 startActivity(intent);
-
             }
         });
 
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+            @Override public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
 
                 TextView titleToolbar = (TextView) findViewById(R.id.agp_txt_titleToolbar);
                 if (verticalOffset < -appBarLayout.getTotalScrollRange() / 4) {
 
                     titleToolbar.animate().alpha(1).setDuration(300);
                     titleToolbar.setVisibility(View.VISIBLE);
-
                 } else {
                     titleToolbar.animate().alpha(0).setDuration(500);
                     titleToolbar.setVisibility(View.GONE);
@@ -373,11 +355,9 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             }
         });
 
-
         fab = (FloatingActionButton) findViewById(R.id.agp_fab_setPic);
         fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 if (!G.imageFile.exists()) {
                     startDialogSelectPicture(R.array.profile);
                 } else {
@@ -386,58 +366,51 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             }
         });
 
-
         txtMore = (TextView) findViewById(R.id.agp_txt_more);
         txtMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
 
                 int count = items.size();
                 int listSize = contacts.size();
 
                 for (int i = count; i < listSize && i < count + numberUploadItem; i++) {
-                    items.add(new ContatItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
+                    items.add(new ContatItemGroupProfile().setContact(contacts.get(i))
+                        .withIdentifier(100 + contacts.indexOf(contacts.get(i))));
                 }
 
                 itemAdapter.clear();
                 itemAdapter.add(items);
 
-                if (items.size() >= listSize)
-                    txtMore.setVisibility(View.GONE);
-
+                if (items.size() >= listSize) txtMore.setVisibility(View.GONE);
             }
         });
 
         ViewGroup layoutAddMember = (ViewGroup) findViewById(R.id.agp_layout_add_member);
         layoutAddMember.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 addMemberToGroup();
             }
         });
 
         TextView txtSetAdmin = (TextView) findViewById(R.id.agp_txt_set_admin);
         txtSetAdmin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 setMemberRoleToAdmin();
             }
         });
 
-
         TextView txtAddModereator = (TextView) findViewById(R.id.agp_txt_add_modereator);
         txtAddModereator.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
 
                 setMemberRoleToModerator();
             }
         });
 
-        final ToggleButton toggleButton = (ToggleButton) findViewById(R.id.agp_toggle_member_can_add_member);
+        final ToggleButton toggleButton =
+            (ToggleButton) findViewById(R.id.agp_toggle_member_can_add_member);
         toggleButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 if (toggleButton.isChecked()) {
                     Log.e("ddd", "toggle button on");
                 } else {
@@ -446,11 +419,9 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             }
         });
 
-
         TextView txtNotification = (TextView) findViewById(R.id.agp_txt_str_notification_and_sound);
         txtNotification.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 Log.e("ddd", "Notification clicked");
 
                 FragmentNotification fragmentNotification = new FragmentNotification();
@@ -458,16 +429,17 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                 bundle.putString("PAGE", "GROUP");
                 bundle.putLong("ID", roomId);
                 fragmentNotification.setArguments(bundle);
-                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer_group_profile, fragmentNotification).commit();
-
+                getSupportFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
+                        R.anim.slide_in_right, R.anim.slide_out_left)
+                    .replace(R.id.fragmentContainer_group_profile, fragmentNotification)
+                    .commit();
             }
         });
 
-
         TextView txtDeleteGroup = (TextView) findViewById(R.id.agp_txt_str_delete_and_leave_group);
         txtDeleteGroup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 groupLeft();
             }
         });
@@ -475,16 +447,13 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         RippleView rippleCircleImage = (RippleView) findViewById(R.id.agp_ripple_group_avatar);
         rippleCircleImage.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
-            @Override
-            public void onComplete(RippleView rippleView) {
+            @Override public void onComplete(RippleView rippleView) {
 
             }
-
         });
 
         setAvatar();
         txtMemberNumber.setText(participantsCountLabel);
-
 
         setUiIndependRole();
 
@@ -556,31 +525,34 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         final HeaderAdapter headerAdapter = new HeaderAdapter();
         itemAdapter = new ItemAdapter();
         itemAdapter.withFilterPredicate(new IItemAdapter.Predicate<ContatItemGroupProfile>() {
-            @Override
-            public boolean filter(ContatItemGroupProfile item, CharSequence constraint) {
-                return !item.mContact.displayName.toLowerCase().startsWith(String.valueOf(constraint).toLowerCase());
+            @Override public boolean filter(ContatItemGroupProfile item, CharSequence constraint) {
+                return !item.mContact.displayName.toLowerCase()
+                    .startsWith(String.valueOf(constraint).toLowerCase());
             }
         });
         fastAdapter.withOnClickListener(new FastAdapter.OnClickListener<ContatItemGroupProfile>() {
-            @Override
-            public boolean onClick(View v, IAdapter adapter, ContatItemGroupProfile item, final int position) {
+            @Override public boolean onClick(View v, IAdapter adapter, ContatItemGroupProfile item,
+                final int position) {
 
                 Log.e("dddd", " invite click  " + position);
                 // TODO: 9/14/2016 nejati     go into clicked user page
 
-                MaterialDesignTextView moreButton = (MaterialDesignTextView) v.findViewById(R.id.cigp_moreButton);
+                MaterialDesignTextView moreButton =
+                    (MaterialDesignTextView) v.findViewById(R.id.cigp_moreButton);
                 moreButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        PopupMenu popup = new PopupMenu(ActivityGroupProfile.this, view, Gravity.TOP);
+                    @Override public void onClick(View view) {
+                        PopupMenu popup =
+                            new PopupMenu(ActivityGroupProfile.this, view, Gravity.TOP);
                         // Inflate the menu from xml
-                        popup.getMenuInflater().inflate(R.menu.menu_item_group_profile, popup.getMenu());
+                        popup.getMenuInflater()
+                            .inflate(R.menu.menu_item_group_profile, popup.getMenu());
                         // Setup menu item selection
                         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                             public boolean onMenuItemClick(MenuItem item) {
                                 switch (item.getItemId()) {
                                     case R.id.menu_setAdmin:
-                                        Toast.makeText(ActivityGroupProfile.this, "Keyword!", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(ActivityGroupProfile.this, "Keyword!",
+                                            Toast.LENGTH_SHORT).show();
                                         return true;
                                     case R.id.menu_kick:
                                         kickMember(contacts.get(position).peerId);
@@ -593,7 +565,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                         // Handle dismissal with: popup.setOnDismissListener(...);
                         // Show the menu
                         popup.show();
-
                     }
                 });
 
@@ -607,23 +578,29 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
                 if (role == GroupChatRole.OWNER) {
 
-                    if (contacts.get(position).role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+                    if (contacts.get(position).role.equals(
+                        ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
                         kickMember(contacts.get(position).peerId);
-                    } else if (contacts.get(position).role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
+                    } else if (contacts.get(position).role.equals(
+                        ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
                         kickAdmin(contacts.get(position).peerId);
-                    } else if (contacts.get(position).role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
+                    } else if (contacts.get(position).role.equals(
+                        ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
                         kickModerator(contacts.get(position).peerId);
                     }
                 } else if (role == GroupChatRole.ADMIN) {
 
-                    if (contacts.get(position).role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+                    if (contacts.get(position).role.equals(
+                        ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
                         kickMember(contacts.get(position).peerId);
-                    } else if (contacts.get(position).role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
+                    } else if (contacts.get(position).role.equals(
+                        ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
                         kickModerator(contacts.get(position).peerId);
                     }
                 } else if (role == GroupChatRole.MODERATOR) {
 
-                    if (contacts.get(position).role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+                    if (contacts.get(position).role.equals(
+                        ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
                         kickMember(contacts.get(position).peerId);
                     }
                 }
@@ -638,52 +615,44 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         recyclerView = (RecyclerView) findViewById(R.id.agp_recycler_view_group_member);
         recyclerView.setLayoutManager(new LinearLayoutManager(ActivityGroupProfile.this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(stickyHeaderAdapter.wrap(itemAdapter.wrap(headerAdapter.wrap(fastAdapter))));
+        recyclerView.setAdapter(
+            stickyHeaderAdapter.wrap(itemAdapter.wrap(headerAdapter.wrap(fastAdapter))));
 
         recyclerView.setNestedScrollingEnabled(false);
 
         //this adds the Sticky Headers within our list
-        final StickyRecyclerHeadersDecoration decoration = new StickyRecyclerHeadersDecoration(stickyHeaderAdapter);
+        final StickyRecyclerHeadersDecoration decoration =
+            new StickyRecyclerHeadersDecoration(stickyHeaderAdapter);
         recyclerView.addItemDecoration(decoration);
 
         items = new ArrayList<>();
 
-
         fillItem();
-
 
         int listSize = contacts.size();
 
         txtMemberNumber.setText(listSize + "");
 
-
         for (int i = 0; i < listSize && i < 3; i++) {
-            items.add(new ContatItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
+            items.add(new ContatItemGroupProfile().setContact(contacts.get(i))
+                .withIdentifier(100 + contacts.indexOf(contacts.get(i))));
         }
 
-
-        if (listSize < 4)
-            txtMore.setVisibility(View.GONE);
-
+        if (listSize < 4) txtMore.setVisibility(View.GONE);
 
         itemAdapter.add(items);
 
-
         //so the headers are aware of changes
         stickyHeaderAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onChanged() {
+            @Override public void onChanged() {
                 decoration.invalidateHeaders();
             }
         });
-
-
     }
 
     private void fillItem() {
 
         contacts = new ArrayList<>();
-
 
         Realm realm = Realm.getDefaultInstance();
 
@@ -691,20 +660,20 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             String role = member.getRole();
             long id = member.getPeerId();
 
-            RealmContacts rc = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, id).findFirst();
+            RealmContacts rc =
+                realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, id).findFirst();
 
             if (rc != null) {
 
-                StructContactInfo s = new StructContactInfo(rc.getId(), rc.getDisplay_name(), rc.getStatus(), false, false, rc.getPhone() + "");
+                StructContactInfo s =
+                    new StructContactInfo(rc.getId(), rc.getDisplay_name(), rc.getStatus(), false,
+                        false, rc.getPhone() + "");
                 s.role = role;
                 contacts.add(s);
             }
-
-
         }
 
         realm.close();
-
     }
 
     private void setUiIndependRole() {
@@ -714,25 +683,18 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             layoutSetAdmin.setVisibility(View.GONE);
             layoutSetModereator.setVisibility(View.GONE);
             layoutMemberCanAddMember.setVisibility(View.GONE);
-
         } else if (role == GroupChatRole.MODERATOR) {
             layoutSetAdmin.setVisibility(View.GONE);
             layoutSetModereator.setVisibility(View.GONE);
-
         } else if (role == GroupChatRole.ADMIN) {
 
             layoutSetAdmin.setVisibility(View.GONE);
-
         } else if (role == GroupChatRole.OWNER) {
 
-
         }
-
-
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == Activity.RESULT_OK) {
@@ -747,20 +709,19 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                     filePath = AttachFile.getFilePathFromUri(data.getData());
                     Log.e("ddd", filePath + "    gallary file path");
                     break;
-
             }
 
             new UploadTask().execute(filePath, avatarId);
         }
     }
 
-    @Override
-    public void onAvatarAdd(final long roomId, final ProtoGlobal.Avatar avatar) {
+    @Override public void onAvatarAdd(final long roomId, final ProtoGlobal.Avatar avatar) {
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findFirst();
+            @Override public void execute(Realm realm) {
+                RealmAvatar realmAvatar = realm.where(RealmAvatar.class)
+                    .equalTo(RealmAvatarFields.OWNER_ID, roomId)
+                    .findFirst();
                 if (realmAvatar == null) {
                     realmAvatar = realm.createObject(RealmAvatar.class);
                     realmAvatar.setId(System.nanoTime());
@@ -776,8 +737,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     @Override
     public void onFileUploaded(final FileUploadStructure uploadStructure, String identity) {
         runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 imvGroupAvatar.setImageURI(Uri.fromFile(new File(uploadStructure.filePath)));
             }
         });
@@ -785,151 +745,43 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         new RequestGroupAvatarAdd().groupAvatarAdd(roomId, uploadStructure.token);
     }
 
-    @Override
-    public void onFileUploading(FileUploadStructure uploadStructure, String identity, double progress) {
+    @Override public void onFileUploading(FileUploadStructure uploadStructure, String identity,
+        double progress) {
         // TODO: 10/20/2016 [Alireza] update view something like updating progress
     }
-
-    private static class UploadTask extends AsyncTask<Object, FileUploadStructure, FileUploadStructure> {
-        @Override
-        protected FileUploadStructure doInBackground(Object... params) {
-            try {
-                String filePath = (String) params[0];
-                long avatarId = (long) params[1];
-                File file = new File(filePath);
-                String fileName = file.getName();
-                long fileSize = file.length();
-                FileUploadStructure fileUploadStructure = new FileUploadStructure(fileName, fileSize, filePath, avatarId);
-                fileUploadStructure.openFile(filePath);
-
-                byte[] fileHash = AndroidUtils.getFileHash(fileUploadStructure);
-                fileUploadStructure.setFileHash(fileHash);
-
-                return fileUploadStructure;
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(FileUploadStructure result) {
-            super.onPostExecute(result);
-            G.uploaderUtil.startUploading(result, Long.toString(result.messageId));
-        }
-    }
-
-    public class StickyHeaderAdapter extends AbstractAdapter implements StickyRecyclerHeadersAdapter {
-        @Override
-        public long getHeaderId(int position) {
-            IItem item = getItem(position);
-
-//            ContatItemGroupProfile ci=(ContatItemGroupProfile)item;
-//            if(ci!=null){
-//                return ci.mContact.displayName.toUpperCase().charAt(0);
-//            }
-
-
-            return -1;
-        }
-
-        @Override
-        public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
-            //we create the view for the header
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_header_item, parent, false);
-            return new RecyclerView.ViewHolder(view) {
-            };
-        }
-
-        @Override
-        public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
-            CustomTextViewMedium textView = (CustomTextViewMedium) holder.itemView;
-
-            IItem item = getItem(position);
-            if (((ContatItemGroupProfile) item).mContact != null) {
-                //based on the position we set the headers text
-                textView.setText(String.valueOf(((ContatItemGroupProfile) item).mContact.displayName.toUpperCase().charAt(0)));
-            }
-
-        }
-
-        /**
-         * REQUIRED FOR THE FastAdapter. Set order to < 0 to tell the FastAdapter he can ignore this one.
-         *
-         * @return int
-         */
-        @Override
-        public int getOrder() {
-            return -100;
-        }
-
-        @Override
-        public int getAdapterItemCount() {
-            return 0;
-        }
-
-        @Override
-        public List<IItem> getAdapterItems() {
-            return null;
-        }
-
-        @Override
-        public IItem getAdapterItem(int position) {
-            return null;
-        }
-
-        @Override
-        public int getAdapterPosition(IItem item) {
-            return -1;
-        }
-
-        @Override
-        public int getGlobalPosition(int position) {
-            return -1;
-        }
-    }
-
-    //***********************************************************************************************************************
 
     //dialog for choose pic from gallery or camera
     private void startDialogSelectPicture(int r) {
 
-        new MaterialDialog.Builder(this)
-                .title(R.string.choose_picture)
-                .negativeText(R.string.cansel)
-                .items(r)
-                .itemsCallback(new MaterialDialog.ListCallback() {
-                    @Override
-                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+        new MaterialDialog.Builder(this).title(R.string.choose_picture)
+            .negativeText(R.string.cansel)
+            .items(r)
+            .itemsCallback(new MaterialDialog.ListCallback() {
+                @Override public void onSelection(MaterialDialog dialog, View view, int which,
+                    CharSequence text) {
 
-                        if (text.toString().equals(getString(R.string.from_camera))) {
+                    if (text.toString().equals(getString(R.string.from_camera))) {
 
-                            if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
+                        if (getPackageManager().hasSystemFeature(
+                            PackageManager.FEATURE_CAMERA_ANY)) {
 
-                                attachFile.requestTakePicture();
+                            attachFile.requestTakePicture();
 
-                                dialog.dismiss();
-
-                            } else {
-                                Toast.makeText(ActivityGroupProfile.this, R.string.please_check_your_camera, Toast.LENGTH_SHORT).show();
-                            }
-
-                        } else if (text.toString().equals(getString(R.string.delete_photo))) {
-                            // TODO: 9/20/2016  delete  group image
-
+                            dialog.dismiss();
                         } else {
-                            attachFile.requestOpenGalleryForImage();
+                            Toast.makeText(ActivityGroupProfile.this,
+                                R.string.please_check_your_camera, Toast.LENGTH_SHORT).show();
                         }
+                    } else if (text.toString().equals(getString(R.string.delete_photo))) {
+                        // TODO: 9/20/2016  delete  group image
 
+                    } else {
+                        attachFile.requestOpenGalleryForImage();
                     }
-                })
-                .show();
+                }
+            })
+            .show();
     }
-
-
-    //***********************************************************************************************************************
 
     private void addMemberToGroup() {
         List<StructContactInfo> userList = Contacts.retrieve(null);
@@ -946,15 +798,14 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
         Fragment fragment = ShowCustomList.newInstance(userList, new OnSelectedList() {
             @Override
-            public void getSelectedList(boolean result, String message, int countForShowLastMessage, final ArrayList<StructContactInfo> list) {
-
+            public void getSelectedList(boolean result, String message, int countForShowLastMessage,
+                final ArrayList<StructContactInfo> list) {
 
                 countAddMemberResponse = 0;
                 countAddMemberRequest = list.size();
 
                 G.onGroupAddMember = new OnGroupAddMember() {
-                    @Override
-                    public void onGroupAddMember() {
+                    @Override public void onGroupAddMember() {
                         countAddMemberResponse++;
 
                         if (countAddMemberResponse >= countAddMemberRequest) {
@@ -964,18 +815,19 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                             }
 
                             runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
+                                @Override public void run() {
                                     txtMemberNumber.setText(contacts.size() + "");
                                     int count = items.size();
                                     final int listSize = contacts.size();
                                     for (int i = count; i < listSize; i++) {
-                                        items.add(new ContatItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
+                                        items.add(
+                                            new ContatItemGroupProfile().setContact(contacts.get(i))
+                                                .withIdentifier(
+                                                    100 + contacts.indexOf(contacts.get(i))));
                                     }
                                     itemAdapter.clear();
                                     itemAdapter.add(items);
                                     txtMore.setVisibility(View.GONE);
-
                                 }
                             });
                         }
@@ -989,11 +841,14 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         bundle.putBoolean("DIALOG_SHOWING", true);
         fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction()
-                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                .addToBackStack(null).replace(R.id.fragmentContainer_group_profile, fragment)
-                .commit();
-
+            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
+                R.anim.slide_in_right, R.anim.slide_out_left)
+            .addToBackStack(null)
+            .replace(R.id.fragmentContainer_group_profile, fragment)
+            .commit();
     }
+
+    //***********************************************************************************************************************
 
     /**
      * add member to realm and send request to server for really added this contacts to this group
@@ -1004,11 +859,16 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         if (messageCount == 0) {
             startMessageId = 0;
         } else {
-            RealmResults<RealmChatHistory> realmChatHistories = realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, roomId).findAllSorted(RealmChatHistoryFields.ID, Sort.DESCENDING);
+            RealmResults<RealmChatHistory> realmChatHistories = realm.where(RealmChatHistory.class)
+                .equalTo(RealmChatHistoryFields.ROOM_ID, roomId)
+                .findAllSorted(RealmChatHistoryFields.ID, Sort.DESCENDING);
 
             if (messageCount >= realmChatHistories.size()) {
                 // if count is bigger than exist messages get first message id that exist
-                RealmResults<RealmChatHistory> realmChatHistoriesAscending = realm.where(RealmChatHistory.class).equalTo(RealmChatHistoryFields.ROOM_ID, roomId).findAllSorted(RealmChatHistoryFields.ID, Sort.ASCENDING);
+                RealmResults<RealmChatHistory> realmChatHistoriesAscending =
+                    realm.where(RealmChatHistory.class)
+                        .equalTo(RealmChatHistoryFields.ROOM_ID, roomId)
+                        .findAllSorted(RealmChatHistoryFields.ID, Sort.ASCENDING);
                 for (final RealmChatHistory chatHistory : realmChatHistoriesAscending) {
 
                     if (chatHistory.getRoomMessage() != null) {
@@ -1018,7 +878,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                         break;
                     }
                 }
-
             } else {
 
                 for (final RealmChatHistory chatHistory : realmChatHistories) {
@@ -1033,8 +892,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         }
 
         realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
+            @Override public void execute(Realm realm) {
                 final RealmList<RealmMember> members = new RealmList<>();
                 for (int i = 0; i < list.size(); i++) {
                     long peerId = list.get(i).peerId;
@@ -1052,12 +910,13 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                     members.add(realmMember);
 
                     //request for add member
-                    new RequestGroupAddMember().groupAddMember(roomId, peerId, startMessageId, ProtoGlobal.GroupRoom.Role.MEMBER);
+                    new RequestGroupAddMember().groupAddMember(roomId, peerId, startMessageId,
+                        ProtoGlobal.GroupRoom.Role.MEMBER);
                 }
 
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                RealmRoom realmRoom =
+                    realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                 RealmList<RealmMember> memberList = realmRoom.getGroupRoom().getMembers();
-
 
                 for (int i = 0; i < members.size(); i++) {
                     long id = members.get(i).getPeerId();
@@ -1072,326 +931,294 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                         memberList.add(members.get(i));
                     }
                 }
-
             }
         });
 
         realm.close();
     }
 
+    //***********************************************************************************************************************
 
     private void ChangeGroupName() {
 
-        MaterialDialog dialog = new MaterialDialog.Builder(ActivityGroupProfile.this)
-                .title(R.string.group_name)
+        MaterialDialog dialog =
+            new MaterialDialog.Builder(ActivityGroupProfile.this).title(R.string.group_name)
                 .positiveText(R.string.save)
                 .alwaysCallInputCallback()
                 .widgetColor(getResources().getColor(R.color.toolbar_background))
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    @Override public void onClick(@NonNull MaterialDialog dialog,
+                        @NonNull DialogAction which) {
 
                         G.onGroupEdit = new OnGroupEdit() {
-                            @Override
-                            public void onGroupEdit(final long roomId, final String name, final String description) {
+                            @Override public void onGroupEdit(final long roomId, final String name,
+                                final String description) {
 
                                 runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
+                                    @Override public void run() {
 
                                         title = name;
                                         txtGroupNameTitle.setText(name);
                                         txtGroupName.setText(name);
-
                                     }
                                 });
-
-
                             }
                         };
 
-                        new RequestGroupEdit().groupEdit(roomId, tmp, txtGroupDescription.getText().toString());
-
-
+                        new RequestGroupEdit().groupEdit(roomId, tmp,
+                            txtGroupDescription.getText().toString());
                     }
                 })
                 .negativeText(getString(R.string.cancel))
                 .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT)
-                .input(getString(R.string.please_enter_group_name), txtGroupName.getText().toString(), new MaterialDialog.InputCallback() {
-                    @Override
-                    public void onInput(MaterialDialog dialog, CharSequence input) {
-                        // Do something
+                .input(getString(R.string.please_enter_group_name),
+                    txtGroupName.getText().toString(), new MaterialDialog.InputCallback() {
+                        @Override public void onInput(MaterialDialog dialog, CharSequence input) {
+                            // Do something
 
-                        View positive = dialog.getActionButton(DialogAction.POSITIVE);
-                        tmp = input.toString();
-                        if (!input.toString().equals(txtGroupName.getText().toString())) {
+                            View positive = dialog.getActionButton(DialogAction.POSITIVE);
+                            tmp = input.toString();
+                            if (!input.toString().equals(txtGroupName.getText().toString())) {
 
-                            positive.setClickable(true);
-                            positive.setAlpha(1.0f);
-                        } else {
-                            positive.setClickable(false);
-                            positive.setAlpha(0.5f);
+                                positive.setClickable(true);
+                                positive.setAlpha(1.0f);
+                            } else {
+                                positive.setClickable(false);
+                                positive.setAlpha(0.5f);
+                            }
                         }
-
-                    }
-
-                }).show();
+                    })
+                .show();
     }
 
     private void ChangeGroupDescription() {
-        MaterialDialog dialog = new MaterialDialog.Builder(ActivityGroupProfile.this)
-                .title(R.string.group_description)
+        MaterialDialog dialog =
+            new MaterialDialog.Builder(ActivityGroupProfile.this).title(R.string.group_description)
                 .positiveText(getString(R.string.save))
                 .alwaysCallInputCallback()
                 .widgetColor(getResources().getColor(R.color.toolbar_background))
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
+                    @Override public void onClick(@NonNull MaterialDialog dialog,
+                        @NonNull DialogAction which) {
 
                         G.onGroupEdit = new OnGroupEdit() {
-                            @Override
-                            public void onGroupEdit(final long roomId, final String name, final String descriptions) {
+                            @Override public void onGroupEdit(final long roomId, final String name,
+                                final String descriptions) {
 
                                 runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
+                                    @Override public void run() {
 
                                         description = descriptions;
                                         txtGroupDescription.setText(descriptions);
-
                                     }
                                 });
-
-
                             }
                         };
 
-                        new RequestGroupEdit().groupEdit(roomId, txtGroupName.getText().toString(), tmp);
-
-
+                        new RequestGroupEdit().groupEdit(roomId, txtGroupName.getText().toString(),
+                            tmp);
                     }
                 })
                 .negativeText(getString(R.string.cancel))
                 .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT)
-                .input(getString(R.string.please_enter_group_description), txtGroupDescription.getText().toString(), new MaterialDialog.InputCallback() {
-                    @Override
-                    public void onInput(MaterialDialog dialog, CharSequence input) {
-                        // Do something
+                .input(getString(R.string.please_enter_group_description),
+                    txtGroupDescription.getText().toString(), new MaterialDialog.InputCallback() {
+                        @Override public void onInput(MaterialDialog dialog, CharSequence input) {
+                            // Do something
 
-                        View positive = dialog.getActionButton(DialogAction.POSITIVE);
-                        tmp = input.toString();
-                        if (!input.toString().equals(txtGroupDescription.getText().toString())) {
+                            View positive = dialog.getActionButton(DialogAction.POSITIVE);
+                            tmp = input.toString();
+                            if (!input.toString()
+                                .equals(txtGroupDescription.getText().toString())) {
 
-                            positive.setClickable(true);
-                            positive.setAlpha(1.0f);
-                        } else {
-                            positive.setClickable(false);
-                            positive.setAlpha(0.5f);
+                                positive.setClickable(true);
+                                positive.setAlpha(1.0f);
+                            } else {
+                                positive.setClickable(false);
+                                positive.setAlpha(0.5f);
+                            }
                         }
-
-                    }
-
-                }).show();
-
+                    })
+                .show();
     }
 
     private void groupLeft() {
 
-        new MaterialDialog.Builder(ActivityGroupProfile.this)
-                .content(R.string.do_you_want_to_delete_this_group)
-                .positiveText(R.string.ok)
-                .negativeText(R.string.cancel)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+        new MaterialDialog.Builder(ActivityGroupProfile.this).content(
+            R.string.do_you_want_to_delete_this_group)
+            .positiveText(R.string.ok)
+            .negativeText(R.string.cancel)
+            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                @Override
+                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                        G.onGroupLeft = new OnGroupLeft() {
-                            @Override
-                            public void onGroupLeft(final long roomId, long memberId) {
+                    G.onGroupLeft = new OnGroupLeft() {
+                        @Override public void onGroupLeft(final long roomId, long memberId) {
 
-                                ActivityGroupProfile.this.finish();
+                            ActivityGroupProfile.this.finish();
 
-                                if (ActivityChat.activityChat != null)
-                                    ActivityChat.activityChat.finish();
-
+                            if (ActivityChat.activityChat != null) {
+                                ActivityChat.activityChat.finish();
                             }
-                        };
+                        }
+                    };
 
-                        new RequestGroupLeft().groupLeft(roomId);
-
-                    }
-                })
-                .show();
+                    new RequestGroupLeft().groupLeft(roomId);
+                }
+            })
+            .show();
     }
 
     /**
      * if user was admin set  role to member
-     *
-     * @param memberID
      */
     private void kickAdmin(final long memberID) {
 
-        new MaterialDialog.Builder(ActivityGroupProfile.this)
-                .content(R.string.do_you_want_to_set_admin_role_to_member)
-                .positiveText(R.string.ok)
-                .negativeText(R.string.cancel)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+        new MaterialDialog.Builder(ActivityGroupProfile.this).content(
+            R.string.do_you_want_to_set_admin_role_to_member)
+            .positiveText(R.string.ok)
+            .negativeText(R.string.cancel)
+            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                @Override
+                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                        G.onGroupKickAdmin = new OnGroupKickAdmin() {
-                            @Override
-                            public void onGroupKickAdmin(long roomId, long memberId) {
+                    G.onGroupKickAdmin = new OnGroupKickAdmin() {
+                        @Override public void onGroupKickAdmin(long roomId, long memberId) {
 
+                            for (int i = 0; i < contacts.size(); i++) {
+                                if (contacts.get(i).peerId == memberId) {
+                                    contacts.get(i).role =
+                                        ProtoGlobal.GroupRoom.Role.MEMBER.toString();
+                                    final int finalI = i;
+                                    runOnUiThread(new Runnable() {
+                                        @Override public void run() {
+                                            IItem item = (new ContatItemGroupProfile().setContact(
+                                                contacts.get(finalI))
+                                                .withIdentifier(
+                                                    100 + contacts.indexOf(contacts.get(finalI))));
+                                            itemAdapter.set(finalI, item);
+                                        }
+                                    });
 
-                                for (int i = 0; i < contacts.size(); i++) {
-                                    if (contacts.get(i).peerId == memberId) {
-                                        contacts.get(i).role = ProtoGlobal.GroupRoom.Role.MEMBER.toString();
-                                        final int finalI = i;
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                IItem item = (new ContatItemGroupProfile().setContact(contacts.get(finalI)).withIdentifier(100 + contacts.indexOf(contacts.get(finalI))));
-                                                itemAdapter.set(finalI, item);
-                                            }
-                                        });
-
-                                        break;
-                                    }
+                                    break;
                                 }
-
-
                             }
-                        };
+                        }
+                    };
 
-                        new RequestGroupKickAdmin().groupKickAdmin(roomId, memberID);
-
-                    }
-                })
-                .show();
-
-
+                    new RequestGroupKickAdmin().groupKickAdmin(roomId, memberID);
+                }
+            })
+            .show();
     }
 
     /**
      * delete this member from list of member group
-     *
-     * @param memberID
      */
     private void kickMember(final long memberID) {
 
-        new MaterialDialog.Builder(ActivityGroupProfile.this)
-                .content(R.string.do_you_want_to_kick_this_member)
-                .positiveText(R.string.ok)
-                .negativeText(R.string.cancel)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        G.onGroupKickMember = new OnGroupKickMember() {
-                            @Override
-                            public void onGroupKickMember(long roomId, final long memberId) {
+        new MaterialDialog.Builder(ActivityGroupProfile.this).content(
+            R.string.do_you_want_to_kick_this_member)
+            .positiveText(R.string.ok)
+            .negativeText(R.string.cancel)
+            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                @Override
+                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    G.onGroupKickMember = new OnGroupKickMember() {
+                        @Override public void onGroupKickMember(long roomId, final long memberId) {
 
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        for (int j = 0; j < contacts.size(); j++) {
-                                            if (contacts.get(j).peerId == memberId) {
-                                                contacts.remove(j);
-                                                itemAdapter.remove(j);
+                            runOnUiThread(new Runnable() {
+                                @Override public void run() {
+                                    for (int j = 0; j < contacts.size(); j++) {
+                                        if (contacts.get(j).peerId == memberId) {
+                                            contacts.remove(j);
+                                            itemAdapter.remove(j);
 
-                                                break;
-                                            }
+                                            break;
                                         }
-
-                                        txtMemberNumber.setText(contacts.size() + "");
-
                                     }
-                                });
 
+                                    txtMemberNumber.setText(contacts.size() + "");
+                                }
+                            });
+                        }
+                    };
 
-                            }
-                        };
-
-                        new RequestGroupKickMember().groupKickMember(roomId, memberID);
-                    }
-                })
-                .show();
-
-
+                    new RequestGroupKickMember().groupKickMember(roomId, memberID);
+                }
+            })
+            .show();
     }
 
     private void kickModerator(final long memberID) {
 
-        new MaterialDialog.Builder(ActivityGroupProfile.this)
-                .content(R.string.do_you_want_to_set_modereator_role_to_member)
-                .positiveText(R.string.ok)
-                .negativeText(R.string.cancel)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+        new MaterialDialog.Builder(ActivityGroupProfile.this).content(
+            R.string.do_you_want_to_set_modereator_role_to_member)
+            .positiveText(R.string.ok)
+            .negativeText(R.string.cancel)
+            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                @Override
+                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                        G.onGroupKickModerator = new OnGroupKickModerator() {
-                            @Override
-                            public void onGroupKickModerator(long roomId, long memberId) {
+                    G.onGroupKickModerator = new OnGroupKickModerator() {
+                        @Override public void onGroupKickModerator(long roomId, long memberId) {
 
-                                for (int i = 0; i < contacts.size(); i++) {
-                                    if (contacts.get(i).peerId == memberId) {
-                                        contacts.get(i).role = ProtoGlobal.GroupRoom.Role.MEMBER.toString();
-                                        final int finalI = i;
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                IItem item = (new ContatItemGroupProfile().setContact(contacts.get(finalI)).withIdentifier(100 + contacts.indexOf(contacts.get(finalI))));
-                                                itemAdapter.set(finalI, item);
-                                            }
-                                        });
+                            for (int i = 0; i < contacts.size(); i++) {
+                                if (contacts.get(i).peerId == memberId) {
+                                    contacts.get(i).role =
+                                        ProtoGlobal.GroupRoom.Role.MEMBER.toString();
+                                    final int finalI = i;
+                                    runOnUiThread(new Runnable() {
+                                        @Override public void run() {
+                                            IItem item = (new ContatItemGroupProfile().setContact(
+                                                contacts.get(finalI))
+                                                .withIdentifier(
+                                                    100 + contacts.indexOf(contacts.get(finalI))));
+                                            itemAdapter.set(finalI, item);
+                                        }
+                                    });
 
-                                        break;
-                                    }
+                                    break;
                                 }
                             }
+                        }
+                    };
 
-
-                        };
-
-                        new RequestGroupKickModerator().groupKickModerator(roomId, memberID);
-
-                    }
-                })
-                .show();
-
+                    new RequestGroupKickModerator().groupKickModerator(roomId, memberID);
+                }
+            })
+            .show();
     }
 
     private void setMemberRoleToModerator() {
 
         Fragment fragment = ShowCustomList.newInstance(contacts, new OnSelectedList() {
-            @Override
-            public void getSelectedList(boolean result, String message, int count, final ArrayList<StructContactInfo> list) {
+            @Override public void getSelectedList(boolean result, String message, int count,
+                final ArrayList<StructContactInfo> list) {
 
                 G.onGroupAddModerator = new OnGroupAddModerator() {
-                    @Override
-                    public void onGroupAddModerator(long roomId, final long memberId) {
+                    @Override public void onGroupAddModerator(long roomId, final long memberId) {
                         runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
+                            @Override public void run() {
                                 for (int i = 0; i < contacts.size(); i++) {
                                     if (contacts.get(i).peerId == memberId) {
-                                        contacts.get(i).role = ProtoGlobal.GroupRoom.Role.MODERATOR.toString();
+                                        contacts.get(i).role =
+                                            ProtoGlobal.GroupRoom.Role.MODERATOR.toString();
 
                                         if (i < itemAdapter.getAdapterItemCount()) {
-                                            IItem item = (new ContatItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
+                                            IItem item = (new ContatItemGroupProfile().setContact(
+                                                contacts.get(i))
+                                                .withIdentifier(
+                                                    100 + contacts.indexOf(contacts.get(i))));
                                             itemAdapter.set(i, item);
                                         }
                                         break;
                                     }
                                 }
-
                             }
                         });
                     }
                 };
-
 
                 for (int i = 0; i < list.size(); i++) {
                     new RequestGroupAddModerator().groupAddModerator(roomId, list.get(i).peerId);
@@ -1401,32 +1228,35 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         Bundle bundle = new Bundle();
         bundle.putBoolean("DIALOG_SHOWING", false);
         fragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
-                R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer_group_profile, fragment).commit();
-
-
+        getSupportFragmentManager().beginTransaction()
+            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
+                R.anim.slide_in_right, R.anim.slide_out_left)
+            .addToBackStack(null)
+            .replace(R.id.fragmentContainer_group_profile, fragment)
+            .commit();
     }
 
     private void setMemberRoleToAdmin() {
 
         Fragment fragment = ShowCustomList.newInstance(contacts, new OnSelectedList() {
-            @Override
-            public void getSelectedList(boolean result, String message, int count, ArrayList<StructContactInfo> list) {
-
+            @Override public void getSelectedList(boolean result, String message, int count,
+                ArrayList<StructContactInfo> list) {
 
                 G.onGroupAddAdmin = new OnGroupAddAdmin() {
-                    @Override
-                    public void onGroupAddAdmin(long roomId, final long memberId) {
+                    @Override public void onGroupAddAdmin(long roomId, final long memberId) {
 
                         runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
+                            @Override public void run() {
                                 for (int i = 0; i < contacts.size(); i++) {
                                     if (contacts.get(i).peerId == memberId) {
-                                        contacts.get(i).role = ProtoGlobal.GroupRoom.Role.ADMIN.toString();
+                                        contacts.get(i).role =
+                                            ProtoGlobal.GroupRoom.Role.ADMIN.toString();
 
                                         if (i < itemAdapter.getAdapterItemCount()) {
-                                            IItem item = (new ContatItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
+                                            IItem item = (new ContatItemGroupProfile().setContact(
+                                                contacts.get(i))
+                                                .withIdentifier(
+                                                    100 + contacts.indexOf(contacts.get(i))));
                                             itemAdapter.set(i, item);
                                         }
 
@@ -1438,21 +1268,114 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                     }
                 };
 
-
                 for (int i = 0; i < list.size(); i++) {
                     new RequestGroupAddAdmin().groupAddAdmin(roomId, list.get(i).peerId);
                 }
-
-
             }
         });
         Bundle bundle = new Bundle();
         bundle.putBoolean("DIALOG_SHOWING", false);
         fragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
-                R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer_group_profile, fragment).commit();
-
+        getSupportFragmentManager().beginTransaction()
+            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
+                R.anim.slide_in_right, R.anim.slide_out_left)
+            .addToBackStack(null)
+            .replace(R.id.fragmentContainer_group_profile, fragment)
+            .commit();
     }
 
+    private static class UploadTask
+        extends AsyncTask<Object, FileUploadStructure, FileUploadStructure> {
+        @Override protected FileUploadStructure doInBackground(Object... params) {
+            try {
+                String filePath = (String) params[0];
+                long avatarId = (long) params[1];
+                File file = new File(filePath);
+                String fileName = file.getName();
+                long fileSize = file.length();
+                FileUploadStructure fileUploadStructure =
+                    new FileUploadStructure(fileName, fileSize, filePath, avatarId);
+                fileUploadStructure.openFile(filePath);
 
+                byte[] fileHash = AndroidUtils.getFileHash(fileUploadStructure);
+                fileUploadStructure.setFileHash(fileHash);
+
+                return fileUploadStructure;
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override protected void onPostExecute(FileUploadStructure result) {
+            super.onPostExecute(result);
+            G.uploaderUtil.startUploading(result, Long.toString(result.messageId));
+        }
+    }
+
+    public class StickyHeaderAdapter extends AbstractAdapter
+        implements StickyRecyclerHeadersAdapter {
+        @Override public long getHeaderId(int position) {
+            IItem item = getItem(position);
+
+            //            ContatItemGroupProfile ci=(ContatItemGroupProfile)item;
+            //            if(ci!=null){
+            //                return ci.mContact.displayName.toUpperCase().charAt(0);
+            //            }
+
+            return -1;
+        }
+
+        @Override public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
+            //we create the view for the header
+            View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.contact_header_item, parent, false);
+            return new RecyclerView.ViewHolder(view) {
+            };
+        }
+
+        @Override public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
+            CustomTextViewMedium textView = (CustomTextViewMedium) holder.itemView;
+
+            IItem item = getItem(position);
+            if (((ContatItemGroupProfile) item).mContact != null) {
+                //based on the position we set the headers text
+                textView.setText(String.valueOf(
+                    ((ContatItemGroupProfile) item).mContact.displayName.toUpperCase().charAt(0)));
+            }
+        }
+
+        /**
+         * REQUIRED FOR THE FastAdapter. Set order to < 0 to tell the FastAdapter he can ignore
+         * this
+         * one.
+         *
+         * @return int
+         */
+        @Override public int getOrder() {
+            return -100;
+        }
+
+        @Override public int getAdapterItemCount() {
+            return 0;
+        }
+
+        @Override public List<IItem> getAdapterItems() {
+            return null;
+        }
+
+        @Override public IItem getAdapterItem(int position) {
+            return null;
+        }
+
+        @Override public int getAdapterPosition(IItem item) {
+            return -1;
+        }
+
+        @Override public int getGlobalPosition(int position) {
+            return -1;
+        }
+    }
 }

@@ -3,7 +3,6 @@ package com.iGap.module;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.TextView;
-
 import com.iGap.helper.FontCache;
 
 public class CustomTextViewMedium extends TextView {

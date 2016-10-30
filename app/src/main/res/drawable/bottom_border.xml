@@ -16,17 +16,17 @@
 
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item
-        android:left="-2dp"
-        android:right="-2dp"
-        android:top="-2dp">
-        <shape android:shape="rectangle">
-            <solid android:color="@android:color/transparent" />
+  <item
+      android:left="-2dp"
+      android:right="-2dp"
+      android:top="-2dp">
+    <shape android:shape="rectangle">
+      <solid android:color="@android:color/transparent"/>
 
-            <stroke
-                android:width="2dp"
-                android:color="@color/colorEmojiPopupCategoryBottomBorder" />
-        </shape>
-    </item>
+      <stroke
+          android:color="@color/colorEmojiPopupCategoryBottomBorder"
+          android:width="2dp"/>
+    </shape>
+  </item>
 
 </layer-list>

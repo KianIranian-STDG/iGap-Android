@@ -10,5 +10,4 @@ public interface OnInfoCountryResponse {
     void onInfoCountryResponse(int callingCode, String name, String pattern, String regex);
 
     void onError(int majorCode, int minorCode);
-
 }

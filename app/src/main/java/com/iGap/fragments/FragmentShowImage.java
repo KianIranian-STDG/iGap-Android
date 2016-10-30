@@ -48,7 +48,6 @@ import io.realm.Realm;
 import java.io.File;
 import java.util.ArrayList;
 
-
 public class FragmentShowImage extends Fragment implements OnFileDownloadResponse {
 
     private TextView txtImageNumber;
@@ -66,23 +65,20 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
 
     private long peerId = 0;
 
-
     public static FragmentShowImage newInstance() {
         return new FragmentShowImage();
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    @Nullable @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+        @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.activity_show_image, container, false);
     }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (getIntentData(this.getArguments()))
-            initComponent(view);
+        if (getIntentData(this.getArguments())) initComponent(view);
     }
 
     private boolean getIntentData(Bundle bundle) {
@@ -93,44 +89,54 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
 
             list = (ArrayList<StructMessageInfo>) bundle.getSerializable("listPic");
             if (list == null) {
-                getActivity().getFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
+                getActivity().getFragmentManager()
+                    .beginTransaction()
+                    .remove(FragmentShowImage.this)
+                    .commit();
                 return false;
             }
             if (list.size() < 1) {
-                getActivity().getFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
+                getActivity().getFragmentManager()
+                    .beginTransaction()
+                    .remove(FragmentShowImage.this)
+                    .commit();
                 return false;
             }
 
             int si = bundle.getInt("SelectedImage");
-            if (si >= 0)
-                selectedFile = si;
+            if (si >= 0) selectedFile = si;
 
             return true;
-
         } else {
-            getActivity().getFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
+            getActivity().getFragmentManager()
+                .beginTransaction()
+                .remove(FragmentShowImage.this)
+                .commit();
             return false;
         }
     }
 
     private void initComponent(View view) {
 
-        MaterialDesignTextView btnBack = (MaterialDesignTextView) view.findViewById(R.id.asi_btn_back);
+        MaterialDesignTextView btnBack =
+            (MaterialDesignTextView) view.findViewById(R.id.asi_btn_back);
         RippleView rippleBack = (RippleView) view.findViewById(R.id.asi_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
-            @Override
-            public void onComplete(RippleView rippleView) {
-                getActivity().getFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
+            @Override public void onComplete(RippleView rippleView) {
+                getActivity().getFragmentManager()
+                    .beginTransaction()
+                    .remove(FragmentShowImage.this)
+                    .commit();
             }
         });
 
-        MaterialDesignTextView btnMenu = (MaterialDesignTextView) view.findViewById(R.id.asi_btn_menu);
+        MaterialDesignTextView btnMenu =
+            (MaterialDesignTextView) view.findViewById(R.id.asi_btn_menu);
         RippleView rippleMenu = (RippleView) view.findViewById(R.id.asi_ripple_menu);
         rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
-            @Override
-            public void onComplete(RippleView rippleView) {
+            @Override public void onComplete(RippleView rippleView) {
                 popUpMenuShowImage();
             }
         });
@@ -160,30 +166,28 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
             txtImageName.setText(list.get(selectedFile).attachment.name);
         }
         if (list.get(selectedFile).time != 0) {
-            txtImageDate.setText(TimeUtils.toLocal(list.get(selectedFile).time, G.CHAT_MESSAGE_TIME));
+            txtImageDate.setText(
+                TimeUtils.toLocal(list.get(selectedFile).time, G.CHAT_MESSAGE_TIME));
         }
 
         viewPager.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
 
                 Log.i("ZZZZ", "setOnClickListener: ");
-
             }
         });
 
-
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            @Override public void onPageScrolled(int position, float positionOffset,
+                int positionOffsetPixels) {
 
             }
 
-            @Override
-            public void onPageSelected(int position) {
+            @Override public void onPageSelected(int position) {
                 StructMessageInfo sharedMedia = list.get(position);
 
-                txtImageNumber.setText(position + 1 + " " + getString(R.string.of) + " " + listSize);
+                txtImageNumber.setText(
+                    position + 1 + " " + getString(R.string.of) + " " + listSize);
 
                 if (sharedMedia.attachment != null) {
                     txtImageName.setText(sharedMedia.attachment.name);
@@ -194,15 +198,13 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
                 }
             }
 
-            @Override
-            public void onPageScrollStateChanged(int state) {
+            @Override public void onPageScrollStateChanged(int state) {
 
             }
         });
 
         viewPager.setPageTransformer(false, new ViewPager.PageTransformer() {
-            @Override
-            public void transformPage(View view, float position) {
+            @Override public void transformPage(View view, float position) {
                 Log.i("ZZZZ", "setPageTransformer: ");
 
                 final float normalizedPosition = Math.abs(Math.abs(position) - 1);
@@ -212,32 +214,83 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
         });
     }
 
-    @Override
-    public void onFileDownload(final String token, final int offset, final ProtoFileDownload.FileDownload.Selector selector, final int progress) {
+    @Override public void onFileDownload(final String token, final int offset,
+        final ProtoFileDownload.FileDownload.Selector selector, final int progress) {
         // if thumbnail
         if (selector != ProtoFileDownload.FileDownload.Selector.FILE) {
             mAdapter.updateThumbnail(token);
         } else {
             // else file
             G.handler.post(new Runnable() {
-                @Override
-                public void run() {
+                @Override public void run() {
                     mAdapter.updateDownloadFields(token, progress, offset);
                 }
             });
         }
     }
 
-    @Override
-    public void onAvatarDownload(String token, int offset, ProtoFileDownload.FileDownload.Selector selector, int progress, long userId, RoomType roomType) {
+    @Override public void onAvatarDownload(String token, int offset,
+        ProtoFileDownload.FileDownload.Selector selector, int progress, long userId,
+        RoomType roomType) {
         // empty
+    }
+
+    public void popUpMenuShowImage() {
+
+        MaterialDialog dialog =
+            new MaterialDialog.Builder(getActivity()).items(R.array.pop_up_menu_show_image)
+                .contentColor(Color.BLACK)
+                .itemsCallback(new MaterialDialog.ListCallback() {
+                    @Override public void onSelection(MaterialDialog dialog, View view, int which,
+                        CharSequence text) {
+
+                        if (which == 0) {
+                            showAllMedia();
+                        } else if (which == 1) {
+                            saveToGalary();
+                        } else if (which == 2) {
+
+                            int pageIndex = mAdapter.removeView(viewPager, getCurrentPage());
+                            if (list.size() == 0) {
+                                getActivity().getFragmentManager()
+                                    .beginTransaction()
+                                    .remove(FragmentShowImage.this)
+                                    .commit();
+                                ((ActivitySetting) getActivity()).setAvatar();
+                            } else if (pageIndex == mAdapter.getCount()) {
+                                pageIndex--;
+                            }
+                            viewPager.setCurrentItem(pageIndex);
+                        }
+                    }
+                })
+                .show();
+
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        layoutParams.copyFrom(dialog.getWindow().getAttributes());
+        layoutParams.width = (int) getResources().getDimension(R.dimen.dp200);
+        layoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
+        dialog.getWindow().setAttributes(layoutParams);
+    }
+
+    private void showAllMedia() {
+        Log.e("ddd", "show all media");
+    }
+
+    private void saveToGalary() {
+        Log.e("ddd", "save to galarry");
+    }
+
+    public StructMessageInfo getCurrentPage() {
+        return mAdapter.getView(viewPager.getCurrentItem());
     }
 
     private class AdapterViewPager extends PagerAdapter {
 
         public void updateDownloadFields(String token, int progress, int offset) {
             for (StructMessageInfo item : list) {
-                if (item.downloadAttachment != null && item.downloadAttachment.token.equalsIgnoreCase(token)) {
+                if (item.downloadAttachment != null
+                    && item.downloadAttachment.token.equalsIgnoreCase(token)) {
                     item.downloadAttachment.offset = offset;
                     item.downloadAttachment.progress = progress;
                     requestDownloadFile(item);
@@ -251,13 +304,11 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
             notifyDataSetChanged();
         }
 
-        @Override
-        public int getCount() {
+        @Override public int getCount() {
             return list.size();
         }
 
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
+        @Override public boolean isViewFromObject(View view, Object object) {
             return view.equals(object);
         }
 
@@ -270,57 +321,75 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
             // request thumbnail
             if (!media.downloadAttachment.thumbnailRequested) {
 
-                ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
-                if (media.attachment.getLocalThumbnailPath() == null || media.attachment.getLocalThumbnailPath().isEmpty()) {
-                    media.attachment.setLocalThumbnailPath(Long.parseLong(media.messageID), Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + media.downloadAttachment.token + System.nanoTime() + media.attachment.name);
+                ProtoFileDownload.FileDownload.Selector selector =
+                    ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
+                if (media.attachment.getLocalThumbnailPath() == null
+                    || media.attachment.getLocalThumbnailPath().isEmpty()) {
+                    media.attachment.setLocalThumbnailPath(Long.parseLong(media.messageID),
+                        Environment.getExternalStoragePublicDirectory(
+                            Environment.DIRECTORY_PICTURES)
+                            + "/"
+                            + media.downloadAttachment.token
+                            + System.nanoTime()
+                            + media.attachment.name);
                 }
 
                 // I don't use offset in getting thumbnail
-                String identity = media.downloadAttachment.token + '*' + selector.toString() + '*' + media.attachment.smallThumbnail.size + '*' + media.attachment.getLocalThumbnailPath() + '*' + media.downloadAttachment.offset;
+                String identity = media.downloadAttachment.token
+                    + '*'
+                    + selector.toString()
+                    + '*'
+                    + media.attachment.smallThumbnail.size
+                    + '*'
+                    + media.attachment.getLocalThumbnailPath()
+                    + '*'
+                    + media.downloadAttachment.offset;
 
-                new RequestFileDownload().download(media.downloadAttachment.token, 0, (int) media.attachment.smallThumbnail.size, selector, identity);
-
+                new RequestFileDownload().download(media.downloadAttachment.token, 0,
+                    (int) media.attachment.smallThumbnail.size, selector, identity);
 
                 // prevent from multiple requesting thumbnail
                 media.downloadAttachment.thumbnailRequested = true;
             }
         }
 
-        private void onLoadFromLocal(final ImageView imageView, String localPath, LocalFileType fileType) {
+        private void onLoadFromLocal(final ImageView imageView, String localPath,
+            LocalFileType fileType) {
             Log.i("VVV", "localPath : " + localPath);
-            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(localPath), imageView, new ImageLoadingListener() {
-                @Override
-                public void onLoadingStarted(String imageUri, View view) {
+            ImageLoader.getInstance()
+                .displayImage(AndroidUtils.suitablePath(localPath), imageView,
+                    new ImageLoadingListener() {
+                        @Override public void onLoadingStarted(String imageUri, View view) {
 
-                }
+                        }
 
-                @Override
-                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                        @Override public void onLoadingFailed(String imageUri, View view,
+                            FailReason failReason) {
 
-                }
+                        }
 
-                @Override
-                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                    imageView.setImageBitmap(loadedImage);
-                }
+                        @Override public void onLoadingComplete(String imageUri, View view,
+                            Bitmap loadedImage) {
+                            imageView.setImageBitmap(loadedImage);
+                        }
 
-                @Override
-                public void onLoadingCancelled(String imageUri, View view) {
+                        @Override public void onLoadingCancelled(String imageUri, View view) {
 
-                }
-            });
+                        }
+                    });
         }
 
-        @Override
-        public Object instantiateItem(View container, int position) {
+        @Override public Object instantiateItem(View container, int position) {
 
             LayoutInflater inflater = LayoutInflater.from(getActivity());
-            final ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.show_image_sub_layout, (ViewGroup) container, false);
+            final ViewGroup layout =
+                (ViewGroup) inflater.inflate(R.layout.show_image_sub_layout, (ViewGroup) container,
+                    false);
 
-            TouchImageView touchImageView = (TouchImageView) layout.findViewById(R.id.sisl_touch_image_view);
+            TouchImageView touchImageView =
+                (TouchImageView) layout.findViewById(R.id.sisl_touch_image_view);
             touchImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+                @Override public void onClick(View view) {
                     if (isShowToolbar) {
                         toolbarShowImage.animate().setDuration(150).alpha(0F).start();
                         toolbarShowImage.setVisibility(View.GONE);
@@ -333,7 +402,6 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
                 }
             });
 
-
             final StructMessageInfo media = list.get(position);
 
             // runs if message has attachment
@@ -341,38 +409,42 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
                 // if file already exists, simply show the local one
                 if (media.attachment.isFileExistsOnLocal()) {
                     // load file from local
-                    onLoadFromLocal(touchImageView, media.attachment.getLocalFilePath(), LocalFileType.FILE);
+                    onLoadFromLocal(touchImageView, media.attachment.getLocalFilePath(),
+                        LocalFileType.FILE);
                 } else {
                     // file doesn't exist on local, I check for a thumbnail
                     // if thumbnail exists, I load it into the view
                     if (media.attachment.isThumbnailExistsOnLocal()) {
-//                        ViewGroup view = (ViewGroup) layout.findViewById(R.id.sisl_touch_image_view).getParent();
-//                        if (view != null) {
-//                            int[] dimens = AndroidUtils.scaleDimenWithSavedRatio(layout.getContext(), media.attachment.width, media.attachment.height);
-//                            view.setLayoutParams(new LinearLayout.LayoutParams(dimens[0], dimens[1]));
-//                            view.requestLayout();
-//                        }
-
+                        //                        ViewGroup view = (ViewGroup) layout.findViewById(R.id.sisl_touch_image_view).getParent();
+                        //                        if (view != null) {
+                        //                            int[] dimens = AndroidUtils.scaleDimenWithSavedRatio(layout.getContext(), media.attachment.width, media.attachment.height);
+                        //                            view.setLayoutParams(new LinearLayout.LayoutParams(dimens[0], dimens[1]));
+                        //                            view.requestLayout();
+                        //                        }
 
                         // load thumbnail from local
-                        onLoadFromLocal(touchImageView, media.attachment.getLocalThumbnailPath(), LocalFileType.THUMBNAIL);
+                        onLoadFromLocal(touchImageView, media.attachment.getLocalThumbnailPath(),
+                            LocalFileType.THUMBNAIL);
                     } else {
                         requestForThumbnail(media);
                     }
 
                     // create new download attachment once with attachment token
                     if (media.downloadAttachment == null) {
-                        media.downloadAttachment = new StructDownloadAttachment(media.attachment.token);
+                        media.downloadAttachment =
+                            new StructDownloadAttachment(media.attachment.token);
                     }
 
                     if (layout.findViewById(R.id.progress) != null) {
-                        ((MessageProgress) layout.findViewById(R.id.progress)).withOnMessageProgress(new OnMessageProgressClick() {
-                            @Override
-                            public void onMessageProgressClick(MessageProgress progress) {
+                        ((MessageProgress) layout.findViewById(
+                            R.id.progress)).withOnMessageProgress(new OnMessageProgressClick() {
+                            @Override public void onMessageProgressClick(MessageProgress progress) {
                                 // make sure to not request multiple times by checking last offset with the new one
-                                if (media.downloadAttachment.lastOffset < media.downloadAttachment.offset) {
+                                if (media.downloadAttachment.lastOffset
+                                    < media.downloadAttachment.offset) {
                                     requestDownloadFile(media);
-                                    media.downloadAttachment.lastOffset = media.downloadAttachment.offset;
+                                    media.downloadAttachment.lastOffset =
+                                        media.downloadAttachment.offset;
                                 }
                             }
                         });
@@ -380,12 +452,12 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
                 }
 
                 if (layout.findViewById(R.id.progress) != null) {
-                    ((MessageProgress) layout.findViewById(R.id.progress)).withOnProgress(new OnProgress() {
-                        @Override
-                        public void onProgressFinished() {
-                            layout.findViewById(R.id.progress).setVisibility(View.INVISIBLE);
-                        }
-                    });
+                    ((MessageProgress) layout.findViewById(R.id.progress)).withOnProgress(
+                        new OnProgress() {
+                            @Override public void onProgressFinished() {
+                                layout.findViewById(R.id.progress).setVisibility(View.INVISIBLE);
+                            }
+                        });
                 }
 
                 updateProgressIfNeeded(layout, media);
@@ -412,10 +484,12 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
                 return;
             }
 
-            ((MessageProgress) itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_download);
+            ((MessageProgress) itemView.findViewById(R.id.progress)).withDrawable(
+                R.drawable.ic_download);
             // update progress when user trying to download
             if (!media.attachment.isFileExistsOnLocal() && media.downloadAttachment != null) {
-                ((MessageProgress) itemView.findViewById(R.id.progress)).withProgress(media.downloadAttachment.progress);
+                ((MessageProgress) itemView.findViewById(R.id.progress)).withProgress(
+                    media.downloadAttachment.progress);
             } else {
                 if (media.attachment.isFileExistsOnLocal()) {
                     ((MessageProgress) itemView.findViewById(R.id.progress)).performProgress();
@@ -429,11 +503,14 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
             if (media.downloadAttachment.progress == 100) {
                 return; // necessary
             }
-            ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
-//            final String localFilePath = G.DIR_IMAGES + "/" + media.downloadAttachment.token + System.nanoTime() + media.attachment.name;
-            final String localFilePath = media.downloadAttachment.token + System.nanoTime() + media.attachment.name;
+            ProtoFileDownload.FileDownload.Selector selector =
+                ProtoFileDownload.FileDownload.Selector.FILE;
+            //            final String localFilePath = G.DIR_IMAGES + "/" + media.downloadAttachment.token + System.nanoTime() + media.attachment.name;
+            final String localFilePath =
+                media.downloadAttachment.token + System.nanoTime() + media.attachment.name;
             Log.i("GGG", "localFilePath : " + localFilePath);
-            if (media.attachment.getLocalFilePath() == null || media.attachment.getLocalFilePath().isEmpty()) {
+            if (media.attachment.getLocalFilePath() == null || media.attachment.getLocalFilePath()
+                .isEmpty()) {
                 media.attachment.setLocalFilePath(Long.parseLong(media.messageID), localFilePath);
             }
 
@@ -447,9 +524,11 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
             if (peerId != 0) {
                 Realm realm = Realm.getDefaultInstance();
                 realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, peerId).findFirst();
+                    @Override public void execute(Realm realm) {
+                        RealmRegisteredInfo realmRegisteredInfo =
+                            realm.where(RealmRegisteredInfo.class)
+                                .equalTo(RealmRegisteredInfoFields.ID, peerId)
+                                .findFirst();
                         for (RealmAvatar avatar : realmRegisteredInfo.getAvatar()) {
                             if (avatar.getFile().getToken().equals(media.attachment.token)) {
                                 avatar.getFile().setLocalFilePath(localFilePath);
@@ -460,24 +539,33 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
                 realm.close();
             }
 
-            Log.i("GGG", "media.attachment.getLocalFilePath() : " + media.attachment.getLocalFilePath());
-            String identity = media.downloadAttachment.token + '*' + selector.toString() + '*' + media.attachment.size + '*' + media.attachment.getLocalFilePath() + '*' + media.downloadAttachment.offset;
+            Log.i("GGG",
+                "media.attachment.getLocalFilePath() : " + media.attachment.getLocalFilePath());
+            String identity = media.downloadAttachment.token
+                + '*'
+                + selector.toString()
+                + '*'
+                + media.attachment.size
+                + '*'
+                + media.attachment.getLocalFilePath()
+                + '*'
+                + media.downloadAttachment.offset;
 
-            new RequestFileDownload().download(media.downloadAttachment.token, media.downloadAttachment.offset, (int) media.attachment.size, selector, identity);
+            new RequestFileDownload().download(media.downloadAttachment.token,
+                media.downloadAttachment.offset, (int) media.attachment.size, selector, identity);
         }
 
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
+        @Override public void destroyItem(ViewGroup container, int position, Object object) {
             container.removeView((View) object);
         }
 
-        @Override
-        public int getItemPosition(Object object) {
+        @Override public int getItemPosition(Object object) {
             int index = list.indexOf(object);
-            if (index == -1)
+            if (index == -1) {
                 return POSITION_NONE;
-            else
+            } else {
                 return index;
+            }
         }
 
         public int removeView(ViewPager pager, StructMessageInfo v) {
@@ -489,10 +577,11 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
         public int removeView(ViewPager pager, int position) {
 
             Realm realm = Realm.getDefaultInstance();
-            final RealmAvatarPath realmAvatarPath = realm.where(RealmAvatarPath.class).equalTo(RealmAvatarPathFields.ID, list.get(position).messageID).findFirst();
+            final RealmAvatarPath realmAvatarPath = realm.where(RealmAvatarPath.class)
+                .equalTo(RealmAvatarPathFields.ID, list.get(position).messageID)
+                .findFirst();
             realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
+                @Override public void execute(Realm realm) {
                     realmAvatarPath.deleteFromRealm();
                 }
             });
@@ -510,60 +599,10 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
         public StructMessageInfo getView(int position) {
             return list.get(position);
         }
-
-    }
-
-    public void popUpMenuShowImage() {
-
-        MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
-                .items(R.array.pop_up_menu_show_image)
-                .contentColor(Color.BLACK)
-                .itemsCallback(new MaterialDialog.ListCallback() {
-                    @Override
-                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-
-                        if (which == 0) {
-                            showAllMedia();
-                        } else if (which == 1) {
-                            saveToGalary();
-                        } else if (which == 2) {
-
-                            int pageIndex = mAdapter.removeView(viewPager, getCurrentPage());
-                            if (list.size() == 0) {
-                                getActivity().getFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
-                                ((ActivitySetting) getActivity()).setAvatar();
-                            } else if (pageIndex == mAdapter.getCount()) {
-                                pageIndex--;
-                            }
-                            viewPager.setCurrentItem(pageIndex);
-                        }
-                    }
-                }).show();
-
-        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-        layoutParams.copyFrom(dialog.getWindow().getAttributes());
-        layoutParams.width = (int) getResources().getDimension(R.dimen.dp200);
-        layoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
-        dialog.getWindow().setAttributes(layoutParams);
-    }
-
-    private void showAllMedia() {
-        Log.e("ddd", "show all media");
-    }
-
-    private void saveToGalary() {
-        Log.e("ddd", "save to galarry");
-    }
-
-
-    public StructMessageInfo getCurrentPage() {
-        return mAdapter.getView(viewPager.getCurrentItem());
     }
 
     //-----------------------------------------------------------------------------
-//    public void setCurrentPage(View pageToShow) {
-//        viewPager.setCurrentItem(mAdapter.getItemPosition(pageToShow), true);
-//    }
-
-
+    //    public void setCurrentPage(View pageToShow) {
+    //        viewPager.setCurrentItem(mAdapter.getItemPosition(pageToShow), true);
+    //    }
 }

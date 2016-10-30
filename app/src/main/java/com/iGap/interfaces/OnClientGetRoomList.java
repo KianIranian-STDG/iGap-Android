@@ -11,5 +11,4 @@ import com.iGap.proto.ProtoResponse;
 public interface OnClientGetRoomList {
 
     void onClientGetRoomList(ProtoGlobal.Room rooms, ProtoResponse.Response response);
-
 }

@@ -2,18 +2,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    >
 
-    <ImageView
-        android:id="@+id/cslst_imv_sticker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+  <ImageView
+      android:id="@+id/cslst_imv_sticker"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
 
-        android:adjustViewBounds="true"
-        android:maxWidth="@dimen/dp240"
-        android:src="@mipmap/sd" />
+      android:adjustViewBounds="true"
+      android:maxWidth="@dimen/dp240"
+      android:src="@mipmap/sd"
+      />
 
-    <View
-        android:layout_width="@dimen/dp48"
-        android:layout_height="wrap_content" />
+  <View
+      android:layout_width="@dimen/dp48"
+      android:layout_height="wrap_content"
+      />
 </LinearLayout>

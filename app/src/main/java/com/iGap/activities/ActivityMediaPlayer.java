@@ -16,7 +16,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
@@ -25,13 +24,14 @@ import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.MusicPlayer;
 import com.iGap.module.OnComplete;
-
 import java.io.File;
-
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityMediaPlayer extends ActivityEnhanced {
 
+    Button btnReplay;
+    Button btnShuffle;
+    OnComplete onComplete;
     private TextView txt_MusicName;
     private TextView txt_MusicPlace;
     private TextView txt_MusicTime;
@@ -42,18 +42,12 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
     private ImageView img_RepeatOne;
     private ImageView img_MusicImage_default_icon;
     private Button btnPlay;
-    Button btnReplay;
-    Button btnShuffle;
 
-    OnComplete onComplete;
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
+    @Override protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    @Override public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_media_player);
 
@@ -61,11 +55,11 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
 
         if (MusicPlayer.mp == null) {
             finish();
-            NotificationManager notifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationManager notifyManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notifyManager.cancel(MusicPlayer.notificationId);
             return;
         }
-
 
         onComplete = new OnComplete() {
             @Override
@@ -73,16 +67,13 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
 
                 if (messageOne.equals("play")) {
                     btnPlay.setText(R.string.md_play_rounded_button);
-
                 } else if (messageOne.equals("pause")) {
                     btnPlay.setText(R.string.md_round_pause_button);
-
                 } else if (messageOne.equals("update")) {
                     updateUi();
                 } else if (messageOne.equals("updateTime")) {
                     txt_Timer.post(new Runnable() {
-                        @Override
-                        public void run() {
+                        @Override public void run() {
                             txt_Timer.setText(MessageTow);
                             musicSeekbar.setProgress(MusicPlayer.musicProgress);
                         }
@@ -92,7 +83,6 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
                 } else if (messageOne.equals("Shuffel")) {
                     setShuffleButton();
                 }
-
             }
         };
 
@@ -101,9 +91,7 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
         initComponent();
 
         setMusicInfo();
-
     }
-
 
     private void setShuffleButton() {
 
@@ -130,23 +118,21 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
         }
     }
 
-    @Override
-    protected void onPause() {
+    @Override protected void onPause() {
         super.onPause();
         MusicPlayer.isShowMediaPlayer = false;
         MusicPlayer.onComplete = null;
         MusicPlayer.updateNotification();
     }
 
-    @Override
-    protected void onResume() {
+    @Override protected void onResume() {
         super.onResume();
         MusicPlayer.isShowMediaPlayer = true;
         MusicPlayer.onComplete = onComplete;
         updateUi();
-        NotificationManager notifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager notifyManager =
+            (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notifyManager.cancel(MusicPlayer.notificationId);
-
     }
 
     //*****************************************************************************************
@@ -157,7 +143,6 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
         txt_MusicPlace = (TextView) findViewById(R.id.ml_txt_music_place);
         txt_MusicTime = (TextView) findViewById(R.id.ml_txt_music_time);
         txt_Timer = (TextView) findViewById(R.id.ml_txt_timer);
-
 
         txt_musicInfo = (TextView) findViewById(R.id.ml_txt_music_info);
         img_MusicImage = (ImageView) findViewById(R.id.ml_img_music_picture);
@@ -172,15 +157,14 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
             img_MusicImage_default_icon.setVisibility(View.VISIBLE);
         }
 
-
         musicSeekbar = (SeekBar) findViewById(R.id.ml_seekBar1);
         musicSeekbar.setOnTouchListener(new View.OnTouchListener() {
 
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            @Override public boolean onTouch(View v, MotionEvent event) {
 
-                if (event.getAction() == MotionEvent.ACTION_UP)
+                if (event.getAction() == MotionEvent.ACTION_UP) {
                     MusicPlayer.setMusicProgress(musicSeekbar.getProgress());
+                }
                 return false;
             }
         });
@@ -188,28 +172,24 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
         MaterialDesignTextView btnBack = (MaterialDesignTextView) findViewById(R.id.ml_btn_back);
         RippleView rippleBack = (RippleView) findViewById(R.id.ml_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
+            @Override public void onComplete(RippleView rippleView) {
                 finish();
             }
         });
 
-
-        MaterialDesignTextView btnMusicMenu = (MaterialDesignTextView) findViewById(R.id.ml_btn_music_menu);
+        MaterialDesignTextView btnMusicMenu =
+            (MaterialDesignTextView) findViewById(R.id.ml_btn_music_menu);
         RippleView rippleMusicMenu = (RippleView) findViewById(R.id.amp_ripple_menu);
         rippleMusicMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
+            @Override public void onComplete(RippleView rippleView) {
                 popUpMusicMenu();
-
             }
         });
 
         Button btnPrevious = (Button) findViewById(R.id.ml_btn_Previous_music);
         btnPrevious.setTypeface(G.flaticon);
         btnPrevious.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            @Override public void onClick(View v) {
                 MusicPlayer.previousMusic();
             }
         });
@@ -217,8 +197,7 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
         btnShuffle = (Button) findViewById(R.id.ml_btn_shuffel_music);
         btnShuffle.setTypeface(G.flaticon);
         btnShuffle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            @Override public void onClick(View v) {
                 MusicPlayer.shuffelClick();
             }
         });
@@ -228,8 +207,7 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
         btnReplay = (Button) findViewById(R.id.ml_btn_replay_music);
         btnReplay.setTypeface(G.flaticon);
         btnReplay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            @Override public void onClick(View v) {
                 MusicPlayer.repeatClick();
             }
         });
@@ -238,8 +216,7 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
         btnPlay = (Button) findViewById(R.id.ml_btn_play_music);
         btnPlay.setTypeface(G.flaticon);
         btnPlay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            @Override public void onClick(View v) {
                 MusicPlayer.playAndPause();
             }
         });
@@ -247,36 +224,31 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
         Button btnNextMusic = (Button) findViewById(R.id.ml_btn_forward_music);
         btnNextMusic.setTypeface(G.flaticon);
         btnNextMusic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            @Override public void onClick(View v) {
                 MusicPlayer.nextMusic();
             }
         });
-
-
     }
 
     private void popUpMusicMenu() {
 
-        MaterialDialog dialog = new MaterialDialog.Builder(this)
-                .items(R.array.pop_up_media_player)
-                .contentColor(Color.BLACK)
-                .itemsCallback(new MaterialDialog.ListCallback() {
-                    @Override
-                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+        MaterialDialog dialog = new MaterialDialog.Builder(this).items(R.array.pop_up_media_player)
+            .contentColor(Color.BLACK)
+            .itemsCallback(new MaterialDialog.ListCallback() {
+                @Override public void onSelection(MaterialDialog dialog, View view, int which,
+                    CharSequence text) {
 
-                        switch (which) {
-                            case 0:
-                                saveToMusic();
-                                break;
-                            case 1:
-                                shareMusuic();
-                                break;
-                        }
-
-
+                    switch (which) {
+                        case 0:
+                            saveToMusic();
+                            break;
+                        case 1:
+                            shareMusuic();
+                            break;
                     }
-                }).show();
+                }
+            })
+            .show();
 
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
         layoutParams.copyFrom(dialog.getWindow().getAttributes());
@@ -286,11 +258,9 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
         dialog.getWindow().setAttributes(layoutParams);
     }
 
-
     private void saveToMusic() {
 
         HelperSaveFile.saveToMusicFolder(MusicPlayer.musicPath, MusicPlayer.musicName);
-
     }
 
     private void shareMusuic() {
@@ -302,9 +272,7 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
         share.setType("audio/*");
         share.putExtra(Intent.EXTRA_STREAM, uri);
         startActivity(Intent.createChooser(share, "Share audio File"));
-
     }
-
 
     private void updateUi() {
         txt_MusicTime.setText(MusicPlayer.musicTime);
@@ -328,9 +296,7 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
             }
 
             setMusicInfo();
-
         }
-
     }
 
     private void setMusicInfo() {
@@ -345,9 +311,5 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
         } else {
             txt_musicInfo.setVisibility(View.GONE);
         }
-
-
     }
-
-
 }

@@ -1,6 +1,5 @@
 package com.iGap.fragments;
 
-
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.media.AudioManager;
@@ -17,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -33,7 +31,6 @@ import com.iGap.realm.RealmRoomFields;
 import com.larswerkman.holocolorpicker.ColorPicker;
 import com.larswerkman.holocolorpicker.OpacityBar;
 import com.larswerkman.holocolorpicker.SVBar;
-
 import io.realm.Realm;
 
 import static com.iGap.R.id.ntg_txt_back;
@@ -44,7 +41,8 @@ import static com.iGap.R.id.ntg_txt_back;
 public class FragmentNotification extends Fragment {
 
     private ImageView imgLED;
-    private ViewGroup root, ltLedColor, ltVibrate, ltSound, ltPopupNotification, ltSmartNotification;
+    private ViewGroup root, ltLedColor, ltVibrate, ltSound, ltPopupNotification,
+        ltSmartNotification;
     private String page, soundName;
     private int ledColor, poRbDialogSound;
     private TextView txtVibrate, txtSound, txtPopupNotification, txtSmartNotification;
@@ -67,31 +65,27 @@ public class FragmentNotification extends Fragment {
         // Required empty public constructor
     }
 
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
+        Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_notification, container, false);
     }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         page = getArguments().getString("PAGE");
         roomId = getArguments().getLong("ID");
         callObject(view);
 
-
         //=================================================Realm
-
 
         switch (page) {
             case "GROUP": {
 
-
                 Realm realm = Realm.getDefaultInstance();
 
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                RealmRoom realmRoom =
+                    realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
                 RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
 
@@ -109,7 +103,8 @@ public class FragmentNotification extends Fragment {
             break;
             case "CHANNEL": {
                 Realm realm = Realm.getDefaultInstance();
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                RealmRoom realmRoom =
+                    realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                 RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
                 if (realmChannelRoom.getRealmNotificationSetting() == null) {
                     setRealm(realm, null, realmChannelRoom, null);
@@ -126,7 +121,8 @@ public class FragmentNotification extends Fragment {
             case "CONTACT": {
 
                 Realm realm = Realm.getDefaultInstance();
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                RealmRoom realmRoom =
+                    realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                 RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
                 realmNotificationSetting = realmChatRoom.getRealmNotificationSetting();
 
@@ -146,158 +142,167 @@ public class FragmentNotification extends Fragment {
         }
         //=================================================Realm
 
-
         txtBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
 
-                getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNotification.this).commit();
+                getActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .remove(FragmentNotification.this)
+                    .commit();
             }
         });
         root.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
 
             }
         });
-
 
         String popupNotification = realmNotification;
         txtPopupNotification.setText(popupNotification);
         ltPopupNotification.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
 
-                new MaterialDialog.Builder(getActivity())
-                        .title("Popup Notification")
-                        .items(R.array.notifications_notification)
-                        .negativeText("CANCEL")
-                        .itemsCallback(new MaterialDialog.ListCallback() {
-                            @Override
-                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                                switch (which) {
-                                    case 0: {
-                                        txtPopupNotification.setText("Default");
-                                        Realm realm = Realm.getDefaultInstance();
-                                        realm.executeTransaction(new Realm.Transaction() {
-                                            @Override
-                                            public void execute(Realm realm) {
-                                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                new MaterialDialog.Builder(getActivity()).title("Popup Notification")
+                    .items(R.array.notifications_notification)
+                    .negativeText("CANCEL")
+                    .itemsCallback(new MaterialDialog.ListCallback() {
+                        @Override
+                        public void onSelection(MaterialDialog dialog, View view, int which,
+                            CharSequence text) {
+                            switch (which) {
+                                case 0: {
+                                    txtPopupNotification.setText("Default");
+                                    Realm realm = Realm.getDefaultInstance();
+                                    realm.executeTransaction(new Realm.Transaction() {
+                                        @Override public void execute(Realm realm) {
+                                            RealmRoom realmRoom = realm.where(RealmRoom.class)
+                                                .equalTo(RealmRoomFields.ID, roomId)
+                                                .findFirst();
 
-                                                switch (page) {
-                                                    case "GROUP": {
-                                                        RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-                                                        realmGroupRoom.getRealmNotificationSetting().setNotification("Default");
-                                                        break;
-                                                    }
-                                                    case "CHANNEL": {
-                                                        RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-                                                        realmChannelRoom.getRealmNotificationSetting().setNotification("Default");
-                                                        break;
-                                                    }
-                                                    case "CONTACT": {
-                                                        RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
-                                                        realmChatRoom.getRealmNotificationSetting().setNotification("Default");
-                                                        break;
-                                                    }
+                                            switch (page) {
+                                                case "GROUP": {
+                                                    RealmGroupRoom realmGroupRoom =
+                                                        realmRoom.getGroupRoom();
+                                                    realmGroupRoom.getRealmNotificationSetting()
+                                                        .setNotification("Default");
+                                                    break;
                                                 }
-
-                                            }
-
-
-                                        });
-                                        realm.close();
-                                        break;
-                                    }
-                                    case 1: {
-                                        txtPopupNotification.setText("Enable");
-                                        Realm realm = Realm.getDefaultInstance();
-                                        realm.executeTransaction(new Realm.Transaction() {
-                                            @Override
-                                            public void execute(Realm realm) {
-                                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-
-                                                switch (page) {
-                                                    case "GROUP": {
-                                                        RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-                                                        realmGroupRoom.getRealmNotificationSetting().setNotification("Enable");
-                                                        break;
-                                                    }
-                                                    case "CHANNEL": {
-                                                        RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-                                                        realmChannelRoom.getRealmNotificationSetting().setNotification("Enable");
-                                                        break;
-                                                    }
-                                                    case "CONTACT": {
-                                                        RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
-                                                        realmChatRoom.getRealmNotificationSetting().setNotification("Enable");
-                                                        break;
-                                                    }
+                                                case "CHANNEL": {
+                                                    RealmChannelRoom realmChannelRoom =
+                                                        realmRoom.getChannelRoom();
+                                                    realmChannelRoom.getRealmNotificationSetting()
+                                                        .setNotification("Default");
+                                                    break;
                                                 }
-
-                                            }
-
-
-                                        });
-                                        realm.close();
-                                        break;
-                                    }
-                                    case 2: {
-                                        txtPopupNotification.setText("Disable");
-                                        Realm realm = Realm.getDefaultInstance();
-                                        realm.executeTransaction(new Realm.Transaction() {
-                                            @Override
-                                            public void execute(Realm realm) {
-                                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-
-                                                switch (page) {
-                                                    case "GROUP": {
-                                                        RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-                                                        realmGroupRoom.getRealmNotificationSetting().setNotification("Disable");
-                                                        break;
-                                                    }
-                                                    case "CHANNEL": {
-                                                        RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-                                                        realmChannelRoom.getRealmNotificationSetting().setNotification("Disable");
-                                                        break;
-                                                    }
-                                                    case "CONTACT": {
-                                                        RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
-                                                        realmChatRoom.getRealmNotificationSetting().setNotification("Disable");
-                                                        break;
-                                                    }
+                                                case "CONTACT": {
+                                                    RealmChatRoom realmChatRoom =
+                                                        realmRoom.getChatRoom();
+                                                    realmChatRoom.getRealmNotificationSetting()
+                                                        .setNotification("Default");
+                                                    break;
                                                 }
-
                                             }
+                                        }
+                                    });
+                                    realm.close();
+                                    break;
+                                }
+                                case 1: {
+                                    txtPopupNotification.setText("Enable");
+                                    Realm realm = Realm.getDefaultInstance();
+                                    realm.executeTransaction(new Realm.Transaction() {
+                                        @Override public void execute(Realm realm) {
+                                            RealmRoom realmRoom = realm.where(RealmRoom.class)
+                                                .equalTo(RealmRoomFields.ID, roomId)
+                                                .findFirst();
 
-                                        });
-                                        realm.close();
-                                        break;
-                                    }
+                                            switch (page) {
+                                                case "GROUP": {
+                                                    RealmGroupRoom realmGroupRoom =
+                                                        realmRoom.getGroupRoom();
+                                                    realmGroupRoom.getRealmNotificationSetting()
+                                                        .setNotification("Enable");
+                                                    break;
+                                                }
+                                                case "CHANNEL": {
+                                                    RealmChannelRoom realmChannelRoom =
+                                                        realmRoom.getChannelRoom();
+                                                    realmChannelRoom.getRealmNotificationSetting()
+                                                        .setNotification("Enable");
+                                                    break;
+                                                }
+                                                case "CONTACT": {
+                                                    RealmChatRoom realmChatRoom =
+                                                        realmRoom.getChatRoom();
+                                                    realmChatRoom.getRealmNotificationSetting()
+                                                        .setNotification("Enable");
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    });
+                                    realm.close();
+                                    break;
+                                }
+                                case 2: {
+                                    txtPopupNotification.setText("Disable");
+                                    Realm realm = Realm.getDefaultInstance();
+                                    realm.executeTransaction(new Realm.Transaction() {
+                                        @Override public void execute(Realm realm) {
+                                            RealmRoom realmRoom = realm.where(RealmRoom.class)
+                                                .equalTo(RealmRoomFields.ID, roomId)
+                                                .findFirst();
+
+                                            switch (page) {
+                                                case "GROUP": {
+                                                    RealmGroupRoom realmGroupRoom =
+                                                        realmRoom.getGroupRoom();
+                                                    realmGroupRoom.getRealmNotificationSetting()
+                                                        .setNotification("Disable");
+                                                    break;
+                                                }
+                                                case "CHANNEL": {
+                                                    RealmChannelRoom realmChannelRoom =
+                                                        realmRoom.getChannelRoom();
+                                                    realmChannelRoom.getRealmNotificationSetting()
+                                                        .setNotification("Disable");
+                                                    break;
+                                                }
+                                                case "CONTACT": {
+                                                    RealmChatRoom realmChatRoom =
+                                                        realmRoom.getChatRoom();
+                                                    realmChatRoom.getRealmNotificationSetting()
+                                                        .setNotification("Disable");
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    });
+                                    realm.close();
+                                    break;
                                 }
                             }
-                        })
-                        .show();
+                        }
+                    })
+                    .show();
             }
         });
-
 
         //========================================================sound
         txtSound.setTypeface(G.arial);
         txtSound.setText(realmSound);
         ltSound.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
 
-                new MaterialDialog.Builder(getActivity())
-                        .title("Ringtone")
-                        .titleGravity(GravityEnum.START)
-                        .titleColor(getResources().getColor(android.R.color.black))
-                        .items(R.array.sound_message)
-                        .alwaysCallSingleChoiceCallback()
-                        .itemsCallbackSingleChoice(realmIdSound, new MaterialDialog.ListCallbackSingleChoice() {
-                            @Override
-                            public boolean onSelection(MaterialDialog dialog, View view, final int which, final CharSequence text) {
+                new MaterialDialog.Builder(getActivity()).title("Ringtone")
+                    .titleGravity(GravityEnum.START)
+                    .titleColor(getResources().getColor(android.R.color.black))
+                    .items(R.array.sound_message)
+                    .alwaysCallSingleChoiceCallback()
+                    .itemsCallbackSingleChoice(realmIdSound,
+                        new MaterialDialog.ListCallbackSingleChoice() {
+                            @Override public boolean onSelection(MaterialDialog dialog, View view,
+                                final int which, final CharSequence text) {
 
                                 switch (which) {
                                     case 0:
@@ -351,261 +356,290 @@ public class FragmentNotification extends Fragment {
 
                                 Realm realm = Realm.getDefaultInstance();
                                 realm.executeTransaction(new Realm.Transaction() {
-                                    @Override
-                                    public void execute(Realm realm) {
-                                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                                    @Override public void execute(Realm realm) {
+                                        RealmRoom realmRoom = realm.where(RealmRoom.class)
+                                            .equalTo(RealmRoomFields.ID, roomId)
+                                            .findFirst();
 
                                         switch (page) {
                                             case "GROUP": {
-                                                RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-                                                realmGroupRoom.getRealmNotificationSetting().setSound(text.toString());
-                                                realmGroupRoom.getRealmNotificationSetting().setIdRadioButtonSound(which);
+                                                RealmGroupRoom realmGroupRoom =
+                                                    realmRoom.getGroupRoom();
+                                                realmGroupRoom.getRealmNotificationSetting()
+                                                    .setSound(text.toString());
+                                                realmGroupRoom.getRealmNotificationSetting()
+                                                    .setIdRadioButtonSound(which);
                                                 break;
                                             }
                                             case "CHANNEL": {
-                                                RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-                                                realmChannelRoom.getRealmNotificationSetting().setSound(text.toString());
-                                                realmChannelRoom.getRealmNotificationSetting().setIdRadioButtonSound(which);
+                                                RealmChannelRoom realmChannelRoom =
+                                                    realmRoom.getChannelRoom();
+                                                realmChannelRoom.getRealmNotificationSetting()
+                                                    .setSound(text.toString());
+                                                realmChannelRoom.getRealmNotificationSetting()
+                                                    .setIdRadioButtonSound(which);
                                                 break;
                                             }
                                             case "CONTACT": {
-                                                RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
-                                                realmChatRoom.getRealmNotificationSetting().setSound(text.toString());
-                                                realmChatRoom.getRealmNotificationSetting().setIdRadioButtonSound(which);
+                                                RealmChatRoom realmChatRoom =
+                                                    realmRoom.getChatRoom();
+                                                realmChatRoom.getRealmNotificationSetting()
+                                                    .setSound(text.toString());
+                                                realmChatRoom.getRealmNotificationSetting()
+                                                    .setIdRadioButtonSound(which);
                                                 break;
                                             }
                                         }
-
                                     }
-
-
                                 });
                                 realm.close();
                                 return true;
                             }
                         })
-                        .positiveText("OK")
-                        .negativeText("CANCEL")
-                        .show();
+                    .positiveText("OK")
+                    .negativeText("CANCEL")
+                    .show();
             }
         });
-
 
         //========================================================= vibrate
         txtVibrate.setTypeface(G.arial);
         txtVibrate.setText(realmVibrate);
         ltVibrate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
 
-                new MaterialDialog.Builder(getActivity())
-                        .title("Vibrate")
-                        .items(R.array.notifications_vibrate)
-                        .negativeText("CANCEL")
-                        .itemsCallback(new MaterialDialog.ListCallback() {
-                            @Override
-                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                                switch (which) {
-                                    case 0: {
-                                        txtVibrate.setText("Disable");
-                                        Realm realm = Realm.getDefaultInstance();
-                                        realm.executeTransaction(new Realm.Transaction() {
-                                            @Override
-                                            public void execute(Realm realm) {
-                                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                new MaterialDialog.Builder(getActivity()).title("Vibrate")
+                    .items(R.array.notifications_vibrate)
+                    .negativeText("CANCEL")
+                    .itemsCallback(new MaterialDialog.ListCallback() {
+                        @Override
+                        public void onSelection(MaterialDialog dialog, View view, int which,
+                            CharSequence text) {
+                            switch (which) {
+                                case 0: {
+                                    txtVibrate.setText("Disable");
+                                    Realm realm = Realm.getDefaultInstance();
+                                    realm.executeTransaction(new Realm.Transaction() {
+                                        @Override public void execute(Realm realm) {
+                                            RealmRoom realmRoom = realm.where(RealmRoom.class)
+                                                .equalTo(RealmRoomFields.ID, roomId)
+                                                .findFirst();
 
-                                                switch (page) {
-                                                    case "GROUP": {
-                                                        RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-                                                        realmGroupRoom.getRealmNotificationSetting().setVibrate("Disable");
-                                                        break;
-                                                    }
-                                                    case "CHANNEL": {
-                                                        RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-                                                        realmChannelRoom.getRealmNotificationSetting().setVibrate("Disable");
-                                                        break;
-                                                    }
-                                                    case "CONTACT": {
-                                                        RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
-                                                        realmChatRoom.getRealmNotificationSetting().setVibrate("Disable");
-                                                        break;
-                                                    }
+                                            switch (page) {
+                                                case "GROUP": {
+                                                    RealmGroupRoom realmGroupRoom =
+                                                        realmRoom.getGroupRoom();
+                                                    realmGroupRoom.getRealmNotificationSetting()
+                                                        .setVibrate("Disable");
+                                                    break;
                                                 }
-
-                                            }
-
-
-                                        });
-                                        realm.close();
-
-                                        break;
-                                    }
-                                    case 1: {
-                                        txtVibrate.setText("Setting default");
-
-                                        Realm realm = Realm.getDefaultInstance();
-                                        realm.executeTransaction(new Realm.Transaction() {
-                                            @Override
-                                            public void execute(Realm realm) {
-                                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-
-                                                switch (page) {
-                                                    case "GROUP": {
-                                                        RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-                                                        realmGroupRoom.getRealmNotificationSetting().setVibrate("Setting default");
-                                                        break;
-                                                    }
-                                                    case "CHANNEL": {
-                                                        RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-                                                        realmChannelRoom.getRealmNotificationSetting().setVibrate("Setting default");
-                                                        break;
-                                                    }
-                                                    case "CONTACT": {
-                                                        RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
-                                                        realmChatRoom.getRealmNotificationSetting().setVibrate("Setting default");
-                                                        break;
-                                                    }
+                                                case "CHANNEL": {
+                                                    RealmChannelRoom realmChannelRoom =
+                                                        realmRoom.getChannelRoom();
+                                                    realmChannelRoom.getRealmNotificationSetting()
+                                                        .setVibrate("Disable");
+                                                    break;
                                                 }
-
+                                                case "CONTACT": {
+                                                    RealmChatRoom realmChatRoom =
+                                                        realmRoom.getChatRoom();
+                                                    realmChatRoom.getRealmNotificationSetting()
+                                                        .setVibrate("Disable");
+                                                    break;
+                                                }
                                             }
-
-
-                                        });
-                                        realm.close();
-                                        AudioManager am = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
-                                        switch (am.getRingerMode()) {
-                                            case AudioManager.RINGER_MODE_VIBRATE:
-                                                Vibrator vSilent = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
-                                                vSilent.vibrate(AudioManager.VIBRATE_SETTING_ONLY_SILENT);
-                                                break;
                                         }
-                                        break;
-                                    }
+                                    });
+                                    realm.close();
 
-                                    case 2: {
-                                        txtVibrate.setText("System default");
-                                        Realm realm = Realm.getDefaultInstance();
-                                        realm.executeTransaction(new Realm.Transaction() {
-                                            @Override
-                                            public void execute(Realm realm) {
-                                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                                    break;
+                                }
+                                case 1: {
+                                    txtVibrate.setText("Setting default");
 
-                                                switch (page) {
-                                                    case "GROUP": {
-                                                        RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-                                                        realmGroupRoom.getRealmNotificationSetting().setVibrate("System default");
-                                                        break;
-                                                    }
-                                                    case "CHANNEL": {
-                                                        RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-                                                        realmChannelRoom.getRealmNotificationSetting().setVibrate("System default");
-                                                        break;
-                                                    }
-                                                    case "CONTACT": {
-                                                        RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
-                                                        realmChatRoom.getRealmNotificationSetting().setVibrate("System default");
-                                                        break;
-                                                    }
+                                    Realm realm = Realm.getDefaultInstance();
+                                    realm.executeTransaction(new Realm.Transaction() {
+                                        @Override public void execute(Realm realm) {
+                                            RealmRoom realmRoom = realm.where(RealmRoom.class)
+                                                .equalTo(RealmRoomFields.ID, roomId)
+                                                .findFirst();
+
+                                            switch (page) {
+                                                case "GROUP": {
+                                                    RealmGroupRoom realmGroupRoom =
+                                                        realmRoom.getGroupRoom();
+                                                    realmGroupRoom.getRealmNotificationSetting()
+                                                        .setVibrate("Setting default");
+                                                    break;
                                                 }
-
-                                            }
-
-
-                                        });
-                                        realm.close();
-
-
-                                        break;
-                                    }
-                                    case 3: {
-                                        txtVibrate.setText("Short");
-                                        Realm realm = Realm.getDefaultInstance();
-                                        realm.executeTransaction(new Realm.Transaction() {
-                                            @Override
-                                            public void execute(Realm realm) {
-                                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-
-                                                switch (page) {
-                                                    case "GROUP": {
-                                                        RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-                                                        realmGroupRoom.getRealmNotificationSetting().setVibrate("Short");
-                                                        break;
-                                                    }
-                                                    case "CHANNEL": {
-                                                        RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-                                                        realmChannelRoom.getRealmNotificationSetting().setVibrate("Short");
-                                                        break;
-                                                    }
-                                                    case "CONTACT": {
-                                                        RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
-                                                        realmChatRoom.getRealmNotificationSetting().setVibrate("Short");
-                                                        break;
-                                                    }
+                                                case "CHANNEL": {
+                                                    RealmChannelRoom realmChannelRoom =
+                                                        realmRoom.getChannelRoom();
+                                                    realmChannelRoom.getRealmNotificationSetting()
+                                                        .setVibrate("Setting default");
+                                                    break;
                                                 }
-
-                                            }
-
-
-                                        });
-                                        realm.close();
-                                        Vibrator vShort = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
-                                        vShort.vibrate(200);
-                                        break;
-                                    }
-                                    case 4: {
-                                        txtVibrate.setText("Long");
-
-                                        Realm realm = Realm.getDefaultInstance();
-                                        realm.executeTransaction(new Realm.Transaction() {
-                                            @Override
-                                            public void execute(Realm realm) {
-                                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-
-                                                switch (page) {
-                                                    case "GROUP": {
-                                                        RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-                                                        realmGroupRoom.getRealmNotificationSetting().setVibrate("Long");
-                                                        break;
-                                                    }
-                                                    case "CHANNEL": {
-                                                        RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-                                                        realmChannelRoom.getRealmNotificationSetting().setVibrate("DisLongable");
-                                                        break;
-                                                    }
-                                                    case "CONTACT": {
-                                                        RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
-                                                        realmChatRoom.getRealmNotificationSetting().setVibrate("Long");
-                                                        break;
-                                                    }
+                                                case "CONTACT": {
+                                                    RealmChatRoom realmChatRoom =
+                                                        realmRoom.getChatRoom();
+                                                    realmChatRoom.getRealmNotificationSetting()
+                                                        .setVibrate("Setting default");
+                                                    break;
                                                 }
-
                                             }
-
-
-                                        });
-                                        realm.close();
-                                        Vibrator vLong = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
-                                        vLong.vibrate(500);
-                                        break;
+                                        }
+                                    });
+                                    realm.close();
+                                    AudioManager am = (AudioManager) getActivity().getSystemService(
+                                        Context.AUDIO_SERVICE);
+                                    switch (am.getRingerMode()) {
+                                        case AudioManager.RINGER_MODE_VIBRATE:
+                                            Vibrator vSilent =
+                                                (Vibrator) G.context.getSystemService(
+                                                    Context.VIBRATOR_SERVICE);
+                                            vSilent.vibrate(
+                                                AudioManager.VIBRATE_SETTING_ONLY_SILENT);
+                                            break;
                                     }
+                                    break;
+                                }
+
+                                case 2: {
+                                    txtVibrate.setText("System default");
+                                    Realm realm = Realm.getDefaultInstance();
+                                    realm.executeTransaction(new Realm.Transaction() {
+                                        @Override public void execute(Realm realm) {
+                                            RealmRoom realmRoom = realm.where(RealmRoom.class)
+                                                .equalTo(RealmRoomFields.ID, roomId)
+                                                .findFirst();
+
+                                            switch (page) {
+                                                case "GROUP": {
+                                                    RealmGroupRoom realmGroupRoom =
+                                                        realmRoom.getGroupRoom();
+                                                    realmGroupRoom.getRealmNotificationSetting()
+                                                        .setVibrate("System default");
+                                                    break;
+                                                }
+                                                case "CHANNEL": {
+                                                    RealmChannelRoom realmChannelRoom =
+                                                        realmRoom.getChannelRoom();
+                                                    realmChannelRoom.getRealmNotificationSetting()
+                                                        .setVibrate("System default");
+                                                    break;
+                                                }
+                                                case "CONTACT": {
+                                                    RealmChatRoom realmChatRoom =
+                                                        realmRoom.getChatRoom();
+                                                    realmChatRoom.getRealmNotificationSetting()
+                                                        .setVibrate("System default");
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    });
+                                    realm.close();
+
+                                    break;
+                                }
+                                case 3: {
+                                    txtVibrate.setText("Short");
+                                    Realm realm = Realm.getDefaultInstance();
+                                    realm.executeTransaction(new Realm.Transaction() {
+                                        @Override public void execute(Realm realm) {
+                                            RealmRoom realmRoom = realm.where(RealmRoom.class)
+                                                .equalTo(RealmRoomFields.ID, roomId)
+                                                .findFirst();
+
+                                            switch (page) {
+                                                case "GROUP": {
+                                                    RealmGroupRoom realmGroupRoom =
+                                                        realmRoom.getGroupRoom();
+                                                    realmGroupRoom.getRealmNotificationSetting()
+                                                        .setVibrate("Short");
+                                                    break;
+                                                }
+                                                case "CHANNEL": {
+                                                    RealmChannelRoom realmChannelRoom =
+                                                        realmRoom.getChannelRoom();
+                                                    realmChannelRoom.getRealmNotificationSetting()
+                                                        .setVibrate("Short");
+                                                    break;
+                                                }
+                                                case "CONTACT": {
+                                                    RealmChatRoom realmChatRoom =
+                                                        realmRoom.getChatRoom();
+                                                    realmChatRoom.getRealmNotificationSetting()
+                                                        .setVibrate("Short");
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    });
+                                    realm.close();
+                                    Vibrator vShort = (Vibrator) G.context.getSystemService(
+                                        Context.VIBRATOR_SERVICE);
+                                    vShort.vibrate(200);
+                                    break;
+                                }
+                                case 4: {
+                                    txtVibrate.setText("Long");
+
+                                    Realm realm = Realm.getDefaultInstance();
+                                    realm.executeTransaction(new Realm.Transaction() {
+                                        @Override public void execute(Realm realm) {
+                                            RealmRoom realmRoom = realm.where(RealmRoom.class)
+                                                .equalTo(RealmRoomFields.ID, roomId)
+                                                .findFirst();
+
+                                            switch (page) {
+                                                case "GROUP": {
+                                                    RealmGroupRoom realmGroupRoom =
+                                                        realmRoom.getGroupRoom();
+                                                    realmGroupRoom.getRealmNotificationSetting()
+                                                        .setVibrate("Long");
+                                                    break;
+                                                }
+                                                case "CHANNEL": {
+                                                    RealmChannelRoom realmChannelRoom =
+                                                        realmRoom.getChannelRoom();
+                                                    realmChannelRoom.getRealmNotificationSetting()
+                                                        .setVibrate("DisLongable");
+                                                    break;
+                                                }
+                                                case "CONTACT": {
+                                                    RealmChatRoom realmChatRoom =
+                                                        realmRoom.getChatRoom();
+                                                    realmChatRoom.getRealmNotificationSetting()
+                                                        .setVibrate("Long");
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    });
+                                    realm.close();
+                                    Vibrator vLong = (Vibrator) G.context.getSystemService(
+                                        Context.VIBRATOR_SERVICE);
+                                    vLong.vibrate(500);
+                                    break;
                                 }
                             }
-                        })
-                        .show();
+                        }
+                    })
+                    .show();
             }
         });
 
-
         //==========================================================number pick
 
-        txtSmartNotification.setText("Sound at must " + realmTimes + " times within " + realmMinutes + " minutes");
+        txtSmartNotification.setText(
+            "Sound at must " + realmTimes + " times within " + realmMinutes + " minutes");
         ltSmartNotification.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
 
                 boolean wrapInScrollView = true;
-                final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
-                        .title("Smart Notifications")
+                final MaterialDialog dialog =
+                    new MaterialDialog.Builder(getActivity()).title("Smart Notifications")
                         .customView(R.layout.dialog_number_picker, wrapInScrollView)
                         .positiveText(R.string.B_ok)
                         .negativeText(R.string.B_cancel)
@@ -629,33 +663,44 @@ public class FragmentNotification extends Fragment {
 
                 View btnPositive = dialog.getActionButton(DialogAction.POSITIVE);
                 btnPositive.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        txtSmartNotification.setText("Sound at must " + numberPickerTimes.getValue() + " times within " + numberPickerMinutes.getValue() + " minutes");
+                    @Override public void onClick(View view) {
+                        txtSmartNotification.setText("Sound at must "
+                            + numberPickerTimes.getValue()
+                            + " times within "
+                            + numberPickerMinutes.getValue()
+                            + " minutes");
                         Realm realm = Realm.getDefaultInstance();
                         realm.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                            @Override public void execute(Realm realm) {
+                                RealmRoom realmRoom = realm.where(RealmRoom.class)
+                                    .equalTo(RealmRoomFields.ID, roomId)
+                                    .findFirst();
 
                                 switch (page) {
                                     case "GROUP": {
                                         RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-                                        realmGroupRoom.getRealmNotificationSetting().setMinutes(numberPickerMinutes.getValue());
-                                        realmGroupRoom.getRealmNotificationSetting().setTimes(numberPickerTimes.getValue());
+                                        realmGroupRoom.getRealmNotificationSetting()
+                                            .setMinutes(numberPickerMinutes.getValue());
+                                        realmGroupRoom.getRealmNotificationSetting()
+                                            .setTimes(numberPickerTimes.getValue());
                                         break;
                                     }
                                     case "CHANNEL": {
-                                        RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-                                        realmChannelRoom.getRealmNotificationSetting().setMinutes(numberPickerMinutes.getValue());
-                                        realmChannelRoom.getRealmNotificationSetting().setTimes(numberPickerTimes.getValue());
+                                        RealmChannelRoom realmChannelRoom =
+                                            realmRoom.getChannelRoom();
+                                        realmChannelRoom.getRealmNotificationSetting()
+                                            .setMinutes(numberPickerMinutes.getValue());
+                                        realmChannelRoom.getRealmNotificationSetting()
+                                            .setTimes(numberPickerTimes.getValue());
 
                                         break;
                                     }
                                     case "CONTACT": {
                                         RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
-                                        realmChatRoom.getRealmNotificationSetting().setMinutes(numberPickerMinutes.getValue());
-                                        realmChatRoom.getRealmNotificationSetting().setTimes(numberPickerTimes.getValue());
+                                        realmChatRoom.getRealmNotificationSetting()
+                                            .setMinutes(numberPickerMinutes.getValue());
+                                        realmChatRoom.getRealmNotificationSetting()
+                                            .setTimes(numberPickerTimes.getValue());
 
                                         break;
                                     }
@@ -667,41 +712,37 @@ public class FragmentNotification extends Fragment {
                         dialog.dismiss();
                         Log.i("VVVV", "onClick: " + numberPickerTimes.getValue());
                         Log.i("VVVV", "onClick: " + numberPickerMinutes.getValue());
-
                     }
                 });
                 dialog.show();
-
             }
         });
-
 
         //=======================================================================led color
 
         GradientDrawable bgShape = (GradientDrawable) imgLED.getBackground();
         bgShape.setColor(realmLedColor);
         ltLedColor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 boolean wrapInScrollView = true;
-                final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
-                        .customView(R.layout.stns_popup_colorpicer, wrapInScrollView)
-                        .positiveText("SET")
-                        .negativeText("DISCARD")
-                        .title("LED Color")
-                        .onNegative(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                final MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).customView(
+                    R.layout.stns_popup_colorpicer, wrapInScrollView)
+                    .positiveText("SET")
+                    .negativeText("DISCARD")
+                    .title("LED Color")
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override public void onClick(@NonNull MaterialDialog dialog,
+                            @NonNull DialogAction which) {
 
+                        }
+                    })
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override public void onClick(@NonNull MaterialDialog dialog,
+                            @NonNull DialogAction which) {
 
-                            }
-                        })
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                            }
-                        }).build();
+                        }
+                    })
+                    .build();
 
                 View view1 = dialog.getCustomView();
                 assert view1 != null;
@@ -711,54 +752,58 @@ public class FragmentNotification extends Fragment {
                 picker.addSVBar(svBar);
                 picker.addOpacityBar(opacityBar);
 
-                dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+                dialog.getActionButton(DialogAction.POSITIVE)
+                    .setOnClickListener(new View.OnClickListener() {
+                        @Override public void onClick(View view) {
 
+                            dialog.dismiss();
+                            GradientDrawable bgShape = (GradientDrawable) imgLED.getBackground();
+                            bgShape.setColor(picker.getColor());
 
-                        dialog.dismiss();
-                        GradientDrawable bgShape = (GradientDrawable) imgLED.getBackground();
-                        bgShape.setColor(picker.getColor());
+                            Realm realm = Realm.getDefaultInstance();
+                            realm.executeTransaction(new Realm.Transaction() {
+                                @Override public void execute(Realm realm) {
+                                    RealmRoom realmRoom = realm.where(RealmRoom.class)
+                                        .equalTo(RealmRoomFields.ID, roomId)
+                                        .findFirst();
 
-
-                        Realm realm = Realm.getDefaultInstance();
-                        realm.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-
-                                switch (page) {
-                                    case "GROUP": {
-                                        RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-                                        realmGroupRoom.getRealmNotificationSetting().setLedColor(picker.getColor());
-                                        break;
-                                    }
-                                    case "CHANNEL": {
-                                        RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-                                        realmChannelRoom.getRealmNotificationSetting().setLedColor(picker.getColor());
-                                        break;
-                                    }
-                                    case "CONTACT": {
-                                        RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
-                                        realmChatRoom.getRealmNotificationSetting().setLedColor(picker.getColor());
-                                        break;
+                                    switch (page) {
+                                        case "GROUP": {
+                                            RealmGroupRoom realmGroupRoom =
+                                                realmRoom.getGroupRoom();
+                                            realmGroupRoom.getRealmNotificationSetting()
+                                                .setLedColor(picker.getColor());
+                                            break;
+                                        }
+                                        case "CHANNEL": {
+                                            RealmChannelRoom realmChannelRoom =
+                                                realmRoom.getChannelRoom();
+                                            realmChannelRoom.getRealmNotificationSetting()
+                                                .setLedColor(picker.getColor());
+                                            break;
+                                        }
+                                        case "CONTACT": {
+                                            RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
+                                            realmChatRoom.getRealmNotificationSetting()
+                                                .setLedColor(picker.getColor());
+                                            break;
+                                        }
                                     }
                                 }
-                            }
-                        });
-                        realm.close();
-                    }
-                });
+                            });
+                            realm.close();
+                        }
+                    });
 
                 dialog.show();
             }
         });
     }
 
-    private void setRealm(Realm realm, final RealmGroupRoom realmGroupRoom, final RealmChannelRoom realmChannelRoom, final RealmChatRoom realmChatRoom) {
+    private void setRealm(Realm realm, final RealmGroupRoom realmGroupRoom,
+        final RealmChannelRoom realmChannelRoom, final RealmChatRoom realmChatRoom) {
         realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
+            @Override public void execute(Realm realm) {
                 realmNotificationSetting = realm.createObject(RealmNotificationSetting.class);
 
                 realmNotificationSetting.setNotification("default");
@@ -771,17 +816,19 @@ public class FragmentNotification extends Fragment {
                 realmNotificationSetting.setSmartNotification("default");
                 realmNotificationSetting.setLedColor(-8257792);
 
-                if (realmGroupRoom != null)
+                if (realmGroupRoom != null) {
                     realmGroupRoom.setRealmNotificationSetting(realmNotificationSetting);
+                }
 
-                if (realmChannelRoom != null)
+                if (realmChannelRoom != null) {
                     realmChannelRoom.setRealmNotificationSetting(realmNotificationSetting);
+                }
 
-                if (realmChatRoom != null)
+                if (realmChatRoom != null) {
                     realmChatRoom.setRealmNotificationSetting(realmNotificationSetting);
+                }
             }
         });
-
     }
 
     private void getRealm() {
@@ -815,7 +862,5 @@ public class FragmentNotification extends Fragment {
 
         txtSound = (TextView) view.findViewById(R.id.ntg_txt_desc_sound);
         ltSound = (ViewGroup) view.findViewById(R.id.ntg_layout_sound);
-
-
     }
 }

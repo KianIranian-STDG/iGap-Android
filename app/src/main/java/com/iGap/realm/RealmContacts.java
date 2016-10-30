@@ -17,11 +17,6 @@ public class RealmContacts extends RealmObject {
     private int avatarCount;
     private RealmAvatar avatar;
 
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public long getId() {
         return id;
     }
@@ -96,6 +91,10 @@ public class RealmContacts extends RealmObject {
 
     public String getStatus() {
         return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public int getAvatarCount() {

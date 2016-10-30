@@ -6,7 +6,8 @@ public class RequestUserUsernameToId {
 
     public void userUserNameToId(String username) {
 
-        ProtoUserUsernameToId.UserUsernameToId.Builder builder = ProtoUserUsernameToId.UserUsernameToId.newBuilder();
+        ProtoUserUsernameToId.UserUsernameToId.Builder builder =
+            ProtoUserUsernameToId.UserUsernameToId.newBuilder();
         builder.setUsername(username);
 
         RequestWrapper requestWrapper = new RequestWrapper(113, builder);
@@ -16,5 +17,4 @@ public class RequestUserUsernameToId {
             e.printStackTrace();
         }
     }
-
 }

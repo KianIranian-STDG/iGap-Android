@@ -8,7 +8,8 @@ public class RequestFileUploadStatus {
 
     public void fileUploadStatus(String token, String fileHashAsIdentity) {
 
-        ProtoFileUploadStatus.FileUploadStatus.Builder builder = ProtoFileUploadStatus.FileUploadStatus.newBuilder();
+        ProtoFileUploadStatus.FileUploadStatus.Builder builder =
+            ProtoFileUploadStatus.FileUploadStatus.newBuilder();
         builder.setRequest(ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
         builder.setToken(token);
 

@@ -53,7 +53,6 @@ public class HelperFillLookUpClass {
         G.lookupMap.put(117, "UserInfo");
         G.lookupMap.put(30117, "ProtoUserInfo.UserInfoResponse");
 
-
         // Chat 2xx , 302xx
         G.lookupMap.put(200, "Chat.GetRoom");
         G.lookupMap.put(30200, "ProtoChatGetRoom.ChatGetRoomResponse");
@@ -137,5 +136,4 @@ public class HelperFillLookUpClass {
         G.lookupMap.put(705, "FileDownload");
         G.lookupMap.put(30705, "ProtoFileDownload.FileDownloadResponse");
     }
-
 }

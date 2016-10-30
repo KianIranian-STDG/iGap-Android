@@ -9,19 +9,17 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-
 import com.iGap.R;
-
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
-
 /**
  * This is a View class that wraps Android {@link Movie} object and displays it.
- * You can set GIF as a Movie object or as a resource id from XML or by calling {@link #setMovie(Movie)} or {@link #setMovieResource(int)}.
+ * You can set GIF as a Movie object or as a resource id from XML or by calling {@link
+ * #setMovie(Movie)} or {@link #setMovieResource(int)}.
  * <p>
  * You can pause and resume GIF animation by calling {@link #setPaused(boolean)}.
  * <p>
@@ -60,23 +58,19 @@ public class GifMovieView extends View {
     private volatile boolean mPaused = false;
     private boolean mVisible = true;
 
-
     public GifMovieView(Context context) {
         this(context, null);
     }
 
-
     public GifMovieView(Context context, AttributeSet attrs) {
         this(context, attrs, R.styleable.CustomTheme_gifMoviewViewStyle);
     }
-
 
     public GifMovieView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
         setViewAttributes(context, attrs, defStyle);
     }
-
 
     @SuppressLint("NewApi")
     private void setViewAttributes(Context context, AttributeSet attrs, int defStyle) {
@@ -89,7 +83,8 @@ public class GifMovieView extends View {
             setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
 
-        final TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.GifMoviewView, defStyle,
+        final TypedArray array =
+            context.obtainStyledAttributes(attrs, R.styleable.GifMoviewView, defStyle,
                 R.style.Widget_GifMoviewView);
 
         mMovieResourceId = array.getResourceId(R.styleable.GifMoviewView_gif, -1);
@@ -102,13 +97,11 @@ public class GifMovieView extends View {
         }
     }
 
-
     public void setMovieResource(int movieResId) {
         this.mMovieResourceId = movieResId;
         mMovie = Movie.decodeStream(getResources().openRawResource(mMovieResourceId));
         requestLayout();
     }
-
 
     public void setMoviefilepath(String path) {
         this.path = path;
@@ -125,7 +118,6 @@ public class GifMovieView extends View {
             try {
                 byte[] array = streamToBytes(is);
                 mMovie = Movie.decodeByteArray(array, 0, array.length);
-
             } finally {
                 try {
                     is.close();
@@ -144,23 +136,23 @@ public class GifMovieView extends View {
         requestLayout();
     }
 
+    public Movie getMovie() {
+        return mMovie;
+    }
 
     public void setMovie(Movie movie) {
         this.mMovie = movie;
         requestLayout();
     }
 
-
-    public Movie getMovie() {
-        return mMovie;
-    }
-
-
     public void setMovieTime(int time) {
         mCurrentAnimationTime = time;
         invalidate();
     }
 
+    public boolean isPaused() {
+        return this.mPaused;
+    }
 
     public void setPaused(boolean paused) {
         this.mPaused = paused;
@@ -176,14 +168,7 @@ public class GifMovieView extends View {
         invalidate();
     }
 
-
-    public boolean isPaused() {
-        return this.mPaused;
-    }
-
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    @Override protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
         if (mMovie != null) {
             int movieWidth = mMovie.width();
@@ -215,16 +200,13 @@ public class GifMovieView extends View {
             mMeasuredMovieHeight = (int) (movieHeight * mScale);
 
             setMeasuredDimension(mMeasuredMovieWidth, mMeasuredMovieHeight);
-
         } else {
 
             setMeasuredDimension(getSuggestedMinimumWidth(), getSuggestedMinimumHeight());
         }
     }
 
-
-    @Override
-    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+    @Override protected void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
 
         mLeft = (getWidth() - mMeasuredMovieWidth) / 2f;
@@ -233,9 +215,7 @@ public class GifMovieView extends View {
         mVisible = getVisibility() == View.VISIBLE;
     }
 
-
-    @Override
-    protected void onDraw(Canvas canvas) {
+    @Override protected void onDraw(Canvas canvas) {
         if (mMovie != null) {
             if (!mPaused) {
                 updateAnimationTime();
@@ -247,13 +227,11 @@ public class GifMovieView extends View {
         }
     }
 
-
     /**
      * Invalidates view only if it is visible. <br>
      * {@link #postInvalidateOnAnimation()} is used for Jelly Bean and higher.
      */
-    @SuppressLint("NewApi")
-    private void invalidateView() {
+    @SuppressLint("NewApi") private void invalidateView() {
         if (mVisible) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 postInvalidateOnAnimation();
@@ -262,7 +240,6 @@ public class GifMovieView extends View {
             }
         }
     }
-
 
     /**
      * Calculate current animation time
@@ -283,7 +260,6 @@ public class GifMovieView extends View {
         mCurrentAnimationTime = (int) ((now - mMovieStart) % dur);
     }
 
-
     /**
      * Draw current GIF frame
      */
@@ -297,32 +273,24 @@ public class GifMovieView extends View {
         canvas.restore();
     }
 
-
-    @SuppressLint("NewApi")
-    @Override
-    public void onScreenStateChanged(int screenState) {
+    @SuppressLint("NewApi") @Override public void onScreenStateChanged(int screenState) {
         super.onScreenStateChanged(screenState);
         mVisible = screenState == SCREEN_STATE_ON;
         invalidateView();
     }
 
-
-    @SuppressLint("NewApi")
-    @Override
+    @SuppressLint("NewApi") @Override
     protected void onVisibilityChanged(View changedView, int visibility) {
         super.onVisibilityChanged(changedView, visibility);
         mVisible = visibility == View.VISIBLE;
         invalidateView();
     }
 
-
-    @Override
-    protected void onWindowVisibilityChanged(int visibility) {
+    @Override protected void onWindowVisibilityChanged(int visibility) {
         super.onWindowVisibilityChanged(visibility);
         mVisible = visibility == View.VISIBLE;
         invalidateView();
     }
-
 
     private byte[] streamToBytes(InputStream is) {
         ByteArrayOutputStream os = new ByteArrayOutputStream(1024);

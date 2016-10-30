@@ -1,7 +1,6 @@
 package com.iGap.realm;
 
 import com.iGap.proto.ProtoGlobal;
-
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -10,15 +9,15 @@ import io.realm.annotations.PrimaryKey;
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/29/2016.
  */
 public class RealmThumbnail extends RealmObject {
-    @PrimaryKey
-    private long id;
+    @PrimaryKey private long id;
     private long messageId;
     private long size;
     private int width;
     private int height;
     private String cacheId;
 
-    public static void create(long id, final long messageId, final ProtoGlobal.Thumbnail thumbnail) {
+    public static void create(long id, final long messageId,
+        final ProtoGlobal.Thumbnail thumbnail) {
         Realm realm = Realm.getDefaultInstance();
         RealmThumbnail realmThumbnail = realm.createObject(RealmThumbnail.class);
         realmThumbnail.setCacheId(thumbnail.getCacheId());

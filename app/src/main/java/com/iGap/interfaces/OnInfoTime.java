@@ -10,5 +10,4 @@ import com.iGap.proto.ProtoResponse;
 public interface OnInfoTime {
 
     void onInfoTime(int timeStamp, ProtoResponse.Response response);
-
 }

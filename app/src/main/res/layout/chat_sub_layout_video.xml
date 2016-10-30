@@ -1,117 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
-             android:id="@+id/chatSubLayoutVideo"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:layout_marginBottom="@dimen/dp4"
-             android:maxWidth="@dimen/dp300"
-             android:textDirection="firstStrong">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/chatSubLayoutVideo"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/dp4"
+    android:maxWidth="@dimen/dp300"
+    android:textDirection="firstStrong"
+    >
+
+  <LinearLayout
+      android:id="@+id/mainContainer"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      tools:ignore="UselessParent"
+      >
+
+    <com.iGap.module.CircleImageView
+        android:id="@+id/messageSenderAvatar"
+        android:layout_width="@dimen/dp52"
+        android:layout_height="@dimen/dp52"
+        android:layout_marginRight="@dimen/dp8"
+        android:src="@mipmap/b"
+        />
 
     <LinearLayout
-        android:id="@+id/mainContainer"
+        android:id="@+id/contentContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        tools:ignore="UselessParent">
+        android:background="@drawable/rectangle_round_white"
+        android:orientation="vertical"
+        android:padding="@dimen/messageContainerPadding"
+        >
 
-        <com.iGap.module.CircleImageView
-            android:id="@+id/messageSenderAvatar"
-            android:layout_width="@dimen/dp52"
-            android:layout_height="@dimen/dp52"
-            android:layout_marginRight="@dimen/dp8"
-            android:src="@mipmap/b"/>
+      <include
+          layout="@layout/chat_sub_layout_replay"
+          android:id="@+id/replayLayout"
+          />
+
+      <include
+          layout="@layout/chat_sub_layout_forward"
+          android:id="@+id/cslr_ll_forward"
+          />
+
+      <FrameLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          >
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/thumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            app:riv_corner_radius="@dimen/chatMessageImageCorner"
+            />
+
+        <include
+            layout="@layout/msg_progress_item"
+            android:id="@+id/progress"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_gravity="center"
+            />
 
         <LinearLayout
-            android:id="@+id/contentContainer"
+            android:id="@+id/cslr_ll_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/rectangle_round_white"
-            android:orientation="vertical"
-            android:padding="@dimen/messageContainerPadding">
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="@dimen/dp4"
+            android:background="@drawable/bg_message_image_time"
+            android:gravity="bottom|left"
+            android:orientation="horizontal"
+            android:padding="@dimen/dp4"
+            >
 
-            <include
-                android:id="@+id/replayLayout"
-                layout="@layout/chat_sub_layout_replay"/>
+          <TextView
+              android:id="@+id/cslr_txt_time"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="10:21"
+              android:textColor="@android:color/white"
+              android:textSize="@dimen/sp12"
+              />
 
-            <include
-                android:id="@+id/cslr_ll_forward"
-                layout="@layout/chat_sub_layout_forward"/>
-
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <com.makeramen.roundedimageview.RoundedImageView
-                    android:id="@+id/thumbnail"
-                    android:layout_width="match_parent"
-                    android:adjustViewBounds="true"
-                    android:layout_height="match_parent"
-                    android:scaleType="fitXY"
-                    app:riv_corner_radius="@dimen/chatMessageImageCorner"/>
-
-                <include
-                    android:id="@+id/progress"
-                    layout="@layout/msg_progress_item"
-                    android:layout_width="64dp"
-                    android:layout_height="64dp"
-                    android:layout_gravity="center"/>
-
-                <LinearLayout
-                    android:id="@+id/cslr_ll_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|right"
-                    android:layout_marginRight="@dimen/dp4"
-                    android:background="@drawable/bg_message_image_time"
-                    android:gravity="bottom|left"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/dp4">
-
-                    <TextView
-                        android:id="@+id/cslr_txt_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="10:21"
-                        android:textColor="@android:color/white"
-                        android:textSize="@dimen/sp12"/>
-
-                    <com.iGap.module.MaterialDesignTextView
-                        android:id="@+id/cslr_txt_tic"
-                        style="@style/ChatMessages.MaterialDesignTextView.Tick"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="@dimen/dp4"
-                        android:gravity="bottom"
-                        android:text="@string/md_clock_with_white_face"
-                        android:textColor="@color/green"/>
+          <com.iGap.module.MaterialDesignTextView
+              android:id="@+id/cslr_txt_tic"
+              android:layout_width="wrap_content"
+              android:layout_height="match_parent"
+              android:layout_marginLeft="@dimen/dp4"
+              android:gravity="bottom"
+              android:text="@string/md_clock_with_white_face"
+              android:textColor="@color/green"
+              style="@style/ChatMessages.MaterialDesignTextView.Tick"
+              />
 
 
-                </LinearLayout>
-
-            </FrameLayout>
-
-            <TextView
-                android:id="@+id/fileName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:text="FILENAME.MP4"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/sp16"
-                android:textStyle="bold"/>
-
-            <TextView
-                android:id="@+id/duration"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:text="3:48 (4.5 MB)"
-                android:textAllCaps="true"
-                android:textColor="@color/gray"
-                android:textSize="@dimen/sp14"/>
         </LinearLayout>
+
+      </FrameLayout>
+
+      <TextView
+          android:id="@+id/fileName"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:singleLine="true"
+          android:text="FILENAME.MP4"
+          android:textColor="@android:color/black"
+          android:textSize="@dimen/sp16"
+          android:textStyle="bold"
+          />
+
+      <TextView
+          android:id="@+id/duration"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:singleLine="true"
+          android:text="3:48 (4.5 MB)"
+          android:textAllCaps="true"
+          android:textColor="@color/gray"
+          android:textSize="@dimen/sp14"
+          />
     </LinearLayout>
+  </LinearLayout>
 </FrameLayout>

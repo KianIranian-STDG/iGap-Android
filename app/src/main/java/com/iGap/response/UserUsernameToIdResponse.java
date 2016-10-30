@@ -16,19 +16,16 @@ public class UserUsernameToIdResponse extends MessageHandler {
         this.identity = identity;
     }
 
-
-    @Override
-    public void handler() {
-        ProtoUserUsernameToId.UserUsernameToIdResponse.Builder builder = (ProtoUserUsernameToId.UserUsernameToIdResponse.Builder) message;
+    @Override public void handler() {
+        ProtoUserUsernameToId.UserUsernameToIdResponse.Builder builder =
+            (ProtoUserUsernameToId.UserUsernameToIdResponse.Builder) message;
         builder.getUserId();
     }
 
-    @Override
-    public void timeOut() {
+    @Override public void timeOut() {
     }
 
-    @Override
-    public void error() {
+    @Override public void error() {
     }
 }
 

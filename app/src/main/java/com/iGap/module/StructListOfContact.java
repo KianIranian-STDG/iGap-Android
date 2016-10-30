@@ -10,15 +10,17 @@ public class StructListOfContact {
     public String lastName;
     public String displayName;
 
-
     public String getPhone() {
         return phone;
     }
 
     public void setPhone(String phone) {
 
-        if (phone == null) this.phone = "";
-        else this.phone = phone;
+        if (phone == null) {
+            this.phone = "";
+        } else {
+            this.phone = phone;
+        }
     }
 
     public String getFirstName() {
@@ -28,8 +30,11 @@ public class StructListOfContact {
 
     public void setFirstName(String firstName) {
 
-        if (firstName == null) this.firstName = "";
-        else this.firstName = firstName;
+        if (firstName == null) {
+            this.firstName = "";
+        } else {
+            this.firstName = firstName;
+        }
     }
 
     public String getLastName() {
@@ -38,8 +43,11 @@ public class StructListOfContact {
 
     public void setLastName(String lastName) {
 
-        if (lastName == null) this.lastName = "";
-        else this.lastName = lastName;
+        if (lastName == null) {
+            this.lastName = "";
+        } else {
+            this.lastName = lastName;
+        }
     }
 
     public String getDisplayName() {

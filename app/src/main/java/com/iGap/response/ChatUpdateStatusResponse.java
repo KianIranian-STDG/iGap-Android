@@ -1,7 +1,6 @@
 package com.iGap.response;
 
 import android.util.Log;
-
 import com.iGap.G;
 import com.iGap.proto.ProtoChatUpdateStatus;
 import com.iGap.proto.ProtoError;
@@ -11,7 +10,6 @@ import com.iGap.realm.RealmClientConditionFields;
 import com.iGap.realm.RealmOfflineSeen;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
-
 import io.realm.Realm;
 
 public class ChatUpdateStatusResponse extends MessageHandler {
@@ -27,23 +25,29 @@ public class ChatUpdateStatusResponse extends MessageHandler {
         this.actionId = actionId;
     }
 
-
     @Override
     public void handler() { //TODO [Saeed Mozaffari] [2016-09-17 4:05 PM] - FORCE for remove seen from client condition
-        final ProtoChatUpdateStatus.ChatUpdateStatusResponse.Builder chatUpdateStatus = (ProtoChatUpdateStatus.ChatUpdateStatusResponse.Builder) message;
+        final ProtoChatUpdateStatus.ChatUpdateStatusResponse.Builder chatUpdateStatus =
+            (ProtoChatUpdateStatus.ChatUpdateStatusResponse.Builder) message;
 
-        final ProtoResponse.Response.Builder response = ProtoResponse.Response.newBuilder().mergeFrom(chatUpdateStatus.getResponse());
+        final ProtoResponse.Response.Builder response =
+            ProtoResponse.Response.newBuilder().mergeFrom(chatUpdateStatus.getResponse());
         Log.i("SOC_CONDITION", "ChatUpdateStatusResponse response.getId() : " + response.getId());
-        Log.i("SOC_CONDITION", "ChatUpdateStatusResponse response.getTimestamp() : " + response.getTimestamp());
-        Log.i("SOC_CONDITION", "ChatSendMessageResponse chatUpdateStatus : " + chatUpdateStatus.getStatus());
+        Log.i("SOC_CONDITION",
+            "ChatUpdateStatusResponse response.getTimestamp() : " + response.getTimestamp());
+        Log.i("SOC_CONDITION",
+            "ChatSendMessageResponse chatUpdateStatus : " + chatUpdateStatus.getStatus());
 
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
+            @Override public void execute(Realm realm) {
                 if (!response.getId().isEmpty()) { // I'm sender
                     Log.i("CLI", "chatUpdateStatus getId : " + chatUpdateStatus.getMessageId());
-                    RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, chatUpdateStatus.getRoomId()).findFirst();
+                    RealmClientCondition realmClientCondition =
+                        realm.where(RealmClientCondition.class)
+                            .equalTo(RealmClientConditionFields.ROOM_ID,
+                                chatUpdateStatus.getRoomId())
+                            .findFirst();
                     // RealmList<RealmOfflineSeen> offlineSeen = realmClientCondition.getOfflineSeen();
                     for (RealmOfflineSeen realmOfflineSeen : realmClientCondition.getOfflineSeen()) {
                         if (realmOfflineSeen.getOfflineSeen() == chatUpdateStatus.getMessageId()) {
@@ -52,37 +56,39 @@ public class ChatUpdateStatusResponse extends MessageHandler {
                             break;
                         }
                     }
-//                    for (int i = offlineSeen.size() - 1; i >= 0; i--) {
-//                        RealmOfflineSeen realmOfflineSeen = offlineSeen.get(i);
-//                        Log.i("SOC_CONDITION", "realmOfflineSeen 1 : " + realmOfflineSeen);
-//                        realmOfflineSeen.deleteFromRealm();
-//                    }
+                    //                    for (int i = offlineSeen.size() - 1; i >= 0; i--) {
+                    //                        RealmOfflineSeen realmOfflineSeen = offlineSeen.get(i);
+                    //                        Log.i("SOC_CONDITION", "realmOfflineSeen 1 : " + realmOfflineSeen);
+                    //                        realmOfflineSeen.deleteFromRealm();
+                    //                    }
                 } else { // I'm recipient
 
                     // find message from database and update its status
-                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, chatUpdateStatus.getMessageId()).findFirst();
+                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class)
+                        .equalTo(RealmRoomMessageFields.MESSAGE_ID, chatUpdateStatus.getMessageId())
+                        .findFirst();
                     Log.i("SOC_CONDITION", "I'm recipient 1");
                     if (roomMessage != null) {
-                        Log.i(ChatUpdateStatusResponse.class.getSimpleName(), "oftad > " + chatUpdateStatus.getStatus().toString());
+                        Log.i(ChatUpdateStatusResponse.class.getSimpleName(),
+                            "oftad > " + chatUpdateStatus.getStatus().toString());
                         roomMessage.setStatus(chatUpdateStatus.getStatus().toString());
                         realm.copyToRealmOrUpdate(roomMessage);
                         Log.i("SOC_CONDITION", "I'm recipient ");
-                        G.chatUpdateStatusUtil.onChatUpdateStatus(chatUpdateStatus.getRoomId(), chatUpdateStatus.getMessageId(), chatUpdateStatus.getStatus(), chatUpdateStatus.getStatusVersion());
+                        G.chatUpdateStatusUtil.onChatUpdateStatus(chatUpdateStatus.getRoomId(),
+                            chatUpdateStatus.getMessageId(), chatUpdateStatus.getStatus(),
+                            chatUpdateStatus.getStatusVersion());
                     }
-
                 }
             }
         });
         realm.close();
     }
 
-    @Override
-    public void timeOut() {
+    @Override public void timeOut() {
         Log.i("SOC", "ChatUpdateStatusResponse timeout");
     }
 
-    @Override
-    public void error() {
+    @Override public void error() {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();

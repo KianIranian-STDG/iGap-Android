@@ -1,130 +1,131 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="BaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/green</item>
-        <item name="colorPrimaryDark">@color/greenStatus</item>
-        <item name="colorAccent">@color/green</item>
-        <item name="android:textViewStyle">@style/AppTheme.Widget.TextView</item>
-    </style>
+  <!-- Base application theme. -->
+  <style name="BaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <!-- Customize your theme here. -->
+    <item name="colorPrimary">@color/green</item>
+    <item name="colorPrimaryDark">@color/greenStatus</item>
+    <item name="colorAccent">@color/green</item>
+    <item name="android:textViewStyle">@style/AppTheme.Widget.TextView</item>
+  </style>
 
-    <style name="AppTheme.Widget" />
+  <style name="AppTheme.Widget"/>
 
-    <style name="AppTheme.Widget.TextView" parent="android:Widget.Holo.Light.TextView">
-        <item name="fontPath">fonts/iransanslite.ttf</item>
-    </style>
+  <style name="AppTheme.Widget.TextView" parent="android:Widget.Holo.Light.TextView">
+    <item name="fontPath">fonts/iransanslite.ttf</item>
+  </style>
 
-    <style name="AppTheme" parent="BaseTheme">
+  <style name="AppTheme" parent="BaseTheme">
 
-    </style>
+  </style>
 
-    <style name="AppThemeTranslucent" parent="BaseTheme">
+  <style name="AppThemeTranslucent" parent="BaseTheme">
 
-    </style>
+  </style>
 
-    <style name="ChatMessages.EmojiTextView" parent="ChatMessages">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:paddingBottom">2dp</item>
-        <item name="android:textSize">@dimen/sp16</item>
-    </style>
+  <style name="ChatMessages.EmojiTextView" parent="ChatMessages">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:paddingBottom">2dp</item>
+    <item name="android:textSize">@dimen/sp16</item>
+  </style>
 
-    <style name="Widget.GifMoviewView" parent="@android:style/Widget"></style>
+  <style name="Widget.GifMoviewView" parent="@android:style/Widget"></style>
 
-    <style name="AppTheme22" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/toolbar_background</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/toolbar_background</item>
+  <style name="AppTheme22" parent="Theme.AppCompat.Light.DarkActionBar">
+    <!-- Customize your theme here. -->
+    <item name="colorPrimary">@color/toolbar_background</item>
+    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    <item name="colorAccent">@color/toolbar_background</item>
 
-    </style>
+  </style>
 
-    <style name="FabButton">
-        <item name="colorAccent">@android:color/white</item>
-    </style>
+  <style name="FabButton">
+    <item name="colorAccent">@android:color/white</item>
+  </style>
 
-    <style name="st_BeforeCollapse">
-        <item name="android:textSize">@dimen/sp18</item>
-        <item name="android:textColor">@android:color/transparent</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:visibility">gone</item>
-    </style>
+  <style name="st_BeforeCollapse">
+    <item name="android:textSize">@dimen/sp18</item>
+    <item name="android:textColor">@android:color/transparent</item>
+    <item name="android:textStyle">bold</item>
+    <item name="android:visibility">gone</item>
+  </style>
 
-    <style name="st_afterCollapse">
-        <item name="android:textSize">@dimen/sp18</item>
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:textStyle">bold</item>
-    </style>
+  <style name="st_afterCollapse">
+    <item name="android:textSize">@dimen/sp18</item>
+    <item name="android:textColor">@android:color/white</item>
+    <item name="android:textStyle">bold</item>
+  </style>
 
-    <style name="RedHUGEText" parent="@android:style/Widget.TextView">
+  <style name="RedHUGEText" parent="@android:style/Widget.TextView">
 
-        <item name="android:textColor">@color/black_register</item>
-        <item name="android:textStyle">bold</item>
-    </style>
+    <item name="android:textColor">@color/black_register</item>
+    <item name="android:textStyle">bold</item>
+  </style>
 
-    <style name="MyToolbar" parent="Theme.AppCompat">
-        <item name="colorControlNormal">@color/colorAccent</item>
-    </style>
+  <style name="MyToolbar" parent="Theme.AppCompat">
+    <item name="colorControlNormal">@color/colorAccent</item>
+  </style>
 
-    <style name="Setting_editText">
-        <item name="colorControlNormal">@color/st_line_editText</item>
-    </style>
+  <style name="Setting_editText">
+    <item name="colorControlNormal">@color/st_line_editText</item>
+  </style>
 
 
-    <style name="MySearch" parent="android:Theme.Holo.Light.DarkActionBar">
-        <item name="android:editTextColor">@color/black_register</item>
-        <item name="android:textColorHint">@color/text_verify</item>
-        <item name="colorAccent">@color/toolbar_background</item>
-        <item name="android:tint">@color/border_editText</item>
-        <item name="android:gravity">right</item>
-        <item name="android:textColor">@color/text_verify</item>
-    </style>
+  <style name="MySearch" parent="android:Theme.Holo.Light.DarkActionBar">
+    <item name="android:editTextColor">@color/black_register</item>
+    <item name="android:textColorHint">@color/text_verify</item>
+    <item name="colorAccent">@color/toolbar_background</item>
+    <item name="android:tint">@color/border_editText</item>
+    <item name="android:gravity">right</item>
+    <item name="android:textColor">@color/text_verify</item>
+  </style>
 
-    <style name="SearchViewToolbar" parent="Widget.AppCompat.Light.SearchView">
-        <item name="android:editTextColor">@color/white</item>
-        <item name="android:textColorHint">@color/white</item>
-        <item name="colorAccent">@color/white</item>
-        <item name="android:tint">@color/white</item>
-        <item name="android:gravity">right</item>
-        <item name="android:textColor">@color/white</item>
-    </style>
-    <style name="EmojiPopupAnimation">
-        <item name="android:windowEnterAnimation">@anim/popup_enter</item>
-        <item name="android:windowExitAnimation">@anim/popup_exit</item>
-    </style>
+  <style name="SearchViewToolbar" parent="Widget.AppCompat.Light.SearchView">
+    <item name="android:editTextColor">@color/white</item>
+    <item name="android:textColorHint">@color/white</item>
+    <item name="colorAccent">@color/white</item>
+    <item name="android:tint">@color/white</item>
+    <item name="android:gravity">right</item>
+    <item name="android:textColor">@color/white</item>
+  </style>
 
-    <style name="EmojiPopup">
-        <item name="android:background">@color/colorEmojiPopupBackground</item>
-    </style>
+  <style name="EmojiPopupAnimation">
+    <item name="android:windowEnterAnimation">@anim/popup_enter</item>
+    <item name="android:windowExitAnimation">@anim/popup_exit</item>
+  </style>
 
-    <style name="NavigationDrawer"/>
+  <style name="EmojiPopup">
+    <item name="android:background">@color/colorEmojiPopupBackground</item>
+  </style>
 
-    <style name="NavigationDrawer.Item">
-        <item name="android:clickable">true</item>
-        <item name="android:focusable">true</item>
-        <item name="android:background">?android:attr/selectableItemBackground</item>
-    </style>
+  <style name="NavigationDrawer"/>
 
-    <style name="ChatMessages"/>
+  <style name="NavigationDrawer.Item">
+    <item name="android:clickable">true</item>
+    <item name="android:focusable">true</item>
+    <item name="android:background">?android:attr/selectableItemBackground</item>
+  </style>
 
-    <style name="ChatMessages.MaterialDesignTextView"/>
+  <style name="ChatMessages"/>
 
-    <style name="ChatMessages.Time">
-        <item name="android:textColor">@color/colorChatMessageTime</item>
-        <item name="android:textSize">@dimen/sp12</item>
-    </style>
+  <style name="ChatMessages.MaterialDesignTextView"/>
 
-    <style name="ChatMessages.MaterialDesignTextView.Tick">
-        <item name="android:textSize">@dimen/sp16</item>
-    </style>
+  <style name="ChatMessages.Time">
+    <item name="android:textColor">@color/colorChatMessageTime</item>
+    <item name="android:textSize">@dimen/sp12</item>
+  </style>
 
-    <style name="ChatMessages.MaterialDesignTextView.BottomIcon">
-        <item name="android:textSize">@dimen/sp22</item>
-    </style>
+  <style name="ChatMessages.MaterialDesignTextView.Tick">
+    <item name="android:textSize">@dimen/sp16</item>
+  </style>
 
-    <style name="ChatMessages.MaterialDesignTextView.BottomIcon.SendBtn" parent="ChatMessages.MaterialDesignTextView.BottomIcon">
-        <item name="android:textColor">@color/green</item>
-    </style>
+  <style name="ChatMessages.MaterialDesignTextView.BottomIcon">
+    <item name="android:textSize">@dimen/sp22</item>
+  </style>
+
+  <style name="ChatMessages.MaterialDesignTextView.BottomIcon.SendBtn" parent="ChatMessages.MaterialDesignTextView.BottomIcon">
+    <item name="android:textColor">@color/green</item>
+  </style>
 
 </resources>

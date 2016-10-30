@@ -6,7 +6,8 @@ public class RequestGroupAddModerator {
 
     public void groupAddModerator(long roomId, long memberId) {
 
-        ProtoGroupAddModerator.GroupAddModerator.Builder builder = ProtoGroupAddModerator.GroupAddModerator.newBuilder();
+        ProtoGroupAddModerator.GroupAddModerator.Builder builder =
+            ProtoGroupAddModerator.GroupAddModerator.newBuilder();
         builder.setRoomId(roomId);
         builder.setMemberId(memberId);
 
@@ -17,6 +18,5 @@ public class RequestGroupAddModerator {
             e.printStackTrace();
         }
     }
-
 }
 

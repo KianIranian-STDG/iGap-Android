@@ -1,7 +1,6 @@
 package com.iGap.module;
 
 import com.iGap.proto.ProtoGlobal;
-
 import java.io.Serializable;
 
 /**
@@ -30,6 +29,5 @@ public class StructSharedMedia implements Serializable {
     public boolean isThumbnailExists() {
         return attachment != null && attachment.isThumbnailExistsOnLocal();
     }
-
 }
 

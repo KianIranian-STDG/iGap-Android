@@ -4,10 +4,10 @@ import com.iGap.proto.ProtoChatClearMessage;
 
 public class RequestChatClearMessage {
 
-
     public void chatClearMessage(long roomId, long lastMessageId) {
 
-        ProtoChatClearMessage.ChatClearMessage.Builder chatClearMessage = ProtoChatClearMessage.ChatClearMessage.newBuilder();
+        ProtoChatClearMessage.ChatClearMessage.Builder chatClearMessage =
+            ProtoChatClearMessage.ChatClearMessage.newBuilder();
         chatClearMessage.setRoomId(roomId);
         chatClearMessage.setClearId(lastMessageId);
 
@@ -18,6 +18,5 @@ public class RequestChatClearMessage {
             e.printStackTrace();
         }
     }
-
 }
 

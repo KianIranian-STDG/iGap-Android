@@ -1,58 +1,28 @@
 package com.iGap.realm;
 
 import com.iGap.proto.ProtoGlobal;
-
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-
 public class RealmAvatar extends RealmObject {
 
+    @PrimaryKey private long id;
+    private long ownerId;
+    private RealmAttachment file;
     public RealmAvatar() {
     }
-
     public RealmAvatar(long id) {
         this.id = id;
     }
 
-    @PrimaryKey
-    private long id;
-    private long ownerId;
-    private RealmAttachment file;
-
-    public long getOwnerId() {
-        return ownerId;
-    }
-
-    public void setOwnerId(long ownerId) {
-        this.ownerId = ownerId;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public RealmAttachment getFile() {
-        return file;
-    }
-
-    public void setFile(RealmAttachment file) {
-        this.file = file;
-    }
-
     /**
-     * use this method just for group or channel , because chat don't have avatar in room(chat avatar exist in channel info)
-     *
-     * @param room
-     * @return
+     * use this method just for group or channel , because chat don't have avatar in room(chat
+     * avatar exist in channel info)
      */
 
-    public static RealmAvatar convert(final ProtoGlobal.Room room, Realm realm) {  //TODO [Saeed Mozaffari] [2016-10-04 5:40 PM] - check this code . i guess is wrong!!! maybe overwriting realmAvatar
+    public static RealmAvatar convert(final ProtoGlobal.Room room,
+        Realm realm) {  //TODO [Saeed Mozaffari] [2016-10-04 5:40 PM] - check this code . i guess is wrong!!! maybe overwriting realmAvatar
         ProtoGlobal.File file = null;
         switch (room.getType()) {
             case GROUP:
@@ -84,7 +54,9 @@ public class RealmAvatar extends RealmObject {
         realmThumbnailLarge.setCacheId(largeThumbnail.getCacheId());
 
         //File info for avatar
-        RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, room.getId()).findFirst();
+        RealmAvatar realmAvatar = realm.where(RealmAvatar.class)
+            .equalTo(RealmAvatarFields.OWNER_ID, room.getId())
+            .findFirst();
         if (realmAvatar == null) {
             realmAvatar = realm.createObject(RealmAvatar.class);
             realmAvatar.setOwnerId(room.getId());
@@ -97,11 +69,10 @@ public class RealmAvatar extends RealmObject {
 
     public static RealmAvatar convert(final ProtoGlobal.Room room) {
         Realm realm = Realm.getDefaultInstance();
-        final RealmAvatar[] realmAvatar = {null};
+        final RealmAvatar[] realmAvatar = { null };
 
         realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
+            @Override public void execute(Realm realm) {
                 realmAvatar[0] = convert(room, realm);
             }
         });
@@ -115,7 +86,8 @@ public class RealmAvatar extends RealmObject {
         Realm realm = Realm.getDefaultInstance();
 
         // don't put it into transaction
-        RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findFirst();
+        RealmAvatar realmAvatar =
+            realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findFirst();
         if (realmAvatar == null) {
             realmAvatar = realm.createObject(RealmAvatar.class);
             realmAvatar.setId(attachment.getId());
@@ -151,7 +123,9 @@ public class RealmAvatar extends RealmObject {
         realmThumbnailLarge.setCacheId(largeThumbnail.getCacheId());
 
         //File info for avatar
-        RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, user.getId()).findFirst();
+        RealmAvatar realmAvatar = realm.where(RealmAvatar.class)
+            .equalTo(RealmAvatarFields.OWNER_ID, user.getId())
+            .findFirst();
         if (realmAvatar == null) {
             realmAvatar = realm.createObject(RealmAvatar.class);
             realmAvatar.setOwnerId(user.getId());
@@ -160,5 +134,29 @@ public class RealmAvatar extends RealmObject {
         realmAvatar.setFile(RealmAttachment.build(file));
 
         return realmAvatar;
+    }
+
+    public long getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(long ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public RealmAttachment getFile() {
+        return file;
+    }
+
+    public void setFile(RealmAttachment file) {
+        this.file = file;
     }
 }

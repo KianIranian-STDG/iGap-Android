@@ -9,6 +9,6 @@ import com.iGap.proto.ProtoResponse;
 
 public interface OnFileUploadOptionResponse {
 
-    void OnFileUploadOption(int firstBytesLimit, int lastBytesLimit, int maxConnection, String fileHashAsIdentity, ProtoResponse.Response response);
-
+    void OnFileUploadOption(int firstBytesLimit, int lastBytesLimit, int maxConnection,
+        String fileHashAsIdentity, ProtoResponse.Response response);
 }

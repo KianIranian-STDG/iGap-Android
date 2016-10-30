@@ -5,7 +5,8 @@ import com.iGap.proto.ProtoUserProfileNickname;
 public class RequestUserProfileSetNickname {
 
     public void userProfileNickName(String nickName) {
-        ProtoUserProfileNickname.UserProfileSetNickname.Builder userProfileNickName = ProtoUserProfileNickname.UserProfileSetNickname.newBuilder();
+        ProtoUserProfileNickname.UserProfileSetNickname.Builder userProfileNickName =
+            ProtoUserProfileNickname.UserProfileSetNickname.newBuilder();
         userProfileNickName.setNickname(nickName);
 
         RequestWrapper requestWrapper = new RequestWrapper(105, userProfileNickName);
@@ -15,5 +16,4 @@ public class RequestUserProfileSetNickname {
             e.printStackTrace();
         }
     }
-
 }

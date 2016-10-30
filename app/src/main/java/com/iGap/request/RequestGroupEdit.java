@@ -18,6 +18,5 @@ public class RequestGroupEdit {
             e.printStackTrace();
         }
     }
-
 }
 

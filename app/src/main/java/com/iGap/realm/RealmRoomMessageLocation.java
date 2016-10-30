@@ -1,7 +1,6 @@
 package com.iGap.realm;
 
 import com.iGap.proto.ProtoGlobal;
-
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -9,8 +8,19 @@ import io.realm.annotations.PrimaryKey;
 public class RealmRoomMessageLocation extends RealmObject {
     private double locationLat;
     private double locationLong;
-    @PrimaryKey
-    private long id;
+    @PrimaryKey private long id;
+
+    public static RealmRoomMessageLocation build(final ProtoGlobal.RoomMessageLocation input) {
+        Realm realm = Realm.getDefaultInstance();
+        RealmRoomMessageLocation messageLocation =
+            realm.createObject(RealmRoomMessageLocation.class);
+        messageLocation.setId(System.nanoTime());
+        messageLocation.setLocationLat(input.getLat());
+        messageLocation.setLocationLong(input.getLon());
+        realm.close();
+
+        return messageLocation;
+    }
 
     public double getLocationLat() {
         return locationLat;
@@ -34,16 +44,5 @@ public class RealmRoomMessageLocation extends RealmObject {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public static RealmRoomMessageLocation build(final ProtoGlobal.RoomMessageLocation input) {
-        Realm realm = Realm.getDefaultInstance();
-        RealmRoomMessageLocation messageLocation = realm.createObject(RealmRoomMessageLocation.class);
-        messageLocation.setId(System.nanoTime());
-        messageLocation.setLocationLat(input.getLat());
-        messageLocation.setLocationLong(input.getLon());
-        realm.close();
-
-        return messageLocation;
     }
 }

@@ -3,65 +3,73 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layoutDirection="ltr"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    >
 
+
+  <LinearLayout
+      android:id="@+id/lmr_ll_mic_record"
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/dp48"
+      android:background="@color/white"
+      android:orientation="horizontal"
+      >
 
     <LinearLayout
-        android:id="@+id/lmr_ll_mic_record"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp48"
-        android:background="@color/white"
-        android:orientation="horizontal">
+        android:layout_width="@dimen/dp80"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:paddingLeft="@dimen/dp6"
+        >
 
-        <LinearLayout
-            android:layout_width="@dimen/dp80"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:paddingLeft="@dimen/dp6">
+      <ImageView
+          android:id="@+id/img_pic_record"
+          android:layout_width="10dp"
+          android:layout_height="10dp"
+          android:src="@mipmap/circle_white"
+          />
 
-            <ImageView
-                android:id="@+id/img_pic_record"
-                android:layout_width="10dp"
-                android:layout_height="10dp"
-                android:src="@mipmap/circle_white" />
-
-            <TextView
-                android:id="@+id/txt_time_record"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="1"
-                android:text="00:00"
-                android:textSize="@dimen/sp14" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/layout3"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center">
-
-            <TextView
-                android:id="@+id/txt_slideto_cancel"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="right"
-                android:text="@string/slide_to_cancel_en"
-                android:textSize="@dimen/sp14" />
-
-            <com.iGap.module.MaterialDesignTextView
-                android:id="@+id/lmr_imv_mic_button"
-                style="@style/ChatMessages.MaterialDesignTextView.BottomIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:padding="@dimen/dp8"
-                android:text="@string/md_voice_message_microphone_button" />
-
-        </LinearLayout>
+      <TextView
+          android:id="@+id/txt_time_record"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginLeft="5dp"
+          android:layout_weight="1"
+          android:text="00:00"
+          android:textSize="@dimen/sp14"
+          />
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout3"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        >
+
+      <TextView
+          android:id="@+id/txt_slideto_cancel"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:gravity="right"
+          android:text="@string/slide_to_cancel_en"
+          android:textSize="@dimen/sp14"
+          />
+
+      <com.iGap.module.MaterialDesignTextView
+          android:id="@+id/lmr_imv_mic_button"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:padding="@dimen/dp8"
+
+          android:text="@string/md_voice_message_microphone_button"
+          style="@style/ChatMessages.MaterialDesignTextView.BottomIcon"
+          />
+
+    </LinearLayout>
+  </LinearLayout>
 
 
 </LinearLayout>

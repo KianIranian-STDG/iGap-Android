@@ -1,53 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:id="@+id/chatSubLayoutMessage"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:layout_marginBottom="@dimen/dp4"
-             android:maxWidth="@dimen/dp300"
-             android:textDirection="firstStrong">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/chatSubLayoutMessage"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/dp4"
+    android:maxWidth="@dimen/dp300"
+    android:textDirection="firstStrong"
+    >
+
+  <LinearLayout
+      android:id="@+id/mainContainer"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      tools:ignore="UselessParent"
+      >
+
+    <com.iGap.module.CircleImageView
+        android:id="@+id/messageSenderAvatar"
+        android:layout_width="@dimen/dp52"
+        android:layout_height="@dimen/dp52"
+        android:layout_marginRight="@dimen/dp8"
+        android:src="@mipmap/b"
+        />
 
     <LinearLayout
-        android:id="@+id/mainContainer"
+        android:id="@+id/contentContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        tools:ignore="UselessParent">
+        android:background="@drawable/rectangle_round_white"
+        android:orientation="vertical"
+        android:padding="@dimen/messageContainerPadding"
+        >
 
-        <com.iGap.module.CircleImageView
-            android:id="@+id/messageSenderAvatar"
-            android:layout_width="@dimen/dp52"
-            android:layout_height="@dimen/dp52"
-            android:layout_marginRight="@dimen/dp8"
-            android:src="@mipmap/b"/>
+      <include
+          layout="@layout/chat_sub_layout_replay"
+          android:id="@+id/replayLayout"
+          />
 
-        <LinearLayout
-            android:id="@+id/contentContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/rectangle_round_white"
-            android:orientation="vertical"
-            android:padding="@dimen/messageContainerPadding">
+      <include
+          layout="@layout/chat_sub_layout_forward"
+          android:id="@+id/cslr_ll_forward"
+          />
 
-            <include
-                android:id="@+id/replayLayout"
-                layout="@layout/chat_sub_layout_replay"/>
+      <com.iGap.module.EmojiTextView
+          android:id="@+id/messageText"
+          android:text="SAMPLE TEXT"
+          android:textColor="@android:color/black"
+          style="@style/ChatMessages.EmojiTextView"
+          />
 
-            <include
-                android:id="@+id/cslr_ll_forward"
-                layout="@layout/chat_sub_layout_forward"/>
-
-            <com.iGap.module.EmojiTextView
-                android:id="@+id/messageText"
-                style="@style/ChatMessages.EmojiTextView"
-                android:text="SAMPLE TEXT"
-                android:textColor="@android:color/black"/>
-
-            <include
-                android:id="@+id/cslr_ll_time"
-                layout="@layout/chat_sub_layout_messages_time"/>
-        </LinearLayout>
+      <include
+          layout="@layout/chat_sub_layout_messages_time"
+          android:id="@+id/cslr_ll_time"
+          />
     </LinearLayout>
+  </LinearLayout>
 </FrameLayout>

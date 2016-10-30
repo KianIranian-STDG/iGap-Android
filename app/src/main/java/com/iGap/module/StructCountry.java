@@ -56,6 +56,4 @@ public class StructCountry {
     public void setFlag(int flag) {
         this.flag = flag;
     }
-
-
 }

@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:background="@android:color/white"
-    android:layout_height="wrap_content">
+    android:orientation="vertical"
+    >
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/dp4"
-        android:textSize="@dimen/sp16"
-        android:gravity="center"
-        android:background="#f1f1f1"
-        android:layout_marginBottom="@dimen/dp20"
-        android:text="more ..."
-        android:id="@+id/cslmo_txt_more" />
+  <TextView
+      android:id="@+id/cslmo_txt_more"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="@dimen/dp20"
+      android:background="#f1f1f1"
+      android:gravity="center"
+      android:padding="@dimen/dp4"
+      android:text="more ..."
+      android:textSize="@dimen/sp16"
+      />
 
 </LinearLayout>

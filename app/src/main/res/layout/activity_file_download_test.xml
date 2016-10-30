@@ -2,143 +2,162 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp">
+    android:padding="10dp"
+    >
+
+  <LinearLayout
+      android:id="@+id/progressViews"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      >
+
+  </LinearLayout>
+
+  <android.support.v7.widget.RecyclerView
+      android:id="@+id/logs"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_above="@+id/checkBoxes"
+      android:layout_below="@+id/progressViews"
+      android:overScrollMode="never"
+      >
+
+  </android.support.v7.widget.RecyclerView>
+
+  <LinearLayout
+      android:id="@+id/checkBoxes"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_above="@+id/bottomBtns"
+      android:orientation="horizontal"
+      >
 
     <LinearLayout
-        android:id="@+id/progressViews"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-    </LinearLayout>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/logs"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/checkBoxes"
-        android:layout_below="@+id/progressViews"
-        android:overScrollMode="never">
-
-    </android.support.v7.widget.RecyclerView>
-
-    <LinearLayout
-        android:id="@+id/checkBoxes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/bottomBtns"
-        android:orientation="horizontal">
+        android:layout_weight="1"
+        android:orientation="vertical"
+        >
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/bottomBtns"
-            android:layout_weight="1"
-            android:orientation="vertical">
+      <CheckBox
+          android:id="@+id/logAll"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="4dp"
+          android:text="All"
+          />
 
-            <CheckBox
-                android:id="@+id/logAll"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:text="All" />
-
-            <CheckBox
-                android:id="@+id/logFileDetails"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="File Details" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <CheckBox
-                android:id="@+id/logSectional"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:text="Sectional" />
-
-            <CheckBox
-                android:id="@+id/logFinally"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Finally" />
-        </LinearLayout>
-
+      <CheckBox
+          android:id="@+id/logFileDetails"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="File Details"
+          />
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/bottomBtns"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/clearFiles"
-        android:layout_marginBottom="5dp"
-        android:orientation="horizontal">
+        android:layout_weight="1"
+        android:orientation="vertical"
+        >
 
-        <Button
-            android:id="@+id/pickFiles"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Pick Files" />
+      <CheckBox
+          android:id="@+id/logSectional"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="4dp"
+          android:text="Sectional"
+          />
 
-        <Button
-            android:id="@+id/btnDownloadFiles"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Start Download" />
+      <CheckBox
+          android:id="@+id/logFinally"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Finally"
+          />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/clearFiles"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/clearLogs"
-        android:text="Clear Files" />
+  </LinearLayout>
+
+  <LinearLayout
+      android:id="@+id/bottomBtns"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_above="@+id/clearFiles"
+      android:layout_marginBottom="5dp"
+      android:orientation="horizontal"
+      >
 
     <Button
-        android:id="@+id/clearLogs"
-        android:layout_width="match_parent"
+        android:id="@+id/pickFiles"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/minsSection"
-        android:text="Clear Logs" />
+        android:layout_weight="1"
+        android:text="Pick Files"
+        />
 
-    <LinearLayout
-        android:id="@+id/minsSection"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/btnDownloadFiles"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
-        android:visibility="invisible">
+        android:layout_weight="1"
+        android:text="Start Download"
+        />
+  </LinearLayout>
 
-        <TextView
-            android:id="@+id/ofuTxt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="OFU: 145"
-            android:textSize="12sp" />
+  <Button
+      android:id="@+id/clearFiles"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_above="@+id/clearLogs"
+      android:text="Clear Files"
+      />
 
-        <TextView
-            android:id="@+id/gnbTxt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="GNB: 145"
-            android:textSize="12sp" />
+  <Button
+      android:id="@+id/clearLogs"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_above="@+id/minsSection"
+      android:text="Clear Logs"
+      />
 
-        <TextView
-            android:id="@+id/rTxt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="R: 145"
-            android:textSize="12sp" />
-    </LinearLayout>
+  <LinearLayout
+      android:id="@+id/minsSection"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_alignParentBottom="true"
+      android:orientation="horizontal"
+      android:visibility="invisible"
+      >
+
+    <TextView
+        android:id="@+id/ofuTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="OFU: 145"
+        android:textSize="12sp"
+        />
+
+    <TextView
+        android:id="@+id/gnbTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="GNB: 145"
+        android:textSize="12sp"
+        />
+
+    <TextView
+        android:id="@+id/rTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="R: 145"
+        android:textSize="12sp"
+        />
+  </LinearLayout>
 
 </RelativeLayout>

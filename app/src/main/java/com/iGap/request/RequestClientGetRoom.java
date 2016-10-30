@@ -5,7 +5,8 @@ import com.iGap.proto.ProtoClientGetRoom;
 public class RequestClientGetRoom {
 
     public void clientGetRoom(long roomId) {
-        ProtoClientGetRoom.ClientGetRoom.Builder clientGetRoom = ProtoClientGetRoom.ClientGetRoom.newBuilder();
+        ProtoClientGetRoom.ClientGetRoom.Builder clientGetRoom =
+            ProtoClientGetRoom.ClientGetRoom.newBuilder();
         clientGetRoom.setRoomId(roomId);
 
         RequestWrapper requestWrapper = new RequestWrapper(602, clientGetRoom);
@@ -15,5 +16,4 @@ public class RequestClientGetRoom {
             e.printStackTrace();
         }
     }
-
 }

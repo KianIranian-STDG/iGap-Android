@@ -4,10 +4,10 @@ import com.iGap.proto.ProtoUserProfileGetEmail;
 
 public class RequestUserProfileGetEmail {
 
-
     public void userProfileGetEmail() {
 
-        ProtoUserProfileGetEmail.UserProfileGetEmail.Builder builder = ProtoUserProfileGetEmail.UserProfileGetEmail.newBuilder();
+        ProtoUserProfileGetEmail.UserProfileGetEmail.Builder builder =
+            ProtoUserProfileGetEmail.UserProfileGetEmail.newBuilder();
 
         RequestWrapper requestWrapper = new RequestWrapper(110, builder);
         try {
@@ -16,6 +16,5 @@ public class RequestUserProfileGetEmail {
             e.printStackTrace();
         }
     }
-
 }
 

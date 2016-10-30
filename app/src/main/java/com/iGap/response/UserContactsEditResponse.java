@@ -17,12 +17,9 @@ public class UserContactsEditResponse extends MessageHandler {
         this.message = protoClass;
         this.actionId = actionId;
         this.identity = identity;
-
     }
 
-
-    @Override
-    public void handler() {
+    @Override public void handler() {
         Log.i("XXX", "UserContactsEditResponse handler");
         ProtoUserContactsEdit.UserContactsEditResponse.Builder builder =
             (ProtoUserContactsEdit.UserContactsEditResponse.Builder) message;
@@ -33,25 +30,24 @@ public class UserContactsEditResponse extends MessageHandler {
         Log.i("XXX", "first_name handler" + first_name);
         Log.i("XXX", "last_name handler" + last_name);
         G.onUserContactEdit.onContactEdit(first_name, last_name);
-
     }
 
-    @Override
-    public void timeOut() {
+    @Override public void timeOut() {
         Log.i("XXX", "UserContactsEditResponse timeOut");
         G.onUserContactEdit.onContactEditTimeOut();
     }
 
-    @Override
-    public void error() {
+    @Override public void error() {
 
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         errorResponse.getMajorCode();
         errorResponse.getMinorCode();
         G.onUserContactEdit.onContactEditError();
 
-        Log.i("XXX", "UserContactsEditResponse errorReponse.getMajorCode() : " + errorResponse.getMajorCode());
-        Log.i("XXX", "UserContactsEditResponse errorReponse.getMinorCode() : " + errorResponse.getMinorCode());
+        Log.i("XXX", "UserContactsEditResponse errorReponse.getMajorCode() : "
+            + errorResponse.getMajorCode());
+        Log.i("XXX", "UserContactsEditResponse errorReponse.getMinorCode() : "
+            + errorResponse.getMinorCode());
     }
 }
 

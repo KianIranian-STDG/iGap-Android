@@ -6,7 +6,8 @@ public class RequestChatGetRoom {
 
     public void chatGetRoom(long peerId) {
 
-        ProtoChatGetRoom.ChatGetRoom.Builder chatGetRoom = ProtoChatGetRoom.ChatGetRoom.newBuilder();
+        ProtoChatGetRoom.ChatGetRoom.Builder chatGetRoom =
+            ProtoChatGetRoom.ChatGetRoom.newBuilder();
         chatGetRoom.setPeerId(peerId);
 
         RequestWrapper requestWrapper = new RequestWrapper(200, chatGetRoom);
@@ -16,5 +17,4 @@ public class RequestChatGetRoom {
             e.printStackTrace();
         }
     }
-
 }

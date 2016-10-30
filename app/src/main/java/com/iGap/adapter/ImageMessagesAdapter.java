@@ -18,6 +18,25 @@ public class ImageMessagesAdapter<Item extends ImageMessageItem> extends FastIte
         setHasStableIds(true);
     }
 
+    public static void removeFileRequest(String token) {
+        requestsOffset.remove(token);
+        requestsProgress.remove(token);
+    }
+
+    /**
+     * has already requested for downloading avatar file
+     */
+    public static boolean hasFileRequested(String token) {
+        return requestsProgress.containsKey(token);
+    }
+
+    /**
+     * has already requested for downloading avatar file
+     */
+    public static boolean hasThumbnailRequested(String token) {
+        return thumbnailRequests.contains(token);
+    }
+
     public void downloadingAvatarFile(String token, int progress, int offset) {
         for (Item item : getAdapterItems()) {
             if (item.message.getAttachment().getToken().equalsIgnoreCase(token)) {
@@ -36,11 +55,6 @@ public class ImageMessagesAdapter<Item extends ImageMessageItem> extends FastIte
         }
     }
 
-    public static void removeFileRequest(String token) {
-        requestsOffset.remove(token);
-        requestsProgress.remove(token);
-    }
-
     public void downloadingAvatarThumbnail(String token) {
         for (Item item : getAdapterItems()) {
             if (item.message.getAttachment().getToken().equalsIgnoreCase(token)) {
@@ -49,19 +63,5 @@ public class ImageMessagesAdapter<Item extends ImageMessageItem> extends FastIte
                 break;
             }
         }
-    }
-
-    /**
-     * has already requested for downloading avatar file
-     */
-    public static boolean hasFileRequested(String token) {
-        return requestsProgress.containsKey(token);
-    }
-
-    /**
-     * has already requested for downloading avatar file
-     */
-    public static boolean hasThumbnailRequested(String token) {
-        return thumbnailRequests.contains(token);
     }
 }
