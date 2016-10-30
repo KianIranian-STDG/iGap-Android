@@ -2,6 +2,7 @@ package com.iGap.module;
 
 import com.iGap.interfaces.OnChatSendMessageResponse;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.realm.RealmRoomMessage;
 import com.iGap.request.RequestChatSendMessage;
 import com.iGap.request.RequestGroupSendMessage;
 
@@ -49,6 +50,35 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
         return this;
     }
 
+    public ChatSendMessageUtil build(ProtoGlobal.Room.Type roomType, long roomId,
+        RealmRoomMessage message) {
+        ChatSendMessageUtil builder =
+            newBuilder(roomType, ProtoGlobal.RoomMessageType.valueOf(message.getMessageType()),
+                roomId);
+        if (message.getMessage() != null && !message.getMessage().isEmpty()) {
+            builder.message(message.getMessage());
+        }
+        if (message.getAttachment() != null
+            && message.getAttachment().getToken() != null
+            && !message.getAttachment().getToken().isEmpty()) {
+            builder.attachment(message.getAttachment().getToken());
+        }
+        if (message.getRoomMessageContact() != null) {
+            builder.contact(message.getRoomMessageContact().getFirstName(),
+                message.getRoomMessageContact().getLastName(),
+                message.getRoomMessageContact().getPhones().get(0).getString());
+        }
+        if (message.getLocation() != null) {
+            builder.location(message.getLocation().getLocationLat(),
+                message.getLocation().getLocationLong());
+        }
+        if (message.getLog() != null) {
+            builder.log(message.getLog().getType());
+        }
+        builder.sendMessage(Long.toString(message.getMessageId()));
+        return this;
+    }
+
     public ChatSendMessageUtil contact(ProtoGlobal.RoomMessageContact value) {
         if (roomType == ProtoGlobal.Room.Type.CHAT) {
             requestChatSendMessage.contact(value);
@@ -85,11 +115,35 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
         return this;
     }
 
+    public ChatSendMessageUtil location(double lat, double lon) {
+        ProtoGlobal.RoomMessageLocation.Builder location =
+            ProtoGlobal.RoomMessageLocation.newBuilder();
+        location.setLat(lat);
+        location.setLon(lon);
+        if (roomType == ProtoGlobal.Room.Type.CHAT) {
+            requestChatSendMessage.location(location.build());
+        } else if (roomType == ProtoGlobal.Room.Type.GROUP) {
+            requestGroupSendMessage.location(location.build());
+        }
+        return this;
+    }
+
     public ChatSendMessageUtil log(ProtoGlobal.RoomMessageLog value) {
         if (roomType == ProtoGlobal.Room.Type.CHAT) {
             requestChatSendMessage.log(value);
         } else if (roomType == ProtoGlobal.Room.Type.GROUP) {
             requestGroupSendMessage.log(value);
+        }
+        return this;
+    }
+
+    public ChatSendMessageUtil log(ProtoGlobal.RoomMessageLog.Type type) {
+        ProtoGlobal.RoomMessageLog.Builder log = ProtoGlobal.RoomMessageLog.newBuilder();
+        log.setType(type);
+        if (roomType == ProtoGlobal.Room.Type.CHAT) {
+            requestChatSendMessage.log(log.build());
+        } else if (roomType == ProtoGlobal.Room.Type.GROUP) {
+            requestGroupSendMessage.log(log.build());
         }
         return this;
     }
@@ -120,6 +174,13 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
         if (onChatSendMessageResponse != null) {
             onChatSendMessageResponse.onMessageReceive(roomId, message, messageType, roomMessage,
                 roomType);
+        }
+    }
+
+    @Override public void onMessageFailed(long roomId, RealmRoomMessage roomMessage,
+        ProtoGlobal.Room.Type roomType) {
+        if (onChatSendMessageResponse != null) {
+            onChatSendMessageResponse.onMessageFailed(roomId, roomMessage, roomType);
         }
     }
 }

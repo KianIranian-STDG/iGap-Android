@@ -1,10 +1,14 @@
 package com.iGap.module;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.view.View;
 import android.widget.TextView;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.interfaces.IResendMessage;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
@@ -128,5 +132,26 @@ public final class AppUtils {
 
         realm.close();
         return messageText;
+    }
+
+    public static MaterialDialog.Builder buildResendDialog(Context context,
+        final IResendMessage listener) {
+        return new MaterialDialog.Builder(context).title("Resend Messages")
+            .negativeText("CANCEL")
+            .items(R.array.resendMessagesDialog)
+            .itemsCallback(new MaterialDialog.ListCallback() {
+                @Override
+                public void onSelection(MaterialDialog dialog, View itemView, int position,
+                    CharSequence text) {
+                    switch (position) {
+                        case 0:
+                            listener.resendMessage();
+                            break;
+                        case 1:
+                            listener.deleteMessage();
+                            break;
+                    }
+                }
+            });
     }
 }

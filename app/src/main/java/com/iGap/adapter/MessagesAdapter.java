@@ -63,20 +63,19 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
             @Override
             public boolean onClick(View v, IAdapter<Item> adapter, Item item, int position) {
                 if (getSelectedItems().size() == 0) {
-                    if (iMessageItem != null) {
-                        iMessageItem.onContainerClick(v, item.mMessage, position);
+                    if (iMessageItem != null && !item.mMessage.messageID.equalsIgnoreCase("-1")) {
+                        if (item.mMessage.status.equalsIgnoreCase(
+                            ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                            return true;
+                        }
+                        if (item.mMessage.status.equalsIgnoreCase(
+                            ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                            iMessageItem.onFailedMessageClick(v, item.mMessage, position);
+                        } else {
+                            iMessageItem.onContainerClick(v, item.mMessage, position);
+                        }
                     }
-                } /*else {
-                    if (!item.isSelected()){
-                        select(position);
-                        makeSelected(v);
-                    }
-                    else{
-                        deselect(position);
-                        makeDeselected(v);
-                    }
-                }*/
-                // TODO: 9/17/2016 [Alireza Eskandarpour Shoferi] implement
+                }
                 return true;
             }
         });

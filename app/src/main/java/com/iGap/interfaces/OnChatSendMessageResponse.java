@@ -1,6 +1,7 @@
 package com.iGap.interfaces;
 
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.realm.RealmRoomMessage;
 
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/5/2016.
@@ -12,4 +13,6 @@ public interface OnChatSendMessageResponse {
 
     void onMessageReceive(long roomId, String message, String messageType,
         ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType);
+
+    void onMessageFailed(long roomId, RealmRoomMessage roomMessage, ProtoGlobal.Room.Type roomType);
 }

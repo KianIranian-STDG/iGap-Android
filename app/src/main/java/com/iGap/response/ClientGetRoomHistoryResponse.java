@@ -62,6 +62,7 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
                     if (realmRoomMessage == null) {
                         realmRoomMessage = realm.createObject(RealmRoomMessage.class);
                         realmRoomMessage.setMessageId(roomMessage.getMessageId());
+                        realmRoomMessage.setRoomId(Long.parseLong(identity));
                     }
 
                     realmRoomMessage.setMessageVersion(roomMessage.getMessageVersion());

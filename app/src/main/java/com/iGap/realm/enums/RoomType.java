@@ -15,15 +15,16 @@ public enum RoomType {
      * @return RoomType
      */
     public static RoomType convert(ProtoGlobal.Room.Type type) {
-        switch (type) {
-            case CHANNEL:
-                return RoomType.CHANNEL;
-            case CHAT:
-                return RoomType.CHAT;
-            case GROUP:
-                return RoomType.GROUP;
-            default:
-                return null;
-        }
+        return RoomType.valueOf(type.toString());
+    }
+
+    /**
+     * convert ProtoGlobal.Room.Type to RoomType
+     *
+     * @param type ProtoGlobal.Room.Type
+     * @return RoomType
+     */
+    public static ProtoGlobal.Room.Type convert(RoomType type) {
+        return ProtoGlobal.Room.Type.valueOf(type.toString());
     }
 }

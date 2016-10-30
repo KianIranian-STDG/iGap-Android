@@ -1006,6 +1006,11 @@ public class ActivityMain extends ActivityEnhanced
         }
     }
 
+    @Override public void onMessageFailed(long roomId, RealmRoomMessage roomMessage,
+        ProtoGlobal.Room.Type roomType) {
+        mAdapter.updateChatStatus(roomId, ProtoGlobal.RoomMessageStatus.FAILED.toString());
+    }
+
     @Override public void onChatUpdateStatus(long roomId, long messageId,
         ProtoGlobal.RoomMessageStatus status, long statusVersion) {
         mAdapter.updateChatStatus(roomId, status.toString());

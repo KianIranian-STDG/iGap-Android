@@ -22,4 +22,6 @@ public interface IMessageItem {
     void onDownloadCancel(View view, StructMessageInfo message, int pos);
 
     void onDownloadStart(View view, StructMessageInfo message, int pos);
+
+    void onFailedMessageClick(View view, StructMessageInfo message, int pos);
 }

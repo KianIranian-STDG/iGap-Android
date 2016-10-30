@@ -52,13 +52,33 @@ public class ImageWithTextItem
 
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                messageClickListener.onOpenClick(v, mMessage, holder.getAdapterPosition());
+                if (mMessage.status.equalsIgnoreCase(
+                    ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                    return;
+                }
+                if (mMessage.status.equalsIgnoreCase(
+                    ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                    messageClickListener.onFailedMessageClick(v, mMessage,
+                        holder.getAdapterPosition());
+                } else {
+                    messageClickListener.onOpenClick(v, mMessage, holder.getAdapterPosition());
+                }
             }
         });
 
         holder.messageText.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                messageClickListener.onContainerClick(v, mMessage, holder.getAdapterPosition());
+                if (mMessage.status.equalsIgnoreCase(
+                    ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                    return;
+                }
+                if (mMessage.status.equalsIgnoreCase(
+                    ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                    messageClickListener.onFailedMessageClick(v, mMessage,
+                        holder.getAdapterPosition());
+                } else {
+                    messageClickListener.onContainerClick(v, mMessage, holder.getAdapterPosition());
+                }
             }
         });
     }

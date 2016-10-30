@@ -37,7 +37,18 @@ public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
         if (!mMessage.messageText.contains("#")) {
             holder.messageText.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
-                    messageClickListener.onContainerClick(v, mMessage, holder.getAdapterPosition());
+                    if (mMessage.status.equalsIgnoreCase(
+                        ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                        return;
+                    }
+                    if (mMessage.status.equalsIgnoreCase(
+                        ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                        messageClickListener.onFailedMessageClick(v, mMessage,
+                            holder.getAdapterPosition());
+                    } else {
+                        messageClickListener.onContainerClick(v, mMessage,
+                            holder.getAdapterPosition());
+                    }
                 }
             });
         }

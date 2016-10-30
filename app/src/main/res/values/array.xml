@@ -187,5 +187,10 @@
     <item>@string/delete_from_gallery</item>
   </string-array>
 
+  <string-array name="resendMessagesDialog">
+    <item>@string/resend_message</item>
+    <item>@string/delete_item_dialog</item>
+  </string-array>
+
 
 </resources>

@@ -116,6 +116,7 @@ public class ChatSendMessageResponse extends MessageHandler {
 
                         realmRoomMessage = realm.createObject(RealmRoomMessage.class);
                         realmRoomMessage.setMessageId(roomMessage.getMessageId());
+                        realmRoomMessage.setRoomId(chatSendMessageResponse.getRoomId());
                     } else {
 
                         /*
@@ -230,5 +231,19 @@ public class ChatSendMessageResponse extends MessageHandler {
 
     @Override public void timeOut() {
         super.timeOut();
+        // message failed
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override public void execute(Realm realm) {
+                RealmRoomMessage message = realm.where(RealmRoomMessage.class)
+                    .equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(identity))
+                    .findFirst();
+                if (message != null) {
+                    message.setStatus(ProtoGlobal.RoomMessageStatus.FAILED.toString());
+                    G.chatSendMessageUtil.onMessageFailed(message.getRoomId(), message,
+                        ProtoGlobal.Room.Type.CHAT);
+                }
+            }
+        });
     }
 }

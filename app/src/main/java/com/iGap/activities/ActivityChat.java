@@ -85,6 +85,7 @@ import com.iGap.interfaces.IEmojiStickerClick;
 import com.iGap.interfaces.IEmojiViewCreate;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.interfaces.IRecentsLongClick;
+import com.iGap.interfaces.IResendMessage;
 import com.iGap.interfaces.ISoftKeyboardOpenClose;
 import com.iGap.interfaces.OnChatClearMessageResponse;
 import com.iGap.interfaces.OnChatDelete;
@@ -118,6 +119,7 @@ import com.iGap.module.MusicPlayer;
 import com.iGap.module.MyType;
 import com.iGap.module.OnComplete;
 import com.iGap.module.RecyclerViewPauseOnScrollListener;
+import com.iGap.module.ResendMessage;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.ShouldScrolledBehavior;
 import com.iGap.module.SortMessages;
@@ -1238,6 +1240,7 @@ public class ActivityChat extends ActivityEnhanced
 
                                 roomMessage.setMessageType(
                                     ProtoGlobal.RoomMessageType.TEXT.toString());
+                                roomMessage.setRoomId(mRoomId);
                                 roomMessage.setMessage(message);
                                 roomMessage.setStatus(
                                     ProtoGlobal.RoomMessageStatus.SENDING.toString());
@@ -2263,6 +2266,7 @@ public class ActivityChat extends ActivityEnhanced
                 roomMessage.setMessageType(finalMessageType.toString());
                 roomMessage.setMessage(getWrittenMessage());
                 roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
+                roomMessage.setRoomId(mRoomId);
                 roomMessage.setAttachment(messageId, finalFilePath, finalImageDimens[0],
                     finalImageDimens[1], finalFileSize, finalFileName, finalDuration,
                     LocalFileType.THUMBNAIL);
@@ -2918,6 +2922,14 @@ public class ActivityChat extends ActivityEnhanced
         realm.close();
     }
 
+    @Override public void onMessageFailed(long roomId, RealmRoomMessage message,
+        ProtoGlobal.Room.Type roomType) {
+        if (roomId == mRoomId) {
+            mAdapter.updateMessageStatus(message.getMessageId(),
+                ProtoGlobal.RoomMessageStatus.FAILED);
+        }
+    }
+
     @Override public void onFileDownload(final String token, final int offset,
         final ProtoFileDownload.FileDownload.Selector selector, final int progress) {
         runOnUiThread(new Runnable() {
@@ -2988,6 +3000,7 @@ public class ActivityChat extends ActivityEnhanced
 
                 roomMessage.setMessageType(ProtoGlobal.RoomMessageType.VOICE.toString());
                 roomMessage.setMessage(getWrittenMessage());
+                roomMessage.setRoomId(mRoomId);
                 roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
                 roomMessage.setAttachment(messageId, savedPath, 0, 0, 0, null, duration,
                     LocalFileType.FILE);
@@ -3652,6 +3665,20 @@ public class ActivityChat extends ActivityEnhanced
 
     @Override public void onDownloadStart(View view, StructMessageInfo message, int pos) {
         // TODO: 10/29/2016 [Alireza] implement
+    }
+
+    @Override
+    public void onFailedMessageClick(View view, final StructMessageInfo message, final int pos) {
+        new ResendMessage(this, new IResendMessage() {
+            @Override public void deleteMessage() {
+                mAdapter.remove(pos);
+            }
+
+            @Override public void resendMessage() {
+                mAdapter.updateMessageStatus(Long.parseLong(message.messageID),
+                    ProtoGlobal.RoomMessageStatus.SENDING);
+            }
+        }, message);
     }
 
     private static class UploadTask

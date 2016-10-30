@@ -387,8 +387,18 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                             }
                         } else {
                             if (mMessage.attachment.isFileExistsOnLocal()) {
-                                messageClickListener.onOpenClick(progress, mMessage,
-                                    holder.getAdapterPosition());
+                                if (mMessage.status.equalsIgnoreCase(
+                                    ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                                    return;
+                                }
+                                if (mMessage.status.equalsIgnoreCase(
+                                    ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                                    messageClickListener.onFailedMessageClick(progress, mMessage,
+                                        holder.getAdapterPosition());
+                                } else {
+                                    messageClickListener.onOpenClick(progress, mMessage,
+                                        holder.getAdapterPosition());
+                                }
                             } else {
                                 ((MessageProgress) holder.itemView.findViewById(
                                     R.id.progress)).withDrawable(R.drawable.ic_cancel);

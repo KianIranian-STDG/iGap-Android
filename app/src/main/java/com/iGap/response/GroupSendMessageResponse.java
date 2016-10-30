@@ -18,6 +18,7 @@ import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageContact;
+import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.RealmRoomMessageLocation;
 import com.iGap.realm.RealmRoomMessageLog;
 import com.iGap.realm.RealmUserInfo;
@@ -103,6 +104,7 @@ public class GroupSendMessageResponse extends MessageHandler {
                     RealmRoomMessage realmRoomMessage = realm.createObject(RealmRoomMessage.class);
 
                     realmRoomMessage.setMessageId(roomMessage.getMessageId());
+                    realmRoomMessage.setRoomId(builder.getRoomId());
                     realmRoomMessage.setMessageVersion(roomMessage.getMessageVersion());
                     realmRoomMessage.setStatus(roomMessage.getStatus().toString());
                     realmRoomMessage.setMessageType(roomMessage.getMessageType().toString());
@@ -195,6 +197,19 @@ public class GroupSendMessageResponse extends MessageHandler {
 
     @Override public void timeOut() {
         super.timeOut();
-        Log.i("SOC", "GroupSendMessageResponse timeout");
+        // message failed
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override public void execute(Realm realm) {
+                RealmRoomMessage message = realm.where(RealmRoomMessage.class)
+                    .equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(identity))
+                    .findFirst();
+                if (message != null) {
+                    message.setStatus(ProtoGlobal.RoomMessageStatus.FAILED.toString());
+                    G.chatSendMessageUtil.onMessageFailed(message.getRoomId(), message,
+                        ProtoGlobal.Room.Type.CHAT);
+                }
+            }
+        });
     }
 }

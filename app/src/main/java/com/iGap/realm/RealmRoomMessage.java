@@ -5,6 +5,7 @@ import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 import io.realm.Realm;
 import io.realm.RealmObject;
+import io.realm.annotations.Index;
 import io.realm.annotations.PrimaryKey;
 
 public class RealmRoomMessage extends RealmObject {
@@ -22,6 +23,15 @@ public class RealmRoomMessage extends RealmObject {
     private boolean edited;
     private long updateTime;
     private boolean deleted;
+    @Index private long roomId;
+
+    public long getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(long roomId) {
+        this.roomId = roomId;
+    }
 
     public long getMessageId() {
         return messageId;
