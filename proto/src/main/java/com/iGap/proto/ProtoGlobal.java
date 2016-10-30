@@ -11328,7 +11328,8 @@ public final class ProtoGlobal {
       return hash;
     }
 
-    public static com.iGap.proto.ProtoGlobal.GroupRoom parseFrom(com.google.protobuf.ByteString data)
+    public static com.iGap.proto.ProtoGlobal.GroupRoom parseFrom(
+        com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
@@ -15356,14 +15357,21 @@ public final class ProtoGlobal {
             +
             " \001(\t*\036\n\006Gender\022\n\n\006FEMALE\020\000\022\010\n\004MALE\020\001*\275\001\n"
             +
-            "\017RoomMessageType\022\010\n\004TEXT\020\000\022\t\n\005IMAGE\020\001\022\016\n" +
-      "\nIMAGE_TEXT\020\002\022\t\n\005VIDEO\020\003\022\016\n\nVIDEO_TEXT\020\004" +
-      "\022\t\n\005AUDIO\020\005\022\016\n\nAUDIO_TEXT\020\006\022\t\n\005VOICE\020\007\022\007" +
-      "\n\003GIF\020\010\022\010\n\004FILE\020\t\022\r\n\tFILE_TEXT\020\n\022\014\n\010LOCA" +
-      "TION\020\013\022\007\n\003LOG\020\014\022\013\n\007CONTACT\020\r*O\n\021RoomMess" +
-      "ageStatus\022\n\n\006FAILED\020\000\022\013\n\007SENDING\020\001\022\010\n\004SE" +
-      "NT\020\002\022\r\n\tDELIVERED\020\003\022\010\n\004SEEN\020\004B\035\n\016com.iGa" +
-      "p.protoB\013ProtoGlobalb\006proto3"
+            "\017RoomMessageType\022\010\n\004TEXT\020\000\022\t\n\005IMAGE\020\001\022\016\n"
+            +
+            "\nIMAGE_TEXT\020\002\022\t\n\005VIDEO\020\003\022\016\n\nVIDEO_TEXT\020\004"
+            +
+            "\022\t\n\005AUDIO\020\005\022\016\n\nAUDIO_TEXT\020\006\022\t\n\005VOICE\020\007\022\007"
+            +
+            "\n\003GIF\020\010\022\010\n\004FILE\020\t\022\r\n\tFILE_TEXT\020\n\022\014\n\010LOCA"
+            +
+            "TION\020\013\022\007\n\003LOG\020\014\022\013\n\007CONTACT\020\r*O\n\021RoomMess"
+            +
+            "ageStatus\022\n\n\006FAILED\020\000\022\013\n\007SENDING\020\001\022\010\n\004SE"
+            +
+            "NT\020\002\022\r\n\tDELIVERED\020\003\022\010\n\004SEEN\020\004B\035\n\016com.iGa"
+            +
+            "p.protoB\013ProtoGlobalb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -15373,86 +15381,60 @@ public final class ProtoGlobal {
             return null;
           }
         };
-    com.google.protobuf.Descriptors.FileDescriptor
-      .internalBuildGeneratedFileFrom(descriptorData,
+    com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         }, assigner);
-    internal_static_proto_RoomMessageLocation_descriptor =
-      getDescriptor().getMessageTypes().get(0);
-    internal_static_proto_RoomMessageLocation_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+    internal_static_proto_RoomMessageLocation_descriptor = getDescriptor().getMessageTypes().get(0);
+    internal_static_proto_RoomMessageLocation_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_RoomMessageLocation_descriptor,
         new java.lang.String[] { "Lat", "Lon", });
-    internal_static_proto_RoomMessageLog_descriptor =
-      getDescriptor().getMessageTypes().get(1);
-    internal_static_proto_RoomMessageLog_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+    internal_static_proto_RoomMessageLog_descriptor = getDescriptor().getMessageTypes().get(1);
+    internal_static_proto_RoomMessageLog_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_RoomMessageLog_descriptor,
         new java.lang.String[] { "Type", });
-    internal_static_proto_RoomMessageContact_descriptor =
-      getDescriptor().getMessageTypes().get(2);
-    internal_static_proto_RoomMessageContact_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+    internal_static_proto_RoomMessageContact_descriptor = getDescriptor().getMessageTypes().get(2);
+    internal_static_proto_RoomMessageContact_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_RoomMessageContact_descriptor,
         new java.lang.String[] { "FirstName", "LastName", "Nickname", "Phone", "Email", });
     internal_static_proto_RoomMessageForwardFrom_descriptor =
-      getDescriptor().getMessageTypes().get(3);
-    internal_static_proto_RoomMessageForwardFrom_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        getDescriptor().getMessageTypes().get(3);
+    internal_static_proto_RoomMessageForwardFrom_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_RoomMessageForwardFrom_descriptor,
         new java.lang.String[] { "RoomId", "MessageId", });
-    internal_static_proto_RegisteredUser_descriptor =
-      getDescriptor().getMessageTypes().get(4);
-    internal_static_proto_RegisteredUser_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+    internal_static_proto_RegisteredUser_descriptor = getDescriptor().getMessageTypes().get(4);
+    internal_static_proto_RegisteredUser_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_RegisteredUser_descriptor,
         new java.lang.String[] { "Id", "Username", "Phone", "FirstName", "LastName", "DisplayName", "Initials", "Color", "Status", "LastSeen", "AvatarCount", "Avatar", "Mutual", });
-    internal_static_proto_Avatar_descriptor =
-      getDescriptor().getMessageTypes().get(5);
-    internal_static_proto_Avatar_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+    internal_static_proto_Avatar_descriptor = getDescriptor().getMessageTypes().get(5);
+    internal_static_proto_Avatar_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_Avatar_descriptor,
         new java.lang.String[] { "Id", "File", });
-    internal_static_proto_RoomMessage_descriptor =
-      getDescriptor().getMessageTypes().get(6);
-    internal_static_proto_RoomMessage_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+    internal_static_proto_RoomMessage_descriptor = getDescriptor().getMessageTypes().get(6);
+    internal_static_proto_RoomMessage_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_RoomMessage_descriptor,
         new java.lang.String[] { "MessageId", "MessageVersion", "Status", "StatusVersion", "MessageType", "Message", "Attachment", "UserId", "Location", "Log", "Contact", "Edited", "CreateTime", "UpdateTime", "Deleted", "ForwardFrom", "ReplyTo", "PreviousMessageId", });
-    internal_static_proto_Room_descriptor =
-      getDescriptor().getMessageTypes().get(7);
-    internal_static_proto_Room_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+    internal_static_proto_Room_descriptor = getDescriptor().getMessageTypes().get(7);
+    internal_static_proto_Room_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_Room_descriptor,
         new java.lang.String[] { "Id", "Type", "Title", "Initials", "Color", "UnreadCount", "LastMessage", "ReadOnly", "ChatRoom", "GroupRoom", "ChannelRoom", });
-    internal_static_proto_ChatRoom_descriptor =
-      getDescriptor().getMessageTypes().get(8);
-    internal_static_proto_ChatRoom_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+    internal_static_proto_ChatRoom_descriptor = getDescriptor().getMessageTypes().get(8);
+    internal_static_proto_ChatRoom_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_ChatRoom_descriptor,
         new java.lang.String[] { "Peer", });
-    internal_static_proto_GroupRoom_descriptor =
-      getDescriptor().getMessageTypes().get(9);
-    internal_static_proto_GroupRoom_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+    internal_static_proto_GroupRoom_descriptor = getDescriptor().getMessageTypes().get(9);
+    internal_static_proto_GroupRoom_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_GroupRoom_descriptor,
         new java.lang.String[] { "Role", "ParticipantsCountLabel", "Description", "AvatarCount", "Avatar", });
-    internal_static_proto_ChannelRoom_descriptor =
-      getDescriptor().getMessageTypes().get(10);
-    internal_static_proto_ChannelRoom_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+    internal_static_proto_ChannelRoom_descriptor = getDescriptor().getMessageTypes().get(10);
+    internal_static_proto_ChannelRoom_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_ChannelRoom_descriptor,
         new java.lang.String[] { "Role", "ParticipantsCountLabel", "Description", "AvatarCount", "Avatar", });
-    internal_static_proto_Thumbnail_descriptor =
-      getDescriptor().getMessageTypes().get(11);
-    internal_static_proto_Thumbnail_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+    internal_static_proto_Thumbnail_descriptor = getDescriptor().getMessageTypes().get(11);
+    internal_static_proto_Thumbnail_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_Thumbnail_descriptor,
         new java.lang.String[] { "Size", "Width", "Height", "CacheId", });
-    internal_static_proto_File_descriptor =
-      getDescriptor().getMessageTypes().get(12);
-    internal_static_proto_File_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+    internal_static_proto_File_descriptor = getDescriptor().getMessageTypes().get(12);
+    internal_static_proto_File_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_File_descriptor,
         new java.lang.String[] { "Token", "Name", "Size", "LargeThumbnail", "SmallThumbnail", "Width", "Height", "Duration", "CacheId", });
   }
