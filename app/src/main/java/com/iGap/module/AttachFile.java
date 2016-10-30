@@ -46,13 +46,10 @@ public class AttachFile {
     public static final int request_code_paint = 17;
     public static final int MEDIA_TYPE_IMAGE = 20;
 
-
     public static String imagePath = "";
     public static final String IMAGE_DIRECTORY_NAME = "Upload";
 
-
     private Context context;
-
 
     private LocationManager locationManager;
     private ProgressDialog pd;
@@ -69,19 +66,16 @@ public class AttachFile {
     public void requestPaint() {
 
         HelperPermision.getStoragePermision(context, new OnGetPermision() {
-            @Override
-            public void Allow() {
+            @Override public void Allow() {
                 Intent intent = new Intent(context, ActivityPaint.class);
                 ((Activity) context).startActivityForResult(intent, request_code_paint);
             }
         });
-
     }
 
     //*************************************************************************************************************
 
     public void requestTakePicture() {
-
 
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         Uri outPath = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
@@ -152,7 +146,7 @@ public class AttachFile {
         ((Activity) context).startActivityForResult(intent, request_code_VIDEO_CAPTURED);
     }
 
-//*************************************************************************************************************
+    //*************************************************************************************************************
 
     public void requestPickAudio() {
         Intent intent = new Intent();
@@ -165,8 +159,7 @@ public class AttachFile {
 
     public void requestPickFile() {
         HelperPermision.getStoragePermision(context, new OnGetPermision() {
-            @Override
-            public void Allow() {
+            @Override public void Allow() {
                 Intent intent = new Intent(context, ActivityExplorer.class);
                 ((Activity) context).startActivityForResult(intent, request_code_pic_file);
             }
@@ -188,16 +181,13 @@ public class AttachFile {
         this.complete = complete;
 
         HelperPermision.getLocationPermision(context, new OnGetPermision() {
-            @Override
-            public void Allow() {
+            @Override public void Allow() {
                 getPosition();
             }
         });
-
     }
 
     private void getPosition() {
-
 
         try {
             if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -225,12 +215,9 @@ public class AttachFile {
                     location.getLongitude();
 
                     String position = context.getString(R.string.my_Position_is) + "\n" + context.getString(R.string.latitude) + String.valueOf(location.getLatitude()) +
-                            "\n" + context.getString(R.string.longitude) + String.valueOf(location.getLongitude());
+                        "\n" + context.getString(R.string.longitude) + String.valueOf(location.getLongitude());
 
-                    if (complete != null)
-                        complete.complete(true, position, "");
-
-
+                    if (complete != null) complete.complete(true, position, "");
                 } else {
                     sendPosition = true;
                     pd = new ProgressDialog(context);
@@ -248,26 +235,19 @@ public class AttachFile {
 
     LocationListener locationListener = new LocationListener() {
 
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
+        @Override public void onStatusChanged(String provider, int status, Bundle extras) {
 
         }
 
-
-        @Override
-        public void onProviderEnabled(String provider) {
+        @Override public void onProviderEnabled(String provider) {
 
         }
 
-
-        @Override
-        public void onProviderDisabled(String provider) {
+        @Override public void onProviderDisabled(String provider) {
 
         }
 
-
-        @Override
-        public void onLocationChanged(Location location) {
+        @Override public void onLocationChanged(Location location) {
 
             if (sendPosition) {
                 sendPosition = false;
@@ -280,10 +260,9 @@ public class AttachFile {
                 location.getLongitude();
 
                 String position = context.getString(R.string.my_Position_is) + "\n" + context.getString(R.string.latitude) + String.valueOf(location.getLatitude()) +
-                        "\n" + context.getString(R.string.longitude) + String.valueOf(location.getLongitude());
+                    "\n" + context.getString(R.string.longitude) + String.valueOf(location.getLongitude());
 
-                if (complete != null)
-                    complete.complete(true, position, "");
+                if (complete != null) complete.complete(true, position, "");
             }
 
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -302,19 +281,13 @@ public class AttachFile {
 
     void showSettingsAlert() {
 
-        new MaterialDialog.Builder(context)
-                .title(context.getString(R.string.do_you_want_to_turn_on_gps))
-                .positiveText(R.string.ok)
-                .negativeText(R.string.cancel)
-                .callback(new MaterialDialog.ButtonCallback() {
-                    @Override
-                    public void onPositive(MaterialDialog dialog) {
-                        super.onPositive(dialog);
+        new MaterialDialog.Builder(context).title(context.getString(R.string.do_you_want_to_turn_on_gps)).positiveText(R.string.ok).negativeText(R.string.cancel).callback(new MaterialDialog.ButtonCallback() {
+            @Override public void onPositive(MaterialDialog dialog) {
+                super.onPositive(dialog);
 
-                        turnOnGps();
-                    }
-                })
-                .show();
+                turnOnGps();
+            }
+        }).show();
     }
 
     private void turnOnGps() {
@@ -326,7 +299,7 @@ public class AttachFile {
     private static String getRealPathFromURI(Uri contentUri) {
         Cursor cursor = null;
         try {
-            String[] proj = {MediaStore.Images.Media.DATA};
+            String[] proj = { MediaStore.Images.Media.DATA };
             cursor = G.context.getContentResolver().query(contentUri, proj, null, null, null);
             int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();
@@ -340,9 +313,9 @@ public class AttachFile {
 
     public static String getFilePathFromUri(Uri uri) {
 
-        String path = "";
+        String path;
 
-        if (uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
+        if (uri.getScheme() != null && uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
             path = getRealPathFromURI(uri);
         } else {
             path = uri.getPath();
@@ -352,6 +325,4 @@ public class AttachFile {
     }
 
     //*************************************************************************************************************
-
-
 }
