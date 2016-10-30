@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -38,6 +39,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -1694,7 +1696,23 @@ public class ActivityChat extends ActivityEnhanced
         } else if (messageInfo.messageType.toString().equals("FILE")
             || messageInfo.messageType.toString().equals("FILE_TEXT")) {
             Uri uri = Uri.fromFile(new File(messageInfo.getAttachment().getLocalFilePath()));
-            intent.setType(getContentResolver().getType(uri));
+
+            String mimeType = null;
+            if (uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
+                ContentResolver cr = getContentResolver();
+                mimeType = cr.getType(uri);
+            } else {
+                String fileExtension = MimeTypeMap.getFileExtensionFromUrl(uri.toString());
+                mimeType = MimeTypeMap.getSingleton()
+                    .getMimeTypeFromExtension(fileExtension.toLowerCase());
+            }
+
+            if (mimeType == null || mimeType.length() < 1) {
+                mimeType = "*/*";
+            }
+
+            intent.setType(mimeType);
+            Log.e("ddd", mimeType + "");
             intent.putExtra(Intent.EXTRA_STREAM, uri);
             choserDialogText = "Share  file";
         }
@@ -3476,6 +3494,7 @@ public class ActivityChat extends ActivityEnhanced
             case FILE:
             case IMAGE:
             case VIDEO:
+            case AUDIO:
             case VOICE:
                 itemsRes = R.array.fileMessageDialogItems;
                 break;

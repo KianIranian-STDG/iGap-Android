@@ -72,6 +72,7 @@ import com.iGap.interfaces.OnUserVerification;
 import com.iGap.module.ChatSendMessageUtil;
 import com.iGap.module.ChatUpdateStatusUtil;
 import com.iGap.module.ClearMessagesUtil;
+import com.iGap.module.Contacts;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.UploaderUtil;
 import com.iGap.proto.ProtoGlobal;
@@ -261,7 +262,8 @@ public class G extends Application {
                 getContactListFromServer();
             }
         };
-        //    Contacts.getListOfContact(true);  // this can be go in the activity for cheke permision in api 6+
+        Contacts.getListOfContact(
+            true);  // this can be go in the activity for cheke permision in api 6+
     }
 
     public static void getContactListFromServer() {
