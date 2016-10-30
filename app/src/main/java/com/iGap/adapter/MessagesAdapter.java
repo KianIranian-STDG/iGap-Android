@@ -11,6 +11,7 @@ import com.iGap.interfaces.IMessageItem;
 import com.iGap.interfaces.OnChatMessageRemove;
 import com.iGap.interfaces.OnChatMessageSelectionChanged;
 import com.iGap.module.StructMessageAttachment;
+import com.iGap.module.StructMessageInfo;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.mikepenz.fastadapter.FastAdapter;
@@ -63,7 +64,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
             @Override
             public boolean onClick(View v, IAdapter<Item> adapter, Item item, int position) {
                 if (getSelectedItems().size() == 0) {
-                    if (iMessageItem != null && !item.mMessage.messageID.equalsIgnoreCase("-1")) {
+                    if (iMessageItem != null && !item.mMessage.senderID.equalsIgnoreCase("-1")) {
                         if (item.mMessage.status.equalsIgnoreCase(
                             ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
                             return true;
@@ -79,6 +80,18 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
                 return true;
             }
         });
+    }
+
+    public List<StructMessageInfo> getFailedMessages() {
+        List<StructMessageInfo> failedMessages = new ArrayList<>();
+        for (Item item : getAdapterItems()) {
+            if (!item.mMessage.senderID.equalsIgnoreCase("-1")
+                && item.mMessage.status.equalsIgnoreCase(
+                ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                failedMessages.add(item.mMessage);
+            }
+        }
+        return failedMessages;
     }
 
     public static boolean hasDownloadRequested(String token) {

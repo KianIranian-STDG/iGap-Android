@@ -3791,6 +3791,7 @@ public class ActivityChat extends ActivityEnhanced
 
     @Override
     public void onFailedMessageClick(View view, final StructMessageInfo message, final int pos) {
+        final List<StructMessageInfo> failedMessages = mAdapter.getFailedMessages();
         new ResendMessage(this, new IResendMessage() {
             @Override public void deleteMessage() {
                 mAdapter.remove(pos);
@@ -3800,7 +3801,14 @@ public class ActivityChat extends ActivityEnhanced
                 mAdapter.updateMessageStatus(Long.parseLong(message.messageID),
                     ProtoGlobal.RoomMessageStatus.SENDING);
             }
-        }, message);
+
+            @Override public void resendAllMessages() {
+                for (StructMessageInfo message : failedMessages) {
+                    mAdapter.updateMessageStatus(Long.parseLong(message.messageID),
+                        ProtoGlobal.RoomMessageStatus.SENDING);
+                }
+            }
+        }, Long.parseLong(message.messageID), failedMessages);
     }
 
     private static class UploadTask

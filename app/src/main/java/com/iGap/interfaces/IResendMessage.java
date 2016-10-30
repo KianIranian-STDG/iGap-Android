@@ -8,4 +8,6 @@ public interface IResendMessage {
     void deleteMessage();
 
     void resendMessage();
+
+    void resendAllMessages();
 }

@@ -14,6 +14,8 @@ import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.enums.RoomType;
 import io.realm.Realm;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 10/22/2016.
@@ -134,20 +136,39 @@ public final class AppUtils {
         return messageText;
     }
 
-    public static MaterialDialog.Builder buildResendDialog(Context context,
+    public static MaterialDialog.Builder buildResendDialog(Context context, int failedMessagesCount,
         final IResendMessage listener) {
+        List<String> items = new ArrayList<>();
+        List<Integer> itemsId = new ArrayList<>();
+        items.add(context.getString(R.string.resend_message));
+        itemsId.add(0);
+        if (failedMessagesCount > 1) {
+            items.add(String.format(context.getString(R.string.resend_all_messages),
+                failedMessagesCount));
+            itemsId.add(1);
+        }
+        items.add(context.getString(R.string.delete_item_dialog));
+        itemsId.add(2);
+
+        int[] newIds = new int[itemsId.size()];
+        for (Integer integer : itemsId) {
+            newIds[itemsId.indexOf(integer)] = integer;
+        }
+
         return new MaterialDialog.Builder(context).title("Resend Messages")
-            .negativeText("CANCEL")
-            .items(R.array.resendMessagesDialog)
+            .negativeText("CANCEL").items(items).itemsIds(newIds)
             .itemsCallback(new MaterialDialog.ListCallback() {
                 @Override
                 public void onSelection(MaterialDialog dialog, View itemView, int position,
                     CharSequence text) {
-                    switch (position) {
+                    switch (itemView.getId()) {
                         case 0:
                             listener.resendMessage();
                             break;
                         case 1:
+                            listener.resendAllMessages();
+                            break;
+                        case 2:
                             listener.deleteMessage();
                             break;
                     }

@@ -110,7 +110,6 @@
         <activity
             android:name=".activities.ActivityIntroduce"
             android:configChanges="keyboard|keyboardHidden|screenSize|locale">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

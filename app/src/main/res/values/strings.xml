@@ -552,6 +552,7 @@
   <string name="E_218">Bad payload for request ; Invalid roomId</string>
   <string name="E_219">Internal server error for request</string>
   <string name="E_220">This operation is not permitted for request </string>
+  <string name="resend_all_messages" formatted="false">Resend %d messages</string>
 
 
 </resources>

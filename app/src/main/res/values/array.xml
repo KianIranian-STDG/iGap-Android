@@ -189,6 +189,7 @@
 
   <string-array name="resendMessagesDialog">
     <item>@string/resend_message</item>
+    <item>@string/resend_all_messages</item>
     <item>@string/delete_item_dialog</item>
   </string-array>
 
