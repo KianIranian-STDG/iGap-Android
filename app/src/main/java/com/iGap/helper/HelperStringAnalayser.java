@@ -96,6 +96,6 @@ public class HelperStringAnalayser {
                     ActivityChat.hashListener.complete(true, text, messageID);
                 }
             }
-        }, start + 1, start + text.length() + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }, start, start + text.length() + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 }

@@ -3,6 +3,7 @@ package com.iGap.module;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.format.DateUtils;
+import android.view.View;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
@@ -26,6 +27,7 @@ public class StructMessageInfo implements Parcelable {
                 return new StructMessageInfo[size];
             }
         };
+    public View view = null;
     public String messageID = "1";
     public String senderName = "";
     public String senderID = "";
