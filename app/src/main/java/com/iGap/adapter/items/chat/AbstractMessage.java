@@ -90,6 +90,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             requestUserInfo.userInfo(Long.parseLong(mMessage.senderID));
 
             MessagesAdapter.usersInfoRequested.add(mMessage.senderID);
+
         }
     }
 
@@ -135,6 +136,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     @Override @CallSuper public void bindView(final VH holder, List payloads) {
         super.bindView(holder, payloads);
+
+        mMessage.view =
+            holder.itemView;  // this use for select foregroung in activity chat  for search item and hash item
 
         //noinspection RedundantCast
         if (!isSelected() && ((FrameLayout) holder.itemView).getForeground() != null) {
