@@ -1810,6 +1810,10 @@ public class ActivityChat extends ActivityEnhanced
         if (messageInfo.messageType.toString().equals("TEXT")) {
             intent.setType("text/plain");
             intent.putExtra(android.content.Intent.EXTRA_TEXT, messageInfo.messageText);
+        } else if (messageInfo.messageType.toString().equals("CONTACT")) {
+            intent.setType("text/plain");
+            intent.putExtra(android.content.Intent.EXTRA_TEXT,
+                messageInfo.userInfo.firstName + "\n" + messageInfo.userInfo.phone);
         } else if (messageInfo.messageType.toString().equals("VOICE")
             || messageInfo.messageType.toString().equals("AUDIO")
             || messageInfo.messageType.toString().equals("AUDIO_TEXT")) {
@@ -1959,6 +1963,8 @@ public class ActivityChat extends ActivityEnhanced
     @Override public void onBackPressed() {
         if (mAdapter != null && mAdapter.getSelections().size() > 0) {
             mAdapter.deselect();
+        } else if (boomMenuButton.isOpen()) {
+            boomMenuButton.dismiss();
         } else {
             super.onBackPressed();
         }
@@ -3648,6 +3654,7 @@ public class ActivityChat extends ActivityEnhanced
                 itemsRes = R.array.fileMessageDialogItems;
                 break;
             case LOCATION:
+            case CONTACT:
             case LOG:
                 itemsRes = R.array.otherMessageDialogItems;
                 break;

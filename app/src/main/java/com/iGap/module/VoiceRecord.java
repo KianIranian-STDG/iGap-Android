@@ -2,6 +2,7 @@ package com.iGap.module;
 
 import android.content.Context;
 import android.media.MediaRecorder;
+import android.os.Vibrator;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -98,6 +99,10 @@ public class VoiceRecord {
     }
 
     public void startVoiceRecord() {
+
+        Vibrator v = (Vibrator) this.context.getSystemService(Context.VIBRATOR_SERVICE);
+        v.vibrate(200);
+
         canStop = false;
         startRecording();
         timertask = new TimerTask() {
