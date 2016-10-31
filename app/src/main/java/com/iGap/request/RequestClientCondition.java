@@ -2,12 +2,12 @@ package com.iGap.request;
 
 import android.util.Log;
 import com.iGap.proto.ProtoClientCondition;
-import com.iGap.realm.RealmChatHistory;
-import com.iGap.realm.RealmChatHistoryFields;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmOfflineDelete;
 import com.iGap.realm.RealmOfflineEdited;
 import com.iGap.realm.RealmOfflineSeen;
+import com.iGap.realm.RealmRoomMessage;
+import com.iGap.realm.RealmRoomMessageFields;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.Sort;
@@ -49,24 +49,24 @@ public class RequestClientCondition {
 
                 room.setClearId(realmClientCondition.getClearId()); //DONE
 
-                RealmChatHistory realmChatHistory = realm.where(RealmChatHistory.class)
-                    .equalTo(RealmChatHistoryFields.ROOM_ID, realmClientCondition.getRoomId())
+                RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class)
+                    .equalTo(RealmRoomMessageFields.ROOM_ID, realmClientCondition.getRoomId())
                     .findFirst();
-                Log.i("CLI1", "realmChatHistory : " + realmChatHistory);
-                if (realmChatHistory != null && realmChatHistory.getRoomMessage() != null) {
-                    Log.i("CLI1", "start ID : " + realmChatHistory.getRoomMessage().getMessageId());
-                    room.setCacheStartId(realmChatHistory.getRoomMessage().getMessageId());//Done
+                Log.i("CLI1", "realmChatHistory : " + realmRoomMessage);
+                if (realmRoomMessage != null) {
+                    Log.i("CLI1", "start ID : " + realmRoomMessage.getMessageId());
+                    room.setCacheStartId(realmRoomMessage.getMessageId());//Done
 
-                    List<RealmChatHistory> allItems = realm.where(RealmChatHistory.class)
-                        .equalTo(RealmChatHistoryFields.ROOM_ID, realmClientCondition.getRoomId())
+                    List<RealmRoomMessage> allItems = realm.where(RealmRoomMessage.class)
+                        .equalTo(RealmRoomMessageFields.ROOM_ID, realmClientCondition.getRoomId())
                         .findAll()
-                        .sort("id", Sort.DESCENDING);
+                        .sort(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
 
-                    for (RealmChatHistory item : allItems) {
+                    for (RealmRoomMessage item : allItems) {
                         Log.i("CLI1", "End 1");
-                        if (item.getRoomMessage() != null) {
-                            Log.i("CLI1", "End ID : " + item.getRoomMessage().getMessageId());
-                            room.setCacheEndId(item.getRoomMessage().getMessageId());//Done
+                        if (item != null) {
+                            Log.i("CLI1", "End ID : " + item.getMessageId());
+                            room.setCacheEndId(item.getMessageId());//Done
                             break;
                         }
                     }

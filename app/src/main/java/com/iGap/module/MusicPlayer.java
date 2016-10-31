@@ -22,9 +22,8 @@ import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityMediaPlayer;
-import com.iGap.realm.RealmChatHistory;
-import com.iGap.realm.RealmChatHistoryFields;
 import com.iGap.realm.RealmRoomMessage;
+import com.iGap.realm.RealmRoomMessageFields;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
@@ -509,20 +508,19 @@ public class MusicPlayer {
 
         Realm realm = Realm.getDefaultInstance();
 
-        RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class)
-            .equalTo(RealmChatHistoryFields.ROOM_ID, roomId)
+        RealmResults<RealmRoomMessage> roomMessages =
+            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
             .findAll();
 
-        if (chatHistories != null) {
-            for (RealmChatHistory chatHistory : chatHistories) {
-                if (chatHistory.getRoomMessage().getMessageType().equals("VOICE")
-                    || chatHistory.getRoomMessage().getMessageType().equals("AUDIO")
-                    || chatHistory.getRoomMessage().getMessageType().equals("AUDIO_TEXT")) {
-                    mediaList.add(chatHistory.getRoomMessage());
+        if (!roomMessages.isEmpty()) {
+            for (RealmRoomMessage realmRoomMessage : roomMessages) {
+                if (realmRoomMessage.getMessageType().equals("VOICE")
+                    || realmRoomMessage.getMessageType().equals("AUDIO")
+                    || realmRoomMessage.getMessageType().equals("AUDIO_TEXT")) {
+                    mediaList.add(realmRoomMessage);
 
-                    if (chatHistory.getRoomMessage().getAttachment() != null) {
-                        String tmpPath =
-                            chatHistory.getRoomMessage().getAttachment().getLocalFilePath();
+                    if (realmRoomMessage.getAttachment() != null) {
+                        String tmpPath = realmRoomMessage.getAttachment().getLocalFilePath();
                         if (tmpPath != null) {
                             if (tmpPath.equals(musicPath)) selectedMedia = mediaList.size();
                         }

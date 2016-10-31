@@ -58,8 +58,6 @@ import com.iGap.module.StructMessageInfo;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmAvatar;
-import com.iGap.realm.RealmChatHistory;
-import com.iGap.realm.RealmChatHistoryFields;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmClientConditionFields;
 import com.iGap.realm.RealmContacts;
@@ -71,6 +69,7 @@ import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
+import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.request.RequestChatDelete;
 import com.iGap.request.RequestChatGetRoom;
 import com.iGap.request.RequestUserAvatarGetList;
@@ -1192,15 +1191,14 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                             G.clearMessagesUtil.clearMessages(roomId, realmRoom.getLastMessageId());
                         }
 
-                        RealmResults<RealmChatHistory> realmChatHistories =
-                            realm.where(RealmChatHistory.class)
-                                .equalTo(RealmChatHistoryFields.ROOM_ID, roomId)
+                        RealmResults<RealmRoomMessage> realmRoomMessages =
+                            realm.where(RealmRoomMessage.class)
+                                .equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
                                 .findAll();
-                        for (RealmChatHistory chatHistory : realmChatHistories) {
-                            RealmRoomMessage roomMessage = chatHistory.getRoomMessage();
-                            if (roomMessage != null) {
+                        for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
+                            if (realmRoomMessage != null) {
                                 // delete chat history message
-                                chatHistory.getRoomMessage().deleteFromRealm();
+                                realmRoomMessage.deleteFromRealm();
                             }
                         }
 
@@ -1216,7 +1214,7 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                             realm.copyToRealmOrUpdate(room);
                         }
                         // finally delete whole chat history
-                        realmChatHistories.deleteAllFromRealm();
+                        realmRoomMessages.deleteAllFromRealm();
                     }
                 });
 
@@ -1359,8 +1357,8 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                                 .equalTo(RealmRoomFields.ID, roomId)
                                 .findFirst()
                                 .deleteFromRealm();
-                            realm.where(RealmChatHistory.class)
-                                .equalTo(RealmChatHistoryFields.ROOM_ID, roomId)
+                            realm.where(RealmRoomMessage.class)
+                                .equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
                                 .findAll()
                                 .deleteAllFromRealm();
 

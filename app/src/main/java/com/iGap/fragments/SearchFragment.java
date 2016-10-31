@@ -26,7 +26,6 @@ import com.iGap.interfaces.OnChatGetRoom;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.realm.RealmAvatar;
-import com.iGap.realm.RealmChatHistory;
 import com.iGap.realm.RealmContacts;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
@@ -304,19 +303,18 @@ public class SearchFragment extends Fragment {
         int size = list.size();
         Realm realm = Realm.getDefaultInstance();
 
-        for (RealmChatHistory realmChatHistory : realm.where(RealmChatHistory.class).findAll()) {
-            RealmRoomMessage roomMessage = realmChatHistory.getRoomMessage();
+        for (RealmRoomMessage roomMessage : realm.where(RealmRoomMessage.class).findAll()) {
             if (roomMessage != null) {
                 StructSearch item = new StructSearch();
 
                 item.time = roomMessage.getUpdateTime();
                 item.comment = roomMessage.getMessage();
-                item.id = realmChatHistory.getRoomId();
+                item.id = roomMessage.getRoomId();
                 item.type = SearchType.message;
                 item.messageId = roomMessage.getMessageId();
 
                 RealmRoom realmRoom = realm.where(RealmRoom.class)
-                    .equalTo(RealmRoomFields.ID, realmChatHistory.getRoomId())
+                    .equalTo(RealmRoomFields.ID, roomMessage.getRoomId())
                     .findFirst();
 
                 if (realmRoom != null) { // room exist

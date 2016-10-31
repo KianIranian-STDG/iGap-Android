@@ -59,8 +59,6 @@ import com.iGap.proto.ProtoClientGetRoom;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
-import com.iGap.realm.RealmChatHistory;
-import com.iGap.realm.RealmChatHistoryFields;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmClientConditionFields;
 import com.iGap.realm.RealmOfflineDelete;
@@ -495,15 +493,14 @@ public class ActivityMain extends ActivityEnhanced
                             G.clearMessagesUtil.clearMessages(chatId, realmRoom.getLastMessageId());
                         }
 
-                        RealmResults<RealmChatHistory> realmChatHistories =
-                            realm.where(RealmChatHistory.class)
-                                .equalTo(RealmChatHistoryFields.ROOM_ID, chatId)
+                        RealmResults<RealmRoomMessage> realmRoomMessages =
+                            realm.where(RealmRoomMessage.class)
+                                .equalTo(RealmRoomMessageFields.ROOM_ID, chatId)
                                 .findAll();
-                        for (RealmChatHistory chatHistory : realmChatHistories) {
-                            RealmRoomMessage roomMessage = chatHistory.getRoomMessage();
-                            if (roomMessage != null) {
+                        for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
+                            if (realmRoomMessage != null) {
                                 // delete chat history message
-                                chatHistory.getRoomMessage().deleteFromRealm();
+                                realmRoomMessage.deleteFromRealm();
                             }
                         }
 
@@ -519,7 +516,7 @@ public class ActivityMain extends ActivityEnhanced
                             realm.copyToRealmOrUpdate(room);
                         }
                         // finally delete whole chat history
-                        realmChatHistories.deleteAllFromRealm();
+                        realmRoomMessages.deleteAllFromRealm();
 
                         runOnUiThread(new Runnable() {
                             @Override public void run() {
@@ -601,8 +598,8 @@ public class ActivityMain extends ActivityEnhanced
                                 .equalTo(RealmRoomFields.ID, item.getInfo().chatId)
                                 .findFirst()
                                 .deleteFromRealm();
-                            realm.where(RealmChatHistory.class)
-                                .equalTo(RealmChatHistoryFields.ROOM_ID, item.getInfo().chatId)
+                            realm.where(RealmRoomMessage.class)
+                                .equalTo(RealmRoomMessageFields.ROOM_ID, item.getInfo().chatId)
                                 .findAll()
                                 .deleteAllFromRealm();
 
@@ -898,33 +895,31 @@ public class ActivityMain extends ActivityEnhanced
 
             boolean clearMessage = false;
 
-            RealmResults<RealmChatHistory> realmChatHistories = realm.where(RealmChatHistory.class)
-                .equalTo(RealmChatHistoryFields.ROOM_ID, roomId)
-                .findAllSorted(RealmChatHistoryFields.ID, Sort.DESCENDING);
-            for (final RealmChatHistory chatHistory : realmChatHistories) {
-                final RealmRoomMessage roomMessage = chatHistory.getRoomMessage();
-                if (!clearMessage && roomMessage.getMessageId() == clearId) {
+            RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class)
+                .equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
+                .findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+            for (final RealmRoomMessage realmRoomMessage : realmRoomMessages) {
+                if (!clearMessage && realmRoomMessage.getMessageId() == clearId) {
                     clearMessage = true;
                 }
 
                 if (clearMessage) {
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override public void execute(Realm realm) {
-                            if (chatHistory.getRoomMessage() != null) {
-                                chatHistory.getRoomMessage().deleteFromRealm();
+                            if (realmRoomMessage != null) {
+                                realmRoomMessage.deleteFromRealm();
                             }
                         }
                     });
                 }
             }
-            List<RealmChatHistory> allItems = realm.where(RealmChatHistory.class)
-                .equalTo(RealmChatHistoryFields.ROOM_ID, roomId)
-                .findAll()
-                .sort("id", Sort.DESCENDING);
+            List<RealmRoomMessage> allItems =
+                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
+                .findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
             long latestMessageId = 0;
-            for (RealmChatHistory item : allItems) {
-                if (item.getRoomMessage() != null) {
-                    latestMessageId = item.getRoomMessage().getMessageId();
+            for (RealmRoomMessage item : allItems) {
+                if (item != null) {
+                    latestMessageId = item.getMessageId();
                     break;
                 }
             }

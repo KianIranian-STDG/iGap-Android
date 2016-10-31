@@ -186,6 +186,10 @@ public class RealmRoomMessage extends RealmObject {
         return attachment;
     }
 
+    public void setAttachment(RealmAttachment attachment) {
+        this.attachment = attachment;
+    }
+
     public void setAttachment(final long messageId, final ProtoGlobal.File attachment) {
         Realm realm = Realm.getDefaultInstance();
         if (!attachment.getToken().isEmpty()) {

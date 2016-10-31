@@ -10,8 +10,6 @@ import com.iGap.module.SHP_SETTING;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoGroupSendMessage;
-import com.iGap.realm.RealmChatHistory;
-import com.iGap.realm.RealmChatHistoryFields;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmClientConditionFields;
 import com.iGap.realm.RealmRoom;
@@ -104,21 +102,10 @@ public class GroupSendMessageResponse extends MessageHandler {
                         .equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId())
                         .findFirst();
 
-                    RealmChatHistory realmChatHistory;
-
                     if (realmRoomMessage == null) {
-                        realmChatHistory = realm.createObject(RealmChatHistory.class);
-                        realmChatHistory.setId(System.currentTimeMillis());
-
                         realmRoomMessage = realm.createObject(RealmRoomMessage.class);
                         realmRoomMessage.setMessageId(roomMessage.getMessageId());
                         realmRoomMessage.setRoomId(builder.getRoomId());
-                    } else {
-
-                        realmChatHistory = realm.where(RealmChatHistory.class)
-                            .equalTo(RealmChatHistoryFields.ROOM_MESSAGE.MESSAGE_ID,
-                                roomMessage.getMessageId())
-                            .findFirst();
                     }
 
                     fillRoomMessage(realmRoomMessage, roomMessage);
@@ -136,11 +123,6 @@ public class GroupSendMessageResponse extends MessageHandler {
                         realmRoomMessage.setReplyTo(fillRoomMessage(reply, roomMessage));
                     }
 
-                    realmChatHistory.setRoomId(builder.getRoomId());
-                    realmChatHistory.setRoomMessage(realmRoomMessage);
-
-                    realm.copyToRealm(realmChatHistory);
-
                     SharedPreferences sharedPreferences =
                         G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
                     int checkAlert = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_ALERT_GROUP, 1);
@@ -151,39 +133,42 @@ public class GroupSendMessageResponse extends MessageHandler {
                 } else {
                     // i'm the sender
                     // update message fields into database
-                    RealmResults<RealmChatHistory> chatHistories =
-                        realm.where(RealmChatHistory.class)
-                            .equalTo(RealmChatHistoryFields.ROOM_ID, builder.getRoomId())
+                    RealmResults<RealmRoomMessage> realmRoomMessageRealmResults =
+                        realm.where(RealmRoomMessage.class)
+                            .equalTo(RealmRoomMessageFields.ROOM_ID, builder.getRoomId())
                             .findAll();
-                    for (RealmChatHistory history : chatHistories) {
-                        RealmRoomMessage message = history.getRoomMessage();
+                    for (RealmRoomMessage realmRoomMessage : realmRoomMessageRealmResults) {
                         // find the message using identity and update it
-                        if (message != null && message.getMessageId() == Long.parseLong(identity)) {
+                        if (realmRoomMessage != null
+                            && realmRoomMessage.getMessageId() == Long.parseLong(identity)) {
 
-                            fillRoomMessage(message, roomMessage);
+                            fillRoomMessage(realmRoomMessage, roomMessage);
 
                             if (roomMessage.getForwardFrom() != null) { // forward message
 
-                                RealmRoomMessage forwardMessage = message.getForwardMessage();
+                                RealmRoomMessage forwardMessage =
+                                    realmRoomMessage.getForwardMessage();
                                 // forwardMessage shouldn't be null but client check it for insuring
                                 if (forwardMessage == null) {
                                     forwardMessage = realm.createObject(RealmRoomMessage.class);
                                     forwardMessage.setMessageId(System.nanoTime());
                                 }
-                                message.setForwardMessage(
+                                realmRoomMessage.setForwardMessage(
                                     fillRoomMessage(forwardMessage, roomMessage));
                             } else if (roomMessage.getReplyTo() != null) { // reply message
 
-                                RealmRoomMessage replyMessage = message.getForwardMessage();
+                                RealmRoomMessage replyMessage =
+                                    realmRoomMessage.getForwardMessage();
                                 // replyMessage shouldn't be null but client check it for insuring
                                 if (replyMessage == null) {
                                     replyMessage = realm.createObject(RealmRoomMessage.class);
                                     replyMessage.setMessageId(System.nanoTime());
                                 }
-                                message.setReplyTo(fillRoomMessage(replyMessage, roomMessage));
+                                realmRoomMessage.setReplyTo(
+                                    fillRoomMessage(replyMessage, roomMessage));
                             }
 
-                            realm.copyToRealmOrUpdate(message);
+                            realm.copyToRealmOrUpdate(realmRoomMessage);
                             break;
                         }
                     }

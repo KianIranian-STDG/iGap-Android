@@ -28,9 +28,8 @@ import com.iGap.module.MusicPlayer;
 import com.iGap.module.OnComplete;
 import com.iGap.module.StructMessageInfo;
 import com.iGap.proto.ProtoGlobal;
-import com.iGap.realm.RealmChatHistory;
-import com.iGap.realm.RealmChatHistoryFields;
 import com.iGap.realm.RealmRoomMessage;
+import com.iGap.realm.RealmRoomMessageFields;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import java.io.File;
@@ -73,12 +72,12 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
         Realm realm = Realm.getDefaultInstance();
 
-        RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class)
-            .equalTo(RealmChatHistoryFields.ROOM_ID, roomId)
+        RealmResults<RealmRoomMessage> realmRoomMessages =
+            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
             .findAll();
 
-        for (RealmChatHistory chatHistory : chatHistories) {
-            String type = chatHistory.getRoomMessage().getMessageType();
+        for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
+            String type = realmRoomMessage.getMessageType();
             if (type.equals(ProtoGlobal.RoomMessageType.VOICE.toString()) || type.equals(
                 ProtoGlobal.RoomMessageType.AUDIO.toString()) || type.equals(
                 ProtoGlobal.RoomMessageType.AUDIO_TEXT.toString()) ||

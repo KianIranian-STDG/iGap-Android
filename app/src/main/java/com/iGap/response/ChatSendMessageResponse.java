@@ -8,8 +8,6 @@ import com.iGap.G;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.proto.ProtoChatSendMessage;
 import com.iGap.proto.ProtoGlobal;
-import com.iGap.realm.RealmChatHistory;
-import com.iGap.realm.RealmChatHistoryFields;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmClientConditionFields;
 import com.iGap.realm.RealmRoom;
@@ -115,12 +113,7 @@ public class ChatSendMessageResponse extends MessageHandler {
                      *  messageId and update it
                      *  client check this because maybe receive repetitious message from server
                      */
-                    RealmChatHistory realmChatHistory;
-
                     if (realmRoomMessage == null) {
-                        realmChatHistory = realm.createObject(RealmChatHistory.class);
-                        realmChatHistory.setId(System.currentTimeMillis());
-
                         realmRoomMessage = realm.createObject(RealmRoomMessage.class);
                         realmRoomMessage.setMessageId(roomMessage.getMessageId());
                         realmRoomMessage.setRoomId(chatSendMessageResponse.getRoomId());
@@ -134,11 +127,6 @@ public class ChatSendMessageResponse extends MessageHandler {
                         * from server so client should handle this subject
                         */
                         messageId.add(roomMessage.getMessageId());
-
-                        realmChatHistory = realm.where(RealmChatHistory.class)
-                            .equalTo(RealmChatHistoryFields.ROOM_MESSAGE.MESSAGE_ID,
-                                roomMessage.getMessageId())
-                            .findFirst();
                     }
 
                     fillRoomMessage(realmRoomMessage, roomMessage);
@@ -156,11 +144,6 @@ public class ChatSendMessageResponse extends MessageHandler {
                         realmRoomMessage.setReplyTo(fillRoomMessage(reply, roomMessage));
                     }
 
-                    realmChatHistory.setRoomId(chatSendMessageResponse.getRoomId());
-                    realmChatHistory.setRoomMessage(realmRoomMessage);
-
-                    realm.copyToRealm(realmChatHistory);
-
                     if (roomMessage.getUserId()
                         != userId) { // show notification if this message isn't for another account
 
@@ -176,41 +159,43 @@ public class ChatSendMessageResponse extends MessageHandler {
                 } else {
                     // i'm the sender
                     // update message fields into database
-                    RealmResults<RealmChatHistory> chatHistories =
-                        realm.where(RealmChatHistory.class)
-                            .equalTo(RealmChatHistoryFields.ROOM_ID,
+                    RealmResults<RealmRoomMessage> realmRoomMessages =
+                        realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID,
                                 chatSendMessageResponse.getRoomId())
                             .findAll();
-                    for (RealmChatHistory history : chatHistories) {
-                        RealmRoomMessage message = history.getRoomMessage();
+                    for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
                         // find the message using identity and update it
-                        if (message != null && message.getMessageId() == Long.parseLong(identity)) {
-                            message.setMessageId(roomMessage.getMessageId());
+                        if (realmRoomMessage != null
+                            && realmRoomMessage.getMessageId() == Long.parseLong(identity)) {
+                            realmRoomMessage.setMessageId(roomMessage.getMessageId());
 
-                            message = fillRoomMessage(message, roomMessage);
+                            realmRoomMessage = fillRoomMessage(realmRoomMessage, roomMessage);
 
                             if (roomMessage.getForwardFrom() != null) { // forward message
 
-                                RealmRoomMessage forwardMessage = message.getForwardMessage();
+                                RealmRoomMessage forwardMessage =
+                                    realmRoomMessage.getForwardMessage();
                                 // forwardMessage shouldn't be null but client check it for insuring
                                 if (forwardMessage == null) {
                                     forwardMessage = realm.createObject(RealmRoomMessage.class);
                                     forwardMessage.setMessageId(System.nanoTime());
                                 }
-                                message.setForwardMessage(
+                                realmRoomMessage.setForwardMessage(
                                     fillRoomMessage(forwardMessage, roomMessage));
                             } else if (roomMessage.getReplyTo() != null) { // reply message
 
-                                RealmRoomMessage replyMessage = message.getForwardMessage();
+                                RealmRoomMessage replyMessage =
+                                    realmRoomMessage.getForwardMessage();
                                 // replyMessage shouldn't be null but client check it for insuring
                                 if (replyMessage == null) {
                                     replyMessage = realm.createObject(RealmRoomMessage.class);
                                     replyMessage.setMessageId(System.nanoTime());
                                 }
-                                message.setReplyTo(fillRoomMessage(replyMessage, roomMessage));
+                                realmRoomMessage.setReplyTo(
+                                    fillRoomMessage(replyMessage, roomMessage));
                             }
 
-                            realm.copyToRealmOrUpdate(message);
+                            realm.copyToRealmOrUpdate(realmRoomMessage);
                             break;
                         }
                     }

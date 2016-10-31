@@ -4,12 +4,12 @@ import android.util.Log;
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGroupLeft;
-import com.iGap.realm.RealmChatHistory;
-import com.iGap.realm.RealmChatHistoryFields;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmClientConditionFields;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
+import com.iGap.realm.RealmRoomMessage;
+import com.iGap.realm.RealmRoomMessageFields;
 import io.realm.Realm;
 
 public class GroupLeftResponse extends MessageHandler {
@@ -46,11 +46,11 @@ public class GroupLeftResponse extends MessageHandler {
                     G.onGroupLeft.onGroupLeft(roomId, memberId);
                 }
 
-                RealmChatHistory realmChatHistory = realm.where(RealmChatHistory.class)
-                    .equalTo(RealmChatHistoryFields.ROOM_ID, roomId)
+                RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class)
+                    .equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
                     .findFirst();
-                if (realmChatHistory != null) {
-                    realmChatHistory.deleteFromRealm();
+                if (realmRoomMessage != null) {
+                    realmRoomMessage.deleteFromRealm();
                 }
 
                 RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class)

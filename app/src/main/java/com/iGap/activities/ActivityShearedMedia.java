@@ -25,9 +25,8 @@ import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.MusicPlayer;
 import com.iGap.module.OnComplete;
 import com.iGap.proto.ProtoGlobal;
-import com.iGap.realm.RealmChatHistory;
-import com.iGap.realm.RealmChatHistoryFields;
 import com.iGap.realm.RealmRoomMessage;
+import com.iGap.realm.RealmRoomMessageFields;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import java.text.SimpleDateFormat;
@@ -292,18 +291,18 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         mList = new ArrayList<>();
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class)
-            .equalTo(RealmChatHistoryFields.ROOM_ID, roomId)
-            .findAllSorted(RealmChatHistoryFields.ID);
+        RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class)
+            .equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
+            .findAllSorted(RealmRoomMessageFields.MESSAGE_ID);
 
         String firstItmeTime = "";
         String secendItemTime = "";
         SimpleDateFormat month_date = new SimpleDateFormat("yyyy/MM/dd");
         String type = "";
 
-        for (RealmChatHistory chatHistory : chatHistories) {
+        for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
             try {
-                type = chatHistory.getRoomMessage().getMessageType();
+                type = realmRoomMessage.getMessageType();
             } catch (NullPointerException e) {
             }
             if (type.equals(ProtoGlobal.RoomMessageType.VIDEO.toString()) || type.equals(
@@ -311,7 +310,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 type.equals(ProtoGlobal.RoomMessageType.IMAGE.toString()) || type.equals(
                 ProtoGlobal.RoomMessageType.IMAGE_TEXT.toString())) {
 
-                secendItemTime = month_date.format(chatHistory.getRoomMessage().getUpdateTime());
+                secendItemTime = month_date.format(realmRoomMessage.getUpdateTime());
 
                 if (secendItemTime.compareTo(firstItmeTime) > 0) {
 
@@ -323,7 +322,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                     firstItmeTime = secendItemTime;
                 }
 
-                mList.add(chatHistory.getRoomMessage());
+                mList.add(realmRoomMessage);
             }
         }
 
@@ -334,24 +333,24 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         mList = new ArrayList<>();
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class)
-            .equalTo(RealmChatHistoryFields.ROOM_ID, roomId)
-            .findAllSorted(RealmChatHistoryFields.ID);
+        RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class)
+            .equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
+            .findAllSorted(RealmRoomMessageFields.MESSAGE_ID);
 
         String firstItmeTime = "";
         String secendItemTime = "";
         SimpleDateFormat month_date = new SimpleDateFormat("yyyy/MM/dd");
         String type = "";
 
-        for (RealmChatHistory chatHistory : chatHistories) {
+        for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
             try {
-                type = chatHistory.getRoomMessage().getMessageType();
+                type = realmRoomMessage.getMessageType();
             } catch (NullPointerException e) {
             }
             if (type.equals(ProtoGlobal.RoomMessageType.FILE.toString()) || type.equals(
                 ProtoGlobal.RoomMessageType.FILE_TEXT.toString())) {
 
-                secendItemTime = month_date.format(chatHistory.getRoomMessage().getUpdateTime());
+                secendItemTime = month_date.format(realmRoomMessage.getUpdateTime());
 
                 if (secendItemTime.compareTo(firstItmeTime) > 0) {
 
@@ -363,7 +362,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                     firstItmeTime = secendItemTime;
                 }
 
-                mList.add(chatHistory.getRoomMessage());
+                mList.add(realmRoomMessage);
             }
         }
 
@@ -374,25 +373,25 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         mList = new ArrayList<>();
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class)
-            .equalTo(RealmChatHistoryFields.ROOM_ID, roomId)
-            .findAllSorted(RealmChatHistoryFields.ID);
+        RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class)
+            .equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
+            .findAllSorted(RealmRoomMessageFields.MESSAGE_ID);
 
         String firstItmeTime = "";
         String secendItemTime = "";
         SimpleDateFormat month_date = new SimpleDateFormat("yyyy/MM/dd");
         String type = "";
 
-        for (RealmChatHistory chatHistory : chatHistories) {
+        for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
             try {
-                type = chatHistory.getRoomMessage().getMessageType();
+                type = realmRoomMessage.getMessageType();
             } catch (NullPointerException e) {
             }
             if (type.equals(ProtoGlobal.RoomMessageType.AUDIO.toString()) || type.equals(
                 ProtoGlobal.RoomMessageType.AUDIO_TEXT.toString()) ||
                 type.equals(ProtoGlobal.RoomMessageType.VOICE.toString())) {
 
-                secendItemTime = month_date.format(chatHistory.getRoomMessage().getUpdateTime());
+                secendItemTime = month_date.format(realmRoomMessage.getUpdateTime());
 
                 if (secendItemTime.compareTo(firstItmeTime) > 0) {
 
@@ -404,7 +403,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                     firstItmeTime = secendItemTime;
                 }
 
-                mList.add(chatHistory.getRoomMessage());
+                mList.add(realmRoomMessage);
             }
         }
 

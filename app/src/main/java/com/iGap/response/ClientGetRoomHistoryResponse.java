@@ -3,7 +3,6 @@ package com.iGap.response;
 import com.iGap.G;
 import com.iGap.proto.ProtoClientGetRoomHistory;
 import com.iGap.proto.ProtoGlobal;
-import com.iGap.realm.RealmChatHistory;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmClientConditionFields;
 import com.iGap.realm.RealmRoomMessage;
@@ -52,9 +51,6 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
                         realmClientCondition.setStatusVersion(roomMessage.getStatusVersion());
                     }
 
-                    RealmChatHistory realmChatHistory = realm.createObject(RealmChatHistory.class);
-                    realmChatHistory.setId(System.currentTimeMillis());
-
                     RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class)
                         .equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId())
                         .findFirst();
@@ -80,11 +76,6 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
                         RealmRoomMessageContact.build(roomMessage.getContact()));
                     realmRoomMessage.setEdited(roomMessage.getEdited());
                     realmRoomMessage.setUpdateTime(roomMessage.getUpdateTime());
-
-                    realmChatHistory.setRoomId(Long.parseLong(identity));
-                    realmChatHistory.setRoomMessage(realmRoomMessage);
-
-                    realm.copyToRealm(realmChatHistory);
 
                     if (roomMessage.getUserId()
                         != userId) { // show notification if this message isn't for another account

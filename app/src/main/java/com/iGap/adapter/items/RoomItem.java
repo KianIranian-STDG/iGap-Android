@@ -18,12 +18,12 @@ import com.iGap.module.StructChatInfo;
 import com.iGap.module.StructDownloadAttachment;
 import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoFileDownload;
-import com.iGap.realm.RealmChatHistory;
-import com.iGap.realm.RealmChatHistoryFields;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
+import com.iGap.realm.RealmRoomMessage;
+import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestFileDownload;
 import com.iGap.request.RequestUserInfo;
@@ -204,16 +204,16 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
                     lastMessageSender = "You : ";
                 } else {
                     Realm realm1 = Realm.getDefaultInstance();
-                    RealmResults<RealmChatHistory> results = realm1.where(RealmChatHistory.class)
-                        .equalTo(RealmChatHistoryFields.ROOM_ID, mInfo.chatId)
-                        .findAllSorted(RealmChatHistoryFields.ID, Sort.DESCENDING);
-                    if (results != null) {
-                        RealmChatHistory realmChatHistory = results.first();
-                        if (realmChatHistory != null && realmChatHistory.getRoomMessage() != null) {
+                    RealmResults<RealmRoomMessage> results = realm1.where(RealmRoomMessage.class)
+                        .equalTo(RealmRoomMessageFields.ROOM_ID, mInfo.chatId)
+                        .findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+                    if (!results.isEmpty()) {
+                        RealmRoomMessage realmRoomMessage = results.first();
+                        if (realmRoomMessage != null) {
                             RealmRegisteredInfo realmRegisteredInfo =
                                 realm1.where(RealmRegisteredInfo.class)
                                     .equalTo(RealmRegisteredInfoFields.ID,
-                                        realmChatHistory.getRoomMessage().getUserId())
+                                        realmRoomMessage.getUserId())
                                     .findFirst();
                             if (realmRegisteredInfo != null) {
                                 lastMessageSender = realmRegisteredInfo.getDisplayName() + " : ";

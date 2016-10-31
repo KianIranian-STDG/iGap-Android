@@ -26,8 +26,8 @@ import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
-import com.iGap.realm.RealmChatHistory;
-import com.iGap.realm.RealmChatHistoryFields;
+import com.iGap.realm.RealmRoomMessage;
+import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.enums.RoomType;
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -110,18 +110,18 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
             });
 
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmChatHistory> histories = realm.where(RealmChatHistory.class)
-            .equalTo(RealmChatHistoryFields.ROOM_ID, mRoomId)
+        RealmResults<RealmRoomMessage> roomMessages =
+            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId)
             .findAll();
-        if (!histories.isEmpty()) {
+        if (!roomMessages.isEmpty()) {
             // there is at least on history in DB
             long identifier = System.nanoTime();
-            for (RealmChatHistory history : histories) {
+            for (RealmRoomMessage roomMessage : roomMessages) {
                 ProtoGlobal.RoomMessageType messageType =
-                    ProtoGlobal.RoomMessageType.valueOf(history.getRoomMessage().getMessageType());
+                    ProtoGlobal.RoomMessageType.valueOf(roomMessage.getMessageType());
                 if (messageType == ProtoGlobal.RoomMessageType.IMAGE
                     || messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
-                    mAdapter.add(new ImageMessageItem().setMessage(history.getRoomMessage())
+                    mAdapter.add(new ImageMessageItem().setMessage(roomMessage)
                         .withIdentifier(identifier));
                     identifier++;
                 }

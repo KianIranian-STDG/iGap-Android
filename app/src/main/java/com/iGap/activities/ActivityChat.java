@@ -136,8 +136,6 @@ import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmChannelRoom;
-import com.iGap.realm.RealmChatHistory;
-import com.iGap.realm.RealmChatHistoryFields;
 import com.iGap.realm.RealmChatRoom;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmClientConditionFields;
@@ -287,19 +285,18 @@ public class ActivityChat extends ActivityEnhanced
         // but imagine user is not in the room (or he is in another room) and received some messages
         // when came back to the room with new messages, I make new update status request as SEEN to
         // the message sender
-        final Realm chatHistoriesRealm = Realm.getDefaultInstance();
-        final RealmResults<RealmChatHistory> realmChatHistories =
-            chatHistoriesRealm.where(RealmChatHistory.class)
-                .equalTo(RealmChatHistoryFields.ROOM_ID, mRoomId)
-                .findAllAsync();
-        realmChatHistories.addChangeListener(
-            new RealmChangeListener<RealmResults<RealmChatHistory>>() {
-                @Override public void onChange(final RealmResults<RealmChatHistory> element) {
+        final Realm realm = Realm.getDefaultInstance();
+        final RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class)
+            .equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId)
+            .findAllAsync();
+        realmRoomMessages.addChangeListener(
+            new RealmChangeListener<RealmResults<RealmRoomMessage>>() {
+                @Override public void onChange(final RealmResults<RealmRoomMessage> element) {
                     //Start ClientCondition OfflineSeen
-                    chatHistoriesRealm.executeTransaction(new Realm.Transaction() {
+                    realm.executeTransaction(new Realm.Transaction() {
                         @Override public void execute(Realm realm) {
                             final RealmClientCondition realmClientCondition =
-                                chatHistoriesRealm.where(RealmClientCondition.class)
+                                realm.where(RealmClientCondition.class)
                                     .equalTo(RealmClientConditionFields.ROOM_ID, mRoomId)
                                     .findFirst();
 
@@ -307,27 +304,25 @@ public class ActivityChat extends ActivityEnhanced
 
                             long id = System.nanoTime();
 
-                            for (RealmChatHistory history : element) {
-                                final RealmRoomMessage realmRoomMessage = history.getRoomMessage();
-                                if (realmRoomMessage != null) {
-                                    if (realmRoomMessage.getUserId() != realm.where(
-                                        RealmUserInfo.class).findFirst().getUserId()
-                                        && !realmRoomMessage.getStatus()
+                            for (RealmRoomMessage roomMessage : element) {
+                                if (roomMessage != null) {
+                                    if (roomMessage.getUserId() != realm.where(RealmUserInfo.class)
+                                        .findFirst()
+                                        .getUserId() && !roomMessage.getStatus()
                                         .equalsIgnoreCase(
                                             ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
 
-                                        realmRoomMessage.setStatus(
+                                        roomMessage.setStatus(
                                             ProtoGlobal.RoomMessageStatus.SEEN.toString());
 
                                         RealmOfflineSeen realmOfflineSeen =
                                             realm.createObject(RealmOfflineSeen.class);
                                         realmOfflineSeen.setId(id++);
-                                        realmOfflineSeen.setOfflineSeen(
-                                            realmRoomMessage.getMessageId());
+                                        realmOfflineSeen.setOfflineSeen(roomMessage.getMessageId());
                                         realm.copyToRealmOrUpdate(realmOfflineSeen);
 
                                         realmClientCondition.getOfflineSeen().add(realmOfflineSeen);
-                                        offlineSeenId.add(realmRoomMessage.getMessageId());
+                                        offlineSeenId.add(roomMessage.getMessageId());
                                     }
                                 }
                             }
@@ -341,7 +336,7 @@ public class ActivityChat extends ActivityEnhanced
                     });
 
                     element.removeChangeListeners();
-                    chatHistoriesRealm.close();
+                    realm.close();
                 }
             });
 
@@ -556,9 +551,26 @@ public class ActivityChat extends ActivityEnhanced
                     .equalTo(RealmRoomMessageFields.MESSAGE_ID,
                         Long.parseLong(messageInfo.messageID))
                     .findFirst();
+
                 if (roomMessage != null) {
-                    switchAddItem(new ArrayList<>(Collections.singletonList(messageInfo)), false);
-                    G.chatSendMessageUtil.build(chatType, roomMessage.getRoomId(), roomMessage);
+                    RealmRoomMessage forwardedMessage = realm.createObject(RealmRoomMessage.class);
+                    forwardedMessage.setMessageId(System.nanoTime());
+                    forwardedMessage.setMessage(roomMessage.getMessage());
+                    forwardedMessage.setAttachment(roomMessage.getAttachment());
+                    forwardedMessage.setCreateTime(System.currentTimeMillis());
+                    forwardedMessage.setLocation(roomMessage.getLocation());
+                    forwardedMessage.setLog(roomMessage.getLog());
+                    forwardedMessage.setMessageType(roomMessage.getMessageType());
+                    forwardedMessage.setRoomId(mRoomId);
+                    forwardedMessage.setRoomMessageContact(roomMessage.getRoomMessageContact());
+                    forwardedMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
+                    forwardedMessage.setUserId(roomMessage.getUserId());
+
+                    switchAddItem(new ArrayList<>(
+                            Collections.singletonList(StructMessageInfo.convert(forwardedMessage))),
+                        false);
+                    G.chatSendMessageUtil.build(chatType, forwardedMessage.getRoomId(),
+                        forwardedMessage);
                 }
             }
         });
@@ -1359,8 +1371,6 @@ public class ActivityChat extends ActivityEnhanced
 
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override public void execute(Realm realm) {
-                                RealmChatHistory chatHistory =
-                                    realm.createObject(RealmChatHistory.class);
                                 RealmRoomMessage roomMessage =
                                     realm.createObject(RealmRoomMessage.class);
 
@@ -1387,10 +1397,6 @@ public class ActivityChat extends ActivityEnhanced
                                     messageInfo.replayPicturePath = ((StructMessageInfo)
                                     mReplayLayout.getTag()).filePic;*/
                                 }
-
-                                chatHistory.setId(System.currentTimeMillis());
-                                chatHistory.setRoomId(mRoomId);
-                                chatHistory.setRoomMessage(roomMessage);
                             }
                         });
 
@@ -2413,7 +2419,6 @@ public class ActivityChat extends ActivityEnhanced
         final StructMessageInfo finalMessageInfo = messageInfo;
         realm.executeTransaction(new Realm.Transaction() {
             @Override public void execute(Realm realm) {
-                RealmChatHistory chatHistory = realm.createObject(RealmChatHistory.class);
                 RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class);
 
                 roomMessage.setMessageType(finalMessageType.toString());
@@ -2440,10 +2445,6 @@ public class ActivityChat extends ActivityEnhanced
                 // TODO: 9/26/2016 [Alireza Eskandarpour Shoferi] user may wants to send a file
                 // in response to a message as replay, so after server done creating replay and
                 // forward options, modify this section and sending message as well.
-
-                chatHistory.setId(System.currentTimeMillis());
-                chatHistory.setRoomId(mRoomId);
-                chatHistory.setRoomMessage(roomMessage);
 
                 if (finalMessageType != ProtoGlobal.RoomMessageType.CONTACT) {
                     finalMessageInfo.attachment =
@@ -2558,6 +2559,7 @@ public class ActivityChat extends ActivityEnhanced
         btnReplaySelected.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
                 Log.e("ddd", "btnReplaySelected");
+                // FIXME: 10/31/2016 [Alireza] inja nabayad null bashe
                 replay(null);
             }
         });
@@ -2720,12 +2722,11 @@ public class ActivityChat extends ActivityEnhanced
         Realm realm = Realm.getDefaultInstance();
         ArrayList<RealmRoomMessage> realmRoomMessages = new ArrayList<>();
         // get all RealmRoomMessages
-        for (RealmChatHistory realmChatHistory : realm.where(RealmChatHistory.class)
-            .equalTo(RealmChatHistoryFields.ROOM_ID, mRoomId)
+        for (RealmRoomMessage realmRoomMessage : realm.where(RealmRoomMessage.class)
+            .equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId)
             .findAll()) {
-            RealmRoomMessage roomMessage = realmChatHistory.getRoomMessage();
-            if (roomMessage != null) {
-                realmRoomMessages.add(roomMessage);
+            if (realmRoomMessage != null) {
+                realmRoomMessages.add(realmRoomMessage);
             }
         }
 
@@ -2830,21 +2831,19 @@ public class ActivityChat extends ActivityEnhanced
         boolean clearMessage = false;
 
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmChatHistory> realmChatHistories = realm.where(RealmChatHistory.class)
-            .equalTo(RealmChatHistoryFields.ROOM_ID, roomId)
-            .findAllSorted(RealmChatHistoryFields.ID, Sort.DESCENDING);
-        for (final RealmChatHistory chatHistory : realmChatHistories) {
-            final RealmRoomMessage roomMessage = chatHistory.getRoomMessage();
-
-            if (!clearMessage && roomMessage.getMessageId() == clearId) {
+        RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class)
+            .equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
+            .findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+        for (final RealmRoomMessage realmRoomMessage : realmRoomMessages) {
+            if (!clearMessage && realmRoomMessage.getMessageId() == clearId) {
                 clearMessage = true;
             }
 
             if (clearMessage) {
-                final long messageId = chatHistory.getRoomMessage().getMessageId();
+                final long messageId = realmRoomMessage.getMessageId();
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override public void execute(Realm realm) {
-                        chatHistory.getRoomMessage().deleteFromRealm();
+                        realmRoomMessage.deleteFromRealm();
                     }
                 });
 
@@ -3155,7 +3154,6 @@ public class ActivityChat extends ActivityEnhanced
 
         realm.executeTransaction(new Realm.Transaction() {
             @Override public void execute(Realm realm) {
-                RealmChatHistory chatHistory = realm.createObject(RealmChatHistory.class);
                 RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class);
 
                 roomMessage.setMessageType(ProtoGlobal.RoomMessageType.VOICE.toString());
@@ -3171,10 +3169,6 @@ public class ActivityChat extends ActivityEnhanced
                 // TODO: 9/26/2016 [Alireza Eskandarpour Shoferi] user may wants to send a file
                 // in response to a message as replay, so after server done creating replay and
                 // forward options, modify this section and sending message as well.
-
-                chatHistory.setId(System.currentTimeMillis());
-                chatHistory.setRoomId(mRoomId);
-                chatHistory.setRoomMessage(roomMessage);
             }
         });
 
@@ -3316,15 +3310,14 @@ public class ActivityChat extends ActivityEnhanced
                             G.clearMessagesUtil.clearMessages(chatId, realmRoom.getLastMessageId());
                         }
 
-                        RealmResults<RealmChatHistory> realmChatHistories =
-                            realm.where(RealmChatHistory.class)
-                                .equalTo(RealmChatHistoryFields.ROOM_ID, chatId)
+                        RealmResults<RealmRoomMessage> realmRoomMessages =
+                            realm.where(RealmRoomMessage.class)
+                                .equalTo(RealmRoomMessageFields.ROOM_ID, chatId)
                                 .findAll();
-                        for (RealmChatHistory chatHistory : realmChatHistories) {
-                            RealmRoomMessage roomMessage = chatHistory.getRoomMessage();
-                            if (roomMessage != null) {
+                        for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
+                            if (realmRoomMessage != null) {
                                 // delete chat history message
-                                chatHistory.getRoomMessage().deleteFromRealm();
+                                realmRoomMessage.deleteFromRealm();
                             }
                         }
 
@@ -3340,7 +3333,7 @@ public class ActivityChat extends ActivityEnhanced
                             realm.copyToRealmOrUpdate(room);
                         }
                         // finally delete whole chat history
-                        realmChatHistories.deleteAllFromRealm();
+                        realmRoomMessages.deleteAllFromRealm();
 
                         runOnUiThread(new Runnable() {
                             @Override public void run() {
@@ -3416,8 +3409,8 @@ public class ActivityChat extends ActivityEnhanced
                                 .equalTo(RealmRoomFields.ID, item)
                                 .findFirst()
                                 .deleteFromRealm();
-                            realm.where(RealmChatHistory.class)
-                                .equalTo(RealmChatHistoryFields.ROOM_ID, item)
+                            realm.where(RealmRoomMessage.class)
+                                .equalTo(RealmRoomMessageFields.ROOM_ID, item)
                                 .findAll()
                                 .deleteAllFromRealm();
 
@@ -3769,8 +3762,7 @@ public class ActivityChat extends ActivityEnhanced
                                                             // remove tag from edtChat if the
                                                             // message has deleted
                                                             if (edtChat.getTag() != null
-                                                                && edtChat.getTag() instanceof
-                                                                StructMessageInfo) {
+                                                                && edtChat.getTag() instanceof StructMessageInfo) {
                                                                 if (Long.toString(Long.parseLong(
                                                                     message.messageID))
                                                                     .equals(
@@ -3782,8 +3774,7 @@ public class ActivityChat extends ActivityEnhanced
                                                         }
                                                     });
                                                     // delete message
-                                                    new RequestChatDeleteMessage()
-                                                        .chatDeleteMessage(
+                                                    new RequestChatDeleteMessage().chatDeleteMessage(
                                                         mRoomId, Long.parseLong(message.messageID));
                                                 }
                                                 element.removeChangeListeners();

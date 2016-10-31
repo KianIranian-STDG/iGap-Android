@@ -63,14 +63,14 @@ import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmAvatarFields;
-import com.iGap.realm.RealmChatHistory;
-import com.iGap.realm.RealmChatHistoryFields;
 import com.iGap.realm.RealmContacts;
 import com.iGap.realm.RealmContactsFields;
 import com.iGap.realm.RealmGroupRoom;
 import com.iGap.realm.RealmMember;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
+import com.iGap.realm.RealmRoomMessage;
+import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.enums.GroupChatRole;
 import com.iGap.request.RequestGroupAddAdmin;
 import com.iGap.request.RequestGroupAddMember;
@@ -1041,33 +1041,33 @@ public class ActivityGroupProfile extends ActivityEnhanced
         if (messageCount == 0) {
             startMessageId = 0;
         } else {
-            RealmResults<RealmChatHistory> realmChatHistories = realm.where(RealmChatHistory.class)
-                .equalTo(RealmChatHistoryFields.ROOM_ID, roomId)
-                .findAllSorted(RealmChatHistoryFields.ID, Sort.DESCENDING);
+            RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class)
+                .equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
+                .findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
 
-            if (messageCount >= realmChatHistories.size()) {
+            if (messageCount >= realmRoomMessages.size()) {
                 // if count is bigger than exist messages get first message id that exist
-                RealmResults<RealmChatHistory> realmChatHistoriesAscending =
-                    realm.where(RealmChatHistory.class)
-                        .equalTo(RealmChatHistoryFields.ROOM_ID, roomId)
-                        .findAllSorted(RealmChatHistoryFields.ID, Sort.ASCENDING);
-                for (final RealmChatHistory chatHistory : realmChatHistoriesAscending) {
+                RealmResults<RealmRoomMessage> realmRoomMessageRealmResults =
+                    realm.where(RealmRoomMessage.class)
+                        .equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
+                        .findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.ASCENDING);
+                for (final RealmRoomMessage realmRoomMessage : realmRoomMessageRealmResults) {
 
-                    if (chatHistory.getRoomMessage() != null) {
-                        startMessageId = chatHistory.getRoomMessage().getMessageId();
+                    if (realmRoomMessage != null) {
+                        startMessageId = realmRoomMessage.getMessageId();
                         Log.i("HHH", "startMessageId1 : " + startMessageId);
-                        Log.i("HHH", "getMessage1 : " + chatHistory.getRoomMessage().getMessage());
+                        Log.i("HHH", "getMessage1 : " + realmRoomMessage.getMessage());
                         break;
                     }
                 }
             } else {
 
-                for (final RealmChatHistory chatHistory : realmChatHistories) {
+                for (final RealmRoomMessage realmRoomMessage : realmRoomMessages) {
                     messageCount--;
                     if (messageCount == 0) {
-                        startMessageId = chatHistory.getRoomMessage().getMessageId();
+                        startMessageId = realmRoomMessage.getMessageId();
                         Log.i("HHH", "startMessageId2 : " + startMessageId);
-                        Log.i("HHH", "getMessage2 : " + chatHistory.getRoomMessage().getMessage());
+                        Log.i("HHH", "getMessage2 : " + realmRoomMessage.getMessage());
                     }
                 }
             }

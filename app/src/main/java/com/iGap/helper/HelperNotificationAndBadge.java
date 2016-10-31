@@ -24,11 +24,10 @@ import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAvatarPath;
 import com.iGap.realm.RealmAvatarPathFields;
-import com.iGap.realm.RealmChatHistory;
-import com.iGap.realm.RealmChatHistoryFields;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
+import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.RealmUserInfo;
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -379,12 +378,11 @@ public class HelperNotificationAndBadge {
 
         Realm realm = Realm.getDefaultInstance();
         long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
-        RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class)
-            .findAllSorted(RealmChatHistoryFields.ID, Sort.DESCENDING);
+        RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class)
+            .findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
 
-        if (chatHistories != null) {
-            for (RealmChatHistory realmChatHistory : chatHistories) {
-                RealmRoomMessage roomMessage = realmChatHistory.getRoomMessage();
+        if (!realmRoomMessages.isEmpty()) {
+            for (RealmRoomMessage roomMessage : realmRoomMessages) {
                 if (roomMessage != null) {
                     if (roomMessage.getUserId() != userId) {
                         if (roomMessage.getStatus()
@@ -400,7 +398,7 @@ public class HelperNotificationAndBadge {
                                 || unreadMessageCount == 3) {
                                 Item item = new Item();
                                 RealmRoom room = realm.where(RealmRoom.class)
-                                    .equalTo(RealmRoomFields.ID, realmChatHistory.getRoomId())
+                                    .equalTo(RealmRoomFields.ID, roomMessage.getRoomId())
                                     .findFirst();
                                 if (room != null) {
                                     item.name = room.getTitle() + " : ";
@@ -411,21 +409,21 @@ public class HelperNotificationAndBadge {
                                 list.add(item);
                             }
 
-                            if (unreadMessageCount == 1) roomId = realmChatHistory.getRoomId();
+                            if (unreadMessageCount == 1) roomId = roomMessage.getRoomId();
 
-                            if (roomId != realmChatHistory.getRoomId()) {
+                            if (roomId != roomMessage.getRoomId()) {
                                 isFromOnRoom = false;
                             }
 
                             boolean isAdd = true;
                             for (int k = 0; k < senderList.size(); k++) {
-                                if (senderList.get(k) == realmChatHistory.getRoomId()) {
+                                if (senderList.get(k) == roomMessage.getRoomId()) {
                                     isAdd = false;
                                     break;
                                 }
                             }
 
-                            if (isAdd) senderList.add(realmChatHistory.getRoomId());
+                            if (isAdd) senderList.add(roomMessage.getRoomId());
                         }
                     }
                 }
