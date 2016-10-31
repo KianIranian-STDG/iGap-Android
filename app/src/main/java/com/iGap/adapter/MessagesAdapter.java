@@ -204,6 +204,14 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         }
     }
 
+    public void updateToken(long messageId, String token) {
+        Item item = getItemByFileIdentity(messageId);
+        int pos = getAdapterItems().indexOf(item);
+        item.mMessage.attachment.token = token;
+
+        set(pos, item);
+    }
+
     /**
      * get item by its file hash
      * useful for finding item which tries to upload something

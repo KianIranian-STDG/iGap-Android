@@ -2789,8 +2789,7 @@ public class ActivityChat extends ActivityEnhanced
     private void showImage(StructMessageInfo messageInfo) {
         FragmentShowImageMessages fragment =
             FragmentShowImageMessages.newInstance(mRoomId, messageInfo.attachment.token);
-        getSupportFragmentManager().beginTransaction()
-            .replace(R.id.ac_ll_parent, fragment, "Show_Image_fragment")
+        getSupportFragmentManager().beginTransaction().replace(R.id.ac_ll_parent, fragment, null)
             .commit();
     }
 
@@ -3200,7 +3199,7 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     @Override
-    public void onFileUploaded(FileUploadStructure uploadStructure, final String identity) {
+    public void onFileUploaded(final FileUploadStructure uploadStructure, final String identity) {
         new ChatSendMessageUtil().newBuilder(chatType, uploadStructure.messageType,
             uploadStructure.roomId)
             .attachment(uploadStructure.token)
@@ -3210,6 +3209,7 @@ public class ActivityChat extends ActivityEnhanced
         runOnUiThread(new Runnable() {
             @Override public void run() {
                 mAdapter.updateProgress(Long.parseLong(identity), 100);
+                mAdapter.updateToken(uploadStructure.messageId, uploadStructure.token);
             }
         });
     }
