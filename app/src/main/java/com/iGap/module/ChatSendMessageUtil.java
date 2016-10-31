@@ -148,6 +148,22 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
         return this;
     }
 
+    public ChatSendMessageUtil forwardMessage(long roomId, long messageId) {
+
+        ProtoGlobal.RoomMessageForwardFrom.Builder forward =
+            ProtoGlobal.RoomMessageForwardFrom.newBuilder();
+        forward.setRoomId(roomId);
+        forward.setMessageId(messageId);
+
+        if (roomType == ProtoGlobal.Room.Type.CHAT) {
+            requestChatSendMessage.forwardMessage(forward.build());
+        } else if (roomType == ProtoGlobal.Room.Type.GROUP) {
+            requestGroupSendMessage.forwardMessage(forward.build());
+        }
+
+        return this;
+    }
+
     public void setOnChatSendMessageResponse(OnChatSendMessageResponse response) {
         this.onChatSendMessageResponse = response;
     }

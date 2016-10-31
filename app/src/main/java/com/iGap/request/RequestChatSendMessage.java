@@ -3,7 +3,8 @@ package com.iGap.request;
 import com.iGap.proto.ProtoChatSendMessage;
 import com.iGap.proto.ProtoGlobal;
 
-public class RequestChatSendMessage { //TODO [Saeed Mozaffari] [2016-08-29 1:02 PM] - change builder to force use newBuilder
+public class RequestChatSendMessage { //TODO [Saeed Mozaffari] [2016-08-29 1:02 PM] - change
+    // builder to force use newBuilder
     ProtoChatSendMessage.ChatSendMessage.Builder chatSendMessage;
 
     public RequestChatSendMessage newBuilder(ProtoGlobal.RoomMessageType messageType, long roomId) {
@@ -35,6 +36,11 @@ public class RequestChatSendMessage { //TODO [Saeed Mozaffari] [2016-08-29 1:02 
 
     public RequestChatSendMessage contact(ProtoGlobal.RoomMessageContact value) {
         chatSendMessage.setContact(value);
+        return this;
+    }
+
+    public RequestChatSendMessage forwardMessage(ProtoGlobal.RoomMessageForwardFrom forwardFrom) {
+        chatSendMessage.setForwardFrom(forwardFrom);
         return this;
     }
 

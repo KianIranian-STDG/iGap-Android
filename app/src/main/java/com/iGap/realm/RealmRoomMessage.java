@@ -21,8 +21,12 @@ public class RealmRoomMessage extends RealmObject {
     private RealmRoomMessageLog log;
     private RealmRoomMessageContact roomMessageContact;
     private boolean edited;
+    private long createTime;
     private long updateTime;
     private boolean deleted;
+    private RealmRoomMessage forwardMessage;
+    private RealmRoomMessage replyTo;
+
     @Index private long roomId;
 
     public long getRoomId() {
@@ -121,6 +125,14 @@ public class RealmRoomMessage extends RealmObject {
         this.edited = edited;
     }
 
+    public long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(long createTime) {
+        this.createTime = createTime;
+    }
+
     public long getUpdateTime() {
         return updateTime;
     }
@@ -139,6 +151,22 @@ public class RealmRoomMessage extends RealmObject {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public RealmRoomMessage getForwardMessage() {
+        return forwardMessage;
+    }
+
+    public void setForwardMessage(RealmRoomMessage forwardMessage) {
+        this.forwardMessage = forwardMessage;
+    }
+
+    public RealmRoomMessage getReplyTo() {
+        return replyTo;
+    }
+
+    public void setReplyTo(RealmRoomMessage replyTo) {
+        this.replyTo = replyTo;
     }
 
     public boolean isSenderMe() {

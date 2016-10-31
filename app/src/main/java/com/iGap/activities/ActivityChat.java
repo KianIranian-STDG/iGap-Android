@@ -270,7 +270,8 @@ public class ActivityChat extends ActivityEnhanced
     private String channelParticipantsCountLabel;
     private PopupWindow popupWindow;
     private String avatarPath;
-    // save latest intent data and requestCode from result activity for set draft if not send file yet
+    // save latest intent data and requestCode from result activity for set draft if not send
+    // file yet
     private Uri latestUri;
     private int latestRequestCode;
     private String latestFilePath;
@@ -538,8 +539,8 @@ public class ActivityChat extends ActivityEnhanced
         G.onDeleteChatFinishActivity = new OnDeleteChatFinishActivity() {
             @Override public void onFinish() {
                 runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() { //TODO [Saeed Mozaffari] [2016-10-15 4:19 PM] - runOnUiThread need here???
+                    @Override public void run() { //TODO [Saeed Mozaffari] [2016-10-15 4:19 PM] -
+                        // runOnUiThread need here???
                         finish();
                     }
                 });
@@ -548,7 +549,8 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     private void sendForwardedMessage(StructMessageInfo messageInfo) {
-        // TODO: 9/10/2016 [Alireza Eskandarpour Shoferi] vaghti kare forward server anjam shod, injaro por kon
+        // TODO: 9/10/2016 [Alireza Eskandarpour Shoferi] vaghti kare forward server anjam shod,
+        // injaro por kon
     }
 
     public void initCallbacks() {
@@ -740,7 +742,8 @@ public class ActivityChat extends ActivityEnhanced
                                         .withIdentifier(identifier));
                             }
                         } /*else {
-                        mAdapter.add(new ChannelVideoItem(chatType,this).setMessage(messageInfo).withIdentifier(identifier));
+                        mAdapter.add(new ChannelVideoItem(chatType,this).setMessage(messageInfo)
+                        .withIdentifier(identifier));
                     }*/
                         break;
                     case FILE:
@@ -872,7 +875,8 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     private void selectMessage(int position) {
-        //  mAdapter.select(position, true);// TODO: 10/16/2016  work on blue back ground selected item
+        //  mAdapter.select(position, true);// TODO: 10/16/2016  work on blue back ground
+        // selected item
     }
 
     private void deSelectMessage(int position) {
@@ -1202,7 +1206,8 @@ public class ActivityChat extends ActivityEnhanced
         switchAddItem(getChatList(), true);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(ActivityChat.this);
-        // make start messages from bottom, this is exatly what Telegram and other messengers do for their messages list
+        // make start messages from bottom, this is exatly what Telegram and other messengers do
+        // for their messages list
         layoutManager.setStackFromEnd(true);
         // set behavior to RecyclerView
         CoordinatorLayout.LayoutParams params =
@@ -1247,7 +1252,9 @@ public class ActivityChat extends ActivityEnhanced
             @Override public void onClick(View view) {
                 if (chatType == ProtoGlobal.Room.Type.CHAT
                     && chatPeerId
-                    != 134) {//TODO [Saeed Mozaffari] [2016-09-07 11:46 AM] -  in if eshtebah ast check for iGap message ==> chatPeerId == 134(alan baraye check kardane) , waiting for userDetail proto
+                    != 134) {//TODO [Saeed Mozaffari] [2016-09-07 11:46 AM] -  in if eshtebah ast
+                    // check for iGap message ==> chatPeerId == 134(alan baraye check kardane) ,
+                    // waiting for userDetail proto
                     Intent intent = new Intent(G.context, ActivityContactsProfile.class);
                     intent.putExtra("peerId", chatPeerId);
                     intent.putExtra("RoomId", mRoomId);
@@ -1359,10 +1366,14 @@ public class ActivityChat extends ActivityEnhanced
                                 // user wants to replay to a message
                                 if (mReplayLayout != null
                                     && mReplayLayout.getTag() instanceof StructMessageInfo) {
-                                    // TODO: 9/10/2016 [Alireza Eskandarpour Shoferi] after server done creating replay, uncomment following lines
-                                    /*messageInfo.replayFrom = ((StructMessageInfo) mReplayLayout.getTag()).senderName;
-                                    messageInfo.replayMessage = ((StructMessageInfo) mReplayLayout.getTag()).messageText;
-                                    messageInfo.replayPicturePath = ((StructMessageInfo) mReplayLayout.getTag()).filePic;*/
+                                    // TODO: 9/10/2016 [Alireza Eskandarpour Shoferi] after
+                                    // server done creating replay, uncomment following lines
+                                    /*messageInfo.replayFrom = ((StructMessageInfo) mReplayLayout
+                                    .getTag()).senderName;
+                                    messageInfo.replayMessage = ((StructMessageInfo)
+                                    mReplayLayout.getTag()).messageText;
+                                    messageInfo.replayPicturePath = ((StructMessageInfo)
+                                    mReplayLayout.getTag()).filePic;*/
                                 }
 
                                 chatHistory.setId(System.currentTimeMillis());
@@ -1441,7 +1452,8 @@ public class ActivityChat extends ActivityEnhanced
         });
 
         // init emoji popup
-        // give the topmost view of your activity layout hierarchy. this will be used to measure soft keyboard height
+        // give the topmost view of your activity layout hierarchy. this will be used to measure
+        // soft keyboard height
         final EmojiPopup emojiPopup =
             new EmojiPopup(getWindow().findViewById(android.R.id.content), getApplicationContext(),
                 this);
@@ -1517,7 +1529,8 @@ public class ActivityChat extends ActivityEnhanced
                         emojiPopup.showAtBottom();
                         changeEmojiButtonImageResource(R.string.md_black_keyboard_with_white_keys);
                     }
-                    // else, open the text keyboard first and immediately after that show the emoji popup
+                    // else, open the text keyboard first and immediately after that show the
+                    // emoji popup
                     else {
                         edtChat.setFocusableInTouchMode(true);
                         edtChat.requestFocus();
@@ -2412,7 +2425,9 @@ public class ActivityChat extends ActivityEnhanced
                     roomMessage.setRoomMessageContact(realmRoomMessageContact);
                 }
 
-                // TODO: 9/26/2016 [Alireza Eskandarpour Shoferi] user may wants to send a file in response to a message as replay, so after server done creating replay and forward options, modify this section and sending message as well.
+                // TODO: 9/26/2016 [Alireza Eskandarpour Shoferi] user may wants to send a file
+                // in response to a message as replay, so after server done creating replay and
+                // forward options, modify this section and sending message as well.
 
                 chatHistory.setId(System.currentTimeMillis());
                 chatHistory.setRoomId(mRoomId);
@@ -2540,7 +2555,8 @@ public class ActivityChat extends ActivityEnhanced
         btnCopySelected.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
 
-                for (AbstractMessage messageID : mAdapter.getSelectedItems()) {////TODO [Saeed Mozaffari] [2016-09-13 6:39 PM] - code is wrong
+                for (AbstractMessage messageID : mAdapter.getSelectedItems()) {////TODO [Saeed
+                    // Mozaffari] [2016-09-13 6:39 PM] - code is wrong
                     ClipboardManager clipboard =
                         (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
                     ClipData clip =
@@ -2567,13 +2583,15 @@ public class ActivityChat extends ActivityEnhanced
         btnDeleteSelected.setTypeface(G.fontawesome);
 
         btnDeleteSelected.setOnClickListener(
-            new View.OnClickListener() { //TODO [Saeed Mozaffari] [2016-09-17 2:58 PM] - FORCE - add item to delete list
+            new View.OnClickListener() { //TODO [Saeed Mozaffari] [2016-09-17 2:58 PM] - FORCE -
+                // add item to delete list
                 @Override public void onClick(View view) {
 
                     Realm realm = Realm.getDefaultInstance();
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override public void execute(Realm realm) {
-                            // get offline delete list , add new deleted list and update in client condition , then send request for delete message to server
+                            // get offline delete list , add new deleted list and update in
+                            // client condition , then send request for delete message to server
                             RealmClientCondition realmClientCondition =
                                 realm.where(RealmClientCondition.class)
                                     .equalTo(RealmClientConditionFields.ROOM_ID, mRoomId)
@@ -2739,7 +2757,8 @@ public class ActivityChat extends ActivityEnhanced
                         AbstractMessage item = mAdapter.getAdapterItem(p);
                         // not time message
                         if (!item.mMessage.senderID.equalsIgnoreCase("-1")) {
-                            // new RequestClientGetRoomHistory().getRoomHistory(mRoomId, Long.parseLong(item.mMessage.messageID), Long.toString(mRoomId));
+                            // new RequestClientGetRoomHistory().getRoomHistory(mRoomId, Long
+                            // .parseLong(item.mMessage.messageID), Long.toString(mRoomId));
                             break;
                         }
                     }
@@ -2952,8 +2971,10 @@ public class ActivityChat extends ActivityEnhanced
                 });
 
                 // when user receive message, I send update status as SENT to the message sender
-                // but imagine user is not in the room (or he is in another room) and received some messages
-                // when came back to the room with new messages, I make new update status request as SEEN to
+                // but imagine user is not in the room (or he is in another room) and received
+                // some messages
+                // when came back to the room with new messages, I make new update status request
+                // as SEEN to
                 // the message sender
                 final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class)
                     .equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId())
@@ -3135,7 +3156,9 @@ public class ActivityChat extends ActivityEnhanced
                 roomMessage.setUserId(senderID);
                 roomMessage.setUpdateTime((int) (updateTime / DateUtils.SECOND_IN_MILLIS));
 
-                // TODO: 9/26/2016 [Alireza Eskandarpour Shoferi] user may wants to send a file in response to a message as replay, so after server done creating replay and forward options, modify this section and sending message as well.
+                // TODO: 9/26/2016 [Alireza Eskandarpour Shoferi] user may wants to send a file
+                // in response to a message as replay, so after server done creating replay and
+                // forward options, modify this section and sending message as well.
 
                 chatHistory.setId(System.currentTimeMillis());
                 chatHistory.setRoomId(mRoomId);
@@ -3660,7 +3683,8 @@ public class ActivityChat extends ActivityEnhanced
                 break;
         }
 
-        // Arrays.asList returns fixed size, doing like this fixes remove object UnsupportedOperationException exception
+        // Arrays.asList returns fixed size, doing like this fixes remove object
+        // UnsupportedOperationException exception
         List<String> items =
             new LinkedList<>(Arrays.asList(getResources().getStringArray(itemsRes)));
 
@@ -3730,9 +3754,11 @@ public class ActivityChat extends ActivityEnhanced
                                                             mAdapter.removeMessage(
                                                                 Long.parseLong(message.messageID));
 
-                                                            // remove tag from edtChat if the message has deleted
+                                                            // remove tag from edtChat if the
+                                                            // message has deleted
                                                             if (edtChat.getTag() != null
-                                                                && edtChat.getTag() instanceof StructMessageInfo) {
+                                                                && edtChat.getTag() instanceof
+                                                                StructMessageInfo) {
                                                                 if (Long.toString(Long.parseLong(
                                                                     message.messageID))
                                                                     .equals(
@@ -3744,7 +3770,8 @@ public class ActivityChat extends ActivityEnhanced
                                                         }
                                                     });
                                                     // delete message
-                                                    new RequestChatDeleteMessage().chatDeleteMessage(
+                                                    new RequestChatDeleteMessage()
+                                                        .chatDeleteMessage(
                                                         mRoomId, Long.parseLong(message.messageID));
                                                 }
                                                 element.removeChangeListeners();
