@@ -52,32 +52,28 @@ public final class TimeUtils {
         Calendar date = Calendar.getInstance();
         date.setTime(comingDate);
 
-        long now = current.getTimeInMillis();
-        long time = date.getTimeInMillis();
-
-        if (time <= 0) {
-            return null;
-        }
-
-        if ((time > now)) {
-            if (time - now > 10000) {
-                return String.format("%1$s %2$s",
-                    new SimpleDateFormat("MMMM", Locale.getDefault()).format(
-                        date.getTimeInMillis()), date.get(Calendar.DAY_OF_MONTH));
-            }
-        }
-
         String output;
-        if (current.get(Calendar.DAY_OF_MONTH) == date.get(Calendar.DAY_OF_MONTH)) {
+        if (current.get(Calendar.DAY_OF_MONTH) == date.get(Calendar.DAY_OF_MONTH)
+            && current.get(Calendar.YEAR) == date.get(Calendar.YEAR)) {
             output = context.getString(R.string.today);
         } else if (getYesterdayCalendar().get(Calendar.DAY_OF_MONTH) == date.get(
             Calendar.DAY_OF_MONTH)) {
             output = context.getString(R.string.yesterday);
-        } else {
-            output = String.format("%1$s %2$s",
-                new SimpleDateFormat("MMMM", Locale.getDefault()).format(date.getTimeInMillis()),
-                date.get(Calendar.DAY_OF_MONTH));
-        }
+        } else //noinspection WrongConstant
+            if (current.get(Calendar.WEEK_OF_YEAR) == date.get(Calendar.WEEK_OF_YEAR) + 1
+                && current.get(Calendar.YEAR) == date.get(Calendar.YEAR)) {
+                output = String.format("%1$s %2$s",
+                    new SimpleDateFormat("EEE", Locale.getDefault()).format(date.getTimeInMillis()),
+                    date.get(Calendar.DAY_OF_MONTH));
+            } else if (current.get(Calendar.YEAR) < date.get(Calendar.YEAR)) {
+                output = String.format("%1$s-%2$s-%3$s",
+                    new SimpleDateFormat("MM", Locale.getDefault()).format(date.getTimeInMillis()),
+                    date.get(Calendar.DAY_OF_MONTH), date.get(Calendar.YEAR));
+            } else {
+                output = String.format("%1$s %2$s",
+                    new SimpleDateFormat("MMMM", Locale.getDefault()).format(
+                        date.getTimeInMillis()), date.get(Calendar.DAY_OF_MONTH));
+            }
 
         return output;
     }
