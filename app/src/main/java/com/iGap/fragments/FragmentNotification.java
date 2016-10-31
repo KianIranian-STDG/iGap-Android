@@ -50,7 +50,7 @@ public class FragmentNotification extends Fragment {
     private MaterialDesignTextView txtBack;
 
     private long roomId;
-    private String realmNotification = "Default";
+    private int realmNotification = 0;
     private String realmVibrate = "Disable";
     private String realmSound = "iGap";
     private int realmIdSound = 0;
@@ -58,6 +58,11 @@ public class FragmentNotification extends Fragment {
     private int realmMinutes;
     private int realmTimes;
     private int realmLedColor;
+
+    private static final int DEFAULT = 0;
+    private static final int ENABLE = 1;
+    private static final int DISABLE = 2;
+
 
     private RealmNotificationSetting realmNotificationSetting;
 
@@ -157,8 +162,19 @@ public class FragmentNotification extends Fragment {
             }
         });
 
-        String popupNotification = realmNotification;
-        txtPopupNotification.setText(popupNotification);
+        int popupNotification = realmNotification;
+        switch (popupNotification) {
+            case DEFAULT:
+                txtPopupNotification.setText("Default");
+                break;
+            case ENABLE:
+                txtPopupNotification.setText("Enable");
+                break;
+            case DISABLE:
+                txtPopupNotification.setText("Disable");
+                break;
+        }
+
         ltPopupNotification.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
 
@@ -184,21 +200,21 @@ public class FragmentNotification extends Fragment {
                                                     RealmGroupRoom realmGroupRoom =
                                                         realmRoom.getGroupRoom();
                                                     realmGroupRoom.getRealmNotificationSetting()
-                                                        .setNotification("Default");
+                                                        .setNotification(0);
                                                     break;
                                                 }
                                                 case "CHANNEL": {
                                                     RealmChannelRoom realmChannelRoom =
                                                         realmRoom.getChannelRoom();
                                                     realmChannelRoom.getRealmNotificationSetting()
-                                                        .setNotification("Default");
+                                                        .setNotification(0);
                                                     break;
                                                 }
                                                 case "CONTACT": {
                                                     RealmChatRoom realmChatRoom =
                                                         realmRoom.getChatRoom();
                                                     realmChatRoom.getRealmNotificationSetting()
-                                                        .setNotification("Default");
+                                                        .setNotification(0);
                                                     break;
                                                 }
                                             }
@@ -221,21 +237,21 @@ public class FragmentNotification extends Fragment {
                                                     RealmGroupRoom realmGroupRoom =
                                                         realmRoom.getGroupRoom();
                                                     realmGroupRoom.getRealmNotificationSetting()
-                                                        .setNotification("Enable");
+                                                        .setNotification(1);
                                                     break;
                                                 }
                                                 case "CHANNEL": {
                                                     RealmChannelRoom realmChannelRoom =
                                                         realmRoom.getChannelRoom();
                                                     realmChannelRoom.getRealmNotificationSetting()
-                                                        .setNotification("Enable");
+                                                        .setNotification(1);
                                                     break;
                                                 }
                                                 case "CONTACT": {
                                                     RealmChatRoom realmChatRoom =
                                                         realmRoom.getChatRoom();
                                                     realmChatRoom.getRealmNotificationSetting()
-                                                        .setNotification("Enable");
+                                                        .setNotification(1);
                                                     break;
                                                 }
                                             }
@@ -258,21 +274,21 @@ public class FragmentNotification extends Fragment {
                                                     RealmGroupRoom realmGroupRoom =
                                                         realmRoom.getGroupRoom();
                                                     realmGroupRoom.getRealmNotificationSetting()
-                                                        .setNotification("Disable");
+                                                        .setNotification(2);
                                                     break;
                                                 }
                                                 case "CHANNEL": {
                                                     RealmChannelRoom realmChannelRoom =
                                                         realmRoom.getChannelRoom();
                                                     realmChannelRoom.getRealmNotificationSetting()
-                                                        .setNotification("Disable");
+                                                        .setNotification(2);
                                                     break;
                                                 }
                                                 case "CONTACT": {
                                                     RealmChatRoom realmChatRoom =
                                                         realmRoom.getChatRoom();
                                                     realmChatRoom.getRealmNotificationSetting()
-                                                        .setNotification("Disable");
+                                                        .setNotification(2);
                                                     break;
                                                 }
                                             }
@@ -505,44 +521,6 @@ public class FragmentNotification extends Fragment {
                                 }
 
                                 case 2: {
-                                    txtVibrate.setText("System default");
-                                    Realm realm = Realm.getDefaultInstance();
-                                    realm.executeTransaction(new Realm.Transaction() {
-                                        @Override public void execute(Realm realm) {
-                                            RealmRoom realmRoom = realm.where(RealmRoom.class)
-                                                .equalTo(RealmRoomFields.ID, roomId)
-                                                .findFirst();
-
-                                            switch (page) {
-                                                case "GROUP": {
-                                                    RealmGroupRoom realmGroupRoom =
-                                                        realmRoom.getGroupRoom();
-                                                    realmGroupRoom.getRealmNotificationSetting()
-                                                        .setVibrate("System default");
-                                                    break;
-                                                }
-                                                case "CHANNEL": {
-                                                    RealmChannelRoom realmChannelRoom =
-                                                        realmRoom.getChannelRoom();
-                                                    realmChannelRoom.getRealmNotificationSetting()
-                                                        .setVibrate("System default");
-                                                    break;
-                                                }
-                                                case "CONTACT": {
-                                                    RealmChatRoom realmChatRoom =
-                                                        realmRoom.getChatRoom();
-                                                    realmChatRoom.getRealmNotificationSetting()
-                                                        .setVibrate("System default");
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                    });
-                                    realm.close();
-
-                                    break;
-                                }
-                                case 3: {
                                     txtVibrate.setText("Short");
                                     Realm realm = Realm.getDefaultInstance();
                                     realm.executeTransaction(new Realm.Transaction() {
@@ -582,7 +560,7 @@ public class FragmentNotification extends Fragment {
                                     vShort.vibrate(200);
                                     break;
                                 }
-                                case 4: {
+                                case 3: {
                                     txtVibrate.setText("Long");
 
                                     Realm realm = Realm.getDefaultInstance();
@@ -806,7 +784,7 @@ public class FragmentNotification extends Fragment {
             @Override public void execute(Realm realm) {
                 realmNotificationSetting = realm.createObject(RealmNotificationSetting.class);
 
-                realmNotificationSetting.setNotification("default");
+                realmNotificationSetting.setNotification(0);
                 realmNotificationSetting.setVibrate("Disable");
                 realmNotificationSetting.setSound("iGap");
                 realmNotificationSetting.setIdRadioButtonSound(0);

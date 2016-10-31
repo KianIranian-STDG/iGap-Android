@@ -186,14 +186,15 @@
             >
 
 
-          <Button
+          <com.iGap.module.MaterialDesignTextView
               android:id="@+id/chl_btn_close_layout"
               android:layout_width="@dimen/dp48"
               android:layout_height="match_parent"
               android:background="@null"
               android:paddingLeft="@dimen/dp12"
-              android:text="@string/fa_close"
+              android:text="@string/md_close_button"
               android:textColor="@color/gray"
+              android:gravity="center"
               android:textSize="@dimen/sp20"
               />
 
@@ -218,43 +219,47 @@
               android:orientation="horizontal"
               >
 
-            <Button
+            <com.iGap.module.MaterialDesignTextView
                 android:id="@+id/chl_btn_replay_selected"
                 android:layout_width="@dimen/dp60"
                 android:layout_height="match_parent"
                 android:background="@null"
-                android:text="@string/fa_mail_replay"
+                android:text="@string/md_back_arrow_reply"
                 android:textColor="@color/gray"
+                android:gravity="center"
                 android:textSize="@dimen/sp20"
                 />
 
-            <Button
+            <com.iGap.module.MaterialDesignTextView
                 android:id="@+id/chl_btn_copy_selected"
                 android:layout_width="@dimen/dp60"
                 android:layout_height="match_parent"
                 android:background="@null"
-                android:text="@string/fa_files_o"
+                android:text="@string/md_copy"
                 android:textColor="@color/gray"
+                android:gravity="center"
                 android:textSize="@dimen/sp20"
                 />
 
-            <Button
+            <com.iGap.module.MaterialDesignTextView
                 android:id="@+id/chl_btn_forward_selected"
                 android:layout_width="@dimen/dp60"
                 android:layout_height="match_parent"
                 android:background="@null"
-                android:text="@string/fa_long_arrow_right"
+                android:text="@string/md_right_arrow_forward"
                 android:textColor="@color/gray"
+                android:gravity="center"
                 android:textSize="@dimen/sp20"
                 />
           </LinearLayout>
 
-          <Button
+          <com.iGap.module.MaterialDesignTextView
               android:id="@+id/chl_btn_delete_selected"
               android:layout_width="@dimen/dp60"
               android:layout_height="match_parent"
               android:background="@null"
-              android:text="@string/fa_trash_o"
+              android:gravity="center"
+              android:text="@string/md_rubbish_delete_file"
               android:textColor="@color/gray"
               android:textSize="@dimen/sp20"
               />

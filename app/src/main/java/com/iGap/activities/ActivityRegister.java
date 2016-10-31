@@ -732,7 +732,8 @@ public class ActivityRegister extends ActivityEnhanced {
                 dialog.dismiss();
             }
         });
-
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
         dialog.show();
         if (dialog.isShowing()) {
             countDownTimer.cancel();

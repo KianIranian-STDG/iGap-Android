@@ -81,6 +81,7 @@ import com.iGap.fragments.FragmentShowImageMessages;
 import com.iGap.helper.Emojione;
 import com.iGap.helper.HelperGetDataFromOtherApp;
 import com.iGap.helper.HelperMimeType;
+import com.iGap.helper.HelperNotificationAndBadge;
 import com.iGap.interfaces.IEmojiBackspaceClick;
 import com.iGap.interfaces.IEmojiClickListener;
 import com.iGap.interfaces.IEmojiLongClickListener;
@@ -210,11 +211,11 @@ public class ActivityChat extends ActivityEnhanced
     private MaterialDesignTextView imvAttachFileButton;
     private LinearLayout layoutAttachBottom;
     private MaterialDesignTextView imvMicButton;
-    private Button btnCloseAppBarSelected;
-    private Button btnReplaySelected;
-    private Button btnCopySelected;
-    private Button btnForwardSelected;
-    private Button btnDeleteSelected;
+    private MaterialDesignTextView btnCloseAppBarSelected;
+    private MaterialDesignTextView btnReplaySelected;
+    private MaterialDesignTextView btnCopySelected;
+    private MaterialDesignTextView btnForwardSelected;
+    private MaterialDesignTextView btnDeleteSelected;
     private Button btnCancelSeningFile;
     private TextView txtFileNameForSend;
     private LinearLayout ll_attach_text;
@@ -331,7 +332,7 @@ public class ActivityChat extends ActivityEnhanced
                                     ProtoGlobal.RoomMessageStatus.SEEN);
                             }
 
-                            G.helperNotificationAndBadge.updateNotificationAndBadge(false, 0);
+                            G.helperNotificationAndBadge.checkAlert(false, 0, mRoomId);
                         }
                     });
 
@@ -359,6 +360,9 @@ public class ActivityChat extends ActivityEnhanced
 
     @Override protected void onResume() {
         super.onResume();
+
+        HelperNotificationAndBadge.isChatRoomNow = true;
+
         if (MusicPlayer.mp != null) {
             MusicPlayer.initLayoutTripMusic(mediaLayout);
         }
@@ -379,8 +383,7 @@ public class ActivityChat extends ActivityEnhanced
         G.helperNotificationAndBadge.cancelNotification();
 
         // get sendByEnter action from setting value
-        SharedPreferences sharedPreferences =
-            getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         int checkedSendByEnter = sharedPreferences.getInt(SHP_SETTING.KEY_SEND_BT_ENTER, 0);
         sendByEnter = checkedSendByEnter == 1;
 
@@ -1143,24 +1146,10 @@ public class ActivityChat extends ActivityEnhanced
                                 realm.executeTransaction(new Realm.Transaction() {
                                     @Override public void execute(Realm realm) {
 
-                                        if (realmRoom.getType() == RoomType.GROUP) {
-
-                                            RealmGroupRoom realmGroupRoom =
-                                                realmRoom.getGroupRoom();
-                                            realmGroupRoom.getRealmNotificationSetting()
-                                                .setMute(true);
-                                        } else if (realmRoom.getType() == RoomType.CHAT) {
-
-                                            RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
-                                            realmChatRoom.getRealmNotificationSetting()
-                                                .setMute(true);
-                                        } else if (realmRoom.getType() == RoomType.CHANNEL) {
-
-                                            RealmChannelRoom realmChannelRoom =
-                                                realmRoom.getChannelRoom();
-                                            realmChannelRoom.getRealmNotificationSetting()
-                                                .setMute(true);
-                                        }
+                                        realm.where(RealmRoom.class)
+                                            .equalTo(RealmRoomFields.ID, mRoomId)
+                                            .findFirst()
+                                            .setMute(true);
                                     }
                                 });
                             } else {
@@ -1169,24 +1158,10 @@ public class ActivityChat extends ActivityEnhanced
                                 realm.executeTransaction(new Realm.Transaction() {
                                     @Override public void execute(Realm realm) {
 
-                                        if (realmRoom.getType() == RoomType.GROUP) {
-
-                                            RealmGroupRoom realmGroupRoom =
-                                                realmRoom.getGroupRoom();
-                                            realmGroupRoom.getRealmNotificationSetting()
-                                                .setMute(false);
-                                        } else if (realmRoom.getType() == RoomType.CHAT) {
-
-                                            RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
-                                            realmChatRoom.getRealmNotificationSetting()
-                                                .setMute(false);
-                                        } else if (realmRoom.getType() == RoomType.CHANNEL) {
-
-                                            RealmChannelRoom realmChannelRoom =
-                                                realmRoom.getChannelRoom();
-                                            realmChannelRoom.getRealmNotificationSetting()
-                                                .setMute(false);
-                                        }
+                                        realm.where(RealmRoom.class)
+                                            .equalTo(RealmRoomFields.ID, mRoomId)
+                                            .findFirst()
+                                            .setMute(false);
                                     }
                                 });
                             }
@@ -2124,8 +2099,6 @@ public class ActivityChat extends ActivityEnhanced
         }
         latestRequestCode = requestCode;
 
-        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-
         if (resultCode == Activity.RESULT_OK
             && sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 0) == 1
             && requestCode == AttachFile.request_code_media_from_gallery) {
@@ -2540,8 +2513,7 @@ public class ActivityChat extends ActivityEnhanced
 
     private void initAppbarSelected() {
 
-        btnCloseAppBarSelected = (Button) findViewById(R.id.chl_btn_close_layout);
-        btnCloseAppBarSelected.setTypeface(G.fontawesome);
+        btnCloseAppBarSelected = (MaterialDesignTextView) findViewById(R.id.chl_btn_close_layout);
         btnCloseAppBarSelected.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
                 mAdapter.deselect();
@@ -2554,8 +2526,7 @@ public class ActivityChat extends ActivityEnhanced
             }
         });
 
-        btnReplaySelected = (Button) findViewById(R.id.chl_btn_replay_selected);
-        btnReplaySelected.setTypeface(G.fontawesome);
+        btnReplaySelected = (MaterialDesignTextView) findViewById(R.id.chl_btn_replay_selected);
         btnReplaySelected.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
                 Log.e("ddd", "btnReplaySelected");
@@ -2564,8 +2535,7 @@ public class ActivityChat extends ActivityEnhanced
             }
         });
 
-        btnCopySelected = (Button) findViewById(R.id.chl_btn_copy_selected);
-        btnCopySelected.setTypeface(G.fontawesome);
+        btnCopySelected = (MaterialDesignTextView) findViewById(R.id.chl_btn_copy_selected);
         btnCopySelected.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
 
@@ -2580,8 +2550,7 @@ public class ActivityChat extends ActivityEnhanced
             }
         });
 
-        btnForwardSelected = (Button) findViewById(R.id.chl_btn_forward_selected);
-        btnForwardSelected.setTypeface(G.fontawesome);
+        btnForwardSelected = (MaterialDesignTextView) findViewById(R.id.chl_btn_forward_selected);
         btnForwardSelected.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
                 Log.e("ddd", "btnForwardSelected");
@@ -2593,9 +2562,7 @@ public class ActivityChat extends ActivityEnhanced
             }
         });
 
-        btnDeleteSelected = (Button) findViewById(R.id.chl_btn_delete_selected);
-        btnDeleteSelected.setTypeface(G.fontawesome);
-
+        btnDeleteSelected = (MaterialDesignTextView) findViewById(R.id.chl_btn_delete_selected);
         btnDeleteSelected.setOnClickListener(
             new View.OnClickListener() { //TODO [Saeed Mozaffari] [2016-09-17 2:58 PM] - FORCE -
                 // add item to delete list
@@ -3633,6 +3600,7 @@ public class ActivityChat extends ActivityEnhanced
 
     @Override protected void onStop() {
         setDraft();
+        HelperNotificationAndBadge.isChatRoomNow = false;
         super.onStop();
     }
 

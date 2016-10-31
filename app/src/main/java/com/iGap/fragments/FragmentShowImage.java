@@ -55,7 +55,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
     private TextView txtImageDate;
     private LinearLayout toolbarShowImage;
     private boolean isShowToolbar = true;
-
+    private ViewGroup ltImageName;
     private ViewPager viewPager;
 
     private ArrayList<StructMessageInfo> list;
@@ -144,6 +144,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
 
         txtImageNumber = (TextView) view.findViewById(R.id.asi_txt_image_number);
         txtImageName = (TextView) view.findViewById(R.id.asi_txt_image_name);
+        ltImageName = (ViewGroup) view.findViewById(R.id.asi_layout_image_name);
         txtImageDate = (TextView) view.findViewById(R.id.asi_txt_image_date);
         toolbarShowImage = (LinearLayout) view.findViewById(R.id.toolbarShowImage);
 
@@ -205,7 +206,6 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
 
         viewPager.setPageTransformer(false, new ViewPager.PageTransformer() {
             @Override public void transformPage(View view, float position) {
-                Log.i("ZZZZ", "setPageTransformer: ");
 
                 final float normalizedPosition = Math.abs(Math.abs(position) - 1);
                 view.setScaleX(normalizedPosition / 2 + 0.5f);
@@ -392,11 +392,15 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
                 @Override public void onClick(View view) {
                     if (isShowToolbar) {
                         toolbarShowImage.animate().setDuration(150).alpha(0F).start();
+                        ltImageName.setVisibility(View.GONE);
+                        ltImageName.animate().setDuration(150).alpha(0F).start();
                         toolbarShowImage.setVisibility(View.GONE);
                         isShowToolbar = false;
                     } else {
                         toolbarShowImage.animate().setDuration(150).alpha(1F).start();
                         toolbarShowImage.setVisibility(View.VISIBLE);
+                        ltImageName.animate().setDuration(150).alpha(1F).start();
+                        ltImageName.setVisibility(View.VISIBLE);
                         isShowToolbar = true;
                     }
                 }

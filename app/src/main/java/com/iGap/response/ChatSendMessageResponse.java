@@ -1,11 +1,8 @@
 package com.iGap.response;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.text.format.DateUtils;
 import android.util.Log;
 import com.iGap.G;
-import com.iGap.module.SHP_SETTING;
 import com.iGap.proto.ProtoChatSendMessage;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmClientCondition;
@@ -147,14 +144,9 @@ public class ChatSendMessageResponse extends MessageHandler {
                     if (roomMessage.getUserId()
                         != userId) { // show notification if this message isn't for another account
 
-                        SharedPreferences sharedPreferences =
-                            G.context.getSharedPreferences(SHP_SETTING.FILE_NAME,
-                                Context.MODE_PRIVATE);
-                        int checkAlert =
-                            sharedPreferences.getInt(SHP_SETTING.KEY_STNS_ALERT_MESSAGE, 1);
-                        if (checkAlert == 1) {
-                            G.helperNotificationAndBadge.updateNotificationAndBadge(true, 0);
-                        }
+                        G.helperNotificationAndBadge.checkAlert(true, 0,
+                            chatSendMessageResponse.getRoomId());
+
                     }
                 } else {
                     // i'm the sender
