@@ -548,9 +548,21 @@ public class ActivityChat extends ActivityEnhanced
         };
     }
 
-    private void sendForwardedMessage(StructMessageInfo messageInfo) {
-        // TODO: 9/10/2016 [Alireza Eskandarpour Shoferi] vaghti kare forward server anjam shod,
-        // injaro por kon
+    private void sendForwardedMessage(final StructMessageInfo messageInfo) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override public void execute(Realm realm) {
+                RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class)
+                    .equalTo(RealmRoomMessageFields.MESSAGE_ID,
+                        Long.parseLong(messageInfo.messageID))
+                    .findFirst();
+                if (roomMessage != null) {
+                    switchAddItem(new ArrayList<>(Collections.singletonList(messageInfo)), false);
+                    G.chatSendMessageUtil.build(chatType, roomMessage.getRoomId(), roomMessage);
+                }
+            }
+        });
+        realm.close();
     }
 
     public void initCallbacks() {
