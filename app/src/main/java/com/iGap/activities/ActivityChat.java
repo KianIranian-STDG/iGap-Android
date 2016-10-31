@@ -151,6 +151,7 @@ import com.iGap.realm.RealmOfflineSeen;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmRoom;
+import com.iGap.realm.RealmRoomDraft;
 import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageContact;
@@ -162,6 +163,7 @@ import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestChatDelete;
 import com.iGap.request.RequestChatDeleteMessage;
 import com.iGap.request.RequestChatEditMessage;
+import com.iGap.request.RequestChatUpdateDraft;
 import com.iGap.request.RequestFileDownload;
 import com.mikepenz.fastadapter.IItemAdapter;
 import com.nightonke.boommenu.BoomMenuButton;
@@ -3425,59 +3427,8 @@ public class ActivityChat extends ActivityEnhanced
         }).start();
     }
 
-    private String getMessageType() {
-        String messageType = "";
+    private void draftRequest() {
 
-        switch (latestRequestCode) {
-            case AttachFile.request_code_TAKE_PICTURE:
-                if (isMessageWrote()) {
-                    messageType = ProtoGlobal.RoomMessageType.IMAGE_TEXT.toString();
-                } else {
-                    messageType = ProtoGlobal.RoomMessageType.IMAGE.toString();
-                }
-                break;
-            case AttachFile.request_code_media_from_gallery:
-                if (isMessageWrote()) {
-                    messageType = ProtoGlobal.RoomMessageType.IMAGE_TEXT.toString();
-                } else {
-                    messageType = ProtoGlobal.RoomMessageType.IMAGE.toString();
-                }
-                break;
-            case AttachFile.request_code_VIDEO_CAPTURED:
-                if (isMessageWrote()) {
-                    messageType = ProtoGlobal.RoomMessageType.VIDEO_TEXT.toString();
-                } else {
-                    messageType = ProtoGlobal.RoomMessageType.VIDEO.toString();
-                }
-                break;
-            case AttachFile.request_code_pic_audi:
-                if (isMessageWrote()) {
-                    messageType = ProtoGlobal.RoomMessageType.AUDIO_TEXT.toString();
-                } else {
-                    messageType = ProtoGlobal.RoomMessageType.AUDIO.toString();
-                }
-                break;
-            case AttachFile.request_code_pic_file:
-                if (isMessageWrote()) {
-                    messageType = ProtoGlobal.RoomMessageType.FILE_TEXT.toString();
-                } else {
-                    messageType = ProtoGlobal.RoomMessageType.FILE.toString();
-                }
-                break;
-            case AttachFile.request_code_contact_phone:
-                messageType = ProtoGlobal.RoomMessageType.CONTACT.toString();
-                break;
-            case AttachFile.request_code_position:
-                break;
-            case AttachFile.request_code_paint:
-                if (isMessageWrote()) {
-                    messageType = ProtoGlobal.RoomMessageType.FILE_TEXT.toString();
-                } else {
-                    messageType = ProtoGlobal.RoomMessageType.FILE.toString();
-                }
-                break;
-        }
-        return messageType;
     }
 
     private void setDraft() {
@@ -3503,10 +3454,22 @@ public class ActivityChat extends ActivityEnhanced
                     realmDraftFile.setRequestCode(latestRequestCode);
 
                     if (isMessageWrote()) {
-                        realmRoom.setDraft(edtChat.getText().toString());
+                        RealmRoomDraft draft = realm.createObject(RealmRoomDraft.class);
+                        draft.setMessage(edtChat.getText().toString());
+                        draft.setReplyToMessageId(0);
+
+                        realmRoom.setDraft(draft);
+
+                        new RequestChatUpdateDraft().chatUpdateDraft(mRoomId,
+                            edtChat.getText().toString(), 0);
+
                         G.onDraftMessage.onDraftMessage(mRoomId);
                     } else {
-                        realmRoom.setDraft("");
+
+                        //send empty message and zero replyId for clear another account draft
+                        new RequestChatUpdateDraft().chatUpdateDraft(mRoomId, "", 0);
+
+                        realmRoom.setDraft(null);
                         G.onDraftMessage.onDraftMessage(mRoomId);
                     }
 
@@ -3524,7 +3487,12 @@ public class ActivityChat extends ActivityEnhanced
                             .equalTo(RealmRoomFields.ID, mRoomId)
                             .findFirst();
                         if (realmRoom != null) {
-                            realmRoom.setDraft(message);
+
+                            RealmRoomDraft draft = realm.createObject(RealmRoomDraft.class);
+                            draft.setMessage(message);
+                            draft.setReplyToMessageId(0);
+
+                            realmRoom.setDraft(draft);
                             G.onDraftMessage.onDraftMessage(mRoomId);
                         }
                     }
@@ -3564,17 +3532,25 @@ public class ActivityChat extends ActivityEnhanced
                 if ((latestUri != null && new File(filePath).exists()) || (!latestFilePath.isEmpty()
                     && new File(latestFilePath).exists())) {
                     showDraftLayout();
-                    String message = realmRoom.getDraft();
+                    RealmRoomDraft draft = realmRoom.getDraft();
 
-                    if (!message.isEmpty()) {
-                        edtChat.setText(message);
+                    if (draft != null) {
+                        edtChat.setText(draft.getMessage());
+
+                        if (draft.getReplyToMessageId() != 0) {
+                            //TODO [Saeed Mozaffari] [2016-10-31 4:24 PM] - set reply view for draft
+                        }
                     }
                     setDraftMessage(latestRequestCode);
                 }
             } else {
-                String draft = realmRoom.getDraft();
-                if (draft != null && !draft.isEmpty()) {
-                    edtChat.setText(draft);
+                RealmRoomDraft draft = realmRoom.getDraft();
+                if (draft != null) {
+                    edtChat.setText(draft.getMessage());
+
+                    if (draft.getReplyToMessageId() != 0) {
+                        //TODO [Saeed Mozaffari] [2016-10-31 4:24 PM] - set reply view for draft
+                    }
                 }
             }
         }
@@ -3590,7 +3566,7 @@ public class ActivityChat extends ActivityEnhanced
                 RealmRoom realmRoom =
                     realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                 if (realmRoom != null) {
-                    realmRoom.setDraft("");
+                    realmRoom.setDraft(null);
                     realmRoom.setDraftFile(null);
                 }
             }
@@ -3730,7 +3706,8 @@ public class ActivityChat extends ActivityEnhanced
                                                             // remove tag from edtChat if the
                                                             // message has deleted
                                                             if (edtChat.getTag() != null
-                                                                && edtChat.getTag() instanceof StructMessageInfo) {
+                                                                && edtChat.getTag() instanceof
+                                                                StructMessageInfo) {
                                                                 if (Long.toString(Long.parseLong(
                                                                     message.messageID))
                                                                     .equals(
@@ -3742,7 +3719,8 @@ public class ActivityChat extends ActivityEnhanced
                                                         }
                                                     });
                                                     // delete message
-                                                    new RequestChatDeleteMessage().chatDeleteMessage(
+                                                    new RequestChatDeleteMessage()
+                                                        .chatDeleteMessage(
                                                         mRoomId, Long.parseLong(message.messageID));
                                                 }
                                                 element.removeChangeListeners();

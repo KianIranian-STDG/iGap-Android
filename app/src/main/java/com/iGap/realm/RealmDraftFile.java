@@ -2,6 +2,9 @@ package com.iGap.realm;
 
 import io.realm.RealmObject;
 
+/**
+ * draft file just work in own client
+ */
 public class RealmDraftFile extends RealmObject {
 
     private String uri;

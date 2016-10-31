@@ -68,6 +68,10 @@ public class HelperFillLookUpClass {
         G.lookupMap.put(30205, "ProtoChatClearMessage.ChatClearMessageResponse");
         G.lookupMap.put(206, "ChatDelete");
         G.lookupMap.put(30206, "ProtoChatDelete.ChatDeleteResponse");
+        G.lookupMap.put(207, "ChatUpdateDraft");
+        G.lookupMap.put(30207, "ProtoChatUpdateDraft.ChatUpdateDraftResponse");
+        G.lookupMap.put(208, "ChatGetDraft");
+        G.lookupMap.put(30208, "ProtoChatGetDraft.ChatGetDraftResponse");
 
         // Group 3xx , 303xx
         G.lookupMap.put(300, "GroupCreate");
@@ -94,13 +98,16 @@ public class HelperFillLookUpClass {
         G.lookupMap.put(30310, "ProtoGroupSendMessage.GroupSendMessageResponse");
         G.lookupMap.put(311, "GroupUpdateStatus");
         G.lookupMap.put(30311, "ProtoGroupUpdateStatus.GroupUpdateStatusResponse");
-
         G.lookupMap.put(312, "GroupAvatarAdd");
         G.lookupMap.put(30312, "ProtoGroupAvatarAdd.GroupAvatarAddResponse");
         G.lookupMap.put(313, "GroupAvatarDelete");
         G.lookupMap.put(30313, "ProtoGroupAvatarDelete.GroupAvatarDeleteResponse");
         G.lookupMap.put(314, "GroupAvatarGetList");
         G.lookupMap.put(30314, "ProtoGroupAvatarGetList.GroupAvatarGetListResponse");
+        G.lookupMap.put(315, "GroupUpdateDraft");
+        G.lookupMap.put(30315, "ProtoGroupUpdateDraft.GroupUpdateDraftResponse");
+        G.lookupMap.put(316, "GroupGetDraft");
+        G.lookupMap.put(30316, "ProtoGroupGetDraft.GroupGetDraftResponse");
 
         // Info 5xx , 305xx
         G.lookupMap.put(500, "Info.Location");

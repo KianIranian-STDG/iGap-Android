@@ -21,6 +21,7 @@ import com.iGap.proto.ProtoFileDownload;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmRoom;
+import com.iGap.realm.RealmRoomDraft;
 import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
@@ -159,7 +160,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
     @Override public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        String draft = null;
+        RealmRoomDraft draft = null;
         Realm realm = Realm.getDefaultInstance();
         RealmRoom realmRoom =
             realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mInfo.chatId).findFirst();
@@ -168,13 +169,13 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
         }
         realm.close();
 
-        if (draft != null && !draft.isEmpty()) {
+        if (draft != null) {
             holder.lastMessage.setVisibility(View.VISIBLE);
             holder.messageStatus.setVisibility(View.GONE);
             holder.lastMessageSender.setVisibility(View.VISIBLE);
             holder.lastMessageSender.setText("Draft : ");
             holder.lastMessageSender.setTextColor(Color.parseColor("#ff4644"));
-            holder.lastMessage.setText(draft);
+            holder.lastMessage.setText(draft.getMessage());
         } else {
             String lastMessage =
                 AppUtils.rightLastMessage(holder.itemView.getResources(), mInfo.chatType,

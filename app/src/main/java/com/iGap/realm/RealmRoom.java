@@ -26,7 +26,7 @@ public class RealmRoom extends RealmObject {
     private long lastMessageTime;
     private String lastMessage;
     private String lastMessageStatus;
-    private String draft = "";
+    private RealmRoomDraft draft;
     private RealmDraftFile draftFile;
     private RealmAvatar avatar;
 
@@ -52,7 +52,8 @@ public class RealmRoom extends RealmObject {
         realmRoom.setUnreadCount(room.getUnreadCount());
         realmRoom.setReadOnly(room.getReadOnly());
         realmRoom.setMute(
-            false); //TODO [Saeed Mozaffari] [2016-09-07 9:59 AM] - agar mute ro az server gereftim be jaye false sabt mikonim
+            false); //TODO [Saeed Mozaffari] [2016-09-07 9:59 AM] - agar mute ro az server
+        // gereftim be jaye false sabt mikonim
         switch (room.getType()) {
             case CHANNEL:
                 realmRoom.setType(RoomType.CHANNEL);
@@ -218,11 +219,11 @@ public class RealmRoom extends RealmObject {
         this.lastMessageStatus = lastMessageStatus;
     }
 
-    public String getDraft() {
+    public RealmRoomDraft getDraft() {
         return draft;
     }
 
-    public void setDraft(String draft) {
+    public void setDraft(RealmRoomDraft draft) {
         this.draft = draft;
     }
 

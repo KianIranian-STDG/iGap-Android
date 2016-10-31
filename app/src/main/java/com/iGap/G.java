@@ -25,7 +25,9 @@ import com.iGap.interfaces.OnChangeUserPhotoListener;
 import com.iGap.interfaces.OnChatDelete;
 import com.iGap.interfaces.OnChatDeleteMessageResponse;
 import com.iGap.interfaces.OnChatEditMessageResponse;
+import com.iGap.interfaces.OnChatGetDraft;
 import com.iGap.interfaces.OnChatGetRoom;
+import com.iGap.interfaces.OnChatUpdateDraft;
 import com.iGap.interfaces.OnClearChatHistory;
 import com.iGap.interfaces.OnClientGetRoomHistoryResponse;
 import com.iGap.interfaces.OnClientGetRoomListResponse;
@@ -46,6 +48,7 @@ import com.iGap.interfaces.OnGroupKickAdmin;
 import com.iGap.interfaces.OnGroupKickMember;
 import com.iGap.interfaces.OnGroupKickModerator;
 import com.iGap.interfaces.OnGroupLeft;
+import com.iGap.interfaces.OnGroupUpdateDraft;
 import com.iGap.interfaces.OnInfoCountryResponse;
 import com.iGap.interfaces.OnInfoTime;
 import com.iGap.interfaces.OnReceiveInfoLocation;
@@ -226,6 +229,9 @@ public class G extends Application {
     public static OnUserAvatarDelete onUserAvatarDelete;
     public static OnUserAvatarGetList onUserAvatarGetList;
     public static OnDraftMessage onDraftMessage;
+    public static OnChatUpdateDraft onChatUpdateDraft;
+    public static OnChatGetDraft onChatGetDraft;
+    public static OnGroupUpdateDraft onGroupUpdateDraft;
     public static File chatBackground;
     public static File IMAGE_NEW_GROUP;
     public static File IMAGE_NEW_CHANEL;
@@ -283,8 +289,11 @@ public class G extends Application {
 
     public static void getUserInfo() {
         Log.i("FFF", "getUserInfo 1");
-        //TODO [Saeed Mozaffari] [2016-10-15 1:51 PM] - nabayad har bar etella'ate khodam ro begiram. agar ham digar account taghiri dadae bashe response hamun zaman miayad va man ba accountam yeki misham
-        //TODO [Saeed Mozaffari] [2016-10-15 1:52 PM] - bayad zamani ke register kardam userInfo ro begiram , fekr nemikonam ke deige niaz be har bar gereftan bashe
+        //TODO [Saeed Mozaffari] [2016-10-15 1:51 PM] - nabayad har bar etella'ate khodam ro
+        // begiram. agar ham digar account taghiri dadae bashe response hamun zaman miayad va man
+        // ba accountam yeki misham
+        //TODO [Saeed Mozaffari] [2016-10-15 1:52 PM] - bayad zamani ke register kardam userInfo
+        // ro begiram , fekr nemikonam ke deige niaz be har bar gereftan bashe
         Realm realm = Realm.getDefaultInstance();
         final long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
         realm.close();
@@ -442,27 +451,31 @@ public class G extends Application {
             case "فارسی":
                 CalligraphyConfig.initDefault(
                     new CalligraphyConfig.Builder().setDefaultFontPath("fonts/iransanslite.ttf")
-                        .setFontAttrId(R.attr.fontPath).build());
+                        .setFontAttrId(R.attr.fontPath)
+                        .build());
                 setLocale("fa");
 
                 break;
             case "English":
                 CalligraphyConfig.initDefault(
                     new CalligraphyConfig.Builder().setDefaultFontPath("fonts/iransanslite.ttf")
-                        .setFontAttrId(R.attr.fontPath).build());
+                        .setFontAttrId(R.attr.fontPath)
+                        .build());
                 setLocale("en");
                 break;
             case "العربی":
                 CalligraphyConfig.initDefault(
                     new CalligraphyConfig.Builder().setDefaultFontPath("fonts/iransanslite.ttf")
-                        .setFontAttrId(R.attr.fontPath).build());
+                        .setFontAttrId(R.attr.fontPath)
+                        .build());
                 setLocale("ar");
 
                 break;
             case "Deutsch":
                 CalligraphyConfig.initDefault(
                     new CalligraphyConfig.Builder().setDefaultFontPath("fonts/iransanslite.ttf")
-                        .setFontAttrId(R.attr.fontPath).build());
+                        .setFontAttrId(R.attr.fontPath)
+                        .build());
                 setLocale("nl");
 
                 break;
@@ -556,7 +569,8 @@ public class G extends Application {
         }
     }
 
-    private void login() { //TODO [Saeed Mozaffari] [2016-09-07 10:24 AM] - mitonim karhaie ke hamishe bad az login bayad anjam beshe ro dar classe login response gharar bedim
+    private void login() { //TODO [Saeed Mozaffari] [2016-09-07 10:24 AM] - mitonim karhaie ke
+        // hamishe bad az login bayad anjam beshe ro dar classe login response gharar bedim
 
         G.onUserLogin = new OnUserLogin() {
             @Override public void onLogin() {
