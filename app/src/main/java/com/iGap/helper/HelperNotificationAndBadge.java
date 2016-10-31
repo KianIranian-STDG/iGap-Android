@@ -254,7 +254,8 @@ public class HelperNotificationAndBadge {
         }
     }
 
-    //*****************************************************************************************   notification ***********************
+    //*****************************************************************************************
+    // notification ***********************
 
     private void setNotification() {
 
@@ -336,7 +337,7 @@ public class HelperNotificationAndBadge {
             context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
 
         switch (type) {
-            case 0:
+            case 0: // chat
 
                 led = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_LED_COLOR_MESSAGE, -8257792);
                 vibrator =
@@ -348,7 +349,7 @@ public class HelperNotificationAndBadge {
                     sharedPreferences.getInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_MESSAGE, 1);
                 break;
 
-            case 1:
+            case 1: // group
                 led = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, -8257792);
                 vibrator =
                     sharedPreferences.getString(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, "Default");
@@ -359,7 +360,7 @@ public class HelperNotificationAndBadge {
                     sharedPreferences.getInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_GROUP, 1);
 
                 break;
-            case 2:
+            case 2: // channel
 
                 break;
         }

@@ -128,7 +128,7 @@ public class ChatSendMessageResponse extends MessageHandler {
 
                         /*
                         * message exist in chat room so don't calling onMessageReceive callback ,
-                         * just
+                        * just
                         * update message . this process for this is that maybe receive
                         * repetitious message
                         * from server so client should handle this subject

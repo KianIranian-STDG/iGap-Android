@@ -90,36 +90,51 @@ public class GroupSendMessageResponse extends MessageHandler {
                     }
                 }
 
-                // because user may have more than one device, his another device should not be recipient
-                // but sender. so I check current userId with room message user id, and if not equals
+                // because user may have more than one device, his another device should not be
+                // recipient
+                // but sender. so I check current userId with room message user id, and if not
+                // equals
                 // and response is null, so we sure recipient is another user
                 if (userId != roomMessage.getUserId() && builder.getResponse().getId().isEmpty()) {
                     // i'm the recipient
 
                     HelperCheckUserInfoExist.checkUserInfoExist(roomMessage.getUserId());
 
-                    RealmChatHistory realmChatHistory = realm.createObject(RealmChatHistory.class);
-                    realmChatHistory.setId(System.currentTimeMillis());
+                    RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class)
+                        .equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId())
+                        .findFirst();
 
-                    RealmRoomMessage realmRoomMessage = realm.createObject(RealmRoomMessage.class);
+                    RealmChatHistory realmChatHistory;
 
-                    realmRoomMessage.setMessageId(roomMessage.getMessageId());
-                    realmRoomMessage.setRoomId(builder.getRoomId());
-                    realmRoomMessage.setMessageVersion(roomMessage.getMessageVersion());
-                    realmRoomMessage.setStatus(roomMessage.getStatus().toString());
-                    realmRoomMessage.setMessageType(roomMessage.getMessageType().toString());
-                    realmRoomMessage.setMessage(roomMessage.getMessage());
+                    if (realmRoomMessage == null) {
+                        realmChatHistory = realm.createObject(RealmChatHistory.class);
+                        realmChatHistory.setId(System.currentTimeMillis());
 
-                    realmRoomMessage.setAttachment(roomMessage.getMessageId(),
-                        roomMessage.getAttachment());
-                    realmRoomMessage.setUserId(roomMessage.getUserId());
-                    realmRoomMessage.setLocation(
-                        RealmRoomMessageLocation.build(roomMessage.getLocation()));
-                    realmRoomMessage.setLog(RealmRoomMessageLog.build(roomMessage.getLog()));
-                    realmRoomMessage.setRoomMessageContact(
-                        RealmRoomMessageContact.build(roomMessage.getContact()));
-                    realmRoomMessage.setEdited(roomMessage.getEdited());
-                    realmRoomMessage.setUpdateTime(roomMessage.getUpdateTime());
+                        realmRoomMessage = realm.createObject(RealmRoomMessage.class);
+                        realmRoomMessage.setMessageId(roomMessage.getMessageId());
+                        realmRoomMessage.setRoomId(builder.getRoomId());
+                    } else {
+
+                        realmChatHistory = realm.where(RealmChatHistory.class)
+                            .equalTo(RealmChatHistoryFields.ROOM_MESSAGE.MESSAGE_ID,
+                                roomMessage.getMessageId())
+                            .findFirst();
+                    }
+
+                    fillRoomMessage(realmRoomMessage, roomMessage);
+
+                    if (roomMessage.getForwardFrom() != null) {
+                        RealmRoomMessage forward = realm.createObject(RealmRoomMessage.class);
+                        forward.setMessageId(System.nanoTime());
+
+                        realmRoomMessage.setForwardMessage(fillRoomMessage(forward, roomMessage));
+                    } else if (roomMessage.getReplyTo() != null) { // reply message
+
+                        RealmRoomMessage reply = realm.createObject(RealmRoomMessage.class);
+                        reply.setMessageId(System.currentTimeMillis());
+
+                        realmRoomMessage.setReplyTo(fillRoomMessage(reply, roomMessage));
+                    }
 
                     realmChatHistory.setRoomId(builder.getRoomId());
                     realmChatHistory.setRoomMessage(realmRoomMessage);
@@ -144,21 +159,29 @@ public class GroupSendMessageResponse extends MessageHandler {
                         RealmRoomMessage message = history.getRoomMessage();
                         // find the message using identity and update it
                         if (message != null && message.getMessageId() == Long.parseLong(identity)) {
-                            message.setMessageId(roomMessage.getMessageId());
-                            message.setMessageVersion(roomMessage.getMessageVersion());
-                            message.setStatus(roomMessage.getStatus().toString());
-                            message.setMessageType(roomMessage.getMessageType().toString());
-                            message.setMessage(roomMessage.getMessage());
-                            message.setAttachment(roomMessage.getMessageId(),
-                                roomMessage.getAttachment());
-                            message.setUserId(roomMessage.getUserId());
-                            message.setLocation(
-                                RealmRoomMessageLocation.build(roomMessage.getLocation()));
-                            message.setLog(RealmRoomMessageLog.build(roomMessage.getLog()));
-                            message.setRoomMessageContact(
-                                RealmRoomMessageContact.build(roomMessage.getContact()));
-                            message.setEdited(roomMessage.getEdited());
-                            message.setUpdateTime(roomMessage.getUpdateTime());
+
+                            fillRoomMessage(message, roomMessage);
+
+                            if (roomMessage.getForwardFrom() != null) { // forward message
+
+                                RealmRoomMessage forwardMessage = message.getForwardMessage();
+                                // forwardMessage shouldn't be null but client check it for insuring
+                                if (forwardMessage == null) {
+                                    forwardMessage = realm.createObject(RealmRoomMessage.class);
+                                    forwardMessage.setMessageId(System.nanoTime());
+                                }
+                                message.setForwardMessage(
+                                    fillRoomMessage(forwardMessage, roomMessage));
+                            } else if (roomMessage.getReplyTo() != null) { // reply message
+
+                                RealmRoomMessage replyMessage = message.getForwardMessage();
+                                // replyMessage shouldn't be null but client check it for insuring
+                                if (replyMessage == null) {
+                                    replyMessage = realm.createObject(RealmRoomMessage.class);
+                                    replyMessage.setMessageId(System.nanoTime());
+                                }
+                                message.setReplyTo(fillRoomMessage(replyMessage, roomMessage));
+                            }
 
                             realm.copyToRealmOrUpdate(message);
                             break;
@@ -169,7 +192,8 @@ public class GroupSendMessageResponse extends MessageHandler {
         });
 
         if (userId != roomMessage.getUserId() && builder.getResponse().getId().isEmpty()) {
-            // invoke following callback when i'm not the sender, because I already done everything after sending message
+            // invoke following callback when i'm not the sender, because I already done
+            // everything after sending message
             if (realm.where(RealmRoom.class)
                 .equalTo(RealmRoomFields.ID, builder.getRoomId())
                 .findFirst() != null) {
@@ -184,6 +208,26 @@ public class GroupSendMessageResponse extends MessageHandler {
         }
 
         realm.close();
+    }
+
+    private RealmRoomMessage fillRoomMessage(RealmRoomMessage realmRoomMessage,
+
+        ProtoGlobal.RoomMessage roomMessage) {
+        realmRoomMessage.setMessageId(roomMessage.getMessageId());
+        realmRoomMessage.setMessageVersion(roomMessage.getMessageVersion());
+        realmRoomMessage.setStatus(roomMessage.getStatus().toString());
+        realmRoomMessage.setMessageType(roomMessage.getMessageType().toString());
+        realmRoomMessage.setMessage(roomMessage.getMessage());
+
+        realmRoomMessage.setAttachment(roomMessage.getMessageId(), roomMessage.getAttachment());
+        realmRoomMessage.setUserId(roomMessage.getUserId());
+        realmRoomMessage.setLocation(RealmRoomMessageLocation.build(roomMessage.getLocation()));
+        realmRoomMessage.setLog(RealmRoomMessageLog.build(roomMessage.getLog()));
+        realmRoomMessage.setRoomMessageContact(
+            RealmRoomMessageContact.build(roomMessage.getContact()));
+        realmRoomMessage.setEdited(roomMessage.getEdited());
+        realmRoomMessage.setUpdateTime(roomMessage.getUpdateTime());
+        return realmRoomMessage;
     }
 
     @Override public void error() {
