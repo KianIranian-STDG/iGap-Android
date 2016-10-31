@@ -87,6 +87,7 @@
     <com.iGap.module.MyAppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
+        app:elevation="0dp"
         android:layout_height="wrap_content"
         app:popupTheme="@style/ThemeOverlay.AppCompat"
         >
