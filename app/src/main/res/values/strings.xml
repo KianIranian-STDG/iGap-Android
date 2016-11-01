@@ -298,7 +298,7 @@
   <string name="st_in_app_vibrate">In-App Vibrate</string>
   <string name="st_in_app_preview">In-App Preview</string>
   <string name="st_in_chat_sound">In_Chat Sounds </string>
-  <string name="st_title_Events">In_Chat Sounds </string>
+  <string name="st_title_Events">Events</string>
   <string name="st_Contact_joined_igap">Contact joined iGap</string>
   <string name="st_pinned_message">Pinned Message</string>
   <string name="st_title_other">Other</string>

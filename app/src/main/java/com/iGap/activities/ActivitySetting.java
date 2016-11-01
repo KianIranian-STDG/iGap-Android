@@ -246,9 +246,13 @@ public class ActivitySetting extends ActivityEnhanced
                     new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutParams.setMargins(0, 0, 0, 30);
+                LinearLayout.LayoutParams lastNameLayoutParams =
+                    new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
+                layoutParams.setMargins(0, 70, 0, 10);
 
                 layoutNickname.addView(inputFirstName, layoutParams);
-                layoutNickname.addView(inputLastName, layoutParams);
+                layoutNickname.addView(inputLastName, lastNameLayoutParams);
 
                 final MaterialDialog dialog =
                     new MaterialDialog.Builder(ActivitySetting.this).title("Nickname")
