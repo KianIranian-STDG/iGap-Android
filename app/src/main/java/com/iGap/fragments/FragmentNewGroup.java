@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
 import android.text.InputType;
@@ -311,7 +312,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
                 getRoom(roomId);
             }
 
-            @Override public void onErrorGroupCreate() {
+            @Override public void onError(int majorCode, int minorCode) {
 
                 prgWaiting.setVisibility(View.GONE);
                 txtNextStep.setEnabled(true);
@@ -320,6 +321,55 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
                 edtDescription.setEnabled(true);
                 edtGroupName.setEnabled(true);
                 imgCircleImageView.setEnabled(true);
+
+                if (majorCode == 300 && minorCode == 1) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override public void run() {
+                            final Snackbar snack =
+                                Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                    getResources().getString(R.string.E_302_1),
+                                    Snackbar.LENGTH_LONG);
+
+                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                @Override public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                            snack.show();
+                        }
+                    });
+                } else if (majorCode == 300 && minorCode == 2) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override public void run() {
+                            final Snackbar snack =
+                                Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                    getResources().getString(R.string.E_300_2),
+                                    Snackbar.LENGTH_LONG);
+
+                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                @Override public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                            snack.show();
+                        }
+                    });
+                } else if (majorCode == 301) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override public void run() {
+                            final Snackbar snack =
+                                Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                    getResources().getString(R.string.E_301), Snackbar.LENGTH_LONG);
+
+                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                @Override public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                            snack.show();
+                        }
+                    });
+                }
             }
         };
 
@@ -351,6 +401,85 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
                     .beginTransaction()
                     .remove(FragmentNewGroup.this)
                     .commit();
+            }
+
+            @Override public void onError(int majorCode, int minorCode) {
+                if (majorCode == 610) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override public void run() {
+                            final Snackbar snack =
+                                Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                    getResources().getString(R.string.E_610), Snackbar.LENGTH_LONG);
+
+                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                @Override public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                            snack.show();
+                        }
+                    });
+                } else if (majorCode == 611) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override public void run() {
+                            final Snackbar snack =
+                                Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                    getResources().getString(R.string.E_611), Snackbar.LENGTH_LONG);
+
+                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                @Override public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                            snack.show();
+                        }
+                    });
+                } else if (majorCode == 612) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override public void run() {
+                            final Snackbar snack =
+                                Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                    getResources().getString(R.string.E_612), Snackbar.LENGTH_LONG);
+
+                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                @Override public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                            snack.show();
+                        }
+                    });
+                } else if (majorCode == 613) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override public void run() {
+                            final Snackbar snack =
+                                Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                    getResources().getString(R.string.E_613), Snackbar.LENGTH_LONG);
+
+                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                @Override public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                            snack.show();
+                        }
+                    });
+                } else if (majorCode == 614) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override public void run() {
+                            final Snackbar snack =
+                                Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                    getResources().getString(R.string.E_614), Snackbar.LENGTH_LONG);
+
+                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                @Override public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                            snack.show();
+                        }
+                    });
+                }
             }
         };
 

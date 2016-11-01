@@ -9,5 +9,7 @@ public interface OnGroupCreate {
 
     void onGroupCreate(long roomId);
 
-    void onErrorGroupCreate();
+    void onError(int majorCode, int minorCode);
+
+
 }

@@ -8,4 +8,7 @@ import com.iGap.proto.ProtoResponse;
 public interface OnChatDeleteMessageResponse {
     void onChatDeleteMessage(long deleteVersion, long messageId, long roomId,
         ProtoResponse.Response response);
+
+    void onError(int majorCode, int minorCode);
+
 }

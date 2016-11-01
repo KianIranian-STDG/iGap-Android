@@ -471,7 +471,7 @@ public class FragmentNotification extends Fragment {
                                     break;
                                 }
                                 case 1: {
-                                    txtVibrate.setText("Setting default");
+                                    txtVibrate.setText("default");
 
                                     Realm realm = Realm.getDefaultInstance();
                                     realm.executeTransaction(new Realm.Transaction() {
@@ -485,21 +485,21 @@ public class FragmentNotification extends Fragment {
                                                     RealmGroupRoom realmGroupRoom =
                                                         realmRoom.getGroupRoom();
                                                     realmGroupRoom.getRealmNotificationSetting()
-                                                        .setVibrate("Setting default");
+                                                        .setVibrate("default");
                                                     break;
                                                 }
                                                 case "CHANNEL": {
                                                     RealmChannelRoom realmChannelRoom =
                                                         realmRoom.getChannelRoom();
                                                     realmChannelRoom.getRealmNotificationSetting()
-                                                        .setVibrate("Setting default");
+                                                        .setVibrate("default");
                                                     break;
                                                 }
                                                 case "CONTACT": {
                                                     RealmChatRoom realmChatRoom =
                                                         realmRoom.getChatRoom();
                                                     realmChatRoom.getRealmNotificationSetting()
-                                                        .setVibrate("Setting default");
+                                                        .setVibrate("default");
                                                     break;
                                                 }
                                             }
@@ -582,7 +582,7 @@ public class FragmentNotification extends Fragment {
                                                     RealmChannelRoom realmChannelRoom =
                                                         realmRoom.getChannelRoom();
                                                     realmChannelRoom.getRealmNotificationSetting()
-                                                        .setVibrate("DisLongable");
+                                                        .setVibrate("Long");
                                                     break;
                                                 }
                                                 case "CONTACT": {
@@ -592,6 +592,7 @@ public class FragmentNotification extends Fragment {
                                                         .setVibrate("Long");
                                                     break;
                                                 }
+
                                             }
                                         }
                                     });
@@ -601,6 +602,37 @@ public class FragmentNotification extends Fragment {
                                     vLong.vibrate(500);
                                     break;
                                 }
+                                case 4:
+                                    txtVibrate.setText("Only if silent");
+
+                                    AudioManager am2 = (AudioManager) G.context.getSystemService(
+                                        Context.AUDIO_SERVICE);
+
+                                    switch (am2.getRingerMode()) {
+                                        case AudioManager.RINGER_MODE_SILENT:
+                                            Vibrator vSilent =
+                                                (Vibrator) G.context.getSystemService(
+                                                    Context.VIBRATOR_SERVICE);
+                                            vSilent.vibrate(
+                                                AudioManager.VIBRATE_SETTING_ONLY_SILENT);
+
+                                            Realm realm = Realm.getDefaultInstance();
+                                            realm.executeTransaction(new Realm.Transaction() {
+                                                @Override public void execute(Realm realm) {
+                                                    RealmRoom realmRoom =
+                                                        realm.where(RealmRoom.class)
+                                                            .equalTo(RealmRoomFields.ID, roomId)
+                                                            .findFirst();
+                                                    RealmChatRoom realmChatRoom =
+                                                        realmRoom.getChatRoom();
+                                                    realmChatRoom.getRealmNotificationSetting()
+                                                        .setVibrate("Only if silent");
+                                                }
+                                            });
+
+                                            // TODO: 10/31/2016 its not complete break;
+                                    }
+                                    break;
                             }
                         }
                     })

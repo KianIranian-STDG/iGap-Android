@@ -478,15 +478,31 @@ public class ActivityIntroduce extends ActivityEnhanced {
                 if (majorCode == 502 && minorCode == 1) {
                     runOnUiThread(new Runnable() {
                         @Override public void run() {
-                            //                            locationFound = false;
-                            //                            Toast.makeText(G.context, "Location Not Found", Toast.LENGTH_SHORT).show();
+                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
+                                getResources().getString(R.string.Toast_Location_Not_Found),
+                                Snackbar.LENGTH_LONG);
+
+                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                @Override public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                            snack.show();
                         }
                     });
                 } else if (majorCode == 503) {
                     runOnUiThread(new Runnable() {
                         @Override public void run() {
-                            //                            locationFound = false;
-                            //                            Toast.makeText(G.context, "Location Not Found", Toast.LENGTH_SHORT).show();
+                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
+                                getResources().getString(R.string.Toast_Location_Not_Found),
+                                Snackbar.LENGTH_LONG);
+
+                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                @Override public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                            snack.show();
                         }
                     });
                 }

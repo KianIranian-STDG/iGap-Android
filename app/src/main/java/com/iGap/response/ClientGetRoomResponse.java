@@ -82,6 +82,8 @@ public class ClientGetRoomResponse extends MessageHandler {
 
         Log.i("SOC", "ClientGetRoomResponse response.majorCode() : " + majorCode);
         Log.i("SOC", "ClientGetRoomResponse response.minorCode() : " + minorCode);
+
+        G.onClientGetRoomResponse.onError(majorCode, minorCode);
     }
 }
 

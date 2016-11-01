@@ -3,6 +3,7 @@ package com.iGap.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -66,7 +67,7 @@ public class ContactGroupFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_contact_group, container, false);
     }
 
-    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         Bundle bundle = this.getArguments();
@@ -120,7 +121,119 @@ public class ContactGroupFragment extends Fragment {
                     }
 
                     @Override public void onError(int majorCode, int minorCode) {
+                        if (majorCode == 302 && minorCode == 1) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override public void run() {
+                                    final Snackbar snack =
+                                        Snackbar.make(view.findViewById(android.R.id.content),
+                                            getResources().getString(R.string.E_302_1),
+                                            Snackbar.LENGTH_LONG);
 
+                                    snack.setAction("CANCEL", new View.OnClickListener() {
+                                        @Override public void onClick(View view) {
+                                            snack.dismiss();
+                                        }
+                                    });
+                                    snack.show();
+                                }
+                            });
+                        } else if (majorCode == 302 && minorCode == 2) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override public void run() {
+                                    final Snackbar snack =
+                                        Snackbar.make(view.findViewById(android.R.id.content),
+                                            getResources().getString(R.string.E_302_2),
+                                            Snackbar.LENGTH_LONG);
+
+                                    snack.setAction("CANCEL", new View.OnClickListener() {
+                                        @Override public void onClick(View view) {
+                                            snack.dismiss();
+                                        }
+                                    });
+                                    snack.show();
+                                }
+                            });
+                        } else if (majorCode == 302 && minorCode == 3) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override public void run() {
+                                    final Snackbar snack =
+                                        Snackbar.make(view.findViewById(android.R.id.content),
+                                            getResources().getString(R.string.E_302_3),
+                                            Snackbar.LENGTH_LONG);
+
+                                    snack.setAction("CANCEL", new View.OnClickListener() {
+                                        @Override public void onClick(View view) {
+                                            snack.dismiss();
+                                        }
+                                    });
+                                    snack.show();
+                                }
+                            });
+                        } else if (majorCode == 302 && minorCode == 4) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override public void run() {
+                                    final Snackbar snack =
+                                        Snackbar.make(view.findViewById(android.R.id.content),
+                                            getResources().getString(R.string.E_302_4),
+                                            Snackbar.LENGTH_LONG);
+
+                                    snack.setAction("CANCEL", new View.OnClickListener() {
+                                        @Override public void onClick(View view) {
+                                            snack.dismiss();
+                                        }
+                                    });
+                                    snack.show();
+                                }
+                            });
+                        } else if (majorCode == 303) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override public void run() {
+                                    final Snackbar snack =
+                                        Snackbar.make(view.findViewById(android.R.id.content),
+                                            getResources().getString(R.string.E_303),
+                                            Snackbar.LENGTH_LONG);
+
+                                    snack.setAction("CANCEL", new View.OnClickListener() {
+                                        @Override public void onClick(View view) {
+                                            snack.dismiss();
+                                        }
+                                    });
+                                    snack.show();
+                                }
+                            });
+                        } else if (majorCode == 304) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override public void run() {
+                                    final Snackbar snack =
+                                        Snackbar.make(view.findViewById(android.R.id.content),
+                                            getResources().getString(R.string.E_304),
+                                            Snackbar.LENGTH_LONG);
+
+                                    snack.setAction("CANCEL", new View.OnClickListener() {
+                                        @Override public void onClick(View view) {
+                                            snack.dismiss();
+                                        }
+                                    });
+                                    snack.show();
+                                }
+                            });
+                        } else if (majorCode == 305) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override public void run() {
+                                    final Snackbar snack =
+                                        Snackbar.make(view.findViewById(android.R.id.content),
+                                            getResources().getString(R.string.E_305),
+                                            Snackbar.LENGTH_LONG);
+
+                                    snack.setAction("CANCEL", new View.OnClickListener() {
+                                        @Override public void onClick(View view) {
+                                            snack.dismiss();
+                                        }
+                                    });
+                                    snack.show();
+                                }
+                            });
+                        }
                     }
                 };
 

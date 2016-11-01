@@ -95,6 +95,8 @@ public class ChatEditMessageResponse extends MessageHandler {
 
         Log.i("SOC", "ChatEditMessageResponse response.majorCode() : " + majorCode);
         Log.i("SOC", "ChatEditMessageResponse response.minorCode() : " + minorCode);
+
+        G.onChatEditMessageResponse.onError(majorCode, minorCode);
     }
 }
 

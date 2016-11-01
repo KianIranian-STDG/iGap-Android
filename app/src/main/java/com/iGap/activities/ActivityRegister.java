@@ -10,7 +10,6 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.SearchView;
 import android.text.Editable;
 import android.text.Html;
@@ -57,7 +56,6 @@ import com.iGap.proto.ProtoUserRegister;
 import com.iGap.proto.ProtoUserVerify;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.realm.RealmUserInfoFields;
-import com.iGap.request.RequestInfoCountry;
 import com.iGap.request.RequestQueue;
 import com.iGap.request.RequestUserInfo;
 import com.iGap.request.RequestUserLogin;
@@ -392,26 +390,6 @@ public class ActivityRegister extends ActivityEnhanced {
                                 }
                             }
                         };
-
-                        btnStart.setEnabled(false);
-                        new RequestInfoCountry().infoCountry(isoCode);
-
-                        G.handler.post(new Runnable() {
-                            @Override public void run() {
-
-                                final Snackbar snack =
-                                    Snackbar.make(findViewById(android.R.id.content),
-                                        getResources().getString(
-                                            R.string.Toast_waiting_for_get_info_country),
-                                        Snackbar.LENGTH_LONG);
-                                snack.setAction("CANCEL", new View.OnClickListener() {
-                                    @Override public void onClick(View view) {
-                                        snack.dismiss();
-                                    }
-                                });
-                                snack.show();
-                            }
-                        });
 
                         edtPhoneNumber.setText("");
                         dialogChooseCountry.dismiss();

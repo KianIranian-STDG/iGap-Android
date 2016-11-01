@@ -9,4 +9,6 @@ import com.iGap.proto.ProtoGlobal;
 public interface OnClientGetRoomResponse {
     void onClientGetRoomResponse(ProtoGlobal.Room room,
         ProtoClientGetRoom.ClientGetRoomResponse.Builder builder);
+
+    void onError(int majorCode, int minorCode);
 }

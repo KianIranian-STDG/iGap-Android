@@ -556,6 +556,38 @@
   <string name="E_218">Bad payload for request ; Invalid roomId</string>
   <string name="E_219">Internal server error for request</string>
   <string name="E_220">This operation is not permitted for request </string>
+  <string name="E_300_1">Bad payload for request ; Invalid name</string>
+  <string name="E_300_2">Bad payload for request ; Invalid description </string>
+  <string name="E_301">Internal server error for request</string>
+  <string name="E_610">Bad payload for request</string>
+  <string name="E_611">Internal server error for request</string>
+  <string name="E_612">Bad payload for request</string>
+  <string name="E_613">Internal server error for request </string>
+  <string name="E_614">No such room is found for request</string>
+  <string name="E_615_1">Bad payload for request ; Invalid roomId</string>
+  <string name="E_615_2">Bad payload for request ; Invalid firstMessageId</string>
+  <string name="E_616">Internal server error for request</string>
+  <string name="E_617">There is no other massage for viewing. for request</string>
+  <string name="E_713_1">Bad payload for request ; Invalid token</string>
+  <string name="E_713_2">Bad payload for request ; Invalid offset</string>
+  <string name="E_713_3">Bad payload for request ; Invalid maxLimit</string>
+  <string name="E_713_4">Bad payload for request ; Invalid selector</string>
+  <string name="E_713_5">Bad payload for request ; Invalid offset</string>
+  <string name="E_714">Internal server error for request</string>
+  <string name="E_715">No such file is found for request</string>
+  <string name="E_209_1">Bad payload for request ; Invalid roomId</string>
+  <string name="E_209_2">Bad payload for request ; Invalid messageId</string>
+  <string name="E_209_3">Bad payload for request ; Invalid message</string>
+  <string name="E_210">No such file is found for request</string>
+  <string name="E_211">This operation is not permitted for request</string>
+  <string name="E_212_1">Bad payload for request ; Invalid roomId</string>
+  <string name="E_212_2">Bad payload for request ; Invalid messageId</string>
+  <string name="E_213">Internal server error for request</string>
+  <string name="E_214">This operation is not permitted for request</string>
+  <string name="E_502">Bad payload for request ; Invalid id</string>
+  <string name="E_503">Internal server error for request</string>
+
+
   <string name="resend_all_messages" formatted="false">Resend %d messages</string>
 
 

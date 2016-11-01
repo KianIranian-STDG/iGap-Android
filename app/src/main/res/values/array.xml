@@ -112,8 +112,7 @@
 
   <string-array name="notifications_vibrate">
     <item>@string/array_Disable</item>
-    <item>@string/array_setting_default</item>
-    <item>@string/array_system_default</item>
+    <item>@string/array_Default</item>
     <item>@string/array_Short</item>
     <item>@string/array_Long</item>
   </string-array>

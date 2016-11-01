@@ -1306,29 +1306,41 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                     runOnUiThread(new Runnable() {
                         @Override public void run() {
                             final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
-                                getResources().getString(R.string.E_330_1), Snackbar.LENGTH_LONG);
+                                getResources().getString(R.string.E_218), Snackbar.LENGTH_LONG);
 
                             snack.setAction("CANCEL", new View.OnClickListener() {
                                 @Override public void onClick(View view) {
                                     snack.dismiss();
                                 }
                             });
-                            snack.show();
+
                         }
                     });
                 } else if (majorCode == 219) {
                     runOnUiThread(new Runnable() {
                         @Override public void run() {
-                            // TODO: 9/25/2016 Error 219 - CHAT_DELETE_INTERNAL_SERVER_ERROR
-                            //Invalid roomId
+                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
+                                getResources().getString(R.string.E_219), Snackbar.LENGTH_LONG);
+
+                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                @Override public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
 
                         }
                     });
                 } else if (majorCode == 220) {
                     runOnUiThread(new Runnable() {
                         @Override public void run() {
-                            // TODO: 9/25/2016 Error 220 - CHAT_DELETE_FORBIDDEN
-                            //Invalid roomId
+                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
+                                getResources().getString(R.string.E_220), Snackbar.LENGTH_LONG);
+
+                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                @Override public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
 
                         }
                     });

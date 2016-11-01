@@ -1,7 +1,9 @@
 package com.iGap.response;
 
+import android.util.Log;
 import com.iGap.G;
 import com.iGap.proto.ProtoClientGetRoomHistory;
+import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmClientConditionFields;
@@ -101,6 +103,15 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
 
     @Override public void error() {
         super.error();
+
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        int majorCode = errorResponse.getMajorCode();
+        int minorCode = errorResponse.getMinorCode();
+
+        Log.i("XXX", "ClientGetRoomHistoryResponse response.majorCode() : " + majorCode);
+        Log.i("XXX", "ClientGetRoomHistoryResponse response.minorCode() : " + minorCode);
+
+        G.onClientGetRoomHistoryResponse.onGetRoomHistoryError(majorCode, minorCode);
     }
 }
 

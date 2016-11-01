@@ -64,6 +64,10 @@ public class FileDownloadResponse extends MessageHandler {
         int minorCode = errorResponse.getMinorCode();
         Log.i("SOC", "FileDownloadResponse response.majorCode() : " + majorCode);
         Log.i("SOC", "FileDownloadResponse response.minorCode() : " + minorCode);
+
+        G.onFileDownloadResponse.onError(majorCode, minorCode);
+
+
     }
 }
 

@@ -9,4 +9,6 @@ import java.util.List;
  */
 public interface OnClientGetRoomListResponse {
     void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response);
+
+    void onError(int majorCode, int minorCode);
 }

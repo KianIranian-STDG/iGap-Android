@@ -37,6 +37,8 @@ public class ClientGetRoomListResponse extends MessageHandler {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
+        G.onClientGetRoomListResponse.onError(majorCode, minorCode);
+
     }
 }
 

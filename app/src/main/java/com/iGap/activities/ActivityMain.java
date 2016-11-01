@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -133,6 +134,52 @@ public class ActivityMain extends ActivityEnhanced
                             }
                         });
                     }
+                }
+            }
+
+            @Override public void onError(int majorCode, int minorCode) {
+                if (majorCode == 612) {
+                    runOnUiThread(new Runnable() {
+                        @Override public void run() {
+                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
+                                getResources().getString(R.string.E_612), Snackbar.LENGTH_LONG);
+
+                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                @Override public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                            snack.show();
+                        }
+                    });
+                } else if (majorCode == 613) {
+                    runOnUiThread(new Runnable() {
+                        @Override public void run() {
+                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
+                                getResources().getString(R.string.E_613), Snackbar.LENGTH_LONG);
+
+                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                @Override public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                            snack.show();
+                        }
+                    });
+                } else if (majorCode == 614) {
+                    runOnUiThread(new Runnable() {
+                        @Override public void run() {
+                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
+                                getResources().getString(R.string.E_614), Snackbar.LENGTH_LONG);
+
+                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                @Override public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                            snack.show();
+                        }
+                    });
                 }
             }
         };
@@ -545,24 +592,42 @@ public class ActivityMain extends ActivityEnhanced
                 if (majorCode == 218 && minorCode == 1) {
                     runOnUiThread(new Runnable() {
                         @Override public void run() {
-                            // TODO: 9/25/2016 Error 218 - CHAT_DELETE_BAD_PAYLOAD
-                            //Invalid roomId
+                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
+                                getResources().getString(R.string.E_218), Snackbar.LENGTH_LONG);
+
+                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                @Override public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
 
                         }
                     });
                 } else if (majorCode == 219) {
                     runOnUiThread(new Runnable() {
                         @Override public void run() {
-                            // TODO: 9/25/2016 Error 219 - CHAT_DELETE_INTERNAL_SERVER_ERROR
-                            //Invalid roomId
+                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
+                                getResources().getString(R.string.E_219), Snackbar.LENGTH_LONG);
+
+                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                @Override public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
 
                         }
                     });
                 } else if (majorCode == 220) {
                     runOnUiThread(new Runnable() {
                         @Override public void run() {
-                            // TODO: 9/25/2016 Error 220 - CHAT_DELETE_FORBIDDEN
-                            //Invalid roomId
+                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
+                                getResources().getString(R.string.E_220), Snackbar.LENGTH_LONG);
+
+                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                @Override public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
 
                         }
                     });
@@ -669,6 +734,38 @@ public class ActivityMain extends ActivityEnhanced
                         loadLocalChatList();
                     }
                 });
+            }
+
+            @Override public void onError(int majorCode, int minorCode) {
+                if (majorCode == 610) {
+                    runOnUiThread(new Runnable() {
+                        @Override public void run() {
+                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
+                                getResources().getString(R.string.E_610), Snackbar.LENGTH_LONG);
+
+                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                @Override public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                            snack.show();
+                        }
+                    });
+                } else if (majorCode == 611) {
+                    runOnUiThread(new Runnable() {
+                        @Override public void run() {
+                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
+                                getResources().getString(R.string.E_611), Snackbar.LENGTH_LONG);
+
+                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                @Override public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                            snack.show();
+                        }
+                    });
+                }
             }
         };
 
@@ -879,6 +976,108 @@ public class ActivityMain extends ActivityEnhanced
                 realm.close();
             }
         });
+    }
+
+    @Override public void onError(int majorCode, int minorCode) {
+        if (majorCode == 713 && minorCode == 1) {
+            runOnUiThread(new Runnable() {
+                @Override public void run() {
+                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
+                        getResources().getString(R.string.E_713_1), Snackbar.LENGTH_LONG);
+
+                    snack.setAction("CANCEL", new View.OnClickListener() {
+                        @Override public void onClick(View view) {
+                            snack.dismiss();
+                        }
+                    });
+                    snack.show();
+                }
+            });
+        } else if (majorCode == 713 && minorCode == 2) {
+            runOnUiThread(new Runnable() {
+                @Override public void run() {
+                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
+                        getResources().getString(R.string.E_713_2), Snackbar.LENGTH_LONG);
+
+                    snack.setAction("CANCEL", new View.OnClickListener() {
+                        @Override public void onClick(View view) {
+                            snack.dismiss();
+                        }
+                    });
+                    snack.show();
+                }
+            });
+        } else if (majorCode == 713 && minorCode == 3) {
+            runOnUiThread(new Runnable() {
+                @Override public void run() {
+                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
+                        getResources().getString(R.string.E_713_3), Snackbar.LENGTH_LONG);
+
+                    snack.setAction("CANCEL", new View.OnClickListener() {
+                        @Override public void onClick(View view) {
+                            snack.dismiss();
+                        }
+                    });
+                    snack.show();
+                }
+            });
+        } else if (majorCode == 713 && minorCode == 4) {
+            runOnUiThread(new Runnable() {
+                @Override public void run() {
+                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
+                        getResources().getString(R.string.E_713_4), Snackbar.LENGTH_LONG);
+
+                    snack.setAction("CANCEL", new View.OnClickListener() {
+                        @Override public void onClick(View view) {
+                            snack.dismiss();
+                        }
+                    });
+                    snack.show();
+                }
+            });
+        } else if (majorCode == 713 && minorCode == 5) {
+            runOnUiThread(new Runnable() {
+                @Override public void run() {
+                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
+                        getResources().getString(R.string.E_713_5), Snackbar.LENGTH_LONG);
+
+                    snack.setAction("CANCEL", new View.OnClickListener() {
+                        @Override public void onClick(View view) {
+                            snack.dismiss();
+                        }
+                    });
+                    snack.show();
+                }
+            });
+        } else if (majorCode == 714) {
+            runOnUiThread(new Runnable() {
+                @Override public void run() {
+                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
+                        getResources().getString(R.string.E_714), Snackbar.LENGTH_LONG);
+
+                    snack.setAction("CANCEL", new View.OnClickListener() {
+                        @Override public void onClick(View view) {
+                            snack.dismiss();
+                        }
+                    });
+                    snack.show();
+                }
+            });
+        } else if (majorCode == 715) {
+            runOnUiThread(new Runnable() {
+                @Override public void run() {
+                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
+                        getResources().getString(R.string.E_715), Snackbar.LENGTH_LONG);
+
+                    snack.setAction("CANCEL", new View.OnClickListener() {
+                        @Override public void onClick(View view) {
+                            snack.dismiss();
+                        }
+                    });
+                    snack.show();
+                }
+            });
+        }
     }
 
     @Override public void complete(boolean result, String messageOne, String MessageTow) {
