@@ -562,6 +562,7 @@ public class ActivityChat extends ActivityEnhanced
                     forwardedMessage.setMessageId(System.nanoTime());
                     forwardedMessage.setMessage(roomMessage.getMessage());
                     forwardedMessage.setAttachment(roomMessage.getAttachment());
+                    forwardedMessage.setForwardMessage(roomMessage);
                     forwardedMessage.setCreateTime(System.currentTimeMillis());
                     forwardedMessage.setLocation(roomMessage.getLocation());
                     forwardedMessage.setLog(roomMessage.getLog());

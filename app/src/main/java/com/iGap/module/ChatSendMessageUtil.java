@@ -75,6 +75,11 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
         if (message.getLog() != null) {
             builder.log(message.getLog().getType());
         }
+        if (message.getForwardMessage() != null) {
+            builder.forwardMessage(message.getForwardMessage().getRoomId(),
+                message.getForwardMessage().getMessageId());
+        }
+
         builder.sendMessage(Long.toString(message.getMessageId()));
         return this;
     }

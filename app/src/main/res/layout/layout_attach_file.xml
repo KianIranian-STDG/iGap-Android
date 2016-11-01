@@ -6,11 +6,6 @@
     android:orientation="vertical"
     >
 
-  <android.support.v7.widget.ViewStubCompat
-      android:id="@+id/replayLayoutStub"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      />
 
   <LinearLayout
       android:id="@+id/chl_ll_attach"
@@ -19,6 +14,13 @@
       android:layout_alignParentBottom="true"
       android:orientation="vertical"
       >
+
+    <android.support.v7.widget.ViewStubCompat
+        android:id="@+id/replayLayoutStub"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        />
 
     <View
         android:layout_width="match_parent"
