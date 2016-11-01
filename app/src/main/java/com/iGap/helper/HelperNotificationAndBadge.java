@@ -20,6 +20,7 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityChat;
 import com.iGap.activities.ActivityMain;
+import com.iGap.activities.ActivityPopUpNotification;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoGlobal;
@@ -580,6 +581,8 @@ public class HelperNotificationAndBadge {
         } else {
             if (updateNotification) {
                 setNotification();
+
+                startActivityPopUpNotification();
             }
             try {
                 ShortcutBadger.applyCount(context, unreadMessageCount);
@@ -690,4 +693,23 @@ public class HelperNotificationAndBadge {
         String message = "";
         String time = "";
     }
+
+    private void startActivityPopUpNotification() {
+
+        //if(ActivityPopUpNotification.isPopUpVisible){
+        //
+        //    Log.e("ddd","aaaaaaaaaaaaa");
+        //    if(ActivityPopUpNotification.onComplete !=null)
+        //        ActivityPopUpNotification.onComplete.complete(true,"","");
+        //}
+        // else{
+        Intent popUpActivityIntent = new Intent(context, ActivityPopUpNotification.class);
+        popUpActivityIntent.setFlags(
+            Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.getApplicationContext().startActivity(popUpActivityIntent);
+
+        //  }
+
+    }
+
 }

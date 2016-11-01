@@ -33,6 +33,7 @@
           android:id="@+id/txt_time_record"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
+          android:textColor="@color/gray"
           android:layout_marginLeft="5dp"
           android:layout_weight="1"
           android:text="00:00"
@@ -53,6 +54,7 @@
           android:layout_width="0dp"
           android:layout_height="wrap_content"
           android:layout_weight="1"
+          android:textColor="@color/gray"
           android:gravity="right"
           android:text="@string/slide_to_cancel_en"
           android:textSize="@dimen/sp14"
@@ -63,7 +65,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:padding="@dimen/dp8"
-
+          android:textColor="@color/gray"
           android:text="@string/md_voice_message_microphone_button"
           style="@style/ChatMessages.MaterialDesignTextView.BottomIcon"
           />
