@@ -1429,6 +1429,8 @@ public class ActivityChat extends ActivityEnhanced
         imvSendButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
 
+                clearDraftRequest();
+
                 if (ll_attach_text.getVisibility() == View.VISIBLE) {
                     sendMessage(latestRequestCode, latestUri);
                     ll_attach_text.setVisibility(View.GONE);
@@ -2606,8 +2608,6 @@ public class ActivityChat extends ActivityEnhanced
         realm.close();
 
         scrollToEnd();
-
-        clearDraftRequest();
     }
 
     private boolean isMessageWrote() {
@@ -3667,7 +3667,6 @@ public class ActivityChat extends ActivityEnhanced
                                     snack.dismiss();
                                 }
                             });
-
                         }
                     });
                 } else if (majorCode == 219) {
@@ -3681,7 +3680,6 @@ public class ActivityChat extends ActivityEnhanced
                                     snack.dismiss();
                                 }
                             });
-
                         }
                     });
                 } else if (majorCode == 220) {
@@ -3695,7 +3693,6 @@ public class ActivityChat extends ActivityEnhanced
                                     snack.dismiss();
                                 }
                             });
-
                         }
                     });
                 }
@@ -3941,6 +3938,7 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     private void clearDraftRequest() {
+        Log.i("UUU", "clearDraftRequest hasDraft : " + hasDraft);
         if (hasDraft) {
             hasDraft = false;
             if (chatType == CHAT) {
