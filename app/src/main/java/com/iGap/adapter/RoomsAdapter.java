@@ -1,5 +1,6 @@
 package com.iGap.adapter;
 
+import android.util.Log;
 import com.iGap.adapter.items.RoomItem;
 import com.iGap.module.StructMessageAttachment;
 import com.mikepenz.fastadapter.adapters.FastItemAdapter;
@@ -67,6 +68,22 @@ public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
             }
         }
         updateChat(chatId, item);
+    }
+
+    public void norifyDraft(long chatId, String draftMessage) {
+        List<Item> items = getAdapterItems();
+        for (Item chat : items) {
+            if (chat.mInfo.chatId == chatId) {
+
+                int position = items.indexOf(chat);
+                Log.i("BBB", "chat.mInfo.chatTitle : " + chat.mInfo.chatTitle);
+                Log.i("BBB", "position : " + position);
+                chat.mInfo.draftMessage = draftMessage;
+
+                //notifyAdapterItemChanged(position);
+                notifyItemChanged(position);
+            }
+        }
     }
 
     private int getItemPosition(long chatId) {

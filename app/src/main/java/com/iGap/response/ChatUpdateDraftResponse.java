@@ -1,6 +1,7 @@
 package com.iGap.response;
 
 import com.iGap.proto.ProtoChatUpdateDraft;
+import com.iGap.realm.RealmRoom;
 
 public class ChatUpdateDraftResponse extends MessageHandler {
 
@@ -22,10 +23,9 @@ public class ChatUpdateDraftResponse extends MessageHandler {
        /*
         * if another account get UpdateDraftResponse set draft to RealmRoom
         */
-
         if (updateDraft.getResponse().getId().isEmpty()) {
-            updateDraft.getRoomId();
-            updateDraft.getDraft();
+            RealmRoom.convertAndSetDraft(updateDraft.getRoomId(),
+                updateDraft.getDraft().getMessage(), updateDraft.getDraft().getReplyTo());
         }
     }
 

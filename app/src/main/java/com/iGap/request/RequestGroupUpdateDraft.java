@@ -17,7 +17,7 @@ public class RequestGroupUpdateDraft {
         builder.setRoomId(roomId);
         builder.setDraft(roomDraft);
 
-        RequestWrapper requestWrapper = new RequestWrapper(208, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(315, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

@@ -21,7 +21,6 @@ public class ChatGetRoomResponse extends MessageHandler {
 
     @Override public void handler() {
         super.handler();
-        Log.i("XXX", "ChatGetRoomResponse handler");
         ProtoChatGetRoom.ChatGetRoomResponse.Builder chatGetRoomResponse =
             (ProtoChatGetRoom.ChatGetRoomResponse.Builder) message;
         G.onChatGetRoom.onChatGetRoom(chatGetRoomResponse.getRoomId());

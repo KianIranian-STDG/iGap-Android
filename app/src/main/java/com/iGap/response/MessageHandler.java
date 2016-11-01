@@ -20,11 +20,11 @@ public abstract class MessageHandler {
     }
 
     public void timeOut() {
-        Log.i("MSGT", "MessageHandler timeOut : " + message);
+        Log.i("MSGT", "MessageHandler timeOut : " + actionId + " || " + message);
         error();
     }
 
     public void error() {
-        Log.i("MSGE", "MessageHandler error : " + message);
+        Log.i("MSGE", "MessageHandler error : " + actionId + " || " + message);
     }
 }

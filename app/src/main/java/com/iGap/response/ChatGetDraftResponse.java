@@ -1,6 +1,8 @@
 package com.iGap.response;
 
+import android.util.Log;
 import com.iGap.proto.ProtoChatGetDraft;
+import com.iGap.realm.RealmRoom;
 
 public class ChatGetDraftResponse extends MessageHandler {
 
@@ -17,18 +19,23 @@ public class ChatGetDraftResponse extends MessageHandler {
 
     @Override public void handler() {
 
-        ProtoChatGetDraft.ChatGetDraftResponse.Builder updateDraft =
+        ProtoChatGetDraft.ChatGetDraftResponse.Builder chatGetDraft =
             (ProtoChatGetDraft.ChatGetDraftResponse.Builder) message;
 
-        updateDraft.getDraft();
+        Log.i("IIII", "chatGetDraft.getDraft() : " + chatGetDraft.getDraft());
+
+        RealmRoom.convertAndSetDraft(Long.parseLong(identity), chatGetDraft.getDraft().getMessage(),
+            chatGetDraft.getDraft().getReplyTo());
     }
 
     @Override public void timeOut() {
         super.timeOut();
+        Log.i("IIII", "ChatGetDraftResponse timeOut : " + message);
     }
 
     @Override public void error() {
         super.error();
+        Log.i("IIII", "ChatGetDraftResponse error : " + message);
     }
 }
 

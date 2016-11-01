@@ -1,6 +1,8 @@
 package com.iGap.response;
 
+import android.util.Log;
 import com.iGap.proto.ProtoGroupGetDraft;
+import com.iGap.realm.RealmRoom;
 
 public class GroupGetDraftResponse extends MessageHandler {
 
@@ -17,10 +19,13 @@ public class GroupGetDraftResponse extends MessageHandler {
 
     @Override public void handler() {
 
-        ProtoGroupGetDraft.GroupGetDraftResponse.Builder updateDraft =
+        ProtoGroupGetDraft.GroupGetDraftResponse.Builder groupGetDraft =
             (ProtoGroupGetDraft.GroupGetDraftResponse.Builder) message;
 
-        updateDraft.getDraft();
+        Log.i("III", "groupGetDraft.getDraft() : " + groupGetDraft.getDraft());
+
+        RealmRoom.convertAndSetDraft(Long.parseLong(identity),
+            groupGetDraft.getDraft().getMessage(), groupGetDraft.getDraft().getReplyTo());
     }
 
     @Override public void timeOut() {

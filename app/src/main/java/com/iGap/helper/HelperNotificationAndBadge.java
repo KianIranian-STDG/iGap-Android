@@ -377,7 +377,7 @@ public class HelperNotificationAndBadge {
         notificationManager.notify(notificationId, notification);
     }
 
-    public void checkAlert(boolean updateNotification, int type, long roomId) {
+    public void checkAlert(boolean updateNotification, ProtoGlobal.Room.Type type, long roomId) {
 
         idRoom = (int) roomId;
 
@@ -390,7 +390,7 @@ public class HelperNotificationAndBadge {
                 realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
             switch (type) {
-                case 0:
+                case CHAT:
                     RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
                     if (realmChatRoom.getRealmNotificationSetting() != null
                         && realmChatRoom.getRealmNotificationSetting().getNotification() != 0) {
@@ -409,20 +409,20 @@ public class HelperNotificationAndBadge {
                     }
 
                     break;
-                case 1:
+                case GROUP:
                     RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
                     if (realmGroupRoom.getRealmNotificationSetting() != null
                         && realmGroupRoom.getRealmNotificationSetting().getNotification() != 0) {
                         updateNotificationAndBadge(updateNotification, type);
                     }
                     break;
-                case 2:
+                case CHANNEL:
                     break;
             }
         }
     }
 
-    public void updateNotificationAndBadge(boolean updateNotification, int type) {
+    public void updateNotificationAndBadge(boolean updateNotification, ProtoGlobal.Room.Type type) {
 
         sharedPreferences =
             context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
@@ -431,7 +431,7 @@ public class HelperNotificationAndBadge {
         RealmRoom realmRoom =
             realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, idRoom).findFirst();
         switch (type) {
-            case 0: // chat
+            case CHAT:
 
                 if (realmRoom.getChatRoom() != null
                     && realmRoom.getChatRoom().getRealmNotificationSetting() != null
@@ -469,7 +469,7 @@ public class HelperNotificationAndBadge {
 
                 break;
 
-            case 1: // group
+            case GROUP:
                 led = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, -8257792);
                 vibrator =
                     sharedPreferences.getString(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, "Default");
@@ -494,7 +494,7 @@ public class HelperNotificationAndBadge {
                 RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
 
                 break;
-            case 2: // channel
+            case CHANNEL:
 
                 break;
         }

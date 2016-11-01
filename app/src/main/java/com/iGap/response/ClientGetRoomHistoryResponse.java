@@ -37,7 +37,6 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
 
         final ProtoClientGetRoomHistory.ClientGetRoomHistoryResponse.Builder builder =
             (ProtoClientGetRoomHistory.ClientGetRoomHistoryResponse.Builder) message;
-        builder.getMessageList();
 
         realm.executeTransaction(new Realm.Transaction() {
             @Override public void execute(Realm realm) {
@@ -83,7 +82,8 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
                         != userId) { // show notification if this message isn't for another account
                         if (!G.isAppInFg) {
 
-                            G.helperNotificationAndBadge.checkAlert(true, 0, 0);
+                            G.helperNotificationAndBadge.checkAlert(true,
+                                ProtoGlobal.Room.Type.CHAT, Long.parseLong(identity));
                         }
                     }
 

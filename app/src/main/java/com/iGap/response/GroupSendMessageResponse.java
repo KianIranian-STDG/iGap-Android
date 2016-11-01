@@ -120,7 +120,8 @@ public class GroupSendMessageResponse extends MessageHandler {
                         realmRoomMessage.setReplyTo(fillRoomMessage(reply, roomMessage));
                     }
 
-                    G.helperNotificationAndBadge.checkAlert(true, 1, roomMessage.getMessageId());
+                    G.helperNotificationAndBadge.checkAlert(true, ProtoGlobal.Room.Type.GROUP,
+                        roomMessage.getMessageId());
                 } else {
                     // i'm the sender
                     // update message fields into database

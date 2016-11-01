@@ -1,6 +1,8 @@
 package com.iGap.response;
 
+import android.util.Log;
 import com.iGap.proto.ProtoGroupUpdateDraft;
+import com.iGap.realm.RealmRoom;
 
 public class GroupUpdateDraftResponse extends MessageHandler {
 
@@ -24,18 +26,21 @@ public class GroupUpdateDraftResponse extends MessageHandler {
         * if another account get UpdateDraftResponse set draft to RealmRoom
         */
 
+        Log.i("III", "updateDraft.getDraft() : " + updateDraft.getDraft());
         if (updateDraft.getResponse().getId().isEmpty()) {
-            updateDraft.getRoomId();
-            updateDraft.getDraft();
+            RealmRoom.convertAndSetDraft(updateDraft.getRoomId(),
+                updateDraft.getDraft().getMessage(), updateDraft.getDraft().getReplyTo());
         }
     }
 
     @Override public void timeOut() {
         super.timeOut();
+        Log.i("III", "GroupUpdateDraftResponse timeOut");
     }
 
     @Override public void error() {
         super.error();
+        Log.i("III", "GroupUpdateDraftResponse error : " + message);
     }
 }
 

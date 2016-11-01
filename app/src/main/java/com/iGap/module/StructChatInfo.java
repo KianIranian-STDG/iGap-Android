@@ -37,6 +37,7 @@ public class StructChatInfo {
     public String fileName = "";
     public String fileSize = "";
     public String filePath = "";
+    public String draftMessage = "";
     public StructDownloadAttachment downloadAttachment;
 
     /**

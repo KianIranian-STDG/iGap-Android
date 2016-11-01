@@ -1,6 +1,7 @@
 package com.iGap.realm;
 
 import android.text.format.DateUtils;
+import com.iGap.G;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.enums.RoomType;
 import io.realm.Realm;
@@ -84,6 +85,15 @@ public class RealmRoom extends RealmObject {
         realmRoom.setLastMessage(room.getLastMessage().getMessage());
         realmRoom.setLastMessageId(room.getLastMessage().getMessageId());
         realmRoom.setLastMessageStatus(room.getLastMessage().getStatus().toString());
+
+        RealmRoomDraft realmRoomDraft = realmRoom.getDraft();
+        if (realmRoomDraft == null) {
+            realmRoomDraft = realm.createObject(RealmRoomDraft.class);
+        }
+        realmRoomDraft.setMessage(room.getDraft().getMessage());
+        realmRoomDraft.setReplyToMessageId(room.getDraft().getReplyTo());
+
+        realmRoom.setDraft(realmRoomDraft);
 
         return realmRoom;
     }
@@ -241,5 +251,29 @@ public class RealmRoom extends RealmObject {
 
     public void setAvatar(RealmAvatar avatar) {
         this.avatar = avatar;
+    }
+
+    public static void convertAndSetDraft(final long roomId, final String message,
+        final long replyToMessageId) {
+        Realm realm = Realm.getDefaultInstance();
+
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override public void execute(Realm realm) {
+                RealmRoom realmRoom =
+                    realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+
+                RealmRoomDraft realmRoomDraft = realm.createObject(RealmRoomDraft.class);
+                realmRoomDraft.setMessage(message);
+                realmRoomDraft.setReplyToMessageId(replyToMessageId);
+
+                realmRoom.setDraft(realmRoomDraft);
+
+                if (G.onDraftMessage != null) {
+                    G.onDraftMessage.onDraftMessage(roomId, message);
+                }
+            }
+        });
+
+        realm.close();
     }
 }

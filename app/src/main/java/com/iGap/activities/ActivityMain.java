@@ -86,7 +86,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityMain extends ActivityEnhanced
     implements OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse,
-    OnChatUpdateStatusResponse, OnFileDownloadResponse, OnUserInfoResponse {
+    OnChatUpdateStatusResponse, OnFileDownloadResponse, OnUserInfoResponse, OnDraftMessage {
 
     public static LeftDrawerLayout mLeftDrawerLayout;
     public static boolean isMenuButtonAddShown = false;
@@ -119,6 +119,7 @@ public class ActivityMain extends ActivityEnhanced
 
         G.onFileDownloadResponse = this;
         G.onUserInfoResponse = this;
+        G.onDraftMessage = this;
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
         G.chatSendMessageUtil.setOnChatSendMessageResponse(this);
         G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
@@ -188,7 +189,7 @@ public class ActivityMain extends ActivityEnhanced
         initRecycleView();
         initFloatingButtonCreateNew();
         initDrawerMenu();
-        onDraftMessage();
+        //onDraftMessage();
 
         HelperPermision.getContactPermision(ActivityMain.this, new OnGetPermision() {
             @Override public void Allow() {
@@ -699,7 +700,8 @@ public class ActivityMain extends ActivityEnhanced
         }
     }
 
-    // FIXME: 9/6/2016 [Alireza Eskandarpour Shoferi] not to be on handler, but for fixing securing for testing purposes
+    // FIXME: 9/6/2016 [Alireza Eskandarpour Shoferi] not to be on handler, but for fixing
+    // securing for testing purposes
     // TODO ghable pak kardan, request ro bear jaye jaee ke invoke kardi
     private void testIsSecure() {
         new Handler().postDelayed(new Runnable() {
@@ -725,8 +727,6 @@ public class ActivityMain extends ActivityEnhanced
                         Toast.makeText(ActivityMain.this,
                             "rooms list fetched: " + Integer.toString(roomList.size()),
                             Toast.LENGTH_LONG).show();
-                        Log.i(ActivityMain.class.getSimpleName(),
-                            "rooms list fetched: " + Integer.toString(roomList.size()));
 
                         for (final ProtoGlobal.Room room : roomList) {
                             putChatToDatabase(room);
@@ -786,6 +786,9 @@ public class ActivityMain extends ActivityEnhanced
             info.initials = realmRoom.getInitials();
             info.ownerId = realmRoom.getId();
             info.readOnly = realmRoom.getReadOnly();
+            if (realmRoom.getDraft() != null) {
+                info.draftMessage = realmRoom.getDraft().getMessage();
+            }
             switch (realmRoom.getType()) {
                 case CHAT:
                     info.chatType = RoomType.CHAT;
@@ -899,10 +902,15 @@ public class ActivityMain extends ActivityEnhanced
         chatInfo.chatTitle = room.getTitle();
         chatInfo.initials = room.getInitials();
         chatInfo.lastMessageTime =
-            room.getLastMessageTime(); //TODO [Saeed Mozaffari] [2016-10-03 5:38 PM] -  see this code later for avoid from multiple calling lastMessageTime and lastMessage and lastMessageStatus
+            room.getLastMessageTime(); //TODO [Saeed Mozaffari] [2016-10-03 5:38 PM] -  see this
+        // code later for avoid from multiple calling lastMessageTime and lastMessage and
+        // lastMessageStatus
         chatInfo.lastMessageId = room.getLastMessageId();
         chatInfo.lastMessageStatus = room.getLastMessageStatus();
         chatInfo.readOnly = room.getReadOnly();
+        if (room.getDraft() != null) {
+            chatInfo.draftMessage = room.getDraft().getMessage();
+        }
         RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class)
             .equalTo(RealmRoomMessageFields.MESSAGE_ID, room.getLastMessageId())
             .findFirst();
@@ -1089,7 +1097,8 @@ public class ActivityMain extends ActivityEnhanced
     @Override public void onChatClearMessage(final long roomId, long clearId,
         final ProtoResponse.Response response) {
         if (response.getId().isEmpty()) {// another account cleared message
-            // if have message show last message otherwise clear item from message and time and last seen state
+            // if have message show last message otherwise clear item from message and time and
+            // last seen state
             Realm realm = Realm.getDefaultInstance();
 
             boolean clearMessage = false;
@@ -1112,9 +1121,10 @@ public class ActivityMain extends ActivityEnhanced
                     });
                 }
             }
-            List<RealmRoomMessage> allItems =
-                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
-                .findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+            List<RealmRoomMessage> allItems = realm.where(RealmRoomMessage.class)
+                .equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
+                .findAll()
+                .sort(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
             long latestMessageId = 0;
             for (RealmRoomMessage item : allItems) {
                 if (item != null) {
@@ -1165,7 +1175,8 @@ public class ActivityMain extends ActivityEnhanced
         // I'm not in the room, so I have to add 1 to the unread messages count
         Realm realm = Realm.getDefaultInstance();
         if (roomMessage.getUserId() != realm.where(RealmUserInfo.class).findFirst().getUserId()) {
-            //if another account not send this message , and really i'm recipient not sender update unread count
+            //if another account not send this message , and really i'm recipient not sender
+            // update unread count
             realm.executeTransaction(new Realm.Transaction() {
                 @Override public void execute(Realm realm) {
                     final RealmRoom room = realm.where(RealmRoom.class)
@@ -1217,7 +1228,9 @@ public class ActivityMain extends ActivityEnhanced
             @Override
             public void run() {
                 Realm realm = Realm.getDefaultInstance();
-                mAdapter.downloadingAvatar(user.getId(), StructMessageAttachment.convert(realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, user.getId()).findFirst().getLastAvatar()));
+                mAdapter.downloadingAvatar(user.getId(), StructMessageAttachment.convert(realm
+                .where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, user
+                .getId()).findFirst().getLastAvatar()));
                 realm.close();
             }
         });*/
@@ -1231,12 +1244,17 @@ public class ActivityMain extends ActivityEnhanced
 
     }
 
-    private void onDraftMessage() {
-        G.onDraftMessage = new OnDraftMessage() {
-            @Override public void onDraftMessage(long roomId) {
-                mAdapter.notifyRoomItem(roomId);
-                mAdapter.goToTop(roomId);
-            }
-        };
+    //private void onDraftMessage() {
+    //    //call this from getDraftResponse for chat and group
+    //    G.onDraftMessage = new OnDraftMessage() {
+    //        @Override public void onDraftMessage(long roomId) {
+    //
+    //        }
+    //    };
+    //}
+
+    @Override public void onDraftMessage(long roomId, String draftMessage) {
+        mAdapter.norifyDraft(roomId, draftMessage);
+        mAdapter.goToTop(roomId);
     }
 }

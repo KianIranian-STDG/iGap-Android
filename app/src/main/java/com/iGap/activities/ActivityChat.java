@@ -166,6 +166,7 @@ import com.iGap.request.RequestChatDeleteMessage;
 import com.iGap.request.RequestChatEditMessage;
 import com.iGap.request.RequestChatUpdateDraft;
 import com.iGap.request.RequestFileDownload;
+import com.iGap.request.RequestGroupUpdateDraft;
 import com.mikepenz.fastadapter.IItemAdapter;
 import com.nightonke.boommenu.BoomMenuButton;
 import com.nightonke.boommenu.Types.BoomType;
@@ -189,6 +190,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
+import static com.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
+import static com.iGap.proto.ProtoGlobal.Room.Type.CHAT;
+import static com.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
 public class ActivityChat extends ActivityEnhanced
     implements IEmojiViewCreate, IRecentsLongClick, IMessageItem, OnChatClearMessageResponse,
@@ -282,6 +287,8 @@ public class ActivityChat extends ActivityEnhanced
 
     private MaterialDesignTextView iconMute;
 
+    private boolean hasDraft = false;
+
     @Override protected void onStart() {
         super.onStart();
 
@@ -335,7 +342,17 @@ public class ActivityChat extends ActivityEnhanced
                                     ProtoGlobal.RoomMessageStatus.SEEN);
                             }
 
-                            G.helperNotificationAndBadge.checkAlert(false, 0, mRoomId);
+                            if (chatType != null) {
+
+                                if (chatType == CHAT) {
+                                    G.helperNotificationAndBadge.checkAlert(false, CHAT, mRoomId);
+                                } else if (chatType == GROUP) {
+                                    G.helperNotificationAndBadge.checkAlert(false, GROUP, mRoomId);
+                                } else if (chatType == CHANNEL) {
+                                    G.helperNotificationAndBadge.checkAlert(false, CHANNEL,
+                                        mRoomId);
+                                }
+                            }
                         }
                     });
 
@@ -445,7 +462,7 @@ public class ActivityChat extends ActivityEnhanced
 
                 if (realmRoom.getType() == RoomType.CHAT) {
 
-                    chatType = ProtoGlobal.Room.Type.CHAT;
+                    chatType = CHAT;
                     RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
                     chatPeerId = realmChatRoom.getPeerId();
                     RealmContacts realmContacts = realm.where(RealmContacts.class)
@@ -473,20 +490,20 @@ public class ActivityChat extends ActivityEnhanced
                         lastSeen = "last seen";
                     }
                 } else if (realmRoom.getType() == RoomType.GROUP) {
-                    chatType = ProtoGlobal.Room.Type.GROUP;
+                    chatType = GROUP;
                     RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
                     groupRole = realmGroupRoom.getRole();
                     groupParticipantsCountLabel = realmGroupRoom.getParticipantsCountLabel();
                 } else if (realmRoom.getType() == RoomType.CHANNEL) {
 
-                    chatType = ProtoGlobal.Room.Type.CHANNEL;
+                    chatType = CHANNEL;
                     RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
                     channelRole = realmChannelRoom.getRole();
                     channelParticipantsCountLabel = realmChannelRoom.getParticipantsCountLabel();
                 }
             } else {
                 chatPeerId = extras.getLong("peerId");
-                chatType = ProtoGlobal.Room.Type.CHAT;
+                chatType = CHAT;
                 RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class)
                     .equalTo(RealmRegisteredInfoFields.ID, chatPeerId)
                     .findFirst();
@@ -502,7 +519,7 @@ public class ActivityChat extends ActivityEnhanced
         initComponent();
         initAppbarSelected();
         initCallbacks();
-        if (chatType == ProtoGlobal.Room.Type.CHANNEL && channelRole == ChannelChatRole.MEMBER) {
+        if (chatType == CHANNEL && channelRole == ChannelChatRole.MEMBER) {
             initLayotChannelFooter();
         }
 
@@ -788,7 +805,7 @@ public class ActivityChat extends ActivityEnhanced
             if (!messageInfo.isTimeMessage()) {
                 switch (messageInfo.messageType) {
                     case TEXT:
-                        if (chatType != ProtoGlobal.Room.Type.CHANNEL) {
+                        if (chatType != CHANNEL) {
                             if (!addTop) {
                                 mAdapter.add(new TextItem(chatType, this).setMessage(messageInfo)
                                     .withIdentifier(identifier));
@@ -809,7 +826,7 @@ public class ActivityChat extends ActivityEnhanced
                         }
                         break;
                     case IMAGE:
-                        if (chatType != ProtoGlobal.Room.Type.CHANNEL) {
+                        if (chatType != CHANNEL) {
                             if (!addTop) {
                                 mAdapter.add(new ImageItem(chatType, this).setMessage(messageInfo)
                                     .withIdentifier(identifier));
@@ -831,7 +848,7 @@ public class ActivityChat extends ActivityEnhanced
                         }
                         break;
                     case IMAGE_TEXT:
-                        if (chatType != ProtoGlobal.Room.Type.CHANNEL) {
+                        if (chatType != CHANNEL) {
                             if (!addTop) {
                                 mAdapter.add(
                                     new ImageWithTextItem(chatType, this).setMessage(messageInfo)
@@ -854,7 +871,7 @@ public class ActivityChat extends ActivityEnhanced
                         }
                         break;
                     case VIDEO:
-                        if (chatType != ProtoGlobal.Room.Type.CHANNEL) {
+                        if (chatType != CHANNEL) {
                             if (!addTop) {
                                 mAdapter.add(new VideoItem(chatType, this).setMessage(messageInfo)
                                     .withIdentifier(identifier));
@@ -876,7 +893,7 @@ public class ActivityChat extends ActivityEnhanced
                         }
                         break;
                     case VIDEO_TEXT:
-                        if (chatType != ProtoGlobal.Room.Type.CHANNEL) {
+                        if (chatType != CHANNEL) {
                             if (!addTop) {
                                 mAdapter.add(
                                     new VideoWithTextItem(chatType, this).setMessage(messageInfo)
@@ -900,7 +917,7 @@ public class ActivityChat extends ActivityEnhanced
                         break;
                     case LOCATION:
                         // TODO: 9/15/2016 [Alireza Eskandarpour Shoferi] fill
-                        if (chatType != ProtoGlobal.Room.Type.CHANNEL) {
+                        if (chatType != CHANNEL) {
                             if (!addTop) {
                                 mAdapter.add(
                                     new LocationItem(chatType, this).setMessage(messageInfo)
@@ -917,7 +934,7 @@ public class ActivityChat extends ActivityEnhanced
                         break;
                     case FILE:
                     case FILE_TEXT:
-                        if (chatType != ProtoGlobal.Room.Type.CHANNEL) {
+                        if (chatType != CHANNEL) {
                             if (!addTop) {
                                 mAdapter.add(new FileItem(chatType, this).setMessage(messageInfo)
                                     .withIdentifier(identifier));
@@ -925,7 +942,7 @@ public class ActivityChat extends ActivityEnhanced
                                 mAdapter.add(0, new FileItem(chatType, this).setMessage(messageInfo)
                                     .withIdentifier(identifier));
                             }
-                        } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
+                        } else if (chatType == CHANNEL) {
                             if (!addTop) {
                                 mAdapter.add(
                                     new ChannelFileItem(chatType, this).setMessage(messageInfo)
@@ -938,7 +955,7 @@ public class ActivityChat extends ActivityEnhanced
                         }
                         break;
                     case VOICE:
-                        if (chatType != ProtoGlobal.Room.Type.CHANNEL) {
+                        if (chatType != CHANNEL) {
                             if (!addTop) {
                                 mAdapter.add(new VoiceItem(chatType, this).setMessage(messageInfo)
                                     .withIdentifier(identifier));
@@ -947,7 +964,7 @@ public class ActivityChat extends ActivityEnhanced
                                     new VoiceItem(chatType, this).setMessage(messageInfo)
                                         .withIdentifier(identifier));
                             }
-                        } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
+                        } else if (chatType == CHANNEL) {
                             if (!addTop) {
                                 mAdapter.add(
                                     new ChannelVoiceItem(chatType, this).setMessage(messageInfo)
@@ -961,7 +978,7 @@ public class ActivityChat extends ActivityEnhanced
                         break;
                     case AUDIO:
                     case AUDIO_TEXT:
-                        if (chatType != ProtoGlobal.Room.Type.CHANNEL) {
+                        if (chatType != CHANNEL) {
                             if (!addTop) {
                                 mAdapter.add(new AudioItem(chatType, this).setMessage(messageInfo)
                                     .withIdentifier(identifier));
@@ -970,7 +987,7 @@ public class ActivityChat extends ActivityEnhanced
                                     new AudioItem(chatType, this).setMessage(messageInfo)
                                         .withIdentifier(identifier));
                             }
-                        } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
+                        } else if (chatType == CHANNEL) {
                             if (!addTop) {
                                 mAdapter.add(
                                     new ChannelAudioItem(chatType, this).setMessage(messageInfo)
@@ -983,7 +1000,7 @@ public class ActivityChat extends ActivityEnhanced
                         }
                         break;
                     case CONTACT:
-                        if (chatType != ProtoGlobal.Room.Type.CHANNEL) {
+                        if (chatType != CHANNEL) {
                             if (!addTop) {
                                 mAdapter.add(new ContactItem(chatType, this).setMessage(messageInfo)
                                     .withIdentifier(identifier));
@@ -992,7 +1009,7 @@ public class ActivityChat extends ActivityEnhanced
                                     new ContactItem(chatType, this).setMessage(messageInfo)
                                         .withIdentifier(identifier));
                             }
-                        } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
+                        } else if (chatType == CHANNEL) {
                             if (!addTop) {
                                 mAdapter.add(
                                     new ChannelContactItem(chatType, this).setMessage(messageInfo)
@@ -1005,7 +1022,7 @@ public class ActivityChat extends ActivityEnhanced
                         }
                         break;
                     case GIF:
-                        if (chatType != ProtoGlobal.Room.Type.CHANNEL) {
+                        if (chatType != CHANNEL) {
                             if (!addTop) {
                                 mAdapter.add(new GifItem(chatType, this).setMessage(messageInfo)
                                     .withIdentifier(identifier));
@@ -1013,7 +1030,7 @@ public class ActivityChat extends ActivityEnhanced
                                 mAdapter.add(0, new GifItem(chatType, this).setMessage(messageInfo)
                                     .withIdentifier(identifier));
                             }
-                        } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
+                        } else if (chatType == CHANNEL) {
                             if (!addTop) {
                                 mAdapter.add(
                                     new ChannelGifItem(chatType, this).setMessage(messageInfo)
@@ -1108,17 +1125,17 @@ public class ActivityChat extends ActivityEnhanced
 
         txtLastSeen = (TextView) findViewById(R.id.chl_txt_last_seen);
 
-        if (chatType == ProtoGlobal.Room.Type.CHAT) {
+        if (chatType == CHAT) {
 
             if (lastSeen != null) {
                 txtLastSeen.setText(lastSeen);
             }
-        } else if (chatType == ProtoGlobal.Room.Type.GROUP) {
+        } else if (chatType == GROUP) {
 
             if (groupParticipantsCountLabel != null) {
                 txtLastSeen.setText(groupParticipantsCountLabel + " member");
             }
-        } else if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
+        } else if (chatType == CHANNEL) {
 
             if (channelParticipantsCountLabel != null) {
                 txtLastSeen.setText(channelParticipantsCountLabel + " member");
@@ -1391,7 +1408,7 @@ public class ActivityChat extends ActivityEnhanced
 
         imvUserPicture.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
-                if (chatType == ProtoGlobal.Room.Type.CHAT
+                if (chatType == CHAT
                     && chatPeerId
                     != 134) {//TODO [Saeed Mozaffari] [2016-09-07 11:46 AM] -  in if eshtebah ast
                     // check for iGap message ==> chatPeerId == 134(alan baraye check kardane) ,
@@ -1399,9 +1416,9 @@ public class ActivityChat extends ActivityEnhanced
                     Intent intent = new Intent(G.context, ActivityContactsProfile.class);
                     intent.putExtra("peerId", chatPeerId);
                     intent.putExtra("RoomId", mRoomId);
-                    intent.putExtra("enterFrom", ProtoGlobal.Room.Type.CHAT.toString());
+                    intent.putExtra("enterFrom", CHAT.toString());
                     startActivity(intent);
-                } else if (chatType == ProtoGlobal.Room.Type.GROUP) {
+                } else if (chatType == GROUP) {
                     Intent intent = new Intent(G.context, ActivityGroupProfile.class);
                     intent.putExtra("RoomId", mRoomId);
                     startActivity(intent);
@@ -2589,6 +2606,8 @@ public class ActivityChat extends ActivityEnhanced
         realm.close();
 
         scrollToEnd();
+
+        clearDraftRequest();
     }
 
     private boolean isMessageWrote() {
@@ -2923,7 +2942,7 @@ public class ActivityChat extends ActivityEnhanced
         Intent intent = new Intent(G.context, ActivityContactsProfile.class);
         intent.putExtra("peerId", Long.parseLong(messageInfo.senderID));
         intent.putExtra("RoomId", mRoomId);
-        intent.putExtra("enterFrom", ProtoGlobal.Room.Type.GROUP.toString());
+        intent.putExtra("enterFrom", GROUP.toString());
         startActivity(intent);
     }
 
@@ -3130,11 +3149,11 @@ public class ActivityChat extends ActivityEnhanced
                         }
 
                         // make update status to message sender that i've read his message
-                        if (roomType == ProtoGlobal.Room.Type.CHAT) {
+                        if (roomType == CHAT) {
                             G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId,
                                 roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
-                        } else if (roomType == ProtoGlobal.Room.Type.GROUP
-                            && (roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT
+                        } else if (roomType == GROUP && (roomMessage.getStatus()
+                            == ProtoGlobal.RoomMessageStatus.SENT
                             || roomMessage.getStatus()
                             == ProtoGlobal.RoomMessageStatus.DELIVERED)) {
                             G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId,
@@ -3153,10 +3172,10 @@ public class ActivityChat extends ActivityEnhanced
                 });
             } else {
                 // user has received the message, so I make a new delivered update status request
-                if (roomType == ProtoGlobal.Room.Type.CHAT) {
+                if (roomType == CHAT) {
                     G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId,
                         roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
-                } else if (roomType == ProtoGlobal.Room.Type.GROUP
+                } else if (roomType == GROUP
                     && roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT) {
                     G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId,
                         roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
@@ -3219,11 +3238,18 @@ public class ActivityChat extends ActivityEnhanced
         runOnUiThread(new Runnable() {
             @Override public void run() {
                 Realm realm = Realm.getDefaultInstance();
-                mAdapter.downloadingAvatar(userId, progress, offset,
-                    StructMessageAttachment.convert(realm.where(RealmRegisteredInfo.class)
-                        .equalTo("id", userId)
-                        .findFirst()
-                        .getLastAvatar()));
+
+                RealmRegisteredInfo realmRegisteredInfo =
+                    realm.where(RealmRegisteredInfo.class).equalTo("id", userId).findFirst();
+
+                if (realmRegisteredInfo != null) {
+                    mAdapter.downloadingAvatar(userId, progress, offset,
+                        StructMessageAttachment.convert(
+                            realmRegisteredInfo.getLastAvatar())); //TODO [Saeed Mozaffari]
+                    // [2016-11-01 10:10 AM] -we have NullPointerException for
+                    // realmRegisteredInfo check this
+                }
+
                 realm.close();
             }
         });
@@ -3774,23 +3800,30 @@ public class ActivityChat extends ActivityEnhanced
                     realmDraftFile.setRequestCode(latestRequestCode);
 
                     if (isMessageWrote()) {
+
+                        hasDraft = true;
+
                         RealmRoomDraft draft = realm.createObject(RealmRoomDraft.class);
                         draft.setMessage(edtChat.getText().toString());
                         draft.setReplyToMessageId(0);
 
                         realmRoom.setDraft(draft);
 
-                        new RequestChatUpdateDraft().chatUpdateDraft(mRoomId,
-                            edtChat.getText().toString(), 0);
+                        if (chatType == CHAT) {
+                            Log.i("III", "RequestChatUpdateDraft");
+                            new RequestChatUpdateDraft().chatUpdateDraft(mRoomId,
+                                edtChat.getText().toString(), 0);
+                        } else if (chatType == GROUP) {
+                            Log.i("III", "RequestGroupUpdateDraft");
+                            new RequestGroupUpdateDraft().groupUpdateDraft(mRoomId,
+                                edtChat.getText().toString(), 0);
+                        }
 
-                        G.onDraftMessage.onDraftMessage(mRoomId);
+                        G.onDraftMessage.onDraftMessage(mRoomId, edtChat.getText().toString());
                     } else {
 
-                        //send empty message and zero replyId for clear another account draft
-                        new RequestChatUpdateDraft().chatUpdateDraft(mRoomId, "", 0);
-
-                        realmRoom.setDraft(null);
-                        G.onDraftMessage.onDraftMessage(mRoomId);
+                        clearDraftRequest();
+                        G.onDraftMessage.onDraftMessage(mRoomId, "");
                     }
 
                     realmRoom.setDraftFile(realmDraftFile);
@@ -3800,6 +3833,9 @@ public class ActivityChat extends ActivityEnhanced
         } else {
             final String message = edtChat.getText().toString();
             if (!message.isEmpty()) {
+
+                hasDraft = true;
+
                 Realm realm = Realm.getDefaultInstance();
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override public void execute(Realm realm) {
@@ -3813,13 +3849,20 @@ public class ActivityChat extends ActivityEnhanced
                             draft.setReplyToMessageId(0);
 
                             realmRoom.setDraft(draft);
-                            G.onDraftMessage.onDraftMessage(mRoomId);
+
+                            if (chatType == CHAT) {
+                                new RequestChatUpdateDraft().chatUpdateDraft(mRoomId, message, 0);
+                            } else if (chatType == GROUP) {
+                                new RequestGroupUpdateDraft().groupUpdateDraft(mRoomId, message, 0);
+                            }
+
+                            G.onDraftMessage.onDraftMessage(mRoomId, message);
                         }
                     }
                 });
                 realm.close();
             } else {
-                clearDraft();
+                clearDraftRequest();
             }
         }
     }
@@ -3855,6 +3898,7 @@ public class ActivityChat extends ActivityEnhanced
                     RealmRoomDraft draft = realmRoom.getDraft();
 
                     if (draft != null) {
+                        hasDraft = true;
                         edtChat.setText(draft.getMessage());
 
                         if (draft.getReplyToMessageId() != 0) {
@@ -3866,6 +3910,7 @@ public class ActivityChat extends ActivityEnhanced
             } else {
                 RealmRoomDraft draft = realmRoom.getDraft();
                 if (draft != null) {
+                    hasDraft = true;
                     edtChat.setText(draft.getMessage());
 
                     if (draft.getReplyToMessageId() != 0) {
@@ -3876,10 +3921,11 @@ public class ActivityChat extends ActivityEnhanced
         }
         realm.close();
 
-        clearDraft();
+        clearLocalDraft();
     }
 
-    private void clearDraft() {
+    private void clearLocalDraft() {
+
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override public void execute(Realm realm) {
@@ -3892,6 +3938,19 @@ public class ActivityChat extends ActivityEnhanced
             }
         });
         realm.close();
+    }
+
+    private void clearDraftRequest() {
+        if (hasDraft) {
+            hasDraft = false;
+            if (chatType == CHAT) {
+                new RequestChatUpdateDraft().chatUpdateDraft(mRoomId, "", 0);
+            } else if (chatType == GROUP) {
+                new RequestGroupUpdateDraft().groupUpdateDraft(mRoomId, "", 0);
+            }
+
+            clearLocalDraft();
+        }
     }
 
     @Override protected void onStop() {

@@ -2,6 +2,7 @@ package com.iGap.adapter.items;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import com.iGap.G;
@@ -20,9 +21,6 @@ import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
-import com.iGap.realm.RealmRoom;
-import com.iGap.realm.RealmRoomDraft;
-import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.enums.RoomType;
@@ -160,22 +158,27 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
     @Override public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        RealmRoomDraft draft = null;
-        Realm realm = Realm.getDefaultInstance();
-        RealmRoom realmRoom =
-            realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mInfo.chatId).findFirst();
-        if (realmRoom != null) {
-            draft = realmRoom.getDraft();
-        }
-        realm.close();
+        //RealmRoomDraft draft = null;
+        //Realm realm = Realm.getDefaultInstance();
+        //RealmRoom realmRoom =
+        //    realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mInfo.chatId).findFirst();
+        //if (realmRoom != null) {
+        //    draft = realmRoom.getDraft();
+        //}
+        //realm.close();
 
-        if (draft != null) {
-            holder.lastMessage.setVisibility(View.VISIBLE);
+        if (!mInfo.draftMessage.isEmpty()) {
             holder.messageStatus.setVisibility(View.GONE);
+            holder.lastMessage.setVisibility(View.VISIBLE);
             holder.lastMessageSender.setVisibility(View.VISIBLE);
             holder.lastMessageSender.setText("Draft : ");
             holder.lastMessageSender.setTextColor(Color.parseColor("#ff4644"));
-            holder.lastMessage.setText(draft.getMessage());
+            holder.lastMessage.setText(mInfo.draftMessage);
+            Log.i("BBB", "mInfo.getTitle() : " + mInfo.chatTitle);
+            Log.i("BBB", "draft.getMessage() : " + mInfo.draftMessage);
+            Log.i("BBB", "*****");
+            Log.i("BBB", "**********");
+            Log.i("BBB", "*****");
         } else {
             String lastMessage =
                 AppUtils.rightLastMessage(holder.itemView.getResources(), mInfo.chatType,

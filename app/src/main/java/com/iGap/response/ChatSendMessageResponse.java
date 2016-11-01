@@ -144,9 +144,8 @@ public class ChatSendMessageResponse extends MessageHandler {
                     if (roomMessage.getUserId()
                         != userId) { // show notification if this message isn't for another account
 
-                        G.helperNotificationAndBadge.checkAlert(true, 0,
+                        G.helperNotificationAndBadge.checkAlert(true, ProtoGlobal.Room.Type.CHAT,
                             chatSendMessageResponse.getRoomId());
-
                     }
                 } else {
                     // i'm the sender
