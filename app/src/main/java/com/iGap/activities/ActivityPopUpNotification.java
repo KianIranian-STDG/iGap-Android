@@ -46,8 +46,6 @@ import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.VoiceRecord;
 import com.iGap.proto.ProtoGlobal;
-import com.iGap.realm.RealmChatHistory;
-import com.iGap.realm.RealmChatHistoryFields;
 import com.iGap.realm.RealmChatRoom;
 import com.iGap.realm.RealmContacts;
 import com.iGap.realm.RealmContactsFields;
@@ -56,6 +54,7 @@ import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
+import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.realm.enums.RoomType;
 import io.realm.Realm;
@@ -100,7 +99,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
     private boolean sendByEnter = false;
     private AdapterViewPagerClass mAdapter;
     private int listSize = 0;
-    ArrayList<RealmChatHistory> unreadList;
+    ArrayList<RealmRoomMessage> unreadList;
     private InitComponnet initComponnet;
 
     ////////////////////////////////////////////////////////////////////////////////////
@@ -150,12 +149,11 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
         Realm realm = Realm.getDefaultInstance();
         long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
-        RealmResults<RealmChatHistory> chatHistories = realm.where(RealmChatHistory.class)
-            .findAllSorted(RealmChatHistoryFields.ID, Sort.DESCENDING);
+        RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class)
+            .findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
 
-        if (chatHistories != null) {
-            for (RealmChatHistory realmChatHistory : chatHistories) {
-                RealmRoomMessage roomMessage = realmChatHistory.getRoomMessage();
+        if (!realmRoomMessages.isEmpty()) {
+            for (RealmRoomMessage roomMessage : realmRoomMessages) {
                 if (roomMessage != null) {
                     if (roomMessage.getUserId() != userId) {
                         if (roomMessage.getStatus()
@@ -163,7 +161,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                             || roomMessage.getStatus()
                             .equals(ProtoGlobal.RoomMessageStatus.DELIVERED.toString())) {
 
-                            unreadList.add(realmChatHistory);
+                            unreadList.add(roomMessage);
                         }
                     }
                 }
@@ -495,9 +493,9 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                     (ViewGroup) container, false);
 
             TextView txtMessage = (TextView) layout.findViewById(R.id.slapn_txt_message);
-            txtMessage.setText(unreadList.get(position).getRoomMessage().getMessage());
+            txtMessage.setText(unreadList.get(position).getMessage());
 
-            Log.e("ddd", unreadList.get(position).getRoomMessage().getMessage() + "  " + position);
+            Log.e("ddd", unreadList.get(position).getMessage() + "  " + position);
 
             Realm realm = Realm.getDefaultInstance();
 
