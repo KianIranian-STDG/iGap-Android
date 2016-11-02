@@ -37,7 +37,6 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
 import java.util.ArrayList;
-import me.leolin.shortcutbadger.ShortcutBadger;
 
 import static com.iGap.G.context;
 
@@ -467,7 +466,6 @@ public class HelperNotificationAndBadge {
                 messagePeriview =
                     sharedPreferences.getInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_MESSAGE, 1);
 
-
                 break;
 
             case GROUP:
@@ -572,20 +570,20 @@ public class HelperNotificationAndBadge {
 
         if (unreadMessageCount == 0) {
             if (updateNotification) {
-                notificationManager.cancel(notificationId);
+                //  notificationManager.cancel(notificationId);
             }
             try {
-                ShortcutBadger.applyCount(context, 0);
+                //   ShortcutBadger.applyCount(context, 0);
             } catch (RuntimeException e) {
             }
         } else {
             if (updateNotification) {
                 setNotification();
 
-                startActivityPopUpNotification();
+                if (!G.isAppInFg) startActivityPopUpNotification();
             }
             try {
-                ShortcutBadger.applyCount(context, unreadMessageCount);
+                // ShortcutBadger.applyCount(context, unreadMessageCount);
             } catch (RuntimeException e) {
             }
         }
@@ -696,20 +694,15 @@ public class HelperNotificationAndBadge {
 
     private void startActivityPopUpNotification() {
 
-        //if(ActivityPopUpNotification.isPopUpVisible){
-        //
-        //    Log.e("ddd","aaaaaaaaaaaaa");
-        //    if(ActivityPopUpNotification.onComplete !=null)
-        //        ActivityPopUpNotification.onComplete.complete(true,"","");
-        //}
-        // else{
-        Intent popUpActivityIntent = new Intent(context, ActivityPopUpNotification.class);
-        popUpActivityIntent.setFlags(
-            Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        context.getApplicationContext().startActivity(popUpActivityIntent);
-
-        //  }
-
+        if (ActivityPopUpNotification.isPopUpVisible) {
+            if (ActivityPopUpNotification.onComplete != null) {
+                ActivityPopUpNotification.onComplete.complete(true, "", "");
+            }
+        } else {
+            Intent popUpActivityIntent = new Intent(context, ActivityPopUpNotification.class);
+            popUpActivityIntent.setFlags(
+                Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            context.getApplicationContext().startActivity(popUpActivityIntent);
+        }
     }
-
 }

@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -39,12 +40,16 @@ import com.iGap.interfaces.IRecentsLongClick;
 import com.iGap.interfaces.ISoftKeyboardOpenClose;
 import com.iGap.interfaces.OnVoiceRecord;
 import com.iGap.libs.rippleeffect.RippleView;
+import com.iGap.module.AndroidUtils;
+import com.iGap.module.ChatSendMessageUtil;
 import com.iGap.module.EmojiEditText;
 import com.iGap.module.EmojiPopup;
 import com.iGap.module.EmojiRecentsManager;
 import com.iGap.module.MaterialDesignTextView;
+import com.iGap.module.OnComplete;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.VoiceRecord;
+import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmChatRoom;
 import com.iGap.realm.RealmContacts;
@@ -63,14 +68,17 @@ import io.realm.Sort;
 import java.io.File;
 import java.util.ArrayList;
 
+import static com.iGap.proto.ProtoGlobal.Room.Type.CHAT;
+import static com.iGap.proto.ProtoGlobal.Room.Type.GROUP;
+
 /**
  * Created by android3 on 10/31/2016.
  */
 
 public class ActivityPopUpNotification extends AppCompatActivity {
 
-    // public static boolean isPopUpVisible=false;
-    //public static OnComplete onComplete;
+    public static boolean isPopUpVisible = false;
+    public static OnComplete onComplete;
 
     //////////////////////////////////////////   appbar component
 
@@ -102,35 +110,40 @@ public class ActivityPopUpNotification extends AppCompatActivity {
     ArrayList<RealmRoomMessage> unreadList;
     private InitComponnet initComponnet;
 
-    ////////////////////////////////////////////////////////////////////////////////////
+    private String initialize;
+    private String color;
+    private long chatPeerId;
 
-    //@Override protected void onResume() {
-    //    super.onResume();
-    //    isPopUpVisible=true;
-    //
-    //}
-    //
-    //@Override protected void onPause() {
-    //    super.onPause();
-    //    isPopUpVisible=false;
-    //
-    //}
+    /////////////////////////////////////////////////////////////////////////////////////////
+
+    @Override protected void onResume() {
+        super.onResume();
+        isPopUpVisible = true;
+    }
+
+    @Override protected void onPause() {
+        super.onPause();
+        isPopUpVisible = false;
+    }
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_popup_notification);
 
-        //
-        //onComplete=new OnComplete() {
-        //    @Override public void complete(boolean result, String messageOne, String MessageTow) {
-        //
-        //        fillList();
-        //
-        //      //  mAdapter =new  AdapterViewPagerClass();
-        //        viewPager.getAdapter().notifyDataSetChanged();
-        //
-        //    }
-        //};
+        onComplete = new OnComplete() {
+            @Override public void complete(boolean result, String messageOne, String MessageTow) {
+
+                viewPager.postDelayed(new Runnable() {
+                    @Override public void run() {
+                        fillList();
+                        viewPager.setAdapter(mAdapter);
+                        btnMessageCounter.setText(
+                            1 + " " + getString(R.string.of) + " " + unreadList.size());
+                        setImeageAndTextAppBar(viewPager.getCurrentItem());
+                    }
+                }, 300);
+            }
+        };
 
         new Handler().postDelayed(new Runnable() {
             @Override public void run() {
@@ -143,35 +156,8 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         }, 300);
     }
 
-    private void fillList() {
+    /////////////////////////////////////////////////////////////////////////////////////////
 
-        unreadList = new ArrayList<>();
-
-        Realm realm = Realm.getDefaultInstance();
-        long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
-        RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class)
-            .findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
-
-        if (!realmRoomMessages.isEmpty()) {
-            for (RealmRoomMessage roomMessage : realmRoomMessages) {
-                if (roomMessage != null) {
-                    if (roomMessage.getUserId() != userId) {
-                        if (roomMessage.getStatus()
-                            .equals(ProtoGlobal.RoomMessageStatus.SENT.toString())
-                            || roomMessage.getStatus()
-                            .equals(ProtoGlobal.RoomMessageStatus.DELIVERED.toString())) {
-
-                            unreadList.add(roomMessage);
-                        }
-                    }
-                }
-            }
-        }
-
-        realm.close();
-
-        Log.e("ddd", "size   " + unreadList.size());
-    }
 
     private class InitComponnet {
 
@@ -195,7 +181,8 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                     new OnVoiceRecord() {
                         @Override public void onVoiceRecordDone(String savedPath) {
 
-                            sendVoice(savedPath);
+                            sendVoice(savedPath,
+                                unreadList.get(viewPager.getCurrentItem()).getRoomId());
                         }
 
                         @Override public void onVoiceRecordCancel() {
@@ -244,6 +231,8 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
             btnMessageCounter.setText(1 + " " + getString(R.string.of) + " " + listSize);
 
+            setImeageAndTextAppBar(viewPager.getCurrentItem());
+
             viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override public void onPageScrolled(int position, float positionOffset,
                     int positionOffsetPixels) {
@@ -253,6 +242,9 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                 @Override public void onPageSelected(int position) {
                     btnMessageCounter.setText(
                         position + 1 + " " + getString(R.string.of) + " " + listSize);
+
+                    setImeageAndTextAppBar(position);
+
                 }
 
                 @Override public void onPageScrollStateChanged(int state) {
@@ -429,7 +421,17 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             btnSend.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
 
-                    sendMessage();
+                    int position = viewPager.getCurrentItem();
+
+                    ProtoGlobal.Room.Type type = CHAT;
+
+                    if (unreadList.get(position).getMessageType().equals("GROUP")) {
+                        type = GROUP;
+                    }
+
+                    Long roomid = unreadList.get(position).getRoomId();
+
+                    sendMessage(edtChat.getText().toString(), roomid, type);
 
                     edtChat.setText("");
                 }
@@ -471,11 +473,11 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         }
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////
+
     private class AdapterViewPagerClass extends PagerAdapter {
 
-        private String initialize;
-        private String color;
-        private long chatPeerId;
+
 
         @Override public int getCount() {
             return unreadList.size();
@@ -495,26 +497,6 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             TextView txtMessage = (TextView) layout.findViewById(R.id.slapn_txt_message);
             txtMessage.setText(unreadList.get(position).getMessage());
 
-            Log.e("ddd", unreadList.get(position).getMessage() + "  " + position);
-
-            Realm realm = Realm.getDefaultInstance();
-
-            final RealmRoom realmRoom = realm.where(RealmRoom.class)
-                .equalTo(RealmRoomFields.ID, unreadList.get(position).getRoomId())
-                .findFirst();
-
-            if (realmRoom != null) { // room exist
-                initialize = realmRoom.getInitials();
-                color = realmRoom.getColor();
-
-                try {
-                    txtName.setText(realmRoom.getTitle());
-                    setLastSeen(realmRoom, realm);
-                    setAvatar(realm);
-                } catch (Exception e) {
-                }
-            }
-            realm.close();
 
             ((ViewGroup) container).addView(layout);
 
@@ -524,87 +506,139 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         @Override public void destroyItem(ViewGroup container, int position, Object object) {
             container.removeView((View) object);
         }
+    }
 
-        private void setLastSeen(RealmRoom realmRoom, Realm realm) {
+    private void setImeageAndTextAppBar(int position) {
 
-            String lastSeen = "";
+        Realm realm = Realm.getDefaultInstance();
 
-            if (realmRoom.getType() == RoomType.CHAT) {
+        final RealmRoom realmRoom = realm.where(RealmRoom.class)
+            .equalTo(RealmRoomFields.ID, unreadList.get(position).getRoomId())
+            .findFirst();
 
-                RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
-                chatPeerId = realmChatRoom.getPeerId();
+        if (realmRoom != null) { // room exist
+            initialize = realmRoom.getInitials();
+            color = realmRoom.getColor();
 
-                RealmContacts realmContacts = realm.where(RealmContacts.class)
-                    .equalTo(RealmContactsFields.ID, chatPeerId)
-                    .findFirst();
-                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class)
-                    .equalTo(RealmRegisteredInfoFields.ID, chatPeerId)
-                    .findFirst();
-                if (realmRegisteredInfo != null) {
-                    lastSeen = Long.toString(realmRegisteredInfo.getLastSeen());
-                } else if (realmContacts != null) {
-                    lastSeen = Long.toString(realmContacts.getLast_seen());
-                } else {
-                    lastSeen = "last seen";
-                }
+            try {
+
+                txtName.setText(realmRoom.getTitle());
+                setLastSeen(realmRoom, realm);
+                setAvatar(realm);
+            } catch (Exception e) {
             }
-
-            txtLastSeen.setText(lastSeen);
         }
+        realm.close();
+    }
 
-        private void setAvatar(Realm realm) {
+    private void setLastSeen(RealmRoom realmRoom, Realm realm) {
 
-            String avatarPath = null;
+        String lastSeen = "";
 
+        if (realmRoom.getType() == RoomType.CHAT) {
+
+            RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
+            chatPeerId = realmChatRoom.getPeerId();
+
+            RealmContacts realmContacts = realm.where(RealmContacts.class)
+                .equalTo(RealmContactsFields.ID, chatPeerId)
+                .findFirst();
             RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class)
                 .equalTo(RealmRegisteredInfoFields.ID, chatPeerId)
                 .findFirst();
-            if (realmRegisteredInfo != null
-                && realmRegisteredInfo.getAvatar() != null
-                && realmRegisteredInfo.getLastAvatar() != null) {
-
-                String mainFilePath =
-                    realmRegisteredInfo.getLastAvatar().getFile().getLocalFilePath();
-
-                if (mainFilePath != null && new File(
-                    mainFilePath).exists()) { // if main image is exist showing that
-                    avatarPath = mainFilePath;
-                } else {
-                    avatarPath =
-                        realmRegisteredInfo.getLastAvatar().getFile().getLocalThumbnailPath();
-                }
+            if (realmRegisteredInfo != null) {
+                lastSeen = Long.toString(realmRegisteredInfo.getLastSeen());
+            } else if (realmContacts != null) {
+                lastSeen = Long.toString(realmContacts.getLast_seen());
+            } else {
+                lastSeen = "last seen";
             }
+        }
 
-            //Set Avatar For Chat,Group,Channel
-            if (avatarPath != null) {
-                File imgFile = new File(avatarPath);
-                if (imgFile.exists()) {
-                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                    imvUserPicture.setImageBitmap(myBitmap);
-                } else {
-                    if (realmRegisteredInfo != null
-                        && realmRegisteredInfo.getLastAvatar() != null
-                        && realmRegisteredInfo.getLastAvatar().getFile() != null) {
-                        // onRequestDownloadAvatar(realmRegisteredInfo.getLastAvatar().getFile());
-                    }
-                    imvUserPicture.setImageBitmap(
-                        com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture(
-                            (int) imvUserPicture.getContext()
-                                .getResources()
-                                .getDimension(R.dimen.dp60), initialize, color));
-                }
+        txtLastSeen.setText(lastSeen);
+    }
+
+    private void setAvatar(Realm realm) {
+
+        String avatarPath = null;
+
+        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class)
+            .equalTo(RealmRegisteredInfoFields.ID, chatPeerId)
+            .findFirst();
+        if (realmRegisteredInfo != null
+            && realmRegisteredInfo.getAvatar() != null
+            && realmRegisteredInfo.getLastAvatar() != null) {
+
+            String mainFilePath = realmRegisteredInfo.getLastAvatar().getFile().getLocalFilePath();
+
+            if (mainFilePath != null && new File(
+                mainFilePath).exists()) { // if main image is exist showing that
+                avatarPath = mainFilePath;
+            } else {
+                avatarPath = realmRegisteredInfo.getLastAvatar().getFile().getLocalThumbnailPath();
+            }
+        }
+
+        //Set Avatar For Chat,Group,Channel
+        if (avatarPath != null) {
+            File imgFile = new File(avatarPath);
+            if (imgFile.exists()) {
+                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                imvUserPicture.setImageBitmap(myBitmap);
             } else {
                 if (realmRegisteredInfo != null
                     && realmRegisteredInfo.getLastAvatar() != null
                     && realmRegisteredInfo.getLastAvatar().getFile() != null) {
-                    //  onRequestDownloadAvatar(realmRegisteredInfo.getLastAvatar().getFile());
+                    // onRequestDownloadAvatar(realmRegisteredInfo.getLastAvatar().getFile());
                 }
                 imvUserPicture.setImageBitmap(
                     com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture(
                         (int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60),
                         initialize, color));
             }
+        } else {
+            if (realmRegisteredInfo != null
+                && realmRegisteredInfo.getLastAvatar() != null
+                && realmRegisteredInfo.getLastAvatar().getFile() != null) {
+                //  onRequestDownloadAvatar(realmRegisteredInfo.getLastAvatar().getFile());
+            }
+            imvUserPicture.setImageBitmap(
+                com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture(
+                    (int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60),
+                    initialize, color));
         }
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+
+    private void fillList() {
+
+        unreadList = new ArrayList<>();
+
+        Realm realm = Realm.getDefaultInstance();
+        long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
+        RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class)
+            .findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+
+        if (!realmRoomMessages.isEmpty()) {
+            for (RealmRoomMessage roomMessage : realmRoomMessages) {
+                if (roomMessage != null) {
+                    if (roomMessage.getUserId() != userId) {
+                        if (roomMessage.getStatus()
+                            .equals(ProtoGlobal.RoomMessageStatus.SENT.toString())
+                            || roomMessage.getStatus()
+                            .equals(ProtoGlobal.RoomMessageStatus.DELIVERED.toString())) {
+
+                            unreadList.add(roomMessage);
+                        }
+                    }
+                }
+            }
+        }
+
+        realm.close();
+
+        Log.e("ddd", "size   " + unreadList.size());
     }
 
     @Override public boolean dispatchTouchEvent(MotionEvent event) {
@@ -612,11 +646,65 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         return super.dispatchTouchEvent(event);
     }
 
-    private void sendMessage() {
+    private void sendMessage(final String message, final long mRoomId,
+        ProtoGlobal.Room.Type chatType) {
 
+        final Realm realm = Realm.getDefaultInstance();
+        final long senderId = realm.where(RealmUserInfo.class).findFirst().getUserId();
+
+        final String identity = Long.toString(System.currentTimeMillis());
+
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override public void execute(Realm realm) {
+                RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class);
+
+                roomMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT.toString());
+                roomMessage.setRoomId(mRoomId);
+                roomMessage.setMessage(message);
+                roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
+                roomMessage.setMessageId(Long.parseLong(identity));
+                roomMessage.setUserId(senderId);
+                roomMessage.setUpdateTime(
+                    (int) (System.currentTimeMillis() / DateUtils.SECOND_IN_MILLIS));
+            }
+        });
+
+        realm.close();
+
+        new ChatSendMessageUtil().newBuilder(chatType, ProtoGlobal.RoomMessageType.TEXT, mRoomId)
+            .message(message)
+            .sendMessage(identity);
     }
 
-    private void sendVoice(String path) {
+    private void sendVoice(final String savedPath, final Long mRoomId) {
+
+        Realm realm = Realm.getDefaultInstance();
+        final long messageId = System.nanoTime();
+        final long updateTime = System.currentTimeMillis();
+        final long senderID = realm.where(RealmUserInfo.class).findFirst().getUserId();
+        final long duration = AndroidUtils.getAudioDuration(getApplicationContext(), savedPath);
+
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override public void execute(Realm realm) {
+                RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class);
+
+                roomMessage.setMessageType(ProtoGlobal.RoomMessageType.VOICE.toString());
+                //  roomMessage.setMessage(getWrittenMessage());
+                roomMessage.setRoomId(mRoomId);
+                roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
+                roomMessage.setAttachment(messageId, savedPath, 0, 0, 0, null, duration,
+                    LocalFileType.FILE);
+                roomMessage.setMessageId(messageId);
+                roomMessage.setUserId(senderID);
+                roomMessage.setUpdateTime((int) (updateTime / DateUtils.SECOND_IN_MILLIS));
+            }
+        });
+
+        new ActivityChat.UploadTask().execute(savedPath, messageId,
+            ProtoGlobal.RoomMessageType.VOICE, mRoomId, "");
+
+        Log.e("ddd", "voice");
+        realm.close();
 
     }
 }

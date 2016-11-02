@@ -4213,7 +4213,7 @@ public class ActivityChat extends ActivityEnhanced
         }, Long.parseLong(message.messageID), failedMessages);
     }
 
-    private static class UploadTask
+    public static class UploadTask
         extends AsyncTask<Object, FileUploadStructure, FileUploadStructure> {
         @Override protected FileUploadStructure doInBackground(Object... params) {
             try {
