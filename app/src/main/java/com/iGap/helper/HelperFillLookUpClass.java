@@ -60,6 +60,10 @@ public class HelperFillLookUpClass {
         G.lookupMap.put(30120, "ProtoUserProfileSetSelfRemove.UserProfileSetSelfRemoveResponse");
         G.lookupMap.put(121, "UserProfileGetSelfRemove");
         G.lookupMap.put(30121, "ProtoUserProfileGetSelfRemove.UserProfileGetSelfRemoveResponse");
+        G.lookupMap.put(122, "UserProfileCheckUsername");
+        G.lookupMap.put(30122, "ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse");
+        G.lookupMap.put(123, "UserProfileUpdateUsername");
+        G.lookupMap.put(30123, "ProtoUserProfileUpdateUsername.UserProfileUpdateUsernameResponse");
 
         // Chat 2xx , 302xx
         G.lookupMap.put(200, "Chat.GetRoom");
