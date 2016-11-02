@@ -502,7 +502,9 @@ public class HelperNotificationAndBadge {
                 break;
         }
 
-        isMute = realmRoom.getMute();
+        if (realmRoom != null) {
+            isMute = realmRoom.getMute();
+        }
         inAppSound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_APP_SOUND, 1);
         inVibrator = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_APP_VIBRATE, 1);
         inAppPreview = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_APP_PREVIEW, 1);
