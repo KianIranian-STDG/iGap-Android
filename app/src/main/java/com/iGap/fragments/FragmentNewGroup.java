@@ -185,7 +185,6 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
         TextInputLayout txtInputNewGroup =
             (TextInputLayout) view.findViewById(R.id.ng_txtInput_newGroup);
 
-        final View viewGroupName = view.findViewById(R.id.ng_view_newGroup);
         edtGroupName = (EditText) view.findViewById(R.id.ng_edt_newGroup);
         edtGroupName.setPadding(0, 8, 0, 8);
 
@@ -194,18 +193,6 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
         } else {
             txtInputNewGroup.setHint(getResources().getString(R.string.New_Group));
         }
-
-        edtGroupName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    viewGroupName.setBackgroundColor(
-                        getResources().getColor(R.color.toolbar_background));
-                } else {
-                    viewGroupName.setBackgroundColor(
-                        getResources().getColor(R.color.line_edit_text));
-                }
-            }
-        });
 
         //=======================description group
         edtDescription = (LinedEditText) view.findViewById(R.id.ng_edt_description);
@@ -247,8 +234,8 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
         txtNextStep.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
 
-                                               if (edtDescription.getText().toString().length() > 0) {
-                                                   if (edtGroupName.getText().toString().length() > 0) {
+                if (edtDescription.getText().toString().length() > 0) {
+                    if (edtGroupName.getText().toString().length() > 0) {
                                                        prgWaiting.setVisibility(View.VISIBLE);
                                                        txtNextStep.setEnabled(false);
                                                        txtBack.setEnabled(false);
@@ -259,36 +246,33 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
                                                        InputMethodManager imm =
                                                            (InputMethodManager) G.context.getSystemService(
                                                                Context.INPUT_METHOD_SERVICE);
-                                                       imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
                                                        boolean success;
-                                                       String newName = edtGroupName.getText().toString().replace(" ", "_");
-                                                       File file2 = new File(path, prefix
-                                                           + "_"
-                                                           + newName
-                                                           + Math.random() * 10000
-                                                           + 1
-                                                           + ".png");
+                        String newName = edtGroupName.getText().toString().replace(" ", "_");
+                        File file2 = new File(path,
+                            prefix + "_" + newName + Math.random() * 10000 + 1 + ".png");
                                                        if (prefix.equals("NewChanel")) {
-                                                           success = G.IMAGE_NEW_CHANEL.renameTo(file2);
-                                                           startActivity(new Intent(G.context, ActivityNewChanelFinish.class));
+                                                           success =
+                                                               G.IMAGE_NEW_CHANEL.renameTo(file2);
+                                                           startActivity(new Intent(G.context,
+                                                               ActivityNewChanelFinish.class));
                                                            getActivity().getSupportFragmentManager()
                                                                .beginTransaction()
                                                                .remove(FragmentNewGroup.this)
                                                                .commit();
                                                        } else {
-                                                           success = G.IMAGE_NEW_GROUP.renameTo(file2);
+                                                           success =
+                                                               G.IMAGE_NEW_GROUP.renameTo(file2);
                                                            createGroup();
                                                        }
                                                    } else {
-                                                       Toast.makeText(G.context,
-                                                           R.string.please_enter_group_description,
+                        Toast.makeText(G.context, R.string.please_enter_group_description,
                                                            Toast.LENGTH_SHORT).show();
                                                    }
                                                } else {
-                                                   Toast.makeText(G.context,
-                                                       R.string.please_enter_group_name,
-                                                       Toast.LENGTH_SHORT).show();
+                    Toast.makeText(G.context, R.string.please_enter_group_name, Toast.LENGTH_SHORT)
+                        .show();
                                                }
                                            }
                                        }
@@ -327,13 +311,17 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
 
             @Override public void onError(int majorCode, int minorCode) {
 
-                prgWaiting.setVisibility(View.GONE);
-                txtNextStep.setEnabled(true);
-                txtBack.setEnabled(true);
-                txtCancel.setEnabled(true);
-                edtDescription.setEnabled(true);
-                edtGroupName.setEnabled(true);
-                imgCircleImageView.setEnabled(true);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override public void run() {
+                        prgWaiting.setVisibility(View.GONE);
+                        txtNextStep.setEnabled(true);
+                        txtBack.setEnabled(true);
+                        txtCancel.setEnabled(true);
+                        edtDescription.setEnabled(true);
+                        edtGroupName.setEnabled(true);
+                        imgCircleImageView.setEnabled(true);
+                    }
+                });
 
                 if (majorCode == 300 && minorCode == 1) {
                     getActivity().runOnUiThread(new Runnable() {

@@ -4,7 +4,7 @@ import com.iGap.proto.ProtoUserGetDeleteToken;
 
 public class RequestUserGetDeleteToken {
 
-    public void userGetDeleteToken(long roomId) {
+    public void userGetDeleteToken() {
 
         ProtoUserGetDeleteToken.UserGetDeleteToken.Builder builder =
             ProtoUserGetDeleteToken.UserGetDeleteToken.newBuilder();

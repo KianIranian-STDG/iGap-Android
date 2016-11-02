@@ -44,6 +44,7 @@ import com.iGap.fragments.FragmentShowAvatars;
 import com.iGap.fragments.FragmentSticker;
 import com.iGap.helper.HelperImageBackColor;
 import com.iGap.helper.HelperLogout;
+import com.iGap.helper.HelperString;
 import com.iGap.interfaces.OnFileUploadForActivities;
 import com.iGap.interfaces.OnUserAvatarDelete;
 import com.iGap.interfaces.OnUserAvatarResponse;
@@ -55,7 +56,7 @@ import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.FileUploadStructure;
 import com.iGap.module.HelperDecodeFile;
-import com.iGap.module.MaterialDesignTextView;
+import com.iGap.module.IncomingSms;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.StructMessageInfo;
 import com.iGap.proto.ProtoGlobal;
@@ -89,7 +90,6 @@ public class ActivitySetting extends ActivityEnhanced
 
     private TextView txtMenu, txtMessageTextSize, txtAutoDownloadData, txtAutoDownloadWifi,
         txtChatBackground, txtAutoDownloadRoaming, txtKeepMedia, txtLanguage, txtSizeClearCach;
-    private MaterialDesignTextView imgMenu, txtBack;
 
     private RelativeLayout ltClearCache;
 
@@ -593,7 +593,6 @@ public class ActivitySetting extends ActivityEnhanced
             }
         });
         // button back in toolbar
-        txtBack = (MaterialDesignTextView) findViewById(R.id.st_txt_back);
         RippleView rippleBack = (RippleView) findViewById(R.id.st_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
@@ -658,11 +657,20 @@ public class ActivitySetting extends ActivityEnhanced
                     @Override public void onClick(View view) {
                         HelperLogout.logout();
                         popupWindow.dismiss();
+
+                        //G.onUserGetDeleteToken = new OnUserGetDeleteToken() {
+                        //    @Override
+                        //    public void onUserGetDeleteToken(int resendDelay, String tokenRegex,
+                        //        String tokenLength) {
+                        //
+                        //    }
+                        //};
+                        //
+                        //new RequestUserGetDeleteToken().userGetDeleteToken();
                     }
                 });
             }
         });
-        imgMenu = (MaterialDesignTextView) findViewById(R.id.st_img_menuPopup);
 
         realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
         //fab button for set pic
@@ -1596,9 +1604,36 @@ public class ActivitySetting extends ActivityEnhanced
         return items;
     }
 
-    @Override protected void onResume() {
-        super.onResume();
+    private void getSms(String message) {
+        String verificationCode = HelperString.regexExtractValue(message, regex);
+        Log.i("KKK", "verificationCode : " + verificationCode);
     }
+
+    private IncomingSms smsReceiver;
+    private String regex;
+
+    //@Override protected void onResume() {
+    //    final IntentFilter filter = new IntentFilter();
+    //    filter.addAction("android.provider.Telephony.SMS_RECEIVED");
+    //
+    //    smsReceiver = new IncomingSms(new OnSmsReceive() {
+    //
+    //        @Override public void onSmsReceive(String message) {
+    //            try {
+    //                if (message != null && !message.isEmpty() && !message.equals("null") &&
+    // !message
+    //                    .equals("")) {
+    //                    getSms(message);
+    //                }
+    //            } catch (Exception e1) {
+    //                e1.getStackTrace();
+    //            }
+    //        }
+    //    });
+    //
+    //    registerReceiver(smsReceiver, filter);
+    //    super.onResume();
+    //}
 
     @Override public void onAvatarAdd(final ProtoGlobal.Avatar avatar) {
         Realm realm = Realm.getDefaultInstance();

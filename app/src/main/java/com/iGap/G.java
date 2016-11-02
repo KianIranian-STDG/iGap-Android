@@ -60,6 +60,7 @@ import com.iGap.interfaces.OnUserContactEdit;
 import com.iGap.interfaces.OnUserContactGetList;
 import com.iGap.interfaces.OnUserContactImport;
 import com.iGap.interfaces.OnUserDelete;
+import com.iGap.interfaces.OnUserGetDeleteToken;
 import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.interfaces.OnUserLogin;
 import com.iGap.interfaces.OnUserProfileCheckUsername;
@@ -238,6 +239,7 @@ public class G extends Application {
     public static OnUserProfileCheckUsername onUserProfileCheckUsername;
     public static OnUserProfileUpdateUsername onUserProfileUpdateUsername;
     public static OnGroupGetMemberList onGroupGetMemberList;
+    public static OnUserGetDeleteToken onUserGetDeleteToken;
     public static File chatBackground;
     public static File IMAGE_NEW_GROUP;
     public static File IMAGE_NEW_CHANEL;

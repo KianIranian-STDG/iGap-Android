@@ -1,5 +1,7 @@
 package com.iGap.response;
 
+import android.util.Log;
+import com.iGap.G;
 import com.iGap.proto.ProtoUserGetDeleteToken;
 
 public class UserGetDeleteTokenResponse extends MessageHandler {
@@ -17,14 +19,13 @@ public class UserGetDeleteTokenResponse extends MessageHandler {
     }
 
     @Override public void handler() {
-
         final ProtoUserGetDeleteToken.UserGetDeleteTokenResponse.Builder builder =
             (ProtoUserGetDeleteToken.UserGetDeleteTokenResponse.Builder) message;
+        Log.i("UUU", "UserGetDeleteTokenResponse 2 message : " + message);
 
-        builder.getResendDelay();
-        builder.getSmsNumberList();
-        builder.getTokenRegex();
-        builder.getTokenLenght();
+        G.smsNumbers = builder.getSmsNumberList();
+        G.onUserGetDeleteToken.onUserGetDeleteToken(builder.getResendDelay(),
+            builder.getTokenRegex(), builder.getTokenLenght());
     }
 
     @Override public void timeOut() {
