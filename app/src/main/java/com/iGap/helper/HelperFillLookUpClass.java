@@ -52,6 +52,14 @@ public class HelperFillLookUpClass {
         G.lookupMap.put(30116, "ProtoUserAvatarGetList.UserAvatarGetListResponse");
         G.lookupMap.put(117, "UserInfo");
         G.lookupMap.put(30117, "ProtoUserInfo.UserInfoResponse");
+        G.lookupMap.put(118, "UserGetDeleteToken");
+        G.lookupMap.put(30118, "ProtoUserGetDeleteToken.UserGetDeleteTokenResponse");
+        G.lookupMap.put(119, "UserDelete");
+        G.lookupMap.put(30119, "ProtoUserDelete.UserDeleteResponse");
+        G.lookupMap.put(120, "UserProfileSetSelfRemove");
+        G.lookupMap.put(30120, "ProtoUserProfileSetSelfRemove.UserProfileSetSelfRemoveResponse");
+        G.lookupMap.put(121, "UserProfileGetSelfRemove");
+        G.lookupMap.put(30121, "ProtoUserProfileGetSelfRemove.UserProfileGetSelfRemoveResponse");
 
         // Chat 2xx , 302xx
         G.lookupMap.put(200, "Chat.GetRoom");
