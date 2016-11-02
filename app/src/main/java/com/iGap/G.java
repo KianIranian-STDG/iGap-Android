@@ -42,6 +42,7 @@ import com.iGap.interfaces.OnGroupAvatarResponse;
 import com.iGap.interfaces.OnGroupClearMessage;
 import com.iGap.interfaces.OnGroupCreate;
 import com.iGap.interfaces.OnGroupEdit;
+import com.iGap.interfaces.OnGroupGetMemberList;
 import com.iGap.interfaces.OnGroupKickAdmin;
 import com.iGap.interfaces.OnGroupKickMember;
 import com.iGap.interfaces.OnGroupKickModerator;
@@ -236,6 +237,7 @@ public class G extends Application {
     public static OnUserProfileGetSelfRemove onUserProfileGetSelfRemove;
     public static OnUserProfileCheckUsername onUserProfileCheckUsername;
     public static OnUserProfileUpdateUsername onUserProfileUpdateUsername;
+    public static OnGroupGetMemberList onGroupGetMemberList;
     public static File chatBackground;
     public static File IMAGE_NEW_GROUP;
     public static File IMAGE_NEW_CHANEL;
