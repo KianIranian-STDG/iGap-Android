@@ -288,6 +288,7 @@ public class ActivityChat extends ActivityEnhanced
     private MaterialDesignTextView iconMute;
 
     private boolean hasDraft = false;
+    private long replyToMessageId = 0;
 
     @Override protected void onStart() {
         super.onStart();
@@ -1541,6 +1542,12 @@ public class ActivityChat extends ActivityEnhanced
                             .findFirst();
 
                         // user wants to replay to a message
+                        /*
+                         * in draft file , create StructMessageInfo with senderName,messageText and
+                         * filePic . when i write this code at draft ; just need this three params
+                         * for reply . if later need more data for reply should ensure that add new
+                         * params to draft also.
+                         */
                         if (mReplayLayout != null
                             && mReplayLayout.getTag() instanceof StructMessageInfo) {
                             mAdapter.add(new TextItem(chatType, ActivityChat.this).setMessage(
@@ -2705,8 +2712,9 @@ public class ActivityChat extends ActivityEnhanced
                     ClipboardManager clipboard =
                         (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
                     ClipData clip =
-                        ClipData.newPlainText("Copied Text", messageID.mMessage.messageID);
+                        ClipData.newPlainText("Copied Text", messageID.mMessage.messageText);
                     clipboard.setPrimaryClip(clip);
+                    Toast.makeText(G.context, "Text Copied", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -3770,11 +3778,14 @@ public class ActivityChat extends ActivityEnhanced
         }).start();
     }
 
-    private void draftRequest() {
-
-    }
-
     private void setDraft() {
+
+        if (mReplayLayout != null && mReplayLayout.getVisibility() == View.VISIBLE) {
+            StructMessageInfo info = ((StructMessageInfo) mReplayLayout.getTag());
+            replyToMessageId = Long.parseLong(info.messageID);
+        } else {
+            replyToMessageId = 0;
+        }
 
         if (ll_attach_text.getVisibility() == View.VISIBLE) {
             Realm realm = Realm.getDefaultInstance();
@@ -3802,18 +3813,16 @@ public class ActivityChat extends ActivityEnhanced
 
                         RealmRoomDraft draft = realm.createObject(RealmRoomDraft.class);
                         draft.setMessage(edtChat.getText().toString());
-                        draft.setReplyToMessageId(0);
+                        draft.setReplyToMessageId(replyToMessageId);
 
                         realmRoom.setDraft(draft);
 
                         if (chatType == CHAT) {
-                            Log.i("III", "RequestChatUpdateDraft");
                             new RequestChatUpdateDraft().chatUpdateDraft(mRoomId,
-                                edtChat.getText().toString(), 0);
+                                edtChat.getText().toString(), replyToMessageId);
                         } else if (chatType == GROUP) {
-                            Log.i("III", "RequestGroupUpdateDraft");
                             new RequestGroupUpdateDraft().groupUpdateDraft(mRoomId,
-                                edtChat.getText().toString(), 0);
+                                edtChat.getText().toString(), replyToMessageId);
                         }
 
                         G.onDraftMessage.onDraftMessage(mRoomId, edtChat.getText().toString());
@@ -3843,14 +3852,16 @@ public class ActivityChat extends ActivityEnhanced
 
                             RealmRoomDraft draft = realm.createObject(RealmRoomDraft.class);
                             draft.setMessage(message);
-                            draft.setReplyToMessageId(0);
+                            draft.setReplyToMessageId(replyToMessageId);
 
                             realmRoom.setDraft(draft);
 
                             if (chatType == CHAT) {
-                                new RequestChatUpdateDraft().chatUpdateDraft(mRoomId, message, 0);
+                                new RequestChatUpdateDraft().chatUpdateDraft(mRoomId, message,
+                                    replyToMessageId);
                             } else if (chatType == GROUP) {
-                                new RequestGroupUpdateDraft().groupUpdateDraft(mRoomId, message, 0);
+                                new RequestGroupUpdateDraft().groupUpdateDraft(mRoomId, message,
+                                    replyToMessageId);
                             }
 
                             G.onDraftMessage.onDraftMessage(mRoomId, message);
@@ -3899,7 +3910,37 @@ public class ActivityChat extends ActivityEnhanced
                         edtChat.setText(draft.getMessage());
 
                         if (draft.getReplyToMessageId() != 0) {
-                            //TODO [Saeed Mozaffari] [2016-10-31 4:24 PM] - set reply view for draft
+                            RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class)
+                                .equalTo(RealmRoomMessageFields.MESSAGE_ID,
+                                    draft.getReplyToMessageId())
+                                .findFirst();
+
+                            if (realmRoomMessage != null) {
+
+                                StructMessageInfo struct = new StructMessageInfo();
+
+                                RealmRegisteredInfo realmRegisteredInfo =
+                                    realm.where(RealmRegisteredInfo.class)
+                                        .equalTo(RealmRegisteredInfoFields.ID,
+                                            realmRoomMessage.getUserId())
+                                        .findFirst();
+
+                                if (realmRegisteredInfo != null) {
+                                    struct.senderName = realmRegisteredInfo.getDisplayName();
+                                } else {
+                                    struct.senderName = "name not detect";
+                                }
+                                struct.messageText = realmRoomMessage.getMessage();
+                                if (realmRoomMessage.getAttachment() != null) {
+                                    struct.filePic =
+                                        realmRoomMessage.getAttachment().getLocalThumbnailPath();
+                                } else {
+                                    // is need that fill filePic with "" if not exist
+                                    struct.filePic = "";
+                                }
+
+                                replay(struct);
+                            }
                         }
                     }
                     setDraftMessage(latestRequestCode);
@@ -4035,6 +4076,7 @@ public class ActivityChat extends ActivityEnhanced
                             (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
                         ClipData clip = ClipData.newPlainText("Copied Text", message.messageText);
                         clipboard.setPrimaryClip(clip);
+                        Toast.makeText(G.context, "Text Copied", Toast.LENGTH_SHORT).show();
                     } else if (text.toString()
                         .equalsIgnoreCase(getString(R.string.delete_item_dialog))) {
                         final Realm realmCondition = Realm.getDefaultInstance();
