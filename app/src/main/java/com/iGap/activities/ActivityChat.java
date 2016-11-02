@@ -541,7 +541,13 @@ public class ActivityChat extends ActivityEnhanced
         onDeleteChatFinishActivityInterface();
 
         getDraft();
-        setAvatar();
+
+        if (chatType == CHAT) {
+            setAvatar();
+        } else {
+            setAvatarGroup();
+        }
+
     }
 
     private void clearHistoryFromContactsProfileInterface() {
@@ -2067,6 +2073,57 @@ public class ActivityChat extends ActivityEnhanced
                     initialize, color));
         }
         realm.close();
+    }
+
+    private void setAvatarGroup() {
+
+        Bitmap bitmap = null;
+        RealmAttachment realmAttachment = null;
+
+        Realm realm = Realm.getDefaultInstance();
+        RealmRoom realmRoom =
+            realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+        if (realmRoom != null) {
+
+            if (realmRoom.getGroupRoom() != null) {
+                if (realmRoom.getGroupRoom().getAvatar() != null) {
+                    realmAttachment = realmRoom.getGroupRoom().getAvatar().getFile();
+                }
+            }
+
+            Log.e("ddd", realmAttachment + "");
+
+            if (realmAttachment != null) {
+
+                String mainFilePath = realmAttachment.getLocalFilePath();
+
+                if (mainFilePath != null) {
+                    File file = new File(mainFilePath);
+                    if (!file.exists()) {
+                        mainFilePath = realmAttachment.getLocalThumbnailPath();
+                    }
+                } else {
+                    mainFilePath = realmAttachment.getLocalThumbnailPath();
+                }
+
+                if (mainFilePath != null) {
+                    File fileb = new File(mainFilePath);
+                    if (fileb.exists()) {
+                        bitmap = BitmapFactory.decodeFile(fileb.getPath());
+                    }
+                }
+            }
+
+            if (bitmap != null) {
+                imvUserPicture.setImageBitmap(bitmap);
+            } else {
+                imvUserPicture.setImageBitmap(
+                    com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture(
+                        (int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60),
+                        initialize, color));
+            }
+        }
+
     }
 
     public void onRequestDownloadAvatar(RealmAttachment file) {

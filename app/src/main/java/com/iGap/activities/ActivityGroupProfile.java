@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -473,14 +475,63 @@ public class ActivityGroupProfile extends ActivityEnhanced
             }
         });
 
-        imvGroupAvatar.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture(
-            (int) imvGroupAvatar.getContext().getResources().getDimension(R.dimen.dp60), initials,
-            color));
+        setAvatarGroup();
         txtMemberNumber.setText(participantsCountLabel);
 
         setUiIndependRole();
 
         initRecycleView();
+    }
+
+    private void setAvatarGroup() {
+
+        Bitmap bitmap = null;
+        RealmAttachment realmAttachment = null;
+
+        Realm realm = Realm.getDefaultInstance();
+        RealmRoom realmRoom =
+            realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        if (realmRoom != null) {
+
+            if (realmRoom.getGroupRoom() != null) {
+                if (realmRoom.getGroupRoom().getAvatar() != null) {
+                    realmAttachment = realmRoom.getGroupRoom().getAvatar().getFile();
+                }
+            }
+
+            Log.e("ddd", realmAttachment + "");
+
+            if (realmAttachment != null) {
+
+                String mainFilePath = realmAttachment.getLocalFilePath();
+
+                if (mainFilePath != null) {
+                    File file = new File(mainFilePath);
+                    if (!file.exists()) {
+                        mainFilePath = realmAttachment.getLocalThumbnailPath();
+                    }
+                } else {
+                    mainFilePath = realmAttachment.getLocalThumbnailPath();
+                }
+
+                if (mainFilePath != null) {
+                    File fileb = new File(mainFilePath);
+                    if (fileb.exists()) {
+                        bitmap = BitmapFactory.decodeFile(fileb.getPath());
+                    }
+                }
+            }
+
+            if (bitmap != null) {
+                imvGroupAvatar.setImageBitmap(bitmap);
+            } else {
+                imvGroupAvatar.setImageBitmap(
+                    com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture(
+                        (int) imvGroupAvatar.getContext().getResources().getDimension(R.dimen.dp60),
+                        initials, color));
+            }
+        }
+
     }
 
     private void initRecycleView() {

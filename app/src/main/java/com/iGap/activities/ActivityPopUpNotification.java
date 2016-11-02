@@ -140,6 +140,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                         btnMessageCounter.setText(
                             1 + " " + getString(R.string.of) + " " + unreadList.size());
                         setImeageAndTextAppBar(viewPager.getCurrentItem());
+                        listSize = unreadList.size();
                     }
                 }, 300);
             }
