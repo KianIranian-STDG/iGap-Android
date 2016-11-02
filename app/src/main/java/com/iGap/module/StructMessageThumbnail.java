@@ -9,16 +9,6 @@ import com.iGap.realm.RealmThumbnail;
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/29/2016.
  */
 public class StructMessageThumbnail implements Parcelable {
-    public static final Parcelable.Creator<StructMessageThumbnail> CREATOR =
-        new Parcelable.Creator<StructMessageThumbnail>() {
-            @Override public StructMessageThumbnail createFromParcel(Parcel source) {
-                return new StructMessageThumbnail(source);
-            }
-
-            @Override public StructMessageThumbnail[] newArray(int size) {
-                return new StructMessageThumbnail[size];
-            }
-        };
     public long size;
     public int width;
     public int height;
@@ -32,13 +22,6 @@ public class StructMessageThumbnail implements Parcelable {
         this.width = width;
         this.height = height;
         this.cacheId = cacheId;
-    }
-
-    protected StructMessageThumbnail(Parcel in) {
-        this.size = in.readLong();
-        this.width = in.readInt();
-        this.height = in.readInt();
-        this.cacheId = in.readString();
     }
 
     public static StructMessageThumbnail convert(ProtoGlobal.Thumbnail thumbnail) {
@@ -64,4 +47,22 @@ public class StructMessageThumbnail implements Parcelable {
         dest.writeInt(this.height);
         dest.writeString(this.cacheId);
     }
+
+    protected StructMessageThumbnail(Parcel in) {
+        this.size = in.readLong();
+        this.width = in.readInt();
+        this.height = in.readInt();
+        this.cacheId = in.readString();
+    }
+
+    public static final Parcelable.Creator<StructMessageThumbnail> CREATOR =
+        new Parcelable.Creator<StructMessageThumbnail>() {
+            @Override public StructMessageThumbnail createFromParcel(Parcel source) {
+                return new StructMessageThumbnail(source);
+            }
+
+            @Override public StructMessageThumbnail[] newArray(int size) {
+                return new StructMessageThumbnail[size];
+            }
+        };
 }

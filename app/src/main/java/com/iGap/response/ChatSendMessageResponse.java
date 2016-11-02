@@ -162,7 +162,7 @@ public class ChatSendMessageResponse extends MessageHandler {
 
                             realmRoomMessage = fillRoomMessage(realmRoomMessage, roomMessage);
 
-                            if (roomMessage.getForwardFrom() != null) { // forward message
+                            if (roomMessage.getForwardFrom().hasForwardFrom()) { // forward message
 
                                 RealmRoomMessage forwardMessage =
                                     realmRoomMessage.getForwardMessage();
@@ -173,7 +173,7 @@ public class ChatSendMessageResponse extends MessageHandler {
                                 }
                                 realmRoomMessage.setForwardMessage(
                                     fillRoomMessage(forwardMessage, roomMessage));
-                            } else if (roomMessage.getReplyTo() != null) { // reply message
+                            } else if (roomMessage.hasReplyTo()) { // reply message
 
                                 RealmRoomMessage replyMessage =
                                     realmRoomMessage.getForwardMessage();
@@ -243,7 +243,7 @@ public class ChatSendMessageResponse extends MessageHandler {
                 RealmRoomMessageContact.build(roomMessage.getContact()));
         }
         realmRoomMessage.setEdited(roomMessage.getEdited());
-        realmRoomMessage.setUpdateTime(roomMessage.getUpdateTime());
+        realmRoomMessage.setUpdateTime(roomMessage.getUpdateTime() * DateUtils.SECOND_IN_MILLIS);
 
         return realmRoomMessage;
     }

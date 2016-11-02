@@ -1,11 +1,18 @@
 package com.iGap.realm;
 
+import com.iGap.module.StringListParcelConverter;
 import com.iGap.proto.ProtoGlobal;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
+import io.realm.RealmRoomMessageContactRealmProxy;
 import io.realm.annotations.PrimaryKey;
+import org.parceler.Parcel;
+import org.parceler.ParcelPropertyConverter;
 
+@Parcel(implementations = { RealmRoomMessageContactRealmProxy.class },
+    value = Parcel.Serialization.BEAN,
+    analyze = { RealmRoomMessageContact.class })
 public class RealmRoomMessageContact extends RealmObject {
 
     private String firstName;
@@ -69,6 +76,7 @@ public class RealmRoomMessageContact extends RealmObject {
         return phones;
     }
 
+    @ParcelPropertyConverter(StringListParcelConverter.class)
     public void setPhones(RealmList<RealmString> phones) {
         this.phones = phones;
     }
@@ -93,6 +101,7 @@ public class RealmRoomMessageContact extends RealmObject {
         return emails;
     }
 
+    @ParcelPropertyConverter(StringListParcelConverter.class)
     public void setEmails(RealmList<RealmString> emails) {
         this.emails = emails;
     }

@@ -3,6 +3,7 @@ package com.iGap.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,7 +15,6 @@ import com.iGap.adapter.items.RoomItem;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.StructChatInfo;
 import com.iGap.module.StructMessageAttachment;
-import com.iGap.module.StructMessageInfo;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmRoom;
@@ -35,7 +35,7 @@ public class ActivitySelectChat extends ActivityEnhanced {
     public static final String ARG_FORWARD_MESSAGE = "arg_forward_msg";
     private RecyclerView mRecyclerView;
     private FastItemAdapter<RoomItem> mAdapter;
-    private ArrayList<StructMessageInfo> mForwardMessages;
+    private ArrayList<Parcelable> mForwardMessages;
 
     @Override protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));

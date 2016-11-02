@@ -5,9 +5,14 @@ import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 import io.realm.Realm;
 import io.realm.RealmObject;
+import io.realm.RealmRoomMessageRealmProxy;
 import io.realm.annotations.Index;
 import io.realm.annotations.PrimaryKey;
+import org.parceler.Parcel;
 
+@Parcel(implementations = { RealmRoomMessageRealmProxy.class },
+    value = Parcel.Serialization.BEAN,
+    analyze = { RealmRoomMessage.class })
 public class RealmRoomMessage extends RealmObject {
     @PrimaryKey private long messageId;
     private long messageVersion;
@@ -65,7 +70,7 @@ public class RealmRoomMessage extends RealmObject {
         return statusVersion;
     }
 
-    public void setStatusVersion(int statusVersion) {
+    public void setStatusVersion(long statusVersion) {
         this.statusVersion = statusVersion;
     }
 
@@ -137,8 +142,8 @@ public class RealmRoomMessage extends RealmObject {
         return updateTime;
     }
 
-    public void setUpdateTime(int updateTime) {
-        this.updateTime = updateTime * DateUtils.SECOND_IN_MILLIS;
+    public void setUpdateTime(long updateTime) {
+        this.updateTime = updateTime;
     }
 
     public int getUpdateTimeAsSeconds() {

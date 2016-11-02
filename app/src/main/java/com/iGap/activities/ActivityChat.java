@@ -20,6 +20,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.support.annotation.ArrayRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -189,6 +190,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import org.parceler.Parcels;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
@@ -528,11 +530,11 @@ public class ActivityChat extends ActivityEnhanced
             && getIntent().getExtras() != null
             && getIntent().getExtras()
             .getParcelableArrayList(ActivitySelectChat.ARG_FORWARD_MESSAGE) != null) {
-            ArrayList<StructMessageInfo> messageInfos = getIntent().getExtras()
-                .getParcelableArrayList(ActivitySelectChat.ARG_FORWARD_MESSAGE);
+            ArrayList<Parcelable> messageInfos =
+                getIntent().getParcelableArrayListExtra(ActivitySelectChat.ARG_FORWARD_MESSAGE);
 
-            for (StructMessageInfo messageInfo : messageInfos) {
-                sendForwardedMessage(messageInfo);
+            for (Parcelable messageInfo : messageInfos) {
+                sendForwardedMessage((StructMessageInfo) Parcels.unwrap(messageInfo));
             }
         }
         clearHistoryFromContactsProfileInterface();
@@ -1519,20 +1521,20 @@ public class ActivityChat extends ActivityEnhanced
                                     ProtoGlobal.RoomMessageStatus.SENDING.toString());
                                 roomMessage.setMessageId(Long.parseLong(identity));
                                 roomMessage.setUserId(senderId);
-                                roomMessage.setUpdateTime((int) (System.currentTimeMillis()
-                                    / DateUtils.SECOND_IN_MILLIS));
+                                roomMessage.setUpdateTime(System.currentTimeMillis());
 
                                 // user wants to replay to a message
                                 if (mReplayLayout != null
                                     && mReplayLayout.getTag() instanceof StructMessageInfo) {
-                                    // TODO: 9/10/2016 [Alireza Eskandarpour Shoferi] after
-                                    // server done creating replay, uncomment following lines
-                                    /*messageInfo.replayFrom = ((StructMessageInfo) mReplayLayout
-                                    .getTag()).senderName;
-                                    messageInfo.replayMessage = ((StructMessageInfo)
-                                    mReplayLayout.getTag()).messageText;
-                                    messageInfo.replayPicturePath = ((StructMessageInfo)
-                                    mReplayLayout.getTag()).filePic;*/
+                                    RealmRoomMessage messageToReplay =
+                                        realm.where(RealmRoomMessage.class)
+                                            .equalTo(RealmRoomMessageFields.MESSAGE_ID,
+                                                Long.parseLong(
+                                                    ((StructMessageInfo) mReplayLayout.getTag()).messageID))
+                                            .findFirst();
+                                    if (messageToReplay != null) {
+                                        roomMessage.setReplyTo(messageToReplay);
+                                    }
                                 }
                             }
                         });
@@ -1541,26 +1543,9 @@ public class ActivityChat extends ActivityEnhanced
                             .equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(identity))
                             .findFirst();
 
-                        // user wants to replay to a message
-                        /*
-                         * in draft file , create StructMessageInfo with senderName,messageText and
-                         * filePic . when i write this code at draft ; just need this three params
-                         * for reply . if later need more data for reply should ensure that add new
-                         * params to draft also.
-                         */
-                        if (mReplayLayout != null
-                            && mReplayLayout.getTag() instanceof StructMessageInfo) {
-                            mAdapter.add(new TextItem(chatType, ActivityChat.this).setMessage(
-                                StructMessageInfo.convert(roomMessage,
-                                    ((StructMessageInfo) mReplayLayout.getTag()).senderName,
-                                    ((StructMessageInfo) mReplayLayout.getTag()).messageText,
-                                    ((StructMessageInfo) mReplayLayout.getTag()).filePic))
-                                .withIdentifier(System.nanoTime()));
-                        } else {
-                            mAdapter.add(new TextItem(chatType, ActivityChat.this).setMessage(
-                                StructMessageInfo.convert(roomMessage))
-                                .withIdentifier(System.nanoTime()));
-                        }
+                        mAdapter.add(new TextItem(chatType, ActivityChat.this).setMessage(
+                            StructMessageInfo.convert(roomMessage))
+                            .withIdentifier(System.nanoTime()));
 
                         realm.close();
 
@@ -2362,14 +2347,14 @@ public class ActivityChat extends ActivityEnhanced
                     messageInfo =
                         new StructMessageInfo(Long.toString(messageId), Long.toString(senderID),
                             ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
-                            MyType.SendType.send, MyType.FileState.uploading, null, filePath,
-                            updateTime, ((StructMessageInfo) mReplayLayout.getTag()));
+                            MyType.SendType.send, null, filePath, updateTime,
+                            Long.parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
                 } else {
                     messageInfo =
                         new StructMessageInfo(Long.toString(messageId), getWrittenMessage(),
                             Long.toString(senderID),
                             ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
-                            MyType.SendType.send, MyType.FileState.uploading, null, filePath,
+                            MyType.SendType.send, null, filePath,
                             updateTime);
                 }
                 break;
@@ -2390,14 +2375,14 @@ public class ActivityChat extends ActivityEnhanced
                     messageInfo =
                         new StructMessageInfo(Long.toString(messageId), Long.toString(senderID),
                             ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
-                            MyType.SendType.send, MyType.FileState.uploading, null, filePath,
-                            updateTime, ((StructMessageInfo) mReplayLayout.getTag()));
+                            MyType.SendType.send, null, filePath, updateTime,
+                            Long.parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
                 } else {
                     messageInfo =
                         new StructMessageInfo(Long.toString(messageId), getWrittenMessage(),
                             Long.toString(senderID),
                             ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
-                            MyType.SendType.send, MyType.FileState.uploading, null, filePath,
+                            MyType.SendType.send, null, filePath,
                             updateTime);
                 }
 
@@ -2419,14 +2404,14 @@ public class ActivityChat extends ActivityEnhanced
                     messageInfo =
                         new StructMessageInfo(Long.toString(messageId), Long.toString(senderID),
                             ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
-                            MyType.SendType.send, MyType.FileState.uploading, null, filePath,
-                            updateTime, ((StructMessageInfo) mReplayLayout.getTag()));
+                            MyType.SendType.send, null, filePath, updateTime,
+                            Long.parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
                 } else {
                     messageInfo =
                         new StructMessageInfo(Long.toString(messageId), getWrittenMessage(),
                             Long.toString(senderID),
                             ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
-                            MyType.SendType.send, MyType.FileState.uploading, null, filePath,
+                            MyType.SendType.send, null, filePath,
                             updateTime);
                 }
                 break;
@@ -2448,16 +2433,15 @@ public class ActivityChat extends ActivityEnhanced
                     messageInfo =
                         new StructMessageInfo(Long.toString(messageId), Long.toString(senderID),
                             ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
-                            MyType.SendType.send, MyType.FileState.uploading, videoFileMime,
+                            MyType.SendType.send, videoFileMime,
                             filePath, null, filePath, null, updateTime,
-                            ((StructMessageInfo) mReplayLayout.getTag()));
+                            Long.parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
                 } else {
                     messageInfo =
                         new StructMessageInfo(Long.toString(messageId), Long.toString(senderID),
                             getWrittenMessage(), ProtoGlobal.RoomMessageStatus.SENDING.toString(),
-                            messageType, MyType.SendType.send, MyType.FileState.uploading,
-                            videoFileName, videoFileMime, filePath, null, filePath,
-                            videoFile.length(), null, updateTime);
+                            messageType, MyType.SendType.send, videoFileMime, filePath, null,
+                            filePath, null, updateTime);
                 }
                 break;
             case AttachFile.request_code_pic_audi:
@@ -2477,7 +2461,8 @@ public class ActivityChat extends ActivityEnhanced
                 messageInfo = StructMessageInfo.buildForAudio(messageId, senderID,
                     ProtoGlobal.RoomMessageStatus.SENDING, messageType, MyType.SendType.send,
                     updateTime, getWrittenMessage(), null, filePath, songArtist, songDuration,
-                    userTriesReplay() ? mReplayLayout.getTag() : null);
+                    userTriesReplay() ? Long.parseLong(
+                        ((StructMessageInfo) mReplayLayout.getTag()).messageID) : 0);
                 break;
             case AttachFile.request_code_pic_file:
                 fileName = new File(filePath).getName();
@@ -2494,16 +2479,15 @@ public class ActivityChat extends ActivityEnhanced
                     messageInfo =
                         new StructMessageInfo(Long.toString(messageId), Long.toString(senderID),
                             ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
-                            MyType.SendType.send, MyType.FileState.uploading, fileFileMime,
+                            MyType.SendType.send, fileFileMime,
                             filePath, null, filePath, null, updateTime,
-                            ((StructMessageInfo) mReplayLayout.getTag()));
+                            Long.parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
                 } else {
                     messageInfo =
                         new StructMessageInfo(Long.toString(messageId), Long.toString(senderID),
                             getWrittenMessage(), ProtoGlobal.RoomMessageStatus.SENDING.toString(),
-                            messageType, MyType.SendType.send, MyType.FileState.uploading,
-                            fileFileName, fileFileMime, filePath, null, filePath, fileFile.length(),
-                            null, updateTime);
+                            messageType, MyType.SendType.send, fileFileMime, filePath, null,
+                            filePath, null, updateTime);
                 }
                 break;
             case AttachFile.request_code_contact_phone:
@@ -2522,7 +2506,8 @@ public class ActivityChat extends ActivityEnhanced
                 messageInfo =
                     StructMessageInfo.buildForContact(messageId, senderID, MyType.SendType.send,
                         updateTime, ProtoGlobal.RoomMessageStatus.SENDING, image, username, name,
-                        "", number, userTriesReplay() ? mReplayLayout.getTag() : null);
+                        "", number, userTriesReplay() ? Long.parseLong(
+                            ((StructMessageInfo) mReplayLayout.getTag()).messageID) : null);
                 break;
             case AttachFile.request_code_paint:
                 fileName = new File(filePath).getName();
@@ -2537,14 +2522,14 @@ public class ActivityChat extends ActivityEnhanced
                     messageInfo =
                         new StructMessageInfo(Long.toString(messageId), Long.toString(senderID),
                             ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
-                            MyType.SendType.send, MyType.FileState.uploading, null, filePath,
-                            updateTime, ((StructMessageInfo) mReplayLayout.getTag()));
+                            MyType.SendType.send, null, filePath, updateTime,
+                            Long.parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
                 } else {
                     messageInfo =
                         new StructMessageInfo(Long.toString(messageId), getWrittenMessage(),
                             Long.toString(senderID),
                             ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
-                            MyType.SendType.send, MyType.FileState.uploading, null, filePath,
+                            MyType.SendType.send, null, filePath,
                             updateTime);
                 }
                 break;
@@ -2571,7 +2556,7 @@ public class ActivityChat extends ActivityEnhanced
                     LocalFileType.THUMBNAIL);
                 roomMessage.setMessageId(messageId);
                 roomMessage.setUserId(senderID);
-                roomMessage.setUpdateTime((int) (updateTime / DateUtils.SECOND_IN_MILLIS));
+                roomMessage.setUpdateTime(updateTime);
 
                 if (finalMessageType == ProtoGlobal.RoomMessageType.CONTACT) {
                     RealmRoomMessageContact realmRoomMessageContact =
@@ -2652,7 +2637,7 @@ public class ActivityChat extends ActivityEnhanced
         return false;
     }
 
-    private Intent makeIntentForForwardMessages(ArrayList<StructMessageInfo> messageInfos) {
+    private Intent makeIntentForForwardMessages(ArrayList<Parcelable> messageInfos) {
         Intent intent = new Intent(ActivityChat.this, ActivitySelectChat.class);
         intent.putParcelableArrayListExtra(ActivitySelectChat.ARG_FORWARD_MESSAGE, messageInfos);
 
@@ -2660,10 +2645,8 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     private Intent makeIntentForForwardMessages(StructMessageInfo messageInfos) {
-        ArrayList<StructMessageInfo> infos = new ArrayList<>();
-        infos.add(messageInfos);
-
-        return makeIntentForForwardMessages(infos);
+        return makeIntentForForwardMessages(
+            new ArrayList<>(Arrays.asList(Parcels.wrap(messageInfos))));
     }
 
     private void replay(StructMessageInfo item) {
@@ -2807,11 +2790,10 @@ public class ActivityChat extends ActivityEnhanced
         ll_AppBarSelected = (LinearLayout) findViewById(R.id.chl_ll_appbar_selelected);
     }
 
-    private ArrayList<StructMessageInfo> getMessageStructFromSelectedItems() {
-        ArrayList<StructMessageInfo> messageInfos =
-            new ArrayList<>(mAdapter.getSelectedItems().size());
+    private ArrayList<Parcelable> getMessageStructFromSelectedItems() {
+        ArrayList<Parcelable> messageInfos = new ArrayList<>(mAdapter.getSelectedItems().size());
         for (AbstractMessage item : mAdapter.getSelectedItems()) {
-            messageInfos.add(item.mMessage);
+            messageInfos.add(Parcels.wrap(item.mMessage));
         }
         return messageInfos;
     }
@@ -2888,7 +2870,7 @@ public class ActivityChat extends ActivityEnhanced
                 timeMessage.setMessageId(System.currentTimeMillis());
                 // -1 means time message
                 timeMessage.setUserId(-1);
-                timeMessage.setUpdateTime(message.getUpdateTimeAsSeconds() - 1);
+                timeMessage.setUpdateTime(message.getUpdateTime() - 1L);
                 timeMessage.setMessage(timeString);
                 timeMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT.toString());
                 lastResultMessages.add(timeMessage);
@@ -3386,24 +3368,24 @@ public class ActivityChat extends ActivityEnhanced
             mAdapter.add(new VoiceItem(chatType, this).setMessage(
                 new StructMessageInfo(Long.toString(messageId), Long.toString(senderID),
                     ProtoGlobal.RoomMessageStatus.SENDING.toString(),
-                    ProtoGlobal.RoomMessageType.VOICE, MyType.SendType.send,
-                    MyType.FileState.uploading, null, savedPath, updateTime,
-                    ((StructMessageInfo) mReplayLayout.getTag())))
+                    ProtoGlobal.RoomMessageType.VOICE, MyType.SendType.send, null, savedPath,
+                    updateTime,
+                    Long.parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID)))
                 .withIdentifier(System.nanoTime()));
         } else {
             if (isMessageWrote()) {
                 mAdapter.add(new VoiceItem(chatType, this).setMessage(
                     new StructMessageInfo(Long.toString(messageId), Long.toString(senderID),
                         ProtoGlobal.RoomMessageStatus.SENDING.toString(),
-                        ProtoGlobal.RoomMessageType.VOICE, MyType.SendType.send,
-                        MyType.FileState.uploading, null, savedPath, updateTime))
+                        ProtoGlobal.RoomMessageType.VOICE, MyType.SendType.send, null, savedPath,
+                        updateTime))
                     .withIdentifier(System.nanoTime()));
             } else {
                 mAdapter.add(new VoiceItem(chatType, this).setMessage(
                     new StructMessageInfo(Long.toString(messageId), Long.toString(senderID),
                         ProtoGlobal.RoomMessageStatus.SENDING.toString(),
-                        ProtoGlobal.RoomMessageType.VOICE, MyType.SendType.send,
-                        MyType.FileState.uploading, null, savedPath, updateTime))
+                        ProtoGlobal.RoomMessageType.VOICE, MyType.SendType.send, null, savedPath,
+                        updateTime))
                     .withIdentifier(System.nanoTime()));
             }
         }
@@ -3420,7 +3402,7 @@ public class ActivityChat extends ActivityEnhanced
                     LocalFileType.FILE);
                 roomMessage.setMessageId(messageId);
                 roomMessage.setUserId(senderID);
-                roomMessage.setUpdateTime((int) (updateTime / DateUtils.SECOND_IN_MILLIS));
+                roomMessage.setUpdateTime(updateTime);
 
                 // TODO: 9/26/2016 [Alireza Eskandarpour Shoferi] user may wants to send a file
                 // in response to a message as replay, so after server done creating replay and
@@ -4136,8 +4118,7 @@ public class ActivityChat extends ActivityEnhanced
                                                             // remove tag from edtChat if the
                                                             // message has deleted
                                                             if (edtChat.getTag() != null
-                                                                && edtChat.getTag() instanceof
-                                                                StructMessageInfo) {
+                                                                && edtChat.getTag() instanceof StructMessageInfo) {
                                                                 if (Long.toString(Long.parseLong(
                                                                     message.messageID))
                                                                     .equals(
@@ -4149,8 +4130,7 @@ public class ActivityChat extends ActivityEnhanced
                                                         }
                                                     });
                                                     // delete message
-                                                    new RequestChatDeleteMessage()
-                                                        .chatDeleteMessage(
+                                                    new RequestChatDeleteMessage().chatDeleteMessage(
                                                         mRoomId, Long.parseLong(message.messageID));
                                                 }
                                                 element.removeChangeListeners();

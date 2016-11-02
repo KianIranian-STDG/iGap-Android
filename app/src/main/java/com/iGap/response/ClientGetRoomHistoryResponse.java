@@ -1,5 +1,6 @@
 package com.iGap.response;
 
+import android.text.format.DateUtils;
 import android.util.Log;
 import com.iGap.G;
 import com.iGap.proto.ProtoClientGetRoomHistory;
@@ -76,7 +77,8 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
                     realmRoomMessage.setRoomMessageContact(
                         RealmRoomMessageContact.build(roomMessage.getContact()));
                     realmRoomMessage.setEdited(roomMessage.getEdited());
-                    realmRoomMessage.setUpdateTime(roomMessage.getUpdateTime());
+                    realmRoomMessage.setUpdateTime(
+                        roomMessage.getUpdateTime() * DateUtils.SECOND_IN_MILLIS);
 
                     if (roomMessage.getUserId()
                         != userId) { // show notification if this message isn't for another account

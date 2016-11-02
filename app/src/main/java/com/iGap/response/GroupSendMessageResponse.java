@@ -203,7 +203,7 @@ public class GroupSendMessageResponse extends MessageHandler {
         realmRoomMessage.setRoomMessageContact(
             RealmRoomMessageContact.build(roomMessage.getContact()));
         realmRoomMessage.setEdited(roomMessage.getEdited());
-        realmRoomMessage.setUpdateTime(roomMessage.getUpdateTime());
+        realmRoomMessage.setUpdateTime(roomMessage.getUpdateTime() * DateUtils.SECOND_IN_MILLIS);
         return realmRoomMessage;
     }
 

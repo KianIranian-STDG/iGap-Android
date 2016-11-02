@@ -26,6 +26,8 @@ import com.iGap.module.TimeUtils;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.realm.RealmUserInfo;
+import com.iGap.realm.RealmUserInfoFields;
 import com.iGap.request.RequestFileDownload;
 import com.iGap.request.RequestUserInfo;
 import com.mikepenz.fastadapter.items.AbstractItem;
@@ -34,6 +36,7 @@ import io.meness.github.messageprogress.MessageProgress;
 import io.meness.github.messageprogress.OnMessageProgressClick;
 import io.meness.github.messageprogress.OnProgress;
 import io.meness.github.messageprogress.ProgressProcess;
+import io.realm.Realm;
 import java.io.IOException;
 import java.util.List;
 
@@ -291,22 +294,29 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         LinearLayout replayContainer =
             (LinearLayout) holder.itemView.findViewById(R.id.replayLayout);
         if (replayContainer != null) {
-            if (!mMessage.replayFrom.isEmpty()) {
-                if (!mMessage.replayPicturePath.isEmpty()) {
+            if (mMessage.replayTo != null) {
+                if (mMessage.replayTo.getAttachment() != null) {
                     holder.itemView.findViewById(R.id.chslr_imv_replay_pic)
                         .setVisibility(View.VISIBLE);
-                    ((ImageView) holder.itemView.findViewById(
-                        R.id.chslr_imv_replay_pic)).setImageResource(
-                        Integer.parseInt(mMessage.replayPicturePath));
+                    ImageLoader.getInstance()
+                        .displayImage(mMessage.replayTo.getAttachment().getLocalThumbnailPath(),
+                            (ImageView) holder.itemView.findViewById(R.id.chslr_imv_replay_pic));
                 } else {
                     holder.itemView.findViewById(R.id.chslr_imv_replay_pic)
                         .setVisibility(View.GONE);
                 }
 
-                ((TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_from)).setText(
-                    mMessage.replayFrom);
+                Realm realm = Realm.getDefaultInstance();
+                RealmUserInfo replayToInfo = realm.where(RealmUserInfo.class)
+                    .equalTo(RealmUserInfoFields.USER_ID, mMessage.replayTo.getUserId())
+                    .findFirst();
+                if (replayToInfo != null) {
+                    ((TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_from)).setText(
+                        replayToInfo.getNickName());
+                }
+                realm.close();
                 ((TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_message)).setText(
-                    mMessage.replayMessage);
+                    mMessage.replayTo.getMessage());
                 replayContainer.setVisibility(View.VISIBLE);
             } else {
                 replayContainer.setVisibility(View.GONE);
@@ -319,7 +329,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         LinearLayout forwardContainer =
             (LinearLayout) holder.itemView.findViewById(R.id.cslr_ll_forward);
         if (forwardContainer != null) {
-            if (!mMessage.forwardMessageFrom.isEmpty()) {
+            if (mMessage.forwardMessageFrom != null) {
                 forwardContainer.setVisibility(View.VISIBLE);
                 ((TextView) forwardContainer.findViewById(R.id.cslr_txt_forward_from)).setText(
                     mMessage.forwardMessageFrom);

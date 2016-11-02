@@ -3,8 +3,13 @@ package com.iGap.realm;
 import com.iGap.proto.ProtoGlobal;
 import io.realm.Realm;
 import io.realm.RealmObject;
+import io.realm.RealmRoomMessageLocationRealmProxy;
 import io.realm.annotations.PrimaryKey;
+import org.parceler.Parcel;
 
+@Parcel(implementations = { RealmRoomMessageLocationRealmProxy.class },
+    value = Parcel.Serialization.BEAN,
+    analyze = { RealmRoomMessageLocation.class })
 public class RealmRoomMessageLocation extends RealmObject {
     private double locationLat;
     private double locationLong;

@@ -12,21 +12,12 @@ import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import io.realm.Realm;
 import java.io.File;
+import org.parceler.Parcels;
 
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/28/2016.
  */
 public class StructMessageAttachment implements Parcelable {
-    public static final Parcelable.Creator<StructMessageAttachment> CREATOR =
-        new Parcelable.Creator<StructMessageAttachment>() {
-            @Override public StructMessageAttachment createFromParcel(Parcel source) {
-                return new StructMessageAttachment(source);
-            }
-
-            @Override public StructMessageAttachment[] newArray(int size) {
-                return new StructMessageAttachment[size];
-            }
-        };
     public String token;
     public String name;
     public long size;
@@ -53,9 +44,6 @@ public class StructMessageAttachment implements Parcelable {
         this.smallThumbnail = smallThumbnail;
     }
 
-    public StructMessageAttachment() {
-    }
-
     public StructMessageAttachment(RealmAttachment realmAttachment) {
         this.token = realmAttachment.getToken();
         this.name = realmAttachment.getName();
@@ -67,16 +55,7 @@ public class StructMessageAttachment implements Parcelable {
         this.localFilePath = realmAttachment.getLocalFilePath();
     }
 
-    protected StructMessageAttachment(Parcel in) {
-        this.token = in.readString();
-        this.name = in.readString();
-        this.size = in.readLong();
-        this.width = in.readInt();
-        this.height = in.readInt();
-        this.duration = in.readDouble();
-        this.localThumbnailPath = in.readString();
-        this.largeThumbnail = in.readParcelable(StructMessageThumbnail.class.getClassLoader());
-        this.smallThumbnail = in.readParcelable(StructMessageThumbnail.class.getClassLoader());
+    public StructMessageAttachment() {
     }
 
     public static StructMessageAttachment convert(ProtoGlobal.File attachment) {
@@ -250,8 +229,33 @@ public class StructMessageAttachment implements Parcelable {
         dest.writeInt(this.width);
         dest.writeInt(this.height);
         dest.writeDouble(this.duration);
+        dest.writeParcelable(Parcels.wrap(this.largeThumbnail), flags);
+        dest.writeParcelable(Parcels.wrap(this.smallThumbnail), flags);
         dest.writeString(this.localThumbnailPath);
-        dest.writeParcelable(this.largeThumbnail, flags);
-        dest.writeParcelable(this.smallThumbnail, flags);
+        dest.writeString(this.localFilePath);
     }
+
+    protected StructMessageAttachment(Parcel in) {
+        this.token = in.readString();
+        this.name = in.readString();
+        this.size = in.readLong();
+        this.width = in.readInt();
+        this.height = in.readInt();
+        this.duration = in.readDouble();
+        this.largeThumbnail = in.readParcelable(StructMessageThumbnail.class.getClassLoader());
+        this.smallThumbnail = in.readParcelable(StructMessageThumbnail.class.getClassLoader());
+        this.localThumbnailPath = in.readString();
+        this.localFilePath = in.readString();
+    }
+
+    public static final Parcelable.Creator<StructMessageAttachment> CREATOR =
+        new Parcelable.Creator<StructMessageAttachment>() {
+            @Override public StructMessageAttachment createFromParcel(Parcel source) {
+                return new StructMessageAttachment(source);
+            }
+
+            @Override public StructMessageAttachment[] newArray(int size) {
+                return new StructMessageAttachment[size];
+            }
+        };
 }

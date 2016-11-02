@@ -4,13 +4,18 @@ import android.support.annotation.Nullable;
 import com.iGap.G;
 import com.iGap.proto.ProtoGlobal;
 import io.realm.Realm;
+import io.realm.RealmAttachmentRealmProxy;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 import java.io.File;
+import org.parceler.Parcel;
 
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/26/2016.
  */
+@Parcel(implementations = { RealmAttachmentRealmProxy.class },
+    value = Parcel.Serialization.BEAN,
+    analyze = { RealmAttachment.class })
 public class RealmAttachment extends RealmObject {
     // should be message id for message attachment and user id for avatar
     @PrimaryKey private long id;
