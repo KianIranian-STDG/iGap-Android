@@ -22,8 +22,7 @@ public class GroupGetMemberListResponse extends MessageHandler {
         ProtoGroupGetMemberList.GroupGetMemberListResponse.Builder builder =
             (ProtoGroupGetMemberList.GroupGetMemberListResponse.Builder) message;
 
-        builder.getMemberList();
-        G.onGroupGetMemberList.onGroupGetMemberList();
+        G.onGroupGetMemberList.onGroupGetMemberList(builder.getMemberList());
     }
 
     @Override public void timeOut() {

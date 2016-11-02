@@ -5,7 +5,6 @@ import android.view.View;
 import android.widget.TextView;
 import com.iGap.R;
 import com.iGap.interfaces.IMessageItem;
-import com.iGap.module.CircleImageView;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import java.util.List;
@@ -34,13 +33,6 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
         holder.name.setText(mMessage.userInfo.displayName);
         holder.number.setText(mMessage.userInfo.phone);
         holder.username.setText("@" + mMessage.userInfo.username);
-        // TODO: 10/5/2016 [Alireza] set avatar
-            /*if (mMessage.userInfo.avatar != null && !mMessage.userInfo.avatar.isEmpty()) {
-                holder.image.setVisibility(View.VISIBLE);
-                ImageLoader.getInstance().displayImage(suitablePath(mMessage.userInfo.imageSource), holder.image);
-            } else {
-                holder.image.setVisibility(View.GONE);
-            }*/
     }
 
     @Override public ViewHolderFactory<? extends ViewHolder> getFactory() {
@@ -54,14 +46,12 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
-        protected CircleImageView image;
         protected TextView name;
         protected TextView number;
         protected TextView username;
 
         public ViewHolder(View view) {
             super(view);
-            image = (CircleImageView) view.findViewById(R.id.image);
             name = (TextView) view.findViewById(R.id.name);
             number = (TextView) view.findViewById(R.id.number);
             username = (TextView) view.findViewById(R.id.username);

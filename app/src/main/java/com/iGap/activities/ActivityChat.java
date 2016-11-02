@@ -3911,26 +3911,7 @@ public class ActivityChat extends ActivityEnhanced
                             if (realmRoomMessage != null) {
 
                                 StructMessageInfo struct = new StructMessageInfo();
-
-                                RealmRegisteredInfo realmRegisteredInfo =
-                                    realm.where(RealmRegisteredInfo.class)
-                                        .equalTo(RealmRegisteredInfoFields.ID,
-                                            realmRoomMessage.getUserId())
-                                        .findFirst();
-
-                                if (realmRegisteredInfo != null) {
-                                    struct.senderName = realmRegisteredInfo.getDisplayName();
-                                } else {
-                                    struct.senderName = "name not detect";
-                                }
                                 struct.messageText = realmRoomMessage.getMessage();
-                                if (realmRoomMessage.getAttachment() != null) {
-                                    struct.filePic =
-                                        realmRoomMessage.getAttachment().getLocalThumbnailPath();
-                                } else {
-                                    // is need that fill filePic with "" if not exist
-                                    struct.filePic = "";
-                                }
 
                                 replay(struct);
                             }
