@@ -159,6 +159,10 @@
             android:name=".helper.MyService"
             android:enabled="true"
             android:exported="true"></service>
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="a8bb9474c4f59357347dbd3fd5707ca541e2a740" />
     </application>
 
 </manifest>

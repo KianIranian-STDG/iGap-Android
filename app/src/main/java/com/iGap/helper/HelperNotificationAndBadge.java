@@ -269,7 +269,8 @@ public class HelperNotificationAndBadge {
         }
     }
 
-    //*****************************************************************************************   notification ***********************
+    //*****************************************************************************************
+    // notification ***********************
 
     private void setNotification() {
 
@@ -392,7 +393,7 @@ public class HelperNotificationAndBadge {
             switch (type) {
                 case CHAT:
                     RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
-                    if (realmChatRoom.getRealmNotificationSetting() != null
+                    if (realmRoom != null && realmChatRoom.getRealmNotificationSetting() != null
                         && realmChatRoom.getRealmNotificationSetting().getNotification() != 0) {
                         switch (realmChatRoom.getRealmNotificationSetting().getNotification()) {
                             case DEFAULT:
