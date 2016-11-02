@@ -219,8 +219,8 @@ public class StructMessageInfo implements Parcelable {
     }
 
     public static StructMessageInfo buildForContact(long messageID, long senderID,
-        MyType.SendType sendType, long time, ProtoGlobal.RoomMessageStatus status, String avatar,
-        String username, String firstName, String lastName, String number, long replayToMessageId) {
+        MyType.SendType sendType, long time, ProtoGlobal.RoomMessageStatus status, String username,
+        String firstName, String lastName, String number, long replayToMessageId) {
         StructMessageInfo info = new StructMessageInfo();
 
         info.messageID = Long.toString(messageID);
@@ -235,9 +235,11 @@ public class StructMessageInfo implements Parcelable {
         info.messageType = ProtoGlobal.RoomMessageType.CONTACT;
         info.sendType = sendType;
         info.time = time;
-        info.replayTo = realm.where(RealmRoomMessage.class)
-            .equalTo(RealmRoomMessageFields.MESSAGE_ID, replayToMessageId)
-            .findFirst();
+        if (replayToMessageId != -1) {
+            info.replayTo = realm.where(RealmRoomMessage.class)
+                .equalTo(RealmRoomMessageFields.MESSAGE_ID, replayToMessageId)
+                .findFirst();
+        }
         realm.close();
 
         // contact exclusive

@@ -2505,9 +2505,9 @@ public class ActivityChat extends ActivityEnhanced
                 // FIXME: 10/18/2016 [Alireza] lastName "" gozashtam jash, firstName esme kamele
                 messageInfo =
                     StructMessageInfo.buildForContact(messageId, senderID, MyType.SendType.send,
-                        updateTime, ProtoGlobal.RoomMessageStatus.SENDING, image, username, name,
+                        updateTime, ProtoGlobal.RoomMessageStatus.SENDING, username, name,
                         "", number, userTriesReplay() ? Long.parseLong(
-                            ((StructMessageInfo) mReplayLayout.getTag()).messageID) : null);
+                            ((StructMessageInfo) mReplayLayout.getTag()).messageID) : -1);
                 break;
             case AttachFile.request_code_paint:
                 fileName = new File(filePath).getName();
