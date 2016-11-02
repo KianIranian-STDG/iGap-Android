@@ -26,7 +26,6 @@ import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAvatarPath;
 import com.iGap.realm.RealmAvatarPathFields;
-import com.iGap.realm.RealmChatRoom;
 import com.iGap.realm.RealmGroupRoom;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
@@ -392,10 +391,14 @@ public class HelperNotificationAndBadge {
 
             switch (type) {
                 case CHAT:
-                    RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
-                    if (realmRoom != null && realmChatRoom.getRealmNotificationSetting() != null
-                        && realmChatRoom.getRealmNotificationSetting().getNotification() != 0) {
-                        switch (realmChatRoom.getRealmNotificationSetting().getNotification()) {
+                    if (realmRoom != null
+                        && realmRoom.getChatRoom() != null
+                        && realmRoom.getChatRoom().getRealmNotificationSetting() != null
+                        && realmRoom.getChatRoom().getRealmNotificationSetting().getNotification()
+                        != 0) {
+                        switch (realmRoom.getChatRoom()
+                            .getRealmNotificationSetting()
+                            .getNotification()) {
                             case DEFAULT:
                                 updateNotificationAndBadge(updateNotification, type);
                                 break;
@@ -434,7 +437,7 @@ public class HelperNotificationAndBadge {
         switch (type) {
             case CHAT:
 
-                if (realmRoom.getChatRoom() != null
+                if (realmRoom != null && realmRoom.getChatRoom() != null
                     && realmRoom.getChatRoom().getRealmNotificationSetting() != null
                     && realmRoom.getChatRoom().getRealmNotificationSetting().getLedColor() != 0) {
                     led = realmRoom.getChatRoom().getRealmNotificationSetting().getLedColor();
@@ -442,7 +445,7 @@ public class HelperNotificationAndBadge {
                     led =
                         sharedPreferences.getInt(SHP_SETTING.KEY_STNS_LED_COLOR_MESSAGE, -8257792);
                 }
-                if (realmRoom.getChatRoom() != null
+                if (realmRoom != null && realmRoom.getChatRoom() != null
                     && realmRoom.getChatRoom().getRealmNotificationSetting() != null
                     && realmRoom.getChatRoom().getRealmNotificationSetting().getVibrate() != null) {
                     vibrator = realmRoom.getChatRoom().getRealmNotificationSetting().getVibrate();
@@ -453,7 +456,7 @@ public class HelperNotificationAndBadge {
                 popupNotification =
                     sharedPreferences.getInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, 3);
 
-                if (realmRoom.getChatRoom() != null
+                if (realmRoom != null && realmRoom.getChatRoom() != null
                     && realmRoom.getChatRoom().getRealmNotificationSetting() != null
                     && realmRoom.getChatRoom().getRealmNotificationSetting().getIdRadioButtonSound()
                     != 0) {
