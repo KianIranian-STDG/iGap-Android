@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AdapterChatBackground;
@@ -85,11 +86,19 @@ public class ActivityChatBackground extends ActivityEnhanced {
             if (i == 0) {
                 item.setId(i);
                 items.add(item);
+                Log.i("CCCC", "a0: " + i);
             } else {
-                if (!file[i].getPath().equals(G.chatBackground.toString())) {
+                if (i == 1 && (G.chatBackground.exists())) {
+                    item.setId(i);
+                    item.setPathImage(G.chatBackground.toString());
+                    items.add(item);
+                    Log.i("CCCC", "a1: " + i);
+                } else if (!file[i].getPath().equals(G.chatBackground.toString())) {
                     item.setId(i);
                     item.setPathImage(file[i].toString());
                     items.add(item);
+                    Log.i("CCCC", "a2: " + i);
+
                 }
             }
         }
@@ -110,13 +119,12 @@ public class ActivityChatBackground extends ActivityEnhanced {
             && resultCode == RESULT_OK) {// result for gallery
 
             String pathImageUser = getRealPathFromURI(data.getData());
-            if (G.imageFile.exists()) G.chatBackground.delete();// if file exists delete
             HelperCopyFile.copyFile(pathImageUser, G.chatBackground.toString());
-
             items.clear();
             AdapterChatBackground.imageLoader.clearDiskCache();
             AdapterChatBackground.imageLoader.clearMemoryCache();
             setItem();
+            Log.i("CCCC", "a4: " + pathImageUser);
         }
     }
 

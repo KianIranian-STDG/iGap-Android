@@ -2682,8 +2682,11 @@ public class ActivityChat extends ActivityEnhanced
     private void initAppbarSelected() {
 
         btnCloseAppBarSelected = (MaterialDesignTextView) findViewById(R.id.chl_btn_close_layout);
-        btnCloseAppBarSelected.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+        RippleView rippleCloseAppBarSelected =
+            (RippleView) findViewById(R.id.chl_ripple_close_layout);
+        rippleCloseAppBarSelected.setOnRippleCompleteListener(
+            new RippleView.OnRippleCompleteListener() {
+                @Override public void onComplete(RippleView rippleView) {
                 mAdapter.deselect();
                 toolbar.setVisibility(View.VISIBLE);
                 ll_AppBarSelected.setVisibility(View.GONE);
@@ -2695,18 +2698,18 @@ public class ActivityChat extends ActivityEnhanced
         });
 
         btnReplaySelected = (MaterialDesignTextView) findViewById(R.id.chl_btn_replay_selected);
-        btnReplaySelected.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+        RippleView rippleReplaySelected = (RippleView) findViewById(R.id.chl_ripple_close_layout);
+        rippleReplaySelected.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+            @Override public void onComplete(RippleView rippleView) {
                 Log.e("ddd", "btnReplaySelected");
                 // FIXME: 10/31/2016 [Alireza] inja nabayad null bashe
                 replay(null);
             }
         });
-
         btnCopySelected = (MaterialDesignTextView) findViewById(R.id.chl_btn_copy_selected);
-        btnCopySelected.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
-
+        RippleView rippleCopySelected = (RippleView) findViewById(R.id.chl_ripple_copy_selected);
+        rippleCopySelected.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+            @Override public void onComplete(RippleView rippleView) {
                 for (AbstractMessage messageID : mAdapter.getSelectedItems()) {////TODO [Saeed
                     // Mozaffari] [2016-09-13 6:39 PM] - code is wrong
                     ClipboardManager clipboard =
@@ -2718,10 +2721,12 @@ public class ActivityChat extends ActivityEnhanced
                 }
             }
         });
-
         btnForwardSelected = (MaterialDesignTextView) findViewById(R.id.chl_btn_forward_selected);
-        btnForwardSelected.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+        RippleView rippleForwardSelected =
+            (RippleView) findViewById(R.id.chl_ripple_forward_selected);
+        rippleForwardSelected.setOnRippleCompleteListener(
+            new RippleView.OnRippleCompleteListener() {
+                @Override public void onComplete(RippleView rippleView) {
                 Log.e("ddd", "btnForwardSelected");
                 // forward selected messages to room list for selecting room
                 if (mAdapter != null && mAdapter.getSelectedItems().size() > 0) {
@@ -2730,8 +2735,14 @@ public class ActivityChat extends ActivityEnhanced
                 }
             }
         });
-
         btnDeleteSelected = (MaterialDesignTextView) findViewById(R.id.chl_btn_delete_selected);
+        RippleView rippleDeleteSelected =
+            (RippleView) findViewById(R.id.chl_ripple_delete_selected);
+        rippleDeleteSelected.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+            @Override public void onComplete(RippleView rippleView) {
+
+            }
+        });
         btnDeleteSelected.setOnClickListener(
             new View.OnClickListener() { //TODO [Saeed Mozaffari] [2016-09-17 2:58 PM] - FORCE -
                 // add item to delete list

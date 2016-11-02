@@ -19,7 +19,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -40,6 +39,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.IntentRequests;
 import com.iGap.R;
+import com.iGap.fragments.FragmentPrivacyAndSecurity;
 import com.iGap.fragments.FragmentShowAvatars;
 import com.iGap.fragments.FragmentSticker;
 import com.iGap.helper.HelperImageBackColor;
@@ -205,34 +205,34 @@ public class ActivitySetting extends ActivityEnhanced
                 } else {
                     firsName = splitNickname[0];
                 }
-                View viewFirstName = new View(ActivitySetting.this);
-                viewFirstName.setBackgroundColor(
-                    getResources().getColor(R.color.toolbar_background));
+                final View viewFirstName = new View(ActivitySetting.this);
+                viewFirstName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
                 LinearLayout.LayoutParams viewParams =
-                    new AppBarLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2);
+                    new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
 
                 TextInputLayout inputFirstName = new TextInputLayout(ActivitySetting.this);
                 final EditText edtFirstName = new EditText(ActivitySetting.this);
                 edtFirstName.setHint("First Name");
                 edtFirstName.setText(firsName);
+                edtFirstName.setTextColor(getResources().getColor(R.color.text_edit_text));
+                edtFirstName.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
                 edtFirstName.setPadding(0, 8, 0, 8);
-
                 edtFirstName.setSingleLine(true);
                 inputFirstName.addView(edtFirstName);
                 inputFirstName.addView(viewFirstName, viewParams);
+                final View viewLastName = new View(ActivitySetting.this);
+                viewLastName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     edtFirstName.setBackground(
                         getResources().getDrawable(android.R.color.transparent));
                 }
 
-                View viewLastName = new View(ActivitySetting.this);
-                viewLastName.setBackgroundColor(
-                    getResources().getColor(R.color.toolbar_background));
-
                 TextInputLayout inputLastName = new TextInputLayout(ActivitySetting.this);
                 final EditText edtLastName = new EditText(ActivitySetting.this);
                 edtLastName.setHint("Last Name");
                 edtLastName.setText(lastName);
+                edtLastName.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
+                edtLastName.setTextColor(getResources().getColor(R.color.text_edit_text));
                 edtLastName.setPadding(0, 8, 0, 8);
                 edtLastName.setSingleLine(true);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -245,11 +245,11 @@ public class ActivitySetting extends ActivityEnhanced
                 LinearLayout.LayoutParams layoutParams =
                     new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT);
-                layoutParams.setMargins(0, 0, 0, 30);
+                layoutParams.setMargins(0, 0, 0, 15);
                 LinearLayout.LayoutParams lastNameLayoutParams =
                     new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT);
-                layoutParams.setMargins(0, 70, 0, 10);
+                lastNameLayoutParams.setMargins(0, 15, 0, 10);
 
                 layoutNickname.addView(inputFirstName, layoutParams);
                 layoutNickname.addView(inputLastName, lastNameLayoutParams);
@@ -311,6 +311,30 @@ public class ActivitySetting extends ActivityEnhanced
                         } else {
                             positive.setClickable(false);
                             positive.setAlpha(0.5f);
+                        }
+                    }
+                });
+
+                edtFirstName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override public void onFocusChange(View view, boolean b) {
+                        if (b) {
+                            viewFirstName.setBackgroundColor(
+                                getResources().getColor(R.color.toolbar_background));
+                        } else {
+                            viewFirstName.setBackgroundColor(
+                                getResources().getColor(R.color.line_edit_text));
+                        }
+                    }
+                });
+
+                edtLastName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override public void onFocusChange(View view, boolean b) {
+                        if (b) {
+                            viewLastName.setBackgroundColor(
+                                getResources().getColor(R.color.toolbar_background));
+                        } else {
+                            viewLastName.setBackgroundColor(
+                                getResources().getColor(R.color.line_edit_text));
                         }
                     }
                 });
@@ -414,54 +438,153 @@ public class ActivitySetting extends ActivityEnhanced
         layoutUserName.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
 
-                new MaterialDialog.Builder(ActivitySetting.this).title("Username")
-                    .positiveText("SAVE")
-                    .alwaysCallInputCallback()// callback input change evrTime
-                    .widgetColor(getResources().getColor(R.color.toolbar_background))
-                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override public void onClick(@NonNull MaterialDialog dialog,
-                            @NonNull DialogAction which) {
+                final LinearLayout layoutUserName = new LinearLayout(ActivitySetting.this);
+                layoutUserName.setOrientation(LinearLayout.VERTICAL);
 
-                            //TODO [Saeed Mozaffari] [2016-09-10 3:51 PM] - waiting for proto
+                final View viewUserName = new View(ActivitySetting.this);
+                LinearLayout.LayoutParams viewParams =
+                    new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
 
+                TextInputLayout inputUserName = new TextInputLayout(ActivitySetting.this);
+                final EditText edtUserName = new EditText(ActivitySetting.this);
+                edtUserName.setHint("First Name");
+                edtUserName.setText(userName);
+                edtUserName.setTextColor(getResources().getColor(R.color.text_edit_text));
+                edtUserName.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
+                edtUserName.setPadding(0, 8, 0, 8);
+                edtUserName.setSingleLine(true);
+                inputUserName.addView(edtUserName);
+                inputUserName.addView(viewUserName, viewParams);
+
+                viewUserName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    edtUserName.setBackground(
+                        getResources().getDrawable(android.R.color.transparent));
+                }
+                LinearLayout.LayoutParams layoutParams =
+                    new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
+
+                layoutUserName.addView(inputUserName, layoutParams);
+
+                final MaterialDialog dialog =
+                    new MaterialDialog.Builder(ActivitySetting.this).title("Username")
+                        .positiveText("SAVE")
+                        .customView(layoutUserName, true)
+                        .widgetColor(getResources().getColor(R.color.toolbar_background))
+                        .negativeText("CANCEL")
+                        .build();
+
+                final View positive = dialog.getActionButton(DialogAction.POSITIVE);
+                positive.setClickable(false);
+                positive.setAlpha(0.5f);
+
+                final String finaluserName = userName;
+                edtUserName.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1,
+                        int i2) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override public void afterTextChanged(Editable editable) {
+
+                        if (!edtUserName.getText().toString().equals(finaluserName)) {
+                            positive.setClickable(true);
+                            positive.setAlpha(1.0f);
+                        } else {
+                            positive.setClickable(false);
+                            positive.setAlpha(0.5f);
                         }
-                    })
-                    .negativeText("CANCEL")
-                    .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT)
-                    .input("please Enter a NickName", txtUserName.getText().toString(),
-                        new MaterialDialog.InputCallback() {
-                            @Override
-                            public void onInput(MaterialDialog dialog, CharSequence input) {
-                                // Do something
-                                View positive = dialog.getActionButton(DialogAction.POSITIVE);
+                    }
+                });
 
-                                if (!input.toString().equals(txtUserName.getText().toString())) {
+                edtUserName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override public void onFocusChange(View view, boolean b) {
+                        if (b) {
+                            viewUserName.setBackgroundColor(
+                                getResources().getColor(R.color.toolbar_background));
+                        } else {
+                            viewUserName.setBackgroundColor(
+                                getResources().getColor(R.color.line_edit_text));
+                        }
+                    }
+                });
 
-                                    positive.setClickable(true);
-                                    positive.setAlpha(1.0f);
-                                } else {
-                                    positive.setClickable(false);
-                                    positive.setAlpha(0.5f);
-                                }
-                            }
-                        })
-                    .show();
+                // check each word with server
+                edtUserName.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1,
+                        int i2) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override public void afterTextChanged(Editable editable) {
+
+                    }
+                });
+
+                dialog.show();
+
+                //        new MaterialDialog.Builder(ActivitySetting.this).title("Username")
+                //            .positiveText("SAVE")
+                //            .alwaysCallInputCallback()// callback input change evrTime
+                //            .widgetColor(getResources().getColor(R.color.toolbar_background))
+                //            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                //                @Override public void onClick(@NonNull MaterialDialog dialog,
+                //                    @NonNull DialogAction which) {
+                //
+                //                    //TODO [Saeed Mozaffari] [2016-09-10 3:51 PM] - waiting for proto
+                //
+                //                }
+                //            })
+                //            .negativeText("CANCEL")
+                //            .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT)
+                //            .input("please Enter a NickName", txtUserName.getText().toString(),
+                //                new MaterialDialog.InputCallback() {
+                //                    @Override
+                //                    public void onInput(MaterialDialog dialog, CharSequence input) {
+                //                        // Do something
+                //                        View positive = dialog.getActionButton(DialogAction.POSITIVE);
+                //
+                //                        if (!input.toString().equals(txtUserName.getText().toString())) {
+                //
+                //                            positive.setClickable(true);
+                //                            positive.setAlpha(1.0f);
+                //                        } else {
+                //                            positive.setClickable(false);
+                //                            positive.setAlpha(0.5f);
+                //                        }
+                //                    }
+                //                })
+                //            .show();
             }
         });
 
         appBarLayout = (AppBarLayout) findViewById(R.id.st_appbar);
+        final TextView titleToolbar = (TextView) findViewById(R.id.st_txt_titleToolbar);
+        final ViewGroup viewGroup = (ViewGroup) findViewById(R.id.st_parentLayoutCircleImage);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
 
-                TextView titleToolbar = (TextView) findViewById(R.id.st_txt_titleToolbar);
-                ViewGroup viewGroup = (ViewGroup) findViewById(R.id.st_parentLayoutCircleImage);
                 if (verticalOffset < -5) {
 
-                    viewGroup.animate().alpha(0).setDuration(700);
                     viewGroup.setVisibility(View.GONE);
                     titleToolbar.setVisibility(View.VISIBLE);
+                    viewGroup.animate().alpha(0).setDuration(700);
                     titleToolbar.animate().alpha(1).setDuration(300);
                 } else {
+
                     titleToolbar.setVisibility(View.GONE);
                     viewGroup.setVisibility(View.VISIBLE);
                     titleToolbar.animate().alpha(0).setDuration(500);
@@ -711,6 +834,19 @@ public class ActivitySetting extends ActivityEnhanced
                             dialog.dismiss();
                         }
                     });
+            }
+        });
+
+        TextView txtprivacySecurity = (TextView) findViewById(R.id.st_txt_privacySecurity);
+        txtprivacySecurity.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                FragmentPrivacyAndSecurity fragmentPrivacyAndSecurity =
+                    new FragmentPrivacyAndSecurity();
+                getSupportFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
+                        R.anim.slide_in_right, R.anim.slide_out_left)
+                    .replace(R.id.st_layoutParent, fragmentPrivacyAndSecurity)
+                    .commit();
             }
         });
 

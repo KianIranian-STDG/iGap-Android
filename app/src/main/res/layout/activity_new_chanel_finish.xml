@@ -29,7 +29,7 @@
           android:layout_height="match_parent"
           android:layout_centerInParent="true"
           android:gravity="center"
-          android:text="New Chanel"
+          android:text="@string/new_chanel"
           android:textColor="@color/whit_background"
           android:textSize="@dimen/sp22"
           android:textStyle="bold"
@@ -83,7 +83,7 @@
           android:layout_height="wrap_content"
           android:layout_gravity="center_horizontal"
           android:layout_marginTop="@dimen/dp20"
-          android:text="Chanel Info"
+          android:text="@string/channel_info"
           android:textColor="@color/toolbar_background"
           android:textSize="24sp"
           android:textStyle="bold"
@@ -95,44 +95,48 @@
           android:layout_height="wrap_content"
           android:layout_below="@+id/textView"
           android:layout_marginTop="12dp"
-          android:padding="@dimen/dp12"
+          android:paddingLeft="@dimen/dp12"
+          android:paddingStart="@dimen/dp12"
+          android:paddingRight="@dimen/dp12"
+          android:paddingEnd="@dimen/dp12"
           >
 
         <RadioButton
             android:id="@+id/nclf_radioButton_Public"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:gravity="left"
-            android:text="Public Chanel"
+            android:gravity="left|center"
+            android:textSize="@dimen/sp14"
+            android:text="@string/public_channel"
             android:textColor="@android:color/black"
             />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp8"
-            android:text="Public Chanels can be found in search , anyone can join them"
-            android:textSize="16sp"
+            android:text="@string/desc_public_channel"
+            android:textSize="14sp"
+            android:paddingLeft="@dimen/dp8"
             />
 
         <RadioButton
             android:id="@+id/nclf_radioButton_private"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
             android:layout_marginTop="@dimen/dp8"
-            android:gravity="left"
-            android:text="Private Chanel"
+            android:gravity="left|center"
+            android:text="@string/private_channel"
+            android:textSize="@dimen/sp14"
             android:textColor="@android:color/black"
             />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp8"
-            android:text="Privet chanel can only be joined via an invite link"
-            android:textSize="16sp"
+            android:text="@string/desc_private_channel"
+            android:textSize="14sp"
+            android:paddingLeft="@dimen/dp8"
+            android:layout_marginBottom="@dimen/dp8"
             />
       </RadioGroup>
 
@@ -152,7 +156,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:padding="0dp"
-            android:text="Link"
+            android:text="@string/link"
             android:textColor="@color/toolbar_background"
             android:textSize="24sp"
             android:textStyle="bold"
@@ -161,7 +165,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp68"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
             >
 
@@ -170,19 +174,19 @@
               android:layout_width="wrap_content"
               android:layout_height="match_parent"
               android:layout_gravity="center_horizontal"
-              android:layout_marginLeft="@dimen/dp8"
+              android:paddingLeft="@dimen/dp8"
               android:gravity="center"
-              android:text="Igap / "
+              android:text="@string/igapChanel"
               android:textSize="@dimen/sp20"
               />
 
           <EditText
               android:id="@+id/nclf_edt_link"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
+              android:layout_height="wrap_content"
               android:layout_gravity="center_horizontal"
-              android:layout_marginRight="@dimen/dp32"
-              android:hint="your Link"
+              android:hint="@string/your_link"
+              android:textColorHint="@color/default_shadow_color"
               />
 
         </LinearLayout>
@@ -201,7 +205,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/dp20"
-            android:text="CANCEL"
+            android:text="@string/B_cancel"
             android:textColor="@color/toolbar_background"
             android:textSize="@dimen/dp16"
             android:textStyle="bold"
@@ -212,7 +216,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/dp20"
-            android:text="FINISH"
+            android:text="@string/B_finish"
             android:textColor="@color/toolbar_background"
             android:textSize="@dimen/dp16"
             android:textStyle="bold"

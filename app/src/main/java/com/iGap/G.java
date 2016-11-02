@@ -124,7 +124,7 @@ public class G extends Application {
     public static final String DIR_AUDIOS = DIR_APP + "/audios";
     public static final String DIR_DOCUMENT = DIR_APP + "/document";
     public static final String DIR_SOUND_NOTIFICATION = DIR_APP + "/.sound";
-    public static final String DIR_CHAT_BACKGROUND = DIR_APP + "/.chat_background";
+    public static final String DIR_CHAT_BACKGROUND = DIR_APP + "/chat_background";
     public static final String DIR_NEW_GROUP = DIR_APP + "/.new_group";
     public static final String DIR_NEW_CHANEL = DIR_APP + "/.new_chanel";
     public static final String DIR_ALL_IMAGE_USER_CONTACT = DIR_APP + "/.all_image_user_contact";
@@ -454,7 +454,7 @@ public class G extends Application {
         switch (language) {
             case "فارسی":
                 CalligraphyConfig.initDefault(
-                    new CalligraphyConfig.Builder().setDefaultFontPath("fonts/iransanslite.ttf")
+                    new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf")
                         .setFontAttrId(R.attr.fontPath)
                         .build());
                 setLocale("fa");
@@ -462,14 +462,14 @@ public class G extends Application {
                 break;
             case "English":
                 CalligraphyConfig.initDefault(
-                    new CalligraphyConfig.Builder().setDefaultFontPath("fonts/iransanslite.ttf")
+                    new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf")
                         .setFontAttrId(R.attr.fontPath)
                         .build());
                 setLocale("en");
                 break;
             case "العربی":
                 CalligraphyConfig.initDefault(
-                    new CalligraphyConfig.Builder().setDefaultFontPath("fonts/iransanslite.ttf")
+                    new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf")
                         .setFontAttrId(R.attr.fontPath)
                         .build());
                 setLocale("ar");
@@ -477,7 +477,7 @@ public class G extends Application {
                 break;
             case "Deutsch":
                 CalligraphyConfig.initDefault(
-                    new CalligraphyConfig.Builder().setDefaultFontPath("fonts/iransanslite.ttf")
+                    new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf")
                         .setFontAttrId(R.attr.fontPath)
                         .build());
                 setLocale("nl");

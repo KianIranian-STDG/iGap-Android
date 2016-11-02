@@ -185,6 +185,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
         TextInputLayout txtInputNewGroup =
             (TextInputLayout) view.findViewById(R.id.ng_txtInput_newGroup);
 
+        final View viewGroupName = view.findViewById(R.id.ng_view_newGroup);
         edtGroupName = (EditText) view.findViewById(R.id.ng_edt_newGroup);
         edtGroupName.setPadding(0, 8, 0, 8);
 
@@ -193,6 +194,18 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
         } else {
             txtInputNewGroup.setHint(getResources().getString(R.string.New_Group));
         }
+
+        edtGroupName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    viewGroupName.setBackgroundColor(
+                        getResources().getColor(R.color.toolbar_background));
+                } else {
+                    viewGroupName.setBackgroundColor(
+                        getResources().getColor(R.color.line_edit_text));
+                }
+            }
+        });
 
         //=======================description group
         edtDescription = (LinedEditText) view.findViewById(R.id.ng_edt_description);

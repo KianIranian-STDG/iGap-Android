@@ -192,5 +192,12 @@
     <item>@string/delete_item_dialog</item>
   </string-array>
 
+  <string-array name="account_self_destruct">
+    <item>1 month</item>
+    <item>3 month</item>
+    <item>6 month</item>
+    <item>1 year</item>
+  </string-array>
+
 
 </resources>

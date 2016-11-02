@@ -59,8 +59,17 @@
             android:id="@+id/ng_edt_newGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp8"
+            android:paddingTop="@dimen/dp8"
+            android:paddingBottom="@dimen/dp8"
+            android:background="@android:color/transparent"
             android:singleLine="true"
+            />
+        <View
+            android:id="@+id/ng_view_newGroup"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:scaleY=".5"
+            android:background="@color/line_edit_text"
             />
 
       </android.support.design.widget.TextInputLayout>
@@ -86,6 +95,8 @@
             android:gravity="top"
             android:lineSpacingMultiplier="1.2"
             android:lines="4"
+            android:paddingTop="@dimen/dp8"
+            android:paddingBottom="@dimen/dp8"
             android:maxLength="500"
             android:maxLines="4"
             />
@@ -190,6 +201,6 @@
       android:layout_centerInParent="true"
       android:background="@drawable/pu_circle_dialog_give_image_gallery"
       android:indeterminate="true"
-      android:visibility="visible"
+      android:visibility="gone"
       />
 </RelativeLayout>

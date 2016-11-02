@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,20 +60,11 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
             }
             break;
             case ALL: {
-                Log.i("TASSSSS", "0: " + position);
                 ViewHolderItem holder2 = (ViewHolderItem) holder;
-                if (position == 1) {
-
-                    Bitmap bmp = imageLoader.loadImageSync("file://" + G.chatBackground);
-                    holder2.img.setImageBitmap(bmp);
-                } else {
-                    Log.i("TASSSSS", "1: " + position);
-                    Bitmap bmp = imageLoader.loadImageSync("file://" + item.getPathImage());
-                    holder2.img.setImageBitmap(bmp);
-                }
+                Bitmap bmp = imageLoader.loadImageSync("file://" + item.getPathImage());
+                holder2.img.setImageBitmap(bmp);
 
                 if (selected_position == position) {
-                    Log.i("TASSSSS", "2: " + position);
                     holder2.itemView.setBackgroundColor(
                         G.context.getResources().getColor(R.color.toolbar_background));
                     holder2.itemView.setPadding(3, 3, 3, 3);
@@ -120,9 +110,8 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
                                     if (G.context.getPackageManager()
                                         .hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
                                         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                        uriIntent = Uri.fromFile(G.chatBackground);
-                                        ActivityChatBackground.uriIntent = uriIntent;
-                                        intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
+                                        intent.putExtra(MediaStore.EXTRA_OUTPUT,
+                                            Uri.fromFile(G.chatBackground));
                                         G.currentActivity.startActivityForResult(intent,
                                             IntentRequests.REQ_CAMERA);
                                         dialog.dismiss();
@@ -145,11 +134,11 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
         }
     }
 
-    public class ViewHolderItem extends RecyclerView.ViewHolder {
+    private class ViewHolderItem extends RecyclerView.ViewHolder {
 
         private ImageView img;
 
-        public ViewHolderItem(View itemView) {
+        ViewHolderItem(View itemView) {
             super(itemView);
 
             img = (ImageView) itemView.findViewById(R.id.imgBackground);

@@ -1,6 +1,7 @@
 package com.iGap.fragments;
 
 import android.content.ContentProviderOperation;
+import android.content.Context;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
@@ -8,7 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.TextView;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.Toast;
 import com.iGap.G;
 import com.iGap.R;
@@ -20,9 +22,9 @@ import java.util.ArrayList;
 
 public class FragmentAddContact extends android.support.v4.app.Fragment {
 
-    private TextView txtFirstName;
-    private TextView txtLastName;
-    private TextView txtPhoneNumber;
+    private EditText edtFirstName;
+    private EditText edtLastName;
+    private EditText edtPhoneNumber;
     private ViewGroup parent;
 
     public static FragmentAddContact newInstance() {
@@ -40,25 +42,25 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
         initComponent(view);
     }
 
-    private void initComponent(View view) {
+    private void initComponent(final View view) {
 
         MaterialDesignTextView btnBack =
             (MaterialDesignTextView) view.findViewById(R.id.ac_txt_back);
         RippleView rippleBack = (RippleView) view.findViewById(R.id.ac_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override public void onComplete(RippleView rippleView) {
+
+                InputMethodManager imm =
+                    (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
                 getActivity().getSupportFragmentManager()
                     .beginTransaction()
                     .remove(FragmentAddContact.this)
                     .commit();
             }
         });
-        //        btnBack.setOnClickListener(new View.OnClickListener() {
-        //            @Override
-        //            public void onClick(View view) {
-        //                getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentAddContact.this).commit();
-        //            }
-        //        });
+
 
         MaterialDesignTextView txtSet = (MaterialDesignTextView) view.findViewById(R.id.ac_txt_set);
 
@@ -69,22 +71,60 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
             }
         });
 
-        txtFirstName = (TextView) view.findViewById(R.id.ac_edt_firstName);
-        txtLastName = (TextView) view.findViewById(R.id.ac_edt_lastName);
-        txtPhoneNumber = (TextView) view.findViewById(R.id.ac_edt_phoneNumber);
+        edtFirstName = (EditText) view.findViewById(R.id.ac_edt_firstName);
+        final View viewFirstName = view.findViewById(R.id.ac_view_firstName);
+        edtLastName = (EditText) view.findViewById(R.id.ac_edt_lastName);
+        final View viewLastName = view.findViewById(R.id.ac_view_lastName);
+        edtPhoneNumber = (EditText) view.findViewById(R.id.ac_edt_phoneNumber);
+        final View viewPhoneNumber = view.findViewById(R.id.ac_view_phoneNumber);
+
+        edtFirstName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    viewFirstName.setBackgroundColor(
+                        getResources().getColor(R.color.toolbar_background));
+                } else {
+                    viewFirstName.setBackgroundColor(
+                        getResources().getColor(R.color.line_edit_text));
+                }
+            }
+        });
+        edtLastName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    viewLastName.setBackgroundColor(
+                        getResources().getColor(R.color.toolbar_background));
+                } else {
+                    viewLastName.setBackgroundColor(
+                        getResources().getColor(R.color.line_edit_text));
+                }
+            }
+        });
+        edtPhoneNumber.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    viewPhoneNumber.setBackgroundColor(
+                        getResources().getColor(R.color.toolbar_background));
+                } else {
+                    viewPhoneNumber.setBackgroundColor(
+                        getResources().getColor(R.color.line_edit_text));
+                }
+            }
+        });
+
         getActivity().getWindow()
             .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         RippleView rippleSet = (RippleView) view.findViewById(R.id.ac_ripple_set);
         rippleSet.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override public void onComplete(RippleView rippleView) {
-                if (txtFirstName.getText().toString().length() > 0
-                    || txtLastName.getText().toString().length() > 0) {
-                    if (txtPhoneNumber.getText().toString().length() > 0) {
+                if (edtFirstName.getText().toString().length() > 0
+                    || edtLastName.getText().toString().length() > 0) {
+                    if (edtPhoneNumber.getText().toString().length() > 0) {
 
                         String displayName =
-                            txtFirstName.getText().toString() + " " + txtLastName.getText()
+                            edtFirstName.getText().toString() + " " + edtLastName.getText()
                                 .toString();
-                        String phone = txtPhoneNumber.getText().toString();
+                        String phone = edtPhoneNumber.getText().toString();
 
                         ArrayList<ContentProviderOperation> ops =
                             new ArrayList<ContentProviderOperation>();
@@ -154,9 +194,9 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
     private void addContactToServer() {
         ArrayList<StructListOfContact> contacts = new ArrayList<>();
         StructListOfContact contact = new StructListOfContact();
-        contact.firstName = txtFirstName.getText().toString();
-        contact.lastName = txtLastName.getText().toString();
-        contact.phone = txtPhoneNumber.getText().toString();
+        contact.firstName = edtFirstName.getText().toString();
+        contact.lastName = edtLastName.getText().toString();
+        contact.phone = edtPhoneNumber.getText().toString();
 
         contacts.add(contact);
 

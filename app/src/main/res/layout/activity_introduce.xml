@@ -415,19 +415,12 @@
       android:layout_height="wrap_content"
       android:layout_above="@+id/int_layoutParentCircleImage"
       android:layout_alignParentRight="true"
-      android:layout_marginBottom="-27dp"
-      android:layout_marginRight="@dimen/dp20"
-      android:text="SKIP"
+      android:layout_alignParentBottom="true"
+      android:layout_marginBottom="@dimen/dp12"
+      android:layout_marginRight="20dp"
+      android:text="@string/B_skip"
       android:textColor="@color/toolbar_background"
       android:textSize="@dimen/sp16"
       />
-
-  <android.support.design.widget.CoordinatorLayout
-      android:id="@+id/snackbarlocation"
-      android:layout_width="fill_parent"
-      android:layout_height="wrap_content"
-      android:layout_alignParentTop="true"
-      android:layout_centerHorizontal="true"
-      ></android.support.design.widget.CoordinatorLayout>
 
 </android.support.percent.PercentRelativeLayout>

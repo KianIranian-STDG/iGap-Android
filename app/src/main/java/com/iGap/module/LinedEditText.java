@@ -49,7 +49,7 @@ public class LinedEditText extends EditText {
 
         // instantiate the paint
         dashedLinePaint = new Paint();
-        dashedLinePaint.setColor(G.context.getResources().getColor(R.color.toolbar_background));
+        dashedLinePaint.setColor(G.context.getResources().getColor(R.color.line_edit_text));
         dashedLinePaint.setStyle(Paint.Style.STROKE);
         initialCount = getMinLines();
         setLines(initialCount);
@@ -57,26 +57,14 @@ public class LinedEditText extends EditText {
 
     @Override protected void onDraw(Canvas canvas) {
 
-        // get the height of the view
         int height = getHeight();
-
-        // get the height of each line (not subtracting one from the line height makes lines uneven)
         int lineHeight = getLineHeight() - 1;
-
-        // set the vertical offset basef off of the view width
         int verticalOffset = (int) (lineHeight * VERTICAL_OFFSET_SCALING_FACTOR);
-
-        // the number of lines equals the height divided by the line height
         int numberOfLines = height / lineHeight * 2;
-
-        // if there are more lines than what appear on screen
         if (getLineCount() > numberOfLines) {
 
-            // set the number of lines to the line count
             numberOfLines = getLineCount();
         }
-
-        // get the baseline for the first line
         int baseline = getLineBounds(0, reuseableRect);
 
         // for each line
@@ -94,5 +82,16 @@ public class LinedEditText extends EditText {
         }
 
         super.onDraw(canvas);
+    }
+
+    @Override
+    protected void onFocusChanged(boolean focused, int direction, Rect previouslyFocusedRect) {
+        super.onFocusChanged(focused, direction, previouslyFocusedRect);
+
+        if (focused) {
+            dashedLinePaint.setColor(G.context.getResources().getColor(R.color.toolbar_background));
+        } else {
+            dashedLinePaint.setColor(G.context.getResources().getColor(R.color.line_edit_text));
+        }
     }
 }

@@ -208,6 +208,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical"
+                android:paddingLeft="@dimen/dp12"
+                android:paddingRight="@dimen/dp12"
+
                 >
 
               <TextView
@@ -238,6 +241,9 @@
                 android:layout_width="@dimen/dp140"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:paddingLeft="@dimen/dp12"
+                android:paddingRight="@dimen/dp12"
+
                 >
 
               <TextView
@@ -280,6 +286,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical"
+                android:paddingLeft="@dimen/dp12"
+                android:paddingRight="@dimen/dp12"
+
                 >
 
               <TextView
@@ -309,6 +318,9 @@
                 android:layout_width="@dimen/dp140"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:paddingLeft="@dimen/dp12"
+                android:paddingRight="@dimen/dp12"
+
                 >
 
               <TextView

@@ -102,6 +102,7 @@
       android:layout_height="wrap_content"
       android:layout_marginLeft="@dimen/dp16"
       android:layout_marginRight="@dimen/dp16"
+      android:layout_marginTop="@dimen/dp8"
       >
 
     <EditText
@@ -110,7 +111,19 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp8"
         android:hint="@string/fac_First_Name"
+        android:background="@android:color/transparent"
         android:singleLine="true"
+        android:paddingTop="@dimen/dp8"
+        android:textColorHint="@color/hint_edit_text"
+        android:layout_marginBottom="@dimen/dp4"
+        />
+
+    <View
+        android:id="@+id/ac_view_firstName"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:scaleY=".5"
+        android:background="@color/line_edit_text"
         />
 
   </android.support.design.widget.TextInputLayout>
@@ -121,6 +134,7 @@
       android:layout_height="wrap_content"
       android:layout_marginLeft="@dimen/dp16"
       android:layout_marginRight="@dimen/dp16"
+      android:layout_marginTop="@dimen/dp20"
       >
 
     <EditText
@@ -129,7 +143,19 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp8"
         android:hint="@string/fac_Last_Name"
+        android:paddingTop="@dimen/dp8"
+        android:background="@android:color/transparent"
+        android:textColorHint="@color/hint_edit_text"
+        android:layout_marginBottom="@dimen/dp4"
         android:singleLine="true"
+        />
+
+    <View
+        android:id="@+id/ac_view_lastName"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:scaleY=".5"
+        android:background="@color/line_edit_text"
         />
 
   </android.support.design.widget.TextInputLayout>
@@ -140,6 +166,7 @@
       android:layout_height="wrap_content"
       android:layout_marginLeft="@dimen/dp16"
       android:layout_marginRight="@dimen/dp16"
+      android:layout_marginTop="@dimen/dp20"
       >
 
     <EditText
@@ -148,8 +175,20 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp8"
         android:hint="@string/fac_Phone_Number"
+        android:paddingTop="@dimen/dp8"
+        android:background="@android:color/transparent"
+        android:textColorHint="@color/hint_edit_text"
         android:inputType="phone"
+        android:layout_marginBottom="@dimen/dp4"
         android:singleLine="true"
+        />
+    <View
+        android:id="@+id/ac_view_phoneNumber"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:scaleY=".5"
+
+        android:background="@color/line_edit_text"
         />
 
   </android.support.design.widget.TextInputLayout>
