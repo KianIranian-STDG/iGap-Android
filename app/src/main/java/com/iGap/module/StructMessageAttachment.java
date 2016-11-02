@@ -12,7 +12,6 @@ import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import io.realm.Realm;
 import java.io.File;
-import org.parceler.Parcels;
 
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/28/2016.
@@ -229,8 +228,8 @@ public class StructMessageAttachment implements Parcelable {
         dest.writeInt(this.width);
         dest.writeInt(this.height);
         dest.writeDouble(this.duration);
-        dest.writeParcelable(Parcels.wrap(this.largeThumbnail), flags);
-        dest.writeParcelable(Parcels.wrap(this.smallThumbnail), flags);
+        dest.writeParcelable(this.largeThumbnail, flags);
+        dest.writeParcelable(this.smallThumbnail, flags);
         dest.writeString(this.localThumbnailPath);
         dest.writeString(this.localFilePath);
     }
