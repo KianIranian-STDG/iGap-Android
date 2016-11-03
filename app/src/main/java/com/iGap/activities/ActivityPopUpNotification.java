@@ -125,6 +125,11 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         isPopUpVisible = false;
     }
 
+    @Override public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(0, 0);
+    }
+
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_popup_notification);
@@ -204,6 +209,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             rippleBackButton.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
                 @Override public void onComplete(RippleView rippleView) {
                     finish();
+                    overridePendingTransition(0, 0);
                 }
             });
 

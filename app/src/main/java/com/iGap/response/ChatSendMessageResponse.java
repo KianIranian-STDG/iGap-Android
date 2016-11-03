@@ -127,13 +127,13 @@ public class ChatSendMessageResponse extends MessageHandler {
                     }
 
                     fillRoomMessage(realmRoomMessage, roomMessage);
-                    if (roomMessage.getForwardFrom() != null) { // forward message
+                    if (roomMessage.hasForwardFrom()) { // forward message
 
                         RealmRoomMessage forward = realm.createObject(RealmRoomMessage.class);
                         forward.setMessageId(System.nanoTime());
 
                         realmRoomMessage.setForwardMessage(fillRoomMessage(forward, roomMessage));
-                    } else if (roomMessage.getReplyTo() != null) { // reply message
+                    } else if (roomMessage.hasReplyTo()) { // reply message
 
                         RealmRoomMessage reply = realm.createObject(RealmRoomMessage.class);
                         reply.setMessageId(System.currentTimeMillis());

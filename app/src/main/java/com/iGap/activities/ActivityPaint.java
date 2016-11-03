@@ -448,12 +448,16 @@ public class ActivityPaint extends Activity {
         }
 
         private void touch_up() {
+
             mPath.lineTo(mX, mY);
+
             circlePath.reset();
             // commit the path to our offscreen
             mCanvas.drawPath(mPath, paint);
             // kill this so we don't double draw
             mPath.reset();
+
+            mCanvas.drawPoint(mX, mY, paint);
         }
 
         @Override public boolean onTouchEvent(MotionEvent event) {
