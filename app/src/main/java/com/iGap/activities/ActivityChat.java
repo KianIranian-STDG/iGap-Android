@@ -2304,7 +2304,7 @@ public class ActivityChat extends ActivityEnhanced
             latestFilePath = AttachFile.imagePath;
             latestUri = null;
         } else {
-            latestUri = data.getData();
+            if (data.getData() != null) latestUri = data.getData();
             latestFilePath = "";
         }
         latestRequestCode = requestCode;

@@ -630,7 +630,12 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                             || roomMessage.getStatus()
                             .equals(ProtoGlobal.RoomMessageStatus.DELIVERED.toString())) {
 
-                            unreadList.add(roomMessage);
+                            if (roomMessage.getMessageType()
+                                .toString()
+                                .toLowerCase()
+                                .contains("text")) {
+                                unreadList.add(roomMessage);
+                            }
                         }
                     }
                 }
