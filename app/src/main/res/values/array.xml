@@ -199,5 +199,10 @@
     <item>1 year</item>
   </string-array>
 
+  <string-array name="array_gander">
+    <item>Male</item>
+    <item>Female</item>
+  </string-array>
+
 
 </resources>

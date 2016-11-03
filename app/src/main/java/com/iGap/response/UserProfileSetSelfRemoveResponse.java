@@ -1,5 +1,8 @@
 package com.iGap.response;
 
+import android.util.Log;
+import com.iGap.G;
+import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoUserProfileSetSelfRemove;
 
 public class UserProfileSetSelfRemoveResponse extends MessageHandler {
@@ -17,10 +20,11 @@ public class UserProfileSetSelfRemoveResponse extends MessageHandler {
     }
 
     @Override public void handler() {
-        ProtoUserProfileSetSelfRemove.UserProfileSetSelfRemoveResponse.Builder builder =
-            (ProtoUserProfileSetSelfRemove.UserProfileSetSelfRemoveResponse.Builder) message;
+        ProtoUserProfileSetSelfRemove.UserProfileSetSelfRemoveResponse.Builder builder = (ProtoUserProfileSetSelfRemove.UserProfileSetSelfRemoveResponse.Builder) message;
 
         builder.getSelfRemove();
+
+        G.onUserProfileSetSelfRemove.onUserSetSelfRemove(builder.getSelfRemove());
     }
 
     @Override public void timeOut() {
@@ -29,6 +33,14 @@ public class UserProfileSetSelfRemoveResponse extends MessageHandler {
 
     @Override public void error() {
         super.error();
+
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        int majorCode = errorResponse.getMajorCode();
+        int minorCode = errorResponse.getMinorCode();
+
+        Log.i("XXX", "UserProfileSetSelfRemoveResponse response.majorCode() : " + majorCode);
+        Log.i("XXX", "UserProfileSetSelfRemoveResponse response.minorCode() : " + minorCode);
+        G.onUserProfileSetSelfRemove.Error(majorCode, minorCode);
     }
 }
 

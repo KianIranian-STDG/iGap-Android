@@ -1265,7 +1265,6 @@ public class ActivityChat extends ActivityEnhanced
                 });
                 text2.setOnClickListener(new View.OnClickListener() {
                     @Override public void onClick(View view) {
-                        onSelectRoomMenu("txtClearHistory", (int) mRoomId);
 
                         new MaterialDialog.Builder(ActivityChat.this).title(R.string.clear_history)
                             .content(R.string.clear_history_content)

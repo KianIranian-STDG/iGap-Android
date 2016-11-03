@@ -11,4 +11,6 @@ import com.iGap.proto.ProtoResponse;
 public interface OnUserProfileSetGenderResponse {
 
     void onUserProfileEmailResponse(ProtoGlobal.Gender gender, ProtoResponse.Response response);
+
+    void Error(int majorCode, int minorCode);
 }

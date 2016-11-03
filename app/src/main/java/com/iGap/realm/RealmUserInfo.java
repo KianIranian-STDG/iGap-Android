@@ -16,6 +16,7 @@ public class RealmUserInfo extends RealmObject {
     private String phoneNumber;
     private String initials;
     private String color;
+    private int setSelfRemove;
 
     private RealmList<RealmAvatarPath> avatarPath = new RealmList<>();
     private RealmList<RealmAvatarToken> avatarTokens = new RealmList<>();
@@ -132,5 +133,21 @@ public class RealmUserInfo extends RealmObject {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public boolean isRegistrationStatus() {
+        return registrationStatus;
+    }
+
+    public void setRegistrationStatus(boolean registrationStatus) {
+        this.registrationStatus = registrationStatus;
+    }
+
+    public int getSetSelfRemove() {
+        return setSelfRemove;
+    }
+
+    public void setSetSelfRemove(int setSelfRemove) {
+        this.setSelfRemove = setSelfRemove;
     }
 }

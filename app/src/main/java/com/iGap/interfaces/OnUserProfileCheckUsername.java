@@ -9,6 +9,7 @@ import com.iGap.proto.ProtoUserProfileCheckUsername;
 
 public interface OnUserProfileCheckUsername {
 
-    void OnUserProfileCheckUsername(
-        ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status status);
+    void OnUserProfileCheckUsername(ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status status);
+
+    void Error(int majorCode, int minorCode);
 }

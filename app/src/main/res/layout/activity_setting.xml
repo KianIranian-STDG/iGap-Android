@@ -198,48 +198,104 @@
             />
 
         <LinearLayout
-            android:id="@+id/st_layout_nickname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             >
 
-
-          <TextView
-              android:layout_width="match_parent"
+          <LinearLayout
+              android:id="@+id/st_layout_nickname"
+              android:layout_width="0dp"
+              android:layout_weight=".48"
               android:layout_height="wrap_content"
-              android:paddingLeft="@dimen/dp4"
-              android:paddingStart="@dimen/dp4"
-              android:text="@string/st_nickname"
-              android:textColor="@color/black_register"
-              android:textSize="@dimen/sp18"
-              android:textStyle="normal"
+              android:orientation="vertical"
+              >
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/dp4"
+                android:paddingStart="@dimen/dp4"
+                android:text="@string/st_nickname"
+                android:textColor="@color/black_register"
+                android:textSize="@dimen/sp18"
+                android:textStyle="normal"
+                />
+
+            <TextView
+                android:id="@+id/st_txt_nikName"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp28"
+                android:gravity="center_vertical"
+                android:maxLength="25"
+                android:paddingLeft="@dimen/dp4"
+                android:paddingStart="@dimen/dp4"
+                android:text="Alexander Smith"
+                android:textColor="@color/colorChatMessageTime"
+                android:textSize="@dimen/sp16"
+                android:singleLine="true"
+                android:theme="@style/Setting_editText"
+                />
+
+          </LinearLayout>
+
+          <LinearLayout
+              android:layout_width="0dp"
+              android:layout_weight=".04"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
               />
 
-          <TextView
-              android:id="@+id/st_txt_nikName"
-              android:layout_width="@dimen/dp200"
-              android:layout_height="@dimen/dp28"
-              android:gravity="center_vertical"
-              android:maxLength="25"
-              android:paddingLeft="@dimen/dp4"
-              android:paddingStart="@dimen/dp4"
-              android:text="Alexander Smith"
-              android:textColor="@color/colorChatMessageTime"
-              android:textSize="@dimen/sp16"
-              android:theme="@style/Setting_editText"
-              />
+          <LinearLayout
+              android:id="@+id/st_layout_gander"
+              android:layout_width="0dp"
+              android:layout_weight=".48"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              >
 
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/dp4"
+                android:paddingStart="@dimen/dp4"
+                android:text="@string/st_Gander"
+                android:textColor="@color/black_register"
+                android:textSize="@dimen/sp18"
+                android:textStyle="normal"
+                />
+
+            <TextView
+                android:id="@+id/st_txt_gander"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp28"
+                android:gravity="center_vertical"
+                android:maxLength="25"
+                android:paddingLeft="@dimen/dp4"
+                android:paddingStart="@dimen/dp4"
+                android:text="unknown"
+                android:textColor="@color/colorChatMessageTime"
+                android:textSize="@dimen/sp16"
+                android:theme="@style/Setting_editText"
+                />
+
+          </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/st_layout_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+          <LinearLayout
+              android:id="@+id/st_layout_username"
+              android:layout_width="0dp"
+              android:layout_weight=".48"
+              android:layout_height="wrap_content"
             android:orientation="vertical"
             >
-
-
           <TextView
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
@@ -254,19 +310,64 @@
 
           <TextView
               android:id="@+id/st_txt_userName"
-              android:layout_width="@dimen/dp200"
+              android:layout_width="wrap_content"
               android:layout_height="@dimen/dp28"
               android:gravity="center_vertical"
               android:maxLength="25"
               android:paddingLeft="@dimen/dp4"
               android:paddingStart="@dimen/dp4"
               android:text="Alexander Smith:"
+
               android:textColor="@color/colorChatMessageTime"
               android:textSize="@dimen/sp16"
+              android:singleLine="true"
               android:theme="@style/Setting_editText"
               />
         </LinearLayout>
 
+          <LinearLayout
+              android:layout_width="0dp"
+              android:layout_weight=".04"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              />
+
+          <LinearLayout
+              android:id="@+id/st_layout_email"
+              android:layout_width="0dp"
+              android:layout_weight=".48"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp20"
+                android:paddingLeft="@dimen/dp4"
+                android:paddingStart="@dimen/dp4"
+                android:text="@string/st_email"
+                android:textColor="@color/black_register"
+                android:textSize="@dimen/sp18"
+                android:textStyle="normal"
+                />
+
+            <TextView
+                android:id="@+id/st_txt_email"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp28"
+                android:gravity="center_vertical"
+                android:maxLength="25"
+                android:paddingLeft="@dimen/dp4"
+                android:paddingStart="@dimen/dp4"
+                android:text="example@Gmail.com"
+                android:textColor="@color/colorChatMessageTime"
+                android:textSize="@dimen/sp16"
+                android:singleLine="true"
+                android:theme="@style/Setting_editText"
+                />
+          </LinearLayout>
+
+        </LinearLayout>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

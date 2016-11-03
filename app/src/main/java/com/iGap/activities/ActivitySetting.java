@@ -49,9 +49,13 @@ import com.iGap.interfaces.OnFileUploadForActivities;
 import com.iGap.interfaces.OnUserAvatarDelete;
 import com.iGap.interfaces.OnUserAvatarResponse;
 import com.iGap.interfaces.OnUserInfoResponse;
+import com.iGap.interfaces.OnUserProfileCheckUsername;
 import com.iGap.interfaces.OnUserProfileGetSelfRemove;
+import com.iGap.interfaces.OnUserProfileSetEmailResponse;
+import com.iGap.interfaces.OnUserProfileSetGenderResponse;
 import com.iGap.interfaces.OnUserProfileSetNickNameResponse;
 import com.iGap.interfaces.OnUserProfileSetSelfRemove;
+import com.iGap.interfaces.OnUserProfileUpdateUsername;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.FileUploadStructure;
@@ -61,15 +65,20 @@ import com.iGap.module.SHP_SETTING;
 import com.iGap.module.StructMessageInfo;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
+import com.iGap.proto.ProtoUserProfileCheckUsername;
 import com.iGap.realm.RealmAvatarPath;
 import com.iGap.realm.RealmAvatarToken;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestUserAvatarAdd;
 import com.iGap.request.RequestUserAvatarDelete;
 import com.iGap.request.RequestUserInfo;
+import com.iGap.request.RequestUserProfileCheckUsername;
 import com.iGap.request.RequestUserProfileGetSelfRemove;
+import com.iGap.request.RequestUserProfileSetEmail;
+import com.iGap.request.RequestUserProfileSetGender;
 import com.iGap.request.RequestUserProfileSetNickname;
 import com.iGap.request.RequestUserProfileSetSelfRemove;
+import com.iGap.request.RequestUserProfileUpdateUsername;
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -82,30 +91,26 @@ import java.util.ArrayList;
 import java.util.Locale;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class ActivitySetting extends ActivityEnhanced
-    implements OnUserAvatarResponse, OnFileUploadForActivities {
+public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarResponse, OnFileUploadForActivities {
 
     private SharedPreferences sharedPreferences;
     private int messageTextSize = 16;
 
-    private TextView txtMenu, txtMessageTextSize, txtAutoDownloadData, txtAutoDownloadWifi,
-        txtChatBackground, txtAutoDownloadRoaming, txtKeepMedia, txtLanguage, txtSizeClearCach;
+    private TextView txtMenu, txtMessageTextSize, txtAutoDownloadData, txtAutoDownloadWifi, txtChatBackground, txtAutoDownloadRoaming, txtKeepMedia, txtLanguage, txtSizeClearCach;
 
     private RelativeLayout ltClearCache;
 
     private PopupWindow popupWindow;
 
     private int poRbDialogLangouage = -1;
+    private int poRbDialoggander = -1;
     private String textLanguage = "English";
     private int poRbDialogTextSize = -1;
 
     private ViewGroup ltMessageTextSize, ltLanguage;
-    private TextView txtNickName, txtUserName, txtPhoneNumber, txtNotifyAndSound, txtFaq,
-        txtPrivacyPolicy, txtSticker, ltInAppBrowser, ltSentByEnter, ltEnableAnimation, ltAutoGifs,
-        ltSaveToGallery;
+    private TextView txtNickName, txtUserName, txtPhoneNumber, txtNotifyAndSound, txtFaq, txtPrivacyPolicy, txtSticker, ltInAppBrowser, ltSentByEnter, ltEnableAnimation, ltAutoGifs, ltSaveToGallery;
     ;
-    private ToggleButton toggleSentByEnter, toggleEnableAnimation, toggleAutoGifs,
-        toggleSaveToGallery, toggleInAppBrowser, toggleCrop;
+    private ToggleButton toggleSentByEnter, toggleEnableAnimation, toggleAutoGifs, toggleSaveToGallery, toggleInAppBrowser, toggleCrop;
 
     private AppBarLayout appBarLayout;
 
@@ -123,6 +128,8 @@ public class ActivitySetting extends ActivityEnhanced
     private String nickName;
     private String userName;
     private String phoneName;
+    private String gander;
+    private String email;
     private long userId;
 
     public static int KEY_AD_DATA_PHOTO = -1;
@@ -147,6 +154,8 @@ public class ActivitySetting extends ActivityEnhanced
     public static int KEY_AD_ROAMINGN_GIF = -1;
 
     private CharSequence inputText = "";
+
+    private boolean stateUserName = false;
 
     @Override protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
@@ -174,6 +183,8 @@ public class ActivitySetting extends ActivityEnhanced
             nickName = realmUserInfo.getNickName();
             userName = realmUserInfo.getUserName();
             phoneName = realmUserInfo.getPhoneNumber();
+            email = realmUserInfo.getEmail();
+            gander = realmUserInfo.getGender();
         }
         if (nickName != null) {
             txtNickName.setText(nickName);
@@ -207,8 +218,7 @@ public class ActivitySetting extends ActivityEnhanced
                 }
                 final View viewFirstName = new View(ActivitySetting.this);
                 viewFirstName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
-                LinearLayout.LayoutParams viewParams =
-                    new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
+                LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
 
                 TextInputLayout inputFirstName = new TextInputLayout(ActivitySetting.this);
                 final EditText edtFirstName = new EditText(ActivitySetting.this);
@@ -223,8 +233,7 @@ public class ActivitySetting extends ActivityEnhanced
                 final View viewLastName = new View(ActivitySetting.this);
                 viewLastName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    edtFirstName.setBackground(
-                        getResources().getDrawable(android.R.color.transparent));
+                    edtFirstName.setBackground(getResources().getDrawable(android.R.color.transparent));
                 }
 
                 TextInputLayout inputLastName = new TextInputLayout(ActivitySetting.this);
@@ -236,31 +245,25 @@ public class ActivitySetting extends ActivityEnhanced
                 edtLastName.setPadding(0, 8, 0, 8);
                 edtLastName.setSingleLine(true);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    edtLastName.setBackground(
-                        getResources().getDrawable(android.R.color.transparent));
+                    edtLastName.setBackground(getResources().getDrawable(android.R.color.transparent));
                 }
                 inputLastName.addView(edtLastName);
                 inputLastName.addView(viewLastName, viewParams);
 
-                LinearLayout.LayoutParams layoutParams =
-                    new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutParams.setMargins(0, 0, 0, 15);
-                LinearLayout.LayoutParams lastNameLayoutParams =
-                    new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams lastNameLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 lastNameLayoutParams.setMargins(0, 15, 0, 10);
 
                 layoutNickname.addView(inputFirstName, layoutParams);
                 layoutNickname.addView(inputLastName, lastNameLayoutParams);
 
-                final MaterialDialog dialog =
-                    new MaterialDialog.Builder(ActivitySetting.this).title("Nickname")
-                        .positiveText("SAVE")
-                        .customView(layoutNickname, true)
-                        .widgetColor(getResources().getColor(R.color.toolbar_background))
-                        .negativeText("CANCEL")
-                        .build();
+                final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this).title("Nickname")
+                    .positiveText("SAVE")
+                    .customView(layoutNickname, true)
+                    .widgetColor(getResources().getColor(R.color.toolbar_background))
+                    .negativeText("CANCEL")
+                    .build();
 
                 final View positive = dialog.getActionButton(DialogAction.POSITIVE);
                 positive.setClickable(false);
@@ -268,14 +271,11 @@ public class ActivitySetting extends ActivityEnhanced
 
                 final String finalFirsName = firsName;
                 edtFirstName.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence charSequence, int i, int i1,
-                        int i2) {
+                    @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                     }
 
-                    @Override
-                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                     }
 
@@ -293,14 +293,11 @@ public class ActivitySetting extends ActivityEnhanced
 
                 final String finalLastName = lastName;
                 edtLastName.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence charSequence, int i, int i1,
-                        int i2) {
+                    @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                     }
 
-                    @Override
-                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                     }
 
@@ -318,11 +315,9 @@ public class ActivitySetting extends ActivityEnhanced
                 edtFirstName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                     @Override public void onFocusChange(View view, boolean b) {
                         if (b) {
-                            viewFirstName.setBackgroundColor(
-                                getResources().getColor(R.color.toolbar_background));
+                            viewFirstName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
                         } else {
-                            viewFirstName.setBackgroundColor(
-                                getResources().getColor(R.color.line_edit_text));
+                            viewFirstName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
                         }
                     }
                 });
@@ -330,11 +325,9 @@ public class ActivitySetting extends ActivityEnhanced
                 edtLastName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                     @Override public void onFocusChange(View view, boolean b) {
                         if (b) {
-                            viewLastName.setBackgroundColor(
-                                getResources().getColor(R.color.toolbar_background));
+                            viewLastName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
                         } else {
-                            viewLastName.setBackgroundColor(
-                                getResources().getColor(R.color.line_edit_text));
+                            viewLastName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
                         }
                     }
                 });
@@ -352,83 +345,300 @@ public class ActivitySetting extends ActivityEnhanced
                             fullName = edtFirstName.getText().toString() + " " + " ";
                         }
                         if (edtLastName.length() > 0 && edtFirstName.length() > 0) {
-                            fullName =
-                                edtFirstName.getText().toString() + " " + edtLastName.getText()
-                                    .toString();
+                            fullName = edtFirstName.getText().toString() + " " + edtLastName.getText().toString();
                         }
 
-                        G.onUserProfileSetNickNameResponse =
-                            new OnUserProfileSetNickNameResponse() {
-                                @Override
-                                public void onUserProfileNickNameResponse(final String nickName,
-                                    ProtoResponse.Response response) {
+                        G.onUserProfileSetNickNameResponse = new OnUserProfileSetNickNameResponse() {
+                            @Override public void onUserProfileNickNameResponse(final String nickName, ProtoResponse.Response response) {
+                                runOnUiThread(new Runnable() {
+                                    @Override public void run() {
+
+                                        Realm realm1 = Realm.getDefaultInstance();
+                                        realm1.executeTransaction(new Realm.Transaction() {
+                                            @Override public void execute(Realm realm) {
+                                                realm.where(RealmUserInfo.class).findFirst().setNickName(nickName);
+                                                txtNickNameTitle.setText(nickName);
+                                                FragmentDrawerMenu.txtUserName.setText(nickName);
+                                            }
+                                        });
+
+                                        realm1.close();
+                                        txtNickName.setText(nickName);
+                                    }
+                                });
+                            }
+
+                            @Override public void onUserProfileNickNameError(int majorCode, int minorCode) {
+
+                                if (majorCode == 112) {
                                     runOnUiThread(new Runnable() {
                                         @Override public void run() {
+                                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_112), Snackbar.LENGTH_LONG);
 
-                                            Realm realm1 = Realm.getDefaultInstance();
-                                            realm1.executeTransaction(new Realm.Transaction() {
-                                                @Override public void execute(Realm realm) {
-                                                    realm.where(RealmUserInfo.class)
-                                                        .findFirst()
-                                                        .setNickName(nickName);
-                                                    txtNickNameTitle.setText(nickName);
-                                                    FragmentDrawerMenu.txtUserName.setText(
-                                                        nickName);
-                                                    getUserInfo();
+                                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                                @Override public void onClick(View view) {
+                                                    snack.dismiss();
                                                 }
                                             });
+                                            snack.show();
+                                        }
+                                    });
+                                } else if (majorCode == 113) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override public void run() {
+                                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_113), Snackbar.LENGTH_LONG);
 
-                                            realm1.close();
-                                            txtNickName.setText(nickName);
+                                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                                @Override public void onClick(View view) {
+                                                    snack.dismiss();
+                                                }
+                                            });
+                                            snack.show();
                                         }
                                     });
                                 }
-
-                                @Override public void onUserProfileNickNameError(int majorCode,
-                                    int minorCode) {
-
-                                    if (majorCode == 112) {
-                                        runOnUiThread(new Runnable() {
-                                            @Override public void run() {
-                                                final Snackbar snack = Snackbar.make(
-                                                    findViewById(android.R.id.content),
-                                                    getResources().getString(R.string.E_112),
-                                                    Snackbar.LENGTH_LONG);
-
-                                                snack.setAction("CANCEL",
-                                                    new View.OnClickListener() {
-                                                        @Override public void onClick(View view) {
-                                                            snack.dismiss();
-                                                        }
-                                                    });
-                                                snack.show();
-                                            }
-                                        });
-                                    } else if (majorCode == 113) {
-                                        runOnUiThread(new Runnable() {
-                                            @Override public void run() {
-                                                final Snackbar snack = Snackbar.make(
-                                                    findViewById(android.R.id.content),
-                                                    getResources().getString(R.string.E_113),
-                                                    Snackbar.LENGTH_LONG);
-
-                                                snack.setAction("CANCEL",
-                                                    new View.OnClickListener() {
-                                                        @Override public void onClick(View view) {
-                                                            snack.dismiss();
-                                                        }
-                                                    });
-                                                snack.show();
-                                            }
-                                        });
-                                    }
-                                }
-                            };
+                            }
+                        };
                         new RequestUserProfileSetNickname().userProfileNickName(fullName);
-                        Log.i("CCCC", "fullName: " + fullName);
                         dialog.dismiss();
                     }
                 });
+
+                dialog.show();
+            }
+        });
+
+        final TextView txtGander = (TextView) findViewById(R.id.st_txt_gander);
+        if (gander == null) {
+            txtGander.setText("unknown");
+        } else {
+            txtGander.setText(gander);
+        }
+
+        poRbDialoggander = sharedPreferences.getInt(SHP_SETTING.KEY_POSITION_GANDER, -1);
+        ViewGroup layoutGander = (ViewGroup) findViewById(R.id.st_layout_gander);
+        layoutGander.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+
+                new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_Gander))
+                    .titleGravity(GravityEnum.START)
+                    .titleColor(getResources().getColor(android.R.color.black))
+                    .items(R.array.array_gander)
+                    .itemsCallbackSingleChoice(poRbDialoggander, new MaterialDialog.ListCallbackSingleChoice() {
+                        @Override public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+
+                            txtGander.setText(text.toString());
+                            switch (which) {
+                                case 0: {
+                                    new RequestUserProfileSetGender().setUserProfileGender(ProtoGlobal.Gender.MALE);
+                                    sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                                    editor.putInt(SHP_SETTING.KEY_POSITION_GANDER, 0);
+                                    editor.apply();
+                                    poRbDialoggander = 0;
+                                    break;
+                                }
+                                case 1: {
+                                    new RequestUserProfileSetGender().setUserProfileGender(ProtoGlobal.Gender.FEMALE);
+                                    sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                                    editor.putInt(SHP_SETTING.KEY_POSITION_GANDER, 1);
+                                    editor.apply();
+                                    poRbDialoggander = 1;
+
+                                    break;
+                                }
+                            }
+                            return false;
+                        }
+                    })
+                    .positiveText("OK")
+                    .negativeText("CANCEL")
+                    .show();
+
+                G.onUserProfileSetGenderResponse = new OnUserProfileSetGenderResponse() {
+                    @Override public void onUserProfileEmailResponse(final ProtoGlobal.Gender gender, ProtoResponse.Response response) {
+
+                        runOnUiThread(new Runnable() {
+                            @Override public void run() {
+
+                                Realm realm1 = Realm.getDefaultInstance();
+                                realm1.executeTransaction(new Realm.Transaction() {
+                                    @Override public void execute(Realm realm) {
+
+                                        if (gender == ProtoGlobal.Gender.MALE) {
+
+                                            realm.where(RealmUserInfo.class).findFirst().setGender("Male");
+                                        } else {
+
+                                            realm.where(RealmUserInfo.class).findFirst().setGender("Female");
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                    }
+
+                    @Override public void Error(int majorCode, int minorCode) {
+                        if (majorCode == 116 && minorCode == 1) {
+                            runOnUiThread(new Runnable() {
+                                @Override public void run() {
+                                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_116), Snackbar.LENGTH_LONG);
+
+                                    snack.setAction("CANCEL", new View.OnClickListener() {
+                                        @Override public void onClick(View view) {
+                                            snack.dismiss();
+                                        }
+                                    });
+                                    snack.show();
+                                }
+                            });
+                        } else if (majorCode == 117) {
+                            runOnUiThread(new Runnable() {
+                                @Override public void run() {
+                                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_117), Snackbar.LENGTH_LONG);
+
+                                    snack.setAction("CANCEL", new View.OnClickListener() {
+                                        @Override public void onClick(View view) {
+                                            snack.dismiss();
+                                        }
+                                    });
+                                    snack.show();
+                                }
+                            });
+                        }
+                    }
+                };
+            }
+        });
+
+        final TextView txtEmail = (TextView) findViewById(R.id.st_txt_email);
+        if (email == null) {
+            txtEmail.setText("example@gmail.com");
+        } else {
+            txtEmail.setText(email);
+        }
+
+        ViewGroup ltEmail = (ViewGroup) findViewById(R.id.st_layout_email);
+        ltEmail.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                final LinearLayout layoutEmail = new LinearLayout(ActivitySetting.this);
+                layoutEmail.setOrientation(LinearLayout.VERTICAL);
+
+                final View viewEmail = new View(ActivitySetting.this);
+                LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
+
+                final TextInputLayout inputEmail = new TextInputLayout(ActivitySetting.this);
+                final EditText edtEmail = new EditText(ActivitySetting.this);
+                edtEmail.setHint("Email");
+                edtEmail.setText(txtEmail.getText().toString());
+                edtEmail.setTextColor(getResources().getColor(R.color.text_edit_text));
+                edtEmail.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
+                edtEmail.setPadding(0, 8, 0, 8);
+                edtEmail.setSingleLine(true);
+                inputEmail.addView(edtEmail);
+                inputEmail.addView(viewEmail, viewParams);
+
+                viewEmail.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    edtEmail.setBackground(getResources().getDrawable(android.R.color.transparent));
+                }
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+                layoutEmail.addView(inputEmail, layoutParams);
+
+                final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this).title("Email")
+                    .positiveText("SAVE")
+                    .customView(layoutEmail, true)
+                    .widgetColor(getResources().getColor(R.color.toolbar_background))
+                    .negativeText("CANCEL")
+                    .build();
+
+                final View positive = dialog.getActionButton(DialogAction.POSITIVE);
+                positive.setClickable(false);
+                positive.setAlpha(0.5f);
+
+                final String finalEmail = email;
+                edtEmail.addTextChangedListener(new TextWatcher() {
+                    @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override public void afterTextChanged(Editable editable) {
+
+                        if (!edtEmail.getText().toString().equals(finalEmail)) {
+                            positive.setClickable(true);
+                            positive.setAlpha(1.0f);
+                        } else {
+                            positive.setClickable(false);
+                            positive.setAlpha(0.5f);
+                        }
+                    }
+                });
+
+                positive.setOnClickListener(new View.OnClickListener() {
+                    @Override public void onClick(View view) {
+
+                        new RequestUserProfileSetEmail().setUserProfileEmail(edtEmail.getText().toString());
+                    }
+                });
+
+                edtEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override public void onFocusChange(View view, boolean b) {
+                        if (b) {
+                            viewEmail.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
+                        } else {
+                            viewEmail.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+                        }
+                    }
+                });
+
+                G.onUserProfileSetEmailResponse = new OnUserProfileSetEmailResponse() {
+                    @Override public void onUserProfileEmailResponse(final String email, ProtoResponse.Response response) {
+                        Log.i("BBBB", "b0: " + email);
+
+                        runOnUiThread(new Runnable() {
+                            @Override public void run() {
+
+                                Realm realm1 = Realm.getDefaultInstance();
+                                realm1.executeTransaction(new Realm.Transaction() {
+                                    @Override public void execute(Realm realm) {
+
+                                        Log.i("BBBB", "b1: " + email);
+                                        realm.where(RealmUserInfo.class).findFirst().setEmail(email);
+                                        txtEmail.setText(email);
+                                        Log.i("BBBB", "b2: " + email);
+                                        dialog.dismiss();
+                                    }
+                                });
+                                Log.i("BBBB", "b3: " + email);
+                                realm1.close();
+                            }
+                        });
+                    }
+
+                    @Override public void Error(int majorCode, int minorCode) {
+                        if (majorCode == 114 && minorCode == 1) {
+                            runOnUiThread(new Runnable() {
+                                @Override public void run() {
+                                    inputEmail.setErrorEnabled(true);
+                                    inputEmail.setError("" + R.string.E_114);
+                                }
+                            });
+                        } else if (majorCode == 115) {
+                            runOnUiThread(new Runnable() {
+                                @Override public void run() {
+                                    inputEmail.setErrorEnabled(true);
+                                    inputEmail.setError("" + R.string.E_115);
+                                }
+                            });
+                        }
+                    }
+                };
 
                 dialog.show();
             }
@@ -442,13 +652,12 @@ public class ActivitySetting extends ActivityEnhanced
                 layoutUserName.setOrientation(LinearLayout.VERTICAL);
 
                 final View viewUserName = new View(ActivitySetting.this);
-                LinearLayout.LayoutParams viewParams =
-                    new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
+                LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
 
-                TextInputLayout inputUserName = new TextInputLayout(ActivitySetting.this);
+                final TextInputLayout inputUserName = new TextInputLayout(ActivitySetting.this);
                 final EditText edtUserName = new EditText(ActivitySetting.this);
-                edtUserName.setHint("First Name");
-                edtUserName.setText(userName);
+                edtUserName.setHint("User Name");
+                edtUserName.setText(txtUserName.getText().toString());
                 edtUserName.setTextColor(getResources().getColor(R.color.text_edit_text));
                 edtUserName.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
                 edtUserName.setPadding(0, 8, 0, 8);
@@ -458,116 +667,117 @@ public class ActivitySetting extends ActivityEnhanced
 
                 viewUserName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    edtUserName.setBackground(
-                        getResources().getDrawable(android.R.color.transparent));
+                    edtUserName.setBackground(getResources().getDrawable(android.R.color.transparent));
                 }
-                LinearLayout.LayoutParams layoutParams =
-                    new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
                 layoutUserName.addView(inputUserName, layoutParams);
 
-                final MaterialDialog dialog =
-                    new MaterialDialog.Builder(ActivitySetting.this).title("Username")
-                        .positiveText("SAVE")
-                        .customView(layoutUserName, true)
-                        .widgetColor(getResources().getColor(R.color.toolbar_background))
-                        .negativeText("CANCEL")
-                        .build();
+                final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this).title("Username")
+                    .positiveText("SAVE")
+                    .customView(layoutUserName, true)
+                    .widgetColor(getResources().getColor(R.color.toolbar_background))
+                    .negativeText("CANCEL")
+                    .build();
 
                 final View positive = dialog.getActionButton(DialogAction.POSITIVE);
                 positive.setClickable(false);
                 positive.setAlpha(0.5f);
 
-                final String finaluserName = userName;
+                final String finalUserName = userName;
                 edtUserName.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence charSequence, int i, int i1,
-                        int i2) {
+                    @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                     }
 
-                    @Override
-                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                    @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     }
 
                     @Override public void afterTextChanged(Editable editable) {
-
-                        if (!edtUserName.getText().toString().equals(finaluserName)) {
-                            positive.setClickable(true);
-                            positive.setAlpha(1.0f);
-                        } else {
-                            positive.setClickable(false);
-                            positive.setAlpha(0.5f);
-                        }
+                        new RequestUserProfileCheckUsername().userProfileCheckUsername(editable.toString());
+                        Log.i("XXX", "charSequence: " + editable.toString());
                     }
                 });
+                G.onUserProfileCheckUsername = new OnUserProfileCheckUsername() {
+                    @Override public void OnUserProfileCheckUsername(final ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status status) {
+                        runOnUiThread(new Runnable() {
+                            @Override public void run() {
+                                if (status == ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status.AVAILABLE) {
+                                    if (!edtUserName.getText().toString().equals(finalUserName)) {
+                                        positive.setClickable(true);
+                                        positive.setAlpha(1.0f);
+                                    } else {
+                                        positive.setClickable(false);
+                                        positive.setAlpha(0.5f);
+                                    }
+                                } else if (status == ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status.INVALID) {
+
+                                    Log.i("XXX", "INVALID: ");
+                                    inputUserName.setErrorEnabled(true);
+                                    inputUserName.setError("INVALID");
+                                    positive.setClickable(false);
+                                    positive.setAlpha(0.5f);
+                                } else if (status == ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status.TAKEN) {
+                                    inputUserName.setErrorEnabled(true);
+                                    inputUserName.setError("TAKEN");
+                                    positive.setClickable(false);
+                                    positive.setAlpha(0.5f);
+                                    Log.i("XXX", "TAKEN: ");
+                                }
+                            }
+                        });
+                    }
+
+                    @Override public void Error(int majorCode, int minorCode) {
+
+                    }
+                };
+
+                positive.setOnClickListener(new View.OnClickListener() {
+                    @Override public void onClick(View view) {
+
+                        new RequestUserProfileUpdateUsername().userProfileUpdateUsername(edtUserName.getText().toString());
+                    }
+                });
+
+                G.onUserProfileUpdateUsername = new OnUserProfileUpdateUsername() {
+                    @Override public void onUserProfileUpdateUsername(final String username) {
+                        runOnUiThread(new Runnable() {
+                            @Override public void run() {
+                                Log.i("XXX", "a1: ");
+                                Realm realm1 = Realm.getDefaultInstance();
+                                realm1.executeTransaction(new Realm.Transaction() {
+                                    @Override public void execute(Realm realm) {
+                                        Log.i("XXX", "a2: ");
+                                        realm.where(RealmUserInfo.class).findFirst().setUserName(username);
+                                        txtUserName.setText(username);
+                                        dialog.dismiss();
+                                    }
+                                });
+                                Log.i("XXX", "a3: ");
+                                realm1.close();
+                            }
+                        });
+                    }
+
+                    @Override public void Error(int majorCode, int minorCode) {
+
+                    }
+                };
 
                 edtUserName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                     @Override public void onFocusChange(View view, boolean b) {
                         if (b) {
-                            viewUserName.setBackgroundColor(
-                                getResources().getColor(R.color.toolbar_background));
+                            viewUserName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
                         } else {
-                            viewUserName.setBackgroundColor(
-                                getResources().getColor(R.color.line_edit_text));
+                            viewUserName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
                         }
                     }
                 });
 
                 // check each word with server
-                edtUserName.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence charSequence, int i, int i1,
-                        int i2) {
-
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                    }
-
-                    @Override public void afterTextChanged(Editable editable) {
-
-                    }
-                });
 
                 dialog.show();
-
-                //        new MaterialDialog.Builder(ActivitySetting.this).title("Username")
-                //            .positiveText("SAVE")
-                //            .alwaysCallInputCallback()// callback input change evrTime
-                //            .widgetColor(getResources().getColor(R.color.toolbar_background))
-                //            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                //                @Override public void onClick(@NonNull MaterialDialog dialog,
-                //                    @NonNull DialogAction which) {
-                //
-                //                    //TODO [Saeed Mozaffari] [2016-09-10 3:51 PM] - waiting for proto
-                //
-                //                }
-                //            })
-                //            .negativeText("CANCEL")
-                //            .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT)
-                //            .input("please Enter a NickName", txtUserName.getText().toString(),
-                //                new MaterialDialog.InputCallback() {
-                //                    @Override
-                //                    public void onInput(MaterialDialog dialog, CharSequence input) {
-                //                        // Do something
-                //                        View positive = dialog.getActionButton(DialogAction.POSITIVE);
-                //
-                //                        if (!input.toString().equals(txtUserName.getText().toString())) {
-                //
-                //                            positive.setClickable(true);
-                //                            positive.setAlpha(1.0f);
-                //                        } else {
-                //                            positive.setClickable(false);
-                //                            positive.setAlpha(0.5f);
-                //                        }
-                //                    }
-                //                })
-                //            .show();
             }
         });
 
@@ -609,9 +819,7 @@ public class ActivitySetting extends ActivityEnhanced
             @Override public void onComplete(RippleView rippleView) {
 
                 LinearLayout layoutDialog = new LinearLayout(ActivitySetting.this);
-                ViewGroup.LayoutParams params =
-                    new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT);
+                ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutDialog.setOrientation(LinearLayout.VERTICAL);
                 layoutDialog.setBackgroundColor(getResources().getColor(android.R.color.white));
                 TextView textView = new TextView(ActivitySetting.this);
@@ -626,17 +834,13 @@ public class ActivitySetting extends ActivityEnhanced
 
                 layoutDialog.addView(textView, params);
 
-                popupWindow =
-                    new PopupWindow(layoutDialog, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT,
-                        true);
+                popupWindow = new PopupWindow(layoutDialog, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT, true);
                 popupWindow.setBackgroundDrawable(new BitmapDrawable());
                 popupWindow.setOutsideTouchable(true);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    popupWindow.setBackgroundDrawable(getResources().getDrawable(R.mipmap.shadow3,
-                        ActivitySetting.this.getTheme()));
+                    popupWindow.setBackgroundDrawable(getResources().getDrawable(R.mipmap.shadow3, ActivitySetting.this.getTheme()));
                 } else {
-                    popupWindow.setBackgroundDrawable(
-                        (getResources().getDrawable(R.mipmap.shadow3)));
+                    popupWindow.setBackgroundDrawable((getResources().getDrawable(R.mipmap.shadow3)));
                 }
                 if (popupWindow.isOutsideTouchable()) {
                     popupWindow.dismiss();
@@ -648,9 +852,7 @@ public class ActivitySetting extends ActivityEnhanced
                 });
 
                 popupWindow.setAnimationStyle(android.R.style.Animation_InputMethod);
-                popupWindow.showAtLocation(layoutDialog, Gravity.RIGHT | Gravity.TOP,
-                    (int) getResources().getDimension(R.dimen.dp16),
-                    (int) getResources().getDimension(R.dimen.dp32));
+                popupWindow.showAtLocation(layoutDialog, Gravity.RIGHT | Gravity.TOP, (int) getResources().getDimension(R.dimen.dp16), (int) getResources().getDimension(R.dimen.dp32));
                 //                popupWindow.showAsDropDown(v);
 
                 textView.setOnClickListener(new View.OnClickListener() {
@@ -679,8 +881,7 @@ public class ActivitySetting extends ActivityEnhanced
             @Override public void onClick(View view) {
 
                 Realm realm = Realm.getDefaultInstance();
-                RealmResults<RealmAvatarPath> realmAvatarPaths =
-                    realm.where(RealmAvatarPath.class).findAll();
+                RealmResults<RealmAvatarPath> realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
 
                 if (realmAvatarPaths.size() > 0) {
                     startDialog(R.array.profile_delete);
@@ -700,10 +901,7 @@ public class ActivitySetting extends ActivityEnhanced
                 // Collections.reverse(items);
 
                 FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(userId);
-                ActivitySetting.this.getSupportFragmentManager()
-                    .beginTransaction()
-                    .add(R.id.st_layoutParent, fragment, null)
-                    .commit();
+                ActivitySetting.this.getSupportFragmentManager().beginTransaction().add(R.id.st_layoutParent, fragment, null).commit();
             }
         });
         setAvatar();
@@ -727,41 +925,36 @@ public class ActivitySetting extends ActivityEnhanced
                 new MaterialDialog.Builder(ActivitySetting.this).title("Language")
                     .titleGravity(GravityEnum.START)
                     .titleColor(getResources().getColor(android.R.color.black))
-                    .items(R.array.language)
-                    .itemsCallbackSingleChoice(poRbDialogLangouage,
-                        new MaterialDialog.ListCallbackSingleChoice() {
-                            @Override
-                            public boolean onSelection(MaterialDialog dialog, View view, int which,
-                                CharSequence text) {
+                    .items(R.array.language).itemsCallbackSingleChoice(poRbDialogLangouage, new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                                txtLanguage.setText(text.toString());
-                                poRbDialogLangouage = which;
-                                sharedPreferences =
-                                    getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putString(SHP_SETTING.KEY_LANGUAGE, text.toString());
-                                editor.apply();
+                        txtLanguage.setText(text.toString());
+                        poRbDialogLangouage = which;
+                        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString(SHP_SETTING.KEY_LANGUAGE, text.toString());
+                        editor.apply();
 
-                                switch (which) {
-                                    case 0:
-                                        setLocale("en");
-                                        break;
-                                    case 1:
-                                        setLocale("fa");
+                        switch (which) {
+                            case 0:
+                                setLocale("en");
+                                break;
+                            case 1:
+                                setLocale("fa");
 
-                                        break;
-                                    case 2:
-                                        setLocale("ar");
+                                break;
+                            case 2:
+                                setLocale("ar");
 
-                                        break;
-                                    case 3:
-                                        setLocale("nl");
-                                        break;
-                                }
-
-                                return false;
+                                break;
+                            case 3:
+                                setLocale("nl");
+                                break;
                             }
-                        })
+
+                        return false;
+                    }
+                })
                     .positiveText("OK")
                     .negativeText("CANCEL")
                     .show();
@@ -787,10 +980,7 @@ public class ActivitySetting extends ActivityEnhanced
 
                 boolean wrapInScrollView = true;
                 final MaterialDialog dialog =
-                    new MaterialDialog.Builder(ActivitySetting.this).title("Clear Cash")
-                        .customView(R.layout.st_dialog_clear_cach, wrapInScrollView)
-                        .positiveText("CLEAR CASH")
-                        .show();
+                    new MaterialDialog.Builder(ActivitySetting.this).title("Clear Cash").customView(R.layout.st_dialog_clear_cach, wrapInScrollView).positiveText("CLEAR CASH").show();
 
                 View view = dialog.getCustomView();
 
@@ -804,55 +994,45 @@ public class ActivitySetting extends ActivityEnhanced
                 TextView video = (TextView) view.findViewById(R.id.st_txt_sizeFolder_video);
                 video.setText(formatFileSize(sizeFolderVideoDialog));
 
-                final CheckBox checkBoxVideo =
-                    (CheckBox) view.findViewById(R.id.st_checkBox_video_dialogClearCash);
+                final CheckBox checkBoxVideo = (CheckBox) view.findViewById(R.id.st_checkBox_video_dialogClearCash);
 
                 final File fileDocument = new File(G.DIR_DOCUMENT);
-                TextView document =
-                    (TextView) view.findViewById(R.id.st_txt_sizeFolder_document_dialogClearCash);
+                TextView document = (TextView) view.findViewById(R.id.st_txt_sizeFolder_document_dialogClearCash);
                 document.setText(formatFileSize(sizeFolderDocumentDialog));
 
-                final CheckBox checkBoxDocument =
-                    (CheckBox) view.findViewById(R.id.st_checkBox_document_dialogClearCash);
+                final CheckBox checkBoxDocument = (CheckBox) view.findViewById(R.id.st_checkBox_document_dialogClearCash);
 
-                dialog.getActionButton(DialogAction.POSITIVE)
-                    .setOnClickListener(new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(new View.OnClickListener() {
+                    @Override public void onClick(View view) {
 
-                            if (checkBoxPhoto.isChecked()) {
-                                for (File file : filePhoto.listFiles())
-                                    if (!file.isDirectory()) file.delete();
-                            }
-                            if (checkBoxVideo.isChecked()) {
-                                for (File file : fileVideo.listFiles())
-                                    if (!file.isDirectory()) file.delete();
-                            }
-                            if (checkBoxDocument.isChecked()) {
-                                for (File file : fileDocument.listFiles())
-                                    if (!file.isDirectory()) file.delete();
-                            }
-                            long afterClearSizeFolderPhoto = getFolderSize(new File(G.DIR_IMAGES));
-                            long afterClearSizeFolderVideo = getFolderSize(new File(G.DIR_VIDEOS));
-                            long afterClearSizeFolderDocument =
-                                getFolderSize(new File(G.DIR_DOCUMENT));
-                            long afterClearTotal = afterClearSizeFolderPhoto
-                                + afterClearSizeFolderVideo
-                                + afterClearSizeFolderDocument;
-                            txtSizeClearCach.setText(formatFileSize(afterClearTotal));
-                            dialog.dismiss();
+                        if (checkBoxPhoto.isChecked()) {
+                            for (File file : filePhoto.listFiles())
+                                if (!file.isDirectory()) file.delete();
                         }
-                    });
+                        if (checkBoxVideo.isChecked()) {
+                            for (File file : fileVideo.listFiles())
+                                if (!file.isDirectory()) file.delete();
+                        }
+                        if (checkBoxDocument.isChecked()) {
+                            for (File file : fileDocument.listFiles())
+                                if (!file.isDirectory()) file.delete();
+                        }
+                        long afterClearSizeFolderPhoto = getFolderSize(new File(G.DIR_IMAGES));
+                        long afterClearSizeFolderVideo = getFolderSize(new File(G.DIR_VIDEOS));
+                        long afterClearSizeFolderDocument = getFolderSize(new File(G.DIR_DOCUMENT));
+                        long afterClearTotal = afterClearSizeFolderPhoto + afterClearSizeFolderVideo + afterClearSizeFolderDocument;
+                        txtSizeClearCach.setText(formatFileSize(afterClearTotal));
+                        dialog.dismiss();
+                    }
+                });
             }
         });
 
         TextView txtprivacySecurity = (TextView) findViewById(R.id.st_txt_privacySecurity);
         txtprivacySecurity.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
-                FragmentPrivacyAndSecurity fragmentPrivacyAndSecurity =
-                    new FragmentPrivacyAndSecurity();
-                getSupportFragmentManager().beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
-                        R.anim.slide_in_right, R.anim.slide_out_left)
+                FragmentPrivacyAndSecurity fragmentPrivacyAndSecurity = new FragmentPrivacyAndSecurity();
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
                     .replace(R.id.st_layoutParent, fragmentPrivacyAndSecurity)
                     .commit();
             }
@@ -860,8 +1040,7 @@ public class ActivitySetting extends ActivityEnhanced
 
         poRbDialogTextSize = sharedPreferences.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 16) - 11;
         txtMessageTextSize = (TextView) findViewById(R.id.st_txt_messageTextSize_number);
-        txtMessageTextSize.setText(
-            "" + sharedPreferences.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 16));
+        txtMessageTextSize.setText("" + sharedPreferences.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 16));
 
         ltMessageTextSize = (ViewGroup) findViewById(R.id.st_layout_messageTextSize);
         ltMessageTextSize.setOnClickListener(new View.OnClickListener() {
@@ -869,31 +1048,24 @@ public class ActivitySetting extends ActivityEnhanced
                 new MaterialDialog.Builder(ActivitySetting.this).title("Messages Text Size")
                     .titleGravity(GravityEnum.START)
                     .titleColor(getResources().getColor(android.R.color.black))
-                    .items(R.array.message_text_size)
-                    .itemsCallbackSingleChoice(poRbDialogTextSize,
-                        new MaterialDialog.ListCallbackSingleChoice() {
-                            @Override
-                            public boolean onSelection(MaterialDialog dialog, View view, int which,
-                                CharSequence text) {
+                    .items(R.array.message_text_size).itemsCallbackSingleChoice(poRbDialogTextSize, new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                                if (text != null) {
-                                    txtMessageTextSize.setText(
-                                        text.toString().replace("(Hello)", "").trim());
-                                }
-                                poRbDialogTextSize = which;
-                                int size =
-                                    Integer.parseInt(text.toString().replace("(Hello)", "").trim());
-                                sharedPreferences =
-                                    getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, size);
-                                editor.apply();
+                        if (text != null) {
+                            txtMessageTextSize.setText(text.toString().replace("(Hello)", "").trim());
+                        }
+                        poRbDialogTextSize = which;
+                        int size = Integer.parseInt(text.toString().replace("(Hello)", "").trim());
+                        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, size);
+                        editor.apply();
 
-                                G.setUserTextSize();
+                        G.setUserTextSize();
 
-                                return false;
-                            }
-                        })
+                        return false;
+                    }
+                })
                     .positiveText("ok")
                     .show();
             }
@@ -903,9 +1075,7 @@ public class ActivitySetting extends ActivityEnhanced
         txtSticker.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
                 FragmentSticker fragmentSticker = new FragmentSticker();
-                getSupportFragmentManager().beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
-                        R.anim.slide_in_right, R.anim.slide_out_left)
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
                     .replace(R.id.st_layoutParent, fragmentSticker)
                     .commit();
             }
@@ -989,14 +1159,12 @@ public class ActivitySetting extends ActivityEnhanced
                     .content(R.string.st_dialog_content_keepMedia)
                     .positiveText("ForEver")
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override public void onClick(@NonNull MaterialDialog dialog,
-                            @NonNull DialogAction which) {
+                        @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         }
                     })
                     .negativeText("1WEEk")
                     .onNegative(new MaterialDialog.SingleButtonCallback() {
-                        @Override public void onClick(@NonNull MaterialDialog dialog,
-                            @NonNull DialogAction which) {
+                        @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         }
                     })
                     .show();
@@ -1004,8 +1172,7 @@ public class ActivitySetting extends ActivityEnhanced
         });
 
         KEY_AD_DATA_PHOTO = sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_PHOTO, -1);
-        KEY_AD_DATA_VOICE_MESSAGE =
-            sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_VOICE_MESSAGE, -1);
+        KEY_AD_DATA_VOICE_MESSAGE = sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_VOICE_MESSAGE, -1);
         KEY_AD_DATA_VIDEO = sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_VIDEO, -1);
         KEY_AD_DATA_FILE = sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_FILE, -1);
         KEY_AD_DATA_MUSIC = sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_MUSIC, -1);
@@ -1014,57 +1181,46 @@ public class ActivitySetting extends ActivityEnhanced
         txtAutoDownloadData.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
 
-                new MaterialDialog.Builder(ActivitySetting.this).title(
-                    R.string.st_auto_download_data)
-                    .items(R.array.auto_download_data)
-                    .itemsCallbackMultiChoice(new Integer[] {
-                        KEY_AD_DATA_PHOTO, KEY_AD_DATA_VOICE_MESSAGE, KEY_AD_DATA_VIDEO,
-                        KEY_AD_DATA_FILE, KEY_AD_DATA_MUSIC, KEY_AD_DATA_GIF
-                    }, new MaterialDialog.ListCallbackMultiChoice() {
-                        @Override public boolean onSelection(MaterialDialog dialog, Integer[] which,
-                            CharSequence[] text) {
+                new MaterialDialog.Builder(ActivitySetting.this).title(R.string.st_auto_download_data).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[] {
+                    KEY_AD_DATA_PHOTO, KEY_AD_DATA_VOICE_MESSAGE, KEY_AD_DATA_VIDEO, KEY_AD_DATA_FILE, KEY_AD_DATA_MUSIC, KEY_AD_DATA_GIF
+                }, new MaterialDialog.ListCallbackMultiChoice() {
+                    @Override public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
 
-                            for (int i = 0; i < which.length; i++) {
+                        for (int i = 0; i < which.length; i++) {
 
-                                if (which[i] == 0) {
-                                    KEY_AD_DATA_PHOTO = which[i];
-                                } else if (which[i] == 1) {
-                                    KEY_AD_DATA_VOICE_MESSAGE = which[i];
-                                } else if (which[i] == 2) {
-                                    KEY_AD_DATA_VIDEO = which[i];
-                                } else if (which[i] == 3) {
-                                    KEY_AD_DATA_FILE = which[i];
-                                } else if (which[i] == 4) {
-                                    KEY_AD_DATA_MUSIC = which[i];
-                                } else if (which[i] == 5) {
-                                    KEY_AD_DATA_GIF = which[i];
-                                }
+                            if (which[i] == 0) {
+                                KEY_AD_DATA_PHOTO = which[i];
+                            } else if (which[i] == 1) {
+                                KEY_AD_DATA_VOICE_MESSAGE = which[i];
+                            } else if (which[i] == 2) {
+                                KEY_AD_DATA_VIDEO = which[i];
+                            } else if (which[i] == 3) {
+                                KEY_AD_DATA_FILE = which[i];
+                            } else if (which[i] == 4) {
+                                KEY_AD_DATA_MUSIC = which[i];
+                            } else if (which[i] == 5) {
+                                KEY_AD_DATA_GIF = which[i];
                             }
-
-                            sharedPreferences =
-                                getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putInt(SHP_SETTING.KEY_AD_DATA_PHOTO, KEY_AD_DATA_PHOTO);
-                            editor.putInt(SHP_SETTING.KEY_AD_DATA_VOICE_MESSAGE,
-                                KEY_AD_DATA_VOICE_MESSAGE);
-                            editor.putInt(SHP_SETTING.KEY_AD_DATA_VIDEO, KEY_AD_DATA_VIDEO);
-                            editor.putInt(SHP_SETTING.KEY_AD_DATA_FILE, KEY_AD_DATA_FILE);
-                            editor.putInt(SHP_SETTING.KEY_AD_DATA_MUSIC, KEY_AD_DATA_MUSIC);
-                            editor.putInt(SHP_SETTING.KEY_AD_DATA_GIF, KEY_AD_DATA_GIF);
-                            editor.apply();
-
-                            return true;
                         }
-                    })
-                    .positiveText("OK")
-                    .negativeText("CANCEL")
-                    .show();
+
+                        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putInt(SHP_SETTING.KEY_AD_DATA_PHOTO, KEY_AD_DATA_PHOTO);
+                        editor.putInt(SHP_SETTING.KEY_AD_DATA_VOICE_MESSAGE, KEY_AD_DATA_VOICE_MESSAGE);
+                        editor.putInt(SHP_SETTING.KEY_AD_DATA_VIDEO, KEY_AD_DATA_VIDEO);
+                        editor.putInt(SHP_SETTING.KEY_AD_DATA_FILE, KEY_AD_DATA_FILE);
+                        editor.putInt(SHP_SETTING.KEY_AD_DATA_MUSIC, KEY_AD_DATA_MUSIC);
+                        editor.putInt(SHP_SETTING.KEY_AD_DATA_GIF, KEY_AD_DATA_GIF);
+                        editor.apply();
+
+                        return true;
+                    }
+                }).positiveText("OK").negativeText("CANCEL").show();
             }
         });
 
         KEY_AD_WIFI_PHOTO = sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_PHOTO, -1);
-        KEY_AD_WIFI_VOICE_MESSAGE =
-            sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_VOICE_MESSAGE, -1);
+        KEY_AD_WIFI_VOICE_MESSAGE = sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_VOICE_MESSAGE, -1);
         KEY_AD_WIFI_VIDEO = sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_VIDEO, -1);
         KEY_AD_WIFI_FILE = sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_FILE, -1);
         KEY_AD_WIFI_MUSIC = sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_MUSIC, -1);
@@ -1073,59 +1229,48 @@ public class ActivitySetting extends ActivityEnhanced
         txtAutoDownloadWifi = (TextView) findViewById(R.id.st_txt_autoDownloadWifi);
         txtAutoDownloadWifi.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
-                new MaterialDialog.Builder(ActivitySetting.this).title(
-                    R.string.st_auto_download_wifi)
-                    .items(R.array.auto_download_data)
-                    .itemsCallbackMultiChoice(new Integer[] {
-                        KEY_AD_WIFI_PHOTO, KEY_AD_WIFI_VOICE_MESSAGE, KEY_AD_WIFI_VIDEO,
-                        KEY_AD_WIFI_FILE, KEY_AD_WIFI_MUSIC, KEY_AD_WIFI_GIF
-                    }, new MaterialDialog.ListCallbackMultiChoice() {
-                        @Override public boolean onSelection(MaterialDialog dialog, Integer[] which,
-                            CharSequence[] text) {
+                new MaterialDialog.Builder(ActivitySetting.this).title(R.string.st_auto_download_wifi).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[] {
+                    KEY_AD_WIFI_PHOTO, KEY_AD_WIFI_VOICE_MESSAGE, KEY_AD_WIFI_VIDEO, KEY_AD_WIFI_FILE, KEY_AD_WIFI_MUSIC, KEY_AD_WIFI_GIF
+                }, new MaterialDialog.ListCallbackMultiChoice() {
+                    @Override public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
 
-                            //
-                            for (int i = 0; i < which.length; i++) {
+                        //
+                        for (int i = 0; i < which.length; i++) {
 
-                                if (which[i] == 0) {
+                            if (which[i] == 0) {
 
-                                    KEY_AD_WIFI_PHOTO = which[i];
-                                } else if (which[i] == 1) {
-                                    KEY_AD_WIFI_VOICE_MESSAGE = which[i];
-                                } else if (which[i] == 2) {
-                                    KEY_AD_WIFI_VIDEO = which[i];
-                                } else if (which[i] == 3) {
-                                    KEY_AD_WIFI_FILE = which[i];
-                                } else if (which[i] == 4) {
-                                    KEY_AD_WIFI_MUSIC = which[i];
-                                } else if (which[i] == 5) {
-                                    KEY_AD_WIFI_GIF = which[i];
-                                }
+                                KEY_AD_WIFI_PHOTO = which[i];
+                            } else if (which[i] == 1) {
+                                KEY_AD_WIFI_VOICE_MESSAGE = which[i];
+                            } else if (which[i] == 2) {
+                                KEY_AD_WIFI_VIDEO = which[i];
+                            } else if (which[i] == 3) {
+                                KEY_AD_WIFI_FILE = which[i];
+                            } else if (which[i] == 4) {
+                                KEY_AD_WIFI_MUSIC = which[i];
+                            } else if (which[i] == 5) {
+                                KEY_AD_WIFI_GIF = which[i];
                             }
-
-                            sharedPreferences =
-                                getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putInt(SHP_SETTING.KEY_AD_WIFI_PHOTO, KEY_AD_WIFI_PHOTO);
-                            editor.putInt(SHP_SETTING.KEY_AD_WIFI_VOICE_MESSAGE,
-                                KEY_AD_WIFI_VOICE_MESSAGE);
-                            editor.putInt(SHP_SETTING.KEY_AD_WIFI_VIDEO, KEY_AD_WIFI_VIDEO);
-                            editor.putInt(SHP_SETTING.KEY_AD_WIFI_FILE, KEY_AD_WIFI_FILE);
-                            editor.putInt(SHP_SETTING.KEY_AD_WIFI_MUSIC, KEY_AD_WIFI_MUSIC);
-                            editor.putInt(SHP_SETTING.KEY_AD_WIFI_GIF, KEY_AD_WIFI_GIF);
-                            editor.apply();
-
-                            return true;
                         }
-                    })
-                    .positiveText("OK")
-                    .negativeText("CANCEL")
-                    .show();
+
+                        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putInt(SHP_SETTING.KEY_AD_WIFI_PHOTO, KEY_AD_WIFI_PHOTO);
+                        editor.putInt(SHP_SETTING.KEY_AD_WIFI_VOICE_MESSAGE, KEY_AD_WIFI_VOICE_MESSAGE);
+                        editor.putInt(SHP_SETTING.KEY_AD_WIFI_VIDEO, KEY_AD_WIFI_VIDEO);
+                        editor.putInt(SHP_SETTING.KEY_AD_WIFI_FILE, KEY_AD_WIFI_FILE);
+                        editor.putInt(SHP_SETTING.KEY_AD_WIFI_MUSIC, KEY_AD_WIFI_MUSIC);
+                        editor.putInt(SHP_SETTING.KEY_AD_WIFI_GIF, KEY_AD_WIFI_GIF);
+                        editor.apply();
+
+                        return true;
+                    }
+                }).positiveText("OK").negativeText("CANCEL").show();
             }
         });
 
         KEY_AD_ROAMING_PHOTO = sharedPreferences.getInt(SHP_SETTING.KEY_AD_ROAMING_PHOTO, -1);
-        KEY_AD_ROAMING_VOICE_MESSAGE =
-            sharedPreferences.getInt(SHP_SETTING.KEY_AD_ROAMING_VOICE_MESSAGE, -1);
+        KEY_AD_ROAMING_VOICE_MESSAGE = sharedPreferences.getInt(SHP_SETTING.KEY_AD_ROAMING_VOICE_MESSAGE, -1);
         KEY_AD_ROAMING_VIDEO = sharedPreferences.getInt(SHP_SETTING.KEY_AD_ROAMING_VIDEO, -1);
         KEY_AD_ROAMING_FILE = sharedPreferences.getInt(SHP_SETTING.KEY_AD_ROAMING_FILE, -1);
         KEY_AD_ROAMING_MUSIC = sharedPreferences.getInt(SHP_SETTING.KEY_AD_ROAMING_MUSIC, -1);
@@ -1134,52 +1279,42 @@ public class ActivitySetting extends ActivityEnhanced
         txtAutoDownloadRoaming = (TextView) findViewById(R.id.st_txt_autoDownloadRoaming);
         txtAutoDownloadRoaming.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
-                new MaterialDialog.Builder(ActivitySetting.this).title(
-                    R.string.st_auto_download_roaming)
-                    .items(R.array.auto_download_data)
-                    .itemsCallbackMultiChoice(new Integer[] {
-                        KEY_AD_ROAMING_PHOTO, KEY_AD_ROAMING_VOICE_MESSAGE, KEY_AD_ROAMING_VIDEO,
-                        KEY_AD_ROAMING_FILE, KEY_AD_ROAMING_MUSIC, KEY_AD_ROAMINGN_GIF
-                    }, new MaterialDialog.ListCallbackMultiChoice() {
-                        @Override public boolean onSelection(MaterialDialog dialog, Integer[] which,
-                            CharSequence[] text) {
+                new MaterialDialog.Builder(ActivitySetting.this).title(R.string.st_auto_download_roaming).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[] {
+                    KEY_AD_ROAMING_PHOTO, KEY_AD_ROAMING_VOICE_MESSAGE, KEY_AD_ROAMING_VIDEO, KEY_AD_ROAMING_FILE, KEY_AD_ROAMING_MUSIC, KEY_AD_ROAMINGN_GIF
+                }, new MaterialDialog.ListCallbackMultiChoice() {
+                    @Override public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
 
-                            //
-                            for (int i = 0; i < which.length; i++) {
+                        //
+                        for (int i = 0; i < which.length; i++) {
 
-                                if (which[i] == 0) {
-                                    KEY_AD_ROAMING_PHOTO = which[i];
-                                } else if (which[i] == 1) {
-                                    KEY_AD_ROAMING_VOICE_MESSAGE = which[i];
-                                } else if (which[i] == 2) {
-                                    KEY_AD_ROAMING_VIDEO = which[i];
-                                } else if (which[i] == 3) {
-                                    KEY_AD_ROAMING_FILE = which[i];
-                                } else if (which[i] == 4) {
-                                    KEY_AD_ROAMING_MUSIC = which[i];
-                                } else if (which[i] == 5) {
-                                    KEY_AD_ROAMINGN_GIF = which[i];
-                                }
+                            if (which[i] == 0) {
+                                KEY_AD_ROAMING_PHOTO = which[i];
+                            } else if (which[i] == 1) {
+                                KEY_AD_ROAMING_VOICE_MESSAGE = which[i];
+                            } else if (which[i] == 2) {
+                                KEY_AD_ROAMING_VIDEO = which[i];
+                            } else if (which[i] == 3) {
+                                KEY_AD_ROAMING_FILE = which[i];
+                            } else if (which[i] == 4) {
+                                KEY_AD_ROAMING_MUSIC = which[i];
+                            } else if (which[i] == 5) {
+                                KEY_AD_ROAMINGN_GIF = which[i];
                             }
-
-                            sharedPreferences =
-                                getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putInt(SHP_SETTING.KEY_AD_ROAMING_PHOTO, KEY_AD_ROAMING_PHOTO);
-                            editor.putInt(SHP_SETTING.KEY_AD_ROAMING_VOICE_MESSAGE,
-                                KEY_AD_ROAMING_VOICE_MESSAGE);
-                            editor.putInt(SHP_SETTING.KEY_AD_ROAMING_VIDEO, KEY_AD_ROAMING_VIDEO);
-                            editor.putInt(SHP_SETTING.KEY_AD_ROAMING_FILE, KEY_AD_ROAMING_FILE);
-                            editor.putInt(SHP_SETTING.KEY_AD_ROAMING_MUSIC, KEY_AD_ROAMING_MUSIC);
-                            editor.putInt(SHP_SETTING.KEY_AD_ROAMING_GIF, KEY_AD_ROAMINGN_GIF);
-                            editor.apply();
-
-                            return true;
                         }
-                    })
-                    .positiveText("OK")
-                    .negativeText("CANCEL")
-                    .show();
+
+                        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putInt(SHP_SETTING.KEY_AD_ROAMING_PHOTO, KEY_AD_ROAMING_PHOTO);
+                        editor.putInt(SHP_SETTING.KEY_AD_ROAMING_VOICE_MESSAGE, KEY_AD_ROAMING_VOICE_MESSAGE);
+                        editor.putInt(SHP_SETTING.KEY_AD_ROAMING_VIDEO, KEY_AD_ROAMING_VIDEO);
+                        editor.putInt(SHP_SETTING.KEY_AD_ROAMING_FILE, KEY_AD_ROAMING_FILE);
+                        editor.putInt(SHP_SETTING.KEY_AD_ROAMING_MUSIC, KEY_AD_ROAMING_MUSIC);
+                        editor.putInt(SHP_SETTING.KEY_AD_ROAMING_GIF, KEY_AD_ROAMINGN_GIF);
+                        editor.apply();
+
+                        return true;
+                    }
+                }).positiveText("OK").negativeText("CANCEL").show();
             }
         });
 
@@ -1290,6 +1425,10 @@ public class ActivitySetting extends ActivityEnhanced
             @Override public void onUserSetSelfRemove(int numberOfMonth) {
                 // set numberOfMonth for selfRemove
             }
+
+            @Override public void Error(int majorCode, int minorCode) {
+
+            }
         };
 
         new RequestUserProfileSetSelfRemove().userProfileSetSelfRemove(numberOfMonth);
@@ -1308,8 +1447,7 @@ public class ActivitySetting extends ActivityEnhanced
 
     private void getUserInfo() {
         G.onUserInfoResponse = new OnUserInfoResponse() {
-            @Override public void onUserInfo(final ProtoGlobal.RegisteredUser user,
-                ProtoResponse.Response response) {
+            @Override public void onUserInfo(final ProtoGlobal.RegisteredUser user, ProtoResponse.Response response) {
 
                 // if response is for own user do this action
                 if (user.getId() == userId) {
@@ -1317,9 +1455,7 @@ public class ActivitySetting extends ActivityEnhanced
                     Realm realm = Realm.getDefaultInstance();
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override public void execute(Realm realm) {
-                            realm.where(RealmUserInfo.class)
-                                .findFirst()
-                                .setInitials(user.getInitials());
+                            realm.where(RealmUserInfo.class).findFirst().setInitials(user.getInitials());
                         }
                     });
                     realm.close();
@@ -1347,105 +1483,83 @@ public class ActivitySetting extends ActivityEnhanced
     //dialog for choose pic from gallery or camera
     private void startDialog(int r) {
 
-        new MaterialDialog.Builder(this).title("Choose Picture")
-            .negativeText("CANCEL")
-            .items(r)
-            .itemsCallback(new MaterialDialog.ListCallback() {
-                @Override public void onSelection(MaterialDialog dialog, View view, int which,
-                    CharSequence text) {
+        new MaterialDialog.Builder(this).title("Choose Picture").negativeText("CANCEL").items(r).itemsCallback(new MaterialDialog.ListCallback() {
+            @Override public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                    if (text.toString().equals("From Camera")) {
+                if (text.toString().equals("From Camera")) {
 
-                        if (getPackageManager().hasSystemFeature(
-                            PackageManager.FEATURE_CAMERA_ANY)) {
+                    if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
 
-                            idAvatar = System.nanoTime();
-                            pathSaveImage = G.imageFile.toString()
-                                + "_"
-                                + System.currentTimeMillis()
-                                + "_"
-                                + idAvatar
-                                + ".jpg";
-                            nameImageFile = new File(pathSaveImage);
-                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                            uriIntent = Uri.fromFile(nameImageFile);
-                            intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
-                            startActivityForResult(intent, IntentRequests.REQ_CAMERA);
-                            //                                realm.close();
-                            dialog.dismiss();
-                        } else {
-                            Toast.makeText(ActivitySetting.this, "Please check your Camera",
-                                Toast.LENGTH_SHORT).show();
-                        }
-                    } else if (text.toString().equals("Delete photo")) {
+                        idAvatar = System.nanoTime();
+                        pathSaveImage = G.imageFile.toString() + "_" + System.currentTimeMillis() + "_" + idAvatar + ".jpg";
+                        nameImageFile = new File(pathSaveImage);
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        uriIntent = Uri.fromFile(nameImageFile);
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
+                        startActivityForResult(intent, IntentRequests.REQ_CAMERA);
+                        //                                realm.close();
+                        dialog.dismiss();
+                    } else {
+                        Toast.makeText(ActivitySetting.this, "Please check your Camera", Toast.LENGTH_SHORT).show();
+                    }
+                } else if (text.toString().equals("Delete photo")) {
 
-                        G.onUserAvatarDelete = new OnUserAvatarDelete() {
-                            @Override public void onUserAvatarDelete(final long avatarId,
-                                final String token) {
-                                runOnUiThread(new Runnable() {
-                                    @Override public void run() {
-                                        Realm realm = Realm.getDefaultInstance();
-                                        realm.executeTransaction(new Realm.Transaction() {
-                                            @Override public void execute(Realm realm) {
-                                                Log.i("XXX", "RealmAvatarPath 3");
-                                                for (RealmAvatarPath avatarPath : realm.where(
-                                                    RealmAvatarPath.class).findAll()) {
-                                                    Log.i("XXX",
-                                                        "RealmAvatarPath 4 avatarPath.getId() : "
-                                                            + avatarPath.getId());
-                                                    if (avatarId == avatarPath.getId()) {
-                                                        new File(
-                                                            avatarPath.getPathImage()).delete();
-                                                        avatarPath.deleteFromRealm();
+                    G.onUserAvatarDelete = new OnUserAvatarDelete() {
+                        @Override public void onUserAvatarDelete(final long avatarId, final String token) {
+                            runOnUiThread(new Runnable() {
+                                @Override public void run() {
+                                    Realm realm = Realm.getDefaultInstance();
+                                    realm.executeTransaction(new Realm.Transaction() {
+                                        @Override public void execute(Realm realm) {
+                                            Log.i("XXX", "RealmAvatarPath 3");
+                                            for (RealmAvatarPath avatarPath : realm.where(RealmAvatarPath.class).findAll()) {
+                                                Log.i("XXX", "RealmAvatarPath 4 avatarPath.getId() : " + avatarPath.getId());
+                                                if (avatarId == avatarPath.getId()) {
+                                                    new File(avatarPath.getPathImage()).delete();
+                                                    avatarPath.deleteFromRealm();
 
-                                                        //realm.where(RealmAvatarToken.class)
-                                                        // .equalTo(RealmAvatarTokenFields.TOKEN,
-                                                        // token).findFirst().deleteFromRealm();
-                                                    }
+                                                    //realm.where(RealmAvatarToken.class)
+                                                    // .equalTo(RealmAvatarTokenFields.TOKEN,
+                                                    // token).findFirst().deleteFromRealm();
                                                 }
                                             }
-                                        });
-                                        realm.close();
-                                        setAvatar();
-                                    }
-                                });
-                            }
-                        };
-                        Realm realm1 = Realm.getDefaultInstance();
-                        RealmResults<RealmAvatarPath> realmAvatarPaths =
-                            realm1.where(RealmAvatarPath.class).findAll();
-                        realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
-                        Log.i("XXX",
-                            "RequestUserAvatarDelete 1 avatarId : " + realmAvatarPaths.first()
-                                .getId());
+                                        }
+                                    });
+                                    realm.close();
+                                    setAvatar();
+                                }
+                            });
+                        }
+                    };
+                    Realm realm1 = Realm.getDefaultInstance();
+                    RealmResults<RealmAvatarPath> realmAvatarPaths = realm1.where(RealmAvatarPath.class).findAll();
+                    realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
+                    Log.i("XXX", "RequestUserAvatarDelete 1 avatarId : " + realmAvatarPaths.first().getId());
 
-                        //                            RealmAvatarToken realmAvatarToken = realm1
-                        // .where(RealmAvatarToken.class).equalTo(RealmAvatarTokenFields.ID,
-                        // realmAvatarPaths.first().getId()).findFirst();
-                        //                            realmAvatarToken.getToken();
-                        //                            Log.i("XXX", "RequestUserAvatarDelete 1
-                        // realmAvatarToken.getToken() : " + realmAvatarToken.getToken());
-                        //
-                        //                             /*
-                        //                              * set token for identity , when i get
-                        // response fetch RealmAvatarToken
-                        //                              * with this identity(token) and delete
-                        // that row from RealmAvatarToken
-                        //                              * */
+                    //                            RealmAvatarToken realmAvatarToken = realm1
+                    // .where(RealmAvatarToken.class).equalTo(RealmAvatarTokenFields.ID,
+                    // realmAvatarPaths.first().getId()).findFirst();
+                    //                            realmAvatarToken.getToken();
+                    //                            Log.i("XXX", "RequestUserAvatarDelete 1
+                    // realmAvatarToken.getToken() : " + realmAvatarToken.getToken());
+                    //
+                    //                             /*
+                    //                              * set token for identity , when i get
+                    // response fetch RealmAvatarToken
+                    //                              * with this identity(token) and delete
+                    // that row from RealmAvatarToken
+                    //                              * */
 
-                        new RequestUserAvatarDelete().userAvatarDelete(
-                            realmAvatarPaths.first().getId(), "");
-                        realm1.close();
-                    } else {
-                        Intent intent = new Intent(Intent.ACTION_PICK,
-                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                        idAvatar = System.nanoTime();
-                        startActivityForResult(intent, IntentRequests.REQ_GALLERY);
-                        dialog.dismiss();
-                    }
+                    new RequestUserAvatarDelete().userAvatarDelete(realmAvatarPaths.first().getId(), "");
+                    realm1.close();
+                } else {
+                    Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    idAvatar = System.nanoTime();
+                    startActivityForResult(intent, IntentRequests.REQ_GALLERY);
+                    dialog.dismiss();
                 }
-            })
-            .show();
+            }
+        }).show();
     }
 
     private long lastUploadedAvatarId;
@@ -1455,8 +1569,7 @@ public class ActivitySetting extends ActivityEnhanced
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == IntentRequests.REQ_CAMERA
-            && resultCode == RESULT_OK) {// result for camera
+        if (requestCode == IntentRequests.REQ_CAMERA && resultCode == RESULT_OK) {// result for camera
 
             Intent intent = new Intent(ActivitySetting.this, ActivityCrop.class);
             if (uriIntent != null) {
@@ -1467,8 +1580,7 @@ public class ActivitySetting extends ActivityEnhanced
                 intent.putExtra("ID", (int) (idAvatar + 1L));
                 startActivityForResult(intent, IntentRequests.REQ_CROP);
             }
-        } else if (requestCode == IntentRequests.REQ_GALLERY
-            && resultCode == RESULT_OK) {// result for gallery
+        } else if (requestCode == IntentRequests.REQ_GALLERY && resultCode == RESULT_OK) {// result for gallery
             if (data != null) {
                 Intent intent = new Intent(ActivitySetting.this, ActivityCrop.class);
                 intent.putExtra("IMAGE_CAMERA", data.getData().toString());
@@ -1477,8 +1589,7 @@ public class ActivitySetting extends ActivityEnhanced
                 intent.putExtra("ID", (int) (idAvatar + 1L));
                 startActivityForResult(intent, IntentRequests.REQ_CROP);
             }
-        } else if (requestCode == IntentRequests.REQ_CROP
-            && resultCode == RESULT_OK) { // save path image on data base ( realm )
+        } else if (requestCode == IntentRequests.REQ_CROP && resultCode == RESULT_OK) { // save path image on data base ( realm )
 
             if (data != null) {
                 pathSaveImage = data.getData().toString();
@@ -1487,8 +1598,7 @@ public class ActivitySetting extends ActivityEnhanced
             Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
                 @Override public void execute(Realm realm) {
-                    final RealmUserInfo realmUserInfo =
-                        realm.where(RealmUserInfo.class).findFirst();
+                    final RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                     RealmAvatarPath realmAvatarPath = realm.createObject(RealmAvatarPath.class);
                     realmAvatarPath.setId((int) (idAvatar + 1L));
                     Log.i("CCC", "pathSaveImage : " + pathSaveImage);
@@ -1560,8 +1670,7 @@ public class ActivitySetting extends ActivityEnhanced
 
     public void setAvatar() {
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmAvatarPath> realmAvatarPaths =
-            realm.where(RealmAvatarPath.class).findAll();
+        RealmResults<RealmAvatarPath> realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
         realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
         if (realmAvatarPaths.size() > 0) {
             pathImageDecode = realmAvatarPaths.first().getPathImage();
@@ -1570,9 +1679,8 @@ public class ActivitySetting extends ActivityEnhanced
             G.onChangeUserPhotoListener.onChangePhoto(pathImageDecode);
         } else {
             RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-            circleImageView.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(
-                (int) circleImageView.getContext().getResources().getDimension(R.dimen.dp88),
-                realmUserInfo.getInitials(), realmUserInfo.getColor()));
+            circleImageView.setImageBitmap(
+                HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp88), realmUserInfo.getInitials(), realmUserInfo.getColor()));
             G.onChangeUserPhotoListener.onChangePhoto(null);
         }
         realm.close();
@@ -1581,9 +1689,7 @@ public class ActivitySetting extends ActivityEnhanced
     private void setInitials(String initials, String color) {
         Log.i("VVV", "initials : " + initials);
         Log.i("VVV", "color : " + color);
-        circleImageView.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(
-            (int) circleImageView.getContext().getResources().getDimension(R.dimen.dp88), initials,
-            color));
+        circleImageView.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp88), initials, color));
         G.onChangeUserPhotoListener.onChangeInitials(initials, color);
     }
 
@@ -1649,8 +1755,7 @@ public class ActivitySetting extends ActivityEnhanced
         realm.close();
     }
 
-    @Override
-    public void onFileUploaded(final FileUploadStructure uploadStructure, String identity) {
+    @Override public void onFileUploaded(final FileUploadStructure uploadStructure, String identity) {
         runOnUiThread(new Runnable() {
             @Override public void run() {
                 circleImageView.setImageURI(Uri.fromFile(new File(uploadStructure.filePath)));
@@ -1660,13 +1765,11 @@ public class ActivitySetting extends ActivityEnhanced
         new RequestUserAvatarAdd().userAddAvatar(uploadStructure.token);
     }
 
-    @Override public void onFileUploading(FileUploadStructure uploadStructure, String identity,
-        double progress) {
+    @Override public void onFileUploading(FileUploadStructure uploadStructure, String identity, double progress) {
         // TODO: 10/20/2016 [Alireza] update view something like updating progress
     }
 
-    private static class UploadTask
-        extends AsyncTask<Object, FileUploadStructure, FileUploadStructure> {
+    private static class UploadTask extends AsyncTask<Object, FileUploadStructure, FileUploadStructure> {
         @Override protected FileUploadStructure doInBackground(Object... params) {
             try {
                 String filePath = (String) params[0];
@@ -1674,8 +1777,7 @@ public class ActivitySetting extends ActivityEnhanced
                 File file = new File(filePath);
                 String fileName = file.getName();
                 long fileSize = file.length();
-                FileUploadStructure fileUploadStructure =
-                    new FileUploadStructure(fileName, fileSize, filePath, avatarId);
+                FileUploadStructure fileUploadStructure = new FileUploadStructure(fileName, fileSize, filePath, avatarId);
                 fileUploadStructure.openFile(filePath);
 
                 byte[] fileHash = AndroidUtils.getFileHash(fileUploadStructure);

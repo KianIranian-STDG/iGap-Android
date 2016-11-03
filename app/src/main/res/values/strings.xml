@@ -259,6 +259,10 @@
   <string name="st_title_general">General</string>
   <string name="st_username">Username:</string>
   <string name="st_nickname">Nickname:</string>
+  <string name="st_Gander">Gander:</string>
+  <string name="st_Gander_male">Male</string>
+  <string name="st_Gander_Female">Female</string>
+  <string name="st_email">Email:</string>
   <string name="st_contactName">Contact Name:</string>
   <string name="st_phoneNumber">Phone Number:</string>
   <string name="st_title_info">Info</string>
@@ -440,6 +444,10 @@
   <string name="Description">Description</string>
   <string name="Please_Enter_Description">Please Enter Description For Group</string>
   <string name="Please_Enter_Description2">Please Enter Your Name Group</string>
+  <string name="month_1">1 Month</string>
+  <string name="month_3">3 Month</string>
+  <string name="month_6">6 Month</string>
+  <string name="year_1">1 Year</string>
 
     <string name="test">
         will likely mark this as an error despite being correct. You may want to add 91211111 will likely mark this as an error despite being correct. You may want to add
@@ -565,6 +573,10 @@
   <string name="E_331">Internal server error for request</string>
   <string name="E_112">Bad payload for request : Invalid nickname</string>
   <string name="E_113">Internal server error for request</string>
+  <string name="E_114">Bad payload for request ; Invalid email</string>
+  <string name="E_115">Internal server error for request</string>
+  <string name="E_116">Bad payload for request ; Invalid gender</string>
+  <string name="E_117">Internal server error for request</string>
   <string name="E_200">Bad payload for request ; Invalid peerId</string>
   <string name="E_201">Internal server error for request</string>
   <string name="E_202">There is no active user with given peerId ; It is not permitted to be peered yourself</string>
