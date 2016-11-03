@@ -589,6 +589,7 @@ public class ActivityChat extends ActivityEnhanced
                     .findFirst();
 
                 if (roomMessage != null) {
+                    long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
                     RealmRoomMessage forwardedMessage = realm.createObject(RealmRoomMessage.class);
                     forwardedMessage.setMessageId(System.nanoTime());
                     forwardedMessage.setMessage(roomMessage.getMessage());
@@ -601,7 +602,7 @@ public class ActivityChat extends ActivityEnhanced
                     forwardedMessage.setRoomId(mRoomId);
                     forwardedMessage.setRoomMessageContact(roomMessage.getRoomMessageContact());
                     forwardedMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
-                    forwardedMessage.setUserId(roomMessage.getUserId());
+                    forwardedMessage.setUserId(userId);
 
                     switchAddItem(new ArrayList<>(
                             Collections.singletonList(StructMessageInfo.convert(forwardedMessage))),

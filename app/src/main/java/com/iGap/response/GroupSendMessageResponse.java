@@ -188,22 +188,26 @@ public class GroupSendMessageResponse extends MessageHandler {
     }
 
     private RealmRoomMessage fillRoomMessage(RealmRoomMessage realmRoomMessage,
-
         ProtoGlobal.RoomMessage roomMessage) {
-        realmRoomMessage.setMessageId(roomMessage.getMessageId());
         realmRoomMessage.setMessageVersion(roomMessage.getMessageVersion());
         realmRoomMessage.setStatus(roomMessage.getStatus().toString());
         realmRoomMessage.setMessageType(roomMessage.getMessageType().toString());
         realmRoomMessage.setMessage(roomMessage.getMessage());
 
-        realmRoomMessage.setAttachment(roomMessage.getMessageId(), roomMessage.getAttachment());
+        if (roomMessage.hasAttachment()) {
+            realmRoomMessage.setAttachment(roomMessage.getMessageId(), roomMessage.getAttachment());
+        }
         realmRoomMessage.setUserId(roomMessage.getUserId());
-        realmRoomMessage.setLocation(RealmRoomMessageLocation.build(roomMessage.getLocation()));
-        realmRoomMessage.setLog(RealmRoomMessageLog.build(roomMessage.getLog()));
-        realmRoomMessage.setRoomMessageContact(
-            RealmRoomMessageContact.build(roomMessage.getContact()));
+        if (roomMessage.hasLocation()) {
+            realmRoomMessage.setLocation(RealmRoomMessageLocation.build(roomMessage.getLocation()));
+        } else if (roomMessage.hasLog()) {
+            realmRoomMessage.setLog(RealmRoomMessageLog.build(roomMessage.getLog()));
+        } else if (roomMessage.hasContact()) {
+            realmRoomMessage.setRoomMessageContact(RealmRoomMessageContact.build(roomMessage.getContact()));
+        }
         realmRoomMessage.setEdited(roomMessage.getEdited());
         realmRoomMessage.setUpdateTime(roomMessage.getUpdateTime() * DateUtils.SECOND_IN_MILLIS);
+
         return realmRoomMessage;
     }
 

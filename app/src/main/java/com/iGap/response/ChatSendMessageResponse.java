@@ -150,8 +150,7 @@ public class ChatSendMessageResponse extends MessageHandler {
                 } else {
                     // i'm the sender
                     // update message fields into database
-                    RealmResults<RealmRoomMessage> realmRoomMessages =
-                        realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID,
+                    RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID,
                                 chatSendMessageResponse.getRoomId())
                             .findAll();
                     for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
@@ -227,18 +226,15 @@ public class ChatSendMessageResponse extends MessageHandler {
         realmRoomMessage.setMessageType(roomMessage.getMessageType().toString());
         realmRoomMessage.setMessage(roomMessage.getMessage());
 
-        if (roomMessage.getMessageType() != ProtoGlobal.RoomMessageType.TEXT
-            && roomMessage.getMessageType() != ProtoGlobal.RoomMessageType.LOCATION
-            && roomMessage.getMessageType() != ProtoGlobal.RoomMessageType.LOG
-            && roomMessage.getMessageType() != ProtoGlobal.RoomMessageType.CONTACT) {
+        if (roomMessage.hasAttachment()) {
             realmRoomMessage.setAttachment(roomMessage.getMessageId(), roomMessage.getAttachment());
         }
         realmRoomMessage.setUserId(roomMessage.getUserId());
-        if (roomMessage.getMessageType() == ProtoGlobal.RoomMessageType.LOCATION) {
+        if (roomMessage.hasLocation()) {
             realmRoomMessage.setLocation(RealmRoomMessageLocation.build(roomMessage.getLocation()));
-        } else if (roomMessage.getMessageType() == ProtoGlobal.RoomMessageType.LOG) {
+        } else if (roomMessage.hasLog()) {
             realmRoomMessage.setLog(RealmRoomMessageLog.build(roomMessage.getLog()));
-        } else if (roomMessage.getMessageType() == ProtoGlobal.RoomMessageType.CONTACT) {
+        } else if (roomMessage.hasContact()) {
             realmRoomMessage.setRoomMessageContact(
                 RealmRoomMessageContact.build(roomMessage.getContact()));
         }
