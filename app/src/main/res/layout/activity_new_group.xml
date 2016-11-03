@@ -65,7 +65,6 @@
             android:singleLine="true"
             />
         <View
-            android:id="@+id/ng_view_newGroup"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:scaleY=".5"

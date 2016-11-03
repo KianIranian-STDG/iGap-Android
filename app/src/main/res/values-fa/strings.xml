@@ -1,43 +1,22 @@
 <resources>
   <string name="app_name">iGap</string>
 
-  <string name="fa_menu_bar">&#xf0c9;</string>
   <string name="fa_bell_slash_o">&#xf1f7;</string>
   <string name="fa_bullhorn">&#xf0a1;</string>
-  <string name="fa_check">&#xf00c;</string>
   <string name="fa_close">&#xf00d;</string>
   <string name="fa_ellipsis_v">&#xf142;</string>
-  <string name="fa_exclamation_triangle">&#xf071;</string>
-  <string name="fa_clock_o">&#xf017;</string>
   <string name="fa_eye">&#xf06e;</string>
-  <string name="fa_group">&#xf0c0;</string>
-  <string name="fa_life_ring">&#xf1cd;</string>
-  <string name="fa_mail_forward">&#xf064;</string>
-  <string name="fa_mail_replay">&#xf112;</string>
-  <string name="fa_smile_o">&#xf118;</string>
-  <string name="fa_microphone">&#xf130;</string>
-  <string name="fa_send">&#xf1d9;</string>
-  <string name="fa_paperclip">&#xf0c6;</string>
-  <string name="fa_search">&#xf002;</string>
   <string name="fa_chevron_left">&#xf053;</string>
-  <string name="fa_user">&#xf007;</string>
   <string name="fa_commenting_o">&#xf27b;</string>
   <string name="fa_thumbs_o_down">&#xf088;</string>
   <string name="fa_thumbs_o_up">&#xf087;</string>
   <string name="fa_trash_o">&#xf014;</string>
-  <string name="fa_files_o">&#xf0c5;</string>
   <string name="fa_long_arrow_right">&#xf178;</string>
   <string name="fa_chevron_down">&#xf078;</string>
   <string name="fa_chevron_up">&#xf077;</string>
-  <string name="fa_sort_desc">&#xf0dd;</string>
   <string name="fa_arrow_down">&#xf063;</string>
   <string name="fa_video_camera">&#xf03d;</string>
   <string name="fa_pause">&#xf04c;</string>
-
-  <string name="fa_cog">&#xf013;</string>
-  <string name="fa_user_plus">&#xf234;</string>
-  <string name="fa_lock">&#xf023;</string>
-  <string name="fa_question_circle">&#xf059;</string>
 
 
   <string name="unmute_notification">UnMute Notification</string>
@@ -51,8 +30,6 @@
   <string name="delete_chat">Delete Chat</string>
   <string name="delete_contact">Delete Contact</string>
   <string name="cancel">Cancel</string>
-  <string name="yes">Yes</string>
-  <string name="no">No</string>
   <string name="ok">Ok</string>
 
 
@@ -60,33 +37,11 @@
 
   <!--Toolbar-->
 
-  <string name="toolbar_title_register_page">Connect to server</string>
-
   <!--REGISTER PAGE-->
 
-  <string name="your_country">YOUR COUNTRY</string>
-  <string name="code_country">YOUR COUNTRY CODE AND PHONE NUMBER</string>
   <string name="phone_number">PHONE NUMBER</string>
-  <string name="verify">Verify your phone number to connect to IGap</string>
-  <string name="register">Registration transmit some connect Information to server. it is not stored </string>
-  <string name="copy_right_rooyekhat">power by rooyekhat</string>
-  <string name="button_register">Register</string>
-  <string name="Re_dialog_message">Double Check that this is your number! we\'re about to verify it an SMS </string>
-  <string name="Re_dialog_message_error">The number you specified</string>
-  <string name="Re_dialog_message_error2">is invalid</string>
 
   <!--check connect to internet Page-->
-
-  <string name="connect_error">Connectivity error</string>
-  <string name="connect_error0">No network connectivity</string>
-  <string name="connect_error1">your device needs network connectivity</string>
-  <string name="connect_error2">order to use this Signal feature. Check to</string>
-  <string name="connect_error3">ensure that it is connect to mobile data or wifi</string>
-
-  <string name="connect_firewall0">Restrictive firewall</string>
-  <string name="connect_firewall1">if you are connected via wi-Fi , it\'s possible </string>
-  <string name="connect_firewall2">that there is a firewall blocking access to</string>
-  <string name="connect_firewall3">th IGap server. try another network or mobile data </string>
 
   <!--introduce app-->
 
@@ -131,12 +86,7 @@
 
   <!--REGISTER PAGE-->
   <string name="rg_title_register">Registration</string>
-  <string name="rg_your_country">YOUR COUNTRY</string>
   <string name="rg_confirm_text_register">Please confirm your structCountry code end enter your phone number</string>
-  <string name="rg_phone_number">PHONE NUMBER</string>
-  <string name="rg_verify">Verify your phone number to connect to IGap</string>
-  <string name="rg_copy_right_rooyekhat">power by rooyekhat</string>
-  <string name="rg_button_register">Register</string>
 
   <string name="rg_agreement_title_register">agreement</string>
     <string name="rg_agreement_text_register">
@@ -148,10 +98,10 @@
         Double Check that this is your number! we\'re about to verify it an SMSDouble Check that this is your number!
         Double Check that this is your number! we\'re about to verify it an SMSDouble Check that this is your number!
     </string>
-  <string name="rg_verify_register1">Connecting...</string>
-  <string name="rg_verify_register2">Waiting for SMS Verification...</string>
-  <string name="rg_verify_register3">Generating Key...</string>
-  <string name="rg_verify_register4">Registering with server...</string>
+  <string name="rg_verify_register1">Connecting…</string>
+  <string name="rg_verify_register2">Waiting for SMS Verification…</string>
+  <string name="rg_verify_register3">Generating Key…</string>
+  <string name="rg_verify_register4">Registering with server…</string>
 
   <string name="rg_verify_dialog_enter_code">iGap App try to detect sms via your phone but maybe you used other phone or another reason happen app cannot detect number of verification code , you can wrote manually and try or resend again .</string>
   <string name="rg_verify_dialog_try_code">Try</string>
@@ -159,8 +109,6 @@
   <string name="search">rg_search</string>
 
   <!--setting-->
-  <string name="st_popupMenu_toolbar_rename">rename</string>
-  <string name="st_popupMenu_toolbar_more">Log Out</string>
   <string name="st_titleToolbar">Settings</string>
   <string name="st_title_general">General</string>
   <string name="st_username">UserName:</string>
@@ -185,7 +133,6 @@
   <string name="st_save_to_gallery">Save to Gallery</string>
   <string name="st_title_support">Support</string>
   <string name="st_ask_question">Ask a Question</string>
-  <string name="st_igap_faq">iGap FAQ</string>
   <string name="st_privacy_policy">Privacy Policy</string>
   <string name="st_keepMedia">Keep Media</string>
     <string name="st_dialog_content_keepMedia">Photo , video and other files from cloud chats that ypo have not accessed during this period
@@ -218,33 +165,21 @@
   <string name="st_title_reset">Reset</string>
   <string name="st_reset_all_notification">پاک کردن</string>
   <string name="st_text_reset_all_notification">Undo all custom notification settings for all your contacts and groups</string>
-  <string name="st_popup_logout">Are you sure you want to log out? \n Note that you can seamLessly use iGap on all your devices at once. \n Remember,logging out kills all your Secret Chats.</string>
 
 
   <!--chanel_info-->
-  <string name="chi_chanel_link">Chanel Link:</string>
   <string name="chi_shared_Media">Shared Media:</string>
   <string name="chi_clearChat">Clear Chat History</string>
   <string name="chi_blockContact">Block this contact</string>
   <string name="chi_title_setting">Settings</string>
-  <string name="chi_popup_addContact">Add to contact</string>
   <string name="chi_popup_call">call</string>
   <string name="chi_popup_copy">copy</string>
-  <string name="chi_popup_share">Share</string>
-  <string name="chi_popup_delete">Delete</string>
-  <string name="chi_popup_shortcut">Add Shortcut</string>
-  <string name="hint_search">Search…</string>
 
   <!--fragment add contact-->
   <string name="fac_contact_info">اطلاعات تماس</string>
   <string name="fac_First_Name">نام کوچک</string>
   <string name="fac_Last_Name">نام خانوادگی</string>
   <string name="fac_Phone_Number">شماره تماس</string>
-
-  <string name="mh_popup_link">Links</string>
-  <string name="mh_popup_media">Media</string>
-  <string name="mh_popup_file">Files</string>
-  <string name="mh_popup_audio">Audio</string>
 
 
   <string name="shared_media">Shared Media</string>

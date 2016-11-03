@@ -30,7 +30,6 @@
         >
 
       <View
-          android:id="@+id/csl_vertical_line_gray"
           android:layout_width="2px"
           android:layout_height="match_parent"
           android:background="#e1dfdf"
@@ -109,7 +108,6 @@
         >
 
       <TextView
-          android:id="@+id/textView7"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:padding="@dimen/dp4"
@@ -119,7 +117,6 @@
           />
 
       <ImageView
-          android:id="@+id/imageView2"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:paddingRight="@dimen/dp4"

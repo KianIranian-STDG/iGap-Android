@@ -44,19 +44,6 @@
     <item name="colorAccent">@android:color/white</item>
   </style>
 
-  <style name="st_BeforeCollapse">
-    <item name="android:textSize">@dimen/sp18</item>
-    <item name="android:textColor">@android:color/transparent</item>
-    <item name="android:textStyle">bold</item>
-    <item name="android:visibility">gone</item>
-  </style>
-
-  <style name="st_afterCollapse">
-    <item name="android:textSize">@dimen/sp18</item>
-    <item name="android:textColor">@android:color/white</item>
-    <item name="android:textStyle">bold</item>
-  </style>
-
   <style name="RedHUGEText" parent="@android:style/Widget.TextView">
 
     <item name="android:textColor">@color/black_register</item>

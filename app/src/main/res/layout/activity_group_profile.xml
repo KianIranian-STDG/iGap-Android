@@ -25,7 +25,6 @@
         >
 
       <android.support.design.widget.CollapsingToolbarLayout
-          android:id="@+id/agp_collapse"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           app:contentScrim="@color/toolbar_background"
@@ -79,7 +78,6 @@
         </LinearLayout>
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/agp_toolbar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp60"
             app:contentInsetLeft="0dp"
@@ -183,7 +181,6 @@
 
 
           <TextView
-              android:id="@+id/agp_txt_str_info"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:gravity="center"
@@ -214,7 +211,6 @@
                 >
 
               <TextView
-                  android:id="@+id/agp_txt_str_group_name"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:singleLine="true"
@@ -247,7 +243,6 @@
                 >
 
               <TextView
-                  android:id="@+id/agp_txt_str_shared_media"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:singleLine="true"
@@ -292,7 +287,6 @@
                 >
 
               <TextView
-                  android:id="@+id/agp_txt_str_group_description"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:singleLine="true"
@@ -324,7 +318,6 @@
                 >
 
               <TextView
-                  android:id="@+id/agp_txt_str_member"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:singleLine="true"
@@ -362,7 +355,6 @@
             >
 
           <TextView
-              android:id="@+id/agp_txt_str_members_filed"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:gravity="center"
@@ -385,7 +377,6 @@
               >
 
             <com.iGap.module.CircleImageView
-                android:id="@+id/agp_imv_add_member"
                 android:layout_width="@dimen/dp48"
                 android:layout_height="@dimen/dp48"
                 android:layout_marginLeft="@dimen/dp4"
@@ -394,7 +385,6 @@
                 />
 
             <TextView
-                android:id="@+id/agp_txt_str_add_new_member"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
@@ -439,7 +429,6 @@
             >
 
           <TextView
-              android:id="@+id/agp_txt_str_setting"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:gravity="center"
@@ -529,7 +518,6 @@
                 >
 
               <TextView
-                  android:id="@+id/agp_txt_member_can_add_new_member"
                   android:layout_width="0dp"
                   android:layout_height="wrap_content"
                   android:layout_weight="1"

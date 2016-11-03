@@ -1,6 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/rg_layoutRoot_dialog"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/rg_whit_background"
@@ -11,7 +10,6 @@
 
   <RelativeLayout
 
-      android:id="@+id/rg_layout_search_chooseCountry"
       android:layout_width="match_parent"
       android:layout_height="@dimen/dp52"
       android:layoutDirection="ltr"

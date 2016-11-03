@@ -7,7 +7,6 @@
     >
 
   <ImageView
-      android:id="@+id/ln_imv_avatar_notification_big"
       android:layout_width="@dimen/dp48"
       android:layout_height="@dimen/dp48"
       android:layout_gravity="left|top"

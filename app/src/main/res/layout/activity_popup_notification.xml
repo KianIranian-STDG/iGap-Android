@@ -35,7 +35,6 @@
           >
 
         <com.iGap.module.MaterialDesignTextView
-            android:id="@+id/apn_imv_back_Button"
             android:layout_width="@dimen/dp60"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"

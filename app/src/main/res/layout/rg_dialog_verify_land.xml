@@ -22,7 +22,6 @@
       />
 
   <LinearLayout
-      android:id="@+id/rg_layout_verify"
       android:layout_width="match_parent"
       android:layout_height="@dimen/dp160"
       android:orientation="vertical"

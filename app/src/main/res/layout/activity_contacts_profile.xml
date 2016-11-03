@@ -19,7 +19,6 @@
       >
 
     <android.support.design.widget.CollapsingToolbarLayout
-        android:id="@+id/chi_collapse"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:contentScrim="@color/toolbar_background"
@@ -32,7 +31,6 @@
 
 
       <android.support.v7.widget.Toolbar
-          android:id="@+id/chi_toolbar"
           android:layout_width="match_parent"
           android:layout_height="@dimen/dp60"
           app:contentInsetLeft="0dp"
@@ -169,7 +167,6 @@
 
 
   <android.support.v4.widget.NestedScrollView
-      android:id="@+id/chi_scroll_nested"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:background="@android:color/white"

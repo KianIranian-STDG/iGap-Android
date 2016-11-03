@@ -4,7 +4,6 @@
   <dimen name="design_fab_size_mini">48dp</dimen>
   <dimen name="design_fab_size_normal">70dp</dimen>
 
-  <dimen name="sp8">12sp</dimen>
   <dimen name="sp10">15sp</dimen>
   <dimen name="sp12">18sp</dimen>
   <dimen name="sp14">21sp</dimen>
@@ -12,16 +11,10 @@
   <dimen name="sp18">27sp</dimen>
   <dimen name="sp20">30sp</dimen>
   <dimen name="sp22">33sp</dimen>
-  <dimen name="s24">36sp</dimen>
   <dimen name="sp26">39sp</dimen>
   <dimen name="sp28">42sp</dimen>
-  <dimen name="sp30">45sp</dimen>
   <dimen name="sp32">48sp</dimen>
-  <dimen name="sp34">51sp</dimen>
   <dimen name="sp36">54sp</dimen>
-  <dimen name="sp40">60sp</dimen>
-  <dimen name="sp44">66sp</dimen>
-  <dimen name="sp48">72sp</dimen>
 
 
   <dimen name="dp4">6dp</dimen>
@@ -39,7 +32,6 @@
   <dimen name="dp44">66dp</dimen>
   <dimen name="dp48">72dp</dimen>
   <dimen name="dp52">78dp</dimen>
-  <dimen name="dp56">84dp</dimen>
   <dimen name="dp60">90dp</dimen>
   <dimen name="dp68">102dp</dimen>
   <dimen name="dp80">120dp</dimen>
@@ -55,15 +47,10 @@
   <dimen name="dp260">390dp</dimen>
   <dimen name="dp280">420dp</dimen>
   <dimen name="dp300">450dp</dimen>
-  <dimen name="dp320">480dp</dimen>
-  <dimen name="dp340">510dp</dimen>
   <dimen name="dp360">540dp</dimen>
-  <dimen name="dp380">570dp</dimen>
-  <dimen name="dp400">600dp</dimen>
 
 
   <dimen name="dp70">105dp</dimen>
-  <dimen name="dp75">113dp</dimen>
   <dimen name="dp105">165dp</dimen>
   <dimen name="dp110">156dp</dimen>
   <dimen name="dp95">143dp</dimen>

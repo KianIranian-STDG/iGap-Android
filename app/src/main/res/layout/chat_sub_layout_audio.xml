@@ -157,7 +157,6 @@
             </LinearLayout>
 
             <SeekBar
-                android:id="@+id/seekBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:max="100"
@@ -188,7 +187,6 @@
 
       <include
           layout="@layout/chat_sub_layout_messages_time"
-          android:id="@+id/cslr_ll_time"
           />
     </LinearLayout>
   </LinearLayout>

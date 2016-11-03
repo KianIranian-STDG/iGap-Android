@@ -24,7 +24,6 @@
 
 
       <TextView
-          android:id="@+id/nclf_txt_titleToolbar"
           android:layout_width="wrap_content"
           android:layout_height="match_parent"
           android:layout_centerInParent="true"
@@ -141,7 +140,6 @@
       </RadioGroup>
 
       <LinearLayout
-          android:id="@+id/nclf_layout_link"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_below="@id/nclf_radioGroup"
@@ -151,7 +149,6 @@
           >
 
         <TextView
-            android:id="@+id/nclf_txt_title_Link"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -170,7 +167,6 @@
             >
 
           <TextView
-              android:id="@+id/nclf_txt_titleIgap"
               android:layout_width="wrap_content"
               android:layout_height="match_parent"
               android:layout_gravity="center_horizontal"

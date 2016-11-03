@@ -1,100 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="app_name">iGap</string>
-
-  <string name="md_cancel_button">\uf136</string>
-  <string name="md_clock_with_white_face">\uf14e</string>
-  <string name="md_check_symbol">\uf143</string>
-  <string name="md_double_tick_indicator">\uf166</string>
-  <string name="md_emoticon_with_happy_face">\uf172</string>
-  <string name="md_black_keyboard_with_white_keys">\uf119</string>
-  <string name="md_send_button">\uf23d</string>
-  <string name="md_attachment_clip">\uf10c</string>
-  <string name="md_voice_message_microphone_button">\uf293</string>
-  <string name="md_flaticon_volume_off_indicator">\uf297</string>
-  <string name="md_share_button">\uf245</string>
-  <string name="md_show_more_button">\uf24f</string>
-  <string name="md_close_button">\uf14f</string>
-  <string name="md_right_arrow_button">\uf186</string>
-  <string name="md_refresh_button">\uf213</string>
-  <string name="md_round_info_button">\uf223</string>
-  <string name="md_back_arrow">\uf1be</string>
-  <string name="md_crop_button">\uf15e</string>
-  <string name="md_user_inside_bubble_speech">\uf289</string>
-  <string name="md_add_user_button">\uf106</string>
-  <string name="md_user_account_box">\uf287</string>
-  <string name="md_user_shape">\uf28b</string>
-  <string name="md_users_social_symbol">\uf28c</string>
-  <string name="md_settings_cogwheel_button">\uf243</string>
-  <string name="md_help_round_button">\uf1b0</string>
-  <string name="md_menu_button">\uf1db</string>
-  <string name="md_searching_magnifying_glass">\uf23a</string>
-  <string name="md_rubbish_delete_file">\uf22e</string>
-  <string name="md_right_arrow_forward">\uf21a</string>
-  <string name="md_copy">\uf159</string>
-  <string name="md_back_arrow_reply">\uf110</string>
-
-  <string name="md_play_rounded_button">\uf201</string>
-  <string name="md_round_pause_button">\uf224</string>
-  <string name="md_play_next_button">\uf200</string>
-  <string name="md_previous_track">\uf206</string>
-  <string name="md_play_arrow">\uf1fe</string>
-  <string name="md_pause_button">\uf1f1</string>
-
-  <string name="md_shuffle_mode">\uf250</string>
-  <string name="md_synchronization_arrows">\uf262</string>
-
-  <string name="md_expand_arrow">\uf176</string>
-  <string name="md_downwards_arrow">\uf16a</string>
-  <string name="md_check_box">\uf142</string>
-
-
-  <string name="fa_stop">&#xf04d;</string>
-  <string name="fa_menu_bar">&#xf0c9;</string>
-  <string name="fa_bell_slash_o">&#xf1f7;</string>
-  <string name="fa_bullhorn">&#xf0a1;</string>
-  <string name="fa_check">&#xf00c;</string>
-  <string name="fa_close">&#xf00d;</string>
-  <string name="fa_ellipsis_v">&#xf142;</string>
-  <string name="fa_exclamation_triangle">&#xf071;</string>
-  <string name="fa_clock_o">&#xf017;</string>
-  <string name="fa_eye">&#xf06e;</string>
-  <string name="fa_group">&#xf0c0;</string>
-  <string name="fa_life_ring">&#xf1cd;</string>
-  <string name="fa_mail_forward">&#xf064;</string>
-  <string name="fa_mail_replay">&#xf112;</string>
-  <string name="fa_smile_o">&#xf118;</string>
-  <string name="fa_microphone">&#xf130;</string>
-  <string name="fa_send">&#xf1d9;</string>
-  <string name="fa_paperclip">&#xf0c6;</string>
-  <string name="fa_search">&#xf002;</string>
-  <string name="fa_chevron_left">&#xf053;</string>
-  <string name="fa_user">&#xf007;</string>
-  <string name="fa_commenting_o">&#xf27b;</string>
-  <string name="fa_thumbs_o_down">&#xf088;</string>
-  <string name="fa_thumbs_o_up">&#xf087;</string>
-  <string name="fa_trash_o">&#xf014;</string>
-  <string name="fa_files_o">&#xf0c5;</string>
-  <string name="fa_long_arrow_right">&#xf178;</string>
-  <string name="fa_chevron_down">&#xf078;</string>
-  <string name="fa_chevron_up">&#xf077;</string>
-  <string name="fa_sort_desc">&#xf0dd;</string>
-  <string name="fa_arrow_down">&#xf063;</string>
-  <string name="fa_video_camera">&#xf03d;</string>
-  <string name="fa_pause">&#xf04c;</string>
-  <string name="fa_repeat">&#xf01e;</string>
-  <string name="fa_save">&#xf0c7;</string>
-  <string name="fa_external_link">&#xf054;</string>
-  <string name="fa_eraser">&#xf12d;</string>
-  <string name="eyedropper">&#xf1fb;</string>
-  <string name="fa_cog">&#xf013;</string>
-  <string name="fa_picture">&#xf03e;</string>
-  <string name="fa_camera">&#xf083;</string>
-  <string name="paint">&#xf1fc;</string>
-  <string name="fa_user_plus">&#xf234;</string>
-  <string name="fa_lock">&#xf023;</string>
-  <string name="fa_question_circle">&#xf059;</string>
-
-
   <string name="unmute_notification">UnMute Notifications</string>
   <string name="mute_notification">Mute Notifications</string>
   <string name="chat">Chat</string>
@@ -110,16 +16,13 @@
   <string name="delete_contact">Delete Contact</string>
   <string name="delete_text">Are you sure delete this contact?</string>
   <string name="cancel">Cancel</string>
-  <string name="B_cancel">CANCEL</string>
+  <string name="B_cancel">Cancel</string>
   <string name="B_skip">SKIP</string>
   <string name="B_finish">FINISH</string>
-  <string name="yes">Yes</string>
-  <string name="no">No</string>
-  <string name="ok">Ok</string>
+  <string name="ok">OK</string>
+  <string name="if_you_are_away_for">if you\'re away for</string>
   <string name="B_ok">OK</string>
   <string name="set">SET</string>
-
-
   <string name="am_camera">Camera</string>
   <string name="am_music">Music</string>
   <string name="am_paint">Paint</string>
@@ -129,8 +32,6 @@
   <string name="am_video">Video</string>
   <string name="am_file">File</string>
   <string name="am_contact">Contact</string>
-
-
   <string name="just_wait_en">Just Wait</string>
   <string name="device_dosenot_camera_en">This device does not have a camera</string>
   <string name="do_you_want_to_turn_on_gps">Your Gps is Off do you want to turn On Gps</string>
@@ -138,110 +39,40 @@
   <string name="select_picture_en">Select Picture</string>
   <string name="cannot_load_data_en">Can\'t load data</string>
   <string name="do_you_want_exit">Do you want to exit</string>
-  <string name="invite_friend">Invite Friend</string>
   <string name="slide_to_cancel_en"> &lt; Slide to Cancel </string>
-
   <string formatted="false" name="video_duration">%s (%s)</string>
-
-  <!--//mo-->
-
-  <!--Toolbar-->
-
-  <string name="toolbar_title_register_page">Connect to Server</string>
-
-  <!--REGISTER PAGE-->
-
-  <string name="your_country">YOUR COUNTRY</string>
-  <string name="code_country">YOUR COUNTRY CODE AND PHONE NUMBER</string>
   <string name="phone_number">PHONE NUMBER</string>
-  <string name="verify">Verify your phone number to connect to IGap</string>
-  <string name="register">Registration transmit some connect information to server. it is not stored </string>
-  <string name="copy_right_rooyekhat">Power by Rooyekhat</string>
-  <string name="button_register">Register</string>
-  <string name="Re_dialog_message">Double check that this is your number! we\'re about to verify it an SMS </string>
-  <string name="Re_dialog_message_error">The number you specified</string>
-  <string name="Re_dialog_message_error2">is invalid</string>
   <string name="Re_Phone_Verification">Phone Verification</string>
-
-
-  <!--check connect to internet Page-->
-
-  <string name="connect_error">Connectivity error</string>
-  <string name="connect_error0">No network connectivity</string>
-  <string name="connect_error1">your device needs network connectivity</string>
-  <string name="connect_error2">Order to use this signal feature. check to</string>
-  <string name="connect_error3">ensure that it is connect to mobile data or wifi</string>
-
-  <string name="connect_firewall0">Restrictive Firewall</string>
-  <string name="connect_firewall1">If you are connected via wi-Fi , it\'s possible </string>
-  <string name="connect_firewall2">That there is a firewall blocking access to</string>
-  <string name="connect_firewall3">The IGap server. Try another network or mobile data </string>
-
-  <!--introduce app-->
-
-
   <string name="text_i_introduce_page1">i</string>
   <string name="text_line_1_introduce_page1">GAP</string>
   <string name="text_line_2_introduce_page1">Limitless Connection</string>
   <string name="text_line_3_introduce_page1"> Create your very own world \n with iGap right now</string>
-
-  <!--page2-->
-
   <string name="text_line_1_introduce_page2">SECURITY</string>
   <string name="text_line_2_introduce_page2"> The thing is, iGap promises you providing a secure connection with your friends and family. We use all new encryption algorithms to secure your privacy. </string>
-  <!--page3-->
   <string name="text_line_1_introduce_page3">CHAT</string>
   <string name="text_line_2_introduce_page3"> You can chat in private or groups and even create your own channel and add members. </string>
-
-  <!--page4-->
-
   <string name="text_line_1_introduce_page4">FILE TRANSFER</string>
   <string name="text_line_2_introduce_page4"> You can transfer any file with any extension \n and size, Share anything you’d like to with whoever you want to. </string>
-
-  <!--page5-->
-
   <string name="btn_start_page5">START NOW</string>
   <string name="text_line_1_introduce_page5">EVERYTHING FOR FREE!</string>
-
-
     <string name="text_line_2_introduce_page5">
-
 <![CDATA[ Not to bore you no more! <br /> iGap is all Free. Create your own world just now! ]]>
 </string>
-
-  <!--//profile user-->
   <string name="pu_title_profileUser">YOUR INFORMATION</string>
   <string name="pu_desc_profileUser">Enter your name and add a profile picture.</string>
   <string name="pu_addPhoto_profileUser">Profile Picture</string>
   <string name="pu_nikname_profileUser">Nickname</string>
   <string name="pu_Lets_Go">Lets Go</string>
-
-
-  <!--REGISTER PAGE-->
   <string name="rg_title_register">Registration</string>
-  <string name="rg_your_country">YOUR COUNTRY</string>
   <string name="rg_confirm_text_register">Please confirm your Country code end enter your phone number</string>
-  <string name="rg_phone_number">PHONE NUMBER</string>
-  <string name="rg_verify">Verify your phone number to connect to IGap</string>
-  <string name="rg_copy_right_rooyekhat">power by Rooyekhat</string>
-  <string name="rg_button_register">Register</string>
   <string name="rg_Start">Start</string>
   <string name="rg_Select_Country">Select Country</string>
-
   <string name="rg_agreement_title_register">Agreement</string>
-    <string name="rg_agreement_text_register">
-        Double Check that this is your number! we\'re about to verify it an SMSDouble Check that this is your number!
-        Double Check that this is your number! we\'re about to verify it an SMSDouble Check that this is your number!
-        Double Check that this is your number! we\'re about to verify it an SMSDouble Check that this is your number!
-        Double Check that this is your number! we\'re about to verify it an SMSDouble Check that this is your number!
-        Double Check that this is your number! we\'re about to verify it an SMSDouble Check that this is your number!
-
-    </string>
-  <string name="rg_verify_register1">Connecting&#8230;</string>
-  <string name="rg_verify_register2">Waiting for SMS verification&#8230;</string>
-  <string name="rg_verify_register3">Generating key&#8230;</string>
-  <string name="rg_verify_register4">Registering with server&#8230;</string>
-
+  <string name="rg_agreement_text_register">Double Check that this is your number! we\'re about to verify it an SMS </string>
+  <string name="rg_verify_register1">Connecting…</string>
+  <string name="rg_verify_register2">Waiting for SMS verification…</string>
+  <string name="rg_verify_register3">Generating key…</string>
+  <string name="rg_verify_register4">Registering with server…</string>
   <string name="rg_verify_dialog_enter_code">iGap App try to detect sms via your phone but maybe you used other phone or another reason happen app cannot detect number of verification code , you can wrote manually and try or resend again .</string>
   <string name="rg_verify_dialog_try_code">Try</string>
   <string name="rg_verify_dialog_resend_code">Resend Code</string>
@@ -249,19 +80,13 @@
   <string name="Re_dialog_verify_number_part1">We will Verifying the phone number: \n</string>
   <string name="Re_dialog_verify_number_part2">Is this OK , or would you like to edit the number?</string>
   <string name="Re_Enter_Verify_Code_Please">Enter Verify Code Please</string>
-
-  <!--setting-->
   <string name="st_Info">Info</string>
   <string name="st_Language">Language</string>
-  <string name="st_popupMenu_toolbar_rename">Rename</string>
-  <string name="st_popupMenu_toolbar_more">Log Out</string>
   <string name="st_titleToolbar">Settings</string>
   <string name="st_title_general">General</string>
   <string name="st_username">Username:</string>
   <string name="st_nickname">Nickname:</string>
   <string name="st_Gander">Gander:</string>
-  <string name="st_Gander_male">Male</string>
-  <string name="st_Gander_Female">Female</string>
   <string name="st_email">Email:</string>
   <string name="st_contactName">Contact Name:</string>
   <string name="st_phoneNumber">Phone Number:</string>
@@ -321,11 +146,8 @@
   <string name="st_dialog_reset_all_notification">Are you sure for undo all custom notifications setting?</string>
   <string name="st_dialog_reset_all_notification_yes">YES</string>
   <string name="st_dialog_reset_all_notification_no">NO</string>
-  <string name="st_popup_logout">Are you sure you want to log out? \n Note that you can seamLesly use iGap on all your devices at once. \n Remembers,logging out kills all your Secret Chats.</string>
   <string name="st_title_Background">Chat Background</string>
   <string name="st_stickers_and_picture">Stickers and Picture</string>
-
-  <!--privacy and security-->
   <string name="privacy">privacy</string>
   <string name="Block_Users">Block Users</string>
   <string name="Last_Seen">Last Seen</string>
@@ -335,56 +157,31 @@
   <string name="Two_Step_Verification">Two Step Verification</string>
   <string name="Active_Sessions">Active Sessions</string>
   <string name="Account_Self_destruction">Account Self destruction</string>
-  <string name="if_you_are_away_for">if you\'re away for</string>
-
-  <!--notification and sound group-->
-
   <string name="ntg_title_toolbar">Notifications and Sounds</string>
   <string name="ntg_notifications">Notifications</string>
   <string name="ntg_Sound">Sound</string>
   <string name="ntg_smart_notifications">Smart Notifications</string>
-  <!--chanel_info-->
-  <string name="chi_chanel_link">Chanel Link:</string>
   <string name="chi_shared_Media">Shared Media:</string>
   <string name="chi_clearChat">Clear Chat History</string>
   <string name="chi_blockContact">Block this contact</string>
   <string name="chi_title_setting">Settings</string>
-  <string name="chi_popup_addContact">Add to Contact</string>
   <string name="chi_popup_call">Call</string>
   <string name="chi_popup_copy">Copy</string>
-  <string name="chi_popup_share">Share</string>
-  <string name="chi_popup_delete">Delete</string>
-  <string name="chi_popup_shortcut">Add Shortcut</string>
-  <string name="hint_search">Search…</string>
   <string name="chi_NEXT_STEP">NEXT STEP</string>
-
-  <!--fragment add contact-->
   <string name="fac_Add_Contact">Add Contact</string>
   <string name="fac_contact_info">Contact Info</string>
   <string name="fac_First_Name">First Name</string>
   <string name="fac_Last_Name">Last Name</string>
   <string name="fac_Phone_Number">Phone Number</string>
-
   <string name="fac_Find_in_Page">Find in Page</string>
   <string name="fac_Open_in_Chrome">Open in Chrome</string>
   <string name="fac_Powered_by_iGap">Powered by iGap</string>
-
   <string name="menu_add_contact">Add Contact</string>
-
-  <string name="mh_popup_link">Links</string>
-  <string name="mh_popup_media">Media</string>
-  <string name="mh_popup_file">Files</string>
-  <string name="mh_popup_audio">Audio</string>
-
-
   <string name="shared_media">Shared Media</string>
   <string name="shared_files">Shared Files</string>
   <string name="shared_links">Shared Links</string>
   <string name="shared_music">Shared Music</string>
-
   <string name="save_to_Music">Save to Music</string>
-
-
   <string name="show_all_media">Show all Media</string>
   <string name="save_to_gallery">Save to Gallery</string>
   <string name="delete_from_gallery">Delete from Gallery</string>
@@ -392,15 +189,12 @@
   <string name="edited">Edited</string>
   <string name="today">Today</string>
   <string name="yesterday">Yesterday</string>
-
-  <!--array-->
   <string name="array_Photo">Photo</string>
   <string name="array_Voice_Message">Voice_Message</string>
   <string name="array_Video">Video</string>
   <string name="array_File">File</string>
   <string name="array_Music">Photo</string>
   <string name="array_GIF">GIF</string>
-  <string name="array_Log_Out">Log Out</string>
   <string name="array_Add_to_Contact">Add to Contact</string>
   <string name="array_Call">Call</string>
   <string name="array_Copy">Copy</string>
@@ -411,8 +205,6 @@
   <string name="array_Always_show_popup">Always show popup</string>
   <string name="array_Disable">Disable</string>
   <string name="array_enable">Enable</string>
-  <string name="array_setting_default">Setting Disable</string>
-  <string name="array_system_default">System Disable</string>
   <string name="array_Default">Default</string>
   <string name="array_Short">Short</string>
   <string name="array_Long">Long</string>
@@ -427,7 +219,6 @@
   <string name="array_2_hour">2 Hours</string>
   <string name="array_4_hour">4 Hours</string>
   <string name="array_Default_Notification_tone">Default Notifications Tone</string>
-
   <string name="replay_item_dialog">Replay</string>
   <string name="copy_item_dialog">Copy</string>
   <string name="share_item_dialog">Share</string>
@@ -435,36 +226,24 @@
   <string name="delete_item_dialog">Delete</string>
   <string name="saveToDownload_item_dialog">Save to Download</string>
   <string name="edit_item_dialog">Edit</string>
-
   <string name="Search">Search</string>
-  <string name="Edit_Name">Edit Name</string>
   <string name="Delete_and_leave_Group">Delete and Leave Group</string>
   <string name="New_Chanel">New Chanel</string>
   <string name="New_Group">New Group</string>
-  <string name="Description">Description</string>
-  <string name="Please_Enter_Description">Please Enter Description For Group</string>
-  <string name="Please_Enter_Description2">Please Enter Your Name Group</string>
   <string name="month_1">1 Month</string>
   <string name="month_3">3 Month</string>
   <string name="month_6">6 Month</string>
   <string name="year_1">1 Year</string>
-
     <string name="test">
         will likely mark this as an error despite being correct. You may want to add 91211111 will likely mark this as an error despite being correct. You may want to add
         will http://www.likely.com mark this as an error despite being correct. You may want to add @gmail will likely mark this as an error despite being correct. You may want to add
     </string>
-
-  <!-- TODO: Remove or change this placeholder text -->
-  <string name="hello_blank_fragment">Hello blank fragment</string>
   <string name="of">"Of "</string>
   <string name="save_to_music_folder">=Save to music folder successfully</string>
   <string name="no_comment">No Comment</string>
   <string name="comment">Comment</string>
-  <string name="edit_name">Edit Name</string>
-  <string name="delete_and_leave_group">Delete and Leave Group</string>
-  <string name="add_shortcut">Add Shortcut</string>
   <string name="choose_picture">Choose Picture</string>
-  <string name="cansel">CANCEL</string>
+  <string name="cansel">Cancel</string>
   <string name="from_camera">From Camera</string>
   <string name="please_check_your_camera">Please Check your Camera</string>
   <string name="delete_photo">Delete Photo</string>
@@ -477,17 +256,16 @@
   <string name="do_you_want_to_set_admin_role_to_member">Do you want to set admin role to members?</string>
   <string name="do_you_want_to_kick_this_member">"Do you want to kick this members? "</string>
   <string name="do_you_want_to_set_modereator_role_to_member">Do you want to set moderator role to members?</string>
-  <string name="waiting_for_network">Waiting For Network...</string>
-  <string name="connecting">Connecting...</string>
-  <string name="updating">Updating...</string>
+  <string name="waiting_for_network">Waiting For Network…</string>
+  <string name="connecting">Connecting…</string>
+  <string name="updating">Updating…</string>
   <string name="last_seen_recently">Last seen Recently</string>
   <string name="member">" Members"</string>
-  <string name="save_ok">"Save Ok: "</string>
+  <string name="save_ok">"Save OK: "</string>
   <string name="exception">"Exception: "</string>
   <string name="please_enter_phone_number">Please Enter PhoneNumber</string>
   <string name="please_enter_firstname_or_lastname">Please Enter FirstName or LastName</string>
   <string name="new_chanel">New Chanel</string>
-  <string name="new_group">New Group</string>
   <string name="can_not_save_picture_pleas_try_again">Can\'t save picture,pleas try again.</string>
   <string name="chats">Chats</string>
   <string name="contacts">Contacts</string>
@@ -517,11 +295,7 @@
   <string name="desc_private_channel">Privet channel can only be joined via an invite link</string>
   <string name="desc_public_channel">Public Channels can be found in search , anyone can join them</string>
   <string name="last_msg_format_chat">%s</string>
-
-  <!--Toast-->
   <string name="Toast_waiting_fot_get_info">waiting fot get info</string>
-  <string name="Toast_waiting_for_get_info_country">waiting for get info country</string>
-  <string name="Toast_check_internet">Check your Internet Please</string>
   <string name="Toast_Location_Not_Found">Location_Not_Found</string>
   <string name="Toast_First_0">Don\'t need First 0</string>
   <string name="Toast_Enter_Phone_Number">Please Enter your Phone Number</string>
@@ -530,14 +304,10 @@
   <string name="Toast_Invalid_nickname">Invalid nickname. Please change nickname</string>
   <string name="Toast_Write_NickName">Please Write Your NickName</string>
   <string formatted="false" name="d_of_d">%d of %d</string>
-
   <string name="add_to_contact">Add to Contact</string>
   <string name="resend_message">Resend message</string>
-
-  <!--Error-->
   <string name="USER_VERIFY_BLOCKED_USER">USER VERIFY BLOCKED USER</string>
   <string name="Enter_Code">Code</string>
-
   <string name="E_335">Bad payload for request</string>
   <string name="E_336">Internal server error for request</string>
   <string name="E_337">This operation is not permitted for request</string>
@@ -590,7 +360,6 @@
   <string name="E_218">Bad payload for request ; Invalid roomId</string>
   <string name="E_219">Internal server error for request</string>
   <string name="E_220">This operation is not permitted for request </string>
-  <string name="E_300_1">Bad payload for request ; Invalid name</string>
   <string name="E_300_2">Bad payload for request ; Invalid description </string>
   <string name="E_301">Internal server error for request</string>
   <string name="E_610">Bad payload for request</string>
@@ -615,14 +384,7 @@
   <string name="E_210">No such file is found for request</string>
   <string name="E_211">This operation is not permitted for request</string>
   <string name="E_212_1">Bad payload for request ; Invalid roomId</string>
-  <string name="E_212_2">Bad payload for request ; Invalid messageId</string>
   <string name="E_213">Internal server error for request</string>
   <string name="E_214">This operation is not permitted for request</string>
-  <string name="E_502">Bad payload for request ; Invalid id</string>
-  <string name="E_503">Internal server error for request</string>
-
-
   <string formatted="false" name="resend_all_messages">Resend %d messages</string>
-
-
 </resources>

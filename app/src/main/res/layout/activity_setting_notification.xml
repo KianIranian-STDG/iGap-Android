@@ -10,7 +10,6 @@
     >
 
   <android.support.v7.widget.Toolbar
-      android:id="@+id/st_toolbar"
       android:layout_width="match_parent"
       android:layout_height="@dimen/dp60"
       android:background="@color/toolbar_background"
@@ -982,7 +981,6 @@
             />
 
         <RelativeLayout
-            android:id="@+id/stns_layout_background_connection"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -1158,7 +1156,6 @@
               />
 
           <TextView
-              android:id="@+id/st_txt_reset_all_notification"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:gravity="center_vertical|top"

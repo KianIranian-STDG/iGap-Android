@@ -146,10 +146,6 @@
     <item>@string/array_Copy</item>
   </string-array>
 
-  <string-array name="menu_setting">
-    <item>@string/array_Log_Out</item>
-  </string-array>
-
   <string-array name="sound_message">
     <item>@string/array_Default_Notification_tone</item>
     <item>aooow</item>
@@ -184,12 +180,6 @@
     <item>@string/show_all_media</item>
     <item>@string/save_to_gallery</item>
     <item>@string/delete_from_gallery</item>
-  </string-array>
-
-  <string-array name="resendMessagesDialog">
-    <item>@string/resend_message</item>
-    <item>@string/resend_all_messages</item>
-    <item>@string/delete_item_dialog</item>
   </string-array>
 
   <string-array name="account_self_destruct">

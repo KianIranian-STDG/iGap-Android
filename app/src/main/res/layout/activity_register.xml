@@ -9,7 +9,6 @@
     >
 
   <android.support.v7.widget.Toolbar
-      android:id="@+id/toolbarRegister"
       android:layout_width="match_parent"
       android:layout_height="@dimen/dp60"
       android:background="@color/toolbar_background"
@@ -82,7 +81,6 @@
   </RelativeLayout>
 
   <RelativeLayout
-      android:id="@+id/rg_parent"
       android:layout_width="match_parent"
       android:layout_height="0dp"
       android:layout_weight="1"
@@ -168,7 +166,6 @@
   </RelativeLayout>
 
   <LinearLayout
-      android:id="@+id/rg_layout_verify"
       android:layout_width="match_parent"
       android:layout_height="0dp"
       android:layout_marginBottom="@dimen/dp8"

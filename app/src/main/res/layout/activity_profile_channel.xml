@@ -13,7 +13,6 @@
       >
 
     <android.support.design.widget.CollapsingToolbarLayout
-        android:id="@+id/pch_collapse"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:contentScrim="@color/toolbar_background"
@@ -42,7 +41,6 @@
             />
 
         <TextView
-            android:id="@+id/pch_txt_nameChannel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -56,7 +54,6 @@
       </LinearLayout>
 
       <android.support.v7.widget.Toolbar
-          android:id="@+id/st_toolbar"
           android:layout_width="match_parent"
           android:layout_height="@dimen/dp60"
           app:contentInsetLeft="0dp"
@@ -136,7 +133,6 @@
 
 
   <android.support.v4.widget.NestedScrollView
-      android:id="@+id/st_scroll_nested"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:background="@android:color/white"

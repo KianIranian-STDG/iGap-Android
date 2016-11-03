@@ -10,7 +10,6 @@
     >
 
   <android.support.v7.widget.Toolbar
-      android:id="@+id/ntg_toolbar"
       android:layout_width="match_parent"
       android:layout_height="@dimen/dp60"
       android:background="@color/toolbar_background"
@@ -26,7 +25,6 @@
         >
 
       <com.iGap.libs.rippleeffect.RippleView
-          android:id="@+id/ntg_ripple_back"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           app:rv_alpha="200"

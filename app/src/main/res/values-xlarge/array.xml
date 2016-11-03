@@ -1,25 +1,3 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string-array name="preference_values">
-    <item><font size="11">11(Hello)</font></item>
-    <item><font size="12">12(Hello)</font></item>
-    <item><font size="13">13(Hello)</font></item>
-    <item><font size="14">14(Hello)</font></item>
-    <item><font size="15">15(Hello)</font></item>
-    <item><font size="16">16(Hello)</font></item>
-    <item><font size="17">17(Hello)</font></item>
-    <item><font size="18">18(Hello)</font></item>
-    <item><font size="19">19(Hello)</font></item>
-    <item><font size="20">20(Hello)</font></item>
-    <item><font size="21">21(Hello)</font></item>
-    <item><font size="22">22(Hello)</font></item>
-    <item><font size="23">23(Hello)</font></item>
-    <item><font size="24">24(Hello)</font></item>
-    <item><font size="25">25(Hello)</font></item>
-    <item><font size="26">26(Hello)</font></item>
-    <item><font size="27">27(Hello)</font></item>
-    <item><font size="28">28(Hello)</font></item>
-    <item><font size="29">29(Hello)</font></item>
-    <item><font size="30">30(Hello)</font></item>
-  </string-array>
 </resources>

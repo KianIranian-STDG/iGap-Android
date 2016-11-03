@@ -7,14 +7,12 @@
 
 
   <com.iGap.module.GifMovieView
-      android:id="@+id/cslg_gifview"
       android:layout_width="@dimen/dp240"
       android:layout_height="@dimen/dp240"
       android:padding="@dimen/dp8"
       />
 
   <ImageButton
-      android:id="@+id/cslg_btn_play"
       android:layout_width="@dimen/dp32"
       android:layout_height="@dimen/dp32"
       android:layout_gravity="center"

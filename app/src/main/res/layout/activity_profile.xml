@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/pu_lt_parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/whit_background"
@@ -10,8 +9,7 @@
     >
 
   <android.support.v7.widget.Toolbar
-      android:id="@+id/pu_toolbarRegister"
-        android:layout_width="match_parent"
+      android:layout_width="match_parent"
       android:layout_height="@dimen/dp60"
       android:background="@color/toolbar_background"
       app:contentInsetLeft="0dp"
@@ -120,8 +118,7 @@
   </LinearLayout>
 
   <RelativeLayout
-      android:id="@+id/mainLayout"
-        android:layout_width="match_parent"
+      android:layout_width="match_parent"
         android:layout_height="wrap_content"
       android:layout_marginLeft="@dimen/dp52"
       android:layout_marginRight="@dimen/dp52"

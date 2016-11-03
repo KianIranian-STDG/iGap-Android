@@ -16,7 +16,6 @@
     <include layout="@layout/activity_main_rooms"/>
 
     <RelativeLayout
-        android:id="@+id/linearLayout"
         android:layout_width="@dimen/dp220"
         android:layout_height="match_parent"
         android:layout_gravity="start"

@@ -6,7 +6,6 @@
     >
 
   <RelativeLayout
-      android:id="@+id/st_layout_photo_dialogClearCash"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:gravity="center_vertical"
@@ -38,7 +37,6 @@
   <!--VIDEO-->
 
   <RelativeLayout
-      android:id="@+id/st_layout_video_dialogClearCash"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:gravity="center_vertical"
@@ -69,7 +67,6 @@
 
   <!--NEXT2-->
   <RelativeLayout
-      android:id="@+id/st_layout_document_dialogClearCash"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:gravity="center_vertical"
@@ -100,7 +97,6 @@
   <!--NEXT3-->
   <!--NEXT2-->
   <RelativeLayout
-      android:id="@+id/st_layout_otherFiles_dialogClearCash"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:gravity="center_vertical"
@@ -111,7 +107,6 @@
 
 
     <CheckBox
-        android:id="@+id/st_checkBox_otherFiles_dialogClearCash"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -120,7 +115,6 @@
 
 
     <TextView
-        android:id="@+id/st_txt_sizeFolder_otherFiles_dialogClearCash"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"

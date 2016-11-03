@@ -21,7 +21,6 @@
 
 
   <com.uncopt.android.widget.text.justify.JustifiedTextView
-      android:id="@+id/txt_p4_l2"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_gravity="center_horizontal"

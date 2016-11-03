@@ -48,7 +48,6 @@
 
       <include
           layout="@layout/chat_sub_layout_messages_time"
-          android:id="@+id/cslr_ll_time"
           />
     </LinearLayout>
   </LinearLayout>

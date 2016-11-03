@@ -114,7 +114,6 @@
               />
 
           <TextView
-              android:id="@+id/lm_txt_new_chat"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:padding="@dimen/dp8"
@@ -145,7 +144,6 @@
               />
 
           <TextView
-              android:id="@+id/lm_txt_new_group"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:padding="@dimen/dp8"
@@ -178,7 +176,6 @@
               />
 
           <TextView
-              android:id="@+id/lm_txt_new_channel"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:padding="@dimen/dp8"
@@ -218,7 +215,6 @@
               />
 
           <TextView
-              android:id="@+id/lm_txt_contacts"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:padding="@dimen/dp8"
@@ -251,7 +247,6 @@
               />
 
           <TextView
-              android:id="@+id/lm_txt_invite_friends"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:padding="@dimen/dp8"
@@ -283,7 +278,6 @@
               />
 
           <TextView
-              android:id="@+id/lm_txt_setting"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:padding="@dimen/dp8"
@@ -315,7 +309,6 @@
               />
 
           <TextView
-              android:id="@+id/lm_txt_igap_faq"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:padding="@dimen/dp8"
