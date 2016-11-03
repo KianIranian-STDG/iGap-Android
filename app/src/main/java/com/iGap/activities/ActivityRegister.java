@@ -131,14 +131,13 @@ public class ActivityRegister extends ActivityEnhanced {
         setContentView(R.layout.activity_register);
         edtCodeNumber = (EditText) findViewById(R.id.rg_edt_CodeNumber);
         btnChoseCountry = (Button) findViewById(R.id.rg_btn_choseCountry);
-        btnChoseCountry.setTypeface(G.arial);
+
         edtPhoneNumber = (MaskedEditText) findViewById(R.id.rg_edt_PhoneNumber);
 
         int portrait = getResources().getConfiguration().orientation;
         if (portrait == 1) {
             txtAgreement_register = (TextView) findViewById(R.id.txtAgreement_register);
             txtAgreement_register.setMovementMethod(new ScrollingMovementMethod());
-            txtAgreement_register.setTypeface(G.arial);
         }
         if (savedInstanceState != null) {
             // Restore value of members from saved state
@@ -169,11 +168,8 @@ public class ActivityRegister extends ActivityEnhanced {
         int getHeight = G.context.getResources().getDisplayMetrics().heightPixels;
 
         txtTitleRegister = (TextView) findViewById(R.id.rg_txt_title_register);
-        txtTitleRegister.setTypeface(G.arial);
         txtDesc = (TextView) findViewById(R.id.rg_txt_text_descRegister);
-        txtDesc.setTypeface(G.arial);
         txtTitleAgreement = (TextView) findViewById(R.id.rg_txt_title_agreement);
-        txtTitleAgreement.setTypeface(G.arial);
 
         txtTitleToolbar = (TextView) findViewById(R.id.rg_txt_titleToolbar);
         txtTitleToolbar.setTypeface(G.FONT_IGAP);
@@ -407,7 +403,6 @@ public class ActivityRegister extends ActivityEnhanced {
         final Animation trans_x_out =
             AnimationUtils.loadAnimation(G.context, R.anim.rg_tansiton_y_out);
         btnStart = (Button) findViewById(R.id.rg_btn_start); //check phone and internet connection
-        btnStart.setTypeface(G.arial);
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
 

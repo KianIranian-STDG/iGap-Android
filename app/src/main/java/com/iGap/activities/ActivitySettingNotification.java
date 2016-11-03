@@ -182,9 +182,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
         });
 
         txtVibrateMessage = (TextView) findViewById(R.id.stns_txt_vibrate_message_text);
-        txtVibrateMessage.setTypeface(G.arial);
-        String vibrateMessage =
-            sharedPreferences.getString(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, "Default");
+        String vibrateMessage = sharedPreferences.getString(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, "Default");
         txtVibrateMessage.setText(vibrateMessage);
         ltVibrate_message = (ViewGroup) findViewById(R.id.stns_layout_vibrate_message);
         ltVibrate_message.setOnClickListener(new View.OnClickListener() {
@@ -268,7 +266,6 @@ public class ActivitySettingNotification extends AppCompatActivity {
 
         txtPopupNotification =
             (TextView) findViewById(R.id.stns_txt_popupNotification_message_text);
-        txtPopupNotification.setTypeface(G.arial);
         String popupNotification =
             sharedPreferences.getString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, "Default");
         txtPopupNotification.setText(popupNotification);
@@ -347,7 +344,6 @@ public class ActivitySettingNotification extends AppCompatActivity {
         poRbDialogSoundMessage =
             sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_MESSAGE_POSITION, 3);
         txtSoundMessage = (TextView) findViewById(R.id.stns_txt_sound_text);
-        txtSoundMessage.setTypeface(G.arial);
         String soundMessage =
             sharedPreferences.getString(SHP_SETTING.KEY_STNS_SOUND_MESSAGE, "Arrow");
         txtSoundMessage.setText(soundMessage);
@@ -479,7 +475,6 @@ public class ActivitySettingNotification extends AppCompatActivity {
         });
 
         tgMessagePreview_group = (ToggleButton) findViewById(R.id.stns_toggle_messagePreview_group);
-        tgMessagePreview_group.setTypeface(G.arial);
         int preview_group =
             sharedPreferences.getInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_MESSAGE, 1);
         if (preview_group == 1) {
@@ -565,7 +560,6 @@ public class ActivitySettingNotification extends AppCompatActivity {
         });
 
         txtVibrateGroup = (TextView) findViewById(R.id.stns_txt_vibrate_group_text);
-        txtVibrateGroup.setTypeface(G.arial);
         String vibrateGroup =
             sharedPreferences.getString(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, "Default");
         txtVibrateGroup.setText(vibrateGroup);
@@ -650,7 +644,6 @@ public class ActivitySettingNotification extends AppCompatActivity {
         });
         txtPopupNotificationGroup =
             (TextView) findViewById(R.id.stns_txt_popupNotification_group_text);
-        txtPopupNotificationGroup.setTypeface(G.arial);
         String popupNotificationGroup =
             sharedPreferences.getString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, "Default1");
         txtPopupNotificationGroup.setText(popupNotificationGroup);
@@ -728,7 +721,6 @@ public class ActivitySettingNotification extends AppCompatActivity {
         poRbDialogSoundGroup =
             sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, 3);
         txtSoundGroup = (TextView) findViewById(R.id.stns_txt_sound_group_text);
-        txtSoundGroup.setTypeface(G.arial);
         String soundGroup = sharedPreferences.getString(SHP_SETTING.KEY_STNS_SOUND_GROUP, "Arrow");
         txtSoundGroup.setText(soundGroup);
         ltSoundGroup = (ViewGroup) findViewById(R.id.stns_layout_sound_group);
@@ -1066,7 +1058,6 @@ public class ActivitySettingNotification extends AppCompatActivity {
         });
 
         txtRepeat_Notifications = (TextView) findViewById(R.id.st_txt_Repeat_Notifications);
-        txtRepeat_Notifications.setTypeface(G.arial);
         String repeat_Notifications =
             sharedPreferences.getString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION, "Off");
         txtRepeat_Notifications.setText(repeat_Notifications);

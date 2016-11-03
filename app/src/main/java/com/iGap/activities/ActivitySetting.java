@@ -599,7 +599,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                 G.onUserProfileSetEmailResponse = new OnUserProfileSetEmailResponse() {
                     @Override public void onUserProfileEmailResponse(final String email, ProtoResponse.Response response) {
-                        Log.i("BBBB", "b0: " + email);
 
                         runOnUiThread(new Runnable() {
                             @Override public void run() {
@@ -608,14 +607,11 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                 realm1.executeTransaction(new Realm.Transaction() {
                                     @Override public void execute(Realm realm) {
 
-                                        Log.i("BBBB", "b1: " + email);
                                         realm.where(RealmUserInfo.class).findFirst().setEmail(email);
                                         txtEmail.setText(email);
-                                        Log.i("BBBB", "b2: " + email);
                                         dialog.dismiss();
                                     }
                                 });
-                                Log.i("BBBB", "b3: " + email);
                                 realm1.close();
                             }
                         });
@@ -695,7 +691,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                     @Override public void afterTextChanged(Editable editable) {
                         new RequestUserProfileCheckUsername().userProfileCheckUsername(editable.toString());
-                        Log.i("XXX", "charSequence: " + editable.toString());
                     }
                 });
                 G.onUserProfileCheckUsername = new OnUserProfileCheckUsername() {
@@ -712,7 +707,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                     }
                                 } else if (status == ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status.INVALID) {
 
-                                    Log.i("XXX", "INVALID: ");
                                     inputUserName.setErrorEnabled(true);
                                     inputUserName.setError("INVALID");
                                     positive.setClickable(false);
@@ -722,7 +716,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                     inputUserName.setError("TAKEN");
                                     positive.setClickable(false);
                                     positive.setAlpha(0.5f);
-                                    Log.i("XXX", "TAKEN: ");
                                 }
                             }
                         });
@@ -744,17 +737,14 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     @Override public void onUserProfileUpdateUsername(final String username) {
                         runOnUiThread(new Runnable() {
                             @Override public void run() {
-                                Log.i("XXX", "a1: ");
                                 Realm realm1 = Realm.getDefaultInstance();
                                 realm1.executeTransaction(new Realm.Transaction() {
                                     @Override public void execute(Realm realm) {
-                                        Log.i("XXX", "a2: ");
                                         realm.where(RealmUserInfo.class).findFirst().setUserName(username);
                                         txtUserName.setText(username);
                                         dialog.dismiss();
                                     }
                                 });
-                                Log.i("XXX", "a3: ");
                                 realm1.close();
                             }
                         });

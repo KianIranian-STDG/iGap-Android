@@ -28,7 +28,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import com.iGap.G;
 import com.iGap.R;
 import com.iGap.helper.Emojione;
 import com.iGap.interfaces.IEmojiBackspaceClick;
@@ -209,7 +208,6 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             });
 
             txtName = (TextView) findViewById(R.id.apn_txt_name);
-            txtName.setTypeface(G.arialBold);
 
             txtLastSeen = (TextView) findViewById(R.id.apn_txt_last_seen);
 

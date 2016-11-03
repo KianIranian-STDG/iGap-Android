@@ -2,7 +2,6 @@ package com.iGap.activities;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -24,6 +23,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.iGap.G;
 import com.iGap.R;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.MaterialDesignTextView;
@@ -56,7 +56,7 @@ public class ActivityProfileChannel extends AppCompatActivity {
                 finish();
             }
         });
-        txtBack.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Flaticon.ttf"));
+        txtBack.setTypeface(G.flaticon);
 
         appBarLayout = (AppBarLayout) findViewById(R.id.pch_appbar);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {

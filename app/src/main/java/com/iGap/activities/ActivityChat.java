@@ -1130,7 +1130,6 @@ public class ActivityChat extends ActivityEnhanced
         });
 
         txtName = (TextView) findViewById(R.id.chl_txt_name);
-        txtName.setTypeface(G.arialBold);
         if (title != null) txtName.setText(title);
 
         txtLastSeen = (TextView) findViewById(R.id.chl_txt_last_seen);

@@ -305,7 +305,6 @@ public class FragmentNotification extends Fragment {
         });
 
         //========================================================sound
-        txtSound.setTypeface(G.arial);
         txtSound.setText(realmSound);
         ltSound.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
@@ -419,7 +418,6 @@ public class FragmentNotification extends Fragment {
         });
 
         //========================================================= vibrate
-        txtVibrate.setTypeface(G.arial);
         txtVibrate.setText(realmVibrate);
         ltVibrate.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {

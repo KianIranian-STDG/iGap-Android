@@ -91,11 +91,9 @@ public class MyDialog {
         dialog.show();
 
         TextView txtMessage = (TextView) dialog.findViewById(R.id.md_txt_message);
-        txtMessage.setTypeface(G.robotoBold);
         txtMessage.setText(Message);
 
         Button tvYes = (Button) dialog.findViewById(R.id.md_btn_yes);
-        tvYes.setTypeface(G.robotoLight);
         tvYes.setOnClickListener(new View.OnClickListener() {
 
             @Override public void onClick(View v) {
@@ -106,7 +104,6 @@ public class MyDialog {
         });
 
         Button tvNo = (Button) dialog.findViewById(R.id.md_btn_no);
-        tvNo.setTypeface(G.robotoLight);
         tvNo.setOnClickListener(new View.OnClickListener() {
 
             @Override public void onClick(View v) {

@@ -70,11 +70,10 @@ public class ActivityProfile extends ActivityEnhanced
         setContentView(R.layout.activity_profile);
         delete();
         txtTitlInformation = (TextView) findViewById(R.id.pu_txt_title_information);
-        txtTitlInformation.setTypeface(G.arialBold);
+
         txtDesc = (TextView) findViewById(R.id.pu_txt_title_desc);
-        txtDesc.setTypeface(G.arial);
+
         txtAddPhoto = (TextView) findViewById(R.id.pu_txt_addPhoto);
-        txtAddPhoto.setTypeface(G.arial);
 
         G.uploaderUtil.setActivityCallbacks(this);
         G.onUserAvatarResponse = this;
@@ -96,11 +95,9 @@ public class ActivityProfile extends ActivityEnhanced
             (TextInputLayout) findViewById(R.id.pu_txtInput_nikeName);
         //        txtInputNickName.setHint("Nickname");
 
-        edtNikName =
-            (EditTextAdjustPan) findViewById(R.id.pu_edt_nikeName); // edit Text for NikName
-        edtNikName.setTypeface(G.arial);
+        edtNikName = (EditTextAdjustPan) findViewById(R.id.pu_edt_nikeName); // edit Text for NikName
+
         btnLetsGo = (Button) findViewById(R.id.pu_btn_letsGo);
-        btnLetsGo.setTypeface(G.arial);
 
         edtNikName.addTextChangedListener(new TextWatcher() {
             @Override
