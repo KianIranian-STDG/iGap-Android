@@ -98,7 +98,6 @@
           android:paddingLeft="@dimen/dp4"
           android:paddingRight="0dp"
           android:paddingTop="@dimen/dp4"
-          android:src="@mipmap/h"
           />
 
 

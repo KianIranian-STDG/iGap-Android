@@ -689,6 +689,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                     new StructContactInfo(rc.getId(), rc.getDisplay_name(), rc.getStatus(), false,
                         false, rc.getPhone() + "");
                 s.role = role;
+                s.avatar = rc.getAvatar();
                 contacts.add(s);
             }
         }

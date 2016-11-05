@@ -123,6 +123,8 @@ public class ActivityPopUpNotification extends AppCompatActivity {
     @Override protected void onPause() {
         super.onPause();
         isPopUpVisible = false;
+
+        finish();
     }
 
     @Override public void onBackPressed() {
@@ -134,35 +136,20 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_popup_notification);
 
-        onComplete = new OnComplete() {
-            @Override public void complete(boolean result, String messageOne, String MessageTow) {
-
-                viewPager.postDelayed(new Runnable() {
-                    @Override public void run() {
-                        fillList();
-                        viewPager.setAdapter(mAdapter);
-                        btnMessageCounter.setText(
-                            1 + " " + getString(R.string.of) + " " + unreadList.size());
-                        setImeageAndTextAppBar(viewPager.getCurrentItem());
-                        listSize = unreadList.size();
-                    }
-                }, 300);
-            }
-        };
-
         new Handler().postDelayed(new Runnable() {
             @Override public void run() {
                 Log.e("ddd", "delay");
 
                 fillList();
 
-                initComponnet = new InitComponnet();
+                if (unreadList != null) {
+                    if (unreadList.size() > 0) initComponnet = new InitComponnet();
+                }
             }
-        }, 300);
+        }, 250);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-
 
     private class InitComponnet {
 
@@ -176,6 +163,23 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         }
 
         private void initMethode() {
+
+            onComplete = new OnComplete() {
+                @Override
+                public void complete(boolean result, String messageOne, String MessageTow) {
+
+                    viewPager.postDelayed(new Runnable() {
+                        @Override public void run() {
+                            fillList();
+                            viewPager.setAdapter(mAdapter);
+                            btnMessageCounter.setText(
+                                1 + " " + getString(R.string.of) + " " + unreadList.size());
+                            setImeageAndTextAppBar(viewPager.getCurrentItem());
+                            listSize = unreadList.size();
+                        }
+                    }, 300);
+                }
+            };
 
             viewAttachFile = findViewById(R.id.apn_layout_attach_file);
 
@@ -249,7 +253,6 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                         position + 1 + " " + getString(R.string.of) + " " + listSize);
 
                     setImeageAndTextAppBar(position);
-
                 }
 
                 @Override public void onPageScrollStateChanged(int state) {
@@ -482,8 +485,6 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
     private class AdapterViewPagerClass extends PagerAdapter {
 
-
-
         @Override public int getCount() {
             return unreadList.size();
         }
@@ -502,7 +503,6 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             TextView txtMessage = (TextView) layout.findViewById(R.id.slapn_txt_message);
             txtMessage.setText(unreadList.get(position).getMessage());
 
-
             ((ViewGroup) container).addView(layout);
 
             return layout;
@@ -517,22 +517,22 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
         Realm realm = Realm.getDefaultInstance();
 
-        final RealmRoom realmRoom = realm.where(RealmRoom.class)
-            .equalTo(RealmRoomFields.ID, unreadList.get(position).getRoomId())
-            .findFirst();
+        try {
+            final RealmRoom realmRoom = realm.where(RealmRoom.class)
+                .equalTo(RealmRoomFields.ID, unreadList.get(position).getRoomId())
+                .findFirst();
 
-        if (realmRoom != null) { // room exist
-            initialize = realmRoom.getInitials();
-            color = realmRoom.getColor();
-
-            try {
+            if (realmRoom != null) { // room exist
+                initialize = realmRoom.getInitials();
+                color = realmRoom.getColor();
 
                 txtName.setText(realmRoom.getTitle());
                 setLastSeen(realmRoom, realm);
                 setAvatar(realm);
-            } catch (Exception e) {
             }
+        } catch (Exception e) {
         }
+
         realm.close();
     }
 
@@ -648,6 +648,12 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
         realm.close();
 
+        if (unreadList.size() < 1) {
+            finish();
+            overridePendingTransition(0, 0);
+        }
+
+
         Log.e("ddd", "size   " + unreadList.size());
     }
 
@@ -715,6 +721,5 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
         Log.e("ddd", "voice");
         realm.close();
-
     }
 }

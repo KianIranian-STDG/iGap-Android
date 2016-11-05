@@ -200,6 +200,8 @@ public class ShowCustomList extends Fragment {
 
         //restore selections (this has to be done after the items were added
         fastAdapter.withSavedInstanceState(savedInstanceState);
+
+        refreshView();
     }
 
     private void showDialog() {

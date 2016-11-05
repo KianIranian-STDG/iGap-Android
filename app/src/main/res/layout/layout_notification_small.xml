@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="64dp"
     android:background="@drawable/notification_gradiant"
+    android:layoutDirection="ltr"
     android:gravity="center"
     android:orientation="horizontal"
     >
@@ -36,6 +37,8 @@
           android:layout_height="wrap_content"
           android:layout_weight="1"
           android:singleLine="true"
+          android:gravity="left"
+          android:textDirection="ltr"
           android:text="New Text"
           android:textColor="@color/white"
           android:textSize="@dimen/sp16"
@@ -48,6 +51,7 @@
           android:layout_height="wrap_content"
           android:gravity="center"
           android:text="10:52"
+
           android:textColor="@color/white"
           android:textSize="@dimen/sp12"
           />
@@ -60,6 +64,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/dp12"
+        android:gravity="left"
+        android:textDirection="ltr"
         android:singleLine="true"
         android:text="New Text"
         android:textColor="@color/white"

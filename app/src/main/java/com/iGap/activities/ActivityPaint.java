@@ -47,7 +47,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
  * for draw a paint and send to other user or save in device folder
  */
 
-public class ActivityPaint extends Activity {
+public class ActivityPaint extends ActivityEnhanced {
 
     AttachFile attachFile;
     private int minBrushSize = 12;
@@ -64,7 +64,7 @@ public class ActivityPaint extends Activity {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
-    @Override protected void onCreate(Bundle savedInstanceState) {
+    @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_paint);

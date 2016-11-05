@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import com.iGap.G;
 import com.iGap.helper.HelperPermision;
+import com.iGap.module.AttachFile;
 
 public class ActivityEnhanced extends AppCompatActivity {
     @Override protected void onResume() {
@@ -33,6 +34,8 @@ public class ActivityEnhanced extends AppCompatActivity {
             G.isChangeScrFg = true;
         }
         G.isScrInFg = true;
+
+        AttachFile.isInAttach = false;
 
         super.onStart();
     }

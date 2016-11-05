@@ -45,6 +45,10 @@ public class AttachFile {
     public static final int request_code_position = 16;
     public static final int request_code_paint = 17;
     public static final int MEDIA_TYPE_IMAGE = 20;
+
+    public static boolean isInAttach = false;
+
+
     public static final String IMAGE_DIRECTORY_NAME = "Upload";
     public static String imagePath = "";
     OnComplete complete;
@@ -160,6 +164,7 @@ public class AttachFile {
             imagePath = outPath.getPath();
             intent.putExtra(MediaStore.EXTRA_OUTPUT, outPath);
             ((Activity) context).startActivityForResult(intent, request_code_TAKE_PICTURE);
+            isInAttach = true;
         } else {
             Log.e("dddd", "file path is null");
         }
@@ -207,6 +212,7 @@ public class AttachFile {
         Intent intent =
             new Intent(Intent.ACTION_PICK, Uri.parse("content://media/internal/images/media"));
         ((Activity) context).startActivityForResult(intent, request_code_media_from_gallery);
+        isInAttach = true;
     }
 
     //*************************************************************************************************************
@@ -219,6 +225,7 @@ public class AttachFile {
         ((Activity) context).startActivityForResult(
             Intent.createChooser(intent, context.getString(R.string.select_picture_en)),
             request_code_media_from_gallery);
+        isInAttach = true;
     }
 
     //*************************************************************************************************************
@@ -235,6 +242,7 @@ public class AttachFile {
 
         Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
         ((Activity) context).startActivityForResult(intent, request_code_VIDEO_CAPTURED);
+        isInAttach = true;
     }
 
     //*************************************************************************************************************
@@ -244,6 +252,7 @@ public class AttachFile {
         intent.setAction(Intent.ACTION_PICK);
         intent.setData(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
         ((Activity) context).startActivityForResult(intent, request_code_pic_audi);
+        isInAttach = true;
     }
 
     public void requestPickFile() {
@@ -259,6 +268,7 @@ public class AttachFile {
         Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
         intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
         ((Activity) context).startActivityForResult(intent, request_code_contact_phone);
+        isInAttach = true;
     }
 
     public void requestGetPosition(OnComplete complete) {
@@ -351,6 +361,7 @@ public class AttachFile {
         ((Activity) context).startActivityForResult(
             new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS),
             request_code_position);
+        isInAttach = true;
     }
 
     //*************************************************************************************************************

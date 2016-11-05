@@ -21,6 +21,7 @@ import com.iGap.R;
 import com.iGap.activities.ActivityChat;
 import com.iGap.activities.ActivityMain;
 import com.iGap.activities.ActivityPopUpNotification;
+import com.iGap.module.AttachFile;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoGlobal;
@@ -449,6 +450,7 @@ public class HelperNotificationAndBadge {
                 vibrator = sharedPreferences.getString(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, "Default");
                 popupNotification = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, 3);
 
+
                 if (realmRoom.getGroupRoom() != null
                     && realmRoom.getChatRoom().getRealmNotificationSetting() != null
                     && realmRoom.getGroupRoom().getRealmNotificationSetting().getIdRadioButtonSound() != 0) {
@@ -544,7 +546,7 @@ public class HelperNotificationAndBadge {
             if (updateNotification) {
                 setNotification();
 
-                if (!G.isAppInFg) startActivityPopUpNotification();
+                if (!G.isAppInFg && !AttachFile.isInAttach) startActivityPopUpNotification();
             }
             try {
                 // ShortcutBadger.applyCount(context, unreadMessageCount);

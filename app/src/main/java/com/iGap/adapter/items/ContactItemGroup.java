@@ -1,5 +1,7 @@
 package com.iGap.adapter.items;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import com.hanks.library.AnimateCheckBox;
@@ -10,6 +12,7 @@ import com.iGap.module.CustomTextViewMedium;
 import com.iGap.module.StructContactInfo;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
+import java.io.File;
 import java.util.List;
 
 /**
@@ -53,12 +56,39 @@ public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItem
 
         holder.subtitle.setText(mContact.status);
 
-        // TODO: 9/16/2016   code for image picture 
+        holder.image.setImageBitmap(setAvatar(holder.image.getLayoutParams().width));
+    }
+
+    private Bitmap setAvatar(int size) {
+
+        String path = null;
+        Bitmap bitmap = null;
+
+        if (mContact.avatar.getFile() != null) {
+            if (mContact.avatar.getFile().getLocalFilePath() != null) {
+                path = mContact.avatar.getFile().getLocalFilePath();
+            } else {
+                path = mContact.avatar.getFile().getLocalThumbnailPath();
+            }
+        }
+
+        File imgFile = null;
+
+        if (path != null) {
+            imgFile = new File(path);
+        }
+
+        if (imgFile != null) {
+            if (imgFile.exists()) {
+                return BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            }
+        }
 
         String name = HelperImageBackColor.getFirstAlphabetName(mContact.displayName);
-        holder.image.setImageBitmap(
-            HelperImageBackColor.drawAlphabetOnPicture(holder.image.getLayoutParams().width, name,
-                HelperImageBackColor.getColor(name)));
+        bitmap = HelperImageBackColor.drawAlphabetOnPicture(size, name,
+            HelperImageBackColor.getColor(name));
+
+        return bitmap;
     }
 
     @Override public ViewHolderFactory<? extends ViewHolder> getFactory() {
