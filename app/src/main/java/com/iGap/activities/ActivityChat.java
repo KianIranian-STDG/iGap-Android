@@ -166,6 +166,7 @@ import com.iGap.request.RequestChatDelete;
 import com.iGap.request.RequestChatDeleteMessage;
 import com.iGap.request.RequestChatEditMessage;
 import com.iGap.request.RequestChatUpdateDraft;
+import com.iGap.request.RequestClientGetRoomHistory;
 import com.iGap.request.RequestFileDownload;
 import com.iGap.request.RequestGroupUpdateDraft;
 import com.mikepenz.fastadapter.IItemAdapter;
@@ -2960,8 +2961,7 @@ public class ActivityChat extends ActivityEnhanced
                         AbstractMessage item = mAdapter.getAdapterItem(p);
                         // not time message
                         if (!item.mMessage.isTimeMessage()) {
-                            // new RequestClientGetRoomHistory().getRoomHistory(mRoomId, Long
-                            // .parseLong(item.mMessage.messageID), Long.toString(mRoomId));
+                            new RequestClientGetRoomHistory().getRoomHistory(mRoomId, Long.parseLong(item.mMessage.messageID), Long.toString(mRoomId));
                             break;
                         }
                     }

@@ -5,6 +5,7 @@ import com.iGap.proto.ProtoGlobal;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
+import io.realm.RealmResults;
 import io.realm.annotations.PrimaryKey;
 
 public class RealmRegisteredInfo extends RealmObject {
@@ -138,28 +139,28 @@ public class RealmRegisteredInfo extends RealmObject {
     }
 
     public void addAvatar(long userId, ProtoGlobal.Avatar avatar) {
-        if (avatar == null || avatar.getFile() == null || (avatar.getFile().getToken() == null
-            || avatar.getFile().getToken().isEmpty())) {
+        if (avatar == null || avatar.getFile() == null || (avatar.getFile().getToken() == null || avatar.getFile().getToken().isEmpty())) {
             return;
         }
 
         Realm realm = Realm.getDefaultInstance();
-        RealmAvatar realmAvatar =
-            realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findFirst();
+        RealmResults<RealmAvatar> avatars = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findAll();
 
-        if (realmAvatar == null) {
-            realmAvatar = realm.createObject(RealmAvatar.class);
-            realmAvatar.setId(System.nanoTime());
-            realmAvatar.setOwnerId(userId);
-        } else {
-            if (realmAvatar.getFile() != null) {
-                realmAvatar.getFile().deleteFromRealm();
+        boolean exists = false;
+        for (RealmAvatar realmAvatar : avatars) {
+            if (realmAvatar.getFile() != null && realmAvatar.getFile().getToken().equalsIgnoreCase(avatar.getFile().getToken())) {
+                exists = true;
+                break;
             }
         }
 
-        realmAvatar.setFile(RealmAttachment.build(avatar.getFile()));
-
-        addAvatar(realmAvatar);
+        if (!exists) {
+            RealmAvatar avatar1 = realm.createObject(RealmAvatar.class);
+            avatar1.setId(System.nanoTime());
+            avatar1.setOwnerId(userId);
+            avatar1.setFile(RealmAttachment.build(avatar.getFile()));
+            addAvatar(avatar1);
+        }
         realm.close();
     }
 
@@ -170,8 +171,7 @@ public class RealmRegisteredInfo extends RealmObject {
      * @param realm realm that get from executeTransaction
      */
 
-    public void setRegisteredUserInfo(ProtoGlobal.RegisteredUser registeredUser,
-        RealmRegisteredInfo realmRegisteredInfo, Realm realm) {
+    public void setRegisteredUserInfo(ProtoGlobal.RegisteredUser registeredUser, RealmRegisteredInfo realmRegisteredInfo, Realm realm) {
         fillRegisteredUserInfo(registeredUser, realmRegisteredInfo, realm);
     }
 
@@ -182,8 +182,7 @@ public class RealmRegisteredInfo extends RealmObject {
      * @param realmRegisteredInfo current object from realm
      * @param realm realm that get from executeTransaction
      */
-    public void updateRegisteredUserInfo(ProtoGlobal.RegisteredUser registeredUser,
-        RealmRegisteredInfo realmRegisteredInfo, Realm realm) {
+    public void updateRegisteredUserInfo(ProtoGlobal.RegisteredUser registeredUser, RealmRegisteredInfo realmRegisteredInfo, Realm realm) {
         fillRegisteredUserInfo(registeredUser, realmRegisteredInfo, realm);
     }
 
@@ -195,8 +194,7 @@ public class RealmRegisteredInfo extends RealmObject {
      * @param realm realm that get from executeTransaction
      */
 
-    private void fillRegisteredUserInfo(ProtoGlobal.RegisteredUser registeredUser,
-        RealmRegisteredInfo info, Realm realm) {
+    private void fillRegisteredUserInfo(ProtoGlobal.RegisteredUser registeredUser, RealmRegisteredInfo info, Realm realm) {
 
         info.setId(registeredUser.getId());
         info.setUsername(registeredUser.getUsername());
@@ -213,10 +211,7 @@ public class RealmRegisteredInfo extends RealmObject {
 
         if (registeredUser.getAvatarCount() > 0) {
             Log.i("SSS", "Avatar Exist");
-            RealmAvatar realmAvatar = realm.where(RealmAvatar.class)
-                .equalTo(RealmAvatarFields.FILE.TOKEN,
-                    registeredUser.getAvatar().getFile().getToken())
-                .findFirst();
+            RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.FILE.TOKEN, registeredUser.getAvatar().getFile().getToken()).findFirst();
             Log.i("SSS", "realmAvatar : " + realmAvatar);
             if (realmAvatar == null) {
                 info.addAvatar(RealmAvatar.convert(registeredUser, realm));

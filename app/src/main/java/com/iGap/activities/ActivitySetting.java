@@ -905,9 +905,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         rippleImageView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
             @Override public void onComplete(RippleView rippleView) {
-                ArrayList<StructMessageInfo> items = setItem();
-                // Collections.reverse(items);
-
                 FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(userId);
                 ActivitySetting.this.getSupportFragmentManager().beginTransaction().add(R.id.st_layoutParent, fragment, null).commit();
             }
