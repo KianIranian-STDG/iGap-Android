@@ -1511,8 +1511,13 @@ public class ActivityChat extends ActivityEnhanced
                     final Realm realm = Realm.getDefaultInstance();
                     final long senderId = realm.where(RealmUserInfo.class).findFirst().getUserId();
                     if (!message.isEmpty()) {
-                        final String identity = Long.toString(System.currentTimeMillis());
+                        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                        String identity = Long.toString(System.nanoTime());
+                        if (room.getLastMessageId() != 0) {
+                            identity = Long.toString(room.getLastMessageId() + 1L);
+                        }
 
+                        final String finalIdentity = identity;
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override public void execute(Realm realm) {
                                 RealmRoomMessage roomMessage =
@@ -1524,9 +1529,10 @@ public class ActivityChat extends ActivityEnhanced
                                 roomMessage.setMessage(message);
                                 roomMessage.setStatus(
                                     ProtoGlobal.RoomMessageStatus.SENDING.toString());
-                                roomMessage.setMessageId(Long.parseLong(identity));
+                                roomMessage.setMessageId(Long.parseLong(finalIdentity));
                                 roomMessage.setUserId(senderId);
                                 roomMessage.setUpdateTime(System.currentTimeMillis());
+                                roomMessage.setCreateTime(System.currentTimeMillis());
 
                                 // user wants to replay to a message
                                 if (mReplayLayout != null
@@ -2369,8 +2375,13 @@ public class ActivityChat extends ActivityEnhanced
 
     //TODO [Saeed Mozaffari] [2016-10-29 10:45 AM] - work on gps
     private void sendMessage(int requestCode, Uri uri) {
+        Realm realm = Realm.getDefaultInstance();
         // TODO: 10/30/2016 [Alireza]  test
-        final long messageId = System.nanoTime();
+        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+        long messageId = System.nanoTime();
+        if (room.getLastMessageId() != 0) {
+            messageId = room.getLastMessageId() + 1L;
+        }
         String filePath;
         if (AttachFile.request_code_TAKE_PICTURE == requestCode) {
             filePath = AttachFile.imagePath;
@@ -2385,7 +2396,6 @@ public class ActivityChat extends ActivityEnhanced
         long duration = 0;
         long fileSize = 0;
         int[] imageDimens = { 0, 0 };
-        Realm realm = Realm.getDefaultInstance();
         final long senderID = realm.where(RealmUserInfo.class).findFirst().getUserId();
         StructMessageInfo messageInfo = null;
 
@@ -2483,7 +2493,6 @@ public class ActivityChat extends ActivityEnhanced
                     messageType = ProtoGlobal.RoomMessageType.VIDEO;
                 }
                 File videoFile = new File(filePath);
-                String videoFileName = videoFile.getName();
                 String videoFileMime = FileUtils.getMimeType(videoFile);
                 if (userTriesReplay()) {
                     messageInfo =
@@ -2529,7 +2538,6 @@ public class ActivityChat extends ActivityEnhanced
                     messageType = ProtoGlobal.RoomMessageType.FILE;
                 }
                 File fileFile = new File(filePath);
-                String fileFileName = fileFile.getName();
                 String fileFileMime = FileUtils.getMimeType(fileFile);
                 if (userTriesReplay()) {
                     messageInfo =
@@ -2552,11 +2560,6 @@ public class ActivityChat extends ActivityEnhanced
                 String number = contactUtils.retrieveNumber();
                 // FIXME: 10/5/2016 [Alireza] get username
                 String username = "username";
-                Uri imageUri = contactUtils.getPhotoUri();
-                String image = null;
-                if (imageUri != null) {
-                    image = imageUri.toString();
-                }
                 messageType = ProtoGlobal.RoomMessageType.CONTACT;
                 // FIXME: 10/18/2016 [Alireza] lastName "" gozashtam jash, firstName esme kamele
                 messageInfo =
@@ -2599,6 +2602,7 @@ public class ActivityChat extends ActivityEnhanced
         final int[] finalImageDimens = imageDimens;
 
         final StructMessageInfo finalMessageInfo = messageInfo;
+        final long finalMessageId = messageId;
         realm.executeTransaction(new Realm.Transaction() {
             @Override public void execute(Realm realm) {
                 RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class);
@@ -2607,11 +2611,12 @@ public class ActivityChat extends ActivityEnhanced
                 roomMessage.setMessage(getWrittenMessage());
                 roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
                 roomMessage.setRoomId(mRoomId);
-                roomMessage.setAttachment(messageId, finalFilePath, finalImageDimens[0],
+                roomMessage.setAttachment(finalMessageId, finalFilePath, finalImageDimens[0],
                     finalImageDimens[1], finalFileSize, finalFileName, finalDuration,
                     LocalFileType.THUMBNAIL);
-                roomMessage.setMessageId(messageId);
+                roomMessage.setMessageId(finalMessageId);
                 roomMessage.setUserId(senderID);
+                roomMessage.setCreateTime(updateTime);
                 roomMessage.setUpdateTime(updateTime);
 
                 if (finalMessageType == ProtoGlobal.RoomMessageType.CONTACT) {
@@ -2637,7 +2642,7 @@ public class ActivityChat extends ActivityEnhanced
 
                 if (finalFilePath != null
                     && finalMessageType != ProtoGlobal.RoomMessageType.CONTACT) {
-                    new UploadTask().execute(finalFilePath, messageId, finalMessageType, mRoomId,
+                    new UploadTask().execute(finalFilePath, finalMessageId, finalMessageType, mRoomId,
                         getWrittenMessage());
                 } else {
                     ChatSendMessageUtil messageUtil =
@@ -2648,7 +2653,7 @@ public class ActivityChat extends ActivityEnhanced
                         messageUtil.contact(finalMessageInfo.userInfo.firstName,
                             finalMessageInfo.userInfo.lastName, finalMessageInfo.userInfo.phone);
                     }
-                    messageUtil.sendMessage(Long.toString(messageId));
+                    messageUtil.sendMessage(Long.toString(finalMessageId));
                 }
             }
         });
@@ -2954,7 +2959,7 @@ public class ActivityChat extends ActivityEnhanced
                     for (int p = mAdapter.getAdapterItemCount() - 1; p >= 0; p--) {
                         AbstractMessage item = mAdapter.getAdapterItem(p);
                         // not time message
-                        if (!item.mMessage.senderID.equalsIgnoreCase("-1")) {
+                        if (!item.mMessage.isTimeMessage()) {
                             // new RequestClientGetRoomHistory().getRoomHistory(mRoomId, Long
                             // .parseLong(item.mMessage.messageID), Long.toString(mRoomId));
                             break;
