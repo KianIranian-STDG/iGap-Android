@@ -2,6 +2,7 @@ package com.iGap.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -46,8 +47,10 @@ import com.iGap.helper.HelperImageBackColor;
 import com.iGap.helper.HelperLogout;
 import com.iGap.helper.HelperString;
 import com.iGap.interfaces.OnFileUploadForActivities;
+import com.iGap.interfaces.OnSmsReceive;
 import com.iGap.interfaces.OnUserAvatarDelete;
 import com.iGap.interfaces.OnUserAvatarResponse;
+import com.iGap.interfaces.OnUserDelete;
 import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.interfaces.OnUserProfileCheckUsername;
 import com.iGap.interfaces.OnUserProfileGetSelfRemove;
@@ -65,12 +68,14 @@ import com.iGap.module.SHP_SETTING;
 import com.iGap.module.StructMessageInfo;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
+import com.iGap.proto.ProtoUserDelete;
 import com.iGap.proto.ProtoUserProfileCheckUsername;
 import com.iGap.realm.RealmAvatarPath;
 import com.iGap.realm.RealmAvatarToken;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestUserAvatarAdd;
 import com.iGap.request.RequestUserAvatarDelete;
+import com.iGap.request.RequestUserDelete;
 import com.iGap.request.RequestUserInfo;
 import com.iGap.request.RequestUserProfileCheckUsername;
 import com.iGap.request.RequestUserProfileGetSelfRemove;
@@ -766,6 +771,19 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 });
 
                 // check each word with server
+                edtUserName.addTextChangedListener(new TextWatcher() {
+                    @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override public void afterTextChanged(Editable editable) {
+
+                    }
+                });
 
                 dialog.show();
             }
@@ -854,7 +872,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                         //    @Override
                         //    public void onUserGetDeleteToken(int resendDelay, String tokenRegex,
                         //        String tokenLength) {
-                        //
+                        //        regex = tokenRegex;
                         //    }
                         //};
                         //
@@ -1702,34 +1720,45 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
     private void getSms(String message) {
         String verificationCode = HelperString.regexExtractValue(message, regex);
-        Log.i("KKK", "verificationCode : " + verificationCode);
+
+        if (verificationCode != null && !verificationCode.isEmpty()) {
+
+            G.onUserDelete = new OnUserDelete() {
+                @Override public void onUserDeleteResponse() {
+                    Log.i("UUU", "onUserDeleteResponse");
+                    HelperLogout.logout();
+                }
+            };
+
+            Log.i("UUU", "RequestUserDelete verificationCode : " + verificationCode);
+            new RequestUserDelete().userDelete(verificationCode, ProtoUserDelete.UserDelete.Reason.OTHER);
+        }
     }
 
     private IncomingSms smsReceiver;
     private String regex;
 
-    //@Override protected void onResume() {
-    //    final IntentFilter filter = new IntentFilter();
-    //    filter.addAction("android.provider.Telephony.SMS_RECEIVED");
-    //
-    //    smsReceiver = new IncomingSms(new OnSmsReceive() {
-    //
-    //        @Override public void onSmsReceive(String message) {
-    //            try {
-    //                if (message != null && !message.isEmpty() && !message.equals("null") &&
-    // !message
-    //                    .equals("")) {
-    //                    getSms(message);
-    //                }
-    //            } catch (Exception e1) {
-    //                e1.getStackTrace();
-    //            }
-    //        }
-    //    });
-    //
-    //    registerReceiver(smsReceiver, filter);
-    //    super.onResume();
-    //}
+    @Override protected void onResume() {
+        final IntentFilter filter = new IntentFilter();
+        filter.addAction("android.provider.Telephony.SMS_RECEIVED");
+
+        smsReceiver = new IncomingSms(new OnSmsReceive() {
+
+            @Override public void onSmsReceive(String message) {
+                try {
+                    if (message != null && !message.isEmpty() && !message.equals("null") &&
+                        !message.equals("")) {
+                        getSms(message);
+                    }
+                } catch (Exception e1) {
+                    e1.getStackTrace();
+                }
+            }
+        });
+
+        registerReceiver(smsReceiver, filter);
+        super.onResume();
+    }
 
     @Override public void onAvatarAdd(final ProtoGlobal.Avatar avatar) {
         Realm realm = Realm.getDefaultInstance();

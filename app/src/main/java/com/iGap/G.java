@@ -89,6 +89,7 @@ import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmAvatarPath;
 import com.iGap.realm.RealmMigrationClass;
 import com.iGap.realm.RealmUserInfo;
+import com.iGap.request.RequestClientCondition;
 import com.iGap.request.RequestQueue;
 import com.iGap.request.RequestUserContactsGetList;
 import com.iGap.request.RequestUserInfo;
@@ -591,7 +592,7 @@ public class G extends Application {
                     @Override public void run() {
                         Log.i("FFF", "Login");
                         Toast.makeText(G.context, "User Login!", Toast.LENGTH_SHORT).show();
-                        //new RequestClientCondition().clientCondition();
+                        new RequestClientCondition().clientCondition();
                         getUserInfo();
                         importContact();
                         sendWaitingRequestWrappers();

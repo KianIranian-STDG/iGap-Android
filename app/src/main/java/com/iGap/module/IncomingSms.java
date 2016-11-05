@@ -32,7 +32,7 @@ public class IncomingSms extends BroadcastReceiver {
 
     @Override public void onReceive(Context context, Intent intent) {
 
-        Log.i("SSS", "Receive SMS");
+        Log.i("UUU", "Receive SMS");
         final Bundle bundle = intent.getExtras();
         try {
             if (bundle != null) {
@@ -43,11 +43,11 @@ public class IncomingSms extends BroadcastReceiver {
                     SmsMessage currentMessage = SmsMessage.createFromPdu((byte[]) pdusObj[i]);
                     String phoneNumber = currentMessage.getDisplayOriginatingAddress();
                     String message = currentMessage.getDisplayMessageBody();
-                    Log.i("SSS", "1 phoneNumber : " + phoneNumber + "  ||  message : " + message);
+                    Log.i("UUU", "1 phoneNumber : " + phoneNumber + "  ||  message : " + message);
                     for (Long number : G.smsNumbers) {
-                        Log.i("SSS", "Server Number : " + number);
+                        Log.i("UUU", "Server Number : " + number);
                         if (phoneNumber.contains(number.toString())) {
-                            Log.i("SSS", "onSmsReceive start");
+                            Log.i("UUU", "onSmsReceive start");
                             listener.onSmsReceive(message);
                             break;
                         }

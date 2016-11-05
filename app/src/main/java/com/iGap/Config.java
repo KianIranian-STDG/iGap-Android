@@ -15,7 +15,7 @@ public class Config {
     public static final int REPEAT_CONNECTION_CHECKING = 1000;
     public static final int INSTANCE_SUCCESSFULLY_CHECKING = 10000;
     public static String urlWebsocket = "wss://secure.igap.im/connect/";
-        //wss://secure.igap.im/connect/
+    //wss://secure.igap.im/connect/
 
     public enum ConnectionState {
         WAITING_FOR_NETWORK, CONNECTING, UPDATING, IGAP

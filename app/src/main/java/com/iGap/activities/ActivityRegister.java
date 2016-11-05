@@ -56,6 +56,7 @@ import com.iGap.proto.ProtoUserRegister;
 import com.iGap.proto.ProtoUserVerify;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.realm.RealmUserInfoFields;
+import com.iGap.request.RequestInfoCountry;
 import com.iGap.request.RequestQueue;
 import com.iGap.request.RequestUserInfo;
 import com.iGap.request.RequestUserLogin;
@@ -158,8 +159,8 @@ public class ActivityRegister extends ActivityEnhanced {
                 regex = extras.getString("REGEX");
                 String body = extras.getString("TERMS_BODY");
                 if (body != null
-                    & txtAgreement_register
-                    != null) { //TODO [Saeed Mozaffari] [2016-09-01 9:28 AM] - txtAgreement_register !=null is wrong. change it
+                    & txtAgreement_register != null) { //TODO [Saeed Mozaffari] [2016-09-01 9:28 AM] -
+                    // txtAgreement_register !=null is wrong. change it
                     txtAgreement_register.setText(Html.fromHtml(body));
                 }
             }
@@ -345,7 +346,8 @@ public class ActivityRegister extends ActivityEnhanced {
                     }
                 });
 
-                //                TextView btnCancel = (TextView) dialogChooseCountry.findViewById(R.id.rg_txt_cancelDialog);
+                //                TextView btnCancel = (TextView) dialogChooseCountry
+                // .findViewById(R.id.rg_txt_cancelDialog);
                 //                btnCancel.setOnClickListener(new View.OnClickListener() {
                 //                    @Override
                 //                    public void onClick(View view) {
@@ -386,6 +388,8 @@ public class ActivityRegister extends ActivityEnhanced {
                                 }
                             }
                         };
+
+                        new RequestInfoCountry().infoCountry(isoCode);
 
                         edtPhoneNumber.setText("");
                         dialogChooseCountry.dismiss();
@@ -517,8 +521,10 @@ public class ActivityRegister extends ActivityEnhanced {
                 btnChoseCountry.setLayoutParams(params);
                 //
                 //                ViewGroup li = (ViewGroup) findViewById(R.id.rg_layout_center);
-                //                RelativeLayout.LayoutParams params3 = (RelativeLayout.LayoutParams) li.getLayoutParams();
-                //                params3.setMargins(marginLeft, marginTopChooseCountry, marginRight, 400); //left, top, right, bottom
+                //                RelativeLayout.LayoutParams params3 = (RelativeLayout
+                // .LayoutParams) li.getLayoutParams();
+                //                params3.setMargins(marginLeft, marginTopChooseCountry,
+                // marginRight, 400); //left, top, right, bottom
                 //                li.setLayoutParams(params3);
 
                 RelativeLayout.LayoutParams params2 =
@@ -692,7 +698,6 @@ public class ActivityRegister extends ActivityEnhanced {
                         .content(R.string.Toast_Enter_Code)
                         .positiveText(R.string.B_ok)
                         .show();
-
                 }
             }
         });
@@ -730,11 +735,9 @@ public class ActivityRegister extends ActivityEnhanced {
                         userId = userIdR;
                         G.smsNumbers = smsNumbersR;
 
-                        if (methodValue
-                            == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SMS) {//verification with sms
+                        if (methodValue == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SMS) {//verification with sms
 
-                        } else if (methodValue
-                            == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SOCKET) {//verification with socket
+                        } else if (methodValue == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SOCKET) {//verification with socket
 
                             errorVerifySms(); // open rg_dialog for enter sms code
                             countDownTimer.cancel();
@@ -999,7 +1002,8 @@ public class ActivityRegister extends ActivityEnhanced {
                             startActivity(intent);
                             finish();
                         } else {
-                            // get user info for set nick name and after from that go to ActivityMain
+                            // get user info for set nick name and after from that go to
+                            // ActivityMain
                             getUserInfo();
                         }
                         realm.close();
@@ -1109,9 +1113,11 @@ public class ActivityRegister extends ActivityEnhanced {
         smsReceiver = new IncomingSms(new OnSmsReceive() {
 
             @Override public void onSmsReceive(String message) {
+                Log.i("UUU", "onSmsReceive 1 message : " + message);
                 try {
                     if (message != null && !message.isEmpty() && !message.equals("null") && !message
                         .equals("")) {
+                        Log.i("UUU", "onSmsReceive 2");
                         rg_txt_verify_sms.setText(message);
                         receiveVerifySms(message);
                     }
@@ -1138,7 +1144,8 @@ public class ActivityRegister extends ActivityEnhanced {
         super.onDestroy();
     }
 
-    private void getVerificationSms() { //TODO [Saeed Mozaffari] [2016-08-22 10:48 AM] - this method is fake and will be removed later
+    private void getVerificationSms() { //TODO [Saeed Mozaffari] [2016-08-22 10:48 AM] - this
+        // method is fake and will be removed later
         rg_prg_verify_sms.setVisibility(View.VISIBLE);
         rg_txt_verify_generate.setTextAppearance(G.context, R.style.RedHUGEText);
         G.handler.postDelayed(new Runnable() {

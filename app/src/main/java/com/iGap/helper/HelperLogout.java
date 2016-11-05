@@ -17,6 +17,7 @@ public final class HelperLogout {
             @Override public void run() {
                 HelperRealm.realmTruncate();
                 Intent intent = new Intent(G.context, ActivityIntroduce.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 G.context.startActivity(intent);
                 G.currentActivity.finish();
             }
