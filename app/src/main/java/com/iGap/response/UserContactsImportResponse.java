@@ -20,12 +20,12 @@ public class UserContactsImportResponse extends MessageHandler {
 
     @Override public void handler() {
 
-        Log.i("XXX", "UserContactsImportResponse handler");
+        Log.i("OOO", "UserContactsImportResponse handler");
         G.onContactImport.onContactImport();
     }
 
     @Override public void timeOut() {
-        Log.i("XXX", "UserContactsImportResponse timeOut");
+        Log.i("OOO", "UserContactsImportResponse timeOut");
     }
 
     @Override public void error() {
@@ -33,10 +33,8 @@ public class UserContactsImportResponse extends MessageHandler {
         errorReponse.getMajorCode();
         errorReponse.getMinorCode();
 
-        Log.i("XXX", "UserContactsImportResponse errorReponse.getMajorCode() : "
-            + errorReponse.getMajorCode());
-        Log.i("XXX", "UserContactsImportResponse errorReponse.getMinorCode() : "
-            + errorReponse.getMinorCode());
+        Log.i("OOO", "UserContactsImportResponse errorReponse.getMajorCode() : " + errorReponse.getMajorCode());
+        Log.i("OOO", "UserContactsImportResponse errorReponse.getMinorCode() : " + errorReponse.getMinorCode());
     }
 }
 

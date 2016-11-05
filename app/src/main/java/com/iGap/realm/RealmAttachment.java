@@ -6,6 +6,7 @@ import com.iGap.proto.ProtoGlobal;
 import io.realm.Realm;
 import io.realm.RealmAttachmentRealmProxy;
 import io.realm.RealmObject;
+import io.realm.Sort;
 import io.realm.annotations.PrimaryKey;
 import java.io.File;
 import org.parceler.Parcel;
@@ -15,8 +16,7 @@ import org.parceler.Parcel;
  */
 @Parcel(implementations = { RealmAttachmentRealmProxy.class },
     value = Parcel.Serialization.BEAN,
-    analyze = { RealmAttachment.class })
-public class RealmAttachment extends RealmObject {
+    analyze = { RealmAttachment.class }) public class RealmAttachment extends RealmObject {
     // should be message id for message attachment and user id for avatar
     @PrimaryKey private long id;
     private String token;
@@ -31,12 +31,16 @@ public class RealmAttachment extends RealmObject {
     @Nullable private String localThumbnailPath;
     @Nullable private String localFilePath;
 
+    private static long getCorrectId(Realm realm) {
+        RealmThumbnail realmThumbnail = realm.where(RealmThumbnail.class).findAllSorted("id", Sort.DESCENDING).first();
+        long id = (realmThumbnail.getId()) + 1;
+        return id;
+    }
+
     public static RealmAttachment build(ProtoGlobal.File file) {
         Realm realm = Realm.getDefaultInstance();
 
-        RealmAttachment realmAttachment = realm.where(RealmAttachment.class)
-            .equalTo(RealmAttachmentFields.TOKEN, file.getToken())
-            .findFirst();
+        RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, file.getToken()).findFirst();
         if (realmAttachment == null) {
             realmAttachment = realm.createObject(RealmAttachment.class);
             long id = System.nanoTime();
@@ -47,22 +51,18 @@ public class RealmAttachment extends RealmObject {
             realmAttachment.setDuration(file.getDuration());
             realmAttachment.setHeight(file.getHeight());
 
-            long largeId = System.nanoTime();
+            long largeId = getCorrectId(realm);
             RealmThumbnail.create(largeId, id, file.getLargeThumbnail());
-            long smallId = System.nanoTime();
+            long smallId = getCorrectId(realm);
             RealmThumbnail.create(smallId, id, file.getSmallThumbnail());
 
-            RealmThumbnail largeThumbnail =
-                realm.where(RealmThumbnail.class).equalTo("id", largeId).findFirst();
+            RealmThumbnail largeThumbnail = realm.where(RealmThumbnail.class).equalTo("id", largeId).findFirst();
             realmAttachment.setLargeThumbnail(largeThumbnail);
-            RealmThumbnail smallThumbnail =
-                realm.where(RealmThumbnail.class).equalTo("id", smallId).findFirst();
+            RealmThumbnail smallThumbnail = realm.where(RealmThumbnail.class).equalTo("id", smallId).findFirst();
             realmAttachment.setSmallThumbnail(smallThumbnail);
 
-            realmAttachment.setLocalFilePath(
-                G.DIR_IMAGE_USER + "/" + file.getToken() + "_" + file.getName());
-            realmAttachment.setLocalThumbnailPath(
-                G.DIR_TEMP + "/" + file.getToken() + "_" + file.getName());
+            realmAttachment.setLocalFilePath(G.DIR_IMAGE_USER + "/" + file.getToken() + "_" + file.getName());
+            realmAttachment.setLocalThumbnailPath(G.DIR_TEMP + "/" + file.getToken() + "_" + file.getName());
             realmAttachment.setName(file.getName());
             realmAttachment.setSize(file.getSize());
             realmAttachment.setToken(file.getToken());

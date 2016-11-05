@@ -122,8 +122,7 @@ public class G extends Application {
 
     public static final String FAQ = "http://www.digikala.com";
     public static final String POLICY = "http://www.digikala.com";
-    public static final String DIR_SDCARD =
-        Environment.getExternalStorageDirectory().getAbsolutePath();
+    public static final String DIR_SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static final String DIR_APP = DIR_SDCARD + "/iGap";
     public static final String DIR_IMAGES = DIR_APP + "/images";
     public static final String DIR_VIDEOS = DIR_APP + "/videos";
@@ -160,8 +159,7 @@ public class G extends Application {
     // list of actionId that can be doing without secure
     public static ArrayList<String> unLogin = new ArrayList<>();
     public static HashMap<Integer, String> lookupMap = new HashMap<>();
-    public static ConcurrentHashMap<String, RequestWrapper> requestQueueMap =
-        new ConcurrentHashMap<>();
+    public static ConcurrentHashMap<String, RequestWrapper> requestQueueMap = new ConcurrentHashMap<>();
     public static HashMap<String, ArrayList<Object>> requestQueueRelationMap = new HashMap<>();
     public static List<Long> smsNumbers = new ArrayList<>();
     public static AtomicBoolean pullRequestQueueRunned = new AtomicBoolean(false);
@@ -252,8 +250,7 @@ public class G extends Application {
 
     public static void setUserTextSize() {
 
-        SharedPreferences sharedPreferencesSetting =
-            context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        SharedPreferences sharedPreferencesSetting = context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         userTextSize = sharedPreferencesSetting.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 16);
 
         int screenLayout = context.getResources().getConfiguration().screenLayout;
@@ -274,9 +271,10 @@ public class G extends Application {
     }
 
     public static void importContact() {
-
+        Log.i("WWW", "importContact");
         G.onContactImport = new OnUserContactImport() {
             @Override public void onContactImport() {
+                Log.i("WWW", "getContactListFromServer");
                 getContactListFromServer();
             }
         };
@@ -287,7 +285,7 @@ public class G extends Application {
     public static void getContactListFromServer() {
         G.onUserContactGetList = new OnUserContactGetList() {
             @Override public void onContactGetList() {
-
+                Log.i("WWW", "onContactGetList");
                 G.handler.post(new Runnable() {
                     @Override public void run() {
                         Toast.makeText(G.context, "Get Contact List!", Toast.LENGTH_SHORT).show();
@@ -300,7 +298,6 @@ public class G extends Application {
     }
 
     public static void getUserInfo() {
-        Log.i("FFF", "getUserInfo 1");
         //TODO [Saeed Mozaffari] [2016-10-15 1:51 PM] - nabayad har bar etella'ate khodam ro
         // begiram. agar ham digar account taghiri dadae bashe response hamun zaman miayad va man
         // ba accountam yeki misham
@@ -311,22 +308,19 @@ public class G extends Application {
         realm.close();
 
         G.onUserInfoResponse = new OnUserInfoResponse() {
-            @Override public void onUserInfo(final ProtoGlobal.RegisteredUser user,
-                ProtoResponse.Response response) {
+            @Override public void onUserInfo(final ProtoGlobal.RegisteredUser user, ProtoResponse.Response response) {
                 // fill own user info
                 if (userId == user.getId()) {
                     Realm realm = Realm.getDefaultInstance();
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override public void execute(Realm realm) {
-                            RealmUserInfo realmUserInfo =
-                                realm.where(RealmUserInfo.class).findFirst();
-                            realmUserInfo.getUserInfo().setColor(user.getColor());
-                            realmUserInfo.getUserInfo().setInitials(user.getInitials());
+                            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                            realmUserInfo.setColor(user.getColor());
+                            realmUserInfo.setInitials(user.getInitials());
                         }
                     });
 
-                    RealmResults<RealmAvatarPath> realmAvatarPaths =
-                        realm.where(RealmAvatarPath.class).findAll();
+                    RealmResults<RealmAvatarPath> realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
 
                     if (G.onChangeUserPhotoListener != null) {
                         if (realmAvatarPaths != null) {
@@ -358,8 +352,7 @@ public class G extends Application {
     @Override public void onCreate() {
         MultiDex.install(getApplicationContext());
         super.onCreate();
-        Fabric.with(this, new Crashlytics.Builder().core(
-            new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
+        Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
 
         SharedPreferences shKeepAlive = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         int isStart = shKeepAlive.getInt(SHP_SETTING.KEY_STNS_KEEP_ALIVE_SERVICE, 1);
@@ -417,24 +410,19 @@ public class G extends Application {
         YEKAN_FARSI = Typeface.createFromAsset(context.getAssets(), "fonts/yekan.ttf");
         YEKAN_BOLD = Typeface.createFromAsset(context.getAssets(), "fonts/yekan_bold.ttf");
 
-        Realm.setDefaultConfiguration(
-            new RealmConfiguration.Builder(getApplicationContext()).name("iGapLocalDatabase.realm")
-                .schemaVersion(1)
-                .migration(new RealmMigrationClass())
-                .deleteRealmIfMigrationNeeded()
-                .build());
+        Realm.setDefaultConfiguration(new RealmConfiguration.Builder(getApplicationContext()).name("iGapLocalDatabase.realm")
+            .schemaVersion(1)
+            .migration(new RealmMigrationClass())
+            .deleteRealmIfMigrationNeeded()
+            .build());
 
         // Create global configuration and initialize ImageLoader with this config
         // https://github.com/nostra13/Android-Universal-Image-Loader/wiki/Configuration
         // https://github.com/nostra13/Android-Universal-Image-Loader/wiki/Display-Options
         // https://github.com/nostra13/Android-Universal-Image-Loader/wiki/Useful-Info
-        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder().cacheInMemory(true)
-            .cacheOnDisk(true)
-            .displayer(new FadeInBitmapDisplayer(500))
-            .build();
-        ImageLoader.getInstance()
-            .init(new ImageLoaderConfiguration.Builder(this).defaultDisplayImageOptions(
-                defaultOptions).build());
+        DisplayImageOptions defaultOptions =
+            new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).displayer(new FadeInBitmapDisplayer(500)).build();
+        ImageLoader.getInstance().init(new ImageLoaderConfiguration.Builder(this).defaultDisplayImageOptions(defaultOptions).build());
 
         FONT_IGAP = Typeface.createFromAsset(context.getAssets(), "fonts/neuropolitical.ttf");
 
@@ -456,40 +444,31 @@ public class G extends Application {
 
     private void setFont() {
 
-        SharedPreferences sharedPreferences =
-            getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
         String language = sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, "en");
 
         switch (language) {
             case "فارسی":
                 CalligraphyConfig.initDefault(
-                    new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf")
-                        .setFontAttrId(R.attr.fontPath)
-                        .build());
+                    new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf").setFontAttrId(R.attr.fontPath).build());
                 setLocale("fa");
 
                 break;
             case "English":
                 CalligraphyConfig.initDefault(
-                    new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf")
-                        .setFontAttrId(R.attr.fontPath)
-                        .build());
+                    new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf").setFontAttrId(R.attr.fontPath).build());
                 setLocale("en");
                 break;
             case "العربی":
                 CalligraphyConfig.initDefault(
-                    new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf")
-                        .setFontAttrId(R.attr.fontPath)
-                        .build());
+                    new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf").setFontAttrId(R.attr.fontPath).build());
                 setLocale("ar");
 
                 break;
             case "Deutsch":
                 CalligraphyConfig.initDefault(
-                    new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf")
-                        .setFontAttrId(R.attr.fontPath)
-                        .build());
+                    new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf").setFontAttrId(R.attr.fontPath).build());
                 setLocale("nl");
 
                 break;
@@ -548,8 +527,7 @@ public class G extends Application {
                 Log.i("FFF", "Secure");
                 login();
 
-                ConnectivityManager cm =
-                    (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
 
                 switch (activeNetwork.getType()) {
@@ -593,7 +571,7 @@ public class G extends Application {
                         Log.i("FFF", "Login");
                         Toast.makeText(G.context, "User Login!", Toast.LENGTH_SHORT).show();
                         new RequestClientCondition().clientCondition();
-                        //getUserInfo();
+                        getUserInfo();
                         importContact();
                         sendWaitingRequestWrappers();
                     }

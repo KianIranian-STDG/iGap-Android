@@ -16,7 +16,7 @@ public abstract class MessageHandler {
     }
 
     public void handler() throws NullPointerException {
-        Log.i("MSGH", "MessageHandler handler : " + message);
+        Log.i("MSGH", "MessageHandler handler : " + actionId + " || " + message);
     }
 
     public void timeOut() {

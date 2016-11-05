@@ -1,6 +1,7 @@
 package com.iGap.response;
 
 import android.content.Context;
+import android.util.Log;
 import com.iGap.G;
 import com.iGap.helper.HelperPermision;
 import com.iGap.interfaces.OnGetPermision;
@@ -16,6 +17,7 @@ import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmThumbnail;
 import io.realm.Realm;
+import io.realm.Sort;
 
 public class UserContactsGetListResponse extends MessageHandler {
 
@@ -33,6 +35,7 @@ public class UserContactsGetListResponse extends MessageHandler {
     }
 
     @Override public void handler() {
+        Log.i("OOO", "UserContactsGetListResponse : " + message);
         final ProtoUserContactsGetList.UserContactsGetListResponse.Builder builder =
             (ProtoUserContactsGetList.UserContactsGetListResponse.Builder) message;
         Realm realm = Realm.getDefaultInstance();
@@ -43,16 +46,13 @@ public class UserContactsGetListResponse extends MessageHandler {
 
                 for (ProtoGlobal.RegisteredUser registerUser : builder.getRegisteredUserList()) {
 
-                    RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class)
-                        .equalTo(RealmRegisteredInfoFields.ID, registerUser.getId())
-                        .findFirst();
+                    RealmRegisteredInfo realmRegisteredInfo =
+                        realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, registerUser.getId()).findFirst();
                     if (realmRegisteredInfo == null) {
                         realmRegisteredInfo = realm.createObject(RealmRegisteredInfo.class);
-                        realmRegisteredInfo.setRegisteredUserInfo(registerUser, realmRegisteredInfo,
-                            realm);
+                        realmRegisteredInfo.setRegisteredUserInfo(registerUser, realmRegisteredInfo, realm);
                     } else {
-                        realmRegisteredInfo.updateRegisteredUserInfo(registerUser,
-                            realmRegisteredInfo, realm);
+                        realmRegisteredInfo.updateRegisteredUserInfo(registerUser, realmRegisteredInfo, realm);
                     }
 
                     RealmContacts listResponse = realm.createObject(RealmContacts.class);
@@ -68,18 +68,15 @@ public class UserContactsGetListResponse extends MessageHandler {
                     listResponse.setLast_seen(registerUser.getLastSeen());
                     listResponse.setAvatarCount(registerUser.getAvatarCount());
 
-                    RealmAvatar realmAvatar = realm.where(RealmAvatar.class)
-                        .equalTo(RealmAvatarFields.OWNER_ID, registerUser.getId())
-                        .findFirst();
+                    RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, registerUser.getId()).findFirst();
                     if (realmAvatar == null) {
                         realmAvatar = realm.createObject(RealmAvatar.class);
                         realmAvatar.setOwnerId(registerUser.getId());
                         realmAvatar.setId(System.nanoTime());
                     }
 
-                    RealmAttachment realmAttachment = realm.where(RealmAttachment.class)
-                        .equalTo(RealmAttachmentFields.ID, registerUser.getId())
-                        .findFirst();
+                    RealmAttachment realmAttachment =
+                        realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, registerUser.getId()).findFirst();
                     if (realmAttachment == null) {
                         realmAttachment = realm.createObject(RealmAttachment.class);
                         realmAttachment.setId(registerUser.getId());
@@ -93,14 +90,14 @@ public class UserContactsGetListResponse extends MessageHandler {
                     ProtoGlobal.Thumbnail largeThumbnail = file.getLargeThumbnail();
 
                     RealmThumbnail realmThumbnailSmall = realm.createObject(RealmThumbnail.class);
-                    realmThumbnailSmall.setId(System.nanoTime());
+                    realmThumbnailSmall.setId(getCorrectId(realm));
                     realmThumbnailSmall.setSize(smallThumbnail.getSize());
                     realmThumbnailSmall.setWidth(smallThumbnail.getWidth());
                     realmThumbnailSmall.setHeight(smallThumbnail.getHeight());
                     realmThumbnailSmall.setCacheId(smallThumbnail.getCacheId());
 
                     RealmThumbnail realmThumbnailLarge = realm.createObject(RealmThumbnail.class);
-                    realmThumbnailLarge.setId(System.nanoTime());
+                    realmThumbnailLarge.setId(getCorrectId(realm));
                     realmThumbnailLarge.setSize(largeThumbnail.getSize());
                     realmThumbnailLarge.setWidth(largeThumbnail.getWidth());
                     realmThumbnailLarge.setHeight(largeThumbnail.getHeight());
@@ -137,6 +134,12 @@ public class UserContactsGetListResponse extends MessageHandler {
 
     @Override public void error() {
         super.error();
+    }
+
+    private static long getCorrectId(Realm realm) {
+        RealmThumbnail realmThumbnail = realm.where(RealmThumbnail.class).findAllSorted("id", Sort.DESCENDING).first();
+        long id = (realmThumbnail.getId()) + 1;
+        return id;
     }
 }
 

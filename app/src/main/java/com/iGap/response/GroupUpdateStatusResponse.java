@@ -28,15 +28,11 @@ public class GroupUpdateStatusResponse extends MessageHandler {
     }
 
     @Override public void handler() {
-        final ProtoGroupUpdateStatus.GroupUpdateStatusResponse.Builder builder =
-            (ProtoGroupUpdateStatus.GroupUpdateStatusResponse.Builder) message;
-        final ProtoResponse.Response.Builder response =
-            ProtoResponse.Response.newBuilder().mergeFrom(builder.getResponse());
+        final ProtoGroupUpdateStatus.GroupUpdateStatusResponse.Builder builder = (ProtoGroupUpdateStatus.GroupUpdateStatusResponse.Builder) message;
+        final ProtoResponse.Response.Builder response = ProtoResponse.Response.newBuilder().mergeFrom(builder.getResponse());
         Log.i("SOC_CONDITION", "GroupUpdateStatusResponse response.getId() : " + response.getId());
-        Log.i("SOC_CONDITION",
-            "GroupUpdateStatusResponse response.getTimestamp() : " + response.getTimestamp());
-        Log.i("SOC_CONDITION",
-            "GroupUpdateStatusResponse chatUpdateStatus : " + builder.getStatus());
+        Log.i("SOC_CONDITION", "GroupUpdateStatusResponse response.getTimestamp() : " + response.getTimestamp());
+        Log.i("SOC_CONDITION", "GroupUpdateStatusResponse chatUpdateStatus : " + builder.getStatus());
 
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
@@ -44,9 +40,7 @@ public class GroupUpdateStatusResponse extends MessageHandler {
                 if (!response.getId().isEmpty()) { // I'm sender
 
                     RealmClientCondition realmClientCondition =
-                        realm.where(RealmClientCondition.class)
-                            .equalTo(RealmClientConditionFields.ROOM_ID, builder.getRoomId())
-                            .findFirst();
+                        realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, builder.getRoomId()).findFirst();
                     RealmList<RealmOfflineSeen> offlineSeen = realmClientCondition.getOfflineSeen();
                     for (int i = offlineSeen.size() - 1; i >= 0; i--) {
                         RealmOfflineSeen realmOfflineSeen = offlineSeen.get(i);
@@ -56,18 +50,16 @@ public class GroupUpdateStatusResponse extends MessageHandler {
                 } else { // I'm recipient
 
                     // find message from database and update its status
-                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class)
-                        .equalTo(RealmRoomMessageFields.MESSAGE_ID, builder.getMessageId())
-                        .findFirst();
-                    Log.i("SOC_CONDITION", "I'm recipient 1");
+                    RealmRoomMessage roomMessage =
+                        realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, builder.getMessageId()).findFirst();
+                    Log.i("SOC_CONDITION", "I'm recipient 1 roomMessage : " + roomMessage);
+                    Log.i("SOC_CONDITION", "I'm recipient 1  builder.getMessageId() : " + builder.getMessageId());
                     if (roomMessage != null) {
-                        Log.i(ChatUpdateStatusResponse.class.getSimpleName(),
-                            "oftad > " + builder.getStatus().toString());
+                        Log.i(ChatUpdateStatusResponse.class.getSimpleName(), "oftad > " + builder.getStatus().toString());
                         roomMessage.setStatus(builder.getStatus().toString());
                         realm.copyToRealmOrUpdate(roomMessage);
                         Log.i("SOC_CONDITION", "I'm recipient ");
-                        G.chatUpdateStatusUtil.onChatUpdateStatus(builder.getRoomId(),
-                            builder.getMessageId(), builder.getStatus(),
+                        G.chatUpdateStatusUtil.onChatUpdateStatus(builder.getRoomId(), builder.getMessageId(), builder.getStatus(),
                             builder.getStatusVersion());
                     }
                 }

@@ -38,17 +38,15 @@ public class GroupSendMessageResponse extends MessageHandler {
     @Override public void handler() {
         Realm realm = Realm.getDefaultInstance();
 
-        final ProtoGroupSendMessage.GroupSendMessageResponse.Builder builder =
-            (ProtoGroupSendMessage.GroupSendMessageResponse.Builder) message;
+        final ProtoGroupSendMessage.GroupSendMessageResponse.Builder builder = (ProtoGroupSendMessage.GroupSendMessageResponse.Builder) message;
         final ProtoGlobal.RoomMessage roomMessage = builder.getRoomMessage();
         final long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
 
         realm.executeTransaction(new Realm.Transaction() {
             @Override public void execute(Realm realm) {
                 // set info for clientCondition
-                RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class)
-                    .equalTo(RealmClientConditionFields.ROOM_ID, builder.getRoomId())
-                    .findFirst();
+                RealmClientCondition realmClientCondition =
+                    realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, builder.getRoomId()).findFirst();
                 if (realmClientCondition != null) {
                     realmClientCondition.setMessageVersion(roomMessage.getMessageVersion());
                     realmClientCondition.setStatusVersion(roomMessage.getStatusVersion());
@@ -68,16 +66,13 @@ public class GroupSendMessageResponse extends MessageHandler {
                 Log.i("CLI", "send message MessageId : " + roomMessage.getMessageId());
 
                 // if first message received but the room doesn't exist, create new room
-                RealmRoom room = realm.where(RealmRoom.class)
-                    .equalTo(RealmRoomFields.ID, builder.getRoomId())
-                    .findFirst();
+                RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst();
                 if (room == null) {
                     // make get room request
                     new RequestClientGetRoom().clientGetRoom(builder.getRoomId());
                 } else {
                     // update last message sent/received in room table
-                    if (room.getLastMessageTime()
-                        < roomMessage.getUpdateTime() * DateUtils.SECOND_IN_MILLIS) {
+                    if (room.getLastMessageTime() < roomMessage.getUpdateTime() * DateUtils.SECOND_IN_MILLIS) {
                         room.setLastMessageId(roomMessage.getMessageId());
                         room.setLastMessageTime(roomMessage.getUpdateTime());
 
@@ -95,9 +90,8 @@ public class GroupSendMessageResponse extends MessageHandler {
 
                     HelperCheckUserInfoExist.checkUserInfoExist(roomMessage.getUserId());
 
-                    RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class)
-                        .equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId())
-                        .findFirst();
+                    RealmRoomMessage realmRoomMessage =
+                        realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
 
                     if (realmRoomMessage == null) {
                         realmRoomMessage = realm.createObject(RealmRoomMessage.class);
@@ -120,44 +114,37 @@ public class GroupSendMessageResponse extends MessageHandler {
                         realmRoomMessage.setReplyTo(fillRoomMessage(reply, roomMessage));
                     }
 
-                    G.helperNotificationAndBadge.checkAlert(true, ProtoGlobal.Room.Type.GROUP,
-                        roomMessage.getMessageId());
+                    G.helperNotificationAndBadge.checkAlert(true, ProtoGlobal.Room.Type.GROUP, roomMessage.getMessageId());
                 } else {
                     // i'm the sender
                     // update message fields into database
                     RealmResults<RealmRoomMessage> realmRoomMessageRealmResults =
-                        realm.where(RealmRoomMessage.class)
-                            .equalTo(RealmRoomMessageFields.ROOM_ID, builder.getRoomId())
-                            .findAll();
+                        realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, builder.getRoomId()).findAll();
                     for (RealmRoomMessage realmRoomMessage : realmRoomMessageRealmResults) {
                         // find the message using identity and update it
-                        if (realmRoomMessage != null
-                            && realmRoomMessage.getMessageId() == Long.parseLong(identity)) {
-
+                        Log.i("III", "realmRoomMessage : " + realmRoomMessage);
+                        if (realmRoomMessage != null && realmRoomMessage.getMessageId() == Long.parseLong(identity)) {
+                            Log.i("III", "fillRoomMessage");
                             fillRoomMessage(realmRoomMessage, roomMessage);
 
                             if (roomMessage.hasForwardFrom()) { // forward message
 
-                                RealmRoomMessage forwardMessage =
-                                    realmRoomMessage.getForwardMessage();
+                                RealmRoomMessage forwardMessage = realmRoomMessage.getForwardMessage();
                                 // forwardMessage shouldn't be null but client check it for insuring
                                 if (forwardMessage == null) {
                                     forwardMessage = realm.createObject(RealmRoomMessage.class);
                                     forwardMessage.setMessageId(System.nanoTime());
                                 }
-                                realmRoomMessage.setForwardMessage(
-                                    fillRoomMessage(forwardMessage, roomMessage));
+                                realmRoomMessage.setForwardMessage(fillRoomMessage(forwardMessage, roomMessage));
                             } else if (roomMessage.hasReplyTo()) { // reply message
 
-                                RealmRoomMessage replyMessage =
-                                    realmRoomMessage.getForwardMessage();
+                                RealmRoomMessage replyMessage = realmRoomMessage.getForwardMessage();
                                 // replyMessage shouldn't be null but client check it for insuring
                                 if (replyMessage == null) {
                                     replyMessage = realm.createObject(RealmRoomMessage.class);
                                     replyMessage.setMessageId(System.nanoTime());
                                 }
-                                realmRoomMessage.setReplyTo(
-                                    fillRoomMessage(replyMessage, roomMessage));
+                                realmRoomMessage.setReplyTo(fillRoomMessage(replyMessage, roomMessage));
                             }
 
                             realm.copyToRealmOrUpdate(realmRoomMessage);
@@ -171,24 +158,19 @@ public class GroupSendMessageResponse extends MessageHandler {
         if (userId != roomMessage.getUserId() && builder.getResponse().getId().isEmpty()) {
             // invoke following callback when i'm not the sender, because I already done
             // everything after sending message
-            if (realm.where(RealmRoom.class)
-                .equalTo(RealmRoomFields.ID, builder.getRoomId())
-                .findFirst() != null) {
-                G.chatSendMessageUtil.onMessageReceive(builder.getRoomId(),
-                    roomMessage.getMessage(), roomMessage.getMessageType().toString(), roomMessage,
-                    ProtoGlobal.Room.Type.GROUP);
+            if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst() != null) {
+                G.chatSendMessageUtil.onMessageReceive(builder.getRoomId(), roomMessage.getMessage(), roomMessage.getMessageType().toString(),
+                    roomMessage, ProtoGlobal.Room.Type.GROUP);
             }
         } else {
             // invoke following callback when I'm the sender and the message has updated
-            G.chatSendMessageUtil.onMessageUpdate(builder.getRoomId(), roomMessage.getMessageId(),
-                roomMessage.getStatus(), identity, roomMessage);
+            G.chatSendMessageUtil.onMessageUpdate(builder.getRoomId(), roomMessage.getMessageId(), roomMessage.getStatus(), identity, roomMessage);
         }
 
         realm.close();
     }
 
-    private RealmRoomMessage fillRoomMessage(RealmRoomMessage realmRoomMessage,
-        ProtoGlobal.RoomMessage roomMessage) {
+    private RealmRoomMessage fillRoomMessage(RealmRoomMessage realmRoomMessage, ProtoGlobal.RoomMessage roomMessage) {
         realmRoomMessage.setMessageVersion(roomMessage.getMessageVersion());
         realmRoomMessage.setStatus(roomMessage.getStatus().toString());
         realmRoomMessage.setMessageType(roomMessage.getMessageType().toString());
@@ -226,13 +208,11 @@ public class GroupSendMessageResponse extends MessageHandler {
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override public void execute(Realm realm) {
-                RealmRoomMessage message = realm.where(RealmRoomMessage.class)
-                    .equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(identity))
-                    .findFirst();
+                RealmRoomMessage message =
+                    realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(identity)).findFirst();
                 if (message != null) {
                     message.setStatus(ProtoGlobal.RoomMessageStatus.FAILED.toString());
-                    G.chatSendMessageUtil.onMessageFailed(message.getRoomId(), message,
-                        ProtoGlobal.Room.Type.CHAT);
+                    G.chatSendMessageUtil.onMessageFailed(message.getRoomId(), message, ProtoGlobal.Room.Type.CHAT);
                 }
             }
         });
