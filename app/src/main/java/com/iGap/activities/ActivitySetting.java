@@ -337,8 +337,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     }
                 });
 
-                final String finalLastName1 = lastName;
-                final String finalFirsName1 = firsName;
+
                 positive.setOnClickListener(new View.OnClickListener() {
                     @Override public void onClick(View view) {
 
@@ -799,14 +798,14 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                     viewGroup.setVisibility(View.GONE);
                     titleToolbar.setVisibility(View.VISIBLE);
-                    viewGroup.animate().alpha(0).setDuration(700);
-                    titleToolbar.animate().alpha(1).setDuration(300);
+                    viewGroup.animate().alpha(0).setDuration(500);
+                    titleToolbar.animate().alpha(1).setDuration(250);
                 } else {
 
                     titleToolbar.setVisibility(View.GONE);
                     viewGroup.setVisibility(View.VISIBLE);
-                    titleToolbar.animate().alpha(0).setDuration(500);
-                    viewGroup.animate().alpha(1).setDuration(700);
+                    titleToolbar.animate().alpha(0).setDuration(250);
+                    viewGroup.animate().alpha(1).setDuration(500);
                 }
             }
         });
@@ -906,7 +905,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
             @Override public void onComplete(RippleView rippleView) {
                 FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(userId);
-                ActivitySetting.this.getSupportFragmentManager().beginTransaction().add(R.id.st_layoutParent, fragment, null).commit();
+                ActivitySetting.this.getSupportFragmentManager().beginTransaction().replace(R.id.st_layoutParent, fragment, null).commit();
             }
         });
         setAvatar();

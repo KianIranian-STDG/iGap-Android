@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:background="@android:color/black"
     android:layoutDirection="ltr"
+    android:elevation="6dp"
     >
 
 
@@ -12,7 +13,8 @@
       android:id="@+id/asi_view_pager"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      ></android.support.v4.view.ViewPager>
+      android:clipToPadding="false"
+      />
 
   <LinearLayout
       android:id="@+id/toolbarShowImage"

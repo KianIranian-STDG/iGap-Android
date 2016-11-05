@@ -228,7 +228,7 @@
 
           <TextView
               android:id="@+id/chi_txt_nikName"
-              android:layout_width="@dimen/dp200"
+              android:layout_width="wrap_content"
               android:layout_height="@dimen/dp40"
               android:gravity="center_vertical"
               android:paddingLeft="@dimen/dp4"
@@ -262,7 +262,7 @@
 
           <TextView
               android:id="@+id/chi_txt_userName"
-              android:layout_width="@dimen/dp200"
+              android:layout_width="wrap_content"
               android:layout_height="@dimen/dp40"
               android:background="@android:color/transparent"
               android:clickable="false"
@@ -301,7 +301,7 @@
 
           <TextView
               android:id="@+id/chi_txt_phoneNumber"
-              android:layout_width="@dimen/dp200"
+              android:layout_width="wrap_content"
               android:layout_height="@dimen/dp40"
               android:gravity="center_vertical"
               android:paddingLeft="@dimen/dp4"
@@ -334,7 +334,7 @@
 
           <TextView
               android:id="@+id/chi_txt_count_of_sharedMedia"
-              android:layout_width="@dimen/dp200"
+              android:layout_width="wrap_content"
               android:layout_height="@dimen/dp40"
               android:clickable="false"
               android:gravity="center_vertical"
@@ -448,7 +448,7 @@
       android:src="@mipmap/comment"
       android:theme="@style/FabButton"
       android:tint="@color/gray"
-      app:fabSize="normal"
+      app:fabSize="mini"
       app:layout_anchor="@+id/chi_appbar"
       app:layout_anchorGravity="bottom|right|end"
       />

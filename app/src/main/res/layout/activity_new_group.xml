@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ng_fragmentContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
     android:fitsSystemWindows="false"
     android:layoutDirection="ltr"
+    tools:ignore="MissingPrefix"
     >
 
   <ScrollView
@@ -116,6 +118,8 @@
           android:textColor="@color/toolbar_background"
           android:textSize="@dimen/dp16"
           android:textStyle="bold"
+          fontPath="fonts/IRANSansMobile_Bold.ttf"
+
           />
 
       <TextView
@@ -131,6 +135,7 @@
           android:textColor="@color/toolbar_background"
           android:textSize="@dimen/dp16"
           android:textStyle="bold"
+          fontPath="fonts/IRANSansMobile_Bold.ttf"
           />
     </RelativeLayout>
   </ScrollView>
