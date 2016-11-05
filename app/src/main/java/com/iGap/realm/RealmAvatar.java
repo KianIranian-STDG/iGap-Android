@@ -3,6 +3,7 @@ package com.iGap.realm;
 import com.iGap.proto.ProtoGlobal;
 import io.realm.Realm;
 import io.realm.RealmObject;
+import io.realm.RealmResults;
 import io.realm.Sort;
 import io.realm.annotations.PrimaryKey;
 
@@ -44,8 +45,14 @@ public class RealmAvatar extends RealmObject {
     }
 
     private static long getCorrectId(Realm realm) {
-        RealmThumbnail realmThumbnail = realm.where(RealmThumbnail.class).findAllSorted("id", Sort.DESCENDING).first();
-        long id = (realmThumbnail.getId()) + 1;
+        RealmResults results = realm.where(RealmThumbnail.class).findAllSorted("id", Sort.DESCENDING);
+
+        long id = 1;
+        if (results.size() > 0) {
+            id = realm.where(RealmThumbnail.class).findAllSorted("id", Sort.DESCENDING).first().getId();
+            id++;
+        }
+
         return id;
     }
 
