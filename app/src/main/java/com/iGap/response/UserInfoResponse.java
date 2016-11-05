@@ -45,7 +45,7 @@ public class UserInfoResponse extends MessageHandler {
                 realmRegisteredInfo.setFirstName(builder.getUser().getFirstName());
                 realmRegisteredInfo.setInitials(builder.getUser().getInitials());
                 realmRegisteredInfo.setLastSeen(builder.getUser().getLastSeen());
-                realmRegisteredInfo.setPhone(builder.getUser().getPhone());
+                realmRegisteredInfo.setPhoneNumber(Long.toString(builder.getUser().getPhone()));
                 realmRegisteredInfo.setStatus(builder.getUser().getStatus().toString());
                 realmRegisteredInfo.setUsername(builder.getUser().getUsername());
                 realmRegisteredInfo.setMutual(builder.getUser().getMutual());

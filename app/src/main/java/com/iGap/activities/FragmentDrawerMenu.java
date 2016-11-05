@@ -81,8 +81,8 @@ public class FragmentDrawerMenu extends MenuFragment {
 
         Realm realm = Realm.getDefaultInstance();
         RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-        String username = realmUserInfo.getNickName();
-        String phoneNumber = realmUserInfo.getPhoneNumber();
+        String username = realmUserInfo.getUserInfo().getDisplayName();
+        String phoneNumber = realmUserInfo.getUserInfo().getPhoneNumber();
         realm.close();
 
         imgUserPhoto = (ImageView) v.findViewById(R.id.lm_imv_user_picture);
@@ -234,15 +234,14 @@ public class FragmentDrawerMenu extends MenuFragment {
             imgUserPhoto.setImageBitmap(decodeBitmapProfile);
         } else {
             RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-            if (realmUserInfo.getColor() == null) {
+            if (realmUserInfo.getUserInfo().getColor() == null) {
                 imgUserPhoto.setImageBitmap(
                     com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture(
                         (int) imgUserPhoto.getContext().getResources().getDimension(R.dimen.dp60),
                         " ", "#117f7f7f"));
             } else {
                 imgUserPhoto.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(
-                    (int) imgUserPhoto.getContext().getResources().getDimension(R.dimen.dp100),
-                    realmUserInfo.getInitials(), realmUserInfo.getColor()));
+                    (int) imgUserPhoto.getContext().getResources().getDimension(R.dimen.dp100), realmUserInfo.getUserInfo().getInitials(), realmUserInfo.getUserInfo().getColor()));
             }
         }
 
@@ -274,9 +273,7 @@ public class FragmentDrawerMenu extends MenuFragment {
                                 realm1.where(RealmUserInfo.class).findFirst();
                             imgUserPhoto.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(
                                 (int) imgUserPhoto.getContext()
-                                    .getResources()
-                                    .getDimension(R.dimen.dp100), realmUserInfo.getInitials(),
-                                realmUserInfo.getColor()));
+                                    .getResources().getDimension(R.dimen.dp100), realmUserInfo.getUserInfo().getInitials(), realmUserInfo.getUserInfo().getColor()));
                             realm1.close();
                         } else {
                             File imgFile = new File(imagePath);

@@ -33,8 +33,10 @@ import com.iGap.module.EditTextAdjustPan;
 import com.iGap.module.FileUploadStructure;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
+import com.iGap.realm.RealmAttachment;
+import com.iGap.realm.RealmAvatar;
+import com.iGap.realm.RealmAvatarFields;
 import com.iGap.realm.RealmAvatarPath;
-import com.iGap.realm.RealmAvatarToken;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestUserAvatarAdd;
 import com.iGap.request.RequestUserInfo;
@@ -213,9 +215,9 @@ public class ActivityProfile extends ActivityEnhanced
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override public void execute(Realm realm) {
                         RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                        realmUserInfo.setNickName(user.getDisplayName());
-                        realmUserInfo.setInitials(user.getInitials());
-                        realmUserInfo.setColor(user.getColor());
+                        realmUserInfo.getUserInfo().setDisplayName(user.getDisplayName());
+                        realmUserInfo.getUserInfo().setInitials(user.getInitials());
+                        realmUserInfo.getUserInfo().setColor(user.getColor());
                         realmUserInfo.setUserRegistrationState(true);
 
                         final long userId = realmUserInfo.getUserId();
@@ -336,21 +338,19 @@ public class ActivityProfile extends ActivityEnhanced
                 pathImageUser = data.getData().toString();
             }
 
+            lastUploadedAvatarId = idAvatar + 1;
+
             Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
                 @Override public void execute(Realm realm) {
-                    final RealmUserInfo realmUserInfo =
-                        realm.where(RealmUserInfo.class).findFirst();
-                    RealmAvatarPath realmAvatarPath = realm.createObject(RealmAvatarPath.class);
-                    realmAvatarPath.setId(idAvatar + 1);
-                    realmAvatarPath.setPathImage(pathImageUser);
-                    realmUserInfo.getAvatarPath().add(realmAvatarPath);
+                    long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
+                    RealmAvatar realmAvatar = realm.createObject(RealmAvatar.class);
+                    realmAvatar.setOwnerId(userId);
+                    realmAvatar.setId(lastUploadedAvatarId);
 
                 }
             });
             realm.close();
-
-            lastUploadedAvatarId = idAvatar + 1;
 
             new UploadTask().execute(pathImageUser, lastUploadedAvatarId);
         }
@@ -441,11 +441,11 @@ public class ActivityProfile extends ActivityEnhanced
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override public void execute(Realm realm) {
+                RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.ID, lastUploadedAvatarId).findFirst();
+                realmAvatar.setFile(RealmAttachment.build(avatar.getFile()));
+
                 RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                RealmAvatarToken realmAvatarPath = realm.createObject(RealmAvatarToken.class);
-                realmAvatarPath.setId(lastUploadedAvatarId);
-                realmAvatarPath.setToken(avatar.getFile().getToken());
-                realmUserInfo.addAvatarToken(realmAvatarPath);
+                realmUserInfo.getUserInfo().addAvatar(realmAvatar);
             }
         });
         realm.close();

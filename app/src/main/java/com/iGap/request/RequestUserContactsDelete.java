@@ -4,11 +4,11 @@ import com.iGap.proto.ProtoUserContactsDelete;
 
 public class RequestUserContactsDelete {
 
-    public void contactsDelete(long phone) {
+    public void contactsDelete(String phone) {
 
         ProtoUserContactsDelete.UserContactsDelete.Builder builder =
             ProtoUserContactsDelete.UserContactsDelete.newBuilder();
-        builder.setPhone(phone);
+        builder.setPhone(Long.parseLong(phone));
         RequestWrapper requestWrapper = new RequestWrapper(108, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);

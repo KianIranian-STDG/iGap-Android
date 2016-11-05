@@ -37,8 +37,7 @@ public class UserContactsDeleteResponse extends MessageHandler {
                     realmUserContactsGetListResponse.deleteFromRealm();
                 }
 
-                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class)
-                    .equalTo(RealmRegisteredInfoFields.PHONE, phone)
+                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.PHONE_NUMBER, phone)
                     .findFirst();
                 if (realmRegisteredInfo != null) {
                     realmRegisteredInfo.setMutual(false);

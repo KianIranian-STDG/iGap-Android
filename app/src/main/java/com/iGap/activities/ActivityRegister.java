@@ -54,6 +54,7 @@ import com.iGap.proto.ProtoRequest;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.proto.ProtoUserRegister;
 import com.iGap.proto.ProtoUserVerify;
+import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.realm.RealmUserInfoFields;
 import com.iGap.request.RequestInfoCountry;
@@ -78,14 +79,10 @@ public class ActivityRegister extends ActivityEnhanced {
 
     public static MaskedEditText edtPhoneNumber;
 
-    private TextView txtAgreement_register, txtTitleToolbar, txtTitleRegister, txtDesc,
-        txtTitleAgreement;
-    private ProgressBar rg_prg_verify_connect, rg_prg_verify_sms, rg_prg_verify_generate,
-        rg_prg_verify_register;
-    private TextView rg_txt_verify_connect, rg_txt_verify_sms, rg_txt_verify_generate,
-        rg_txt_verify_register, txtTimer;
-    private ImageView rg_img_verify_connect, rg_img_verify_sms, rg_img_verify_generate,
-        rg_img_verify_register;
+    private TextView txtAgreement_register, txtTitleToolbar, txtTitleRegister, txtDesc, txtTitleAgreement;
+    private ProgressBar rg_prg_verify_connect, rg_prg_verify_sms, rg_prg_verify_generate, rg_prg_verify_register;
+    private TextView rg_txt_verify_connect, rg_txt_verify_sms, rg_txt_verify_generate, rg_txt_verify_register, txtTimer;
+    private ImageView rg_img_verify_connect, rg_img_verify_sms, rg_img_verify_generate, rg_img_verify_register;
     private ViewGroup layout_agreement;
     private ViewGroup layout_verify;
 
@@ -158,8 +155,7 @@ public class ActivityRegister extends ActivityEnhanced {
                 }
                 regex = extras.getString("REGEX");
                 String body = extras.getString("TERMS_BODY");
-                if (body != null
-                    & txtAgreement_register != null) { //TODO [Saeed Mozaffari] [2016-09-01 9:28 AM] -
+                if (body != null & txtAgreement_register != null) { //TODO [Saeed Mozaffari] [2016-09-01 9:28 AM] -
                     // txtAgreement_register !=null is wrong. change it
                     txtAgreement_register.setText(Html.fromHtml(body));
                 }
@@ -176,8 +172,7 @@ public class ActivityRegister extends ActivityEnhanced {
         txtTitleToolbar.setTypeface(G.FONT_IGAP);
 
         edtPhoneNumber.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
 
             @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -186,9 +181,7 @@ public class ActivityRegister extends ActivityEnhanced {
 
             @Override public void afterTextChanged(Editable editable) {
                 if (editable.toString().equals("0")) {
-                    Toast.makeText(ActivityRegister.this,
-                        getResources().getString(R.string.Toast_First_0), Toast.LENGTH_SHORT)
-                        .show();
+                    Toast.makeText(ActivityRegister.this, getResources().getString(R.string.Toast_First_0), Toast.LENGTH_SHORT).show();
                     edtPhoneNumber.setText("");
                 }
             }
@@ -250,10 +243,8 @@ public class ActivityRegister extends ActivityEnhanced {
                 int setHeight = (int) (getResources().getDisplayMetrics().heightPixels * 0.9);
                 dialogChooseCountry.getWindow().setLayout(setWidth, setHeight);
                 //
-                final TextView txtTitle =
-                    (TextView) dialogChooseCountry.findViewById(R.id.rg_txt_titleToolbar);
-                edtSearchView =
-                    (SearchView) dialogChooseCountry.findViewById(R.id.rg_edtSearch_toolbar);
+                final TextView txtTitle = (TextView) dialogChooseCountry.findViewById(R.id.rg_txt_titleToolbar);
+                edtSearchView = (SearchView) dialogChooseCountry.findViewById(R.id.rg_edtSearch_toolbar);
 
                 txtTitle.setOnClickListener(new View.OnClickListener() {
                     @Override public void onClick(View view) {
@@ -264,20 +255,17 @@ public class ActivityRegister extends ActivityEnhanced {
                     }
                 });
 
-                edtSearchView.setOnCloseListener(
-                    new SearchView.OnCloseListener() { // close SearchView and show title again
-                        @Override public boolean onClose() {
+                edtSearchView.setOnCloseListener(new SearchView.OnCloseListener() { // close SearchView and show title again
+                    @Override public boolean onClose() {
 
-                            txtTitle.setVisibility(View.VISIBLE);
+                        txtTitle.setVisibility(View.VISIBLE);
 
-                            return false;
-                        }
-                    });
+                        return false;
+                    }
+                });
 
-                final ViewGroup root =
-                    (ViewGroup) dialogChooseCountry.findViewById(android.R.id.content);
-                InputMethodManager im =
-                    (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                final ViewGroup root = (ViewGroup) dialogChooseCountry.findViewById(android.R.id.content);
+                InputMethodManager im = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
                 SoftKeyboard softKeyboard = new SoftKeyboard(root, im);
                 softKeyboard.setSoftKeyboardCallback(new SoftKeyboard.SoftKeyboardChanged() {
                     @Override public void onSoftKeyboardHide() {
@@ -308,8 +296,7 @@ public class ActivityRegister extends ActivityEnhanced {
                     }
                 });
 
-                final ListView listView =
-                    (ListView) dialogChooseCountry.findViewById(R.id.lstContent);
+                final ListView listView = (ListView) dialogChooseCountry.findViewById(R.id.lstContent);
                 adapterDialog = new AdapterDialog(ActivityRegister.this, items);
                 listView.setAdapter(adapterDialog);
 
@@ -362,18 +349,15 @@ public class ActivityRegister extends ActivityEnhanced {
                     @Override public void onClick(View v) {
 
                         G.onInfoCountryResponse = new OnInfoCountryResponse() {
-                            @Override public void onInfoCountryResponse(final int callingCode,
-                                final String name, final String pattern, final String regexR) {
+                            @Override public void onInfoCountryResponse(final int callingCode, final String name, final String pattern, final String regexR) {
                                 G.handler.post(new Runnable() {
                                     @Override public void run() {
                                         edtCodeNumber.setText("+" + callingCode);
-                                        edtPhoneNumber.setMask(
-                                            pattern.replace("X", "#").replace(" ", "-"));
+                                        edtPhoneNumber.setMask(pattern.replace("X", "#").replace(" ", "-"));
                                         regex = regexR;
                                         Log.i("SOC_INFO", "onInfoCountryResponse regex : " + regex);
                                         btnStart.setEnabled(true);
-                                        Toast.makeText(G.context, "info country received",
-                                            Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(G.context, "info country received", Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             }
@@ -402,89 +386,69 @@ public class ActivityRegister extends ActivityEnhanced {
 
         //=============================================================================================================== click button for start verify
 
-        final Animation trans_x_in =
-            AnimationUtils.loadAnimation(G.context, R.anim.rg_tansiton_y_in);
-        final Animation trans_x_out =
-            AnimationUtils.loadAnimation(G.context, R.anim.rg_tansiton_y_out);
+        final Animation trans_x_in = AnimationUtils.loadAnimation(G.context, R.anim.rg_tansiton_y_in);
+        final Animation trans_x_out = AnimationUtils.loadAnimation(G.context, R.anim.rg_tansiton_y_out);
         btnStart = (Button) findViewById(R.id.rg_btn_start); //check phone and internet connection
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
 
-                if (edtPhoneNumber.getText().toString().length() > 0
-                    && !regex.equals("")
-                    && edtPhoneNumber.getText().toString().replace("-", "").matches(regex)) {
+                if (edtPhoneNumber.getText().toString().length() > 0 && !regex.equals("") && edtPhoneNumber.getText().toString().replace("-", "").matches(regex)) {
 
                     phoneNumber = edtPhoneNumber.getText().toString();
 
-                    MaterialDialog dialog =
-                        new MaterialDialog.Builder(ActivityRegister.this).customView(
-                            R.layout.rg_mdialog_text, true)
-                            .positiveText("OK")
-                            .negativeText("EDIT")
-                            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                @Override public void onClick(@NonNull MaterialDialog dialog,
-                                    @NonNull DialogAction which) {
+                    MaterialDialog dialog = new MaterialDialog.Builder(ActivityRegister.this).customView(R.layout.rg_mdialog_text, true)
+                        .positiveText("OK")
+                        .negativeText("EDIT")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                                    int portaret_landscope =
-                                        getResources().getConfiguration().orientation;
+                                int portaret_landscope = getResources().getConfiguration().orientation;
 
-                                    if (portaret_landscope == 1) {//portrait
-                                        setRequestedOrientation(
-                                            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                                        txtAgreement_register =
-                                            (TextView) findViewById(R.id.txtAgreement_register);
-                                        txtAgreement_register.setMovementMethod(
-                                            new ScrollingMovementMethod());
+                                if (portaret_landscope == 1) {//portrait
+                                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                                    txtAgreement_register = (TextView) findViewById(R.id.txtAgreement_register);
+                                    txtAgreement_register.setMovementMethod(new ScrollingMovementMethod());
 
-                                        layout_agreement.setVisibility(View.GONE);
-                                        layout_agreement.startAnimation(trans_x_out);
-                                        G.handler.postDelayed(new Runnable() {
-                                            @Override public void run() {
+                                    layout_agreement.setVisibility(View.GONE);
+                                    layout_agreement.startAnimation(trans_x_out);
+                                    G.handler.postDelayed(new Runnable() {
+                                        @Override public void run() {
 
-                                                btnChoseCountry.setEnabled(false);
-                                                btnChoseCountry.setTextColor(
-                                                    getResources().getColor(
-                                                        R.color.rg_border_editText));
-                                                edtPhoneNumber.setEnabled(false);
-                                                edtPhoneNumber.setTextColor(getResources().getColor(
-                                                    R.color.rg_border_editText));
+                                            btnChoseCountry.setEnabled(false);
+                                            btnChoseCountry.setTextColor(getResources().getColor(R.color.rg_border_editText));
+                                            edtPhoneNumber.setEnabled(false);
+                                            edtPhoneNumber.setTextColor(getResources().getColor(R.color.rg_border_editText));
 
-                                                edtCodeNumber.setEnabled(false);
-                                                edtCodeNumber.setTextColor(getResources().getColor(
-                                                    R.color.rg_border_editText));
+                                            edtCodeNumber.setEnabled(false);
+                                            edtCodeNumber.setTextColor(getResources().getColor(R.color.rg_border_editText));
 
-                                                layout_verify.setVisibility(View.VISIBLE);
-                                                layout_verify.startAnimation(trans_x_in);
+                                            layout_verify.setVisibility(View.VISIBLE);
+                                            layout_verify.startAnimation(trans_x_in);
 
-                                                checkVerify();
-                                            }
-                                        }, 600);
-                                    } else {
+                                            checkVerify();
+                                        }
+                                    }, 600);
+                                } else {
 
-                                        setRequestedOrientation(
-                                            ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
-                                        dialogVerifyLandScape = new Dialog(ActivityRegister.this);
+                                    dialogVerifyLandScape = new Dialog(ActivityRegister.this);
 
-                                        btnChoseCountry.setTextColor(getResources().getColor(
-                                            R.color.rg_background_editText));
-                                        btnChoseCountry.setEnabled(false);
-                                        edtPhoneNumber.setTextColor(getResources().getColor(
-                                            R.color.rg_background_editText));
-                                        edtPhoneNumber.setEnabled(false);
+                                    btnChoseCountry.setTextColor(getResources().getColor(R.color.rg_background_editText));
+                                    btnChoseCountry.setEnabled(false);
+                                    edtPhoneNumber.setTextColor(getResources().getColor(R.color.rg_background_editText));
+                                    edtPhoneNumber.setEnabled(false);
 
-                                        dialogVerifyLandScape.requestWindowFeature(
-                                            Window.FEATURE_NO_TITLE);
-                                        dialogVerifyLandScape.setContentView(
-                                            R.layout.rg_dialog_verify_land);
-                                        dialogVerifyLandScape.setCanceledOnTouchOutside(false);
-                                        dialogVerifyLandScape.show();
+                                    dialogVerifyLandScape.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                    dialogVerifyLandScape.setContentView(R.layout.rg_dialog_verify_land);
+                                    dialogVerifyLandScape.setCanceledOnTouchOutside(false);
+                                    dialogVerifyLandScape.show();
 
-                                        checkVerify();
-                                    }
+                                    checkVerify();
                                 }
-                            })
-                            .build();
+                            }
+                        })
+                        .build();
 
                     View view = dialog.getCustomView();
                     assert view != null;
@@ -493,10 +457,7 @@ public class ActivityRegister extends ActivityEnhanced {
                     dialog.show();
                 } else {
 
-                    new MaterialDialog.Builder(ActivityRegister.this).title(R.string.phone_number)
-                        .content(R.string.Toast_Enter_Phone_Number)
-                        .positiveText(R.string.B_ok)
-                        .show();
+                    new MaterialDialog.Builder(ActivityRegister.this).title(R.string.phone_number).content(R.string.Toast_Enter_Phone_Number).positiveText(R.string.B_ok).show();
                 }
             }
         });
@@ -514,10 +475,8 @@ public class ActivityRegister extends ActivityEnhanced {
                 int marginBottomChooseCountry = (int) getResources().getDimension(R.dimen.dp8);
                 int marginBottomStart = 0;
 
-                RelativeLayout.LayoutParams params =
-                    (RelativeLayout.LayoutParams) btnChoseCountry.getLayoutParams();
-                params.setMargins(marginLeft, marginTopChooseCountry, marginRight,
-                    marginBottomChooseCountry); //left, top, right, bottom
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) btnChoseCountry.getLayoutParams();
+                params.setMargins(marginLeft, marginTopChooseCountry, marginRight, marginBottomChooseCountry); //left, top, right, bottom
                 btnChoseCountry.setLayoutParams(params);
                 //
                 //                ViewGroup li = (ViewGroup) findViewById(R.id.rg_layout_center);
@@ -527,10 +486,8 @@ public class ActivityRegister extends ActivityEnhanced {
                 // marginRight, 400); //left, top, right, bottom
                 //                li.setLayoutParams(params3);
 
-                RelativeLayout.LayoutParams params2 =
-                    (RelativeLayout.LayoutParams) btnStart.getLayoutParams();
-                params2.setMargins(marginLeft, marginTopStart, marginRight,
-                    marginBottomStart); //left, top, right, bottom
+                RelativeLayout.LayoutParams params2 = (RelativeLayout.LayoutParams) btnStart.getLayoutParams();
+                params2.setMargins(marginLeft, marginTopStart, marginRight, marginBottomStart); //left, top, right, bottom
                 btnStart.setLayoutParams(params2);
             }
         }
@@ -552,51 +509,39 @@ public class ActivityRegister extends ActivityEnhanced {
                         @Override public void run() {
                             userRegister();
                             btnStart.setEnabled(false);
-                            countDownTimer =
-                                new CountDownTimer(1000 * 60, 1000) { // wait for verify sms
+                            countDownTimer = new CountDownTimer(1000 * 60, 1000) { // wait for verify sms
 
-                                    TextView txtTimerLand;
+                                TextView txtTimerLand;
 
-                                    public void onTick(long millisUntilFinished) {
+                                public void onTick(long millisUntilFinished) {
 
-                                        int seconds = (int) ((millisUntilFinished) / 1000);
-                                        int minutes = seconds / 60;
-                                        seconds = seconds % 60;
-                                        int portrait_landscape =
-                                            getResources().getConfiguration().orientation;
-                                        if (portrait_landscape == 1) {//portrait
-                                            txtTimer =
-                                                (TextView) findViewById(R.id.rg_txt_verify_timer);
-                                            txtTimer.setVisibility(View.VISIBLE);
-                                            txtTimer.setText(""
-                                                + String.format("%02d", minutes)
-                                                + ":"
-                                                + String.format("%02d", seconds));
-                                        } else {
-                                            txtTimerLand =
-                                                (TextView) dialogVerifyLandScape.findViewById(
-                                                    R.id.rg_txt_verify_timer_DialogLand);
-                                            txtTimer.setVisibility(View.VISIBLE);
-                                            txtTimerLand.setText(""
-                                                + String.format("%02d", minutes)
-                                                + ":"
-                                                + String.format("%02d", seconds));
-                                        }
+                                    int seconds = (int) ((millisUntilFinished) / 1000);
+                                    int minutes = seconds / 60;
+                                    seconds = seconds % 60;
+                                    int portrait_landscape = getResources().getConfiguration().orientation;
+                                    if (portrait_landscape == 1) {//portrait
+                                        txtTimer = (TextView) findViewById(R.id.rg_txt_verify_timer);
+                                        txtTimer.setVisibility(View.VISIBLE);
+                                        txtTimer.setText("" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
+                                    } else {
+                                        txtTimerLand = (TextView) dialogVerifyLandScape.findViewById(R.id.rg_txt_verify_timer_DialogLand);
+                                        txtTimer.setVisibility(View.VISIBLE);
+                                        txtTimerLand.setText("" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
                                     }
+                                }
 
-                                    public void onFinish() {
-                                        int portrait_landscape =
-                                            getResources().getConfiguration().orientation;
-                                        if (portrait_landscape == 1) {//portrait
-                                            txtTimer.setText("00:00");
-                                            txtTimer.setVisibility(View.VISIBLE);
-                                        } else {
-                                            txtTimerLand.setText("00:00");
-                                            txtTimer.setVisibility(View.VISIBLE);
-                                        }
-                                        errorVerifySms(); // open rg_dialog for enter sms code
+                                public void onFinish() {
+                                    int portrait_landscape = getResources().getConfiguration().orientation;
+                                    if (portrait_landscape == 1) {//portrait
+                                        txtTimer.setText("00:00");
+                                        txtTimer.setVisibility(View.VISIBLE);
+                                    } else {
+                                        txtTimerLand.setText("00:00");
+                                        txtTimer.setVisibility(View.VISIBLE);
                                     }
-                                };
+                                    errorVerifySms(); // open rg_dialog for enter sms code
+                                }
+                            };
                         }
                     });
                 } else { // connection error
@@ -605,12 +550,9 @@ public class ActivityRegister extends ActivityEnhanced {
                             edtPhoneNumber.setEnabled(true);
                             rg_prg_verify_connect.setVisibility(View.GONE);
                             rg_img_verify_connect.setImageResource(R.mipmap.alert);
-                            rg_img_verify_connect.setColorFilter(
-                                getResources().getColor(R.color.rg_error_red),
-                                PorterDuff.Mode.SRC_ATOP);
+                            rg_img_verify_connect.setColorFilter(getResources().getColor(R.color.rg_error_red), PorterDuff.Mode.SRC_ATOP);
                             rg_img_verify_connect.setVisibility(View.VISIBLE);
-                            rg_txt_verify_connect.setTextColor(
-                                getResources().getColor(R.color.rg_error_red));
+                            rg_txt_verify_connect.setTextColor(getResources().getColor(R.color.rg_error_red));
                             rg_txt_verify_connect.setText("Please check your connection");
                         }
                     });
@@ -622,8 +564,7 @@ public class ActivityRegister extends ActivityEnhanced {
 
     private void setItem() { //invoke object
 
-        int portrait_landscape =
-            getResources().getConfiguration().orientation; //check for portrait & landScape
+        int portrait_landscape = getResources().getConfiguration().orientation; //check for portrait & landScape
         if (portrait_landscape == 1) {//portrait
             rg_prg_verify_connect = (ProgressBar) findViewById(R.id.rg_prg_verify_connect);
             rg_txt_verify_connect = (TextView) findViewById(R.id.rg_txt_verify_connect);
@@ -641,26 +582,19 @@ public class ActivityRegister extends ActivityEnhanced {
             rg_txt_verify_register = (TextView) findViewById(R.id.rg_txt_verify_server);
             rg_img_verify_register = (ImageView) findViewById(R.id.rg_img_verify_server);
         } else {
-            rg_prg_verify_connect = (ProgressBar) dialogVerifyLandScape.findViewById(
-                R.id.rg_prg_verify_connect_DialogLand);
-            rg_txt_verify_connect = (TextView) dialogVerifyLandScape.findViewById(
-                R.id.rg_txt_verify_connect_DialogLand);
-            rg_img_verify_connect = (ImageView) dialogVerifyLandScape.findViewById(
-                R.id.rg_img_verify_connect_DialogLand);
+            rg_prg_verify_connect = (ProgressBar) dialogVerifyLandScape.findViewById(R.id.rg_prg_verify_connect_DialogLand);
+            rg_txt_verify_connect = (TextView) dialogVerifyLandScape.findViewById(R.id.rg_txt_verify_connect_DialogLand);
+            rg_img_verify_connect = (ImageView) dialogVerifyLandScape.findViewById(R.id.rg_img_verify_connect_DialogLand);
 
-            rg_prg_verify_sms =
-                (ProgressBar) dialogVerifyLandScape.findViewById(R.id.rg_prg_verify_sms_DialogLand);
-            rg_txt_verify_sms =
-                (TextView) dialogVerifyLandScape.findViewById(R.id.rg_txt_verify_sms_DialogLand);
-            rg_img_verify_sms =
-                (ImageView) dialogVerifyLandScape.findViewById(R.id.rg_img_verify_sms_DialogLand);
+            rg_prg_verify_sms = (ProgressBar) dialogVerifyLandScape.findViewById(R.id.rg_prg_verify_sms_DialogLand);
+            rg_txt_verify_sms = (TextView) dialogVerifyLandScape.findViewById(R.id.rg_txt_verify_sms_DialogLand);
+            rg_img_verify_sms = (ImageView) dialogVerifyLandScape.findViewById(R.id.rg_img_verify_sms_DialogLand);
 
             rg_prg_verify_generate = (ProgressBar) findViewById(R.id.rg_prg_verify_key_DialogLand);
             rg_txt_verify_generate = (TextView) findViewById(R.id.rg_txt_verify_key_DialogLand);
             rg_img_verify_generate = (ImageView) findViewById(R.id.rg_img_verify_key_DialogLand);
 
-            rg_prg_verify_register =
-                (ProgressBar) findViewById(R.id.rg_prg_verify_server_DialogLand);
+            rg_prg_verify_register = (ProgressBar) findViewById(R.id.rg_prg_verify_server_DialogLand);
             rg_txt_verify_register = (TextView) findViewById(R.id.rg_txt_verify_server_DialogLand);
             rg_img_verify_register = (ImageView) findViewById(R.id.rg_img_verify_server_DialogLand);
         }
@@ -672,8 +606,7 @@ public class ActivityRegister extends ActivityEnhanced {
         rg_prg_verify_sms.setVisibility(View.GONE);
         rg_img_verify_sms.setImageResource(R.mipmap.alert);
         rg_img_verify_sms.setVisibility(View.VISIBLE);
-        rg_img_verify_sms.setColorFilter(getResources().getColor(R.color.rg_error_red),
-            PorterDuff.Mode.SRC_ATOP);
+        rg_img_verify_sms.setColorFilter(getResources().getColor(R.color.rg_error_red), PorterDuff.Mode.SRC_ATOP);
         rg_txt_verify_sms.setText("Error verification SMS");
         rg_txt_verify_sms.setTextColor(getResources().getColor(R.color.rg_error_red));
 
@@ -682,8 +615,7 @@ public class ActivityRegister extends ActivityEnhanced {
         dialog.setContentView(R.layout.rg_dialog_verify_code);
         dialog.setCanceledOnTouchOutside(false);
 
-        final EditText edtEnterCodeVerify = (EditText) dialog.findViewById(
-            R.id.rg_edt_dialog_verifyCode); //EditText For Enter sms cod
+        final EditText edtEnterCodeVerify = (EditText) dialog.findViewById(R.id.rg_edt_dialog_verifyCode); //EditText For Enter sms cod
 
         TextView btnCancel = (TextView) dialog.findViewById(R.id.rg_btn_cancelVerifyCode);
         btnCancel.setOnClickListener(new View.OnClickListener() {
@@ -694,10 +626,7 @@ public class ActivityRegister extends ActivityEnhanced {
                     dialog.dismiss();
                 } else {
 
-                    new MaterialDialog.Builder(ActivityRegister.this).title(R.string.Enter_Code)
-                        .content(R.string.Toast_Enter_Code)
-                        .positiveText(R.string.B_ok)
-                        .show();
+                    new MaterialDialog.Builder(ActivityRegister.this).title(R.string.Enter_Code).content(R.string.Toast_Enter_Code).positiveText(R.string.B_ok).show();
                 }
             }
         });
@@ -722,9 +651,8 @@ public class ActivityRegister extends ActivityEnhanced {
 
         G.onUserRegistration = new OnUserRegistration() {
 
-            @Override public void onRegister(final String userNameR, final long userIdR,
-                final ProtoUserRegister.UserRegisterResponse.Method methodValue,
-                final List<Long> smsNumbersR, String regex, int verifyCodeDigitCount) {
+            @Override public void onRegister(final String userNameR, final long userIdR, final ProtoUserRegister.UserRegisterResponse.Method methodValue, final List<Long> smsNumbersR, String regex,
+                int verifyCodeDigitCount) {
                 digitCount = verifyCodeDigitCount;
                 countDownTimer.start();
                 regexFetchCodeVerification = regex;
@@ -741,16 +669,14 @@ public class ActivityRegister extends ActivityEnhanced {
 
                             errorVerifySms(); // open rg_dialog for enter sms code
                             countDownTimer.cancel();
-                        } else if (methodValue
-                            == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SMS_SOCKET) {//verification with sms and socket
+                        } else if (methodValue == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SMS_SOCKET) {//verification with sms and socket
 
                         }
 
                         rg_prg_verify_connect.setVisibility(View.GONE);
                         rg_img_verify_connect.setVisibility(View.VISIBLE);
                         rg_txt_verify_connect.setTextAppearance(G.context, R.style.RedHUGEText);
-                        rg_txt_verify_connect.setTextColor(
-                            getResources().getColor(R.color.rg_text_verify));
+                        rg_txt_verify_connect.setTextColor(getResources().getColor(R.color.rg_text_verify));
 
                         rg_prg_verify_sms.setVisibility(View.VISIBLE);
                         rg_txt_verify_sms.setTextAppearance(G.context, R.style.RedHUGEText);
@@ -812,8 +738,7 @@ public class ActivityRegister extends ActivityEnhanced {
     private void requestRegister() {
 
         phoneNumber = phoneNumber.replace("-", "");
-        ProtoUserRegister.UserRegister.Builder builder =
-            ProtoUserRegister.UserRegister.newBuilder();
+        ProtoUserRegister.UserRegister.Builder builder = ProtoUserRegister.UserRegister.newBuilder();
         builder.setCountryCode(isoCode);
         builder.setPhoneNumber(Long.parseLong(phoneNumber));
         builder.setRequest(ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
@@ -855,18 +780,14 @@ public class ActivityRegister extends ActivityEnhanced {
                         rg_prg_verify_sms.setVisibility(View.GONE);
                         rg_img_verify_sms.setVisibility(View.VISIBLE);
                         rg_img_verify_sms.setImageResource(R.mipmap.check);
-                        rg_img_verify_sms.setColorFilter(
-                            getResources().getColor(R.color.rg_text_verify),
-                            PorterDuff.Mode.SRC_ATOP);
-                        rg_txt_verify_sms.setTextColor(
-                            getResources().getColor(R.color.rg_text_verify));
+                        rg_img_verify_sms.setColorFilter(getResources().getColor(R.color.rg_text_verify), PorterDuff.Mode.SRC_ATOP);
+                        rg_txt_verify_sms.setTextColor(getResources().getColor(R.color.rg_text_verify));
 
                         newUser = newUserR;
                         token = tokenR;
                         rg_prg_verify_generate.setVisibility(View.GONE);
                         rg_img_verify_generate.setVisibility(View.VISIBLE);
-                        rg_txt_verify_generate.setTextColor(
-                            getResources().getColor(R.color.rg_text_verify));
+                        rg_txt_verify_generate.setTextColor(getResources().getColor(R.color.rg_text_verify));
 
                         userLogin(token);
                     }
@@ -926,11 +847,7 @@ public class ActivityRegister extends ActivityEnhanced {
                             // User is blocked , You cannot verify the user
                             // TODO: 9/25/2016 Error 105 - USER_VERIFY_BLOCKED_USER
 
-                            new MaterialDialog.Builder(ActivityRegister.this).title(
-                                R.string.USER_VERIFY_BLOCKED_USER)
-                                .content(R.string.Toast_Number_Block)
-                                .positiveText(R.string.B_ok)
-                                .show();
+                            new MaterialDialog.Builder(ActivityRegister.this).title(R.string.USER_VERIFY_BLOCKED_USER).content(R.string.Toast_Number_Block).positiveText(R.string.B_ok).show();
                         }
                     });
                 } else if (majorCode == 106) {
@@ -972,16 +889,15 @@ public class ActivityRegister extends ActivityEnhanced {
                         Realm realm = Realm.getDefaultInstance();
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override public void execute(Realm realm) {
-                                RealmUserInfo userInfo = realm.where(RealmUserInfo.class)
-                                    .equalTo(RealmUserInfoFields.USER_ID, userId)
-                                    .findFirst();
+                                RealmUserInfo userInfo = realm.where(RealmUserInfo.class).equalTo(RealmUserInfoFields.USER_INFO.ID, userId).findFirst();
                                 if (userInfo == null) {
                                     userInfo = realm.createObject(RealmUserInfo.class);
-                                    userInfo.setUserId(userId);
+                                    RealmRegisteredInfo registeredInfo = realm.createObject(RealmRegisteredInfo.class);
+                                    registeredInfo.setId(userId);
+                                    userInfo.setUserInfo(registeredInfo);
                                 }
-                                userInfo.setUserName(userName);
-                                userInfo.setCountryISOCode(isoCode);
-                                userInfo.setPhoneNumber(phoneNumber);
+                                userInfo.getUserInfo().setUsername(userName);
+                                userInfo.getUserInfo().setPhoneNumber(phoneNumber);
                                 userInfo.setToken(token);
                                 if (!newUser) {
                                     userInfo.setUserRegistrationState(true);
@@ -993,8 +909,7 @@ public class ActivityRegister extends ActivityEnhanced {
 
                         rg_prg_verify_register.setVisibility(View.GONE);
                         rg_img_verify_register.setVisibility(View.VISIBLE);
-                        rg_txt_verify_register.setTextColor(
-                            getResources().getColor(R.color.rg_text_verify));
+                        rg_txt_verify_register.setTextColor(getResources().getColor(R.color.rg_text_verify));
 
                         if (newUser) {
                             Intent intent = new Intent(G.context, ActivityProfile.class);
@@ -1049,16 +964,15 @@ public class ActivityRegister extends ActivityEnhanced {
     private void getUserInfo() {
 
         G.onUserInfoResponse = new OnUserInfoResponse() {
-            @Override public void onUserInfo(final ProtoGlobal.RegisteredUser user,
-                ProtoResponse.Response response) {
+            @Override public void onUserInfo(final ProtoGlobal.RegisteredUser user, ProtoResponse.Response response) {
 
                 Realm realm = Realm.getDefaultInstance();
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override public void execute(Realm realm) {
                         RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                        realmUserInfo.setNickName(user.getDisplayName());
-                        realmUserInfo.setInitials(user.getInitials());
-                        realmUserInfo.setColor(user.getColor());
+                        realmUserInfo.getUserInfo().setDisplayName(user.getDisplayName());
+                        realmUserInfo.getUserInfo().setInitials(user.getInitials());
+                        realmUserInfo.getUserInfo().setColor(user.getColor());
                         realmUserInfo.setUserRegistrationState(true);
 
                         runOnUiThread(new Runnable() {
@@ -1096,8 +1010,7 @@ public class ActivityRegister extends ActivityEnhanced {
             dialog.dismiss();
         }
 
-        String verificationCode =
-            HelperString.regexExtractValue(message, regexFetchCodeVerification);
+        String verificationCode = HelperString.regexExtractValue(message, regexFetchCodeVerification);
         countDownTimer.cancel(); //cancel method CountDown and continue process verify
 
         rg_prg_verify_sms.setVisibility(View.GONE);
@@ -1115,8 +1028,7 @@ public class ActivityRegister extends ActivityEnhanced {
             @Override public void onSmsReceive(String message) {
                 Log.i("UUU", "onSmsReceive 1 message : " + message);
                 try {
-                    if (message != null && !message.isEmpty() && !message.equals("null") && !message
-                        .equals("")) {
+                    if (message != null && !message.isEmpty() && !message.equals("null") && !message.equals("")) {
                         Log.i("UUU", "onSmsReceive 2");
                         rg_txt_verify_sms.setText(message);
                         receiveVerifySms(message);
@@ -1154,8 +1066,7 @@ public class ActivityRegister extends ActivityEnhanced {
                 rg_img_verify_sms.setVisibility(View.VISIBLE);
                 rg_txt_verify_sms.setTextColor(getResources().getColor(R.color.rg_text_verify));
 
-                receiveVerifySms(
-                    "Your login code is : 12345 This code can be used to login to your account.");
+                receiveVerifySms("Your login code is : 12345 This code can be used to login to your account.");
             }
         }, 4000);
     }
@@ -1164,8 +1075,7 @@ public class ActivityRegister extends ActivityEnhanced {
         // Save the user's current game state
         savedInstanceState.putString(KEY_SAVE_CODENUMBER, edtCodeNumber.getText().toString());
         savedInstanceState.putString(KEY_SAVE_PHONENUMBER_MASK, edtPhoneNumber.getMask());
-        savedInstanceState.putString(KEY_SAVE_PHONENUMBER_NUMBER,
-            edtPhoneNumber.getText().toString());
+        savedInstanceState.putString(KEY_SAVE_PHONENUMBER_NUMBER, edtPhoneNumber.getText().toString());
         savedInstanceState.putString(KEY_SAVE_NAMECOUNTRY, btnChoseCountry.getText().toString());
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);

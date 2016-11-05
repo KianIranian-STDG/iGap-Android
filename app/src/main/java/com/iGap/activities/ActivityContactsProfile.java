@@ -91,7 +91,7 @@ import static com.iGap.G.context;
 public class ActivityContactsProfile extends ActivityEnhanced {
     private long userId = 0;
     private long roomId;
-    private long phone = 0;
+    private String phone = "";
     private String displayName = "";
     private String username = "";
     private String firstName;
@@ -149,7 +149,7 @@ public class ActivityContactsProfile extends ActivityEnhanced {
         RealmContacts realmUser = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, userId).findFirst();
 
         if (realmUser != null) {
-            phone = realmUser.getPhone();
+            phone = Long.toString(realmUser.getPhone());
             displayName = realmUser.getDisplay_name();
             firstName = realmUser.getFirst_name();
             lastName = realmUser.getLast_name();
@@ -158,7 +158,7 @@ public class ActivityContactsProfile extends ActivityEnhanced {
             color = realmUser.getColor();
             initials = realmUser.getInitials();
         } else {
-            phone = realmRegisteredInfo.getPhone();
+            phone = realmRegisteredInfo.getPhoneNumber();
             displayName = realmRegisteredInfo.getDisplayName();
             firstName = realmRegisteredInfo.getFirstName();
             lastName = realmRegisteredInfo.getLastName();

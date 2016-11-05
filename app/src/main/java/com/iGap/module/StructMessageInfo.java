@@ -281,11 +281,10 @@ public class StructMessageInfo implements Parcelable {
             messageInfo.sendType = MyType.SendType.recvive;
         }
         if (message.getForwardFrom() != null) {
-            RealmUserInfo userInfo = realm.where(RealmUserInfo.class)
-                .equalTo(RealmUserInfoFields.USER_ID, message.getForwardFrom().getUserId())
+            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).equalTo(RealmUserInfoFields.USER_INFO.ID, message.getForwardFrom().getUserId())
                 .findFirst();
             if (userInfo != null) {
-                messageInfo.forwardMessageFrom = userInfo.getNickName();
+                messageInfo.forwardMessageFrom = userInfo.getUserInfo().getDisplayName();
             }
         }
         return messageInfo;
@@ -329,11 +328,10 @@ public class StructMessageInfo implements Parcelable {
             messageInfo.userInfo = StructRegisteredInfo.build(roomMessage.getRoomMessageContact());
         }
         if (roomMessage.getForwardMessage() != null) {
-            RealmUserInfo userInfo = realm.where(RealmUserInfo.class)
-                .equalTo(RealmUserInfoFields.USER_ID, roomMessage.getForwardMessage().getUserId())
+            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).equalTo(RealmUserInfoFields.USER_INFO.ID, roomMessage.getForwardMessage().getUserId())
                 .findFirst();
             if (userInfo != null) {
-                messageInfo.forwardMessageFrom = userInfo.getNickName();
+                messageInfo.forwardMessageFrom = userInfo.getUserInfo().getDisplayName();
             }
         }
 

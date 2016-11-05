@@ -31,7 +31,7 @@ public class ChatEditMessageResponse extends MessageHandler {
             (ProtoChatEditMessage.ChatEditMessageResponse.Builder) message;
 
         Realm realm = Realm.getDefaultInstance();
-        String nickname = realm.where(RealmUserInfo.class).findFirst().getNickName();
+        String nickname = realm.where(RealmUserInfo.class).findFirst().getUserInfo().getDisplayName();
         Log.i("CLI_EDIT", "ChatEditMessageResponse for " + nickname + " : " + message);
         realm.executeTransaction(new Realm.Transaction() {
             @Override public void execute(Realm realm) {

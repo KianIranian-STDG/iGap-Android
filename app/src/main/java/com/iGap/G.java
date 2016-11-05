@@ -320,8 +320,8 @@ public class G extends Application {
                         @Override public void execute(Realm realm) {
                             RealmUserInfo realmUserInfo =
                                 realm.where(RealmUserInfo.class).findFirst();
-                            realmUserInfo.setColor(user.getColor());
-                            realmUserInfo.setInitials(user.getInitials());
+                            realmUserInfo.getUserInfo().setColor(user.getColor());
+                            realmUserInfo.getUserInfo().setInitials(user.getInitials());
                         }
                     });
 
@@ -593,7 +593,7 @@ public class G extends Application {
                         Log.i("FFF", "Login");
                         Toast.makeText(G.context, "User Login!", Toast.LENGTH_SHORT).show();
                         new RequestClientCondition().clientCondition();
-                        getUserInfo();
+                        //getUserInfo();
                         importContact();
                         sendWaitingRequestWrappers();
                     }

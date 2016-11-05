@@ -21,7 +21,6 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.activities.ActivitySetting;
 import com.iGap.interfaces.OnFileDownloadResponse;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.AndroidUtils;
@@ -366,7 +365,6 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
                                     .beginTransaction()
                                     .remove(FragmentShowImage.this)
                                     .commit();
-                                ((ActivitySetting) getActivity()).setAvatar();
                             } else if (pageIndex == mAdapter.getCount()) {
                                 pageIndex--;
                             }

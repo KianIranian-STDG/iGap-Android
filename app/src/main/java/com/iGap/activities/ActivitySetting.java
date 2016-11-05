@@ -51,38 +51,34 @@ import com.iGap.interfaces.OnSmsReceive;
 import com.iGap.interfaces.OnUserAvatarDelete;
 import com.iGap.interfaces.OnUserAvatarResponse;
 import com.iGap.interfaces.OnUserDelete;
-import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.interfaces.OnUserProfileCheckUsername;
-import com.iGap.interfaces.OnUserProfileGetSelfRemove;
 import com.iGap.interfaces.OnUserProfileSetEmailResponse;
 import com.iGap.interfaces.OnUserProfileSetGenderResponse;
 import com.iGap.interfaces.OnUserProfileSetNickNameResponse;
-import com.iGap.interfaces.OnUserProfileSetSelfRemove;
 import com.iGap.interfaces.OnUserProfileUpdateUsername;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.FileUploadStructure;
-import com.iGap.module.HelperDecodeFile;
 import com.iGap.module.IncomingSms;
 import com.iGap.module.SHP_SETTING;
-import com.iGap.module.StructMessageInfo;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.proto.ProtoUserDelete;
 import com.iGap.proto.ProtoUserProfileCheckUsername;
+import com.iGap.realm.RealmAttachment;
+import com.iGap.realm.RealmAvatar;
+import com.iGap.realm.RealmAvatarFields;
 import com.iGap.realm.RealmAvatarPath;
-import com.iGap.realm.RealmAvatarToken;
+import com.iGap.realm.RealmRegisteredInfo;
+import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestUserAvatarAdd;
 import com.iGap.request.RequestUserAvatarDelete;
 import com.iGap.request.RequestUserDelete;
-import com.iGap.request.RequestUserInfo;
 import com.iGap.request.RequestUserProfileCheckUsername;
-import com.iGap.request.RequestUserProfileGetSelfRemove;
 import com.iGap.request.RequestUserProfileSetEmail;
 import com.iGap.request.RequestUserProfileSetGender;
 import com.iGap.request.RequestUserProfileSetNickname;
-import com.iGap.request.RequestUserProfileSetSelfRemove;
 import com.iGap.request.RequestUserProfileUpdateUsername;
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
@@ -92,7 +88,6 @@ import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Locale;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -123,7 +118,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     private long idAvatar;
     private File nameImageFile;
     private String pathImageDecode;
-    private RealmResults<RealmAvatarPath> realmAvatarPaths;
     public static String pathSaveImage;
 
     private FloatingActionButton fab;
@@ -185,9 +179,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         final RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
         if (realmUserInfo != null) {
             userId = realmUserInfo.getUserId();
-            nickName = realmUserInfo.getNickName();
-            userName = realmUserInfo.getUserName();
-            phoneName = realmUserInfo.getPhoneNumber();
+            nickName = realmUserInfo.getUserInfo().getDisplayName();
+            userName = realmUserInfo.getUserInfo().getUsername();
+            phoneName = realmUserInfo.getUserInfo().getPhoneNumber();
             email = realmUserInfo.getEmail();
             gander = realmUserInfo.getGender();
         }
@@ -360,7 +354,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                         Realm realm1 = Realm.getDefaultInstance();
                                         realm1.executeTransaction(new Realm.Transaction() {
                                             @Override public void execute(Realm realm) {
-                                                realm.where(RealmUserInfo.class).findFirst().setNickName(nickName);
+                                                realm.where(RealmUserInfo.class).findFirst().getUserInfo().setDisplayName(nickName);
                                                 txtNickNameTitle.setText(nickName);
                                                 FragmentDrawerMenu.txtUserName.setText(nickName);
                                             }
@@ -744,7 +738,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                 Realm realm1 = Realm.getDefaultInstance();
                                 realm1.executeTransaction(new Realm.Transaction() {
                                     @Override public void execute(Realm realm) {
-                                        realm.where(RealmUserInfo.class).findFirst().setUserName(username);
+                                        realm.where(RealmUserInfo.class).findFirst().getUserInfo().setUsername(username);
                                         txtUserName.setText(username);
                                         dialog.dismiss();
                                     }
@@ -881,7 +875,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
-        realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
         //fab button for set pic
         fab = (FloatingActionButton) findViewById(R.id.st_fab_setPic);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -908,7 +901,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 ActivitySetting.this.getSupportFragmentManager().beginTransaction().replace(R.id.st_layoutParent, fragment, null).commit();
             }
         });
-        setAvatar();
         textLanguage = sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, "English");
         if (textLanguage.equals("English")) {
             poRbDialogLangouage = 0;
@@ -1423,67 +1415,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         realm.close();
     }
 
-    private void setSelfRemove(int numberOfMonth) {
-
-        G.onUserProfileSetSelfRemove = new OnUserProfileSetSelfRemove() {
-            @Override public void onUserSetSelfRemove(int numberOfMonth) {
-                // set numberOfMonth for selfRemove
-            }
-
-            @Override public void Error(int majorCode, int minorCode) {
-
-            }
-        };
-
-        new RequestUserProfileSetSelfRemove().userProfileSetSelfRemove(numberOfMonth);
-    }
-
-    private void getSelfRemove() {
-
-        G.onUserProfileGetSelfRemove = new OnUserProfileGetSelfRemove() {
-            @Override public void onUserSetSelfRemove(int numberOfMonth) {
-                // set numberOfMonth for selfRemove
-            }
-        };
-
-        new RequestUserProfileGetSelfRemove().userProfileGetSelfRemove();
-    }
-
-    private void getUserInfo() {
-        G.onUserInfoResponse = new OnUserInfoResponse() {
-            @Override public void onUserInfo(final ProtoGlobal.RegisteredUser user, ProtoResponse.Response response) {
-
-                // if response is for own user do this action
-                if (user.getId() == userId) {
-
-                    Realm realm = Realm.getDefaultInstance();
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override public void execute(Realm realm) {
-                            realm.where(RealmUserInfo.class).findFirst().setInitials(user.getInitials());
-                        }
-                    });
-                    realm.close();
-
-                    runOnUiThread(new Runnable() {
-                        @Override public void run() {
-                            setInitials(user.getInitials(), user.getColor());
-                        }
-                    });
-                }
-            }
-
-            @Override public void onUserInfoTimeOut() {
-
-            }
-
-            @Override public void onUserInfoError(int majorCode, int minorCode) {
-
-            }
-        };
-
-        new RequestUserInfo().userInfo(userId);
-    }
-
     //dialog for choose pic from gallery or camera
     private void startDialog(int r) {
 
@@ -1530,7 +1461,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                         }
                                     });
                                     realm.close();
-                                    setAvatar();
                                 }
                             });
                         }
@@ -1598,22 +1528,19 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             if (data != null) {
                 pathSaveImage = data.getData().toString();
             }
+
+            lastUploadedAvatarId = idAvatar + 1L;
+
             //            getIndexRealm();
             Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
                 @Override public void execute(Realm realm) {
-                    final RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                    RealmAvatarPath realmAvatarPath = realm.createObject(RealmAvatarPath.class);
-                    realmAvatarPath.setId((int) (idAvatar + 1L));
-                    Log.i("CCC", "pathSaveImage : " + pathSaveImage);
-                    realmAvatarPath.setPathImage(pathSaveImage);
-                    realmUserInfo.getAvatarPath().add(realmAvatarPath);
+                    RealmAvatar avatar = realm.createObject(RealmAvatar.class);
+                    avatar.setOwnerId(userId);
+                    avatar.setId(lastUploadedAvatarId);
                 }
             });
             realm.close();
-            setAvatar();
-
-            lastUploadedAvatarId = idAvatar + 1L;
 
             G.onChangeUserPhotoListener.onChangePhoto(pathSaveImage);
             new UploadTask().execute(pathSaveImage, lastUploadedAvatarId);
@@ -1672,46 +1599,11 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         return hrSize;
     }
 
-    public void setAvatar() {
-        Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmAvatarPath> realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
-        realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
-        if (realmAvatarPaths.size() > 0) {
-            pathImageDecode = realmAvatarPaths.first().getPathImage();
-            decodeBitmapProfile = HelperDecodeFile.decodeFile(new File(pathImageDecode));
-            circleImageView.setImageBitmap(decodeBitmapProfile);
-            G.onChangeUserPhotoListener.onChangePhoto(pathImageDecode);
-        } else {
-            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-            circleImageView.setImageBitmap(
-                HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp88), realmUserInfo.getInitials(), realmUserInfo.getColor()));
-            G.onChangeUserPhotoListener.onChangePhoto(null);
-        }
-        realm.close();
-    }
-
     private void setInitials(String initials, String color) {
         Log.i("VVV", "initials : " + initials);
         Log.i("VVV", "color : " + color);
         circleImageView.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp88), initials, color));
         G.onChangeUserPhotoListener.onChangeInitials(initials, color);
-    }
-
-    public ArrayList<StructMessageInfo> setItem() {
-
-        ArrayList<StructMessageInfo> items = new ArrayList<>();
-
-        Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmAvatarPath> realmItemList = realm.where(RealmAvatarPath.class).findAll();
-        realmItemList = realmItemList.sort("id", Sort.DESCENDING);
-        for (int i = 0; i < realmItemList.size(); i++) {
-            StructMessageInfo item = new StructMessageInfo();
-            item.filePath = realmItemList.get(i).getPathImage();
-            item.messageID = realmItemList.get(i).getId() + "";
-            items.add(item);
-        }
-
-        return items;
     }
 
     private void getSms(String message) {
@@ -1760,11 +1652,10 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override public void execute(Realm realm) {
-                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                RealmAvatarToken realmAvatarPath = realm.createObject(RealmAvatarToken.class);
-                realmAvatarPath.setId((int) lastUploadedAvatarId);
-                realmAvatarPath.setToken(avatar.getFile().getToken());
-                realmUserInfo.addAvatarToken(realmAvatarPath);
+                RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.ID, lastUploadedAvatarId).findFirst();
+                realmAvatar.setFile(RealmAttachment.build(avatar.getFile()));
+
+                realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst().addAvatar(realmAvatar);
             }
         });
         realm.close();

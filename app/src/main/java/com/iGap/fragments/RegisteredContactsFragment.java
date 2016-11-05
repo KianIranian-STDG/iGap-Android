@@ -341,7 +341,7 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                                     }
 
                                     realmRegisteredInfo.setUsername(user.getUsername());
-                                    realmRegisteredInfo.setPhone(user.getPhone());
+                                    realmRegisteredInfo.setPhoneNumber(Long.toString(user.getPhone()));
                                     realmRegisteredInfo.setFirstName(user.getFirstName());
                                     realmRegisteredInfo.setLastName(user.getLastName());
                                     realmRegisteredInfo.setDisplayName(user.getDisplayName());

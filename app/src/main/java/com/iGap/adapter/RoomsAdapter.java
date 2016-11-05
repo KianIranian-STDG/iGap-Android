@@ -21,9 +21,11 @@ public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
             if (item.mInfo.chatId == peerId) {
                 int pos = getAdapterItems().indexOf(item);
                 item.mInfo.avatar = avatar;
-                item.mInfo.downloadAttachment.progress = progress;
-                item.mInfo.downloadAttachment.offset = offset;
-                item.onRequestDownloadAvatar(offset, progress);
+                if (item.mInfo.downloadAttachment != null) {
+                    item.mInfo.downloadAttachment.progress = progress;
+                    item.mInfo.downloadAttachment.offset = offset;
+                    item.onRequestDownloadAvatar(offset, progress);
+                }
                 notifyItemChanged(pos);
                 break;
             }

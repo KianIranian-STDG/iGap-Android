@@ -307,12 +307,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
 
                 Realm realm = Realm.getDefaultInstance();
-                RealmUserInfo replayToInfo = realm.where(RealmUserInfo.class)
-                    .equalTo(RealmUserInfoFields.USER_ID, mMessage.replayTo.getUserId())
+                RealmUserInfo replayToInfo = realm.where(RealmUserInfo.class).equalTo(RealmUserInfoFields.USER_INFO.ID, mMessage.replayTo.getUserId())
                     .findFirst();
                 if (replayToInfo != null) {
-                    ((TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_from)).setText(
-                        replayToInfo.getNickName());
+                    ((TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_from)).setText(replayToInfo.getUserInfo().getDisplayName());
                 }
                 realm.close();
                 ((TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_message)).setText(

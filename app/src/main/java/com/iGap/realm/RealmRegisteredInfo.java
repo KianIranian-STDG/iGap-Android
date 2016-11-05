@@ -11,7 +11,7 @@ import io.realm.annotations.PrimaryKey;
 public class RealmRegisteredInfo extends RealmObject {
     @PrimaryKey private long id;
     private String username;
-    private long phone;
+    private String phoneNumber;
     private String firstName;
     private String lastName;
     private String displayName;
@@ -39,12 +39,12 @@ public class RealmRegisteredInfo extends RealmObject {
         this.username = username;
     }
 
-    public long getPhone() {
-        return phone;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setPhone(long phone) {
-        this.phone = phone;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getFirstName() {
@@ -198,7 +198,7 @@ public class RealmRegisteredInfo extends RealmObject {
 
         info.setId(registeredUser.getId());
         info.setUsername(registeredUser.getUsername());
-        info.setPhone(registeredUser.getPhone());
+        info.setPhoneNumber(Long.toString(registeredUser.getPhone()));
         info.setFirstName(registeredUser.getFirstName());
         info.setLastName(registeredUser.getLastName());
         info.setDisplayName(registeredUser.getDisplayName());
