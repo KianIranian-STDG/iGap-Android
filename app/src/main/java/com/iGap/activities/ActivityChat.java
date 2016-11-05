@@ -2455,7 +2455,7 @@ public class ActivityChat extends ActivityEnhanced
         });
 
         btnReplaySelected = (MaterialDesignTextView) findViewById(R.id.chl_btn_replay_selected);
-        RippleView rippleReplaySelected = (RippleView) findViewById(R.id.chl_ripple_close_layout);
+        RippleView rippleReplaySelected = (RippleView) findViewById(R.id.chl_ripple_replay_selected);
         rippleReplaySelected.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override public void onComplete(RippleView rippleView) {
                 Log.e("ddd", "btnReplaySelected");
@@ -2491,25 +2491,15 @@ public class ActivityChat extends ActivityEnhanced
         RippleView rippleDeleteSelected = (RippleView) findViewById(R.id.chl_ripple_delete_selected);
         rippleDeleteSelected.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override public void onComplete(RippleView rippleView) {
-
-            }
-        });
-        btnDeleteSelected.setOnClickListener(new View.OnClickListener() { //TODO [Saeed Mozaffari] [2016-09-17 2:58 PM] - FORCE -
-            // add item to delete list
-            @Override public void onClick(View view) {
-
                 Realm realm = Realm.getDefaultInstance();
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override public void execute(Realm realm) {
                         // get offline delete list , add new deleted list and update in
                         // client condition , then send request for delete message to server
-                        RealmClientCondition realmClientCondition =
-                            realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirst();
+                        RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirst();
 
                         for (final AbstractMessage messageID : mAdapter.getSelectedItems()) {
-                            RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class)
-                                .equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageID.mMessage.messageID))
-                                .findFirst();
+                            RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageID.mMessage.messageID)).findFirst();
                             if (roomMessage != null) {
                                 // delete message from database
                                 roomMessage.deleteFromRealm();
@@ -2541,7 +2531,6 @@ public class ActivityChat extends ActivityEnhanced
                 realm.close();
             }
         });
-
         txtNumberOfSelected = (TextView) findViewById(R.id.chl_txt_number_of_selected);
         txtNumberOfSelected.setTypeface(G.fontawesome);
 

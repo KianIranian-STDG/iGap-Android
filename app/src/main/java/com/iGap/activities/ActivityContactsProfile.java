@@ -350,7 +350,6 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                                                   edtFirstName.setTextColor(getResources().getColor(R.color.text_edit_text));
                                                   edtFirstName.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
                                                   edtFirstName.setPadding(0, 8, 0, 8);
-
                                                   edtFirstName.setSingleLine(true);
                                                   inputFirstName.addView(edtFirstName);
                                                   inputFirstName.addView(viewFirstName, viewParams);
@@ -392,8 +391,7 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                                                       .build();
 
                                                   final View positive = dialog.getActionButton(DialogAction.POSITIVE);
-                                                  positive.setClickable(false);
-                                                  positive.setAlpha(0.5f);
+                                                  positive.setEnabled(false);
 
                                                   edtFirstName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                                                       @Override public void onFocusChange(View view, boolean b) {
@@ -428,11 +426,9 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                                                       @Override public void afterTextChanged(Editable editable) {
 
                                                           if (!edtFirstName.getText().toString().equals(finalFirsName)) {
-                                                              positive.setClickable(true);
-                                                              positive.setAlpha(1.0f);
+                                                              positive.setEnabled(true);
                                                           } else {
-                                                              positive.setClickable(false);
-                                                              positive.setAlpha(0.5f);
+                                                              positive.setEnabled(false);
                                                           }
                                                       }
                                                   });
@@ -449,11 +445,9 @@ public class ActivityContactsProfile extends ActivityEnhanced {
 
                                                       @Override public void afterTextChanged(Editable editable) {
                                                           if (!edtLastName.getText().toString().equals(finalLastName)) {
-                                                              positive.setClickable(true);
-                                                              positive.setAlpha(1.0f);
+                                                              positive.setEnabled(true);
                                                           } else {
-                                                              positive.setClickable(false);
-                                                              positive.setAlpha(0.5f);
+                                                              positive.setEnabled(false);
                                                           }
                                                       }
                                                   });

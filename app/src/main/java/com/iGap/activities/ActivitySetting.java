@@ -265,8 +265,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     .build();
 
                 final View positive = dialog.getActionButton(DialogAction.POSITIVE);
-                positive.setClickable(false);
-                positive.setAlpha(0.5f);
+                positive.setEnabled(false);
+
 
                 final String finalFirsName = firsName;
                 edtFirstName.addTextChangedListener(new TextWatcher() {
@@ -281,11 +281,11 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     @Override public void afterTextChanged(Editable editable) {
 
                         if (!edtFirstName.getText().toString().equals(finalFirsName)) {
-                            positive.setClickable(true);
-                            positive.setAlpha(1.0f);
+                            positive.setEnabled(true);
+
                         } else {
-                            positive.setClickable(false);
-                            positive.setAlpha(0.5f);
+                            positive.setEnabled(false);
+
                         }
                     }
                 });
@@ -302,11 +302,11 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                     @Override public void afterTextChanged(Editable editable) {
                         if (!edtLastName.getText().toString().equals(finalLastName)) {
-                            positive.setClickable(true);
-                            positive.setAlpha(1.0f);
+                            positive.setEnabled(true);
+
                         } else {
-                            positive.setClickable(false);
-                            positive.setAlpha(0.5f);
+                            positive.setEnabled(false);
+
                         }
                     }
                 });
@@ -425,7 +425,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     .itemsCallbackSingleChoice(poRbDialoggander, new MaterialDialog.ListCallbackSingleChoice() {
                         @Override public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                            txtGander.setText(text.toString());
+                            if (text != null) txtGander.setText(text.toString());
                             switch (which) {
                                 case 0: {
                                     new RequestUserProfileSetGender().setUserProfileGender(ProtoGlobal.Gender.MALE);
@@ -473,6 +473,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                         }
                                     }
                                 });
+                                realm1.close();
                             }
                         });
                     }
@@ -553,8 +554,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     .build();
 
                 final View positive = dialog.getActionButton(DialogAction.POSITIVE);
-                positive.setClickable(false);
-                positive.setAlpha(0.5f);
+                positive.setEnabled(false);
 
                 final String finalEmail = email;
                 edtEmail.addTextChangedListener(new TextWatcher() {
@@ -569,11 +569,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     @Override public void afterTextChanged(Editable editable) {
 
                         if (!edtEmail.getText().toString().equals(finalEmail)) {
-                            positive.setClickable(true);
-                            positive.setAlpha(1.0f);
+                            positive.setEnabled(true);
                         } else {
-                            positive.setClickable(false);
-                            positive.setAlpha(0.5f);
+                            positive.setEnabled(false);
                         }
                     }
                 });
@@ -675,8 +673,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     .build();
 
                 final View positive = dialog.getActionButton(DialogAction.POSITIVE);
-                positive.setClickable(false);
-                positive.setAlpha(0.5f);
+                positive.setEnabled(false);
 
                 final String finalUserName = userName;
                 edtUserName.addTextChangedListener(new TextWatcher() {
@@ -697,23 +694,23 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                             @Override public void run() {
                                 if (status == ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status.AVAILABLE) {
                                     if (!edtUserName.getText().toString().equals(finalUserName)) {
-                                        positive.setClickable(true);
-                                        positive.setAlpha(1.0f);
+                                        positive.setEnabled(true);
+
                                     } else {
-                                        positive.setClickable(false);
-                                        positive.setAlpha(0.5f);
+                                        positive.setEnabled(false);
+
                                     }
                                 } else if (status == ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status.INVALID) {
 
                                     inputUserName.setErrorEnabled(true);
                                     inputUserName.setError("INVALID");
-                                    positive.setClickable(false);
-                                    positive.setAlpha(0.5f);
+                                    positive.setEnabled(false);
+
                                 } else if (status == ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status.TAKEN) {
                                     inputUserName.setErrorEnabled(true);
                                     inputUserName.setError("TAKEN");
-                                    positive.setClickable(false);
-                                    positive.setAlpha(0.5f);
+                                    positive.setEnabled(false);
+
                                 }
                             }
                         });

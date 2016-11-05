@@ -150,6 +150,7 @@
               android:layout_marginRight="@dimen/dp4"
               android:text="@string/md_clock_with_white_face"
               style="@style/ChatMessages.MaterialDesignTextView.Tick"
+              fontPath="fonts/Flaticon.ttf"
               />
 
           <TextView

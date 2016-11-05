@@ -179,8 +179,7 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
             }
         });
 
-        MaterialDesignTextView txtMenu =
-            (MaterialDesignTextView) view.findViewById(R.id.menu_txtBack);
+        MaterialDesignTextView txtMenu = (MaterialDesignTextView) view.findViewById(R.id.menu_txtBack);
         RippleView rippleMenu = (RippleView) view.findViewById(R.id.menu_ripple_txtBack);
         rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override public void onComplete(RippleView rippleView) {

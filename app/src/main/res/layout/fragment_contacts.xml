@@ -38,6 +38,7 @@
           android:text="@string/md_back_arrow"
           android:textColor="@color/whit_background"
           android:textSize="@dimen/sp18"
+          fontPath="fonts/Flaticon.ttf"
           />
     </com.iGap.libs.rippleeffect.RippleView>
 

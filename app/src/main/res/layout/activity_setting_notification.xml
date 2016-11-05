@@ -13,9 +13,9 @@
       android:layout_width="match_parent"
       android:layout_height="@dimen/dp60"
       android:background="@color/toolbar_background"
-      android:layoutDirection="ltr"
       app:contentInsetLeft="0dp"
       app:contentInsetStart="0dp"
+      android:id="@+id/toolbar2"
       >
 
     <LinearLayout
@@ -48,7 +48,7 @@
       </com.iGap.libs.rippleeffect.RippleView>
 
       <TextView
-          android:layout_width="wrap_content"
+          android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:gravity="center"
           android:text="@string/st_titleToolbar_page_Notification_and_sounds"

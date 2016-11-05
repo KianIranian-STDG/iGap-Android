@@ -65,6 +65,7 @@
           android:padding="@dimen/dp8"
           android:textColor="@color/gray"
           android:text="@string/md_voice_message_microphone_button"
+          fontPath="fonts/Flaticon.ttf"
           style="@style/ChatMessages.MaterialDesignTextView.BottomIcon"
           />
 
