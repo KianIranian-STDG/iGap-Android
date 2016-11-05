@@ -67,6 +67,7 @@
             android:singleLine="true"
             />
         <View
+            android:id="@+id/ng_view_newGroup"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:scaleY=".5"
@@ -81,7 +82,7 @@
           android:layout_height="wrap_content"
           android:layout_below="@+id/ng_txtInput_newGroup"
           android:layout_marginTop="@dimen/dp12"
-          android:hint="Description"
+          android:hint="@string/desc"
           >
 
         <com.iGap.module.LinedEditText

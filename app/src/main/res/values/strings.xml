@@ -308,6 +308,10 @@
   <string name="resend_message">Resend message</string>
   <string name="USER_VERIFY_BLOCKED_USER">USER VERIFY BLOCKED USER</string>
   <string name="Enter_Code">Code</string>
+
+  <string name="desc">Description</string>
+
+
   <string name="E_335">Bad payload for request</string>
   <string name="E_336">Internal server error for request</string>
   <string name="E_337">This operation is not permitted for request</string>
