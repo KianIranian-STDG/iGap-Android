@@ -430,9 +430,8 @@
       android:id="@+id/chl_recycler_view_chat"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_marginBottom="@dimen/dp48"
       android:overScrollMode="never"
-      android:paddingBottom="@dimen/dp8"
+      android:paddingBottom="@dimen/dp48"
       android:scrollbars="none"
       >
 
