@@ -204,7 +204,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
      */
     public Item getItemByFileIdentity(long messageId) {
         for (Item item : getAdapterItems()) {
-            if (item.mMessage.messageID.equalsIgnoreCase(Long.toString(messageId))) {
+            if (item != null && item.mMessage.messageID.equalsIgnoreCase(Long.toString(messageId))) {
                 return item;
             }
         }
