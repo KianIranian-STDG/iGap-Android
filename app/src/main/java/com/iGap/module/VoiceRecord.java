@@ -28,6 +28,7 @@ public class VoiceRecord {
     private TimerTask timertask;
     private Timer timer;
     private Timer secendTimer;
+    private Timer miliSecendTimer;
     private int secend = 0;
     private int minute = 0;
     private TextView txtTimeRecord;
@@ -42,6 +43,8 @@ public class VoiceRecord {
     private View layoutAttach;
     private View layoutMic;
     private OnVoiceRecord onVoiceRecordListener;
+    private TextView txtMilisecend;
+    private int milisecend = 0;
 
     private Context context;
 
@@ -51,6 +54,7 @@ public class VoiceRecord {
 
         imgPicRecord = (ImageView) layoutMic.findViewById(R.id.img_pic_record);
         txtTimeRecord = (TextView) layoutMic.findViewById(R.id.txt_time_record);
+        txtMilisecend = (TextView) layoutMic.findViewById(R.id.txt_time_mili_secend);
         layout3 = (LinearLayout) layoutMic.findViewById(R.id.layout3);
         txt_slide_to_cancel = (TextView) layoutMic.findViewById(R.id.txt_slideto_cancel);
 
@@ -175,6 +179,24 @@ public class VoiceRecord {
                 }
             }, 1000, 1000);
         }
+
+        if (miliSecendTimer == null) {
+            miliSecendTimer = new Timer();
+            miliSecendTimer.schedule(new TimerTask() {
+                @Override public void run() {
+                    milisecend++;
+                    if (milisecend > 100) milisecend = 1;
+                    txtMilisecend.post(new Runnable() {
+                        @Override public void run() {
+
+                            txtMilisecend.setText(":" + milisecend + "");
+                        }
+                    });
+                }
+            }, 10, 10);
+        }
+
+
     }
 
     public void dispatchTouchEvent(MotionEvent event) {
@@ -237,6 +259,12 @@ public class VoiceRecord {
             secendTimer.purge();
             secendTimer = null;
         }
+        if (miliSecendTimer != null) {
+            miliSecendTimer.cancel();
+            miliSecendTimer.purge();
+            miliSecendTimer = null;
+        }
+
 
         secend = 0;
         minute = 0;

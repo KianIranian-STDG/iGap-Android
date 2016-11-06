@@ -499,7 +499,6 @@ public class ActivityGroupProfile extends ActivityEnhanced
                 }
             }
 
-            Log.e("ddd", realmAttachment + "");
 
             if (realmAttachment != null) {
 
@@ -750,6 +749,15 @@ public class ActivityGroupProfile extends ActivityEnhanced
                 }
 
                 realmAvatar.setFile(RealmAttachment.build(avatar.getFile()));
+
+                RealmRoom realmRoom =
+                    realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                if (realmRoom != null) {
+                    if (realmRoom.getGroupRoom() != null) {
+                        realmRoom.getGroupRoom().setAvatar(realmAvatar);
+                    }
+                }
+
             }
         });
         realm.close();

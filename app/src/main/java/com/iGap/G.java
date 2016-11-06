@@ -87,6 +87,7 @@ import com.iGap.module.UploaderUtil;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmAvatar;
+import com.iGap.realm.RealmAvatarPath;
 import com.iGap.realm.RealmMigrationClass;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestClientCondition;
@@ -102,6 +103,8 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import io.fabric.sdk.android.Fabric;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
+import io.realm.Sort;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -320,7 +323,8 @@ public class G extends Application {
                         }
                     });
 
-                    RealmResults<RealmAvatarPath> realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
+                    RealmResults<RealmAvatarPath> realmAvatarPaths =
+                        realm.where(RealmAvatarPath.class).findAll();
 
                     if (G.onChangeUserPhotoListener != null) {
                         if (realmAvatarPaths != null) {

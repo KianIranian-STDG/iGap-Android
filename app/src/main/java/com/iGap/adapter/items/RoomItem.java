@@ -1,5 +1,6 @@
 package com.iGap.adapter.items;
 
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -28,7 +29,6 @@ import com.iGap.request.RequestFileDownload;
 import com.iGap.request.RequestUserInfo;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -241,14 +241,23 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
         }
 
         if (mInfo.avatar != null) {
+
             if (mInfo.avatar.isFileExistsOnLocal()) {
-                ImageLoader.getInstance()
-                    .displayImage(AndroidUtils.suitablePath(mInfo.avatar.getLocalFilePath()),
-                        holder.image);
+                //ImageLoader.getInstance()
+                //.displayImage(AndroidUtils.suitablePath(mInfo.avatar.getLocalFilePath()),
+                //    holder.image);
+                holder.image.setImageBitmap(
+                    BitmapFactory.decodeFile(mInfo.avatar.getLocalFilePath()));
             } else if (mInfo.avatar.isThumbnailExistsOnLocal()) {
-                ImageLoader.getInstance()
-                    .displayImage(AndroidUtils.suitablePath(mInfo.avatar.getLocalThumbnailPath()),
-                        holder.image);
+                //ImageLoader.getInstance()
+                //    .displayImage(mInfo.avatar.getLocalThumbnailPath(),
+                //        holder.image);
+
+                // TODO: 11/6/2016  if loading picture has problem use asynktask or use imageloader
+
+                holder.image.setImageBitmap(
+                    BitmapFactory.decodeFile(mInfo.avatar.getLocalThumbnailPath()));
+
             } else {
                 holder.image.setImageBitmap(
                     com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView
