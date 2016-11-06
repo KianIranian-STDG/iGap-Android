@@ -104,7 +104,7 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
             .findFirst();
         if (user != null) {
             // user exists in DB
-            final RealmList<RealmAvatar> userAvatars = user.getAvatar();
+            final RealmList<RealmAvatar> userAvatars = user.getAvatars();
 
             long identifier = System.nanoTime();
             for (RealmAvatar avatar : userAvatars) {

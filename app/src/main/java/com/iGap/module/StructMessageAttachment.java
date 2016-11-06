@@ -189,7 +189,6 @@ public class StructMessageAttachment implements Parcelable {
                     realmRegisteredInfo = realm.createObject(RealmRegisteredInfo.class);
                     realmRegisteredInfo.setId(userId);
                 }
-                realmRegisteredInfo.addAvatar(RealmAvatar.convert(userId, realmAttachment));
             }
         });
 

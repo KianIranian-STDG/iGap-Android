@@ -30,7 +30,7 @@ public class UserAvatarGetListResponse extends MessageHandler {
         RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class)
             .equalTo(RealmRegisteredInfoFields.ID, Long.parseLong(identity))
             .findFirst();
-        final RealmList<RealmAvatar> realmAvatars = realmRegisteredInfo.getAvatar();
+        final RealmList<RealmAvatar> realmAvatars = realmRegisteredInfo.getAvatars();
         Log.i("VVV", "message : " + message);
         Log.i("VVV", "realmAvatars : " + realmAvatars);
         realm.executeTransaction(new Realm.Transaction() {

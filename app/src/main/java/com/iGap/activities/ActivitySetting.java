@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -43,7 +44,6 @@ import com.iGap.R;
 import com.iGap.fragments.FragmentPrivacyAndSecurity;
 import com.iGap.fragments.FragmentShowAvatars;
 import com.iGap.fragments.FragmentSticker;
-import com.iGap.helper.HelperImageBackColor;
 import com.iGap.helper.HelperLogout;
 import com.iGap.helper.HelperString;
 import com.iGap.interfaces.OnFileUploadForActivities;
@@ -69,8 +69,6 @@ import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmAvatarFields;
 import com.iGap.realm.RealmAvatarPath;
-import com.iGap.realm.RealmRegisteredInfo;
-import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestUserAvatarAdd;
 import com.iGap.request.RequestUserAvatarDelete;
@@ -94,7 +92,6 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarResponse, OnFileUploadForActivities {
 
     private SharedPreferences sharedPreferences;
-    private int messageTextSize = 16;
 
     private TextView txtMenu, txtMessageTextSize, txtAutoDownloadData, txtAutoDownloadWifi, txtChatBackground, txtAutoDownloadRoaming, txtKeepMedia, txtLanguage, txtSizeClearCach;
 
@@ -117,12 +114,10 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     private Uri uriIntent;
     private long idAvatar;
     private File nameImageFile;
-    private String pathImageDecode;
     public static String pathSaveImage;
 
     private FloatingActionButton fab;
     private CircleImageView circleImageView;
-    public static Bitmap decodeBitmapProfile = null;
 
     private String nickName;
     private String userName;
@@ -152,9 +147,31 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     public static int KEY_AD_ROAMING_MUSIC = -1;
     public static int KEY_AD_ROAMINGN_GIF = -1;
 
-    private CharSequence inputText = "";
-
-    private boolean stateUserName = false;
+    private void setImage() {
+        runOnUiThread(new Runnable() {
+            @Override public void run() {
+                Realm realm = Realm.getDefaultInstance();
+                final RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+                final RealmAvatar lastAvatar = userInfo.getUserInfo().getLastAvatar();
+                if (lastAvatar == null) {
+                    circleImageView.setImageBitmap(
+                        com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp60), userInfo.getUserInfo().getInitials(),
+                            userInfo.getUserInfo().getColor()));
+                } else {
+                    if (lastAvatar.getFile().isFileExistsOnLocal()) {
+                        Bitmap myBitmap = BitmapFactory.decodeFile(lastAvatar.getFile().getLocalFilePath());
+                        circleImageView.setImageBitmap(myBitmap);
+                    } else if (lastAvatar.getFile().isThumbnailExistsOnLocal()) {
+                        Bitmap myBitmap = BitmapFactory.decodeFile(lastAvatar.getFile().getLocalThumbnailPath());
+                        circleImageView.setImageBitmap(myBitmap);
+                    } else {
+                        circleImageView.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp60),
+                            userInfo.getUserInfo().getInitials(), userInfo.getUserInfo().getColor()));
+                    }
+                }
+            }
+        });
+    }
 
     @Override protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
@@ -330,7 +347,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                         }
                     }
                 });
-
 
                 positive.setOnClickListener(new View.OnClickListener() {
                     @Override public void onClick(View view) {
@@ -917,8 +933,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                 new MaterialDialog.Builder(ActivitySetting.this).title("Language")
                     .titleGravity(GravityEnum.START)
-                    .titleColor(getResources().getColor(android.R.color.black))
-                    .items(R.array.language).itemsCallbackSingleChoice(poRbDialogLangouage, new MaterialDialog.ListCallbackSingleChoice() {
+                    .titleColor(getResources().getColor(android.R.color.black)).items(R.array.language).itemsCallbackSingleChoice(poRbDialogLangouage, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
                         txtLanguage.setText(text.toString());
@@ -1041,24 +1056,25 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 new MaterialDialog.Builder(ActivitySetting.this).title("Messages Text Size")
                     .titleGravity(GravityEnum.START)
                     .titleColor(getResources().getColor(android.R.color.black))
-                    .items(R.array.message_text_size).itemsCallbackSingleChoice(poRbDialogTextSize, new MaterialDialog.ListCallbackSingleChoice() {
-                    @Override public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                    .items(R.array.message_text_size)
+                    .itemsCallbackSingleChoice(poRbDialogTextSize, new MaterialDialog.ListCallbackSingleChoice() {
+                        @Override public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                        if (text != null) {
-                            txtMessageTextSize.setText(text.toString().replace("(Hello)", "").trim());
+                            if (text != null) {
+                                txtMessageTextSize.setText(text.toString().replace("(Hello)", "").trim());
+                            }
+                            poRbDialogTextSize = which;
+                            int size = Integer.parseInt(text.toString().replace("(Hello)", "").trim());
+                            sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, size);
+                            editor.apply();
+
+                            G.setUserTextSize();
+
+                            return false;
                         }
-                        poRbDialogTextSize = which;
-                        int size = Integer.parseInt(text.toString().replace("(Hello)", "").trim());
-                        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, size);
-                        editor.apply();
-
-                        G.setUserTextSize();
-
-                        return false;
-                    }
-                })
+                    })
                     .positiveText("ok")
                     .show();
             }
@@ -1410,6 +1426,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         });
 
         realm.close();
+
+        setImage();
     }
 
     //dialog for choose pic from gallery or camera
@@ -1596,13 +1614,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         return hrSize;
     }
 
-    private void setInitials(String initials, String color) {
-        Log.i("VVV", "initials : " + initials);
-        Log.i("VVV", "color : " + color);
-        circleImageView.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp88), initials, color));
-        G.onChangeUserPhotoListener.onChangeInitials(initials, color);
-    }
-
     private void getSms(String message) {
         String verificationCode = HelperString.regexExtractValue(message, regex);
 
@@ -1651,11 +1662,11 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             @Override public void execute(Realm realm) {
                 RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.ID, lastUploadedAvatarId).findFirst();
                 realmAvatar.setFile(RealmAttachment.build(avatar.getFile()));
-
-                realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst().addAvatar(realmAvatar);
             }
         });
         realm.close();
+
+        setImage();
     }
 
     @Override public void onFileUploaded(final FileUploadStructure uploadStructure, String identity) {

@@ -51,7 +51,6 @@ import com.mikepenz.fastadapter.adapters.HeaderAdapter;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 import io.realm.Realm;
-import io.realm.RealmList;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -339,6 +338,8 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                                         realmRegisteredInfo.setId(user.getId());
                                     }
 
+                                    RealmAvatar.put(user.getId(), user.getAvatar());
+
                                     realmRegisteredInfo.setUsername(user.getUsername());
                                     realmRegisteredInfo.setPhoneNumber(Long.toString(user.getPhone()));
                                     realmRegisteredInfo.setFirstName(user.getFirstName());
@@ -349,10 +350,6 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                                     realmRegisteredInfo.setStatus(user.getStatus().toString());
                                     realmRegisteredInfo.setAvatarCount(user.getAvatarCount());
                                     realmRegisteredInfo.setMutual(user.getMutual());
-
-                                    RealmList<RealmAvatar> avatars = new RealmList<>();
-                                    avatars.add(RealmAvatar.convert(user, realm));
-                                    realmRegisteredInfo.setAvatar(avatars);
                                 }
                             }, new Realm.Transaction.OnSuccess() {
                                 @Override public void onSuccess() {

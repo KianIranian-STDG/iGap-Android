@@ -570,8 +570,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class)
             .equalTo(RealmRegisteredInfoFields.ID, chatPeerId)
             .findFirst();
-        if (realmRegisteredInfo != null
-            && realmRegisteredInfo.getAvatar() != null
+        if (realmRegisteredInfo != null && realmRegisteredInfo.getAvatars() != null
             && realmRegisteredInfo.getLastAvatar() != null) {
 
             String mainFilePath = realmRegisteredInfo.getLastAvatar().getFile().getLocalFilePath();

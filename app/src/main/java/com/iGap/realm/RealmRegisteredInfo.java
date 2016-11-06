@@ -5,7 +5,6 @@ import com.iGap.proto.ProtoGlobal;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
-import io.realm.RealmResults;
 import io.realm.annotations.PrimaryKey;
 
 public class RealmRegisteredInfo extends RealmObject {
@@ -21,7 +20,6 @@ public class RealmRegisteredInfo extends RealmObject {
     private int lastSeen;
     private int avatarCount;
     private boolean mutual;
-    private RealmList<RealmAvatar> avatar = new RealmList<>();
 
     public long getId() {
         return id;
@@ -119,49 +117,29 @@ public class RealmRegisteredInfo extends RealmObject {
         this.mutual = mutual;
     }
 
-    public RealmList<RealmAvatar> getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(RealmList<RealmAvatar> avatar) {
-        this.avatar = avatar;
+    public RealmList<RealmAvatar> getAvatars() {
+        RealmList<RealmAvatar> avatars = new RealmList<>();
+        Realm realm = Realm.getDefaultInstance();
+        for (RealmAvatar avatar : realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, id).findAll()) {
+            avatars.add(avatar);
+        }
+        realm.close();
+        return avatars;
     }
 
     public RealmAvatar getLastAvatar() {
-        if (avatar.isEmpty()) {
+        RealmList<RealmAvatar> avatars = getAvatars();
+        if (avatars.isEmpty()) {
             return null;
         }
-        return avatar.last();
-    }
-
-    public void addAvatar(RealmAvatar avatar) {
-        this.avatar.add(avatar);
-    }
-
-    public void addAvatar(long userId, ProtoGlobal.Avatar avatar) {
-        if (avatar == null || avatar.getFile() == null || (avatar.getFile().getToken() == null || avatar.getFile().getToken().isEmpty())) {
-            return;
-        }
-
-        Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmAvatar> avatars = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findAll();
-
-        boolean exists = false;
-        for (RealmAvatar realmAvatar : avatars) {
-            if (realmAvatar.getFile() != null && realmAvatar.getFile().getToken().equalsIgnoreCase(avatar.getFile().getToken())) {
-                exists = true;
-                break;
+        // make sure return last avatar which has attachment
+        for (int i = avatars.size() - 1; i >= 0; i--) {
+            RealmAvatar avatar = getAvatars().get(i);
+            if (avatar.getFile() != null) {
+                return avatar;
             }
         }
-
-        if (!exists) {
-            RealmAvatar avatar1 = realm.createObject(RealmAvatar.class);
-            avatar1.setId(System.nanoTime());
-            avatar1.setOwnerId(userId);
-            avatar1.setFile(RealmAttachment.build(avatar.getFile()));
-            addAvatar(avatar1);
-        }
-        realm.close();
+        return null;
     }
 
     /**
@@ -213,9 +191,6 @@ public class RealmRegisteredInfo extends RealmObject {
             Log.i("SSS", "Avatar Exist");
             RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.FILE.TOKEN, registeredUser.getAvatar().getFile().getToken()).findFirst();
             Log.i("SSS", "realmAvatar : " + realmAvatar);
-            if (realmAvatar == null) {
-                info.addAvatar(RealmAvatar.convert(registeredUser, realm));
-            }
         }
     }
 }

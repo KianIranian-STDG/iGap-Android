@@ -443,9 +443,6 @@ public class ActivityProfile extends ActivityEnhanced
             @Override public void execute(Realm realm) {
                 RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.ID, lastUploadedAvatarId).findFirst();
                 realmAvatar.setFile(RealmAttachment.build(avatar.getFile()));
-
-                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                realmUserInfo.getUserInfo().addAvatar(realmAvatar);
             }
         });
         realm.close();

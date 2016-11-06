@@ -16,6 +16,27 @@ public class RealmAvatar extends RealmObject {
     public RealmAvatar() {
     }
 
+    public static void put(long ownerId, ProtoGlobal.Avatar input) {
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<RealmAvatar> ownerAvatars = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, ownerId).findAll();
+
+        boolean exists = false;
+        for (RealmAvatar avatar : ownerAvatars) {
+            if (avatar.getFile() != null && avatar.getFile().getToken().equalsIgnoreCase(input.getFile().getToken())) {
+                exists = true;
+                break;
+            }
+        }
+
+        if (!exists) {
+            RealmAvatar avatar = realm.createObject(RealmAvatar.class);
+            avatar.setId(System.nanoTime());
+            avatar.setOwnerId(ownerId);
+            avatar.setFile(RealmAttachment.build(input.getFile()));
+        }
+        realm.close();
+    }
+
     public RealmAvatar(long id) {
         this.id = id;
     }

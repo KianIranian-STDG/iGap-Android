@@ -86,7 +86,7 @@ import com.iGap.module.SHP_SETTING;
 import com.iGap.module.UploaderUtil;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
-import com.iGap.realm.RealmAvatarPath;
+import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmMigrationClass;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestClientCondition;
@@ -102,8 +102,6 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import io.fabric.sdk.android.Fabric;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
-import io.realm.RealmResults;
-import io.realm.Sort;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -314,25 +312,27 @@ public class G extends Application {
                     Realm realm = Realm.getDefaultInstance();
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override public void execute(Realm realm) {
+                            RealmAvatar.put(user.getId(), user.getAvatar());
+
                             RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                             realmUserInfo.setColor(user.getColor());
                             realmUserInfo.setInitials(user.getInitials());
+
+                            if (G.onChangeUserPhotoListener != null) {
+                                if (realmUserInfo.getUserInfo().getLastAvatar() != null) {
+                                    String path = null;
+                                    if (realmUserInfo.getUserInfo().getLastAvatar().getFile().isFileExistsOnLocal()) {
+                                        path = realmUserInfo.getUserInfo().getLastAvatar().getFile().getLocalFilePath();
+                                    } else if (realmUserInfo.getUserInfo().getLastAvatar().getFile().isThumbnailExistsOnLocal()) {
+                                        path = realmUserInfo.getUserInfo().getLastAvatar().getFile().getLocalThumbnailPath();
+                                    }
+                                    G.onChangeUserPhotoListener.onChangePhoto(path);
+                                } else {
+                                    G.onChangeUserPhotoListener.onChangePhoto(null);
+                                }
+                            }
                         }
                     });
-
-                    RealmResults<RealmAvatarPath> realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
-
-                    if (G.onChangeUserPhotoListener != null) {
-                        if (realmAvatarPaths != null) {
-                            realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
-                        }
-                        if (realmAvatarPaths != null && realmAvatarPaths.size() > 0) {
-                            String pathImageDecode = realmAvatarPaths.first().getPathImage();
-                            G.onChangeUserPhotoListener.onChangePhoto(pathImageDecode);
-                        } else {
-                            G.onChangeUserPhotoListener.onChangePhoto(null);
-                        }
-                    }
 
                     realm.close();
                 }
@@ -410,18 +410,14 @@ public class G extends Application {
         YEKAN_FARSI = Typeface.createFromAsset(context.getAssets(), "fonts/yekan.ttf");
         YEKAN_BOLD = Typeface.createFromAsset(context.getAssets(), "fonts/yekan_bold.ttf");
 
-        Realm.setDefaultConfiguration(new RealmConfiguration.Builder(getApplicationContext()).name("iGapLocalDatabase.realm")
-            .schemaVersion(1)
-            .migration(new RealmMigrationClass())
-            .deleteRealmIfMigrationNeeded()
-            .build());
+        Realm.setDefaultConfiguration(
+            new RealmConfiguration.Builder(getApplicationContext()).name("iGapLocalDatabase.realm").schemaVersion(1).migration(new RealmMigrationClass()).deleteRealmIfMigrationNeeded().build());
 
         // Create global configuration and initialize ImageLoader with this config
         // https://github.com/nostra13/Android-Universal-Image-Loader/wiki/Configuration
         // https://github.com/nostra13/Android-Universal-Image-Loader/wiki/Display-Options
         // https://github.com/nostra13/Android-Universal-Image-Loader/wiki/Useful-Info
-        DisplayImageOptions defaultOptions =
-            new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).displayer(new FadeInBitmapDisplayer(500)).build();
+        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).displayer(new FadeInBitmapDisplayer(500)).build();
         ImageLoader.getInstance().init(new ImageLoaderConfiguration.Builder(this).defaultDisplayImageOptions(defaultOptions).build());
 
         FONT_IGAP = Typeface.createFromAsset(context.getAssets(), "fonts/neuropolitical.ttf");
@@ -450,25 +446,21 @@ public class G extends Application {
 
         switch (language) {
             case "فارسی":
-                CalligraphyConfig.initDefault(
-                    new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf").setFontAttrId(R.attr.fontPath).build());
+                CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf").setFontAttrId(R.attr.fontPath).build());
                 setLocale("fa");
 
                 break;
             case "English":
-                CalligraphyConfig.initDefault(
-                    new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf").setFontAttrId(R.attr.fontPath).build());
+                CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf").setFontAttrId(R.attr.fontPath).build());
                 setLocale("en");
                 break;
             case "العربی":
-                CalligraphyConfig.initDefault(
-                    new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf").setFontAttrId(R.attr.fontPath).build());
+                CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf").setFontAttrId(R.attr.fontPath).build());
                 setLocale("ar");
 
                 break;
             case "Deutsch":
-                CalligraphyConfig.initDefault(
-                    new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf").setFontAttrId(R.attr.fontPath).build());
+                CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf").setFontAttrId(R.attr.fontPath).build());
                 setLocale("nl");
 
                 break;

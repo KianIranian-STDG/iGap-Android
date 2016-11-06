@@ -641,7 +641,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
                             realm.where(RealmRegisteredInfo.class)
                                 .equalTo(RealmRegisteredInfoFields.ID, peerId)
                                 .findFirst();
-                        for (RealmAvatar avatar : realmRegisteredInfo.getAvatar()) {
+                        for (RealmAvatar avatar : realmRegisteredInfo.getAvatars()) {
                             if (avatar.getFile().getToken().equals(media.attachment.token)) {
                                 avatar.getFile().setLocalFilePath(localFilePath);
                             }

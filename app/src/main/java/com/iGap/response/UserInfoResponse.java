@@ -4,6 +4,7 @@ import android.util.Log;
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoUserInfo;
+import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import io.realm.Realm;
@@ -37,8 +38,7 @@ public class UserInfoResponse extends MessageHandler {
                     realmRegisteredInfo.setId(builder.getUser().getId());
                 }
 
-                realmRegisteredInfo.addAvatar(builder.getUser().getId(),
-                    builder.getUser().getAvatar());
+                RealmAvatar.put(builder.getUser().getId(), builder.getUser().getAvatar());
                 realmRegisteredInfo.setAvatarCount(builder.getUser().getAvatarCount());
                 realmRegisteredInfo.setColor(builder.getUser().getColor());
                 realmRegisteredInfo.setDisplayName(builder.getUser().getDisplayName());

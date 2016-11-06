@@ -143,7 +143,7 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                 avatarPath = realmRegisteredInfo.getLastAvatar().getFile().getLocalThumbnailPath();
             }
 
-            avatarList = realmRegisteredInfo.getAvatar();
+            avatarList = realmRegisteredInfo.getAvatars();
         }
 
         RealmContacts realmUser = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, userId).findFirst();
