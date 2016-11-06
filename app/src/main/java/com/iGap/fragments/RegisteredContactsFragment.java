@@ -407,7 +407,9 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
 
     @Override public void onSaveInstanceState(Bundle outState) {
         //add the values which need to be saved from the adapter to the bundle
-        outState = fastAdapter.saveInstanceState(outState);
+        if (fastAdapter != null) {
+            outState = fastAdapter.saveInstanceState(outState);
+        }
         super.onSaveInstanceState(outState);
     }
 
