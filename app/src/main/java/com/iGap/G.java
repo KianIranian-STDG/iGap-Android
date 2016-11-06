@@ -43,6 +43,7 @@ import com.iGap.interfaces.OnGroupAddModerator;
 import com.iGap.interfaces.OnGroupAvatarResponse;
 import com.iGap.interfaces.OnGroupClearMessage;
 import com.iGap.interfaces.OnGroupCreate;
+import com.iGap.interfaces.OnGroupDelete;
 import com.iGap.interfaces.OnGroupEdit;
 import com.iGap.interfaces.OnGroupGetMemberList;
 import com.iGap.interfaces.OnGroupKickAdmin;
@@ -243,6 +244,7 @@ public class G extends Application {
     public static OnUserProfileUpdateUsername onUserProfileUpdateUsername;
     public static OnGroupGetMemberList onGroupGetMemberList;
     public static OnUserGetDeleteToken onUserGetDeleteToken;
+    public static OnGroupDelete onGroupDelete;
     public static File chatBackground;
     public static File IMAGE_NEW_GROUP;
     public static File IMAGE_NEW_CHANEL;
@@ -323,8 +325,7 @@ public class G extends Application {
                         }
                     });
 
-                    RealmResults<RealmAvatarPath> realmAvatarPaths =
-                        realm.where(RealmAvatarPath.class).findAll();
+                    RealmResults<RealmAvatarPath> realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
 
                     if (G.onChangeUserPhotoListener != null) {
                         if (realmAvatarPaths != null) {

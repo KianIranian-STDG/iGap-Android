@@ -122,6 +122,8 @@ public class HelperFillLookUpClass {
         G.lookupMap.put(30316, "ProtoGroupGetDraft.GroupGetDraftResponse");
         G.lookupMap.put(317, "GroupGetMemberList");
         G.lookupMap.put(30317, "ProtoGroupGetMemberList.GroupGetMemberListResponse");
+        G.lookupMap.put(318, "GroupDelete");
+        G.lookupMap.put(30318, "ProtoGroupDelete.GroupDeleteResponse");
 
         // Info 5xx , 305xx
         G.lookupMap.put(500, "Info.Location");
