@@ -172,8 +172,8 @@ public class Contacts {
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override public void execute(Realm realm) {
                         for (int i = 0; i < results.size(); i++) {
-                            Long phone = results.get(i).getPhone();
-                            String str = phone.toString().replaceAll(" ", "");
+                            long phone = results.get(i).getPhone();
+                            String str = Long.toString(phone).replaceAll(" ", "");
                             if (str.length() > 10) {
                                 str = str.substring(str.length() - 10, str.length());
                             }

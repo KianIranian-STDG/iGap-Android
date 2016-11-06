@@ -59,9 +59,7 @@ public class SearchFragment extends Fragment {
         return new SearchFragment();
     }
 
-    @Nullable @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-        @Nullable Bundle savedInstanceState) {
+    @Nullable @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.search_fragment_layout, container, false);
     }
 
@@ -76,8 +74,7 @@ public class SearchFragment extends Fragment {
 
         edtSearch = (EditText) view.findViewById(R.id.sfl_edt_search);
         edtSearch.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
 
@@ -108,8 +105,7 @@ public class SearchFragment extends Fragment {
                             }
                         }
 
-                        Log.e("ddd",
-                            chatHeaderGone + "  " + contactHeaderGone + "  " + messageHeaderGone);
+                        Log.e("ddd", chatHeaderGone + "  " + contactHeaderGone + "  " + messageHeaderGone);
 
                         itemAdapter.filter(edtSearch.getText().toString());
                     }
@@ -117,28 +113,21 @@ public class SearchFragment extends Fragment {
             }
         });
         edtSearch.requestFocus();
-        InputMethodManager imm =
-            (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(edtSearch, InputMethodManager.SHOW_IMPLICIT);
 
-        MaterialDesignTextView btnBack =
-            (MaterialDesignTextView) view.findViewById(R.id.sfl_btn_back);
+        MaterialDesignTextView btnBack = (MaterialDesignTextView) view.findViewById(R.id.sfl_btn_back);
         final RippleView rippleBack = (RippleView) view.findViewById(R.id.sfl_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override public void onComplete(RippleView rippleView) {
 
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(
-                    Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(rippleBack.getWindowToken(), 0);
-                getActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .remove(SearchFragment.this)
-                    .commit();
+                getActivity().getSupportFragmentManager().beginTransaction().remove(SearchFragment.this).commit();
             }
         });
 
-        MaterialDesignTextView btnClose =
-            (MaterialDesignTextView) view.findViewById(R.id.sfl_btn_close);
+        MaterialDesignTextView btnClose = (MaterialDesignTextView) view.findViewById(R.id.sfl_btn_close);
         RippleView rippleDown = (RippleView) view.findViewById(R.id.sfl_ripple_done);
         rippleDown.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override public void onComplete(RippleView rippleView) {
@@ -170,19 +159,16 @@ public class SearchFragment extends Fragment {
                     SearchItem si = (SearchItem) currentItem;
 
                     if (si.item.type == SearchType.message) {
-                        return !si.item.comment.toLowerCase()
-                            .contains(String.valueOf(constraint).toLowerCase());
+                        return !si.item.comment.toLowerCase().contains(String.valueOf(constraint).toLowerCase());
                     } else {
-                        return !si.item.name.toLowerCase()
-                            .contains(String.valueOf(constraint).toLowerCase());
+                        return !si.item.name.toLowerCase().contains(String.valueOf(constraint).toLowerCase());
                     }
                 }
             }
         });
 
         fastAdapter.withOnClickListener(new FastAdapter.OnClickListener<IItem>() {
-            @Override
-            public boolean onClick(View v, IAdapter adapter, IItem currentItem, int position) {
+            @Override public boolean onClick(View v, IAdapter adapter, IItem currentItem, int position) {
 
                 if (currentItem instanceof SearchItemHeader) {
 
@@ -190,8 +176,7 @@ public class SearchFragment extends Fragment {
                     SearchItem si = (SearchItem) currentItem;
                     goToRoom(si.item.id, si.item.type, si.item.messageId);
 
-                    InputMethodManager imm = (InputMethodManager) G.context.getSystemService(
-                        Context.INPUT_METHOD_SERVICE);
+                    InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(edtSearch.getWindowToken(), 0);
                 }
 
@@ -219,12 +204,12 @@ public class SearchFragment extends Fragment {
         List<IItem> items = new ArrayList<>();
 
         for (StructSearch item : list) {
-            if (item.type == SearchType.header) {
-                items.add(new SearchItemHeader().setText(item.name)
-                    .withIdentifier(100 + list.indexOf(item)));
-            } else {
-                items.add(
-                    new SearchItem().setContact(item).withIdentifier(100 + list.indexOf(item)));
+            if (item != null) {
+                if (item.type == SearchType.header) {
+                    items.add(new SearchItemHeader().setText(item.name).withIdentifier(100 + list.indexOf(item)));
+                } else {
+                    items.add(new SearchItem().setContact(item).withIdentifier(100 + list.indexOf(item)));
+                }
             }
         }
 
@@ -314,9 +299,7 @@ public class SearchFragment extends Fragment {
                 item.type = SearchType.message;
                 item.messageId = roomMessage.getMessageId();
 
-                RealmRoom realmRoom = realm.where(RealmRoom.class)
-                    .equalTo(RealmRoomFields.ID, roomMessage.getRoomId())
-                    .findFirst();
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomMessage.getRoomId()).findFirst();
 
                 if (realmRoom != null) { // room exist
                     item.name = realmRoom.getTitle();
@@ -341,9 +324,7 @@ public class SearchFragment extends Fragment {
         if (type == SearchType.room || type == SearchType.message) {
             realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst();
         } else if (type == SearchType.contact) {
-            realmRoom = realm.where(RealmRoom.class)
-                .equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, id)
-                .findFirst();
+            realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, id).findFirst();
         }
 
         if (realmRoom != null) {
@@ -354,10 +335,7 @@ public class SearchFragment extends Fragment {
             intent.putExtra("RoomId", realmRoom.getId());
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             G.context.startActivity(intent);
-            getActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .remove(SearchFragment.this)
-                .commit();
+            getActivity().getSupportFragmentManager().beginTransaction().remove(SearchFragment.this).commit();
         } else {
             G.onChatGetRoom = new OnChatGetRoom() {
                 @Override public void onChatGetRoom(final long roomId) {
@@ -370,10 +348,7 @@ public class SearchFragment extends Fragment {
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             realm.close();
                             G.context.startActivity(intent);
-                            getActivity().getSupportFragmentManager()
-                                .beginTransaction()
-                                .remove(SearchFragment.this)
-                                .commit();
+                            getActivity().getSupportFragmentManager().beginTransaction().remove(SearchFragment.this).commit();
                         }
                     });
                 }
@@ -386,10 +361,7 @@ public class SearchFragment extends Fragment {
                     if (majorCode == 200) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override public void run() {
-                                final Snackbar snack =
-                                    Snackbar.make(getActivity().findViewById(android.R.id.content),
-                                        getResources().getString(R.string.E_200),
-                                        Snackbar.LENGTH_LONG);
+                                final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_200), Snackbar.LENGTH_LONG);
 
                                 snack.setAction("CANCEL", new View.OnClickListener() {
                                     @Override public void onClick(View view) {
@@ -403,10 +375,7 @@ public class SearchFragment extends Fragment {
                     if (majorCode == 201) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override public void run() {
-                                final Snackbar snack =
-                                    Snackbar.make(getActivity().findViewById(android.R.id.content),
-                                        getResources().getString(R.string.E_201),
-                                        Snackbar.LENGTH_LONG);
+                                final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_201), Snackbar.LENGTH_LONG);
 
                                 snack.setAction("CANCEL", new View.OnClickListener() {
                                     @Override public void onClick(View view) {
@@ -420,10 +389,7 @@ public class SearchFragment extends Fragment {
                     if (majorCode == 202) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override public void run() {
-                                final Snackbar snack =
-                                    Snackbar.make(getActivity().findViewById(android.R.id.content),
-                                        getResources().getString(R.string.E_202),
-                                        Snackbar.LENGTH_LONG);
+                                final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_202), Snackbar.LENGTH_LONG);
 
                                 snack.setAction("CANCEL", new View.OnClickListener() {
                                     @Override public void onClick(View view) {

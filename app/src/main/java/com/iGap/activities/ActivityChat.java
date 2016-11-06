@@ -2228,7 +2228,6 @@ public class ActivityChat extends ActivityEnhanced
                     messageType = ProtoGlobal.RoomMessageType.VIDEO;
                 }
                 File videoFile = new File(filePath);
-                String videoFileName = videoFile.getName();
                 String videoFileMime = FileUtils.getMimeType(videoFile);
                 if (userTriesReplay()) {
                     messageInfo =
@@ -2268,7 +2267,6 @@ public class ActivityChat extends ActivityEnhanced
                     messageType = ProtoGlobal.RoomMessageType.FILE;
                 }
                 File fileFile = new File(filePath);
-                String fileFileName = fileFile.getName();
                 String fileFileMime = FileUtils.getMimeType(fileFile);
                 if (userTriesReplay()) {
                     messageInfo =
@@ -2287,11 +2285,6 @@ public class ActivityChat extends ActivityEnhanced
                 String number = contactUtils.retrieveNumber();
                 // FIXME: 10/5/2016 [Alireza] get username
                 String username = "username";
-                Uri imageUri = contactUtils.getPhotoUri();
-                String image = null;
-                if (imageUri != null) {
-                    image = imageUri.toString();
-                }
                 messageType = ProtoGlobal.RoomMessageType.CONTACT;
                 // FIXME: 10/18/2016 [Alireza] lastName "" gozashtam jash, firstName esme kamele
                 messageInfo =
