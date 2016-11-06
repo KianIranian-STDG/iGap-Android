@@ -52,13 +52,13 @@ public class GroupUpdateStatusResponse extends MessageHandler {
                     // find message from database and update its status
                     RealmRoomMessage roomMessage =
                         realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, builder.getMessageId()).findFirst();
-                    Log.i("SOC_CONDITION", "I'm recipient 1 roomMessage : " + roomMessage);
-                    Log.i("SOC_CONDITION", "I'm recipient 1  builder.getMessageId() : " + builder.getMessageId());
+                    Log.i("III", "I'm recipient 1 roomMessage : " + roomMessage);
+                    Log.i("III", "I'm recipient 1  builder.getMessageId() : " + builder.getMessageId());
                     if (roomMessage != null) {
                         Log.i(ChatUpdateStatusResponse.class.getSimpleName(), "oftad > " + builder.getStatus().toString());
                         roomMessage.setStatus(builder.getStatus().toString());
                         realm.copyToRealmOrUpdate(roomMessage);
-                        Log.i("SOC_CONDITION", "I'm recipient ");
+                        Log.i("III", "I'm recipient ");
                         G.chatUpdateStatusUtil.onChatUpdateStatus(builder.getRoomId(), builder.getMessageId(), builder.getStatus(),
                             builder.getStatusVersion());
                     }

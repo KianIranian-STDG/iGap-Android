@@ -105,7 +105,8 @@ public class ActivityContactsProfile extends ActivityEnhanced {
 
     private AppBarLayout appBarLayout;
 
-    private TextView txtLastSeen, txtUserName, titleToolbar, titleLastSeen, txtBlockContact, txtClearChat, txtPhoneNumber, txtNotifyAndSound, txtNickname;
+    private TextView txtLastSeen, txtUserName, titleToolbar, titleLastSeen, txtBlockContact, txtClearChat, txtPhoneNumber, txtNotifyAndSound,
+        txtNickname;
     private ViewGroup vgPhoneNumber, vgSharedMedia, layoutNickname;
     private CircleImageView imgUser;
     private MaterialDesignTextView imgMenu, txtBack;
@@ -170,7 +171,8 @@ public class ActivityContactsProfile extends ActivityEnhanced {
 
         RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo(RealmContactsFields.PHONE, Long.parseLong(phone)).findFirst();
 
-        // agar ba click roye karbar dar safheye goruh vared in ghesmat shodim va karbar dar list contact haye ma vojud nadasht shomareye karbar namyesh dade nemishavad
+        // agar ba click roye karbar dar safheye goruh vared in ghesmat shodim va karbar dar list contact haye ma vojud nadasht shomareye karbar
+        // namyesh dade nemishavad
         if (realmContacts == null && enterFrom.equals(ProtoGlobal.Room.Type.GROUP.toString())) {
             showNumber = false;
         }
@@ -184,10 +186,14 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                 Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                 imgUser.setImageBitmap(myBitmap);
             } else {
-                imgUser.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imgUser.getContext().getResources().getDimension(R.dimen.dp100), initials, color));
+                imgUser.setImageBitmap(
+                    com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imgUser.getContext().getResources().getDimension(R.dimen.dp100),
+                        initials, color));
             }
         } else {
-            imgUser.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imgUser.getContext().getResources().getDimension(R.dimen.dp100), initials, color));
+            imgUser.setImageBitmap(
+                com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imgUser.getContext().getResources().getDimension(R.dimen.dp100),
+                    initials, color));
         }
 
         imgUser.setOnClickListener(new View.OnClickListener() {
@@ -200,11 +206,15 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                     bundle.putInt("SelectedImage", 0);
                     bundle.putLong("PeedId", userId);
                     fragment.setArguments(bundle);
-                    ActivityContactsProfile.this.getFragmentManager().beginTransaction().replace(R.id.chi_layoutParent, fragment, "Show_Image_fragment").commit();
+                    ActivityContactsProfile.this.getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.chi_layoutParent, fragment, "Show_Image_fragment")
+                        .commit();
                 } else {
                     Toast.makeText(context, "Avatar Not exist!", Toast.LENGTH_SHORT).show();
                 }
-                //                ActivityContactsProfile.this.getFragmentManager().beginTransaction().replace(R.id.chi_layoutParent, fragment).commit();
+                //                ActivityContactsProfile.this.getFragmentManager().beginTransaction().replace(R.id.chi_layoutParent, fragment)
+                // .commit();
 
             }
         });
@@ -257,7 +267,9 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                                 if (majorCode == 200) {
                                     runOnUiThread(new Runnable() {
                                         @Override public void run() {
-                                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_200), Snackbar.LENGTH_LONG);
+                                            final Snackbar snack =
+                                                Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_200),
+                                                    Snackbar.LENGTH_LONG);
 
                                             snack.setAction("CANCEL", new View.OnClickListener() {
                                                 @Override public void onClick(View view) {
@@ -271,7 +283,9 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                                 if (majorCode == 201) {
                                     runOnUiThread(new Runnable() {
                                         @Override public void run() {
-                                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_201), Snackbar.LENGTH_LONG);
+                                            final Snackbar snack =
+                                                Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_201),
+                                                    Snackbar.LENGTH_LONG);
 
                                             snack.setAction("CANCEL", new View.OnClickListener() {
                                                 @Override public void onClick(View view) {
@@ -285,7 +299,9 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                                 if (majorCode == 202) {
                                     runOnUiThread(new Runnable() {
                                         @Override public void run() {
-                                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_202), Snackbar.LENGTH_LONG);
+                                            final Snackbar snack =
+                                                Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_202),
+                                                    Snackbar.LENGTH_LONG);
 
                                             snack.setAction("CANCEL", new View.OnClickListener() {
                                                 @Override public void onClick(View view) {
@@ -341,7 +357,8 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                                                   final View viewFirstName = new View(ActivityContactsProfile.this);
                                                   viewFirstName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
 
-                                                  LinearLayout.LayoutParams viewParams = new AppBarLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2);
+                                                  LinearLayout.LayoutParams viewParams =
+                                                      new AppBarLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2);
 
                                                   TextInputLayout inputFirstName = new TextInputLayout(ActivityContactsProfile.this);
                                                   final EditText edtFirstName = new EditText(ActivityContactsProfile.this);
@@ -374,16 +391,20 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                                                   inputLastName.addView(edtLastName);
                                                   inputLastName.addView(viewLastName, viewParams);
 
-                                                  LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                                                  LinearLayout.LayoutParams layoutParams =
+                                                      new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                                                          ViewGroup.LayoutParams.WRAP_CONTENT);
                                                   layoutParams.setMargins(0, 0, 0, 15);
                                                   LinearLayout.LayoutParams lastNameLayoutParams =
-                                                      new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                                                      new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                                                          ViewGroup.LayoutParams.WRAP_CONTENT);
                                                   lastNameLayoutParams.setMargins(0, 15, 0, 10);
 
                                                   layoutNickname.addView(inputFirstName, layoutParams);
                                                   layoutNickname.addView(inputLastName, lastNameLayoutParams);
 
-                                                  final MaterialDialog dialog = new MaterialDialog.Builder(ActivityContactsProfile.this).title("Nickname")
+                                                  final MaterialDialog dialog =
+                                                      new MaterialDialog.Builder(ActivityContactsProfile.this).title("Nickname")
                                                       .positiveText("SAVE")
                                                       .customView(layoutNickname, true)
                                                       .widgetColor(getResources().getColor(R.color.toolbar_background))
@@ -458,7 +479,8 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                                                                                       long po = Long.parseLong(txtPhoneNumber.getText().toString());
                                                                                       String firstName = edtFirstName.getText().toString();
                                                                                       String lastName = edtLastName.getText().toString();
-                                                                                      new RequestUserContactsEdit().contactsEdit(po, firstName, lastName);
+                                                                                      new RequestUserContactsEdit().contactsEdit(po, firstName,
+                                                                                          lastName);
                                                                                       dialog.dismiss();
                                                                                   }
                                                                               }
@@ -469,7 +491,8 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                                                   G.onUserContactEdit = new OnUserContactEdit() {
                                                       @Override public void onContactEdit(final String firstName, final String lastName) {
                                                           Realm realm1 = Realm.getDefaultInstance();
-                                                          final RealmContacts realmUser = realm1.where(RealmContacts.class).equalTo(RealmContactsFields.ID, userId).findFirst();
+                                                          final RealmContacts realmUser =
+                                                              realm1.where(RealmContacts.class).equalTo(RealmContactsFields.ID, userId).findFirst();
                                                           realm1.executeTransaction(new Realm.Transaction() {
                                                               @Override public void execute(Realm realm) {
                                                                   realmUser.setFirst_name(firstName);
@@ -492,8 +515,8 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                                                           if (majorCode == 124 && minorCode == 1) {
                                                               runOnUiThread(new Runnable() {
                                                                   @Override public void run() {
-                                                                      final Snackbar snack =
-                                                                          Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_124_1), Snackbar.LENGTH_LONG);
+                                                                      final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
+                                                                          getResources().getString(R.string.E_124_1), Snackbar.LENGTH_LONG);
 
                                                                       snack.setAction("CANCEL", new View.OnClickListener() {
                                                                           @Override public void onClick(View view) {
@@ -506,8 +529,8 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                                                           } else if (majorCode == 124 && minorCode == 2) {
                                                               runOnUiThread(new Runnable() {
                                                                   @Override public void run() {
-                                                                      final Snackbar snack =
-                                                                          Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_124_2), Snackbar.LENGTH_LONG);
+                                                                      final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
+                                                                          getResources().getString(R.string.E_124_2), Snackbar.LENGTH_LONG);
 
                                                                       snack.setAction("CANCEL", new View.OnClickListener() {
                                                                           @Override public void onClick(View view) {
@@ -520,8 +543,8 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                                                           } else if (majorCode == 124 && minorCode == 3) {
                                                               runOnUiThread(new Runnable() {
                                                                   @Override public void run() {
-                                                                      final Snackbar snack =
-                                                                          Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_124_3), Snackbar.LENGTH_LONG);
+                                                                      final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
+                                                                          getResources().getString(R.string.E_124_3), Snackbar.LENGTH_LONG);
 
                                                                       snack.setAction("CANCEL", new View.OnClickListener() {
                                                                           @Override public void onClick(View view) {
@@ -534,8 +557,8 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                                                           } else if (majorCode == 124 && minorCode == 4) {
                                                               runOnUiThread(new Runnable() {
                                                                   @Override public void run() {
-                                                                      final Snackbar snack =
-                                                                          Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_124_4), Snackbar.LENGTH_LONG);
+                                                                      final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
+                                                                          getResources().getString(R.string.E_124_4), Snackbar.LENGTH_LONG);
 
                                                                       snack.setAction("CANCEL", new View.OnClickListener() {
                                                                           @Override public void onClick(View view) {
@@ -548,8 +571,8 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                                                           } else if (majorCode == 125) {
                                                               runOnUiThread(new Runnable() {
                                                                   @Override public void run() {
-                                                                      final Snackbar snack =
-                                                                          Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_125), Snackbar.LENGTH_LONG);
+                                                                      final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
+                                                                          getResources().getString(R.string.E_125), Snackbar.LENGTH_LONG);
 
                                                                       snack.setAction("CANCEL", new View.OnClickListener() {
                                                                           @Override public void onClick(View view) {
@@ -741,7 +764,8 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                                                      bundle.putLong("ID", roomId);
                                                      fragmentNotification.setArguments(bundle);
                                                      getSupportFragmentManager().beginTransaction()
-                                                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                                                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right,
+                                                             R.anim.slide_out_left)
                                                          .replace(R.id.chi_layoutParent, fragmentNotification)
                                                          .commit();
                                                  }
@@ -775,114 +799,121 @@ public class ActivityContactsProfile extends ActivityEnhanced {
         }
 
         if (isExist) {
-            new MaterialDialog.Builder(this).title(R.string.phone_number).items(R.array.phone_number2).itemsCallback(new MaterialDialog.ListCallback() {
-                @Override public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                    switch (which) {
-                        case 0:
-                            long call = Long.parseLong(txtPhoneNumber.getText().toString());
-                            try {
-                                Intent phoneIntent = new Intent(Intent.ACTION_CALL);
-                                phoneIntent.setData(Uri.parse("tel:" + call));
-                                //startActivity(phoneIntent); //TODO [Saeed Mozaffari] [2016-09-07 11:31 AM] - phone intent permission
+            new MaterialDialog.Builder(this).title(R.string.phone_number)
+                .items(R.array.phone_number2)
+                .itemsCallback(new MaterialDialog.ListCallback() {
+                    @Override public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        switch (which) {
+                            case 0:
+                                long call = Long.parseLong(txtPhoneNumber.getText().toString());
+                                try {
+                                    Intent phoneIntent = new Intent(Intent.ACTION_CALL);
+                                    phoneIntent.setData(Uri.parse("tel:" + call));
+                                    //startActivity(phoneIntent); //TODO [Saeed Mozaffari] [2016-09-07 11:31 AM] - phone intent permission
 
-                            } catch (Exception ex) {
+                                } catch (Exception ex) {
 
-                                ex.getStackTrace();
-                                Log.i("TAG", "onMenuItemClick: " + ex.getMessage());
-                            }
-                            break;
-                        case 1:
-                            String copy;
-                            copy = txtPhoneNumber.getText().toString();
-
-                            ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                            ClipData clip = ClipData.newPlainText("PHONE_NUMBER", copy);
-                            clipboard.setPrimaryClip(clip);
-                            break;
-                    }
-                }
-            }).show();
-        } else {
-            new MaterialDialog.Builder(this).title(R.string.phone_number).items(R.array.phone_number).itemsCallback(new MaterialDialog.ListCallback() {
-                @Override public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                    switch (which) {
-                        case 0:
-
-                            String name = txtNickname.getText().toString();
-                            String phone = txtPhoneNumber.getText().toString();
-
-                            ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
-
-                            ops.add(ContentProviderOperation.newInsert(ContactsContract.RawContacts.CONTENT_URI)
-                                .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, null)
-                                .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, null)
-                                .build());
-
-                            //------------------------------------------------------ Names
-
-                            ops.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
-                                .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
-                                .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
-                                .withValue(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME, name)
-                                .build());
-
-                            //------------------------------------------------------ Mobile Number
-
-                            ops.add(ContentProviderOperation.
-                                newInsert(ContactsContract.Data.CONTENT_URI)
-                                .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
-                                .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
-                                .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, phone)
-                                .withValue(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)
-                                .build());
-
-                            try {
-                                G.context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
-                                addContactToServer();
-                                Toast.makeText(G.context, R.string.save_ok, Toast.LENGTH_SHORT).show();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                Toast.makeText(G.context, getString(R.string.exception) + e.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-
-                            break;
-                        case 1:
-
-                            long call = Long.parseLong(txtPhoneNumber.getText().toString());
-                            try {
-                                Intent phoneIntent = new Intent(Intent.ACTION_CALL);
-                                phoneIntent.setData(Uri.parse("tel:" + call));
-                                if (ActivityCompat.checkSelfPermission(ActivityContactsProfile.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                                    // TODO: Consider calling
-                                    //    ActivityCompat#requestPermissions
-                                    // here to request the missing permissions, and then overriding
-                                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                    //                                          int[] grantResults)
-                                    // to handle the case where the user grants the permission. See the documentation
-                                    // for ActivityCompat#requestPermissions for more details.
-                                    return;
+                                    ex.getStackTrace();
+                                    Log.i("TAG", "onMenuItemClick: " + ex.getMessage());
                                 }
-                                startActivity(phoneIntent); //TODO [Saeed Mozaffari] [2016-09-07 11:31 AM] - phone intent permission
-                            } catch (Exception ex) {
+                                break;
+                            case 1:
+                                String copy;
+                                copy = txtPhoneNumber.getText().toString();
 
-                                ex.getStackTrace();
-                                Log.i("TAG", "onMenuItemClick: " + ex.getMessage());
-                            }
-
-                            break;
-                        case 2:
-
-                            String copy;
-                            copy = txtPhoneNumber.getText().toString();
-
-                            ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                            ClipData clip = ClipData.newPlainText("PHONE_NUMBER", copy);
-                            clipboard.setPrimaryClip(clip);
-
-                            break;
+                                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                                ClipData clip = ClipData.newPlainText("PHONE_NUMBER", copy);
+                                clipboard.setPrimaryClip(clip);
+                                break;
+                        }
                     }
-                }
-            }).show();
+                })
+                .show();
+        } else {
+            new MaterialDialog.Builder(this).title(R.string.phone_number)
+                .items(R.array.phone_number)
+                .itemsCallback(new MaterialDialog.ListCallback() {
+                    @Override public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        switch (which) {
+                            case 0:
+
+                                String name = txtNickname.getText().toString();
+                                String phone = txtPhoneNumber.getText().toString();
+
+                                ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+
+                                ops.add(ContentProviderOperation.newInsert(ContactsContract.RawContacts.CONTENT_URI)
+                                    .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, null)
+                                    .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, null)
+                                    .build());
+
+                                //------------------------------------------------------ Names
+
+                                ops.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
+                                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+                                    .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
+                                    .withValue(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME, name)
+                                    .build());
+
+                                //------------------------------------------------------ Mobile Number
+
+                                ops.add(ContentProviderOperation.
+                                    newInsert(ContactsContract.Data.CONTENT_URI)
+                                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+                                    .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
+                                    .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, phone)
+                                    .withValue(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)
+                                    .build());
+
+                                try {
+                                    G.context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
+                                    addContactToServer();
+                                    Toast.makeText(G.context, R.string.save_ok, Toast.LENGTH_SHORT).show();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    Toast.makeText(G.context, getString(R.string.exception) + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+
+                                break;
+                            case 1:
+
+                                long call = Long.parseLong(txtPhoneNumber.getText().toString());
+                                try {
+                                    Intent phoneIntent = new Intent(Intent.ACTION_CALL);
+                                    phoneIntent.setData(Uri.parse("tel:" + call));
+                                    if (ActivityCompat.checkSelfPermission(ActivityContactsProfile.this, Manifest.permission.CALL_PHONE)
+                                        != PackageManager.PERMISSION_GRANTED) {
+                                        // TODO: Consider calling
+                                        //    ActivityCompat#requestPermissions
+                                        // here to request the missing permissions, and then overriding
+                                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                        //                                          int[] grantResults)
+                                        // to handle the case where the user grants the permission. See the documentation
+                                        // for ActivityCompat#requestPermissions for more details.
+                                        return;
+                                    }
+                                    startActivity(phoneIntent); //TODO [Saeed Mozaffari] [2016-09-07 11:31 AM] - phone intent permission
+                                } catch (Exception ex) {
+
+                                    ex.getStackTrace();
+                                    Log.i("TAG", "onMenuItemClick: " + ex.getMessage());
+                                }
+
+                                break;
+                            case 2:
+
+                                String copy;
+                                copy = txtPhoneNumber.getText().toString();
+
+                                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                                ClipData clip = ClipData.newPlainText("PHONE_NUMBER", copy);
+                                clipboard.setPrimaryClip(clip);
+
+                                break;
+                        }
+                    }
+                })
+                .show();
         }
     }
 
@@ -951,7 +982,8 @@ public class ActivityContactsProfile extends ActivityEnhanced {
         });
 
         popupWindow.setAnimationStyle(android.R.style.Animation_InputMethod);
-        popupWindow.showAtLocation(layoutDialog, Gravity.RIGHT | Gravity.TOP, (int) getResources().getDimension(R.dimen.dp16), (int) getResources().getDimension(R.dimen.dp32));
+        popupWindow.showAtLocation(layoutDialog, Gravity.RIGHT | Gravity.TOP, (int) getResources().getDimension(R.dimen.dp16),
+            (int) getResources().getDimension(R.dimen.dp32));
         //                popupWindow.showAsDropDown(v);
 
         text1.setOnClickListener(new View.OnClickListener() {
@@ -1060,13 +1092,15 @@ public class ActivityContactsProfile extends ActivityEnhanced {
         return items;
     }
 
-    //TODO [Saeed Mozaffari] [2016-10-15 3:31 PM] - clearHistory , DeleteChat , use in ActivityMain , ActivityChat , ActivityContactsProfile . mitunim method ha ro tekrar nakonim va ye ja bashe va az chand ja farakhani konim
+    //TODO [Saeed Mozaffari] [2016-10-15 3:31 PM] - clearHistory , DeleteChat , use in ActivityMain , ActivityChat , ActivityContactsProfile .
+    // mitunim method ha ro tekrar nakonim va ye ja bashe va az chand ja farakhani konim
     private void clearHistory() {
 
         // make request for clearing messages
         final Realm realm = Realm.getDefaultInstance();
 
-        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirstAsync();
+        final RealmClientCondition realmClientCondition =
+            realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirstAsync();
         realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
             @Override public void onChange(final RealmClientCondition element) {
                 realm.executeTransaction(new Realm.Transaction() {
@@ -1079,7 +1113,8 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                             G.clearMessagesUtil.clearMessages(roomId, realmRoom.getLastMessageId());
                         }
 
-                        RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll();
+                        RealmResults<RealmRoomMessage> realmRoomMessages =
+                            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll();
                         for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
                             if (realmRoomMessage != null) {
                                 // delete chat history message
@@ -1122,7 +1157,8 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                 if (majorCode == 122 && minorCode == 1) {
                     runOnUiThread(new Runnable() {
                         @Override public void run() {
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_122), Snackbar.LENGTH_LONG);
+                            final Snackbar snack =
+                                Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_122), Snackbar.LENGTH_LONG);
 
                             snack.setAction("CANCEL", new View.OnClickListener() {
                                 @Override public void onClick(View view) {
@@ -1135,7 +1171,8 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                 } else if (majorCode == 123) {
                     runOnUiThread(new Runnable() {
                         @Override public void run() {
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_123), Snackbar.LENGTH_LONG);
+                            final Snackbar snack =
+                                Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_123), Snackbar.LENGTH_LONG);
 
                             snack.setAction("CANCEL", new View.OnClickListener() {
                                 @Override public void onClick(View view) {
@@ -1185,7 +1222,8 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                 if (majorCode == 218 && minorCode == 1) {
                     runOnUiThread(new Runnable() {
                         @Override public void run() {
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_218), Snackbar.LENGTH_LONG);
+                            final Snackbar snack =
+                                Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_218), Snackbar.LENGTH_LONG);
 
                             snack.setAction("CANCEL", new View.OnClickListener() {
                                 @Override public void onClick(View view) {
@@ -1197,7 +1235,8 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                 } else if (majorCode == 219) {
                     runOnUiThread(new Runnable() {
                         @Override public void run() {
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_219), Snackbar.LENGTH_LONG);
+                            final Snackbar snack =
+                                Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_219), Snackbar.LENGTH_LONG);
 
                             snack.setAction("CANCEL", new View.OnClickListener() {
                                 @Override public void onClick(View view) {
@@ -1209,7 +1248,8 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                 } else if (majorCode == 220) {
                     runOnUiThread(new Runnable() {
                         @Override public void run() {
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_220), Snackbar.LENGTH_LONG);
+                            final Snackbar snack =
+                                Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_220), Snackbar.LENGTH_LONG);
 
                             snack.setAction("CANCEL", new View.OnClickListener() {
                                 @Override public void onClick(View view) {
@@ -1222,7 +1262,8 @@ public class ActivityContactsProfile extends ActivityEnhanced {
             }
         };
         final Realm realm = Realm.getDefaultInstance();
-        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirstAsync();
+        final RealmClientCondition realmClientCondition =
+            realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirstAsync();
         realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
             @Override public void onChange(final RealmClientCondition element) {
                 realm.executeTransaction(new Realm.Transaction() {

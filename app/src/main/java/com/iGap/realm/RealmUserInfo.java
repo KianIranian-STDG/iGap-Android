@@ -10,24 +10,6 @@ public class RealmUserInfo extends RealmObject {
     private String gender;
     private int selfRemove;
     private String token;
-    private String color;
-    private String initials;
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public String getInitials() {
-        return initials;
-    }
-
-    public void setInitials(String initials) {
-        this.initials = initials;
-    }
 
     public RealmRegisteredInfo getUserInfo() {
         return userInfo;

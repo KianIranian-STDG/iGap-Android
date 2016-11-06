@@ -122,13 +122,11 @@ public class GroupSendMessageResponse extends MessageHandler {
                         realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, builder.getRoomId()).findAll();
                     for (RealmRoomMessage realmRoomMessage : realmRoomMessageRealmResults) {
                         // find the message using identity and update it
-                        Log.i("III", "realmRoomMessage : " + realmRoomMessage);
                         if (realmRoomMessage != null && realmRoomMessage.getMessageId() == Long.parseLong(identity)) {
-                            Log.i("III", "fillRoomMessage");
                             fillRoomMessage(realmRoomMessage, roomMessage);
+                            realmRoomMessage.setMessageId(roomMessage.getMessageId());
 
                             if (roomMessage.hasForwardFrom()) { // forward message
-
                                 RealmRoomMessage forwardMessage = realmRoomMessage.getForwardMessage();
                                 // forwardMessage shouldn't be null but client check it for insuring
                                 if (forwardMessage == null) {
@@ -137,7 +135,6 @@ public class GroupSendMessageResponse extends MessageHandler {
                                 }
                                 realmRoomMessage.setForwardMessage(fillRoomMessage(forwardMessage, roomMessage));
                             } else if (roomMessage.hasReplyTo()) { // reply message
-
                                 RealmRoomMessage replyMessage = realmRoomMessage.getForwardMessage();
                                 // replyMessage shouldn't be null but client check it for insuring
                                 if (replyMessage == null) {

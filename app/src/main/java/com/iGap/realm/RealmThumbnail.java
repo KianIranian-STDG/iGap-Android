@@ -3,7 +3,9 @@ package com.iGap.realm;
 import com.iGap.proto.ProtoGlobal;
 import io.realm.Realm;
 import io.realm.RealmObject;
+import io.realm.RealmResults;
 import io.realm.RealmThumbnailRealmProxy;
+import io.realm.Sort;
 import io.realm.annotations.PrimaryKey;
 import org.parceler.Parcel;
 
@@ -12,8 +14,7 @@ import org.parceler.Parcel;
  */
 @Parcel(implementations = { RealmThumbnailRealmProxy.class },
     value = Parcel.Serialization.BEAN,
-    analyze = { RealmThumbnail.class })
-public class RealmThumbnail extends RealmObject {
+    analyze = { RealmThumbnail.class }) public class RealmThumbnail extends RealmObject {
     @PrimaryKey private long id;
     private long messageId;
     private long size;
@@ -21,15 +22,26 @@ public class RealmThumbnail extends RealmObject {
     private int height;
     private String cacheId;
 
-    public static void create(long id, final long messageId,
-        final ProtoGlobal.Thumbnail thumbnail) {
+    private static long getCorrectId(Realm realm) {
+        RealmResults results = realm.where(RealmThumbnail.class).findAllSorted("id", Sort.DESCENDING);
+
+        long id = 1;
+        if (results.size() > 0) {
+            id = realm.where(RealmThumbnail.class).findAllSorted("id", Sort.DESCENDING).first().getId();
+            id++;
+        }
+
+        return id;
+    }
+
+    public static void create(long id, final long messageId, final ProtoGlobal.Thumbnail thumbnail) {
         Realm realm = Realm.getDefaultInstance();
         RealmThumbnail realmThumbnail = realm.createObject(RealmThumbnail.class);
         realmThumbnail.setCacheId(thumbnail.getCacheId());
         realmThumbnail.setWidth(thumbnail.getWidth());
         realmThumbnail.setSize(thumbnail.getSize());
         realmThumbnail.setHeight(thumbnail.getHeight());
-        realmThumbnail.setId(id);
+        realmThumbnail.setId(getCorrectId(realm));
         realmThumbnail.setMessageId(messageId);
 
         realm.close();

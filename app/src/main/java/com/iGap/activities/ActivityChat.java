@@ -508,7 +508,8 @@ public class ActivityChat extends ActivityEnhanced
         }
 
         if (getIntent() != null
-            && getIntent().getExtras() != null && getIntent().getExtras().getParcelableArrayList(ActivitySelectChat.ARG_FORWARD_MESSAGE) != null) {
+            && getIntent().getExtras() != null
+            && getIntent().getExtras().getParcelableArrayList(ActivitySelectChat.ARG_FORWARD_MESSAGE) != null) {
             ArrayList<Parcelable> messageInfos = getIntent().getParcelableArrayListExtra(ActivitySelectChat.ARG_FORWARD_MESSAGE);
 
             for (Parcelable messageInfo : messageInfos) {
@@ -594,7 +595,6 @@ public class ActivityChat extends ActivityEnhanced
         G.onChatEditMessageResponse = new OnChatEditMessageResponse() {
             @Override public void onChatEditMessage(long roomId, final long messageId, long messageVersion, final String message,
                 ProtoResponse.Response response) {
-                Log.i(ActivityMain.class.getSimpleName(), "onChatEditMessage called");
                 if (mRoomId == roomId) {
                     // I'm in the room
                     runOnUiThread(new Runnable() {
@@ -2496,10 +2496,13 @@ public class ActivityChat extends ActivityEnhanced
                     @Override public void execute(Realm realm) {
                         // get offline delete list , add new deleted list and update in
                         // client condition , then send request for delete message to server
-                        RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirst();
+                        RealmClientCondition realmClientCondition =
+                            realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirst();
 
                         for (final AbstractMessage messageID : mAdapter.getSelectedItems()) {
-                            RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageID.mMessage.messageID)).findFirst();
+                            RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class)
+                                .equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageID.mMessage.messageID))
+                                .findFirst();
                             if (roomMessage != null) {
                                 // delete message from database
                                 roomMessage.deleteFromRealm();
@@ -2854,12 +2857,7 @@ public class ActivityChat extends ActivityEnhanced
                                 realmOfflineSeen.setId(System.nanoTime());
                                 realmOfflineSeen.setOfflineSeen(realmRoomMessage.getMessageId());
                                 realm.copyToRealmOrUpdate(realmOfflineSeen);
-
-                                Log.i(RealmClientCondition.class.getSimpleName(), "before size: " + realmClientCondition.getOfflineSeen().size());
-
                                 realmClientCondition.getOfflineSeen().add(realmOfflineSeen);
-
-                                Log.i(RealmClientCondition.class.getSimpleName(), "after size: " + realmClientCondition.getOfflineSeen().size());
                             }
                         }
 
@@ -2868,6 +2866,7 @@ public class ActivityChat extends ActivityEnhanced
                             G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
                         } else if (roomType == GROUP && (roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT
                             || roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.DELIVERED)) {
+                            Log.i("III", "roomMessage.getMessageId() : " + roomMessage.getMessageId());
                             G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
                         }
                     }

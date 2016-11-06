@@ -12,8 +12,7 @@ import org.parceler.Parcel;
 
 @Parcel(implementations = { RealmRoomMessageRealmProxy.class },
     value = Parcel.Serialization.BEAN,
-    analyze = { RealmRoomMessage.class })
-public class RealmRoomMessage extends RealmObject {
+    analyze = { RealmRoomMessage.class }) public class RealmRoomMessage extends RealmObject {
     @PrimaryKey private long messageId;
     private long messageVersion;
     private String status;
@@ -210,19 +209,13 @@ public class RealmRoomMessage extends RealmObject {
                 realmAttachment.setWidth(attachment.getWidth());
 
                 long smallMessageThumbnail = System.nanoTime();
-                RealmThumbnail.create(smallMessageThumbnail, messageId,
-                    attachment.getSmallThumbnail());
+                RealmThumbnail.create(smallMessageThumbnail, messageId, attachment.getSmallThumbnail());
 
                 long largeMessageThumbnail = System.nanoTime();
-                RealmThumbnail.create(largeMessageThumbnail, messageId,
-                    attachment.getSmallThumbnail());
+                RealmThumbnail.create(largeMessageThumbnail, messageId, attachment.getSmallThumbnail());
 
-                realmAttachment.setSmallThumbnail(realm.where(RealmThumbnail.class)
-                    .equalTo("id", smallMessageThumbnail)
-                    .findFirst());
-                realmAttachment.setLargeThumbnail(realm.where(RealmThumbnail.class)
-                    .equalTo("id", largeMessageThumbnail)
-                    .findFirst());
+                realmAttachment.setSmallThumbnail(realm.where(RealmThumbnail.class).equalTo("id", smallMessageThumbnail).findFirst());
+                realmAttachment.setLargeThumbnail(realm.where(RealmThumbnail.class).equalTo("id", largeMessageThumbnail).findFirst());
 
                 this.attachment = realmAttachment;
             } else {
@@ -235,34 +228,26 @@ public class RealmRoomMessage extends RealmObject {
                 this.attachment.setWidth(attachment.getWidth());
 
                 long smallMessageThumbnail = System.nanoTime();
-                RealmThumbnail.create(smallMessageThumbnail, messageId,
-                    attachment.getSmallThumbnail());
+                RealmThumbnail.create(smallMessageThumbnail, messageId, attachment.getSmallThumbnail());
 
                 long largeMessageThumbnail = System.nanoTime();
-                RealmThumbnail.create(largeMessageThumbnail, messageId,
-                    attachment.getSmallThumbnail());
+                RealmThumbnail.create(largeMessageThumbnail, messageId, attachment.getSmallThumbnail());
 
-                this.attachment.setSmallThumbnail(realm.where(RealmThumbnail.class)
-                    .equalTo("id", smallMessageThumbnail)
-                    .findFirst());
-                this.attachment.setLargeThumbnail(realm.where(RealmThumbnail.class)
-                    .equalTo("id", largeMessageThumbnail)
-                    .findFirst());
+                this.attachment.setSmallThumbnail(realm.where(RealmThumbnail.class).equalTo("id", smallMessageThumbnail).findFirst());
+                this.attachment.setLargeThumbnail(realm.where(RealmThumbnail.class).equalTo("id", largeMessageThumbnail).findFirst());
             }
             realm.close();
         }
     }
 
-    public void setAttachment(final long messageId, final String path, int width, int height,
-        long size, String name, double duration, LocalFileType type) {
+    public void setAttachment(final long messageId, final String path, int width, int height, long size, String name, double duration,
+        LocalFileType type) {
         if (path == null) {
             return;
         }
         Realm realm = Realm.getDefaultInstance();
         if (attachment == null) {
-            RealmAttachment realmAttachment = realm.where(RealmAttachment.class)
-                .equalTo(RealmAttachmentFields.ID, messageId)
-                .findFirst();
+            RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, messageId).findFirst();
             if (realmAttachment == null) {
                 realmAttachment = realm.createObject(RealmAttachment.class);
                 realmAttachment.setId(messageId);

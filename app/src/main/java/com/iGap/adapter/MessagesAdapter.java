@@ -261,7 +261,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
     }
 
     /**
-     * update message id and its status
+     * update message id and status
      *
      * @param messageId new message id
      * @param identity old manually defined as identity id
