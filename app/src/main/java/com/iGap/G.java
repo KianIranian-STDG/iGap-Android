@@ -414,18 +414,14 @@ public class G extends Application {
         YEKAN_FARSI = Typeface.createFromAsset(context.getAssets(), "fonts/yekan.ttf");
         YEKAN_BOLD = Typeface.createFromAsset(context.getAssets(), "fonts/yekan_bold.ttf");
 
-        Realm.setDefaultConfiguration(new RealmConfiguration.Builder(getApplicationContext()).name("iGapLocalDatabase.realm")
-            .schemaVersion(1)
-            .migration(new RealmMigrationClass())
-            .deleteRealmIfMigrationNeeded()
-            .build());
+        Realm.setDefaultConfiguration(
+            new RealmConfiguration.Builder(getApplicationContext()).name("iGapLocalDatabase.realm").schemaVersion(1).migration(new RealmMigrationClass()).deleteRealmIfMigrationNeeded().build());
 
         // Create global configuration and initialize ImageLoader with this config
         // https://github.com/nostra13/Android-Universal-Image-Loader/wiki/Configuration
         // https://github.com/nostra13/Android-Universal-Image-Loader/wiki/Display-Options
         // https://github.com/nostra13/Android-Universal-Image-Loader/wiki/Useful-Info
-        DisplayImageOptions defaultOptions =
-            new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).displayer(new FadeInBitmapDisplayer(500)).build();
+        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).displayer(new FadeInBitmapDisplayer(500)).build();
         ImageLoader.getInstance().init(new ImageLoaderConfiguration.Builder(this).defaultDisplayImageOptions(defaultOptions).build());
 
         FONT_IGAP = Typeface.createFromAsset(context.getAssets(), "fonts/neuropolitical.ttf");
@@ -454,25 +450,21 @@ public class G extends Application {
 
         switch (language) {
             case "فارسی":
-                CalligraphyConfig.initDefault(
-                    new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf").setFontAttrId(R.attr.fontPath).build());
+                CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf").setFontAttrId(R.attr.fontPath).build());
                 setLocale("fa");
 
                 break;
             case "English":
-                CalligraphyConfig.initDefault(
-                    new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf").setFontAttrId(R.attr.fontPath).build());
+                CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf").setFontAttrId(R.attr.fontPath).build());
                 setLocale("en");
                 break;
             case "العربی":
-                CalligraphyConfig.initDefault(
-                    new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf").setFontAttrId(R.attr.fontPath).build());
+                CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf").setFontAttrId(R.attr.fontPath).build());
                 setLocale("ar");
 
                 break;
             case "Deutsch":
-                CalligraphyConfig.initDefault(
-                    new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf").setFontAttrId(R.attr.fontPath).build());
+                CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf").setFontAttrId(R.attr.fontPath).build());
                 setLocale("nl");
 
                 break;

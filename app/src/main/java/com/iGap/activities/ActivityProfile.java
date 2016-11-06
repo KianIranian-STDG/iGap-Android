@@ -111,7 +111,6 @@ public class ActivityProfile extends ActivityEnhanced
                 txtInputNickName.setErrorEnabled(true);
                 txtInputNickName.setError("");
                 txtInputNickName.setHintTextAppearance(R.style.remove_error_appearance);
-                txtInputNickName.setError(getResources().getString(R.string.Toast_Write_NickName));
                 edtNikName.setTextColor(getResources().getColor(R.color.border_editText));
                 lineEditText.setBackgroundColor(getResources().getColor(android.R.color.black));
 

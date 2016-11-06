@@ -51,6 +51,7 @@ import com.iGap.interfaces.OnSmsReceive;
 import com.iGap.interfaces.OnUserAvatarDelete;
 import com.iGap.interfaces.OnUserAvatarResponse;
 import com.iGap.interfaces.OnUserDelete;
+import com.iGap.interfaces.OnUserGetDeleteToken;
 import com.iGap.interfaces.OnUserProfileCheckUsername;
 import com.iGap.interfaces.OnUserProfileSetEmailResponse;
 import com.iGap.interfaces.OnUserProfileSetGenderResponse;
@@ -73,6 +74,7 @@ import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestUserAvatarAdd;
 import com.iGap.request.RequestUserAvatarDelete;
 import com.iGap.request.RequestUserDelete;
+import com.iGap.request.RequestUserGetDeleteToken;
 import com.iGap.request.RequestUserProfileCheckUsername;
 import com.iGap.request.RequestUserProfileSetEmail;
 import com.iGap.request.RequestUserProfileSetGender;
@@ -284,7 +286,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 final View positive = dialog.getActionButton(DialogAction.POSITIVE);
                 positive.setEnabled(false);
 
-
                 final String finalFirsName = firsName;
                 edtFirstName.addTextChangedListener(new TextWatcher() {
                     @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -299,10 +300,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                         if (!edtFirstName.getText().toString().equals(finalFirsName)) {
                             positive.setEnabled(true);
-
                         } else {
                             positive.setEnabled(false);
-
                         }
                     }
                 });
@@ -320,10 +319,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     @Override public void afterTextChanged(Editable editable) {
                         if (!edtLastName.getText().toString().equals(finalLastName)) {
                             positive.setEnabled(true);
-
                         } else {
                             positive.setEnabled(false);
-
                         }
                     }
                 });
@@ -711,22 +708,18 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                 if (status == ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status.AVAILABLE) {
                                     if (!edtUserName.getText().toString().equals(finalUserName)) {
                                         positive.setEnabled(true);
-
                                     } else {
                                         positive.setEnabled(false);
-
                                     }
                                 } else if (status == ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status.INVALID) {
 
                                     inputUserName.setErrorEnabled(true);
                                     inputUserName.setError("INVALID");
                                     positive.setEnabled(false);
-
                                 } else if (status == ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status.TAKEN) {
                                     inputUserName.setErrorEnabled(true);
                                     inputUserName.setError("TAKEN");
                                     positive.setEnabled(false);
-
                                 }
                             }
                         });
@@ -871,18 +864,16 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                 textView.setOnClickListener(new View.OnClickListener() {
                     @Override public void onClick(View view) {
-                        HelperLogout.logout();
-                        popupWindow.dismiss();
+                        //HelperLogout.logout();
+                        //popupWindow.dismiss();
 
-                        //G.onUserGetDeleteToken = new OnUserGetDeleteToken() {
-                        //    @Override
-                        //    public void onUserGetDeleteToken(int resendDelay, String tokenRegex,
-                        //        String tokenLength) {
-                        //        regex = tokenRegex;
-                        //    }
-                        //};
-                        //
-                        //new RequestUserGetDeleteToken().userGetDeleteToken();
+                        G.onUserGetDeleteToken = new OnUserGetDeleteToken() {
+                            @Override public void onUserGetDeleteToken(int resendDelay, String tokenRegex, String tokenLength) {
+                                regex = tokenRegex;
+                            }
+                        };
+
+                        new RequestUserGetDeleteToken().userGetDeleteToken();
                     }
                 });
             }
@@ -933,36 +924,38 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                 new MaterialDialog.Builder(ActivitySetting.this).title("Language")
                     .titleGravity(GravityEnum.START)
-                    .titleColor(getResources().getColor(android.R.color.black)).items(R.array.language).itemsCallbackSingleChoice(poRbDialogLangouage, new MaterialDialog.ListCallbackSingleChoice() {
-                    @Override public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                    .titleColor(getResources().getColor(android.R.color.black))
+                    .items(R.array.language)
+                    .itemsCallbackSingleChoice(poRbDialogLangouage, new MaterialDialog.ListCallbackSingleChoice() {
+                        @Override public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                        txtLanguage.setText(text.toString());
-                        poRbDialogLangouage = which;
-                        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString(SHP_SETTING.KEY_LANGUAGE, text.toString());
-                        editor.apply();
+                            txtLanguage.setText(text.toString());
+                            poRbDialogLangouage = which;
+                            sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString(SHP_SETTING.KEY_LANGUAGE, text.toString());
+                            editor.apply();
 
-                        switch (which) {
-                            case 0:
-                                setLocale("en");
-                                break;
-                            case 1:
-                                setLocale("fa");
+                            switch (which) {
+                                case 0:
+                                    setLocale("en");
+                                    break;
+                                case 1:
+                                    setLocale("fa");
 
-                                break;
-                            case 2:
-                                setLocale("ar");
+                                    break;
+                                case 2:
+                                    setLocale("ar");
 
-                                break;
-                            case 3:
-                                setLocale("nl");
-                                break;
+                                    break;
+                                case 3:
+                                    setLocale("nl");
+                                    break;
                             }
 
-                        return false;
-                    }
-                })
+                            return false;
+                        }
+                    })
                     .positiveText("OK")
                     .negativeText("CANCEL")
                     .show();
