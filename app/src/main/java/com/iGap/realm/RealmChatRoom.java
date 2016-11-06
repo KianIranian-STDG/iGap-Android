@@ -17,12 +17,14 @@ public class RealmChatRoom extends RealmObject {
      * @param room ProtoGlobal.ChatRoom
      * @return RealmChatRoom
      */
-    public static RealmChatRoom convert(ProtoGlobal.ChatRoom room, RealmChatRoom realmChatRoom,
-        Realm realm) {
+    public static RealmChatRoom convert(ProtoGlobal.ChatRoom room) {
+        Realm realm = Realm.getDefaultInstance();
+        RealmChatRoom realmChatRoom = realm.where(RealmChatRoom.class).equalTo(RealmChatRoomFields.PEER_ID, room.getPeer().getId()).findFirst();
         if (realmChatRoom == null) {
             realmChatRoom = realm.createObject(RealmChatRoom.class);
+            realmChatRoom.setPeerId(room.getPeer().getId());
         }
-        realmChatRoom.setPeerId(room.getPeer().getId());
+        realm.close();
         return realmChatRoom;
     }
 

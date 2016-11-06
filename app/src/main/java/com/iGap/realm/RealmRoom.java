@@ -65,8 +65,7 @@ public class RealmRoom extends RealmObject {
                 break;
             case CHAT:
                 realmRoom.setType(RoomType.CHAT);
-                realmRoom.setChatRoom(
-                    RealmChatRoom.convert(room.getChatRoom(), realmRoom.getChatRoom(), realm));
+                realmRoom.setChatRoom(RealmChatRoom.convert(room.getChatRoom()));
                 RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class)
                     .equalTo(RealmRegisteredInfoFields.ID, room.getChatRoom().getPeer().getId())
                     .findFirst();

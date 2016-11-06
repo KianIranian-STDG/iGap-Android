@@ -645,10 +645,8 @@ public class ActivityMain extends ActivityEnhanced
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override public void execute(final Realm realm) {
                         if (realm.where(RealmOfflineDelete.class)
-                            .equalTo(RealmOfflineDeleteFields.OFFLINE_DELETE, item.getInfo().chatId)
-                            .findFirst() == null) {
-                            RealmOfflineDelete realmOfflineDelete =
-                                realm.createObject(RealmOfflineDelete.class);
+                            .equalTo(RealmOfflineDeleteFields.OFFLINE_DELETE, item.getInfo().chatId).findFirst() != null) {
+                            RealmOfflineDelete realmOfflineDelete = realm.createObject(RealmOfflineDelete.class);
                             realmOfflineDelete.setId(System.nanoTime());
                             realmOfflineDelete.setOfflineDelete(item.getInfo().chatId);
 
@@ -660,14 +658,8 @@ public class ActivityMain extends ActivityEnhanced
                                 }
                             });
 
-                            realm.where(RealmRoom.class)
-                                .equalTo(RealmRoomFields.ID, item.getInfo().chatId)
-                                .findFirst()
-                                .deleteFromRealm();
-                            realm.where(RealmRoomMessage.class)
-                                .equalTo(RealmRoomMessageFields.ROOM_ID, item.getInfo().chatId)
-                                .findAll()
-                                .deleteAllFromRealm();
+                            realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, item.getInfo().chatId).findFirst().deleteFromRealm();
+                            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, item.getInfo().chatId).findAll().deleteAllFromRealm();
 
                             new RequestChatDelete().chatDelete(item.getInfo().chatId);
                         }
