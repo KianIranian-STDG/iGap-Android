@@ -2,12 +2,10 @@ package com.iGap.response;
 
 import android.util.Log;
 import com.iGap.G;
-import com.iGap.helper.HelperRealm;
 import com.iGap.proto.ProtoClientGetRoom;
 import com.iGap.proto.ProtoError;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
-import com.iGap.realm.RealmRoomMessage;
 import io.realm.Realm;
 
 public class ClientGetRoomResponse extends MessageHandler {
@@ -44,27 +42,26 @@ public class ClientGetRoomResponse extends MessageHandler {
             }
         });
 
-        realm.executeTransaction(new Realm.Transaction() {
+        // FIXME: 11/6/2016 [Alireza] commented, chon ehsas mikonam ezafie
+        /*realm.executeTransaction(new Realm.Transaction() {
             @Override public void execute(Realm realm) {
                 RealmRoom room = realm.where(RealmRoom.class)
                     .equalTo(RealmRoomFields.ID, clientGetRoom.getRoom().getId())
                     .findFirst();
                 // update last message sent/received in room table
-                if (room != null) {
-                    RealmRoomMessage roomMessage = HelperRealm.getLastMessage(room.getId());
-                    if (room.getLastMessageTime()
-                        != 0) { //TODO [Saeed Mozaffari] [2016-09-19 12:50 PM] - clear this if
-                        if (room.getLastMessageTime() < roomMessage.getUpdateTime()) {
-                            room.setUnreadCount(room.getUnreadCount() + 1);
-                            room.setLastMessageId(roomMessage.getMessageId());
-                            room.setLastMessageTime(roomMessage.getUpdateTimeAsSeconds());
+                RealmRoomMessage roomMessage = HelperRealm.getLastMessage(room.getId());
+                if (room.getLastMessageTime()
+                    != 0) { //TODO [Saeed Mozaffari] [2016-09-19 12:50 PM] - clear this if
+                    if (room.getLastMessageTime() < roomMessage.getUpdateTime()) {
+                        room.setUnreadCount(room.getUnreadCount() + 1);
+                        room.setLastMessageId(roomMessage.getMessageId());
+                        room.setLastMessageTime(roomMessage.getUpdateTimeAsSeconds());
 
-                            realm.copyToRealmOrUpdate(room);
-                        }
+                        realm.copyToRealmOrUpdate(room);
                     }
                 }
             }
-        });
+        });*/
 
         realm.close();
 
