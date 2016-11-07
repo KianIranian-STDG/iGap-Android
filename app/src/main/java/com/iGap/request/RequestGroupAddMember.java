@@ -12,7 +12,7 @@ public class RequestGroupAddMember {
                 ProtoGroupAddMember.GroupAddMember.Member.newBuilder();
         member.setUserId(userId);
         member.setStartMessageId(startMessageId);
-        member.setRole(role);
+
 
         ProtoGroupAddMember.GroupAddMember.Builder builder =
                 ProtoGroupAddMember.GroupAddMember.newBuilder();

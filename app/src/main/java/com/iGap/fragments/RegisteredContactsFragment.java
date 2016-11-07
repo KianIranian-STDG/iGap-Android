@@ -183,7 +183,7 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                             .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
                                     R.anim.slide_in_right, R.anim.slide_out_left)
                             .addToBackStack(null)
-                            .replace(R.id.fragmentContainer, fragment)
+                            .add(R.id.fragmentContainer, fragment)
                             .commit();
                 }
             }

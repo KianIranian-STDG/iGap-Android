@@ -20,10 +20,12 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.interfaces.OnUserContactImport;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.StructListOfContact;
 import com.iGap.request.RequestUserContactImport;
+import com.iGap.request.RequestUserContactsGetList;
 
 import java.util.ArrayList;
 
@@ -61,20 +63,15 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
             @Override
             public void onComplete(RippleView rippleView) {
 
-                InputMethodManager imm =
-                        (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .remove(FragmentAddContact.this)
-                        .commit();
+                changePage();
             }
         });
 
 
         txtSet = (MaterialDesignTextView) view.findViewById(R.id.ac_txt_set);
-        txtSet.setTextColor(getResources().getColor(R.color.gray_9d));
+        txtSet.setTextColor(getResources().getColor(R.color.line_edit_text));
 
         parent = (ViewGroup) view.findViewById(R.id.ac_layoutParent);
         parent.setOnClickListener(new View.OnClickListener() {
@@ -196,12 +193,10 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
                                     if (edtPhoneNumber.getText().toString().length() > 0) {
 
                                         String displayName =
-                                                edtFirstName.getText().toString() + " " + edtLastName.getText()
-                                                        .toString();
+                                                edtFirstName.getText().toString() + " " + edtLastName.getText().toString();
                                         String phone = edtPhoneNumber.getText().toString();
 
-                                        ArrayList<ContentProviderOperation> ops =
-                                                new ArrayList<ContentProviderOperation>();
+                                        ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
 
                                         ops.add(ContentProviderOperation.newInsert(
                                                 ContactsContract.RawContacts.CONTENT_URI)
@@ -246,10 +241,7 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
                                                     .show();
                                         }
 
-                                        getActivity().getSupportFragmentManager()
-                                                .beginTransaction()
-                                                .remove(FragmentAddContact.this)
-                                                .commit();
+                                        changePage();
                                     } else {
                                         Toast.makeText(G.context, R.string.please_enter_phone_number,
                                                 Toast.LENGTH_SHORT).show();
@@ -261,9 +253,31 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
                             }
                         })
                         .negativeText(R.string.B_cancel)
+                        .onNegative(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                                G.onContactImport = new OnUserContactImport() {
+                                    @Override
+                                    public void onContactImport() {
+                                        new RequestUserContactsGetList().userContactGetList();
+                                        changePage();
+                                    }
+                                };
+
+                                ArrayList<StructListOfContact> contacyList = new ArrayList<StructListOfContact>();
+                                StructListOfContact structListOfContact = new StructListOfContact();
+
+                                structListOfContact.setFirstName(edtFirstName.getText().toString());
+                                structListOfContact.setLastName(edtLastName.getText().toString());
+                                structListOfContact.setDisplayName(edtFirstName.getText().toString() + " " + edtLastName.getText().toString());
+                                structListOfContact.setPhone(edtLastName.getText().toString());
+                                contacyList.add(structListOfContact);
+                                new RequestUserContactImport().contactImport(contacyList, true);
+
+                            }
+                        })
                         .show();
-
-
             }
         });
     }
@@ -278,15 +292,22 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
             rippleSet.setEnabled(true);
 
         } else {
-            txtSet.setTextColor(getResources().getColor(R.color.gray_9d));
+            txtSet.setTextColor(getResources().getColor(R.color.line_edit_text));
             rippleSet.setEnabled(false);
         }
+    }
+
+    private void changePage() {
+        final RegisteredContactsFragment registeredContactsFragment = new RegisteredContactsFragment();
+
+        getActivity().getSupportFragmentManager().popBackStack();
     }
 
     /**
      * import contact to server with True force
      */
     private void addContactToServer() {
+
         ArrayList<StructListOfContact> contacts = new ArrayList<>();
         StructListOfContact contact = new StructListOfContact();
         contact.firstName = edtFirstName.getText().toString();
