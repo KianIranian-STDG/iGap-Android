@@ -14,6 +14,8 @@ public class HelperFillLookUpClass {
         G.lookupMap.put(30001, "ProtoConnectionSecuring.ConnectionSecuringResponse");
         G.lookupMap.put(2, "Connection.Symmetric.Key");
         G.lookupMap.put(30002, "ProtoConnectionSecuring.ConnectionSymmetricKeyResponse");
+        G.lookupMap.put(3, "Heartbeat");
+        G.lookupMap.put(30003, "ProtoHeartbeat.HeartbeatResponse");
 
         // User 1xx , 301xx
         G.lookupMap.put(100, "User.Register");
@@ -64,6 +66,8 @@ public class HelperFillLookUpClass {
         G.lookupMap.put(30122, "ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse");
         G.lookupMap.put(123, "UserProfileUpdateUsername");
         G.lookupMap.put(30123, "ProtoUserProfileUpdateUsername.UserProfileUpdateUsernameResponse");
+        G.lookupMap.put(124, "UserUpdateStatus");
+        G.lookupMap.put(30124, "ProtoUserUpdateStatus.UserUpdateStatusResponse");
 
         // Chat 2xx , 302xx
         G.lookupMap.put(200, "Chat.GetRoom");
@@ -84,6 +88,8 @@ public class HelperFillLookUpClass {
         G.lookupMap.put(30207, "ProtoChatUpdateDraft.ChatUpdateDraftResponse");
         G.lookupMap.put(208, "ChatGetDraft");
         G.lookupMap.put(30208, "ProtoChatGetDraft.ChatGetDraftResponse");
+        G.lookupMap.put(209, "ChatConvertToGroup");
+        G.lookupMap.put(30209, "ProtoChatConvertToGroup.ChatConvertToGroupResponse");
 
         // Group 3xx , 303xx
         G.lookupMap.put(300, "GroupCreate");
@@ -144,6 +150,9 @@ public class HelperFillLookUpClass {
         G.lookupMap.put(30602, "ProtoClientGetRoom.ClientGetRoomResponse");
         G.lookupMap.put(603, "ClientGetRoomHistory");
         G.lookupMap.put(30603, "ProtoClientGetRoomHistory.ClientGetRoomHistoryResponse");
+        //============= 604 bayad barresi beshe
+        G.lookupMap.put(605, "ClientSearchRoomHistory");
+        G.lookupMap.put(30605, "ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse");
 
         // FileUpload 7xx , 307xx
         G.lookupMap.put(700, "FileUploadOption");
