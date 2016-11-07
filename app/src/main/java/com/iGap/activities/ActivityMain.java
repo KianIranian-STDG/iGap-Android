@@ -997,23 +997,17 @@ public class ActivityMain extends ActivityEnhanced
 
     @Override
     public void onFileDownload(final String token, final int offset, final ProtoFileDownload.FileDownload.Selector selector, final int progress) {
-        // empty
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mAdapter.downloadingAvatarThumbnail(token);
+            }
+        });
     }
 
     @Override
     public void onAvatarDownload(final String token, final int offset, final ProtoFileDownload.FileDownload.Selector selector, final int progress, final long userId, final RoomType roomType) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Realm realm = Realm.getDefaultInstance();
-                if (roomType == RoomType.CHAT) {
-                    mAdapter.downloadingAvatar(userId, progress, offset, StructMessageAttachment.convert(realm.where(RealmRegisteredInfo.class).equalTo("id", userId).findFirst().getLastAvatar()));
-                } else {
-                    mAdapter.downloadingAvatar(userId, progress, offset, StructMessageAttachment.convert(realm.where(RealmRoom.class).equalTo("id", userId).findFirst().getAvatar()));
-                }
-                realm.close();
-            }
-        });
+        // empty
     }
 
     @Override
@@ -1250,6 +1244,7 @@ public class ActivityMain extends ActivityEnhanced
 
     @Override
     public void onUserInfo(final ProtoGlobal.RegisteredUser user, ProtoResponse.Response response) {
+        String f = "df";
         // FIXME: 10/23/2016 Alireza uncomment
         /*runOnUiThread(new Runnable() {
             @Override

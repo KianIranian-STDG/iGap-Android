@@ -70,7 +70,8 @@ public final class AndroidUtils {
         if (path.matches("\\w+?://")) {
             return path;
         } else {
-            return Uri.fromFile(new File(path)).toString();
+            String encoded = Uri.fromFile(new File(path)).toString();
+            return Uri.decode(encoded);
         }
     }
 

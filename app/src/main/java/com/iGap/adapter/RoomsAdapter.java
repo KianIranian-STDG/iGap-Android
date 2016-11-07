@@ -34,6 +34,16 @@ public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
         }
     }
 
+    public void downloadingAvatarThumbnail(String token) {
+        for (Item item : getAdapterItems()) {
+            if (item.mInfo.avatar.token != null && item.mInfo.avatar.token.equalsIgnoreCase(token)) {
+                item.onRequestDownloadAvatarThumbnail(token, true);
+                notifyAdapterDataSetChanged();
+                break;
+            }
+        }
+    }
+
     public void updateChat(long chatId, Item item) {
         List<Item> items = getAdapterItems();
         for (Item chat : items) {

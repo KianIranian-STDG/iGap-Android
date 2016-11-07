@@ -1,6 +1,5 @@
 package com.iGap.adapter.items;
 
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -9,7 +8,7 @@ import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.adapter.MessagesAdapter;
+import com.iGap.adapter.AvatarsAdapter;
 import com.iGap.interfaces.IChatItemAvatar;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.AppUtils;
@@ -18,9 +17,10 @@ import com.iGap.module.EmojiTextView;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.OnComplete;
 import com.iGap.module.StructChatInfo;
-import com.iGap.module.StructDownloadAttachment;
 import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoFileDownload;
+import com.iGap.realm.RealmAttachment;
+import com.iGap.realm.RealmAttachmentFields;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmRoomMessage;
@@ -30,8 +30,8 @@ import com.iGap.request.RequestFileDownload;
 import com.iGap.request.RequestUserInfo;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
-import java.io.IOException;
 import java.util.List;
 
 import io.realm.Realm;
@@ -94,7 +94,18 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
         }
     }
 
-    private void requestForAvatar() {
+    /**
+     * request for avatar thumbnail
+     */
+    private void requestForAvatarThumbnail(String token) {
+        if (!AvatarsAdapter.hasThumbnailRequested(token)) {
+            AvatarsAdapter.thumbnailRequests.add(token);
+
+            onRequestDownloadAvatarThumbnail(token, false);
+        }
+    }
+
+    /*private void requestForAvatar() {
         // create new download attachment once with attachment token
         if (mInfo.downloadAttachment == null) {
             mInfo.downloadAttachment = new StructDownloadAttachment(mInfo.avatar.token);
@@ -107,11 +118,36 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
             // prevent from multiple requesting thumbnail
             MessagesAdapter.avatarsRequested.add(Long.toString(mInfo.chatId));
         }
+    }*/
+
+    public void onRequestDownloadAvatarThumbnail(String token, boolean done) {
+        final String fileName = token + "_" + mInfo.avatar.name;
+        if (done) {
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmAttachment attachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, mInfo.avatar.token).findFirst();
+                    attachment.setLocalThumbnailPath(G.DIR_TEMP + "/" + fileName);
+                }
+            });
+            realm.close();
+
+            return; // necessary
+        }
+
+        ProtoFileDownload.FileDownload.Selector selector =
+                ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
+        String identity =
+                mInfo.avatar.token + '*' + selector.toString() + '*' + mInfo.avatar.smallThumbnail.size + '*' + fileName + '*' + 0;
+
+        new RequestFileDownload().download(token, 0, (int) mInfo.avatar.smallThumbnail.size,
+                selector, identity);
     }
 
     @Override
     public void onRequestDownloadAvatar(int offset, int progress) {
-        ProtoFileDownload.FileDownload.Selector selector =
+      /*  ProtoFileDownload.FileDownload.Selector selector =
                 ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL;
         String fileName = mInfo.downloadAttachment.token + "_" + mInfo.avatar.name;
         if (progress == 100) {
@@ -149,7 +185,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
                 + mInfo.chatType.toString();
 
         new RequestFileDownload().download(mInfo.downloadAttachment.token, offset,
-                (int) mInfo.avatar.largeThumbnail.size, selector, identity);
+                (int) mInfo.avatar.largeThumbnail.size, selector, identity);*/
     }
 
     private void requestForUserInfo() {
@@ -250,20 +286,13 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
         if (mInfo.avatar != null) {
 
             if (mInfo.avatar.isFileExistsOnLocal()) {
-                //ImageLoader.getInstance()
-                //.displayImage(AndroidUtils.suitablePath(mInfo.avatar.getLocalFilePath()),
-                //    holder.image);
-                holder.image.setImageBitmap(
-                        BitmapFactory.decodeFile(mInfo.avatar.getLocalFilePath()));
+                ImageLoader.getInstance()
+                        .displayImage(AndroidUtils.suitablePath(mInfo.avatar.getLocalFilePath()),
+                                holder.image);
             } else if (mInfo.avatar.isThumbnailExistsOnLocal()) {
-                //ImageLoader.getInstance()
-                //    .displayImage(mInfo.avatar.getLocalThumbnailPath(),
-                //        holder.image);
-
-                // TODO: 11/6/2016  if loading picture has problem use asynktask or use imageloader
-
-                holder.image.setImageBitmap(
-                        BitmapFactory.decodeFile(mInfo.avatar.getLocalThumbnailPath()));
+                ImageLoader.getInstance()
+                        .displayImage(AndroidUtils.suitablePath(mInfo.avatar.getLocalThumbnailPath()),
+                                holder.image);
 
             } else {
                 holder.image.setImageBitmap(
@@ -274,11 +303,11 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
 
                 if (mInfo.chatType != RoomType.CHAT) {
                     if (mInfo.avatar.token != null && !mInfo.avatar.token.isEmpty()) {
-                        requestForAvatar();
+                        requestForAvatarThumbnail(mInfo.avatar.token);
                     }
                 } else {
                     if (mInfo.avatar.token != null && !mInfo.avatar.token.isEmpty()) {
-                        requestForAvatar();
+                        requestForAvatarThumbnail(mInfo.avatar.token);
                     } else {
                         requestForUserInfo();
                     }
@@ -290,7 +319,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
                     mInfo.initials, mInfo.color));
 
             if (mInfo.chatType != RoomType.CHAT) {
-                requestForAvatar();
+                requestForAvatarThumbnail(mInfo.avatar.token);
             } else {
                 requestForUserInfo();
             }
