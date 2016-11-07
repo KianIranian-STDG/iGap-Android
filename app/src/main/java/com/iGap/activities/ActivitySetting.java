@@ -6,7 +6,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -22,7 +21,6 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -276,11 +274,10 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 layoutNickname.addView(inputFirstName, layoutParams);
                 layoutNickname.addView(inputLastName, lastNameLayoutParams);
 
-                final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this).title("Nickname")
-                    .positiveText("SAVE")
+                final MaterialDialog dialog =
+                    new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_nickname)).positiveText(getResources().getString(R.string.B_ok))
                     .customView(layoutNickname, true)
-                    .widgetColor(getResources().getColor(R.color.toolbar_background))
-                    .negativeText("CANCEL")
+                    .widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel))
                     .build();
 
                 final View positive = dialog.getActionButton(DialogAction.POSITIVE);
@@ -421,7 +418,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         final TextView txtGander = (TextView) findViewById(R.id.st_txt_gander);
         if (gander == null) {
-            txtGander.setText("unknown");
+            txtGander.setText(getResources().getString(R.string.unknown));
         } else {
             txtGander.setText(gander);
         }
@@ -462,9 +459,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                             }
                             return false;
                         }
-                    })
-                    .positiveText("OK")
-                    .negativeText("CANCEL")
+                    }).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.B_cancel))
                     .show();
 
                 G.onUserProfileSetGenderResponse = new OnUserProfileSetGenderResponse() {
@@ -479,10 +474,10 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                                         if (gender == ProtoGlobal.Gender.MALE) {
 
-                                            realm.where(RealmUserInfo.class).findFirst().setGender("Male");
+                                            realm.where(RealmUserInfo.class).findFirst().setGender(getResources().getString(R.string.Male));
                                         } else {
 
-                                            realm.where(RealmUserInfo.class).findFirst().setGender("Female");
+                                            realm.where(RealmUserInfo.class).findFirst().setGender(getResources().getString(R.string.Female));
                                         }
                                     }
                                 });
@@ -542,7 +537,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                 final TextInputLayout inputEmail = new TextInputLayout(ActivitySetting.this);
                 final EditText edtEmail = new EditText(ActivitySetting.this);
-                edtEmail.setHint("Email");
+                edtEmail.setHint(getResources().getString(R.string.st_email));
                 edtEmail.setText(txtEmail.getText().toString());
                 edtEmail.setTextColor(getResources().getColor(R.color.text_edit_text));
                 edtEmail.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
@@ -559,11 +554,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                 layoutEmail.addView(inputEmail, layoutParams);
 
-                final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this).title("Email")
-                    .positiveText("SAVE")
+                final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_email)).positiveText(getResources().getString(R.string.save))
                     .customView(layoutEmail, true)
-                    .widgetColor(getResources().getColor(R.color.toolbar_background))
-                    .negativeText("CANCEL")
+                    .widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel))
                     .build();
 
                 final View positive = dialog.getActionButton(DialogAction.POSITIVE);
@@ -661,7 +654,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                 final TextInputLayout inputUserName = new TextInputLayout(ActivitySetting.this);
                 final EditText edtUserName = new EditText(ActivitySetting.this);
-                edtUserName.setHint("User Name");
+                edtUserName.setHint(getResources().getString(R.string.st_username));
                 edtUserName.setText(txtUserName.getText().toString());
                 edtUserName.setTextColor(getResources().getColor(R.color.text_edit_text));
                 edtUserName.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
@@ -678,11 +671,10 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                 layoutUserName.addView(inputUserName, layoutParams);
 
-                final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this).title("Username")
-                    .positiveText("SAVE")
+                final MaterialDialog dialog =
+                    new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_username)).positiveText(getResources().getString(R.string.save))
                     .customView(layoutUserName, true)
-                    .widgetColor(getResources().getColor(R.color.toolbar_background))
-                    .negativeText("CANCEL")
+                    .widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel))
                     .build();
 
                 final View positive = dialog.getActionButton(DialogAction.POSITIVE);
@@ -924,40 +916,36 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                 new MaterialDialog.Builder(ActivitySetting.this).title("Language")
                     .titleGravity(GravityEnum.START)
-                    .titleColor(getResources().getColor(android.R.color.black))
-                    .items(R.array.language)
-                    .itemsCallbackSingleChoice(poRbDialogLangouage, new MaterialDialog.ListCallbackSingleChoice() {
-                        @Override public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                    .titleColor(getResources().getColor(android.R.color.black)).items(R.array.language).itemsCallbackSingleChoice(poRbDialogLangouage, new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                            txtLanguage.setText(text.toString());
-                            poRbDialogLangouage = which;
-                            sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putString(SHP_SETTING.KEY_LANGUAGE, text.toString());
-                            editor.apply();
+                        txtLanguage.setText(text.toString());
+                        poRbDialogLangouage = which;
+                        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString(SHP_SETTING.KEY_LANGUAGE, text.toString());
+                        editor.apply();
 
-                            switch (which) {
-                                case 0:
-                                    setLocale("en");
-                                    break;
-                                case 1:
-                                    setLocale("fa");
+                        switch (which) {
+                            case 0:
+                                setLocale("en");
+                                break;
+                            case 1:
+                                setLocale("fa");
 
-                                    break;
-                                case 2:
-                                    setLocale("ar");
+                                break;
+                            case 2:
+                                setLocale("ar");
 
-                                    break;
-                                case 3:
-                                    setLocale("nl");
-                                    break;
+                                break;
+                            case 3:
+                                setLocale("nl");
+                                break;
                             }
 
-                            return false;
-                        }
-                    })
-                    .positiveText("OK")
-                    .negativeText("CANCEL")
+                        return false;
+                    }
+                }).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.B_cancel))
                     .show();
             }
         });
@@ -980,8 +968,10 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 final long sizeFolderDocumentDialog = getFolderSize(new File(G.DIR_DOCUMENT));
 
                 boolean wrapInScrollView = true;
-                final MaterialDialog dialog =
-                    new MaterialDialog.Builder(ActivitySetting.this).title("Clear Cash").customView(R.layout.st_dialog_clear_cach, wrapInScrollView).positiveText("CLEAR CASH").show();
+                final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_title_Clear_Cache))
+                    .customView(R.layout.st_dialog_clear_cach, wrapInScrollView)
+                    .positiveText(getResources().getString(R.string.st_title_Clear_Cache))
+                    .show();
 
                 View view = dialog.getCustomView();
 
@@ -1046,7 +1036,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         ltMessageTextSize = (ViewGroup) findViewById(R.id.st_layout_messageTextSize);
         ltMessageTextSize.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
-                new MaterialDialog.Builder(ActivitySetting.this).title("Messages Text Size")
+                new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_title_message_textSize))
                     .titleGravity(GravityEnum.START)
                     .titleColor(getResources().getColor(android.R.color.black))
                     .items(R.array.message_text_size)
@@ -1068,7 +1058,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                             return false;
                         }
                     })
-                    .positiveText("ok")
+                    .positiveText(getResources().getString(R.string.B_ok))
                     .show();
             }
         });
@@ -1217,7 +1207,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                         return true;
                     }
-                }).positiveText("OK").negativeText("CANCEL").show();
+                }).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.B_cancel)).show();
             }
         });
 
@@ -1237,21 +1227,21 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     @Override public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
 
                         //
-                        for (int i = 0; i < which.length; i++) {
+                        for (Integer aWhich : which) {
 
-                            if (which[i] == 0) {
+                            if (aWhich == 0) {
 
-                                KEY_AD_WIFI_PHOTO = which[i];
-                            } else if (which[i] == 1) {
-                                KEY_AD_WIFI_VOICE_MESSAGE = which[i];
-                            } else if (which[i] == 2) {
-                                KEY_AD_WIFI_VIDEO = which[i];
-                            } else if (which[i] == 3) {
-                                KEY_AD_WIFI_FILE = which[i];
-                            } else if (which[i] == 4) {
-                                KEY_AD_WIFI_MUSIC = which[i];
-                            } else if (which[i] == 5) {
-                                KEY_AD_WIFI_GIF = which[i];
+                                KEY_AD_WIFI_PHOTO = aWhich;
+                            } else if (aWhich == 1) {
+                                KEY_AD_WIFI_VOICE_MESSAGE = aWhich;
+                            } else if (aWhich == 2) {
+                                KEY_AD_WIFI_VIDEO = aWhich;
+                            } else if (aWhich == 3) {
+                                KEY_AD_WIFI_FILE = aWhich;
+                            } else if (aWhich == 4) {
+                                KEY_AD_WIFI_MUSIC = aWhich;
+                            } else if (aWhich == 5) {
+                                KEY_AD_WIFI_GIF = aWhich;
                             }
                         }
 
@@ -1267,7 +1257,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                         return true;
                     }
-                }).positiveText("OK").negativeText("CANCEL").show();
+                }).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.cancel)).show();
             }
         });
 
@@ -1287,20 +1277,20 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     @Override public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
 
                         //
-                        for (int i = 0; i < which.length; i++) {
+                        for (Integer aWhich : which) {
 
-                            if (which[i] == 0) {
-                                KEY_AD_ROAMING_PHOTO = which[i];
-                            } else if (which[i] == 1) {
-                                KEY_AD_ROAMING_VOICE_MESSAGE = which[i];
-                            } else if (which[i] == 2) {
-                                KEY_AD_ROAMING_VIDEO = which[i];
-                            } else if (which[i] == 3) {
-                                KEY_AD_ROAMING_FILE = which[i];
-                            } else if (which[i] == 4) {
-                                KEY_AD_ROAMING_MUSIC = which[i];
-                            } else if (which[i] == 5) {
-                                KEY_AD_ROAMINGN_GIF = which[i];
+                            if (aWhich == 0) {
+                                KEY_AD_ROAMING_PHOTO = aWhich;
+                            } else if (aWhich == 1) {
+                                KEY_AD_ROAMING_VOICE_MESSAGE = aWhich;
+                            } else if (aWhich == 2) {
+                                KEY_AD_ROAMING_VIDEO = aWhich;
+                            } else if (aWhich == 3) {
+                                KEY_AD_ROAMING_FILE = aWhich;
+                            } else if (aWhich == 4) {
+                                KEY_AD_ROAMING_MUSIC = aWhich;
+                            } else if (aWhich == 5) {
+                                KEY_AD_ROAMINGN_GIF = aWhich;
                             }
                         }
 
@@ -1316,7 +1306,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                         return true;
                     }
-                }).positiveText("OK").negativeText("CANCEL").show();
+                }).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.B_cancel)).show();
             }
         });
 
@@ -1558,14 +1548,12 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     // change language
     public void setLocale(String lang) {
 
-        Locale myLocale = new Locale(lang);
-        Resources res = getResources();
-        DisplayMetrics dm = res.getDisplayMetrics();
-        Configuration conf = res.getConfiguration();
-        conf.locale = myLocale;
-        res.updateConfiguration(conf, dm);
-        Intent refresh = new Intent(this, ActivitySetting.class);
-        startActivity(refresh);
+        Locale locale = new Locale(lang);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+        startActivity(new Intent(ActivitySetting.this, ActivitySetting.class));
         finish();
     }
 

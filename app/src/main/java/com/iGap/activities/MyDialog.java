@@ -8,7 +8,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
-import com.iGap.G;
 import com.iGap.R;
 import com.iGap.module.OnComplete;
 import com.iGap.realm.enums.RoomType;
@@ -57,6 +56,14 @@ public class MyDialog {
             }
         });
 
+        if (mType == RoomType.CHAT) {
+            txtDeleteChat.setText(context.getString(R.string.delete_item_dialog) + " " + context.getString(R.string.chat));
+        } else if (mType == RoomType.GROUP) {
+            txtDeleteChat.setText(context.getString(R.string.delete_item_dialog) + " " + context.getString(R.string.group));
+        } else if (mType == RoomType.CHANNEL) {
+            txtDeleteChat.setText(context.getString(R.string.delete_item_dialog) + " " + context.getString(R.string.channel));
+        }
+
         txtDeleteChat.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
                 String str = "";
@@ -66,9 +73,7 @@ public class MyDialog {
                     str = context.getString(R.string.group);
                 } else if (mType == RoomType.CHANNEL) str = context.getString(R.string.channel);
 
-                showDialogNotification(context,
-                    context.getString(R.string.do_you_want_delete_this) + str + " ?", complete,
-                    "txtDeleteChat");
+                showDialogNotification(context, context.getString(R.string.do_you_want_delete_this) + str + " ?", complete, "txtDeleteChat");
 
                 dialog.cancel();
             }
@@ -81,12 +86,11 @@ public class MyDialog {
         });
     }
 
-    public static void showDialogNotification(Context context, String Message,
-        final OnComplete complete, final String result) {
+    public static void showDialogNotification(Context context, String Message, final OnComplete complete, final String result) {
 
         final Dialog dialog = new Dialog(context);
         // dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setTitle(G.context.getString(R.string.igap));
+        dialog.setTitle(context.getString(R.string.igap));
         dialog.setContentView(R.layout.dialog_notification);
         dialog.show();
 

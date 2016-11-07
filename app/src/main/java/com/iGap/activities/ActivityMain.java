@@ -42,6 +42,7 @@ import com.iGap.interfaces.OnConnectionChangeState;
 import com.iGap.interfaces.OnDraftMessage;
 import com.iGap.interfaces.OnFileDownloadResponse;
 import com.iGap.interfaces.OnGetPermision;
+import com.iGap.interfaces.OnGroupDelete;
 import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.libs.floatingAddButton.ArcMenu;
 import com.iGap.libs.floatingAddButton.StateChangeListener;
@@ -72,6 +73,7 @@ import com.iGap.realm.RealmUserInfo;
 import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestChatDelete;
 import com.iGap.request.RequestClientGetRoomList;
+import com.iGap.request.RequestGroupDelete;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItemAdapter;
@@ -624,6 +626,26 @@ public class ActivityMain extends ActivityEnhanced
         new RequestChatDelete().chatDelete(item.getInfo().chatId);
     }
 
+    public void deleteGroup(final RoomItem item) {
+        Log.i("XXXC", "onSelectRoomMenu2: " + item.getInfo().chatId);
+
+        G.onGroupDelete = new OnGroupDelete() {
+            @Override public void onGroupDelete(long roomId) {
+                runOnUiThread(new Runnable() {
+                    @Override public void run() {
+                        mAdapter.remove(mAdapter.getPosition(item));
+                    }
+                });
+            }
+
+            @Override public void Error(int majorCode, int minorCode) {
+
+            }
+        };
+
+        new RequestGroupDelete().groupDelete(item.getInfo().chatId);
+    }
+
     /**
      * on select room menu
      *
@@ -639,7 +661,16 @@ public class ActivityMain extends ActivityEnhanced
                 clearHistory(item);
                 break;
             case "txtDeleteChat":
-                deleteChat(item);
+
+                if (item.mInfo.chatType == RoomType.CHAT) {
+
+                    deleteChat(item);
+                } else if (item.mInfo.chatType == RoomType.GROUP) {
+                    deleteGroup(item);
+                } else if (item.mInfo.chatType == RoomType.CHANNEL) {
+                    //delete channel
+                }
+
                 break;
         }
     }

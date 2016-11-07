@@ -20,6 +20,7 @@
   <dimen name="dp4">3dp</dimen>
   <dimen name="dp6">4dp</dimen>
   <dimen name="dp8">6dp</dimen>
+  <dimen name="dp10">7.5dp</dimen>
   <dimen name="dp12">9dp</dimen>
   <dimen name="dp16">12dp</dimen>
   <dimen name="dp18">13dp</dimen>

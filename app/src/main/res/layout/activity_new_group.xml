@@ -118,7 +118,7 @@
           android:text="@string/chi_NEXT_STEP"
           android:textColor="@color/toolbar_background"
           android:textSize="@dimen/dp16"
-          android:textStyle="bold"
+          android:textStyle="normal"
           fontPath="fonts/IRANSansMobile_Bold.ttf"
 
           />
@@ -135,7 +135,7 @@
           android:text="@string/B_cancel"
           android:textColor="@color/toolbar_background"
           android:textSize="@dimen/dp16"
-          android:textStyle="bold"
+          android:textStyle="normal"
           fontPath="fonts/IRANSansMobile_Bold.ttf"
           />
     </RelativeLayout>

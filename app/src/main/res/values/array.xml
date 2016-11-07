@@ -183,15 +183,15 @@
   </string-array>
 
   <string-array name="account_self_destruct">
-    <item>1 month</item>
-    <item>3 month</item>
-    <item>6 month</item>
-    <item>1 year</item>
+    <item>@string/month_1</item>
+    <item>@string/month_3</item>
+    <item>@string/month_6</item>
+    <item>@string/year_1</item>
   </string-array>
 
   <string-array name="array_gander">
-    <item>Male</item>
-    <item>Female</item>
+    <item>@string/Male</item>
+    <item>@string/Female</item>
   </string-array>
 
 

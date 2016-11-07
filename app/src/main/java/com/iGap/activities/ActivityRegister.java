@@ -32,6 +32,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
@@ -396,7 +397,7 @@ public class ActivityRegister extends ActivityEnhanced {
 
                     phoneNumber = edtPhoneNumber.getText().toString();
 
-                    MaterialDialog dialog = new MaterialDialog.Builder(ActivityRegister.this).customView(R.layout.rg_mdialog_text, true)
+                    MaterialDialog dialog = new MaterialDialog.Builder(ActivityRegister.this).buttonsGravity(GravityEnum.END).customView(R.layout.rg_mdialog_text, true)
                         .positiveText("OK")
                         .negativeText("EDIT")
                         .onPositive(new MaterialDialog.SingleButtonCallback() {

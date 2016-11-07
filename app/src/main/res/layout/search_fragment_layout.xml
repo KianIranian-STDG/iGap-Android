@@ -48,6 +48,7 @@
               android:text="@string/md_back_arrow"
               android:textColor="@android:color/white"
               android:textSize="@dimen/sp18"
+              fontPath="fonts/Flaticon.ttf"
               />
         </com.iGap.libs.rippleeffect.RippleView>
 
@@ -84,6 +85,7 @@
               android:text="@string/md_close_button"
               android:textColor="@android:color/white"
               android:textSize="@dimen/sp16"
+              fontPath="fonts/Flaticon.ttf"
               />
         </com.iGap.libs.rippleeffect.RippleView>
 

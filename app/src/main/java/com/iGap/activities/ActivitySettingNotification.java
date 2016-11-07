@@ -139,9 +139,9 @@ public class ActivitySettingNotification extends AppCompatActivity {
                 final MaterialDialog dialog =
                     new MaterialDialog.Builder(ActivitySettingNotification.this).customView(
                         R.layout.stns_popup_colorpicer, wrapInScrollView)
-                        .positiveText("SET")
-                        .negativeText("DISCARD")
-                        .title("LED Color")
+                        .positiveText(getResources().getString(R.string.set))
+                        .negativeText(getResources().getString(R.string.DISCARD))
+                        .title(getResources().getString(R.string.st_led_color))
                         .onNegative(new MaterialDialog.SingleButtonCallback() {
                             @Override public void onClick(@NonNull MaterialDialog dialog,
                                 @NonNull DialogAction which) {
@@ -182,15 +182,14 @@ public class ActivitySettingNotification extends AppCompatActivity {
         });
 
         txtVibrateMessage = (TextView) findViewById(R.id.stns_txt_vibrate_message_text);
-        String vibrateMessage = sharedPreferences.getString(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, "Default");
+        String vibrateMessage = sharedPreferences.getString(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, getResources().getString(R.string.array_Default));
         txtVibrateMessage.setText(vibrateMessage);
         ltVibrate_message = (ViewGroup) findViewById(R.id.stns_layout_vibrate_message);
         ltVibrate_message.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
 
-                new MaterialDialog.Builder(ActivitySettingNotification.this).title("Vibrate")
-                    .items(R.array.vibrate)
-                    .negativeText("CANCEL")
+                new MaterialDialog.Builder(ActivitySettingNotification.this).title(getResources().getString(R.string.st_vibrate))
+                    .items(R.array.vibrate).negativeText(getResources().getString(R.string.B_cancel))
                     .itemsCallback(new MaterialDialog.ListCallback() {
                         @Override
                         public void onSelection(MaterialDialog dialog, View view, int which,
@@ -201,15 +200,13 @@ public class ActivitySettingNotification extends AppCompatActivity {
                             SharedPreferences.Editor editor = sharedPreferences.edit();
                             switch (which) {
                                 case 0:
-                                    txtVibrateMessage.setText("Disable");
-                                    editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE,
-                                        "Disable");
+                                    txtVibrateMessage.setText(getResources().getString(R.string.array_Disable));
+                                    editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, getResources().getString(R.string.array_Disable));
                                     editor.apply();
                                     break;
                                 case 1:
-                                    txtVibrateMessage.setText("Default");
-                                    editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE,
-                                        "Default");
+                                    txtVibrateMessage.setText(getResources().getString(R.string.array_Default));
+                                    editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, getResources().getString(R.string.array_Default));
                                     editor.apply();
                                     AudioManager am =
                                         (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -224,25 +221,24 @@ public class ActivitySettingNotification extends AppCompatActivity {
                                     }
                                     break;
                                 case 2:
-                                    txtVibrateMessage.setText("Short");
-                                    editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, "Short");
+                                    txtVibrateMessage.setText(getResources().getString(R.string.array_Short));
+                                    editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, getResources().getString(R.string.array_Short));
                                     editor.apply();
                                     Vibrator vShort = (Vibrator) G.context.getSystemService(
                                         Context.VIBRATOR_SERVICE);
                                     vShort.vibrate(200);
                                     break;
                                 case 3:
-                                    txtVibrateMessage.setText("Long");
-                                    editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, "Long");
+                                    txtVibrateMessage.setText(getResources().getString(R.string.array_Long));
+                                    editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, getResources().getString(R.string.array_Long));
                                     editor.apply();
                                     Vibrator vLong = (Vibrator) G.context.getSystemService(
                                         Context.VIBRATOR_SERVICE);
                                     vLong.vibrate(500);
                                     break;
                                 case 4:
-                                    txtVibrateMessage.setText("Only if silent");
-                                    editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE,
-                                        "Only if silent");
+                                    txtVibrateMessage.setText(getResources().getString(R.string.array_Only_if_silent));
+                                    editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, getResources().getString(R.string.array_Only_if_silent));
                                     editor.apply();
                                     AudioManager am2 =
                                         (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -266,17 +262,14 @@ public class ActivitySettingNotification extends AppCompatActivity {
 
         txtPopupNotification =
             (TextView) findViewById(R.id.stns_txt_popupNotification_message_text);
-        String popupNotification =
-            sharedPreferences.getString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, "Default");
+        String popupNotification = sharedPreferences.getString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, getResources().getString(R.string.array_Default));
         txtPopupNotification.setText(popupNotification);
         ltPopupNotification = (ViewGroup) findViewById(R.id.stns_layout_popupNotification_message);
         ltPopupNotification.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
 
-                new MaterialDialog.Builder(ActivitySettingNotification.this).title(
-                    "Popup Notification")
-                    .items(R.array.popup_Notification)
-                    .negativeText("CANCEL")
+                new MaterialDialog.Builder(ActivitySettingNotification.this).title(getResources().getString(R.string.st_popupNotification))
+                    .items(R.array.popup_Notification).negativeText(getResources().getString(R.string.B_cancel))
                     .itemsCallback(new MaterialDialog.ListCallback() {
                         @Override
                         public void onSelection(MaterialDialog dialog, View view, int which,
@@ -287,13 +280,13 @@ public class ActivitySettingNotification extends AppCompatActivity {
                             SharedPreferences.Editor editor = sharedPreferences.edit();
                             switch (which) {
                                 case 0:
-                                    txtPopupNotification.setText("No popup");
+                                    txtPopupNotification.setText(getResources().getString(R.string.array_No_popup));
                                     editor.putInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE,
                                         0);
                                     editor.apply();
                                     break;
                                 case 1:
-                                    txtPopupNotification.setText("Only when screen \"on\"");
+                                    txtPopupNotification.setText(getResources().getString(R.string.array_Only_when_screen_on));
                                     editor.putInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE,
                                         1);
                                     editor.apply();
@@ -311,7 +304,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
                                     }
                                     break;
                                 case 2:
-                                    txtPopupNotification.setText("Only when screen \"off\"");
+                                    txtPopupNotification.setText(getResources().getString(R.string.array_Only_when_screen_off));
                                     editor.putInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE,
                                         2);
                                     editor.apply();
@@ -329,7 +322,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
                                     }
                                     break;
                                 case 3:
-                                    txtPopupNotification.setText("Always show popup");
+                                    txtPopupNotification.setText(getResources().getString(R.string.array_Always_show_popup));
                                     editor.putInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE,
                                         3);
                                     editor.apply();
@@ -344,15 +337,14 @@ public class ActivitySettingNotification extends AppCompatActivity {
         poRbDialogSoundMessage =
             sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_MESSAGE_POSITION, 3);
         txtSoundMessage = (TextView) findViewById(R.id.stns_txt_sound_text);
-        String soundMessage =
-            sharedPreferences.getString(SHP_SETTING.KEY_STNS_SOUND_MESSAGE, "Arrow");
+        String soundMessage = sharedPreferences.getString(SHP_SETTING.KEY_STNS_SOUND_MESSAGE, getResources().getString(R.string.arrow));
         txtSoundMessage.setText(soundMessage);
         ltSoundMessage = (ViewGroup) findViewById(R.id.stns_layout_sound_message);
 
         ltSoundMessage.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
 
-                new MaterialDialog.Builder(ActivitySettingNotification.this).title("Ringtone")
+                new MaterialDialog.Builder(ActivitySettingNotification.this).title(getResources().getString(R.string.Ringtone))
                     .titleGravity(GravityEnum.START)
                     .titleColor(getResources().getColor(android.R.color.black))
                     .items(R.array.sound_message)
@@ -438,9 +430,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
 
                                 return true;
                             }
-                        })
-                    .positiveText("OK")
-                    .negativeText("CANCEL")
+                        }).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.B_cancel))
                     .show();
                 Toast.makeText(ActivitySettingNotification.this, "ltSoundMessage",
                     Toast.LENGTH_SHORT).show();
@@ -518,9 +508,9 @@ public class ActivitySettingNotification extends AppCompatActivity {
                 final MaterialDialog dialog =
                     new MaterialDialog.Builder(ActivitySettingNotification.this).customView(
                         R.layout.stns_popup_colorpicer, wrapInScrollView)
-                        .positiveText("SET")
-                        .negativeText("DISCARD")
-                        .title("LED Color")
+                        .positiveText(getResources().getString(R.string.set))
+                        .negativeText(getResources().getString(R.string.DISCARD))
+                        .title(getResources().getString(R.string.st_led_color))
                         .onNegative(new MaterialDialog.SingleButtonCallback() {
                             @Override public void onClick(@NonNull MaterialDialog dialog,
                                 @NonNull DialogAction which) {
@@ -560,16 +550,14 @@ public class ActivitySettingNotification extends AppCompatActivity {
         });
 
         txtVibrateGroup = (TextView) findViewById(R.id.stns_txt_vibrate_group_text);
-        String vibrateGroup =
-            sharedPreferences.getString(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, "Default");
+        String vibrateGroup = sharedPreferences.getString(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, getResources().getString(R.string.array_Default));
         txtVibrateGroup.setText(vibrateGroup);
         ltVibrateGroup = (ViewGroup) findViewById(R.id.stns_layout_vibrate_group);
         ltVibrateGroup.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
 
-                new MaterialDialog.Builder(ActivitySettingNotification.this).title("Vibrate")
-                    .items(R.array.vibrate)
-                    .negativeText("CANCEL")
+                new MaterialDialog.Builder(ActivitySettingNotification.this).title(getResources().getString(R.string.st_vibrate))
+                    .items(R.array.vibrate).negativeText(getResources().getString(R.string.B_cancel))
                     .itemsCallback(new MaterialDialog.ListCallback() {
                         @Override
                         public void onSelection(MaterialDialog dialog, View view, int which,
@@ -579,13 +567,13 @@ public class ActivitySettingNotification extends AppCompatActivity {
                             SharedPreferences.Editor editor = sharedPreferences.edit();
                             switch (which) {
                                 case 0:
-                                    txtVibrateGroup.setText("Disable");
-                                    editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, "Disable");
+                                    txtVibrateGroup.setText(getResources().getString(R.string.array_Disable));
+                                    editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, getResources().getString(R.string.array_Disable));
                                     editor.apply();
                                     break;
                                 case 1:
-                                    txtVibrateGroup.setText("Default");
-                                    editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, "Default");
+                                    txtVibrateGroup.setText(getResources().getString(R.string.array_Default));
+                                    editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, getResources().getString(R.string.array_Default));
                                     editor.apply();
                                     AudioManager am =
                                         (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -601,25 +589,24 @@ public class ActivitySettingNotification extends AppCompatActivity {
 
                                     break;
                                 case 2:
-                                    txtVibrateGroup.setText("Short");
-                                    editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, "Short");
+                                    txtVibrateGroup.setText(getResources().getString(R.string.array_Short));
+                                    editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, getResources().getString(R.string.array_Short));
                                     editor.apply();
                                     Vibrator vShort = (Vibrator) G.context.getSystemService(
                                         Context.VIBRATOR_SERVICE);
                                     vShort.vibrate(200);
                                     break;
                                 case 3:
-                                    txtVibrateGroup.setText("Long");
-                                    editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, "Long");
+                                    txtVibrateGroup.setText(getResources().getString(R.string.array_Short));
+                                    editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, getResources().getString(R.string.array_Long));
                                     editor.apply();
                                     Vibrator vLong = (Vibrator) G.context.getSystemService(
                                         Context.VIBRATOR_SERVICE);
                                     vLong.vibrate(500);
                                     break;
                                 case 4:
-                                    txtVibrateGroup.setText("Only if silent");
-                                    editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_GROUP,
-                                        "Only if silent");
+                                    txtVibrateGroup.setText(getResources().getString(R.string.array_Only_if_silent));
+                                    editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, getResources().getString(R.string.array_Only_if_silent));
                                     editor.apply();
 
                                     AudioManager am2 =
@@ -644,18 +631,15 @@ public class ActivitySettingNotification extends AppCompatActivity {
         });
         txtPopupNotificationGroup =
             (TextView) findViewById(R.id.stns_txt_popupNotification_group_text);
-        String popupNotificationGroup =
-            sharedPreferences.getString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, "Default1");
+        String popupNotificationGroup = sharedPreferences.getString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, getResources().getString(R.string.array_Default));
         txtPopupNotificationGroup.setText(popupNotificationGroup);
         ltPopupNotificationGroup =
             (ViewGroup) findViewById(R.id.stns_layout_popupNotification_group);
         ltPopupNotificationGroup.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
 
-                new MaterialDialog.Builder(ActivitySettingNotification.this).title(
-                    "Popup Notification")
-                    .items(R.array.popup_Notification)
-                    .negativeText("CANCEL")
+                new MaterialDialog.Builder(ActivitySettingNotification.this).title(getResources().getString(R.string.st_popupNotification))
+                    .items(R.array.popup_Notification).negativeText(getResources().getString(R.string.B_cancel))
                     .itemsCallback(new MaterialDialog.ListCallback() {
                         @Override
                         public void onSelection(MaterialDialog dialog, View view, int which,
@@ -666,15 +650,13 @@ public class ActivitySettingNotification extends AppCompatActivity {
                             SharedPreferences.Editor editor = sharedPreferences.edit();
                             switch (which) {
                                 case 0:
-                                    txtPopupNotificationGroup.setText("No popup");
-                                    editor.putString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP,
-                                        "No popup");
+                                    txtPopupNotificationGroup.setText(getResources().getString(R.string.array_No_popup));
+                                    editor.putString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, getResources().getString(R.string.array_No_popup));
                                     editor.apply();
                                     break;
                                 case 1:
-                                    txtPopupNotificationGroup.setText("Only when screen \"on\"");
-                                    editor.putString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP,
-                                        "Only when screen \"on\"");
+                                    txtPopupNotificationGroup.setText(getResources().getString(R.string.array_Only_when_screen_on));
+                                    editor.putString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, getResources().getString(R.string.array_Only_when_screen_on));
                                     editor.apply();
                                     PowerManager pmOn =
                                         (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -689,9 +671,8 @@ public class ActivitySettingNotification extends AppCompatActivity {
                                     }
                                     break;
                                 case 2:
-                                    txtPopupNotificationGroup.setText("Only when screen \"off\"");
-                                    editor.putString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP,
-                                        "Only when screen \"off\"");
+                                    txtPopupNotificationGroup.setText(getResources().getString(R.string.array_Only_when_screen_off));
+                                    editor.putString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, getResources().getString(R.string.array_Only_when_screen_off));
                                     editor.apply();
                                     PowerManager pmOff =
                                         (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -706,9 +687,8 @@ public class ActivitySettingNotification extends AppCompatActivity {
                                     }
                                     break;
                                 case 3:
-                                    txtPopupNotificationGroup.setText("Always show popup");
-                                    editor.putString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP,
-                                        "Always show popup");
+                                    txtPopupNotificationGroup.setText(getResources().getString(R.string.array_Always_show_popup));
+                                    editor.putString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, getResources().getString(R.string.array_Always_show_popup));
                                     editor.apply();
                                     break;
                             }
@@ -721,13 +701,13 @@ public class ActivitySettingNotification extends AppCompatActivity {
         poRbDialogSoundGroup =
             sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, 3);
         txtSoundGroup = (TextView) findViewById(R.id.stns_txt_sound_group_text);
-        String soundGroup = sharedPreferences.getString(SHP_SETTING.KEY_STNS_SOUND_GROUP, "Arrow");
+        String soundGroup = sharedPreferences.getString(SHP_SETTING.KEY_STNS_SOUND_GROUP, getResources().getString(R.string.arrow));
         txtSoundGroup.setText(soundGroup);
         ltSoundGroup = (ViewGroup) findViewById(R.id.stns_layout_sound_group);
         ltSoundGroup.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
 
-                new MaterialDialog.Builder(ActivitySettingNotification.this).title("Ringtone")
+                new MaterialDialog.Builder(ActivitySettingNotification.this).title(getResources().getString(R.string.Ringtone))
                     .titleGravity(GravityEnum.START)
                     .titleColor(getResources().getColor(android.R.color.black))
                     .items(R.array.sound_message)
@@ -809,9 +789,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
                                 editor.apply();
                                 return true;
                             }
-                        })
-                    .positiveText("OK")
-                    .negativeText("CANCEL")
+                        }).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.B_cancel))
                     .show();
 
                 Toast.makeText(ActivitySettingNotification.this, "ltSoundMessage",
@@ -1058,17 +1036,14 @@ public class ActivitySettingNotification extends AppCompatActivity {
         });
 
         txtRepeat_Notifications = (TextView) findViewById(R.id.st_txt_Repeat_Notifications);
-        String repeat_Notifications =
-            sharedPreferences.getString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION, "Off");
+        String repeat_Notifications = sharedPreferences.getString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION, getResources().getString(R.string.array_Off));
         txtRepeat_Notifications.setText(repeat_Notifications);
         ltRepeat_Notifications = (ViewGroup) findViewById(R.id.st_layout_Repeat_Notifications);
         ltRepeat_Notifications.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
 
-                new MaterialDialog.Builder(ActivitySettingNotification.this).title(
-                    "Repeat Notifications")
-                    .items(R.array.repeat_notification)
-                    .negativeText("CANCEL")
+                new MaterialDialog.Builder(ActivitySettingNotification.this).title(getResources().getString(R.string.st_Repeat_Notifications))
+                    .items(R.array.repeat_notification).negativeText(getResources().getString(R.string.B_cancel))
                     .itemsCallback(new MaterialDialog.ListCallback() {
                         @Override
                         public void onSelection(MaterialDialog dialog, View view, int which,
@@ -1079,45 +1054,38 @@ public class ActivitySettingNotification extends AppCompatActivity {
                             SharedPreferences.Editor editor = sharedPreferences.edit();
                             switch (which) {
                                 case 0:
-                                    txtRepeat_Notifications.setText("Off");
-                                    editor.putString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION,
-                                        "Off");
+                                    txtRepeat_Notifications.setText(getResources().getString(R.string.array_Off));
+                                    editor.putString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION, getResources().getString(R.string.array_Off));
                                     editor.apply();
                                     break;
                                 case 1:
-                                    txtRepeat_Notifications.setText("5 minutes");
-                                    editor.putString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION,
-                                        "5 minutes");
+                                    txtRepeat_Notifications.setText(getResources().getString(R.string.array_5_minutes));
+                                    editor.putString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION, getResources().getString(R.string.array_5_minutes));
                                     editor.apply();
                                     break;
                                 case 2:
-                                    txtRepeat_Notifications.setText("10 minutes");
-                                    editor.putString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION,
-                                        "10 minutes");
+                                    txtRepeat_Notifications.setText(getResources().getString(R.string.array_10_minutes));
+                                    editor.putString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION, getResources().getString(R.string.array_10_minutes));
                                     editor.apply();
                                     break;
                                 case 3:
-                                    txtRepeat_Notifications.setText("30 minutes");
-                                    editor.putString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION,
-                                        "30 minutes");
+                                    txtRepeat_Notifications.setText(getResources().getString(R.string.array_30_minutes));
+                                    editor.putString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION, getResources().getString(R.string.array_30_minutes));
                                     editor.apply();
                                     break;
                                 case 4:
-                                    txtRepeat_Notifications.setText("1 hour");
-                                    editor.putString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION,
-                                        "1 hour");
+                                    txtRepeat_Notifications.setText(getResources().getString(R.string.array_1_hour));
+                                    editor.putString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION, getResources().getString(R.string.array_1_hour));
                                     editor.apply();
                                     break;
                                 case 5:
-                                    txtRepeat_Notifications.setText("2 hour");
-                                    editor.putString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION,
-                                        "2 hour");
+                                    txtRepeat_Notifications.setText(getResources().getString(R.string.array_2_hour));
+                                    editor.putString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION, getResources().getString(R.string.array_2_hour));
                                     editor.apply();
                                     break;
                                 case 6:
-                                    txtRepeat_Notifications.setText("4 hour");
-                                    editor.putString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION,
-                                        "4 hour");
+                                    txtRepeat_Notifications.setText(getResources().getString(R.string.array_4_hour));
+                                    editor.putString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION, getResources().getString(R.string.array_4_hour));
                                     editor.apply();
                                     break;
                             }
@@ -1147,14 +1115,12 @@ public class ActivitySettingNotification extends AppCompatActivity {
                             SharedPreferences.Editor editor = sharedPreferences.edit();
                             editor.putInt(SHP_SETTING.KEY_STNS_ALERT_MESSAGE, 1);
                             editor.putInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_MESSAGE, 1);
-                            editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, "Default");
-                            editor.putString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE,
-                                "Always show popup");
+                            editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, getResources().getString(R.string.array_Default));
+                            editor.putString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, getResources().getString(R.string.array_Always_show_popup));
                             editor.putInt(SHP_SETTING.KEY_STNS_ALERT_GROUP, 1);
                             editor.putInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_GROUP, 1);
-                            editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, "Default");
-                            editor.putString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP,
-                                "Always show popup");
+                            editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, getResources().getString(R.string.array_Default));
+                            editor.putString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, getResources().getString(R.string.array_Always_show_popup));
                             editor.putInt(SHP_SETTING.KEY_STNS_APP_SOUND, 1);
                             editor.putInt(SHP_SETTING.KEY_STNS_APP_VIBRATE, 1);
                             editor.putInt(SHP_SETTING.KEY_STNS_APP_PREVIEW, 1);
@@ -1164,12 +1130,11 @@ public class ActivitySettingNotification extends AppCompatActivity {
                             editor.putInt(SHP_SETTING.KEY_STNS_KEEP_ALIVE_SERVICE, 1);
                             editor.putInt(SHP_SETTING.KEY_STNS_BACKGROUND_CONNECTION, 1);
                             editor.putInt(SHP_SETTING.KEY_STNS_BADGE_CONTENT, 1);
-                            editor.putString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION, "1 hour");
+                            editor.putString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION, getResources().getString(R.string.array_1_hour));
                             editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_MESSAGE, -8257792);
                             editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, -8257792);
                             editor.apply();
-                            Toast.makeText(ActivitySettingNotification.this,
-                                "Reset All Notification", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ActivitySettingNotification.this, getResources().getString(R.string.st_reset_all_notification), Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(ActivitySettingNotification.this,
                                 ActivitySettingNotification.class));
                             finish();

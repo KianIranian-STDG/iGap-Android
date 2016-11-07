@@ -65,6 +65,7 @@
           android:padding="@dimen/dp8"
           android:text="@string/md_send_button"
           android:visibility="gone"
+          fontPath="fonts/fontawesome.ttf"
           style="@style/ChatMessages.MaterialDesignTextView.BottomIcon.SendBtn"
           />
 

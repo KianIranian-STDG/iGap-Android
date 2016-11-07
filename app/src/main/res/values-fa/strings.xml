@@ -18,6 +18,9 @@
   <string name="fa_video_camera">&#xf03d;</string>
   <string name="fa_pause">&#xf04c;</string>
 
+  <string name="array_Default">دیفالت</string>
+  <string name="array_Short">کوتاه</string>
+  <string name="array_Long">بلند</string>
 
   <string name="unmute_notification">UnMute Notification</string>
   <string name="mute_notification">Mute Notification</string>
@@ -138,32 +141,32 @@
     <string name="st_dialog_content_keepMedia">Photo , video and other files from cloud chats that ypo have not accessed during this period
         will be removed from this device to save disc space. \n all media will stayin the iGap cloud and can be reDownloaded if you need it again.
     </string>
-  <string name="st_titleToolbar_page_Notification_and_sounds">Message notification</string>
-  <string name="st_title_messageNotification">Message notification</string>
-  <string name="st_alert">Alert</string>
+  <string name="st_titleToolbar_page_Notification_and_sounds">پیشنمایش پیغام</string>
+  <string name="st_title_messageNotification">پیشنمایش پیغام</string>
+  <string name="st_alert">پیشنمایش پیغام</string>
   <string name="st_messagePreview">پیشنمایش پیغام</string>
-  <string name="st_led_color">LED Color</string>
+  <string name="st_led_color">پیشنمایش پیغام</string>
   <string name="st_vibrate">ویبره</string>
-  <string name="st_popupNotification">Popup Notification</string>
-  <string name="st_sound">Sound</string>
-  <string name="st_title_groupNotification">Group Notification</string>
-  <string name="st_title_in_app_notification">In-App notifications</string>
-  <string name="st_in_app_sound">In-App Sounds</string>
-  <string name="st_in_app_vibrate">In-App Vibrate</string>
-  <string name="st_in_app_preview">In-App Preview</string>
-  <string name="st_in_chat_sound">In_Chat Sounds </string>
-  <string name="st_title_Events">In_Chat Sounds </string>
-  <string name="st_Contact_joined_igap">Contact joined iGap</string>
-  <string name="st_pinned_message">Pinned Message</string>
-  <string name="st_title_other">Other</string>
-  <string name="st_text_keep_alive_service">Relaunch app when down by user or system. this will ensure app can show notification</string>
-  <string name="st_keep_alive_service">Keep-Alive Service</string>
-  <string name="st_background_connection">Background Connection</string>
-  <string name="st_text_background_connection">Keep a low impact background connection to iGap to receive notification. Enable for reliable notification  </string>
-  <string name="st_badge_counter">Pinned Message</string>
-  <string name="st_Repeat_Notifications">Pinned Message</string>
-  <string name="st_title_reset">Reset</string>
-  <string name="st_reset_all_notification">پاک کردن</string>
+  <string name="st_popupNotification">پیشنمایش پیغام</string>
+  <string name="st_sound">پیشنمایش پیغام</string>
+  <string name="st_title_groupNotification">پیشنمایش پیغام</string>
+  <string name="st_title_in_app_notification">پیشنمایش پیغام</string>
+  <string name="st_in_app_sound">پیشنمایش پیغام</string>
+  <string name="st_in_app_vibrate">پیشنمایش پیغام</string>
+  <string name="st_in_app_preview">پیشنمایش پیغام</string>
+  <string name="st_in_chat_sound">پیشنمایش پیغام</string>
+  <string name="st_title_Events">پیشنمایش پیغام</string>
+  <string name="st_Contact_joined_igap">پیشنمایش پیغام</string>
+  <string name="st_pinned_message">پیشنمایش پیغام</string>
+  <string name="st_title_other">پیشنمایش پیغام</string>
+  <string name="st_text_keep_alive_service">پیشنمایش پیغامپیشنمایش پیغامپیشنمایش پیغامپیشنمایش پیغامپیشنمایش پیغام</string>
+  <string name="st_keep_alive_service">پیشنمایش پیغام</string>
+  <string name="st_background_connection">پیشنمایش پیغام</string>
+  <string name="st_text_background_connection">پیشنمایش پیغامپیشنمایش پیغامپیشنمایش پیغامپیشنمایش پیغامپیشنمایش پیغامپیشنمایش پیغامپیشنمایش پیغام</string>
+  <string name="st_badge_counter">پیشنمایش پیغام</string>
+  <string name="st_Repeat_Notifications">پیشنمایش پیغام</string>
+  <string name="st_title_reset">پیشنمایش پیغام</string>
+  <string name="st_reset_all_notification">پیشنمایش پیغام</string>
   <string name="st_text_reset_all_notification">Undo all custom notification settings for all your contacts and groups</string>
 
 

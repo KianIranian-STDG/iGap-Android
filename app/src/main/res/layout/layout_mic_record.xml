@@ -18,7 +18,7 @@
         android:layout_height="@dimen/dp48"
         android:layout_gravity="bottom"
         android:background="@color/white"
-        ></LinearLayout>
+        />
 
 
     <LinearLayout
@@ -96,6 +96,7 @@
             android:textColor="@color/black_register"
             android:textSize="@dimen/sp26"
             android:text="@string/md_voice_message_microphone_button"
+            fontPath="fonts/fontawesome.ttf"
             style="@style/ChatMessages.MaterialDesignTextView.BottomIcon"
             />
 

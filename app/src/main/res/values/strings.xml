@@ -134,7 +134,7 @@
   <string name="st_Contact_joined_igap">Contact joined iGap</string>
   <string name="st_pinned_message">Pinned Message</string>
   <string name="st_title_other">Other</string>
-  <string name="st_text_keep_alive_service">Relaunch app when down by user or system. this will ensure app can show notifications</string>
+  <string name="st_text_keep_alive_service">Relaunch app when down by user or\n system. this will ensure app can\n show notifications</string>
   <string name="st_keep_alive_service">Keep-Alive Service</string>
   <string name="st_background_connection">Background Connection</string>
   <string name="st_text_background_connection">Keep a low impact background connection to iGap to receive notifications. Enable for reliable notifications  </string>
@@ -308,9 +308,14 @@
   <string name="resend_message">Resend message</string>
   <string name="USER_VERIFY_BLOCKED_USER">USER VERIFY BLOCKED USER</string>
   <string name="Enter_Code">Code</string>
+  <string name="arrow">Arrow</string>
+  <string name="Ringtone">Ringtone</string>
+  <string name="Male">Male</string>
+  <string name="Female">Female</string>
+  <string name="DISCARD">DISCARD</string>
+  <string name="unknown">unknown</string>
 
   <string name="desc">Description</string>
-
 
   <string name="E_335">Bad payload for request</string>
   <string name="E_336">Internal server error for request</string>

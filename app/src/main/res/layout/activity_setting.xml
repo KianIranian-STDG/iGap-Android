@@ -32,7 +32,7 @@
 
       <android.support.v7.widget.Toolbar
           android:layout_width="match_parent"
-          android:layout_height="@dimen/dp60"
+          android:layout_height="@dimen/dp52"
           app:contentInsetLeft="0dp"
           app:contentInsetStart="0dp"
           app:layout_collapseMode="pin"
@@ -51,7 +51,7 @@
               android:gravity="center"
               android:text="@string/st_titleToolbar"
               android:textColor="@color/whit_background"
-              android:textSize="@dimen/sp22"
+              android:textSize="@dimen/sp20"
               android:textStyle="bold"
               android:visibility="gone"
               />
@@ -68,7 +68,7 @@
               >
 
             <com.iGap.module.MaterialDesignTextView
-                android:layout_width="@dimen/dp60"
+                android:layout_width="@dimen/dp48"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="@string/md_back_arrow"
@@ -91,7 +91,7 @@
               >
 
             <com.iGap.module.MaterialDesignTextView
-                android:layout_width="@dimen/dp60"
+                android:layout_width="@dimen/dp48"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="@string/md_show_more_button"
@@ -152,6 +152,7 @@
     </android.support.design.widget.CollapsingToolbarLayout>
   </android.support.design.widget.AppBarLayout>
 
+
   <android.support.v4.widget.NestedScrollView
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -185,11 +186,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:paddingBottom="@dimen/dp20"
+            android:paddingBottom="@dimen/dp16"
             android:text="@string/st_Info"
             android:textColor="@color/green"
-            android:textSize="@dimen/sp22"
+            android:textSize="@dimen/sp20"
             android:textStyle="bold"
+            fontPath="fonts/IRANSansMobile_Bold.ttf"
             />
 
         <LinearLayout
@@ -201,8 +203,8 @@
           <LinearLayout
               android:id="@+id/st_layout_nickname"
               android:layout_width="0dp"
-              android:layout_weight=".48"
               android:layout_height="wrap_content"
+              android:layout_weight=".48"
               android:orientation="vertical"
               >
 
@@ -210,11 +212,11 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/dp4"
+                android:paddingEnd="@dimen/dp4"
                 android:paddingStart="@dimen/dp4"
                 android:text="@string/st_nickname"
                 android:textColor="@color/black_register"
-                android:textSize="@dimen/sp18"
+                android:textSize="@dimen/sp16"
                 android:textStyle="normal"
                 />
 
@@ -224,12 +226,12 @@
                 android:layout_height="@dimen/dp28"
                 android:gravity="center_vertical"
                 android:maxLength="25"
-                android:paddingLeft="@dimen/dp4"
+                android:paddingEnd="@dimen/dp4"
                 android:paddingStart="@dimen/dp4"
+                android:singleLine="true"
                 android:text="Alexander Smith"
                 android:textColor="@color/colorChatMessageTime"
-                android:textSize="@dimen/sp16"
-                android:singleLine="true"
+                android:textSize="@dimen/sp14"
                 android:theme="@style/Setting_editText"
                 />
 
@@ -237,16 +239,16 @@
 
           <LinearLayout
               android:layout_width="0dp"
-              android:layout_weight=".04"
               android:layout_height="wrap_content"
+              android:layout_weight=".04"
               android:orientation="vertical"
               />
 
           <LinearLayout
               android:id="@+id/st_layout_gander"
               android:layout_width="0dp"
-              android:layout_weight=".48"
               android:layout_height="wrap_content"
+              android:layout_weight=".48"
               android:orientation="vertical"
               >
 
@@ -254,11 +256,11 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/dp4"
+                android:paddingEnd="@dimen/dp4"
                 android:paddingStart="@dimen/dp4"
                 android:text="@string/st_Gander"
                 android:textColor="@color/black_register"
-                android:textSize="@dimen/sp18"
+                android:textSize="@dimen/sp16"
                 android:textStyle="normal"
                 />
 
@@ -268,11 +270,11 @@
                 android:layout_height="@dimen/dp28"
                 android:gravity="center_vertical"
                 android:maxLength="25"
-                android:paddingLeft="@dimen/dp4"
+                android:paddingEnd="@dimen/dp4"
                 android:paddingStart="@dimen/dp4"
                 android:text="unknown"
                 android:textColor="@color/colorChatMessageTime"
-                android:textSize="@dimen/sp16"
+                android:textSize="@dimen/sp14"
                 android:theme="@style/Setting_editText"
                 />
 
@@ -287,62 +289,62 @@
           <LinearLayout
               android:id="@+id/st_layout_username"
               android:layout_width="0dp"
+              android:layout_height="wrap_content"
               android:layout_weight=".48"
-              android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
-          <TextView
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_marginTop="@dimen/dp20"
-              android:paddingLeft="@dimen/dp4"
-              android:paddingStart="@dimen/dp4"
-              android:text="@string/st_username"
-              android:textColor="@color/black_register"
-              android:textSize="@dimen/sp18"
-              android:textStyle="normal"
-              />
+              android:orientation="vertical"
+              >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp12"
+                android:paddingEnd="@dimen/dp4"
+                android:paddingStart="@dimen/dp4"
+                android:text="@string/st_username"
+                android:textColor="@color/black_register"
+                android:textSize="@dimen/sp16"
+                android:textStyle="normal"
+                />
 
-          <TextView
-              android:id="@+id/st_txt_userName"
-              android:layout_width="wrap_content"
-              android:layout_height="@dimen/dp28"
-              android:gravity="center_vertical"
-              android:maxLength="25"
-              android:paddingLeft="@dimen/dp4"
-              android:paddingStart="@dimen/dp4"
-              android:text="Alexander Smith:"
-
-              android:textColor="@color/colorChatMessageTime"
-              android:textSize="@dimen/sp16"
-              android:singleLine="true"
-              android:theme="@style/Setting_editText"
-              />
-        </LinearLayout>
+            <TextView
+                android:id="@+id/st_txt_userName"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp28"
+                android:gravity="center_vertical"
+                android:maxLength="25"
+                android:paddingEnd="@dimen/dp4"
+                android:paddingStart="@dimen/dp4"
+                android:singleLine="true"
+                android:text="Alexander Smith:"
+                android:textColor="@color/colorChatMessageTime"
+                android:textSize="@dimen/sp14"
+                android:theme="@style/Setting_editText"
+                />
+          </LinearLayout>
 
           <LinearLayout
               android:layout_width="0dp"
-              android:layout_weight=".04"
               android:layout_height="wrap_content"
+              android:layout_weight=".04"
               android:orientation="vertical"
               />
 
           <LinearLayout
               android:id="@+id/st_layout_email"
               android:layout_width="0dp"
-              android:layout_weight=".48"
               android:layout_height="wrap_content"
+              android:layout_weight=".48"
               android:orientation="vertical"
               >
             <TextView
+                android:id="@+id/textView2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp20"
-                android:paddingLeft="@dimen/dp4"
+                android:layout_marginTop="@dimen/dp12"
+                android:paddingEnd="@dimen/dp4"
                 android:paddingStart="@dimen/dp4"
                 android:text="@string/st_email"
                 android:textColor="@color/black_register"
-                android:textSize="@dimen/sp18"
+                android:textSize="@dimen/sp16"
                 android:textStyle="normal"
                 />
 
@@ -352,12 +354,12 @@
                 android:layout_height="@dimen/dp28"
                 android:gravity="center_vertical"
                 android:maxLength="25"
-                android:paddingLeft="@dimen/dp4"
+                android:paddingEnd="@dimen/dp4"
                 android:paddingStart="@dimen/dp4"
+                android:singleLine="true"
                 android:text="example@Gmail.com"
                 android:textColor="@color/colorChatMessageTime"
-                android:textSize="@dimen/sp16"
-                android:singleLine="true"
+                android:textSize="@dimen/sp14"
                 android:theme="@style/Setting_editText"
                 />
           </LinearLayout>
@@ -367,11 +369,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp20"
-            android:paddingLeft="@dimen/dp4"
+            android:paddingEnd="@dimen/dp4"
             android:paddingStart="@dimen/dp4"
             android:text="@string/st_phoneNumber"
             android:textColor="@color/black_register"
-            android:textSize="@dimen/sp18"
+            android:textSize="@dimen/sp16"
             android:textStyle="normal"
             />
 
@@ -383,11 +385,11 @@
             android:editable="false"
             android:gravity="center_vertical"
             android:maxLength="11"
-            android:paddingLeft="@dimen/dp4"
+            android:paddingEnd="@dimen/dp4"
             android:paddingStart="@dimen/dp4"
             android:text="09121234567"
             android:textColor="@color/colorChatMessageTime"
-            android:textSize="@dimen/sp16"
+            android:textSize="@dimen/sp14"
             android:theme="@style/Setting_editText"
             />
 
@@ -407,13 +409,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:paddingBottom="@dimen/dp20"
+            android:paddingBottom="@dimen/dp16"
             android:paddingLeft="@dimen/dp16"
             android:paddingRight="@dimen/dp16"
             android:paddingTop="@dimen/dp12"
             android:text="@string/st_title_general"
             android:textColor="@color/green"
-            android:textSize="@dimen/sp22"
+            android:textSize="@dimen/sp20"
             android:textStyle="bold"
 
             />
@@ -421,12 +423,15 @@
         <TextView
             android:id="@+id/st_txt_notifyAndSound"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp60"
-            android:padding="@dimen/dp16"
+            android:layout_height="@dimen/dp52"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
             android:text="@string/st_title_notification_sounds"
             android:textColor="@color/black_register"
-            android:textSize="@dimen/sp18"
+            android:textSize="@dimen/sp16"
             android:textStyle="normal"
+            fontPath="fonts/IRANSansMedium.ttf"
             />
 
         <View
@@ -438,30 +443,37 @@
         <LinearLayout
             android:id="@+id/st_layout_language"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp60"
+            android:layout_height="@dimen/dp52"
             android:orientation="horizontal"
-            android:padding="@dimen/dp16"
+
             >
 
           <TextView
               android:layout_width="0dp"
-              android:layout_height="wrap_content"
+              android:layout_height="match_parent"
               android:layout_weight=".5"
+              android:gravity="center_vertical"
+              android:paddingEnd="@dimen/dp16"
+              android:paddingStart="@dimen/dp16"
               android:text="@string/st_Language"
               android:textColor="@color/black_register"
-              android:textSize="@dimen/sp18"
+              android:textSize="@dimen/sp16"
               android:textStyle="normal"
+              fontPath="fonts/IRANSansMobile.ttf"
               />
 
           <TextView
               android:id="@+id/st_txt_language"
               android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:gravity="right"
+              android:layout_height="match_parent"
+              android:gravity="center_vertical"
+              android:paddingEnd="@dimen/dp16"
+              android:paddingLeft="@dimen/dp8"
               android:paddingRight="@dimen/dp8"
+              android:paddingStart="@dimen/dp16"
               android:text="English"
               android:textColor="@color/toolbar_background"
-              android:textSize="@dimen/sp18"
+              android:textSize="@dimen/sp16"
               android:textStyle="normal"
               />
         </LinearLayout>
@@ -475,31 +487,36 @@
         <RelativeLayout
             android:id="@+id/st_layout_clearCache"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/dp52"
             >
-
-          <TextView
-
-              android:layout_width="match_parent"
-              android:layout_height="@dimen/dp60"
-              android:padding="@dimen/dp16"
-              android:text="@string/st_title_Clear_Cache"
-              android:textColor="@color/black_register"
-              android:textSize="@dimen/sp18"
-              android:textStyle="normal"
-              />
 
           <TextView
               android:id="@+id/st_txt_clearCache"
               android:layout_width="wrap_content"
-              android:layout_height="@dimen/dp60"
+              android:layout_height="match_parent"
               android:layout_alignParentRight="true"
               android:gravity="center"
-              android:paddingRight="@dimen/dp28"
+              android:paddingLeft="@dimen/dp16"
+              android:paddingRight="@dimen/dp16"
               android:text="0 KB"
               android:textColor="@color/toolbar_background"
-              android:textSize="@dimen/sp18"
+              android:textSize="@dimen/sp16"
               android:textStyle="normal"
+              />
+          <TextView
+
+              android:id="@+id/textView3"
+              android:layout_width="match_parent"
+              android:layout_height="@dimen/dp52"
+              android:layout_alignParentLeft="true"
+              android:layout_alignParentStart="true"
+              android:layout_alignParentTop="true"
+              android:padding="@dimen/dp16"
+              android:text="@string/st_title_Clear_Cache"
+              android:textColor="@color/black_register"
+              android:textSize="@dimen/sp16"
+              android:textStyle="normal"
+              fontPath="fonts/IRANSansMobile_Bold.ttf"
               />
 
         </RelativeLayout>
@@ -513,12 +530,15 @@
         <TextView
             android:id="@+id/st_txt_privacySecurity"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp60"
-            android:padding="@dimen/dp16"
+            android:layout_height="@dimen/dp52"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
             android:text="@string/st_title_Privacy_Security"
             android:textColor="@color/black_register"
-            android:textSize="@dimen/sp18"
+            android:textSize="@dimen/sp16"
             android:textStyle="normal"
+            fontPath="fonts/iransanslite.ttf"
             />
 
       </LinearLayout>
@@ -538,29 +558,32 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:paddingBottom="@dimen/dp20"
+            android:paddingBottom="@dimen/dp16"
             android:text="@string/st_title_message"
             android:textColor="@color/green"
-            android:textSize="@dimen/sp22"
+            android:textSize="@dimen/sp18"
             android:textStyle="bold"
+            fontPath="fonts/IRANSansMobile.ttf"
             />
 
 
         <LinearLayout
             android:id="@+id/st_layout_messageTextSize"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/dp40"
             android:orientation="horizontal"
-            android:padding="@dimen/dp16"
             >
 
           <TextView
               android:layout_width="0dp"
-              android:layout_height="wrap_content"
+              android:layout_height="match_parent"
               android:layout_weight=".5"
+              android:gravity="center_vertical"
+              android:paddingLeft="@dimen/dp16"
+              android:paddingRight="@dimen/dp16"
               android:text="@string/st_title_message_textSize"
               android:textColor="@color/black_register"
-              android:textSize="@dimen/sp18"
+              android:textSize="@dimen/sp12"
               android:textStyle="normal"
               />
 
@@ -568,14 +591,14 @@
 
               android:id="@+id/st_txt_messageTextSize_number"
               android:layout_width="0dp"
-              android:layout_height="wrap_content"
+              android:layout_height="match_parent"
               android:layout_weight=".15"
-              android:gravity="right"
+              android:gravity="center"
               android:paddingLeft="@dimen/dp16"
               android:paddingRight="@dimen/dp16"
               android:text="16"
               android:textColor="@color/toolbar_background"
-              android:textSize="@dimen/sp18"
+              android:textSize="@dimen/sp12"
               android:textStyle="normal"
               />
         </LinearLayout>
@@ -589,13 +612,13 @@
         <TextView
             android:id="@+id/st_txt_sticker"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/dp16"
+            android:layout_height="@dimen/dp40"
+            android:gravity="center_vertical"
             android:paddingLeft="@dimen/dp16"
             android:paddingRight="@dimen/dp16"
             android:text="@string/st_stickers"
             android:textColor="@color/black_register"
-            android:textSize="@dimen/sp18"
+            android:textSize="@dimen/sp14"
             android:textStyle="normal"
             />
 
@@ -608,13 +631,13 @@
         <TextView
             android:id="@+id/st_txt_chatBackground"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp60"
-            android:padding="@dimen/dp16"
+            android:layout_height="@dimen/dp40"
+            android:gravity="center_vertical"
             android:paddingLeft="@dimen/dp16"
             android:paddingRight="@dimen/dp16"
             android:text="@string/st_chatBackground"
             android:textColor="@color/black_register"
-            android:textSize="@dimen/sp18"
+            android:textSize="@dimen/sp16"
             android:textStyle="normal"
             />
 
@@ -626,7 +649,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp60"
+            android:layout_height="@dimen/dp52"
             android:orientation="horizontal"
             android:paddingEnd="@dimen/dp16"
             android:paddingLeft="@dimen/dp16"
@@ -655,7 +678,7 @@
               android:gravity="center_vertical"
               android:text="@string/st_inApp_Browser"
               android:textColor="@color/black_register"
-              android:textSize="@dimen/sp18"
+              android:textSize="@dimen/sp16"
               android:textStyle="normal"
               />
 
@@ -671,7 +694,7 @@
         <RelativeLayout
 
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp60"
+            android:layout_height="@dimen/dp52"
             android:orientation="horizontal"
             android:paddingEnd="@dimen/dp16"
             android:paddingLeft="@dimen/dp16"
@@ -700,7 +723,7 @@
               android:gravity="center_vertical"
               android:text="@string/st_send_by_enter"
               android:textColor="@color/black_register"
-              android:textSize="@dimen/sp18"
+              android:textSize="@dimen/sp16"
               android:textStyle="normal"
               />
 
@@ -724,21 +747,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:paddingBottom="@dimen/dp20"
+            android:paddingBottom="@dimen/dp16"
             android:text="@string/st_title_Media"
             android:textColor="@color/green"
-            android:textSize="@dimen/sp22"
+            android:textSize="@dimen/sp20"
             android:textStyle="bold"
             />
 
         <TextView
             android:id="@+id/st_txt_keepMedia"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/dp16"
+            android:layout_height="@dimen/dp52"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
             android:text="@string/st_keepMedia"
             android:textColor="@color/black_register"
-            android:textSize="@dimen/sp18"
+            android:textSize="@dimen/sp16"
             android:textStyle="normal"
             />
 
@@ -751,11 +776,13 @@
         <TextView
             android:id="@+id/st_txt_autoDownloadData"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp60"
-            android:padding="@dimen/dp16"
+            android:layout_height="@dimen/dp52"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
             android:text="@string/st_auto_download_data"
             android:textColor="@color/black_register"
-            android:textSize="@dimen/sp18"
+            android:textSize="@dimen/sp16"
             android:textStyle="normal"
             />
 
@@ -768,13 +795,13 @@
         <TextView
             android:id="@+id/st_txt_autoDownloadWifi"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp60"
+            android:layout_height="@dimen/dp52"
             android:padding="@dimen/dp16"
             android:paddingLeft="@dimen/dp16"
             android:paddingRight="@dimen/dp16"
             android:text="@string/st_auto_download_wifi"
             android:textColor="@color/black_register"
-            android:textSize="@dimen/sp18"
+            android:textSize="@dimen/sp16"
             android:textStyle="normal"
             />
 
@@ -787,13 +814,13 @@
         <TextView
             android:id="@+id/st_txt_autoDownloadRoaming"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp60"
+            android:layout_height="@dimen/dp52"
             android:padding="@dimen/dp16"
             android:paddingLeft="@dimen/dp16"
             android:paddingRight="@dimen/dp16"
             android:text="@string/st_auto_download_roaming"
             android:textColor="@color/black_register"
-            android:textSize="@dimen/sp18"
+            android:textSize="@dimen/sp16"
             android:textStyle="normal"
             />
 
@@ -807,7 +834,7 @@
         <RelativeLayout
 
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp60"
+            android:layout_height="@dimen/dp52"
             android:orientation="horizontal"
             android:paddingEnd="@dimen/dp16"
             android:paddingLeft="@dimen/dp16"
@@ -836,7 +863,7 @@
               android:gravity="center_vertical"
               android:text="@string/st_Enable_Animation"
               android:textColor="@color/black_register"
-              android:textSize="@dimen/sp18"
+              android:textSize="@dimen/sp16"
               android:textStyle="normal"
               />
 
@@ -852,7 +879,7 @@
         <RelativeLayout
 
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp60"
+            android:layout_height="@dimen/dp52"
             android:orientation="horizontal"
             android:paddingEnd="@dimen/dp16"
             android:paddingLeft="@dimen/dp16"
@@ -868,6 +895,7 @@
               android:layout_alignParentRight="true"
               android:layout_centerInParent="true"
               android:background="@drawable/st_switch_button"
+              android:paddingLeft="@dimen/dp4"
               android:paddingRight="@dimen/dp4"
               android:textOff=""
               android:textOn=""
@@ -881,7 +909,7 @@
               android:gravity="center_vertical"
               android:text="@string/st_auto_gif"
               android:textColor="@color/black_register"
-              android:textSize="@dimen/sp18"
+              android:textSize="@dimen/sp16"
               android:textStyle="normal"
               />
 
@@ -897,7 +925,7 @@
         <RelativeLayout
 
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp60"
+            android:layout_height="@dimen/dp52"
             android:orientation="horizontal"
             android:paddingEnd="@dimen/dp16"
             android:paddingLeft="@dimen/dp16"
@@ -913,6 +941,7 @@
               android:layout_alignParentRight="true"
               android:layout_centerInParent="true"
               android:background="@drawable/st_switch_button"
+              android:paddingLeft="@dimen/dp4"
               android:paddingRight="@dimen/dp4"
               android:textOff=""
               android:textOn=""
@@ -926,7 +955,7 @@
               android:gravity="center_vertical"
               android:text="@string/st_save_to_gallery"
               android:textColor="@color/black_register"
-              android:textSize="@dimen/sp18"
+              android:textSize="@dimen/sp16"
               android:textStyle="normal"
               />
 
@@ -948,22 +977,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:paddingBottom="@dimen/dp20"
+            android:paddingBottom="@dimen/dp16"
             android:text="@string/st_title_support"
             android:textColor="@color/green"
-            android:textSize="@dimen/sp22"
+            android:textSize="@dimen/sp20"
             android:textStyle="bold"
             />
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp60"
-            android:padding="@dimen/dp16"
+            android:layout_height="@dimen/dp52"
+            android:gravity="center_vertical"
             android:paddingLeft="@dimen/dp16"
             android:paddingRight="@dimen/dp16"
             android:text="@string/st_ask_question"
             android:textColor="@color/black_register"
-            android:textSize="@dimen/sp18"
+            android:textSize="@dimen/sp16"
             android:textStyle="normal"
             />
 
@@ -976,13 +1005,13 @@
         <TextView
             android:id="@+id/st_txt_faq"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp60"
-            android:padding="@dimen/dp16"
+            android:layout_height="@dimen/dp52"
+            android:gravity="center_vertical"
             android:paddingLeft="@dimen/dp16"
             android:paddingRight="@dimen/dp16"
             android:text="@string/st_About_iGap"
             android:textColor="@color/black_register"
-            android:textSize="@dimen/sp18"
+            android:textSize="@dimen/sp16"
             android:textStyle="normal"
             />
 
@@ -995,18 +1024,16 @@
         <TextView
             android:id="@+id/st_txt_privacy_policy"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp60"
-            android:padding="@dimen/dp16"
+            android:layout_height="@dimen/dp52"
+            android:gravity="center_vertical"
             android:paddingLeft="@dimen/dp16"
             android:paddingRight="@dimen/dp16"
             android:text="@string/st_privacy_policy"
             android:textColor="@color/black_register"
-            android:textSize="@dimen/sp18"
+            android:textSize="@dimen/sp16"
             android:textStyle="normal"
             />
       </LinearLayout>
-
-
     </LinearLayout>
   </android.support.v4.widget.NestedScrollView>
 
@@ -1024,7 +1051,6 @@
       app:layout_anchor="@+id/st_appbar"
       app:layout_anchorGravity="bottom|right|end"
       />
-
 
 </android.support.design.widget.CoordinatorLayout>
 
