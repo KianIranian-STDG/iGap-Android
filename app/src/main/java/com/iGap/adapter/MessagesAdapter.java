@@ -129,6 +129,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         for (Item item : getAdapterItems()) {
             if (item.mMessage.downloadAttachment != null && item.mMessage.downloadAttachment.token != null && item.mMessage.downloadAttachment.token.equalsIgnoreCase(token)) {
                 int pos = getAdapterItems().indexOf(item);
+                item.onRequestDownloadThumbnail(token, true);
                 notifyItemChanged(pos);
             }
         }

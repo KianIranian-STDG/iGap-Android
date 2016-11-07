@@ -11,5 +11,5 @@ public interface IChatItemAttachment<VH extends RecyclerView.ViewHolder> {
 
     void onRequestDownloadFile(int offset, int progress);
 
-    void onRequestDownloadThumbnail();
+    void onRequestDownloadThumbnail(String token, boolean done);
 }

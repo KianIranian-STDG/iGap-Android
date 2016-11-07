@@ -1346,7 +1346,7 @@ public class ActivityChat extends ActivityEnhanced
                     if (!message.isEmpty()) {
                         RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                         String identity = Long.toString(System.nanoTime());
-                        if (room.getLastMessageId() != 0) {
+                        if (room != null && room.getLastMessageId() != 0) {
                             identity = Long.toString(room.getLastMessageId() + 1L);
                         }
                         final String finalIdentity = identity;

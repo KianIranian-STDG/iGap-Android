@@ -1,6 +1,5 @@
 package com.iGap.adapter.items.chat;
 
-import android.os.Environment;
 import android.support.annotation.CallSuper;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -509,8 +508,24 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             (int) mMessage.attachment.size, selector, identity);
     }
 
-    @Override public void onRequestDownloadThumbnail() {
+    @Override public void onRequestDownloadThumbnail(String token, boolean done) {
         if (mMessage.attachment.smallThumbnail.size != 0) {
+
+            final String fileName = token + "_" + mMessage.attachment.name;
+            if (done) {
+                mMessage.attachment.setLocalThumbnailPath(Long.parseLong(mMessage.messageID), G.DIR_TEMP + "/" + fileName);
+
+                return; // necessary
+            }
+
+            ProtoFileDownload.FileDownload.Selector selector =
+                ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
+            String identity = mMessage.attachment.token + '*' + selector.toString() + '*' + mMessage.attachment.smallThumbnail.size + '*' + fileName + '*' + 0;
+
+            new RequestFileDownload().download(token, 0, (int) mMessage.attachment.smallThumbnail.size, selector, identity);
+
+            /*
+
             ProtoFileDownload.FileDownload.Selector selector =
                 ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
             if (mMessage.attachment.getLocalThumbnailPath() == null
@@ -535,7 +550,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 + mMessage.downloadAttachment.offset;
 
             new RequestFileDownload().download(mMessage.downloadAttachment.token, 0,
-                (int) mMessage.attachment.smallThumbnail.size, selector, identity);
+                (int) mMessage.attachment.smallThumbnail.size, selector, identity);*/
         }
     }
 
@@ -547,7 +562,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         // request thumbnail
         if (!mMessage.downloadAttachment.thumbnailRequested) {
-            onRequestDownloadThumbnail();
+            onRequestDownloadThumbnail(mMessage.attachment.token, false);
             // prevent from multiple requesting thumbnail
             mMessage.downloadAttachment.thumbnailRequested = true;
         }

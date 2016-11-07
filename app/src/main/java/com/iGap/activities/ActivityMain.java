@@ -1079,6 +1079,8 @@ public class ActivityMain extends ActivityEnhanced
                         if (mAdapter != null) {
                             mAdapter.updateChat(roomId, convertToChatItem(roomId));
                         }
+
+                        scrollToTop();
                     }
                 });
             }
