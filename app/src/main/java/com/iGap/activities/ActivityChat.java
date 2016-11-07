@@ -166,6 +166,7 @@ import com.iGap.request.RequestChatDelete;
 import com.iGap.request.RequestChatDeleteMessage;
 import com.iGap.request.RequestChatEditMessage;
 import com.iGap.request.RequestChatUpdateDraft;
+import com.iGap.request.RequestClientGetRoomHistory;
 import com.iGap.request.RequestFileDownload;
 import com.iGap.request.RequestGroupUpdateDraft;
 import com.mikepenz.fastadapter.IItemAdapter;
@@ -196,11 +197,11 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 import static com.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 import static com.iGap.proto.ProtoGlobal.Room.Type.CHAT;
 import static com.iGap.proto.ProtoGlobal.Room.Type.GROUP;
+import static java.lang.Long.parseLong;
 
 public class ActivityChat extends ActivityEnhanced
-    implements IEmojiViewCreate, IRecentsLongClick, IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse,
-    OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnFileDownloadResponse, OnVoiceRecord, OnUserInfoResponse,
-    OnClientGetRoomHistoryResponse, OnFileUploadForActivities {
+    implements IEmojiViewCreate, IRecentsLongClick, IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>,
+    OnChatMessageRemove, OnFileDownloadResponse, OnVoiceRecord, OnUserInfoResponse, OnClientGetRoomHistoryResponse, OnFileUploadForActivities {
 
     public static ActivityChat activityChat;
     public static OnComplete hashListener;
@@ -299,15 +300,13 @@ public class ActivityChat extends ActivityEnhanced
         // when came back to the room with new messages, I make new update status request as SEEN to
         // the message sender
         final Realm realm = Realm.getDefaultInstance();
-        final RealmResults<RealmRoomMessage> realmRoomMessages =
-            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAllAsync();
+        final RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAllAsync();
         realmRoomMessages.addChangeListener(new RealmChangeListener<RealmResults<RealmRoomMessage>>() {
             @Override public void onChange(final RealmResults<RealmRoomMessage> element) {
                 //Start ClientCondition OfflineSeen
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override public void execute(Realm realm) {
-                        final RealmClientCondition realmClientCondition =
-                            realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirst();
+                        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirst();
 
                         final ArrayList<Long> offlineSeenId = new ArrayList<>();
 
@@ -455,8 +454,7 @@ public class ActivityChat extends ActivityEnhanced
                     chatPeerId = realmChatRoom.getPeerId();
                     RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, chatPeerId).findFirst();
 
-                    RealmRegisteredInfo realmRegisteredInfo =
-                        realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
+                    RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
 
                     if (realmRegisteredInfo != null) {
                         title = realmRegisteredInfo.getDisplayName();
@@ -489,8 +487,7 @@ public class ActivityChat extends ActivityEnhanced
             } else {
                 chatPeerId = extras.getLong("peerId");
                 chatType = CHAT;
-                RealmRegisteredInfo realmRegisteredInfo =
-                    realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
+                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
                 if (realmRegisteredInfo != null) {
                     title = realmRegisteredInfo.getDisplayName();
                     initialize = realmRegisteredInfo.getInitials();
@@ -507,9 +504,7 @@ public class ActivityChat extends ActivityEnhanced
             initLayotChannelFooter();
         }
 
-        if (getIntent() != null
-            && getIntent().getExtras() != null
-            && getIntent().getExtras().getParcelableArrayList(ActivitySelectChat.ARG_FORWARD_MESSAGE) != null) {
+        if (getIntent() != null && getIntent().getExtras() != null && getIntent().getExtras().getParcelableArrayList(ActivitySelectChat.ARG_FORWARD_MESSAGE) != null) {
             ArrayList<Parcelable> messageInfos = getIntent().getParcelableArrayListExtra(ActivitySelectChat.ARG_FORWARD_MESSAGE);
 
             for (Parcelable messageInfo : messageInfos) {
@@ -561,8 +556,7 @@ public class ActivityChat extends ActivityEnhanced
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override public void execute(Realm realm) {
-                RealmRoomMessage roomMessage =
-                    realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageInfo.messageID)).findFirst();
+                RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(messageInfo.messageID)).findFirst();
 
                 if (roomMessage != null) {
                     long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
@@ -593,8 +587,7 @@ public class ActivityChat extends ActivityEnhanced
         G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
 
         G.onChatEditMessageResponse = new OnChatEditMessageResponse() {
-            @Override public void onChatEditMessage(long roomId, final long messageId, long messageVersion, final String message,
-                ProtoResponse.Response response) {
+            @Override public void onChatEditMessage(long roomId, final long messageId, long messageVersion, final String message, ProtoResponse.Response response) {
                 if (mRoomId == roomId) {
                     // I'm in the room
                     runOnUiThread(new Runnable() {
@@ -610,8 +603,7 @@ public class ActivityChat extends ActivityEnhanced
                 if (majorCode == 209 && minorCode == 1) {
                     runOnUiThread(new Runnable() {
                         @Override public void run() {
-                            final Snackbar snack =
-                                Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_209_1), Snackbar.LENGTH_LONG);
+                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_209_1), Snackbar.LENGTH_LONG);
 
                             snack.setAction("CANCEL", new View.OnClickListener() {
                                 @Override public void onClick(View view) {
@@ -624,8 +616,7 @@ public class ActivityChat extends ActivityEnhanced
                 } else if (majorCode == 209 && minorCode == 2) {
                     runOnUiThread(new Runnable() {
                         @Override public void run() {
-                            final Snackbar snack =
-                                Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_209_2), Snackbar.LENGTH_LONG);
+                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_209_2), Snackbar.LENGTH_LONG);
 
                             snack.setAction("CANCEL", new View.OnClickListener() {
                                 @Override public void onClick(View view) {
@@ -638,8 +629,7 @@ public class ActivityChat extends ActivityEnhanced
                 } else if (majorCode == 209 && minorCode == 3) {
                     runOnUiThread(new Runnable() {
                         @Override public void run() {
-                            final Snackbar snack =
-                                Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_209_3), Snackbar.LENGTH_LONG);
+                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_209_3), Snackbar.LENGTH_LONG);
 
                             snack.setAction("CANCEL", new View.OnClickListener() {
                                 @Override public void onClick(View view) {
@@ -652,8 +642,7 @@ public class ActivityChat extends ActivityEnhanced
                 } else if (majorCode == 210) {
                     runOnUiThread(new Runnable() {
                         @Override public void run() {
-                            final Snackbar snack =
-                                Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_210), Snackbar.LENGTH_LONG);
+                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_210), Snackbar.LENGTH_LONG);
 
                             snack.setAction("CANCEL", new View.OnClickListener() {
                                 @Override public void onClick(View view) {
@@ -666,8 +655,7 @@ public class ActivityChat extends ActivityEnhanced
                 } else if (majorCode == 211) {
                     runOnUiThread(new Runnable() {
                         @Override public void run() {
-                            final Snackbar snack =
-                                Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_211), Snackbar.LENGTH_LONG);
+                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_211), Snackbar.LENGTH_LONG);
 
                             snack.setAction("CANCEL", new View.OnClickListener() {
                                 @Override public void onClick(View view) {
@@ -687,8 +675,7 @@ public class ActivityChat extends ActivityEnhanced
                 if (response.getId().isEmpty()) { // another account deleted this message
 
                     Realm realm = Realm.getDefaultInstance();
-                    RealmRoomMessage roomMessage =
-                        realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
                     if (roomMessage != null) {
                         // delete message from database
                         roomMessage.deleteFromRealm();
@@ -716,8 +703,7 @@ public class ActivityChat extends ActivityEnhanced
                 if (majorCode == 212 && minorCode == 1) {
                     runOnUiThread(new Runnable() {
                         @Override public void run() {
-                            final Snackbar snack =
-                                Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_212_1), Snackbar.LENGTH_LONG);
+                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_212_1), Snackbar.LENGTH_LONG);
 
                             snack.setAction("CANCEL", new View.OnClickListener() {
                                 @Override public void onClick(View view) {
@@ -730,8 +716,7 @@ public class ActivityChat extends ActivityEnhanced
                 } else if (majorCode == 212 && minorCode == 2) {
                     runOnUiThread(new Runnable() {
                         @Override public void run() {
-                            final Snackbar snack =
-                                Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_212_1), Snackbar.LENGTH_LONG);
+                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_212_1), Snackbar.LENGTH_LONG);
 
                             snack.setAction("CANCEL", new View.OnClickListener() {
                                 @Override public void onClick(View view) {
@@ -744,8 +729,7 @@ public class ActivityChat extends ActivityEnhanced
                 } else if (majorCode == 213) {
                     runOnUiThread(new Runnable() {
                         @Override public void run() {
-                            final Snackbar snack =
-                                Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_213), Snackbar.LENGTH_LONG);
+                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_213), Snackbar.LENGTH_LONG);
 
                             snack.setAction("CANCEL", new View.OnClickListener() {
                                 @Override public void onClick(View view) {
@@ -758,8 +742,7 @@ public class ActivityChat extends ActivityEnhanced
                 } else if (majorCode == 214) {
                     runOnUiThread(new Runnable() {
                         @Override public void run() {
-                            final Snackbar snack =
-                                Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_214), Snackbar.LENGTH_LONG);
+                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_214), Snackbar.LENGTH_LONG);
 
                             snack.setAction("CANCEL", new View.OnClickListener() {
                                 @Override public void onClick(View view) {
@@ -1123,8 +1106,7 @@ public class ActivityChat extends ActivityEnhanced
                 });
 
                 popupWindow.setAnimationStyle(android.R.style.Animation_InputMethod);
-                popupWindow.showAtLocation(rippleView, Gravity.RIGHT | Gravity.TOP, (int) getResources().getDimension(R.dimen.dp16),
-                    (int) getResources().getDimension(R.dimen.dp32));
+                popupWindow.showAtLocation(rippleView, Gravity.RIGHT | Gravity.TOP, (int) getResources().getDimension(R.dimen.dp16), (int) getResources().getDimension(R.dimen.dp32));
                 //                popupWindow.showAsDropDown(v);
 
                 text1.setOnClickListener(new View.OnClickListener() {
@@ -1318,16 +1300,13 @@ public class ActivityChat extends ActivityEnhanced
                         final Realm realm1 = Realm.getDefaultInstance();
                         realm1.executeTransaction(new Realm.Transaction() {
                             @Override public void execute(Realm realm) {
-                                RealmRoomMessage roomMessage = realm1.where(RealmRoomMessage.class)
-                                    .equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageInfo.messageID))
-                                    .findFirst();
+                                RealmRoomMessage roomMessage = realm1.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(messageInfo.messageID)).findFirst();
 
-                                RealmClientCondition realmClientCondition =
-                                    realm1.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirst();
+                                RealmClientCondition realmClientCondition = realm1.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirst();
 
                                 RealmOfflineEdited realmOfflineEdited = realm.createObject(RealmOfflineEdited.class);
                                 realmOfflineEdited.setId(System.nanoTime());
-                                realmOfflineEdited.setMessageId(Long.parseLong(messageInfo.messageID));
+                                realmOfflineEdited.setMessageId(parseLong(messageInfo.messageID));
                                 realmOfflineEdited.setMessage(message);
                                 realmOfflineEdited = realm.copyToRealm(realmOfflineEdited);
 
@@ -1348,7 +1327,7 @@ public class ActivityChat extends ActivityEnhanced
                         runOnUiThread(new Runnable() {
                             @Override public void run() {
                                 // update message text in adapter
-                                mAdapter.updateMessageText(Long.parseLong(messageInfo.messageID), message);
+                                mAdapter.updateMessageText(parseLong(messageInfo.messageID), message);
                             }
                         });
 
@@ -1357,7 +1336,7 @@ public class ActivityChat extends ActivityEnhanced
                         edtChat.setText("");
 
                         // send edit message request
-                        new RequestChatEditMessage().chatEditMessage(mRoomId, Long.parseLong(messageInfo.messageID), message);
+                        new RequestChatEditMessage().chatEditMessage(mRoomId, parseLong(messageInfo.messageID), message);
                     }
                 } else {
                     // new message has written
@@ -1365,8 +1344,12 @@ public class ActivityChat extends ActivityEnhanced
                     final Realm realm = Realm.getDefaultInstance();
                     final long senderId = realm.where(RealmUserInfo.class).findFirst().getUserId();
                     if (!message.isEmpty()) {
-                        final String identity = Long.toString(System.currentTimeMillis());
-
+                        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                        String identity = Long.toString(System.nanoTime());
+                        if (room.getLastMessageId() != 0) {
+                            identity = Long.toString(room.getLastMessageId() + 1L);
+                        }
+                        final String finalIdentity = identity;
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override public void execute(Realm realm) {
                                 RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class);
@@ -1375,16 +1358,14 @@ public class ActivityChat extends ActivityEnhanced
                                 roomMessage.setRoomId(mRoomId);
                                 roomMessage.setMessage(message);
                                 roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
-                                roomMessage.setMessageId(Long.parseLong(identity));
+                                roomMessage.setMessageId(parseLong(finalIdentity));
                                 roomMessage.setUserId(senderId);
                                 roomMessage.setUpdateTime(System.currentTimeMillis());
 
                                 // user wants to replay to a message
                                 if (mReplayLayout != null && mReplayLayout.getTag() instanceof StructMessageInfo) {
-                                    RealmRoomMessage messageToReplay = realm.where(RealmRoomMessage.class)
-                                        .equalTo(RealmRoomMessageFields.MESSAGE_ID,
-                                            Long.parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID))
-                                        .findFirst();
+                                    RealmRoomMessage messageToReplay =
+                                        realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID)).findFirst();
                                     if (messageToReplay != null) {
                                         roomMessage.setReplyTo(messageToReplay);
                                     }
@@ -1392,19 +1373,15 @@ public class ActivityChat extends ActivityEnhanced
                             }
                         });
 
-                        RealmRoomMessage roomMessage =
-                            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(identity)).findFirst();
+                        RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(identity)).findFirst();
 
-                        mAdapter.add(new TextItem(chatType, ActivityChat.this).setMessage(StructMessageInfo.convert(roomMessage))
-                            .withIdentifier(System.nanoTime()));
+                        mAdapter.add(new TextItem(chatType, ActivityChat.this).setMessage(StructMessageInfo.convert(roomMessage)).withIdentifier(System.nanoTime()));
 
                         realm.close();
 
                         scrollToEnd();
 
-                        new ChatSendMessageUtil().newBuilder(chatType, ProtoGlobal.RoomMessageType.TEXT, mRoomId)
-                            .message(message)
-                            .sendMessage(identity);
+                        new ChatSendMessageUtil().newBuilder(chatType, ProtoGlobal.RoomMessageType.TEXT, mRoomId).message(message).sendMessage(identity);
 
                         edtChat.setText("");
 
@@ -1787,9 +1764,7 @@ public class ActivityChat extends ActivityEnhanced
         } else if (messageInfo.messageType.toString().equals("CONTACT")) {
             intent.setType("text/plain");
             intent.putExtra(android.content.Intent.EXTRA_TEXT, messageInfo.userInfo.firstName + "\n" + messageInfo.userInfo.phone);
-        } else if (messageInfo.messageType.toString().equals("VOICE") || messageInfo.messageType.toString().equals("AUDIO") || messageInfo.messageType
-            .toString()
-            .equals("AUDIO_TEXT")) {
+        } else if (messageInfo.messageType.toString().equals("VOICE") || messageInfo.messageType.toString().equals("AUDIO") || messageInfo.messageType.toString().equals("AUDIO_TEXT")) {
             intent.setType("audio/*");
             intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(messageInfo.getAttachment().getLocalFilePath())));
             choserDialogText = "Share audio file";
@@ -1828,8 +1803,7 @@ public class ActivityChat extends ActivityEnhanced
 
     private void setAvatar() {
         Realm realm = Realm.getDefaultInstance();
-        RealmRegisteredInfo realmRegisteredInfo =
-            realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
+        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
         if (realmRegisteredInfo != null && realmRegisteredInfo.getAvatars() != null && realmRegisteredInfo.getLastAvatar() != null) {
 
             String mainFilePath = realmRegisteredInfo.getLastAvatar().getFile().getLocalFilePath();
@@ -1848,20 +1822,17 @@ public class ActivityChat extends ActivityEnhanced
                 Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                 imvUserPicture.setImageBitmap(myBitmap);
             } else {
-                if (realmRegisteredInfo != null
-                    && realmRegisteredInfo.getLastAvatar() != null
-                    && realmRegisteredInfo.getLastAvatar().getFile() != null) {
+                if (realmRegisteredInfo != null && realmRegisteredInfo.getLastAvatar() != null && realmRegisteredInfo.getLastAvatar().getFile() != null) {
                     onRequestDownloadAvatar(realmRegisteredInfo.getLastAvatar().getFile());
                 }
-                imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture(
-                    (int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
+                imvUserPicture.setImageBitmap(
+                    com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
             }
         } else {
             if (realmRegisteredInfo != null && realmRegisteredInfo.getLastAvatar() != null && realmRegisteredInfo.getLastAvatar().getFile() != null) {
                 onRequestDownloadAvatar(realmRegisteredInfo.getLastAvatar().getFile());
             }
-            imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture(
-                (int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
+            imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
         }
         realm.close();
     }
@@ -1907,8 +1878,8 @@ public class ActivityChat extends ActivityEnhanced
             if (bitmap != null) {
                 imvUserPicture.setImageBitmap(bitmap);
             } else {
-                imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture(
-                    (int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
+                imvUserPicture.setImageBitmap(
+                    com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
             }
         }
     }
@@ -1926,17 +1897,26 @@ public class ActivityChat extends ActivityEnhanced
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override public void execute(Realm realm) {
-                RealmRegisteredInfo realmRegisteredInfo =
-                    realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
+                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
                 realmRegisteredInfo.getLastAvatar().getFile().setLocalThumbnailPath(filepath);
             }
         });
         realm.close();
 
         // I don't use offset in getting thumbnail
-        String identity =
-            file.getToken() + '*' + selector.toString() + '*' + file.getSmallThumbnail().getSize() + '*' + filepath + '*' + file.getSmallThumbnail()
-                .getSize() + '*' + "true" + '*' + "0";// userId don't need here , so i set it with string
+        String identity = file.getToken()
+            + '*'
+            + selector.toString()
+            + '*'
+            + file.getSmallThumbnail().getSize()
+            + '*'
+            + filepath
+            + '*'
+            + file.getSmallThumbnail().getSize()
+            + '*'
+            + "true"
+            + '*'
+            + "0";// userId don't need here , so i set it with string
         new RequestFileDownload().download(file.getToken(), 0, (int) file.getSmallThumbnail().getSize(), selector, identity);
     }
 
@@ -1967,8 +1947,7 @@ public class ActivityChat extends ActivityEnhanced
 
         Drawable[] subButtonDrawables = new Drawable[3];
         int[] drawablesResource = new int[] {
-            R.mipmap.am_camera, R.mipmap.am_music, R.mipmap.am_paint, R.mipmap.am_picture, R.mipmap.am_document, R.mipmap.am_location,
-            R.mipmap.am_video, R.mipmap.am_file, R.mipmap.am_contact
+            R.mipmap.am_camera, R.mipmap.am_music, R.mipmap.am_paint, R.mipmap.am_picture, R.mipmap.am_document, R.mipmap.am_location, R.mipmap.am_video, R.mipmap.am_file, R.mipmap.am_contact
         };
         for (int i = 0; i < 3; i++)
             subButtonDrawables[i] = ContextCompat.getDrawable(G.context, drawablesResource[i]);
@@ -1982,18 +1961,14 @@ public class ActivityChat extends ActivityEnhanced
         BoomMenuButton.Builder bb = new BoomMenuButton.Builder();
 
         bb.addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_camera), subButtonColors[0], getResources().getString(R.string.am_camera))
-            .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_picture), subButtonColors[0],
-                getResources().getString(R.string.am_picture))
+            .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_picture), subButtonColors[0], getResources().getString(R.string.am_picture))
             .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_video), subButtonColors[0], getResources().getString(R.string.am_video))
             .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_music), subButtonColors[0], getResources().getString(R.string.am_music))
-            .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_document), subButtonColors[0],
-                getResources().getString(R.string.am_document))
+            .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_document), subButtonColors[0], getResources().getString(R.string.am_document))
             .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_file), subButtonColors[0], getResources().getString(R.string.am_file))
             .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_paint), subButtonColors[0], getResources().getString(R.string.am_paint))
-            .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_location), subButtonColors[0],
-                getResources().getString(R.string.am_location))
-            .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_contact), subButtonColors[0],
-                getResources().getString(R.string.am_contact))
+            .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_location), subButtonColors[0], getResources().getString(R.string.am_location))
+            .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_contact), subButtonColors[0], getResources().getString(R.string.am_contact))
             .autoDismiss(true)
             .cancelable(true)
             .boomButtonShadow(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2))
@@ -2069,9 +2044,7 @@ public class ActivityChat extends ActivityEnhanced
         }
         latestRequestCode = requestCode;
 
-        if (resultCode == Activity.RESULT_OK
-            && sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 0) == 1
-            && requestCode == AttachFile.request_code_media_from_gallery) {
+        if (resultCode == Activity.RESULT_OK && sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 0) == 1 && requestCode == AttachFile.request_code_media_from_gallery) {
 
             Intent intent = new Intent(ActivityChat.this, ActivityCrop.class);
             intent.putExtra("IMAGE_CAMERA", data.getData().toString());
@@ -2080,9 +2053,7 @@ public class ActivityChat extends ActivityEnhanced
             startActivityForResult(intent, IntentRequests.REQ_CROP);
 
             return;
-        } else if (resultCode == Activity.RESULT_OK
-            && sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 0) == 1
-            && requestCode == AttachFile.request_code_TAKE_PICTURE) {
+        } else if (resultCode == Activity.RESULT_OK && sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 0) == 1 && requestCode == AttachFile.request_code_TAKE_PICTURE) {
 
             Intent intent = new Intent(ActivityChat.this, ActivityCrop.class);
             intent.putExtra("IMAGE_CAMERA", AttachFile.imagePath);
@@ -2130,7 +2101,12 @@ public class ActivityChat extends ActivityEnhanced
     //TODO [Saeed Mozaffari] [2016-10-29 10:45 AM] - work on gps
     private void sendMessage(int requestCode, Uri uri) {
         // TODO: 10/30/2016 [Alireza]  test
-        final long messageId = System.nanoTime();
+        Realm realm = Realm.getDefaultInstance();
+        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+        long messageId = System.nanoTime();
+        if (room.getLastMessageId() != 0) {
+            messageId = room.getLastMessageId() + 1L;
+        }
         String filePath;
         if (AttachFile.request_code_TAKE_PICTURE == requestCode) {
             filePath = AttachFile.imagePath;
@@ -2145,7 +2121,6 @@ public class ActivityChat extends ActivityEnhanced
         long duration = 0;
         long fileSize = 0;
         int[] imageDimens = { 0, 0 };
-        Realm realm = Realm.getDefaultInstance();
         final long senderID = realm.where(RealmUserInfo.class).findFirst().getUserId();
         StructMessageInfo messageInfo = null;
 
@@ -2161,12 +2136,11 @@ public class ActivityChat extends ActivityEnhanced
                 }
                 if (userTriesReplay()) {
                     messageInfo =
-                        new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(),
-                            messageType, MyType.SendType.send, null, filePath, updateTime,
-                            Long.parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
+                        new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath,
+                            updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
                 } else {
-                    messageInfo = new StructMessageInfo(Long.toString(messageId), getWrittenMessage(), Long.toString(senderID),
-                        ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath, updateTime);
+                    messageInfo = new StructMessageInfo(Long.toString(messageId), getWrittenMessage(), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
+                        MyType.SendType.send, null, filePath, updateTime);
                 }
                 break;
             case AttachFile.request_code_TAKE_PICTURE:
@@ -2184,12 +2158,11 @@ public class ActivityChat extends ActivityEnhanced
                 }
                 if (userTriesReplay()) {
                     messageInfo =
-                        new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(),
-                            messageType, MyType.SendType.send, null, filePath, updateTime,
-                            Long.parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
+                        new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath,
+                            updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
                 } else {
-                    messageInfo = new StructMessageInfo(Long.toString(messageId), getWrittenMessage(), Long.toString(senderID),
-                        ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath, updateTime);
+                    messageInfo = new StructMessageInfo(Long.toString(messageId), getWrittenMessage(), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
+                        MyType.SendType.send, null, filePath, updateTime);
                 }
 
                 break;
@@ -2208,12 +2181,11 @@ public class ActivityChat extends ActivityEnhanced
                 }
                 if (userTriesReplay()) {
                     messageInfo =
-                        new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(),
-                            messageType, MyType.SendType.send, null, filePath, updateTime,
-                            Long.parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
+                        new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath,
+                            updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
                 } else {
-                    messageInfo = new StructMessageInfo(Long.toString(messageId), getWrittenMessage(), Long.toString(senderID),
-                        ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath, updateTime);
+                    messageInfo = new StructMessageInfo(Long.toString(messageId), getWrittenMessage(), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
+                        MyType.SendType.send, null, filePath, updateTime);
                 }
                 break;
 
@@ -2231,13 +2203,11 @@ public class ActivityChat extends ActivityEnhanced
                 String videoFileMime = FileUtils.getMimeType(videoFile);
                 if (userTriesReplay()) {
                     messageInfo =
-                        new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(),
-                            messageType, MyType.SendType.send, videoFileMime, filePath, null, filePath, null, updateTime,
-                            Long.parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
+                        new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, videoFileMime,
+                            filePath, null, filePath, null, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
                 } else {
-                    messageInfo = new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), getWrittenMessage(),
-                        ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, videoFileMime, filePath, null, filePath,
-                        null, updateTime);
+                    messageInfo = new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), getWrittenMessage(), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
+                        MyType.SendType.send, videoFileMime, filePath, null, filePath, null, updateTime);
                 }
                 break;
             case AttachFile.request_code_pic_audi:
@@ -2254,9 +2224,8 @@ public class ActivityChat extends ActivityEnhanced
                 long songDuration = AndroidUtils.getAudioDuration(getApplicationContext(), filePath);
 
                 messageInfo =
-                    StructMessageInfo.buildForAudio(messageId, senderID, ProtoGlobal.RoomMessageStatus.SENDING, messageType, MyType.SendType.send,
-                        updateTime, getWrittenMessage(), null, filePath, songArtist, songDuration,
-                        userTriesReplay() ? Long.parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID) : 0);
+                    StructMessageInfo.buildForAudio(messageId, senderID, ProtoGlobal.RoomMessageStatus.SENDING, messageType, MyType.SendType.send, updateTime, getWrittenMessage(), null, filePath,
+                        songArtist, songDuration, userTriesReplay() ? parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID) : 0);
                 break;
             case AttachFile.request_code_pic_file:
                 fileName = new File(filePath).getName();
@@ -2270,13 +2239,11 @@ public class ActivityChat extends ActivityEnhanced
                 String fileFileMime = FileUtils.getMimeType(fileFile);
                 if (userTriesReplay()) {
                     messageInfo =
-                        new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(),
-                            messageType, MyType.SendType.send, fileFileMime, filePath, null, filePath, null, updateTime,
-                            Long.parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
+                        new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, fileFileMime,
+                            filePath, null, filePath, null, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
                 } else {
-                    messageInfo = new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), getWrittenMessage(),
-                        ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, fileFileMime, filePath, null, filePath,
-                        null, updateTime);
+                    messageInfo = new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), getWrittenMessage(), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
+                        MyType.SendType.send, fileFileMime, filePath, null, filePath, null, updateTime);
                 }
                 break;
             case AttachFile.request_code_contact_phone:
@@ -2287,9 +2254,8 @@ public class ActivityChat extends ActivityEnhanced
                 String username = "username";
                 messageType = ProtoGlobal.RoomMessageType.CONTACT;
                 // FIXME: 10/18/2016 [Alireza] lastName "" gozashtam jash, firstName esme kamele
-                messageInfo =
-                    StructMessageInfo.buildForContact(messageId, senderID, MyType.SendType.send, updateTime, ProtoGlobal.RoomMessageStatus.SENDING,
-                        username, name, "", number, userTriesReplay() ? Long.parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID) : -1);
+                messageInfo = StructMessageInfo.buildForContact(messageId, senderID, MyType.SendType.send, updateTime, ProtoGlobal.RoomMessageStatus.SENDING, username, name, "", number,
+                    userTriesReplay() ? parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID) : -1);
                 break;
             case AttachFile.request_code_paint:
                 fileName = new File(filePath).getName();
@@ -2302,12 +2268,11 @@ public class ActivityChat extends ActivityEnhanced
                 }
                 if (userTriesReplay()) {
                     messageInfo =
-                        new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(),
-                            messageType, MyType.SendType.send, null, filePath, updateTime,
-                            Long.parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
+                        new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath,
+                            updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
                 } else {
-                    messageInfo = new StructMessageInfo(Long.toString(messageId), getWrittenMessage(), Long.toString(senderID),
-                        ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath, updateTime);
+                    messageInfo = new StructMessageInfo(Long.toString(messageId), getWrittenMessage(), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
+                        MyType.SendType.send, null, filePath, updateTime);
                 }
                 break;
         }
@@ -2320,6 +2285,7 @@ public class ActivityChat extends ActivityEnhanced
         final int[] finalImageDimens = imageDimens;
 
         final StructMessageInfo finalMessageInfo = messageInfo;
+        final long finalMessageId = messageId;
         realm.executeTransaction(new Realm.Transaction() {
             @Override public void execute(Realm realm) {
                 RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class);
@@ -2328,9 +2294,8 @@ public class ActivityChat extends ActivityEnhanced
                 roomMessage.setMessage(getWrittenMessage());
                 roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
                 roomMessage.setRoomId(mRoomId);
-                roomMessage.setAttachment(messageId, finalFilePath, finalImageDimens[0], finalImageDimens[1], finalFileSize, finalFileName,
-                    finalDuration, LocalFileType.THUMBNAIL);
-                roomMessage.setMessageId(messageId);
+                roomMessage.setAttachment(finalMessageId, finalFilePath, finalImageDimens[0], finalImageDimens[1], finalFileSize, finalFileName, finalDuration, LocalFileType.THUMBNAIL);
+                roomMessage.setMessageId(finalMessageId);
                 roomMessage.setUserId(senderID);
                 roomMessage.setUpdateTime(updateTime);
 
@@ -2354,15 +2319,14 @@ public class ActivityChat extends ActivityEnhanced
                 switchAddItem(new ArrayList<>(Arrays.asList(finalMessageInfo)), false);
 
                 if (finalFilePath != null && finalMessageType != ProtoGlobal.RoomMessageType.CONTACT) {
-                    new UploadTask().execute(finalFilePath, messageId, finalMessageType, mRoomId, getWrittenMessage());
+                    new UploadTask().execute(finalFilePath, finalMessageId, finalMessageType, mRoomId, getWrittenMessage());
                 } else {
-                    ChatSendMessageUtil messageUtil =
-                        new ChatSendMessageUtil().newBuilder(chatType, finalMessageType, mRoomId).message(getWrittenMessage());
+                    ChatSendMessageUtil messageUtil = new ChatSendMessageUtil().newBuilder(chatType, finalMessageType, mRoomId).message(getWrittenMessage());
                     if (finalMessageType == ProtoGlobal.RoomMessageType.CONTACT) {
                         // FIXME: 10/5/2016 [Alireza] retrieve last name
                         messageUtil.contact(finalMessageInfo.userInfo.firstName, finalMessageInfo.userInfo.lastName, finalMessageInfo.userInfo.phone);
                     }
-                    messageUtil.sendMessage(Long.toString(messageId));
+                    messageUtil.sendMessage(Long.toString(finalMessageId));
                 }
             }
         });
@@ -2489,13 +2453,10 @@ public class ActivityChat extends ActivityEnhanced
                     @Override public void execute(Realm realm) {
                         // get offline delete list , add new deleted list and update in
                         // client condition , then send request for delete message to server
-                        RealmClientCondition realmClientCondition =
-                            realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirst();
+                        RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirst();
 
                         for (final AbstractMessage messageID : mAdapter.getSelectedItems()) {
-                            RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class)
-                                .equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageID.mMessage.messageID))
-                                .findFirst();
+                            RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(messageID.mMessage.messageID)).findFirst();
                             if (roomMessage != null) {
                                 // delete message from database
                                 roomMessage.deleteFromRealm();
@@ -2503,14 +2464,14 @@ public class ActivityChat extends ActivityEnhanced
 
                             RealmOfflineDelete realmOfflineDelete = realm.createObject(RealmOfflineDelete.class);
                             realmOfflineDelete.setId(System.nanoTime());
-                            realmOfflineDelete.setOfflineDelete(Long.parseLong(messageID.mMessage.messageID));
+                            realmOfflineDelete.setOfflineDelete(parseLong(messageID.mMessage.messageID));
 
                             realmClientCondition.getOfflineDeleted().add(realmOfflineDelete);
 
                             runOnUiThread(new Runnable() {
                                 @Override public void run() {
                                     // remove deleted message from adapter
-                                    mAdapter.removeMessage(Long.parseLong(messageID.mMessage.messageID));
+                                    mAdapter.removeMessage(parseLong(messageID.mMessage.messageID));
 
                                     // remove tag from edtChat if the message has deleted
                                     if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
@@ -2520,7 +2481,7 @@ public class ActivityChat extends ActivityEnhanced
                                     }
                                 }
                             });
-                            new RequestChatDeleteMessage().chatDeleteMessage(mRoomId, Long.parseLong(messageID.mMessage.messageID));
+                            new RequestChatDeleteMessage().chatDeleteMessage(mRoomId, parseLong(messageID.mMessage.messageID));
                         }
                     }
                 });
@@ -2636,17 +2597,15 @@ public class ActivityChat extends ActivityEnhanced
                 for (int p = mAdapter.getAdapterItemCount() - 1; p >= 0; p--) {
                     AbstractMessage item = mAdapter.getAdapterItem(p);
                     // not time message
-                    if (!item.mMessage.senderID.equalsIgnoreCase("-1")) {
-                        // new RequestClientGetRoomHistory().getRoomHistory(mRoomId, Long
-                        // .parseLong(item.mMessage.messageID), Long.toString(mRoomId));
+                    if (!item.mMessage.isTimeMessage()) {
+                        new RequestClientGetRoomHistory().getRoomHistory(mRoomId, Long.parseLong(item.mMessage.messageID), Long.toString(mRoomId));
                         break;
                     }
                 }
             }
         };
 
-        recyclerView.addOnScrollListener(
-            new RecyclerViewPauseOnScrollListener(ImageLoader.getInstance(), false, true, endlessRecyclerOnScrollListener));
+        recyclerView.addOnScrollListener(new RecyclerViewPauseOnScrollListener(ImageLoader.getInstance(), false, true, endlessRecyclerOnScrollListener));
 
         ArrayList<StructMessageInfo> messageInfos = new ArrayList<>();
         for (RealmRoomMessage realmRoomMessage : endlessRecyclerOnScrollListener.loadMore(0)) {
@@ -2676,7 +2635,7 @@ public class ActivityChat extends ActivityEnhanced
 
     @Override public void onSenderAvatarClick(View view, StructMessageInfo messageInfo, int position) {
         Intent intent = new Intent(G.context, ActivityContactsProfile.class);
-        intent.putExtra("peerId", Long.parseLong(messageInfo.senderID));
+        intent.putExtra("peerId", parseLong(messageInfo.senderID));
         intent.putExtra("RoomId", mRoomId);
         intent.putExtra("enterFrom", GROUP.toString());
         startActivity(intent);
@@ -2692,9 +2651,8 @@ public class ActivityChat extends ActivityEnhanced
         boolean clearMessage = false;
 
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class)
-            .equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
-            .findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+        RealmResults<RealmRoomMessage> realmRoomMessages =
+            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
         for (final RealmRoomMessage realmRoomMessage : realmRoomMessages) {
             if (!clearMessage && realmRoomMessage.getMessageId() == clearId) {
                 clearMessage = true;
@@ -2781,7 +2739,7 @@ public class ActivityChat extends ActivityEnhanced
 
                     AbstractMessage lastMessageBeforeDeleted = mAdapter.getAdapterItem(mAdapter.getAdapterItemCount() - 1);
                     if (lastMessageBeforeDeleted != null) {
-                        realmRoom.setLastMessageId(Long.parseLong(lastMessageBeforeDeleted.mMessage.messageID));
+                        realmRoom.setLastMessageId(parseLong(lastMessageBeforeDeleted.mMessage.messageID));
                         realmRoom.setLastMessageTime((int) (lastMessageBeforeDeleted.mMessage.time / DateUtils.SECOND_IN_MILLIS));
 
                         realm.copyToRealmOrUpdate(realmRoom);
@@ -2795,8 +2753,7 @@ public class ActivityChat extends ActivityEnhanced
         }
     }
 
-    @Override public void onMessageUpdate(long roomId, final long messageId, final ProtoGlobal.RoomMessageStatus status, final String identity,
-        ProtoGlobal.RoomMessage roomMessage) {
+    @Override public void onMessageUpdate(long roomId, final long messageId, final ProtoGlobal.RoomMessageStatus status, final String identity, ProtoGlobal.RoomMessage roomMessage) {
         // I'm in the room
         if (roomId == mRoomId) {
             // update message status in telegram
@@ -2808,8 +2765,7 @@ public class ActivityChat extends ActivityEnhanced
         }
     }
 
-    @Override public void onMessageReceive(final long roomId, String message, String messageType, final ProtoGlobal.RoomMessage roomMessage,
-        final ProtoGlobal.Room.Type roomType) {
+    @Override public void onMessageReceive(final long roomId, String message, String messageType, final ProtoGlobal.RoomMessage roomMessage, final ProtoGlobal.Room.Type roomType) {
         Log.i(ActivityChat.class.getSimpleName(), "onMessageReceive called for group");
 
         final Realm realm = Realm.getDefaultInstance();
@@ -2834,13 +2790,11 @@ public class ActivityChat extends ActivityEnhanced
                 // when came back to the room with new messages, I make new update status request
                 // as SEEN to
                 // the message sender
-                final RealmRoomMessage realmRoomMessage =
-                    realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
+                final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
                 //Start ClientCondition OfflineSeen
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override public void execute(Realm realm) {
-                        final RealmClientCondition realmClientCondition =
-                            realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirst();
+                        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirst();
 
                         if (realmRoomMessage != null) {
                             if (!realmRoomMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
@@ -2857,8 +2811,7 @@ public class ActivityChat extends ActivityEnhanced
                         // make update status to message sender that i've read his message
                         if (roomType == CHAT) {
                             G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
-                        } else if (roomType == GROUP && (roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT
-                            || roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.DELIVERED)) {
+                        } else if (roomType == GROUP && (roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT || roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.DELIVERED)) {
                             Log.i("III", "roomMessage.getMessageId() : " + roomMessage.getMessageId());
                             G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
                         }
@@ -2911,8 +2864,7 @@ public class ActivityChat extends ActivityEnhanced
         }
     }
 
-    @Override
-    public void onFileDownload(final String token, final int offset, final ProtoFileDownload.FileDownload.Selector selector, final int progress) {
+    @Override public void onFileDownload(final String token, final int offset, final ProtoFileDownload.FileDownload.Selector selector, final int progress) {
         runOnUiThread(new Runnable() {
             @Override public void run() {
                 // if thumbnail
@@ -2927,8 +2879,7 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     @Override
-    public void onAvatarDownload(final String token, final int offset, final ProtoFileDownload.FileDownload.Selector selector, final int progress,
-        final long userId, final RoomType roomType) {
+    public void onAvatarDownload(final String token, final int offset, final ProtoFileDownload.FileDownload.Selector selector, final int progress, final long userId, final RoomType roomType) {
         runOnUiThread(new Runnable() {
             @Override public void run() {
                 Realm realm = Realm.getDefaultInstance();
@@ -2936,8 +2887,7 @@ public class ActivityChat extends ActivityEnhanced
                 RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", userId).findFirst();
 
                 if (realmRegisteredInfo != null) {
-                    mAdapter.downloadingAvatar(userId, progress, offset,
-                        StructMessageAttachment.convert(realmRegisteredInfo.getLastAvatar())); //TODO [Saeed Mozaffari]
+                    mAdapter.downloadingAvatar(userId, progress, offset, StructMessageAttachment.convert(realmRegisteredInfo.getLastAvatar())); //TODO [Saeed Mozaffari]
                     // [2016-11-01 10:10 AM] -we have NullPointerException for
                     // realmRegisteredInfo check this
                 }
@@ -2951,8 +2901,7 @@ public class ActivityChat extends ActivityEnhanced
         if (majorCode == 713 && minorCode == 1) {
             runOnUiThread(new Runnable() {
                 @Override public void run() {
-                    final Snackbar snack =
-                        Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_713_1), Snackbar.LENGTH_LONG);
+                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_713_1), Snackbar.LENGTH_LONG);
 
                     snack.setAction("CANCEL", new View.OnClickListener() {
                         @Override public void onClick(View view) {
@@ -2965,8 +2914,7 @@ public class ActivityChat extends ActivityEnhanced
         } else if (majorCode == 713 && minorCode == 2) {
             runOnUiThread(new Runnable() {
                 @Override public void run() {
-                    final Snackbar snack =
-                        Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_713_2), Snackbar.LENGTH_LONG);
+                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_713_2), Snackbar.LENGTH_LONG);
 
                     snack.setAction("CANCEL", new View.OnClickListener() {
                         @Override public void onClick(View view) {
@@ -2979,8 +2927,7 @@ public class ActivityChat extends ActivityEnhanced
         } else if (majorCode == 713 && minorCode == 3) {
             runOnUiThread(new Runnable() {
                 @Override public void run() {
-                    final Snackbar snack =
-                        Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_713_3), Snackbar.LENGTH_LONG);
+                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_713_3), Snackbar.LENGTH_LONG);
 
                     snack.setAction("CANCEL", new View.OnClickListener() {
                         @Override public void onClick(View view) {
@@ -2993,8 +2940,7 @@ public class ActivityChat extends ActivityEnhanced
         } else if (majorCode == 713 && minorCode == 4) {
             runOnUiThread(new Runnable() {
                 @Override public void run() {
-                    final Snackbar snack =
-                        Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_713_4), Snackbar.LENGTH_LONG);
+                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_713_4), Snackbar.LENGTH_LONG);
 
                     snack.setAction("CANCEL", new View.OnClickListener() {
                         @Override public void onClick(View view) {
@@ -3007,8 +2953,7 @@ public class ActivityChat extends ActivityEnhanced
         } else if (majorCode == 713 && minorCode == 5) {
             runOnUiThread(new Runnable() {
                 @Override public void run() {
-                    final Snackbar snack =
-                        Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_713_5), Snackbar.LENGTH_LONG);
+                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_713_5), Snackbar.LENGTH_LONG);
 
                     snack.setAction("CANCEL", new View.OnClickListener() {
                         @Override public void onClick(View view) {
@@ -3021,8 +2966,7 @@ public class ActivityChat extends ActivityEnhanced
         } else if (majorCode == 714) {
             runOnUiThread(new Runnable() {
                 @Override public void run() {
-                    final Snackbar snack =
-                        Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_714), Snackbar.LENGTH_LONG);
+                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_714), Snackbar.LENGTH_LONG);
 
                     snack.setAction("CANCEL", new View.OnClickListener() {
                         @Override public void onClick(View view) {
@@ -3035,8 +2979,7 @@ public class ActivityChat extends ActivityEnhanced
         } else if (majorCode == 715) {
             runOnUiThread(new Runnable() {
                 @Override public void run() {
-                    final Snackbar snack =
-                        Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_715), Snackbar.LENGTH_LONG);
+                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_715), Snackbar.LENGTH_LONG);
 
                     snack.setAction("CANCEL", new View.OnClickListener() {
                         @Override public void onClick(View view) {
@@ -3057,18 +3000,17 @@ public class ActivityChat extends ActivityEnhanced
         final long duration = AndroidUtils.getAudioDuration(getApplicationContext(), savedPath);
         if (userTriesReplay()) {
             mAdapter.add(new VoiceItem(chatType, this).setMessage(
-                new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(),
-                    ProtoGlobal.RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime,
-                    Long.parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID))).withIdentifier(System.nanoTime()));
+                new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.VOICE, MyType.SendType.send,
+                    null, savedPath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID))).withIdentifier(System.nanoTime()));
         } else {
             if (isMessageWrote()) {
                 mAdapter.add(new VoiceItem(chatType, this).setMessage(
-                    new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(),
-                        ProtoGlobal.RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime)).withIdentifier(System.nanoTime()));
+                    new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.VOICE, MyType.SendType.send,
+                        null, savedPath, updateTime)).withIdentifier(System.nanoTime()));
             } else {
                 mAdapter.add(new VoiceItem(chatType, this).setMessage(
-                    new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(),
-                        ProtoGlobal.RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime)).withIdentifier(System.nanoTime()));
+                    new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.VOICE, MyType.SendType.send,
+                        null, savedPath, updateTime)).withIdentifier(System.nanoTime()));
             }
         }
 
@@ -3106,8 +3048,7 @@ public class ActivityChat extends ActivityEnhanced
         runOnUiThread(new Runnable() {
             @Override public void run() {
                 Realm realm = Realm.getDefaultInstance();
-                RealmRegisteredInfo realmRegisteredInfo =
-                    realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, user.getId()).findFirst();
+                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, user.getId()).findFirst();
                 if (realmRegisteredInfo != null) {
                     mAdapter.updateChatAvatar(user.getId(), realmRegisteredInfo);
                 }
@@ -3144,8 +3085,7 @@ public class ActivityChat extends ActivityEnhanced
         if (majorCode == 615 && minorCode == 1) {
             runOnUiThread(new Runnable() {
                 @Override public void run() {
-                    final Snackbar snack =
-                        Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_615_1), Snackbar.LENGTH_LONG);
+                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_615_1), Snackbar.LENGTH_LONG);
 
                     snack.setAction("CANCEL", new View.OnClickListener() {
                         @Override public void onClick(View view) {
@@ -3158,8 +3098,7 @@ public class ActivityChat extends ActivityEnhanced
         } else if (majorCode == 615 && minorCode == 2) {
             runOnUiThread(new Runnable() {
                 @Override public void run() {
-                    final Snackbar snack =
-                        Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_615_2), Snackbar.LENGTH_LONG);
+                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_615_2), Snackbar.LENGTH_LONG);
 
                     snack.setAction("CANCEL", new View.OnClickListener() {
                         @Override public void onClick(View view) {
@@ -3172,8 +3111,7 @@ public class ActivityChat extends ActivityEnhanced
         } else if (majorCode == 616) {
             runOnUiThread(new Runnable() {
                 @Override public void run() {
-                    final Snackbar snack =
-                        Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_616), Snackbar.LENGTH_LONG);
+                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_616), Snackbar.LENGTH_LONG);
 
                     snack.setAction("CANCEL", new View.OnClickListener() {
                         @Override public void onClick(View view) {
@@ -3186,8 +3124,7 @@ public class ActivityChat extends ActivityEnhanced
         } else if (majorCode == 617) {
             runOnUiThread(new Runnable() {
                 @Override public void run() {
-                    final Snackbar snack =
-                        Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_617), Snackbar.LENGTH_LONG);
+                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_617), Snackbar.LENGTH_LONG);
 
                     snack.setAction("CANCEL", new View.OnClickListener() {
                         @Override public void onClick(View view) {
@@ -3208,7 +3145,7 @@ public class ActivityChat extends ActivityEnhanced
 
         runOnUiThread(new Runnable() {
             @Override public void run() {
-                mAdapter.updateProgress(Long.parseLong(identity), 100);
+                mAdapter.updateProgress(parseLong(identity), 100);
                 mAdapter.updateToken(uploadStructure.messageId, uploadStructure.token);
             }
         });
@@ -3217,7 +3154,7 @@ public class ActivityChat extends ActivityEnhanced
     @Override public void onFileUploading(FileUploadStructure uploadStructure, final String identity, final double progress) {
         runOnUiThread(new Runnable() {
             @Override public void run() {
-                mAdapter.updateProgress(Long.parseLong(identity), (int) progress);
+                mAdapter.updateProgress(parseLong(identity), (int) progress);
             }
         });
     }
@@ -3255,8 +3192,7 @@ public class ActivityChat extends ActivityEnhanced
         // make request for clearing messages
         final Realm realm = Realm.getDefaultInstance();
 
-        final RealmClientCondition realmClientCondition =
-            realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, chatId).findFirstAsync();
+        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, chatId).findFirstAsync();
         realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
             @Override public void onChange(final RealmClientCondition element) {
                 realm.executeTransaction(new Realm.Transaction() {
@@ -3270,8 +3206,7 @@ public class ActivityChat extends ActivityEnhanced
                             G.clearMessagesUtil.clearMessages(chatId, realmRoom.getLastMessageId());
                         }
 
-                        RealmResults<RealmRoomMessage> realmRoomMessages =
-                            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, chatId).findAll();
+                        RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, chatId).findAll();
                         for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
                             if (realmRoomMessage != null) {
                                 // delete chat history message
@@ -3318,8 +3253,7 @@ public class ActivityChat extends ActivityEnhanced
                 if (majorCode == 218 && minorCode == 1) {
                     runOnUiThread(new Runnable() {
                         @Override public void run() {
-                            final Snackbar snack =
-                                Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_218), Snackbar.LENGTH_LONG);
+                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_218), Snackbar.LENGTH_LONG);
 
                             snack.setAction("CANCEL", new View.OnClickListener() {
                                 @Override public void onClick(View view) {
@@ -3331,8 +3265,7 @@ public class ActivityChat extends ActivityEnhanced
                 } else if (majorCode == 219) {
                     runOnUiThread(new Runnable() {
                         @Override public void run() {
-                            final Snackbar snack =
-                                Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_219), Snackbar.LENGTH_LONG);
+                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_219), Snackbar.LENGTH_LONG);
 
                             snack.setAction("CANCEL", new View.OnClickListener() {
                                 @Override public void onClick(View view) {
@@ -3344,8 +3277,7 @@ public class ActivityChat extends ActivityEnhanced
                 } else if (majorCode == 220) {
                     runOnUiThread(new Runnable() {
                         @Override public void run() {
-                            final Snackbar snack =
-                                Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_220), Snackbar.LENGTH_LONG);
+                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_220), Snackbar.LENGTH_LONG);
 
                             snack.setAction("CANCEL", new View.OnClickListener() {
                                 @Override public void onClick(View view) {
@@ -3359,8 +3291,7 @@ public class ActivityChat extends ActivityEnhanced
         };
         Log.i("RRR", "onChatDelete 0 start delete");
         final Realm realm = Realm.getDefaultInstance();
-        final RealmClientCondition realmClientCondition =
-            realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, item).findFirstAsync();
+        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, item).findFirstAsync();
         realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
             @Override public void onChange(final RealmClientCondition element) {
                 realm.executeTransaction(new Realm.Transaction() {
@@ -3423,7 +3354,7 @@ public class ActivityChat extends ActivityEnhanced
 
         if (mReplayLayout != null && mReplayLayout.getVisibility() == View.VISIBLE) {
             StructMessageInfo info = ((StructMessageInfo) mReplayLayout.getTag());
-            replyToMessageId = Long.parseLong(info.messageID);
+            replyToMessageId = parseLong(info.messageID);
         } else {
             replyToMessageId = 0;
         }
@@ -3541,9 +3472,7 @@ public class ActivityChat extends ActivityEnhanced
                         edtChat.setText(draft.getMessage());
 
                         if (draft.getReplyToMessageId() != 0) {
-                            RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class)
-                                .equalTo(RealmRoomMessageFields.MESSAGE_ID, draft.getReplyToMessageId())
-                                .findFirst();
+                            RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, draft.getReplyToMessageId()).findFirst();
 
                             if (realmRoomMessage != null) {
 
@@ -3674,20 +3603,15 @@ public class ActivityChat extends ActivityEnhanced
                     Toast.makeText(G.context, "Text Copied", Toast.LENGTH_SHORT).show();
                 } else if (text.toString().equalsIgnoreCase(getString(R.string.delete_item_dialog))) {
                     final Realm realmCondition = Realm.getDefaultInstance();
-                    final RealmClientCondition realmClientCondition =
-                        realmCondition.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirstAsync();
+                    final RealmClientCondition realmClientCondition = realmCondition.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirstAsync();
                     realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
                         @Override public void onChange(final RealmClientCondition element) {
                             realmCondition.executeTransaction(new Realm.Transaction() {
                                 @Override public void execute(Realm realm) {
                                     if (element != null) {
-                                        if (realmCondition.where(RealmOfflineDelete.class)
-                                            .equalTo(RealmOfflineDeleteFields.OFFLINE_DELETE, Long.parseLong(message.messageID))
-                                            .findFirst() == null) {
+                                        if (realmCondition.where(RealmOfflineDelete.class).equalTo(RealmOfflineDeleteFields.OFFLINE_DELETE, parseLong(message.messageID)).findFirst() == null) {
 
-                                            RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class)
-                                                .equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(message.messageID))
-                                                .findFirst();
+                                            RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(message.messageID)).findFirst();
                                             if (roomMessage != null) {
                                                 // delete message from database
                                                 roomMessage.deleteFromRealm();
@@ -3695,26 +3619,25 @@ public class ActivityChat extends ActivityEnhanced
 
                                             RealmOfflineDelete realmOfflineDelete = realmCondition.createObject(RealmOfflineDelete.class);
                                             realmOfflineDelete.setId(System.nanoTime());
-                                            realmOfflineDelete.setOfflineDelete(Long.parseLong(message.messageID));
+                                            realmOfflineDelete.setOfflineDelete(parseLong(message.messageID));
                                             element.getOfflineDeleted().add(realmOfflineDelete);
 
                                             runOnUiThread(new Runnable() {
                                                 @Override public void run() {
                                                     // remove deleted message from adapter
-                                                    mAdapter.removeMessage(Long.parseLong(message.messageID));
+                                                    mAdapter.removeMessage(parseLong(message.messageID));
 
                                                     // remove tag from edtChat if the
                                                     // message has deleted
                                                     if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
-                                                        if (Long.toString(Long.parseLong(message.messageID))
-                                                            .equals(((StructMessageInfo) edtChat.getTag()).messageID)) {
+                                                        if (Long.toString(parseLong(message.messageID)).equals(((StructMessageInfo) edtChat.getTag()).messageID)) {
                                                             edtChat.setTag(null);
                                                         }
                                                     }
                                                 }
                                             });
                                             // delete message
-                                            new RequestChatDeleteMessage().chatDeleteMessage(mRoomId, Long.parseLong(message.messageID));
+                                            new RequestChatDeleteMessage().chatDeleteMessage(mRoomId, parseLong(message.messageID));
                                         }
                                         element.removeChangeListeners();
                                     }
@@ -3768,15 +3691,15 @@ public class ActivityChat extends ActivityEnhanced
             }
 
             @Override public void resendMessage() {
-                mAdapter.updateMessageStatus(Long.parseLong(message.messageID), ProtoGlobal.RoomMessageStatus.SENDING);
+                mAdapter.updateMessageStatus(parseLong(message.messageID), ProtoGlobal.RoomMessageStatus.SENDING);
             }
 
             @Override public void resendAllMessages() {
                 for (StructMessageInfo message : failedMessages) {
-                    mAdapter.updateMessageStatus(Long.parseLong(message.messageID), ProtoGlobal.RoomMessageStatus.SENDING);
+                    mAdapter.updateMessageStatus(parseLong(message.messageID), ProtoGlobal.RoomMessageStatus.SENDING);
                 }
             }
-        }, Long.parseLong(message.messageID), failedMessages);
+        }, parseLong(message.messageID), failedMessages);
     }
 
     public static class UploadTask extends AsyncTask<Object, FileUploadStructure, FileUploadStructure> {
@@ -3847,8 +3770,7 @@ public class ActivityChat extends ActivityEnhanced
             curentSelectedPosition = hashList.get(curentHashposition - 1);
 
             if (mAdapter.getItem(curentSelectedPosition).mMessage.view != null) {
-                ((FrameLayout) mAdapter.getItem(curentSelectedPosition).mMessage.view).setForeground(
-                    new ColorDrawable(getResources().getColor(R.color.colorChatMessageSelectableItemBg)));
+                ((FrameLayout) mAdapter.getItem(curentSelectedPosition).mMessage.view).setForeground(new ColorDrawable(getResources().getColor(R.color.colorChatMessageSelectableItemBg)));
             }
         }
 
@@ -3881,8 +3803,7 @@ public class ActivityChat extends ActivityEnhanced
             new Handler().postDelayed(new Runnable() {
                 @Override public void run() {
                     if (mAdapter.getItem(curentSelectedPosition).mMessage.view != null) {
-                        ((FrameLayout) mAdapter.getItem(curentSelectedPosition).mMessage.view).setForeground(
-                            new ColorDrawable(getResources().getColor(R.color.colorChatMessageSelectableItemBg)));
+                        ((FrameLayout) mAdapter.getItem(curentSelectedPosition).mMessage.view).setForeground(new ColorDrawable(getResources().getColor(R.color.colorChatMessageSelectableItemBg)));
                     }
                 }
             }, 100);
