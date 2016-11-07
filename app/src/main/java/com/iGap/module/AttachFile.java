@@ -8,7 +8,6 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -16,7 +15,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.ContactsContract;
-import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
@@ -117,36 +115,41 @@ public class AttachFile {
     //*************************************************************************************************************
 
     private static String getRealPathFromURI(Uri contentUri) {
-        Cursor cursor = null;
-        try {
 
-            String docId = null;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-                docId = DocumentsContract.getDocumentId(contentUri);
-            }
+        String path = FileUtils.getPath(G.context, contentUri);
 
-            final String[] split = docId.split(":");
-            final String type = split[0];
+        //Cursor cursor = null;
+        //try {
+        //
+        //    String docId = null;
+        //    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+        //        docId = DocumentsContract.getDocumentId(contentUri);
+        //    }
+        //
+        //    final String[] split = docId.split(":");
+        //    final String type = split[0];
+        //
+        //    Uri content = null;
+        //    if ("image".equals(type)) {
+        //        content = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        //    } else if ("video".equals(type)) {
+        //        content = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+        //    } else if ("audio".equals(type)) {
+        //        content = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+        //    }
+        //
+        //    String[] proj = { content.toString() };
+        //    cursor = G.context.getContentResolver().query(contentUri, proj, null, null, null);
+        //    int column_index = cursor.getColumnIndexOrThrow(proj[0]);
+        //    cursor.moveToFirst();
+        //    return cursor.getString(column_index);
+        //} finally {
+        //    if (cursor != null) {
+        //        cursor.close();
+        //    }
+        //}
 
-            Uri content = null;
-            if ("image".equals(type)) {
-                content = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-            } else if ("video".equals(type)) {
-                content = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-            } else if ("audio".equals(type)) {
-                content = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-            }
-
-            String[] proj = { content.toString() };
-            cursor = G.context.getContentResolver().query(contentUri, proj, null, null, null);
-            int column_index = cursor.getColumnIndexOrThrow(proj[0]);
-            cursor.moveToFirst();
-            return cursor.getString(column_index);
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
+        return path;
     }
 
     public static String getFilePathFromUri(Uri uri) {

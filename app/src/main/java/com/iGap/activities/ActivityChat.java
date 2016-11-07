@@ -223,6 +223,7 @@ public class ActivityChat extends ActivityEnhanced
     private MaterialDesignTextView imvMicButton;
     private MaterialDesignTextView btnCloseAppBarSelected;
     private MaterialDesignTextView btnReplaySelected;
+    private ArrayList<String> listPathString;
     private MaterialDesignTextView btnCopySelected;
     private MaterialDesignTextView btnForwardSelected;
     private MaterialDesignTextView btnDeleteSelected;
@@ -1986,6 +1987,7 @@ public class ActivityChat extends ActivityEnhanced
 
                 Log.i("TAG123", "onClick: " + buttonIndex);
 
+
                 switch (buttonIndex) {
 
                     case 0:
@@ -1993,10 +1995,10 @@ public class ActivityChat extends ActivityEnhanced
                         attachFile.requestTakePicture();
                         break;
                     case 1:
-                        attachFile.requestOpenGallery();
+                        attachFile.requestOpenGalleryForImageMultipleSelect();
                         break;
                     case 2:
-                        attachFile.requestVideoCapture();
+                        attachFile.requestOpenGalleryForVideoMultipleSelect();
                         break;
                     case 3:
                         attachFile.requestPickAudio();
@@ -2035,6 +2037,11 @@ public class ActivityChat extends ActivityEnhanced
             return;
         }
 
+        listPathString = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            listPathString = attachFile.getClipData(data.getClipData());
+        }
+
         if (AttachFile.request_code_TAKE_PICTURE == requestCode) {
             latestFilePath = AttachFile.imagePath;
             latestUri = null;
@@ -2044,7 +2051,8 @@ public class ActivityChat extends ActivityEnhanced
         }
         latestRequestCode = requestCode;
 
-        if (resultCode == Activity.RESULT_OK && sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 0) == 1 && requestCode == AttachFile.request_code_media_from_gallery) {
+        if (resultCode == Activity.RESULT_OK && sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 0) == 1 &&
+            requestCode == AttachFile.requestOpenGalleryForImageMultipleSelect) {
 
             Intent intent = new Intent(ActivityChat.this, ActivityCrop.class);
             intent.putExtra("IMAGE_CAMERA", data.getData().toString());
@@ -2072,22 +2080,54 @@ public class ActivityChat extends ActivityEnhanced
         }
     }
 
+
     private void setDraftMessage(int requestCode) {
         switch (requestCode) {
             case AttachFile.request_code_TAKE_PICTURE:
-                txtFileNameForSend.setText("Send Picture From Camera");
+                txtFileNameForSend.setText(attachFile.getFileName(latestFilePath));
                 break;
-            case AttachFile.request_code_media_from_gallery:
-                txtFileNameForSend.setText("Send Picture");
+            case AttachFile.requestOpenGalleryForImageMultipleSelect:
+                if (latestUri != null) {
+                    txtFileNameForSend.setText(attachFile.getFileName(AttachFile.getFilePathFromUri(latestUri)));
+                } else if (listPathString != null) {
+                    if (listPathString.size() > 0) {
+                        txtFileNameForSend.setText(attachFile.getFileName(listPathString.size() + getString(R.string.image_selected_for_send)));
+                    }
+                }
+
                 break;
-            //                case AttachFile.request_code_media_from_gallery:
-            case AttachFile.request_code_VIDEO_CAPTURED:
+
+            case AttachFile.requestOpenGalleryForVideoMultipleSelect:
+
+                if (latestUri != null) {
+                    txtFileNameForSend.setText(attachFile.getFileName(AttachFile.getFilePathFromUri(latestUri)));
+                } else if (listPathString != null) {
+                    if (listPathString.size() > 0) {
+                        txtFileNameForSend.setText(attachFile.getFileName(listPathString.size() + getString(R.string.video_selected_for_send)));
+                    }
+                }
+
+                break;
+
+
             case AttachFile.request_code_pic_audi:
-                txtFileNameForSend.setText("Send Media");
+                if (latestUri != null) {
+                    txtFileNameForSend.setText(attachFile.getFileName(AttachFile.getFilePathFromUri(latestUri)));
+                } else if (listPathString != null) {
+                    if (listPathString.size() > 0) {
+                        txtFileNameForSend.setText(attachFile.getFileName(listPathString.size() + getString(R.string.audio_selected_for_send)));
+                    }
+                }
                 break;
             case AttachFile.request_code_pic_file:
+                if (latestUri != null) {
+                    txtFileNameForSend.setText(attachFile.getFileName(AttachFile.getFilePathFromUri(latestUri)));
+                }
+                break;
             case AttachFile.request_code_paint:
-                txtFileNameForSend.setText("Send Paint");
+                if (latestUri != null) {
+                    txtFileNameForSend.setText(attachFile.getFileName(AttachFile.getFilePathFromUri(latestUri)));
+                }
                 break;
             case AttachFile.request_code_contact_phone:
                 txtFileNameForSend.setText("Send Phone Contact");
@@ -2167,7 +2207,7 @@ public class ActivityChat extends ActivityEnhanced
 
                 break;
 
-            case AttachFile.request_code_media_from_gallery:
+            case AttachFile.requestOpenGalleryForImageMultipleSelect:
                 filePath = AttachFile.getFilePathFromUri(uri);
                 resizeImage(filePath);
 
