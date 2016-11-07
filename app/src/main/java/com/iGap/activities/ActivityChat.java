@@ -10,7 +10,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -139,7 +138,8 @@ import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
-import com.iGap.realm.RealmAttachment;
+import com.iGap.realm.RealmAvatar;
+import com.iGap.realm.RealmAvatarFields;
 import com.iGap.realm.RealmChannelRoom;
 import com.iGap.realm.RealmChatRoom;
 import com.iGap.realm.RealmClientCondition;
@@ -169,7 +169,6 @@ import com.iGap.request.RequestChatDeleteMessage;
 import com.iGap.request.RequestChatEditMessage;
 import com.iGap.request.RequestChatUpdateDraft;
 import com.iGap.request.RequestClientGetRoomHistory;
-import com.iGap.request.RequestFileDownload;
 import com.iGap.request.RequestGroupUpdateDraft;
 import com.mikepenz.fastadapter.IItemAdapter;
 import com.nightonke.boommenu.BoomMenuButton;
@@ -538,11 +537,7 @@ public class ActivityChat extends ActivityEnhanced
 
         getDraft();
 
-        if (chatType == CHAT) {
-            setAvatar();
-        } else {
-            setAvatarGroup();
-        }
+        setAvatar();
     }
 
     private void clearHistoryFromContactsProfileInterface() {
@@ -1914,122 +1909,43 @@ public class ActivityChat extends ActivityEnhanced
 
     private void setAvatar() {
         Realm realm = Realm.getDefaultInstance();
-        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
-        if (realmRegisteredInfo != null && realmRegisteredInfo.getAvatars() != null && realmRegisteredInfo.getLastAvatar() != null) {
-
-            String mainFilePath = realmRegisteredInfo.getLastAvatar().getFile().getLocalFilePath();
-
-            if (mainFilePath != null && new File(mainFilePath).exists()) { // if main image is exist showing that
-                avatarPath = mainFilePath;
-            } else {
-                avatarPath = realmRegisteredInfo.getLastAvatar().getFile().getLocalThumbnailPath();
-            }
-        }
-
-        //Set Avatar For Chat,Group,Channel
-        if (avatarPath != null) {
-            File imgFile = new File(avatarPath);
-            if (imgFile.exists()) {
-                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                imvUserPicture.setImageBitmap(myBitmap);
-            } else {
-                if (realmRegisteredInfo != null && realmRegisteredInfo.getLastAvatar() != null && realmRegisteredInfo.getLastAvatar().getFile() != null) {
-                    onRequestDownloadAvatar(realmRegisteredInfo.getLastAvatar().getFile());
-                }
-                imvUserPicture.setImageBitmap(
-                    com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
-            }
+        RealmResults<RealmAvatar> avatars = null;
+        if (chatType != CHAT) {
+            avatars = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, mRoomId).findAll();
         } else {
-            if (realmRegisteredInfo != null && realmRegisteredInfo.getLastAvatar() != null && realmRegisteredInfo.getLastAvatar().getFile() != null) {
-                onRequestDownloadAvatar(realmRegisteredInfo.getLastAvatar().getFile());
-            }
-            imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
+            avatars = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, chatPeerId).findAll();
         }
-        realm.close();
-    }
 
-    private void setAvatarGroup() {
-
-        Bitmap bitmap = null;
-        RealmAttachment realmAttachment = null;
-
-        Realm realm = Realm.getDefaultInstance();
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-        if (realmRoom != null) {
-
-            if (realmRoom.getGroupRoom() != null) {
-                if (realmRoom.getGroupRoom().getAvatar() != null) {
-                    realmAttachment = realmRoom.getGroupRoom().getAvatar().getFile();
-                }
-            }
-
-            Log.e("ddd", realmAttachment + "");
-
-            if (realmAttachment != null) {
-
-                String mainFilePath = realmAttachment.getLocalFilePath();
-
-                if (mainFilePath != null) {
-                    File file = new File(mainFilePath);
-                    if (!file.exists()) {
-                        mainFilePath = realmAttachment.getLocalThumbnailPath();
-                    }
-                } else {
-                    mainFilePath = realmAttachment.getLocalThumbnailPath();
-                }
-
-                if (mainFilePath != null) {
-                    File fileb = new File(mainFilePath);
-                    if (fileb.exists()) {
-                        bitmap = BitmapFactory.decodeFile(fileb.getPath());
-                    }
-                }
-            }
-
-            if (bitmap != null) {
-                imvUserPicture.setImageBitmap(bitmap);
-            } else {
-                imvUserPicture.setImageBitmap(
+        if (avatars.isEmpty()) {
+            imvUserPicture.setImageBitmap(
                     com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
+            return;
+        }
+        RealmAvatar realmAvatar = null;
+        for (int i = avatars.size() - 1; i >= 0; i--) {
+            RealmAvatar avatar = avatars.get(i);
+            if (avatar.getFile() != null) {
+                realmAvatar = avatar;
+                break;
             }
         }
-    }
 
-    public void onRequestDownloadAvatar(RealmAttachment file) {
-        ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
+        if (realmAvatar == null) {
+            imvUserPicture.setImageBitmap(
+                    com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
+            return;
+        }
 
-        final String filepath = G.DIR_IMAGE_USER + "/" + file.getToken() + "_" + System.nanoTime() + "_" + selector.toString();
+        if (realmAvatar.getFile().isFileExistsOnLocal()) {
+            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalFilePath()), imvUserPicture);
+        } else if (realmAvatar.getFile().isThumbnailExistsOnLocal()) {
+            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalThumbnailPath()), imvUserPicture);
+        } else {
+            imvUserPicture.setImageBitmap(
+                    com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
+        }
 
-        /* if download was successful use this filepath and
-         * show image , otherwise if download was not successfully
-         * run setAvatar method for doing this process again.
-         */
-
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
-                realmRegisteredInfo.getLastAvatar().getFile().setLocalThumbnailPath(filepath);
-            }
-        });
         realm.close();
-
-        // I don't use offset in getting thumbnail
-        String identity = file.getToken()
-            + '*'
-            + selector.toString()
-            + '*'
-            + file.getSmallThumbnail().getSize()
-            + '*'
-            + filepath
-            + '*'
-            + file.getSmallThumbnail().getSize()
-            + '*'
-            + "true"
-            + '*'
-            + "0";// userId don't need here , so i set it with string
-        new RequestFileDownload().download(file.getToken(), 0, (int) file.getSmallThumbnail().getSize(), selector, identity);
     }
 
     private void changeEmojiButtonImageResource(@StringRes int drawableResourceId) {
