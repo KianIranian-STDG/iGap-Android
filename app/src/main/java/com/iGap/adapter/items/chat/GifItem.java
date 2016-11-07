@@ -2,11 +2,13 @@ package com.iGap.adapter.items.chat;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
 import com.iGap.R;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
+
 import java.util.List;
 
 /**
@@ -19,15 +21,18 @@ public class GifItem extends AbstractMessage<GifItem, GifItem.ViewHolder> {
         super(true, type, messageClickListener);
     }
 
-    @Override public int getType() {
+    @Override
+    public int getType() {
         return R.id.chatSubLayoutAudio;
     }
 
-    @Override public int getLayoutRes() {
+    @Override
+    public int getLayoutRes() {
         return R.layout.chat_sub_layout_gif;
     }
 
-    @Override public ViewHolderFactory<? extends ViewHolder> getFactory() {
+    @Override
+    public ViewHolderFactory<? extends ViewHolder> getFactory() {
         return FACTORY;
     }
 
@@ -37,7 +42,8 @@ public class GifItem extends AbstractMessage<GifItem, GifItem.ViewHolder> {
         // TODO: 9/28/2016 [Alireza]
     }
 
-    @Override public void bindView(ViewHolder holder, List payloads) {
+    @Override
+    public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
     }
 

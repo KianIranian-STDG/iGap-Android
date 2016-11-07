@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.R;
@@ -32,6 +33,7 @@ import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.adapters.HeaderAdapter;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +50,7 @@ public class ShowCustomList extends Fragment {
     private int count = 0;
 
     public static ShowCustomList newInstance(List<StructContactInfo> list,
-        OnSelectedList onSelectedListResult) {
+                                             OnSelectedList onSelectedListResult) {
         onSelectedList = onSelectedListResult;
         contacts = list;
 
@@ -59,13 +61,15 @@ public class ShowCustomList extends Fragment {
         return new ShowCustomList();
     }
 
-    @Nullable @Override
+    @Nullable
+    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-        @Nullable Bundle savedInstanceState) {
+                             @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_contact_group, container, false);
     }
 
-    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         Bundle bundle = this.getArguments();
@@ -78,10 +82,11 @@ public class ShowCustomList extends Fragment {
         edtSearch = (EditText) view.findViewById(R.id.fcg_edt_search);
 
         MaterialDesignTextView btnBack =
-            (MaterialDesignTextView) view.findViewById(R.id.fcg_btn_back);
+                (MaterialDesignTextView) view.findViewById(R.id.fcg_btn_back);
         RippleView rippleBack = (RippleView) view.findViewById(R.id.fcg_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
 
                 getActivity().getSupportFragmentManager().popBackStack();
             }
@@ -89,7 +94,8 @@ public class ShowCustomList extends Fragment {
 
         RippleView rippleDown = (RippleView) view.findViewById(R.id.fcg_ripple_done);
         rippleDown.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
 
                 if (dialogShowing) {
                     showDialog();
@@ -111,9 +117,10 @@ public class ShowCustomList extends Fragment {
         final HeaderAdapter headerAdapter = new HeaderAdapter();
         final ItemAdapter itemAdapter = new ItemAdapter();
         itemAdapter.withFilterPredicate(new IItemAdapter.Predicate<ContactItemGroup>() {
-            @Override public boolean filter(ContactItemGroup item, CharSequence constraint) {
+            @Override
+            public boolean filter(ContactItemGroup item, CharSequence constraint) {
                 return !item.mContact.displayName.toLowerCase()
-                    .startsWith(String.valueOf(constraint).toLowerCase());
+                        .startsWith(String.valueOf(constraint).toLowerCase());
             }
         });
         fastAdapter.withOnClickListener(new FastAdapter.OnClickListener<ContactItemGroup>() {
@@ -134,12 +141,13 @@ public class ShowCustomList extends Fragment {
 
             }
 
-            @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                 if (charSequence.length() > sizeTextEdittext) {
                     String s = edtSearch.getText()
-                        .toString()
-                        .substring(sizeTextEdittext, charSequence.length());
+                            .toString()
+                            .substring(sizeTextEdittext, charSequence.length());
                     itemAdapter.filter(s);
                 } else {
                     itemAdapter.filter("");
@@ -150,13 +158,15 @@ public class ShowCustomList extends Fragment {
 
             }
 
-            @Override public void afterTextChanged(Editable editable) {
+            @Override
+            public void afterTextChanged(Editable editable) {
 
             }
         });
 
         edtSearch.setOnKeyListener(new View.OnKeyListener() {
-            @Override public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+            @Override
+            public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
                 if ((keyCode == KeyEvent.KEYCODE_DEL)) {
                     if (edtSearch.getText().length() <= sizeTextEdittext) {
                         return true;
@@ -173,27 +183,28 @@ public class ShowCustomList extends Fragment {
 
         //get our recyclerView and do basic setup
         RecyclerView rv =
-            (RecyclerView) view.findViewById(R.id.fcg_recycler_view_add_item_to_group);
+                (RecyclerView) view.findViewById(R.id.fcg_recycler_view_add_item_to_group);
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
         rv.setItemAnimator(new DefaultItemAnimator());
         rv.setAdapter(stickyHeaderAdapter.wrap(itemAdapter.wrap(headerAdapter.wrap(fastAdapter))));
 
         //this adds the Sticky Headers within our list
         final StickyRecyclerHeadersDecoration decoration =
-            new StickyRecyclerHeadersDecoration(stickyHeaderAdapter);
+                new StickyRecyclerHeadersDecoration(stickyHeaderAdapter);
         rv.addItemDecoration(decoration);
 
         List<IItem> items = new ArrayList<>();
 
         for (StructContactInfo contact : contacts) {
             items.add(new ContactItemGroup().setContact(contact)
-                .withIdentifier(100 + contacts.indexOf(contact)));
+                    .withIdentifier(100 + contacts.indexOf(contact)));
         }
         itemAdapter.add(items);
 
         //so the headers are aware of changes
         stickyHeaderAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override public void onChanged() {
+            @Override
+            public void onChanged() {
                 decoration.invalidateHeaders();
             }
         });
@@ -206,32 +217,34 @@ public class ShowCustomList extends Fragment {
 
     private void showDialog() {
         MaterialDialog dialog =
-            new MaterialDialog.Builder(getActivity()).title(R.string.show_message_count)
-                .positiveText(getString(R.string.ok))
-                .alwaysCallInputCallback()
-                .widgetColor(getResources().getColor(R.color.toolbar_background))
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override public void onClick(@NonNull MaterialDialog dialog,
-                        @NonNull DialogAction which) {
-                        if (onSelectedList != null) {
-                            onSelectedList.getSelectedList(true, "", count, getSelectedList());
-                        }
-                        getActivity().getSupportFragmentManager().popBackStack();
-                    }
-                })
-                .negativeText(getString(R.string.cancel))
-                .inputType(InputType.TYPE_CLASS_PHONE)
-                .input(getString(R.string.count_of_show_message), "50",
-                    new MaterialDialog.InputCallback() {
-                        @Override public void onInput(MaterialDialog dialog, CharSequence input) {
-                            if (input.toString() != null && !input.toString().isEmpty()) {
-                                count = Integer.parseInt(input.toString());
-                            } else {
-                                count = 0;
+                new MaterialDialog.Builder(getActivity()).title(R.string.show_message_count)
+                        .positiveText(getString(R.string.ok))
+                        .alwaysCallInputCallback()
+                        .widgetColor(getResources().getColor(R.color.toolbar_background))
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog,
+                                                @NonNull DialogAction which) {
+                                if (onSelectedList != null) {
+                                    onSelectedList.getSelectedList(true, "", count, getSelectedList());
+                                }
+                                getActivity().getSupportFragmentManager().popBackStack();
                             }
-                        }
-                    })
-                .build();
+                        })
+                        .negativeText(getString(R.string.cancel))
+                        .inputType(InputType.TYPE_CLASS_PHONE)
+                        .input(getString(R.string.count_of_show_message), "50",
+                                new MaterialDialog.InputCallback() {
+                                    @Override
+                                    public void onInput(MaterialDialog dialog, CharSequence input) {
+                                        if (input.toString() != null && !input.toString().isEmpty()) {
+                                            count = Integer.parseInt(input.toString());
+                                        } else {
+                                            count = 0;
+                                        }
+                                    }
+                                })
+                        .build();
         dialog.show();
     }
 
@@ -267,7 +280,8 @@ public class ShowCustomList extends Fragment {
         return list;
     }
 
-    @Override public void onSaveInstanceState(Bundle outState) {
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
         //add the values which need to be saved from the adapter to the bundle
         outState = fastAdapter.saveInstanceState(outState);
         super.onSaveInstanceState(outState);

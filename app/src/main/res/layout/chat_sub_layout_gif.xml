@@ -2,24 +2,21 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:minWidth="@dimen/dp140"
-    >
+    android:minWidth="@dimen/dp140">
 
 
-  <com.iGap.module.GifMovieView
-      android:layout_width="@dimen/dp240"
-      android:layout_height="@dimen/dp240"
-      android:padding="@dimen/dp8"
-      />
+    <com.iGap.module.GifMovieView
+        android:layout_width="@dimen/dp240"
+        android:layout_height="@dimen/dp240"
+        android:padding="@dimen/dp8" />
 
-  <ImageButton
-      android:layout_width="@dimen/dp32"
-      android:layout_height="@dimen/dp32"
-      android:layout_gravity="center"
-      android:background="@null"
-      android:scaleType="centerCrop"
-      android:src="@mipmap/play"
-      />
+    <ImageButton
+        android:layout_width="@dimen/dp32"
+        android:layout_height="@dimen/dp32"
+        android:layout_gravity="center"
+        android:background="@null"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/play" />
 
 
 </FrameLayout>

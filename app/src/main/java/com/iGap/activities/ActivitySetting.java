@@ -33,6 +33,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -78,85 +79,117 @@ import com.iGap.request.RequestUserProfileSetEmail;
 import com.iGap.request.RequestUserProfileSetGender;
 import com.iGap.request.RequestUserProfileSetNickname;
 import com.iGap.request.RequestUserProfileUpdateUsername;
-import de.hdodenhof.circleimageview.CircleImageView;
-import io.realm.Realm;
-import io.realm.RealmResults;
-import io.realm.Sort;
+
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
 import java.util.Locale;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+import io.realm.Realm;
+import io.realm.RealmResults;
+import io.realm.Sort;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarResponse, OnFileUploadForActivities {
 
-    private SharedPreferences sharedPreferences;
-
-    private TextView txtMenu, txtMessageTextSize, txtAutoDownloadData, txtAutoDownloadWifi, txtChatBackground, txtAutoDownloadRoaming, txtKeepMedia, txtLanguage, txtSizeClearCach;
-
-    private RelativeLayout ltClearCache;
-
-    private PopupWindow popupWindow;
-
-    private int poRbDialogLangouage = -1;
-    private int poRbDialoggander = -1;
-    private String textLanguage = "English";
-    private int poRbDialogTextSize = -1;
-
-    private ViewGroup ltMessageTextSize, ltLanguage;
-    private TextView txtNickName, txtUserName, txtPhoneNumber, txtNotifyAndSound, txtFaq, txtPrivacyPolicy, txtSticker, ltInAppBrowser, ltSentByEnter, ltEnableAnimation, ltAutoGifs, ltSaveToGallery;
-    ;
-    private ToggleButton toggleSentByEnter, toggleEnableAnimation, toggleAutoGifs, toggleSaveToGallery, toggleInAppBrowser, toggleCrop;
-
-    private AppBarLayout appBarLayout;
-
-    private Uri uriIntent;
-    private long idAvatar;
-    private File nameImageFile;
     public static String pathSaveImage;
-
-    private FloatingActionButton fab;
-    private CircleImageView circleImageView;
-
-    private String nickName;
-    private String userName;
-    private String phoneName;
-    private String gander;
-    private String email;
-    private long userId;
-
     public static int KEY_AD_DATA_PHOTO = -1;
     public static int KEY_AD_DATA_VOICE_MESSAGE = -1;
     public static int KEY_AD_DATA_VIDEO = -1;
     public static int KEY_AD_DATA_FILE = -1;
     public static int KEY_AD_DATA_MUSIC = -1;
     public static int KEY_AD_DATA_GIF = -1;
-
     public static int KEY_AD_WIFI_PHOTO = -1;
     public static int KEY_AD_WIFI_VOICE_MESSAGE = -1;
     public static int KEY_AD_WIFI_VIDEO = -1;
+    ;
     public static int KEY_AD_WIFI_FILE = -1;
     public static int KEY_AD_WIFI_MUSIC = -1;
     public static int KEY_AD_WIFI_GIF = -1;
-
     public static int KEY_AD_ROAMING_PHOTO = -1;
     public static int KEY_AD_ROAMING_VOICE_MESSAGE = -1;
     public static int KEY_AD_ROAMING_VIDEO = -1;
     public static int KEY_AD_ROAMING_FILE = -1;
     public static int KEY_AD_ROAMING_MUSIC = -1;
     public static int KEY_AD_ROAMINGN_GIF = -1;
+    private SharedPreferences sharedPreferences;
+    private TextView txtMenu, txtMessageTextSize, txtAutoDownloadData, txtAutoDownloadWifi, txtChatBackground, txtAutoDownloadRoaming, txtKeepMedia, txtLanguage, txtSizeClearCach;
+    private RelativeLayout ltClearCache;
+    private PopupWindow popupWindow;
+    private int poRbDialogLangouage = -1;
+    private int poRbDialoggander = -1;
+    private String textLanguage = "English";
+    private int poRbDialogTextSize = -1;
+    private ViewGroup ltMessageTextSize, ltLanguage;
+    private TextView txtNickName, txtUserName, txtPhoneNumber, txtNotifyAndSound, txtFaq, txtPrivacyPolicy, txtSticker, ltInAppBrowser, ltSentByEnter, ltEnableAnimation, ltAutoGifs, ltSaveToGallery;
+    private ToggleButton toggleSentByEnter, toggleEnableAnimation, toggleAutoGifs, toggleSaveToGallery, toggleInAppBrowser, toggleCrop;
+    private AppBarLayout appBarLayout;
+    private Uri uriIntent;
+    private long idAvatar;
+    private File nameImageFile;
+    private FloatingActionButton fab;
+    private CircleImageView circleImageView;
+    private String nickName;
+    private String userName;
+    private String phoneName;
+    private String gander;
+    private String email;
+    private long userId;
+    private long lastUploadedAvatarId;
+    private IncomingSms smsReceiver;
+    private String regex;
+
+    public static long getFolderSize(File dir) {
+        long size = 0;
+        for (File file : dir.listFiles()) {
+            if (file.isFile()) {
+                System.out.println(file.getName() + " " + file.length());
+                size += file.length();
+            } else {
+                size += getFolderSize(file);
+            }
+        }
+        return size;
+    }
+
+    public static String formatFileSize(long size) {
+        String hrSize = null;
+
+        double b = size;
+        double k = size / 1024.0;
+        double m = ((size / 1024.0) / 1024.0);
+        double g = (((size / 1024.0) / 1024.0) / 1024.0);
+        double t = ((((size / 1024.0) / 1024.0) / 1024.0) / 1024.0);
+
+        DecimalFormat dec = new DecimalFormat("0.0");
+
+        if (t > 1) {
+            hrSize = dec.format(t).concat(" TB");
+        } else if (g > 1) {
+            hrSize = dec.format(g).concat(" GB");
+        } else if (m > 1) {
+            hrSize = dec.format(m).concat(" MB");
+        } else if (k > 1) {
+            hrSize = dec.format(k).concat(" KB");
+        } else {
+            hrSize = dec.format(b).concat(" Bytes");
+        }
+        return hrSize;
+    }
 
     private void setImage() {
         runOnUiThread(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 Realm realm = Realm.getDefaultInstance();
                 final RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
                 final RealmAvatar lastAvatar = userInfo.getUserInfo().getLastAvatar();
                 if (lastAvatar == null) {
                     circleImageView.setImageBitmap(
-                        com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp60), userInfo.getUserInfo().getInitials(),
-                            userInfo.getUserInfo().getColor()));
+                            com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp60), userInfo.getUserInfo().getInitials(),
+                                    userInfo.getUserInfo().getColor()));
                 } else {
                     if (lastAvatar.getFile().isFileExistsOnLocal()) {
                         Bitmap myBitmap = BitmapFactory.decodeFile(lastAvatar.getFile().getLocalFilePath());
@@ -166,18 +199,20 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                         circleImageView.setImageBitmap(myBitmap);
                     } else {
                         circleImageView.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp60),
-                            userInfo.getUserInfo().getInitials(), userInfo.getUserInfo().getColor()));
+                                userInfo.getUserInfo().getInitials(), userInfo.getUserInfo().getColor()));
                     }
                 }
             }
         });
     }
 
-    @Override protected void attachBaseContext(Context newBase) {
+    @Override
+    protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
-    @Override public void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
@@ -211,7 +246,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         ViewGroup layoutNickname = (ViewGroup) findViewById(R.id.st_layout_nickname);
         layoutNickname.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 final LinearLayout layoutNickname = new LinearLayout(ActivitySetting.this);
                 layoutNickname.setOrientation(LinearLayout.VERTICAL);
@@ -275,25 +311,28 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 layoutNickname.addView(inputLastName, lastNameLayoutParams);
 
                 final MaterialDialog dialog =
-                    new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_nickname)).positiveText(getResources().getString(R.string.B_ok))
-                    .customView(layoutNickname, true)
-                    .widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel))
-                    .build();
+                        new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_nickname)).positiveText(getResources().getString(R.string.B_ok))
+                                .customView(layoutNickname, true)
+                                .widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel))
+                                .build();
 
                 final View positive = dialog.getActionButton(DialogAction.POSITIVE);
                 positive.setEnabled(false);
 
                 final String finalFirsName = firsName;
                 edtFirstName.addTextChangedListener(new TextWatcher() {
-                    @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                     }
 
-                    @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                     }
 
-                    @Override public void afterTextChanged(Editable editable) {
+                    @Override
+                    public void afterTextChanged(Editable editable) {
 
                         if (!edtFirstName.getText().toString().equals(finalFirsName)) {
                             positive.setEnabled(true);
@@ -305,15 +344,18 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                 final String finalLastName = lastName;
                 edtLastName.addTextChangedListener(new TextWatcher() {
-                    @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                     }
 
-                    @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                     }
 
-                    @Override public void afterTextChanged(Editable editable) {
+                    @Override
+                    public void afterTextChanged(Editable editable) {
                         if (!edtLastName.getText().toString().equals(finalLastName)) {
                             positive.setEnabled(true);
                         } else {
@@ -323,7 +365,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 });
 
                 edtFirstName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                    @Override public void onFocusChange(View view, boolean b) {
+                    @Override
+                    public void onFocusChange(View view, boolean b) {
                         if (b) {
                             viewFirstName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
                         } else {
@@ -333,7 +376,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 });
 
                 edtLastName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                    @Override public void onFocusChange(View view, boolean b) {
+                    @Override
+                    public void onFocusChange(View view, boolean b) {
                         if (b) {
                             viewLastName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
                         } else {
@@ -343,7 +387,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 });
 
                 positive.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View view) {
+                    @Override
+                    public void onClick(View view) {
 
                         String fullName = "";
                         if (edtFirstName.length() == 0) {
@@ -357,13 +402,16 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                         }
 
                         G.onUserProfileSetNickNameResponse = new OnUserProfileSetNickNameResponse() {
-                            @Override public void onUserProfileNickNameResponse(final String nickName, ProtoResponse.Response response) {
+                            @Override
+                            public void onUserProfileNickNameResponse(final String nickName, ProtoResponse.Response response) {
                                 runOnUiThread(new Runnable() {
-                                    @Override public void run() {
+                                    @Override
+                                    public void run() {
 
                                         Realm realm1 = Realm.getDefaultInstance();
                                         realm1.executeTransaction(new Realm.Transaction() {
-                                            @Override public void execute(Realm realm) {
+                                            @Override
+                                            public void execute(Realm realm) {
                                                 realm.where(RealmUserInfo.class).findFirst().getUserInfo().setDisplayName(nickName);
                                                 txtNickNameTitle.setText(nickName);
                                                 FragmentDrawerMenu.txtUserName.setText(nickName);
@@ -376,15 +424,18 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                 });
                             }
 
-                            @Override public void onUserProfileNickNameError(int majorCode, int minorCode) {
+                            @Override
+                            public void onUserProfileNickNameError(int majorCode, int minorCode) {
 
                                 if (majorCode == 112) {
                                     runOnUiThread(new Runnable() {
-                                        @Override public void run() {
+                                        @Override
+                                        public void run() {
                                             final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_112), Snackbar.LENGTH_LONG);
 
                                             snack.setAction("CANCEL", new View.OnClickListener() {
-                                                @Override public void onClick(View view) {
+                                                @Override
+                                                public void onClick(View view) {
                                                     snack.dismiss();
                                                 }
                                             });
@@ -393,11 +444,13 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                     });
                                 } else if (majorCode == 113) {
                                     runOnUiThread(new Runnable() {
-                                        @Override public void run() {
+                                        @Override
+                                        public void run() {
                                             final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_113), Snackbar.LENGTH_LONG);
 
                                             snack.setAction("CANCEL", new View.OnClickListener() {
-                                                @Override public void onClick(View view) {
+                                                @Override
+                                                public void onClick(View view) {
                                                     snack.dismiss();
                                                 }
                                             });
@@ -426,51 +479,56 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         poRbDialoggander = sharedPreferences.getInt(SHP_SETTING.KEY_POSITION_GANDER, -1);
         ViewGroup layoutGander = (ViewGroup) findViewById(R.id.st_layout_gander);
         layoutGander.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_Gander))
-                    .titleGravity(GravityEnum.START)
-                    .titleColor(getResources().getColor(android.R.color.black))
-                    .items(R.array.array_gander)
-                    .itemsCallbackSingleChoice(poRbDialoggander, new MaterialDialog.ListCallbackSingleChoice() {
-                        @Override public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        .titleGravity(GravityEnum.START)
+                        .titleColor(getResources().getColor(android.R.color.black))
+                        .items(R.array.array_gander)
+                        .itemsCallbackSingleChoice(poRbDialoggander, new MaterialDialog.ListCallbackSingleChoice() {
+                            @Override
+                            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                            if (text != null) txtGander.setText(text.toString());
-                            switch (which) {
-                                case 0: {
-                                    new RequestUserProfileSetGender().setUserProfileGender(ProtoGlobal.Gender.MALE);
-                                    sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                                    editor.putInt(SHP_SETTING.KEY_POSITION_GANDER, 0);
-                                    editor.apply();
-                                    poRbDialoggander = 0;
-                                    break;
-                                }
-                                case 1: {
-                                    new RequestUserProfileSetGender().setUserProfileGender(ProtoGlobal.Gender.FEMALE);
-                                    sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                                    editor.putInt(SHP_SETTING.KEY_POSITION_GANDER, 1);
-                                    editor.apply();
-                                    poRbDialoggander = 1;
+                                if (text != null) txtGander.setText(text.toString());
+                                switch (which) {
+                                    case 0: {
+                                        new RequestUserProfileSetGender().setUserProfileGender(ProtoGlobal.Gender.MALE);
+                                        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                                        editor.putInt(SHP_SETTING.KEY_POSITION_GANDER, 0);
+                                        editor.apply();
+                                        poRbDialoggander = 0;
+                                        break;
+                                    }
+                                    case 1: {
+                                        new RequestUserProfileSetGender().setUserProfileGender(ProtoGlobal.Gender.FEMALE);
+                                        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                                        editor.putInt(SHP_SETTING.KEY_POSITION_GANDER, 1);
+                                        editor.apply();
+                                        poRbDialoggander = 1;
 
-                                    break;
+                                        break;
+                                    }
                                 }
+                                return false;
                             }
-                            return false;
-                        }
-                    }).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.B_cancel))
-                    .show();
+                        }).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.B_cancel))
+                        .show();
 
                 G.onUserProfileSetGenderResponse = new OnUserProfileSetGenderResponse() {
-                    @Override public void onUserProfileEmailResponse(final ProtoGlobal.Gender gender, ProtoResponse.Response response) {
+                    @Override
+                    public void onUserProfileEmailResponse(final ProtoGlobal.Gender gender, ProtoResponse.Response response) {
 
                         runOnUiThread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
 
                                 Realm realm1 = Realm.getDefaultInstance();
                                 realm1.executeTransaction(new Realm.Transaction() {
-                                    @Override public void execute(Realm realm) {
+                                    @Override
+                                    public void execute(Realm realm) {
 
                                         if (gender == ProtoGlobal.Gender.MALE) {
 
@@ -486,14 +544,17 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                         });
                     }
 
-                    @Override public void Error(int majorCode, int minorCode) {
+                    @Override
+                    public void Error(int majorCode, int minorCode) {
                         if (majorCode == 116 && minorCode == 1) {
                             runOnUiThread(new Runnable() {
-                                @Override public void run() {
+                                @Override
+                                public void run() {
                                     final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_116), Snackbar.LENGTH_LONG);
 
                                     snack.setAction("CANCEL", new View.OnClickListener() {
-                                        @Override public void onClick(View view) {
+                                        @Override
+                                        public void onClick(View view) {
                                             snack.dismiss();
                                         }
                                     });
@@ -502,11 +563,13 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                             });
                         } else if (majorCode == 117) {
                             runOnUiThread(new Runnable() {
-                                @Override public void run() {
+                                @Override
+                                public void run() {
                                     final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_117), Snackbar.LENGTH_LONG);
 
                                     snack.setAction("CANCEL", new View.OnClickListener() {
-                                        @Override public void onClick(View view) {
+                                        @Override
+                                        public void onClick(View view) {
                                             snack.dismiss();
                                         }
                                     });
@@ -528,7 +591,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         ViewGroup ltEmail = (ViewGroup) findViewById(R.id.st_layout_email);
         ltEmail.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 final LinearLayout layoutEmail = new LinearLayout(ActivitySetting.this);
                 layoutEmail.setOrientation(LinearLayout.VERTICAL);
 
@@ -555,24 +619,27 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 layoutEmail.addView(inputEmail, layoutParams);
 
                 final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_email)).positiveText(getResources().getString(R.string.save))
-                    .customView(layoutEmail, true)
-                    .widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel))
-                    .build();
+                        .customView(layoutEmail, true)
+                        .widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel))
+                        .build();
 
                 final View positive = dialog.getActionButton(DialogAction.POSITIVE);
                 positive.setEnabled(false);
 
                 final String finalEmail = email;
                 edtEmail.addTextChangedListener(new TextWatcher() {
-                    @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                     }
 
-                    @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                     }
 
-                    @Override public void afterTextChanged(Editable editable) {
+                    @Override
+                    public void afterTextChanged(Editable editable) {
 
                         if (!edtEmail.getText().toString().equals(finalEmail)) {
                             positive.setEnabled(true);
@@ -583,14 +650,16 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 });
 
                 positive.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View view) {
+                    @Override
+                    public void onClick(View view) {
 
                         new RequestUserProfileSetEmail().setUserProfileEmail(edtEmail.getText().toString());
                     }
                 });
 
                 edtEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                    @Override public void onFocusChange(View view, boolean b) {
+                    @Override
+                    public void onFocusChange(View view, boolean b) {
                         if (b) {
                             viewEmail.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
                         } else {
@@ -600,14 +669,17 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 });
 
                 G.onUserProfileSetEmailResponse = new OnUserProfileSetEmailResponse() {
-                    @Override public void onUserProfileEmailResponse(final String email, ProtoResponse.Response response) {
+                    @Override
+                    public void onUserProfileEmailResponse(final String email, ProtoResponse.Response response) {
 
                         runOnUiThread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
 
                                 Realm realm1 = Realm.getDefaultInstance();
                                 realm1.executeTransaction(new Realm.Transaction() {
-                                    @Override public void execute(Realm realm) {
+                                    @Override
+                                    public void execute(Realm realm) {
 
                                         realm.where(RealmUserInfo.class).findFirst().setEmail(email);
                                         txtEmail.setText(email);
@@ -619,17 +691,20 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                         });
                     }
 
-                    @Override public void Error(int majorCode, int minorCode) {
+                    @Override
+                    public void Error(int majorCode, int minorCode) {
                         if (majorCode == 114 && minorCode == 1) {
                             runOnUiThread(new Runnable() {
-                                @Override public void run() {
+                                @Override
+                                public void run() {
                                     inputEmail.setErrorEnabled(true);
                                     inputEmail.setError("" + R.string.E_114);
                                 }
                             });
                         } else if (majorCode == 115) {
                             runOnUiThread(new Runnable() {
-                                @Override public void run() {
+                                @Override
+                                public void run() {
                                     inputEmail.setErrorEnabled(true);
                                     inputEmail.setError("" + R.string.E_115);
                                 }
@@ -644,7 +719,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         ViewGroup layoutUserName = (ViewGroup) findViewById(R.id.st_layout_username);
         layoutUserName.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 final LinearLayout layoutUserName = new LinearLayout(ActivitySetting.this);
                 layoutUserName.setOrientation(LinearLayout.VERTICAL);
@@ -672,31 +748,36 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 layoutUserName.addView(inputUserName, layoutParams);
 
                 final MaterialDialog dialog =
-                    new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_username)).positiveText(getResources().getString(R.string.save))
-                    .customView(layoutUserName, true)
-                    .widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel))
-                    .build();
+                        new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_username)).positiveText(getResources().getString(R.string.save))
+                                .customView(layoutUserName, true)
+                                .widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel))
+                                .build();
 
                 final View positive = dialog.getActionButton(DialogAction.POSITIVE);
                 positive.setEnabled(false);
 
                 final String finalUserName = userName;
                 edtUserName.addTextChangedListener(new TextWatcher() {
-                    @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                     }
 
-                    @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     }
 
-                    @Override public void afterTextChanged(Editable editable) {
+                    @Override
+                    public void afterTextChanged(Editable editable) {
                         new RequestUserProfileCheckUsername().userProfileCheckUsername(editable.toString());
                     }
                 });
                 G.onUserProfileCheckUsername = new OnUserProfileCheckUsername() {
-                    @Override public void OnUserProfileCheckUsername(final ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status status) {
+                    @Override
+                    public void OnUserProfileCheckUsername(final ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status status) {
                         runOnUiThread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 if (status == ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status.AVAILABLE) {
                                     if (!edtUserName.getText().toString().equals(finalUserName)) {
                                         positive.setEnabled(true);
@@ -717,25 +798,30 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                         });
                     }
 
-                    @Override public void Error(int majorCode, int minorCode) {
+                    @Override
+                    public void Error(int majorCode, int minorCode) {
 
                     }
                 };
 
                 positive.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View view) {
+                    @Override
+                    public void onClick(View view) {
 
                         new RequestUserProfileUpdateUsername().userProfileUpdateUsername(edtUserName.getText().toString());
                     }
                 });
 
                 G.onUserProfileUpdateUsername = new OnUserProfileUpdateUsername() {
-                    @Override public void onUserProfileUpdateUsername(final String username) {
+                    @Override
+                    public void onUserProfileUpdateUsername(final String username) {
                         runOnUiThread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 Realm realm1 = Realm.getDefaultInstance();
                                 realm1.executeTransaction(new Realm.Transaction() {
-                                    @Override public void execute(Realm realm) {
+                                    @Override
+                                    public void execute(Realm realm) {
                                         realm.where(RealmUserInfo.class).findFirst().getUserInfo().setUsername(username);
                                         txtUserName.setText(username);
                                         dialog.dismiss();
@@ -746,13 +832,15 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                         });
                     }
 
-                    @Override public void Error(int majorCode, int minorCode) {
+                    @Override
+                    public void Error(int majorCode, int minorCode) {
 
                     }
                 };
 
                 edtUserName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                    @Override public void onFocusChange(View view, boolean b) {
+                    @Override
+                    public void onFocusChange(View view, boolean b) {
                         if (b) {
                             viewUserName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
                         } else {
@@ -763,15 +851,18 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                 // check each word with server
                 edtUserName.addTextChangedListener(new TextWatcher() {
-                    @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                     }
 
-                    @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                     }
 
-                    @Override public void afterTextChanged(Editable editable) {
+                    @Override
+                    public void afterTextChanged(Editable editable) {
 
                     }
                 });
@@ -784,7 +875,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         final TextView titleToolbar = (TextView) findViewById(R.id.st_txt_titleToolbar);
         final ViewGroup viewGroup = (ViewGroup) findViewById(R.id.st_parentLayoutCircleImage);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            @Override public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
 
                 if (verticalOffset < -5) {
 
@@ -805,7 +897,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         RippleView rippleBack = (RippleView) findViewById(R.id.st_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
                 finish();
             }
         });
@@ -815,7 +908,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         RippleView rippleMore = (RippleView) findViewById(R.id.st_ripple_more);
         rippleMore.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
 
                 LinearLayout layoutDialog = new LinearLayout(ActivitySetting.this);
                 ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -845,7 +939,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     popupWindow.dismiss();
                 }
                 popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-                    @Override public void onDismiss() {
+                    @Override
+                    public void onDismiss() {
                         //TODO do sth here on dismiss
                     }
                 });
@@ -855,12 +950,14 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 //                popupWindow.showAsDropDown(v);
 
                 textView.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View view) {
+                    @Override
+                    public void onClick(View view) {
                         //HelperLogout.logout();
                         //popupWindow.dismiss();
 
                         G.onUserGetDeleteToken = new OnUserGetDeleteToken() {
-                            @Override public void onUserGetDeleteToken(int resendDelay, String tokenRegex, String tokenLength) {
+                            @Override
+                            public void onUserGetDeleteToken(int resendDelay, String tokenRegex, String tokenLength) {
                                 regex = tokenRegex;
                             }
                         };
@@ -874,7 +971,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         //fab button for set pic
         fab = (FloatingActionButton) findViewById(R.id.st_fab_setPic);
         fab.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 Realm realm = Realm.getDefaultInstance();
                 RealmResults<RealmAvatarPath> realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
@@ -892,7 +990,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         RippleView rippleImageView = (RippleView) findViewById(R.id.st_ripple_circleImage);
         rippleImageView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
                 FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(userId);
                 ActivitySetting.this.getSupportFragmentManager().beginTransaction().replace(R.id.st_layoutParent, fragment, null).commit();
             }
@@ -912,12 +1011,14 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         txtLanguage.setText(textLanguage);
         ltLanguage = (ViewGroup) findViewById(R.id.st_layout_language);
         ltLanguage.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 new MaterialDialog.Builder(ActivitySetting.this).title("Language")
-                    .titleGravity(GravityEnum.START)
-                    .titleColor(getResources().getColor(android.R.color.black)).items(R.array.language).itemsCallbackSingleChoice(poRbDialogLangouage, new MaterialDialog.ListCallbackSingleChoice() {
-                    @Override public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        .titleGravity(GravityEnum.START)
+                        .titleColor(getResources().getColor(android.R.color.black)).items(R.array.language).itemsCallbackSingleChoice(poRbDialogLangouage, new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
                         txtLanguage.setText(text.toString());
                         poRbDialogLangouage = which;
@@ -941,12 +1042,12 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                             case 3:
                                 setLocale("nl");
                                 break;
-                            }
+                        }
 
                         return false;
                     }
                 }).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.B_cancel))
-                    .show();
+                        .show();
             }
         });
 
@@ -961,7 +1062,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         ltClearCache = (RelativeLayout) findViewById(R.id.st_layout_clearCache);
         ltClearCache.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
 
                 final long sizeFolderPhotoDialog = getFolderSize(new File(G.DIR_IMAGES));
                 final long sizeFolderVideoDialog = getFolderSize(new File(G.DIR_VIDEOS));
@@ -969,9 +1071,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                 boolean wrapInScrollView = true;
                 final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_title_Clear_Cache))
-                    .customView(R.layout.st_dialog_clear_cach, wrapInScrollView)
-                    .positiveText(getResources().getString(R.string.st_title_Clear_Cache))
-                    .show();
+                        .customView(R.layout.st_dialog_clear_cach, wrapInScrollView)
+                        .positiveText(getResources().getString(R.string.st_title_Clear_Cache))
+                        .show();
 
                 View view = dialog.getCustomView();
 
@@ -994,7 +1096,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 final CheckBox checkBoxDocument = (CheckBox) view.findViewById(R.id.st_checkBox_document_dialogClearCash);
 
                 dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View view) {
+                    @Override
+                    public void onClick(View view) {
 
                         if (checkBoxPhoto.isChecked()) {
                             for (File file : filePhoto.listFiles())
@@ -1021,11 +1124,12 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         TextView txtprivacySecurity = (TextView) findViewById(R.id.st_txt_privacySecurity);
         txtprivacySecurity.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 FragmentPrivacyAndSecurity fragmentPrivacyAndSecurity = new FragmentPrivacyAndSecurity();
                 getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                    .replace(R.id.st_layoutParent, fragmentPrivacyAndSecurity)
-                    .commit();
+                        .replace(R.id.st_layoutParent, fragmentPrivacyAndSecurity)
+                        .commit();
             }
         });
 
@@ -1035,47 +1139,51 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         ltMessageTextSize = (ViewGroup) findViewById(R.id.st_layout_messageTextSize);
         ltMessageTextSize.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_title_message_textSize))
-                    .titleGravity(GravityEnum.START)
-                    .titleColor(getResources().getColor(android.R.color.black))
-                    .items(R.array.message_text_size)
-                    .itemsCallbackSingleChoice(poRbDialogTextSize, new MaterialDialog.ListCallbackSingleChoice() {
-                        @Override public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        .titleGravity(GravityEnum.START)
+                        .titleColor(getResources().getColor(android.R.color.black))
+                        .items(R.array.message_text_size)
+                        .itemsCallbackSingleChoice(poRbDialogTextSize, new MaterialDialog.ListCallbackSingleChoice() {
+                            @Override
+                            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                            if (text != null) {
-                                txtMessageTextSize.setText(text.toString().replace("(Hello)", "").trim());
+                                if (text != null) {
+                                    txtMessageTextSize.setText(text.toString().replace("(Hello)", "").trim());
+                                }
+                                poRbDialogTextSize = which;
+                                int size = Integer.parseInt(text.toString().replace("(Hello)", "").trim());
+                                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, size);
+                                editor.apply();
+
+                                G.setUserTextSize();
+
+                                return false;
                             }
-                            poRbDialogTextSize = which;
-                            int size = Integer.parseInt(text.toString().replace("(Hello)", "").trim());
-                            sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, size);
-                            editor.apply();
-
-                            G.setUserTextSize();
-
-                            return false;
-                        }
-                    })
-                    .positiveText(getResources().getString(R.string.B_ok))
-                    .show();
+                        })
+                        .positiveText(getResources().getString(R.string.B_ok))
+                        .show();
             }
         });
 
         txtSticker = (TextView) findViewById(R.id.st_txt_sticker);
         txtSticker.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 FragmentSticker fragmentSticker = new FragmentSticker();
                 getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                    .replace(R.id.st_layoutParent, fragmentSticker)
-                    .commit();
+                        .replace(R.id.st_layoutParent, fragmentSticker)
+                        .commit();
             }
         });
 
         txtChatBackground = (TextView) findViewById(R.id.st_txt_chatBackground);
         txtChatBackground.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 startActivity(new Intent(ActivitySetting.this, ActivityChatBackground.class));
             }
         });
@@ -1092,7 +1200,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         ;
 
         ltInAppBrowser.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -1110,7 +1219,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         txtNotifyAndSound = (TextView) findViewById(R.id.st_txt_notifyAndSound);
         txtNotifyAndSound.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 startActivity(new Intent(ActivitySetting.this, ActivitySettingNotification.class));
             }
         });
@@ -1125,7 +1235,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         }
 
         ltSentByEnter.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -1145,21 +1256,24 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         txtKeepMedia = (TextView) findViewById(R.id.st_txt_keepMedia);
         txtKeepMedia.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 new MaterialDialog.Builder(ActivitySetting.this).title(R.string.st_keepMedia)
-                    .content(R.string.st_dialog_content_keepMedia)
-                    .positiveText("ForEver")
-                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        }
-                    })
-                    .negativeText("1WEEk")
-                    .onNegative(new MaterialDialog.SingleButtonCallback() {
-                        @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        }
-                    })
-                    .show();
+                        .content(R.string.st_dialog_content_keepMedia)
+                        .positiveText("ForEver")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            }
+                        })
+                        .negativeText("1WEEk")
+                        .onNegative(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            }
+                        })
+                        .show();
             }
         });
 
@@ -1171,12 +1285,14 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         KEY_AD_DATA_GIF = sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_GIF, -1);
         txtAutoDownloadData = (TextView) findViewById(R.id.st_txt_autoDownloadData);
         txtAutoDownloadData.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
-                new MaterialDialog.Builder(ActivitySetting.this).title(R.string.st_auto_download_data).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[] {
-                    KEY_AD_DATA_PHOTO, KEY_AD_DATA_VOICE_MESSAGE, KEY_AD_DATA_VIDEO, KEY_AD_DATA_FILE, KEY_AD_DATA_MUSIC, KEY_AD_DATA_GIF
+                new MaterialDialog.Builder(ActivitySetting.this).title(R.string.st_auto_download_data).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[]{
+                        KEY_AD_DATA_PHOTO, KEY_AD_DATA_VOICE_MESSAGE, KEY_AD_DATA_VIDEO, KEY_AD_DATA_FILE, KEY_AD_DATA_MUSIC, KEY_AD_DATA_GIF
                 }, new MaterialDialog.ListCallbackMultiChoice() {
-                    @Override public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
 
                         for (int i = 0; i < which.length; i++) {
 
@@ -1220,11 +1336,13 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         txtAutoDownloadWifi = (TextView) findViewById(R.id.st_txt_autoDownloadWifi);
         txtAutoDownloadWifi.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
-                new MaterialDialog.Builder(ActivitySetting.this).title(R.string.st_auto_download_wifi).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[] {
-                    KEY_AD_WIFI_PHOTO, KEY_AD_WIFI_VOICE_MESSAGE, KEY_AD_WIFI_VIDEO, KEY_AD_WIFI_FILE, KEY_AD_WIFI_MUSIC, KEY_AD_WIFI_GIF
+            @Override
+            public void onClick(View view) {
+                new MaterialDialog.Builder(ActivitySetting.this).title(R.string.st_auto_download_wifi).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[]{
+                        KEY_AD_WIFI_PHOTO, KEY_AD_WIFI_VOICE_MESSAGE, KEY_AD_WIFI_VIDEO, KEY_AD_WIFI_FILE, KEY_AD_WIFI_MUSIC, KEY_AD_WIFI_GIF
                 }, new MaterialDialog.ListCallbackMultiChoice() {
-                    @Override public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
 
                         //
                         for (Integer aWhich : which) {
@@ -1270,11 +1388,13 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         txtAutoDownloadRoaming = (TextView) findViewById(R.id.st_txt_autoDownloadRoaming);
         txtAutoDownloadRoaming.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
-                new MaterialDialog.Builder(ActivitySetting.this).title(R.string.st_auto_download_roaming).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[] {
-                    KEY_AD_ROAMING_PHOTO, KEY_AD_ROAMING_VOICE_MESSAGE, KEY_AD_ROAMING_VIDEO, KEY_AD_ROAMING_FILE, KEY_AD_ROAMING_MUSIC, KEY_AD_ROAMINGN_GIF
+            @Override
+            public void onClick(View view) {
+                new MaterialDialog.Builder(ActivitySetting.this).title(R.string.st_auto_download_roaming).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[]{
+                        KEY_AD_ROAMING_PHOTO, KEY_AD_ROAMING_VOICE_MESSAGE, KEY_AD_ROAMING_VIDEO, KEY_AD_ROAMING_FILE, KEY_AD_ROAMING_MUSIC, KEY_AD_ROAMINGN_GIF
                 }, new MaterialDialog.ListCallbackMultiChoice() {
-                    @Override public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
 
                         //
                         for (Integer aWhich : which) {
@@ -1320,7 +1440,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         }
 
         ltEnableAnimation.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -1346,7 +1467,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         }
 
         ltAutoGifs.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -1372,7 +1494,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         }
 
         ltSaveToGallery.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -1392,7 +1515,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         txtPrivacyPolicy = (TextView) findViewById(R.id.st_txt_privacy_policy);
         txtPrivacyPolicy.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 Intent intent = new Intent(ActivitySetting.this, ActivityWebView.class);
                 intent.putExtra("PATH", "Policy");
                 startActivity(intent);
@@ -1401,7 +1525,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         txtFaq = (TextView) findViewById(R.id.st_txt_faq);
         txtFaq.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 Intent intent = new Intent(ActivitySetting.this, ActivityWebView.class);
                 intent.putExtra("PATH", "FAQ");
                 startActivity(intent);
@@ -1417,7 +1542,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     private void startDialog(int r) {
 
         new MaterialDialog.Builder(this).title("Choose Picture").negativeText("CANCEL").items(r).itemsCallback(new MaterialDialog.ListCallback() {
-            @Override public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+            @Override
+            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
                 if (text.toString().equals("From Camera")) {
 
@@ -1438,12 +1564,15 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 } else if (text.toString().equals("Delete photo")) {
 
                     G.onUserAvatarDelete = new OnUserAvatarDelete() {
-                        @Override public void onUserAvatarDelete(final long avatarId, final String token) {
+                        @Override
+                        public void onUserAvatarDelete(final long avatarId, final String token) {
                             runOnUiThread(new Runnable() {
-                                @Override public void run() {
+                                @Override
+                                public void run() {
                                     Realm realm = Realm.getDefaultInstance();
                                     realm.executeTransaction(new Realm.Transaction() {
-                                        @Override public void execute(Realm realm) {
+                                        @Override
+                                        public void execute(Realm realm) {
                                             Log.i("XXX", "RealmAvatarPath 3");
                                             for (RealmAvatarPath avatarPath : realm.where(RealmAvatarPath.class).findAll()) {
                                                 Log.i("XXX", "RealmAvatarPath 4 avatarPath.getId() : " + avatarPath.getId());
@@ -1494,11 +1623,10 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         }).show();
     }
 
-    private long lastUploadedAvatarId;
-
     //=====================================================================================result
     // from camera , gallery and crop
-    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == IntentRequests.REQ_CAMERA && resultCode == RESULT_OK) {// result for camera
@@ -1532,7 +1660,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             //            getIndexRealm();
             Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
-                @Override public void execute(Realm realm) {
+                @Override
+                public void execute(Realm realm) {
                     RealmAvatar avatar = realm.createObject(RealmAvatar.class);
                     avatar.setOwnerId(userId);
                     avatar.setId(lastUploadedAvatarId);
@@ -1557,51 +1686,14 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         finish();
     }
 
-    public static long getFolderSize(File dir) {
-        long size = 0;
-        for (File file : dir.listFiles()) {
-            if (file.isFile()) {
-                System.out.println(file.getName() + " " + file.length());
-                size += file.length();
-            } else {
-                size += getFolderSize(file);
-            }
-        }
-        return size;
-    }
-
-    public static String formatFileSize(long size) {
-        String hrSize = null;
-
-        double b = size;
-        double k = size / 1024.0;
-        double m = ((size / 1024.0) / 1024.0);
-        double g = (((size / 1024.0) / 1024.0) / 1024.0);
-        double t = ((((size / 1024.0) / 1024.0) / 1024.0) / 1024.0);
-
-        DecimalFormat dec = new DecimalFormat("0.0");
-
-        if (t > 1) {
-            hrSize = dec.format(t).concat(" TB");
-        } else if (g > 1) {
-            hrSize = dec.format(g).concat(" GB");
-        } else if (m > 1) {
-            hrSize = dec.format(m).concat(" MB");
-        } else if (k > 1) {
-            hrSize = dec.format(k).concat(" KB");
-        } else {
-            hrSize = dec.format(b).concat(" Bytes");
-        }
-        return hrSize;
-    }
-
     private void getSms(String message) {
         String verificationCode = HelperString.regexExtractValue(message, regex);
 
         if (verificationCode != null && !verificationCode.isEmpty()) {
 
             G.onUserDelete = new OnUserDelete() {
-                @Override public void onUserDeleteResponse() {
+                @Override
+                public void onUserDeleteResponse() {
                     Log.i("UUU", "onUserDeleteResponse");
                     HelperLogout.logout();
                 }
@@ -1612,19 +1704,18 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         }
     }
 
-    private IncomingSms smsReceiver;
-    private String regex;
-
-    @Override protected void onResume() {
+    @Override
+    protected void onResume() {
         final IntentFilter filter = new IntentFilter();
         filter.addAction("android.provider.Telephony.SMS_RECEIVED");
 
         smsReceiver = new IncomingSms(new OnSmsReceive() {
 
-            @Override public void onSmsReceive(String message) {
+            @Override
+            public void onSmsReceive(String message) {
                 try {
                     if (message != null && !message.isEmpty() && !message.equals("null") &&
-                        !message.equals("")) {
+                            !message.equals("")) {
                         getSms(message);
                     }
                 } catch (Exception e1) {
@@ -1637,10 +1728,12 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         super.onResume();
     }
 
-    @Override public void onAvatarAdd(final ProtoGlobal.Avatar avatar) {
+    @Override
+    public void onAvatarAdd(final ProtoGlobal.Avatar avatar) {
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
                 RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.ID, lastUploadedAvatarId).findFirst();
                 realmAvatar.setFile(RealmAttachment.build(avatar.getFile()));
             }
@@ -1650,9 +1743,11 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         setImage();
     }
 
-    @Override public void onFileUploaded(final FileUploadStructure uploadStructure, String identity) {
+    @Override
+    public void onFileUploaded(final FileUploadStructure uploadStructure, String identity) {
         runOnUiThread(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 circleImageView.setImageURI(Uri.fromFile(new File(uploadStructure.filePath)));
             }
         });
@@ -1660,12 +1755,14 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         new RequestUserAvatarAdd().userAddAvatar(uploadStructure.token);
     }
 
-    @Override public void onFileUploading(FileUploadStructure uploadStructure, String identity, double progress) {
+    @Override
+    public void onFileUploading(FileUploadStructure uploadStructure, String identity, double progress) {
         // TODO: 10/20/2016 [Alireza] update view something like updating progress
     }
 
     private static class UploadTask extends AsyncTask<Object, FileUploadStructure, FileUploadStructure> {
-        @Override protected FileUploadStructure doInBackground(Object... params) {
+        @Override
+        protected FileUploadStructure doInBackground(Object... params) {
             try {
                 String filePath = (String) params[0];
                 long avatarId = (long) params[1];
@@ -1687,7 +1784,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             return null;
         }
 
-        @Override protected void onPostExecute(FileUploadStructure result) {
+        @Override
+        protected void onPostExecute(FileUploadStructure result) {
             super.onPostExecute(result);
             G.uploaderUtil.startUploading(result, Long.toString(result.messageId));
         }

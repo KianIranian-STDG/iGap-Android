@@ -9,6 +9,7 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
+
 import com.iGap.R;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ValueAnimator;
@@ -62,7 +63,8 @@ public class FlowingView extends View {
         mPaint.setColor(getResources().getColor(R.color.white));
     }
 
-    @Override protected void onDraw(Canvas canvas) {
+    @Override
+    protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         drawBG(canvas);
     }
@@ -85,7 +87,8 @@ public class FlowingView extends View {
         final int w = getWidth();
         ValueAnimator valueAnimator = ValueAnimator.ofInt(w + 100, w - rightMargin);
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override public void onAnimationUpdate(ValueAnimator animation) {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
                 currentPointX = (int) animation.getAnimatedValue();
                 float fraction = animation.getAnimatedFraction();
                 autoUppingX = (int) (w - rightMargin * fraction);
@@ -93,7 +96,8 @@ public class FlowingView extends View {
             }
         });
         valueAnimator.addListener(new FlowingAnimationListener() {
-            @Override public void onAnimationEnd(Animator animation) {
+            @Override
+            public void onAnimationEnd(Animator animation) {
                 isupping = false;
                 showContent = true;
             }
@@ -120,20 +124,20 @@ public class FlowingView extends View {
                 if (isupping) return;
                 if (currentPointY - getHeight() / 2 >= 0) {
                     topY = (int) (currentPointY - 1.5 * currentPointX * getHeight() / getWidth())
-                        - currentPointY / 2 + getHeight() / 4;
+                            - currentPointY / 2 + getHeight() / 4;
                     bottomY =
-                        (int) (currentPointY + 1.5 * currentPointX * getHeight() / getWidth());
+                            (int) (currentPointY + 1.5 * currentPointX * getHeight() / getWidth());
                 } else {
                     topY = (int) (currentPointY - 1.5 * currentPointX * getHeight() / getWidth());
                     bottomY = (int) (currentPointY + 1.5 * currentPointX * getHeight() / getWidth())
-                        - currentPointY / 2 + getHeight() / 4;
+                            - currentPointY / 2 + getHeight() / 4;
                 }
                 mPath.moveTo(getWidth() - currentPointX, topY);
                 mPath.cubicTo(getWidth() - currentPointX, currentPointY / 4 + 3 * topY / 4,
-                    getWidth(), 3 * currentPointY / 4 + topY / 4, getWidth(), currentPointY);
+                        getWidth(), 3 * currentPointY / 4 + topY / 4, getWidth(), currentPointY);
                 mPath.cubicTo(getWidth(), 5 * currentPointY / 4 - topY / 4,
-                    getWidth() - currentPointX, 7 * currentPointY / 4 - 3 * topY / 4,
-                    getWidth() - currentPointX, bottomY);
+                        getWidth() - currentPointX, 7 * currentPointY / 4 - 3 * topY / 4,
+                        getWidth() - currentPointX, bottomY);
                 mPath.lineTo(getWidth() - currentPointX, topY);
                 canvas.drawPath(mPath, mPaint);
                 break;
@@ -142,10 +146,10 @@ public class FlowingView extends View {
                 bottomY = bottomY + downspeed;
                 mPath.moveTo(getWidth() - currentPointX, topY);
                 mPath.cubicTo(getWidth() - currentPointX, currentPointY / 4 + 3 * topY / 4,
-                    getWidth(), 3 * currentPointY / 4 + topY / 4, getWidth(), currentPointY);
+                        getWidth(), 3 * currentPointY / 4 + topY / 4, getWidth(), currentPointY);
                 mPath.cubicTo(getWidth(), 5 * currentPointY / 4 - topY / 4,
-                    getWidth() - currentPointX, 7 * currentPointY / 4 - 3 * topY / 4,
-                    getWidth() - currentPointX, bottomY);
+                        getWidth() - currentPointX, 7 * currentPointY / 4 - 3 * topY / 4,
+                        getWidth() - currentPointX, bottomY);
                 mPath.lineTo(getWidth() - currentPointX, topY);
                 canvas.drawPath(mPath, mPaint);
                 break;

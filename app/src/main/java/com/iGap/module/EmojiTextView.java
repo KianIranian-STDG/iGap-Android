@@ -19,6 +19,7 @@ package com.iGap.module;
 import android.content.Context;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
+
 import com.iGap.helper.Emojione;
 import com.iGap.helper.FontCache;
 
@@ -45,13 +46,14 @@ public class EmojiTextView extends AppCompatTextView {
         setText(getText());
     }
 
-    @Override public void setText(CharSequence text, BufferType type) {
+    @Override
+    public void setText(CharSequence text, BufferType type) {
 
         if (text.toString().contains("#")) {
             super.setText(text, type);
         } else {
             super.setText(text != null ? Emojione.shortnameToUnicode(text.toString(), false) : text,
-                type);
+                    type);
         }
     }
 }

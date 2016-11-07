@@ -1,6 +1,7 @@
 package com.iGap.response;
 
 import android.util.Log;
+
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGlobal;
@@ -9,6 +10,7 @@ import com.iGap.realm.RealmGroupRoom;
 import com.iGap.realm.RealmMember;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
+
 import io.realm.Realm;
 import io.realm.RealmList;
 
@@ -26,11 +28,12 @@ public class GroupAddModeratorResponse extends MessageHandler {
         this.identity = identity;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
 
         Log.e("ddd", "handler : " + message);
         final ProtoGroupAddModerator.GroupAddModeratorResponse.Builder builder =
-            (ProtoGroupAddModerator.GroupAddModeratorResponse.Builder) message;
+                (ProtoGroupAddModerator.GroupAddModeratorResponse.Builder) message;
         builder.getRoomId();
         builder.getMemberId();
 
@@ -38,13 +41,14 @@ public class GroupAddModeratorResponse extends MessageHandler {
         Realm realm = Realm.getDefaultInstance();
 
         final RealmRoom realmRoom = realm.where(RealmRoom.class)
-            .equalTo(RealmRoomFields.ID, builder.getRoomId())
-            .findFirst();
+                .equalTo(RealmRoomFields.ID, builder.getRoomId())
+                .findFirst();
 
         if (realmRoom != null) {
 
             realm.executeTransaction(new Realm.Transaction() {
-                @Override public void execute(Realm realm) {
+                @Override
+                public void execute(Realm realm) {
                     RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
                     RealmList<RealmMember> realmMemberRealmList = realmGroupRoom.getMembers();
 
@@ -52,7 +56,7 @@ public class GroupAddModeratorResponse extends MessageHandler {
                         if (member.getPeerId() == builder.getMemberId()) {
                             member.setRole(ProtoGlobal.GroupRoom.Role.MODERATOR.toString());
                             G.onGroupAddModerator.onGroupAddModerator(builder.getRoomId(),
-                                builder.getMemberId());
+                                    builder.getMemberId());
                             break;
                         }
                     }
@@ -62,11 +66,13 @@ public class GroupAddModeratorResponse extends MessageHandler {
         realm.close();
     }
 
-    @Override public void timeOut() {
+    @Override
+    public void timeOut() {
         Log.e("ddd", "timeOut : " + message);
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();

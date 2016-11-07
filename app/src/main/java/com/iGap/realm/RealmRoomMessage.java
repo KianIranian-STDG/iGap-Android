@@ -1,19 +1,24 @@
 package com.iGap.realm;
 
 import android.text.format.DateUtils;
+
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
+
+import org.parceler.Parcel;
+
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.RealmRoomMessageRealmProxy;
 import io.realm.annotations.Index;
 import io.realm.annotations.PrimaryKey;
-import org.parceler.Parcel;
 
-@Parcel(implementations = { RealmRoomMessageRealmProxy.class },
-    value = Parcel.Serialization.BEAN,
-    analyze = { RealmRoomMessage.class }) public class RealmRoomMessage extends RealmObject {
-    @PrimaryKey private long messageId;
+@Parcel(implementations = {RealmRoomMessageRealmProxy.class},
+        value = Parcel.Serialization.BEAN,
+        analyze = {RealmRoomMessage.class})
+public class RealmRoomMessage extends RealmObject {
+    @PrimaryKey
+    private long messageId;
     private long messageVersion;
     private String status;
     private long statusVersion;
@@ -31,7 +36,8 @@ import org.parceler.Parcel;
     private RealmRoomMessage forwardMessage;
     private RealmRoomMessage replyTo;
 
-    @Index private long roomId;
+    @Index
+    private long roomId;
 
     public long getRoomId() {
         return roomId;
@@ -241,7 +247,7 @@ import org.parceler.Parcel;
     }
 
     public void setAttachment(final long messageId, final String path, int width, int height, long size, String name, double duration,
-        LocalFileType type) {
+                              LocalFileType type) {
         if (path == null) {
             return;
         }

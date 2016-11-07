@@ -5,8 +5,10 @@ import android.graphics.Bitmap;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.widget.Toast;
+
 import com.iGap.G;
 import com.iGap.R;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -28,7 +30,7 @@ public class HelperSaveFile {
             if (bitmap == null) return false;
 
             File path =
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
 
             Calendar calendar = Calendar.getInstance();
             java.util.Date now = calendar.getTime();
@@ -49,7 +51,7 @@ public class HelperSaveFile {
     public static void savePicToGallary(Bitmap bitmap, String name) {
 
         MediaStore.Images.Media.insertImage(G.context.getContentResolver(), bitmap, name,
-            "yourDescription");
+                "yourDescription");
     }
 
     public static void savePicToGallary(String filePath) {
@@ -69,7 +71,7 @@ public class HelperSaveFile {
 
             InputStream is = new FileInputStream(path);
             File mSavePath =
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC);
+                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC);
             File file = new File(mSavePath + "/" + name);
             OutputStream os = new FileOutputStream(file);
 

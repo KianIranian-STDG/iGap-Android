@@ -2,6 +2,7 @@ package com.iGap.response;
 
 import android.text.format.DateUtils;
 import android.util.Log;
+
 import com.iGap.G;
 import com.iGap.helper.HelperCheckUserInfoExist;
 import com.iGap.proto.ProtoError;
@@ -18,6 +19,7 @@ import com.iGap.realm.RealmRoomMessageLocation;
 import com.iGap.realm.RealmRoomMessageLog;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestClientGetRoom;
+
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -35,7 +37,8 @@ public class GroupSendMessageResponse extends MessageHandler {
         this.identity = identity;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
         Realm realm = Realm.getDefaultInstance();
 
         final ProtoGroupSendMessage.GroupSendMessageResponse.Builder builder = (ProtoGroupSendMessage.GroupSendMessageResponse.Builder) message;
@@ -43,10 +46,11 @@ public class GroupSendMessageResponse extends MessageHandler {
         final long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
 
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
                 // set info for clientCondition
                 RealmClientCondition realmClientCondition =
-                    realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, builder.getRoomId()).findFirst();
+                        realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, builder.getRoomId()).findFirst();
                 if (realmClientCondition != null) {
                     realmClientCondition.setMessageVersion(roomMessage.getMessageVersion());
                     realmClientCondition.setStatusVersion(roomMessage.getStatusVersion());
@@ -91,7 +95,7 @@ public class GroupSendMessageResponse extends MessageHandler {
                     HelperCheckUserInfoExist.checkUserInfoExist(roomMessage.getUserId());
 
                     RealmRoomMessage realmRoomMessage =
-                        realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
+                            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
 
                     if (realmRoomMessage == null) {
                         realmRoomMessage = realm.createObject(RealmRoomMessage.class);
@@ -119,7 +123,7 @@ public class GroupSendMessageResponse extends MessageHandler {
                     // i'm the sender
                     // update message fields into database
                     RealmResults<RealmRoomMessage> realmRoomMessageRealmResults =
-                        realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, builder.getRoomId()).findAll();
+                            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, builder.getRoomId()).findAll();
                     for (RealmRoomMessage realmRoomMessage : realmRoomMessageRealmResults) {
                         // find the message using identity and update it
                         if (realmRoomMessage != null && realmRoomMessage.getMessageId() == Long.parseLong(identity)) {
@@ -157,7 +161,7 @@ public class GroupSendMessageResponse extends MessageHandler {
             // everything after sending message
             if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst() != null) {
                 G.chatSendMessageUtil.onMessageReceive(builder.getRoomId(), roomMessage.getMessage(), roomMessage.getMessageType().toString(),
-                    roomMessage, ProtoGlobal.Room.Type.GROUP);
+                        roomMessage, ProtoGlobal.Room.Type.GROUP);
             }
         } else {
             // invoke following callback when I'm the sender and the message has updated
@@ -190,7 +194,8 @@ public class GroupSendMessageResponse extends MessageHandler {
         return realmRoomMessage;
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
@@ -199,14 +204,16 @@ public class GroupSendMessageResponse extends MessageHandler {
         Log.i("SOC", "GroupSendMessageResponse response.minorCode() : " + minorCode);
     }
 
-    @Override public void timeOut() {
+    @Override
+    public void timeOut() {
         super.timeOut();
         // message failed
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
                 RealmRoomMessage message =
-                    realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(identity)).findFirst();
+                        realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(identity)).findFirst();
                 if (message != null) {
                     message.setStatus(ProtoGlobal.RoomMessageStatus.FAILED.toString());
                     G.chatSendMessageUtil.onMessageFailed(message.getRoomId(), message, ProtoGlobal.Room.Type.CHAT);

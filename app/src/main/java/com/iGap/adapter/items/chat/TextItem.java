@@ -3,12 +3,14 @@ package com.iGap.adapter.items.chat;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
+
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.module.EmojiTextView;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
+
 import java.util.List;
 
 /**
@@ -21,40 +23,45 @@ public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
         super(true, type, messageClickListener);
     }
 
-    @Override public int getType() {
+    @Override
+    public int getType() {
         return R.id.chatSubLayoutMessage;
     }
 
-    @Override public int getLayoutRes() {
+    @Override
+    public int getLayoutRes() {
         return R.layout.chat_sub_layout_message;
     }
 
-    @Override public void bindView(final ViewHolder holder, List payloads) {
+    @Override
+    public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
         setTextIfNeeded(holder.messageText);
 
         if (!mMessage.messageText.contains("#")) {
             holder.messageText.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
                     if (mMessage.status.equalsIgnoreCase(
-                        ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                            ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
                         return;
                     }
                     if (mMessage.status.equalsIgnoreCase(
-                        ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                            ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
                         messageClickListener.onFailedMessageClick(v, mMessage,
-                            holder.getAdapterPosition());
+                                holder.getAdapterPosition());
                     } else {
                         messageClickListener.onContainerClick(v, mMessage,
-                            holder.getAdapterPosition());
+                                holder.getAdapterPosition());
                     }
                 }
             });
         }
     }
 
-    @Override public ViewHolderFactory<? extends ViewHolder> getFactory() {
+    @Override
+    public ViewHolderFactory<? extends ViewHolder> getFactory() {
         return FACTORY;
     }
 

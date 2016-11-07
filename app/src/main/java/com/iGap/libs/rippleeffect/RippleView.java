@@ -43,6 +43,7 @@ import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.AdapterView;
 import android.widget.RelativeLayout;
+
 import com.iGap.R;
 
 /**
@@ -56,7 +57,8 @@ import com.iGap.R;
 public class RippleView extends RelativeLayout {
 
     private final Runnable runnable = new Runnable() {
-        @Override public void run() {
+        @Override
+        public void run() {
             invalidate();
         }
     };
@@ -104,23 +106,23 @@ public class RippleView extends RelativeLayout {
      * Method that initializes all fields and sets listeners
      *
      * @param context Context used to create this view
-     * @param attrs Attribute used to initialize fields
+     * @param attrs   Attribute used to initialize fields
      */
     private void init(final Context context, final AttributeSet attrs) {
         if (isInEditMode()) return;
 
         final TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.RippleView);
         rippleColor = typedArray.getColor(R.styleable.RippleView_rv_color,
-            getResources().getColor(R.color.rippelColor));
+                getResources().getColor(R.color.rippelColor));
         rippleType = typedArray.getInt(R.styleable.RippleView_rv_type, 0);
         hasToZoom = typedArray.getBoolean(R.styleable.RippleView_rv_zoom, false);
         isCentered = typedArray.getBoolean(R.styleable.RippleView_rv_centered, false);
         rippleDuration =
-            typedArray.getInteger(R.styleable.RippleView_rv_rippleDuration, rippleDuration);
+                typedArray.getInteger(R.styleable.RippleView_rv_rippleDuration, rippleDuration);
         frameRate = typedArray.getInteger(R.styleable.RippleView_rv_framerate, frameRate);
         rippleAlpha = typedArray.getInteger(R.styleable.RippleView_rv_alpha, rippleAlpha);
         ripplePadding =
-            typedArray.getDimensionPixelSize(R.styleable.RippleView_rv_ripplePadding, 0);
+                typedArray.getDimensionPixelSize(R.styleable.RippleView_rv_ripplePadding, 0);
         canvasHandler = new Handler();
         zoomScale = typedArray.getFloat(R.styleable.RippleView_rv_zoomScale, 1.03f);
         zoomDuration = typedArray.getInt(R.styleable.RippleView_rv_zoomDuration, 200);
@@ -133,27 +135,31 @@ public class RippleView extends RelativeLayout {
         this.setWillNotDraw(false);
 
         gestureDetector =
-            new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
-                @Override public void onLongPress(MotionEvent event) {
-                    super.onLongPress(event);
-                    animateRipple(event);
-                    sendClickEvent(true);
-                }
+                new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
+                    @Override
+                    public void onLongPress(MotionEvent event) {
+                        super.onLongPress(event);
+                        animateRipple(event);
+                        sendClickEvent(true);
+                    }
 
-                @Override public boolean onSingleTapConfirmed(MotionEvent e) {
-                    return true;
-                }
+                    @Override
+                    public boolean onSingleTapConfirmed(MotionEvent e) {
+                        return true;
+                    }
 
-                @Override public boolean onSingleTapUp(MotionEvent e) {
-                    return true;
-                }
-            });
+                    @Override
+                    public boolean onSingleTapUp(MotionEvent e) {
+                        return true;
+                    }
+                });
 
         this.setDrawingCacheEnabled(true);
         this.setClickable(true);
     }
 
-    @Override public void draw(Canvas canvas) {
+    @Override
+    public void draw(Canvas canvas) {
         super.draw(canvas);
         if (animationRunning) {
             canvas.save();
@@ -177,18 +183,18 @@ public class RippleView extends RelativeLayout {
             if (timer == 0) canvas.save();
 
             canvas.drawCircle(x, y, (radiusMax * (((float) timer * frameRate) / rippleDuration)),
-                paint);
+                    paint);
 
             paint.setColor(Color.parseColor("#ffff4444"));
 
             if (rippleType == 1
-                && originBitmap != null
-                && (((float) timer * frameRate) / rippleDuration) > 0.4f) {
+                    && originBitmap != null
+                    && (((float) timer * frameRate) / rippleDuration) > 0.4f) {
                 if (durationEmpty == -1) durationEmpty = rippleDuration - timer * frameRate;
 
                 timerEmpty++;
                 final Bitmap tmpBitmap = getCircleBitmap(
-                    (int) ((radiusMax) * (((float) timerEmpty * frameRate) / (durationEmpty))));
+                        (int) ((radiusMax) * (((float) timerEmpty * frameRate) / (durationEmpty))));
                 canvas.drawBitmap(tmpBitmap, 0, 0, paint);
                 tmpBitmap.recycle();
             }
@@ -198,21 +204,22 @@ public class RippleView extends RelativeLayout {
             if (rippleType == 1) {
                 if ((((float) timer * frameRate) / rippleDuration) > 0.6f) {
                     paint.setAlpha(
-                        (int) (rippleAlpha - ((rippleAlpha) * (((float) timerEmpty * frameRate)
-                            / (durationEmpty)))));
+                            (int) (rippleAlpha - ((rippleAlpha) * (((float) timerEmpty * frameRate)
+                                    / (durationEmpty)))));
                 } else {
                     paint.setAlpha(rippleAlpha);
                 }
             } else {
                 paint.setAlpha((int) (rippleAlpha - ((rippleAlpha) * (((float) timer * frameRate)
-                    / rippleDuration))));
+                        / rippleDuration))));
             }
 
             timer++;
         }
     }
 
-    @Override protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         WIDTH = w;
         HEIGHT = h;
@@ -274,7 +281,8 @@ public class RippleView extends RelativeLayout {
         }
     }
 
-    @Override public boolean onTouchEvent(MotionEvent event) {
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
         if (gestureDetector.onTouchEvent(event)) {
             animateRipple(event);
             sendClickEvent(false);
@@ -282,7 +290,8 @@ public class RippleView extends RelativeLayout {
         return super.onTouchEvent(event);
     }
 
-    @Override public boolean onInterceptTouchEvent(MotionEvent event) {
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent event) {
         this.onTouchEvent(event);
         return super.onInterceptTouchEvent(event);
     }
@@ -300,12 +309,12 @@ public class RippleView extends RelativeLayout {
             if (isLongClick) {
                 if (adapterView.getOnItemLongClickListener() != null) {
                     adapterView.getOnItemLongClickListener()
-                        .onItemLongClick(adapterView, this, position, id);
+                            .onItemLongClick(adapterView, this, position, id);
                 }
             } else {
                 if (adapterView.getOnItemClickListener() != null) {
                     adapterView.getOnItemClickListener()
-                        .onItemClick(adapterView, this, position, id);
+                            .onItemClick(adapterView, this, position, id);
                 }
             }
         }
@@ -313,11 +322,11 @@ public class RippleView extends RelativeLayout {
 
     private Bitmap getCircleBitmap(final int radius) {
         final Bitmap output = Bitmap.createBitmap(originBitmap.getWidth(), originBitmap.getHeight(),
-            Bitmap.Config.ARGB_8888);
+                Bitmap.Config.ARGB_8888);
         final Canvas canvas = new Canvas(output);
         final Paint paint = new Paint();
         final Rect rect = new Rect((int) (x - radius), (int) (y - radius), (int) (x + radius),
-            (int) (y + radius));
+                (int) (y + radius));
 
         paint.setAntiAlias(true);
         canvas.drawARGB(0, 0, 0, 0);
@@ -338,7 +347,8 @@ public class RippleView extends RelativeLayout {
      *
      * @param rippleColor New color resource
      */
-    @ColorRes public void setRippleColor(int rippleColor) {
+    @ColorRes
+    public void setRippleColor(int rippleColor) {
         this.rippleColor = getResources().getColor(rippleColor);
     }
 

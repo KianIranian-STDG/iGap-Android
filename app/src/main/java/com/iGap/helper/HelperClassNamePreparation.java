@@ -10,9 +10,9 @@ public class HelperClassNamePreparation {
         String protoClassName;
         String packageName = "com.iGap.proto.";
         className = className.replace(".",
-            "$"); // example : ProtoConnectionSecuring.ConnectionSymmetricKeyResponse =>
+                "$"); // example : ProtoConnectionSecuring.ConnectionSymmetricKeyResponse =>
         protoClassName = packageName
-            + className; // example : ChatClearMessage => com.iGap.proto.ProtoConnectionSecuring$ConnectionSymmetricKeyResponse
+                + className; // example : ChatClearMessage => com.iGap.proto.ProtoConnectionSecuring$ConnectionSymmetricKeyResponse
 
         return protoClassName;
     }
@@ -21,9 +21,9 @@ public class HelperClassNamePreparation {
 
         String packageName = "com.iGap.response.";
         String responseClass = className.split(
-            "\\.")[1]; // example : ProtoConnectionSecuring.ConnectionSymmetricKeyResponse => ConnectionSymmetricKeyResponse
+                "\\.")[1]; // example : ProtoConnectionSecuring.ConnectionSymmetricKeyResponse => ConnectionSymmetricKeyResponse
         String responseClassName = packageName
-            + responseClass; // example : com.iGap.response.ConnectionSymmetricKeyResponse
+                + responseClass; // example : com.iGap.response.ConnectionSymmetricKeyResponse
 
         return responseClassName;
     }
@@ -36,8 +36,8 @@ public class HelperClassNamePreparation {
 
         className = className.replace(".", ""); // example : Chat.Clear.Message => ChatClearMessage
         requestClassName = packageName
-            + firstWordClassName
-            + className; // example : ChatClearMessage => com.iGap.request.RequestChatClearMessage
+                + firstWordClassName
+                + className; // example : ChatClearMessage => com.iGap.request.RequestChatClearMessage
 
         return requestClassName;
     }

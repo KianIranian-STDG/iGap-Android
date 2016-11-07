@@ -10,5 +10,5 @@ import com.iGap.proto.ProtoResponse;
 public interface OnFileUploadResponse {
 
     void onFileUpload(double progress, long nextOffset, int nextLimit,
-        ProtoResponse.Response response);
+                      ProtoResponse.Response response);
 }

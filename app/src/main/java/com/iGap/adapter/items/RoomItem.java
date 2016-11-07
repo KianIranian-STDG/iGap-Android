@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.MessagesAdapter;
@@ -29,11 +30,13 @@ import com.iGap.request.RequestFileDownload;
 import com.iGap.request.RequestUserInfo;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
+
+import java.io.IOException;
+import java.util.List;
+
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
-import java.io.IOException;
-import java.util.List;
 
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/``016.
@@ -43,7 +46,7 @@ import java.util.List;
  * chat item for main displaying chats
  */
 public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
-    implements IChatItemAvatar {
+        implements IChatItemAvatar {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
     public StructChatInfo mInfo;
     public OnComplete mComplete;
@@ -62,11 +65,13 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
         return this;
     }
 
-    @Override public int getType() {
+    @Override
+    public int getType() {
         return 0;
     }
 
-    @Override public int getLayoutRes() {
+    @Override
+    public int getLayoutRes() {
         return R.layout.chat_sub_layout;
     }
 
@@ -98,20 +103,21 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
         // request thumbnail
         if (!MessagesAdapter.avatarsRequested.contains(Long.toString(mInfo.chatId))) {
             onRequestDownloadAvatar(mInfo.downloadAttachment.offset,
-                mInfo.downloadAttachment.progress);
+                    mInfo.downloadAttachment.progress);
             // prevent from multiple requesting thumbnail
             MessagesAdapter.avatarsRequested.add(Long.toString(mInfo.chatId));
         }
     }
 
-    @Override public void onRequestDownloadAvatar(int offset, int progress) {
+    @Override
+    public void onRequestDownloadAvatar(int offset, int progress) {
         ProtoFileDownload.FileDownload.Selector selector =
-            ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL;
+                ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL;
         String fileName = mInfo.downloadAttachment.token + "_" + mInfo.avatar.name;
         if (progress == 100) {
             if (mInfo.chatType == RoomType.CHAT) {
                 mInfo.avatar.setLocalThumbnailPathForAvatar(mInfo.ownerId,
-                    G.DIR_IMAGE_USER + "/" + fileName, selector);
+                        G.DIR_IMAGE_USER + "/" + fileName, selector);
             } else {
                 mInfo.avatar.setLocalThumbnailPath(mInfo.chatId, G.DIR_IMAGE_USER + "/" + fileName);
             }
@@ -127,23 +133,23 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
 
         // I don't use offset in getting thumbnail
         String identity = mInfo.downloadAttachment.token
-            + '*'
-            + selector.toString()
-            + '*'
-            + mInfo.avatar.largeThumbnail.size
-            + '*'
-            + fileName
-            + '*'
-            + mInfo.downloadAttachment.offset
-            + "*"
-            + Boolean.toString(true)
-            + "*"
-            + mInfo.chatId
-            + "*"
-            + mInfo.chatType.toString();
+                + '*'
+                + selector.toString()
+                + '*'
+                + mInfo.avatar.largeThumbnail.size
+                + '*'
+                + fileName
+                + '*'
+                + mInfo.downloadAttachment.offset
+                + "*"
+                + Boolean.toString(true)
+                + "*"
+                + mInfo.chatId
+                + "*"
+                + mInfo.chatType.toString();
 
         new RequestFileDownload().download(mInfo.downloadAttachment.token, offset,
-            (int) mInfo.avatar.largeThumbnail.size, selector, identity);
+                (int) mInfo.avatar.largeThumbnail.size, selector, identity);
     }
 
     private void requestForUserInfo() {
@@ -155,7 +161,8 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
         }
     }
 
-    @Override public void bindView(ViewHolder holder, List payloads) {
+    @Override
+    public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
         //RealmRoomDraft draft = null;
@@ -181,8 +188,8 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
             Log.i("BBB", "*****");
         } else {
             String lastMessage =
-                AppUtils.rightLastMessage(holder.itemView.getResources(), mInfo.chatType,
-                    mInfo.lastMessageId);
+                    AppUtils.rightLastMessage(holder.itemView.getResources(), mInfo.chatType,
+                            mInfo.lastMessageId);
             if (lastMessage == null || lastMessage.isEmpty()) {
                 holder.messageStatus.setVisibility(View.GONE);
                 holder.lastMessage.setVisibility(View.GONE);
@@ -209,16 +216,16 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
                 } else {
                     Realm realm1 = Realm.getDefaultInstance();
                     RealmResults<RealmRoomMessage> results = realm1.where(RealmRoomMessage.class)
-                        .equalTo(RealmRoomMessageFields.ROOM_ID, mInfo.chatId)
-                        .findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+                            .equalTo(RealmRoomMessageFields.ROOM_ID, mInfo.chatId)
+                            .findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
                     if (!results.isEmpty()) {
                         RealmRoomMessage realmRoomMessage = results.first();
                         if (realmRoomMessage != null) {
                             RealmRegisteredInfo realmRegisteredInfo =
-                                realm1.where(RealmRegisteredInfo.class)
-                                    .equalTo(RealmRegisteredInfoFields.ID,
-                                        realmRoomMessage.getUserId())
-                                    .findFirst();
+                                    realm1.where(RealmRegisteredInfo.class)
+                                            .equalTo(RealmRegisteredInfoFields.ID,
+                                                    realmRoomMessage.getUserId())
+                                            .findFirst();
                             if (realmRegisteredInfo != null) {
                                 lastMessageSender = realmRegisteredInfo.getDisplayName() + " : ";
                             }
@@ -247,7 +254,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
                 //.displayImage(AndroidUtils.suitablePath(mInfo.avatar.getLocalFilePath()),
                 //    holder.image);
                 holder.image.setImageBitmap(
-                    BitmapFactory.decodeFile(mInfo.avatar.getLocalFilePath()));
+                        BitmapFactory.decodeFile(mInfo.avatar.getLocalFilePath()));
             } else if (mInfo.avatar.isThumbnailExistsOnLocal()) {
                 //ImageLoader.getInstance()
                 //    .displayImage(mInfo.avatar.getLocalThumbnailPath(),
@@ -256,14 +263,14 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
                 // TODO: 11/6/2016  if loading picture has problem use asynktask or use imageloader
 
                 holder.image.setImageBitmap(
-                    BitmapFactory.decodeFile(mInfo.avatar.getLocalThumbnailPath()));
+                        BitmapFactory.decodeFile(mInfo.avatar.getLocalThumbnailPath()));
 
             } else {
                 holder.image.setImageBitmap(
-                    com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView
-                        .getContext()
-                        .getResources()
-                        .getDimension(R.dimen.dp60), mInfo.initials, mInfo.color));
+                        com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView
+                                .getContext()
+                                .getResources()
+                                .getDimension(R.dimen.dp60), mInfo.initials, mInfo.color));
 
                 if (mInfo.chatType != RoomType.CHAT) {
                     if (mInfo.avatar.token != null && !mInfo.avatar.token.isEmpty()) {
@@ -279,8 +286,8 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
             }
         } else {
             holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture(
-                (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60),
-                mInfo.initials, mInfo.color));
+                    (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60),
+                    mInfo.initials, mInfo.color));
 
             if (mInfo.chatType != RoomType.CHAT) {
                 requestForAvatar();
@@ -305,7 +312,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
 
         if (mInfo.lastMessageTime != 0) {
             holder.lastSeen.setText(
-                TimeUtils.toLocal(mInfo.lastMessageTime, G.ROOM_LAST_MESSAGE_TIME));
+                    TimeUtils.toLocal(mInfo.lastMessageTime, G.ROOM_LAST_MESSAGE_TIME));
             holder.lastSeen.setVisibility(View.VISIBLE);
         } else {
             holder.lastSeen.setVisibility(View.GONE);
@@ -332,7 +339,8 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
         }
     }
 
-    @Override public ViewHolderFactory<? extends ViewHolder> getFactory() {
+    @Override
+    public ViewHolderFactory<? extends ViewHolder> getFactory() {
         return FACTORY;
     }
 

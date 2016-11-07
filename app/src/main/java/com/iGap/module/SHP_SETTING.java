@@ -60,7 +60,7 @@ public class SHP_SETTING {
 
     public static final String KEY_STNS_VIBRATE_MESSAGE = "STNS_VIBRATE_MESSAGE";
     public static final String KEY_STNS_POPUP_NOTIFICATION_MESSAGE =
-        "STNS_POPUP_NOTIFICATION_MESSAGE";
+            "STNS_POPUP_NOTIFICATION_MESSAGE";
     public static final String KEY_STNS_VIBRATE_GROUP = "STNS_VIBRATE_GROUP";
     public static final String KEY_STNS_POPUP_NOTIFICATION_GROUP = "STNS_POPUP_NOTIFICATION_GROUP";
     public static final String KEY_STNS_REPEAT_NOTIFICATION = "STNS_REPEAT_NOTIFICATION";
@@ -84,19 +84,19 @@ public class SHP_SETTING {
     public static final String KEY_NTSG_SOUND_GROUP = "KEY_NTSG_SOUND_GROUP";
     public static final String KEY_NTSG_SOUND_POSITION_GROUP = "KEY_NTSG_SOUND_POSITION_GROUP";
     public static final String KEY_NTSG_SMART_NOTIFICATION_GROUP =
-        "KEY_NTSG_SMART_NOTIFICATION_GROUP";
+            "KEY_NTSG_SMART_NOTIFICATION_GROUP";
     public static final String KEY_NTSG_LED_COLOR_GROUP = "KEY_NTSG_LED_COLOR_GROUP";
 
     // ========================================================================================== Notifications and sound contact profile
 
     public static final String KEY_NTSG_NOTIFICATIONS_CONTACTPROFILE =
-        "KEY_NTSG_NOTIFICATIONS_CONTACT_PROFILE";
+            "KEY_NTSG_NOTIFICATIONS_CONTACT_PROFILE";
     public static final String KEY_NTSG_VIBRATE_CONTACTPROFILE = "KEY_NTSG_VIBRATE_CONTACT_PROFILE";
     public static final String KEY_NTSG_SOUND_CONTACTPROFILE = "KEY_NTSG_SOUND_CONTACT_PROFILE";
     public static final String KEY_NTSG_SMART_NOTIFICATION_CONTACTPROFILE =
-        "KEY_NTSG_SMART_NOTIFICATION_CONTACT_PROFILE";
+            "KEY_NTSG_SMART_NOTIFICATION_CONTACT_PROFILE";
     public static final String KEY_NTSG_LED_COLOR_CONTACTPROFILE =
-        "KEY_NTSG_LED_COLOR_CONTACT_PROFILE";
+            "KEY_NTSG_LED_COLOR_CONTACT_PROFILE";
 
     // ========================================================================================== Notifications and sound contact profile
 }

@@ -1,8 +1,10 @@
 package com.iGap.request;
 
 import android.util.Log;
+
 import com.iGap.module.StructListOfContact;
 import com.iGap.proto.ProtoUserContactsImport;
+
 import java.util.ArrayList;
 
 public class RequestUserContactImport {

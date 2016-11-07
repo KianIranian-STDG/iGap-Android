@@ -1,6 +1,7 @@
 package com.iGap.response;
 
 import android.util.Log;
+
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoUserContactsEdit;
@@ -19,10 +20,11 @@ public class UserContactsEditResponse extends MessageHandler {
         this.identity = identity;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
         Log.i("XXX", "UserContactsEditResponse handler");
         ProtoUserContactsEdit.UserContactsEditResponse.Builder builder =
-            (ProtoUserContactsEdit.UserContactsEditResponse.Builder) message;
+                (ProtoUserContactsEdit.UserContactsEditResponse.Builder) message;
 
         long phone = builder.getPhone();
         String first_name = builder.getFirstName();
@@ -32,12 +34,14 @@ public class UserContactsEditResponse extends MessageHandler {
         G.onUserContactEdit.onContactEdit(first_name, last_name);
     }
 
-    @Override public void timeOut() {
+    @Override
+    public void timeOut() {
         Log.i("XXX", "UserContactsEditResponse timeOut");
         G.onUserContactEdit.onContactEditTimeOut();
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
 
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int MajorCode = errorResponse.getMajorCode();
@@ -45,9 +49,9 @@ public class UserContactsEditResponse extends MessageHandler {
         G.onUserContactEdit.onContactEditError(MajorCode, MinorCode);
 
         Log.i("XXX", "UserContactsEditResponse errorReponse.getMajorCode() : "
-            + errorResponse.getMajorCode());
+                + errorResponse.getMajorCode());
         Log.i("XXX", "UserContactsEditResponse errorReponse.getMinorCode() : "
-            + errorResponse.getMinorCode());
+                + errorResponse.getMinorCode());
     }
 }
 

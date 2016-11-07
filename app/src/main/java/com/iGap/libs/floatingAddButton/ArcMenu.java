@@ -20,15 +20,18 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.FrameLayout;
+
 import com.iGap.R;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Saurabh on 14/12/15.
  */
-@CoordinatorLayout.DefaultBehavior(MoveUpwardBehaviour.class) public class ArcMenu
-    extends FrameLayout {
+@CoordinatorLayout.DefaultBehavior(MoveUpwardBehaviour.class)
+public class ArcMenu
+        extends FrameLayout {
 
     private static final double POSITIVE_QUADRANT = 90;
     private static final double NEGATIVE_QUADRANT = -90;
@@ -48,7 +51,8 @@ import java.util.List;
     int cx, cy; //Represents the center points of the circle whose arc we are considering
     private StateChangeListener mStateChangeListener;
     private OnClickListener mMenuClickListener = new OnClickListener() {
-        @Override public void onClick(View v) {
+        @Override
+        public void onClick(View v) {
             toggleMenu();
         }
     };
@@ -70,9 +74,9 @@ import java.util.List;
         mDrawable = attr.getDrawable(R.styleable.ArcMenu_menu_scr);
         mColorStateList = attr.getColorStateList(R.styleable.ArcMenu_menu_color);
         mFinalRadius = attr.getDimension(R.styleable.ArcMenu_menu_radius,
-            resources.getDimension(R.dimen.dp100));
+                resources.getDimension(R.dimen.dp100));
         mElevation = attr.getDimension(R.styleable.ArcMenu_menu_elevation,
-            resources.getDimension(R.dimen.dp6));
+                resources.getDimension(R.dimen.dp6));
         mMenuSideEnum = MenuSideEnum.fromId(attr.getInt(R.styleable.ArcMenu_menu_open, 0));
         mAnimationTime = attr.getInteger(R.styleable.ArcMenu_menu_animation_time, ANIMATION_TIME);
         mCurrentRadius = 0;
@@ -86,11 +90,11 @@ import java.util.List;
         }
 
         mRippleColor = attr.getColor(R.styleable.ArcMenu_menu_ripple_color,
-            getThemeAccentColor(getContext(), R.attr.colorControlHighlight));
+                getThemeAccentColor(getContext(), R.attr.colorControlHighlight));
 
         if (mColorStateList == null) {
             mColorStateList =
-                ColorStateList.valueOf(getThemeAccentColor(getContext(), R.attr.colorAccent));
+                    ColorStateList.valueOf(getThemeAccentColor(getContext(), R.attr.colorAccent));
         }
 
         if (mMenuSideEnum == MenuSideEnum.ARC_LEFT) {
@@ -100,7 +104,7 @@ import java.util.List;
         }
 
         menuMargin = attr.getDimensionPixelSize(R.styleable.ArcMenu_menu_margin,
-            resources.getDimensionPixelSize(R.dimen.dp8));
+                resources.getDimensionPixelSize(R.dimen.dp8));
     }
 
     /**
@@ -126,7 +130,8 @@ import java.util.List;
         addView(fabMenu);
     }
 
-    @Override protected void onLayout(boolean changed, int l, int t, int r, int b) {
+    @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
         layoutMenu();
         layoutChildren();
     }
@@ -159,7 +164,7 @@ import java.util.List;
                 }
 
                 child.layout(left, top, left + child.getMeasuredWidth(),
-                    top + child.getMeasuredHeight());
+                        top + child.getMeasuredHeight());
             }
         }
     }
@@ -184,14 +189,16 @@ import java.util.List;
         fabMenu.layout(cx, cy, cx + fabMenu.getMeasuredWidth(), cy + fabMenu.getMeasuredHeight());
     }
 
-    @Override protected void onFinishInflate() {
+    @Override
+    protected void onFinishInflate() {
         super.onFinishInflate();
         //The main menu is added as the last child of the view.
         addMainMenu();
         toggleVisibilityOfAllChildViews(mIsOpened);
     }
 
-    @Override protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         measureChild(fabMenu, widthMeasureSpec, heightMeasureSpec);
         int width = fabMenu.getMeasuredWidth();
         int height = fabMenu.getMeasuredHeight();
@@ -260,7 +267,8 @@ import java.util.List;
     private void beginOpenAnimation() {
         ValueAnimator openMenuAnimator = ValueAnimator.ofFloat(0, mFinalRadius);
         openMenuAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override public void onAnimationUpdate(ValueAnimator animation) {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
                 mCurrentRadius = (float) animation.getAnimatedValue();
                 requestLayout();
             }
@@ -284,7 +292,8 @@ import java.util.List;
         animatorSet.playTogether(animationCollection);
         animatorSet.setDuration(mAnimationTime);
         animatorSet.addListener(new Animator.AnimatorListener() {
-            @Override public void onAnimationStart(Animator animation) {
+            @Override
+            public void onAnimationStart(Animator animation) {
                 toggleVisibilityOfAllChildViews(mIsOpened);
 
                 Log.e("ddd", "open");
@@ -297,15 +306,18 @@ import java.util.List;
                 }
             }
 
-            @Override public void onAnimationEnd(Animator animation) {
+            @Override
+            public void onAnimationEnd(Animator animation) {
                 if (mStateChangeListener != null) mStateChangeListener.onMenuOpened();
             }
 
-            @Override public void onAnimationCancel(Animator animation) {
+            @Override
+            public void onAnimationCancel(Animator animation) {
 
             }
 
-            @Override public void onAnimationRepeat(Animator animation) {
+            @Override
+            public void onAnimationRepeat(Animator animation) {
 
             }
         });
@@ -316,7 +328,8 @@ import java.util.List;
     private void beginCloseAnimation() {
         ValueAnimator closeMenuAnimator = ValueAnimator.ofFloat(mFinalRadius, 0);
         closeMenuAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override public void onAnimationUpdate(ValueAnimator animation) {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
                 mCurrentRadius = (float) animation.getAnimatedValue();
                 requestLayout();
             }
@@ -345,28 +358,32 @@ import java.util.List;
         animatorSet.playTogether(animationCollection);
         animatorSet.setDuration(mAnimationTime);
         animatorSet.addListener(new Animator.AnimatorListener() {
-            @Override public void onAnimationStart(Animator animation) {
+            @Override
+            public void onAnimationStart(Animator animation) {
                 Log.e("ddd", "close");
 
                 fabMenu.setRotation(0);
                 fabMenu.setBackgroundTintList(
-                    ColorStateList.valueOf(getResources().getColor(R.color.green)));
+                        ColorStateList.valueOf(getResources().getColor(R.color.green)));
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     fabMenu.setElevation(mElevation);
                 }
             }
 
-            @Override public void onAnimationEnd(Animator animation) {
+            @Override
+            public void onAnimationEnd(Animator animation) {
                 toggleVisibilityOfAllChildViews(mIsOpened);
                 if (mStateChangeListener != null) mStateChangeListener.onMenuClosed();
             }
 
-            @Override public void onAnimationCancel(Animator animation) {
+            @Override
+            public void onAnimationCancel(Animator animation) {
 
             }
 
-            @Override public void onAnimationRepeat(Animator animation) {
+            @Override
+            public void onAnimationRepeat(Animator animation) {
 
             }
         });
@@ -374,18 +391,22 @@ import java.util.List;
         rotateAnimatorSet.playTogether(rotateAnimationCollection);
         rotateAnimatorSet.setDuration(mAnimationTime / 3);
         rotateAnimatorSet.addListener(new Animator.AnimatorListener() {
-            @Override public void onAnimationStart(Animator animation) {
+            @Override
+            public void onAnimationStart(Animator animation) {
             }
 
-            @Override public void onAnimationEnd(Animator animation) {
+            @Override
+            public void onAnimationEnd(Animator animation) {
                 animatorSet.start();
             }
 
-            @Override public void onAnimationCancel(Animator animation) {
+            @Override
+            public void onAnimationCancel(Animator animation) {
 
             }
 
-            @Override public void onAnimationRepeat(Animator animation) {
+            @Override
+            public void onAnimationRepeat(Animator animation) {
 
             }
         });
@@ -415,7 +436,8 @@ import java.util.List;
         this.mStateChangeListener = stateChangeListener;
     }
 
-    @SuppressWarnings("unused") public void setRadius(float radius) {
+    @SuppressWarnings("unused")
+    public void setRadius(float radius) {
         this.mFinalRadius = radius;
         invalidate();
     }

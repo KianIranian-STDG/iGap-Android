@@ -7,7 +7,7 @@ public class RequestGroupClearMessage {
     public void groupClearMessage(long roomId, long clearId) {
 
         ProtoGroupClearMessage.GroupClearMessage.Builder builder =
-            ProtoGroupClearMessage.GroupClearMessage.newBuilder();
+                ProtoGroupClearMessage.GroupClearMessage.newBuilder();
         builder.setRoomId(roomId);
         builder.setClearId(clearId);
 

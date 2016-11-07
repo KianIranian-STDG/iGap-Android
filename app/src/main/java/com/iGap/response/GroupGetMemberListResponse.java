@@ -17,19 +17,22 @@ public class GroupGetMemberListResponse extends MessageHandler {
         this.identity = identity;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
 
         ProtoGroupGetMemberList.GroupGetMemberListResponse.Builder builder =
-            (ProtoGroupGetMemberList.GroupGetMemberListResponse.Builder) message;
+                (ProtoGroupGetMemberList.GroupGetMemberListResponse.Builder) message;
 
         G.onGroupGetMemberList.onGroupGetMemberList(builder.getMemberList());
     }
 
-    @Override public void timeOut() {
+    @Override
+    public void timeOut() {
         super.timeOut();
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
         super.error();
     }
 }

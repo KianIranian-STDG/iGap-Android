@@ -7,7 +7,7 @@ public class RequestChatDeleteMessage {
     public void chatDeleteMessage(long roomId, long messageId) {
 
         ProtoChatDeleteMessage.ChatDeleteMessage.Builder chatDeleteMessage =
-            ProtoChatDeleteMessage.ChatDeleteMessage.newBuilder();
+                ProtoChatDeleteMessage.ChatDeleteMessage.newBuilder();
         chatDeleteMessage.setRoomId(roomId);
         chatDeleteMessage.setMessageId(messageId);
 

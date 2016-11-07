@@ -19,6 +19,7 @@ package com.iGap.module;
 import android.content.Context;
 import android.view.View;
 import android.widget.GridView;
+
 import com.iGap.R;
 import com.iGap.adapter.EmojiAdapter;
 import com.iGap.interfaces.IEmojiClickListener;
@@ -28,13 +29,14 @@ public class EmojiRecentsGridView extends EmojiGridView implements IRecents {
     private final EmojiAdapter mAdapter;
 
     public EmojiRecentsGridView(Context context, String[] emoji, IRecents recents,
-        EmojiPopup emojiPopup) {
+                                EmojiPopup emojiPopup) {
         super(context, emoji, recents, emojiPopup);
 
         EmojiRecentsManager recentsManager = EmojiRecentsManager.getInstance(context);
         mAdapter = new EmojiAdapter(context, recentsManager);
         mAdapter.setEmojiClickListener(new IEmojiClickListener() {
-            @Override public void onEmojiClick(View view, String emoji) {
+            @Override
+            public void onEmojiClick(View view, String emoji) {
                 if (getEmojiPopup().getEmojiClickListener() != null) {
                     getEmojiPopup().getEmojiClickListener().onEmojiClick(view, emoji);
                 }
@@ -44,7 +46,8 @@ public class EmojiRecentsGridView extends EmojiGridView implements IRecents {
         gridView.setAdapter(mAdapter);
     }
 
-    @Override public void addRecent(Context context, String emoji) {
+    @Override
+    public void addRecent(Context context, String emoji) {
         EmojiRecentsManager recents = EmojiRecentsManager.getInstance(context);
         recents.push(emoji);
 

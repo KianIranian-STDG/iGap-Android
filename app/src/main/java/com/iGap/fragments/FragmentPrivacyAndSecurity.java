@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
@@ -18,6 +19,7 @@ import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestUserProfileSetSelfRemove;
+
 import io.realm.Realm;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -27,18 +29,21 @@ import static android.content.Context.MODE_PRIVATE;
  */
 public class FragmentPrivacyAndSecurity extends Fragment {
 
+    int poSelfRemove;
     private SharedPreferences sharedPreferences;
     private int poRbDialogSelfDestruction = 0;
     private int selfRemove;
-    int poSelfRemove;
+
     public FragmentPrivacyAndSecurity() {
     }
 
-    @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_privacy_and_security, container, false);
     }
 
-    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         Realm realm = Realm.getDefaultInstance();
@@ -51,7 +56,8 @@ public class FragmentPrivacyAndSecurity extends Fragment {
         RelativeLayout parentPrivacySecurity = (RelativeLayout) view.findViewById(R.id.parentPrivacySecurity);
 
         parentPrivacySecurity.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
             }
         });
@@ -59,7 +65,8 @@ public class FragmentPrivacyAndSecurity extends Fragment {
         RippleView rippleBack = (RippleView) view.findViewById(R.id.stps_ripple_back);
 
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
                 getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentPrivacyAndSecurity.this).commit();
             }
         });
@@ -88,12 +95,14 @@ public class FragmentPrivacyAndSecurity extends Fragment {
         poSelfRemove = sharedPreferences.getInt(SHP_SETTING.KEY_POSITION_SELF_REMOVE, 2);
         ViewGroup ltSelfDestruction = (ViewGroup) view.findViewById(R.id.stps_layout_Self_destruction);
         ltSelfDestruction.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 new MaterialDialog.Builder(getActivity()).title("Language")
-                    .titleGravity(GravityEnum.START)
-                    .titleColor(getResources().getColor(android.R.color.black))
-                    .items(R.array.account_self_destruct).itemsCallbackSingleChoice(poSelfRemove, new MaterialDialog.ListCallbackSingleChoice() {
-                    @Override public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        .titleGravity(GravityEnum.START)
+                        .titleColor(getResources().getColor(android.R.color.black))
+                        .items(R.array.account_self_destruct).itemsCallbackSingleChoice(poSelfRemove, new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
                         switch (which) {
                             case 0: {
@@ -126,7 +135,7 @@ public class FragmentPrivacyAndSecurity extends Fragment {
                                 editor.apply();
                                 poSelfRemove = 2;
                                 break;
-                                }
+                            }
                             case 3: {
 
                                 txtDestruction.setText(getResources().getString(R.string.year_1));
@@ -138,23 +147,26 @@ public class FragmentPrivacyAndSecurity extends Fragment {
                                 poSelfRemove = 3;
                                 break;
                             }
-                            }
+                        }
                         return false;
                     }
                 })
-                    .positiveText("OK")
-                    .negativeText("CANCEL")
-                    .show();
+                        .positiveText("OK")
+                        .negativeText("CANCEL")
+                        .show();
 
                 G.onUserProfileSetSelfRemove = new OnUserProfileSetSelfRemove() {
-                    @Override public void onUserSetSelfRemove(final int numberOfMonth) {
+                    @Override
+                    public void onUserSetSelfRemove(final int numberOfMonth) {
 
                         getActivity().runOnUiThread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
 
                                 Realm realm1 = Realm.getDefaultInstance();
                                 realm1.executeTransaction(new Realm.Transaction() {
-                                    @Override public void execute(Realm realm) {
+                                    @Override
+                                    public void execute(Realm realm) {
                                         realm.where(RealmUserInfo.class).findFirst().setSelfRemove(numberOfMonth);
                                     }
                                 });
@@ -164,7 +176,8 @@ public class FragmentPrivacyAndSecurity extends Fragment {
                         });
                     }
 
-                    @Override public void Error(int majorCode, int minorCode) {
+                    @Override
+                    public void Error(int majorCode, int minorCode) {
 
                     }
                 };

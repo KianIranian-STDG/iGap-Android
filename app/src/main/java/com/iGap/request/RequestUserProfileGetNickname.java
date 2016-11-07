@@ -7,7 +7,7 @@ public class RequestUserProfileGetNickname {
     public void userProfileGetNickname() {
 
         ProtoUserProfileGetNickname.UserProfileGetNickname.Builder builder =
-            ProtoUserProfileGetNickname.UserProfileGetNickname.newBuilder();
+                ProtoUserProfileGetNickname.UserProfileGetNickname.newBuilder();
 
         RequestWrapper requestWrapper = new RequestWrapper(112, builder);
         try {

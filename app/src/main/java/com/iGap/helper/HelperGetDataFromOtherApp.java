@@ -6,7 +6,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
+
 import com.iGap.G;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -26,6 +28,7 @@ public class HelperGetDataFromOtherApp {
     public static ArrayList<Uri> messageFileAddress;
     public static ArrayList<FileType> fileTypeArray = new ArrayList<FileType>();
     private Intent intent;
+
     public HelperGetDataFromOtherApp(Intent intent) {
 
         this.intent = intent;
@@ -50,24 +53,24 @@ public class HelperGetDataFromOtherApp {
             //If scheme is a File
             //This will replace white spaces with %20 and also other special characters. This will avoid returning null values on file name with spaces and special characters.
             extension = MimeTypeMap.getFileExtensionFromUrl(
-                Uri.fromFile(new File(uri.getPath())).toString());
+                    Uri.fromFile(new File(uri.getPath())).toString());
         }
 
         extension = extension.toLowerCase();
 
         if (extension.endsWith("jpg")
-            || extension.endsWith("jpeg")
-            || extension.endsWith("png")
-            || extension.endsWith("bmp")
-            || extension.endsWith(".tiff")) {
+                || extension.endsWith("jpeg")
+                || extension.endsWith("png")
+                || extension.endsWith("bmp")
+                || extension.endsWith(".tiff")) {
             fileType = FileType.image;
         } else if (extension.endsWith("mp3") || extension.endsWith("ogg") || extension.endsWith(
-            "wma") || extension.endsWith("m4a") || extension.endsWith("amr") || extension.endsWith(
-            "wav") || extension.endsWith(".mid") || extension.endsWith(".midi")) {
+                "wma") || extension.endsWith("m4a") || extension.endsWith("amr") || extension.endsWith(
+                "wav") || extension.endsWith(".mid") || extension.endsWith(".midi")) {
             fileType = FileType.audio;
         } else if (extension.endsWith("mp4") || extension.endsWith("3gp") || extension.endsWith(
-            "avi") || extension.endsWith("mpg") || extension.endsWith("flv") || extension.endsWith(
-            "wmv") || extension.endsWith("m4v") || extension.endsWith(".mpeg")) {
+                "avi") || extension.endsWith("mpg") || extension.endsWith("flv") || extension.endsWith(
+                "wmv") || extension.endsWith("m4v") || extension.endsWith(".mpeg")) {
             fileType = FileType.video;
         }
 

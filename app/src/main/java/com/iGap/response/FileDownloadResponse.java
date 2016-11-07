@@ -1,6 +1,7 @@
 package com.iGap.response;
 
 import android.util.Log;
+
 import com.iGap.G;
 import com.iGap.module.AndroidUtils;
 import com.iGap.proto.ProtoError;
@@ -21,14 +22,15 @@ public class FileDownloadResponse extends MessageHandler {
         this.identity = identity;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
         Log.i("BBB", "setAvatar  FileDownloadResponse message : " + message);
         ProtoFileDownload.FileDownloadResponse.Builder builder =
-            (ProtoFileDownload.FileDownloadResponse.Builder) message;
+                (ProtoFileDownload.FileDownloadResponse.Builder) message;
         String[] identityParams = identity.split("\\*");
         String token = identityParams[0];
         ProtoFileDownload.FileDownload.Selector selector =
-            ProtoFileDownload.FileDownload.Selector.valueOf(identityParams[1]);
+                ProtoFileDownload.FileDownload.Selector.valueOf(identityParams[1]);
         long fileSize = Long.parseLong(identityParams[2]);
         String filePath = G.DIR_TEMP + "/" + identityParams[3];
         Log.i("GGG", "identityParams[3] : " + identityParams[3]);
@@ -50,15 +52,17 @@ public class FileDownloadResponse extends MessageHandler {
         } else {
             Log.i("NNN", "setAvatar onFileDownloadResponse");
             G.onFileDownloadResponse.onAvatarDownload(token, nextOffset, selector, progress, userId,
-                roomType);
+                    roomType);
         }
     }
 
-    @Override public void timeOut() {
+    @Override
+    public void timeOut() {
         Log.i("SOC", "FileDownloadResponse timeout");
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();

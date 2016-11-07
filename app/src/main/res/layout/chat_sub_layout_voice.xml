@@ -7,151 +7,130 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/dp4"
     android:maxWidth="@dimen/dp300"
-    android:textDirection="firstStrong"
-    >
-
-  <LinearLayout
-      android:id="@+id/mainContainer"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:orientation="horizontal"
-      tools:ignore="UselessParent"
-      >
-
-    <com.iGap.module.CircleImageView
-        android:id="@+id/messageSenderAvatar"
-        android:layout_width="@dimen/dp52"
-        android:layout_height="@dimen/dp52"
-        android:layout_marginRight="@dimen/dp8"
-        android:src="@mipmap/b"
-        />
+    android:textDirection="firstStrong">
 
     <LinearLayout
-        android:id="@+id/contentContainer"
+        android:id="@+id/mainContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/rectangle_round_white"
-        android:orientation="vertical"
-        android:padding="@dimen/messageContainerPadding"
-        >
+        android:orientation="horizontal"
+        tools:ignore="UselessParent">
 
-      <include
-          layout="@layout/chat_sub_layout_replay"
-          android:id="@+id/replayLayout"
-          />
-
-      <include
-          layout="@layout/chat_sub_layout_forward"
-          android:id="@+id/cslr_ll_forward"
-          />
-
-      <LinearLayout
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layoutDirection="ltr"
-          android:minWidth="@dimen/dp140"
-          android:orientation="horizontal"
-          >
-
-        <FrameLayout
-            android:layout_width="@dimen/dp88"
-            android:layout_height="@dimen/dp88"
-            >
-
-          <ImageView
-              android:id="@+id/thumbnail"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@drawable/gray_bg_rounded_corner"
-              />
-
-          <include
-              layout="@layout/msg_progress_item"
-              android:id="@+id/progress"
-              android:layout_width="64dp"
-              android:layout_height="64dp"
-              android:layout_gravity="center"
-              />
-        </FrameLayout>
+        <com.iGap.module.CircleImageView
+            android:id="@+id/messageSenderAvatar"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="@dimen/dp52"
+            android:layout_marginRight="@dimen/dp8"
+            android:src="@mipmap/b" />
 
         <LinearLayout
+            android:id="@+id/contentContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp8"
+            android:background="@drawable/rectangle_round_white"
             android:orientation="vertical"
-            >
+            android:padding="@dimen/messageContainerPadding">
 
-          <LinearLayout
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:orientation="vertical"
-              >
+            <include
+                android:id="@+id/replayLayout"
+                layout="@layout/chat_sub_layout_replay" />
+
+            <include
+                android:id="@+id/cslr_ll_forward"
+                layout="@layout/chat_sub_layout_forward" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:orientation="horizontal"
-                >
+                android:layoutDirection="ltr"
+                android:minWidth="@dimen/dp140"
+                android:orientation="horizontal">
 
-              <TextView
-                  android:id="@+id/elapsedTime"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:text="2:33"
-                  android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
-                  android:textSize="@dimen/sp12"
-                  />
+                <FrameLayout
+                    android:layout_width="@dimen/dp88"
+                    android:layout_height="@dimen/dp88">
 
-              <TextView
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_marginLeft="2dp"
-                  android:layout_marginRight="2dp"
-                  android:text="/"
-                  />
+                    <ImageView
+                        android:id="@+id/thumbnail"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/gray_bg_rounded_corner" />
 
-              <TextView
-                  android:id="@+id/duration"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:text="5:21"
-                  android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
-                  android:textColor="@android:color/black"
-                  android:textSize="@dimen/sp12"
-                  />
+                    <include
+                        android:id="@+id/progress"
+                        layout="@layout/msg_progress_item"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:layout_gravity="center" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp8"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/elapsedTime"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="2:33"
+                                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
+                                android:textSize="@dimen/sp12" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="2dp"
+                                android:layout_marginRight="2dp"
+                                android:text="/" />
+
+                            <TextView
+                                android:id="@+id/duration"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="5:21"
+                                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
+                                android:textColor="@android:color/black"
+                                android:textSize="@dimen/sp12" />
+                        </LinearLayout>
+
+                        <!--TODO [Alireza] following view is the mask-->
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="0dp" />
+
+                        <MediaController
+                            android:id="@+id/mediaController"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                        </MediaController>
+                    </LinearLayout>
+
+                </LinearLayout>
+
             </LinearLayout>
 
-            <!--TODO [Alireza] following view is the mask-->
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                />
+            <com.iGap.module.EmojiTextView
+                android:id="@+id/messageText"
+                style="@style/ChatMessages.EmojiTextView"
+                android:layout_marginTop="@dimen/dp20"
+                android:text="SAMPLE TEXT df df df d fd f df df df d f df df df df  df df df "
+                android:textColor="@android:color/black" />
 
-            <MediaController
-                android:id="@+id/mediaController"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                >
-
-            </MediaController>
-          </LinearLayout>
-
+            <include layout="@layout/chat_sub_layout_messages_time" />
         </LinearLayout>
-
-      </LinearLayout>
-
-      <com.iGap.module.EmojiTextView
-          android:id="@+id/messageText"
-          android:layout_marginTop="@dimen/dp20"
-          android:text="SAMPLE TEXT df df df d fd f df df df d f df df df df  df df df "
-          android:textColor="@android:color/black"
-          style="@style/ChatMessages.EmojiTextView"
-          />
-
-      <include
-          layout="@layout/chat_sub_layout_messages_time"
-          />
     </LinearLayout>
-  </LinearLayout>
 </FrameLayout>

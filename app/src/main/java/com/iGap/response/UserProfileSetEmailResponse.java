@@ -1,6 +1,7 @@
 package com.iGap.response;
 
 import android.util.Log;
+
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoUserProfileEmail;
@@ -19,17 +20,20 @@ public class UserProfileSetEmailResponse extends MessageHandler {
         this.identity = identity;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
         ProtoUserProfileEmail.UserProfileSetEmailResponse.Builder userProfileEmail =
-            (ProtoUserProfileEmail.UserProfileSetEmailResponse.Builder) message;
+                (ProtoUserProfileEmail.UserProfileSetEmailResponse.Builder) message;
         G.onUserProfileSetEmailResponse.onUserProfileEmailResponse(userProfileEmail.getEmail(),
-            userProfileEmail.getResponse());
+                userProfileEmail.getResponse());
     }
 
-    @Override public void timeOut() {
+    @Override
+    public void timeOut() {
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();

@@ -16,7 +16,7 @@ public class StructContactInfo {
     public RealmAvatar avatar;
 
     public StructContactInfo(long peerId, String displayName, String status, boolean isHeader,
-        boolean isSelected, String phone) {
+                             boolean isSelected, String phone) {
         this.peerId = peerId;
         this.isHeader = isHeader;
         this.displayName = displayName;

@@ -15,20 +15,23 @@ public class GroupAvatarDeleteResponse extends MessageHandler {
         this.actionId = actionId;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
         super.handler();
 
         ProtoGroupAvatarDelete.GroupAvatarDelete.Builder groupAvatarDelete =
-            (ProtoGroupAvatarDelete.GroupAvatarDelete.Builder) message;
+                (ProtoGroupAvatarDelete.GroupAvatarDelete.Builder) message;
         groupAvatarDelete.getRoomId();
         groupAvatarDelete.getId();
     }
 
-    @Override public void timeOut() {
+    @Override
+    public void timeOut() {
         super.timeOut();
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
         super.error();
     }
 }

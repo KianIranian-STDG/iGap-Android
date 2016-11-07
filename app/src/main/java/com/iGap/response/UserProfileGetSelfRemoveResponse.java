@@ -16,18 +16,21 @@ public class UserProfileGetSelfRemoveResponse extends MessageHandler {
         this.identity = identity;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
         ProtoUserProfileSetSelfRemove.UserProfileSetSelfRemoveResponse.Builder builder =
-            (ProtoUserProfileSetSelfRemove.UserProfileSetSelfRemoveResponse.Builder) message;
+                (ProtoUserProfileSetSelfRemove.UserProfileSetSelfRemoveResponse.Builder) message;
 
         builder.getSelfRemove();
     }
 
-    @Override public void timeOut() {
+    @Override
+    public void timeOut() {
         super.timeOut();
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
         super.error();
     }
 }

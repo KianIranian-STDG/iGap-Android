@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
@@ -29,6 +30,7 @@ import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.enums.RoomType;
+
 import io.realm.Realm;
 import io.realm.RealmList;
 
@@ -54,7 +56,8 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
         return fragment;
     }
 
-    @Override public void onCreate(@Nullable Bundle savedInstanceState) {
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // init passed data through bundle
@@ -64,13 +67,15 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
         G.onFileDownloadResponse = this;
     }
 
-    @Nullable @Override
+    @Nullable
+    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-        @Nullable Bundle savedInstanceState) {
+                             @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_show_avatars, container, false);
     }
 
-    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         // init fields
@@ -81,27 +86,29 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
 
         // ripple back
         ((RippleView) view.findViewById(R.id.back)).setOnRippleCompleteListener(
-            new RippleView.OnRippleCompleteListener() {
-                @Override public void onComplete(RippleView rippleView) {
-                    getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .remove(FragmentShowAvatars.this)
-                        .commit();
-                }
-            });
+                new RippleView.OnRippleCompleteListener() {
+                    @Override
+                    public void onComplete(RippleView rippleView) {
+                        getActivity().getSupportFragmentManager()
+                                .beginTransaction()
+                                .remove(FragmentShowAvatars.this)
+                                .commit();
+                    }
+                });
 
         // ripple menu
         ((RippleView) view.findViewById(R.id.menu)).setOnRippleCompleteListener(
-            new RippleView.OnRippleCompleteListener() {
-                @Override public void onComplete(RippleView rippleView) {
-                    showPopupMenu();
-                }
-            });
+                new RippleView.OnRippleCompleteListener() {
+                    @Override
+                    public void onComplete(RippleView rippleView) {
+                        showPopupMenu();
+                    }
+                });
 
         Realm realm = Realm.getDefaultInstance();
         RealmRegisteredInfo user = realm.where(RealmRegisteredInfo.class)
-            .equalTo(RealmRegisteredInfoFields.ID, mPeerId)
-            .findFirst();
+                .equalTo(RealmRegisteredInfoFields.ID, mPeerId)
+                .findFirst();
         if (user != null) {
             // user exists in DB
             final RealmList<RealmAvatar> userAvatars = user.getAvatars();
@@ -109,7 +116,7 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
             long identifier = System.nanoTime();
             for (RealmAvatar avatar : userAvatars) {
                 mAdapter.add(
-                    new AvatarItem().setAvatar(avatar.getFile()).withIdentifier(identifier));
+                        new AvatarItem().setAvatar(avatar.getFile()).withIdentifier(identifier));
                 identifier++;
             }
 
@@ -119,7 +126,7 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
             mRecyclerView.setItemViewCacheSize(20);
             mRecyclerView.setDrawingCacheEnabled(true);
             LinearLayoutManager layoutManager =
-                new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+                    new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
             mRecyclerView.setLayoutManager(layoutManager);
             mRecyclerView.setAdapter(mAdapter);
 
@@ -128,8 +135,8 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
                 public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                     super.onScrollStateChanged(recyclerView, newState);
                     mCount.setText(String.format(getString(R.string.d_of_d),
-                        ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition()
-                            + 1, mAdapter.getAdapterItemCount()));
+                            ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition()
+                                    + 1, mAdapter.getAdapterItemCount()));
                 }
             });
 
@@ -138,7 +145,7 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
             helper.attachToRecyclerView(mRecyclerView);
 
             mCount.setText(
-                String.format(getString(R.string.d_of_d), 1, mAdapter.getAdapterItemCount()));
+                    String.format(getString(R.string.d_of_d), 1, mAdapter.getAdapterItemCount()));
         } else {
             // user doesn't exist in DB
         }
@@ -152,17 +159,18 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
 
     private void showPopupMenu() {
         MaterialDialog dialog =
-            new MaterialDialog.Builder(getActivity()).items(R.array.pop_up_menu_show_image)
-                .contentColor(Color.BLACK)
-                .itemsCallback(new MaterialDialog.ListCallback() {
-                    @Override public void onSelection(MaterialDialog dialog, View view, int which,
-                        CharSequence text) {
-                        if (which == 0) {
-                            showAllMedia();
-                        } else if (which == 1) {
-                            saveToGallery();
-                        }
-                        // TODO: 10/26/2016 [Alireza] implement delete
+                new MaterialDialog.Builder(getActivity()).items(R.array.pop_up_menu_show_image)
+                        .contentColor(Color.BLACK)
+                        .itemsCallback(new MaterialDialog.ListCallback() {
+                            @Override
+                            public void onSelection(MaterialDialog dialog, View view, int which,
+                                                    CharSequence text) {
+                                if (which == 0) {
+                                    showAllMedia();
+                                } else if (which == 1) {
+                                    saveToGallery();
+                                }
+                                // TODO: 10/26/2016 [Alireza] implement delete
                         /*else if (which == 2) {
                             int pos = mRecyclerView.getCurrentItem();
                             if (deleteFromGallery(pos)) {
@@ -172,8 +180,8 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
                                 }
                             }
                         }*/
-                    }
-                }).show();
+                            }
+                        }).show();
 
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
         layoutParams.copyFrom(dialog.getWindow().getAttributes());
@@ -190,10 +198,12 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
         Log.i(FragmentShowAvatars.class.getSimpleName(), "Save to gallery");
     }
 
-    @Override public void onFileDownload(final String token, final int offset,
-        final ProtoFileDownload.FileDownload.Selector selector, final int progress) {
+    @Override
+    public void onFileDownload(final String token, final int offset,
+                               final ProtoFileDownload.FileDownload.Selector selector, final int progress) {
         getActivity().runOnUiThread(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 if (selector != ProtoFileDownload.FileDownload.Selector.FILE) {
                     // requested thumbnail
                     mAdapter.downloadingAvatarThumbnail(token);
@@ -205,22 +215,26 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
         });
     }
 
-    @Override public void onAvatarDownload(String token, int offset,
-        ProtoFileDownload.FileDownload.Selector selector, int progress, long userId,
-        RoomType roomType) {
+    @Override
+    public void onAvatarDownload(String token, int offset,
+                                 ProtoFileDownload.FileDownload.Selector selector, int progress, long userId,
+                                 RoomType roomType) {
         // empty
     }
 
-    @Override public void onError(int majorCode, int minorCode) {
+    @Override
+    public void onError(int majorCode, int minorCode) {
         if (majorCode == 713 && minorCode == 1) {
             getActivity().runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     final Snackbar snack =
-                        Snackbar.make(getActivity().findViewById(android.R.id.content),
-                            getResources().getString(R.string.E_713_1), Snackbar.LENGTH_LONG);
+                            Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                    getResources().getString(R.string.E_713_1), Snackbar.LENGTH_LONG);
 
                     snack.setAction("CANCEL", new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
                             snack.dismiss();
                         }
                     });
@@ -229,13 +243,15 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
             });
         } else if (majorCode == 713 && minorCode == 2) {
             getActivity().runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     final Snackbar snack =
-                        Snackbar.make(getActivity().findViewById(android.R.id.content),
-                            getResources().getString(R.string.E_713_2), Snackbar.LENGTH_LONG);
+                            Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                    getResources().getString(R.string.E_713_2), Snackbar.LENGTH_LONG);
 
                     snack.setAction("CANCEL", new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
                             snack.dismiss();
                         }
                     });
@@ -244,13 +260,15 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
             });
         } else if (majorCode == 713 && minorCode == 3) {
             getActivity().runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     final Snackbar snack =
-                        Snackbar.make(getActivity().findViewById(android.R.id.content),
-                            getResources().getString(R.string.E_713_3), Snackbar.LENGTH_LONG);
+                            Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                    getResources().getString(R.string.E_713_3), Snackbar.LENGTH_LONG);
 
                     snack.setAction("CANCEL", new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
                             snack.dismiss();
                         }
                     });
@@ -259,13 +277,15 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
             });
         } else if (majorCode == 713 && minorCode == 4) {
             getActivity().runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     final Snackbar snack =
-                        Snackbar.make(getActivity().findViewById(android.R.id.content),
-                            getResources().getString(R.string.E_713_4), Snackbar.LENGTH_LONG);
+                            Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                    getResources().getString(R.string.E_713_4), Snackbar.LENGTH_LONG);
 
                     snack.setAction("CANCEL", new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
                             snack.dismiss();
                         }
                     });
@@ -274,13 +294,15 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
             });
         } else if (majorCode == 713 && minorCode == 5) {
             getActivity().runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     final Snackbar snack =
-                        Snackbar.make(getActivity().findViewById(android.R.id.content),
-                            getResources().getString(R.string.E_713_5), Snackbar.LENGTH_LONG);
+                            Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                    getResources().getString(R.string.E_713_5), Snackbar.LENGTH_LONG);
 
                     snack.setAction("CANCEL", new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
                             snack.dismiss();
                         }
                     });
@@ -289,13 +311,15 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
             });
         } else if (majorCode == 714) {
             getActivity().runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     final Snackbar snack =
-                        Snackbar.make(getActivity().findViewById(android.R.id.content),
-                            getResources().getString(R.string.E_714), Snackbar.LENGTH_LONG);
+                            Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                    getResources().getString(R.string.E_714), Snackbar.LENGTH_LONG);
 
                     snack.setAction("CANCEL", new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
                             snack.dismiss();
                         }
                     });
@@ -304,13 +328,15 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
             });
         } else if (majorCode == 715) {
             getActivity().runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     final Snackbar snack =
-                        Snackbar.make(getActivity().findViewById(android.R.id.content),
-                            getResources().getString(R.string.E_715), Snackbar.LENGTH_LONG);
+                            Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                    getResources().getString(R.string.E_715), Snackbar.LENGTH_LONG);
 
                     snack.setAction("CANCEL", new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
                             snack.dismiss();
                         }
                     });

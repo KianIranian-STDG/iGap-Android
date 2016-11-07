@@ -2,20 +2,23 @@ package com.iGap.module;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
 import com.iGap.realm.RealmRoomMessageContact;
 
 public class StructUserInfo implements Parcelable {
 
     public static final Parcelable.Creator<StructUserInfo> CREATOR =
-        new Parcelable.Creator<StructUserInfo>() {
-            @Override public StructUserInfo createFromParcel(Parcel source) {
-                return new StructUserInfo(source);
-            }
+            new Parcelable.Creator<StructUserInfo>() {
+                @Override
+                public StructUserInfo createFromParcel(Parcel source) {
+                    return new StructUserInfo(source);
+                }
 
-            @Override public StructUserInfo[] newArray(int size) {
-                return new StructUserInfo[size];
-            }
-        };
+                @Override
+                public StructUserInfo[] newArray(int size) {
+                    return new StructUserInfo[size];
+                }
+            };
     public String imageSource;
     public String userName;
     public String lastSeen;
@@ -23,7 +26,7 @@ public class StructUserInfo implements Parcelable {
     public String number;
 
     public StructUserInfo(String imageSource, String userName, String lastSeen, String name,
-        String number) {
+                          String number) {
         this.imageSource = imageSource;
         this.userName = userName;
         this.lastSeen = lastSeen;
@@ -63,11 +66,13 @@ public class StructUserInfo implements Parcelable {
         return userInfo;
     }
 
-    @Override public int describeContents() {
+    @Override
+    public int describeContents() {
         return 0;
     }
 
-    @Override public void writeToParcel(Parcel dest, int flags) {
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.imageSource);
         dest.writeString(this.userName);
         dest.writeString(this.lastSeen);

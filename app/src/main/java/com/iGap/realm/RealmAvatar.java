@@ -1,6 +1,7 @@
 package com.iGap.realm;
 
 import com.iGap.proto.ProtoGlobal;
+
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
@@ -9,11 +10,16 @@ import io.realm.annotations.PrimaryKey;
 
 public class RealmAvatar extends RealmObject {
 
-    @PrimaryKey private long id;
+    @PrimaryKey
+    private long id;
     private long ownerId;
     private RealmAttachment file;
 
     public RealmAvatar() {
+    }
+
+    public RealmAvatar(long id) {
+        this.id = id;
     }
 
     public static void put(long ownerId, ProtoGlobal.Avatar input) {
@@ -35,34 +41,6 @@ public class RealmAvatar extends RealmObject {
             avatar.setFile(RealmAttachment.build(input.getFile()));
         }
         realm.close();
-    }
-
-    public RealmAvatar(long id) {
-        this.id = id;
-    }
-
-    public long getOwnerId() {
-        return ownerId;
-    }
-
-    public void setOwnerId(long ownerId) {
-        this.ownerId = ownerId;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public RealmAttachment getFile() {
-        return file;
-    }
-
-    public void setFile(RealmAttachment file) {
-        this.file = file;
     }
 
     private static long getCorrectId(Realm realm) {
@@ -128,10 +106,11 @@ public class RealmAvatar extends RealmObject {
 
     public static RealmAvatar convert(final ProtoGlobal.Room room) {
         Realm realm = Realm.getDefaultInstance();
-        final RealmAvatar[] realmAvatar = { null };
+        final RealmAvatar[] realmAvatar = {null};
 
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
                 realmAvatar[0] = convert(room, realm);
             }
         });
@@ -190,5 +169,29 @@ public class RealmAvatar extends RealmObject {
         realmAvatar.setFile(RealmAttachment.build(file));
 
         return realmAvatar;
+    }
+
+    public long getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(long ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public RealmAttachment getFile() {
+        return file;
+    }
+
+    public void setFile(RealmAttachment file) {
+        this.file = file;
     }
 }

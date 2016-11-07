@@ -18,18 +18,21 @@ public class ClientGetRoomListResponse extends MessageHandler {
         this.identity = identity;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
         ProtoClientGetRoomList.ClientGetRoomListResponse.Builder clientGetRoomListResponse =
-            (ProtoClientGetRoomList.ClientGetRoomListResponse.Builder) message;
+                (ProtoClientGetRoomList.ClientGetRoomListResponse.Builder) message;
         G.onClientGetRoomListResponse.onClientGetRoomList(clientGetRoomListResponse.getRoomsList(),
-            clientGetRoomListResponse.getResponse());
+                clientGetRoomListResponse.getResponse());
     }
 
-    @Override public void timeOut() {
+    @Override
+    public void timeOut() {
         super.timeOut();
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
         super.error();
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();

@@ -2,17 +2,19 @@ package com.iGap.realm;
 
 import com.iGap.module.StringListParcelConverter;
 import com.iGap.proto.ProtoGlobal;
+
+import org.parceler.Parcel;
+import org.parceler.ParcelPropertyConverter;
+
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.RealmRoomMessageContactRealmProxy;
 import io.realm.annotations.PrimaryKey;
-import org.parceler.Parcel;
-import org.parceler.ParcelPropertyConverter;
 
-@Parcel(implementations = { RealmRoomMessageContactRealmProxy.class },
-    value = Parcel.Serialization.BEAN,
-    analyze = { RealmRoomMessageContact.class })
+@Parcel(implementations = {RealmRoomMessageContactRealmProxy.class},
+        value = Parcel.Serialization.BEAN,
+        analyze = {RealmRoomMessageContact.class})
 public class RealmRoomMessageContact extends RealmObject {
 
     private String firstName;
@@ -20,7 +22,8 @@ public class RealmRoomMessageContact extends RealmObject {
     private String nickName;
     private RealmList<RealmString> phones = new RealmList<>();
     private RealmList<RealmString> emails = new RealmList<>();
-    @PrimaryKey private long id;
+    @PrimaryKey
+    private long id;
 
     public static RealmRoomMessageContact build(final ProtoGlobal.RoomMessageContact input) {
         Realm realm = Realm.getDefaultInstance();

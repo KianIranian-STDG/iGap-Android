@@ -1,9 +1,11 @@
 package com.iGap.adapter;
 
 import android.util.Log;
+
 import com.iGap.adapter.items.RoomItem;
 import com.iGap.module.StructMessageAttachment;
 import com.mikepenz.fastadapter.adapters.FastItemAdapter;
+
 import java.util.List;
 
 /**
@@ -16,7 +18,7 @@ public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
     }
 
     public void downloadingAvatar(long peerId, int progress, int offset,
-        StructMessageAttachment avatar) {
+                                  StructMessageAttachment avatar) {
         for (Item item : getAdapterItems()) {
             if (item.mInfo.chatId == peerId) {
                 int pos = getAdapterItems().indexOf(item);

@@ -6,97 +6,87 @@
     android:layout_height="match_parent"
     android:background="@android:color/white"
     android:orientation="vertical"
-    tools:context="com.iGap.fragments.FragmentSticker"
-    >
+    tools:context="com.iGap.fragments.FragmentSticker">
 
-  <android.support.v7.widget.Toolbar
-      android:layout_width="match_parent"
-      android:layout_height="@dimen/dp60"
-      android:background="@color/toolbar_background"
-      app:contentInsetLeft="0dp"
-      app:contentInsetStart="0dp"
-      app:layout_collapseMode="pin"
-      >
-
-    <RelativeLayout
+    <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="@dimen/dp60"
+        android:background="@color/toolbar_background"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        app:layout_collapseMode="pin">
 
-      <TextView
-          android:layout_width="wrap_content"
-          android:layout_height="match_parent"
-          android:layout_centerInParent="true"
-          android:gravity="center"
-          android:text="@string/st_stickers_and_picture"
-          android:textColor="@color/whit_background"
-          android:textSize="@dimen/sp22"
-          android:textStyle="bold"
-          android:visibility="visible"
-          />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-      <com.iGap.libs.rippleeffect.RippleView
-          android:id="@+id/stsp_ripple_back"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          app:rv_alpha="200"
-          app:rv_centered="true"
-          app:rv_rippleDuration="150"
-          app:rv_ripplePadding="5dp"
-          rv_centered="true"
-          >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:text="@string/st_stickers_and_picture"
+                android:textColor="@color/whit_background"
+                android:textSize="@dimen/sp22"
+                android:textStyle="bold"
+                android:visibility="visible" />
 
-        <com.iGap.module.MaterialDesignTextView
-            android:layout_width="@dimen/dp60"
+            <com.iGap.libs.rippleeffect.RippleView
+                android:id="@+id/stsp_ripple_back"
+                rv_centered="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:rv_alpha="200"
+                app:rv_centered="true"
+                app:rv_rippleDuration="150"
+                app:rv_ripplePadding="5dp">
+
+                <com.iGap.module.MaterialDesignTextView
+                    fontPath="fonts/Flaticon.ttf"
+                    android:layout_width="@dimen/dp60"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:gravity="center"
+                    android:text="@string/md_back_arrow"
+                    android:textColor="@color/whit_background"
+                    android:textSize="@dimen/sp18" />
+
+            </com.iGap.libs.rippleeffect.RippleView>
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
+
+    <LinearLayout
+        android:id="@+id/stsp_layout_crop"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp60"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/dp16">
+
+        <TextView
+
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:gravity="center"
-            android:text="@string/md_back_arrow"
-            android:textColor="@color/whit_background"
+            android:layout_weight=".5"
+            android:text="@string/st_crop"
+            android:textColor="@color/black_register"
             android:textSize="@dimen/sp18"
-            fontPath="fonts/Flaticon.ttf"
-            />
+            android:textStyle="normal" />
 
-      </com.iGap.libs.rippleeffect.RippleView>
-    </RelativeLayout>
-  </android.support.v7.widget.Toolbar>
+        <ToggleButton
+            android:id="@+id/stsp_toggle_crop"
+            android:layout_width="@dimen/dp40"
+            android:layout_height="@dimen/dp40"
+            android:background="@drawable/st_switch_button"
+            android:paddingRight="@dimen/dp4"
+            android:textOff=""
+            android:textOn="" />
 
-  <LinearLayout
-      android:id="@+id/stsp_layout_crop"
-      android:layout_width="match_parent"
-      android:layout_height="@dimen/dp60"
-      android:gravity="center_vertical"
-      android:orientation="horizontal"
-      android:padding="@dimen/dp16"
-      >
+    </LinearLayout>
 
-    <TextView
-
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight=".5"
-        android:text="@string/st_crop"
-        android:textColor="@color/black_register"
-        android:textSize="@dimen/sp18"
-        android:textStyle="normal"
-        />
-
-    <ToggleButton
-        android:id="@+id/stsp_toggle_crop"
-        android:layout_width="@dimen/dp40"
-        android:layout_height="@dimen/dp40"
-        android:background="@drawable/st_switch_button"
-        android:paddingRight="@dimen/dp4"
-        android:textOff=""
-        android:textOn=""
-        />
-
-  </LinearLayout>
-
-  <View
-      android:layout_width="match_parent"
-      android:layout_height="1dp"
-      android:background="@color/background_editText"
-      />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/background_editText" />
 
 </LinearLayout>

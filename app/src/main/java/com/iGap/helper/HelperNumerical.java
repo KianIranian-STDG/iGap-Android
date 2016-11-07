@@ -1,6 +1,7 @@
 package com.iGap.helper;
 
 import com.iGap.G;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -16,7 +17,7 @@ public class HelperNumerical {
     /**
      * append firstByteArray with secondByteArray and return single byteArray
      *
-     * @param firstByteArray id byteArray
+     * @param firstByteArray  id byteArray
      * @param secondByteArray proto byteArray
      * @return message byteArray
      */
@@ -47,7 +48,7 @@ public class HelperNumerical {
      * get Iv from server message
      *
      * @param byteArray server message
-     * @param length ivSize
+     * @param length    ivSize
      */
 
     public static byte[] getIv(byte[] byteArray, int length) {

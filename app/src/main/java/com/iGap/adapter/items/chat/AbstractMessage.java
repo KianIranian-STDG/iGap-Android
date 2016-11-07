@@ -9,6 +9,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.MessagesAdapter;
@@ -31,13 +32,15 @@ import com.iGap.request.RequestFileDownload;
 import com.iGap.request.RequestUserInfo;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
+import java.io.IOException;
+import java.util.List;
+
 import io.meness.github.messageprogress.MessageProgress;
 import io.meness.github.messageprogress.OnMessageProgressClick;
 import io.meness.github.messageprogress.OnProgress;
 import io.meness.github.messageprogress.ProgressProcess;
 import io.realm.Realm;
-import java.io.IOException;
-import java.util.List;
 
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/6/2016.
@@ -91,7 +94,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
     }
 
-    @Override public void onRequestDownloadAvatar(int offset, int progress) {
+    @Override
+    public void onRequestDownloadAvatar(int offset, int progress) {
         ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL;
         String fileName = mMessage.downloadAttachment.token + "_" + mMessage.senderAvatar.name;
         if (progress == 100) {
@@ -124,11 +128,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
     }
 
-    @Override public Item withIdentifier(long identifier) {
+    @Override
+    public Item withIdentifier(long identifier) {
         return super.withIdentifier(identifier);
     }
 
-    @Override @CallSuper public void bindView(final VH holder, List payloads) {
+    @Override
+    @CallSuper
+    public void bindView(final VH holder, List payloads) {
         super.bindView(holder, payloads);
 
         mMessage.view = holder.itemView;  // this use for select foregroung in activity chat  for search item and hash item
@@ -167,7 +174,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.VISIBLE);
 
                 holder.itemView.findViewById(R.id.messageSenderAvatar).setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View v) {
+                    @Override
+                    public void onClick(View v) {
                         messageClickListener.onSenderAvatarClick(v, mMessage, holder.getAdapterPosition());
                     }
                 });
@@ -215,7 +223,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         prepareAttachmentIfNeeded(holder);
     }
 
-    @CallSuper protected void updateLayoutForReceive(VH holder) {
+    @CallSuper
+    protected void updateLayoutForReceive(VH holder) {
         LinearLayout frameLayout = (LinearLayout) holder.itemView.findViewById(R.id.mainContainer);
         ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).gravity = Gravity.START;
 
@@ -229,7 +238,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         holder.itemView.findViewById(R.id.cslr_txt_tic).setVisibility(View.GONE);
     }
 
-    @CallSuper protected void updateLayoutForSend(VH holder) {
+    @CallSuper
+    protected void updateLayoutForSend(VH holder) {
         LinearLayout frameLayout = (LinearLayout) holder.itemView.findViewById(R.id.mainContainer);
         ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).gravity = Gravity.END;
 
@@ -252,7 +262,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         return TimeUtils.toLocal(mMessage.time, G.CHAT_MESSAGE_TIME);
     }
 
-    @CallSuper protected void replayMessageIfNeeded(VH holder) {
+    @CallSuper
+    protected void replayMessageIfNeeded(VH holder) {
         // set replay container visible if message was replayed, otherwise, gone it
         LinearLayout replayContainer = (LinearLayout) holder.itemView.findViewById(R.id.replayLayout);
         if (replayContainer != null) {
@@ -278,7 +289,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
     }
 
-    @CallSuper protected void forwardMessageIfNeeded(VH holder) {
+    @CallSuper
+    protected void forwardMessageIfNeeded(VH holder) {
         // set forward container visible if message was forwarded, otherwise, gone it
         LinearLayout forwardContainer = (LinearLayout) holder.itemView.findViewById(R.id.cslr_ll_forward);
         if (forwardContainer != null) {
@@ -330,7 +342,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
             if (hasProgress(holder.itemView)) {
                 ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withOnMessageProgress(new OnMessageProgressClick() {
-                    @Override public void onMessageProgressClick(MessageProgress progress) {
+                    @Override
+                    public void onMessageProgressClick(MessageProgress progress) {
                         if (progress.getProcessType() == ProgressProcess.PROCESSING) {
                             if (MessagesAdapter.hasUploadRequested(Long.parseLong(mMessage.messageID))) {
                                 messageClickListener.onUploadCancel(progress, mMessage, holder.getAdapterPosition());
@@ -370,7 +383,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 });
 
                 ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withOnProgress(new OnProgress() {
-                    @Override public void onProgressFinished() {
+                    @Override
+                    public void onProgressFinished() {
                         // TODO: 10/15/2016 [Alireza] onClick babate har kodom age niaz bood, masalan vase play, bayad video ro play kone
                         switch (mMessage.messageType) {
                             case IMAGE:
@@ -401,11 +415,15 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
     }
 
-    @Override @CallSuper public void onLoadFromLocal(VH holder, String localPath, LocalFileType fileType) {
+    @Override
+    @CallSuper
+    public void onLoadFromLocal(VH holder, String localPath, LocalFileType fileType) {
 
     }
 
-    @Override @CallSuper public void onRequestDownloadFile(int offset, int progress) {
+    @Override
+    @CallSuper
+    public void onRequestDownloadFile(int offset, int progress) {
         String fileName = mMessage.attachment.token + "_" + mMessage.attachment.name;
         if (progress == 100) {
             mMessage.attachment.setLocalFilePath(Long.parseLong(mMessage.messageID), AndroidUtils.suitableAppFilePath(mMessage.messageType) + "/" + fileName);
@@ -424,7 +442,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         new RequestFileDownload().download(mMessage.downloadAttachment.token, offset, (int) mMessage.attachment.size, selector, identity);
     }
 
-    @Override public void onRequestDownloadThumbnail(String token, boolean done) {
+    @Override
+    public void onRequestDownloadThumbnail(String token, boolean done) {
         if (mMessage.attachment.smallThumbnail.size != 0) {
 
             final String fileName = token + "_" + mMessage.attachment.name;

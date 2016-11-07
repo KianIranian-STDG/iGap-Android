@@ -3,18 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/white"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
-  <TextView
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginBottom="@dimen/dp20"
-      android:background="#f1f1f1"
-      android:gravity="center"
-      android:padding="@dimen/dp4"
-      android:text="more ..."
-      android:textSize="@dimen/sp16"
-      />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp20"
+        android:background="#f1f1f1"
+        android:gravity="center"
+        android:padding="@dimen/dp4"
+        android:text="more ..."
+        android:textSize="@dimen/sp16" />
 
 </LinearLayout>

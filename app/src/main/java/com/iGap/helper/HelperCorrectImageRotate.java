@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -31,7 +32,7 @@ public class HelperCorrectImageRotate {
 
             ExifInterface ei = new ExifInterface(filepath);
             int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
-                ExifInterface.ORIENTATION_UNDEFINED);
+                    ExifInterface.ORIENTATION_UNDEFINED);
 
             switch (orientation) {
                 case ExifInterface.ORIENTATION_ROTATE_90:
@@ -79,7 +80,7 @@ public class HelperCorrectImageRotate {
         Matrix matrix = new Matrix();
         matrix.postRotate(angle);
         retVal =
-            Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
+                Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
 
         return retVal;
     }

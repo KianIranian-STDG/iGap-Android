@@ -1,97 +1,97 @@
 <resources>
-  <string name="app_name">iGap</string>
+    <string name="app_name">iGap</string>
 
-  <string name="fa_bell_slash_o">&#xf1f7;</string>
-  <string name="fa_bullhorn">&#xf0a1;</string>
-  <string name="fa_close">&#xf00d;</string>
-  <string name="fa_ellipsis_v">&#xf142;</string>
-  <string name="fa_eye">&#xf06e;</string>
-  <string name="fa_chevron_left">&#xf053;</string>
-  <string name="fa_commenting_o">&#xf27b;</string>
-  <string name="fa_thumbs_o_down">&#xf088;</string>
-  <string name="fa_thumbs_o_up">&#xf087;</string>
-  <string name="fa_trash_o">&#xf014;</string>
-  <string name="fa_long_arrow_right">&#xf178;</string>
-  <string name="fa_chevron_down">&#xf078;</string>
-  <string name="fa_chevron_up">&#xf077;</string>
-  <string name="fa_arrow_down">&#xf063;</string>
-  <string name="fa_video_camera">&#xf03d;</string>
-  <string name="fa_pause">&#xf04c;</string>
+    <string name="fa_bell_slash_o">&#xf1f7;</string>
+    <string name="fa_bullhorn">&#xf0a1;</string>
+    <string name="fa_close">&#xf00d;</string>
+    <string name="fa_ellipsis_v">&#xf142;</string>
+    <string name="fa_eye">&#xf06e;</string>
+    <string name="fa_chevron_left">&#xf053;</string>
+    <string name="fa_commenting_o">&#xf27b;</string>
+    <string name="fa_thumbs_o_down">&#xf088;</string>
+    <string name="fa_thumbs_o_up">&#xf087;</string>
+    <string name="fa_trash_o">&#xf014;</string>
+    <string name="fa_long_arrow_right">&#xf178;</string>
+    <string name="fa_chevron_down">&#xf078;</string>
+    <string name="fa_chevron_up">&#xf077;</string>
+    <string name="fa_arrow_down">&#xf063;</string>
+    <string name="fa_video_camera">&#xf03d;</string>
+    <string name="fa_pause">&#xf04c;</string>
 
-  <string name="array_Default">دیفالت</string>
-  <string name="array_Short">کوتاه</string>
-  <string name="array_Long">بلند</string>
+    <string name="array_Default">دیفالت</string>
+    <string name="array_Short">کوتاه</string>
+    <string name="array_Long">بلند</string>
 
-  <string name="unmute_notification">UnMute Notification</string>
-  <string name="mute_notification">Mute Notification</string>
-  <string name="chat">chat</string>
-  <string name="group">group</string>
-  <string name="channel">channel</string>
-  <string name="do_you_want_delete_this">"do you want delete this "</string>
-  <string name="igap">iGAP</string>
-  <string name="clear_history">Clear history</string>
-  <string name="delete_chat">Delete Chat</string>
-  <string name="delete_contact">Delete Contact</string>
-  <string name="cancel">Cancel</string>
-  <string name="ok">Ok</string>
-
-
-  <string formatted="false" name="video_duration">%s (%s)</string>
-
-  <!--Toolbar-->
-
-  <!--REGISTER PAGE-->
-
-  <string name="phone_number">PHONE NUMBER</string>
-
-  <!--check connect to internet Page-->
-
-  <!--introduce app-->
+    <string name="unmute_notification">UnMute Notification</string>
+    <string name="mute_notification">Mute Notification</string>
+    <string name="chat">chat</string>
+    <string name="group">group</string>
+    <string name="channel">channel</string>
+    <string name="do_you_want_delete_this">"do you want delete this "</string>
+    <string name="igap">iGAP</string>
+    <string name="clear_history">Clear history</string>
+    <string name="delete_chat">Delete Chat</string>
+    <string name="delete_contact">Delete Contact</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">Ok</string>
 
 
-  <string name="text_i_introduce_page1">i</string>
-  <string name="text_line_1_introduce_page1">GAP</string>
-  <string name="text_line_2_introduce_page1">Limitless Connection</string>
-  <string name="text_line_3_introduce_page1"> Create your very own world \n with iGap right now</string>
+    <string name="video_duration" formatted="false">%s (%s)</string>
 
-  <!--page2-->
+    <!--Toolbar-->
 
-  <string name="text_line_1_introduce_page2">SECURITY</string>
-  <string name="text_line_2_introduce_page2"> The thing is, iGap promises you providing a secure connection with your friends and family. We use all new encryption algorithms to secure your privacy. </string>
+    <!--REGISTER PAGE-->
 
-  <!--page3-->
+    <string name="phone_number">PHONE NUMBER</string>
 
-  <string name="text_line_1_introduce_page3">CHAT</string>
-  <string name="text_line_2_introduce_page3"> You can chat in private or groups and even create your own channel and add members. </string>
+    <!--check connect to internet Page-->
 
-  <!--page4-->
-
-  <string name="text_line_1_introduce_page4">FILE TRANSFER</string>
-  <string name="text_line_2_introduce_page4"> You can transfer any file with any extension \n and size, Share anything you’d like to with whoever you want to. </string>
-
-  <!--page5-->
-
-  <string name="btn_start_page5">START NOW</string>
-  <string name="text_line_1_introduce_page5">EVERYTHING FOR FREE!</string>
+    <!--introduce app-->
 
 
-  -<string name="text_line_2_introduce_page5">
+    <string name="text_i_introduce_page1">i</string>
+    <string name="text_line_1_introduce_page1">GAP</string>
+    <string name="text_line_2_introduce_page1">Limitless Connection</string>
+    <string name="text_line_3_introduce_page1"> Create your very own world \n with iGap right now</string>
+
+    <!--page2-->
+
+    <string name="text_line_1_introduce_page2">SECURITY</string>
+    <string name="text_line_2_introduce_page2"> The thing is, iGap promises you providing a secure connection with your friends and family. We use all new encryption algorithms to secure your privacy. </string>
+
+    <!--page3-->
+
+    <string name="text_line_1_introduce_page3">CHAT</string>
+    <string name="text_line_2_introduce_page3"> You can chat in private or groups and even create your own channel and add members. </string>
+
+    <!--page4-->
+
+    <string name="text_line_1_introduce_page4">FILE TRANSFER</string>
+    <string name="text_line_2_introduce_page4"> You can transfer any file with any extension \n and size, Share anything you’d like to with whoever you want to. </string>
+
+    <!--page5-->
+
+    <string name="btn_start_page5">START NOW</string>
+    <string name="text_line_1_introduce_page5">EVERYTHING FOR FREE!</string>
+
+
+    -<string name="text_line_2_introduce_page5">
 
 -<![CDATA[ Not to bore you no more! <br /> iGap is all Free. Create your own world just now! ]]>
 </string>
 
-  //profile user
-  <string name="pu_title_profileUser">YOUR INFORMATION</string>
-  <string name="pu_desc_profileUser">Enter your name and add a profile picture.</string>
-  <string name="pu_addPhoto_profileUser">Profile Picture</string>
-  <string name="pu_nikname_profileUser">Nickname</string>
+    //profile user
+    <string name="pu_title_profileUser">YOUR INFORMATION</string>
+    <string name="pu_desc_profileUser">Enter your name and add a profile picture.</string>
+    <string name="pu_addPhoto_profileUser">Profile Picture</string>
+    <string name="pu_nikname_profileUser">Nickname</string>
 
 
-  <!--REGISTER PAGE-->
-  <string name="rg_title_register">Registration</string>
-  <string name="rg_confirm_text_register">Please confirm your structCountry code end enter your phone number</string>
+    <!--REGISTER PAGE-->
+    <string name="rg_title_register">Registration</string>
+    <string name="rg_confirm_text_register">Please confirm your structCountry code end enter your phone number</string>
 
-  <string name="rg_agreement_title_register">agreement</string>
+    <string name="rg_agreement_title_register">agreement</string>
     <string name="rg_agreement_text_register">
         Double Check that this is your number! we\'re about to verify it an SMSDouble Check that this is your number!
         Double Check that this is your number! we\'re about to verify it an SMSDouble Check that this is your number!
@@ -101,110 +101,110 @@
         Double Check that this is your number! we\'re about to verify it an SMSDouble Check that this is your number!
         Double Check that this is your number! we\'re about to verify it an SMSDouble Check that this is your number!
     </string>
-  <string name="rg_verify_register1">Connecting…</string>
-  <string name="rg_verify_register2">Waiting for SMS Verification…</string>
-  <string name="rg_verify_register3">Generating Key…</string>
-  <string name="rg_verify_register4">Registering with server…</string>
+    <string name="rg_verify_register1">Connecting…</string>
+    <string name="rg_verify_register2">Waiting for SMS Verification…</string>
+    <string name="rg_verify_register3">Generating Key…</string>
+    <string name="rg_verify_register4">Registering with server…</string>
 
-  <string name="rg_verify_dialog_enter_code">iGap App try to detect sms via your phone but maybe you used other phone or another reason happen app cannot detect number of verification code , you can wrote manually and try or resend again .</string>
-  <string name="rg_verify_dialog_try_code">Try</string>
-  <string name="rg_verify_dialog_resend_code">Resend Code</string>
-  <string name="search">rg_search</string>
+    <string name="rg_verify_dialog_enter_code">iGap App try to detect sms via your phone but maybe you used other phone or another reason happen app cannot detect number of verification code , you can wrote manually and try or resend again .</string>
+    <string name="rg_verify_dialog_try_code">Try</string>
+    <string name="rg_verify_dialog_resend_code">Resend Code</string>
+    <string name="search">rg_search</string>
 
-  <!--setting-->
-  <string name="st_titleToolbar">Settings</string>
-  <string name="st_title_general">General</string>
-  <string name="st_username">UserName:</string>
-  <string name="st_nickname">Nickname:</string>
-  <string name="st_phoneNumber">Phone Number:</string>
-  <string name="st_title_info">Info</string>
-  <string name="st_title_notification_sounds">صدا و اعلانات</string>
-  <string name="st_title_Clear_Cache">Clear Cache</string>
-  <string name="st_title_Privacy_Security">Privacy and Security</string>
-  <string name="st_title_message">Message</string>
-  <string name="st_title_message_textSize">Message Text Size</string>
-  <string name="st_stickers">Stickers</string>
-  <string name="st_chatBackground">Chat Background</string>
-  <string name="st_Enable_Animation">Enable Animation </string>
-  <string name="st_inApp_Browser">In_App Browser</string>
-  <string name="st_send_by_enter">Send By Enter</string>
-  <string name="st_title_Media">Media</string>
-  <string name="st_auto_download_data">Auto Download (cellular Data) </string>
-  <string name="st_auto_download_wifi">Auto Download (Wifi)</string>
-  <string name="st_auto_download_roaming">Auto Download (Roaming)</string>
-  <string name="st_auto_gif">AutoPlay GIFs</string>
-  <string name="st_save_to_gallery">Save to Gallery</string>
-  <string name="st_title_support">Support</string>
-  <string name="st_ask_question">Ask a Question</string>
-  <string name="st_privacy_policy">Privacy Policy</string>
-  <string name="st_keepMedia">Keep Media</string>
+    <!--setting-->
+    <string name="st_titleToolbar">Settings</string>
+    <string name="st_title_general">General</string>
+    <string name="st_username">UserName:</string>
+    <string name="st_nickname">Nickname:</string>
+    <string name="st_phoneNumber">Phone Number:</string>
+    <string name="st_title_info">Info</string>
+    <string name="st_title_notification_sounds">صدا و اعلانات</string>
+    <string name="st_title_Clear_Cache">Clear Cache</string>
+    <string name="st_title_Privacy_Security">Privacy and Security</string>
+    <string name="st_title_message">Message</string>
+    <string name="st_title_message_textSize">Message Text Size</string>
+    <string name="st_stickers">Stickers</string>
+    <string name="st_chatBackground">Chat Background</string>
+    <string name="st_Enable_Animation">Enable Animation </string>
+    <string name="st_inApp_Browser">In_App Browser</string>
+    <string name="st_send_by_enter">Send By Enter</string>
+    <string name="st_title_Media">Media</string>
+    <string name="st_auto_download_data">Auto Download (cellular Data) </string>
+    <string name="st_auto_download_wifi">Auto Download (Wifi)</string>
+    <string name="st_auto_download_roaming">Auto Download (Roaming)</string>
+    <string name="st_auto_gif">AutoPlay GIFs</string>
+    <string name="st_save_to_gallery">Save to Gallery</string>
+    <string name="st_title_support">Support</string>
+    <string name="st_ask_question">Ask a Question</string>
+    <string name="st_privacy_policy">Privacy Policy</string>
+    <string name="st_keepMedia">Keep Media</string>
     <string name="st_dialog_content_keepMedia">Photo , video and other files from cloud chats that ypo have not accessed during this period
         will be removed from this device to save disc space. \n all media will stayin the iGap cloud and can be reDownloaded if you need it again.
     </string>
-  <string name="st_titleToolbar_page_Notification_and_sounds">پیشنمایش پیغام</string>
-  <string name="st_title_messageNotification">پیشنمایش پیغام</string>
-  <string name="st_alert">پیشنمایش پیغام</string>
-  <string name="st_messagePreview">پیشنمایش پیغام</string>
-  <string name="st_led_color">پیشنمایش پیغام</string>
-  <string name="st_vibrate">ویبره</string>
-  <string name="st_popupNotification">پیشنمایش پیغام</string>
-  <string name="st_sound">پیشنمایش پیغام</string>
-  <string name="st_title_groupNotification">پیشنمایش پیغام</string>
-  <string name="st_title_in_app_notification">پیشنمایش پیغام</string>
-  <string name="st_in_app_sound">پیشنمایش پیغام</string>
-  <string name="st_in_app_vibrate">پیشنمایش پیغام</string>
-  <string name="st_in_app_preview">پیشنمایش پیغام</string>
-  <string name="st_in_chat_sound">پیشنمایش پیغام</string>
-  <string name="st_title_Events">پیشنمایش پیغام</string>
-  <string name="st_Contact_joined_igap">پیشنمایش پیغام</string>
-  <string name="st_pinned_message">پیشنمایش پیغام</string>
-  <string name="st_title_other">پیشنمایش پیغام</string>
-  <string name="st_text_keep_alive_service">پیشنمایش پیغامپیشنمایش پیغامپیشنمایش پیغامپیشنمایش پیغامپیشنمایش پیغام</string>
-  <string name="st_keep_alive_service">پیشنمایش پیغام</string>
-  <string name="st_background_connection">پیشنمایش پیغام</string>
-  <string name="st_text_background_connection">پیشنمایش پیغامپیشنمایش پیغامپیشنمایش پیغامپیشنمایش پیغامپیشنمایش پیغامپیشنمایش پیغامپیشنمایش پیغام</string>
-  <string name="st_badge_counter">پیشنمایش پیغام</string>
-  <string name="st_Repeat_Notifications">پیشنمایش پیغام</string>
-  <string name="st_title_reset">پیشنمایش پیغام</string>
-  <string name="st_reset_all_notification">پیشنمایش پیغام</string>
-  <string name="st_text_reset_all_notification">Undo all custom notification settings for all your contacts and groups</string>
+    <string name="st_titleToolbar_page_Notification_and_sounds">پیشنمایش پیغام</string>
+    <string name="st_title_messageNotification">پیشنمایش پیغام</string>
+    <string name="st_alert">پیشنمایش پیغام</string>
+    <string name="st_messagePreview">پیشنمایش پیغام</string>
+    <string name="st_led_color">پیشنمایش پیغام</string>
+    <string name="st_vibrate">ویبره</string>
+    <string name="st_popupNotification">پیشنمایش پیغام</string>
+    <string name="st_sound">پیشنمایش پیغام</string>
+    <string name="st_title_groupNotification">پیشنمایش پیغام</string>
+    <string name="st_title_in_app_notification">پیشنمایش پیغام</string>
+    <string name="st_in_app_sound">پیشنمایش پیغام</string>
+    <string name="st_in_app_vibrate">پیشنمایش پیغام</string>
+    <string name="st_in_app_preview">پیشنمایش پیغام</string>
+    <string name="st_in_chat_sound">پیشنمایش پیغام</string>
+    <string name="st_title_Events">پیشنمایش پیغام</string>
+    <string name="st_Contact_joined_igap">پیشنمایش پیغام</string>
+    <string name="st_pinned_message">پیشنمایش پیغام</string>
+    <string name="st_title_other">پیشنمایش پیغام</string>
+    <string name="st_text_keep_alive_service">پیشنمایش پیغامپیشنمایش پیغامپیشنمایش پیغامپیشنمایش پیغامپیشنمایش پیغام</string>
+    <string name="st_keep_alive_service">پیشنمایش پیغام</string>
+    <string name="st_background_connection">پیشنمایش پیغام</string>
+    <string name="st_text_background_connection">پیشنمایش پیغامپیشنمایش پیغامپیشنمایش پیغامپیشنمایش پیغامپیشنمایش پیغامپیشنمایش پیغامپیشنمایش پیغام</string>
+    <string name="st_badge_counter">پیشنمایش پیغام</string>
+    <string name="st_Repeat_Notifications">پیشنمایش پیغام</string>
+    <string name="st_title_reset">پیشنمایش پیغام</string>
+    <string name="st_reset_all_notification">پیشنمایش پیغام</string>
+    <string name="st_text_reset_all_notification">Undo all custom notification settings for all your contacts and groups</string>
 
 
-  <!--chanel_info-->
-  <string name="chi_shared_Media">Shared Media:</string>
-  <string name="chi_clearChat">Clear Chat History</string>
-  <string name="chi_blockContact">Block this contact</string>
-  <string name="chi_title_setting">Settings</string>
-  <string name="chi_popup_call">call</string>
-  <string name="chi_popup_copy">copy</string>
+    <!--chanel_info-->
+    <string name="chi_shared_Media">Shared Media:</string>
+    <string name="chi_clearChat">Clear Chat History</string>
+    <string name="chi_blockContact">Block this contact</string>
+    <string name="chi_title_setting">Settings</string>
+    <string name="chi_popup_call">call</string>
+    <string name="chi_popup_copy">copy</string>
 
-  <!--fragment add contact-->
-  <string name="fac_contact_info">اطلاعات تماس</string>
-  <string name="fac_First_Name">نام کوچک</string>
-  <string name="fac_Last_Name">نام خانوادگی</string>
-  <string name="fac_Phone_Number">شماره تماس</string>
+    <!--fragment add contact-->
+    <string name="fac_contact_info">اطلاعات تماس</string>
+    <string name="fac_First_Name">نام کوچک</string>
+    <string name="fac_Last_Name">نام خانوادگی</string>
+    <string name="fac_Phone_Number">شماره تماس</string>
 
 
-  <string name="shared_media">Shared Media</string>
-  <string name="shared_files">Shared Files</string>
-  <string name="shared_links">Shared Links</string>
-  <string name="shared_music">Shared Music</string>
+    <string name="shared_media">Shared Media</string>
+    <string name="shared_files">Shared Files</string>
+    <string name="shared_links">Shared Links</string>
+    <string name="shared_music">Shared Music</string>
 
-  <string name="show_all_media">Show all Media</string>
-  <string name="save_to_gallery">Save to gallery</string>
-  <string name="select_room">Select Room</string>
+    <string name="show_all_media">Show all Media</string>
+    <string name="save_to_gallery">Save to gallery</string>
+    <string name="select_room">Select Room</string>
 
-  <string-array name="pop_up_shared_media">
-    <item>@string/shared_media</item>
-    <item>@string/shared_files</item>
-    <item>@string/shared_links</item>
-    <item>@string/shared_music</item>
-  </string-array>
+    <string-array name="pop_up_shared_media">
+        <item>@string/shared_media</item>
+        <item>@string/shared_files</item>
+        <item>@string/shared_links</item>
+        <item>@string/shared_music</item>
+    </string-array>
 
-  <string-array name="pop_up_menu_show_image">
-    <item>@string/show_all_media</item>
-    <item>@string/save_to_gallery</item>
-  </string-array>
+    <string-array name="pop_up_menu_show_image">
+        <item>@string/show_all_media</item>
+        <item>@string/save_to_gallery</item>
+    </string-array>
 
 
 </resources>

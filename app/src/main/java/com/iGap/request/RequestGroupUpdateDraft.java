@@ -8,7 +8,7 @@ public class RequestGroupUpdateDraft {
     public void groupUpdateDraft(long roomId, String message, long replyToMessageId) {
 
         ProtoGroupUpdateDraft.GroupUpdateDraft.Builder builder =
-            ProtoGroupUpdateDraft.GroupUpdateDraft.newBuilder();
+                ProtoGroupUpdateDraft.GroupUpdateDraft.newBuilder();
 
         ProtoGlobal.RoomDraft.Builder roomDraft = ProtoGlobal.RoomDraft.newBuilder();
         roomDraft.setMessage(message);

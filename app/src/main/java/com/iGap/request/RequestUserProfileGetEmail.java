@@ -7,7 +7,7 @@ public class RequestUserProfileGetEmail {
     public void userProfileGetEmail() {
 
         ProtoUserProfileGetEmail.UserProfileGetEmail.Builder builder =
-            ProtoUserProfileGetEmail.UserProfileGetEmail.newBuilder();
+                ProtoUserProfileGetEmail.UserProfileGetEmail.newBuilder();
 
         RequestWrapper requestWrapper = new RequestWrapper(110, builder);
         try {

@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.libs.rippleeffect.RippleView;
@@ -40,7 +41,8 @@ public class ActivityWebView extends ActivityEnhanced {
     //    protected void attachBaseContext(Context newBase) {
     //        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     //    }
-    @Override public void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting_webview);
 
@@ -58,7 +60,7 @@ public class ActivityWebView extends ActivityEnhanced {
         txtPopupMenu = (MaterialDesignTextView) findViewById(R.id.stfaq_txt_menuPopup);
 
         EditText searchBox =
-            ((EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text));
+                ((EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text));
         searchBox.setTextColor(getResources().getColor(R.color.white));
 
         //        txtBack.setOnClickListener(new View.OnClickListener() {
@@ -72,7 +74,8 @@ public class ActivityWebView extends ActivityEnhanced {
         RippleView rippleBack = (RippleView) findViewById(R.id.stfaq_riple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
                 finish();
             }
         });
@@ -92,7 +95,8 @@ public class ActivityWebView extends ActivityEnhanced {
         RippleView rippleShare = (RippleView) findViewById(R.id.stfaq_ripple_share);
         rippleShare.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
                 Intent sharingIntent = new Intent(Intent.ACTION_SEND);
                 sharingIntent.setType("text/plain");
                 String shareBody = "Here is the share content body";
@@ -249,25 +253,26 @@ public class ActivityWebView extends ActivityEnhanced {
         RippleView rippleMenu = (RippleView) findViewById(R.id.stfaq_ripple_menuPopup);
         rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
                 LayoutInflater layoutInflater =
-                    (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                        (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 final View popupView = layoutInflater.inflate(R.layout.popup_faq, null);
                 int finalScreen;
 
                 popupWindow =
-                    new PopupWindow(popupView, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT,
-                        true);
+                        new PopupWindow(popupView, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT,
+                                true);
                 popupWindow.setBackgroundDrawable(new BitmapDrawable());
                 popupWindow.setOutsideTouchable(true);
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     popupWindow.setBackgroundDrawable(
-                        getResources().getDrawable(R.drawable.shadow30,
-                            ActivityWebView.this.getTheme()));
+                            getResources().getDrawable(R.drawable.shadow30,
+                                    ActivityWebView.this.getTheme()));
                 } else {
                     popupWindow.setBackgroundDrawable(
-                        (getResources().getDrawable(R.drawable.shadow30)));
+                            (getResources().getDrawable(R.drawable.shadow30)));
                 }
 
                 if (popupWindow.isOutsideTouchable()) {
@@ -275,29 +280,33 @@ public class ActivityWebView extends ActivityEnhanced {
                     Log.i("CCVVBB", "rr: ");
                 }
                 popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-                    @Override public void onDismiss() {
+                    @Override
+                    public void onDismiss() {
                         //TODO do sth here on dismiss
                     }
                 });
 
                 popupWindow.setAnimationStyle(android.R.style.Animation_InputMethod);
                 popupWindow.showAtLocation(popupView, Gravity.RIGHT | Gravity.TOP, 0,
-                    (int) getResources().getDimension(R.dimen.dp16));
+                        (int) getResources().getDimension(R.dimen.dp16));
 
                 popupWindow.showAsDropDown(rippleView);
                 TextView txtFindPage = (TextView) popupView.findViewById(R.id.popup_faq_findPage);
                 txtFindPage.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View v) {
+                    @Override
+                    public void onClick(View v) {
                         popupWindow.dismiss();
                         allLayoutToolbar.setVisibility(View.GONE);
                         searchView.setVisibility(View.VISIBLE);
                         searchView.setIconified(false);
                         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                            @Override public boolean onQueryTextSubmit(String query) {
+                            @Override
+                            public boolean onQueryTextSubmit(String query) {
                                 return false;
                             }
 
-                            @Override public boolean onQueryTextChange(String newText) {
+                            @Override
+                            public boolean onQueryTextChange(String newText) {
 
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                                     webView.findAllAsync(newText);
@@ -309,7 +318,8 @@ public class ActivityWebView extends ActivityEnhanced {
                             }
                         });
                         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-                            @Override public boolean onClose() {
+                            @Override
+                            public boolean onClose() {
 
                                 allLayoutToolbar.setVisibility(View.VISIBLE);
                                 searchView.setVisibility(View.GONE);
@@ -320,7 +330,8 @@ public class ActivityWebView extends ActivityEnhanced {
                 });
                 TextView openChrome = (TextView) popupView.findViewById(R.id.popup_faq_openChrome);
                 openChrome.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View v) {
+                    @Override
+                    public void onClick(View v) {
                         String urlString;
                         if (key.equals("FAQ")) {
                             urlString = G.FAQ;
@@ -342,9 +353,10 @@ public class ActivityWebView extends ActivityEnhanced {
                 });
 
                 MaterialDesignTextView reload =
-                    (MaterialDesignTextView) popupView.findViewById(R.id.popup_faq_reload);
+                        (MaterialDesignTextView) popupView.findViewById(R.id.popup_faq_reload);
                 reload.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View v) {
+                    @Override
+                    public void onClick(View v) {
                         webView.reload();
                         popupWindow.dismiss();
                     }

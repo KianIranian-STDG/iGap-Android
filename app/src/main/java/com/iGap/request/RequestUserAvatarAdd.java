@@ -7,7 +7,7 @@ public class RequestUserAvatarAdd {
     public void userAddAvatar(String attachment) {
 
         ProtoUserAvatarAdd.UserAvatarAdd.Builder builder =
-            ProtoUserAvatarAdd.UserAvatarAdd.newBuilder();
+                ProtoUserAvatarAdd.UserAvatarAdd.newBuilder();
         builder.setAttachment(attachment);
 
         RequestWrapper requestWrapper = new RequestWrapper(114, builder);

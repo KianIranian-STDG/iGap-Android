@@ -7,7 +7,7 @@ public class RequestUserProfileSetSelfRemove {
     public void userProfileSetSelfRemove(int numberOfMonth) {
 
         ProtoUserProfileSetSelfRemove.UserProfileSetSelfRemove.Builder builder =
-            ProtoUserProfileSetSelfRemove.UserProfileSetSelfRemove.newBuilder();
+                ProtoUserProfileSetSelfRemove.UserProfileSetSelfRemove.newBuilder();
 
         builder.setSelfRemove(numberOfMonth);
 

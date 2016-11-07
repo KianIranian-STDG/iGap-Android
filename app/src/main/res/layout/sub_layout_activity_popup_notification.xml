@@ -2,19 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
     android:background="@color/gray_f2"
-    android:orientation="vertical"
-    >
+    android:gravity="center"
+    android:orientation="vertical">
 
-  <TextView
-      android:id="@+id/slapn_txt_message"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:textColor="@color/black_register"
-      android:layout_gravity="center_horizontal"
-      android:padding="@dimen/dp4"
-      android:text="contacts"
-      android:textAppearance="?android:attr/textAppearanceLarge"
-      />
+    <TextView
+        android:id="@+id/slapn_txt_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:padding="@dimen/dp4"
+        android:text="contacts"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/black_register" />
 </LinearLayout>

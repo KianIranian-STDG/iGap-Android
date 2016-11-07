@@ -4,6 +4,7 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ClickableSpan;
 import android.view.View;
+
 import com.iGap.activities.ActivityChat;
 
 /**
@@ -36,38 +37,38 @@ public class HelperStringAnalayser {
 
             if (isHash) {
                 if (s.equals("!")
-                    || s.equals("@")
-                    || s.equals("$")
-                    || s.equals("%")
-                    || s.equals("^")
-                    || s.equals("&")
-                    ||
-                    s.equals("(")
-                    || s.equals(")")
-                    || s.equals("-")
-                    || s.equals("+")
-                    || s.equals("=")
-                    || s.equals("!")
-                    ||
-                    s.equals("`")
-                    || s.equals("{")
-                    || s.equals("}")
-                    || s.equals("[")
-                    || s.equals("]")
-                    || s.equals(";")
-                    ||
-                    s.equals(":")
-                    || s.equals("'")
-                    || s.equals("?")
-                    || s.equals("<")
-                    || s.equals(">")
-                    || s.equals(",")
-                    ||
-                    s.equals("\\")
-                    || s.equals("|")
-                    || s.equals("//")
-                    || s.codePointAt(0) == 8192
-                    || s.equals(enter)) {
+                        || s.equals("@")
+                        || s.equals("$")
+                        || s.equals("%")
+                        || s.equals("^")
+                        || s.equals("&")
+                        ||
+                        s.equals("(")
+                        || s.equals(")")
+                        || s.equals("-")
+                        || s.equals("+")
+                        || s.equals("=")
+                        || s.equals("!")
+                        ||
+                        s.equals("`")
+                        || s.equals("{")
+                        || s.equals("}")
+                        || s.equals("[")
+                        || s.equals("]")
+                        || s.equals(";")
+                        ||
+                        s.equals(":")
+                        || s.equals("'")
+                        || s.equals("?")
+                        || s.equals("<")
+                        || s.equals(">")
+                        || s.equals(",")
+                        ||
+                        s.equals("\\")
+                        || s.equals("|")
+                        || s.equals("//")
+                        || s.codePointAt(0) == 8192
+                        || s.equals(enter)) {
 
                     insertHashLink(tmp, builder, start, messageID);
 
@@ -87,10 +88,11 @@ public class HelperStringAnalayser {
     }
 
     private static void insertHashLink(final String text, SpannableStringBuilder builder, int start,
-        final String messageID) {
+                                       final String messageID) {
 
         builder.setSpan(new ClickableSpan() {
-            @Override public void onClick(View arg0) {
+            @Override
+            public void onClick(View arg0) {
 
                 if (ActivityChat.hashListener != null) {
                     ActivityChat.hashListener.complete(true, text, messageID);

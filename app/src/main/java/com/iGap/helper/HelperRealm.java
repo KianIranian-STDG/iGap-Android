@@ -2,6 +2,7 @@ package com.iGap.helper;
 
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
+
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -18,8 +19,8 @@ public final class HelperRealm {
         Realm realm = Realm.getDefaultInstance();
 
         RealmResults<RealmRoomMessage> realmRoomMessages =
-            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
-            .findAll();
+                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
+                        .findAll();
         long lastMessageId = 0;
         long lastMessageTime = 0;
         for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
@@ -31,8 +32,8 @@ public final class HelperRealm {
         }
 
         RealmRoomMessage lastMessage = realm.where(RealmRoomMessage.class)
-            .equalTo(RealmRoomMessageFields.MESSAGE_ID, lastMessageId)
-            .findFirst();
+                .equalTo(RealmRoomMessageFields.MESSAGE_ID, lastMessageId)
+                .findFirst();
         realm.close();
 
         return lastMessage;
@@ -45,7 +46,8 @@ public final class HelperRealm {
     public static void realmTruncate() {
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
                 realm.deleteAll();
             }
         });

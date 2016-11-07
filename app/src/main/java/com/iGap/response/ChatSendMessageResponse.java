@@ -2,6 +2,7 @@ package com.iGap.response;
 
 import android.text.format.DateUtils;
 import android.util.Log;
+
 import com.iGap.G;
 import com.iGap.proto.ProtoChatSendMessage;
 import com.iGap.proto.ProtoGlobal;
@@ -16,9 +17,11 @@ import com.iGap.realm.RealmRoomMessageLocation;
 import com.iGap.realm.RealmRoomMessageLog;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestClientGetRoom;
+
+import java.util.ArrayList;
+
 import io.realm.Realm;
 import io.realm.RealmResults;
-import java.util.ArrayList;
 
 public class ChatSendMessageResponse extends MessageHandler {
 
@@ -35,20 +38,22 @@ public class ChatSendMessageResponse extends MessageHandler {
         this.message = protoClass;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
         Realm realm = Realm.getDefaultInstance();
         final ProtoChatSendMessage.ChatSendMessageResponse.Builder chatSendMessageResponse =
-            (ProtoChatSendMessage.ChatSendMessageResponse.Builder) message;
+                (ProtoChatSendMessage.ChatSendMessageResponse.Builder) message;
 
         final ProtoGlobal.RoomMessage roomMessage = chatSendMessageResponse.getRoomMessage();
         final long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
 
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
                 // set info for clientCondition
                 RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class)
-                    .equalTo(RealmClientConditionFields.ROOM_ID, chatSendMessageResponse.getRoomId())
-                    .findFirst();
+                        .equalTo(RealmClientConditionFields.ROOM_ID, chatSendMessageResponse.getRoomId())
+                        .findFirst();
                 if (realmClientCondition != null) {
                     realmClientCondition.setMessageVersion(roomMessage.getMessageVersion());
                     realmClientCondition.setStatusVersion(roomMessage.getStatusVersion());
@@ -94,7 +99,7 @@ public class ChatSendMessageResponse extends MessageHandler {
                     // i'm the recipient
 
                     RealmRoomMessage realmRoomMessage =
-                        realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
+                            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
 
                     /*
                      *  if this is new message and not exist this messageId createObject from
@@ -141,7 +146,7 @@ public class ChatSendMessageResponse extends MessageHandler {
                     // i'm the sender
                     // update message fields into database
                     RealmResults<RealmRoomMessage> realmRoomMessages =
-                        realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, chatSendMessageResponse.getRoomId()).findAll();
+                            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, chatSendMessageResponse.getRoomId()).findAll();
                     for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
                         // find the message using identity and update it
                         if (realmRoomMessage != null && realmRoomMessage.getMessageId() == Long.parseLong(identity)) {
@@ -184,7 +189,7 @@ public class ChatSendMessageResponse extends MessageHandler {
             if (!messageId.contains(roomMessage.getMessageId())) {
                 if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatSendMessageResponse.getRoomId()).findFirst() != null) {
                     G.chatSendMessageUtil.onMessageReceive(chatSendMessageResponse.getRoomId(), roomMessage.getMessage(),
-                        roomMessage.getMessageType().toString(), roomMessage, ProtoGlobal.Room.Type.CHAT);
+                            roomMessage.getMessageType().toString(), roomMessage, ProtoGlobal.Room.Type.CHAT);
                 }
             } else {
                 messageId.remove(messageId.indexOf(roomMessage.getMessageId()));
@@ -192,7 +197,7 @@ public class ChatSendMessageResponse extends MessageHandler {
         } else {
             // invoke following callback when I'm the sender and the message has updated
             G.chatSendMessageUtil.onMessageUpdate(chatSendMessageResponse.getRoomId(), roomMessage.getMessageId(), roomMessage.getStatus(), identity,
-                roomMessage);
+                    roomMessage);
         }
 
         realm.close();
@@ -221,18 +226,21 @@ public class ChatSendMessageResponse extends MessageHandler {
         return realmRoomMessage;
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
         super.error();
     }
 
-    @Override public void timeOut() {
+    @Override
+    public void timeOut() {
         super.timeOut();
         // message failed
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
                 RealmRoomMessage message =
-                    realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(identity)).findFirst();
+                        realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(identity)).findFirst();
                 if (message != null) {
                     message.setStatus(ProtoGlobal.RoomMessageStatus.FAILED.toString());
                     G.chatSendMessageUtil.onMessageFailed(message.getRoomId(), message, ProtoGlobal.Room.Type.CHAT);

@@ -9,6 +9,6 @@ import com.iGap.proto.ProtoResponse;
 
 public interface OnFileUploadStatusResponse {
     void onFileUploadStatus(ProtoFileUploadStatus.FileUploadStatusResponse.Status status,
-        double progress, int recheckDelayMS, String fileHashAsIdentity,
-        ProtoResponse.Response response);
+                            double progress, int recheckDelayMS, String fileHashAsIdentity,
+                            ProtoResponse.Response response);
 }

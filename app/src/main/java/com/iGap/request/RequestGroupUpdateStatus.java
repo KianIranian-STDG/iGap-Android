@@ -1,6 +1,7 @@
 package com.iGap.request;
 
 import android.util.Log;
+
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoGroupUpdateStatus;
 

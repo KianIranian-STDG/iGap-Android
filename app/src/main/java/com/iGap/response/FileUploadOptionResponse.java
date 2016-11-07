@@ -1,6 +1,7 @@
 package com.iGap.response;
 
 import android.util.Log;
+
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoFileUploadOption;
@@ -20,27 +21,30 @@ public class FileUploadOptionResponse extends MessageHandler {
         this.identity = identity;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
 
         ProtoFileUploadOption.FileUploadOptionResponse.Builder fileUploadOptionResponse =
-            (ProtoFileUploadOption.FileUploadOptionResponse.Builder) message;
+                (ProtoFileUploadOption.FileUploadOptionResponse.Builder) message;
 
         ProtoResponse.Response.Builder response =
-            ProtoResponse.Response.newBuilder().mergeFrom(fileUploadOptionResponse.getResponse());
+                ProtoResponse.Response.newBuilder().mergeFrom(fileUploadOptionResponse.getResponse());
         Log.i("SOC", "FileUploadOptionResponse response.getId() : " + response.getId());
         Log.i("SOC",
-            "FileUploadOptionResponse response.getTimestamp() : " + response.getTimestamp());
+                "FileUploadOptionResponse response.getTimestamp() : " + response.getTimestamp());
         G.uploaderUtil.OnFileUploadOption(fileUploadOptionResponse.getFirstBytesLimit(),
-            fileUploadOptionResponse.getLastBytesLimit(),
-            fileUploadOptionResponse.getMaxConnection(), this.identity,
-            fileUploadOptionResponse.getResponse());
+                fileUploadOptionResponse.getLastBytesLimit(),
+                fileUploadOptionResponse.getMaxConnection(), this.identity,
+                fileUploadOptionResponse.getResponse());
     }
 
-    @Override public void timeOut() {
+    @Override
+    public void timeOut() {
         Log.i("SOC", "FileUploadOptionResponse timeout");
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
 
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();

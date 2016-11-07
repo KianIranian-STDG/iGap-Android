@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ToggleButton;
+
 import com.iGap.R;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.SHP_SETTING;
@@ -27,29 +28,33 @@ public class FragmentSticker extends Fragment {
         // Required empty public constructor
     }
 
-    @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
-        Bundle savedInstanceState) {
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_sticker, container, false);
     }
 
-    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         ViewGroup root = (ViewGroup) view.findViewById(R.id.stsp_rootLayout);
         root.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
             }
         });
 
         RippleView rippleBack = (RippleView) view.findViewById(R.id.stsp_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
                 getActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .remove(FragmentSticker.this)
-                    .commit();
+                        .beginTransaction()
+                        .remove(FragmentSticker.this)
+                        .commit();
             }
         });
         sharedPreferences = getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
@@ -62,10 +67,11 @@ public class FragmentSticker extends Fragment {
             toggleCrop.setChecked(false);
         }
         layoutCrop.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 sharedPreferences =
-                    getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                        getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 if (toggleCrop.isChecked()) {
                     toggleCrop.setChecked(false);
@@ -80,10 +86,11 @@ public class FragmentSticker extends Fragment {
         });
 
         toggleCrop.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 layoutCrop.performClick();
                 sharedPreferences =
-                    getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                        getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 if (toggleCrop.isChecked()) {
                     toggleCrop.setChecked(false);

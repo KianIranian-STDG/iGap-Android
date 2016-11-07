@@ -1,6 +1,7 @@
 package com.iGap.response;
 
 import android.util.Log;
+
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoFileUpload;
@@ -20,24 +21,27 @@ public class FileUploadResponse extends MessageHandler {
         this.identity = identity;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
         ProtoFileUpload.FileUploadResponse.Builder fileUploadResponse =
-            (ProtoFileUpload.FileUploadResponse.Builder) message;
+                (ProtoFileUpload.FileUploadResponse.Builder) message;
 
         ProtoResponse.Response.Builder response =
-            ProtoResponse.Response.newBuilder().mergeFrom(fileUploadResponse.getResponse());
+                ProtoResponse.Response.newBuilder().mergeFrom(fileUploadResponse.getResponse());
         Log.i("SOC", "FileUploadResponse response.getId() : " + response.getId());
         Log.i("SOC", "FileUploadResponse response.getTimestamp() : " + response.getTimestamp());
         G.uploaderUtil.onFileUpload(fileUploadResponse.getProgress(),
-            fileUploadResponse.getNextOffset(), fileUploadResponse.getNextLimit(), this.identity,
-            fileUploadResponse.getResponse());
+                fileUploadResponse.getNextOffset(), fileUploadResponse.getNextLimit(), this.identity,
+                fileUploadResponse.getResponse());
     }
 
-    @Override public void timeOut() {
+    @Override
+    public void timeOut() {
         Log.i("SOC", "FileUploadResponse timeout");
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();

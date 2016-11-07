@@ -5,7 +5,8 @@ import io.realm.annotations.PrimaryKey;
 
 public class RealmAvatarToken extends RealmObject {
 
-    @PrimaryKey private int id;
+    @PrimaryKey
+    private int id;
     private String token;
 
     public int getId() {

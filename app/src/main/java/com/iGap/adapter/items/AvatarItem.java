@@ -2,6 +2,7 @@ package com.iGap.adapter.items;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AvatarsAdapter;
@@ -14,11 +15,13 @@ import com.iGap.request.RequestFileDownload;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
+import java.io.IOException;
+import java.util.List;
+
 import io.meness.github.messageprogress.MessageProgress;
 import io.meness.github.messageprogress.OnMessageProgressClick;
 import io.realm.Realm;
-import java.io.IOException;
-import java.util.List;
 
 import static com.iGap.module.AndroidUtils.suitablePath;
 
@@ -27,7 +30,7 @@ import static com.iGap.module.AndroidUtils.suitablePath;
  */
 
 public class AvatarItem extends AbstractItem<AvatarItem, AvatarItem.ViewHolder>
-    implements IChatItemAvatar {
+        implements IChatItemAvatar {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
     public RealmAttachment avatar;
 
@@ -36,11 +39,13 @@ public class AvatarItem extends AbstractItem<AvatarItem, AvatarItem.ViewHolder>
         return this;
     }
 
-    @Override public int getType() {
+    @Override
+    public int getType() {
         return 0;
     }
 
-    @Override public int getLayoutRes() {
+    @Override
+    public int getLayoutRes() {
         return R.layout.show_image_sub_layout;
     }
 
@@ -72,7 +77,8 @@ public class AvatarItem extends AbstractItem<AvatarItem, AvatarItem.ViewHolder>
         if (done) {
             Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
-                @Override public void execute(Realm realm) {
+                @Override
+                public void execute(Realm realm) {
                     avatar.setLocalThumbnailPath(G.DIR_TEMP + "/" + fileName);
                 }
             });
@@ -82,28 +88,30 @@ public class AvatarItem extends AbstractItem<AvatarItem, AvatarItem.ViewHolder>
         }
 
         ProtoFileDownload.FileDownload.Selector selector =
-            ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
+                ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
         String identity =
-            avatar.getToken() + '*' + selector.toString() + '*' + avatar.getSmallThumbnail()
-                .getSize() + '*' + fileName + '*' + 0;
+                avatar.getToken() + '*' + selector.toString() + '*' + avatar.getSmallThumbnail()
+                        .getSize() + '*' + fileName + '*' + 0;
 
         new RequestFileDownload().download(token, 0, (int) avatar.getSmallThumbnail().getSize(),
-            selector, identity);
+                selector, identity);
     }
 
     public void onLoadFromLocal(ViewHolder holder, String localPath) {
         ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.image);
     }
 
-    @Override public void onRequestDownloadAvatar(int offset, int progress) {
+    @Override
+    public void onRequestDownloadAvatar(int offset, int progress) {
         ProtoFileDownload.FileDownload.Selector selector =
-            ProtoFileDownload.FileDownload.Selector.FILE;
+                ProtoFileDownload.FileDownload.Selector.FILE;
         final String fileName = avatar.getToken() + "_" + avatar.getName();
 
         if (progress == 100) {
             Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
-                @Override public void execute(Realm realm) {
+                @Override
+                public void execute(Realm realm) {
                     avatar.setLocalFilePath(G.DIR_IMAGE_USER + "/" + fileName);
                 }
             });
@@ -122,19 +130,20 @@ public class AvatarItem extends AbstractItem<AvatarItem, AvatarItem.ViewHolder>
         }
 
         String identity = avatar.getToken()
-            + '*'
-            + selector.toString()
-            + '*'
-            + avatar.getSize()
-            + '*'
-            + fileName
-            + '*'
-            + offset;
+                + '*'
+                + selector.toString()
+                + '*'
+                + avatar.getSize()
+                + '*'
+                + fileName
+                + '*'
+                + offset;
         new RequestFileDownload().download(avatar.getToken(), offset, (int) avatar.getSize(),
-            selector, identity);
+                selector, identity);
     }
 
-    @Override public void bindView(final ViewHolder holder, List payloads) {
+    @Override
+    public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
         // if file already exists, simply show the local one
@@ -152,7 +161,8 @@ public class AvatarItem extends AbstractItem<AvatarItem, AvatarItem.ViewHolder>
             }
 
             holder.progress.withOnMessageProgress(new OnMessageProgressClick() {
-                @Override public void onMessageProgressClick(MessageProgress progress) {
+                @Override
+                public void onMessageProgressClick(MessageProgress progress) {
                     holder.progress.withDrawable(R.drawable.ic_cancel);
                     holder.progress.withIndeterminate(true);
 
@@ -175,7 +185,7 @@ public class AvatarItem extends AbstractItem<AvatarItem, AvatarItem.ViewHolder>
                 holder.progress.setVisibility(View.VISIBLE);
                 holder.progress.withDrawable(R.drawable.ic_cancel);
                 holder.progress.withProgress(
-                    AvatarsAdapter.requestsProgress.get(avatar.getToken()));
+                        AvatarsAdapter.requestsProgress.get(avatar.getToken()));
             } else {
                 holder.progress.setVisibility(View.VISIBLE);
                 holder.progress.withDrawable(R.drawable.ic_download);
@@ -183,7 +193,8 @@ public class AvatarItem extends AbstractItem<AvatarItem, AvatarItem.ViewHolder>
         }
     }
 
-    @Override public ViewHolderFactory<? extends ViewHolder> getFactory() {
+    @Override
+    public ViewHolderFactory<? extends ViewHolder> getFactory() {
         return FACTORY;
     }
 

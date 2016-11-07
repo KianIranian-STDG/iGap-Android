@@ -59,8 +59,8 @@ public class HelperImageBackColor {
     /**
      * get letter and color and size finally draw bitmap with this info
      *
-     * @param with size of bitmap
-     * @param text letter for drawing
+     * @param with  size of bitmap
+     * @param text  letter for drawing
      * @param color color of bitmap
      * @return bitmap that painted alphabet
      */
@@ -100,7 +100,7 @@ public class HelperImageBackColor {
         Canvas cs = new Canvas(bitmap);
 
         Paint textPaint =
-            new Paint(Paint.FILTER_BITMAP_FLAG | Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
+                new Paint(Paint.FILTER_BITMAP_FLAG | Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
         textPaint.setMaskFilter(new BlurMaskFilter(1, BlurMaskFilter.Blur.SOLID));
         textPaint.setColor(Color.parseColor(mColor));
         //        textPaint.setTypeface(G.robotoRegular);

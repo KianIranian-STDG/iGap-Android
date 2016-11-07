@@ -17,6 +17,7 @@
 package com.iGap.interfaces;
 
 import android.view.View;
+
 import com.iGap.module.EmojiRecentsManager;
 
 // useful for clear recents

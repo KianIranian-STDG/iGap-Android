@@ -1,6 +1,7 @@
 package com.iGap.response;
 
 import android.util.Log;
+
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoUserProfileGender;
@@ -19,17 +20,20 @@ public class UserProfileSetGenderResponse extends MessageHandler {
         this.identity = identity;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
         ProtoUserProfileGender.UserProfileSetGenderResponse.Builder userProfileGenderResponse =
-            ProtoUserProfileGender.UserProfileSetGenderResponse.newBuilder();
+                ProtoUserProfileGender.UserProfileSetGenderResponse.newBuilder();
         G.onUserProfileSetGenderResponse.onUserProfileEmailResponse(
-            userProfileGenderResponse.getGender(), userProfileGenderResponse.getResponse());
+                userProfileGenderResponse.getGender(), userProfileGenderResponse.getResponse());
     }
 
-    @Override public void timeOut() {
+    @Override
+    public void timeOut() {
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
 
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();

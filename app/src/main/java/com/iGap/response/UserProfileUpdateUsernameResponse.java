@@ -1,6 +1,7 @@
 package com.iGap.response;
 
 import android.util.Log;
+
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoUserProfileUpdateUsername;
@@ -18,19 +19,22 @@ public class UserProfileUpdateUsernameResponse extends MessageHandler {
         this.actionId = actionId;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
 
         ProtoUserProfileUpdateUsername.UserProfileUpdateUsernameResponse.Builder builder =
-            (ProtoUserProfileUpdateUsername.UserProfileUpdateUsernameResponse.Builder) message;
+                (ProtoUserProfileUpdateUsername.UserProfileUpdateUsernameResponse.Builder) message;
 
         G.onUserProfileUpdateUsername.onUserProfileUpdateUsername(builder.getUsername());
     }
 
-    @Override public void timeOut() {
+    @Override
+    public void timeOut() {
         super.timeOut();
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
         super.error();
 
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;

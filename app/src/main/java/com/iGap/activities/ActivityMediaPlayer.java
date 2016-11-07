@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
@@ -24,7 +25,9 @@ import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.MusicPlayer;
 import com.iGap.module.OnComplete;
+
 import java.io.File;
+
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityMediaPlayer extends ActivityEnhanced {
@@ -43,11 +46,13 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
     private ImageView img_MusicImage_default_icon;
     private Button btnPlay;
 
-    @Override protected void attachBaseContext(Context newBase) {
+    @Override
+    protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
-    @Override public void onCreate(@Nullable Bundle savedInstanceState) {
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_media_player);
 
@@ -56,7 +61,7 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
         if (MusicPlayer.mp == null) {
             finish();
             NotificationManager notifyManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notifyManager.cancel(MusicPlayer.notificationId);
             return;
         }
@@ -73,7 +78,8 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
                     updateUi();
                 } else if (messageOne.equals("updateTime")) {
                     txt_Timer.post(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             txt_Timer.setText(MessageTow);
                             musicSeekbar.setProgress(MusicPlayer.musicProgress);
                         }
@@ -118,20 +124,22 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
         }
     }
 
-    @Override protected void onPause() {
+    @Override
+    protected void onPause() {
         super.onPause();
         MusicPlayer.isShowMediaPlayer = false;
         MusicPlayer.onComplete = null;
         MusicPlayer.updateNotification();
     }
 
-    @Override protected void onResume() {
+    @Override
+    protected void onResume() {
         super.onResume();
         MusicPlayer.isShowMediaPlayer = true;
         MusicPlayer.onComplete = onComplete;
         updateUi();
         NotificationManager notifyManager =
-            (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notifyManager.cancel(MusicPlayer.notificationId);
     }
 
@@ -160,7 +168,8 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
         musicSeekbar = (SeekBar) findViewById(R.id.ml_seekBar1);
         musicSeekbar.setOnTouchListener(new View.OnTouchListener() {
 
-            @Override public boolean onTouch(View v, MotionEvent event) {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
 
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     MusicPlayer.setMusicProgress(musicSeekbar.getProgress());
@@ -172,16 +181,18 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
         MaterialDesignTextView btnBack = (MaterialDesignTextView) findViewById(R.id.ml_btn_back);
         RippleView rippleBack = (RippleView) findViewById(R.id.ml_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
                 finish();
             }
         });
 
         MaterialDesignTextView btnMusicMenu =
-            (MaterialDesignTextView) findViewById(R.id.ml_btn_music_menu);
+                (MaterialDesignTextView) findViewById(R.id.ml_btn_music_menu);
         RippleView rippleMusicMenu = (RippleView) findViewById(R.id.amp_ripple_menu);
         rippleMusicMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
                 popUpMusicMenu();
             }
         });
@@ -189,7 +200,8 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
         Button btnPrevious = (Button) findViewById(R.id.ml_btn_Previous_music);
         btnPrevious.setTypeface(G.flaticon);
         btnPrevious.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 MusicPlayer.previousMusic();
             }
         });
@@ -197,7 +209,8 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
         btnShuffle = (Button) findViewById(R.id.ml_btn_shuffel_music);
         btnShuffle.setTypeface(G.flaticon);
         btnShuffle.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 MusicPlayer.shuffelClick();
             }
         });
@@ -207,7 +220,8 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
         btnReplay = (Button) findViewById(R.id.ml_btn_replay_music);
         btnReplay.setTypeface(G.flaticon);
         btnReplay.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 MusicPlayer.repeatClick();
             }
         });
@@ -216,7 +230,8 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
         btnPlay = (Button) findViewById(R.id.ml_btn_play_music);
         btnPlay.setTypeface(G.flaticon);
         btnPlay.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 MusicPlayer.playAndPause();
             }
         });
@@ -224,7 +239,8 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
         Button btnNextMusic = (Button) findViewById(R.id.ml_btn_forward_music);
         btnNextMusic.setTypeface(G.flaticon);
         btnNextMusic.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 MusicPlayer.nextMusic();
             }
         });
@@ -233,22 +249,23 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
     private void popUpMusicMenu() {
 
         MaterialDialog dialog = new MaterialDialog.Builder(this).items(R.array.pop_up_media_player)
-            .contentColor(Color.BLACK)
-            .itemsCallback(new MaterialDialog.ListCallback() {
-                @Override public void onSelection(MaterialDialog dialog, View view, int which,
-                    CharSequence text) {
+                .contentColor(Color.BLACK)
+                .itemsCallback(new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog dialog, View view, int which,
+                                            CharSequence text) {
 
-                    switch (which) {
-                        case 0:
-                            saveToMusic();
-                            break;
-                        case 1:
-                            shareMusuic();
-                            break;
+                        switch (which) {
+                            case 0:
+                                saveToMusic();
+                                break;
+                            case 1:
+                                shareMusuic();
+                                break;
+                        }
                     }
-                }
-            })
-            .show();
+                })
+                .show();
 
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
         layoutParams.copyFrom(dialog.getWindow().getAttributes());

@@ -1,6 +1,7 @@
 package com.iGap.response;
 
 import android.util.Log;
+
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGlobal;
@@ -8,6 +9,7 @@ import com.iGap.proto.ProtoGroupKickModerator;
 import com.iGap.realm.RealmMember;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
+
 import io.realm.Realm;
 import io.realm.RealmList;
 
@@ -25,17 +27,18 @@ public class GroupKickModeratorResponse extends MessageHandler {
         this.identity = identity;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
 
         ProtoGroupKickModerator.GroupKickModeratorResponse.Builder builder =
-            (ProtoGroupKickModerator.GroupKickModeratorResponse.Builder) message;
+                (ProtoGroupKickModerator.GroupKickModeratorResponse.Builder) message;
         builder.getRoomId();
         builder.getMemberId();
 
         Realm realm = Realm.getDefaultInstance();
         RealmRoom realmRoom = realm.where(RealmRoom.class)
-            .equalTo(RealmRoomFields.ID, builder.getRoomId())
-            .findFirst();
+                .equalTo(RealmRoomFields.ID, builder.getRoomId())
+                .findFirst();
 
         if (realmRoom != null) {
             RealmList<RealmMember> realmMembers = realmRoom.getGroupRoom().getMembers();
@@ -43,20 +46,22 @@ public class GroupKickModeratorResponse extends MessageHandler {
             for (final RealmMember member : realmMembers) {
                 if (member.getPeerId() == builder.getMemberId()) {
                     realm.executeTransaction(new Realm.Transaction() {
-                        @Override public void execute(Realm realm) {
+                        @Override
+                        public void execute(Realm realm) {
                             member.setRole(ProtoGlobal.GroupRoom.Role.MEMBER.toString());
                         }
                     });
 
                     G.onGroupKickModerator.onGroupKickModerator(builder.getRoomId(),
-                        builder.getMemberId());
+                            builder.getMemberId());
                     break;
                 }
             }
         }
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
 
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();

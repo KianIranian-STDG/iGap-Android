@@ -7,7 +7,7 @@ public class RequestUserProfileGetGender {
     public void userProfileGetGender() {
 
         ProtoUserProfileGetGender.UserProfileGetGender.Builder builder =
-            ProtoUserProfileGetGender.UserProfileGetGender.newBuilder();
+                ProtoUserProfileGetGender.UserProfileGetGender.newBuilder();
 
         RequestWrapper requestWrapper = new RequestWrapper(111, builder);
         try {

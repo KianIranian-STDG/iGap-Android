@@ -7,7 +7,7 @@ public class RequestUserGetDeleteToken {
     public void userGetDeleteToken() {
 
         ProtoUserGetDeleteToken.UserGetDeleteToken.Builder builder =
-            ProtoUserGetDeleteToken.UserGetDeleteToken.newBuilder();
+                ProtoUserGetDeleteToken.UserGetDeleteToken.newBuilder();
 
         RequestWrapper requestWrapper = new RequestWrapper(118, builder);
         try {

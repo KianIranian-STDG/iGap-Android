@@ -9,9 +9,9 @@ public class RequestClientGetRoomList {
     public void clientGetRoomList() {
 
         ProtoClientGetRoomList.ClientGetRoomList.Builder clientGetRoomList =
-            ProtoClientGetRoomList.ClientGetRoomList.newBuilder();
+                ProtoClientGetRoomList.ClientGetRoomList.newBuilder();
         clientGetRoomList.setRequest(
-            ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
+                ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
 
         RequestWrapper requestWrapper = new RequestWrapper(601, clientGetRoomList);
         try {

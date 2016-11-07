@@ -7,7 +7,7 @@ public class RequestUserProfileUpdateUsername {
     public void userProfileUpdateUsername(String username) {
 
         ProtoUserProfileUpdateUsername.UserProfileUpdateUsername.Builder builder =
-            ProtoUserProfileUpdateUsername.UserProfileUpdateUsername.newBuilder();
+                ProtoUserProfileUpdateUsername.UserProfileUpdateUsername.newBuilder();
 
         builder.setUsername(username);
 

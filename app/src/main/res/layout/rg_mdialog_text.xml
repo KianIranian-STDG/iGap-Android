@@ -3,39 +3,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layoutDirection="ltr"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
-  <TextView
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:gravity="center_vertical"
-      android:paddingTop="@dimen/dp12"
-      android:text="@string/Re_dialog_verify_number_part1"
-      android:textColor="@android:color/black"
-      android:textSize="16sp"
-      />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingTop="@dimen/dp12"
+        android:text="@string/Re_dialog_verify_number_part1"
+        android:textColor="@android:color/black"
+        android:textSize="16sp" />
 
-  <TextView
-      android:id="@+id/rg_dialog_txt_number"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:gravity="center_vertical"
+    <TextView
+        android:id="@+id/rg_dialog_txt_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
 
-      android:text="number"
-      android:textColor="@android:color/black"
-      android:textSize="18sp"
-      android:textStyle="bold"
-      />
+        android:text="number"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
-  <TextView
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:gravity="center_vertical"
-      android:paddingTop="@dimen/dp12"
-      android:text="@string/Re_dialog_verify_number_part2"
-      android:textColor="@android:color/black"
-      android:textSize="16sp"
-      />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingTop="@dimen/dp12"
+        android:text="@string/Re_dialog_verify_number_part2"
+        android:textColor="@android:color/black"
+        android:textSize="16sp" />
 
 </LinearLayout>

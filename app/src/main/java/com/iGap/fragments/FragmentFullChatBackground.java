@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.libs.rippleeffect.RippleView;
@@ -30,13 +31,15 @@ public class FragmentFullChatBackground extends Fragment {
         // Required empty public constructor
     }
 
-    @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
-        Bundle savedInstanceState) {
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_full_chat_background, container, false);
     }
 
-    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         final String fullImage = getArguments().getString("IMAGE");
@@ -45,11 +48,12 @@ public class FragmentFullChatBackground extends Fragment {
         rippleBack = (RippleView) view.findViewById(R.id.stcbf_ripple_back);
         rippleSet = (RippleView) view.findViewById(R.id.stcbf_ripple_set);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
                 getActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .remove(FragmentFullChatBackground.this)
-                    .commit();
+                        .beginTransaction()
+                        .remove(FragmentFullChatBackground.this)
+                        .commit();
             }
         });
 
@@ -59,17 +63,18 @@ public class FragmentFullChatBackground extends Fragment {
 
         txtSet = (MaterialDesignTextView) view.findViewById(R.id.stcbf_txt_set);
         rippleSet.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
                 SharedPreferences sharedPreferences =
-                    G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
+                        G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, fullImage);
                 editor.apply();
 
                 getActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .remove(FragmentFullChatBackground.this)
-                    .commit();
+                        .beginTransaction()
+                        .remove(FragmentFullChatBackground.this)
+                        .commit();
             }
         });
     }

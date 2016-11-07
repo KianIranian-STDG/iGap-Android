@@ -16,24 +16,27 @@ public class ChatUpdateDraftResponse extends MessageHandler {
         this.actionId = actionId;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
         ProtoChatUpdateDraft.ChatUpdateDraftResponse.Builder updateDraft =
-            (ProtoChatUpdateDraft.ChatUpdateDraftResponse.Builder) message;
+                (ProtoChatUpdateDraft.ChatUpdateDraftResponse.Builder) message;
 
        /*
         * if another account get UpdateDraftResponse set draft to RealmRoom
         */
         if (updateDraft.getResponse().getId().isEmpty()) {
             RealmRoom.convertAndSetDraft(updateDraft.getRoomId(),
-                updateDraft.getDraft().getMessage(), updateDraft.getDraft().getReplyTo());
+                    updateDraft.getDraft().getMessage(), updateDraft.getDraft().getReplyTo());
         }
     }
 
-    @Override public void timeOut() {
+    @Override
+    public void timeOut() {
         super.timeOut();
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
         super.error();
     }
 }

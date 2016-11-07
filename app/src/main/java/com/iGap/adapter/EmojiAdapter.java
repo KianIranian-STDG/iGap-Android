@@ -23,9 +23,11 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
 import com.iGap.R;
 import com.iGap.interfaces.IEmojiClickListener;
 import com.iGap.interfaces.IEmojiLongClickListener;
+
 import java.util.List;
 
 public class EmojiAdapter extends ArrayAdapter<String> {
@@ -48,7 +50,8 @@ public class EmojiAdapter extends ArrayAdapter<String> {
         this.mEmojiClickListener = listener;
     }
 
-    @Override public View getView(final int position, View convertView, ViewGroup parent) {
+    @Override
+    public View getView(final int position, View convertView, ViewGroup parent) {
         View v = convertView;
         if (v == null) {
             v = LayoutInflater.from(getContext()).inflate(R.layout.item_emoji, null, false);
@@ -61,13 +64,15 @@ public class EmojiAdapter extends ArrayAdapter<String> {
         ViewHolder holder = (ViewHolder) v.getTag();
         holder.emoji.setText(emoji);
         holder.emoji.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override public boolean onLongClick(View view) {
+            @Override
+            public boolean onLongClick(View view) {
                 return mEmojiLongClickListener != null && mEmojiLongClickListener.onEmojiLongClick(
-                    view, getItem(position));
+                        view, getItem(position));
             }
         });
         holder.emoji.setOnClickListener(new OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 if (mEmojiClickListener != null) {
                     mEmojiClickListener.onEmojiClick(v, getItem(position));
                 }

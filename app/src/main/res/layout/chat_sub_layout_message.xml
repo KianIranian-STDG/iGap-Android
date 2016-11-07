@@ -7,54 +7,45 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/dp4"
     android:maxWidth="@dimen/dp300"
-    android:textDirection="firstStrong"
-    >
-
-  <LinearLayout
-      android:id="@+id/mainContainer"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:orientation="horizontal"
-      tools:ignore="UselessParent"
-      >
-
-    <com.iGap.module.CircleImageView
-        android:id="@+id/messageSenderAvatar"
-        android:layout_width="@dimen/dp52"
-        android:layout_height="@dimen/dp52"
-        android:layout_marginRight="@dimen/dp8"
-        android:src="@mipmap/b"
-        />
+    android:textDirection="firstStrong">
 
     <LinearLayout
-        android:id="@+id/contentContainer"
+        android:id="@+id/mainContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/rectangle_round_white"
-        android:orientation="vertical"
-        android:padding="@dimen/messageContainerPadding"
-        >
+        android:orientation="horizontal"
+        tools:ignore="UselessParent">
 
-      <include
-          layout="@layout/chat_sub_layout_replay"
-          android:id="@+id/replayLayout"
-          />
+        <com.iGap.module.CircleImageView
+            android:id="@+id/messageSenderAvatar"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="@dimen/dp52"
+            android:layout_marginRight="@dimen/dp8"
+            android:src="@mipmap/b" />
 
-      <include
-          layout="@layout/chat_sub_layout_forward"
-          android:id="@+id/cslr_ll_forward"
-          />
+        <LinearLayout
+            android:id="@+id/contentContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rectangle_round_white"
+            android:orientation="vertical"
+            android:padding="@dimen/messageContainerPadding">
 
-      <com.iGap.module.EmojiTextView
-          android:id="@+id/messageText"
-          android:text="SAMPLE TEXT"
-          android:textColor="@android:color/black"
-          style="@style/ChatMessages.EmojiTextView"
-          />
+            <include
+                android:id="@+id/replayLayout"
+                layout="@layout/chat_sub_layout_replay" />
 
-      <include
-          layout="@layout/chat_sub_layout_messages_time"
-          />
+            <include
+                android:id="@+id/cslr_ll_forward"
+                layout="@layout/chat_sub_layout_forward" />
+
+            <com.iGap.module.EmojiTextView
+                android:id="@+id/messageText"
+                style="@style/ChatMessages.EmojiTextView"
+                android:text="SAMPLE TEXT"
+                android:textColor="@android:color/black" />
+
+            <include layout="@layout/chat_sub_layout_messages_time" />
+        </LinearLayout>
     </LinearLayout>
-  </LinearLayout>
 </FrameLayout>

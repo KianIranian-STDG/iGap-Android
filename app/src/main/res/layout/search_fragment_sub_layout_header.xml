@@ -3,16 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/gray_f2"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
-  <TextView
-      android:id="@+id/sfslh_txt_header_text"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center_horizontal"
-      android:padding="@dimen/dp4"
-      android:text="contacts"
-      android:textAppearance="?android:attr/textAppearanceLarge"
-      />
+    <TextView
+        android:id="@+id/sfslh_txt_header_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:padding="@dimen/dp4"
+        android:text="contacts"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 </LinearLayout>

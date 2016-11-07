@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
+
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.StickyHeaderAdapter;
@@ -28,6 +29,7 @@ import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.adapters.HeaderAdapter;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,13 +40,15 @@ public class NotRegisteredContactsFragment extends Fragment {
         return new NotRegisteredContactsFragment();
     }
 
-    @Nullable @Override
+    @Nullable
+    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-        @Nullable Bundle savedInstanceState) {
+                             @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_contacts, container, false);
     }
 
-    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         Bundle bundle = this.getArguments();
@@ -62,14 +66,16 @@ public class NotRegisteredContactsFragment extends Fragment {
         final HeaderAdapter headerAdapter = new HeaderAdapter();
         final ItemAdapter itemAdapter = new ItemAdapter();
         itemAdapter.withFilterPredicate(new IItemAdapter.Predicate<ContactItemNotRegister>() {
-            @Override public boolean filter(ContactItemNotRegister item, CharSequence constraint) {
+            @Override
+            public boolean filter(ContactItemNotRegister item, CharSequence constraint) {
                 return !item.mContact.displayName.toLowerCase()
-                    .startsWith(String.valueOf(constraint).toLowerCase());
+                        .startsWith(String.valueOf(constraint).toLowerCase());
             }
         });
         fastAdapter.withOnClickListener(new FastAdapter.OnClickListener<ContactItemNotRegister>() {
-            @Override public boolean onClick(View v, IAdapter adapter, ContactItemNotRegister item,
-                int position) {
+            @Override
+            public boolean onClick(View v, IAdapter adapter, ContactItemNotRegister item,
+                                   int position) {
 
                 Log.e("dddd", " invite click  " + position);
                 // TODO: 9/14/2016 nejati     send sms for invite friend
@@ -79,18 +85,20 @@ public class NotRegisteredContactsFragment extends Fragment {
         });
 
         final TextView menu_txt_titleToolbar =
-            (TextView) view.findViewById(R.id.menu_txt_titleToolbar);
+                (TextView) view.findViewById(R.id.menu_txt_titleToolbar);
         menu_txt_titleToolbar.setText(title);
 
         final android.support.v7.widget.SearchView searchView =
-            (android.support.v7.widget.SearchView) view.findViewById(R.id.menu_edtSearch);
+                (android.support.v7.widget.SearchView) view.findViewById(R.id.menu_edtSearch);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override public boolean onQueryTextSubmit(String query) {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
 
                 return false;
             }
 
-            @Override public boolean onQueryTextChange(String newText) {
+            @Override
+            public boolean onQueryTextChange(String newText) {
 
                 itemAdapter.filter(newText);
 
@@ -99,20 +107,23 @@ public class NotRegisteredContactsFragment extends Fragment {
         });
 
         searchView.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 menu_txt_titleToolbar.setVisibility(View.GONE);
             }
         });
 
         final ViewGroup root = (ViewGroup) view.findViewById(R.id.menu_parent_layout);
         InputMethodManager im =
-            (InputMethodManager) G.context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+                (InputMethodManager) G.context.getSystemService(Activity.INPUT_METHOD_SERVICE);
         final SoftKeyboard softKeyboard = new SoftKeyboard(root, im);
         softKeyboard.setSoftKeyboardCallback(new SoftKeyboard.SoftKeyboardChanged() {
-            @Override public void onSoftKeyboardHide() {
+            @Override
+            public void onSoftKeyboardHide() {
 
                 G.handler.post(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         if (searchView.getQuery().toString().length() > 0) {
                             searchView.setIconified(false);
                             menu_txt_titleToolbar.setVisibility(View.GONE);
@@ -125,10 +136,12 @@ public class NotRegisteredContactsFragment extends Fragment {
                 });
             }
 
-            @Override public void onSoftKeyboardShow() {
+            @Override
+            public void onSoftKeyboardShow() {
 
                 G.handler.post(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         menu_txt_titleToolbar.setVisibility(View.GONE);
                     }
                 });
@@ -138,7 +151,8 @@ public class NotRegisteredContactsFragment extends Fragment {
         TextView txtMenu = (TextView) view.findViewById(R.id.menu_txtBack);
         txtMenu.setTypeface(G.fontawesome);
         txtMenu.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 // close and remove fragment from stack
                 softKeyboard.closeSoftKeyboard();
                 getActivity().getSupportFragmentManager().popBackStack();
@@ -148,7 +162,8 @@ public class NotRegisteredContactsFragment extends Fragment {
         ViewGroup layout = (ViewGroup) view.findViewById(R.id.menu_layout);
 
         layout.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 //                searchView.onActionViewExpanded();
                 searchView.setIconified(false);
@@ -157,14 +172,15 @@ public class NotRegisteredContactsFragment extends Fragment {
         });
 
         searchView.setOnCloseListener(
-            new SearchView.OnCloseListener() { // close SearchView and show title again
-                @Override public boolean onClose() {
+                new SearchView.OnCloseListener() { // close SearchView and show title again
+                    @Override
+                    public boolean onClose() {
 
-                    menu_txt_titleToolbar.setVisibility(View.VISIBLE);
+                        menu_txt_titleToolbar.setVisibility(View.VISIBLE);
 
-                    return false;
-                }
-            });
+                        return false;
+                    }
+                });
 
         //configure our fastAdapter
         //as we provide id's for the items we want the hasStableIds enabled to speed up things
@@ -178,7 +194,7 @@ public class NotRegisteredContactsFragment extends Fragment {
 
         //this adds the Sticky Headers within our list
         final StickyRecyclerHeadersDecoration decoration =
-            new StickyRecyclerHeadersDecoration(stickyHeaderAdapter);
+                new StickyRecyclerHeadersDecoration(stickyHeaderAdapter);
         rv.addItemDecoration(decoration);
 
         List<IItem> items = new ArrayList<>();
@@ -187,13 +203,14 @@ public class NotRegisteredContactsFragment extends Fragment {
 
         for (StructContactInfo contact : contacts) {
             items.add(new ContactItemNotRegister().setContact(contact)
-                .withIdentifier(100 + contacts.indexOf(contact)));
+                    .withIdentifier(100 + contacts.indexOf(contact)));
         }
         itemAdapter.add(items);
 
         //so the headers are aware of changes
         stickyHeaderAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override public void onChanged() {
+            @Override
+            public void onChanged() {
                 decoration.invalidateHeaders();
             }
         });
@@ -202,7 +219,8 @@ public class NotRegisteredContactsFragment extends Fragment {
         fastAdapter.withSavedInstanceState(savedInstanceState);
     }
 
-    @Override public void onSaveInstanceState(Bundle outState) {
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
         //add the values which need to be saved from the adapter to the bundle
         outState = fastAdapter.saveInstanceState(outState);
         super.onSaveInstanceState(outState);

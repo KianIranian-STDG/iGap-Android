@@ -4,8 +4,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
 import com.iGap.realm.RealmRoomMessage;
 import com.mikepenz.fastadapter.adapters.FastItemAdapter;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +26,7 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
     private boolean mAlreadyCalledOnNoMore;
 
     public EndlessRecyclerOnScrollListener(List<RealmRoomMessage> messageList,
-        FastItemAdapter adapter) {
+                                           FastItemAdapter adapter) {
         mAdapter = adapter;
         mMessagesList = messageList;
     }
@@ -37,8 +39,8 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
 
         if (mVisibleThreshold == -1) {
             mVisibleThreshold =
-                findLastVisibleItemPosition(recyclerView) - findFirstVisibleItemPosition(
-                    recyclerView);
+                    findLastVisibleItemPosition(recyclerView) - findFirstVisibleItemPosition(
+                            recyclerView);
         }
 
         mVisibleItemCount = recyclerView.getChildCount();
@@ -62,8 +64,8 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
             mLoading = true;
         } else {
             if (mAdapter.getAdapterItemCount() == mMessagesList.size()
-                && mLayoutManager.findFirstVisibleItemPosition() - mVisibleThreshold <= 0
-                && !mAlreadyCalledOnNoMore) {
+                    && mLayoutManager.findFirstVisibleItemPosition() - mVisibleThreshold <= 0
+                    && !mAlreadyCalledOnNoMore) {
                 onNoMore(this);
                 mAlreadyCalledOnNoMore = true;
             }
@@ -73,13 +75,13 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
     private int findLastVisibleItemPosition(RecyclerView recyclerView) {
         final View child = findOneVisibleChild(recyclerView.getChildCount() - 1, -1, false, true);
         return child == null ? RecyclerView.NO_POSITION
-            : recyclerView.getChildAdapterPosition(child);
+                : recyclerView.getChildAdapterPosition(child);
     }
 
     private int findFirstVisibleItemPosition(RecyclerView recyclerView) {
         final View child = findOneVisibleChild(0, mLayoutManager.getChildCount(), false, true);
         return child == null ? RecyclerView.NO_POSITION
-            : recyclerView.getChildAdapterPosition(child);
+                : recyclerView.getChildAdapterPosition(child);
     }
 
     public abstract void onLoadMore(EndlessRecyclerOnScrollListener listener, int page);
@@ -92,7 +94,7 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
 
         // +timeMessagesAddedCount because of not counting time messages
         for (int i = startFrom, timeMessagesAddedCount = 0;
-            i < (startFrom) + mTotalItemsInPages + timeMessagesAddedCount; i++) {
+             i < (startFrom) + mTotalItemsInPages + timeMessagesAddedCount; i++) {
             if (i < mMessagesList.size()) {
                 messages.add(mMessagesList.get(i));
                 if (mMessagesList.get(i).isOnlyTime()) {
@@ -107,13 +109,13 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
     }
 
     private View findOneVisibleChild(int fromIndex, int toIndex, boolean completelyVisible,
-        boolean acceptPartiallyVisible) {
+                                     boolean acceptPartiallyVisible) {
         if (mLayoutManager.canScrollVertically() != mIsOrientationHelperVertical
-            || mOrientationHelper == null) {
+                || mOrientationHelper == null) {
             mIsOrientationHelperVertical = mLayoutManager.canScrollVertically();
             mOrientationHelper =
-                mIsOrientationHelperVertical ? OrientationHelper.createVerticalHelper(
-                    mLayoutManager) : OrientationHelper.createHorizontalHelper(mLayoutManager);
+                    mIsOrientationHelperVertical ? OrientationHelper.createVerticalHelper(
+                            mLayoutManager) : OrientationHelper.createHorizontalHelper(mLayoutManager);
         }
 
         final int start = mOrientationHelper.getStartAfterPadding();

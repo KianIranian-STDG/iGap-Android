@@ -1,14 +1,17 @@
 package com.iGap.realm;
 
 import android.util.Log;
+
 import com.iGap.proto.ProtoGlobal;
+
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 public class RealmRegisteredInfo extends RealmObject {
-    @PrimaryKey private long id;
+    @PrimaryKey
+    private long id;
     private String username;
     private String phoneNumber;
     private String firstName;
@@ -146,7 +149,7 @@ public class RealmRegisteredInfo extends RealmObject {
      * create new object from RealmRegisteredInfo and set all fields with registeredUser Proto
      *
      * @param registeredUser proto that get from server
-     * @param realm realm that get from executeTransaction
+     * @param realm          realm that get from executeTransaction
      */
 
     public void setRegisteredUserInfo(ProtoGlobal.RegisteredUser registeredUser, RealmRegisteredInfo realmRegisteredInfo, Realm realm) {
@@ -156,9 +159,9 @@ public class RealmRegisteredInfo extends RealmObject {
     /**
      * get exist row from RealmRegisteredInfo and set all fields with registeredUser Proto
      *
-     * @param registeredUser proto that get from server
+     * @param registeredUser      proto that get from server
      * @param realmRegisteredInfo current object from realm
-     * @param realm realm that get from executeTransaction
+     * @param realm               realm that get from executeTransaction
      */
     public void updateRegisteredUserInfo(ProtoGlobal.RegisteredUser registeredUser, RealmRegisteredInfo realmRegisteredInfo, Realm realm) {
         fillRegisteredUserInfo(registeredUser, realmRegisteredInfo, realm);
@@ -168,8 +171,8 @@ public class RealmRegisteredInfo extends RealmObject {
      * fill object from proto to realm
      *
      * @param registeredUser proto that get from server
-     * @param info object from RealmRegisteredInfo
-     * @param realm realm that get from executeTransaction
+     * @param info           object from RealmRegisteredInfo
+     * @param realm          realm that get from executeTransaction
      */
 
     private void fillRegisteredUserInfo(ProtoGlobal.RegisteredUser registeredUser, RealmRegisteredInfo info, Realm realm) {

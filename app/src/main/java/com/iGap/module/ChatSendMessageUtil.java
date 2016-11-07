@@ -21,7 +21,7 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
     private OnChatSendMessageResponse onChatSendMessageResponse;
 
     public ChatSendMessageUtil newBuilder(ProtoGlobal.Room.Type roomType,
-        ProtoGlobal.RoomMessageType messageType, long roomId) {
+                                          ProtoGlobal.RoomMessageType messageType, long roomId) {
         this.roomType = roomType;
 
         if (roomType == ProtoGlobal.Room.Type.CHAT) {
@@ -51,33 +51,33 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
     }
 
     public ChatSendMessageUtil build(ProtoGlobal.Room.Type roomType, long roomId,
-        RealmRoomMessage message) {
+                                     RealmRoomMessage message) {
         ChatSendMessageUtil builder =
-            newBuilder(roomType, ProtoGlobal.RoomMessageType.valueOf(message.getMessageType()),
-                roomId);
+                newBuilder(roomType, ProtoGlobal.RoomMessageType.valueOf(message.getMessageType()),
+                        roomId);
         if (message.getMessage() != null && !message.getMessage().isEmpty()) {
             builder.message(message.getMessage());
         }
         if (message.getAttachment() != null
-            && message.getAttachment().getToken() != null
-            && !message.getAttachment().getToken().isEmpty()) {
+                && message.getAttachment().getToken() != null
+                && !message.getAttachment().getToken().isEmpty()) {
             builder.attachment(message.getAttachment().getToken());
         }
         if (message.getRoomMessageContact() != null) {
             builder.contact(message.getRoomMessageContact().getFirstName(),
-                message.getRoomMessageContact().getLastName(),
-                message.getRoomMessageContact().getPhones().get(0).getString());
+                    message.getRoomMessageContact().getLastName(),
+                    message.getRoomMessageContact().getPhones().get(0).getString());
         }
         if (message.getLocation() != null) {
             builder.location(message.getLocation().getLocationLat(),
-                message.getLocation().getLocationLong());
+                    message.getLocation().getLocationLong());
         }
         if (message.getLog() != null) {
             builder.log(message.getLog().getType());
         }
         if (message.getForwardMessage() != null) {
             builder.forwardMessage(message.getForwardMessage().getRoomId(),
-                message.getForwardMessage().getMessageId());
+                    message.getForwardMessage().getMessageId());
         }
 
         builder.sendMessage(Long.toString(message.getMessageId()));
@@ -122,7 +122,7 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
 
     public ChatSendMessageUtil location(double lat, double lon) {
         ProtoGlobal.RoomMessageLocation.Builder location =
-            ProtoGlobal.RoomMessageLocation.newBuilder();
+                ProtoGlobal.RoomMessageLocation.newBuilder();
         location.setLat(lat);
         location.setLon(lon);
         if (roomType == ProtoGlobal.Room.Type.CHAT) {
@@ -156,7 +156,7 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
     public ChatSendMessageUtil forwardMessage(long roomId, long messageId) {
 
         ProtoGlobal.RoomMessageForwardFrom.Builder forward =
-            ProtoGlobal.RoomMessageForwardFrom.newBuilder();
+                ProtoGlobal.RoomMessageForwardFrom.newBuilder();
         forward.setRoomId(roomId);
         forward.setMessageId(messageId);
 
@@ -183,23 +183,25 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
 
     @Override
     public void onMessageUpdate(long roomId, long messageId, ProtoGlobal.RoomMessageStatus status,
-        String identity, ProtoGlobal.RoomMessage roomMessage) {
+                                String identity, ProtoGlobal.RoomMessage roomMessage) {
         if (onChatSendMessageResponse != null) {
             onChatSendMessageResponse.onMessageUpdate(roomId, messageId, status, identity,
-                roomMessage);
+                    roomMessage);
         }
     }
 
-    @Override public void onMessageReceive(long roomId, String message, String messageType,
-        ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType) {
+    @Override
+    public void onMessageReceive(long roomId, String message, String messageType,
+                                 ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType) {
         if (onChatSendMessageResponse != null) {
             onChatSendMessageResponse.onMessageReceive(roomId, message, messageType, roomMessage,
-                roomType);
+                    roomType);
         }
     }
 
-    @Override public void onMessageFailed(long roomId, RealmRoomMessage roomMessage,
-        ProtoGlobal.Room.Type roomType) {
+    @Override
+    public void onMessageFailed(long roomId, RealmRoomMessage roomMessage,
+                                ProtoGlobal.Room.Type roomType) {
         if (onChatSendMessageResponse != null) {
             onChatSendMessageResponse.onMessageFailed(roomId, roomMessage, roomType);
         }

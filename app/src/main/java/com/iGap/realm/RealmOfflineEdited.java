@@ -8,7 +8,8 @@ import io.realm.annotations.PrimaryKey;
 // https://github.com/realm/realm-java/issues/776
 public class RealmOfflineEdited extends RealmObject {
 
-    @PrimaryKey private long id;
+    @PrimaryKey
+    private long id;
 
     private long messageId;
     private String message;

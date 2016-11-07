@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
 import com.hanks.library.AnimateCheckBox;
 import com.iGap.R;
 import com.iGap.helper.HelperImageBackColor;
@@ -12,6 +13,7 @@ import com.iGap.module.CustomTextViewMedium;
 import com.iGap.module.StructContactInfo;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
+
 import java.io.File;
 import java.util.List;
 
@@ -27,15 +29,18 @@ public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItem
         return this;
     }
 
-    @Override public int getType() {
+    @Override
+    public int getType() {
         return 0;
     }
 
-    @Override public int getLayoutRes() {
+    @Override
+    public int getLayoutRes() {
         return R.layout.contact_item_group;
     }
 
-    @Override public void bindView(ViewHolder holder, List payloads) {
+    @Override
+    public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
         holder.checkBoxSelect.setChecked(true);
@@ -86,12 +91,13 @@ public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItem
 
         String name = HelperImageBackColor.getFirstAlphabetName(mContact.displayName);
         bitmap = HelperImageBackColor.drawAlphabetOnPicture(size, name,
-            HelperImageBackColor.getColor(name));
+                HelperImageBackColor.getColor(name));
 
         return bitmap;
     }
 
-    @Override public ViewHolderFactory<? extends ViewHolder> getFactory() {
+    @Override
+    public ViewHolderFactory<? extends ViewHolder> getFactory() {
         return FACTORY;
     }
 

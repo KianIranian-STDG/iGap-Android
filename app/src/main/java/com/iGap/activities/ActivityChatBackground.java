@@ -9,6 +9,7 @@ import android.provider.MediaStore;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AdapterChatBackground;
@@ -16,9 +17,11 @@ import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.HelperCopyFile;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.StructAdapterBackground;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityChatBackground extends ActivityEnhanced {
@@ -36,24 +39,28 @@ public class ActivityChatBackground extends ActivityEnhanced {
     private AdapterChatBackground adapterChatBackgroundSetting;
     private List<StructAdapterBackground> items = new ArrayList<>();
 
-    @Override protected void onResume() {
+    @Override
+    protected void onResume() {
         super.onResume();
 
         G.currentActivity = this;
     }
 
-    @Override protected void attachBaseContext(Context newBase) {
+    @Override
+    protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
-    @Override public void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_background);
 
         txtBack = (MaterialDesignTextView) findViewById(R.id.stcb_txt_back);
         rippleBack = (RippleView) findViewById(R.id.stcb_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
                 finish();
             }
         });
@@ -106,7 +113,8 @@ public class ActivityChatBackground extends ActivityEnhanced {
         adapterChatBackgroundSetting.notifyDataSetChanged();
     }
 
-    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == myResultCodeCamera && resultCode == RESULT_OK) {// result for camera
@@ -116,7 +124,7 @@ public class ActivityChatBackground extends ActivityEnhanced {
             AdapterChatBackground.imageLoader.clearMemoryCache();
             setItem();
         } else if (requestCode == myResultCodeGallery
-            && resultCode == RESULT_OK) {// result for gallery
+                && resultCode == RESULT_OK) {// result for gallery
 
             String pathImageUser = getRealPathFromURI(data.getData());
             HelperCopyFile.copyFile(pathImageUser, G.chatBackground.toString());

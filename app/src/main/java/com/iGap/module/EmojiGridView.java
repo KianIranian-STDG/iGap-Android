@@ -20,6 +20,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.GridView;
+
 import com.iGap.R;
 import com.iGap.adapter.EmojiAdapter;
 import com.iGap.emoji.People;
@@ -33,7 +34,7 @@ public class EmojiGridView {
     private IRecents mRecents;
 
     public EmojiGridView(final Context context, String[] emojis, IRecents recents,
-        EmojiPopup emojiPopup) {
+                         EmojiPopup emojiPopup) {
         mEmojiPopup = emojiPopup;
         rootView = LayoutInflater.from(context).inflate(R.layout.emoji_grid_view, null);
         setRecents(recents);
@@ -46,14 +47,16 @@ public class EmojiGridView {
         }
         EmojiAdapter mAdapter = new EmojiAdapter(context, data);
         mAdapter.setEmojiLongClickListener(new IEmojiLongClickListener() {
-            @Override public boolean onEmojiLongClick(View view, String emoji) {
+            @Override
+            public boolean onEmojiLongClick(View view, String emoji) {
                 return mEmojiPopup.getEmojiLongClickListener() != null
-                    && mEmojiPopup.getEmojiLongClickListener().onEmojiLongClick(view, emoji);
+                        && mEmojiPopup.getEmojiLongClickListener().onEmojiLongClick(view, emoji);
             }
         });
         mAdapter.setEmojiClickListener(new IEmojiClickListener() {
 
-            @Override public void onEmojiClick(View view, String emoji) {
+            @Override
+            public void onEmojiClick(View view, String emoji) {
                 if (mEmojiPopup.getEmojiClickListener() != null) {
                     mEmojiPopup.getEmojiClickListener().onEmojiClick(view, emoji);
                 }

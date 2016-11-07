@@ -7,15 +7,16 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.ImageView;
+
 import com.iGap.G;
 import com.iGap.R;
 
 public class CustomCircleImage extends ImageView {
 
     private static final int CIRCLE_RADIUS =
-        (int) G.context.getResources().getDimension(R.dimen.dp12);
+            (int) G.context.getResources().getDimension(R.dimen.dp12);
     private static final int CIRCLE_SPACE =
-        (int) G.context.getResources().getDimension(R.dimen.dp16);
+            (int) G.context.getResources().getDimension(R.dimen.dp16);
     private Paint fiiPain;
     private Paint strokePain;
     private int count;
@@ -76,13 +77,14 @@ public class CustomCircleImage extends ImageView {
         postInvalidate();
     }
 
-    @Override protected void onDraw(Canvas canvas) {
+    @Override
+    protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
         for (int i = 0; i < count; i++) {
 
             canvas.drawCircle(offsetX + i * (CIRCLE_RADIUS + CIRCLE_SPACE), tt, CIRCLE_RADIUS / 2,
-                strokePain);
+                    strokePain);
             boolean fillCheck = false;
             if (i == position) {
                 fiiPain.setAlpha((int) ((1.0f - percent) * 255));
@@ -99,7 +101,7 @@ public class CustomCircleImage extends ImageView {
 
             if (fillCheck) {
                 canvas.drawCircle(offsetX + i * (CIRCLE_RADIUS + CIRCLE_SPACE), tt,
-                    CIRCLE_RADIUS / 2, fiiPain);
+                        CIRCLE_RADIUS / 2, fiiPain);
             }
         }
     }

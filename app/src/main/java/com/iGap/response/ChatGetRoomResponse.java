@@ -1,6 +1,7 @@
 package com.iGap.response;
 
 import android.util.Log;
+
 import com.iGap.G;
 import com.iGap.proto.ProtoChatGetRoom;
 import com.iGap.proto.ProtoError;
@@ -19,19 +20,22 @@ public class ChatGetRoomResponse extends MessageHandler {
         this.identity = identity;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
         super.handler();
         ProtoChatGetRoom.ChatGetRoomResponse.Builder chatGetRoomResponse =
-            (ProtoChatGetRoom.ChatGetRoomResponse.Builder) message;
+                (ProtoChatGetRoom.ChatGetRoomResponse.Builder) message;
         G.onChatGetRoom.onChatGetRoom(chatGetRoomResponse.getRoomId());
     }
 
-    @Override public void timeOut() {
+    @Override
+    public void timeOut() {
         super.timeOut();
         G.onChatGetRoom.onChatGetRoomTimeOut();
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
         super.error();
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();

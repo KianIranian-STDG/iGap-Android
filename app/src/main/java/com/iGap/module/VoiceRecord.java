@@ -8,9 +8,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.interfaces.OnVoiceRecord;
+
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -111,12 +113,14 @@ public class VoiceRecord {
         startRecording();
         timertask = new TimerTask() {
 
-            @Override public void run() {
+            @Override
+            public void run() {
                 if (state) {
 
                     imgPicRecord.post(new Runnable() {
 
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             imgPicRecord.setImageResource(R.mipmap.circle_white);
                             state = false;
                         }
@@ -124,7 +128,8 @@ public class VoiceRecord {
                 } else {
                     imgPicRecord.post(new Runnable() {
 
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             imgPicRecord.setImageResource(R.mipmap.circle_red);
                             state = true;
                         }
@@ -143,7 +148,8 @@ public class VoiceRecord {
             secendTimer = new Timer();
             secendTimer.schedule(new TimerTask() {
 
-                @Override public void run() {
+                @Override
+                public void run() {
 
                     secend++;
                     if (secend >= 60) {
@@ -159,7 +165,8 @@ public class VoiceRecord {
 
                     txtTimeRecord.post(new Runnable() {
 
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             String s = "";
                             if (minute < 10) {
                                 s += "0" + minute;
@@ -183,11 +190,13 @@ public class VoiceRecord {
         if (miliSecendTimer == null) {
             miliSecendTimer = new Timer();
             miliSecendTimer.schedule(new TimerTask() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     milisecend++;
                     if (milisecend > 100) milisecend = 1;
                     txtMilisecend.post(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
 
                             txtMilisecend.setText(":" + milisecend + "");
                         }
@@ -226,7 +235,7 @@ public class VoiceRecord {
         if (i > 0 || Allmoving > 0) {
             Allmoving += i;
             txt_slide_to_cancel.setAlpha(
-                ((float) (DistanceToCancel - Allmoving) / DistanceToCancel));
+                    ((float) (DistanceToCancel - Allmoving) / DistanceToCancel));
             layout3.setPadding(0, 0, layout3.getPaddingRight() + i, 0);
             lastX = x;
 

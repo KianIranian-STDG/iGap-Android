@@ -14,10 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.iGap.R;
 import com.iGap.activities.ActivityComment;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.StructCommentInfo;
+
 import java.util.ArrayList;
 
 /**
@@ -31,30 +33,34 @@ public class AdapterComment extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private ActivityComment.FragmentSubLayoutReplay layoutReplay;
 
     public AdapterComment(Context context, ArrayList<StructCommentInfo> list,
-        ActivityComment.FragmentSubLayoutReplay layoutReplay) {
+                          ActivityComment.FragmentSubLayoutReplay layoutReplay) {
         this.list = list;
         this.context = context;
         this.layoutReplay = layoutReplay;
     }
 
-    @Override public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-            .inflate(R.layout.comment_sub_layout, parent, false);
+                .inflate(R.layout.comment_sub_layout, parent, false);
         return new MyViewHolder(itemView, viewType);
     }
 
-    @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         if (list.get(position).isChange) {
             updateSomething(position, holder.itemView);
         }
     }
 
-    @Override public int getItemCount() {
+    @Override
+    public int getItemCount() {
         return list.size();
     }
 
-    @Override public int getItemViewType(int position) {
+    @Override
+    public int getItemViewType(int position) {
         return position;
     }
 
@@ -79,33 +85,34 @@ public class AdapterComment extends RecyclerView.Adapter<RecyclerView.ViewHolder
             final StructCommentInfo infoReplay = list.get(position).replayMessageList.get(i);
 
             CircleImageView imvSenderPictureReplay =
-                (CircleImageView) v.findViewById(R.id.csl_img_comment_sender_picture);
+                    (CircleImageView) v.findViewById(R.id.csl_img_comment_sender_picture);
             final TextView txtMessageReplay = (TextView) v.findViewById(R.id.csl_txt_message);
             TextView txtDateReplay = (TextView) v.findViewById(R.id.csl_txt_date);
             TextView txtClockReplay = (TextView) v.findViewById(R.id.csl_txt_clock);
 
             if (infoReplay.senderPicturePath.length() > 0) {
                 imvSenderPictureReplay.setImageResource(
-                    Integer.parseInt(infoReplay.senderPicturePath));
+                        Integer.parseInt(infoReplay.senderPicturePath));
             } else {
                 imvSenderPictureReplay.setImageBitmap(
-                    com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture(
-                        (int) context.getResources().getDimension(R.dimen.dp60),
-                        infoReplay.senderName, ""));
+                        com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture(
+                                (int) context.getResources().getDimension(R.dimen.dp60),
+                                infoReplay.senderName, ""));
             }
 
             SpannableString s =
-                new SpannableString(infoReplay.senderName + ": " + infoReplay.message);
+                    new SpannableString(infoReplay.senderName + ": " + infoReplay.message);
             s.setSpan(new ForegroundColorSpan(Color.parseColor("#37B8CC")), 0,
-                infoReplay.senderName.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    infoReplay.senderName.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             s.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0,
-                infoReplay.senderName.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    infoReplay.senderName.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             txtMessageReplay.setText(s);
 
             txtDateReplay.setText(infoReplay.date);
             txtClockReplay.setText(infoReplay.time);
             v.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View view) {
+                @Override
+                public void onClick(View view) {
 
                     if (infoReplay.maxLine) {
                         txtMessageReplay.setEllipsize(null);
@@ -124,10 +131,11 @@ public class AdapterComment extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         if (count > 3 + start) {
             View vMore =
-                LayoutInflater.from(context).inflate(R.layout.comment_sub_layout_more, null, false);
+                    LayoutInflater.from(context).inflate(R.layout.comment_sub_layout_more, null, false);
 
             vMore.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View view) {
+                @Override
+                public void onClick(View view) {
                     layout.removeViewAt(layout.getChildCount() - 1);
                     addThreeSubLayoutReplay(position, layout.getChildCount(), itemView);
                 }
@@ -152,7 +160,7 @@ public class AdapterComment extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 case 1: // gone layout replay
                     holder.findViewById(R.id.csl_ll_replay_comment).setVisibility(View.GONE);
                     holder.findViewById(R.id.csl_img_comment_sender_picture)
-                        .setVisibility(View.VISIBLE);
+                            .setVisibility(View.VISIBLE);
                     holder.findViewById(R.id.csl_ll_comment).setBackgroundColor(Color.WHITE);
                     break;
             }
@@ -171,7 +179,7 @@ public class AdapterComment extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         layoutReplay.setLayoutVisible(true);
         layoutReplay.setLayoutParameter(list.get(position).senderPicturePath,
-            list.get(position).senderName, list.get(position).message);
+                list.get(position).senderName, list.get(position).message);
     }
 
     private void goneLayoutReplay(int position) {
@@ -200,34 +208,35 @@ public class AdapterComment extends RecyclerView.Adapter<RecyclerView.ViewHolder
             super(itemView);
 
             imvSenderPicture =
-                (CircleImageView) itemView.findViewById(R.id.csl_img_comment_sender_picture);
+                    (CircleImageView) itemView.findViewById(R.id.csl_img_comment_sender_picture);
             txtMessage = (TextView) itemView.findViewById(R.id.csl_txt_message);
             txtDate = (TextView) itemView.findViewById(R.id.csl_txt_date);
             txtClock = (TextView) itemView.findViewById(R.id.csl_txt_clock);
 
             if (list.get(position).senderPicturePath.length() > 0) {
                 imvSenderPicture.setImageResource(
-                    Integer.parseInt(list.get(position).senderPicturePath));
+                        Integer.parseInt(list.get(position).senderPicturePath));
             } else {
                 imvSenderPicture.setImageBitmap(
-                    com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture(
-                        (int) context.getResources().getDimension(R.dimen.dp60),
-                        list.get(position).senderName, ""));
+                        com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture(
+                                (int) context.getResources().getDimension(R.dimen.dp60),
+                                list.get(position).senderName, ""));
             }
 
             SpannableString s = new SpannableString(
-                list.get(position).senderName + ": " + list.get(position).message);
+                    list.get(position).senderName + ": " + list.get(position).message);
             s.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.green)), 0,
-                list.get(position).senderName.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    list.get(position).senderName.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             s.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0,
-                list.get(position).senderName.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    list.get(position).senderName.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             txtMessage.setText(s);
 
             txtDate.setText(list.get(position).date);
             txtClock.setText(list.get(position).time);
 
             itemView.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View view) {
+                @Override
+                public void onClick(View view) {
                     if (list.get(position).maxLine) {
                         txtMessage.setEllipsize(null);
                         txtMessage.setMaxLines(Integer.MAX_VALUE);
@@ -241,7 +250,8 @@ public class AdapterComment extends RecyclerView.Adapter<RecyclerView.ViewHolder
             });
 
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override public boolean onLongClick(View view) {
+                @Override
+                public boolean onLongClick(View view) {
 
                     if (replayCommentNumber == -1) {
                         visibleLayoutReplay(position, itemView);

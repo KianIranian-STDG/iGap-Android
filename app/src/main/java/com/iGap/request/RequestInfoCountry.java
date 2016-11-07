@@ -7,7 +7,7 @@ public class RequestInfoCountry {
     public void infoCountry(String isoCode) {
 
         ProtoInfoCountry.InfoCountry.Builder infoCountry =
-            ProtoInfoCountry.InfoCountry.newBuilder();
+                ProtoInfoCountry.InfoCountry.newBuilder();
         infoCountry.setIsoCode(isoCode);
 
         RequestWrapper requestWrapper = new RequestWrapper(501, infoCountry);

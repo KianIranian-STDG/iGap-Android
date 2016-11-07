@@ -9,7 +9,9 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+
 import com.iGap.R;
+
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -84,8 +86,8 @@ public class GifMovieView extends View {
         }
 
         final TypedArray array =
-            context.obtainStyledAttributes(attrs, R.styleable.GifMoviewView, defStyle,
-                R.style.Widget_GifMoviewView);
+                context.obtainStyledAttributes(attrs, R.styleable.GifMoviewView, defStyle,
+                        R.style.Widget_GifMoviewView);
 
         mMovieResourceId = array.getResourceId(R.styleable.GifMoviewView_gif, -1);
         mPaused = array.getBoolean(R.styleable.GifMoviewView_paused, false);
@@ -168,7 +170,8 @@ public class GifMovieView extends View {
         invalidate();
     }
 
-    @Override protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
         if (mMovie != null) {
             int movieWidth = mMovie.width();
@@ -206,7 +209,8 @@ public class GifMovieView extends View {
         }
     }
 
-    @Override protected void onLayout(boolean changed, int l, int t, int r, int b) {
+    @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
 
         mLeft = (getWidth() - mMeasuredMovieWidth) / 2f;
@@ -215,7 +219,8 @@ public class GifMovieView extends View {
         mVisible = getVisibility() == View.VISIBLE;
     }
 
-    @Override protected void onDraw(Canvas canvas) {
+    @Override
+    protected void onDraw(Canvas canvas) {
         if (mMovie != null) {
             if (!mPaused) {
                 updateAnimationTime();
@@ -231,7 +236,8 @@ public class GifMovieView extends View {
      * Invalidates view only if it is visible. <br>
      * {@link #postInvalidateOnAnimation()} is used for Jelly Bean and higher.
      */
-    @SuppressLint("NewApi") private void invalidateView() {
+    @SuppressLint("NewApi")
+    private void invalidateView() {
         if (mVisible) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 postInvalidateOnAnimation();
@@ -273,20 +279,24 @@ public class GifMovieView extends View {
         canvas.restore();
     }
 
-    @SuppressLint("NewApi") @Override public void onScreenStateChanged(int screenState) {
+    @SuppressLint("NewApi")
+    @Override
+    public void onScreenStateChanged(int screenState) {
         super.onScreenStateChanged(screenState);
         mVisible = screenState == SCREEN_STATE_ON;
         invalidateView();
     }
 
-    @SuppressLint("NewApi") @Override
+    @SuppressLint("NewApi")
+    @Override
     protected void onVisibilityChanged(View changedView, int visibility) {
         super.onVisibilityChanged(changedView, visibility);
         mVisible = visibility == View.VISIBLE;
         invalidateView();
     }
 
-    @Override protected void onWindowVisibilityChanged(int visibility) {
+    @Override
+    protected void onWindowVisibilityChanged(int visibility) {
         super.onWindowVisibilityChanged(visibility);
         mVisible = visibility == View.VISIBLE;
         invalidateView();

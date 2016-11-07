@@ -7,7 +7,7 @@ public class RequestGroupSendMessage { //TODO [Saeed Mozaffari] [2016-08-29 1:02
     ProtoGroupSendMessage.GroupSendMessage.Builder groupSendMessage;
 
     public RequestGroupSendMessage newBuilder(ProtoGlobal.RoomMessageType messageType,
-        long roomId) {
+                                              long roomId) {
         groupSendMessage = ProtoGroupSendMessage.GroupSendMessage.newBuilder();
         groupSendMessage.setMessageType(messageType);
         groupSendMessage.setRoomId(roomId);
@@ -46,7 +46,7 @@ public class RequestGroupSendMessage { //TODO [Saeed Mozaffari] [2016-08-29 1:02
 
     public RequestGroupSendMessage sendMessage(String fakeMessageIdAsIdentity) {
         RequestWrapper requestWrapper =
-            new RequestWrapper(310, groupSendMessage, fakeMessageIdAsIdentity);
+                new RequestWrapper(310, groupSendMessage, fakeMessageIdAsIdentity);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

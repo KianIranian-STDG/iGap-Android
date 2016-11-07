@@ -1,101 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <color name="colorPrimary">#3F51B5</color>
-  <color name="colorPrimaryDark">#25000000</color>
-  <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#25000000</color>
+    <color name="colorAccent">#FF4081</color>
 
-  <color name="gray">#999797</color>
-  <color name="light_gray">#adadadad</color>
-  <color name="red">#f23131</color>
-  <color name="green">#31bdb6</color>
-  <color name="greenStatus">#3c000000</color>
+    <color name="gray">#999797</color>
+    <color name="light_gray">#adadadad</color>
+    <color name="red">#f23131</color>
+    <color name="green">#31bdb6</color>
+    <color name="greenStatus">#3c000000</color>
 
-  <color name="gray_9d">#9d9d9d</color>
-  <color name="gray_f2">#f2f2f2</color>
-  <color name="gray_4c">#4c4c4c</color>
-  <color name="gray_3c">#52838383</color>
+    <color name="gray_9d">#9d9d9d</color>
+    <color name="gray_f2">#f2f2f2</color>
+    <color name="gray_4c">#4c4c4c</color>
+    <color name="gray_3c">#52838383</color>
 
-  <color name="am_iconFab_black">#000</color>
-
-
-  //mo
-  <!--toolbar-->
-
-  <color name="toolbar_background">#41c6c4</color>
-
-  <!--REGISTER PAGE-->
-
-  <color name="country">#000</color>
-
-  <!--connectivity Page-->
-
-  <color name="layout_background_top_connectivity">#f2b33d</color>
-
-  <!--guide app-->
-
-  <color name="text_line1_igap_dark">#2a2a2a</color>
-  <color name="text_line2_lc__dark">#4c4c4c</color>
-  <color name="btn_start_page5">#30BCB6</color>
-  <color name="txt_start_page5">#fff</color>
-
-  <!--REGISTER PAGE-->
-
-  <color name="background_editText">#e7e7e7</color>
-  <color name="border_editText">#757575</color>
-  <color name="black_register">#1a1a1a</color>
-  <color name="whit_background">#ffffff</color>
-  <color name="start_background">#31bdb6</color>
-  <color name="line1_background">#34a49f</color>
-  <color name="line2_background">#e4e4e4</color>
-  <color name="confirm_country">#151515</color>
-  <color name="text_verify">#636363</color>
-  <color name="text_dark_verify">#232323</color>
-  <color name="rg_error_red">#ff0000</color>
-
-  <color name="pu_edtHintText">#cacaca</color>
-
-  <!--REGISTER PAGE-->
-
-  <color name="rg_background_verify">#e7e7e7</color>
-  <color name="rg_background_editText">#e7e7e7</color>
-  <color name="rg_border_editText">#757575</color>
-  <color name="rg_black_register">#1a1a1a</color>
-  <color name="rg_agreement_background">#f1f1f1</color>
-  <color name="rg_whit_background">#ffffff</color>
-  <color name="rg_start_background">#31bdb6</color>
-  <color name="rg_line1_background">#34a49f</color>
-  <color name="rg_line2_background">#e4e4e4</color>
-  <color name="rg_confirm_country">#151515</color>
-  <color name="rg_text_verify">#636363</color>
-  <color name="rg_text_dark_verify">#232323</color>
-
-  <color name="toolbar_title_register">#fff</color>
-  <color name="structCountry">#fff</color>
-
-  <color name="st_title_s">#c4c4c4</color>
-  <color name="st_line_editText">#e1e1e1</color>
-  <color name="st_background2">#f7f7f7</color>
-  <color name="line_edit_text">#d2d2d2</color>
-  <color name="hint_edit_text">#9b9b9b</color>
-  <color name="text_edit_text">#000000</color>
+    <color name="am_iconFab_black">#000</color>
 
 
-  <!-- FlowingDrawer -->
+    //mo
+    <!--toolbar-->
 
-  <color name="ou_background_crop">#50000000</color>
+    <color name="toolbar_background">#41c6c4</color>
 
-  <!--Fragment menu contacts-->
-  <color name="primary">#009688</color>
+    <!--REGISTER PAGE-->
 
-  <!-- emoji popup window-->
-  <color name="colorEmojiPopupBackground">#f4f6f5</color>
-  <color name="colorEmojiPopupCategoryBottomBorder">#e4e6e5</color>
+    <color name="country">#000</color>
 
-  <color name="colorChatMessageSelectableItemBg">#99AADFF7</color>
+    <!--connectivity Page-->
 
-  <color name="colorChatMessageTime">#737373</color>
+    <color name="layout_background_top_connectivity">#f2b33d</color>
 
-  <!--ripple-->
-  <color name="rippelColor">#FFFFFF</color>
+    <!--guide app-->
+
+    <color name="text_line1_igap_dark">#2a2a2a</color>
+    <color name="text_line2_lc__dark">#4c4c4c</color>
+    <color name="btn_start_page5">#30BCB6</color>
+    <color name="txt_start_page5">#fff</color>
+
+    <!--REGISTER PAGE-->
+
+    <color name="background_editText">#e7e7e7</color>
+    <color name="border_editText">#757575</color>
+    <color name="black_register">#1a1a1a</color>
+    <color name="whit_background">#ffffff</color>
+    <color name="start_background">#31bdb6</color>
+    <color name="line1_background">#34a49f</color>
+    <color name="line2_background">#e4e4e4</color>
+    <color name="confirm_country">#151515</color>
+    <color name="text_verify">#636363</color>
+    <color name="text_dark_verify">#232323</color>
+    <color name="rg_error_red">#ff0000</color>
+
+    <color name="pu_edtHintText">#cacaca</color>
+
+    <!--REGISTER PAGE-->
+
+    <color name="rg_background_verify">#e7e7e7</color>
+    <color name="rg_background_editText">#e7e7e7</color>
+    <color name="rg_border_editText">#757575</color>
+    <color name="rg_black_register">#1a1a1a</color>
+    <color name="rg_agreement_background">#f1f1f1</color>
+    <color name="rg_whit_background">#ffffff</color>
+    <color name="rg_start_background">#31bdb6</color>
+    <color name="rg_line1_background">#34a49f</color>
+    <color name="rg_line2_background">#e4e4e4</color>
+    <color name="rg_confirm_country">#151515</color>
+    <color name="rg_text_verify">#636363</color>
+    <color name="rg_text_dark_verify">#232323</color>
+
+    <color name="toolbar_title_register">#fff</color>
+    <color name="structCountry">#fff</color>
+
+    <color name="st_title_s">#c4c4c4</color>
+    <color name="st_line_editText">#e1e1e1</color>
+    <color name="st_background2">#f7f7f7</color>
+    <color name="line_edit_text">#d2d2d2</color>
+    <color name="hint_edit_text">#9b9b9b</color>
+    <color name="text_edit_text">#000000</color>
+
+
+    <!-- FlowingDrawer -->
+
+    <color name="ou_background_crop">#50000000</color>
+
+    <!--Fragment menu contacts-->
+    <color name="primary">#009688</color>
+
+    <!-- emoji popup window-->
+    <color name="colorEmojiPopupBackground">#f4f6f5</color>
+    <color name="colorEmojiPopupCategoryBottomBorder">#e4e6e5</color>
+
+    <color name="colorChatMessageSelectableItemBg">#99AADFF7</color>
+
+    <color name="colorChatMessageTime">#737373</color>
+
+    <!--ripple-->
+    <color name="rippelColor">#FFFFFF</color>
 
 </resources>

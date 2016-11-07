@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityChat;
@@ -38,10 +39,12 @@ import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItem;
 import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
-import io.realm.Realm;
-import io.realm.RealmResults;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class SearchFragment extends Fragment {
 
@@ -59,11 +62,14 @@ public class SearchFragment extends Fragment {
         return new SearchFragment();
     }
 
-    @Nullable @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.search_fragment_layout, container, false);
     }
 
-    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         initComponent(view);
@@ -74,21 +80,25 @@ public class SearchFragment extends Fragment {
 
         edtSearch = (EditText) view.findViewById(R.id.sfl_edt_search);
         edtSearch.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
 
-            @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                 if (charSequence.length() == 1 && !isFillList) fillList();
 
                 itemAdapter.filter(charSequence);
             }
 
-            @Override public void afterTextChanged(Editable editable) {
+            @Override
+            public void afterTextChanged(Editable editable) {
 
                 new Handler().postDelayed(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
 
                         chatHeaderGone = contactHeaderGone = messageHeaderGone = true;
 
@@ -119,7 +129,8 @@ public class SearchFragment extends Fragment {
         MaterialDesignTextView btnBack = (MaterialDesignTextView) view.findViewById(R.id.sfl_btn_back);
         final RippleView rippleBack = (RippleView) view.findViewById(R.id.sfl_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
 
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(rippleBack.getWindowToken(), 0);
@@ -130,7 +141,8 @@ public class SearchFragment extends Fragment {
         MaterialDesignTextView btnClose = (MaterialDesignTextView) view.findViewById(R.id.sfl_btn_close);
         RippleView rippleDown = (RippleView) view.findViewById(R.id.sfl_ripple_done);
         rippleDown.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
                 edtSearch.setText("");
             }
         });
@@ -143,7 +155,8 @@ public class SearchFragment extends Fragment {
         fastAdapter = new FastAdapter();
         itemAdapter = new ItemAdapter();
         itemAdapter.withFilterPredicate(new IItemAdapter.Predicate<IItem>() {
-            @Override public boolean filter(IItem currentItem, CharSequence constraint) {
+            @Override
+            public boolean filter(IItem currentItem, CharSequence constraint) {
                 if (currentItem instanceof SearchItemHeader) {
                     SearchItemHeader sih = (SearchItemHeader) currentItem;
                     if (sih.text.equals(getString(R.string.chats)) && chatHeaderGone) {
@@ -168,7 +181,8 @@ public class SearchFragment extends Fragment {
         });
 
         fastAdapter.withOnClickListener(new FastAdapter.OnClickListener<IItem>() {
-            @Override public boolean onClick(View v, IAdapter adapter, IItem currentItem, int position) {
+            @Override
+            public boolean onClick(View v, IAdapter adapter, IItem currentItem, int position) {
 
                 if (currentItem instanceof SearchItemHeader) {
 
@@ -338,9 +352,11 @@ public class SearchFragment extends Fragment {
             getActivity().getSupportFragmentManager().beginTransaction().remove(SearchFragment.this).commit();
         } else {
             G.onChatGetRoom = new OnChatGetRoom() {
-                @Override public void onChatGetRoom(final long roomId) {
+                @Override
+                public void onChatGetRoom(final long roomId) {
                     G.currentActivity.runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             Realm realm = Realm.getDefaultInstance();
                             Intent intent = new Intent(G.context, ActivityChat.class);
                             intent.putExtra("peerId", id);
@@ -353,18 +369,22 @@ public class SearchFragment extends Fragment {
                     });
                 }
 
-                @Override public void onChatGetRoomTimeOut() {
+                @Override
+                public void onChatGetRoomTimeOut() {
 
                 }
 
-                @Override public void onChatGetRoomError(int majorCode, int minorCode) {
+                @Override
+                public void onChatGetRoomError(int majorCode, int minorCode) {
                     if (majorCode == 200) {
                         getActivity().runOnUiThread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_200), Snackbar.LENGTH_LONG);
 
                                 snack.setAction("CANCEL", new View.OnClickListener() {
-                                    @Override public void onClick(View view) {
+                                    @Override
+                                    public void onClick(View view) {
                                         snack.dismiss();
                                     }
                                 });
@@ -374,11 +394,13 @@ public class SearchFragment extends Fragment {
                     }
                     if (majorCode == 201) {
                         getActivity().runOnUiThread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_201), Snackbar.LENGTH_LONG);
 
                                 snack.setAction("CANCEL", new View.OnClickListener() {
-                                    @Override public void onClick(View view) {
+                                    @Override
+                                    public void onClick(View view) {
                                         snack.dismiss();
                                     }
                                 });
@@ -388,11 +410,13 @@ public class SearchFragment extends Fragment {
                     }
                     if (majorCode == 202) {
                         getActivity().runOnUiThread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_202), Snackbar.LENGTH_LONG);
 
                                 snack.setAction("CANCEL", new View.OnClickListener() {
-                                    @Override public void onClick(View view) {
+                                    @Override
+                                    public void onClick(View view) {
                                         snack.dismiss();
                                     }
                                 });

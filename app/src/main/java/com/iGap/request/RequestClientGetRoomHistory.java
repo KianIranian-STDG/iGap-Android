@@ -7,7 +7,7 @@ public class RequestClientGetRoomHistory {
     public void getRoomHistory(long roomId, long firstMessageId, String identity) {
 
         ProtoClientGetRoomHistory.ClientGetRoomHistory.Builder builder =
-            ProtoClientGetRoomHistory.ClientGetRoomHistory.newBuilder();
+                ProtoClientGetRoomHistory.ClientGetRoomHistory.newBuilder();
         builder.setRoomId(roomId);
         builder.setFirstMessageId(firstMessageId);
 

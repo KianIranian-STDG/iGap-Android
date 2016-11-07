@@ -6,7 +6,8 @@ import org.parceler.ParcelConstructor;
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/28/2016.
  */
-@Parcel public class StructDownloadAttachment {
+@Parcel
+public class StructDownloadAttachment {
     public String token;
     public int progress;
     public int offset;

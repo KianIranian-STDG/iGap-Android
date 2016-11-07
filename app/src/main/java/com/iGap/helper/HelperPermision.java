@@ -10,7 +10,9 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+
 import com.iGap.interfaces.OnGetPermision;
+
 import java.util.ArrayList;
 
 /**
@@ -48,11 +50,11 @@ public class HelperPermision {
         ResultCamera = onGetPermision;
 
         int permissionCheck =
-            ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA);
+                ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA);
 
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-            getPremision(context, new String[] { Manifest.permission.CAMERA },
-                MY_PERMISSIONS_CAMERA);
+            getPremision(context, new String[]{Manifest.permission.CAMERA},
+                    MY_PERMISSIONS_CAMERA);
         } else {
             onGetPermision.Allow();
         }
@@ -71,9 +73,9 @@ public class HelperPermision {
         ArrayList<String> needPermosion = null;
 
         int permissionReadStorage =
-            ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE);
+                ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE);
         int permissionWriteStorage =
-            ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
         if (permissionReadStorage != PackageManager.PERMISSION_GRANTED) {
             needPermosion = new ArrayList<>();
@@ -109,9 +111,9 @@ public class HelperPermision {
         ArrayList<String> needPermosion = null;
 
         int permissionReadContact =
-            ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS);
+                ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS);
         int permissionWriteContact =
-            ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CONTACTS);
+                ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CONTACTS);
         //  int permissionWritGetAccunt = ContextCompat.checkSelfPermission(context, Manifest.permission.GET_ACCOUNTS);
 
         if (permissionReadContact != PackageManager.PERMISSION_GRANTED) {
@@ -156,9 +158,9 @@ public class HelperPermision {
         ArrayList<String> needPermosion = null;
 
         int permissionReadCalendar =
-            ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR);
+                ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR);
         int permissionWriteCaledar =
-            ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALENDAR);
+                ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALENDAR);
 
         if (permissionReadCalendar != PackageManager.PERMISSION_GRANTED) {
             needPermosion = new ArrayList<>();
@@ -194,9 +196,9 @@ public class HelperPermision {
         ArrayList<String> needPermosion = null;
 
         int permissionFineLocation =
-            ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION);
+                ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION);
         int permissionCoreseLocation =
-            ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION);
+                ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION);
 
         if (permissionFineLocation != PackageManager.PERMISSION_GRANTED) {
             needPermosion = new ArrayList<>();
@@ -230,11 +232,11 @@ public class HelperPermision {
         ResultRecordAudio = onGetPermision;
 
         int permissionCheck =
-            ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO);
+                ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO);
 
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-            getPremision(context, new String[] { Manifest.permission.RECORD_AUDIO },
-                MY_PERMISSIONS_RECORD_AUDIO);
+            getPremision(context, new String[]{Manifest.permission.RECORD_AUDIO},
+                    MY_PERMISSIONS_RECORD_AUDIO);
         } else {
             onGetPermision.Allow();
         }
@@ -253,9 +255,9 @@ public class HelperPermision {
         ArrayList<String> needPermosion = null;
 
         int permissionCallPhone =
-            ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE);
+                ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE);
         int permissionReadPhoneState =
-            ContextCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE);
+                ContextCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE);
 
         //        int permissionReadCallLog = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CALL_LOG);
         //        int permissionWriteCallLog = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALL_LOG);
@@ -297,9 +299,9 @@ public class HelperPermision {
         ArrayList<String> needPermosion = null;
 
         int permissionReciveSms =
-            ContextCompat.checkSelfPermission(context, Manifest.permission.RECEIVE_SMS);
+                ContextCompat.checkSelfPermission(context, Manifest.permission.RECEIVE_SMS);
         int permissionReadSms =
-            ContextCompat.checkSelfPermission(context, Manifest.permission.READ_SMS);
+                ContextCompat.checkSelfPermission(context, Manifest.permission.READ_SMS);
 
         //        int permissionSendSms = ContextCompat.checkSelfPermission(context, Manifest.permission.SEND_SMS);
         //        int permissionReciveWashBush = ContextCompat.checkSelfPermission(context, Manifest.permission.RECEIVE_WAP_PUSH);
@@ -337,17 +339,18 @@ public class HelperPermision {
 
     //************************************************************************************************************
     public static void getPremision(final Context context, final String[] needPermision,
-        final int requestCode) {
+                                    final int requestCode) {
 
         if (!ActivityCompat.shouldShowRequestPermissionRationale((Activity) context,
-            needPermision[0])) {
+                needPermision[0])) {
             showMessageOKCancel(context, "You need to allow " + needPermision[0],
-                new DialogInterface.OnClickListener() {
-                    @Override public void onClick(DialogInterface dialog, int which) {
-                        ActivityCompat.requestPermissions((Activity) context, needPermision,
-                            requestCode);
-                    }
-                });
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ActivityCompat.requestPermissions((Activity) context, needPermision,
+                                    requestCode);
+                        }
+                    });
             return;
         }
 
@@ -355,17 +358,17 @@ public class HelperPermision {
     }
 
     private static void showMessageOKCancel(Context context, String message,
-        DialogInterface.OnClickListener okListener) {
+                                            DialogInterface.OnClickListener okListener) {
         new AlertDialog.Builder(context).setMessage(message)
-            .setPositiveButton("OK", okListener)
-            .setNegativeButton("Cancel", null)
-            .create()
-            .show();
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();
     }
 
     //************************************************************************************************************
     public static void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-        @NonNull int[] grantResults) {
+                                                  @NonNull int[] grantResults) {
 
         switch (requestCode) {
             case MY_PERMISSIONS_CAMERA:

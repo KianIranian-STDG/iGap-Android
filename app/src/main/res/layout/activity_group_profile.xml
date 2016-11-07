@@ -4,630 +4,575 @@
     android:id="@+id/fragmentContainer_group_profile"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layoutDirection="ltr"
-    >
+    android:layoutDirection="ltr">
 
-  <android.support.design.widget.CoordinatorLayout
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:layout_alignParentTop="true"
-      android:layout_alignParentLeft="true"
-      android:layout_alignParentStart="true"
-      >
-
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/agp_appbar"
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp140"
-        android:background="@color/toolbar_background"
-        android:fitsSystemWindows="true"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        >
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
 
-      <android.support.design.widget.CollapsingToolbarLayout
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          app:contentScrim="@color/toolbar_background"
-          app:expandedTitleMarginBottom="32dp"
-          app:expandedTitleMarginEnd="64dp"
-          app:expandedTitleMarginStart="48dp"
-          app:expandedTitleTextAppearance="@android:color/transparent"
-          app:layout_scrollFlags="scroll|exitUntilCollapsed"
-          >
-
-
-        <LinearLayout
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/agp_appbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:paddingTop="@dimen/dp8"
-            app:layout_collapseMode="parallax"
-            >
+            android:layout_height="@dimen/dp140"
+            android:background="@color/toolbar_background"
+            android:fitsSystemWindows="true"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-          <com.iGap.libs.rippleeffect.RippleView
-              android:id="@+id/agp_ripple_group_avatar"
-              android:layout_width="@dimen/dp88"
-              android:layout_height="@dimen/dp88"
-              app:rv_alpha="200"
-              app:rv_centered="true"
-              app:rv_rippleDuration="150"
-              app:rv_ripplePadding="5dp"
-              rv_centered="true"
-              >
-
-            <com.iGap.module.CircleImageView
-                android:id="@+id/agp_imv_group_avatar"
-                android:layout_width="@dimen/dp88"
-                android:layout_height="@dimen/dp88"
-                android:src="@mipmap/back_chat3"
-                />
-          </com.iGap.libs.rippleeffect.RippleView>
-
-          <TextView
-              android:id="@+id/agp_txt_group_name_title"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:singleLine="true"
-              android:text=""
-              android:textAppearance="?android:attr/textAppearanceMedium"
-              android:textColor="@android:color/white"
-              android:textSize="@dimen/sp18"
-              />
-
-        </LinearLayout>
-
-        <android.support.v7.widget.Toolbar
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp60"
-            app:contentInsetLeft="0dp"
-            app:contentInsetStart="0dp"
-            app:layout_collapseMode="pin"
-            >
-
-          <RelativeLayout
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              >
-
-            <com.iGap.libs.rippleeffect.RippleView
-                android:id="@+id/agp_ripple_back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                app:rv_alpha="200"
-                app:rv_centered="true"
-                app:rv_rippleDuration="150"
-                app:rv_ripplePadding="5dp"
-                rv_centered="true"
-                >
-
-              <com.iGap.module.MaterialDesignTextView
-                  android:id="@+id/agp_btn_back"
-                  android:layout_width="@dimen/dp60"
-                  android:layout_height="match_parent"
-                  android:layout_alignParentLeft="true"
-                  android:gravity="center"
-                  android:text="@string/md_back_arrow"
-                  android:textColor="@android:color/white"
-                  android:textSize="@dimen/sp18"
-                  fontPath="fonts/Flaticon.ttf"
-                  />
-            </com.iGap.libs.rippleeffect.RippleView>
-
-            <TextView
-                android:id="@+id/agp_txt_titleToolbar"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_centerInParent="true"
-                android:gravity="center"
-                android:text="Group Profile"
-                android:textColor="@color/whit_background"
-                android:textSize="@dimen/sp22"
-                android:textStyle="bold"
-                android:visibility="gone"
-                />
-
-            <com.iGap.libs.rippleeffect.RippleView
-                android:id="@+id/agp_ripple_menu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                app:rv_alpha="200"
-                app:rv_centered="true"
-                app:rv_rippleDuration="150"
-                app:rv_ripplePadding="5dp"
-                rv_centered="true"
-                >
-
-              <com.iGap.module.MaterialDesignTextView
-                  android:id="@+id/agp_btn_menu"
-                  android:layout_width="@dimen/dp60"
-                  android:layout_height="match_parent"
-                  android:gravity="center"
-                  android:text="@string/md_show_more_button"
-                  android:textColor="@android:color/white"
-                  android:textSize="@dimen/sp18"
-                  fontPath="fonts/Flaticon.ttf"
-                  />
-            </com.iGap.libs.rippleeffect.RippleView>
-          </RelativeLayout>
-        </android.support.v7.widget.Toolbar>
-
-      </android.support.design.widget.CollapsingToolbarLayout>
-
-    </android.support.design.widget.AppBarLayout>
-
-    <android.support.v4.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fillViewport="true"
-        android:scrollbars="none"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        >
-
-      <LinearLayout
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:orientation="vertical"
-          >
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
-            >
-
-
-          <TextView
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:gravity="center"
-              android:padding="@dimen/dp8"
-              android:text="INFO"
-              android:textColor="@color/green"
-              android:textSize="@dimen/sp18"
-              android:textStyle="bold"
-              />
-
-          <LinearLayout
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:gravity="left"
-              android:orientation="horizontal"
-              >
-
-
-            <LinearLayout
-                android:id="@+id/agp_ll_group_name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:paddingLeft="@dimen/dp12"
-                android:paddingRight="@dimen/dp12"
-
-                >
-
-              <TextView
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:singleLine="true"
-                  android:text="@string/group_name"
-                  android:textSize="@dimen/sp16"
-                  />
-
-              <TextView
-                  android:id="@+id/agp_txt_group_name"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:paddingBottom="@dimen/dp18"
-                  android:paddingTop="@dimen/dp4"
-                  android:singleLine="true"
-                  android:text=""
-                  android:textColor="@android:color/black"
-                  android:textSize="@dimen/sp16"
-                  />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/agp_ll_sheared_media"
-                android:layout_width="@dimen/dp140"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingLeft="@dimen/dp12"
-                android:paddingRight="@dimen/dp12"
-
-                >
-
-              <TextView
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:singleLine="true"
-                  android:text="@string/shared_media"
-                  android:textSize="@dimen/sp16"
-                  />
-
-              <TextView
-                  android:id="@+id/agp_txt_number_of_shared_media"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:paddingBottom="@dimen/dp18"
-                  android:paddingTop="@dimen/dp4"
-                  android:singleLine="true"
-                  android:text="12"
-                  android:textColor="@android:color/black"
-                  android:textSize="@dimen/sp16"
-                  />
-            </LinearLayout>
-
-
-          </LinearLayout>
-
-
-          <LinearLayout
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:gravity="left"
-              android:orientation="horizontal"
-              >
-
-
-            <LinearLayout
-                android:id="@+id/agp_ll_group_description"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:paddingLeft="@dimen/dp12"
-                android:paddingRight="@dimen/dp12"
-
-                >
-
-              <TextView
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:singleLine="true"
-                  android:text="@string/group_description"
-                  android:textSize="@dimen/sp16"
-                  />
-
-              <TextView
-                  android:id="@+id/agp_txt_group_description"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:paddingBottom="@dimen/dp18"
-                  android:paddingTop="@dimen/dp4"
-                  android:singleLine="true"
-                  android:text=""
-                  android:textColor="@android:color/black"
-                  android:textSize="@dimen/sp16"
-                  />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="@dimen/dp140"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingLeft="@dimen/dp12"
-                android:paddingRight="@dimen/dp12"
-
-                >
-
-              <TextView
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:singleLine="true"
-                  android:text="@string/member"
-                  android:textSize="@dimen/sp16"
-                  />
-
-              <TextView
-                  android:id="@+id/agp_txt_member_number"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:paddingBottom="@dimen/dp18"
-                  android:paddingTop="@dimen/dp4"
-                  android:singleLine="true"
-                  android:text=""
-                  android:textColor="@android:color/black"
-                  android:textSize="@dimen/sp16"
-                  />
-
-            </LinearLayout>
-
-
-          </LinearLayout>
-
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/gray_f2"
-            android:gravity="left"
-            android:orientation="vertical"
-            >
-
-          <TextView
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:gravity="center"
-              android:padding="@dimen/dp8"
-              android:text="Members"
-              android:textColor="@color/green"
-              android:textSize="@dimen/sp18"
-              android:textStyle="bold"
-              />
-
-
-          <LinearLayout
-              android:id="@+id/agp_layout_add_member"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:gravity="left|center"
-              android:orientation="horizontal"
-              android:paddingBottom="@dimen/dp8"
-              android:paddingLeft="@dimen/dp8"
-              >
-
-            <com.iGap.module.CircleImageView
-                android:layout_width="@dimen/dp48"
-                android:layout_height="@dimen/dp48"
-                android:layout_marginLeft="@dimen/dp4"
-                android:scaleType="centerCrop"
-                android:src="@mipmap/add_chat_background3"
-                />
-
-            <TextView
+            <android.support.design.widget.CollapsingToolbarLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:padding="@dimen/dp8"
-                android:text="@string/add_new_member"
-                android:textSize="@dimen/sp16"
-                />
+                app:contentScrim="@color/toolbar_background"
+                app:expandedTitleMarginBottom="32dp"
+                app:expandedTitleMarginEnd="64dp"
+                app:expandedTitleMarginStart="48dp"
+                app:expandedTitleTextAppearance="@android:color/transparent"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
 
-          </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingTop="@dimen/dp8"
+                    app:layout_collapseMode="parallax">
 
+                    <com.iGap.libs.rippleeffect.RippleView
+                        android:id="@+id/agp_ripple_group_avatar"
+                        rv_centered="true"
+                        android:layout_width="@dimen/dp88"
+                        android:layout_height="@dimen/dp88"
+                        app:rv_alpha="200"
+                        app:rv_centered="true"
+                        app:rv_rippleDuration="150"
+                        app:rv_ripplePadding="5dp">
 
-          <android.support.v7.widget.RecyclerView
-              android:id="@+id/agp_recycler_view_group_member"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:scrollbars="vertical"
-              android:visibility="visible"
-              app:layout_behavior="@string/appbar_scrolling_view_behavior"
-              />
+                        <com.iGap.module.CircleImageView
+                            android:id="@+id/agp_imv_group_avatar"
+                            android:layout_width="@dimen/dp88"
+                            android:layout_height="@dimen/dp88"
+                            android:src="@mipmap/back_chat3" />
+                    </com.iGap.libs.rippleeffect.RippleView>
 
-          <TextView
-              android:id="@+id/agp_txt_more"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:gravity="center"
-              android:padding="@dimen/dp12"
-              android:text="more..."
-              android:textSize="@dimen/sp16"
-              />
+                    <TextView
+                        android:id="@+id/agp_txt_group_name_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:text=""
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/sp18" />
 
+                </LinearLayout>
 
-        </LinearLayout>
+                <android.support.v7.widget.Toolbar
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp60"
+                    app:contentInsetLeft="0dp"
+                    app:contentInsetStart="0dp"
+                    app:layout_collapseMode="pin">
 
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
 
-        <LinearLayout
-            android:id="@+id/agp_ll_seetting"
+                        <com.iGap.libs.rippleeffect.RippleView
+                            android:id="@+id/agp_ripple_back"
+                            rv_centered="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            app:rv_alpha="200"
+                            app:rv_centered="true"
+                            app:rv_rippleDuration="150"
+                            app:rv_ripplePadding="5dp">
+
+                            <com.iGap.module.MaterialDesignTextView
+                                android:id="@+id/agp_btn_back"
+                                fontPath="fonts/Flaticon.ttf"
+                                android:layout_width="@dimen/dp60"
+                                android:layout_height="match_parent"
+                                android:layout_alignParentLeft="true"
+                                android:gravity="center"
+                                android:text="@string/md_back_arrow"
+                                android:textColor="@android:color/white"
+                                android:textSize="@dimen/sp18" />
+                        </com.iGap.libs.rippleeffect.RippleView>
+
+                        <TextView
+                            android:id="@+id/agp_txt_titleToolbar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_centerInParent="true"
+                            android:gravity="center"
+                            android:text="Group Profile"
+                            android:textColor="@color/whit_background"
+                            android:textSize="@dimen/sp22"
+                            android:textStyle="bold"
+                            android:visibility="gone" />
+
+                        <com.iGap.libs.rippleeffect.RippleView
+                            android:id="@+id/agp_ripple_menu"
+                            rv_centered="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            app:rv_alpha="200"
+                            app:rv_centered="true"
+                            app:rv_rippleDuration="150"
+                            app:rv_ripplePadding="5dp">
+
+                            <com.iGap.module.MaterialDesignTextView
+                                android:id="@+id/agp_btn_menu"
+                                fontPath="fonts/Flaticon.ttf"
+                                android:layout_width="@dimen/dp60"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="@string/md_show_more_button"
+                                android:textColor="@android:color/white"
+                                android:textSize="@dimen/sp18" />
+                        </com.iGap.libs.rippleeffect.RippleView>
+                    </RelativeLayout>
+                </android.support.v7.widget.Toolbar>
+
+            </android.support.design.widget.CollapsingToolbarLayout>
+
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="left"
-            android:orientation="vertical"
-            >
-
-          <TextView
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:gravity="center"
-              android:padding="@dimen/dp12"
-              android:text="Settings"
-              android:textColor="@color/green"
-              android:textSize="@dimen/sp18"
-              android:textStyle="bold"
-              />
-
-          <LinearLayout
-              android:id="@+id/agp_ll_set_admin"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:gravity="left"
-              android:orientation="vertical"
-              >
-
-            <TextView
-                android:id="@+id/agp_txt_set_admin"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="left"
-                android:paddingBottom="@dimen/dp4"
-                android:paddingLeft="@dimen/dp16"
-                android:paddingTop="@dimen/dp4"
-                android:singleLine="true"
-                android:text="@string/set_admin"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/sp16"
-                />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_marginBottom="@dimen/dp4"
-                android:layout_marginTop="@dimen/dp12"
-                android:background="@color/gray"
-                />
-          </LinearLayout>
-
-          <LinearLayout
-              android:id="@+id/agp_ll_set_modereator"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:gravity="left"
-              android:orientation="vertical"
-              >
-
-            <TextView
-                android:id="@+id/agp_txt_add_modereator"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="left"
-                android:paddingBottom="@dimen/dp4"
-                android:paddingLeft="@dimen/dp16"
-                android:paddingTop="@dimen/dp4"
-                android:singleLine="true"
-                android:text="@string/set_modereator"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/sp16"
-                />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_marginBottom="@dimen/dp4"
-                android:layout_marginTop="@dimen/dp12"
-                android:background="@color/gray"
-                />
-
-          </LinearLayout>
-
-          <LinearLayout
-              android:id="@+id/agp_ll_member_can_add_member"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:gravity="left"
-              android:orientation="vertical"
-              >
+            android:fillViewport="true"
+            android:scrollbars="none"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal"
-                >
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-              <TextView
-                  android:layout_width="0dp"
-                  android:layout_height="wrap_content"
-                  android:layout_weight="1"
-                  android:gravity="left"
-                  android:paddingBottom="@dimen/dp4"
-                  android:paddingLeft="@dimen/dp16"
-                  android:paddingTop="@dimen/dp4"
-                  android:singleLine="true"
-                  android:text="@string/member_can_add_new_member"
-                  android:textColor="@android:color/black"
-                  android:textSize="@dimen/sp16"
-                  />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-              <ToggleButton
-                  android:id="@+id/agp_toggle_member_can_add_member"
-                  android:layout_width="@dimen/dp40"
-                  android:layout_height="@dimen/dp40"
-                  android:background="@drawable/st_switch_button"
-                  android:paddingRight="@dimen/dp4"
-                  android:textOff=""
-                  android:textOn=""
-                  />
 
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="@dimen/dp8"
+                        android:text="INFO"
+                        android:textColor="@color/green"
+                        android:textSize="@dimen/sp18"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:orientation="horizontal">
+
+
+                        <LinearLayout
+                            android:id="@+id/agp_ll_group_name"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:paddingLeft="@dimen/dp12"
+                            android:paddingRight="@dimen/dp12"
+
+                            >
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:singleLine="true"
+                                android:text="@string/group_name"
+                                android:textSize="@dimen/sp16" />
+
+                            <TextView
+                                android:id="@+id/agp_txt_group_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingBottom="@dimen/dp18"
+                                android:paddingTop="@dimen/dp4"
+                                android:singleLine="true"
+                                android:text=""
+                                android:textColor="@android:color/black"
+                                android:textSize="@dimen/sp16" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/agp_ll_sheared_media"
+                            android:layout_width="@dimen/dp140"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingLeft="@dimen/dp12"
+                            android:paddingRight="@dimen/dp12"
+
+                            >
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:singleLine="true"
+                                android:text="@string/shared_media"
+                                android:textSize="@dimen/sp16" />
+
+                            <TextView
+                                android:id="@+id/agp_txt_number_of_shared_media"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingBottom="@dimen/dp18"
+                                android:paddingTop="@dimen/dp4"
+                                android:singleLine="true"
+                                android:text="12"
+                                android:textColor="@android:color/black"
+                                android:textSize="@dimen/sp16" />
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:orientation="horizontal">
+
+
+                        <LinearLayout
+                            android:id="@+id/agp_ll_group_description"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:paddingLeft="@dimen/dp12"
+                            android:paddingRight="@dimen/dp12"
+
+                            >
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:singleLine="true"
+                                android:text="@string/group_description"
+                                android:textSize="@dimen/sp16" />
+
+                            <TextView
+                                android:id="@+id/agp_txt_group_description"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingBottom="@dimen/dp18"
+                                android:paddingTop="@dimen/dp4"
+                                android:singleLine="true"
+                                android:text=""
+                                android:textColor="@android:color/black"
+                                android:textSize="@dimen/sp16" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="@dimen/dp140"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingLeft="@dimen/dp12"
+                            android:paddingRight="@dimen/dp12"
+
+                            >
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:singleLine="true"
+                                android:text="@string/member"
+                                android:textSize="@dimen/sp16" />
+
+                            <TextView
+                                android:id="@+id/agp_txt_member_number"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingBottom="@dimen/dp18"
+                                android:paddingTop="@dimen/dp4"
+                                android:singleLine="true"
+                                android:text=""
+                                android:textColor="@android:color/black"
+                                android:textSize="@dimen/sp16" />
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/gray_f2"
+                    android:gravity="left"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="@dimen/dp8"
+                        android:text="Members"
+                        android:textColor="@color/green"
+                        android:textSize="@dimen/sp18"
+                        android:textStyle="bold" />
+
+
+                    <LinearLayout
+                        android:id="@+id/agp_layout_add_member"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left|center"
+                        android:orientation="horizontal"
+                        android:paddingBottom="@dimen/dp8"
+                        android:paddingLeft="@dimen/dp8">
+
+                        <com.iGap.module.CircleImageView
+                            android:layout_width="@dimen/dp48"
+                            android:layout_height="@dimen/dp48"
+                            android:layout_marginLeft="@dimen/dp4"
+                            android:scaleType="centerCrop"
+                            android:src="@mipmap/add_chat_background3" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:padding="@dimen/dp8"
+                            android:text="@string/add_new_member"
+                            android:textSize="@dimen/sp16" />
+
+
+                    </LinearLayout>
+
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/agp_recycler_view_group_member"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:scrollbars="vertical"
+                        android:visibility="visible"
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+                    <TextView
+                        android:id="@+id/agp_txt_more"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="@dimen/dp12"
+                        android:text="more..."
+                        android:textSize="@dimen/sp16" />
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/agp_ll_seetting"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="@dimen/dp12"
+                        android:text="Settings"
+                        android:textColor="@color/green"
+                        android:textSize="@dimen/sp18"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:id="@+id/agp_ll_set_admin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/agp_txt_set_admin"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:paddingBottom="@dimen/dp4"
+                            android:paddingLeft="@dimen/dp16"
+                            android:paddingTop="@dimen/dp4"
+                            android:singleLine="true"
+                            android:text="@string/set_admin"
+                            android:textColor="@android:color/black"
+                            android:textSize="@dimen/sp16" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1px"
+                            android:layout_marginBottom="@dimen/dp4"
+                            android:layout_marginTop="@dimen/dp12"
+                            android:background="@color/gray" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/agp_ll_set_modereator"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/agp_txt_add_modereator"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:paddingBottom="@dimen/dp4"
+                            android:paddingLeft="@dimen/dp16"
+                            android:paddingTop="@dimen/dp4"
+                            android:singleLine="true"
+                            android:text="@string/set_modereator"
+                            android:textColor="@android:color/black"
+                            android:textSize="@dimen/sp16" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1px"
+                            android:layout_marginBottom="@dimen/dp4"
+                            android:layout_marginTop="@dimen/dp12"
+                            android:background="@color/gray" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/agp_ll_member_can_add_member"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="left"
+                                android:paddingBottom="@dimen/dp4"
+                                android:paddingLeft="@dimen/dp16"
+                                android:paddingTop="@dimen/dp4"
+                                android:singleLine="true"
+                                android:text="@string/member_can_add_new_member"
+                                android:textColor="@android:color/black"
+                                android:textSize="@dimen/sp16" />
+
+                            <ToggleButton
+                                android:id="@+id/agp_toggle_member_can_add_member"
+                                android:layout_width="@dimen/dp40"
+                                android:layout_height="@dimen/dp40"
+                                android:background="@drawable/st_switch_button"
+                                android:paddingRight="@dimen/dp4"
+                                android:textOff=""
+                                android:textOn="" />
+
+
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1px"
+                            android:layout_marginBottom="@dimen/dp12"
+                            android:layout_marginTop="@dimen/dp4"
+                            android:background="@color/gray" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/agp_ll_notification"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/agp_txt_str_notification_and_sound"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:paddingBottom="@dimen/dp4"
+                            android:paddingLeft="@dimen/dp16"
+                            android:paddingTop="@dimen/dp4"
+                            android:singleLine="true"
+                            android:text="@string/notificaion_and_sound"
+                            android:textColor="@android:color/black"
+                            android:textSize="@dimen/sp16" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1px"
+                            android:layout_marginBottom="@dimen/dp12"
+                            android:layout_marginTop="@dimen/dp12"
+                            android:background="@color/gray" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/agp_ll_delete_and_left_group"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/agp_txt_str_delete_and_leave_group"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:paddingBottom="@dimen/dp18"
+                            android:paddingLeft="@dimen/dp16"
+                            android:paddingTop="@dimen/dp4"
+                            android:singleLine="true"
+                            android:text="@string/Delete_and_leave_Group"
+                            android:textColor="@android:color/black"
+                            android:textSize="@dimen/sp16" />
+                    </LinearLayout>
+
+                </LinearLayout>
 
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_marginBottom="@dimen/dp12"
-                android:layout_marginTop="@dimen/dp4"
-                android:background="@color/gray"
-                />
-          </LinearLayout>
 
-          <LinearLayout
-              android:id="@+id/agp_ll_notification"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:gravity="left"
-              android:orientation="vertical"
-              >
+        </android.support.v4.widget.NestedScrollView>
 
-            <TextView
-                android:id="@+id/agp_txt_str_notification_and_sound"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="left"
-                android:paddingBottom="@dimen/dp4"
-                android:paddingLeft="@dimen/dp16"
-                android:paddingTop="@dimen/dp4"
-                android:singleLine="true"
-                android:text="@string/notificaion_and_sound"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/sp16"
-                />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/agp_fab_setPic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp20"
+            android:clickable="true"
+            android:src="@mipmap/pu_camera"
+            android:theme="@style/FabButton"
+            android:tint="@color/gray"
+            app:fabSize="mini"
+            app:layout_anchor="@+id/agp_appbar"
+            app:layout_anchorGravity="bottom|right|end" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_marginBottom="@dimen/dp12"
-                android:layout_marginTop="@dimen/dp12"
-                android:background="@color/gray"
-                />
-          </LinearLayout>
-
-          <LinearLayout
-              android:id="@+id/agp_ll_delete_and_left_group"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:gravity="left"
-              android:orientation="vertical"
-              >
-
-            <TextView
-                android:id="@+id/agp_txt_str_delete_and_leave_group"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="left"
-                android:paddingBottom="@dimen/dp18"
-                android:paddingLeft="@dimen/dp16"
-                android:paddingTop="@dimen/dp4"
-                android:singleLine="true"
-                android:text="@string/Delete_and_leave_Group"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/sp16"
-                />
-          </LinearLayout>
-
-        </LinearLayout>
-
-      </LinearLayout>
-
-
-    </android.support.v4.widget.NestedScrollView>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/agp_fab_setPic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dp20"
-        android:clickable="true"
-        android:src="@mipmap/pu_camera"
-        android:theme="@style/FabButton"
-        android:tint="@color/gray"
-        app:fabSize="mini"
-        app:layout_anchor="@+id/agp_appbar"
-        app:layout_anchorGravity="bottom|right|end"
-        />
-
-  </android.support.design.widget.CoordinatorLayout>
+    </android.support.design.widget.CoordinatorLayout>
 
 </RelativeLayout>

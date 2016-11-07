@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
@@ -30,9 +31,11 @@ import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.enums.RoomType;
+
+import java.util.Date;
+
 import io.realm.Realm;
 import io.realm.RealmResults;
-import java.util.Date;
 
 import static com.iGap.R.id.recyclerView;
 
@@ -63,7 +66,8 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
         return fragment;
     }
 
-    @Override public void onCreate(@Nullable Bundle savedInstanceState) {
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // init passed data through bundle
@@ -74,13 +78,15 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
         G.onFileDownloadResponse = this;
     }
 
-    @Nullable @Override
+    @Nullable
+    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-        @Nullable Bundle savedInstanceState) {
+                             @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_show_image_messages, container, false);
     }
 
-    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         // init fields
@@ -93,37 +99,39 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
 
         // ripple back
         ((RippleView) view.findViewById(R.id.back)).setOnRippleCompleteListener(
-            new RippleView.OnRippleCompleteListener() {
-                @Override public void onComplete(RippleView rippleView) {
-                    getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .remove(FragmentShowImageMessages.this)
-                        .commit();
-                }
-            });
+                new RippleView.OnRippleCompleteListener() {
+                    @Override
+                    public void onComplete(RippleView rippleView) {
+                        getActivity().getSupportFragmentManager()
+                                .beginTransaction()
+                                .remove(FragmentShowImageMessages.this)
+                                .commit();
+                    }
+                });
 
         // ripple menu
         ((RippleView) view.findViewById(R.id.menu)).setOnRippleCompleteListener(
-            new RippleView.OnRippleCompleteListener() {
-                @Override public void onComplete(RippleView rippleView) {
-                    showPopupMenu();
-                }
-            });
+                new RippleView.OnRippleCompleteListener() {
+                    @Override
+                    public void onComplete(RippleView rippleView) {
+                        showPopupMenu();
+                    }
+                });
 
         Realm realm = Realm.getDefaultInstance();
         RealmResults<RealmRoomMessage> roomMessages =
-            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId)
-            .findAll();
+                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId)
+                        .findAll();
         if (!roomMessages.isEmpty()) {
             // there is at least on history in DB
             long identifier = System.nanoTime();
             for (RealmRoomMessage roomMessage : roomMessages) {
                 ProtoGlobal.RoomMessageType messageType =
-                    ProtoGlobal.RoomMessageType.valueOf(roomMessage.getMessageType());
+                        ProtoGlobal.RoomMessageType.valueOf(roomMessage.getMessageType());
                 if (messageType == ProtoGlobal.RoomMessageType.IMAGE
-                    || messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
+                        || messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
                     mAdapter.add(new ImageMessageItem().setMessage(roomMessage)
-                        .withIdentifier(identifier));
+                            .withIdentifier(identifier));
                     identifier++;
                 }
             }
@@ -134,7 +142,7 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
             mRecyclerView.setItemViewCacheSize(20);
             mRecyclerView.setDrawingCacheEnabled(true);
             LinearLayoutManager layoutManager =
-                new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+                    new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
             mRecyclerView.setLayoutManager(layoutManager);
             mRecyclerView.setAdapter(mAdapter);
 
@@ -144,13 +152,13 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
                     super.onScrollStateChanged(recyclerView, newState);
 
                     int currentlyViewedPos =
-                        ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                            ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
                     ImageMessageItem item = mAdapter.getAdapterItem(currentlyViewedPos);
                     mCount.setText(String.format(getString(R.string.d_of_d), currentlyViewedPos + 1,
-                        mAdapter.getAdapterItemCount()));
+                            mAdapter.getAdapterItemCount()));
                     mFileName.setText(item.message.getAttachment().getName());
                     mMessageTime.setText(TimeUtils.getChatSettingsTimeAgo(getContext(),
-                        new Date(item.message.getUpdateTime())));
+                            new Date(item.message.getUpdateTime())));
                 }
             });
 
@@ -160,10 +168,10 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
 
             ImageMessageItem selectedItem = findByToken(mSelectedToken);
             mCount.setText(
-                String.format(getString(R.string.d_of_d), 1, mAdapter.getAdapterItemCount()));
+                    String.format(getString(R.string.d_of_d), 1, mAdapter.getAdapterItemCount()));
             mFileName.setText(selectedItem.message.getAttachment().getName());
             mMessageTime.setText(TimeUtils.getChatSettingsTimeAgo(getContext(),
-                new Date(selectedItem.message.getUpdateTime())));
+                    new Date(selectedItem.message.getUpdateTime())));
 
             preSelect();
         } else {
@@ -197,17 +205,18 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
 
     private void showPopupMenu() {
         MaterialDialog dialog =
-            new MaterialDialog.Builder(getActivity()).items(R.array.pop_up_menu_show_image)
-                .contentColor(Color.BLACK)
-                .itemsCallback(new MaterialDialog.ListCallback() {
-                    @Override public void onSelection(MaterialDialog dialog, View view, int which,
-                        CharSequence text) {
-                        if (which == 0) {
-                            showAllMedia();
-                        } else if (which == 1) {
-                            saveToGallery();
-                        }
-                        // TODO: 10/26/2016 [Alireza] implement delete
+                new MaterialDialog.Builder(getActivity()).items(R.array.pop_up_menu_show_image)
+                        .contentColor(Color.BLACK)
+                        .itemsCallback(new MaterialDialog.ListCallback() {
+                            @Override
+                            public void onSelection(MaterialDialog dialog, View view, int which,
+                                                    CharSequence text) {
+                                if (which == 0) {
+                                    showAllMedia();
+                                } else if (which == 1) {
+                                    saveToGallery();
+                                }
+                                // TODO: 10/26/2016 [Alireza] implement delete
                         /*else if (which == 2) {
                             int pos = mRecyclerView.getCurrentItem();
                             if (deleteFromGallery(pos)) {
@@ -217,9 +226,9 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
                                 }
                             }
                         }*/
-                    }
-                })
-                .show();
+                            }
+                        })
+                        .show();
 
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
         layoutParams.copyFrom(dialog.getWindow().getAttributes());
@@ -236,10 +245,12 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
         Log.i(FragmentShowImageMessages.class.getSimpleName(), "Save to gallery");
     }
 
-    @Override public void onFileDownload(final String token, final int offset,
-        final ProtoFileDownload.FileDownload.Selector selector, final int progress) {
+    @Override
+    public void onFileDownload(final String token, final int offset,
+                               final ProtoFileDownload.FileDownload.Selector selector, final int progress) {
         getActivity().runOnUiThread(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 if (selector != ProtoFileDownload.FileDownload.Selector.FILE) {
                     // requested thumbnail
                     mAdapter.downloadingAvatarThumbnail(token);
@@ -251,22 +262,26 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
         });
     }
 
-    @Override public void onAvatarDownload(String token, int offset,
-        ProtoFileDownload.FileDownload.Selector selector, int progress, long userId,
-        RoomType roomType) {
+    @Override
+    public void onAvatarDownload(String token, int offset,
+                                 ProtoFileDownload.FileDownload.Selector selector, int progress, long userId,
+                                 RoomType roomType) {
         // empty
     }
 
-    @Override public void onError(int majorCode, int minorCode) {
+    @Override
+    public void onError(int majorCode, int minorCode) {
         if (majorCode == 713 && minorCode == 1) {
             getActivity().runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     final Snackbar snack =
-                        Snackbar.make(getActivity().findViewById(android.R.id.content),
-                            getResources().getString(R.string.E_713_1), Snackbar.LENGTH_LONG);
+                            Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                    getResources().getString(R.string.E_713_1), Snackbar.LENGTH_LONG);
 
                     snack.setAction("CANCEL", new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
                             snack.dismiss();
                         }
                     });
@@ -275,13 +290,15 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
             });
         } else if (majorCode == 713 && minorCode == 2) {
             getActivity().runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     final Snackbar snack =
-                        Snackbar.make(getActivity().findViewById(android.R.id.content),
-                            getResources().getString(R.string.E_713_2), Snackbar.LENGTH_LONG);
+                            Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                    getResources().getString(R.string.E_713_2), Snackbar.LENGTH_LONG);
 
                     snack.setAction("CANCEL", new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
                             snack.dismiss();
                         }
                     });
@@ -290,13 +307,15 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
             });
         } else if (majorCode == 713 && minorCode == 3) {
             getActivity().runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     final Snackbar snack =
-                        Snackbar.make(getActivity().findViewById(android.R.id.content),
-                            getResources().getString(R.string.E_713_3), Snackbar.LENGTH_LONG);
+                            Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                    getResources().getString(R.string.E_713_3), Snackbar.LENGTH_LONG);
 
                     snack.setAction("CANCEL", new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
                             snack.dismiss();
                         }
                     });
@@ -305,13 +324,15 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
             });
         } else if (majorCode == 713 && minorCode == 4) {
             getActivity().runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     final Snackbar snack =
-                        Snackbar.make(getActivity().findViewById(android.R.id.content),
-                            getResources().getString(R.string.E_713_4), Snackbar.LENGTH_LONG);
+                            Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                    getResources().getString(R.string.E_713_4), Snackbar.LENGTH_LONG);
 
                     snack.setAction("CANCEL", new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
                             snack.dismiss();
                         }
                     });
@@ -320,13 +341,15 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
             });
         } else if (majorCode == 713 && minorCode == 5) {
             getActivity().runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     final Snackbar snack =
-                        Snackbar.make(getActivity().findViewById(android.R.id.content),
-                            getResources().getString(R.string.E_713_5), Snackbar.LENGTH_LONG);
+                            Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                    getResources().getString(R.string.E_713_5), Snackbar.LENGTH_LONG);
 
                     snack.setAction("CANCEL", new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
                             snack.dismiss();
                         }
                     });
@@ -335,13 +358,15 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
             });
         } else if (majorCode == 714) {
             getActivity().runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     final Snackbar snack =
-                        Snackbar.make(getActivity().findViewById(android.R.id.content),
-                            getResources().getString(R.string.E_714), Snackbar.LENGTH_LONG);
+                            Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                    getResources().getString(R.string.E_714), Snackbar.LENGTH_LONG);
 
                     snack.setAction("CANCEL", new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
                             snack.dismiss();
                         }
                     });
@@ -350,13 +375,15 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
             });
         } else if (majorCode == 715) {
             getActivity().runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     final Snackbar snack =
-                        Snackbar.make(getActivity().findViewById(android.R.id.content),
-                            getResources().getString(R.string.E_715), Snackbar.LENGTH_LONG);
+                            Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                    getResources().getString(R.string.E_715), Snackbar.LENGTH_LONG);
 
                     snack.setAction("CANCEL", new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
                             snack.dismiss();
                         }
                     });

@@ -4,6 +4,7 @@ import com.iGap.AESCrypt;
 import com.iGap.G;
 import com.iGap.helper.HelperNumerical;
 import com.iGap.helper.HelperUnpackMessage;
+
 import java.security.GeneralSecurityException;
 
 public class HandleResponse extends Thread {
@@ -14,7 +15,8 @@ public class HandleResponse extends Thread {
         this.binary = binary;
     }
 
-    @Override public void run() {
+    @Override
+    public void run() {
         super.run();
         if (G.isSecure) {
             byte[] iv = HelperNumerical.getIv(binary, G.ivSize);

@@ -7,7 +7,7 @@ public class RequestUserProfileCheckUsername {
     public void userProfileCheckUsername(String username) {
 
         ProtoUserProfileCheckUsername.UserProfileCheckUsername.Builder builder =
-            ProtoUserProfileCheckUsername.UserProfileCheckUsername.newBuilder();
+                ProtoUserProfileCheckUsername.UserProfileCheckUsername.newBuilder();
 
         builder.setUsername(username);
 

@@ -8,12 +8,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityComment;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
+
 import java.util.List;
 
 /**
@@ -26,15 +28,18 @@ public class ChannelFileItem extends AbstractMessage<ChannelFileItem, ChannelFil
         super(false, type, messageClickListener);
     }
 
-    @Override public int getType() {
+    @Override
+    public int getType() {
         return R.id.chatSubLayoutImage;
     }
 
-    @Override public int getLayoutRes() {
+    @Override
+    public int getLayoutRes() {
         return R.layout.chat_sub_layout_channel_file;
     }
 
-    @Override public void bindView(ViewHolder holder, List payloads) {
+    @Override
+    public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
         if (!mMessage.messageText.isEmpty()) {
@@ -45,7 +50,8 @@ public class ChannelFileItem extends AbstractMessage<ChannelFileItem, ChannelFil
         }
 
         holder.cslch_ll_comment.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 Log.e("ddd", "omment click");
 
                 Intent intent = new Intent(view.getContext(), ActivityComment.class);
@@ -56,7 +62,8 @@ public class ChannelFileItem extends AbstractMessage<ChannelFileItem, ChannelFil
         });
     }
 
-    @Override public ViewHolderFactory<? extends ViewHolder> getFactory() {
+    @Override
+    public ViewHolderFactory<? extends ViewHolder> getFactory() {
         return FACTORY;
     }
 
@@ -135,17 +142,20 @@ public class ChannelFileItem extends AbstractMessage<ChannelFileItem, ChannelFil
             cslch_btn_item_menu.setTypeface(G.fontawesome);
 
             cslch_btn_item_menu.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View view) {
+                @Override
+                public void onClick(View view) {
                     Log.e("ddd", "item menu click");
                 }
             });
             cslch_ll_like.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View view) {
+                @Override
+                public void onClick(View view) {
                     Log.e("ddd", "like click");
                 }
             });
             cslch_ll_unlike.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View view) {
+                @Override
+                public void onClick(View view) {
                     Log.e("ddd", "Unclick");
                 }
             });

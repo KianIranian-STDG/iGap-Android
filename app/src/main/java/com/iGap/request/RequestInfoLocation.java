@@ -8,9 +8,9 @@ public class RequestInfoLocation {
 
     public void infoLocation() {
         ProtoInfoLocation.InfoLocation.Builder infoLocation =
-            ProtoInfoLocation.InfoLocation.newBuilder();
+                ProtoInfoLocation.InfoLocation.newBuilder();
         infoLocation.setRequest(
-            ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
+                ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
 
         RequestWrapper requestWrapper = new RequestWrapper(500, infoLocation);
         try {

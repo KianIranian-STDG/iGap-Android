@@ -1,6 +1,7 @@
 package com.iGap.request;
 
 import android.util.Log;
+
 import com.iGap.proto.ProtoUserContactsGetList;
 
 public class RequestUserContactsGetList {

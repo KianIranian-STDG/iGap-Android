@@ -8,7 +8,7 @@ public class RequestChatUpdateDraft {
     public void chatUpdateDraft(long roomId, String message, long replyToMessageId) {
 
         ProtoChatUpdateDraft.ChatUpdateDraft.Builder builder =
-            ProtoChatUpdateDraft.ChatUpdateDraft.newBuilder();
+                ProtoChatUpdateDraft.ChatUpdateDraft.newBuilder();
 
         ProtoGlobal.RoomDraft.Builder roomDraft = ProtoGlobal.RoomDraft.newBuilder();
         roomDraft.setMessage(message);

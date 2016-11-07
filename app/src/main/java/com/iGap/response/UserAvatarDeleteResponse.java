@@ -1,6 +1,7 @@
 package com.iGap.response;
 
 import android.util.Log;
+
 import com.iGap.G;
 import com.iGap.proto.ProtoUserAvatarDelete;
 
@@ -17,21 +18,24 @@ public class UserAvatarDeleteResponse extends MessageHandler {
         this.actionId = actionId;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
         super.handler();
 
         ProtoUserAvatarDelete.UserAvatarDeleteResponse.Builder userAvatarDeleteResponse =
-            (ProtoUserAvatarDelete.UserAvatarDeleteResponse.Builder) message;
+                (ProtoUserAvatarDelete.UserAvatarDeleteResponse.Builder) message;
         Log.i("XXX", "userAvatarDeleteResponse.getId() 2 : " + userAvatarDeleteResponse.getId());
         Log.i("XXX", "userAvatarDeleteResponse.identity  2 : " + identity);
         G.onUserAvatarDelete.onUserAvatarDelete(userAvatarDeleteResponse.getId(), identity);
     }
 
-    @Override public void timeOut() {
+    @Override
+    public void timeOut() {
         super.timeOut();
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
         super.error();
     }
 }

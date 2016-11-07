@@ -20,6 +20,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.IntentRequests;
@@ -41,33 +42,38 @@ import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestUserAvatarAdd;
 import com.iGap.request.RequestUserInfo;
 import com.iGap.request.RequestUserProfileSetNickname;
-import io.realm.Realm;
-import io.realm.RealmResults;
+
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityProfile extends ActivityEnhanced
-    implements OnUserAvatarResponse, OnFileUploadForActivities {
+        implements OnUserAvatarResponse, OnFileUploadForActivities {
 
+    public final static String ARG_USER_ID = "arg_user_id";
+    public static boolean IsDeleteFile;
+    public static Bitmap decodeBitmapProfile = null;
     private TextView txtTitle, txtTitlInformation, txtDesc, txtAddPhoto;
     private Button btnLetsGo;
     private com.iGap.module.CircleImageView btnSetImage;
     private EditTextAdjustPan edtNikName;
     private Uri uriIntent;
     private String pathImageUser;
-    public static boolean IsDeleteFile;
     private File pathImageFromCamera = new File(G.imageFile.toString() + "_" + 0 + ".jpg");
-    public final static String ARG_USER_ID = "arg_user_id";
     private int idAvatar;
-    public static Bitmap decodeBitmapProfile = null;
+    private int lastUploadedAvatarId;
 
-    @Override protected void attachBaseContext(Context newBase) {
+    @Override
+    protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
-    @Override public void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         delete();
@@ -88,13 +94,14 @@ public class ActivityProfile extends ActivityEnhanced
         final View lineEditText = findViewById(R.id.pu_line_below_editText);
         btnSetImage = (com.iGap.module.CircleImageView) findViewById(R.id.pu_profile_circle_image);
         btnSetImage.setOnClickListener(new View.OnClickListener() { // button for set image
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 startDialog(); // this dialog show 2 way for choose image : gallery and camera
             }
         });
 
         final TextInputLayout txtInputNickName =
-            (TextInputLayout) findViewById(R.id.pu_txtInput_nikeName);
+                (TextInputLayout) findViewById(R.id.pu_txtInput_nikeName);
         //        txtInputNickName.setHint("Nickname");
 
         edtNikName = (EditTextAdjustPan) findViewById(R.id.pu_edt_nikeName); // edit Text for NikName
@@ -107,7 +114,8 @@ public class ActivityProfile extends ActivityEnhanced
 
             }
 
-            @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 txtInputNickName.setErrorEnabled(true);
                 txtInputNickName.setError("");
                 txtInputNickName.setHintTextAppearance(R.style.remove_error_appearance);
@@ -116,58 +124,65 @@ public class ActivityProfile extends ActivityEnhanced
 
             }
 
-            @Override public void afterTextChanged(Editable editable) {
+            @Override
+            public void afterTextChanged(Editable editable) {
 
             }
         });
         btnLetsGo.setOnClickListener(
-            new View.OnClickListener() { // button for save data and go to next page
-                @Override public void onClick(View view) {
+                new View.OnClickListener() { // button for save data and go to next page
+                    @Override
+                    public void onClick(View view) {
 
-                    Realm realm = Realm.getDefaultInstance();
-                    final String nickName = edtNikName.getText().toString();
+                        Realm realm = Realm.getDefaultInstance();
+                        final String nickName = edtNikName.getText().toString();
 
-                    if (!nickName.equals("")) {
-                        btnLetsGo.setEnabled(false);
-                        btnSetImage.setEnabled(false);
-                        edtNikName.setEnabled(false);
-                        realm.executeTransaction(new Realm.Transaction() {
-                            @Override public void execute(Realm realm) {
-                                setNickName();
-                            }
-                        });
-                        realm.close();
-                    } else {
-                        runOnUiThread(new Runnable() {
-                            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN) @Override
-                            public void run() {
+                        if (!nickName.equals("")) {
+                            btnLetsGo.setEnabled(false);
+                            btnSetImage.setEnabled(false);
+                            edtNikName.setEnabled(false);
+                            realm.executeTransaction(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+                                    setNickName();
+                                }
+                            });
+                            realm.close();
+                        } else {
+                            runOnUiThread(new Runnable() {
+                                @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+                                @Override
+                                public void run() {
 
-                                txtInputNickName.setErrorEnabled(true);
-                                txtInputNickName.setError(
-                                    getResources().getString(R.string.Toast_Write_NickName));
-                                txtInputNickName.setHintTextAppearance(R.style.error_appearance);
-                                edtNikName.setTextColor(getResources().getColor(R.color.red));
-                                lineEditText.setBackgroundColor(
-                                    getResources().getColor(R.color.red));
-                            }
-                        });
-                }
-                }
-            });
+                                    txtInputNickName.setErrorEnabled(true);
+                                    txtInputNickName.setError(
+                                            getResources().getString(R.string.Toast_Write_NickName));
+                                    txtInputNickName.setHintTextAppearance(R.style.error_appearance);
+                                    edtNikName.setTextColor(getResources().getColor(R.color.red));
+                                    lineEditText.setBackgroundColor(
+                                            getResources().getColor(R.color.red));
+                                }
+                            });
+                        }
+                    }
+                });
     }
 
     private void setNickName() {
 
         G.onUserProfileSetNickNameResponse = new OnUserProfileSetNickNameResponse() {
-            @Override public void onUserProfileNickNameResponse(final String nickName,
-                ProtoResponse.Response response) {
+            @Override
+            public void onUserProfileNickNameResponse(final String nickName,
+                                                      ProtoResponse.Response response) {
                 getUserInfo();
             }
 
-            @Override public void onUserProfileNickNameError(int majorCode, int minorCode) {
+            @Override
+            public void onUserProfileNickNameError(int majorCode, int minorCode) {
 
                 runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         btnLetsGo.setEnabled(true);
                         btnSetImage.setEnabled(true);
                         edtNikName.setEnabled(true);
@@ -176,14 +191,16 @@ public class ActivityProfile extends ActivityEnhanced
 
                 if (majorCode == 112 && minorCode == 1) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             // TODO: 9/25/2016 Error 112 - USER_PROFILE_SET_NICKNAME_BAD_PAYLOAD
                             //Invalid nickname
                             final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
-                                getResources().getString(R.string.Toast_Invalid_nickname),
-                                Snackbar.LENGTH_LONG);
+                                    getResources().getString(R.string.Toast_Invalid_nickname),
+                                    Snackbar.LENGTH_LONG);
                             snack.setAction("CANCEL", new View.OnClickListener() {
-                                @Override public void onClick(View view) {
+                                @Override
+                                public void onClick(View view) {
                                     snack.dismiss();
                                 }
                             });
@@ -193,7 +210,8 @@ public class ActivityProfile extends ActivityEnhanced
                     });
                 } else if (majorCode == 113) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             // TODO: 9/25/2016 Error 113 - USER_PROFILE_SET_NICKNAME_INTERNAL_SERVER_ERROR
                         }
                     });
@@ -207,12 +225,14 @@ public class ActivityProfile extends ActivityEnhanced
     private void getUserInfo() {
 
         G.onUserInfoResponse = new OnUserInfoResponse() {
-            @Override public void onUserInfo(final ProtoGlobal.RegisteredUser user,
-                ProtoResponse.Response response) {
+            @Override
+            public void onUserInfo(final ProtoGlobal.RegisteredUser user,
+                                   ProtoResponse.Response response) {
 
                 Realm realm = Realm.getDefaultInstance();
                 realm.executeTransaction(new Realm.Transaction() {
-                    @Override public void execute(Realm realm) {
+                    @Override
+                    public void execute(Realm realm) {
                         RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                         realmUserInfo.getUserInfo().setDisplayName(user.getDisplayName());
                         realmUserInfo.getUserInfo().setInitials(user.getInitials());
@@ -222,7 +242,8 @@ public class ActivityProfile extends ActivityEnhanced
                         final long userId = realmUserInfo.getUserId();
 
                         runOnUiThread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 Intent intent = new Intent(G.context, ActivityMain.class);
                                 intent.putExtra(ActivityProfile.ARG_USER_ID, userId);
                                 startActivity(intent);
@@ -235,11 +256,13 @@ public class ActivityProfile extends ActivityEnhanced
 
             }
 
-            @Override public void onUserInfoTimeOut() {
+            @Override
+            public void onUserInfoTimeOut() {
 
             }
 
-            @Override public void onUserInfoError(int majorCode, int minorCode) {
+            @Override
+            public void onUserInfoError(int majorCode, int minorCode) {
 
             }
         };
@@ -249,7 +272,6 @@ public class ActivityProfile extends ActivityEnhanced
         new RequestUserInfo().userInfo(realmUserInfo.getUserId());
         realm.close();
     }
-
 
     public void useCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -262,58 +284,60 @@ public class ActivityProfile extends ActivityEnhanced
 
     }
 
-    public void useGallery() {
-        Intent intent =
-            new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, IntentRequests.REQ_GALLERY);
-    }
-
     //======================================================================================================dialog for choose image
 
+    public void useGallery() {
+        Intent intent =
+                new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, IntentRequests.REQ_GALLERY);
+    }
 
     private void startDialog() {
 
         new MaterialDialog.Builder(this).title("Choose Picture")
-            .negativeText("CANCEL")
-            .items(R.array.profile)
-            .itemsCallback(new MaterialDialog.ListCallback() {
-                @Override public void onSelection(MaterialDialog dialog, View view, int which,
-                    CharSequence text) {
+                .negativeText("CANCEL")
+                .items(R.array.profile)
+                .itemsCallback(new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog dialog, View view, int which,
+                                            CharSequence text) {
 
-                    if (text.toString().equals("From Camera")) {
+                        if (text.toString().equals("From Camera")) {
 
-                        if (getPackageManager().hasSystemFeature(
-                            PackageManager.FEATURE_CAMERA_ANY)) {
-                            useCamera();
-                            dialog.dismiss();
+                            if (getPackageManager().hasSystemFeature(
+                                    PackageManager.FEATURE_CAMERA_ANY)) {
+                                useCamera();
+                                dialog.dismiss();
+                            } else {
+                                final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
+                                        getResources().getString(R.string.please_check_your_camera),
+                                        Snackbar.LENGTH_LONG);
+
+                                snack.setAction("CANCEL", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        snack.dismiss();
+                                    }
+                                });
+                                snack.show();
+                            }
                         } else {
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
-                                getResources().getString(R.string.please_check_your_camera),
-                                Snackbar.LENGTH_LONG);
-
-                            snack.setAction("CANCEL", new View.OnClickListener() {
-                                @Override public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                            snack.show();
-                        }
-                    } else {
-                        useGallery();
-                        dialog.dismiss();
+                            useGallery();
+                            dialog.dismiss();
                         }
 
                     }
-            })
-            .show();
+                })
+                .show();
     }
 
     //======================================================================================================result from camera , gallery and crop
-    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == IntentRequests.REQ_CAMERA
-            && resultCode == RESULT_OK) {// result for camera
+                && resultCode == RESULT_OK) {// result for camera
 
             Intent intent = new Intent(ActivityProfile.this, ActivityCrop.class);
             intent.putExtra("IMAGE_CAMERA", uriIntent.toString());
@@ -322,7 +346,7 @@ public class ActivityProfile extends ActivityEnhanced
             intent.putExtra("ID", (int) getIntent().getLongExtra(ARG_USER_ID, -1));
             startActivityForResult(intent, IntentRequests.REQ_CROP);
         } else if (requestCode == IntentRequests.REQ_GALLERY
-            && resultCode == RESULT_OK) {// result for gallery
+                && resultCode == RESULT_OK) {// result for gallery
             Intent intent = new Intent(ActivityProfile.this, ActivityCrop.class);
             intent.putExtra("IMAGE_CAMERA", data.getData().toString());
             intent.putExtra("TYPE", "gallery");
@@ -341,7 +365,8 @@ public class ActivityProfile extends ActivityEnhanced
 
             Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
-                @Override public void execute(Realm realm) {
+                @Override
+                public void execute(Realm realm) {
                     long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
                     RealmAvatar realmAvatar = realm.createObject(RealmAvatar.class);
                     realmAvatar.setOwnerId(userId);
@@ -355,12 +380,11 @@ public class ActivityProfile extends ActivityEnhanced
         }
     }
 
-    private int lastUploadedAvatarId;
-
     @Override
     public void onFileUploaded(final FileUploadStructure uploadStructure, String identity) {
         runOnUiThread(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 setImage(uploadStructure.filePath);
             }
         });
@@ -368,14 +392,63 @@ public class ActivityProfile extends ActivityEnhanced
         new RequestUserAvatarAdd().userAddAvatar(uploadStructure.token);
     }
 
-    @Override public void onFileUploading(FileUploadStructure uploadStructure, String identity,
-        double progress) {
+    @Override
+    public void onFileUploading(FileUploadStructure uploadStructure, String identity,
+                                double progress) {
         // TODO: 10/20/2016 [Alireza] update view something like updating progress
     }
 
+    private void setImage(String path) {
+        if (pathImageUser != null) {
+            Bitmap bitmap = BitmapFactory.decodeFile(path);
+            btnSetImage.setPadding(0, 0, 0, 0);
+            btnSetImage.setImageBitmap(bitmap);
+        }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (pathImageFromCamera.exists()) {
+                pathImageFromCamera.delete();
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void delete() {
+        Realm realm = Realm.getDefaultInstance();
+        final RealmResults<RealmAvatarPath> realmAvatarPaths =
+                realm.where(RealmAvatarPath.class).findAll();
+        if (realmAvatarPaths.size() > 0) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    realmAvatarPaths.deleteAllFromRealm();
+                }
+            });
+        }
+        realm.close();
+    }
+
+    @Override
+    public void onAvatarAdd(final ProtoGlobal.Avatar avatar) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.ID, lastUploadedAvatarId).findFirst();
+                realmAvatar.setFile(RealmAttachment.build(avatar.getFile()));
+            }
+        });
+        realm.close();
+    }
+
     private static class UploadTask
-        extends AsyncTask<Object, FileUploadStructure, FileUploadStructure> {
-        @Override protected FileUploadStructure doInBackground(Object... params) {
+            extends AsyncTask<Object, FileUploadStructure, FileUploadStructure> {
+        @Override
+        protected FileUploadStructure doInBackground(Object... params) {
             try {
                 String filePath = (String) params[0];
                 int avatarId = (int) params[1];
@@ -383,7 +456,7 @@ public class ActivityProfile extends ActivityEnhanced
                 String fileName = file.getName();
                 long fileSize = file.length();
                 FileUploadStructure fileUploadStructure =
-                    new FileUploadStructure(fileName, fileSize, filePath, avatarId);
+                        new FileUploadStructure(fileName, fileSize, filePath, avatarId);
                 fileUploadStructure.openFile(filePath);
 
                 byte[] fileHash = AndroidUtils.getFileHash(fileUploadStructure);
@@ -398,52 +471,10 @@ public class ActivityProfile extends ActivityEnhanced
             return null;
         }
 
-        @Override protected void onPostExecute(FileUploadStructure result) {
+        @Override
+        protected void onPostExecute(FileUploadStructure result) {
             super.onPostExecute(result);
             G.uploaderUtil.startUploading(result, Long.toString(result.messageId));
         }
-    }
-
-    private void setImage(String path) {
-        if (pathImageUser != null) {
-            Bitmap bitmap = BitmapFactory.decodeFile(path);
-            btnSetImage.setPadding(0, 0, 0, 0);
-            btnSetImage.setImageBitmap(bitmap);
-        }
-    }
-
-    @Override public boolean onKeyDown(int keyCode, KeyEvent event) {
-
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (pathImageFromCamera.exists()) {
-                pathImageFromCamera.delete();
-            }
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
-    private void delete() {
-        Realm realm = Realm.getDefaultInstance();
-        final RealmResults<RealmAvatarPath> realmAvatarPaths =
-            realm.where(RealmAvatarPath.class).findAll();
-        if (realmAvatarPaths.size() > 0) {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override public void execute(Realm realm) {
-                    realmAvatarPaths.deleteAllFromRealm();
-                }
-            });
-        }
-        realm.close();
-    }
-
-    @Override public void onAvatarAdd(final ProtoGlobal.Avatar avatar) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
-                RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.ID, lastUploadedAvatarId).findFirst();
-                realmAvatar.setFile(RealmAttachment.build(avatar.getFile()));
-            }
-        });
-        realm.close();
     }
 }

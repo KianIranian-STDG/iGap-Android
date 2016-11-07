@@ -7,7 +7,7 @@ public class RequestGroupKickModerator {
     public void groupKickModerator(long roomId, long memberId) {
 
         ProtoGroupKickModerator.GroupKickModerator.Builder builder =
-            ProtoGroupKickModerator.GroupKickModerator.newBuilder();
+                ProtoGroupKickModerator.GroupKickModerator.newBuilder();
         builder.setRoomId(roomId);
         builder.setMemberId(memberId);
 

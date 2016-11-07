@@ -1,7 +1,9 @@
 package com.iGap.helper;
 
 import android.util.Base64;
+
 import com.iGap.G;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -16,6 +18,7 @@ import java.util.Iterator;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import javax.crypto.spec.SecretKeySpec;
 
 /**
@@ -39,7 +42,7 @@ public class HelperString {
 
     private static String generate(int length) {
         char[] chars =
-            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
         StringBuilder sb = new StringBuilder();
         Random random = new Random();
 
@@ -65,10 +68,10 @@ public class HelperString {
      */
 
     public static PublicKey getPublicKeyFromPemFormat(String PEMString)
-        throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
+            throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
         BufferedReader pemReader = null;
         pemReader = new BufferedReader(
-            new InputStreamReader(new ByteArrayInputStream(PEMString.getBytes("UTF-8"))));
+                new InputStreamReader(new ByteArrayInputStream(PEMString.getBytes("UTF-8"))));
         StringBuffer content = new StringBuffer();
         String line = null;
         while ((line = pemReader.readLine()) != null) {
@@ -88,7 +91,7 @@ public class HelperString {
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
 
         RSAPublicKey key = (RSAPublicKey) keyFactory.generatePublic(
-            new X509EncodedKeySpec(Base64.decode(content.toString(), Base64.DEFAULT)));
+                new X509EncodedKeySpec(Base64.decode(content.toString(), Base64.DEFAULT)));
         return key;
     }
 
@@ -118,7 +121,7 @@ public class HelperString {
     /**
      * regex for detect number from text
      *
-     * @param text input text that contain number
+     * @param text  input text that contain number
      * @param regex regex pattern for detection
      */
 

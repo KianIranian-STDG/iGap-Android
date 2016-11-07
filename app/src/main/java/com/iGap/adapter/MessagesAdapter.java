@@ -5,6 +5,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.support.v4.util.ArrayMap;
 import android.view.View;
 import android.widget.FrameLayout;
+
 import com.iGap.R;
 import com.iGap.adapter.items.chat.AbstractMessage;
 import com.iGap.interfaces.IMessageItem;
@@ -17,6 +18,7 @@ import com.iGap.realm.RealmRegisteredInfo;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.adapters.FastItemAdapter;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +35,8 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
     private IMessageItem iMessageItem;
     private OnChatMessageRemove onChatMessageRemove;
     private OnLongClickListener longClickListener = new OnLongClickListener<Item>() {
-        @Override public boolean onLongClick(View v, IAdapter<Item> adapter, Item item, int position) {
+        @Override
+        public boolean onLongClick(View v, IAdapter<Item> adapter, Item item, int position) {
             if (onChatMessageSelectionChanged != null) {
                 onChatMessageSelectionChanged.onChatMessageSelectionChanged(getSelectedItems().size(), getSelectedItems());
             }
@@ -55,7 +58,8 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         withOnPreLongClickListener(this);
         withOnLongClickListener(longClickListener);
         withOnClickListener(new OnClickListener<Item>() {
-            @Override public boolean onClick(View v, IAdapter<Item> adapter, Item item, int position) {
+            @Override
+            public boolean onClick(View v, IAdapter<Item> adapter, Item item, int position) {
                 if (getSelectedItems().size() == 0) {
                     if (iMessageItem != null && !item.mMessage.senderID.equalsIgnoreCase("-1")) {
                         if (item.mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
@@ -73,6 +77,14 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         });
     }
 
+    public static boolean hasDownloadRequested(String token) {
+        return downloading.containsKey(token);
+    }
+
+    public static boolean hasUploadRequested(long messageId) {
+        return uploading.containsKey(messageId);
+    }
+
     public List<StructMessageInfo> getFailedMessages() {
         List<StructMessageInfo> failedMessages = new ArrayList<>();
         for (Item item : getAdapterItems()) {
@@ -81,14 +93,6 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
             }
         }
         return failedMessages;
-    }
-
-    public static boolean hasDownloadRequested(String token) {
-        return downloading.containsKey(token);
-    }
-
-    public static boolean hasUploadRequested(long messageId) {
-        return uploading.containsKey(messageId);
     }
 
     public void downloadingAvatar(long peerId, int progress, int offset, StructMessageAttachment avatar) {
@@ -150,7 +154,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
     /**
      * update message text
      *
-     * @param messageId message id
+     * @param messageId   message id
      * @param updatedText new message text
      */
     public void updateMessageText(long messageId, String updatedText) {
@@ -232,7 +236,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
      * update message status
      *
      * @param messageId message id
-     * @param status ProtoGlobal.RoomMessageStatus
+     * @param status    ProtoGlobal.RoomMessageStatus
      */
     public void updateMessageStatus(long messageId, ProtoGlobal.RoomMessageStatus status) {
         List<Item> items = getAdapterItems();
@@ -250,8 +254,8 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
      * update message id and status
      *
      * @param messageId new message id
-     * @param identity old manually defined as identity id
-     * @param status ProtoGlobal.RoomMessageStatus
+     * @param identity  old manually defined as identity id
+     * @param status    ProtoGlobal.RoomMessageStatus
      */
     public void updateMessageIdAndStatus(long messageId, String identity, ProtoGlobal.RoomMessageStatus status) {
         List<Item> items = getAdapterItems();
@@ -266,7 +270,8 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         }
     }
 
-    @Override public void notifyAdapterItemRemoved(int position) {
+    @Override
+    public void notifyAdapterItemRemoved(int position) {
         super.notifyAdapterItemRemoved(position);
 
         if (onChatMessageSelectionChanged != null) {
@@ -274,7 +279,8 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         }
     }
 
-    @Override public void deselect() {
+    @Override
+    public void deselect() {
         super.deselect();
 
         if (onChatMessageSelectionChanged != null) {
@@ -292,7 +298,8 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         ((FrameLayout) v).setForeground(new ColorDrawable(Color.TRANSPARENT));
     }
 
-    @Override public boolean onLongClick(View v, IAdapter<Item> adapter, Item item, int position) {
+    @Override
+    public boolean onLongClick(View v, IAdapter<Item> adapter, Item item, int position) {
         if (!item.isSelected()) {
             makeSelected(v);
         } else {

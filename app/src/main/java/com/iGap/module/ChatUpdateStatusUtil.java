@@ -21,7 +21,7 @@ public class ChatUpdateStatusUtil implements OnChatUpdateStatusResponse {
     }
 
     public void sendUpdateStatus(ProtoGlobal.Room.Type roomType, long roomId, long messageId,
-        ProtoGlobal.RoomMessageStatus roomMessageStatus) {
+                                 ProtoGlobal.RoomMessageStatus roomMessageStatus) {
         if (roomType == ProtoGlobal.Room.Type.CHAT) {
             new RequestChatUpdateStatus().updateStatus(roomId, messageId, roomMessageStatus);
         } else if (roomType == ProtoGlobal.Room.Type.GROUP) {
@@ -30,8 +30,9 @@ public class ChatUpdateStatusUtil implements OnChatUpdateStatusResponse {
         // TODO: 9/28/2016 [Alireza Eskandarpour Shoferi] add channel request update status if needed
     }
 
-    @Override public void onChatUpdateStatus(long roomId, long messageId,
-        ProtoGlobal.RoomMessageStatus status, long statusVersion) {
+    @Override
+    public void onChatUpdateStatus(long roomId, long messageId,
+                                   ProtoGlobal.RoomMessageStatus status, long statusVersion) {
         if (onChatUpdateStatusResponse != null) {
             onChatUpdateStatusResponse.onChatUpdateStatus(roomId, messageId, status, statusVersion);
         }

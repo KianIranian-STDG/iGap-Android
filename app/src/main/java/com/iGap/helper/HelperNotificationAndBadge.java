@@ -16,6 +16,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
+
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityChat;
@@ -33,10 +34,12 @@ import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.RealmUserInfo;
+
+import java.util.ArrayList;
+
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
-import java.util.ArrayList;
 
 import static com.iGap.G.context;
 
@@ -46,6 +49,10 @@ import static com.iGap.G.context;
 public class HelperNotificationAndBadge {
 
     private static final String strClose = "close";
+    private static final int DEFAULT = 0;
+    private static final int ENABLE = 1;
+    private static final int DISABLE = 2;
+    public static boolean isChatRoomNow = false;
     private int unreadMessageCount = 0;
     private String messageOne = "";
     private boolean isFromOnRoom = true;
@@ -64,23 +71,15 @@ public class HelperNotificationAndBadge {
     private int popupNotification;
     private int sound;
     private int messagePeriview;
-
     private boolean isMute;
     private String inRoomVibrator;  //specially for each room
     private int inRoomSound;        //specially for each room
     private int inRoomLedColor;     //specially for each room
-
     private int inAppSound;
     private int inVibrator;
     private int inAppPreview;
     private int inChat_Sound;
-    public static boolean isChatRoomNow = false;
     private int countUnicChat = 0;
-
-    private static final int DEFAULT = 0;
-    private static final int ENABLE = 1;
-    private static final int DISABLE = 2;
-
     private int idRoom;
 
     public HelperNotificationAndBadge() {
@@ -114,7 +113,7 @@ public class HelperNotificationAndBadge {
             }
 
             remoteViews.setTextViewText(R.id.ln_txt_message_notification,
-                unreadMessageCount + context.getString(R.string.new_messages_from) + countUnicChat + s);
+                    unreadMessageCount + context.getString(R.string.new_messages_from) + countUnicChat + s);
         }
 
         if (isFromOnRoom) {
@@ -281,12 +280,12 @@ public class HelperNotificationAndBadge {
         }
 
         notification = new NotificationCompat.Builder(context).setSmallIcon(R.mipmap.logo)
-            .setContentTitle(context.getString(R.string.new_message_recicve))
-            .setContent(remoteViews)
-            .setContentIntent(pi)
-            .setAutoCancel(false)
-            .setOngoing(true)
-            .build();
+                .setContentTitle(context.getString(R.string.new_message_recicve))
+                .setContent(remoteViews)
+                .setContentIntent(pi)
+                .setAutoCancel(false)
+                .setOngoing(true)
+                .build();
 
         if (inAppPreview == 0 && G.isAppInFg) {
 
@@ -305,7 +304,7 @@ public class HelperNotificationAndBadge {
         if (isMute) {
             Log.i("CCCCC", "setNotification:1 " + isMute);
             Uri.parse("android.resource://" + context.getPackageName() + "/raw/" + R.raw.none);
-            notification.vibrate = new long[] { 0, 0, 0 };
+            notification.vibrate = new long[]{0, 0, 0};
         } else {
             Log.i("CCCCC", "setNotification:2 " + isMute);
             //=======================================================
@@ -317,7 +316,7 @@ public class HelperNotificationAndBadge {
                 } else if (inChat_Sound == 1 && isChatRoomNow) {
                     notification.sound = Uri.parse(
 
-                        "android.resource://" + context.getPackageName() + "/raw/" + setSound(sound));
+                            "android.resource://" + context.getPackageName() + "/raw/" + setSound(sound));
                 } else if (inAppSound == 0) {
                     notification.sound = Uri.parse("android.resource://" + context.getPackageName() + "/raw/" + R.raw.none);
                 } else if (inAppSound == 1) {
@@ -327,7 +326,7 @@ public class HelperNotificationAndBadge {
             //=======================================================
 
             if (inVibrator == 0 && G.isAppInFg) {
-                notification.vibrate = new long[] { 0, 0, 0 };
+                notification.vibrate = new long[]{0, 0, 0};
             } else {
 
                 notification.vibrate = setVibrator(vibrator);
@@ -373,9 +372,9 @@ public class HelperNotificationAndBadge {
             switch (type) {
                 case CHAT:
                     if (realmRoom != null
-                        && realmRoom.getChatRoom() != null
-                        && realmRoom.getChatRoom().getRealmNotificationSetting() != null
-                        && realmRoom.getChatRoom().getRealmNotificationSetting().getNotification() != 0) {
+                            && realmRoom.getChatRoom() != null
+                            && realmRoom.getChatRoom().getRealmNotificationSetting() != null
+                            && realmRoom.getChatRoom().getRealmNotificationSetting().getNotification() != 0) {
                         switch (realmRoom.getChatRoom().getRealmNotificationSetting().getNotification()) {
                             case DEFAULT:
                                 updateNotificationAndBadge(updateNotification, type);
@@ -396,7 +395,7 @@ public class HelperNotificationAndBadge {
                     if (realmRoom != null) {
                         RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
                         if (realmGroupRoom.getRealmNotificationSetting() != null
-                            && realmGroupRoom.getRealmNotificationSetting().getNotification() != 0) {
+                                && realmGroupRoom.getRealmNotificationSetting().getNotification() != 0) {
                             updateNotificationAndBadge(updateNotification, type);
                         }
                     }
@@ -418,15 +417,15 @@ public class HelperNotificationAndBadge {
             case CHAT:
 
                 if (realmRoom != null && realmRoom.getChatRoom() != null
-                    && realmRoom.getChatRoom().getRealmNotificationSetting() != null
-                    && realmRoom.getChatRoom().getRealmNotificationSetting().getLedColor() != 0) {
+                        && realmRoom.getChatRoom().getRealmNotificationSetting() != null
+                        && realmRoom.getChatRoom().getRealmNotificationSetting().getLedColor() != 0) {
                     led = realmRoom.getChatRoom().getRealmNotificationSetting().getLedColor();
                 } else {
                     led = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_LED_COLOR_MESSAGE, -8257792);
                 }
                 if (realmRoom != null && realmRoom.getChatRoom() != null
-                    && realmRoom.getChatRoom().getRealmNotificationSetting() != null
-                    && realmRoom.getChatRoom().getRealmNotificationSetting().getVibrate() != null) {
+                        && realmRoom.getChatRoom().getRealmNotificationSetting() != null
+                        && realmRoom.getChatRoom().getRealmNotificationSetting().getVibrate() != null) {
                     vibrator = realmRoom.getChatRoom().getRealmNotificationSetting().getVibrate();
                 } else {
                     vibrator = sharedPreferences.getString(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, "Default");
@@ -434,9 +433,9 @@ public class HelperNotificationAndBadge {
                 popupNotification = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, 3);
 
                 if (realmRoom != null
-                    && realmRoom.getChatRoom() != null
-                    && realmRoom.getChatRoom().getRealmNotificationSetting() != null
-                    && realmRoom.getChatRoom().getRealmNotificationSetting().getIdRadioButtonSound() != 0) {
+                        && realmRoom.getChatRoom() != null
+                        && realmRoom.getChatRoom().getRealmNotificationSetting() != null
+                        && realmRoom.getChatRoom().getRealmNotificationSetting().getIdRadioButtonSound() != 0) {
                     sound = realmRoom.getChatRoom().getRealmNotificationSetting().getIdRadioButtonSound();
                 } else {
                     sound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_MESSAGE_POSITION, 3);
@@ -452,8 +451,8 @@ public class HelperNotificationAndBadge {
 
 
                 if (realmRoom.getGroupRoom() != null
-                    && realmRoom.getChatRoom().getRealmNotificationSetting() != null
-                    && realmRoom.getGroupRoom().getRealmNotificationSetting().getIdRadioButtonSound() != 0) {
+                        && realmRoom.getChatRoom().getRealmNotificationSetting() != null
+                        && realmRoom.getGroupRoom().getRealmNotificationSetting().getIdRadioButtonSound() != 0) {
                     sound = realmRoom.getGroupRoom().getRealmNotificationSetting().getIdRadioButtonSound();
                 } else {
                     sound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, 3);
@@ -486,14 +485,14 @@ public class HelperNotificationAndBadge {
 
         long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
         RealmResults<RealmRoomMessage> realmRoomMessages =
-            realm.where(RealmRoomMessage.class).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+                realm.where(RealmRoomMessage.class).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
 
         if (!realmRoomMessages.isEmpty()) {
             for (RealmRoomMessage roomMessage : realmRoomMessages) {
                 if (roomMessage != null) {
                     if (roomMessage.getUserId() != userId) {
                         if (roomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENT.toString()) || roomMessage.getStatus()
-                            .equals(ProtoGlobal.RoomMessageStatus.DELIVERED.toString())) {
+                                .equals(ProtoGlobal.RoomMessageStatus.DELIVERED.toString())) {
                             unreadMessageCount++;
                             messageOne = roomMessage.getMessage();
                             senderId = roomMessage.getUserId();
@@ -613,49 +612,31 @@ public class HelperNotificationAndBadge {
     }
 
     public long[] setVibrator(String vibre) {
-        long[] intVibrator = new long[] {};
+        long[] intVibrator = new long[]{};
 
         switch (vibre) {
             case "Disable":
-                intVibrator = new long[] { 0, 0, 0 };
+                intVibrator = new long[]{0, 0, 0};
                 break;
             case "Default":
-                intVibrator = new long[] { 0, 500, 0 };
+                intVibrator = new long[]{0, 500, 0};
                 break;
             case "Short":
-                intVibrator = new long[] { 0, 200, 0 };
+                intVibrator = new long[]{0, 200, 0};
                 break;
             case "Long":
-                intVibrator = new long[] { 0, 1000, 0 };
+                intVibrator = new long[]{0, 1000, 0};
                 break;
             case "Only if silent":
                 AudioManager am2 = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
                 switch (am2.getRingerMode()) {
                     case AudioManager.RINGER_MODE_SILENT:
-                        intVibrator = new long[] { 0, 500, 0 };
+                        intVibrator = new long[]{0, 500, 0};
                         break;
                 }
                 break;
         }
         return intVibrator;
-    }
-
-    public static class RemoteActionReciver extends BroadcastReceiver {
-
-        public RemoteActionReciver() {
-        }
-
-        @Override public void onReceive(Context context, Intent intent) {
-
-            G.helperNotificationAndBadge.cancelNotification();
-        }
-    }
-
-    private class Item {
-
-        String name = "";
-        String message = "";
-        String time = "";
     }
 
     private void startActivityPopUpNotification() {
@@ -669,5 +650,24 @@ public class HelperNotificationAndBadge {
             popUpActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             context.getApplicationContext().startActivity(popUpActivityIntent);
         }
+    }
+
+    public static class RemoteActionReciver extends BroadcastReceiver {
+
+        public RemoteActionReciver() {
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            G.helperNotificationAndBadge.cancelNotification();
+        }
+    }
+
+    private class Item {
+
+        String name = "";
+        String message = "";
+        String time = "";
     }
 }

@@ -17,20 +17,23 @@ public class InfoCountryResponse extends MessageHandler {
         this.identity = identity;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
 
         ProtoInfoCountry.InfoCountryResponse.Builder infoCountryResponse =
-            (ProtoInfoCountry.InfoCountryResponse.Builder) message;
+                (ProtoInfoCountry.InfoCountryResponse.Builder) message;
 
         G.onInfoCountryResponse.onInfoCountryResponse(infoCountryResponse.getCallingCode(),
-            infoCountryResponse.getName(), infoCountryResponse.getPattern(),
-            infoCountryResponse.getRegex());
+                infoCountryResponse.getName(), infoCountryResponse.getPattern(),
+                infoCountryResponse.getRegex());
     }
 
-    @Override public void timeOut() {
+    @Override
+    public void timeOut() {
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
     }
 }
 

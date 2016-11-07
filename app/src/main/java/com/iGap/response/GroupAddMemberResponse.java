@@ -1,6 +1,7 @@
 package com.iGap.response;
 
 import android.util.Log;
+
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 
@@ -18,14 +19,16 @@ public class GroupAddMemberResponse extends MessageHandler {
         this.identity = identity;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
 
         G.onGroupAddMember.onGroupAddMember();
 
         Log.i("XXX", "GroupAddMemberResponse handler : " + message);
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
 
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();

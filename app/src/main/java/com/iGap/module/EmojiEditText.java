@@ -19,6 +19,7 @@ package com.iGap.module;
 import android.content.Context;
 import android.support.v7.widget.AppCompatEditText;
 import android.util.AttributeSet;
+
 import com.iGap.helper.FontCache;
 
 public class EmojiEditText extends AppCompatEditText {

@@ -2,6 +2,7 @@ package com.iGap.response;
 
 import android.content.Context;
 import android.util.Log;
+
 import com.iGap.G;
 import com.iGap.helper.HelperPermision;
 import com.iGap.interfaces.OnGetPermision;
@@ -16,6 +17,7 @@ import com.iGap.realm.RealmContacts;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmThumbnail;
+
 import io.realm.Realm;
 import io.realm.Sort;
 
@@ -34,20 +36,28 @@ public class UserContactsGetListResponse extends MessageHandler {
         this.identity = identity;
     }
 
-    @Override public void handler() {
+    private static long getCorrectId(Realm realm) {
+        RealmThumbnail realmThumbnail = realm.where(RealmThumbnail.class).findAllSorted("id", Sort.DESCENDING).first();
+        long id = (realmThumbnail.getId()) + 1;
+        return id;
+    }
+
+    @Override
+    public void handler() {
         Log.i("OOO", "UserContactsGetListResponse : " + message);
         final ProtoUserContactsGetList.UserContactsGetListResponse.Builder builder =
-            (ProtoUserContactsGetList.UserContactsGetListResponse.Builder) message;
+                (ProtoUserContactsGetList.UserContactsGetListResponse.Builder) message;
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
 
                 realm.delete(RealmContacts.class);
 
                 for (ProtoGlobal.RegisteredUser registerUser : builder.getRegisteredUserList()) {
 
                     RealmRegisteredInfo realmRegisteredInfo =
-                        realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, registerUser.getId()).findFirst();
+                            realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, registerUser.getId()).findFirst();
                     if (realmRegisteredInfo == null) {
                         realmRegisteredInfo = realm.createObject(RealmRegisteredInfo.class);
                         realmRegisteredInfo.setRegisteredUserInfo(registerUser, realmRegisteredInfo, realm);
@@ -76,7 +86,7 @@ public class UserContactsGetListResponse extends MessageHandler {
                     }
 
                     RealmAttachment realmAttachment =
-                        realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, registerUser.getId()).findFirst();
+                            realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, registerUser.getId()).findFirst();
                     if (realmAttachment == null) {
                         realmAttachment = realm.createObject(RealmAttachment.class);
                         realmAttachment.setId(registerUser.getId());
@@ -122,24 +132,21 @@ public class UserContactsGetListResponse extends MessageHandler {
         realm.close();
 
         HelperPermision.getContactPermision(context, new OnGetPermision() {
-            @Override public void Allow() {
+            @Override
+            public void Allow() {
                 Contacts.FillRealmInviteFriend();
             }
         });
     }
 
-    @Override public void timeOut() {
+    @Override
+    public void timeOut() {
         super.timeOut();
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
         super.error();
-    }
-
-    private static long getCorrectId(Realm realm) {
-        RealmThumbnail realmThumbnail = realm.where(RealmThumbnail.class).findAllSorted("id", Sort.DESCENDING).first();
-        long id = (realmThumbnail.getId()) + 1;
-        return id;
     }
 }
 

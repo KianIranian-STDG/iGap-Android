@@ -7,7 +7,7 @@ import com.iGap.proto.ProtoGlobal;
  */
 public interface OnClientGetRoomHistoryResponse {
     void onGetRoomHistory(long roomId, String message, String messageType,
-        ProtoGlobal.RoomMessage roomMessage);
+                          ProtoGlobal.RoomMessage roomMessage);
 
     void onGetRoomHistoryError(int majorCode, int minorCode);
 }

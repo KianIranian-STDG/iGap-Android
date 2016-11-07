@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.view.View;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
@@ -13,9 +14,11 @@ import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.enums.RoomType;
-import io.realm.Realm;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.Realm;
 
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 10/22/2016.
@@ -66,8 +69,8 @@ public final class AppUtils {
         Realm realm = Realm.getDefaultInstance();
         String messageText;
         RealmRoomMessage message = realm.where(RealmRoomMessage.class)
-            .equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId)
-            .findFirst();
+                .equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId)
+                .findFirst();
         if (message == null) {
             return null;
         }
@@ -80,21 +83,21 @@ public final class AppUtils {
                         return null;
                     }
                     messageText = resources.getString(R.string.last_msg_format_chat,
-                        message.getAttachment().getName());
+                            message.getAttachment().getName());
                     break;
                 case CONTACT:
                     if (message.getAttachment() == null) {
                         return null;
                     }
                     messageText = resources.getString(R.string.last_msg_format_chat,
-                        message.getRoomMessageContact().getFirstName());
+                            message.getRoomMessageContact().getFirstName());
                     break;
                 case FILE:
                     if (message.getAttachment() == null) {
                         return null;
                     }
                     messageText = resources.getString(R.string.last_msg_format_chat,
-                        message.getAttachment().getName());
+                            message.getAttachment().getName());
                     break;
                 case GIF:
                     messageText = null;
@@ -104,7 +107,7 @@ public final class AppUtils {
                         return null;
                     }
                     messageText = resources.getString(R.string.last_msg_format_chat,
-                        message.getAttachment().getName());
+                            message.getAttachment().getName());
                     break;
                 case LOCATION:
                     messageText = null;
@@ -117,14 +120,14 @@ public final class AppUtils {
                         return null;
                     }
                     messageText = resources.getString(R.string.last_msg_format_chat,
-                        message.getAttachment().getName());
+                            message.getAttachment().getName());
                     break;
                 case VOICE:
                     if (message.getAttachment() == null) {
                         return null;
                     }
                     messageText = resources.getString(R.string.last_msg_format_chat,
-                        message.getAttachment().getName());
+                            message.getAttachment().getName());
                     break;
                 default:
                     messageText = null;
@@ -137,14 +140,14 @@ public final class AppUtils {
     }
 
     public static MaterialDialog.Builder buildResendDialog(Context context, int failedMessagesCount,
-        final IResendMessage listener) {
+                                                           final IResendMessage listener) {
         List<String> items = new ArrayList<>();
         List<Integer> itemsId = new ArrayList<>();
         items.add(context.getString(R.string.resend_message));
         itemsId.add(0);
         if (failedMessagesCount > 1) {
             items.add(String.format(context.getString(R.string.resend_all_messages),
-                failedMessagesCount));
+                    failedMessagesCount));
             itemsId.add(1);
         }
         items.add(context.getString(R.string.delete_item_dialog));
@@ -156,23 +159,23 @@ public final class AppUtils {
         }
 
         return new MaterialDialog.Builder(context).title("Resend Messages")
-            .negativeText("CANCEL").items(items).itemsIds(newIds)
-            .itemsCallback(new MaterialDialog.ListCallback() {
-                @Override
-                public void onSelection(MaterialDialog dialog, View itemView, int position,
-                    CharSequence text) {
-                    switch (itemView.getId()) {
-                        case 0:
-                            listener.resendMessage();
-                            break;
-                        case 1:
-                            listener.resendAllMessages();
-                            break;
-                        case 2:
-                            listener.deleteMessage();
-                            break;
+                .negativeText("CANCEL").items(items).itemsIds(newIds)
+                .itemsCallback(new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog dialog, View itemView, int position,
+                                            CharSequence text) {
+                        switch (itemView.getId()) {
+                            case 0:
+                                listener.resendMessage();
+                                break;
+                            case 1:
+                                listener.resendAllMessages();
+                                break;
+                            case 2:
+                                listener.deleteMessage();
+                                break;
+                        }
                     }
-                }
-            });
+                });
     }
 }

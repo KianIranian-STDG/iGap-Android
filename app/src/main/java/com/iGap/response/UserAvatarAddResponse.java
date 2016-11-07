@@ -16,19 +16,22 @@ public class UserAvatarAddResponse extends MessageHandler {
         this.actionId = actionId;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
         super.handler();
 
         ProtoUserAvatarAdd.UserAvatarAddResponse.Builder userAvatarAddResponse =
-            (ProtoUserAvatarAdd.UserAvatarAddResponse.Builder) message;
+                (ProtoUserAvatarAdd.UserAvatarAddResponse.Builder) message;
         G.onUserAvatarResponse.onAvatarAdd(userAvatarAddResponse.getAvatar());
     }
 
-    @Override public void timeOut() {
+    @Override
+    public void timeOut() {
         super.timeOut();
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
         super.error();
     }
 }

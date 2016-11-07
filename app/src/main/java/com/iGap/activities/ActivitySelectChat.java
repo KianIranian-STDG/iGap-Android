@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.items.RoomItem;
@@ -25,9 +26,11 @@ import com.iGap.realm.enums.RoomType;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.adapters.FastItemAdapter;
+
+import java.util.ArrayList;
+
 import io.realm.Realm;
 import io.realm.Sort;
-import java.util.ArrayList;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivitySelectChat extends ActivityEnhanced {
@@ -37,11 +40,13 @@ public class ActivitySelectChat extends ActivityEnhanced {
     private FastItemAdapter<RoomItem> mAdapter;
     private ArrayList<Parcelable> mForwardMessages;
 
-    @Override protected void attachBaseContext(Context newBase) {
+    @Override
+    protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
-    @Override public void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -55,13 +60,14 @@ public class ActivitySelectChat extends ActivityEnhanced {
         MaterialDesignTextView btnMenu = (MaterialDesignTextView) findViewById(R.id.cl_btn_menu);
 
         MaterialDesignTextView btnSearch =
-            (MaterialDesignTextView) findViewById(R.id.amr_btn_search);
+                (MaterialDesignTextView) findViewById(R.id.amr_btn_search);
 
         TextView txtIgap = (TextView) findViewById(R.id.cl_txt_igap);
         txtIgap.setTypeface(G.neuroplp);
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
             }
         });
     }
@@ -70,8 +76,9 @@ public class ActivitySelectChat extends ActivityEnhanced {
         mRecyclerView = (RecyclerView) findViewById(R.id.cl_recycler_view_contact);
         mAdapter = new FastItemAdapter<>();
         mAdapter.withOnClickListener(new FastAdapter.OnClickListener<RoomItem>() {
-            @Override public boolean onClick(View v, IAdapter<RoomItem> adapter, RoomItem item,
-                int position) {
+            @Override
+            public boolean onClick(View v, IAdapter<RoomItem> adapter, RoomItem item,
+                                   int position) {
                 Intent intent = new Intent(ActivitySelectChat.this, ActivityChat.class);
                 intent.putExtra("RoomId", item.mInfo.chatId);
                 intent.putParcelableArrayListExtra(ARG_FORWARD_MESSAGE, mForwardMessages);
@@ -81,7 +88,7 @@ public class ActivitySelectChat extends ActivityEnhanced {
             }
         });
         RecyclerView.LayoutManager mLayoutManager =
-            new LinearLayoutManager(ActivitySelectChat.this);
+                new LinearLayoutManager(ActivitySelectChat.this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setAdapter(mAdapter);
@@ -94,7 +101,7 @@ public class ActivitySelectChat extends ActivityEnhanced {
 
         Realm realm = Realm.getDefaultInstance();
         for (RealmRoom realmRoom : realm.where(RealmRoom.class)
-            .findAllSorted(RealmRoomFields.LAST_MESSAGE_TIME, Sort.DESCENDING)) {
+                .findAllSorted(RealmRoomFields.LAST_MESSAGE_TIME, Sort.DESCENDING)) {
             final RoomItem roomItem = new RoomItem();
             StructChatInfo info = new StructChatInfo();
             info.unreadMessagesCount = realmRoom.getUnreadCount();
@@ -107,10 +114,10 @@ public class ActivitySelectChat extends ActivityEnhanced {
                 case CHAT:
                     info.chatType = RoomType.CHAT;
                     RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class)
-                        .equalTo(RealmRegisteredInfoFields.ID, realmRoom.getChatRoom().getPeerId())
-                        .findFirst();
+                            .equalTo(RealmRegisteredInfoFields.ID, realmRoom.getChatRoom().getPeerId())
+                            .findFirst();
                     info.avatar = realmRegisteredInfo != null ? StructMessageAttachment.convert(
-                        realmRegisteredInfo.getLastAvatar()) : new StructMessageAttachment();
+                            realmRegisteredInfo.getLastAvatar()) : new StructMessageAttachment();
                     info.ownerId = realmRoom.getChatRoom().getPeerId();
                     break;
                 case CHANNEL:
@@ -133,8 +140,8 @@ public class ActivitySelectChat extends ActivityEnhanced {
             info.lastMessageTime = realmRoom.getLastMessageTime();
             info.lastMessageStatus = realmRoom.getLastMessageStatus();
             RealmRoomMessage lastMessage = realm.where(RealmRoomMessage.class)
-                .equalTo(RealmRoomMessageFields.MESSAGE_ID, realmRoom.getLastMessageId())
-                .findFirst();
+                    .equalTo(RealmRoomMessageFields.MESSAGE_ID, realmRoom.getLastMessageId())
+                    .findFirst();
             if (lastMessage != null) {
                 info.lastMessageTime = lastMessage.getUpdateTime();
                 info.lastMessageSenderIsMe = lastMessage.isSenderMe();
@@ -145,7 +152,8 @@ public class ActivitySelectChat extends ActivityEnhanced {
             roomItem.setInfo(info);
             //roomItem.setComplete(this);
             runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     mAdapter.add(roomItem);
                 }
             });

@@ -2,6 +2,7 @@ package com.iGap.realm;
 
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.enums.ChannelChatRole;
+
 import io.realm.Realm;
 import io.realm.RealmObject;
 
@@ -20,7 +21,7 @@ public class RealmChannelRoom extends RealmObject {
      * @return RealmChannelRoom
      */
     public static RealmChannelRoom convert(ProtoGlobal.ChannelRoom room,
-        RealmChannelRoom realmChannelRoom, Realm realm) {
+                                           RealmChannelRoom realmChannelRoom, Realm realm) {
         if (realmChannelRoom == null) {
             realmChannelRoom = realm.createObject(RealmChannelRoom.class);
         }

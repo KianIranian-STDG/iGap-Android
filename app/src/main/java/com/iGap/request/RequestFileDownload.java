@@ -5,9 +5,9 @@ import com.iGap.proto.ProtoFileDownload;
 public class RequestFileDownload {
 
     public void download(String token, long offset, int maxLimit,
-        ProtoFileDownload.FileDownload.Selector selector, String identity) {
+                         ProtoFileDownload.FileDownload.Selector selector, String identity) {
         ProtoFileDownload.FileDownload.Builder builder =
-            ProtoFileDownload.FileDownload.newBuilder();
+                ProtoFileDownload.FileDownload.newBuilder();
         builder.setToken(token);
         builder.setOffset(offset);
         builder.setMaxLimit(maxLimit);

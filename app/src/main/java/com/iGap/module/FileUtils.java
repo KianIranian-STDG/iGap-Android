@@ -31,6 +31,7 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileFilter;
@@ -60,7 +61,8 @@ public class FileUtils {
      * @author paulburke
      */
     public static Comparator<File> sComparator = new Comparator<File>() {
-        @Override public int compare(File f1, File f2) {
+        @Override
+        public int compare(File f1, File f2) {
             // Sort alphabetically by lower case, which is much cleaner
             return f1.getName().toLowerCase().compareTo(f2.getName().toLowerCase());
         }
@@ -71,7 +73,8 @@ public class FileUtils {
      * @author paulburke
      */
     public static FileFilter sFileFilter = new FileFilter() {
-        @Override public boolean accept(File file) {
+        @Override
+        public boolean accept(File file) {
             final String fileName = file.getName();
             // Return files only (not directories) and skip hidden files
             return file.isFile() && !fileName.startsWith(HIDDEN_PREFIX);
@@ -83,7 +86,8 @@ public class FileUtils {
      * @author paulburke
      */
     public static FileFilter sDirFilter = new FileFilter() {
-        @Override public boolean accept(File file) {
+        @Override
+        public boolean accept(File file) {
             final String fileName = file.getName();
             // Return directories only and skip hidden directories
             return file.isDirectory() && !fileName.startsWith(HIDDEN_PREFIX);
@@ -179,7 +183,7 @@ public class FileUtils {
 
                 // Construct path without file name.
                 String pathwithoutname =
-                    filepath.substring(0, filepath.length() - filename.length());
+                        filepath.substring(0, filepath.length() - filename.length());
                 if (pathwithoutname.endsWith("/")) {
                     pathwithoutname = pathwithoutname.substring(0, pathwithoutname.length() - 1);
                 }
@@ -250,25 +254,25 @@ public class FileUtils {
      * Get the value of the data column for this Uri. This is useful for
      * MediaStore Uris, and other file-based ContentProviders.
      *
-     * @param context The context.
-     * @param uri The Uri to query.
-     * @param selection (Optional) Filter used in the query.
+     * @param context       The context.
+     * @param uri           The Uri to query.
+     * @param selection     (Optional) Filter used in the query.
      * @param selectionArgs (Optional) Selection arguments used in the query.
      * @return The value of the _data column, which is typically a file path.
      * @author paulburke
      */
     public static String getDataColumn(Context context, Uri uri, String selection,
-        String[] selectionArgs) {
+                                       String[] selectionArgs) {
 
         Cursor cursor = null;
         final String column = "_data";
         final String[] projection = {
-            column
+                column
         };
 
         try {
             cursor =
-                context.getContentResolver().query(uri, projection, selection, selectionArgs, null);
+                    context.getContentResolver().query(uri, projection, selection, selectionArgs, null);
             if (cursor != null && cursor.moveToFirst()) {
                 if (DEBUG) DatabaseUtils.dumpCursor(cursor);
 
@@ -290,7 +294,7 @@ public class FileUtils {
      * represents a local file.
      *
      * @param context The context.
-     * @param uri The Uri to query.
+     * @param uri     The Uri to query.
      * @author paulburke
      * @see #isLocal(String)
      * @see #getFile(Context, Uri)
@@ -299,12 +303,12 @@ public class FileUtils {
 
         if (DEBUG) {
             Log.d(TAG + " File -", "Authority: " + uri.getAuthority() +
-                ", Fragment: " + uri.getFragment() +
-                ", Port: " + uri.getPort() +
-                ", Query: " + uri.getQuery() +
-                ", Scheme: " + uri.getScheme() +
-                ", Host: " + uri.getHost() +
-                ", Segments: " + uri.getPathSegments().toString());
+                    ", Fragment: " + uri.getFragment() +
+                    ", Port: " + uri.getPort() +
+                    ", Query: " + uri.getQuery() +
+                    ", Scheme: " + uri.getScheme() +
+                    ", Host: " + uri.getHost() +
+                    ", Segments: " + uri.getPathSegments().toString());
         }
 
         final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
@@ -327,8 +331,8 @@ public class FileUtils {
 
                 final String id = DocumentsContract.getDocumentId(uri);
                 final Uri contentUri =
-                    ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"),
-                        Long.valueOf(id));
+                        ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"),
+                                Long.valueOf(id));
 
                 return getDataColumn(context, contentUri, null, null);
             }
@@ -348,8 +352,8 @@ public class FileUtils {
                 }
 
                 final String selection = "_id=?";
-                final String[] selectionArgs = new String[] {
-                    split[1]
+                final String[] selectionArgs = new String[]{
+                        split[1]
                 };
 
                 return getDataColumn(context, contentUri, selection, selectionArgs);
@@ -464,10 +468,10 @@ public class FileUtils {
 
                     if (mimeType.contains("video")) {
                         bm = MediaStore.Video.Thumbnails.getThumbnail(resolver, id,
-                            MediaStore.Video.Thumbnails.MINI_KIND, null);
+                                MediaStore.Video.Thumbnails.MINI_KIND, null);
                     } else if (mimeType.contains(FileUtils.MIME_TYPE_IMAGE)) {
                         bm = MediaStore.Images.Thumbnails.getThumbnail(resolver, id,
-                            MediaStore.Images.Thumbnails.MINI_KIND, null);
+                                MediaStore.Images.Thumbnails.MINI_KIND, null);
                     }
                 }
             } catch (Exception e) {

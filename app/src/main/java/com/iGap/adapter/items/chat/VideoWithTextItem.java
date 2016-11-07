@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.interfaces.IMessageItem;
@@ -15,6 +16,7 @@ import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
 import java.util.List;
 
 import static com.iGap.module.AndroidUtils.suitablePath;
@@ -23,37 +25,40 @@ import static com.iGap.module.AndroidUtils.suitablePath;
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/2016.
  */
 public class VideoWithTextItem
-    extends AbstractMessage<VideoWithTextItem, VideoWithTextItem.ViewHolder> {
+        extends AbstractMessage<VideoWithTextItem, VideoWithTextItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
     public VideoWithTextItem(ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         super(true, type, messageClickListener);
     }
 
-    @Override public int getType() {
+    @Override
+    public int getType() {
         return R.id.chatSubLayoutVideoWithText;
     }
 
-    @Override public int getLayoutRes() {
+    @Override
+    public int getLayoutRes() {
         return R.layout.chat_sub_layout_video_with_text;
     }
 
-    @Override public void bindView(final ViewHolder holder, List payloads) {
+    @Override
+    public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
         if (mMessage.attachment != null) {
             int[] dimens = AndroidUtils.scaleDimenWithSavedRatio(holder.itemView.getContext(),
-                mMessage.attachment.width, mMessage.attachment.height);
+                    mMessage.attachment.width, mMessage.attachment.height);
             ((ViewGroup) holder.image.getParent()).setLayoutParams(
-                new LinearLayout.LayoutParams(dimens[0], dimens[1]));
+                    new LinearLayout.LayoutParams(dimens[0], dimens[1]));
             holder.image.getParent().requestLayout();
         }
 
         holder.fileName.setText(mMessage.attachment.name);
         holder.duration.setText(
-            String.format(holder.itemView.getResources().getString(R.string.video_duration),
-                Double.toString(mMessage.attachment.duration).replace(".", ":"),
-                AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true)));
+                String.format(holder.itemView.getResources().getString(R.string.video_duration),
+                        Double.toString(mMessage.attachment.duration).replace(".", ":"),
+                        AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true)));
 
         setTextIfNeeded(holder.messageText);
     }
@@ -64,7 +69,8 @@ public class VideoWithTextItem
         ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.image);
     }
 
-    @Override public ViewHolderFactory<? extends ViewHolder> getFactory() {
+    @Override
+    public ViewHolderFactory<? extends ViewHolder> getFactory() {
         return FACTORY;
     }
 

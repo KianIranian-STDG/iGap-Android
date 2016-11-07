@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.interfaces.IMessageItem;
@@ -13,6 +14,7 @@ import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
 import java.util.List;
 
 import static com.iGap.module.AndroidUtils.suitablePath;
@@ -27,15 +29,18 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
         super(true, type, messageClickListener);
     }
 
-    @Override public int getType() {
+    @Override
+    public int getType() {
         return R.id.chatSubLayoutFile;
     }
 
-    @Override public int getLayoutRes() {
+    @Override
+    public int getLayoutRes() {
         return R.layout.chat_sub_layout_file;
     }
 
-    @Override public ViewHolderFactory<? extends ViewHolder> getFactory() {
+    @Override
+    public ViewHolderFactory<? extends ViewHolder> getFactory() {
         return FACTORY;
     }
 
@@ -46,12 +51,13 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
         ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.image);
     }
 
-    @Override public void bindView(ViewHolder holder, List payloads) {
+    @Override
+    public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
         holder.cslf_txt_file_name.setText(mMessage.attachment.name);
         holder.cslf_txt_file_size.setText(
-            AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true));
+                AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true));
 
         setTextIfNeeded(holder.messageText);
     }

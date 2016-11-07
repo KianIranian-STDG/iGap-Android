@@ -31,6 +31,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -64,68 +65,60 @@ import com.iGap.request.RequestUserInfo;
 import com.iGap.request.RequestUserLogin;
 import com.iGap.request.RequestWrapper;
 import com.vicmikhailau.maskededittext.MaskedEditText;
-import io.realm.Realm;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import io.realm.Realm;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityRegister extends ActivityEnhanced {
 
-    private SoftKeyboard softKeyboard;
-
-    private Button btnStart;
+    static final String KEY_SAVE_CODENUMBER = "SAVE_CODENUMBER";
+    static final String KEY_SAVE_PHONENUMBER_MASK = "SAVE_PHONENUMBER_MASK";
+    static final String KEY_SAVE_PHONENUMBER_NUMBER = "SAVE_PHONENUMBER_NUMBER";
+    static final String KEY_SAVE_NAMECOUNTRY = "SAVE_NAMECOUNTRY";
     public static Button btnChoseCountry;
     public static EditText edtCodeNumber;
-
     public static MaskedEditText edtPhoneNumber;
-
+    public static String isoCode = "IR";
+    public static TextView btnOk;
+    public static Dialog dialogChooseCountry;
+    public static int positionRadioButton = -1;
+    ArrayList<StructCountry> structCountryArrayList = new ArrayList();
+    private SoftKeyboard softKeyboard;
+    private Button btnStart;
     private TextView txtAgreement_register, txtTitleToolbar, txtTitleRegister, txtDesc, txtTitleAgreement;
     private ProgressBar rg_prg_verify_connect, rg_prg_verify_sms, rg_prg_verify_generate, rg_prg_verify_register;
     private TextView rg_txt_verify_connect, rg_txt_verify_sms, rg_txt_verify_generate, rg_txt_verify_register, txtTimer;
     private ImageView rg_img_verify_connect, rg_img_verify_sms, rg_img_verify_generate, rg_img_verify_register;
     private ViewGroup layout_agreement;
     private ViewGroup layout_verify;
-
     private String phoneNumber;
-    public static String isoCode = "IR";
+    //Array List for Store List of StructCountry Object
     private String regex;
     private String userName;
     private String token;
     private String regexFetchCodeVerification;
-
     private long userId;
-    public static TextView btnOk;
     private boolean newUser;
-
-    ArrayList<StructCountry> structCountryArrayList = new ArrayList();
-    //Array List for Store List of StructCountry Object
-
     private ArrayList<StructCountry> items = new ArrayList<>();
     private AdapterDialog adapterDialog;
-
     private Dialog dialogVerifyLandScape;
     private IncomingSms smsReceiver;
-
     private CountDownTimer countDownTimer;
-    public static Dialog dialogChooseCountry;
     private SearchView edtSearchView;
-
-    public static int positionRadioButton = -1;
-
     private Dialog dialog;
     private int digitCount;
 
-    static final String KEY_SAVE_CODENUMBER = "SAVE_CODENUMBER";
-    static final String KEY_SAVE_PHONENUMBER_MASK = "SAVE_PHONENUMBER_MASK";
-    static final String KEY_SAVE_PHONENUMBER_NUMBER = "SAVE_PHONENUMBER_NUMBER";
-    static final String KEY_SAVE_NAMECOUNTRY = "SAVE_NAMECOUNTRY";
-
-    @Override protected void attachBaseContext(Context newBase) {
+    @Override
+    protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
-    @Override public void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         edtCodeNumber = (EditText) findViewById(R.id.rg_edt_CodeNumber);
@@ -173,14 +166,17 @@ public class ActivityRegister extends ActivityEnhanced {
         txtTitleToolbar.setTypeface(G.FONT_IGAP);
 
         edtPhoneNumber.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
 
-            @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
 
-            @Override public void afterTextChanged(Editable editable) {
+            @Override
+            public void afterTextChanged(Editable editable) {
                 if (editable.toString().equals("0")) {
                     Toast.makeText(ActivityRegister.this, getResources().getString(R.string.Toast_First_0), Toast.LENGTH_SHORT).show();
                     edtPhoneNumber.setText("");
@@ -234,7 +230,8 @@ public class ActivityRegister extends ActivityEnhanced {
         }
 
         btnChoseCountry.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
 
                 dialogChooseCountry = new Dialog(ActivityRegister.this);
                 dialogChooseCountry.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -248,7 +245,8 @@ public class ActivityRegister extends ActivityEnhanced {
                 edtSearchView = (SearchView) dialogChooseCountry.findViewById(R.id.rg_edtSearch_toolbar);
 
                 txtTitle.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View view) {
+                    @Override
+                    public void onClick(View view) {
 
                         edtSearchView.setIconified(false);
                         edtSearchView.setIconifiedByDefault(true);
@@ -257,7 +255,8 @@ public class ActivityRegister extends ActivityEnhanced {
                 });
 
                 edtSearchView.setOnCloseListener(new SearchView.OnCloseListener() { // close SearchView and show title again
-                    @Override public boolean onClose() {
+                    @Override
+                    public boolean onClose() {
 
                         txtTitle.setVisibility(View.VISIBLE);
 
@@ -269,9 +268,11 @@ public class ActivityRegister extends ActivityEnhanced {
                 InputMethodManager im = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
                 SoftKeyboard softKeyboard = new SoftKeyboard(root, im);
                 softKeyboard.setSoftKeyboardCallback(new SoftKeyboard.SoftKeyboardChanged() {
-                    @Override public void onSoftKeyboardHide() {
+                    @Override
+                    public void onSoftKeyboardHide() {
                         runOnUiThread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 if (edtSearchView.getQuery().toString().length() > 0) {
                                     edtSearchView.setIconified(false);
                                     edtSearchView.clearFocus();
@@ -285,11 +286,13 @@ public class ActivityRegister extends ActivityEnhanced {
                         });
                     }
 
-                    @Override public void onSoftKeyboardShow() {
+                    @Override
+                    public void onSoftKeyboardShow() {
 
                         runOnUiThread(new Runnable() {
 
-                            @Override public void run() {
+                            @Override
+                            public void run() {
 
                                 txtTitle.setVisibility(View.GONE);
                             }
@@ -303,11 +306,13 @@ public class ActivityRegister extends ActivityEnhanced {
 
                 final View border = (View) dialogChooseCountry.findViewById(R.id.rg_borderButton);
                 listView.setOnScrollListener(new AbsListView.OnScrollListener() {
-                    @Override public void onScrollStateChanged(AbsListView absListView, int i) {
+                    @Override
+                    public void onScrollStateChanged(AbsListView absListView, int i) {
 
                     }
 
-                    @Override public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+                    @Override
+                    public void onScroll(AbsListView absListView, int i, int i1, int i2) {
 
                         if (i > 0) {
                             border.setVisibility(View.VISIBLE);
@@ -322,12 +327,14 @@ public class ActivityRegister extends ActivityEnhanced {
                 adapterDialog.notifyDataSetChanged();
 
                 edtSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                    @Override public boolean onQueryTextSubmit(String s) {
+                    @Override
+                    public boolean onQueryTextSubmit(String s) {
 
                         return false;
                     }
 
-                    @Override public boolean onQueryTextChange(String s) {
+                    @Override
+                    public boolean onQueryTextChange(String s) {
 
                         adapterDialog.getFilter().filter(s);
                         return false;
@@ -347,12 +354,15 @@ public class ActivityRegister extends ActivityEnhanced {
 
                 btnOk = (TextView) dialogChooseCountry.findViewById(R.id.rg_txt_okDialog);
                 btnOk.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View v) {
+                    @Override
+                    public void onClick(View v) {
 
                         G.onInfoCountryResponse = new OnInfoCountryResponse() {
-                            @Override public void onInfoCountryResponse(final int callingCode, final String name, final String pattern, final String regexR) {
+                            @Override
+                            public void onInfoCountryResponse(final int callingCode, final String name, final String pattern, final String regexR) {
                                 G.handler.post(new Runnable() {
-                                    @Override public void run() {
+                                    @Override
+                                    public void run() {
                                         edtCodeNumber.setText("+" + callingCode);
                                         edtPhoneNumber.setMask(pattern.replace("X", "#").replace(" ", "-"));
                                         regex = regexR;
@@ -363,10 +373,12 @@ public class ActivityRegister extends ActivityEnhanced {
                                 });
                             }
 
-                            @Override public void onError(int majorCode, int minorCode) {
+                            @Override
+                            public void onError(int majorCode, int minorCode) {
                                 if (majorCode == 501 && minorCode == 1) {
                                     runOnUiThread(new Runnable() {
-                                        @Override public void run() {
+                                        @Override
+                                        public void run() {
                                             // TODO: 9/25/2016 Error 501 - INFO_COUNTRY_BAD_PAYLOAD
                                         }
                                     });
@@ -391,65 +403,68 @@ public class ActivityRegister extends ActivityEnhanced {
         final Animation trans_x_out = AnimationUtils.loadAnimation(G.context, R.anim.rg_tansiton_y_out);
         btnStart = (Button) findViewById(R.id.rg_btn_start); //check phone and internet connection
         btnStart.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
 
                 if (edtPhoneNumber.getText().toString().length() > 0 && !regex.equals("") && edtPhoneNumber.getText().toString().replace("-", "").matches(regex)) {
 
                     phoneNumber = edtPhoneNumber.getText().toString();
 
                     MaterialDialog dialog = new MaterialDialog.Builder(ActivityRegister.this).buttonsGravity(GravityEnum.END).customView(R.layout.rg_mdialog_text, true)
-                        .positiveText("OK")
-                        .negativeText("EDIT")
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            .positiveText("OK")
+                            .negativeText("EDIT")
+                            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                                int portaret_landscope = getResources().getConfiguration().orientation;
+                                    int portaret_landscope = getResources().getConfiguration().orientation;
 
-                                if (portaret_landscope == 1) {//portrait
-                                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                                    txtAgreement_register = (TextView) findViewById(R.id.txtAgreement_register);
-                                    txtAgreement_register.setMovementMethod(new ScrollingMovementMethod());
+                                    if (portaret_landscope == 1) {//portrait
+                                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                                        txtAgreement_register = (TextView) findViewById(R.id.txtAgreement_register);
+                                        txtAgreement_register.setMovementMethod(new ScrollingMovementMethod());
 
-                                    layout_agreement.setVisibility(View.GONE);
-                                    layout_agreement.startAnimation(trans_x_out);
-                                    G.handler.postDelayed(new Runnable() {
-                                        @Override public void run() {
+                                        layout_agreement.setVisibility(View.GONE);
+                                        layout_agreement.startAnimation(trans_x_out);
+                                        G.handler.postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
 
-                                            btnChoseCountry.setEnabled(false);
-                                            btnChoseCountry.setTextColor(getResources().getColor(R.color.rg_border_editText));
-                                            edtPhoneNumber.setEnabled(false);
-                                            edtPhoneNumber.setTextColor(getResources().getColor(R.color.rg_border_editText));
+                                                btnChoseCountry.setEnabled(false);
+                                                btnChoseCountry.setTextColor(getResources().getColor(R.color.rg_border_editText));
+                                                edtPhoneNumber.setEnabled(false);
+                                                edtPhoneNumber.setTextColor(getResources().getColor(R.color.rg_border_editText));
 
-                                            edtCodeNumber.setEnabled(false);
-                                            edtCodeNumber.setTextColor(getResources().getColor(R.color.rg_border_editText));
+                                                edtCodeNumber.setEnabled(false);
+                                                edtCodeNumber.setTextColor(getResources().getColor(R.color.rg_border_editText));
 
-                                            layout_verify.setVisibility(View.VISIBLE);
-                                            layout_verify.startAnimation(trans_x_in);
+                                                layout_verify.setVisibility(View.VISIBLE);
+                                                layout_verify.startAnimation(trans_x_in);
 
-                                            checkVerify();
-                                        }
-                                    }, 600);
-                                } else {
+                                                checkVerify();
+                                            }
+                                        }, 600);
+                                    } else {
 
-                                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
-                                    dialogVerifyLandScape = new Dialog(ActivityRegister.this);
+                                        dialogVerifyLandScape = new Dialog(ActivityRegister.this);
 
-                                    btnChoseCountry.setTextColor(getResources().getColor(R.color.rg_background_editText));
-                                    btnChoseCountry.setEnabled(false);
-                                    edtPhoneNumber.setTextColor(getResources().getColor(R.color.rg_background_editText));
-                                    edtPhoneNumber.setEnabled(false);
+                                        btnChoseCountry.setTextColor(getResources().getColor(R.color.rg_background_editText));
+                                        btnChoseCountry.setEnabled(false);
+                                        edtPhoneNumber.setTextColor(getResources().getColor(R.color.rg_background_editText));
+                                        edtPhoneNumber.setEnabled(false);
 
-                                    dialogVerifyLandScape.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                    dialogVerifyLandScape.setContentView(R.layout.rg_dialog_verify_land);
-                                    dialogVerifyLandScape.setCanceledOnTouchOutside(false);
-                                    dialogVerifyLandScape.show();
+                                        dialogVerifyLandScape.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                        dialogVerifyLandScape.setContentView(R.layout.rg_dialog_verify_land);
+                                        dialogVerifyLandScape.setCanceledOnTouchOutside(false);
+                                        dialogVerifyLandScape.show();
 
-                                    checkVerify();
+                                        checkVerify();
+                                    }
                                 }
-                            }
-                        })
-                        .build();
+                            })
+                            .build();
 
                     View view = dialog.getCustomView();
                     assert view != null;
@@ -502,12 +517,14 @@ public class ActivityRegister extends ActivityEnhanced {
         rg_prg_verify_connect.setVisibility(View.VISIBLE);
 
         Thread thread = new Thread(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
 
                 if (G.socketConnection) { //connection ok
                     //                        if (checkInternet()) { //connection ok
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             userRegister();
                             btnStart.setEnabled(false);
                             countDownTimer = new CountDownTimer(1000 * 60, 1000) { // wait for verify sms
@@ -547,7 +564,8 @@ public class ActivityRegister extends ActivityEnhanced {
                     });
                 } else { // connection error
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             edtPhoneNumber.setEnabled(true);
                             rg_prg_verify_connect.setVisibility(View.GONE);
                             rg_img_verify_connect.setImageResource(R.mipmap.alert);
@@ -620,7 +638,8 @@ public class ActivityRegister extends ActivityEnhanced {
 
         TextView btnCancel = (TextView) dialog.findViewById(R.id.rg_btn_cancelVerifyCode);
         btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
 
                 if (!edtEnterCodeVerify.getText().toString().equals("")) {
                     userVerify(userName, edtEnterCodeVerify.getText().toString());
@@ -634,7 +653,8 @@ public class ActivityRegister extends ActivityEnhanced {
 
         TextView btnOk = (TextView) dialog.findViewById(R.id.rg_btn_dialog_okVerifyCode);
         btnOk.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 userRegister();
                 edtPhoneNumber.setText("");
                 dialog.dismiss();
@@ -652,13 +672,15 @@ public class ActivityRegister extends ActivityEnhanced {
 
         G.onUserRegistration = new OnUserRegistration() {
 
-            @Override public void onRegister(final String userNameR, final long userIdR, final ProtoUserRegister.UserRegisterResponse.Method methodValue, final List<Long> smsNumbersR, String regex,
-                int verifyCodeDigitCount) {
+            @Override
+            public void onRegister(final String userNameR, final long userIdR, final ProtoUserRegister.UserRegisterResponse.Method methodValue, final List<Long> smsNumbersR, String regex,
+                                   int verifyCodeDigitCount) {
                 digitCount = verifyCodeDigitCount;
                 countDownTimer.start();
                 regexFetchCodeVerification = regex;
                 runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         txtTimer.setVisibility(View.VISIBLE);
                         userName = userNameR;
                         userId = userIdR;
@@ -686,18 +708,21 @@ public class ActivityRegister extends ActivityEnhanced {
                 });
             }
 
-            @Override public void onRegisterError(int majorCode, int minorCode) {
+            @Override
+            public void onRegisterError(int majorCode, int minorCode) {
 
                 if (majorCode == 100 && minorCode == 1) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             // TODO: 9/25/2016  Error 100 - USER_REGISTER_BAD_PAYLOAD
                             //Invalid countryCode
                         }
                     });
                 } else if (majorCode == 100 && minorCode == 2) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             // TODO: 9/25/2016  Error 100 - USER_REGISTER_BAD_PAYLOAD
                             //Invalid phoneNumber
                             requestRegister();
@@ -705,7 +730,8 @@ public class ActivityRegister extends ActivityEnhanced {
                     });
                 } else if (majorCode == 101) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             // TODO: 9/25/2016  Error 101 - USER_REGISTER_INTERNAL_SERVER_ERROR
                             //Invalid phoneNumber
                             requestRegister();
@@ -713,19 +739,22 @@ public class ActivityRegister extends ActivityEnhanced {
                     });
                 } else if (majorCode == 135) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             // TODO: 9/25/2016  Error 135 - USER_REGISTER_BLOCKED_USER
                         }
                     });
                 } else if (majorCode == 136) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             // TODO: 9/25/2016  Error 136 - USER_REGISTER_MAX_TRY_LOCK
                         }
                     });
                 } else if (majorCode == 137) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             // TODO: 9/25/2016  Error 137 - USER_REGISTER_MAX_SEND_LOCK
                         }
                     });
@@ -774,9 +803,11 @@ public class ActivityRegister extends ActivityEnhanced {
 
     private void userVerifyResponse(final String verificationCode) {
         G.onUserVerification = new OnUserVerification() {
-            @Override public void onUserVerify(final String tokenR, final boolean newUserR) {
+            @Override
+            public void onUserVerify(final String tokenR, final boolean newUserR) {
                 runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         rg_txt_verify_sms.setText("Your login code is : " + verificationCode);
                         rg_prg_verify_sms.setVisibility(View.GONE);
                         rg_img_verify_sms.setVisibility(View.VISIBLE);
@@ -795,48 +826,56 @@ public class ActivityRegister extends ActivityEnhanced {
                 });
             }
 
-            @Override public void onUserVerifyError(int majorCode, int minorCode) {
+            @Override
+            public void onUserVerifyError(int majorCode, int minorCode) {
 
                 if (majorCode == 102 && minorCode == 1) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             errorVerifySms();
                             countDownTimer.cancel();
                         }
                     });
                 } else if (majorCode == 102 && minorCode == 2) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             // TODO: 9/25/2016 Invalid username
                         }
                     });
                 } else if (majorCode == 102 && minorCode == 3) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             // TODO: 9/25/2016 Invalid device
                         }
                     });
                 } else if (majorCode == 102 && minorCode == 4) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             // TODO: 9/25/2016 Invalid osName
                         }
                     });
                 } else if (majorCode == 102 && minorCode == 5) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             // TODO: 9/25/2016 Invalid osVersion
                         }
                     });
                 } else if (majorCode == 103) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             // TODO: 9/25/2016 Error 103 - USER_VERIFY_INTERNAL_SERVER_ERROR
                         }
                     });
                 } else if (majorCode == 104) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             // There is no registered user with given username
                             // TODO: 9/25/2016 Error 104 - USER_VERIFY_USER_NOT_FOUND
 
@@ -844,7 +883,8 @@ public class ActivityRegister extends ActivityEnhanced {
                     });
                 } else if (majorCode == 105) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             // User is blocked , You cannot verify the user
                             // TODO: 9/25/2016 Error 105 - USER_VERIFY_BLOCKED_USER
 
@@ -853,7 +893,8 @@ public class ActivityRegister extends ActivityEnhanced {
                     });
                 } else if (majorCode == 106) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             // Verification code is invalid
                             // TODO: 9/25/2016 Error 106 - USER_VERIFY_INVALID_CODE
                             errorVerifySms();
@@ -861,7 +902,8 @@ public class ActivityRegister extends ActivityEnhanced {
                     });
                 } else if (majorCode == 107) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             // There is no registered user with given username
                             // TODO: 9/25/2016 Error 107 - USER_VERIFY_EXPIRED_CODE
 
@@ -869,7 +911,8 @@ public class ActivityRegister extends ActivityEnhanced {
                     });
                 } else if (majorCode == 108) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             // Verification code is locked for a while due to too many tries
                             // TODO: 9/25/2016 Error 108 - USER_VERIFY_MAX_TRY_LOCK
 
@@ -884,12 +927,15 @@ public class ActivityRegister extends ActivityEnhanced {
         rg_prg_verify_register.setVisibility(View.VISIBLE);
         rg_txt_verify_register.setTextAppearance(G.context, R.style.RedHUGEText);
         G.onUserLogin = new OnUserLogin() {
-            @Override public void onLogin() {
+            @Override
+            public void onLogin() {
                 runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         Realm realm = Realm.getDefaultInstance();
                         realm.executeTransaction(new Realm.Transaction() {
-                            @Override public void execute(Realm realm) {
+                            @Override
+                            public void execute(Realm realm) {
                                 RealmUserInfo userInfo = realm.where(RealmUserInfo.class).equalTo(RealmUserInfoFields.USER_INFO.ID, userId).findFirst();
                                 if (userInfo == null) {
                                     userInfo = realm.createObject(RealmUserInfo.class);
@@ -927,31 +973,36 @@ public class ActivityRegister extends ActivityEnhanced {
                 });
             }
 
-            @Override public void onLoginError(int majorCode, int minorCode) {
+            @Override
+            public void onLoginError(int majorCode, int minorCode) {
                 if (majorCode == 109 && minorCode == 1) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
 
                             // TODO: 9/25/2016 Error 109 - USER_LOGIN_BAD_PAYLOAD
                         }
                     });
                 } else if (majorCode == 110) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
 
                             // TODO: 9/25/2016 Error 110 - USER_LOGIN_INTERNAL_SERVER_ERROR
                         }
                     });
                 } else if (majorCode == 111 && minorCode == 4) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
 
                             HelperLogout.logout();
                         }
                     });
                 } else if (majorCode == 111) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             requestLogin();
                         }
                     });
@@ -965,11 +1016,13 @@ public class ActivityRegister extends ActivityEnhanced {
     private void getUserInfo() {
 
         G.onUserInfoResponse = new OnUserInfoResponse() {
-            @Override public void onUserInfo(final ProtoGlobal.RegisteredUser user, ProtoResponse.Response response) {
+            @Override
+            public void onUserInfo(final ProtoGlobal.RegisteredUser user, ProtoResponse.Response response) {
 
                 Realm realm = Realm.getDefaultInstance();
                 realm.executeTransaction(new Realm.Transaction() {
-                    @Override public void execute(Realm realm) {
+                    @Override
+                    public void execute(Realm realm) {
                         RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                         realmUserInfo.getUserInfo().setDisplayName(user.getDisplayName());
                         realmUserInfo.getUserInfo().setInitials(user.getInitials());
@@ -977,7 +1030,8 @@ public class ActivityRegister extends ActivityEnhanced {
                         realmUserInfo.setUserRegistrationState(true);
 
                         runOnUiThread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 Intent intent = new Intent(G.context, ActivityMain.class);
                                 intent.putExtra(ActivityProfile.ARG_USER_ID, userId);
                                 startActivity(intent);
@@ -989,11 +1043,13 @@ public class ActivityRegister extends ActivityEnhanced {
                 realm.close();
             }
 
-            @Override public void onUserInfoTimeOut() {
+            @Override
+            public void onUserInfoTimeOut() {
 
             }
 
-            @Override public void onUserInfoError(int majorCode, int minorCode) {
+            @Override
+            public void onUserInfoError(int majorCode, int minorCode) {
 
             }
         };
@@ -1020,13 +1076,15 @@ public class ActivityRegister extends ActivityEnhanced {
         userVerify(userName, verificationCode);
     }
 
-    @Override protected void onResume() {
+    @Override
+    protected void onResume() {
         final IntentFilter filter = new IntentFilter();
         filter.addAction("android.provider.Telephony.SMS_RECEIVED");
 
         smsReceiver = new IncomingSms(new OnSmsReceive() {
 
-            @Override public void onSmsReceive(String message) {
+            @Override
+            public void onSmsReceive(String message) {
                 Log.i("UUU", "onSmsReceive 1 message : " + message);
                 try {
                     if (message != null && !message.isEmpty() && !message.equals("null") && !message.equals("")) {
@@ -1044,7 +1102,8 @@ public class ActivityRegister extends ActivityEnhanced {
         super.onResume();
     }
 
-    @Override protected void onPause() {
+    @Override
+    protected void onPause() {
         try {
             unregisterReceiver(smsReceiver);
         } catch (Exception e) {
@@ -1053,7 +1112,8 @@ public class ActivityRegister extends ActivityEnhanced {
         super.onPause();
     }
 
-    @Override protected void onDestroy() {
+    @Override
+    protected void onDestroy() {
         super.onDestroy();
     }
 
@@ -1062,7 +1122,8 @@ public class ActivityRegister extends ActivityEnhanced {
         rg_prg_verify_sms.setVisibility(View.VISIBLE);
         rg_txt_verify_generate.setTextAppearance(G.context, R.style.RedHUGEText);
         G.handler.postDelayed(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 rg_prg_verify_sms.setVisibility(View.GONE);
                 rg_img_verify_sms.setVisibility(View.VISIBLE);
                 rg_txt_verify_sms.setTextColor(getResources().getColor(R.color.rg_text_verify));

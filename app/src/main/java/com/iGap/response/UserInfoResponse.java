@@ -1,12 +1,14 @@
 package com.iGap.response;
 
 import android.util.Log;
+
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoUserInfo;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
+
 import io.realm.Realm;
 
 public class UserInfoResponse extends MessageHandler {
@@ -22,16 +24,18 @@ public class UserInfoResponse extends MessageHandler {
         this.actionId = actionId;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
         final ProtoUserInfo.UserInfoResponse.Builder builder =
-            (ProtoUserInfo.UserInfoResponse.Builder) message;
+                (ProtoUserInfo.UserInfoResponse.Builder) message;
 
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
                 RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class)
-                    .equalTo(RealmRegisteredInfoFields.ID, builder.getUser().getId())
-                    .findFirst();
+                        .equalTo(RealmRegisteredInfoFields.ID, builder.getUser().getId())
+                        .findFirst();
 
                 if (realmRegisteredInfo == null) {
                     realmRegisteredInfo = realm.createObject(RealmRegisteredInfo.class);
@@ -58,13 +62,15 @@ public class UserInfoResponse extends MessageHandler {
         }
     }
 
-    @Override public void timeOut() {
+    @Override
+    public void timeOut() {
         Log.i("SOCA", "UserInfoResponse timeout");
 
         G.onUserInfoResponse.onUserInfoTimeOut();
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();

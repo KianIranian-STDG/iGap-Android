@@ -1,6 +1,7 @@
 package com.iGap.response;
 
 import android.util.Log;
+
 import com.iGap.proto.ProtoError;
 
 public class ErrorResponse extends MessageHandler {
@@ -17,7 +18,8 @@ public class ErrorResponse extends MessageHandler {
         this.identity = identity;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
         Log.i("SOC", "ErrorResponse");
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         double majorCode = errorResponse.getMajorCode();
@@ -26,7 +28,8 @@ public class ErrorResponse extends MessageHandler {
         Log.i("SOC", "minorCode : " + minorCode);
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
         Log.i("SOC", "1ErrorResponse");
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         double majorCode = errorResponse.getMajorCode();

@@ -7,7 +7,7 @@ public class RequestGroupAddAdmin {
     public void groupAddAdmin(long roomId, long memberId) {
 
         ProtoGroupAddAdmin.GroupAddAdmin.Builder builder =
-            ProtoGroupAddAdmin.GroupAddAdmin.newBuilder();
+                ProtoGroupAddAdmin.GroupAddAdmin.newBuilder();
         builder.setRoomId(roomId);
         builder.setMemberId(memberId);
 

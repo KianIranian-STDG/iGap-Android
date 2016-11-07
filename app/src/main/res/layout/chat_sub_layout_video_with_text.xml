@@ -8,101 +8,87 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/dp4"
     android:maxWidth="@dimen/dp300"
-    android:textDirection="firstStrong"
-    >
-
-  <LinearLayout
-      android:id="@+id/mainContainer"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:orientation="horizontal"
-      tools:ignore="UselessParent"
-      >
-
-    <com.iGap.module.CircleImageView
-        android:id="@+id/messageSenderAvatar"
-        android:layout_width="@dimen/dp52"
-        android:layout_height="@dimen/dp52"
-        android:layout_marginRight="@dimen/dp8"
-        android:src="@mipmap/b"
-        />
+    android:textDirection="firstStrong">
 
     <LinearLayout
-        android:id="@+id/contentContainer"
+        android:id="@+id/mainContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/rectangle_round_white"
-        android:orientation="vertical"
-        android:padding="@dimen/messageContainerPadding"
-        >
+        android:orientation="horizontal"
+        tools:ignore="UselessParent">
 
-      <include
-          layout="@layout/chat_sub_layout_replay"
-          android:id="@+id/replayLayout"
-          />
+        <com.iGap.module.CircleImageView
+            android:id="@+id/messageSenderAvatar"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="@dimen/dp52"
+            android:layout_marginRight="@dimen/dp8"
+            android:src="@mipmap/b" />
 
-      <include
-          layout="@layout/chat_sub_layout_forward"
-          android:id="@+id/cslr_ll_forward"
-          />
+        <LinearLayout
+            android:id="@+id/contentContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rectangle_round_white"
+            android:orientation="vertical"
+            android:padding="@dimen/messageContainerPadding">
 
-      <FrameLayout
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          >
+            <include
+                android:id="@+id/replayLayout"
+                layout="@layout/chat_sub_layout_replay" />
 
-        <com.makeramen.roundedimageview.RoundedImageView
-            android:id="@+id/thumbnail"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:adjustViewBounds="true"
-            android:scaleType="fitXY"
-            app:riv_corner_radius="@dimen/chatMessageImageCorner"
-            />
+            <include
+                android:id="@+id/cslr_ll_forward"
+                layout="@layout/chat_sub_layout_forward" />
 
-        <include
-            layout="@layout/msg_progress_item"
-            android:id="@+id/progress"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_gravity="center"
-            />
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
-      </FrameLayout>
+                <com.makeramen.roundedimageview.RoundedImageView
+                    android:id="@+id/thumbnail"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"
+                    app:riv_corner_radius="@dimen/chatMessageImageCorner" />
 
-      <TextView
-          android:id="@+id/fileName"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:singleLine="true"
-          android:text="FILENAME.MP4"
-          android:textColor="@android:color/black"
-          android:textSize="@dimen/sp16"
-          android:textStyle="bold"
-          />
+                <include
+                    android:id="@+id/progress"
+                    layout="@layout/msg_progress_item"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_gravity="center" />
 
-      <TextView
-          android:id="@+id/duration"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:singleLine="true"
-          android:text="3:48 (4.5 MB)"
-          android:textAllCaps="true"
-          android:textColor="@color/gray"
-          android:textSize="@dimen/sp14"
-          />
+            </FrameLayout>
 
-      <com.iGap.module.EmojiTextView
-          android:id="@+id/messageText"
-          android:layout_marginTop="4dp"
-          android:text="SAMPLE TEXT"
-          android:textColor="@android:color/black"
-          style="@style/ChatMessages.EmojiTextView"
-          />
+            <TextView
+                android:id="@+id/fileName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="FILENAME.MP4"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/sp16"
+                android:textStyle="bold" />
 
-      <include
-          layout="@layout/chat_sub_layout_messages_time"
-          />
+            <TextView
+                android:id="@+id/duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="3:48 (4.5 MB)"
+                android:textAllCaps="true"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/sp14" />
+
+            <com.iGap.module.EmojiTextView
+                android:id="@+id/messageText"
+                style="@style/ChatMessages.EmojiTextView"
+                android:layout_marginTop="4dp"
+                android:text="SAMPLE TEXT"
+                android:textColor="@android:color/black" />
+
+            <include layout="@layout/chat_sub_layout_messages_time" />
+        </LinearLayout>
     </LinearLayout>
-  </LinearLayout>
 </FrameLayout>

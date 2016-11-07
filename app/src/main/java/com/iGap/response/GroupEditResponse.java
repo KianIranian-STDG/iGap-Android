@@ -1,12 +1,14 @@
 package com.iGap.response;
 
 import android.util.Log;
+
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGroupEdit;
 import com.iGap.realm.RealmGroupRoom;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
+
 import io.realm.Realm;
 
 public class GroupEditResponse extends MessageHandler {
@@ -23,10 +25,11 @@ public class GroupEditResponse extends MessageHandler {
         this.identity = identity;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
 
         ProtoGroupEdit.GroupEditResponse.Builder builder =
-            (ProtoGroupEdit.GroupEditResponse.Builder) message;
+                (ProtoGroupEdit.GroupEditResponse.Builder) message;
         long roomId = builder.getRoomId();
         final String name = builder.getName();
         final String descriptions = builder.getDescription();
@@ -34,11 +37,12 @@ public class GroupEditResponse extends MessageHandler {
 
         Realm realm = Realm.getDefaultInstance();
         final RealmRoom realmRoom =
-            realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
         if (realmRoom != null) {
             realm.executeTransaction(new Realm.Transaction() {
-                @Override public void execute(Realm realm) {
+                @Override
+                public void execute(Realm realm) {
 
                     realmRoom.setTitle(name);
                     RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
@@ -48,14 +52,15 @@ public class GroupEditResponse extends MessageHandler {
             });
 
             G.onGroupEdit.onGroupEdit(builder.getRoomId(), builder.getName(),
-                builder.getDescription());
+                    builder.getDescription());
 
         }
 
         realm.close();
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
 
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();

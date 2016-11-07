@@ -10,7 +10,9 @@ import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.ImageView;
+
 import com.iGap.R;
+
 import java.io.File;
 
 /**
@@ -38,40 +40,40 @@ public class HelperMimeType {
         intent.setAction(android.content.Intent.ACTION_VIEW);
 
         if (path.endsWith(".txt")
-            || path.endsWith(".csv")
-            || path.endsWith(".xml")
-            || path.endsWith(".html")) {
+                || path.endsWith(".csv")
+                || path.endsWith(".xml")
+                || path.endsWith(".html")) {
 
             intent.setDataAndType(Uri.fromFile(file), "text/*");
         } else if (path.endsWith(".mp3")
-            || path.endsWith(".ogg")
-            || path.endsWith(".wma")
-            || path.endsWith(".m4a")
-            || path.endsWith(".amr")
-            || path.endsWith(".wav")
-            || path.endsWith(".mid")
-            || path.endsWith(".midi")) {
+                || path.endsWith(".ogg")
+                || path.endsWith(".wma")
+                || path.endsWith(".m4a")
+                || path.endsWith(".amr")
+                || path.endsWith(".wav")
+                || path.endsWith(".mid")
+                || path.endsWith(".midi")) {
 
             intent.setDataAndType(Uri.fromFile(file), "audio/*");
         } else if (path.endsWith(".mp4")
-            || path.endsWith(".3gp")
-            || path.endsWith(".avi")
-            || path.endsWith(".mpg")
-            || path.endsWith(".mpeg")
-            || path.endsWith(".flv")
-            || path.endsWith(".wmv")
-            || path.endsWith(".m4v")) {
+                || path.endsWith(".3gp")
+                || path.endsWith(".avi")
+                || path.endsWith(".mpg")
+                || path.endsWith(".mpeg")
+                || path.endsWith(".flv")
+                || path.endsWith(".wmv")
+                || path.endsWith(".m4v")) {
 
             intent.setDataAndType(Uri.fromFile(file), "video/*");
         } else if (path.endsWith(".pdf")) {
 
             intent.setDataAndType(Uri.fromFile(file), "application/pdf");
         } else if (path.endsWith(".jpg")
-            || path.endsWith(".bmp")
-            || path.endsWith(".png")
-            || path.endsWith(".gif")
-            || path.endsWith(".jpeg")
-            || path.endsWith(".tiff")) {
+                || path.endsWith(".bmp")
+                || path.endsWith(".png")
+                || path.endsWith(".gif")
+                || path.endsWith(".jpeg")
+                || path.endsWith(".tiff")) {
 
             intent.setDataAndType(Uri.fromFile(file), "image/*");
         } else if (path.endsWith(".apk")) {
@@ -103,21 +105,21 @@ public class HelperMimeType {
         extention = extention.toLowerCase();
 
         if (extention.endsWith("jpg")
-            || extention.endsWith("jpeg")
-            || extention.endsWith("png")
-            || extention.endsWith("bmp")) {
+                || extention.endsWith("jpeg")
+                || extention.endsWith("png")
+                || extention.endsWith("bmp")) {
             x = R.mipmap.j_pic;
         } else if (extention.endsWith("apk")) {
             x = R.mipmap.j_apk;
         } else if (extention.endsWith("mp3") || extention.endsWith("ogg") || extention.endsWith(
-            "wma")) {
+                "wma")) {
             x = R.mipmap.j_mp3;
         } else if (extention.endsWith("mp4") || extention.endsWith("3gp") || extention.endsWith(
-            "avi") || extention.endsWith("mpg") || extention.endsWith("flv") || extention.endsWith(
-            "wmv") || extention.endsWith("m4v")) {
+                "avi") || extention.endsWith("mpg") || extention.endsWith("flv") || extention.endsWith(
+                "wmv") || extention.endsWith("m4v")) {
             x = R.mipmap.j_video;
         } else if (extention.endsWith("m4a") || extention.endsWith("amr") || extention.endsWith(
-            "wav")) {
+                "wav")) {
             x = R.mipmap.j_audio;
         } else if (extention.endsWith("html") || extention.endsWith("htm")) {
             x = R.mipmap.j_html;
@@ -173,7 +175,8 @@ public class HelperMimeType {
             this.path = path;
         }
 
-        @Override protected Bitmap doInBackground(Object... params) {
+        @Override
+        protected Bitmap doInBackground(Object... params) {
 
             Bitmap bitmap = null;
             BitmapFactory.Options opts = new BitmapFactory.Options();
@@ -185,7 +188,8 @@ public class HelperMimeType {
             return bitmap;
         }
 
-        @Override protected void onPostExecute(Bitmap result) {
+        @Override
+        protected void onPostExecute(Bitmap result) {
             Log.e("ddd", "LoadImageToImageView");
             if (result != null && imv != null) {
                 imv.setImageBitmap(result);
@@ -206,13 +210,15 @@ public class HelperMimeType {
             this.path = path;
         }
 
-        @Override protected Bitmap doInBackground(Object... params) {
+        @Override
+        protected Bitmap doInBackground(Object... params) {
 
             return ThumbnailUtils.createVideoThumbnail(path,
-                MediaStore.Video.Thumbnails.FULL_SCREEN_KIND);
+                    MediaStore.Video.Thumbnails.FULL_SCREEN_KIND);
         }
 
-        @Override protected void onPostExecute(Bitmap result) {
+        @Override
+        protected void onPostExecute(Bitmap result) {
             if (result != null && imv != null) {
                 imv.setImageBitmap(result);
             }

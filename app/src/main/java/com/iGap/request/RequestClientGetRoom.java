@@ -6,7 +6,7 @@ public class RequestClientGetRoom {
 
     public void clientGetRoom(long roomId) {
         ProtoClientGetRoom.ClientGetRoom.Builder clientGetRoom =
-            ProtoClientGetRoom.ClientGetRoom.newBuilder();
+                ProtoClientGetRoom.ClientGetRoom.newBuilder();
         clientGetRoom.setRoomId(roomId);
 
         RequestWrapper requestWrapper = new RequestWrapper(602, clientGetRoom);

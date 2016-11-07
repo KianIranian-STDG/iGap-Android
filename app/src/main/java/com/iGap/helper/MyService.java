@@ -9,11 +9,13 @@ public class MyService extends Service {
     public MyService() {
     }
 
-    @Override public void onCreate() {
+    @Override
+    public void onCreate() {
         super.onCreate();
     }
 
-    @Override public int onStartCommand(Intent intent, int flags, int startId) {
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
 
         if (startId == 24) {
             return Service.START_NOT_STICKY;
@@ -22,12 +24,14 @@ public class MyService extends Service {
         }
     }
 
-    @Override public IBinder onBind(Intent intent) {
+    @Override
+    public IBinder onBind(Intent intent) {
         // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    @Override public void onDestroy() {
+    @Override
+    public void onDestroy() {
         super.onDestroy();
 
         Intent i = new Intent("stop");

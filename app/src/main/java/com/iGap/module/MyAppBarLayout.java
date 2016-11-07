@@ -44,7 +44,8 @@ public class MyAppBarLayout extends AppBarLayout implements AppBarLayout.OnOffse
         this.mListener = listener;
     }
 
-    @Override public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+    @Override
+    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
         int verticalOffsetAbs = Math.abs(verticalOffset);
         int appBarLayoutHeight = appBarLayout.getHeight();
 
@@ -63,8 +64,8 @@ public class MyAppBarLayout extends AppBarLayout implements AppBarLayout.OnOffse
         if (mListener != null) {
             // FIXME: 9/24/2016 [Alireza Eskandarpour Shoferi] bad tashkhis mide ke be bala scroll mishe ya paeen
             mListener.onAppBarLayoutMove(appBarLayout, verticalOffset,
-                verticalOffsetAbs > appBarLayoutHeight - AndroidUtils.getStatusBarHeight(
-                    getContext()));
+                    verticalOffsetAbs > appBarLayoutHeight - AndroidUtils.getStatusBarHeight(
+                            getContext()));
         }
     }
 

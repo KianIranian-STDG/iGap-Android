@@ -3,6 +3,7 @@ package com.iGap.module;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
+
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAttachment;
@@ -10,13 +11,27 @@ import com.iGap.realm.RealmAttachmentFields;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
-import io.realm.Realm;
+
 import java.io.File;
+
+import io.realm.Realm;
 
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/28/2016.
  */
 public class StructMessageAttachment implements Parcelable {
+    public static final Parcelable.Creator<StructMessageAttachment> CREATOR =
+            new Parcelable.Creator<StructMessageAttachment>() {
+                @Override
+                public StructMessageAttachment createFromParcel(Parcel source) {
+                    return new StructMessageAttachment(source);
+                }
+
+                @Override
+                public StructMessageAttachment[] newArray(int size) {
+                    return new StructMessageAttachment[size];
+                }
+            };
     public String token;
     public String name;
     public long size;
@@ -25,12 +40,14 @@ public class StructMessageAttachment implements Parcelable {
     public double duration;
     public StructMessageThumbnail largeThumbnail;
     public StructMessageThumbnail smallThumbnail;
-    @Nullable private String localThumbnailPath;
-    @Nullable private String localFilePath;
+    @Nullable
+    private String localThumbnailPath;
+    @Nullable
+    private String localFilePath;
 
     public StructMessageAttachment(String token, String name, long size, int width, int height,
-        double duration, @Nullable String localThumbnailPath, @Nullable String localFilePath,
-        StructMessageThumbnail largeThumbnail, StructMessageThumbnail smallThumbnail) {
+                                   double duration, @Nullable String localThumbnailPath, @Nullable String localFilePath,
+                                   StructMessageThumbnail largeThumbnail, StructMessageThumbnail smallThumbnail) {
         this.token = token;
         this.name = name;
         this.size = size;
@@ -57,15 +74,28 @@ public class StructMessageAttachment implements Parcelable {
     public StructMessageAttachment() {
     }
 
+    protected StructMessageAttachment(Parcel in) {
+        this.token = in.readString();
+        this.name = in.readString();
+        this.size = in.readLong();
+        this.width = in.readInt();
+        this.height = in.readInt();
+        this.duration = in.readDouble();
+        this.largeThumbnail = in.readParcelable(StructMessageThumbnail.class.getClassLoader());
+        this.smallThumbnail = in.readParcelable(StructMessageThumbnail.class.getClassLoader());
+        this.localThumbnailPath = in.readString();
+        this.localFilePath = in.readString();
+    }
+
     public static StructMessageAttachment convert(ProtoGlobal.File attachment) {
         if (attachment == null) {
             return new StructMessageAttachment();
         }
         return new StructMessageAttachment(attachment.getToken(), attachment.getName(),
-            attachment.getSize(), attachment.getWidth(), attachment.getHeight(),
-            attachment.getDuration(), null, null,
-            StructMessageThumbnail.convert(attachment.getLargeThumbnail()),
-            StructMessageThumbnail.convert(attachment.getSmallThumbnail()));
+                attachment.getSize(), attachment.getWidth(), attachment.getHeight(),
+                attachment.getDuration(), null, null,
+                StructMessageThumbnail.convert(attachment.getLargeThumbnail()),
+                StructMessageThumbnail.convert(attachment.getSmallThumbnail()));
     }
 
     public static StructMessageAttachment convert(ProtoGlobal.Avatar attachment) {
@@ -73,11 +103,11 @@ public class StructMessageAttachment implements Parcelable {
             return new StructMessageAttachment();
         }
         return new StructMessageAttachment(attachment.getFile().getToken(),
-            attachment.getFile().getName(), attachment.getFile().getSize(),
-            attachment.getFile().getWidth(), attachment.getFile().getHeight(),
-            attachment.getFile().getDuration(), null, null,
-            StructMessageThumbnail.convert(attachment.getFile().getLargeThumbnail()),
-            StructMessageThumbnail.convert(attachment.getFile().getSmallThumbnail()));
+                attachment.getFile().getName(), attachment.getFile().getSize(),
+                attachment.getFile().getWidth(), attachment.getFile().getHeight(),
+                attachment.getFile().getDuration(), null, null,
+                StructMessageThumbnail.convert(attachment.getFile().getLargeThumbnail()),
+                StructMessageThumbnail.convert(attachment.getFile().getSmallThumbnail()));
     }
 
     public static StructMessageAttachment convert(RealmAttachment attachment) {
@@ -85,11 +115,11 @@ public class StructMessageAttachment implements Parcelable {
             return new StructMessageAttachment();
         }
         return new StructMessageAttachment(attachment.getToken(), attachment.getName(),
-            attachment.getSize(), attachment.getWidth(), attachment.getHeight(),
-            attachment.getDuration(), attachment.getLocalThumbnailPath(),
-            attachment.getLocalFilePath(),
-            StructMessageThumbnail.convert(attachment.getLargeThumbnail()),
-            StructMessageThumbnail.convert(attachment.getSmallThumbnail()));
+                attachment.getSize(), attachment.getWidth(), attachment.getHeight(),
+                attachment.getDuration(), attachment.getLocalThumbnailPath(),
+                attachment.getLocalFilePath(),
+                StructMessageThumbnail.convert(attachment.getLargeThumbnail()),
+                StructMessageThumbnail.convert(attachment.getSmallThumbnail()));
     }
 
     public static StructMessageAttachment convert(RealmAvatar attachment) {
@@ -97,15 +127,16 @@ public class StructMessageAttachment implements Parcelable {
             return new StructMessageAttachment();
         }
         return new StructMessageAttachment(attachment.getFile().getToken(),
-            attachment.getFile().getName(), attachment.getFile().getSize(),
-            attachment.getFile().getWidth(), attachment.getFile().getHeight(),
-            attachment.getFile().getDuration(), attachment.getFile().getLocalThumbnailPath(),
-            attachment.getFile().getLocalFilePath(),
-            StructMessageThumbnail.convert(attachment.getFile().getLargeThumbnail()),
-            StructMessageThumbnail.convert(attachment.getFile().getSmallThumbnail()));
+                attachment.getFile().getName(), attachment.getFile().getSize(),
+                attachment.getFile().getWidth(), attachment.getFile().getHeight(),
+                attachment.getFile().getDuration(), attachment.getFile().getLocalThumbnailPath(),
+                attachment.getFile().getLocalFilePath(),
+                StructMessageThumbnail.convert(attachment.getFile().getLargeThumbnail()),
+                StructMessageThumbnail.convert(attachment.getFile().getSmallThumbnail()));
     }
 
-    @Nullable public String getLocalFilePath() {
+    @Nullable
+    public String getLocalFilePath() {
         return localFilePath;
     }
 
@@ -113,11 +144,12 @@ public class StructMessageAttachment implements Parcelable {
         this.localFilePath = path;
         Realm realm = Realm.getDefaultInstance();
         final RealmAttachment realmAttachment = realm.where(RealmAttachment.class)
-            .equalTo(RealmAttachmentFields.ID, messageId)
-            .findFirst();
+                .equalTo(RealmAttachmentFields.ID, messageId)
+                .findFirst();
         if (realmAttachment == null) {
             realm.executeTransaction(new Realm.Transaction() {
-                @Override public void execute(Realm realm) {
+                @Override
+                public void execute(Realm realm) {
                     RealmAttachment messageAttachment = realm.createObject(RealmAttachment.class);
                     messageAttachment.setLocalFilePath(path);
                     messageAttachment.setId(messageId);
@@ -126,7 +158,8 @@ public class StructMessageAttachment implements Parcelable {
         } else {
             if (realmAttachment.getLocalFilePath() == null) {
                 realm.executeTransaction(new Realm.Transaction() {
-                    @Override public void execute(Realm realm) {
+                    @Override
+                    public void execute(Realm realm) {
                         realmAttachment.setLocalFilePath(path);
                     }
                 });
@@ -135,7 +168,8 @@ public class StructMessageAttachment implements Parcelable {
         realm.close();
     }
 
-    @Nullable public String getLocalThumbnailPath() {
+    @Nullable
+    public String getLocalThumbnailPath() {
         return localThumbnailPath;
     }
 
@@ -143,11 +177,12 @@ public class StructMessageAttachment implements Parcelable {
         this.localThumbnailPath = localPath;
         Realm realm = Realm.getDefaultInstance();
         final RealmAttachment realmAttachment = realm.where(RealmAttachment.class)
-            .equalTo(RealmAttachmentFields.ID, messageId)
-            .findFirst();
+                .equalTo(RealmAttachmentFields.ID, messageId)
+                .findFirst();
         if (realmAttachment == null) {
             realm.executeTransaction(new Realm.Transaction() {
-                @Override public void execute(Realm realm) {
+                @Override
+                public void execute(Realm realm) {
                     RealmAttachment messageAttachment = realm.createObject(RealmAttachment.class);
                     messageAttachment.setLocalThumbnailPath(localPath);
                     messageAttachment.setId(messageId);
@@ -155,7 +190,8 @@ public class StructMessageAttachment implements Parcelable {
             });
         } else {
             realm.executeTransaction(new Realm.Transaction() {
-                @Override public void execute(Realm realm) {
+                @Override
+                public void execute(Realm realm) {
                     realmAttachment.setLocalThumbnailPath(localPath);
                 }
             });
@@ -164,14 +200,15 @@ public class StructMessageAttachment implements Parcelable {
     }
 
     public void setLocalThumbnailPathForAvatar(final long userId, @Nullable final String localPath,
-        final ProtoFileDownload.FileDownload.Selector selector) {
+                                               final ProtoFileDownload.FileDownload.Selector selector) {
         this.localThumbnailPath = localPath;
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
                 RealmAttachment realmAttachment = realm.where(RealmAttachment.class)
-                    .equalTo(RealmAttachmentFields.ID, userId)
-                    .findFirst();
+                        .equalTo(RealmAttachmentFields.ID, userId)
+                        .findFirst();
 
                 if (realmAttachment == null) {
                     realmAttachment = realm.createObject(RealmAttachment.class);
@@ -183,8 +220,8 @@ public class StructMessageAttachment implements Parcelable {
                 }
 
                 RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class)
-                    .equalTo(RealmRegisteredInfoFields.ID, userId)
-                    .findFirst();
+                        .equalTo(RealmRegisteredInfoFields.ID, userId)
+                        .findFirst();
                 if (realmRegisteredInfo == null) {
                     realmRegisteredInfo = realm.createObject(RealmRegisteredInfo.class);
                     realmRegisteredInfo.setId(userId);
@@ -200,7 +237,7 @@ public class StructMessageAttachment implements Parcelable {
      * Large thumbnail or Small thumbnail
      */
     private void setPath(RealmAttachment realmAttachment, String filepath,
-        ProtoFileDownload.FileDownload.Selector selector) {
+                         ProtoFileDownload.FileDownload.Selector selector) {
         if (selector == ProtoFileDownload.FileDownload.Selector.FILE) {
             realmAttachment.setLocalFilePath(filepath);
         } else {
@@ -216,11 +253,13 @@ public class StructMessageAttachment implements Parcelable {
         return localThumbnailPath != null && new File(localThumbnailPath).exists();
     }
 
-    @Override public int describeContents() {
+    @Override
+    public int describeContents() {
         return 0;
     }
 
-    @Override public void writeToParcel(Parcel dest, int flags) {
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.token);
         dest.writeString(this.name);
         dest.writeLong(this.size);
@@ -232,28 +271,4 @@ public class StructMessageAttachment implements Parcelable {
         dest.writeString(this.localThumbnailPath);
         dest.writeString(this.localFilePath);
     }
-
-    protected StructMessageAttachment(Parcel in) {
-        this.token = in.readString();
-        this.name = in.readString();
-        this.size = in.readLong();
-        this.width = in.readInt();
-        this.height = in.readInt();
-        this.duration = in.readDouble();
-        this.largeThumbnail = in.readParcelable(StructMessageThumbnail.class.getClassLoader());
-        this.smallThumbnail = in.readParcelable(StructMessageThumbnail.class.getClassLoader());
-        this.localThumbnailPath = in.readString();
-        this.localFilePath = in.readString();
-    }
-
-    public static final Parcelable.Creator<StructMessageAttachment> CREATOR =
-        new Parcelable.Creator<StructMessageAttachment>() {
-            @Override public StructMessageAttachment createFromParcel(Parcel source) {
-                return new StructMessageAttachment(source);
-            }
-
-            @Override public StructMessageAttachment[] newArray(int size) {
-                return new StructMessageAttachment[size];
-            }
-        };
 }

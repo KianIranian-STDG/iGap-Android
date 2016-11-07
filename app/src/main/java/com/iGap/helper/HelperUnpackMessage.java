@@ -1,12 +1,14 @@
 package com.iGap.helper;
 
 import android.util.Log;
+
 import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoRequest;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.request.RequestWrapper;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -46,7 +48,7 @@ public class HelperUnpackMessage {
         Object protoObject = fillProtoClassData(protoClassName, payload);
         String responseId = getResponseId(protoObject);
         Log.i("SOC",
-            "HelperUnpackMessage responseId : " + responseId + "  ||  actionId : " + actionId);
+                "HelperUnpackMessage responseId : " + responseId + "  ||  actionId : " + actionId);
 
         if (responseId == null) {
             if (actionId == 0) {
@@ -72,17 +74,17 @@ public class HelperUnpackMessage {
                             Object currentProto;
                             String currentResponseId = randomId + "." + i;
                             RequestWrapper currentRequestWrapper =
-                                G.requestQueueMap.get(currentResponseId);
+                                    G.requestQueueMap.get(currentResponseId);
                             if (i == index) {
                                 currentProto = protoObject;
                             } else {
                                 ProtoResponse.Response.Builder responseBuilder =
-                                    ProtoResponse.Response.newBuilder();
+                                        ProtoResponse.Response.newBuilder();
                                 responseBuilder.setId(getRequestId(currentRequestWrapper));
                                 responseBuilder.build();
 
                                 ProtoError.ErrorResponse.Builder errorResponse =
-                                    ProtoError.ErrorResponse.newBuilder();
+                                        ProtoError.ErrorResponse.newBuilder();
                                 errorResponse.setMinorCode(6);
                                 errorResponse.setMinorCode(1);
                                 errorResponse.setResponse(responseBuilder);
@@ -92,16 +94,16 @@ public class HelperUnpackMessage {
                             }
                             G.requestQueueMap.remove(currentResponseId);
                             instanceResponseClass(currentRequestWrapper.getActionId()
-                                    + Config.LOOKUP_MAP_RESPONSE_OFFSET, currentProto,
-                                currentRequestWrapper.identity, "error");
+                                            + Config.LOOKUP_MAP_RESPONSE_OFFSET, currentProto,
+                                    currentRequestWrapper.identity, "error");
                         }
                     } else {
                         RequestWrapper requestWrapper = G.requestQueueMap.get(responseId);
                         G.requestQueueMap.remove(responseId);
 
                         instanceResponseClass(
-                            requestWrapper.getActionId() + Config.LOOKUP_MAP_RESPONSE_OFFSET,
-                            protoObject, requestWrapper.identity, "error");
+                                requestWrapper.getActionId() + Config.LOOKUP_MAP_RESPONSE_OFFSET,
+                                protoObject, requestWrapper.identity, "error");
                     }
                 } else {
                     if (responseId.contains(".")) {
@@ -111,7 +113,7 @@ public class HelperUnpackMessage {
                         int index = Integer.parseInt(indexString);
 
                         Object responseClass = instanceResponseClass(actionId, protoObject,
-                            G.requestQueueMap.get(responseId).identity, null);
+                                G.requestQueueMap.get(responseId).identity, null);
 
                         ArrayList<Object> objectValues = G.requestQueueRelationMap.get(randomId);
                         objectValues.set(index, responseClass);
@@ -134,10 +136,10 @@ public class HelperUnpackMessage {
                                 Object object = objectValues.get(j);
 
                                 Field fieldActionId =
-                                    object.getClass().getDeclaredField("actionId");
+                                        object.getClass().getDeclaredField("actionId");
                                 Field fieldMessage = object.getClass().getDeclaredField("message");
                                 Field fieldIdentity =
-                                    object.getClass().getDeclaredField("identity");
+                                        object.getClass().getDeclaredField("identity");
                                 int currentActionId = fieldActionId.getInt(object);
                                 Object currentMessage = fieldMessage.get(object);
                                 String currentIdentity = null;
@@ -145,14 +147,14 @@ public class HelperUnpackMessage {
                                     currentIdentity = fieldIdentity.get(object).toString();
                                 }
                                 instanceResponseClass(currentActionId, currentMessage,
-                                    currentIdentity, "handler");
+                                        currentIdentity, "handler");
                             }
                         }
                     } else {
                         RequestWrapper requestWrapper = G.requestQueueMap.get(responseId);
                         G.requestQueueMap.remove(responseId);
                         instanceResponseClass(actionId, protoObject, requestWrapper.identity,
-                            "handler");
+                                "handler");
                     }
                 }
             } catch (Exception e) {
@@ -214,7 +216,7 @@ public class HelperUnpackMessage {
             return null;
         }
 
-        return new Object[] { actionId, payload, className };
+        return new Object[]{actionId, payload, className};
     }
 
     public static synchronized int getId(byte[] byteArray) {
@@ -242,7 +244,7 @@ public class HelperUnpackMessage {
     }
 
     public static synchronized Object fillProtoClassData(String protoClassName,
-        byte[] protoMessage) {
+                                                         byte[] protoMessage) {
         Log.i("SOC", "HelperUnpackMessage 2 fillProtoClassData");
         Object object3 = null;
         try {
@@ -278,17 +280,17 @@ public class HelperUnpackMessage {
     }
 
     public static synchronized Object instanceResponseClass(int actionId, Object protoObject,
-        String identity, String optionalMethod) {
+                                                            String identity, String optionalMethod) {
         Log.i("SOC", "HelperUnpackMessage 5 instanceResponseClass");
         Object object = null;
         try {
             String className = getClassName(actionId);
             String responseClassName =
-                HelperClassNamePreparation.preparationResponseClassName(className);
+                    HelperClassNamePreparation.preparationResponseClassName(className);
             Log.i("SOC", "HelperUnpackMessage 5 responseClassName : " + responseClassName);
             Class<?> responseClass = Class.forName(responseClassName);
             Constructor<?> constructor =
-                responseClass.getDeclaredConstructor(int.class, Object.class, String.class);
+                    responseClass.getDeclaredConstructor(int.class, Object.class, String.class);
             constructor.setAccessible(true);
             object = constructor.newInstance(actionId, protoObject, identity);
             if (optionalMethod != null) {

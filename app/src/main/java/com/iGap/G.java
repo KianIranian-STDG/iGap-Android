@@ -18,6 +18,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.Toast;
+
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 import com.iGap.helper.HelperFillLookUpClass;
@@ -100,11 +101,7 @@ import com.iGap.request.RequestWrapper;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import io.fabric.sdk.android.Fabric;
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
-import io.realm.RealmResults;
-import io.realm.Sort;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -116,7 +113,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
+
 import javax.crypto.spec.SecretKeySpec;
+
+import io.fabric.sdk.android.Fabric;
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
+import io.realm.Sort;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 public class G extends Application {
@@ -275,7 +279,8 @@ public class G extends Application {
     public static void importContact() {
         Log.i("WWW", "importContact");
         G.onContactImport = new OnUserContactImport() {
-            @Override public void onContactImport() {
+            @Override
+            public void onContactImport() {
                 Log.i("WWW", "getContactListFromServer");
                 getContactListFromServer();
             }
@@ -286,10 +291,12 @@ public class G extends Application {
 
     public static void getContactListFromServer() {
         G.onUserContactGetList = new OnUserContactGetList() {
-            @Override public void onContactGetList() {
+            @Override
+            public void onContactGetList() {
                 Log.i("WWW", "onContactGetList");
                 G.handler.post(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         Toast.makeText(G.context, "Get Contact List!", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -310,12 +317,14 @@ public class G extends Application {
         realm.close();
 
         G.onUserInfoResponse = new OnUserInfoResponse() {
-            @Override public void onUserInfo(final ProtoGlobal.RegisteredUser user, ProtoResponse.Response response) {
+            @Override
+            public void onUserInfo(final ProtoGlobal.RegisteredUser user, ProtoResponse.Response response) {
                 // fill own user info
                 if (userId == user.getId()) {
                     Realm realm = Realm.getDefaultInstance();
                     realm.executeTransaction(new Realm.Transaction() {
-                        @Override public void execute(Realm realm) {
+                        @Override
+                        public void execute(Realm realm) {
                             RealmAvatar.put(user.getId(), user.getAvatar());
 
                             RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
@@ -342,18 +351,21 @@ public class G extends Application {
                 }
             }
 
-            @Override public void onUserInfoTimeOut() {
+            @Override
+            public void onUserInfoTimeOut() {
 
             }
 
-            @Override public void onUserInfoError(int majorCode, int minorCode) {
+            @Override
+            public void onUserInfoError(int majorCode, int minorCode) {
 
             }
         };
         new RequestUserInfo().userInfo(userId);
     }
 
-    @Override public void onCreate() {
+    @Override
+    public void onCreate() {
         MultiDex.install(getApplicationContext());
         super.onCreate();
         Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
@@ -415,7 +427,7 @@ public class G extends Application {
         YEKAN_BOLD = Typeface.createFromAsset(context.getAssets(), "fonts/yekan_bold.ttf");
 
         Realm.setDefaultConfiguration(
-            new RealmConfiguration.Builder(getApplicationContext()).name("iGapLocalDatabase.realm").schemaVersion(1).migration(new RealmMigrationClass()).deleteRealmIfMigrationNeeded().build());
+                new RealmConfiguration.Builder(getApplicationContext()).name("iGapLocalDatabase.realm").schemaVersion(1).migration(new RealmMigrationClass()).deleteRealmIfMigrationNeeded().build());
 
         // Create global configuration and initialize ImageLoader with this config
         // https://github.com/nostra13/Android-Universal-Image-Loader/wiki/Configuration
@@ -519,7 +531,8 @@ public class G extends Application {
 
     private void fillSecuringInterface() {
         G.onSecuring = new OnSecuring() {
-            @Override public void onSecure() {
+            @Override
+            public void onSecure() {
                 Log.i("FFF", "Secure");
                 login();
 
@@ -561,9 +574,11 @@ public class G extends Application {
         // hamishe bad az login bayad anjam beshe ro dar classe login response gharar bedim
 
         G.onUserLogin = new OnUserLogin() {
-            @Override public void onLogin() {
+            @Override
+            public void onLogin() {
                 G.handler.post(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         Log.i("FFF", "Login");
                         Toast.makeText(G.context, "User Login!", Toast.LENGTH_SHORT).show();
                         new RequestClientCondition().clientCondition();
@@ -574,13 +589,15 @@ public class G extends Application {
                 });
             }
 
-            @Override public void onLoginError(int majorCode, int minorCode) {
+            @Override
+            public void onLoginError(int majorCode, int minorCode) {
 
             }
         };
 
         G.handler.postDelayed(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 if (G.isSecure) {
                     Log.i("FFF", "Login 1");
                     Realm realm = Realm.getDefaultInstance();

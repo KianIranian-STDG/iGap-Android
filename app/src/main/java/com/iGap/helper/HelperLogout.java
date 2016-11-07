@@ -1,6 +1,7 @@
 package com.iGap.helper;
 
 import android.content.Intent;
+
 import com.iGap.G;
 import com.iGap.activities.ActivityIntroduce;
 
@@ -14,7 +15,8 @@ public final class HelperLogout {
      */
     public static void logout() {
         G.handler.post(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 HelperRealm.realmTruncate();
                 Intent intent = new Intent(G.context, ActivityIntroduce.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

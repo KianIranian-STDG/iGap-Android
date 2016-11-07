@@ -16,16 +16,19 @@ public class UserProfileGetEmailResponse extends MessageHandler {
         this.identity = identity;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
         ProtoUserProfileGetEmail.UserProfileGetEmailResponse.Builder builder =
-            (ProtoUserProfileGetEmail.UserProfileGetEmailResponse.Builder) message;
+                (ProtoUserProfileGetEmail.UserProfileGetEmailResponse.Builder) message;
         builder.getEmail();
     }
 
-    @Override public void timeOut() {
+    @Override
+    public void timeOut() {
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
     }
 }
 

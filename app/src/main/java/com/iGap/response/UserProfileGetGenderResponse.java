@@ -16,16 +16,19 @@ public class UserProfileGetGenderResponse extends MessageHandler {
         this.identity = identity;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
         ProtoUserProfileGetGender.UserProfileGetGenderResponse.Builder builder =
-            (ProtoUserProfileGetGender.UserProfileGetGenderResponse.Builder) message;
+                (ProtoUserProfileGetGender.UserProfileGetGenderResponse.Builder) message;
         builder.getGender();
     }
 
-    @Override public void timeOut() {
+    @Override
+    public void timeOut() {
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
     }
 }
 

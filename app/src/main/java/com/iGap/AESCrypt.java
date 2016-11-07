@@ -1,12 +1,15 @@
 package com.iGap;
 
 import android.util.Log;
+
 import com.iGap.helper.HelperNumerical;
+
 import java.security.GeneralSecurityException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.security.SecureRandom;
+
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
@@ -26,13 +29,13 @@ public final class AESCrypt {
     /**
      * More flexible AES encrypt that doesn't encode
      *
-     * @param key AES key typically 128, 192 or 256 bit
+     * @param key     AES key typically 128, 192 or 256 bit
      * @param message in bytes (assumed it's already been decoded)
      * @return Encrypted cipher text (not encoded)
      * @throws GeneralSecurityException if something goes wrong during encryption
      */
     public static byte[] encrypt(final SecretKeySpec key, final byte[] message)
-        throws GeneralSecurityException {
+            throws GeneralSecurityException {
 
         try {
             final Cipher cipher = Cipher.getInstance("AES/" + G.symmetricMethod + "/PKCS5Padding");
@@ -55,14 +58,14 @@ public final class AESCrypt {
     /**
      * More flexible AES decrypt that doesn't encode
      *
-     * @param key AES key typically 128, 192 or 256 bit
-     * @param iv Initiation Vector
+     * @param key               AES key typically 128, 192 or 256 bit
+     * @param iv                Initiation Vector
      * @param decodedCipherText in bytes (assumed it's already been decoded)
      * @return Decrypted message cipher text (not encoded)
      * @throws GeneralSecurityException if something goes wrong during encryption
      */
     public static byte[] decrypt(final SecretKeySpec key, final byte[] iv,
-        final byte[] decodedCipherText) throws GeneralSecurityException {
+                                 final byte[] decodedCipherText) throws GeneralSecurityException {
 
         //        final Cipher cipher = Cipher.getInstance(AES_MODE);
         final Cipher cipher = Cipher.getInstance("AES/" + G.symmetricMethod + "/PKCS5Padding");
@@ -76,7 +79,7 @@ public final class AESCrypt {
     /**
      * encrypt symmetricKey with PublicKey
      *
-     * @param key publicKey that get from server
+     * @param key          publicKey that get from server
      * @param symmetricKey random String that generate in client
      */
 

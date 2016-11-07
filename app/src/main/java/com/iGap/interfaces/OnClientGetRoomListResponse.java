@@ -2,6 +2,7 @@ package com.iGap.interfaces;
 
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
+
 import java.util.List;
 
 /**

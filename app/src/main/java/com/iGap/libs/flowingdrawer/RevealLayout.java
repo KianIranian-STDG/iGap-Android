@@ -8,6 +8,7 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
+
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorListenerAdapter;
 import com.nineoldandroids.animation.ObjectAnimator;
@@ -34,12 +35,13 @@ public class RevealLayout extends FrameLayout {
         super(context, attrs, defStyleAttr);
         mClipPath = new Path();
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2
-            && Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                && Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
     }
 
-    @Override protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         mClipCenterX = w / 2;
         mClipCenterY = h / 2;
         if (!mIsContentShown) {
@@ -113,7 +115,7 @@ public class RevealLayout extends FrameLayout {
     public void show(int x, int y, int duration) {
         if (x < 0 || x > getWidth() || y < 0 || y > getHeight()) {
             throw new RuntimeException(
-                "Center point out of range or call method when View is not initialed yet.");
+                    "Center point out of range or call method when View is not initialed yet.");
         }
 
         mClipCenterX = x;
@@ -128,7 +130,8 @@ public class RevealLayout extends FrameLayout {
         mAnimator.setInterpolator(new BakedBezierInterpolator());
         mAnimator.setDuration(duration);
         mAnimator.addListener(new AnimatorListenerAdapter() {
-            @Override public void onAnimationEnd(Animator animation) {
+            @Override
+            public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 mIsContentShown = true;
             }
@@ -139,7 +142,7 @@ public class RevealLayout extends FrameLayout {
     public void hide(int x, int y, int duration) {
         if (x < 0 || x > getWidth() || y < 0 || y > getHeight()) {
             throw new RuntimeException(
-                "Center point out of range or call method when View is not initialed yet.");
+                    "Center point out of range or call method when View is not initialed yet.");
         }
 
         if (x != mClipCenterX || y != mClipCenterY) {
@@ -156,7 +159,8 @@ public class RevealLayout extends FrameLayout {
         mAnimator.setInterpolator(new BakedBezierInterpolator());
         mAnimator.setDuration(duration);
         mAnimator.addListener(new AnimatorListenerAdapter() {
-            @Override public void onAnimationEnd(Animator animation) {
+            @Override
+            public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 mIsContentShown = false;
             }
@@ -183,7 +187,8 @@ public class RevealLayout extends FrameLayout {
         return (float) Math.sqrt(h * h + v * v);
     }
 
-    @Override protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+    @Override
+    protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
         if (indexOfChild(child) == getChildCount() - 1) {
             boolean result;
             mClipPath.reset();

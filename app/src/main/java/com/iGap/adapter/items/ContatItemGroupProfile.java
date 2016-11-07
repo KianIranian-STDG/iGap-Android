@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+
 import com.iGap.R;
 import com.iGap.helper.HelperImageBackColor;
 import com.iGap.module.CircleImageView;
@@ -12,11 +13,12 @@ import com.iGap.module.CustomTextViewMedium;
 import com.iGap.module.StructContactInfo;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
+
 import java.io.File;
 import java.util.List;
 
 public class ContatItemGroupProfile
-    extends AbstractItem<ContatItemGroupProfile, ContatItemGroupProfile.ViewHolder> {
+        extends AbstractItem<ContatItemGroupProfile, ContatItemGroupProfile.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
     public StructContactInfo mContact;
 
@@ -25,15 +27,18 @@ public class ContatItemGroupProfile
         return this;
     }
 
-    @Override public int getType() {
+    @Override
+    public int getType() {
         return 0;
     }
 
-    @Override public int getLayoutRes() {
+    @Override
+    public int getLayoutRes() {
         return R.layout.contact_item_group_profile;
     }
 
-    @Override public void bindView(ViewHolder holder, List payloads) {
+    @Override
+    public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
         if (mContact.isHeader) {
@@ -76,12 +81,13 @@ public class ContatItemGroupProfile
 
         String name = HelperImageBackColor.getFirstAlphabetName(mContact.displayName);
         bitmap = HelperImageBackColor.drawAlphabetOnPicture(size, name,
-            HelperImageBackColor.getColor(name));
+                HelperImageBackColor.getColor(name));
 
         return bitmap;
     }
 
-    @Override public ViewHolderFactory<? extends ViewHolder> getFactory() {
+    @Override
+    public ViewHolderFactory<? extends ViewHolder> getFactory() {
         return FACTORY;
     }
 
@@ -106,7 +112,7 @@ public class ContatItemGroupProfile
             subtitle = (CustomTextViewMedium) view.findViewById(R.id.cigp_txt_contact_lastseen);
             topLine = view.findViewById(R.id.cigp_view_topLine);
             txtNomberOfSharedMedia =
-                (TextView) view.findViewById(R.id.cigp_txt_nomber_of_shared_media);
+                    (TextView) view.findViewById(R.id.cigp_txt_nomber_of_shared_media);
         }
     }
 }

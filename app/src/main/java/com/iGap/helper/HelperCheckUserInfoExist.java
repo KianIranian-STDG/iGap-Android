@@ -3,6 +3,7 @@ package com.iGap.helper;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.request.RequestUserInfo;
+
 import io.realm.Realm;
 
 public class HelperCheckUserInfoExist {
@@ -17,8 +18,8 @@ public class HelperCheckUserInfoExist {
 
         Realm realm = Realm.getDefaultInstance();
         RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class)
-            .equalTo(RealmRegisteredInfoFields.ID, userId)
-            .findFirst();
+                .equalTo(RealmRegisteredInfoFields.ID, userId)
+                .findFirst();
         if (realmRegisteredInfo != null) {
             return true;
         }

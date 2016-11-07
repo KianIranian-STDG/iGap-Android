@@ -2,126 +2,113 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
-  <RelativeLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:gravity="center_vertical"
-      android:orientation="horizontal"
-      android:paddingTop="@dimen/dp8"
-      >
-
-
-    <CheckBox
-        android:id="@+id/st_checkBox_photo"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:text="photo"
-        />
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/dp8">
 
-    <TextView
-        android:id="@+id/st_txt_sizeFolder_photo"
-        android:layout_width="wrap_content"
+
+        <CheckBox
+            android:id="@+id/st_checkBox_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="photo" />
+
+        <TextView
+            android:id="@+id/st_txt_sizeFolder_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:gravity="right"
+            android:text="photo"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/sp16" />
+    </RelativeLayout>
+
+    <!--VIDEO-->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:gravity="right"
-        android:text="photo"
-        android:textColor="@android:color/black"
-        android:textSize="@dimen/sp16"
-        />
-  </RelativeLayout>
-
-  <!--VIDEO-->
-
-  <RelativeLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:gravity="center_vertical"
-      android:orientation="horizontal"
-      android:paddingTop="@dimen/dp8"
-      >
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/dp8">
 
 
-    <CheckBox
-        android:id="@+id/st_checkBox_video_dialogClearCash"
-        android:layout_width="wrap_content"
+        <CheckBox
+            android:id="@+id/st_checkBox_video_dialogClearCash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="video" />
+
+        <TextView
+            android:id="@+id/st_txt_sizeFolder_video"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:gravity="right"
+            android:text="photo"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/sp16" />
+    </RelativeLayout>
+
+    <!--NEXT2-->
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:text="video"
-        />
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/dp8">
 
-    <TextView
-        android:id="@+id/st_txt_sizeFolder_video"
-        android:layout_width="wrap_content"
+
+        <CheckBox
+            android:id="@+id/st_checkBox_document_dialogClearCash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="Documents" />
+
+        <TextView
+            android:id="@+id/st_txt_sizeFolder_document_dialogClearCash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:gravity="right"
+            android:text="photo"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/sp16" />
+    </RelativeLayout>
+    <!--NEXT3-->
+    <!--NEXT2-->
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:gravity="right"
-        android:text="photo"
-        android:textColor="@android:color/black"
-        android:textSize="@dimen/sp16"
-        />
-  </RelativeLayout>
-
-  <!--NEXT2-->
-  <RelativeLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:gravity="center_vertical"
-      android:orientation="horizontal"
-      android:paddingTop="@dimen/dp8"
-      >
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/dp8"
+        android:visibility="gone">
 
 
-    <CheckBox
-        android:id="@+id/st_checkBox_document_dialogClearCash"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:text="Documents"
-        />
-
-    <TextView
-        android:id="@+id/st_txt_sizeFolder_document_dialogClearCash"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:gravity="right"
-        android:text="photo"
-        android:textColor="@android:color/black"
-        android:textSize="@dimen/sp16"
-        />
-  </RelativeLayout>
-  <!--NEXT3-->
-  <!--NEXT2-->
-  <RelativeLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:gravity="center_vertical"
-      android:orientation="horizontal"
-      android:paddingTop="@dimen/dp8"
-      android:visibility="gone"
-      >
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="Other files" />
 
 
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:text="Other files"
-        />
-
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:gravity="right"
-        android:text="photo"
-        android:textColor="@android:color/black"
-        android:textSize="@dimen/sp16"
-        />
-  </RelativeLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:gravity="right"
+            android:text="photo"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/sp16" />
+    </RelativeLayout>
 </LinearLayout>

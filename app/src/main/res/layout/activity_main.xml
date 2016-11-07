@@ -3,40 +3,35 @@
     android:id="@+id/fragmentContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layoutDirection="ltr"
-    >
+    android:layoutDirection="ltr">
 
-  <com.iGap.libs.flowingdrawer.LeftDrawerLayout
-      android:id="@+id/id_drawerlayout"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:clipChildren="false"
-      >
-
-    <include layout="@layout/activity_main_rooms"/>
-
-    <RelativeLayout
-        android:layout_width="@dimen/dp220"
+    <com.iGap.libs.flowingdrawer.LeftDrawerLayout
+        android:id="@+id/id_drawerlayout"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:clipChildren="false"
-        >
+        android:clipChildren="false">
 
-      <com.iGap.libs.flowingdrawer.FlowingView
-          android:id="@+id/sv"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          />
+        <include layout="@layout/activity_main_rooms" />
 
-      <FrameLayout
-          android:id="@+id/id_container_menu"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:layout_alignParentLeft="true"
-          android:layout_marginRight="@dimen/dp8"
-          />
+        <RelativeLayout
+            android:layout_width="@dimen/dp220"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:clipChildren="false">
 
-    </RelativeLayout>
+            <com.iGap.libs.flowingdrawer.FlowingView
+                android:id="@+id/sv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
-  </com.iGap.libs.flowingdrawer.LeftDrawerLayout>
+            <FrameLayout
+                android:id="@+id/id_container_menu"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_marginRight="@dimen/dp8" />
+
+        </RelativeLayout>
+
+    </com.iGap.libs.flowingdrawer.LeftDrawerLayout>
 </RelativeLayout>

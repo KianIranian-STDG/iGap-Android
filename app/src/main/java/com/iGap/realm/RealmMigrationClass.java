@@ -4,7 +4,8 @@ import io.realm.DynamicRealm;
 import io.realm.RealmMigration;
 
 public class RealmMigrationClass implements RealmMigration {
-    @Override public void migrate(DynamicRealm realm, long oldVersion, long newVersion) {
+    @Override
+    public void migrate(DynamicRealm realm, long oldVersion, long newVersion) {
 
         //        if(oldVersion == 0) {
         //            RealmSchema sessionSchema = realm.getSchema();

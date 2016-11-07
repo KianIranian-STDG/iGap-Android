@@ -19,6 +19,7 @@ package com.iGap.module;
 import android.content.Context;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
+
 import com.iGap.helper.Emojione;
 import com.iGap.helper.FontCache;
 
@@ -44,7 +45,8 @@ public class MaterialDesignTextView extends AppCompatTextView {
         setText(getText());
     }
 
-    @Override public void setText(CharSequence text, BufferType type) {
+    @Override
+    public void setText(CharSequence text, BufferType type) {
         super.setText(Emojione.shortnameToUnicode(text.toString(), false), type);
     }
 }

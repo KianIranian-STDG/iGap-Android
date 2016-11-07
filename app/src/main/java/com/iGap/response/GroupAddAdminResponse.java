@@ -1,6 +1,7 @@
 package com.iGap.response;
 
 import android.util.Log;
+
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGlobal;
@@ -9,6 +10,7 @@ import com.iGap.realm.RealmGroupRoom;
 import com.iGap.realm.RealmMember;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
+
 import io.realm.Realm;
 import io.realm.RealmList;
 
@@ -26,10 +28,11 @@ public class GroupAddAdminResponse extends MessageHandler {
         this.identity = identity;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
 
         final ProtoGroupAddAdmin.GroupAddAdminResponse.Builder builder =
-            (ProtoGroupAddAdmin.GroupAddAdminResponse.Builder) message;
+                (ProtoGroupAddAdmin.GroupAddAdminResponse.Builder) message;
         builder.getRoomId();
         builder.getMemberId();
 
@@ -41,13 +44,14 @@ public class GroupAddAdminResponse extends MessageHandler {
         Realm realm = Realm.getDefaultInstance();
 
         final RealmRoom realmRoom = realm.where(RealmRoom.class)
-            .equalTo(RealmRoomFields.ID, builder.getRoomId())
-            .findFirst();
+                .equalTo(RealmRoomFields.ID, builder.getRoomId())
+                .findFirst();
 
         if (realmRoom != null) {
 
             realm.executeTransaction(new Realm.Transaction() {
-                @Override public void execute(Realm realm) {
+                @Override
+                public void execute(Realm realm) {
                     RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
                     RealmList<RealmMember> realmMemberRealmList = realmGroupRoom.getMembers();
 
@@ -55,7 +59,7 @@ public class GroupAddAdminResponse extends MessageHandler {
                         if (member.getPeerId() == builder.getMemberId()) {
                             member.setRole(ProtoGlobal.GroupRoom.Role.ADMIN.toString());
                             G.onGroupAddAdmin.onGroupAddAdmin(builder.getRoomId(),
-                                builder.getMemberId());
+                                    builder.getMemberId());
                             break;
                         }
                     }
@@ -67,7 +71,8 @@ public class GroupAddAdminResponse extends MessageHandler {
 
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();

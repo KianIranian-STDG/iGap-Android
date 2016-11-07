@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -26,7 +27,7 @@ public final class ContactUtils {
 
         // getting contact ID
         Cursor cursorID = mContext.getContentResolver()
-            .query(mContactUri, new String[] { ContactsContract.Contacts._ID }, null, null, null);
+                .query(mContactUri, new String[]{ContactsContract.Contacts._ID}, null, null, null);
 
         if (cursorID != null && cursorID.moveToFirst()) {
             mContactID = cursorID.getString(cursorID.getColumnIndex(ContactsContract.Contacts._ID));
@@ -34,20 +35,21 @@ public final class ContactUtils {
         }
     }
 
-    @Nullable public Uri getPhotoUri() {
+    @Nullable
+    public Uri getPhotoUri() {
         ContentResolver contentResolver = mContext.getContentResolver();
 
         try {
             Cursor cursor = contentResolver.query(ContactsContract.Data.CONTENT_URI, null,
-                ContactsContract.Data.CONTACT_ID
-                    + "="
-                    + mContactID
-                    + " AND "
+                    ContactsContract.Data.CONTACT_ID
+                            + "="
+                            + mContactID
+                            + " AND "
 
-                    + ContactsContract.Data.MIMETYPE
-                    + "='"
-                    + ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE
-                    + "'", null, null);
+                            + ContactsContract.Data.MIMETYPE
+                            + "='"
+                            + ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE
+                            + "'", null, null);
 
             if (cursor != null) {
                 if (!cursor.moveToFirst()) {
@@ -62,7 +64,7 @@ public final class ContactUtils {
         }
 
         Uri person = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI,
-            Long.parseLong(mContactID));
+                Long.parseLong(mContactID));
         return Uri.withAppendedPath(person, ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
     }
 
@@ -70,9 +72,9 @@ public final class ContactUtils {
         try {
             Bitmap photo = null;
             InputStream inputStream =
-                ContactsContract.Contacts.openContactPhotoInputStream(mContext.getContentResolver(),
-                    ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI,
-                        Long.parseLong(mContactID)));
+                    ContactsContract.Contacts.openContactPhotoInputStream(mContext.getContentResolver(),
+                            ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI,
+                                    Long.parseLong(mContactID)));
 
             if (inputStream != null) {
                 photo = BitmapFactory.decodeStream(inputStream);
@@ -92,11 +94,11 @@ public final class ContactUtils {
         String cNumber = null;
         if (c.moveToFirst()) {
             String hasPhone =
-                c.getString(c.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+                    c.getString(c.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
 
             if (hasPhone.equalsIgnoreCase("1")) {
                 cNumber =
-                    c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                        c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
             }
         }
         c.close();
@@ -111,7 +113,7 @@ public final class ContactUtils {
 
         if (cursor != null && cursor.moveToFirst()) {
             contactName =
-                cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                    cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
             cursor.close();
         }
 

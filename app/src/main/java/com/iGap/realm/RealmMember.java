@@ -5,7 +5,8 @@ import io.realm.annotations.PrimaryKey;
 
 public class RealmMember extends RealmObject {
 
-    @PrimaryKey private long id;
+    @PrimaryKey
+    private long id;
 
     private long peerId;
     private String role;

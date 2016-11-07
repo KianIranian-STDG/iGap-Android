@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.fragments.FragmentShowImage;
@@ -30,10 +31,12 @@ import com.iGap.module.StructMessageInfo;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
-import io.realm.Realm;
-import io.realm.RealmResults;
+
 import java.io.File;
 import java.util.ArrayList;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 /**
  * Created by android3 on 9/4/2016.
@@ -51,7 +54,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
     private long roomId = 0;
 
     public AdapterShearedMedia(Context context, ArrayList<RealmRoomMessage> list, String mediaType,
-        OnComplete complete, MusicPlayer musicPlayer, long roomId) {
+                               OnComplete complete, MusicPlayer musicPlayer, long roomId) {
         this.context = context;
         this.list = list;
         this.mediaType = mediaType;
@@ -73,20 +76,20 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
         Realm realm = Realm.getDefaultInstance();
 
         RealmResults<RealmRoomMessage> realmRoomMessages =
-            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
-            .findAll();
+                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
+                        .findAll();
 
         for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
             String type = realmRoomMessage.getMessageType();
             if (type.equals(ProtoGlobal.RoomMessageType.VOICE.toString()) || type.equals(
-                ProtoGlobal.RoomMessageType.AUDIO.toString()) || type.equals(
-                ProtoGlobal.RoomMessageType.AUDIO_TEXT.toString()) ||
-                type.equals(ProtoGlobal.RoomMessageType.VIDEO.toString()) || type.equals(
-                ProtoGlobal.RoomMessageType.VIDEO_TEXT.toString()) ||
-                type.equals(ProtoGlobal.RoomMessageType.FILE.toString()) || type.equals(
-                ProtoGlobal.RoomMessageType.FILE_TEXT.toString()) ||
-                type.equals(ProtoGlobal.RoomMessageType.IMAGE.toString()) || type.equals(
-                ProtoGlobal.RoomMessageType.IMAGE_TEXT.toString())) {
+                    ProtoGlobal.RoomMessageType.AUDIO.toString()) || type.equals(
+                    ProtoGlobal.RoomMessageType.AUDIO_TEXT.toString()) ||
+                    type.equals(ProtoGlobal.RoomMessageType.VIDEO.toString()) || type.equals(
+                    ProtoGlobal.RoomMessageType.VIDEO_TEXT.toString()) ||
+                    type.equals(ProtoGlobal.RoomMessageType.FILE.toString()) || type.equals(
+                    ProtoGlobal.RoomMessageType.FILE_TEXT.toString()) ||
+                    type.equals(ProtoGlobal.RoomMessageType.IMAGE.toString()) || type.equals(
+                    ProtoGlobal.RoomMessageType.IMAGE_TEXT.toString())) {
 
                 counter++;
             }
@@ -97,14 +100,15 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
         return counter;
     }
 
-    @Override public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int position) {
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int position) {
 
         RecyclerView.ViewHolder viewHolder = null;
         boolean isHeader = false;
 
         if (list.get(position)
-            .getMessageType()
-            .equals(ProtoGlobal.RoomMessageType.TEXT.toString())) {
+                .getMessageType()
+                .equals(ProtoGlobal.RoomMessageType.TEXT.toString())) {
             isHeader = true;
         }
 
@@ -112,11 +116,11 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
             if (isHeader) {
                 View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.shared_media_sub_layout_time, null);
+                        .inflate(R.layout.shared_media_sub_layout_time, null);
                 viewHolder = new MyHoldersTime(view, position);
             } else {
                 View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.shared_media_sub_layout_image, null);
+                        .inflate(R.layout.shared_media_sub_layout_image, null);
                 viewHolder = new MyHoldersImage(view, position);
             }
         } else if (mediaType.equals(context.getString(R.string.shared_files))) {// file
@@ -124,10 +128,10 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
                 viewHolder = new MyHoldersTime(setLayoutHeaderTime(parent), position);
             } else {
                 View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.shared_media_sub_layout_file, null);
+                        .inflate(R.layout.shared_media_sub_layout_file, null);
                 RecyclerView.LayoutParams lp =
-                    new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT);
+                        new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                                ViewGroup.LayoutParams.WRAP_CONTENT);
                 view.setLayoutParams(lp);
                 viewHolder = new MyHoldersFile(view, position);
             }
@@ -142,10 +146,10 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
                 viewHolder = new MyHoldersTime(setLayoutHeaderTime(parent), position);
             } else {
                 View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.shared_media_sub_layout_file, null);
+                        .inflate(R.layout.shared_media_sub_layout_file, null);
                 RecyclerView.LayoutParams lp =
-                    new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT);
+                        new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                                ViewGroup.LayoutParams.WRAP_CONTENT);
                 view.setLayoutParams(lp);
                 viewHolder = new MyHoldersMusic(view, position);
             }
@@ -156,24 +160,25 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private View setLayoutHeaderTime(View parent) {
         View view = LayoutInflater.from(parent.getContext())
-            .inflate(R.layout.shared_media_sub_layout_time, null);
+                .inflate(R.layout.shared_media_sub_layout_time, null);
         RecyclerView.LayoutParams lp =
-            new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
+                new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
         view.setLayoutParams(lp);
         view.setBackgroundColor(Color.parseColor("#cccccc"));
         return view;
     }
 
-    @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         if (!list.get(position)
-            .getMessageType()
-            .equals(ProtoGlobal.RoomMessageType.TEXT.toString())) {
+                .getMessageType()
+                .equals(ProtoGlobal.RoomMessageType.TEXT.toString())) {
 
             // set blue back ground for selected file
             FrameLayout layout =
-                (FrameLayout) holder.itemView.findViewById(R.id.smsl_fl_contain_main);
+                    (FrameLayout) holder.itemView.findViewById(R.id.smsl_fl_contain_main);
 
             if (options.get(position).isSelected) {
                 layout.setForeground(new ColorDrawable(Color.parseColor("#99AADFF7")));
@@ -186,10 +191,10 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
                 String path = "";
 
                 if (list.get(position)
-                    .getMessageType()
-                    .equals(ProtoGlobal.RoomMessageType.VIDEO.toString()) || list.get(position)
-                    .getMessageType()
-                    .equals(ProtoGlobal.RoomMessageType.VIDEO_TEXT.toString())) {
+                        .getMessageType()
+                        .equals(ProtoGlobal.RoomMessageType.VIDEO.toString()) || list.get(position)
+                        .getMessageType()
+                        .equals(ProtoGlobal.RoomMessageType.VIDEO_TEXT.toString())) {
                     path = list.get(position).getAttachment().getLocalThumbnailPath();
                     if (path == null) path = "";
 
@@ -197,7 +202,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
                         ((MyHoldersImage) holder).imvPicFile.setImageResource(R.mipmap.j_video);
                     } else {
                         new HelperMimeType().loadVideoThumbnail(
-                            ((MyHoldersImage) holder).imvPicFile, path);
+                                ((MyHoldersImage) holder).imvPicFile, path);
                         //  new LoadImageToImageView(((MyHoldersImage) holder).imvPicFile, path).execute();
                     }
                 } else {
@@ -212,7 +217,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
                     if (path.length() > 0) {
                         new LoadImageToImageView(((MyHoldersImage) holder).imvPicFile,
-                            path).execute();
+                                path).execute();
                     }
                 }
             } else if (mediaType.equals(context.getString(R.string.shared_files))) {
@@ -226,11 +231,13 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-    @Override public int getItemCount() {
+    @Override
+    public int getItemCount() {
         return list.size();
     }
 
-    @Override public int getItemViewType(int position) {
+    @Override
+    public int getItemViewType(int position) {
         return position;
     }
 
@@ -253,39 +260,39 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
         } else {
 
             if (list.get(position)
-                .getMessageType()
-                .equals(ProtoGlobal.RoomMessageType.IMAGE.toString()) || list.get(position)
-                .getMessageType()
-                .equals(ProtoGlobal.RoomMessageType.IMAGE_TEXT.toString())) {
+                    .getMessageType()
+                    .equals(ProtoGlobal.RoomMessageType.IMAGE.toString()) || list.get(position)
+                    .getMessageType()
+                    .equals(ProtoGlobal.RoomMessageType.IMAGE_TEXT.toString())) {
                 selectImage(position);
             } else if (list.get(position)
-                .getMessageType()
-                .equals(ProtoGlobal.RoomMessageType.FILE.toString()) ||
-                list.get(position)
                     .getMessageType()
-                    .equals(ProtoGlobal.RoomMessageType.FILE_TEXT.toString()) ||
-                list.get(position)
-                    .getMessageType()
-                    .equals(ProtoGlobal.RoomMessageType.VIDEO.toString()) ||
-                list.get(position)
-                    .getMessageType()
-                    .equals(ProtoGlobal.RoomMessageType.VIDEO_TEXT.toString())) {
+                    .equals(ProtoGlobal.RoomMessageType.FILE.toString()) ||
+                    list.get(position)
+                            .getMessageType()
+                            .equals(ProtoGlobal.RoomMessageType.FILE_TEXT.toString()) ||
+                    list.get(position)
+                            .getMessageType()
+                            .equals(ProtoGlobal.RoomMessageType.VIDEO.toString()) ||
+                    list.get(position)
+                            .getMessageType()
+                            .equals(ProtoGlobal.RoomMessageType.VIDEO_TEXT.toString())) {
 
                 Intent intent = HelperMimeType.appropriateProgram(
-                    list.get(position).getAttachment().getLocalFilePath());
+                        list.get(position).getAttachment().getLocalFilePath());
                 if (intent != null) context.startActivity(intent);
             } else if (list.get(position)
-                .getMessageType()
-                .equals(ProtoGlobal.RoomMessageType.VOICE.toString()) ||
-                list.get(position)
                     .getMessageType()
-                    .equals(ProtoGlobal.RoomMessageType.AUDIO.toString()) ||
-                list.get(position)
-                    .getMessageType()
-                    .equals(ProtoGlobal.RoomMessageType.AUDIO_TEXT.toString())) {
+                    .equals(ProtoGlobal.RoomMessageType.VOICE.toString()) ||
+                    list.get(position)
+                            .getMessageType()
+                            .equals(ProtoGlobal.RoomMessageType.AUDIO.toString()) ||
+                    list.get(position)
+                            .getMessageType()
+                            .equals(ProtoGlobal.RoomMessageType.AUDIO_TEXT.toString())) {
 
                 MusicPlayer.startPlayer(list.get(position).getAttachment().getLocalFilePath(),
-                    list.get(position).getAttachment().getName(), roomId, true);
+                        list.get(position).getAttachment().getName(), roomId, true);
             }
         }
     }
@@ -352,8 +359,8 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
         for (RealmRoomMessage mMessage : list) {
             if (mMessage.getMessageType().equals(ProtoGlobal.RoomMessageType.IMAGE.toString())
-                || mMessage.getMessageType()
-                .equals(ProtoGlobal.RoomMessageType.IMAGE_TEXT.toString())) {
+                    || mMessage.getMessageType()
+                    .equals(ProtoGlobal.RoomMessageType.IMAGE_TEXT.toString())) {
                 listPic.add(StructMessageInfo.convert(mMessage));
             }
         }
@@ -372,9 +379,9 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
         fragment.setArguments(bundle);
 
         ((Activity) context).getFragmentManager()
-            .beginTransaction()
-            .replace(R.id.asm_ll_parent, fragment, "Show_Image_fragment_shared_media")
-            .commit();
+                .beginTransaction()
+                .replace(R.id.asm_ll_parent, fragment, "Show_Image_fragment_shared_media")
+                .commit();
     }
 
     //****************************************************************************************************************
@@ -394,7 +401,8 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
             this.path = path;
         }
 
-        @Override protected Bitmap doInBackground(Object... params) {
+        @Override
+        protected Bitmap doInBackground(Object... params) {
 
             Bitmap bitmap = null;
             //            BitmapFactory.Options opts = new BitmapFactory.Options();
@@ -407,7 +415,8 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
             return bitmap;
         }
 
-        @Override protected void onPostExecute(Bitmap result) {
+        @Override
+        protected void onPostExecute(Bitmap result) {
             Log.e("ddd", "LoadImageToImageView");
             if (result != null && imv != null) {
                 imv.setImageBitmap(result);
@@ -421,7 +430,8 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
             super(itemView);
 
             itemView.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View view) {
+                @Override
+                public void onClick(View view) {
                     if (isSelectedMode) {
                         setSelectedItem(getPosition());
                     } else {
@@ -431,7 +441,8 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
             });
 
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override public boolean onLongClick(View view) {
+                @Override
+                public boolean onLongClick(View view) {
                     isSelectedMode = true;
                     setSelectedItem(getPosition());
                     return true;
@@ -450,8 +461,8 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
             imvPicFile = (ImageView) itemView.findViewById(R.id.smsl_imv_file_pic);
 
             if (list.get(position)
-                .getMessageType()
-                .equals(ProtoGlobal.RoomMessageType.VIDEO.toString())) {
+                    .getMessageType()
+                    .equals(ProtoGlobal.RoomMessageType.VIDEO.toString())) {
 
                 itemView.findViewById(R.id.smsl_ll_video).setVisibility(View.VISIBLE);
 
@@ -480,11 +491,11 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
             if (list.get(position).getAttachment() != null) {
                 imvPicFile.setImageBitmap(HelperMimeType.getMimePic(context,
-                    HelperMimeType.getMimeResource(
-                        list.get(position).getAttachment().getLocalFilePath())));
+                        HelperMimeType.getMimeResource(
+                                list.get(position).getAttachment().getLocalFilePath())));
                 txtFileName.setText(list.get(position).getAttachment().getName());
                 txtFileInfo.setText(AndroidUtils.humanReadableByteCount(
-                    list.get(position).getAttachment().getSize(), true));
+                        list.get(position).getAttachment().getSize(), true));
             }
         }
     }
@@ -509,7 +520,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
             if (list.get(position).getAttachment() != null) {
                 txtFileName.setText(list.get(position).getAttachment().getName());
                 txtFileInfo.setText(AndroidUtils.humanReadableByteCount(
-                    list.get(position).getAttachment().getSize(), true));
+                        list.get(position).getAttachment().getSize(), true));
             }
         }
     }

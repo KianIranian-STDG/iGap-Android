@@ -19,8 +19,10 @@ package com.iGap.adapter;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.iGap.module.EmojiGridView;
 import com.iGap.module.EmojiRecentsGridView;
+
 import java.util.List;
 
 public class EmojiPagerAdapter extends PagerAdapter {
@@ -38,21 +40,25 @@ public class EmojiPagerAdapter extends PagerAdapter {
         return null;
     }
 
-    @Override public int getCount() {
+    @Override
+    public int getCount() {
         return mViews.size();
     }
 
-    @Override public Object instantiateItem(ViewGroup container, int position) {
+    @Override
+    public Object instantiateItem(ViewGroup container, int position) {
         View v = mViews.get(position).rootView;
         container.addView(v, 0);
         return v;
     }
 
-    @Override public void destroyItem(ViewGroup container, int position, Object view) {
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object view) {
         container.removeView((View) view);
     }
 
-    @Override public boolean isViewFromObject(View view, Object key) {
+    @Override
+    public boolean isViewFromObject(View view, Object key) {
         return key == view;
     }
 }

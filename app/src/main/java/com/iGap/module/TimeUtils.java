@@ -17,7 +17,9 @@ package com.iGap.module;
  */
 
 import android.content.Context;
+
 import com.iGap.R;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -32,9 +34,9 @@ public final class TimeUtils {
      * convert unix time to local time
      *
      * @param unixTime unix time is 13 characters (milliseconds), if you passed seconds, remember
-     * to
-     * multiply by 1000L
-     * @param format String format
+     *                 to
+     *                 multiply by 1000L
+     * @param format   String format
      * @return String formatted time in local
      */
     public static String toLocal(long unixTime, String format) {
@@ -54,25 +56,25 @@ public final class TimeUtils {
 
         String output;
         if (current.get(Calendar.DAY_OF_MONTH) == date.get(Calendar.DAY_OF_MONTH)
-            && current.get(Calendar.YEAR) == date.get(Calendar.YEAR)) {
+                && current.get(Calendar.YEAR) == date.get(Calendar.YEAR)) {
             output = context.getString(R.string.today);
         } else if (getYesterdayCalendar().get(Calendar.DAY_OF_MONTH) == date.get(
-            Calendar.DAY_OF_MONTH)) {
+                Calendar.DAY_OF_MONTH)) {
             output = context.getString(R.string.yesterday);
         } else //noinspection WrongConstant
             if (current.get(Calendar.WEEK_OF_YEAR) == date.get(Calendar.WEEK_OF_YEAR) + 1
-                && current.get(Calendar.YEAR) == date.get(Calendar.YEAR)) {
+                    && current.get(Calendar.YEAR) == date.get(Calendar.YEAR)) {
                 output = String.format("%1$s %2$s",
-                    new SimpleDateFormat("EEE", Locale.getDefault()).format(date.getTimeInMillis()),
-                    date.get(Calendar.DAY_OF_MONTH));
+                        new SimpleDateFormat("EEE", Locale.getDefault()).format(date.getTimeInMillis()),
+                        date.get(Calendar.DAY_OF_MONTH));
             } else if (current.get(Calendar.YEAR) < date.get(Calendar.YEAR)) {
                 output = String.format("%1$s-%2$s-%3$s",
-                    new SimpleDateFormat("MM", Locale.getDefault()).format(date.getTimeInMillis()),
-                    date.get(Calendar.DAY_OF_MONTH), date.get(Calendar.YEAR));
+                        new SimpleDateFormat("MM", Locale.getDefault()).format(date.getTimeInMillis()),
+                        date.get(Calendar.DAY_OF_MONTH), date.get(Calendar.YEAR));
             } else {
                 output = String.format("%1$s %2$s",
-                    new SimpleDateFormat("MMMM", Locale.getDefault()).format(
-                        date.getTimeInMillis()), date.get(Calendar.DAY_OF_MONTH));
+                        new SimpleDateFormat("MMMM", Locale.getDefault()).format(
+                                date.getTimeInMillis()), date.get(Calendar.DAY_OF_MONTH));
             }
 
         return output;

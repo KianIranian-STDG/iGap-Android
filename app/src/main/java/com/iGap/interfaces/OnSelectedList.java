@@ -1,10 +1,11 @@
 package com.iGap.interfaces;
 
 import com.iGap.module.StructContactInfo;
+
 import java.util.ArrayList;
 
 public interface OnSelectedList {
 
     void getSelectedList(boolean result, String message, int countForShowLastMessage,
-        ArrayList<StructContactInfo> list);
+                         ArrayList<StructContactInfo> list);
 }

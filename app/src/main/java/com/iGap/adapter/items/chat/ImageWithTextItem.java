@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.interfaces.IMessageItem;
@@ -14,6 +15,7 @@ import com.iGap.proto.ProtoGlobal;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
 import java.util.List;
 
 import static com.iGap.module.AndroidUtils.suitablePath;
@@ -22,44 +24,48 @@ import static com.iGap.module.AndroidUtils.suitablePath;
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/2016.
  */
 public class ImageWithTextItem
-    extends AbstractMessage<ImageWithTextItem, ImageWithTextItem.ViewHolder> {
+        extends AbstractMessage<ImageWithTextItem, ImageWithTextItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
     public ImageWithTextItem(ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         super(true, type, messageClickListener);
     }
 
-    @Override public int getType() {
+    @Override
+    public int getType() {
         return R.id.chatSubLayoutImageWithText;
     }
 
-    @Override public int getLayoutRes() {
+    @Override
+    public int getLayoutRes() {
         return R.layout.chat_sub_layout_image_with_text;
     }
 
-    @Override public void bindView(final ViewHolder holder, List payloads) {
+    @Override
+    public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
         if (mMessage.attachment != null) {
             int[] dimens = AndroidUtils.scaleDimenWithSavedRatio(holder.itemView.getContext(),
-                mMessage.attachment.width, mMessage.attachment.height);
+                    mMessage.attachment.width, mMessage.attachment.height);
             ((ViewGroup) holder.image.getParent()).setLayoutParams(
-                new LinearLayout.LayoutParams(dimens[0], dimens[1]));
+                    new LinearLayout.LayoutParams(dimens[0], dimens[1]));
             holder.image.getParent().requestLayout();
         }
 
         setTextIfNeeded(holder.messageText);
 
         holder.image.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 if (mMessage.status.equalsIgnoreCase(
-                    ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                        ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
                     return;
                 }
                 if (mMessage.status.equalsIgnoreCase(
-                    ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                        ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
                     messageClickListener.onFailedMessageClick(v, mMessage,
-                        holder.getAdapterPosition());
+                            holder.getAdapterPosition());
                 } else {
                     messageClickListener.onOpenClick(v, mMessage, holder.getAdapterPosition());
                 }
@@ -67,15 +73,16 @@ public class ImageWithTextItem
         });
 
         holder.messageText.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 if (mMessage.status.equalsIgnoreCase(
-                    ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                        ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
                     return;
                 }
                 if (mMessage.status.equalsIgnoreCase(
-                    ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                        ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
                     messageClickListener.onFailedMessageClick(v, mMessage,
-                        holder.getAdapterPosition());
+                            holder.getAdapterPosition());
                 } else {
                     messageClickListener.onContainerClick(v, mMessage, holder.getAdapterPosition());
                 }
@@ -89,7 +96,8 @@ public class ImageWithTextItem
         ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.image);
     }
 
-    @Override public ViewHolderFactory<? extends ViewHolder> getFactory() {
+    @Override
+    public ViewHolderFactory<? extends ViewHolder> getFactory() {
         return FACTORY;
     }
 

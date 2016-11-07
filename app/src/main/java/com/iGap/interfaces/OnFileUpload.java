@@ -11,13 +11,13 @@ import com.iGap.proto.ProtoResponse;
  */
 public interface OnFileUpload {
     void OnFileUploadOption(int firstBytesLimit, int lastBytesLimit, int maxConnection,
-        String fileHashAsIdentity, ProtoResponse.Response response);
+                            String fileHashAsIdentity, ProtoResponse.Response response);
 
     void OnFileUploadInit(String token, double progress, long offset, int limit,
-        String fileHashAsIdentity, ProtoResponse.Response response);
+                          String fileHashAsIdentity, ProtoResponse.Response response);
 
     void onFileUpload(double progress, long nextOffset, int nextLimit, String fileHashAsIdentity,
-        ProtoResponse.Response response);
+                      ProtoResponse.Response response);
 
     void onFileUploadComplete(String fileHashAsIdentity, ProtoResponse.Response response);
 }

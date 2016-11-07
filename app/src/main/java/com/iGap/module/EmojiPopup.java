@@ -31,6 +31,7 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.PopupWindow;
+
 import com.iGap.R;
 import com.iGap.adapter.EmojiPagerAdapter;
 import com.iGap.emoji.Food;
@@ -46,6 +47,7 @@ import com.iGap.interfaces.IEmojiViewCreate;
 import com.iGap.interfaces.IRecents;
 import com.iGap.interfaces.IRecentsLongClick;
 import com.iGap.interfaces.ISoftKeyboardOpenClose;
+
 import java.util.Arrays;
 
 public class EmojiPopup extends PopupWindow implements ViewPager.OnPageChangeListener, IRecents {
@@ -70,8 +72,8 @@ public class EmojiPopup extends PopupWindow implements ViewPager.OnPageChangeLis
      * Constructor
      *
      * @param rootView The top most layout in your view hierarchy. The difference of this view and
-     * the screen height will be used to calculate the keyboard height.
-     * @param context The context of current activity.
+     *                 the screen height will be used to calculate the keyboard height.
+     * @param context  The context of current activity.
      */
     public EmojiPopup(View rootView, Context context, IEmojiViewCreate emojiViewCreateListener) {
         super(context);
@@ -83,7 +85,7 @@ public class EmojiPopup extends PopupWindow implements ViewPager.OnPageChangeLis
         setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         //default size
         setSize((int) context.getResources().getDimension(R.dimen.keyboard_height),
-            LayoutParams.MATCH_PARENT);
+                LayoutParams.MATCH_PARENT);
     }
 
     public void setEmojiStickerClickListener(IEmojiStickerClick listener) {
@@ -108,12 +110,12 @@ public class EmojiPopup extends PopupWindow implements ViewPager.OnPageChangeLis
         mEmojiPager = (ViewPager) view.findViewById(R.id.emojiPager);
         mEmojiPager.addOnPageChangeListener(EmojiPopup.this);
         EmojiPagerAdapter adapter = new EmojiPagerAdapter(
-            Arrays.asList(new EmojiRecentsGridView(mContext, null, null, EmojiPopup.this),
-                new EmojiGridView(mContext, People.DATA, EmojiPopup.this, EmojiPopup.this),
-                new EmojiGridView(mContext, Nature.DATA, EmojiPopup.this, EmojiPopup.this),
-                new EmojiGridView(mContext, Food.DATA, EmojiPopup.this, EmojiPopup.this),
-                new EmojiGridView(mContext, Places.DATA, EmojiPopup.this, EmojiPopup.this),
-                new EmojiGridView(mContext, Objects.DATA, EmojiPopup.this, EmojiPopup.this)));
+                Arrays.asList(new EmojiRecentsGridView(mContext, null, null, EmojiPopup.this),
+                        new EmojiGridView(mContext, People.DATA, EmojiPopup.this, EmojiPopup.this),
+                        new EmojiGridView(mContext, Nature.DATA, EmojiPopup.this, EmojiPopup.this),
+                        new EmojiGridView(mContext, Food.DATA, EmojiPopup.this, EmojiPopup.this),
+                        new EmojiGridView(mContext, Places.DATA, EmojiPopup.this, EmojiPopup.this),
+                        new EmojiGridView(mContext, Objects.DATA, EmojiPopup.this, EmojiPopup.this)));
         mEmojiPager.setAdapter(adapter);
 
         mEmojiCategories = new View[7];
@@ -127,22 +129,25 @@ public class EmojiPopup extends PopupWindow implements ViewPager.OnPageChangeLis
         for (int i = 0; i < mEmojiCategories.length; i++) {
             final int position = i;
             mEmojiCategories[i].setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
                     mEmojiPager.setCurrentItem(position);
                 }
             });
             if (i == 0) {
                 mEmojiCategories[i].setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override public boolean onLongClick(View view) {
+                    @Override
+                    public boolean onLongClick(View view) {
                         return mRecentsLongClickListener != null
-                            && mRecentsLongClickListener.onRecentsLongClick(view, mRecentsManager);
+                                && mRecentsLongClickListener.onRecentsLongClick(view, mRecentsManager);
                     }
                 });
             }
             // last category is the sticker emoji
             else if (i == mEmojiCategories.length - 1) {
                 mEmojiCategories[6].setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View view) {
+                    @Override
+                    public void onClick(View view) {
                         if (mEmojiStickerClickListener != null) {
                             mEmojiStickerClickListener.onEmojiStickerClick(view);
                         }
@@ -151,13 +156,14 @@ public class EmojiPopup extends PopupWindow implements ViewPager.OnPageChangeLis
             }
         }
         view.findViewById(R.id.backspace)
-            .setOnTouchListener(new RepeatListener(1000, 50, new View.OnClickListener() {
-                @Override public void onClick(View v) {
-                    if (mEmojiBackspaceClickListener != null) {
-                        mEmojiBackspaceClickListener.onEmojiBackspaceClick(view);
+                .setOnTouchListener(new RepeatListener(1000, 50, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mEmojiBackspaceClickListener != null) {
+                            mEmojiBackspaceClickListener.onEmojiBackspaceClick(view);
+                        }
                     }
-                }
-            }));
+                }));
 
         // get last selected page
         int page = 0;
@@ -176,7 +182,8 @@ public class EmojiPopup extends PopupWindow implements ViewPager.OnPageChangeLis
         return view;
     }
 
-    @Override public void setContentView(View contentView) {
+    @Override
+    public void setContentView(View contentView) {
         super.setContentView(contentView);
         if (mEmojiViewCreateListener != null) {
             mEmojiViewCreateListener.onEmojiViewCreate(contentView, this);
@@ -186,7 +193,7 @@ public class EmojiPopup extends PopupWindow implements ViewPager.OnPageChangeLis
     /**
      * Manually set the popup window size
      *
-     * @param width Width of the popup
+     * @param width  Width of the popup
      * @param height Height of the popup
      */
     private void setSize(int width, int height) {
@@ -197,7 +204,8 @@ public class EmojiPopup extends PopupWindow implements ViewPager.OnPageChangeLis
     /**
      * Dismiss the popup
      */
-    @Override public void dismiss() {
+    @Override
+    public void dismiss() {
         super.dismiss();
         EmojiRecentsManager.getInstance(mContext).saveRecents();
     }
@@ -263,14 +271,15 @@ public class EmojiPopup extends PopupWindow implements ViewPager.OnPageChangeLis
      */
     public void setSizeForSoftKeyboard() {
         mRootView.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
-            @Override public void onGlobalLayout() {
+            @Override
+            public void onGlobalLayout() {
                 Rect r = new Rect();
                 mRootView.getWindowVisibleDisplayFrame(r);
 
                 int screenHeight = getUsableScreenHeight();
                 int heightDifference = screenHeight - (r.bottom - r.top);
                 int resourceId =
-                    mContext.getResources().getIdentifier("status_bar_height", "dimen", "android");
+                        mContext.getResources().getIdentifier("status_bar_height", "dimen", "android");
                 if (resourceId > 0) {
                     heightDifference -= mContext.getResources().getDimensionPixelSize(resourceId);
                 }
@@ -302,7 +311,7 @@ public class EmojiPopup extends PopupWindow implements ViewPager.OnPageChangeLis
             DisplayMetrics metrics = new DisplayMetrics();
 
             WindowManager windowManager =
-                (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+                    (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
             windowManager.getDefaultDisplay().getMetrics(metrics);
 
             return metrics.heightPixels;
@@ -311,21 +320,24 @@ public class EmojiPopup extends PopupWindow implements ViewPager.OnPageChangeLis
         }
     }
 
-    @Override public void addRecent(Context context, String emoji) {
+    @Override
+    public void addRecent(Context context, String emoji) {
         EmojiRecentsGridView fragment =
-            ((EmojiPagerAdapter) mEmojiPager.getAdapter()).getRecentFragment();
+                ((EmojiPagerAdapter) mEmojiPager.getAdapter()).getRecentFragment();
         fragment.addRecent(context, emoji);
     }
 
-    @Override public void onPageScrolled(int i, float v, int i2) {
+    @Override
+    public void onPageScrolled(int i, float v, int i2) {
     }
 
-    @Override public void onPageSelected(int i) {
+    @Override
+    public void onPageSelected(int i) {
         if (mEmojiTabLastSelectedIndex == i) {
             return;
         }
         if (mEmojiTabLastSelectedIndex >= 0
-            && mEmojiTabLastSelectedIndex < mEmojiCategories.length) {
+                && mEmojiTabLastSelectedIndex < mEmojiCategories.length) {
             mEmojiCategories[mEmojiTabLastSelectedIndex].setSelected(false);
         }
         mEmojiCategories[i].setSelected(true);
@@ -333,7 +345,8 @@ public class EmojiPopup extends PopupWindow implements ViewPager.OnPageChangeLis
         mRecentsManager.setRecentPage(i);
     }
 
-    @Override public void onPageScrollStateChanged(int i) {
+    @Override
+    public void onPageScrollStateChanged(int i) {
     }
 
     /**
@@ -356,7 +369,8 @@ public class EmojiPopup extends PopupWindow implements ViewPager.OnPageChangeLis
         private int initialInterval;
         private View downView;
         private Runnable handlerRunnable = new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 if (downView == null) {
                     return;
                 }
@@ -368,13 +382,13 @@ public class EmojiPopup extends PopupWindow implements ViewPager.OnPageChangeLis
 
         /**
          * @param initialInterval The interval before first click event
-         * @param normalInterval The interval before second and subsequent click
-         * events
-         * @param clickListener The OnClickListener, that will be called
-         * periodically
+         * @param normalInterval  The interval before second and subsequent click
+         *                        events
+         * @param clickListener   The OnClickListener, that will be called
+         *                        periodically
          */
         public RepeatListener(int initialInterval, int normalInterval,
-            View.OnClickListener clickListener) {
+                              View.OnClickListener clickListener) {
             if (clickListener == null) throw new IllegalArgumentException("null runnable");
             if (initialInterval < 0 || normalInterval < 0) {
                 throw new IllegalArgumentException("negative interval");
@@ -391,7 +405,7 @@ public class EmojiPopup extends PopupWindow implements ViewPager.OnPageChangeLis
                     downView = view;
                     handler.removeCallbacks(handlerRunnable);
                     handler.postAtTime(handlerRunnable, downView,
-                        SystemClock.uptimeMillis() + initialInterval);
+                            SystemClock.uptimeMillis() + initialInterval);
                     clickListener.onClick(view);
                     return true;
                 case MotionEvent.ACTION_UP:

@@ -1,6 +1,7 @@
 package com.iGap.interfaces;
 
 import android.view.View;
+
 import com.iGap.module.StructMessageInfo;
 
 /**

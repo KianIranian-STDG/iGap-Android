@@ -7,7 +7,7 @@ public class RequestGroupGetMemberList {
     public void getRoomHistory(long roomId) {
 
         ProtoGroupGetMemberList.GroupGetMemberList.Builder builder =
-            ProtoGroupGetMemberList.GroupGetMemberList.newBuilder();
+                ProtoGroupGetMemberList.GroupGetMemberList.newBuilder();
 
         builder.setRoomId(roomId);
 

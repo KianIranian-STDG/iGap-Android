@@ -1,6 +1,7 @@
 package com.iGap.module;
 
 import com.iGap.proto.ProtoGlobal;
+
 import java.io.Serializable;
 
 /**

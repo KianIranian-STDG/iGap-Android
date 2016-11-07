@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+
 import com.iGap.R;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.module.AndroidUtils;
@@ -12,6 +13,7 @@ import com.iGap.proto.ProtoGlobal;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
 import java.util.List;
 
 import static com.iGap.module.AndroidUtils.suitablePath;
@@ -26,15 +28,18 @@ public class ImageItem extends AbstractMessage<ImageItem, ImageItem.ViewHolder> 
         super(true, type, messageClickListener);
     }
 
-    @Override public int getType() {
+    @Override
+    public int getType() {
         return R.id.chatSubLayoutImage;
     }
 
-    @Override public int getLayoutRes() {
+    @Override
+    public int getLayoutRes() {
         return R.layout.chat_sub_layout_image;
     }
 
-    @Override public ViewHolderFactory<? extends ViewHolder> getFactory() {
+    @Override
+    public ViewHolderFactory<? extends ViewHolder> getFactory() {
         return FACTORY;
     }
 
@@ -44,7 +49,8 @@ public class ImageItem extends AbstractMessage<ImageItem, ImageItem.ViewHolder> 
         ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.image);
     }
 
-    @Override public void bindView(final ViewHolder holder, List payloads) {
+    @Override
+    public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
         if (mMessage.attachment != null) {
@@ -56,7 +62,8 @@ public class ImageItem extends AbstractMessage<ImageItem, ImageItem.ViewHolder> 
         }
 
         holder.image.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 if (mMessage.status.equalsIgnoreCase(
                     ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
                     return;

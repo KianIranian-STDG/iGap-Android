@@ -7,7 +7,7 @@ public class RequestChatGetDraft {
     public void chatGetDraft(long roomId) {
 
         ProtoChatGetDraft.ChatGetDraft.Builder builder =
-            ProtoChatGetDraft.ChatGetDraft.newBuilder();
+                ProtoChatGetDraft.ChatGetDraft.newBuilder();
         builder.setRoomId(roomId);
 
         RequestWrapper requestWrapper = new RequestWrapper(208, builder, roomId + "");

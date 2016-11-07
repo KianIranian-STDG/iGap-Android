@@ -7,7 +7,7 @@ public class RequestUserProfileGetSelfRemove {
     public void userProfileGetSelfRemove() {
 
         ProtoUserProfileGetSelfRemove.UserProfileGetSelfRemove.Builder builder =
-            ProtoUserProfileGetSelfRemove.UserProfileGetSelfRemove.newBuilder();
+                ProtoUserProfileGetSelfRemove.UserProfileGetSelfRemove.newBuilder();
 
         RequestWrapper requestWrapper = new RequestWrapper(121, builder);
         try {

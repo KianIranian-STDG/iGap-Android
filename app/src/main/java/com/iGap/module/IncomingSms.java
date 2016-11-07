@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
 import android.util.Log;
+
 import com.iGap.G;
 import com.iGap.interfaces.OnSmsReceive;
 
@@ -30,7 +31,8 @@ public class IncomingSms extends BroadcastReceiver {
         this.listener = listener;
     }
 
-    @Override public void onReceive(Context context, Intent intent) {
+    @Override
+    public void onReceive(Context context, Intent intent) {
 
         Log.i("UUU", "Receive SMS");
         final Bundle bundle = intent.getExtras();

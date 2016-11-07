@@ -3,6 +3,7 @@ package com.iGap.request;
 import com.iGap.proto.ProtoUserContactsEdit;
 import com.iGap.realm.RealmContacts;
 import com.iGap.realm.RealmContactsFields;
+
 import io.realm.Realm;
 
 public class RequestUserContactsEdit {
@@ -10,9 +11,9 @@ public class RequestUserContactsEdit {
     public void contactsEdit(long phone, String first_name, String last_name) {
         Realm realm = Realm.getDefaultInstance();
         ProtoUserContactsEdit.UserContactsEdit.Builder builder =
-            ProtoUserContactsEdit.UserContactsEdit.newBuilder();
+                ProtoUserContactsEdit.UserContactsEdit.newBuilder();
         RealmContacts realmItem =
-            realm.where(RealmContacts.class).equalTo(RealmContactsFields.PHONE, phone).findFirst();
+                realm.where(RealmContacts.class).equalTo(RealmContactsFields.PHONE, phone).findFirst();
 
         if (realmItem != null) {
 

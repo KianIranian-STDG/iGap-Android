@@ -1,6 +1,7 @@
 package com.iGap;
 
 import android.util.Log;
+
 import com.iGap.helper.HelperConnectionState;
 import com.iGap.response.HandleResponse;
 import com.neovisionaries.ws.client.WebSocket;
@@ -8,6 +9,7 @@ import com.neovisionaries.ws.client.WebSocketAdapter;
 import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketFactory;
 import com.neovisionaries.ws.client.WebSocketFrame;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +39,7 @@ public class WebSocketClient {
 
                 @Override
                 public void onConnected(WebSocket websocket, Map<String, List<String>> headers)
-                    throws Exception {
+                        throws Exception {
                     Log.i("SOC_WebSocket", "onConnected");
                     G.socketConnection = true;
                     HelperConnectionState.connectionState(Config.ConnectionState.CONNECTING);
@@ -45,15 +47,17 @@ public class WebSocketClient {
                     super.onConnected(websocket, headers);
                 }
 
-                @Override public void onBinaryMessage(WebSocket websocket, final byte[] binary)
-                    throws Exception {
+                @Override
+                public void onBinaryMessage(WebSocket websocket, final byte[] binary)
+                        throws Exception {
                     Log.i("SOC_WebSocket", "WebSocketClient binary : " + binary);
                     new HandleResponse(binary).run();
                     super.onBinaryMessage(websocket, binary);
                 }
 
-                @Override public void onError(WebSocket websocket, WebSocketException cause)
-                    throws Exception {
+                @Override
+                public void onError(WebSocket websocket, WebSocketException cause)
+                        throws Exception {
                     Log.i("SOC_WebSocket", "onError");
                     reconnect();
                     super.onError(websocket, cause);
@@ -61,23 +65,24 @@ public class WebSocketClient {
 
                 @Override
                 public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame,
-                    WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
+                                           WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
                     Log.i("SOC_WebSocketD", "onDisconnected");
                     reconnect();
                     super.onDisconnected(websocket, serverCloseFrame, clientCloseFrame,
-                        closedByServer);
+                            closedByServer);
                 }
 
                 @Override
                 public void onConnectError(WebSocket websocket, WebSocketException exception)
-                    throws Exception {
+                        throws Exception {
                     Log.i("SOC_WebSocket", "onConnectError");
                     reconnect();
                     super.onConnectError(websocket, exception);
                 }
 
-                @Override public void onMessageError(WebSocket websocket, WebSocketException cause,
-                    List<WebSocketFrame> frames) throws Exception {
+                @Override
+                public void onMessageError(WebSocket websocket, WebSocketException cause,
+                                           List<WebSocketFrame> frames) throws Exception {
                     Log.i("SOC_WebSocket", "onMessageError");
                     super.onMessageError(websocket, cause, frames);
                 }
@@ -87,13 +92,14 @@ public class WebSocketClient {
         }
         final WebSocket finalWs = websocketFactory;
         Thread thread = new Thread(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 if (G.allowForConnect) {
                     try {
                         if (finalWs != null) {
                             Log.i("SOC_WebSocket", "Connecting");
                             HelperConnectionState.connectionState(
-                                Config.ConnectionState.CONNECTING);
+                                    Config.ConnectionState.CONNECTING);
                             finalWs.connect();
                         }
                     } catch (WebSocketException e) {
@@ -135,7 +141,8 @@ public class WebSocketClient {
     private static void checkGetInstanceSuccessfully() {
 
         G.handler.postDelayed(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 if (webSocketClient == null || !webSocketClient.isOpen()) {
                     reconnect();
                 }
@@ -170,7 +177,8 @@ public class WebSocketClient {
 
         if (webSocketClient == null || !webSocketClient.isOpen()) {
             G.handler.postDelayed(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     if (timeDifference(latestConnectionTryTiming)) {
                         allowForReconnecting = true;
                         waitingForReconnecting = false;
@@ -245,7 +253,8 @@ public class WebSocketClient {
     private static void checkFirstResponse() {
 
         Thread thread = new Thread(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
 
                 while (G.symmetricKey == null && G.socketConnection) {
 
@@ -258,7 +267,8 @@ public class WebSocketClient {
                         }
 
                         G.handler.post(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 if (G.symmetricKey == null && G.socketConnection) {
                                     Log.i("SOC", "I need 30001");
                                     WebSocketClient.getInstance().sendText("i need 30001");

@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityChat;
@@ -38,10 +39,12 @@ import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.adapters.HeaderAdapter;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
-import io.realm.Realm;
-import io.realm.RealmList;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmList;
 
 public class ContactGroupFragment extends Fragment {
     private FastAdapter fastAdapter;
@@ -61,13 +64,15 @@ public class ContactGroupFragment extends Fragment {
         return new ContactGroupFragment();
     }
 
-    @Nullable @Override
+    @Nullable
+    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-        @Nullable Bundle savedInstanceState) {
+                             @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_contact_group, container, false);
     }
 
-    @Override public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         Bundle bundle = this.getArguments();
@@ -80,19 +85,21 @@ public class ContactGroupFragment extends Fragment {
         edtSearch = (EditText) view.findViewById(R.id.fcg_edt_search);
 
         MaterialDesignTextView btnBack =
-            (MaterialDesignTextView) view.findViewById(R.id.fcg_btn_back);
+                (MaterialDesignTextView) view.findViewById(R.id.fcg_btn_back);
         RippleView rippleBack = (RippleView) view.findViewById(R.id.fcg_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
                 getActivity().getSupportFragmentManager().popBackStack();
             }
         });
 
         MaterialDesignTextView btnDone =
-            (MaterialDesignTextView) view.findViewById(R.id.fcg_btn_done);
+                (MaterialDesignTextView) view.findViewById(R.id.fcg_btn_done);
         RippleView rippleDone = (RippleView) view.findViewById(R.id.fcg_ripple_done);
         rippleDone.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
                 G.onGroupAddMember = new OnGroupAddMember() {
                     @Override
                     public void onGroupAddMember() { //TODO [Saeed Mozaffari] [2016-10-15 10:34 AM] - bayad id ra begirim ke daghighan motevajeh shavim ke chand nafar add shodeand
@@ -102,12 +109,13 @@ public class ContactGroupFragment extends Fragment {
                             Realm realm = Realm.getDefaultInstance();
 
                             realm.executeTransaction(new Realm.Transaction() {
-                                @Override public void execute(Realm realm) {
+                                @Override
+                                public void execute(Realm realm) {
                                     RealmRoom realmRoom = realm.where(RealmRoom.class)
-                                        .equalTo(RealmRoomFields.ID, roomId)
-                                        .findFirst();
+                                            .equalTo(RealmRoomFields.ID, roomId)
+                                            .findFirst();
                                     realmRoom.getGroupRoom()
-                                        .setParticipantsCountLabel(countAddMemberResponse + "");
+                                            .setParticipantsCountLabel(countAddMemberResponse + "");
                                 }
                             });
 
@@ -120,17 +128,20 @@ public class ContactGroupFragment extends Fragment {
                         }
                     }
 
-                    @Override public void onError(int majorCode, int minorCode) {
+                    @Override
+                    public void onError(int majorCode, int minorCode) {
                         if (majorCode == 302 && minorCode == 1) {
                             getActivity().runOnUiThread(new Runnable() {
-                                @Override public void run() {
+                                @Override
+                                public void run() {
                                     final Snackbar snack =
-                                        Snackbar.make(view.findViewById(android.R.id.content),
-                                            getResources().getString(R.string.E_302_1),
-                                            Snackbar.LENGTH_LONG);
+                                            Snackbar.make(view.findViewById(android.R.id.content),
+                                                    getResources().getString(R.string.E_302_1),
+                                                    Snackbar.LENGTH_LONG);
 
                                     snack.setAction("CANCEL", new View.OnClickListener() {
-                                        @Override public void onClick(View view) {
+                                        @Override
+                                        public void onClick(View view) {
                                             snack.dismiss();
                                         }
                                     });
@@ -139,14 +150,16 @@ public class ContactGroupFragment extends Fragment {
                             });
                         } else if (majorCode == 302 && minorCode == 2) {
                             getActivity().runOnUiThread(new Runnable() {
-                                @Override public void run() {
+                                @Override
+                                public void run() {
                                     final Snackbar snack =
-                                        Snackbar.make(view.findViewById(android.R.id.content),
-                                            getResources().getString(R.string.E_302_2),
-                                            Snackbar.LENGTH_LONG);
+                                            Snackbar.make(view.findViewById(android.R.id.content),
+                                                    getResources().getString(R.string.E_302_2),
+                                                    Snackbar.LENGTH_LONG);
 
                                     snack.setAction("CANCEL", new View.OnClickListener() {
-                                        @Override public void onClick(View view) {
+                                        @Override
+                                        public void onClick(View view) {
                                             snack.dismiss();
                                         }
                                     });
@@ -155,14 +168,16 @@ public class ContactGroupFragment extends Fragment {
                             });
                         } else if (majorCode == 302 && minorCode == 3) {
                             getActivity().runOnUiThread(new Runnable() {
-                                @Override public void run() {
+                                @Override
+                                public void run() {
                                     final Snackbar snack =
-                                        Snackbar.make(view.findViewById(android.R.id.content),
-                                            getResources().getString(R.string.E_302_3),
-                                            Snackbar.LENGTH_LONG);
+                                            Snackbar.make(view.findViewById(android.R.id.content),
+                                                    getResources().getString(R.string.E_302_3),
+                                                    Snackbar.LENGTH_LONG);
 
                                     snack.setAction("CANCEL", new View.OnClickListener() {
-                                        @Override public void onClick(View view) {
+                                        @Override
+                                        public void onClick(View view) {
                                             snack.dismiss();
                                         }
                                     });
@@ -171,14 +186,16 @@ public class ContactGroupFragment extends Fragment {
                             });
                         } else if (majorCode == 302 && minorCode == 4) {
                             getActivity().runOnUiThread(new Runnable() {
-                                @Override public void run() {
+                                @Override
+                                public void run() {
                                     final Snackbar snack =
-                                        Snackbar.make(view.findViewById(android.R.id.content),
-                                            getResources().getString(R.string.E_302_4),
-                                            Snackbar.LENGTH_LONG);
+                                            Snackbar.make(view.findViewById(android.R.id.content),
+                                                    getResources().getString(R.string.E_302_4),
+                                                    Snackbar.LENGTH_LONG);
 
                                     snack.setAction("CANCEL", new View.OnClickListener() {
-                                        @Override public void onClick(View view) {
+                                        @Override
+                                        public void onClick(View view) {
                                             snack.dismiss();
                                         }
                                     });
@@ -187,14 +204,16 @@ public class ContactGroupFragment extends Fragment {
                             });
                         } else if (majorCode == 303) {
                             getActivity().runOnUiThread(new Runnable() {
-                                @Override public void run() {
+                                @Override
+                                public void run() {
                                     final Snackbar snack =
-                                        Snackbar.make(view.findViewById(android.R.id.content),
-                                            getResources().getString(R.string.E_303),
-                                            Snackbar.LENGTH_LONG);
+                                            Snackbar.make(view.findViewById(android.R.id.content),
+                                                    getResources().getString(R.string.E_303),
+                                                    Snackbar.LENGTH_LONG);
 
                                     snack.setAction("CANCEL", new View.OnClickListener() {
-                                        @Override public void onClick(View view) {
+                                        @Override
+                                        public void onClick(View view) {
                                             snack.dismiss();
                                         }
                                     });
@@ -203,14 +222,16 @@ public class ContactGroupFragment extends Fragment {
                             });
                         } else if (majorCode == 304) {
                             getActivity().runOnUiThread(new Runnable() {
-                                @Override public void run() {
+                                @Override
+                                public void run() {
                                     final Snackbar snack =
-                                        Snackbar.make(view.findViewById(android.R.id.content),
-                                            getResources().getString(R.string.E_304),
-                                            Snackbar.LENGTH_LONG);
+                                            Snackbar.make(view.findViewById(android.R.id.content),
+                                                    getResources().getString(R.string.E_304),
+                                                    Snackbar.LENGTH_LONG);
 
                                     snack.setAction("CANCEL", new View.OnClickListener() {
-                                        @Override public void onClick(View view) {
+                                        @Override
+                                        public void onClick(View view) {
                                             snack.dismiss();
                                         }
                                     });
@@ -219,14 +240,16 @@ public class ContactGroupFragment extends Fragment {
                             });
                         } else if (majorCode == 305) {
                             getActivity().runOnUiThread(new Runnable() {
-                                @Override public void run() {
+                                @Override
+                                public void run() {
                                     final Snackbar snack =
-                                        Snackbar.make(view.findViewById(android.R.id.content),
-                                            getResources().getString(R.string.E_305),
-                                            Snackbar.LENGTH_LONG);
+                                            Snackbar.make(view.findViewById(android.R.id.content),
+                                                    getResources().getString(R.string.E_305),
+                                                    Snackbar.LENGTH_LONG);
 
                                     snack.setAction("CANCEL", new View.OnClickListener() {
-                                        @Override public void onClick(View view) {
+                                        @Override
+                                        public void onClick(View view) {
                                             snack.dismiss();
                                         }
                                     });
@@ -239,7 +262,8 @@ public class ContactGroupFragment extends Fragment {
 
                 Realm realm = Realm.getDefaultInstance();
                 realm.executeTransaction(new Realm.Transaction() {
-                    @Override public void execute(Realm realm) {
+                    @Override
+                    public void execute(Realm realm) {
                         final RealmList<RealmMember> members = new RealmList<>();
                         for (long peerId : getSelectedList()) {
 
@@ -248,7 +272,7 @@ public class ContactGroupFragment extends Fragment {
                             int autoIncrement = 0;
                             if (realm.where(RealmMember.class).max("id") != null) {
                                 autoIncrement =
-                                    realm.where(RealmMember.class).max("id").intValue() + 1;
+                                        realm.where(RealmMember.class).max("id").intValue() + 1;
                             }
                             realmMember.setId(autoIncrement);
                             realmMember.setPeerId(peerId);
@@ -259,12 +283,12 @@ public class ContactGroupFragment extends Fragment {
 
                             //request for add member
                             new RequestGroupAddMember().groupAddMember(roomId, peerId, 0,
-                                ProtoGlobal.GroupRoom.Role.MEMBER);
+                                    ProtoGlobal.GroupRoom.Role.MEMBER);
                         }
 
                         RealmRoom realmRoom = realm.where(RealmRoom.class)
-                            .equalTo(RealmRoomFields.ID, roomId)
-                            .findFirst();
+                                .equalTo(RealmRoomFields.ID, roomId)
+                                .findFirst();
 
                         for (RealmMember member : realmRoom.getGroupRoom().getMembers()) {
                             members.add(member);
@@ -285,9 +309,10 @@ public class ContactGroupFragment extends Fragment {
         final HeaderAdapter headerAdapter = new HeaderAdapter();
         final ItemAdapter itemAdapter = new ItemAdapter();
         itemAdapter.withFilterPredicate(new IItemAdapter.Predicate<ContactItemGroup>() {
-            @Override public boolean filter(ContactItemGroup item, CharSequence constraint) {
+            @Override
+            public boolean filter(ContactItemGroup item, CharSequence constraint) {
                 return !item.mContact.displayName.toLowerCase()
-                    .startsWith(String.valueOf(constraint).toLowerCase());
+                        .startsWith(String.valueOf(constraint).toLowerCase());
             }
         });
         fastAdapter.withOnClickListener(new FastAdapter.OnClickListener<ContactItemGroup>() {
@@ -309,12 +334,13 @@ public class ContactGroupFragment extends Fragment {
 
             }
 
-            @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                 if (charSequence.length() > sizeTextEditText) {
                     String s = edtSearch.getText()
-                        .toString()
-                        .substring(sizeTextEditText, charSequence.length());
+                            .toString()
+                            .substring(sizeTextEditText, charSequence.length());
                     itemAdapter.filter(s);
                 } else {
                     itemAdapter.filter("");
@@ -325,13 +351,15 @@ public class ContactGroupFragment extends Fragment {
 
             }
 
-            @Override public void afterTextChanged(Editable editable) {
+            @Override
+            public void afterTextChanged(Editable editable) {
 
             }
         });
 
         edtSearch.setOnKeyListener(new View.OnKeyListener() {
-            @Override public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+            @Override
+            public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
                 if ((keyCode == KeyEvent.KEYCODE_DEL)) {
                     if (edtSearch.getText().length() <= sizeTextEditText) {
                         return true;
@@ -348,14 +376,14 @@ public class ContactGroupFragment extends Fragment {
 
         //get our recyclerView and do basic setup
         RecyclerView rv =
-            (RecyclerView) view.findViewById(R.id.fcg_recycler_view_add_item_to_group);
+                (RecyclerView) view.findViewById(R.id.fcg_recycler_view_add_item_to_group);
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
         rv.setItemAnimator(new DefaultItemAnimator());
         rv.setAdapter(stickyHeaderAdapter.wrap(itemAdapter.wrap(headerAdapter.wrap(fastAdapter))));
 
         //this adds the Sticky Headers within our list
         final StickyRecyclerHeadersDecoration decoration =
-            new StickyRecyclerHeadersDecoration(stickyHeaderAdapter);
+                new StickyRecyclerHeadersDecoration(stickyHeaderAdapter);
         rv.addItemDecoration(decoration);
 
         List<IItem> items = new ArrayList<>();
@@ -363,13 +391,14 @@ public class ContactGroupFragment extends Fragment {
 
         for (StructContactInfo contact : contacts) {
             items.add(new ContactItemGroup().setContact(contact)
-                .withIdentifier(100 + contacts.indexOf(contact)));
+                    .withIdentifier(100 + contacts.indexOf(contact)));
         }
         itemAdapter.add(items);
 
         //so the headers are aware of changes
         stickyHeaderAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override public void onChanged() {
+            @Override
+            public void onChanged() {
                 decoration.invalidateHeaders();
             }
         });
@@ -391,7 +420,7 @@ public class ContactGroupFragment extends Fragment {
         }
 
         txtNumberOfMember.setText(
-            selectedNumber + " / " + contacts.size() + getString(R.string.member));
+                selectedNumber + " / " + contacts.size() + getString(R.string.member));
         sizeTextEditText = textString.length();
         edtSearch.setText(textString);
     }
@@ -410,7 +439,8 @@ public class ContactGroupFragment extends Fragment {
         return list;
     }
 
-    @Override public void onSaveInstanceState(Bundle outState) {
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
         //add the values which need to be saved from the adapter to the bundle
         outState = fastAdapter.saveInstanceState(outState);
         super.onSaveInstanceState(outState);

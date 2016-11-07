@@ -7,7 +7,7 @@ public class RequestGroupGetDraft {
     public void groupGetDraft(long roomId) {
 
         ProtoGroupGetDraft.GroupGetDraft.Builder builder =
-            ProtoGroupGetDraft.GroupGetDraft.newBuilder();
+                ProtoGroupGetDraft.GroupGetDraft.newBuilder();
 
         builder.setRoomId(roomId);
 

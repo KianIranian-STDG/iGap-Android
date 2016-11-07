@@ -2,6 +2,7 @@ package com.iGap.realm;
 
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.enums.GroupChatRole;
+
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
@@ -22,7 +23,7 @@ public class RealmGroupRoom extends RealmObject {
      * @return RealmGroupRoom
      */
     public static RealmGroupRoom convert(ProtoGlobal.GroupRoom room, RealmGroupRoom realmGroupRoom,
-        Realm realm) {
+                                         Realm realm) {
         if (realmGroupRoom == null) {
             realmGroupRoom = realm.createObject(RealmGroupRoom.class);
         }

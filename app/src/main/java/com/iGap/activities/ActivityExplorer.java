@@ -12,13 +12,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AdapterExplorer;
 import com.iGap.helper.HelperMimeType;
 import com.iGap.module.StructExplorerItem;
+
 import java.io.File;
 import java.util.ArrayList;
+
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
@@ -38,11 +41,13 @@ public class ActivityExplorer extends ActivityEnhanced {
     RecyclerView recyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
 
-    @Override protected void attachBaseContext(Context newBase) {
+    @Override
+    protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
-    @Override public void onCreate(@Nullable Bundle savedInstanceState) {
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_explorer);
 
@@ -59,7 +64,8 @@ public class ActivityExplorer extends ActivityEnhanced {
         btnBack.setTypeface(G.fontawesome);
         btnBack.setOnClickListener(new View.OnClickListener() {
 
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
 
                 onBackPressed();
             }
@@ -79,7 +85,8 @@ public class ActivityExplorer extends ActivityEnhanced {
         fill(nextnode, position);
     }
 
-    @Override public void onBackPressed() {
+    @Override
+    public void onBackPressed() {
         int size = node.size();
         if (size == rootcount) {
             super.onBackPressed();
@@ -141,13 +148,14 @@ public class ActivityExplorer extends ActivityEnhanced {
         }
 
         recyclerView.setAdapter(
-            new AdapterExplorer(item, new AdapterExplorer.OnItemClickListenerExplorer() {
+                new AdapterExplorer(item, new AdapterExplorer.OnItemClickListenerExplorer() {
 
-                @Override public void onItemClick(View view, int position) {
+                    @Override
+                    public void onItemClick(View view, int position) {
 
-                    onItemClickInernal(position);
-                }
-            }));
+                        onItemClickInernal(position);
+                    }
+                }));
     }
 
     void fill(String nextnod, int position) {
@@ -187,13 +195,14 @@ public class ActivityExplorer extends ActivityEnhanced {
                 }
 
                 recyclerView.setAdapter(
-                    new AdapterExplorer(item, new AdapterExplorer.OnItemClickListenerExplorer() {
+                        new AdapterExplorer(item, new AdapterExplorer.OnItemClickListenerExplorer() {
 
-                        @Override public void onItemClick(View view, int position) {
+                            @Override
+                            public void onItemClick(View view, int position) {
 
-                            onItemClickInernal(position);
-                        }
-                    }));
+                                onItemClickInernal(position);
+                            }
+                        }));
 
                 node.add(nextnod);
             } else if (fileDir.isFile()) {

@@ -33,14 +33,17 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.interfaces.OnColorChangedListenerSelect;
 import com.iGap.module.AttachFile;
 import com.iGap.module.ColorPiker;
+
 import java.io.File;
 import java.io.FileOutputStream;
+
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
@@ -60,11 +63,13 @@ public class ActivityPaint extends ActivityEnhanced {
     private Paint paint;
     private FrameLayout frameLayout;
 
-    @Override protected void attachBaseContext(Context newBase) {
+    @Override
+    protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
-    @Override public void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_paint);
@@ -86,7 +91,8 @@ public class ActivityPaint extends ActivityEnhanced {
         tvclose.setTypeface(G.fontawesome);
         tvclose.setOnClickListener(new OnClickListener() {
 
-            @Override public void onClick(View arg0) {
+            @Override
+            public void onClick(View arg0) {
                 showAlertDialogExit();
             }
         });
@@ -95,7 +101,8 @@ public class ActivityPaint extends ActivityEnhanced {
         tvRefesh.setTypeface(G.fontawesome);
         tvRefesh.setOnClickListener(new OnClickListener() {
 
-            @Override public void onClick(View arg0) {
+            @Override
+            public void onClick(View arg0) {
                 drawingView = new DrawingView(ActivityPaint.this, false, null);
                 frameLayout.removeAllViews();
                 frameLayout.addView(drawingView);
@@ -106,7 +113,8 @@ public class ActivityPaint extends ActivityEnhanced {
         tvSave.setTypeface(G.fontawesome);
         tvSave.setOnClickListener(new OnClickListener() {
 
-            @Override public void onClick(View arg0) {
+            @Override
+            public void onClick(View arg0) {
                 savePicToFile("paint", false);
             }
         });
@@ -115,7 +123,8 @@ public class ActivityPaint extends ActivityEnhanced {
         tvSend.setTypeface(G.fontawesome);
         tvSend.setOnClickListener(new OnClickListener() {
 
-            @Override public void onClick(View arg0) {
+            @Override
+            public void onClick(View arg0) {
                 savePicToFile("paint", true);
             }
         });
@@ -124,7 +133,8 @@ public class ActivityPaint extends ActivityEnhanced {
         tvEraser.setTypeface(G.fontawesome);
         tvEraser.setOnClickListener(new OnClickListener() {
 
-            @Override public void onClick(View arg0) {
+            @Override
+            public void onClick(View arg0) {
                 setPaintClear();
             }
         });
@@ -133,7 +143,8 @@ public class ActivityPaint extends ActivityEnhanced {
         tvPaint.setTypeface(G.fontawesome);
         tvPaint.setOnClickListener(new OnClickListener() {
 
-            @Override public void onClick(View arg0) {
+            @Override
+            public void onClick(View arg0) {
                 initDialogBrush();
                 setPaintColor();
             }
@@ -143,7 +154,8 @@ public class ActivityPaint extends ActivityEnhanced {
         tvColor.setTypeface(G.fontawesome);
         tvColor.setOnClickListener(new OnClickListener() {
 
-            @Override public void onClick(View arg0) {
+            @Override
+            public void onClick(View arg0) {
 
                 showDialogSelectColor();
             }
@@ -153,7 +165,8 @@ public class ActivityPaint extends ActivityEnhanced {
         tvSience.setTypeface(G.fontawesome);
         tvSience.setOnClickListener(new OnClickListener() {
 
-            @Override public void onClick(View arg0) {
+            @Override
+            public void onClick(View arg0) {
                 captureimage = false;
                 attachFile.requestOpenGalleryForImageSingleSelect();
             }
@@ -163,7 +176,8 @@ public class ActivityPaint extends ActivityEnhanced {
         tvCamera.setTypeface(G.fontawesome);
         tvCamera.setOnClickListener(new OnClickListener() {
 
-            @Override public void onClick(View arg0) {
+            @Override
+            public void onClick(View arg0) {
                 captureimage = true;
                 attachFile.requestTakePicture();
             }
@@ -172,20 +186,22 @@ public class ActivityPaint extends ActivityEnhanced {
 
     private void showDialogSelectColor() {
         ColorPiker d =
-            new ColorPiker(ActivityPaint.this, paintColor, new OnColorChangedListenerSelect() {
+                new ColorPiker(ActivityPaint.this, paintColor, new OnColorChangedListenerSelect() {
 
-                @Override public void colorChanged(String key, int color) {
+                    @Override
+                    public void colorChanged(String key, int color) {
 
-                    if (key.equals("ok")) {
-                        paintColor = color;
-                        setPaintColor();
+                        if (key.equals("ok")) {
+                            paintColor = color;
+                            setPaintColor();
+                        }
                     }
-                }
 
-                @Override public void Confirmation(Boolean result) {
+                    @Override
+                    public void Confirmation(Boolean result) {
 
-                }
-            });
+                    }
+                });
 
         Display display = getWindowManager().getDefaultDisplay();
         @SuppressWarnings("deprecation") int screenWidth = display.getWidth();
@@ -218,11 +234,13 @@ public class ActivityPaint extends ActivityEnhanced {
         skBrushSize.setProgress(brushSize - minBrushSize);
         skBrushSize.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
-            @Override public void onStopTrackingTouch(SeekBar seekBar) {
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
                 setPaintColor();
             }
 
-            @Override public void onStartTrackingTouch(SeekBar seekBar) {
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
                 tvBrushSize.setText(brushSize + "");
             }
 
@@ -260,15 +278,15 @@ public class ActivityPaint extends ActivityEnhanced {
     void savePicToFile(String fileName, Boolean send) {
 
         File dir =
-            new File(Environment.getExternalStorageDirectory().getAbsoluteFile() + "/igap/paint");
+                new File(Environment.getExternalStorageDirectory().getAbsoluteFile() + "/igap/paint");
         if (!dir.exists()) dir.mkdirs();
         File f = new File(dir, fileName + ".png");
 
         int x = 0;
         while (f.exists()) {
             f = new File(
-                Environment.getExternalStorageDirectory().getAbsoluteFile() + "/igap/paint",
-                fileName + Integer.toString(x) + ".png");
+                    Environment.getExternalStorageDirectory().getAbsoluteFile() + "/igap/paint",
+                    fileName + Integer.toString(x) + ".png");
             x++;
         }
 
@@ -289,11 +307,12 @@ public class ActivityPaint extends ActivityEnhanced {
             finish();
         } else {
             Toast.makeText(getApplicationContext(), getString(R.string.picture_is_saved_en),
-                Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_SHORT).show();
         }
     }
 
-    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == Activity.RESULT_OK) {
@@ -305,7 +324,7 @@ public class ActivityPaint extends ActivityEnhanced {
                         setImageToBitmap(data);
                     } catch (Exception e) {
                         Toast.makeText(ActivityPaint.this, getString(R.string.cannot_load_data_en),
-                            Toast.LENGTH_SHORT).show();
+                                Toast.LENGTH_SHORT).show();
                         return;
                     }
 
@@ -316,7 +335,7 @@ public class ActivityPaint extends ActivityEnhanced {
                         setImageToBitmap1();
                     } catch (Exception e) {
                         Toast.makeText(ActivityPaint.this, getString(R.string.cannot_load_data_en),
-                            Toast.LENGTH_SHORT).show();
+                                Toast.LENGTH_SHORT).show();
                         return;
                     }
                     break;
@@ -329,16 +348,17 @@ public class ActivityPaint extends ActivityEnhanced {
     private void showAlertDialogExit() {
 
         new MaterialDialog.Builder(ActivityPaint.this).title(getString(R.string.do_you_want_exit))
-            .positiveText(R.string.ok)
-            .negativeText(R.string.cancel)
-            .callback(new MaterialDialog.ButtonCallback() {
-                @Override public void onPositive(MaterialDialog dialog) {
-                    super.onPositive(dialog);
+                .positiveText(R.string.ok)
+                .negativeText(R.string.cancel)
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        super.onPositive(dialog);
 
-                    ActivityPaint.this.finish();
-                }
-            })
-            .show();
+                        ActivityPaint.this.finish();
+                    }
+                })
+                .show();
     }
 
     private void setImageToBitmap(Intent data) {
@@ -385,7 +405,8 @@ public class ActivityPaint extends ActivityEnhanced {
             this.PicAddress = picAddress;
         }
 
-        @Override protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        @Override
+        protected void onSizeChanged(int w, int h, int oldw, int oldh) {
             super.onSizeChanged(w, h, oldw, oldh);
 
             mBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
@@ -395,9 +416,9 @@ public class ActivityPaint extends ActivityEnhanced {
             if (fromGallery) {
 
                 if (!captureimage) {
-                    String[] projection = { MediaColumns.DATA };
+                    String[] projection = {MediaColumns.DATA};
                     @SuppressWarnings("deprecation") Cursor cursor =
-                        managedQuery(PicAddress, projection, null, null, null);
+                            managedQuery(PicAddress, projection, null, null, null);
                     int column_index = cursor.getColumnIndexOrThrow(MediaColumns.DATA);
                     cursor.moveToFirst();
                     String selectedImagePath = cursor.getString(column_index);
@@ -419,7 +440,8 @@ public class ActivityPaint extends ActivityEnhanced {
             }
         }
 
-        @Override protected void onDraw(Canvas canvas) {
+        @Override
+        protected void onDraw(Canvas canvas) {
             super.onDraw(canvas);
 
             canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
@@ -460,7 +482,8 @@ public class ActivityPaint extends ActivityEnhanced {
             mCanvas.drawPoint(mX, mY, paint);
         }
 
-        @Override public boolean onTouchEvent(MotionEvent event) {
+        @Override
+        public boolean onTouchEvent(MotionEvent event) {
             float x = event.getX();
             float y = event.getY();
 

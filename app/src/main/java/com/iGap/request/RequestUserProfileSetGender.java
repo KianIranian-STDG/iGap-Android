@@ -8,7 +8,7 @@ public class RequestUserProfileSetGender {
     public void setUserProfileGender(ProtoGlobal.Gender gender) {
 
         ProtoUserProfileGender.UserProfileSetGender.Builder userProfileGender =
-            ProtoUserProfileGender.UserProfileSetGender.newBuilder();
+                ProtoUserProfileGender.UserProfileSetGender.newBuilder();
         userProfileGender.setGender(gender);
 
         RequestWrapper requestWrapper = new RequestWrapper(104, userProfileGender);

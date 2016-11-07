@@ -16,15 +16,18 @@ public class ClientConditionResponse extends MessageHandler {
         this.identity = identity;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
         Log.i("CLI", "handler : " + message);
     }
 
-    @Override public void timeOut() {
+    @Override
+    public void timeOut() {
         Log.i("CLI", "timeOut : " + message);
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
         Log.i("CLI", "error : " + message);
     }
 }

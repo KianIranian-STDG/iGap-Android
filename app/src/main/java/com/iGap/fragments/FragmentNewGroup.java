@@ -25,6 +25,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.IntentRequests;
@@ -42,6 +43,7 @@ import com.iGap.proto.ProtoClientGetRoom;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.request.RequestClientGetRoom;
 import com.iGap.request.RequestGroupCreate;
+
 import java.io.File;
 
 public class FragmentNewGroup extends android.support.v4.app.Fragment {
@@ -67,11 +69,14 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
         return new FragmentNewGroup();
     }
 
-    @Nullable @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.activity_new_group, container, false);
     }
 
-    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         getIntentData(this.getArguments());
@@ -96,7 +101,8 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
         RippleView rippleBack = (RippleView) view.findViewById(R.id.ng_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
                 InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(rippleView.getWindowToken(), 0);
                 if (G.IMAGE_NEW_GROUP.exists()) {
@@ -117,7 +123,8 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
 
         parent = (RelativeLayout) view.findViewById(R.id.ng_fragmentContainer);
         parent.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
             }
         });
@@ -127,38 +134,40 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
 
         RippleView rippleCircleImage = (RippleView) view.findViewById(R.id.ng_ripple_circle_image);
         rippleCircleImage.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
                 new MaterialDialog.Builder(getActivity()).title(getString(R.string.choose_picture))
-                    .negativeText(getString(R.string.cancel))
-                    .items(R.array.profile)
-                    .itemsCallback(new MaterialDialog.ListCallback() {
-                        @Override public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        .negativeText(getString(R.string.cancel))
+                        .items(R.array.profile)
+                        .itemsCallback(new MaterialDialog.ListCallback() {
+                            @Override
+                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                            if (text.toString().equals("From Camera")) {
+                                if (text.toString().equals("From Camera")) {
 
-                                if (G.context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
+                                    if (G.context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
 
-                                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                    if (prefix.equals("NewChanel")) {
-                                        uriIntent = Uri.fromFile(G.IMAGE_NEW_CHANEL);
+                                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                        if (prefix.equals("NewChanel")) {
+                                            uriIntent = Uri.fromFile(G.IMAGE_NEW_CHANEL);
+                                        } else {
+                                            uriIntent = Uri.fromFile(G.IMAGE_NEW_GROUP);
+                                        }
+
+                                        intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
+                                        startActivityForResult(intent, IntentRequests.REQ_CAMERA);
+                                        dialog.dismiss();
                                     } else {
-                                        uriIntent = Uri.fromFile(G.IMAGE_NEW_GROUP);
+                                        Toast.makeText(G.context, R.string.please_check_your_camera, Toast.LENGTH_SHORT).show();
                                     }
-
-                                    intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
-                                    startActivityForResult(intent, IntentRequests.REQ_CAMERA);
-                                    dialog.dismiss();
                                 } else {
-                                    Toast.makeText(G.context, R.string.please_check_your_camera, Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                                    startActivityForResult(intent, IntentRequests.REQ_GALLERY);
+                                    dialog.dismiss();
                                 }
-                            } else {
-                                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                                startActivityForResult(intent, IntentRequests.REQ_GALLERY);
-                                dialog.dismiss();
                             }
-                        }
-                    })
-                    .show();
+                        })
+                        .show();
             }
         });
 
@@ -175,7 +184,8 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
         final View ViewGroupName = view.findViewById(R.id.ng_view_newGroup);
         edtGroupName.setPadding(0, 8, 0, 8);
         edtGroupName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override public void onFocusChange(View view, boolean b) {
+            @Override
+            public void onFocusChange(View view, boolean b) {
 
                 if (b) {
                     ViewGroupName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
@@ -196,15 +206,18 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
         edtDescription.setPadding(0, 8, 0, 8);
 
         edtDescription.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 lastSpecialRequestsCursorPosition = edtDescription.getSelectionStart();
             }
 
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
 
             }
 
-            @Override public void afterTextChanged(Editable s) {
+            @Override
+            public void afterTextChanged(Editable s) {
                 edtDescription.removeTextChangedListener(this);
 
                 if (edtDescription.getLineCount() > 4) {
@@ -227,30 +240,31 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
 
         txtNextStep = (TextView) view.findViewById(R.id.ng_txt_nextStep);
         txtNextStep.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 if (edtGroupName.getText().toString().length() > 0) {
-                                                       prgWaiting.setVisibility(View.VISIBLE);
-                                                       txtNextStep.setEnabled(false);
-                                                       txtBack.setEnabled(false);
-                                                       txtCancel.setEnabled(false);
-                                                       edtDescription.setEnabled(false);
-                                                       edtGroupName.setEnabled(false);
-                                                       imgCircleImageView.setEnabled(false);
+                    prgWaiting.setVisibility(View.VISIBLE);
+                    txtNextStep.setEnabled(false);
+                    txtBack.setEnabled(false);
+                    txtCancel.setEnabled(false);
+                    edtDescription.setEnabled(false);
+                    edtGroupName.setEnabled(false);
+                    imgCircleImageView.setEnabled(false);
                     InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
-                                                       boolean success;
+                    boolean success;
                     String newName = edtGroupName.getText().toString().replace(" ", "_");
                     File file2 = new File(path, prefix + "_" + newName + Math.random() * 10000 + 1 + ".png");
-                                                       if (prefix.equals("NewChanel")) {
-                                                           success = G.IMAGE_NEW_CHANEL.renameTo(file2);
-                                                           startActivity(new Intent(G.context, ActivityNewChanelFinish.class));
-                                                           getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
-                                                       } else {
-                                                           success = G.IMAGE_NEW_GROUP.renameTo(file2);
-                                                           createGroup();
-                                                       }
+                    if (prefix.equals("NewChanel")) {
+                        success = G.IMAGE_NEW_CHANEL.renameTo(file2);
+                        startActivity(new Intent(G.context, ActivityNewChanelFinish.class));
+                        getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
+                    } else {
+                        success = G.IMAGE_NEW_GROUP.renameTo(file2);
+                        createGroup();
+                    }
                                                } else {
                     Toast.makeText(G.context, R.string.please_enter_group_name, Toast.LENGTH_SHORT).show();
                                                }
@@ -263,7 +277,8 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
         txtCancel.setOnClickListener(new View.OnClickListener()
 
                                      {
-                                         @Override public void onClick(View view) {
+                                         @Override
+                                         public void onClick(View view) {
                                              InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
                                              imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                                              if (G.IMAGE_NEW_GROUP.exists()) {
@@ -280,14 +295,17 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
 
     private void createGroup() {
         G.onGroupCreate = new OnGroupCreate() {
-            @Override public void onGroupCreate(long roomId) {
+            @Override
+            public void onGroupCreate(long roomId) {
                 getRoom(roomId);
             }
 
-            @Override public void onError(int majorCode, int minorCode) {
+            @Override
+            public void onError(int majorCode, int minorCode) {
 
                 getActivity().runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         prgWaiting.setVisibility(View.GONE);
                         txtNextStep.setEnabled(true);
                         txtBack.setEnabled(true);
@@ -300,11 +318,13 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
 
                 if (majorCode == 300 && minorCode == 1) {
                     getActivity().runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_302_1), Snackbar.LENGTH_LONG);
 
                             snack.setAction("CANCEL", new View.OnClickListener() {
-                                @Override public void onClick(View view) {
+                                @Override
+                                public void onClick(View view) {
                                     snack.dismiss();
                                 }
                             });
@@ -313,11 +333,13 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
                     });
                 } else if (majorCode == 300 && minorCode == 2) {
                     getActivity().runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_300_2), Snackbar.LENGTH_LONG);
 
                             snack.setAction("CANCEL", new View.OnClickListener() {
-                                @Override public void onClick(View view) {
+                                @Override
+                                public void onClick(View view) {
                                     snack.dismiss();
                                 }
                             });
@@ -326,11 +348,13 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
                     });
                 } else if (majorCode == 301) {
                     getActivity().runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_301), Snackbar.LENGTH_LONG);
 
                             snack.setAction("CANCEL", new View.OnClickListener() {
-                                @Override public void onClick(View view) {
+                                @Override
+                                public void onClick(View view) {
                                     snack.dismiss();
                                 }
                             });
@@ -347,7 +371,8 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
     private void getRoom(final long roomId) {
 
         G.onClientGetRoomResponse = new OnClientGetRoomResponse() {
-            @Override public void onClientGetRoomResponse(ProtoGlobal.Room room, ProtoClientGetRoom.ClientGetRoomResponse.Builder builder) {
+            @Override
+            public void onClientGetRoomResponse(ProtoGlobal.Room room, ProtoClientGetRoom.ClientGetRoomResponse.Builder builder) {
                 getFragmentManager().popBackStack();
                 android.support.v4.app.Fragment fragment = ContactGroupFragment.newInstance();
                 Bundle bundle = new Bundle();
@@ -355,23 +380,26 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
                 bundle.putBoolean("NewRoom", true);
                 fragment.setArguments(bundle);
                 getActivity().getSupportFragmentManager()
-                    .beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                    .addToBackStack(null)
-                    .replace(R.id.fragmentContainer, fragment)
-                    .commit();
+                        .beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                        .addToBackStack(null)
+                        .replace(R.id.fragmentContainer, fragment)
+                        .commit();
                 ActivityMain.mLeftDrawerLayout.closeDrawer();
                 prgWaiting.setVisibility(View.GONE);
                 getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
             }
 
-            @Override public void onError(int majorCode, int minorCode) {
+            @Override
+            public void onError(int majorCode, int minorCode) {
                 if (majorCode == 610) {
                     getActivity().runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_610), Snackbar.LENGTH_LONG);
 
                             snack.setAction("CANCEL", new View.OnClickListener() {
-                                @Override public void onClick(View view) {
+                                @Override
+                                public void onClick(View view) {
                                     snack.dismiss();
                                 }
                             });
@@ -380,11 +408,13 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
                     });
                 } else if (majorCode == 611) {
                     getActivity().runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_611), Snackbar.LENGTH_LONG);
 
                             snack.setAction("CANCEL", new View.OnClickListener() {
-                                @Override public void onClick(View view) {
+                                @Override
+                                public void onClick(View view) {
                                     snack.dismiss();
                                 }
                             });
@@ -393,11 +423,13 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
                     });
                 } else if (majorCode == 612) {
                     getActivity().runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_612), Snackbar.LENGTH_LONG);
 
                             snack.setAction("CANCEL", new View.OnClickListener() {
-                                @Override public void onClick(View view) {
+                                @Override
+                                public void onClick(View view) {
                                     snack.dismiss();
                                 }
                             });
@@ -406,11 +438,13 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
                     });
                 } else if (majorCode == 613) {
                     getActivity().runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_613), Snackbar.LENGTH_LONG);
 
                             snack.setAction("CANCEL", new View.OnClickListener() {
-                                @Override public void onClick(View view) {
+                                @Override
+                                public void onClick(View view) {
                                     snack.dismiss();
                                 }
                             });
@@ -419,11 +453,13 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
                     });
                 } else if (majorCode == 614) {
                     getActivity().runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_614), Snackbar.LENGTH_LONG);
 
                             snack.setAction("CANCEL", new View.OnClickListener() {
-                                @Override public void onClick(View view) {
+                                @Override
+                                public void onClick(View view) {
                                     snack.dismiss();
                                 }
                             });
@@ -439,7 +475,8 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
 
     //=======================result for picture
 
-    @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == IntentRequests.REQ_CAMERA && resultCode == getActivity().RESULT_OK) {// result for camera
@@ -473,7 +510,8 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
         }
     }
 
-    @Override public void onConfigurationChanged(Configuration newConfig) {
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         Toast.makeText(getActivity(), "ddd", Toast.LENGTH_SHORT).show();
     }

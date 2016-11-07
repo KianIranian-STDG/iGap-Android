@@ -19,18 +19,21 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RemoteViews;
 import android.widget.TextView;
+
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityMediaPlayer;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
-import io.realm.Realm;
-import io.realm.RealmList;
-import io.realm.RealmResults;
+
 import java.io.File;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmResults;
 
 /**
  * Created by android3 on 10/2/2016.
@@ -73,9 +76,9 @@ public class MusicPlayer {
     public MusicPlayer(LinearLayout layoutTripMusic) {
 
         remoteViews =
-            new RemoteViews(G.context.getPackageName(), R.layout.music_layout_notification);
+                new RemoteViews(G.context.getPackageName(), R.layout.music_layout_notification);
         notificationManager =
-            (NotificationManager) G.context.getSystemService(Context.NOTIFICATION_SERVICE);
+                (NotificationManager) G.context.getSystemService(Context.NOTIFICATION_SERVICE);
         handler = new Handler(G.context.getMainLooper());
 
         if (this.layoutTripMusic != null) this.layoutTripMusic.setVisibility(View.GONE);
@@ -99,7 +102,7 @@ public class MusicPlayer {
         repeatMode = str;
 
         SharedPreferences sharedPreferences = sharedPreferences =
-            G.context.getSharedPreferences("MusicSetting", G.context.MODE_PRIVATE);
+                G.context.getSharedPreferences("MusicSetting", G.context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("RepeatMode", str);
         editor.apply();
@@ -113,7 +116,7 @@ public class MusicPlayer {
 
         isShuffelOn = !isShuffelOn;
         SharedPreferences sharedPreferences = sharedPreferences =
-            G.context.getSharedPreferences("MusicSetting", G.context.MODE_PRIVATE);
+                G.context.getSharedPreferences("MusicSetting", G.context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("Shuffel", isShuffelOn);
         editor.apply();
@@ -127,7 +130,8 @@ public class MusicPlayer {
         MusicPlayer.layoutTripMusic = layout;
 
         layout.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 Intent intent = new Intent(G.context, ActivityMediaPlayer.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 G.context.startActivity(intent);
@@ -141,7 +145,8 @@ public class MusicPlayer {
         btnPlayMusic = (Button) layout.findViewById(R.id.mls_btn_play_music);
         btnPlayMusic.setTypeface(G.flaticon);
         btnPlayMusic.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 playAndPause();
             }
         });
@@ -149,7 +154,8 @@ public class MusicPlayer {
         btnCloseMusic = (Button) layout.findViewById(R.id.mls_btn_close);
         btnCloseMusic.setTypeface(G.flaticon);
         btnCloseMusic.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 closeLayoutMediaPlayer();
             }
         });
@@ -158,7 +164,7 @@ public class MusicPlayer {
             layout.setVisibility(View.VISIBLE);
             txt_music_name.setText(MusicPlayer.musicName);
             txt_music_time.setText(
-                MusicPlayer.milliSecondsToTimer((long) MusicPlayer.mp.getDuration()));
+                    MusicPlayer.milliSecondsToTimer((long) MusicPlayer.mp.getDuration()));
 
             if (MusicPlayer.mp.isPlaying()) {
                 btnPlayMusic.setText(G.context.getString(R.string.md_pause_button));
@@ -248,12 +254,12 @@ public class MusicPlayer {
     public static void nextMusic() {
         if (selectedMedia < mediaList.size()) {
             startPlayer(mediaList.get(selectedMedia).getAttachment().getLocalFilePath(), roomName,
-                roomId, false);
+                    roomId, false);
             selectedMedia++;
             if (onComplete != null) onComplete.complete(true, "update", "");
         } else {
             startPlayer(mediaList.get(0).getAttachment().getLocalFilePath(), roomName, roomId,
-                false);
+                    false);
             selectedMedia = 1;
             if (onComplete != null) onComplete.complete(true, "update", "");
         }
@@ -263,7 +269,7 @@ public class MusicPlayer {
         Random r = new Random();
         selectedMedia = r.nextInt(mediaList.size());
         startPlayer(mediaList.get(selectedMedia).getAttachment().getLocalFilePath(), roomName,
-            roomId, false);
+                roomId, false);
 
         if (onComplete != null) onComplete.complete(true, "update", "");
     }
@@ -273,14 +279,14 @@ public class MusicPlayer {
         if (selectedMedia > 1) {
             selectedMedia--;
             startPlayer(mediaList.get(selectedMedia - 1).getAttachment().getLocalFilePath(),
-                roomName, roomId, false);
+                    roomName, roomId, false);
 
             if (onComplete != null) onComplete.complete(true, "update", "");
         } else {
             int item = mediaList.size();
             if (item > 0) {
                 startPlayer(mediaList.get(item - 1).getAttachment().getLocalFilePath(), roomName,
-                    roomId, false);
+                        roomId, false);
                 selectedMedia = item;
                 if (onComplete != null) onComplete.complete(true, "update", "");
             }
@@ -301,7 +307,7 @@ public class MusicPlayer {
     }
 
     public static void startPlayer(String musicPath, String roomName, long roomId,
-        boolean updateList) {
+                                   boolean updateList) {
 
         MusicPlayer.musicPath = musicPath;
         MusicPlayer.roomName = roomName;
@@ -327,7 +333,8 @@ public class MusicPlayer {
                 if (!isShowMediaPlayer) {
 
                     handler.post(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             try {
                                 notificationManager.notify(notificationId, notification);
                             } catch (RuntimeException e) {
@@ -363,7 +370,8 @@ public class MusicPlayer {
                 if (!isShowMediaPlayer) {
 
                     handler.post(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             try {
                                 notificationManager.notify(notificationId, notification);
                             } catch (RuntimeException e) {
@@ -376,7 +384,8 @@ public class MusicPlayer {
 
                 mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 
-                    @Override public void onCompletion(MediaPlayer mp) {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
 
                         if (repeatMode.equals(RepeatMode.noRepeat.toString())) {
                             stopSound();
@@ -444,7 +453,7 @@ public class MusicPlayer {
         getMusicInfo();
 
         PendingIntent pi = PendingIntent.getActivity(G.context, 10,
-            new Intent(G.context, ActivityMediaPlayer.class), PendingIntent.FLAG_UPDATE_CURRENT);
+                new Intent(G.context, ActivityMediaPlayer.class), PendingIntent.FLAG_UPDATE_CURRENT);
 
         remoteViews.setTextViewText(R.id.mln_txt_music_name, MusicPlayer.musicName);
         remoteViews.setTextViewText(R.id.mln_txt_music_outher, MusicPlayer.musicInfoTitle);
@@ -460,19 +469,19 @@ public class MusicPlayer {
         Intent intentPrevious = new Intent(G.context, customButtonListener.class);
         intentPrevious.putExtra("mode", "previous");
         PendingIntent pendingIntentPrevious =
-            PendingIntent.getBroadcast(G.context, 1, intentPrevious, 0);
+                PendingIntent.getBroadcast(G.context, 1, intentPrevious, 0);
         remoteViews.setOnClickPendingIntent(R.id.mln_btn_Previous_music, pendingIntentPrevious);
 
         Intent intentPlayPause = new Intent(G.context, customButtonListener.class);
         intentPlayPause.putExtra("mode", "play");
         PendingIntent pendingIntentPlayPause =
-            PendingIntent.getBroadcast(G.context, 2, intentPlayPause, 0);
+                PendingIntent.getBroadcast(G.context, 2, intentPlayPause, 0);
         remoteViews.setOnClickPendingIntent(R.id.mln_btn_play_music, pendingIntentPlayPause);
 
         Intent intentforward = new Intent(G.context, customButtonListener.class);
         intentforward.putExtra("mode", "forward");
         PendingIntent pendingIntentforward =
-            PendingIntent.getBroadcast(G.context, 3, intentforward, 0);
+                PendingIntent.getBroadcast(G.context, 3, intentforward, 0);
         remoteViews.setOnClickPendingIntent(R.id.mln_btn_forward_music, pendingIntentforward);
 
         Intent intentClose = new Intent(G.context, customButtonListener.class);
@@ -481,17 +490,18 @@ public class MusicPlayer {
         remoteViews.setOnClickPendingIntent(R.id.mln_btn_close, pendingIntentClose);
 
         notification =
-            new NotificationCompat.Builder(G.context.getApplicationContext()).setTicker("music")
-                .setSmallIcon(R.mipmap.j_audio)
-                .setContentTitle(musicName)
-                //  .setContentText(place)
-                .setContent(remoteViews)
-                .setContentIntent(pi)
-                .setAutoCancel(false)
-                .build();
+                new NotificationCompat.Builder(G.context.getApplicationContext()).setTicker("music")
+                        .setSmallIcon(R.mipmap.j_audio)
+                        .setContentTitle(musicName)
+                        //  .setContentText(place)
+                        .setContent(remoteViews)
+                        .setContentIntent(pi)
+                        .setAutoCancel(false)
+                        .build();
 
         handler.post(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 try {
                     if (!isShowMediaPlayer) {
                         notificationManager.notify(notificationId, notification);
@@ -509,14 +519,14 @@ public class MusicPlayer {
         Realm realm = Realm.getDefaultInstance();
 
         RealmResults<RealmRoomMessage> roomMessages =
-            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
-            .findAll();
+                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
+                        .findAll();
 
         if (!roomMessages.isEmpty()) {
             for (RealmRoomMessage realmRoomMessage : roomMessages) {
                 if (realmRoomMessage.getMessageType().equals("VOICE")
-                    || realmRoomMessage.getMessageType().equals("AUDIO")
-                    || realmRoomMessage.getMessageType().equals("AUDIO_TEXT")) {
+                        || realmRoomMessage.getMessageType().equals("AUDIO")
+                        || realmRoomMessage.getMessageType().equals("AUDIO_TEXT")) {
                     mediaList.add(realmRoomMessage);
 
                     if (realmRoomMessage.getAttachment() != null) {
@@ -544,7 +554,8 @@ public class MusicPlayer {
         mTimeSecend = new Timer();
 
         mTimeSecend.schedule(new TimerTask() {
-            @Override public void run() {
+            @Override
+            public void run() {
 
                 updatePlayerTime();
                 time += 1000;
@@ -554,7 +565,8 @@ public class MusicPlayer {
         mTimer = new Timer();
         mTimer.schedule(new TimerTask() {
 
-            @Override public void run() {
+            @Override
+            public void run() {
 
                 if (musicProgress < 100) {
                     musicProgress++;
@@ -585,7 +597,8 @@ public class MusicPlayer {
         if (txt_music_time_counter != null) {
 
             txt_music_time_counter.post(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     txt_music_time_counter.setText(strTimer + "/");
                 }
             });
@@ -614,12 +627,12 @@ public class MusicPlayer {
         musicInfoTitle = "";
 
         MediaMetadataRetriever mediaMetadataRetriever =
-            (MediaMetadataRetriever) new MediaMetadataRetriever();
+                (MediaMetadataRetriever) new MediaMetadataRetriever();
         Uri uri = (Uri) Uri.fromFile(new File(MusicPlayer.musicPath));
         mediaMetadataRetriever.setDataSource(G.context, uri);
 
         String title = (String) mediaMetadataRetriever.extractMetadata(
-            MediaMetadataRetriever.METADATA_KEY_TITLE);
+                MediaMetadataRetriever.METADATA_KEY_TITLE);
 
         if (title != null) {
             musicInfo += title + "       ";
@@ -627,14 +640,14 @@ public class MusicPlayer {
         }
 
         String albumName =
-            mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
+                mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
         if (albumName != null) {
             musicInfo += albumName + "       ";
             musicInfoTitle = albumName;
         }
 
         String artist =
-            mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
+                mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
         if (artist != null) {
             musicInfo += artist + "       ";
             musicInfoTitle = artist;
@@ -651,10 +664,10 @@ public class MusicPlayer {
                 mediaThumpnail = BitmapFactory.decodeByteArray(data, 0, data.length);
                 int size = (int) G.context.getResources().getDimension(R.dimen.dp48);
                 remoteViews.setImageViewBitmap(R.id.mln_img_picture_music,
-                    Bitmap.createScaledBitmap(mediaThumpnail, size, size, false));
+                        Bitmap.createScaledBitmap(mediaThumpnail, size, size, false));
             } else {
                 remoteViews.setImageViewResource(R.id.mln_img_picture_music,
-                    R.mipmap.music_icon_green);
+                        R.mipmap.music_icon_green);
             }
         } catch (Exception e) {
         }
@@ -662,7 +675,7 @@ public class MusicPlayer {
 
     private void getAtribuits() {
         SharedPreferences sharedPreferences = sharedPreferences =
-            G.context.getSharedPreferences("MusicSetting", G.context.MODE_PRIVATE);
+                G.context.getSharedPreferences("MusicSetting", G.context.MODE_PRIVATE);
         repeatMode = sharedPreferences.getString("RepeatMode", RepeatMode.noRepeat.toString());
         isShuffelOn = sharedPreferences.getBoolean("Shuffel", false);
     }
@@ -675,7 +688,8 @@ public class MusicPlayer {
 
     public static class customButtonListener extends BroadcastReceiver {
 
-        @Override public void onReceive(Context context, Intent intent) {
+        @Override
+        public void onReceive(Context context, Intent intent) {
 
             String str = intent.getExtras().getString("mode");
 

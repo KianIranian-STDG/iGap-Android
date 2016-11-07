@@ -6,67 +6,60 @@
     android:gravity="left|center"
     android:orientation="horizontal"
     android:padding="@dimen/dp4"
-    android:textDirection="firstStrong"
-    >
+    android:textDirection="firstStrong">
 
-  <ImageView
-      android:layout_width="@dimen/dp40"
-      android:layout_height="@dimen/dp40"
-      android:layout_marginLeft="@dimen/dp8"
-      android:adjustViewBounds="true"
-      android:padding="@dimen/dp4"
-      android:src="@mipmap/reply"
-      android:visibility="visible"
-      />
+    <ImageView
+        android:layout_width="@dimen/dp40"
+        android:layout_height="@dimen/dp40"
+        android:layout_marginLeft="@dimen/dp8"
+        android:adjustViewBounds="true"
+        android:padding="@dimen/dp4"
+        android:src="@mipmap/reply"
+        android:visibility="visible" />
 
-  <View
-      android:layout_width="3dp"
-      android:layout_height="@dimen/dp40"
-      android:layout_marginLeft="@dimen/dp8"
-      android:background="@color/green"
-      />
+    <View
+        android:layout_width="3dp"
+        android:layout_height="@dimen/dp40"
+        android:layout_marginLeft="@dimen/dp8"
+        android:background="@color/green" />
 
 
-  <ImageView
-      android:id="@+id/chslr_imv_replay_pic"
-      android:layout_width="@dimen/dp40"
-      android:layout_height="@dimen/dp40"
-      android:layout_marginLeft="@dimen/dp8"
-      android:adjustViewBounds="true"
-      android:src="@mipmap/d"
-      android:visibility="gone"
-      />
+    <ImageView
+        android:id="@+id/chslr_imv_replay_pic"
+        android:layout_width="@dimen/dp40"
+        android:layout_height="@dimen/dp40"
+        android:layout_marginLeft="@dimen/dp8"
+        android:adjustViewBounds="true"
+        android:src="@mipmap/d"
+        android:visibility="gone" />
 
-  <LinearLayout
-      android:layout_width="0dp"
-      android:layout_height="match_parent"
-      android:layout_marginLeft="@dimen/dp8"
-      android:layout_weight="1"
-      android:gravity="left|center"
-      android:orientation="vertical"
-      >
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/dp8"
+        android:layout_weight="1"
+        android:gravity="left|center"
+        android:orientation="vertical">
 
-    <com.iGap.module.EmojiTextView
-        android:id="@+id/chslr_txt_replay_from"
-        android:maxWidth="@dimen/dp280"
-        android:singleLine="true"
-        android:text="SAMPLE TEXT"
-        android:textColor="@color/colorPrimary"
-        android:textSize="@dimen/sp14"
-        style="@style/ChatMessages.EmojiTextView"
-        />
+        <com.iGap.module.EmojiTextView
+            android:id="@+id/chslr_txt_replay_from"
+            style="@style/ChatMessages.EmojiTextView"
+            android:maxWidth="@dimen/dp280"
+            android:singleLine="true"
+            android:text="SAMPLE TEXT"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/sp14" />
 
-    <com.iGap.module.EmojiTextView
-        android:id="@+id/chslr_txt_replay_message"
-        android:layout_marginTop="@dimen/dp4"
-        android:maxWidth="@dimen/dp280"
-        android:singleLine="true"
-        android:text="SAMPLE TEXT"
-        android:textColor="@android:color/black"
-        android:textSize="@dimen/sp14"
-        style="@style/ChatMessages.EmojiTextView"
-        />
-  </LinearLayout>
+        <com.iGap.module.EmojiTextView
+            android:id="@+id/chslr_txt_replay_message"
+            style="@style/ChatMessages.EmojiTextView"
+            android:layout_marginTop="@dimen/dp4"
+            android:maxWidth="@dimen/dp280"
+            android:singleLine="true"
+            android:text="SAMPLE TEXT"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/sp14" />
+    </LinearLayout>
 
 
 </LinearLayout>

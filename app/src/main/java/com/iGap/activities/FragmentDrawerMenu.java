@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.fragments.FragmentNewGroup;
@@ -29,10 +30,12 @@ import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmAvatarPath;
 import com.iGap.realm.RealmUserInfo;
+
+import java.io.File;
+
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
-import java.io.File;
 
 public class FragmentDrawerMenu extends MenuFragment {
     public static Bitmap decodeBitmapProfile = null;
@@ -41,13 +44,15 @@ public class FragmentDrawerMenu extends MenuFragment {
     private String pathImageDecode;
     private ImageView imgUserPhoto;
 
-    @Override public void onCreate(@Nullable Bundle savedInstanceState) {
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getActivity();
     }
 
-    @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
-        Bundle savedInstanceState) {
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.layout_menu, container, false);
         initLayoutMenu(view);
@@ -98,9 +103,10 @@ public class FragmentDrawerMenu extends MenuFragment {
         setImage();
 
         RelativeLayout layoutUserPicture =
-            (RelativeLayout) v.findViewById(R.id.lm_layout_user_picture);
+                (RelativeLayout) v.findViewById(R.id.lm_layout_user_picture);
         layoutUserPicture.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 Intent intent = new Intent(G.context, ActivitySetting.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -111,38 +117,40 @@ public class FragmentDrawerMenu extends MenuFragment {
 
         LinearLayout layoutNewGroup = (LinearLayout) v.findViewById(R.id.lm_ll_new_group);
         layoutNewGroup.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 FragmentNewGroup fragment = FragmentNewGroup.newInstance();
                 Bundle bundle = new Bundle();
                 bundle.putString("TYPE", "NewGroup");
                 fragment.setArguments(bundle);
                 getActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
-                        R.anim.slide_in_right, R.anim.slide_out_left)
-                    .addToBackStack(null)
-                    .replace(R.id.fragmentContainer, fragment)
-                    .commit();
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
+                                R.anim.slide_in_right, R.anim.slide_out_left)
+                        .addToBackStack(null)
+                        .replace(R.id.fragmentContainer, fragment)
+                        .commit();
             }
         });
 
         LinearLayout layoutNewChat = (LinearLayout) v.findViewById(R.id.lm_ll_new_chat);
         layoutNewChat.setOnClickListener(new View.OnClickListener() {
 
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 Fragment fragment = RegisteredContactsFragment.newInstance();
                 Bundle bundle = new Bundle();
                 bundle.putString("TITLE", "New Chat");
                 fragment.setArguments(bundle);
                 getActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
-                        R.anim.slide_in_right, R.anim.slide_out_left)
-                    .addToBackStack(null)
-                    .replace(R.id.fragmentContainer, fragment)
-                    .commit();
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
+                                R.anim.slide_in_right, R.anim.slide_out_left)
+                        .addToBackStack(null)
+                        .replace(R.id.fragmentContainer, fragment)
+                        .commit();
 
                 ActivityMain.mLeftDrawerLayout.closeDrawer();
             }
@@ -150,48 +158,51 @@ public class FragmentDrawerMenu extends MenuFragment {
 
         LinearLayout layoutNewChannel = (LinearLayout) v.findViewById(R.id.lm_ll_new_channle);
         layoutNewChannel.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 FragmentNewGroup fragment = FragmentNewGroup.newInstance();
                 Bundle bundle = new Bundle();
                 bundle.putString("TYPE", "NewChanel");
                 fragment.setArguments(bundle);
                 getActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
-                        R.anim.slide_in_right, R.anim.slide_out_left)
-                    .addToBackStack(null)
-                    .replace(R.id.fragmentContainer, fragment)
-                    .commit();
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
+                                R.anim.slide_in_right, R.anim.slide_out_left)
+                        .addToBackStack(null)
+                        .replace(R.id.fragmentContainer, fragment)
+                        .commit();
             }
         });
 
         LinearLayout layoutContacts = (LinearLayout) v.findViewById(R.id.lm_ll_contacts);
         layoutContacts.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 Fragment fragment = RegisteredContactsFragment.newInstance();
                 Bundle bundle = new Bundle();
                 bundle.putString("TITLE", "Contacts");
                 fragment.setArguments(bundle);
                 getActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
-                        R.anim.slide_in_right, R.anim.slide_out_left)
-                    .addToBackStack(null)
-                    .replace(R.id.fragmentContainer, fragment)
-                    .commit();
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
+                                R.anim.slide_in_right, R.anim.slide_out_left)
+                        .addToBackStack(null)
+                        .replace(R.id.fragmentContainer, fragment)
+                        .commit();
                 ActivityMain.mLeftDrawerLayout.closeDrawer();
             }
         });
 
         LinearLayout layoutInviteFriends = (LinearLayout) v.findViewById(R.id.lm_ll_invite_friends);
         layoutInviteFriends.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
                 sendIntent.putExtra(Intent.EXTRA_TEXT,
-                    "Hey Join iGap : https://www.igap.im/iGap.apk");
+                        "Hey Join iGap : https://www.igap.im/iGap.apk");
                 sendIntent.setType("text/plain");
                 startActivity(sendIntent);
                 ActivityMain.mLeftDrawerLayout.closeDrawer();
@@ -200,10 +211,12 @@ public class FragmentDrawerMenu extends MenuFragment {
 
         LinearLayout layoutSetting = (LinearLayout) v.findViewById(R.id.lm_ll_setting);
         layoutSetting.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 HelperPermision.getStoragePermision(getActivity(), new OnGetPermision() {
-                    @Override public void Allow() {
+                    @Override
+                    public void Allow() {
                         Intent intent = new Intent(G.context, ActivitySetting.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
@@ -215,7 +228,8 @@ public class FragmentDrawerMenu extends MenuFragment {
 
         LinearLayout layoutiGapFAQ = (LinearLayout) v.findViewById(R.id.lm_ll_igap_faq);
         layoutiGapFAQ.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
             }
         });
     }
@@ -225,7 +239,7 @@ public class FragmentDrawerMenu extends MenuFragment {
     public void setImage() {
         final Realm realm = Realm.getDefaultInstance();
         RealmResults<RealmAvatarPath> realmAvatarPaths =
-            realm.where(RealmAvatarPath.class).findAll();
+                realm.where(RealmAvatarPath.class).findAll();
         realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
 
         if (realmAvatarPaths.size() > 0) {
@@ -236,26 +250,29 @@ public class FragmentDrawerMenu extends MenuFragment {
             RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
             if (realmUserInfo.getUserInfo().getColor() == null) {
                 imgUserPhoto.setImageBitmap(
-                    com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture(
-                        (int) imgUserPhoto.getContext().getResources().getDimension(R.dimen.dp60),
-                        " ", "#117f7f7f"));
+                        com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture(
+                                (int) imgUserPhoto.getContext().getResources().getDimension(R.dimen.dp60),
+                                " ", "#117f7f7f"));
             } else {
                 imgUserPhoto.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(
-                    (int) imgUserPhoto.getContext().getResources().getDimension(R.dimen.dp100), realmUserInfo.getUserInfo().getInitials(), realmUserInfo.getUserInfo().getColor()));
+                        (int) imgUserPhoto.getContext().getResources().getDimension(R.dimen.dp100), realmUserInfo.getUserInfo().getInitials(), realmUserInfo.getUserInfo().getColor()));
             }
         }
 
         G.onUserInfoResponse = new OnUserInfoResponse() {
-            @Override public void onUserInfo(ProtoGlobal.RegisteredUser user,
-                ProtoResponse.Response response) {
+            @Override
+            public void onUserInfo(ProtoGlobal.RegisteredUser user,
+                                   ProtoResponse.Response response) {
 
             }
 
-            @Override public void onUserInfoTimeOut() {
+            @Override
+            public void onUserInfoTimeOut() {
 
             }
 
-            @Override public void onUserInfoError(int majorCode, int minorCode) {
+            @Override
+            public void onUserInfoError(int majorCode, int minorCode) {
 
             }
         };
@@ -263,23 +280,25 @@ public class FragmentDrawerMenu extends MenuFragment {
         //new RequestUserInfo().userInfo(realm.where(RealmUserInfo.class).findFirst().getUserId());
 
         G.onChangeUserPhotoListener = new OnChangeUserPhotoListener() {
-            @Override public void onChangePhoto(final String imagePath) {
+            @Override
+            public void onChangePhoto(final String imagePath) {
                 G.handler.post(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         if (imagePath == null) {
 
                             Realm realm1 = Realm.getDefaultInstance();
                             RealmUserInfo realmUserInfo =
-                                realm1.where(RealmUserInfo.class).findFirst();
+                                    realm1.where(RealmUserInfo.class).findFirst();
                             imgUserPhoto.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(
-                                (int) imgUserPhoto.getContext()
-                                    .getResources().getDimension(R.dimen.dp100), realmUserInfo.getUserInfo().getInitials(), realmUserInfo.getUserInfo().getColor()));
+                                    (int) imgUserPhoto.getContext()
+                                            .getResources().getDimension(R.dimen.dp100), realmUserInfo.getUserInfo().getInitials(), realmUserInfo.getUserInfo().getColor()));
                             realm1.close();
                         } else {
                             File imgFile = new File(imagePath);
                             if (imgFile.exists()) {
                                 Bitmap myBitmap =
-                                    BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                                        BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                                 imgUserPhoto.setImageBitmap(myBitmap);
                             }
                         }
@@ -287,10 +306,11 @@ public class FragmentDrawerMenu extends MenuFragment {
                 });
             }
 
-            @Override public void onChangeInitials(String initials, String color) {
+            @Override
+            public void onChangeInitials(String initials, String color) {
                 imgUserPhoto.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(
-                    (int) imgUserPhoto.getContext().getResources().getDimension(R.dimen.dp100),
-                    initials, color));
+                        (int) imgUserPhoto.getContext().getResources().getDimension(R.dimen.dp100),
+                        initials, color));
             }
         };
 

@@ -20,6 +20,7 @@ import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+
 import com.iGap.R;
 import com.iGap.interfaces.OnColorChangedListenerSelect;
 
@@ -41,7 +42,7 @@ public class ColorPiker extends Dialog {
     private int selectColor;
 
     public ColorPiker(Context context, int defultColor,
-        OnColorChangedListenerSelect onColorChangedListenerSelect) {
+                      OnColorChangedListenerSelect onColorChangedListenerSelect) {
         super(context);
         Listener = onColorChangedListenerSelect;
         defaultColor = defultColor;
@@ -52,7 +53,8 @@ public class ColorPiker extends Dialog {
         init();
     }
 
-    @Override public void onWindowFocusChanged(boolean hasFocus) {
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
 
         adjustLineColor();
         adjustSqureColor(defaultColor);
@@ -68,7 +70,8 @@ public class ColorPiker extends Dialog {
 
         ivLineColor.setOnTouchListener(new OnTouchListener() {
 
-            @Override public boolean onTouch(View arg0, MotionEvent event) {
+            @Override
+            public boolean onTouch(View arg0, MotionEvent event) {
 
                 adjustSqureColor(mHueBarColors[(int) event.getY()]);
 
@@ -78,7 +81,8 @@ public class ColorPiker extends Dialog {
 
         ivSquareColor.setOnTouchListener(new OnTouchListener() {
 
-            @Override public boolean onTouch(View arg0, MotionEvent event) {
+            @Override
+            public boolean onTouch(View arg0, MotionEvent event) {
                 selectColor = bitmapsqure.getPixel((int) event.getX(), (int) event.getY());
                 btnOk.setBackgroundColor(selectColor);
 
@@ -88,7 +92,8 @@ public class ColorPiker extends Dialog {
 
         btnOk.setOnTouchListener(new OnTouchListener() {
 
-            @Override public boolean onTouch(View v, MotionEvent event) {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
 
                 Listener.colorChanged("ok", selectColor);
                 dismiss();
@@ -98,7 +103,8 @@ public class ColorPiker extends Dialog {
 
         btnCancel.setOnTouchListener(new OnTouchListener() {
 
-            @Override public boolean onTouch(View v, MotionEvent event) {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
                 dismiss();
                 return false;
             }
@@ -199,7 +205,7 @@ public class ColorPiker extends Dialog {
             colors[0] = mMainColors[i];
             colors[1] = Color.BLACK;
             Shader shader =
-                new LinearGradient(0, 0, 0, squareHight, colors, null, Shader.TileMode.REPEAT);
+                    new LinearGradient(0, 0, 0, squareHight, colors, null, Shader.TileMode.REPEAT);
             mPaint.setShader(shader);
             canvasSquare.drawLine(i, 0, i, squareHight, mPaint);
         }
@@ -216,13 +222,13 @@ public class ColorPiker extends Dialog {
             for (int x = 0; x < with; x++) {
                 if (y == 0) {
                     mMainColors[index] = Color.rgb(255 - (255 - Color.red(mainColor)) * x / with,
-                        255 - (255 - Color.green(mainColor)) * x / with,
-                        255 - (255 - Color.blue(mainColor)) * x / with);
+                            255 - (255 - Color.green(mainColor)) * x / with,
+                            255 - (255 - Color.blue(mainColor)) * x / with);
                     topColors[x] = mMainColors[index];
                 } else {
                     mMainColors[index] = Color.rgb((255 - y) * Color.red(topColors[x]) / 255,
-                        (255 - y) * Color.green(topColors[x]) / 255,
-                        (255 - y) * Color.blue(topColors[x]) / 255);
+                            (255 - y) * Color.green(topColors[x]) / 255,
+                            (255 - y) * Color.blue(topColors[x]) / 255);
                 }
 
                 if (index < with - 1) {

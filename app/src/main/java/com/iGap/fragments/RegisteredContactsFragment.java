@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityChat;
@@ -50,9 +51,11 @@ import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.adapters.HeaderAdapter;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
-import io.realm.Realm;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.Realm;
 
 import static com.iGap.G.context;
 
@@ -70,20 +73,22 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
         return new RegisteredContactsFragment();
     }
 
-    @Nullable @Override
+    @Nullable
+    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-        @Nullable Bundle savedInstanceState) {
+                             @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_contacts, container, false);
     }
 
-    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         //set interface for get callback here
         prgWaiting = (ProgressBar) view.findViewById(R.id.prgWaiting_addContact);
         prgWaiting.getIndeterminateDrawable()
-            .setColorFilter(getResources().getColor(R.color.toolbar_background),
-                android.graphics.PorterDuff.Mode.MULTIPLY);
+                .setColorFilter(getResources().getColor(R.color.toolbar_background),
+                        android.graphics.PorterDuff.Mode.MULTIPLY);
         prgWaiting.setVisibility(View.GONE);
 
         G.onFileDownloadResponse = this;
@@ -102,9 +107,10 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
         final HeaderAdapter headerAdapter = new HeaderAdapter();
         final ItemAdapter itemAdapter = new ItemAdapter();
         itemAdapter.withFilterPredicate(new IItemAdapter.Predicate<ContactItem>() {
-            @Override public boolean filter(ContactItem item, CharSequence constraint) {
+            @Override
+            public boolean filter(ContactItem item, CharSequence constraint) {
                 return !item.mContact.displayName.toLowerCase()
-                    .startsWith(String.valueOf(constraint).toLowerCase());
+                        .startsWith(String.valueOf(constraint).toLowerCase());
             }
         });
         fastAdapter.withOnClickListener(new FastAdapter.OnClickListener<ContactItem>() {
@@ -124,18 +130,21 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
 
         searchView = (android.support.v7.widget.SearchView) view.findViewById(R.id.menu_edtSearch);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override public boolean onQueryTextSubmit(String query) {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
                 return false;
             }
 
-            @Override public boolean onQueryTextChange(String newText) {
+            @Override
+            public boolean onQueryTextChange(String newText) {
                 itemAdapter.filter(newText);
                 return false;
             }
         });
 
         searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override public void onFocusChange(View view, boolean b) {
+            @Override
+            public void onFocusChange(View view, boolean b) {
                 if (b && menu_txt_titleToolbar.getVisibility() == View.VISIBLE) {
                     menu_txt_titleToolbar.setVisibility(View.GONE);
                 }
@@ -143,22 +152,24 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
         });
 
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override public boolean onClose() {
+            @Override
+            public boolean onClose() {
                 menu_txt_titleToolbar.setVisibility(View.VISIBLE);
                 return false;
             }
         });
 
         final EditText searchBox =
-            ((EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text));
+                ((EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text));
         searchBox.setTextColor(getResources().getColor(R.color.white));
 
         vgAddContact = (ViewGroup) view.findViewById(R.id.menu_layout_addContact);
         vgAddContact.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 int permissionWriteContact =
-                    ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CONTACTS);
+                        ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CONTACTS);
 
                 if (permissionWriteContact != PackageManager.PERMISSION_GRANTED) {
                     HelperPermision.getContactPermision(getActivity(), null);
@@ -168,12 +179,12 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                     bundle.putString("TITLE", "add_contact");
                     fragment.setArguments(bundle);
                     getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
-                            R.anim.slide_in_right, R.anim.slide_out_left)
-                        .addToBackStack(null)
-                        .replace(R.id.fragmentContainer, fragment)
-                        .commit();
+                            .beginTransaction()
+                            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
+                                    R.anim.slide_in_right, R.anim.slide_out_left)
+                            .addToBackStack(null)
+                            .replace(R.id.fragmentContainer, fragment)
+                            .commit();
                 }
             }
         });
@@ -181,7 +192,8 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
         MaterialDesignTextView txtMenu = (MaterialDesignTextView) view.findViewById(R.id.menu_txtBack);
         RippleView rippleMenu = (RippleView) view.findViewById(R.id.menu_ripple_txtBack);
         rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
                 // close and remove fragment from stack
                 if (!searchView.isIconified()) {
                     searchView.onActionViewCollapsed();
@@ -200,20 +212,21 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
 
         //this adds the Sticky Headers within our list
         final StickyRecyclerHeadersDecoration decoration =
-            new StickyRecyclerHeadersDecoration(stickyHeaderAdapter);
+                new StickyRecyclerHeadersDecoration(stickyHeaderAdapter);
         rv.addItemDecoration(decoration);
 
         List<IItem> items = new ArrayList<>();
         contacts = Contacts.retrieve(null);
         for (StructContactInfo contact : contacts) {
             items.add(new ContactItem().setContact(contact)
-                .withIdentifier(100 + contacts.indexOf(contact)));
+                    .withIdentifier(100 + contacts.indexOf(contact)));
         }
         itemAdapter.add(items);
 
         //so the headers are aware of changes
         stickyHeaderAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override public void onChanged() {
+            @Override
+            public void onChanged() {
                 decoration.invalidateHeaders();
             }
         });
@@ -226,8 +239,8 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
 
         final Realm realm = Realm.getDefaultInstance();
         final RealmRoom realmRoom = realm.where(RealmRoom.class)
-            .equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId)
-            .findFirst();
+                .equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId)
+                .findFirst();
 
         if (realmRoom != null) {
             Intent intent = new Intent(context, ActivityChat.class);
@@ -237,18 +250,21 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
             getActivity().getSupportFragmentManager().popBackStack();
         } else {
             G.onChatGetRoom = new OnChatGetRoom() {
-                @Override public void onChatGetRoom(final long roomId) {
+                @Override
+                public void onChatGetRoom(final long roomId) {
                     getUserInfo(peerId, roomId);
                 }
 
-                @Override public void onChatGetRoomTimeOut() {
+                @Override
+                public void onChatGetRoomTimeOut() {
                     prgWaiting.setVisibility(View.GONE);
                     rv.setEnabled(true);
                     vgAddContact.setEnabled(true);
                     searchView.setEnabled(true);
                 }
 
-                @Override public void onChatGetRoomError(int majorCode, int minorCode) {
+                @Override
+                public void onChatGetRoomError(int majorCode, int minorCode) {
                     prgWaiting.setVisibility(View.GONE);
                     rv.setEnabled(true);
                     vgAddContact.setEnabled(true);
@@ -256,14 +272,16 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
 
                     if (majorCode == 200) {
                         getActivity().runOnUiThread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 final Snackbar snack =
-                                    Snackbar.make(getActivity().findViewById(android.R.id.content),
-                                        getResources().getString(R.string.E_200),
-                                        Snackbar.LENGTH_LONG);
+                                        Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                                getResources().getString(R.string.E_200),
+                                                Snackbar.LENGTH_LONG);
 
                                 snack.setAction("CANCEL", new View.OnClickListener() {
-                                    @Override public void onClick(View view) {
+                                    @Override
+                                    public void onClick(View view) {
                                         snack.dismiss();
                                     }
                                 });
@@ -273,14 +291,16 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                     }
                     if (majorCode == 201) {
                         getActivity().runOnUiThread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 final Snackbar snack =
-                                    Snackbar.make(getActivity().findViewById(android.R.id.content),
-                                        getResources().getString(R.string.E_201),
-                                        Snackbar.LENGTH_LONG);
+                                        Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                                getResources().getString(R.string.E_201),
+                                                Snackbar.LENGTH_LONG);
 
                                 snack.setAction("CANCEL", new View.OnClickListener() {
-                                    @Override public void onClick(View view) {
+                                    @Override
+                                    public void onClick(View view) {
                                         snack.dismiss();
                                     }
                                 });
@@ -290,14 +310,16 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                     }
                     if (majorCode == 202) {
                         getActivity().runOnUiThread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 final Snackbar snack =
-                                    Snackbar.make(getActivity().findViewById(android.R.id.content),
-                                        getResources().getString(R.string.E_202),
-                                        Snackbar.LENGTH_LONG);
+                                        Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                                getResources().getString(R.string.E_202),
+                                                Snackbar.LENGTH_LONG);
 
                                 snack.setAction("CANCEL", new View.OnClickListener() {
-                                    @Override public void onClick(View view) {
+                                    @Override
+                                    public void onClick(View view) {
                                         snack.dismiss();
                                     }
                                 });
@@ -317,24 +339,27 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
     private void getUserInfo(final long peerId, final long roomId) {
 
         G.onUserInfoResponse = new OnUserInfoResponse() {
-            @Override public void onUserInfo(final ProtoGlobal.RegisteredUser user,
-                ProtoResponse.Response response) {
+            @Override
+            public void onUserInfo(final ProtoGlobal.RegisteredUser user,
+                                   ProtoResponse.Response response) {
 
                 G.currentActivity.runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
 
                         if (user.getId() == peerId) {
                             Realm realm = Realm.getDefaultInstance();
 
                             realm.executeTransactionAsync(new Realm.Transaction() {
-                                @Override public void execute(Realm realm) {
+                                @Override
+                                public void execute(Realm realm) {
                                     RealmRegisteredInfo realmRegisteredInfo =
-                                        realm.where(RealmRegisteredInfo.class)
-                                            .equalTo(RealmRegisteredInfoFields.ID, user.getId())
-                                            .findFirst();
+                                            realm.where(RealmRegisteredInfo.class)
+                                                    .equalTo(RealmRegisteredInfoFields.ID, user.getId())
+                                                    .findFirst();
                                     if (realmRegisteredInfo == null) {
                                         realmRegisteredInfo =
-                                            realm.createObject(RealmRegisteredInfo.class);
+                                                realm.createObject(RealmRegisteredInfo.class);
                                         realmRegisteredInfo.setId(user.getId());
                                     }
 
@@ -352,7 +377,8 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                                     realmRegisteredInfo.setMutual(user.getMutual());
                                 }
                             }, new Realm.Transaction.OnSuccess() {
-                                @Override public void onSuccess() {
+                                @Override
+                                public void onSuccess() {
                                     prgWaiting.setVisibility(View.GONE);
                                     Intent intent = new Intent(context, ActivityChat.class);
                                     intent.putExtra("peerId", peerId);
@@ -369,14 +395,16 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                 });
             }
 
-            @Override public void onUserInfoTimeOut() {
+            @Override
+            public void onUserInfoTimeOut() {
                 prgWaiting.setVisibility(View.GONE);
                 rv.setEnabled(true);
                 vgAddContact.setEnabled(true);
                 searchView.setEnabled(true);
             }
 
-            @Override public void onUserInfoError(int majorCode, int minorCode) {
+            @Override
+            public void onUserInfoError(int majorCode, int minorCode) {
                 prgWaiting.setVisibility(View.GONE);
                 rv.setEnabled(true);
                 vgAddContact.setEnabled(true);
@@ -405,7 +433,8 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
         return -1;
     }
 
-    @Override public void onSaveInstanceState(Bundle outState) {
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
         //add the values which need to be saved from the adapter to the bundle
         if (fastAdapter != null) {
             outState = fastAdapter.saveInstanceState(outState);
@@ -413,16 +442,19 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
         super.onSaveInstanceState(outState);
     }
 
-    @Override public void onFileDownload(String token, int offset,
-        ProtoFileDownload.FileDownload.Selector selector, int progress) {
+    @Override
+    public void onFileDownload(String token, int offset,
+                               ProtoFileDownload.FileDownload.Selector selector, int progress) {
         // empty
     }
 
-    @Override public void onAvatarDownload(String token, int offset,
-        final ProtoFileDownload.FileDownload.Selector selector, int progress, final long userId,
-        RoomType roomType) {
+    @Override
+    public void onAvatarDownload(String token, int offset,
+                                 final ProtoFileDownload.FileDownload.Selector selector, int progress, final long userId,
+                                 RoomType roomType) {
         G.currentActivity.runOnUiThread(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 // if thumbnail
                 if (selector != ProtoFileDownload.FileDownload.Selector.FILE) {
                     //fastAdapter.downloadingAvatar(userId, StructMessageAttachment.convert(realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst().getLastAvatar()));
@@ -433,16 +465,19 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
         });
     }
 
-    @Override public void onError(int majorCode, int minorCode) {
+    @Override
+    public void onError(int majorCode, int minorCode) {
         if (majorCode == 713 && minorCode == 1) {
             getActivity().runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     final Snackbar snack =
-                        Snackbar.make(getActivity().findViewById(android.R.id.content),
-                            getResources().getString(R.string.E_713_1), Snackbar.LENGTH_LONG);
+                            Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                    getResources().getString(R.string.E_713_1), Snackbar.LENGTH_LONG);
 
                     snack.setAction("CANCEL", new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
                             snack.dismiss();
                         }
                     });
@@ -451,13 +486,15 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
             });
         } else if (majorCode == 713 && minorCode == 2) {
             getActivity().runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     final Snackbar snack =
-                        Snackbar.make(getActivity().findViewById(android.R.id.content),
-                            getResources().getString(R.string.E_713_2), Snackbar.LENGTH_LONG);
+                            Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                    getResources().getString(R.string.E_713_2), Snackbar.LENGTH_LONG);
 
                     snack.setAction("CANCEL", new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
                             snack.dismiss();
                         }
                     });
@@ -466,13 +503,15 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
             });
         } else if (majorCode == 713 && minorCode == 3) {
             getActivity().runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     final Snackbar snack =
-                        Snackbar.make(getActivity().findViewById(android.R.id.content),
-                            getResources().getString(R.string.E_713_3), Snackbar.LENGTH_LONG);
+                            Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                    getResources().getString(R.string.E_713_3), Snackbar.LENGTH_LONG);
 
                     snack.setAction("CANCEL", new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
                             snack.dismiss();
                         }
                     });
@@ -481,13 +520,15 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
             });
         } else if (majorCode == 713 && minorCode == 4) {
             getActivity().runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     final Snackbar snack =
-                        Snackbar.make(getActivity().findViewById(android.R.id.content),
-                            getResources().getString(R.string.E_713_4), Snackbar.LENGTH_LONG);
+                            Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                    getResources().getString(R.string.E_713_4), Snackbar.LENGTH_LONG);
 
                     snack.setAction("CANCEL", new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
                             snack.dismiss();
                         }
                     });
@@ -496,13 +537,15 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
             });
         } else if (majorCode == 713 && minorCode == 5) {
             getActivity().runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     final Snackbar snack =
-                        Snackbar.make(getActivity().findViewById(android.R.id.content),
-                            getResources().getString(R.string.E_713_5), Snackbar.LENGTH_LONG);
+                            Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                    getResources().getString(R.string.E_713_5), Snackbar.LENGTH_LONG);
 
                     snack.setAction("CANCEL", new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
                             snack.dismiss();
                         }
                     });
@@ -511,13 +554,15 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
             });
         } else if (majorCode == 714) {
             getActivity().runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     final Snackbar snack =
-                        Snackbar.make(getActivity().findViewById(android.R.id.content),
-                            getResources().getString(R.string.E_714), Snackbar.LENGTH_LONG);
+                            Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                    getResources().getString(R.string.E_714), Snackbar.LENGTH_LONG);
 
                     snack.setAction("CANCEL", new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
                             snack.dismiss();
                         }
                     });
@@ -526,13 +571,15 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
             });
         } else if (majorCode == 715) {
             getActivity().runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     final Snackbar snack =
-                        Snackbar.make(getActivity().findViewById(android.R.id.content),
-                            getResources().getString(R.string.E_715), Snackbar.LENGTH_LONG);
+                            Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                    getResources().getString(R.string.E_715), Snackbar.LENGTH_LONG);
 
                     snack.setAction("CANCEL", new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
                             snack.dismiss();
                         }
                     });

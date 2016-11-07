@@ -22,18 +22,20 @@ import android.view.ViewGroup;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.MaterialDesignTextView;
+
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityProfileChannel extends AppCompatActivity {
 
     private AppBarLayout appBarLayout;
     private TextView txtNameChannel, txtDescription, txtChannelLink, txtPhoneNumber,
-        txtNotifyAndSound, txtDeleteCache, txtLeaveChannel, txtReport;
+            txtNotifyAndSound, txtDeleteCache, txtLeaveChannel, txtReport;
     private MaterialDesignTextView imgPupupMenul;
     private de.hdodenhof.circleimageview.CircleImageView imgCircleImageView;
     private FloatingActionButton fab;
@@ -41,18 +43,21 @@ public class ActivityProfileChannel extends AppCompatActivity {
     private Spannable wordtoSpan;
     private MaterialDesignTextView txtBack;
 
-    @Override protected void attachBaseContext(Context newBase) {
+    @Override
+    protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
-    @Override protected void onCreate(Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_channel);
 
         txtBack = (MaterialDesignTextView) findViewById(R.id.pch_txt_back);
         final RippleView rippleBack = (RippleView) findViewById(R.id.pch_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
                 finish();
             }
         });
@@ -60,7 +65,8 @@ public class ActivityProfileChannel extends AppCompatActivity {
 
         appBarLayout = (AppBarLayout) findViewById(R.id.pch_appbar);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            @Override public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
 
                 TextView titleToolbar = (TextView) findViewById(R.id.pch_txt_titleToolbar);
                 if (verticalOffset < -2) {
@@ -77,14 +83,15 @@ public class ActivityProfileChannel extends AppCompatActivity {
         imgPupupMenul = (MaterialDesignTextView) findViewById(R.id.pch_img_menuPopup);
         RippleView rippleMenu = (RippleView) findViewById(R.id.pch_ripple_menuPopup);
         rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
                 LayoutInflater layoutInflater =
-                    (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                        (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 final View popupView = layoutInflater.inflate(R.layout.popup_window, null);
 
                 popupWindow =
-                    new PopupWindow(popupView, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT,
-                        true);
+                        new PopupWindow(popupView, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT,
+                                true);
                 popupWindow.setBackgroundDrawable(new BitmapDrawable());
                 popupWindow.setOutsideTouchable(true);
 
@@ -93,7 +100,8 @@ public class ActivityProfileChannel extends AppCompatActivity {
                     Log.i("CCVVBB", "rr: ");
                 }
                 popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-                    @Override public void onDismiss() {
+                    @Override
+                    public void onDismiss() {
                         //TODO do sth here on dismiss
                     }
                 });
@@ -103,9 +111,10 @@ public class ActivityProfileChannel extends AppCompatActivity {
                 TextView remove = (TextView) popupView.findViewById(R.id.popup_txtItem1);
                 remove.setText("Remove");
                 remove.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View view) {
+                    @Override
+                    public void onClick(View view) {
                         Toast.makeText(ActivityProfileChannel.this, "Remove", Toast.LENGTH_SHORT)
-                            .show();
+                                .show();
                     }
                 });
 
@@ -120,17 +129,19 @@ public class ActivityProfileChannel extends AppCompatActivity {
 
         fab = (FloatingActionButton) findViewById(R.id.pch_fab_addToChannel);
         fab.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 Toast.makeText(ActivityProfileChannel.this, "fab", Toast.LENGTH_SHORT).show();
             }
         });
 
         imgCircleImageView =
-            (de.hdodenhof.circleimageview.CircleImageView) findViewById(R.id.pch_img_circleImage);
+                (de.hdodenhof.circleimageview.CircleImageView) findViewById(R.id.pch_img_circleImage);
         imgCircleImageView.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 Toast.makeText(ActivityProfileChannel.this, "imgCircleImageView",
-                    Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_SHORT).show();
             }
         });
         txtDescription = (TextView) findViewById(R.id.pch_txt_description);
@@ -144,9 +155,10 @@ public class ActivityProfileChannel extends AppCompatActivity {
 
                 wordtoSpan = new SpannableString(a[i]);
                 wordtoSpan.setSpan(new ForegroundColorSpan(Color.BLUE), 0, a[i].length(),
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 wordtoSpan.setSpan(new ClickableSpan() {
-                    @Override public void onClick(View v) {
+                    @Override
+                    public void onClick(View v) {
                         TextView tv = (TextView) v;
                         if (tv.getText() instanceof Spannable) {
 
@@ -157,32 +169,33 @@ public class ActivityProfileChannel extends AppCompatActivity {
                             valuesSpan = s.subSequence(start, end).toString();
                         }
                         new MaterialDialog.Builder(ActivityProfileChannel.this).items(
-                            R.array.phone_profile_chanel)
-                            .negativeText("CANCEL")
-                            .itemsCallback(new MaterialDialog.ListCallback() {
-                                @Override
-                                public void onSelection(MaterialDialog dialog, View view, int which,
-                                    CharSequence text) {
-                                    switch (which) {
-                                        case 0:
-                                            break;
-                                        case 1:
-                                            break;
-                                        case 2:
-                                            break;
+                                R.array.phone_profile_chanel)
+                                .negativeText("CANCEL")
+                                .itemsCallback(new MaterialDialog.ListCallback() {
+                                    @Override
+                                    public void onSelection(MaterialDialog dialog, View view, int which,
+                                                            CharSequence text) {
+                                        switch (which) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                        }
                                     }
-                                }
-                            })
-                            .show();
+                                })
+                                .show();
                     }
                 }, 0, a[i].length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             } else if (a[i].matches("\\@(\\w+)")) {
 
                 wordtoSpan = new SpannableString(a[i]);
                 wordtoSpan.setSpan(new ForegroundColorSpan(Color.BLUE), 0, a[i].length(),
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 wordtoSpan.setSpan(new ClickableSpan() {
-                    @Override public void onClick(View v) {
+                    @Override
+                    public void onClick(View v) {
                         String valuesSpan;
                         TextView tv = (TextView) v;
                         if (tv.getText() instanceof Spannable) {
@@ -196,7 +209,7 @@ public class ActivityProfileChannel extends AppCompatActivity {
             } else {
                 wordtoSpan = new SpannableString(a[i]);
                 wordtoSpan.setSpan(new ForegroundColorSpan(Color.BLACK), 0, a[i].length(),
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
             builder.append(wordtoSpan).append(" ");
@@ -205,42 +218,48 @@ public class ActivityProfileChannel extends AppCompatActivity {
 
         txtChannelLink = (TextView) findViewById(R.id.st_txt_channelLink);
         txtChannelLink.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 Toast.makeText(ActivityProfileChannel.this, "txtChannelLink", Toast.LENGTH_SHORT)
-                    .show();
+                        .show();
             }
         });
         txtPhoneNumber = (TextView) findViewById(R.id.st_txt_phoneNumber);
         txtPhoneNumber.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 Toast.makeText(ActivityProfileChannel.this, "txtPhoneNumber", Toast.LENGTH_SHORT)
-                    .show();
+                        .show();
             }
         });
         txtNotifyAndSound = (TextView) findViewById(R.id.pch_txt_notifyAndSound);
         txtNotifyAndSound.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 Toast.makeText(ActivityProfileChannel.this, "txtNotifyAndSound", Toast.LENGTH_SHORT)
-                    .show();
+                        .show();
             }
         });
         txtDeleteCache = (TextView) findViewById(R.id.pch_txt_deleteCache);
         txtDeleteCache.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 Toast.makeText(ActivityProfileChannel.this, "txtDeleteCache", Toast.LENGTH_SHORT)
-                    .show();
+                        .show();
             }
         });
         txtLeaveChannel = (TextView) findViewById(R.id.pch_txt_leaveChannel);
         txtLeaveChannel.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 Toast.makeText(ActivityProfileChannel.this, "txtLeaveChannel", Toast.LENGTH_SHORT)
-                    .show();
+                        .show();
             }
         });
         txtReport = (TextView) findViewById(R.id.pch_txt_Report);
         txtReport.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 Toast.makeText(ActivityProfileChannel.this, "txtReport", Toast.LENGTH_SHORT).show();
             }
         });

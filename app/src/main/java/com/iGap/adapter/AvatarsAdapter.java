@@ -1,8 +1,10 @@
 package com.iGap.adapter;
 
 import android.support.v4.util.ArrayMap;
+
 import com.iGap.adapter.items.AvatarItem;
 import com.mikepenz.fastadapter.adapters.FastItemAdapter;
+
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**

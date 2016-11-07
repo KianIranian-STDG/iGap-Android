@@ -1,6 +1,7 @@
 package com.iGap.interfaces;
 
 import android.support.v7.widget.RecyclerView;
+
 import com.iGap.module.enums.LocalFileType;
 
 /**

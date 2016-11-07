@@ -35,6 +35,7 @@ import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.util.AttributeSet;
 import android.widget.ImageView;
+
 import com.iGap.R;
 
 public class CircleImageView extends ImageView {
@@ -90,14 +91,14 @@ public class CircleImageView extends ImageView {
         super(context, attrs, defStyle);
 
         TypedArray a =
-            context.obtainStyledAttributes(attrs, R.styleable.CircleImageView, defStyle, 0);
+                context.obtainStyledAttributes(attrs, R.styleable.CircleImageView, defStyle, 0);
 
         mBorderWidth = a.getDimensionPixelSize(R.styleable.CircleImageView_civ_border_width,
-            DEFAULT_BORDER_WIDTH);
+                DEFAULT_BORDER_WIDTH);
         mBorderColor =
-            a.getColor(R.styleable.CircleImageView_civ_border_color, DEFAULT_BORDER_COLOR);
+                a.getColor(R.styleable.CircleImageView_civ_border_color, DEFAULT_BORDER_COLOR);
         mBorderOverlay =
-            a.getBoolean(R.styleable.CircleImageView_civ_border_overlay, DEFAULT_BORDER_OVERLAY);
+                a.getBoolean(R.styleable.CircleImageView_civ_border_overlay, DEFAULT_BORDER_OVERLAY);
         mFillColor = a.getColor(R.styleable.CircleImageView_civ_fill_color, DEFAULT_FILL_COLOR);
 
         a.recycle();
@@ -115,24 +116,28 @@ public class CircleImageView extends ImageView {
         }
     }
 
-    @Override public ScaleType getScaleType() {
+    @Override
+    public ScaleType getScaleType() {
         return SCALE_TYPE;
     }
 
-    @Override public void setScaleType(ScaleType scaleType) {
+    @Override
+    public void setScaleType(ScaleType scaleType) {
         if (scaleType != SCALE_TYPE) {
             throw new IllegalArgumentException(
-                String.format("ScaleType %s not supported.", scaleType));
+                    String.format("ScaleType %s not supported.", scaleType));
         }
     }
 
-    @Override public void setAdjustViewBounds(boolean adjustViewBounds) {
+    @Override
+    public void setAdjustViewBounds(boolean adjustViewBounds) {
         if (adjustViewBounds) {
             throw new IllegalArgumentException("adjustViewBounds not supported.");
         }
     }
 
-    @Override protected void onDraw(Canvas canvas) {
+    @Override
+    protected void onDraw(Canvas canvas) {
         if (mDisableCircularTransformation) {
             super.onDraw(canvas);
             return;
@@ -144,27 +149,30 @@ public class CircleImageView extends ImageView {
 
         if (mFillColor != Color.TRANSPARENT) {
             canvas.drawCircle(mDrawableRect.centerX(), mDrawableRect.centerY(), mDrawableRadius,
-                mFillPaint);
+                    mFillPaint);
         }
         canvas.drawCircle(mDrawableRect.centerX(), mDrawableRect.centerY(), mDrawableRadius,
-            mBitmapPaint);
+                mBitmapPaint);
         if (mBorderWidth > 0) {
             canvas.drawCircle(mBorderRect.centerX(), mBorderRect.centerY(), mBorderRadius,
-                mBorderPaint);
+                    mBorderPaint);
         }
     }
 
-    @Override protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         setup();
     }
 
-    @Override public void setPadding(int left, int top, int right, int bottom) {
+    @Override
+    public void setPadding(int left, int top, int right, int bottom) {
         super.setPadding(left, top, right, bottom);
         setup();
     }
 
-    @Override public void setPaddingRelative(int start, int top, int end, int bottom) {
+    @Override
+    public void setPaddingRelative(int start, int top, int end, int bottom) {
         super.setPaddingRelative(start, top, end, bottom);
         setup();
     }
@@ -186,7 +194,8 @@ public class CircleImageView extends ImageView {
     /**
      * @deprecated Use {@link #setBorderColor(int)} instead
      */
-    @Deprecated public void setBorderColorResource(@ColorRes int borderColorRes) {
+    @Deprecated
+    public void setBorderColorResource(@ColorRes int borderColorRes) {
         setBorderColor(getContext().getResources().getColor(borderColorRes));
     }
 
@@ -196,7 +205,8 @@ public class CircleImageView extends ImageView {
      * @return The color drawn behind the drawable
      * @deprecated Fill color support is going to be removed in the future
      */
-    @Deprecated public int getFillColor() {
+    @Deprecated
+    public int getFillColor() {
         return mFillColor;
     }
 
@@ -207,7 +217,8 @@ public class CircleImageView extends ImageView {
      * @param fillColor The color to be drawn behind the drawable
      * @deprecated Fill color support is going to be removed in the future
      */
-    @Deprecated public void setFillColor(@ColorInt int fillColor) {
+    @Deprecated
+    public void setFillColor(@ColorInt int fillColor) {
         if (fillColor == mFillColor) {
             return;
         }
@@ -222,10 +233,11 @@ public class CircleImageView extends ImageView {
      * this has no effect if the drawable is opaque or no drawable is set.
      *
      * @param fillColorRes The color resource to be resolved to a color and
-     * drawn behind the drawable
+     *                     drawn behind the drawable
      * @deprecated Fill color support is going to be removed in the future
      */
-    @Deprecated public void setFillColorResource(@ColorRes int fillColorRes) {
+    @Deprecated
+    public void setFillColorResource(@ColorRes int fillColorRes) {
         setFillColor(getContext().getResources().getColor(fillColorRes));
     }
 
@@ -268,31 +280,37 @@ public class CircleImageView extends ImageView {
         initializeBitmap();
     }
 
-    @Override public void setImageBitmap(Bitmap bm) {
+    @Override
+    public void setImageBitmap(Bitmap bm) {
         super.setImageBitmap(bm);
         initializeBitmap();
     }
 
-    @Override public void setImageDrawable(Drawable drawable) {
+    @Override
+    public void setImageDrawable(Drawable drawable) {
         super.setImageDrawable(drawable);
         initializeBitmap();
     }
 
-    @Override public void setImageResource(@DrawableRes int resId) {
+    @Override
+    public void setImageResource(@DrawableRes int resId) {
         super.setImageResource(resId);
         initializeBitmap();
     }
 
-    @Override public void setImageURI(Uri uri) {
+    @Override
+    public void setImageURI(Uri uri) {
         super.setImageURI(uri);
         initializeBitmap();
     }
 
-    @Override public ColorFilter getColorFilter() {
+    @Override
+    public ColorFilter getColorFilter() {
         return mColorFilter;
     }
 
-    @Override public void setColorFilter(ColorFilter cf) {
+    @Override
+    public void setColorFilter(ColorFilter cf) {
         if (cf == mColorFilter) {
             return;
         }
@@ -322,11 +340,11 @@ public class CircleImageView extends ImageView {
 
             if (drawable instanceof ColorDrawable) {
                 bitmap = Bitmap.createBitmap(COLORDRAWABLE_DIMENSION, COLORDRAWABLE_DIMENSION,
-                    BITMAP_CONFIG);
+                        BITMAP_CONFIG);
             } else {
                 bitmap =
-                    Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(),
-                        BITMAP_CONFIG);
+                        Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(),
+                                BITMAP_CONFIG);
             }
 
             Canvas canvas = new Canvas(bitmap);
@@ -382,7 +400,7 @@ public class CircleImageView extends ImageView {
 
         mBorderRect.set(calculateBounds());
         mBorderRadius = Math.min((mBorderRect.height() - mBorderWidth) / 2.0f,
-            (mBorderRect.width() - mBorderWidth) / 2.0f);
+                (mBorderRect.width() - mBorderWidth) / 2.0f);
 
         mDrawableRect.set(mBorderRect);
         if (!mBorderOverlay && mBorderWidth > 0) {
@@ -424,7 +442,7 @@ public class CircleImageView extends ImageView {
 
         mShaderMatrix.setScale(scale, scale);
         mShaderMatrix.postTranslate((int) (dx + 0.5f) + mDrawableRect.left,
-            (int) (dy + 0.5f) + mDrawableRect.top);
+                (int) (dy + 0.5f) + mDrawableRect.top);
 
         mBitmapShader.setLocalMatrix(mShaderMatrix);
     }

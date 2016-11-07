@@ -3,78 +3,69 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
-  <LinearLayout
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      >
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
-    <TextView
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="@dimen/dp12"
+            android:layout_marginRight="@dimen/dp12"
+            android:text=" Sound at most"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/sp18" />
+
+        <NumberPicker
+            android:id="@+id/dialog_np_times"
+            android:layout_width="40dp"
+            android:layout_height="120dp"
+            android:background="@android:color/transparent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp12"
+            android:layout_marginStart="@dimen/dp12"
+            android:text="times"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/sp18" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginEnd="@dimen/dp12"
-        android:layout_marginRight="@dimen/dp12"
-        android:text=" Sound at most"
-        android:textColor="@android:color/black"
-        android:textSize="@dimen/sp18"
-        />
+        android:layout_marginTop="@dimen/dp20">
 
-    <NumberPicker
-        android:id="@+id/dialog_np_times"
-        android:layout_width="40dp"
-        android:layout_height="120dp"
-        android:background="@android:color/transparent"
-        />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="@dimen/dp12"
+            android:layout_marginRight="@dimen/dp12"
+            android:text=" within"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/sp18" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginLeft="@dimen/dp12"
-        android:layout_marginStart="@dimen/dp12"
-        android:text="times"
-        android:textColor="@android:color/black"
-        android:textSize="@dimen/sp18"
-        />
-  </LinearLayout>
+        <NumberPicker
+            android:id="@+id/dialog_np_minutes"
+            android:layout_width="40dp"
+            android:layout_height="120dp"
+            android:background="@android:color/transparent" />
 
-  <LinearLayout
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="@dimen/dp20"
-      >
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginEnd="@dimen/dp12"
-        android:layout_marginRight="@dimen/dp12"
-        android:text=" within"
-        android:textColor="@android:color/black"
-        android:textSize="@dimen/sp18"
-        />
-
-    <NumberPicker
-        android:id="@+id/dialog_np_minutes"
-        android:layout_width="40dp"
-        android:layout_height="120dp"
-        android:background="@android:color/transparent"
-        />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginLeft="@dimen/dp12"
-        android:layout_marginStart="@dimen/dp12"
-        android:text="minutes"
-        android:textColor="@android:color/black"
-        android:textSize="@dimen/sp18"
-        />
-  </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp12"
+            android:layout_marginStart="@dimen/dp12"
+            android:text="minutes"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/sp18" />
+    </LinearLayout>
 
 </LinearLayout>

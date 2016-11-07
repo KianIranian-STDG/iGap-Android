@@ -1,18 +1,20 @@
 package com.iGap.request;
 
 import android.os.Bundle;
+
 import com.iGap.activities.ActivityEnhanced;
 import com.iGap.helper.HelperString;
 import com.iGap.proto.ProtoUserRegister;
 
 public class RequestUserRegister extends ActivityEnhanced {
 
-    @Override public void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // build proto class
         ProtoUserRegister.UserRegister.Builder builder =
-            ProtoUserRegister.UserRegister.newBuilder();
+                ProtoUserRegister.UserRegister.newBuilder();
         builder.setCountryCode("IR");
         builder.setPhoneNumber(1123456789L);
         ProtoUserRegister.UserRegister userRegister = builder.build();

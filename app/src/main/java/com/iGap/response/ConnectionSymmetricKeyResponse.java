@@ -1,6 +1,7 @@
 package com.iGap.response;
 
 import android.util.Log;
+
 import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.WebSocketClient;
@@ -21,10 +22,11 @@ public class ConnectionSymmetricKeyResponse extends MessageHandler {
         this.identity = identity;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
 
         ProtoConnectionSecuring.ConnectionSymmetricKeyResponse.Builder builder =
-            (ProtoConnectionSecuring.ConnectionSymmetricKeyResponse.Builder) message;
+                (ProtoConnectionSecuring.ConnectionSymmetricKeyResponse.Builder) message;
         ProtoConnectionSecuring.ConnectionSymmetricKeyResponse.Status status = builder.getStatus();
         int statusNumber = status.getNumber();
 
@@ -50,7 +52,8 @@ public class ConnectionSymmetricKeyResponse extends MessageHandler {
         }
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
 
     }
 }

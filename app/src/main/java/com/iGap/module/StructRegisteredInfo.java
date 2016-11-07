@@ -2,10 +2,23 @@ package com.iGap.module;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoomMessageContact;
 
 public class StructRegisteredInfo implements Parcelable {
+    public static final Parcelable.Creator<StructRegisteredInfo> CREATOR =
+            new Parcelable.Creator<StructRegisteredInfo>() {
+                @Override
+                public StructRegisteredInfo createFromParcel(Parcel source) {
+                    return new StructRegisteredInfo(source);
+                }
+
+                @Override
+                public StructRegisteredInfo[] newArray(int size) {
+                    return new StructRegisteredInfo[size];
+                }
+            };
     public long id;
     public String username;
     public String phone;
@@ -23,13 +36,28 @@ public class StructRegisteredInfo implements Parcelable {
     }
 
     public StructRegisteredInfo(String lastName, String firstName, String phone, String username,
-        long id) {
+                                long id) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.displayName = firstName + " " + lastName;
         this.phone = phone;
         this.username = username;
         this.id = id;
+    }
+
+    protected StructRegisteredInfo(Parcel in) {
+        this.id = in.readLong();
+        this.username = in.readString();
+        this.phone = in.readString();
+        this.firstName = in.readString();
+        this.lastName = in.readString();
+        this.displayName = in.readString();
+        this.initials = in.readString();
+        this.color = in.readString();
+        this.status = in.readString();
+        this.lastSeen = in.readInt();
+        this.avatarCount = in.readInt();
+        this.avatar = in.readParcelable(StructMessageAttachment.class.getClassLoader());
     }
 
     public static StructRegisteredInfo build(RealmRoomMessageContact messageContact) {
@@ -59,7 +87,7 @@ public class StructRegisteredInfo implements Parcelable {
         userInfo.lastName = messageContact.getLastName();
         if (messageContact.getPhoneList() != null && messageContact.getPhoneList().size() > 0) {
             userInfo.phone =
-                messageContact.getPhoneList().get(messageContact.getPhoneList().size() - 1);
+                    messageContact.getPhoneList().get(messageContact.getPhoneList().size() - 1);
         }
         userInfo.displayName = userInfo.firstName + " " + userInfo.lastName;
         //userInfo.userName=;
@@ -67,11 +95,13 @@ public class StructRegisteredInfo implements Parcelable {
         return userInfo;
     }
 
-    @Override public int describeContents() {
+    @Override
+    public int describeContents() {
         return 0;
     }
 
-    @Override public void writeToParcel(Parcel dest, int flags) {
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(this.id);
         dest.writeString(this.username);
         dest.writeString(this.phone);
@@ -85,30 +115,4 @@ public class StructRegisteredInfo implements Parcelable {
         dest.writeInt(this.avatarCount);
         dest.writeParcelable(this.avatar, flags);
     }
-
-    protected StructRegisteredInfo(Parcel in) {
-        this.id = in.readLong();
-        this.username = in.readString();
-        this.phone = in.readString();
-        this.firstName = in.readString();
-        this.lastName = in.readString();
-        this.displayName = in.readString();
-        this.initials = in.readString();
-        this.color = in.readString();
-        this.status = in.readString();
-        this.lastSeen = in.readInt();
-        this.avatarCount = in.readInt();
-        this.avatar = in.readParcelable(StructMessageAttachment.class.getClassLoader());
-    }
-
-    public static final Parcelable.Creator<StructRegisteredInfo> CREATOR =
-        new Parcelable.Creator<StructRegisteredInfo>() {
-            @Override public StructRegisteredInfo createFromParcel(Parcel source) {
-                return new StructRegisteredInfo(source);
-            }
-
-            @Override public StructRegisteredInfo[] newArray(int size) {
-                return new StructRegisteredInfo[size];
-            }
-        };
 }

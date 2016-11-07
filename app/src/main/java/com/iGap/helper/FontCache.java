@@ -2,6 +2,7 @@ package com.iGap.helper;
 
 import android.content.Context;
 import android.graphics.Typeface;
+
 import java.util.Hashtable;
 
 public class FontCache {

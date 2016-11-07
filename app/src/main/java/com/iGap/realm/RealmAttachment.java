@@ -1,25 +1,31 @@
 package com.iGap.realm;
 
 import android.support.annotation.Nullable;
+
 import com.iGap.G;
 import com.iGap.proto.ProtoGlobal;
+
+import org.parceler.Parcel;
+
+import java.io.File;
+
 import io.realm.Realm;
 import io.realm.RealmAttachmentRealmProxy;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
 import io.realm.Sort;
 import io.realm.annotations.PrimaryKey;
-import java.io.File;
-import org.parceler.Parcel;
 
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/26/2016.
  */
-@Parcel(implementations = { RealmAttachmentRealmProxy.class },
-    value = Parcel.Serialization.BEAN,
-    analyze = { RealmAttachment.class }) public class RealmAttachment extends RealmObject {
+@Parcel(implementations = {RealmAttachmentRealmProxy.class},
+        value = Parcel.Serialization.BEAN,
+        analyze = {RealmAttachment.class})
+public class RealmAttachment extends RealmObject {
     // should be message id for message attachment and user id for avatar
-    @PrimaryKey private long id;
+    @PrimaryKey
+    private long id;
     private String token;
     private String name;
     private long size;
@@ -29,8 +35,10 @@ import org.parceler.Parcel;
     private String cacheId;
     private RealmThumbnail largeThumbnail;
     private RealmThumbnail smallThumbnail;
-    @Nullable private String localThumbnailPath;
-    @Nullable private String localFilePath;
+    @Nullable
+    private String localThumbnailPath;
+    @Nullable
+    private String localFilePath;
 
     private static long getCorrectId(Realm realm) {
 
@@ -96,7 +104,8 @@ import org.parceler.Parcel;
         this.smallThumbnail = smallThumbnail;
     }
 
-    @Nullable public String getLocalThumbnailPath() {
+    @Nullable
+    public String getLocalThumbnailPath() {
         return localThumbnailPath;
     }
 
@@ -112,7 +121,8 @@ import org.parceler.Parcel;
         return localFilePath != null && new File(localFilePath).exists();
     }
 
-    @Nullable public String getLocalFilePath() {
+    @Nullable
+    public String getLocalFilePath() {
         return localFilePath;
     }
 

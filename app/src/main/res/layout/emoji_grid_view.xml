@@ -25,5 +25,4 @@
     android:numColumns="auto_fit"
     android:overScrollMode="never"
     android:scrollbars="vertical"
-    android:verticalSpacing="0dp"
-    />
+    android:verticalSpacing="0dp" />
