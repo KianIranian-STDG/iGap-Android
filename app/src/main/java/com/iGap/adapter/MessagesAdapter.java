@@ -190,10 +190,12 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
 
     public void updateToken(long messageId, String token) {
         Item item = getItemByFileIdentity(messageId);
-        int pos = getAdapterItems().indexOf(item);
-        item.mMessage.attachment.token = token;
+        if (item != null) {
+            int pos = getAdapterItems().indexOf(item);
+            item.mMessage.attachment.token = token;
 
-        set(pos, item);
+            set(pos, item);
+        }
     }
 
     /**
