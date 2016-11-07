@@ -37,6 +37,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
@@ -77,13 +78,15 @@ import com.iGap.request.RequestUserContactImport;
 import com.iGap.request.RequestUserContactsDelete;
 import com.iGap.request.RequestUserContactsEdit;
 import com.iGap.request.RequestUserInfo;
+
+import java.io.File;
+import java.util.ArrayList;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmList;
 import io.realm.RealmResults;
-import java.io.File;
-import java.util.ArrayList;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
@@ -838,7 +841,7 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                             case 0:
 
                                 String name = txtNickname.getText().toString();
-                                String phone = txtPhoneNumber.getText().toString();
+                                String phone = "+" + txtPhoneNumber.getText().toString();
 
                                 ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
 

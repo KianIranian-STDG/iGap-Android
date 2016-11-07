@@ -314,6 +314,8 @@
   <string name="Female">Female</string>
   <string name="DISCARD">DISCARD</string>
   <string name="unknown">unknown</string>
+  <string name="add_to_list_contact">Add to List Contact</string>
+  <string name="text_add_to_list_contact">Do you want add this number to your contact?</string>
 
   <string name="desc">Description</string>
 

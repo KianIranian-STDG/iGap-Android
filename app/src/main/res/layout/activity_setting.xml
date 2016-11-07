@@ -231,7 +231,7 @@
                 android:singleLine="true"
                 android:text="Alexander Smith"
                 android:textColor="@color/colorChatMessageTime"
-                android:textSize="@dimen/sp14"
+                android:textSize="@dimen/sp13"
                 android:theme="@style/Setting_editText"
                 />
 
@@ -274,7 +274,7 @@
                 android:paddingStart="@dimen/dp4"
                 android:text="unknown"
                 android:textColor="@color/colorChatMessageTime"
-                android:textSize="@dimen/sp14"
+                android:textSize="@dimen/sp13"
                 android:theme="@style/Setting_editText"
                 />
 
@@ -316,7 +316,7 @@
                 android:singleLine="true"
                 android:text="Alexander Smith:"
                 android:textColor="@color/colorChatMessageTime"
-                android:textSize="@dimen/sp14"
+                android:textSize="@dimen/sp13"
                 android:theme="@style/Setting_editText"
                 />
           </LinearLayout>
@@ -389,7 +389,7 @@
             android:paddingStart="@dimen/dp4"
             android:text="09121234567"
             android:textColor="@color/colorChatMessageTime"
-            android:textSize="@dimen/sp14"
+            android:textSize="@dimen/sp13"
             android:theme="@style/Setting_editText"
             />
 
@@ -429,7 +429,7 @@
             android:paddingRight="@dimen/dp16"
             android:text="@string/st_title_notification_sounds"
             android:textColor="@color/black_register"
-            android:textSize="@dimen/sp16"
+            android:textSize="@dimen/sp15"
             android:textStyle="normal"
             fontPath="fonts/IRANSansMedium.ttf"
             />
@@ -563,7 +563,7 @@
             android:textColor="@color/green"
             android:textSize="@dimen/sp18"
             android:textStyle="bold"
-            fontPath="fonts/IRANSansMobile.ttf"
+            fontPath="fonts/IRANSansMedium.ttf"
             />
 
 
@@ -583,8 +583,9 @@
               android:paddingRight="@dimen/dp16"
               android:text="@string/st_title_message_textSize"
               android:textColor="@color/black_register"
-              android:textSize="@dimen/sp12"
+              android:textSize="@dimen/sp15"
               android:textStyle="normal"
+              fontPath="fonts/IRANSansMedium.ttf"
               />
 
           <TextView
@@ -598,8 +599,9 @@
               android:paddingRight="@dimen/dp16"
               android:text="16"
               android:textColor="@color/toolbar_background"
-              android:textSize="@dimen/sp12"
+              android:textSize="@dimen/sp15"
               android:textStyle="normal"
+              fontPath="fonts/IRANSansMedium.ttf"
               />
         </LinearLayout>
 
@@ -618,8 +620,9 @@
             android:paddingRight="@dimen/dp16"
             android:text="@string/st_stickers"
             android:textColor="@color/black_register"
-            android:textSize="@dimen/sp14"
+            android:textSize="@dimen/sp15"
             android:textStyle="normal"
+            fontPath="fonts/IRANSansMedium.ttf"
             />
 
         <View
@@ -637,8 +640,9 @@
             android:paddingRight="@dimen/dp16"
             android:text="@string/st_chatBackground"
             android:textColor="@color/black_register"
-            android:textSize="@dimen/sp16"
+            android:textSize="@dimen/sp15"
             android:textStyle="normal"
+            fontPath="fonts/IRANSansMedium.ttf"
             />
 
         <View
@@ -649,7 +653,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp52"
+            android:layout_height="@dimen/dp40"
             android:orientation="horizontal"
             android:paddingEnd="@dimen/dp16"
             android:paddingLeft="@dimen/dp16"
@@ -678,8 +682,9 @@
               android:gravity="center_vertical"
               android:text="@string/st_inApp_Browser"
               android:textColor="@color/black_register"
-              android:textSize="@dimen/sp16"
+              android:textSize="@dimen/sp15"
               android:textStyle="normal"
+              fontPath="fonts/IRANSansMedium.ttf"
               />
 
         </RelativeLayout>
@@ -694,7 +699,7 @@
         <RelativeLayout
 
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp52"
+            android:layout_height="@dimen/dp40"
             android:orientation="horizontal"
             android:paddingEnd="@dimen/dp16"
             android:paddingLeft="@dimen/dp16"
@@ -723,8 +728,9 @@
               android:gravity="center_vertical"
               android:text="@string/st_send_by_enter"
               android:textColor="@color/black_register"
-              android:textSize="@dimen/sp16"
+              android:textSize="@dimen/sp15"
               android:textStyle="normal"
+              fontPath="fonts/IRANSansMedium.ttf"
               />
 
         </RelativeLayout>
