@@ -76,7 +76,7 @@
                         android:background="@null"
                         android:gravity="center"
                         android:text="@string/md_close_button"
-                        android:textColor="@android:color/white"
+                        android:textColor="@color/gray"
                         android:textSize="@dimen/sp16" />
                 </com.iGap.libs.rippleeffect.RippleView>
 

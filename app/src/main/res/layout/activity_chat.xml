@@ -377,13 +377,14 @@
                 app:rv_ripplePadding="5dp">
 
                 <com.iGap.module.MaterialDesignTextView
+                    android:id="@+id/ac_btn_clear_message_search"
                     fontPath="fonts/Flaticon.ttf"
                     android:layout_width="@dimen/dp60"
                     android:layout_height="match_parent"
                     android:background="@null"
                     android:gravity="center"
                     android:text="@string/md_close_button"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/gray"
                     android:textSize="@dimen/sp16" />
             </com.iGap.libs.rippleeffect.RippleView>
 

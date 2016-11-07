@@ -375,6 +375,9 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                 public void onVoiceRecordDone(String savedPath) {
 
                     sendVoice(savedPath, unreadList.get(viewPager.getCurrentItem()).getRoomId());
+
+                    finish();
+                    overridePendingTransition(0, 0);
                 }
 
                 @Override
@@ -641,6 +644,9 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                     sendMessage(edtChat.getText().toString(), roomid, type);
 
                     edtChat.setText("");
+
+                    finish();
+                    overridePendingTransition(0, 0);
                 }
             });
         }

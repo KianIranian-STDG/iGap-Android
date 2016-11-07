@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -252,6 +253,7 @@ public class ActivityChat extends ActivityEnhanced
     private LinearLayout ll_navigate_Message;
     private Button btnUpMessage;
     private Button btnDownMessage;
+    private MaterialDesignTextView txtClearMessageSearch;
     private TextView txtMessageCounter;
     private int messageCounter = 0;
     private int selectedPosition = 0;
@@ -273,6 +275,7 @@ public class ActivityChat extends ActivityEnhanced
     private String initialize;
     private String color;
     private boolean isMute = false;
+    private boolean isChatReadOnly = false;
     //chat
     private long chatPeerId;
     private boolean isMuteNotification;
@@ -460,6 +463,11 @@ public class ActivityChat extends ActivityEnhanced
                 title = realmRoom.getTitle();
                 initialize = realmRoom.getInitials();
                 color = realmRoom.getColor();
+                isChatReadOnly = realmRoom.getReadOnly();
+
+                if (isChatReadOnly) {
+                    viewAttachFile.setVisibility(View.GONE);
+                }
 
                 if (realmRoom.getType() == RoomType.CHAT) {
 
@@ -1668,6 +1676,7 @@ public class ActivityChat extends ActivityEnhanced
 
         ll_navigate_Message = (LinearLayout) findViewById(R.id.ac_ll_message_navigation);
         btnUpMessage = (Button) findViewById(R.id.ac_btn_message_up);
+        txtClearMessageSearch = (MaterialDesignTextView) findViewById(R.id.ac_btn_clear_message_search);
         btnUpMessage.setTypeface(G.flaticon);
         btnDownMessage = (Button) findViewById(R.id.ac_btn_message_down);
         btnDownMessage.setTypeface(G.flaticon);
@@ -1753,6 +1762,12 @@ public class ActivityChat extends ActivityEnhanced
                         }
                     }
                 }, 1000);
+
+                if (charSequence.length() > 0) {
+                    txtClearMessageSearch.setTextColor(Color.WHITE);
+                } else {
+                    txtClearMessageSearch.setTextColor(getResources().getColor(R.color.gray));
+                }
             }
 
             @Override
@@ -2139,7 +2154,8 @@ public class ActivityChat extends ActivityEnhanced
 
         listPathString = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            listPathString = attachFile.getClipData(data.getClipData());
+            if (data.getClipData() != null)
+                listPathString = attachFile.getClipData(data.getClipData());
         }
 
         if (AttachFile.request_code_TAKE_PICTURE == requestCode) {

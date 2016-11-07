@@ -2,6 +2,7 @@ package com.iGap.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -50,6 +51,7 @@ public class SearchFragment extends Fragment {
 
     private FastAdapter fastAdapter;
     private EditText edtSearch;
+    MaterialDesignTextView btnClose;
     private ArrayList<StructSearch> list = new ArrayList<>();
     private RecyclerView recyclerView;
     private ItemAdapter itemAdapter;
@@ -91,6 +93,12 @@ public class SearchFragment extends Fragment {
                 if (charSequence.length() == 1 && !isFillList) fillList();
 
                 itemAdapter.filter(charSequence);
+
+                if (charSequence.length() > 0) {
+                    btnClose.setTextColor(Color.WHITE);
+                } else {
+                    btnClose.setTextColor(getResources().getColor(R.color.gray));
+                }
             }
 
             @Override
@@ -138,7 +146,7 @@ public class SearchFragment extends Fragment {
             }
         });
 
-        MaterialDesignTextView btnClose = (MaterialDesignTextView) view.findViewById(R.id.sfl_btn_close);
+        btnClose = (MaterialDesignTextView) view.findViewById(R.id.sfl_btn_close);
         RippleView rippleDown = (RippleView) view.findViewById(R.id.sfl_ripple_done);
         rippleDown.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
