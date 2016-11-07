@@ -725,7 +725,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                     filePath = AttachFile.imagePath;
                     Log.e("ddd", filePath + "     image path");
                     break;
-                case AttachFile.request_code_media_from_gallery:
+                case AttachFile.request_code_image_from_gallery_single_select:
                     filePath = AttachFile.getFilePathFromUri(data.getData());
                     Log.e("ddd", filePath + "    gallary file path");
                     break;
@@ -902,7 +902,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                         // TODO: 9/20/2016  delete  group image
 
                     } else {
-                        attachFile.requestOpenGalleryForImage();
+                        attachFile.requestOpenGalleryForImageSingleSelect();
                     }
                 }
             })

@@ -3,6 +3,7 @@ package com.iGap.module;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ClipData;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +16,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.ContactsContract;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
@@ -28,6 +30,7 @@ import com.iGap.helper.HelperPermision;
 import com.iGap.interfaces.OnGetPermision;
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -37,17 +40,18 @@ import java.util.Locale;
 public class AttachFile {
 
     public static final int request_code_TAKE_PICTURE = 10;
-    public static final int request_code_media_from_gallery = 11;
+    public static final int request_code_image_from_gallery_single_select = 11;
     public static final int request_code_VIDEO_CAPTURED = 12;
     public static final int request_code_pic_audi = 13;
     public static final int request_code_pic_file = 14;
     public static final int request_code_contact_phone = 15;
     public static final int request_code_position = 16;
     public static final int request_code_paint = 17;
-    public static final int MEDIA_TYPE_IMAGE = 20;
+    public static final int MEDIA_TYPE_IMAGE = 18;
+    public static final int requestOpenGalleryForImageMultipleSelect = 19;
+    public static final int requestOpenGalleryForVideoMultipleSelect = 20;
 
     public static boolean isInAttach = false;
-
 
     public static final String IMAGE_DIRECTORY_NAME = "Upload";
     public static String imagePath = "";
@@ -82,19 +86,14 @@ public class AttachFile {
                 location.getLatitude();
                 location.getLongitude();
 
-                String position =
-                    context.getString(R.string.my_Position_is) + "\n" + context.getString(
-                        R.string.latitude) + String.valueOf(location.getLatitude()) +
-                        "\n" + context.getString(R.string.longitude) + String.valueOf(
-                        location.getLongitude());
+                String position = context.getString(R.string.my_Position_is) + "\n" + context.getString(R.string.latitude) + String.valueOf(location.getLatitude()) +
+                    "\n" + context.getString(R.string.longitude) + String.valueOf(location.getLongitude());
 
                 if (complete != null) complete.complete(true, position, "");
             }
 
-            if (ActivityCompat.checkSelfPermission(context,
-                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(context,
-                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
                 //    ActivityCompat#requestPermissions
                 // here to request the missing permissions, and then overriding
@@ -120,9 +119,27 @@ public class AttachFile {
     private static String getRealPathFromURI(Uri contentUri) {
         Cursor cursor = null;
         try {
-            String[] proj = { MediaStore.Images.Media.DATA };
+
+            String docId = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+                docId = DocumentsContract.getDocumentId(contentUri);
+            }
+
+            final String[] split = docId.split(":");
+            final String type = split[0];
+
+            Uri content = null;
+            if ("image".equals(type)) {
+                content = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+            } else if ("video".equals(type)) {
+                content = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+            } else if ("audio".equals(type)) {
+                content = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+            }
+
+            String[] proj = { content.toString() };
             cursor = G.context.getContentResolver().query(contentUri, proj, null, null, null);
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            int column_index = cursor.getColumnIndexOrThrow(proj[0]);
             cursor.moveToFirst();
             return cursor.getString(column_index);
         } finally {
@@ -177,9 +194,7 @@ public class AttachFile {
     private File getOutputMediaFile(int type) {
 
         // External sdcard location
-        File mediaStorageDir =
-            new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                IMAGE_DIRECTORY_NAME);
+        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), IMAGE_DIRECTORY_NAME);
 
         // Create the storage directory if it does not exist
         if (!mediaStorageDir.exists()) {
@@ -192,12 +207,10 @@ public class AttachFile {
         File mediaFile;
 
         // Create a media file name
-        String timeStamp =
-            new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
 
         if (type == MEDIA_TYPE_IMAGE) {
-            mediaFile =
-                new File(mediaStorageDir.getPath() + File.separator + "IMG_" + timeStamp + ".jpg");
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator + "IMG_" + timeStamp + ".jpg");
         } else {
             return null;
         }
@@ -208,23 +221,37 @@ public class AttachFile {
     //*************************************************************************************************************
 
     //*************************************************************************************************************
-    public void requestOpenGallery() {
-        Intent intent =
-            new Intent(Intent.ACTION_PICK, Uri.parse("content://media/internal/images/media"));
-        ((Activity) context).startActivityForResult(intent, request_code_media_from_gallery);
+    public void requestOpenGalleryForImageMultipleSelect() {
+
+        //this code use for open galary for image and video together
+        //Intent intent = new Intent(Intent.ACTION_PICK, Uri.parse("content://media/internal/images/media"));
+        //((Activity) context).startActivityForResult(intent, request_code_media_from_gallery);
+
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        ((Activity) context).startActivityForResult(intent, requestOpenGalleryForImageMultipleSelect);
         isInAttach = true;
     }
 
     //*************************************************************************************************************
+    public void requestOpenGalleryForVideoMultipleSelect() {
 
-    public void requestOpenGalleryForImage() {
+        Intent intent = new Intent();
+        intent.setType("video/*");
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        ((Activity) context).startActivityForResult(intent, requestOpenGalleryForImageMultipleSelect);
+        isInAttach = true;
+    }
 
-        Intent intent =
-            new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+    //*************************************************************************************************************
+    public void requestOpenGalleryForImageSingleSelect() {
+
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setType("image/*");
-        ((Activity) context).startActivityForResult(
-            Intent.createChooser(intent, context.getString(R.string.select_picture_en)),
-            request_code_media_from_gallery);
+        ((Activity) context).startActivityForResult(Intent.createChooser(intent, context.getString(R.string.select_picture_en)), request_code_image_from_gallery_single_select);
         isInAttach = true;
     }
 
@@ -235,8 +262,7 @@ public class AttachFile {
 
         PackageManager packageManager = context.getPackageManager();
         if (packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA) == false) {
-            Toast.makeText(context, context.getString(R.string.device_dosenot_camera_en),
-                Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, context.getString(R.string.device_dosenot_camera_en), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -248,10 +274,17 @@ public class AttachFile {
     //*************************************************************************************************************
 
     public void requestPickAudio() {
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_PICK);
-        intent.setData(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
+        //Intent intent = new Intent();
+        //intent.setAction(Intent.ACTION_PICK);
+        //intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        //intent.setData(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
+        //((Activity) context).startActivityForResult(intent, request_code_pic_audi);
+
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("audio/*");
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         ((Activity) context).startActivityForResult(intent, request_code_pic_audi);
+
         isInAttach = true;
     }
 
@@ -267,6 +300,7 @@ public class AttachFile {
     public void requestPickContact() {
         Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
         intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         ((Activity) context).startActivityForResult(intent, request_code_contact_phone);
         isInAttach = true;
     }
@@ -288,11 +322,8 @@ public class AttachFile {
             if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 showSettingsAlert();
             } else {
-                if (ActivityCompat.checkSelfPermission(context,
-                    Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                    && ActivityCompat.checkSelfPermission(context,
-                    Manifest.permission.ACCESS_COARSE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     // TODO: Consider calling
                     //    ActivityCompat#requestPermissions
                     // here to request the missing permissions, and then overriding
@@ -302,26 +333,19 @@ public class AttachFile {
                     // for ActivityCompat#requestPermissions for more details.
                     return;
                 }
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,
-                    locationListener);
-                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0,
-                    locationListener);
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
 
-                Location location =
-                    locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                 if (location == null) {
-                    location =
-                        locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                    location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                 }
                 if (location != null) {
                     location.getLatitude();
                     location.getLongitude();
 
-                    String position =
-                        context.getString(R.string.my_Position_is) + "\n" + context.getString(
-                            R.string.latitude) + String.valueOf(location.getLatitude()) +
-                            "\n" + context.getString(R.string.longitude) + String.valueOf(
-                            location.getLongitude());
+                    String position = context.getString(R.string.my_Position_is) + "\n" + context.getString(R.string.latitude) + String.valueOf(location.getLatitude()) +
+                        "\n" + context.getString(R.string.longitude) + String.valueOf(location.getLongitude());
 
                     if (complete != null) complete.complete(true, position, "");
                 } else {
@@ -343,8 +367,7 @@ public class AttachFile {
 
     void showSettingsAlert() {
 
-        new MaterialDialog.Builder(context).title(
-            context.getString(R.string.do_you_want_to_turn_on_gps))
+        new MaterialDialog.Builder(context).title(context.getString(R.string.do_you_want_to_turn_on_gps))
             .positiveText(R.string.ok)
             .negativeText(R.string.cancel)
             .callback(new MaterialDialog.ButtonCallback() {
@@ -358,11 +381,42 @@ public class AttachFile {
     }
 
     private void turnOnGps() {
-        ((Activity) context).startActivityForResult(
-            new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS),
-            request_code_position);
+        ((Activity) context).startActivityForResult(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS), request_code_position);
         isInAttach = true;
     }
 
     //*************************************************************************************************************
+
+    public ArrayList<String> getClipData(ClipData clipData) {
+
+        if (clipData != null) {
+            ArrayList<String> list = new ArrayList<>();
+
+            for (int i = 0; i < clipData.getItemCount(); i++) {
+                ClipData.Item item = clipData.getItemAt(i);
+
+                Log.e("ddd", item.getUri() + "");
+                String path = getFilePathFromUri(item.getUri());
+                list.add(path);
+
+                Log.e("ddd", path + "  " + i);
+            }
+
+            if (list.size() < 1) return null;
+
+            return list;
+        }
+
+        return null;
+    }
+
+    public String getFileName(String path) {
+
+        if (path == null) return "";
+        if (path.length() < 1) return "";
+
+        String filename = path.substring(path.lastIndexOf("/") + 1);
+
+        return filename;
+    }
 }

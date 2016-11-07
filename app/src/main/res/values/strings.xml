@@ -396,4 +396,7 @@
   <string name="E_213">Internal server error for request</string>
   <string name="E_214">This operation is not permitted for request</string>
   <string formatted="false" name="resend_all_messages">Resend %d messages</string>
+  <string name="image_selected_for_send">" image selected for send"</string>
+  <string name="video_selected_for_send">" video selected for send"</string>
+  <string name="audio_selected_for_send">" audio selected for send"</string>
 </resources>

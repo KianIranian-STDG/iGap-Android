@@ -155,7 +155,7 @@ public class ActivityPaint extends ActivityEnhanced {
 
             @Override public void onClick(View arg0) {
                 captureimage = false;
-                attachFile.requestOpenGalleryForImage();
+                attachFile.requestOpenGalleryForImageSingleSelect();
             }
         });
 
@@ -299,7 +299,7 @@ public class ActivityPaint extends ActivityEnhanced {
         if (resultCode == Activity.RESULT_OK) {
 
             switch (requestCode) {
-                case AttachFile.request_code_media_from_gallery:
+                case AttachFile.request_code_image_from_gallery_single_select:
 
                     try {
                         setImageToBitmap(data);
