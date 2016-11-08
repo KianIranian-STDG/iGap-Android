@@ -90,6 +90,8 @@ public class HelperFillLookUpClass {
         G.lookupMap.put(30208, "ProtoChatGetDraft.ChatGetDraftResponse");
         G.lookupMap.put(209, "ChatConvertToGroup");
         G.lookupMap.put(30209, "ProtoChatConvertToGroup.ChatConvertToGroupResponse");
+        G.lookupMap.put(210, "ChatSetAction");
+        G.lookupMap.put(30210, "ProtoChatSetAction.ChatSetActionResponse");
 
         // Group 3xx , 303xx
         G.lookupMap.put(300, "GroupCreate");
@@ -130,6 +132,8 @@ public class HelperFillLookUpClass {
         G.lookupMap.put(30317, "ProtoGroupGetMemberList.GroupGetMemberListResponse");
         G.lookupMap.put(318, "GroupDelete");
         G.lookupMap.put(30318, "ProtoGroupDelete.GroupDeleteResponse");
+        G.lookupMap.put(319, "GroupSetAction");
+        G.lookupMap.put(30319, "ProtoGroupSetAction.GroupSetActionResponse");
 
         // Info 5xx , 305xx
         G.lookupMap.put(500, "Info.Location");
@@ -150,7 +154,6 @@ public class HelperFillLookUpClass {
         G.lookupMap.put(30602, "ProtoClientGetRoom.ClientGetRoomResponse");
         G.lookupMap.put(603, "ClientGetRoomHistory");
         G.lookupMap.put(30603, "ProtoClientGetRoomHistory.ClientGetRoomHistoryResponse");
-        //============= 604 bayad barresi beshe
         G.lookupMap.put(605, "ClientSearchRoomHistory");
         G.lookupMap.put(30605, "ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse");
 

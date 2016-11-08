@@ -6,7 +6,6 @@ package com.iGap.proto;
 public final class ProtoGlobal {
   private ProtoGlobal() {
   }
-
   public static void registerAllExtensions(
           com.google.protobuf.ExtensionRegistryLite registry) {
   }
@@ -81,7 +80,6 @@ public final class ProtoGlobal {
     internalGetValueMap() {
       return internalValueMap;
     }
-
     private static final com.google.protobuf.Internal.EnumLiteMap<
             Gender> internalValueMap =
             new com.google.protobuf.Internal.EnumLiteMap<Gender>() {
@@ -94,12 +92,10 @@ public final class ProtoGlobal {
     getValueDescriptor() {
       return getDescriptor().getValues().get(ordinal());
     }
-
     public final com.google.protobuf.Descriptors.EnumDescriptor
     getDescriptorForType() {
       return getDescriptor();
     }
-
     public static final com.google.protobuf.Descriptors.EnumDescriptor
     getDescriptor() {
       return ProtoGlobal.getDescriptor().getEnumTypes().get(0);
@@ -304,7 +300,6 @@ public final class ProtoGlobal {
     internalGetValueMap() {
       return internalValueMap;
     }
-
     private static final com.google.protobuf.Internal.EnumLiteMap<
             RoomMessageType> internalValueMap =
             new com.google.protobuf.Internal.EnumLiteMap<RoomMessageType>() {
@@ -317,12 +312,10 @@ public final class ProtoGlobal {
     getValueDescriptor() {
       return getDescriptor().getValues().get(ordinal());
     }
-
     public final com.google.protobuf.Descriptors.EnumDescriptor
     getDescriptorForType() {
       return getDescriptor();
     }
-
     public static final com.google.protobuf.Descriptors.EnumDescriptor
     getDescriptor() {
       return ProtoGlobal.getDescriptor().getEnumTypes().get(1);
@@ -437,7 +430,6 @@ public final class ProtoGlobal {
     internalGetValueMap() {
       return internalValueMap;
     }
-
     private static final com.google.protobuf.Internal.EnumLiteMap<
             RoomMessageStatus> internalValueMap =
             new com.google.protobuf.Internal.EnumLiteMap<RoomMessageStatus>() {
@@ -450,12 +442,10 @@ public final class ProtoGlobal {
     getValueDescriptor() {
       return getDescriptor().getValues().get(ordinal());
     }
-
     public final com.google.protobuf.Descriptors.EnumDescriptor
     getDescriptorForType() {
       return getDescriptor();
     }
-
     public static final com.google.protobuf.Descriptors.EnumDescriptor
     getDescriptor() {
       return ProtoGlobal.getDescriptor().getEnumTypes().get(2);
@@ -484,6 +474,239 @@ public final class ProtoGlobal {
     // @@protoc_insertion_point(enum_scope:proto.RoomMessageStatus)
   }
 
+  /**
+   * Protobuf enum {@code proto.ClientAction}
+   */
+  public enum ClientAction
+          implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     * <code>CANCEL = 0;</code>
+     */
+    CANCEL(0),
+    /**
+     * <code>TYPING = 1;</code>
+     */
+    TYPING(1),
+    /**
+     * <code>SENDING_IMAGE = 2;</code>
+     */
+    SENDING_IMAGE(2),
+    /**
+     * <code>CAPTURING_IMAGE = 3;</code>
+     */
+    CAPTURING_IMAGE(3),
+    /**
+     * <code>SENDING_VIDEO = 4;</code>
+     */
+    SENDING_VIDEO(4),
+    /**
+     * <code>CAPTURING_VIDEO = 5;</code>
+     */
+    CAPTURING_VIDEO(5),
+    /**
+     * <code>SENDING_AUDIO = 6;</code>
+     */
+    SENDING_AUDIO(6),
+    /**
+     * <code>RECORING_VOICE = 7;</code>
+     */
+    RECORING_VOICE(7),
+    /**
+     * <code>SENDING_VOICE = 8;</code>
+     */
+    SENDING_VOICE(8),
+    /**
+     * <code>SENDING_DOCUMENT = 9;</code>
+     */
+    SENDING_DOCUMENT(9),
+    /**
+     * <code>SENDING_GIF = 10;</code>
+     */
+    SENDING_GIF(10),
+    /**
+     * <code>SENDING_FILE = 11;</code>
+     */
+    SENDING_FILE(11),
+    /**
+     * <code>SENDING_LOCATION = 12;</code>
+     */
+    SENDING_LOCATION(12),
+    /**
+     * <code>CHOOSING_CONTACT = 13;</code>
+     */
+    CHOOSING_CONTACT(13),
+    /**
+     * <code>PAINTING = 14;</code>
+     */
+    PAINTING(14),
+    UNRECOGNIZED(-1),;
+
+    /**
+     * <code>CANCEL = 0;</code>
+     */
+    public static final int CANCEL_VALUE = 0;
+    /**
+     * <code>TYPING = 1;</code>
+     */
+    public static final int TYPING_VALUE = 1;
+    /**
+     * <code>SENDING_IMAGE = 2;</code>
+     */
+    public static final int SENDING_IMAGE_VALUE = 2;
+    /**
+     * <code>CAPTURING_IMAGE = 3;</code>
+     */
+    public static final int CAPTURING_IMAGE_VALUE = 3;
+    /**
+     * <code>SENDING_VIDEO = 4;</code>
+     */
+    public static final int SENDING_VIDEO_VALUE = 4;
+    /**
+     * <code>CAPTURING_VIDEO = 5;</code>
+     */
+    public static final int CAPTURING_VIDEO_VALUE = 5;
+    /**
+     * <code>SENDING_AUDIO = 6;</code>
+     */
+    public static final int SENDING_AUDIO_VALUE = 6;
+    /**
+     * <code>RECORING_VOICE = 7;</code>
+     */
+    public static final int RECORING_VOICE_VALUE = 7;
+    /**
+     * <code>SENDING_VOICE = 8;</code>
+     */
+    public static final int SENDING_VOICE_VALUE = 8;
+    /**
+     * <code>SENDING_DOCUMENT = 9;</code>
+     */
+    public static final int SENDING_DOCUMENT_VALUE = 9;
+    /**
+     * <code>SENDING_GIF = 10;</code>
+     */
+    public static final int SENDING_GIF_VALUE = 10;
+    /**
+     * <code>SENDING_FILE = 11;</code>
+     */
+    public static final int SENDING_FILE_VALUE = 11;
+    /**
+     * <code>SENDING_LOCATION = 12;</code>
+     */
+    public static final int SENDING_LOCATION_VALUE = 12;
+    /**
+     * <code>CHOOSING_CONTACT = 13;</code>
+     */
+    public static final int CHOOSING_CONTACT_VALUE = 13;
+    /**
+     * <code>PAINTING = 14;</code>
+     */
+    public static final int PAINTING_VALUE = 14;
+
+
+    public final int getNumber() {
+      if (this == UNRECOGNIZED) {
+        throw new IllegalArgumentException(
+                "Can't get the number of an unknown enum value.");
+      }
+      return value;
+    }
+
+    /**
+     * @deprecated Use {@link #forNumber(int)} instead.
+     */
+    @Deprecated
+    public static ClientAction valueOf(int value) {
+      return forNumber(value);
+    }
+
+    public static ClientAction forNumber(int value) {
+      switch (value) {
+        case 0:
+          return CANCEL;
+        case 1:
+          return TYPING;
+        case 2:
+          return SENDING_IMAGE;
+        case 3:
+          return CAPTURING_IMAGE;
+        case 4:
+          return SENDING_VIDEO;
+        case 5:
+          return CAPTURING_VIDEO;
+        case 6:
+          return SENDING_AUDIO;
+        case 7:
+          return RECORING_VOICE;
+        case 8:
+          return SENDING_VOICE;
+        case 9:
+          return SENDING_DOCUMENT;
+        case 10:
+          return SENDING_GIF;
+        case 11:
+          return SENDING_FILE;
+        case 12:
+          return SENDING_LOCATION;
+        case 13:
+          return CHOOSING_CONTACT;
+        case 14:
+          return PAINTING;
+        default:
+          return null;
+      }
+    }
+
+    public static com.google.protobuf.Internal.EnumLiteMap<ClientAction>
+    internalGetValueMap() {
+      return internalValueMap;
+    }
+
+    private static final com.google.protobuf.Internal.EnumLiteMap<
+            ClientAction> internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<ClientAction>() {
+              public ClientAction findValueByNumber(int number) {
+                return ClientAction.forNumber(number);
+              }
+            };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor
+    getValueDescriptor() {
+      return getDescriptor().getValues().get(ordinal());
+    }
+
+    public final com.google.protobuf.Descriptors.EnumDescriptor
+    getDescriptorForType() {
+      return getDescriptor();
+    }
+
+    public static final com.google.protobuf.Descriptors.EnumDescriptor
+    getDescriptor() {
+      return ProtoGlobal.getDescriptor().getEnumTypes().get(3);
+    }
+
+    private static final ClientAction[] VALUES = values();
+
+    public static ClientAction valueOf(
+            com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new IllegalArgumentException(
+                "EnumValueDescriptor is not for this type.");
+      }
+      if (desc.getIndex() == -1) {
+        return UNRECOGNIZED;
+      }
+      return VALUES[desc.getIndex()];
+    }
+
+    private final int value;
+
+    private ClientAction(int value) {
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:proto.ClientAction)
+  }
+
   public interface RoomMessageLocationOrBuilder extends
       // @@protoc_insertion_point(interface_extends:proto.RoomMessageLocation)
       com.google.protobuf.MessageOrBuilder {
@@ -501,8 +724,8 @@ public final class ProtoGlobal {
   /**
    * Protobuf type {@code proto.RoomMessageLocation}
    */
-  public static final class RoomMessageLocation extends
-          com.google.protobuf.GeneratedMessageV3 implements
+  public  static final class RoomMessageLocation extends
+      com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:proto.RoomMessageLocation)
       RoomMessageLocationOrBuilder {
     // Use RoomMessageLocation.newBuilder() to construct.
@@ -519,9 +742,8 @@ public final class ProtoGlobal {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-
     private RoomMessageLocation(
-            com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
@@ -556,22 +778,21 @@ public final class ProtoGlobal {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
-                e).setUnfinishedMessage(this);
+            e).setUnfinishedMessage(this);
       } finally {
         makeExtensionsImmutable();
       }
     }
-
     public static final com.google.protobuf.Descriptors.Descriptor
-    getDescriptor() {
+        getDescriptor() {
       return ProtoGlobal.internal_static_proto_RoomMessageLocation_descriptor;
     }
 
     protected FieldAccessorTable
-    internalGetFieldAccessorTable() {
+        internalGetFieldAccessorTable() {
       return ProtoGlobal.internal_static_proto_RoomMessageLocation_fieldAccessorTable
-              .ensureFieldAccessorsInitialized(
-                      RoomMessageLocation.class, Builder.class);
+          .ensureFieldAccessorsInitialized(
+              RoomMessageLocation.class, Builder.class);
     }
 
     public static final int LAT_FIELD_NUMBER = 1;
@@ -603,7 +824,7 @@ public final class ProtoGlobal {
     }
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-            throws java.io.IOException {
+                        throws java.io.IOException {
       if (lat_ != 0D) {
         output.writeDouble(1, lat_);
       }
@@ -619,18 +840,17 @@ public final class ProtoGlobal {
       size = 0;
       if (lat_ != 0D) {
         size += com.google.protobuf.CodedOutputStream
-                .computeDoubleSize(1, lat_);
+          .computeDoubleSize(1, lat_);
       }
       if (lon_ != 0D) {
         size += com.google.protobuf.CodedOutputStream
-                .computeDoubleSize(2, lon_);
+          .computeDoubleSize(2, lon_);
       }
       memoizedSize = size;
       return size;
     }
 
     private static final long serialVersionUID = 0L;
-
     @Override
     public boolean equals(final Object obj) {
       if (obj == this) {
@@ -643,13 +863,13 @@ public final class ProtoGlobal {
 
       boolean result = true;
       result = result && (
-              Double.doubleToLongBits(getLat())
-                      == Double.doubleToLongBits(
-                      other.getLat()));
+          Double.doubleToLongBits(getLat())
+          == Double.doubleToLongBits(
+              other.getLat()));
       result = result && (
-              Double.doubleToLongBits(getLon())
-                      == Double.doubleToLongBits(
-                      other.getLon()));
+          Double.doubleToLongBits(getLon())
+          == Double.doubleToLongBits(
+              other.getLon()));
       return result;
     }
 
@@ -662,10 +882,10 @@ public final class ProtoGlobal {
       hash = (19 * hash) + getDescriptorForType().hashCode();
       hash = (37 * hash) + LAT_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-              Double.doubleToLongBits(getLat()));
+          Double.doubleToLongBits(getLat()));
       hash = (37 * hash) + LON_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-              Double.doubleToLongBits(getLon()));
+          Double.doubleToLongBits(getLon()));
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -676,54 +896,48 @@ public final class ProtoGlobal {
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static RoomMessageLocation parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static RoomMessageLocation parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static RoomMessageLocation parseFrom(
-            byte[] data,
+        byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static RoomMessageLocation parseFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input);
+          .parseWithIOException(PARSER, input);
     }
 
     public static RoomMessageLocation parseFrom(
-            java.io.InputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static RoomMessageLocation parseDelimitedFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-              .parseDelimitedWithIOException(PARSER, input);
+          .parseDelimitedWithIOException(PARSER, input);
     }
 
     public static RoomMessageLocation parseDelimitedFrom(
             java.io.InputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static RoomMessageLocation parseFrom(
             com.google.protobuf.CodedInputStream input)
             throws java.io.IOException {
@@ -734,14 +948,12 @@ public final class ProtoGlobal {
     public static RoomMessageLocation parseFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
+        throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input, extensionRegistry);
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public Builder newBuilderForType() {
-      return newBuilder();
-    }
+    public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
@@ -751,7 +963,7 @@ public final class ProtoGlobal {
     }
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
-              ? new Builder() : new Builder().mergeFrom(this);
+          ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @Override
@@ -768,15 +980,15 @@ public final class ProtoGlobal {
         // @@protoc_insertion_point(builder_implements:proto.RoomMessageLocation)
             RoomMessageLocationOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
-      getDescriptor() {
+          getDescriptor() {
         return ProtoGlobal.internal_static_proto_RoomMessageLocation_descriptor;
       }
 
       protected FieldAccessorTable
-      internalGetFieldAccessorTable() {
+          internalGetFieldAccessorTable() {
         return ProtoGlobal.internal_static_proto_RoomMessageLocation_fieldAccessorTable
-                .ensureFieldAccessorsInitialized(
-                        RoomMessageLocation.class, Builder.class);
+            .ensureFieldAccessorsInitialized(
+                    RoomMessageLocation.class, Builder.class);
       }
 
       // Construct using com.iGap.proto.ProtoGlobal.RoomMessageLocation.newBuilder()
@@ -785,7 +997,7 @@ public final class ProtoGlobal {
       }
 
       private Builder(
-              BuilderParent parent) {
+          BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -804,7 +1016,7 @@ public final class ProtoGlobal {
       }
 
       public com.google.protobuf.Descriptors.Descriptor
-      getDescriptorForType() {
+          getDescriptorForType() {
         return ProtoGlobal.internal_static_proto_RoomMessageLocation_descriptor;
       }
 
@@ -833,18 +1045,17 @@ public final class ProtoGlobal {
       }
 
       public Builder setField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
-              Object value) {
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
         return (Builder) super.setField(field, value);
       }
-
       public Builder clearField(
-              com.google.protobuf.Descriptors.FieldDescriptor field) {
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
 
       public Builder clearOneof(
-              com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
 
@@ -853,15 +1064,14 @@ public final class ProtoGlobal {
           int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-
       public Builder addRepeatedField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
+          com.google.protobuf.Descriptors.FieldDescriptor field,
           Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof RoomMessageLocation) {
-          return mergeFrom((RoomMessageLocation) other);
+          return mergeFrom((RoomMessageLocation)other);
         } else {
           super.mergeFrom(other);
           return this;
@@ -885,9 +1095,9 @@ public final class ProtoGlobal {
       }
 
       public Builder mergeFrom(
-              com.google.protobuf.CodedInputStream input,
-              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-              throws java.io.IOException {
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
         RoomMessageLocation parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
@@ -969,6 +1179,7 @@ public final class ProtoGlobal {
 
     // @@protoc_insertion_point(class_scope:proto.RoomMessageLocation)
     private static final RoomMessageLocation DEFAULT_INSTANCE;
+
     static {
       DEFAULT_INSTANCE = new RoomMessageLocation();
     }
@@ -981,9 +1192,9 @@ public final class ProtoGlobal {
             PARSER = new com.google.protobuf.AbstractParser<RoomMessageLocation>() {
       public RoomMessageLocation parsePartialFrom(
               com.google.protobuf.CodedInputStream input,
-              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-              throws com.google.protobuf.InvalidProtocolBufferException {
-        return new RoomMessageLocation(input, extensionRegistry);
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new RoomMessageLocation(input, extensionRegistry);
       }
     };
 
@@ -1010,6 +1221,7 @@ public final class ProtoGlobal {
      * <code>optional .proto.RoomMessageLog.Type type = 1;</code>
      */
     int getTypeValue();
+
     /**
      * <code>optional .proto.RoomMessageLog.Type type = 1;</code>
      */
@@ -1018,14 +1230,15 @@ public final class ProtoGlobal {
   /**
    * Protobuf type {@code proto.RoomMessageLog}
    */
-  public static final class RoomMessageLog extends
-          com.google.protobuf.GeneratedMessageV3 implements
+  public  static final class RoomMessageLog extends
+      com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:proto.RoomMessageLog)
       RoomMessageLogOrBuilder {
     // Use RoomMessageLog.newBuilder() to construct.
     private RoomMessageLog(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
+
     private RoomMessageLog() {
       type_ = 0;
     }
@@ -1035,9 +1248,8 @@ public final class ProtoGlobal {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-
     private RoomMessageLog(
-            com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
@@ -1068,29 +1280,28 @@ public final class ProtoGlobal {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
-                e).setUnfinishedMessage(this);
+            e).setUnfinishedMessage(this);
       } finally {
         makeExtensionsImmutable();
       }
     }
-
     public static final com.google.protobuf.Descriptors.Descriptor
     getDescriptor() {
       return ProtoGlobal.internal_static_proto_RoomMessageLog_descriptor;
     }
 
     protected FieldAccessorTable
-    internalGetFieldAccessorTable() {
+        internalGetFieldAccessorTable() {
       return ProtoGlobal.internal_static_proto_RoomMessageLog_fieldAccessorTable
-              .ensureFieldAccessorsInitialized(
-                      RoomMessageLog.class, Builder.class);
+          .ensureFieldAccessorsInitialized(
+              RoomMessageLog.class, Builder.class);
     }
 
     /**
      * Protobuf enum {@code proto.RoomMessageLog.Type}
      */
     public enum Type
-            implements com.google.protobuf.ProtocolMessageEnum {
+        implements com.google.protobuf.ProtocolMessageEnum {
       /**
        * <code>LOGIN = 0;</code>
        */
@@ -1130,11 +1341,10 @@ public final class ProtoGlobal {
 
       public static Type forNumber(int value) {
         switch (value) {
-          case 0:
-            return LOGIN;
-          case 1:
-            return LOGOUT;
-          default: return null;
+          case 0: return LOGIN;
+          case 1: return LOGOUT;
+          default:
+            return null;
         }
       }
 
@@ -1144,23 +1354,21 @@ public final class ProtoGlobal {
       }
 
       private static final com.google.protobuf.Internal.EnumLiteMap<
-              Type> internalValueMap =
-              new com.google.protobuf.Internal.EnumLiteMap<Type>() {
-                public Type findValueByNumber(int number) {
-                  return Type.forNumber(number);
-                }
-              };
+          Type> internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<Type>() {
+              public Type findValueByNumber(int number) {
+                return Type.forNumber(number);
+              }
+            };
 
       public final com.google.protobuf.Descriptors.EnumValueDescriptor
-      getValueDescriptor() {
+          getValueDescriptor() {
         return getDescriptor().getValues().get(ordinal());
       }
-
       public final com.google.protobuf.Descriptors.EnumDescriptor
-      getDescriptorForType() {
+          getDescriptorForType() {
         return getDescriptor();
       }
-
       public static final com.google.protobuf.Descriptors.EnumDescriptor
       getDescriptor() {
         return RoomMessageLog.getDescriptor().getEnumTypes().get(0);
@@ -1169,10 +1377,10 @@ public final class ProtoGlobal {
       private static final Type[] VALUES = values();
 
       public static Type valueOf(
-              com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
         if (desc.getType() != getDescriptor()) {
           throw new IllegalArgumentException(
-                  "EnumValueDescriptor is not for this type.");
+            "EnumValueDescriptor is not for this type.");
         }
         if (desc.getIndex() == -1) {
           return UNRECOGNIZED;
@@ -1216,7 +1424,7 @@ public final class ProtoGlobal {
     }
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-            throws java.io.IOException {
+                        throws java.io.IOException {
       if (type_ != Type.LOGIN.getNumber()) {
         output.writeEnum(1, type_);
       }
@@ -1229,18 +1437,17 @@ public final class ProtoGlobal {
       size = 0;
       if (type_ != Type.LOGIN.getNumber()) {
         size += com.google.protobuf.CodedOutputStream
-                .computeEnumSize(1, type_);
+          .computeEnumSize(1, type_);
       }
       memoizedSize = size;
       return size;
     }
 
     private static final long serialVersionUID = 0L;
-
     @Override
     public boolean equals(final Object obj) {
       if (obj == this) {
-        return true;
+       return true;
       }
       if (!(obj instanceof RoomMessageLog)) {
         return super.equals(obj);
@@ -1271,72 +1478,65 @@ public final class ProtoGlobal {
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static RoomMessageLog parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static RoomMessageLog parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static RoomMessageLog parseFrom(
-            byte[] data,
+        byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
     public static RoomMessageLog parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input);
+          .parseWithIOException(PARSER, input);
     }
 
     public static RoomMessageLog parseFrom(
-            java.io.InputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static RoomMessageLog parseDelimitedFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-              .parseDelimitedWithIOException(PARSER, input);
+          .parseDelimitedWithIOException(PARSER, input);
     }
 
     public static RoomMessageLog parseDelimitedFrom(
             java.io.InputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static RoomMessageLog parseFrom(
             com.google.protobuf.CodedInputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input);
+          .parseWithIOException(PARSER, input);
     }
 
     public static RoomMessageLog parseFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
+        throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input, extensionRegistry);
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public Builder newBuilderForType() {
-      return newBuilder();
-    }
+    public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
@@ -1346,7 +1546,7 @@ public final class ProtoGlobal {
     }
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
-              ? new Builder() : new Builder().mergeFrom(this);
+          ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @Override
@@ -1355,6 +1555,7 @@ public final class ProtoGlobal {
       Builder builder = new Builder(parent);
       return builder;
     }
+
     /**
      * Protobuf type {@code proto.RoomMessageLog}
      */
@@ -1363,15 +1564,15 @@ public final class ProtoGlobal {
         // @@protoc_insertion_point(builder_implements:proto.RoomMessageLog)
             RoomMessageLogOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
-      getDescriptor() {
+          getDescriptor() {
         return ProtoGlobal.internal_static_proto_RoomMessageLog_descriptor;
       }
 
       protected FieldAccessorTable
-      internalGetFieldAccessorTable() {
+          internalGetFieldAccessorTable() {
         return ProtoGlobal.internal_static_proto_RoomMessageLog_fieldAccessorTable
-                .ensureFieldAccessorsInitialized(
-                        RoomMessageLog.class, Builder.class);
+            .ensureFieldAccessorsInitialized(
+                    RoomMessageLog.class, Builder.class);
       }
 
       // Construct using com.iGap.proto.ProtoGlobal.RoomMessageLog.newBuilder()
@@ -1380,7 +1581,7 @@ public final class ProtoGlobal {
       }
 
       private Builder(
-              BuilderParent parent) {
+          BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -1397,7 +1598,7 @@ public final class ProtoGlobal {
       }
 
       public com.google.protobuf.Descriptors.Descriptor
-      getDescriptorForType() {
+          getDescriptorForType() {
         return ProtoGlobal.internal_static_proto_RoomMessageLog_descriptor;
       }
 
@@ -1425,18 +1626,17 @@ public final class ProtoGlobal {
       }
 
       public Builder setField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
-              Object value) {
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
         return (Builder) super.setField(field, value);
       }
-
       public Builder clearField(
-              com.google.protobuf.Descriptors.FieldDescriptor field) {
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
 
       public Builder clearOneof(
-              com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
 
@@ -1445,15 +1645,14 @@ public final class ProtoGlobal {
           int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-
       public Builder addRepeatedField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
+          com.google.protobuf.Descriptors.FieldDescriptor field,
           Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof RoomMessageLog) {
-          return mergeFrom((RoomMessageLog) other);
+          return mergeFrom((RoomMessageLog)other);
         } else {
           super.mergeFrom(other);
           return this;
@@ -1474,9 +1673,9 @@ public final class ProtoGlobal {
       }
 
       public Builder mergeFrom(
-              com.google.protobuf.CodedInputStream input,
-              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-              throws java.io.IOException {
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
         RoomMessageLog parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
@@ -1550,6 +1749,7 @@ public final class ProtoGlobal {
 
     // @@protoc_insertion_point(class_scope:proto.RoomMessageLog)
     private static final RoomMessageLog DEFAULT_INSTANCE;
+
     static {
       DEFAULT_INSTANCE = new RoomMessageLog();
     }
@@ -1561,10 +1761,10 @@ public final class ProtoGlobal {
     private static final com.google.protobuf.Parser<RoomMessageLog>
             PARSER = new com.google.protobuf.AbstractParser<RoomMessageLog>() {
       public RoomMessageLog parsePartialFrom(
-              com.google.protobuf.CodedInputStream input,
-              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-              throws com.google.protobuf.InvalidProtocolBufferException {
-        return new RoomMessageLog(input, extensionRegistry);
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new RoomMessageLog(input, extensionRegistry);
       }
     };
 
@@ -1585,7 +1785,7 @@ public final class ProtoGlobal {
 
   public interface RoomMessageContactOrBuilder extends
       // @@protoc_insertion_point(interface_extends:proto.RoomMessageContact)
-      com.google.protobuf.MessageOrBuilder {
+          com.google.protobuf.MessageOrBuilder {
 
     /**
      * <code>optional string first_name = 1;</code>
@@ -1595,7 +1795,7 @@ public final class ProtoGlobal {
      * <code>optional string first_name = 1;</code>
      */
     com.google.protobuf.ByteString
-    getFirstNameBytes();
+        getFirstNameBytes();
 
     /**
      * <code>optional string last_name = 2;</code>
@@ -1605,7 +1805,7 @@ public final class ProtoGlobal {
      * <code>optional string last_name = 2;</code>
      */
     com.google.protobuf.ByteString
-    getLastNameBytes();
+        getLastNameBytes();
 
     /**
      * <code>optional string nickname = 3;</code>
@@ -1615,13 +1815,13 @@ public final class ProtoGlobal {
      * <code>optional string nickname = 3;</code>
      */
     com.google.protobuf.ByteString
-    getNicknameBytes();
+        getNicknameBytes();
 
     /**
      * <code>repeated string phone = 4;</code>
      */
     java.util.List<String>
-    getPhoneList();
+        getPhoneList();
     /**
      * <code>repeated string phone = 4;</code>
      */
@@ -1634,13 +1834,13 @@ public final class ProtoGlobal {
      * <code>repeated string phone = 4;</code>
      */
     com.google.protobuf.ByteString
-    getPhoneBytes(int index);
+        getPhoneBytes(int index);
 
     /**
      * <code>repeated string email = 5;</code>
      */
     java.util.List<String>
-    getEmailList();
+        getEmailList();
     /**
      * <code>repeated string email = 5;</code>
      */
@@ -1649,17 +1849,18 @@ public final class ProtoGlobal {
      * <code>repeated string email = 5;</code>
      */
     String getEmail(int index);
+
     /**
      * <code>repeated string email = 5;</code>
      */
     com.google.protobuf.ByteString
-    getEmailBytes(int index);
+        getEmailBytes(int index);
   }
   /**
    * Protobuf type {@code proto.RoomMessageContact}
    */
-  public static final class RoomMessageContact extends
-          com.google.protobuf.GeneratedMessageV3 implements
+  public  static final class RoomMessageContact extends
+      com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:proto.RoomMessageContact)
       RoomMessageContactOrBuilder {
     // Use RoomMessageContact.newBuilder() to construct.
@@ -1679,9 +1880,8 @@ public final class ProtoGlobal {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-
     private RoomMessageContact(
-            com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
@@ -1742,7 +1942,7 @@ public final class ProtoGlobal {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
-                e).setUnfinishedMessage(this);
+            e).setUnfinishedMessage(this);
       } finally {
         if (((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
           phone_ = phone_.getUnmodifiableView();
@@ -1753,22 +1953,22 @@ public final class ProtoGlobal {
         makeExtensionsImmutable();
       }
     }
-
     public static final com.google.protobuf.Descriptors.Descriptor
-    getDescriptor() {
+        getDescriptor() {
       return ProtoGlobal.internal_static_proto_RoomMessageContact_descriptor;
     }
 
     protected FieldAccessorTable
-    internalGetFieldAccessorTable() {
+        internalGetFieldAccessorTable() {
       return ProtoGlobal.internal_static_proto_RoomMessageContact_fieldAccessorTable
-              .ensureFieldAccessorsInitialized(
-                      RoomMessageContact.class, Builder.class);
+          .ensureFieldAccessorsInitialized(
+              RoomMessageContact.class, Builder.class);
     }
 
     private int bitField0_;
     public static final int FIRST_NAME_FIELD_NUMBER = 1;
     private volatile Object firstName_;
+
     /**
      * <code>optional string first_name = 1;</code>
      */
@@ -1784,16 +1984,17 @@ public final class ProtoGlobal {
         return s;
       }
     }
+
     /**
      * <code>optional string first_name = 1;</code>
      */
     public com.google.protobuf.ByteString
-    getFirstNameBytes() {
+        getFirstNameBytes() {
       Object ref = firstName_;
       if (ref instanceof String) {
-        com.google.protobuf.ByteString b =
-                com.google.protobuf.ByteString.copyFromUtf8(
-                        (String) ref);
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
         firstName_ = b;
         return b;
       } else {
@@ -1803,6 +2004,7 @@ public final class ProtoGlobal {
 
     public static final int LAST_NAME_FIELD_NUMBER = 2;
     private volatile Object lastName_;
+
     /**
      * <code>optional string last_name = 2;</code>
      */
@@ -1818,16 +2020,17 @@ public final class ProtoGlobal {
         return s;
       }
     }
+
     /**
      * <code>optional string last_name = 2;</code>
      */
     public com.google.protobuf.ByteString
-    getLastNameBytes() {
+        getLastNameBytes() {
       Object ref = lastName_;
       if (ref instanceof String) {
-        com.google.protobuf.ByteString b =
-                com.google.protobuf.ByteString.copyFromUtf8(
-                        (String) ref);
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
         lastName_ = b;
         return b;
       } else {
@@ -1837,6 +2040,7 @@ public final class ProtoGlobal {
 
     public static final int NICKNAME_FIELD_NUMBER = 3;
     private volatile Object nickname_;
+
     /**
      * <code>optional string nickname = 3;</code>
      */
@@ -1852,16 +2056,17 @@ public final class ProtoGlobal {
         return s;
       }
     }
+
     /**
      * <code>optional string nickname = 3;</code>
      */
     public com.google.protobuf.ByteString
-    getNicknameBytes() {
+        getNicknameBytes() {
       Object ref = nickname_;
       if (ref instanceof String) {
-        com.google.protobuf.ByteString b =
-                com.google.protobuf.ByteString.copyFromUtf8(
-                        (String) ref);
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
         nickname_ = b;
         return b;
       } else {
@@ -1875,7 +2080,7 @@ public final class ProtoGlobal {
      * <code>repeated string phone = 4;</code>
      */
     public com.google.protobuf.ProtocolStringList
-    getPhoneList() {
+        getPhoneList() {
       return phone_;
     }
     /**
@@ -1884,6 +2089,7 @@ public final class ProtoGlobal {
     public int getPhoneCount() {
       return phone_.size();
     }
+
     /**
      * <code>repeated string phone = 4;</code>
      */
@@ -1894,7 +2100,7 @@ public final class ProtoGlobal {
      * <code>repeated string phone = 4;</code>
      */
     public com.google.protobuf.ByteString
-    getPhoneBytes(int index) {
+        getPhoneBytes(int index) {
       return phone_.getByteString(index);
     }
 
@@ -1904,7 +2110,7 @@ public final class ProtoGlobal {
      * <code>repeated string email = 5;</code>
      */
     public com.google.protobuf.ProtocolStringList
-    getEmailList() {
+        getEmailList() {
       return email_;
     }
     /**
@@ -1913,6 +2119,7 @@ public final class ProtoGlobal {
     public int getEmailCount() {
       return email_.size();
     }
+
     /**
      * <code>repeated string email = 5;</code>
      */
@@ -1923,7 +2130,7 @@ public final class ProtoGlobal {
      * <code>repeated string email = 5;</code>
      */
     public com.google.protobuf.ByteString
-    getEmailBytes(int index) {
+        getEmailBytes(int index) {
       return email_.getByteString(index);
     }
 
@@ -1938,7 +2145,7 @@ public final class ProtoGlobal {
     }
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-            throws java.io.IOException {
+                        throws java.io.IOException {
       if (!getFirstNameBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 1, firstName_);
       }
@@ -1991,7 +2198,6 @@ public final class ProtoGlobal {
     }
 
     private static final long serialVersionUID = 0L;
-
     @Override
     public boolean equals(final Object obj) {
       if (obj == this) {
@@ -2008,11 +2214,11 @@ public final class ProtoGlobal {
       result = result && getLastName()
               .equals(other.getLastName());
       result = result && getNickname()
-              .equals(other.getNickname());
+          .equals(other.getNickname());
       result = result && getPhoneList()
-              .equals(other.getPhoneList());
+          .equals(other.getPhoneList());
       result = result && getEmailList()
-              .equals(other.getEmailList());
+          .equals(other.getEmailList());
       return result;
     }
 
@@ -2047,82 +2253,74 @@ public final class ProtoGlobal {
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static RoomMessageContact parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static RoomMessageContact parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static RoomMessageContact parseFrom(
-            byte[] data,
+        byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
     public static RoomMessageContact parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input);
+          .parseWithIOException(PARSER, input);
     }
 
     public static RoomMessageContact parseFrom(
-            java.io.InputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static RoomMessageContact parseDelimitedFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-              .parseDelimitedWithIOException(PARSER, input);
+          .parseDelimitedWithIOException(PARSER, input);
     }
 
     public static RoomMessageContact parseDelimitedFrom(
-            java.io.InputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static RoomMessageContact parseFrom(
             com.google.protobuf.CodedInputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input);
+          .parseWithIOException(PARSER, input);
     }
 
     public static RoomMessageContact parseFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
+        throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input, extensionRegistry);
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public Builder newBuilderForType() {
-      return newBuilder();
-    }
+    public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(RoomMessageContact prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
-              ? new Builder() : new Builder().mergeFrom(this);
+          ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @Override
@@ -2131,6 +2329,7 @@ public final class ProtoGlobal {
       Builder builder = new Builder(parent);
       return builder;
     }
+
     /**
      * Protobuf type {@code proto.RoomMessageContact}
      */
@@ -2144,10 +2343,10 @@ public final class ProtoGlobal {
       }
 
       protected FieldAccessorTable
-      internalGetFieldAccessorTable() {
+          internalGetFieldAccessorTable() {
         return ProtoGlobal.internal_static_proto_RoomMessageContact_fieldAccessorTable
-                .ensureFieldAccessorsInitialized(
-                        RoomMessageContact.class, Builder.class);
+            .ensureFieldAccessorsInitialized(
+                    RoomMessageContact.class, Builder.class);
       }
 
       // Construct using com.iGap.proto.ProtoGlobal.RoomMessageContact.newBuilder()
@@ -2156,7 +2355,7 @@ public final class ProtoGlobal {
       }
 
       private Builder(
-              BuilderParent parent) {
+          BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -2181,7 +2380,7 @@ public final class ProtoGlobal {
       }
 
       public com.google.protobuf.Descriptors.Descriptor
-      getDescriptorForType() {
+          getDescriptorForType() {
         return ProtoGlobal.internal_static_proto_RoomMessageContact_descriptor;
       }
 
@@ -2228,14 +2427,12 @@ public final class ProtoGlobal {
               Object value) {
         return (Builder) super.setField(field, value);
       }
-
       public Builder clearField(
-              com.google.protobuf.Descriptors.FieldDescriptor field) {
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-
       public Builder clearOneof(
-              com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
 
@@ -2244,15 +2441,14 @@ public final class ProtoGlobal {
           int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-
       public Builder addRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+              Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof RoomMessageContact) {
-          return mergeFrom((RoomMessageContact) other);
+          return mergeFrom((RoomMessageContact)other);
         } else {
           super.mergeFrom(other);
           return this;
@@ -2302,9 +2498,9 @@ public final class ProtoGlobal {
       }
 
       public Builder mergeFrom(
-              com.google.protobuf.CodedInputStream input,
-              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-              throws java.io.IOException {
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
         RoomMessageContact parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
@@ -2321,6 +2517,7 @@ public final class ProtoGlobal {
       private int bitField0_;
 
       private Object firstName_ = "";
+
       /**
        * <code>optional string first_name = 1;</code>
        */
@@ -2328,7 +2525,7 @@ public final class ProtoGlobal {
         Object ref = firstName_;
         if (!(ref instanceof String)) {
           com.google.protobuf.ByteString bs =
-                  (com.google.protobuf.ByteString) ref;
+              (com.google.protobuf.ByteString) ref;
           String s = bs.toStringUtf8();
           firstName_ = s;
           return s;
@@ -2336,16 +2533,17 @@ public final class ProtoGlobal {
           return (String) ref;
         }
       }
+
       /**
        * <code>optional string first_name = 1;</code>
        */
       public com.google.protobuf.ByteString
-      getFirstNameBytes() {
+          getFirstNameBytes() {
         Object ref = firstName_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b =
-                  com.google.protobuf.ByteString.copyFromUtf8(
-                          (String) ref);
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                      (String) ref);
           firstName_ = b;
           return b;
         } else {
@@ -2356,9 +2554,9 @@ public final class ProtoGlobal {
        * <code>optional string first_name = 1;</code>
        */
       public Builder setFirstName(
-              String value) {
+          String value) {
         if (value == null) {
-          throw new NullPointerException();
+    throw new NullPointerException();
   }
   
         firstName_ = value;
@@ -2378,11 +2576,11 @@ public final class ProtoGlobal {
        * <code>optional string first_name = 1;</code>
        */
       public Builder setFirstNameBytes(
-              com.google.protobuf.ByteString value) {
+          com.google.protobuf.ByteString value) {
         if (value == null) {
-          throw new NullPointerException();
-        }
-        checkByteStringIsUtf8(value);
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
         
         firstName_ = value;
         onChanged();
@@ -2397,7 +2595,7 @@ public final class ProtoGlobal {
         Object ref = lastName_;
         if (!(ref instanceof String)) {
           com.google.protobuf.ByteString bs =
-                  (com.google.protobuf.ByteString) ref;
+              (com.google.protobuf.ByteString) ref;
           String s = bs.toStringUtf8();
           lastName_ = s;
           return s;
@@ -2405,16 +2603,17 @@ public final class ProtoGlobal {
           return (String) ref;
         }
       }
+
       /**
        * <code>optional string last_name = 2;</code>
        */
       public com.google.protobuf.ByteString
-      getLastNameBytes() {
+          getLastNameBytes() {
         Object ref = lastName_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b =
-                  com.google.protobuf.ByteString.copyFromUtf8(
-                          (String) ref);
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                      (String) ref);
           lastName_ = b;
           return b;
         } else {
@@ -2425,9 +2624,9 @@ public final class ProtoGlobal {
        * <code>optional string last_name = 2;</code>
        */
       public Builder setLastName(
-              String value) {
+          String value) {
         if (value == null) {
-          throw new NullPointerException();
+    throw new NullPointerException();
   }
   
         lastName_ = value;
@@ -2447,11 +2646,11 @@ public final class ProtoGlobal {
        * <code>optional string last_name = 2;</code>
        */
       public Builder setLastNameBytes(
-              com.google.protobuf.ByteString value) {
+          com.google.protobuf.ByteString value) {
         if (value == null) {
-          throw new NullPointerException();
-        }
-        checkByteStringIsUtf8(value);
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
         
         lastName_ = value;
         onChanged();
@@ -2466,7 +2665,7 @@ public final class ProtoGlobal {
         Object ref = nickname_;
         if (!(ref instanceof String)) {
           com.google.protobuf.ByteString bs =
-                  (com.google.protobuf.ByteString) ref;
+              (com.google.protobuf.ByteString) ref;
           String s = bs.toStringUtf8();
           nickname_ = s;
           return s;
@@ -2474,16 +2673,17 @@ public final class ProtoGlobal {
           return (String) ref;
         }
       }
+
       /**
        * <code>optional string nickname = 3;</code>
        */
       public com.google.protobuf.ByteString
-      getNicknameBytes() {
+          getNicknameBytes() {
         Object ref = nickname_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b =
-                  com.google.protobuf.ByteString.copyFromUtf8(
-                          (String) ref);
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                      (String) ref);
           nickname_ = b;
           return b;
         } else {
@@ -2494,9 +2694,9 @@ public final class ProtoGlobal {
        * <code>optional string nickname = 3;</code>
        */
       public Builder setNickname(
-              String value) {
+          String value) {
         if (value == null) {
-          throw new NullPointerException();
+    throw new NullPointerException();
   }
   
         nickname_ = value;
@@ -2507,7 +2707,7 @@ public final class ProtoGlobal {
        * <code>optional string nickname = 3;</code>
        */
       public Builder clearNickname() {
-        
+
         nickname_ = getDefaultInstance().getNickname();
         onChanged();
         return this;
@@ -2516,11 +2716,11 @@ public final class ProtoGlobal {
        * <code>optional string nickname = 3;</code>
        */
       public Builder setNicknameBytes(
-              com.google.protobuf.ByteString value) {
+          com.google.protobuf.ByteString value) {
         if (value == null) {
-          throw new NullPointerException();
-        }
-        checkByteStringIsUtf8(value);
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
         
         nickname_ = value;
         onChanged();
@@ -2538,7 +2738,7 @@ public final class ProtoGlobal {
        * <code>repeated string phone = 4;</code>
        */
       public com.google.protobuf.ProtocolStringList
-      getPhoneList() {
+          getPhoneList() {
         return phone_.getUnmodifiableView();
       }
       /**
@@ -2547,6 +2747,7 @@ public final class ProtoGlobal {
       public int getPhoneCount() {
         return phone_.size();
       }
+
       /**
        * <code>repeated string phone = 4;</code>
        */
@@ -2564,9 +2765,9 @@ public final class ProtoGlobal {
        * <code>repeated string phone = 4;</code>
        */
       public Builder setPhone(
-              int index, String value) {
+          int index, String value) {
         if (value == null) {
-          throw new NullPointerException();
+    throw new NullPointerException();
         }
         ensurePhoneIsMutable();
         phone_.set(index, value);
@@ -2577,11 +2778,11 @@ public final class ProtoGlobal {
        * <code>repeated string phone = 4;</code>
        */
       public Builder addPhone(
-              String value) {
+          String value) {
         if (value == null) {
-          throw new NullPointerException();
-        }
-        ensurePhoneIsMutable();
+    throw new NullPointerException();
+  }
+  ensurePhoneIsMutable();
         phone_.add(value);
         onChanged();
         return this;
@@ -2590,10 +2791,10 @@ public final class ProtoGlobal {
        * <code>repeated string phone = 4;</code>
        */
       public Builder addAllPhone(
-              Iterable<String> values) {
+          Iterable<String> values) {
         ensurePhoneIsMutable();
         com.google.protobuf.AbstractMessageLite.Builder.addAll(
-                values, phone_);
+            values, phone_);
         onChanged();
         return this;
       }
@@ -2610,11 +2811,11 @@ public final class ProtoGlobal {
        * <code>repeated string phone = 4;</code>
        */
       public Builder addPhoneBytes(
-              com.google.protobuf.ByteString value) {
+          com.google.protobuf.ByteString value) {
         if (value == null) {
-          throw new NullPointerException();
-        }
-        checkByteStringIsUtf8(value);
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
         ensurePhoneIsMutable();
         phone_.add(value);
         onChanged();
@@ -2632,7 +2833,7 @@ public final class ProtoGlobal {
        * <code>repeated string email = 5;</code>
        */
       public com.google.protobuf.ProtocolStringList
-      getEmailList() {
+          getEmailList() {
         return email_.getUnmodifiableView();
       }
       /**
@@ -2641,6 +2842,7 @@ public final class ProtoGlobal {
       public int getEmailCount() {
         return email_.size();
       }
+
       /**
        * <code>repeated string email = 5;</code>
        */
@@ -2658,9 +2860,9 @@ public final class ProtoGlobal {
        * <code>repeated string email = 5;</code>
        */
       public Builder setEmail(
-              int index, String value) {
+          int index, String value) {
         if (value == null) {
-          throw new NullPointerException();
+    throw new NullPointerException();
         }
         ensureEmailIsMutable();
         email_.set(index, value);
@@ -2671,11 +2873,11 @@ public final class ProtoGlobal {
        * <code>repeated string email = 5;</code>
        */
       public Builder addEmail(
-              String value) {
+          String value) {
         if (value == null) {
-          throw new NullPointerException();
-        }
-        ensureEmailIsMutable();
+    throw new NullPointerException();
+  }
+  ensureEmailIsMutable();
         email_.add(value);
         onChanged();
         return this;
@@ -2684,10 +2886,10 @@ public final class ProtoGlobal {
        * <code>repeated string email = 5;</code>
        */
       public Builder addAllEmail(
-              Iterable<String> values) {
+          Iterable<String> values) {
         ensureEmailIsMutable();
         com.google.protobuf.AbstractMessageLite.Builder.addAll(
-                values, email_);
+            values, email_);
         onChanged();
         return this;
       }
@@ -2704,11 +2906,11 @@ public final class ProtoGlobal {
        * <code>repeated string email = 5;</code>
        */
       public Builder addEmailBytes(
-              com.google.protobuf.ByteString value) {
+          com.google.protobuf.ByteString value) {
         if (value == null) {
-          throw new NullPointerException();
-        }
-        checkByteStringIsUtf8(value);
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
         ensureEmailIsMutable();
         email_.add(value);
         onChanged();
@@ -2730,6 +2932,7 @@ public final class ProtoGlobal {
 
     // @@protoc_insertion_point(class_scope:proto.RoomMessageContact)
     private static final RoomMessageContact DEFAULT_INSTANCE;
+
     static {
       DEFAULT_INSTANCE = new RoomMessageContact();
     }
@@ -2741,10 +2944,10 @@ public final class ProtoGlobal {
     private static final com.google.protobuf.Parser<RoomMessageContact>
             PARSER = new com.google.protobuf.AbstractParser<RoomMessageContact>() {
       public RoomMessageContact parsePartialFrom(
-              com.google.protobuf.CodedInputStream input,
-              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-              throws com.google.protobuf.InvalidProtocolBufferException {
-        return new RoomMessageContact(input, extensionRegistry);
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new RoomMessageContact(input, extensionRegistry);
       }
     };
 
@@ -2780,14 +2983,15 @@ public final class ProtoGlobal {
   /**
    * Protobuf type {@code proto.RoomMessageForwardFrom}
    */
-  public static final class RoomMessageForwardFrom extends
-          com.google.protobuf.GeneratedMessageV3 implements
+  public  static final class RoomMessageForwardFrom extends
+      com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:proto.RoomMessageForwardFrom)
       RoomMessageForwardFromOrBuilder {
     // Use RoomMessageForwardFrom.newBuilder() to construct.
     private RoomMessageForwardFrom(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
+
     private RoomMessageForwardFrom() {
       roomId_ = 0L;
       messageId_ = 0L;
@@ -2798,9 +3002,8 @@ public final class ProtoGlobal {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-
     private RoomMessageForwardFrom(
-            com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
@@ -2835,22 +3038,21 @@ public final class ProtoGlobal {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
-                e).setUnfinishedMessage(this);
+            e).setUnfinishedMessage(this);
       } finally {
         makeExtensionsImmutable();
       }
     }
-
     public static final com.google.protobuf.Descriptors.Descriptor
     getDescriptor() {
       return ProtoGlobal.internal_static_proto_RoomMessageForwardFrom_descriptor;
     }
 
     protected FieldAccessorTable
-    internalGetFieldAccessorTable() {
+        internalGetFieldAccessorTable() {
       return ProtoGlobal.internal_static_proto_RoomMessageForwardFrom_fieldAccessorTable
-              .ensureFieldAccessorsInitialized(
-                      RoomMessageForwardFrom.class, Builder.class);
+          .ensureFieldAccessorsInitialized(
+              RoomMessageForwardFrom.class, Builder.class);
     }
 
     public static final int ROOM_ID_FIELD_NUMBER = 1;
@@ -2882,7 +3084,7 @@ public final class ProtoGlobal {
     }
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-            throws java.io.IOException {
+                        throws java.io.IOException {
       if (roomId_ != 0L) {
         output.writeUInt64(1, roomId_);
       }
@@ -2898,22 +3100,21 @@ public final class ProtoGlobal {
       size = 0;
       if (roomId_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
-                .computeUInt64Size(1, roomId_);
+          .computeUInt64Size(1, roomId_);
       }
       if (messageId_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
-                .computeUInt64Size(2, messageId_);
+          .computeUInt64Size(2, messageId_);
       }
       memoizedSize = size;
       return size;
     }
 
     private static final long serialVersionUID = 0L;
-
     @Override
     public boolean equals(final Object obj) {
       if (obj == this) {
-        return true;
+       return true;
       }
       if (!(obj instanceof RoomMessageForwardFrom)) {
         return super.equals(obj);
@@ -2922,9 +3123,9 @@ public final class ProtoGlobal {
 
       boolean result = true;
       result = result && (getRoomId()
-              == other.getRoomId());
+          == other.getRoomId());
       result = result && (getMessageId()
-              == other.getMessageId());
+          == other.getMessageId());
       return result;
     }
 
@@ -2937,10 +3138,10 @@ public final class ProtoGlobal {
       hash = (19 * hash) + getDescriptorForType().hashCode();
       hash = (37 * hash) + ROOM_ID_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-              getRoomId());
+          getRoomId());
       hash = (37 * hash) + MESSAGE_ID_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-              getMessageId());
+          getMessageId());
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -2951,23 +3152,20 @@ public final class ProtoGlobal {
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static RoomMessageForwardFrom parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static RoomMessageForwardFrom parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static RoomMessageForwardFrom parseFrom(
             byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -2978,8 +3176,8 @@ public final class ProtoGlobal {
     }
 
     public static RoomMessageForwardFrom parseFrom(
-            java.io.InputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input, extensionRegistry);
@@ -2988,13 +3186,13 @@ public final class ProtoGlobal {
     public static RoomMessageForwardFrom parseDelimitedFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-              .parseDelimitedWithIOException(PARSER, input);
+          .parseDelimitedWithIOException(PARSER, input);
     }
 
     public static RoomMessageForwardFrom parseDelimitedFrom(
-            java.io.InputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
@@ -3003,30 +3201,27 @@ public final class ProtoGlobal {
             com.google.protobuf.CodedInputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input);
+          .parseWithIOException(PARSER, input);
     }
 
     public static RoomMessageForwardFrom parseFrom(
             com.google.protobuf.CodedInputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input, extensionRegistry);
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public Builder newBuilderForType() {
-      return newBuilder();
-    }
+    public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(RoomMessageForwardFrom prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
-              ? new Builder() : new Builder().mergeFrom(this);
+          ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @Override
@@ -3035,6 +3230,7 @@ public final class ProtoGlobal {
       Builder builder = new Builder(parent);
       return builder;
     }
+
     /**
      * Protobuf type {@code proto.RoomMessageForwardFrom}
      */
@@ -3043,15 +3239,15 @@ public final class ProtoGlobal {
         // @@protoc_insertion_point(builder_implements:proto.RoomMessageForwardFrom)
             RoomMessageForwardFromOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
-      getDescriptor() {
+          getDescriptor() {
         return ProtoGlobal.internal_static_proto_RoomMessageForwardFrom_descriptor;
       }
 
       protected FieldAccessorTable
-      internalGetFieldAccessorTable() {
+          internalGetFieldAccessorTable() {
         return ProtoGlobal.internal_static_proto_RoomMessageForwardFrom_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                    RoomMessageForwardFrom.class, Builder.class);
+                .ensureFieldAccessorsInitialized(
+                RoomMessageForwardFrom.class, Builder.class);
       }
 
       // Construct using com.iGap.proto.ProtoGlobal.RoomMessageForwardFrom.newBuilder()
@@ -3060,7 +3256,7 @@ public final class ProtoGlobal {
       }
 
       private Builder(
-              BuilderParent parent) {
+          BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -3079,7 +3275,7 @@ public final class ProtoGlobal {
       }
 
       public com.google.protobuf.Descriptors.Descriptor
-      getDescriptorForType() {
+          getDescriptorForType() {
         return ProtoGlobal.internal_static_proto_RoomMessageForwardFrom_descriptor;
       }
 
@@ -3106,29 +3302,25 @@ public final class ProtoGlobal {
       public Builder clone() {
         return (Builder) super.clone();
       }
-
       public Builder setField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
-              Object value) {
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
         return (Builder) super.setField(field, value);
       }
-
       public Builder clearField(
-              com.google.protobuf.Descriptors.FieldDescriptor field) {
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-
       public Builder clearOneof(
-              com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
 
       public Builder setRepeatedField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
+          com.google.protobuf.Descriptors.FieldDescriptor field,
           int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-
       public Builder addRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
           Object value) {
@@ -3136,7 +3328,7 @@ public final class ProtoGlobal {
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof RoomMessageForwardFrom) {
-          return mergeFrom((RoomMessageForwardFrom) other);
+          return mergeFrom((RoomMessageForwardFrom)other);
         } else {
           super.mergeFrom(other);
           return this;
@@ -3160,9 +3352,9 @@ public final class ProtoGlobal {
       }
 
       public Builder mergeFrom(
-              com.google.protobuf.CodedInputStream input,
-              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-              throws java.io.IOException {
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
         RoomMessageForwardFrom parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
@@ -3244,6 +3436,7 @@ public final class ProtoGlobal {
 
     // @@protoc_insertion_point(class_scope:proto.RoomMessageForwardFrom)
     private static final RoomMessageForwardFrom DEFAULT_INSTANCE;
+
     static {
       DEFAULT_INSTANCE = new RoomMessageForwardFrom();
     }
@@ -3255,10 +3448,10 @@ public final class ProtoGlobal {
     private static final com.google.protobuf.Parser<RoomMessageForwardFrom>
             PARSER = new com.google.protobuf.AbstractParser<RoomMessageForwardFrom>() {
       public RoomMessageForwardFrom parsePartialFrom(
-              com.google.protobuf.CodedInputStream input,
-              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-              throws com.google.protobuf.InvalidProtocolBufferException {
-        return new RoomMessageForwardFrom(input, extensionRegistry);
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new RoomMessageForwardFrom(input, extensionRegistry);
       }
     };
 
@@ -3294,7 +3487,7 @@ public final class ProtoGlobal {
      * <code>optional string username = 2;</code>
      */
     com.google.protobuf.ByteString
-    getUsernameBytes();
+        getUsernameBytes();
 
     /**
      * <code>optional uint64 phone = 3;</code>
@@ -3309,7 +3502,7 @@ public final class ProtoGlobal {
      * <code>optional string first_name = 4;</code>
      */
     com.google.protobuf.ByteString
-    getFirstNameBytes();
+        getFirstNameBytes();
 
     /**
      * <code>optional string last_name = 5;</code>
@@ -3319,7 +3512,7 @@ public final class ProtoGlobal {
      * <code>optional string last_name = 5;</code>
      */
     com.google.protobuf.ByteString
-    getLastNameBytes();
+        getLastNameBytes();
 
     /**
      * <code>optional string display_name = 6;</code>
@@ -3329,7 +3522,7 @@ public final class ProtoGlobal {
      * <code>optional string display_name = 6;</code>
      */
     com.google.protobuf.ByteString
-    getDisplayNameBytes();
+        getDisplayNameBytes();
 
     /**
      * <code>optional string initials = 7;</code>
@@ -3339,7 +3532,7 @@ public final class ProtoGlobal {
      * <code>optional string initials = 7;</code>
      */
     com.google.protobuf.ByteString
-    getInitialsBytes();
+        getInitialsBytes();
 
     /**
      * <code>optional string color = 8;</code>
@@ -3349,7 +3542,7 @@ public final class ProtoGlobal {
      * <code>optional string color = 8;</code>
      */
     com.google.protobuf.ByteString
-    getColorBytes();
+        getColorBytes();
 
     /**
      * <code>optional .proto.RegisteredUser.Status status = 9;</code>
@@ -3402,13 +3595,13 @@ public final class ProtoGlobal {
      * <code>optional string cache_id = 15;</code>
      */
     com.google.protobuf.ByteString
-    getCacheIdBytes();
+        getCacheIdBytes();
   }
   /**
    * Protobuf type {@code proto.RegisteredUser}
    */
-  public static final class RegisteredUser extends
-          com.google.protobuf.GeneratedMessageV3 implements
+  public  static final class RegisteredUser extends
+      com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:proto.RegisteredUser)
       RegisteredUserOrBuilder {
     // Use RegisteredUser.newBuilder() to construct.
@@ -3437,9 +3630,8 @@ public final class ProtoGlobal {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-
     private RegisteredUser(
-            com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
@@ -3555,29 +3747,28 @@ public final class ProtoGlobal {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
-                e).setUnfinishedMessage(this);
+            e).setUnfinishedMessage(this);
       } finally {
         makeExtensionsImmutable();
       }
     }
-
     public static final com.google.protobuf.Descriptors.Descriptor
     getDescriptor() {
       return ProtoGlobal.internal_static_proto_RegisteredUser_descriptor;
     }
 
     protected FieldAccessorTable
-    internalGetFieldAccessorTable() {
+        internalGetFieldAccessorTable() {
       return ProtoGlobal.internal_static_proto_RegisteredUser_fieldAccessorTable
-              .ensureFieldAccessorsInitialized(
-                      RegisteredUser.class, Builder.class);
+          .ensureFieldAccessorsInitialized(
+              RegisteredUser.class, Builder.class);
     }
 
     /**
      * Protobuf enum {@code proto.RegisteredUser.Status}
      */
     public enum Status
-            implements com.google.protobuf.ProtocolMessageEnum {
+        implements com.google.protobuf.ProtocolMessageEnum {
       /**
        * <code>LONG_TIME_AGO = 0;</code>
        */
@@ -3610,7 +3801,8 @@ public final class ProtoGlobal {
        * <code>SERVICE_NOTIFICATIONS = 7;</code>
        */
       SERVICE_NOTIFICATIONS(7),
-      UNRECOGNIZED(-1),;
+      UNRECOGNIZED(-1),
+      ;
 
       /**
        * <code>LONG_TIME_AGO = 0;</code>
@@ -3664,61 +3856,53 @@ public final class ProtoGlobal {
 
       public static Status forNumber(int value) {
         switch (value) {
-          case 0:
-            return LONG_TIME_AGO;
-          case 1:
-            return LAST_MONTH;
-          case 2:
-            return LAST_WEEK;
-          case 3:
-            return ONLINE;
-          case 4:
-            return EXACTLY;
-          case 5:
-            return RECENTLY;
-          case 6:
-            return SUPPORT;
-          case 7: return SERVICE_NOTIFICATIONS;
+          case 0: return LONG_TIME_AGO;
+          case 1: return LAST_MONTH;
+          case 2: return LAST_WEEK;
+          case 3: return ONLINE;
+          case 4: return EXACTLY;
+          case 5: return RECENTLY;
+          case 6: return SUPPORT;
+          case 7:
+            return SERVICE_NOTIFICATIONS;
           default:
             return null;
         }
       }
 
       public static com.google.protobuf.Internal.EnumLiteMap<Status>
-          internalGetValueMap() {
+      internalGetValueMap() {
         return internalValueMap;
       }
-
       private static final com.google.protobuf.Internal.EnumLiteMap<
-              Status> internalValueMap =
-              new com.google.protobuf.Internal.EnumLiteMap<Status>() {
-                public Status findValueByNumber(int number) {
-                  return Status.forNumber(number);
-                }
-              };
+          Status> internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<Status>() {
+              public Status findValueByNumber(int number) {
+                return Status.forNumber(number);
+              }
+            };
 
       public final com.google.protobuf.Descriptors.EnumValueDescriptor
-          getValueDescriptor() {
+      getValueDescriptor() {
         return getDescriptor().getValues().get(ordinal());
       }
-
       public final com.google.protobuf.Descriptors.EnumDescriptor
           getDescriptorForType() {
         return getDescriptor();
       }
 
       public static final com.google.protobuf.Descriptors.EnumDescriptor
-      getDescriptor() {
+          getDescriptor() {
         return RegisteredUser.getDescriptor().getEnumTypes().get(0);
       }
 
       private static final Status[] VALUES = values();
 
       public static Status valueOf(
-              com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
         if (desc.getType() != getDescriptor()) {
           throw new IllegalArgumentException(
-                  "EnumValueDescriptor is not for this type.");
+            "EnumValueDescriptor is not for this type.");
         }
         if (desc.getIndex() == -1) {
           return UNRECOGNIZED;
@@ -3754,8 +3938,8 @@ public final class ProtoGlobal {
       if (ref instanceof String) {
         return (String) ref;
       } else {
-        com.google.protobuf.ByteString bs =
-                (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
         String s = bs.toStringUtf8();
         username_ = s;
         return s;
@@ -3765,11 +3949,11 @@ public final class ProtoGlobal {
      * <code>optional string username = 2;</code>
      */
     public com.google.protobuf.ByteString
-    getUsernameBytes() {
+        getUsernameBytes() {
       Object ref = username_;
       if (ref instanceof String) {
-        com.google.protobuf.ByteString b =
-                com.google.protobuf.ByteString.copyFromUtf8(
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
                 (String) ref);
         username_ = b;
         return b;
@@ -3797,8 +3981,8 @@ public final class ProtoGlobal {
       if (ref instanceof String) {
         return (String) ref;
       } else {
-        com.google.protobuf.ByteString bs =
-                (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
         String s = bs.toStringUtf8();
         firstName_ = s;
         return s;
@@ -3808,11 +3992,11 @@ public final class ProtoGlobal {
      * <code>optional string first_name = 4;</code>
      */
     public com.google.protobuf.ByteString
-    getFirstNameBytes() {
+        getFirstNameBytes() {
       Object ref = firstName_;
       if (ref instanceof String) {
-        com.google.protobuf.ByteString b =
-                com.google.protobuf.ByteString.copyFromUtf8(
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
                 (String) ref);
         firstName_ = b;
         return b;
@@ -3831,8 +4015,8 @@ public final class ProtoGlobal {
       if (ref instanceof String) {
         return (String) ref;
       } else {
-        com.google.protobuf.ByteString bs =
-                (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
         String s = bs.toStringUtf8();
         lastName_ = s;
         return s;
@@ -3842,11 +4026,11 @@ public final class ProtoGlobal {
      * <code>optional string last_name = 5;</code>
      */
     public com.google.protobuf.ByteString
-    getLastNameBytes() {
+        getLastNameBytes() {
       Object ref = lastName_;
       if (ref instanceof String) {
-        com.google.protobuf.ByteString b =
-                com.google.protobuf.ByteString.copyFromUtf8(
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
                 (String) ref);
         lastName_ = b;
         return b;
@@ -3865,8 +4049,8 @@ public final class ProtoGlobal {
       if (ref instanceof String) {
         return (String) ref;
       } else {
-        com.google.protobuf.ByteString bs =
-                (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
         String s = bs.toStringUtf8();
         displayName_ = s;
         return s;
@@ -3876,11 +4060,11 @@ public final class ProtoGlobal {
      * <code>optional string display_name = 6;</code>
      */
     public com.google.protobuf.ByteString
-    getDisplayNameBytes() {
+        getDisplayNameBytes() {
       Object ref = displayName_;
       if (ref instanceof String) {
-        com.google.protobuf.ByteString b =
-                com.google.protobuf.ByteString.copyFromUtf8(
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
                 (String) ref);
         displayName_ = b;
         return b;
@@ -3899,8 +4083,8 @@ public final class ProtoGlobal {
       if (ref instanceof String) {
         return (String) ref;
       } else {
-        com.google.protobuf.ByteString bs =
-                (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
         String s = bs.toStringUtf8();
         initials_ = s;
         return s;
@@ -3910,11 +4094,11 @@ public final class ProtoGlobal {
      * <code>optional string initials = 7;</code>
      */
     public com.google.protobuf.ByteString
-    getInitialsBytes() {
+        getInitialsBytes() {
       Object ref = initials_;
       if (ref instanceof String) {
-        com.google.protobuf.ByteString b =
-                com.google.protobuf.ByteString.copyFromUtf8(
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
                 (String) ref);
         initials_ = b;
         return b;
@@ -3933,8 +4117,8 @@ public final class ProtoGlobal {
       if (ref instanceof String) {
         return (String) ref;
       } else {
-        com.google.protobuf.ByteString bs =
-                (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
         String s = bs.toStringUtf8();
         color_ = s;
         return s;
@@ -3944,11 +4128,11 @@ public final class ProtoGlobal {
      * <code>optional string color = 8;</code>
      */
     public com.google.protobuf.ByteString
-    getColorBytes() {
+        getColorBytes() {
       Object ref = color_;
       if (ref instanceof String) {
-        com.google.protobuf.ByteString b =
-                com.google.protobuf.ByteString.copyFromUtf8(
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
                 (String) ref);
         color_ = b;
         return b;
@@ -4023,7 +4207,6 @@ public final class ProtoGlobal {
 
     public static final int DELETED_FIELD_NUMBER = 14;
     private boolean deleted_;
-
     /**
      * <code>optional bool deleted = 14;</code>
      */
@@ -4033,7 +4216,6 @@ public final class ProtoGlobal {
 
     public static final int CACHE_ID_FIELD_NUMBER = 15;
     private volatile Object cacheId_;
-
     /**
      * <code>optional string cache_id = 15;</code>
      */
@@ -4042,8 +4224,8 @@ public final class ProtoGlobal {
       if (ref instanceof String) {
         return (String) ref;
       } else {
-        com.google.protobuf.ByteString bs =
-                (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
         String s = bs.toStringUtf8();
         cacheId_ = s;
         return s;
@@ -4054,12 +4236,12 @@ public final class ProtoGlobal {
      * <code>optional string cache_id = 15;</code>
      */
     public com.google.protobuf.ByteString
-    getCacheIdBytes() {
+        getCacheIdBytes() {
       Object ref = cacheId_;
       if (ref instanceof String) {
-        com.google.protobuf.ByteString b =
-                com.google.protobuf.ByteString.copyFromUtf8(
-                        (String) ref);
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
         cacheId_ = b;
         return b;
       } else {
@@ -4159,7 +4341,7 @@ public final class ProtoGlobal {
       }
       if (status_ != Status.LONG_TIME_AGO.getNumber()) {
         size += com.google.protobuf.CodedOutputStream
-                .computeEnumSize(9, status_);
+          .computeEnumSize(9, status_);
       }
       if (lastSeen_ != 0) {
         size += com.google.protobuf.CodedOutputStream
@@ -4167,7 +4349,7 @@ public final class ProtoGlobal {
       }
       if (avatarCount_ != 0) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(11, avatarCount_);
+                .computeUInt32Size(11, avatarCount_);
       }
       if (avatar_ != null) {
         size += com.google.protobuf.CodedOutputStream
@@ -4175,11 +4357,11 @@ public final class ProtoGlobal {
       }
       if (mutual_ != false) {
         size += com.google.protobuf.CodedOutputStream
-                .computeBoolSize(13, mutual_);
+          .computeBoolSize(13, mutual_);
       }
       if (deleted_ != false) {
         size += com.google.protobuf.CodedOutputStream
-                .computeBoolSize(14, deleted_);
+          .computeBoolSize(14, deleted_);
       }
       if (!getCacheIdBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(15, cacheId_);
@@ -4189,6 +4371,7 @@ public final class ProtoGlobal {
     }
 
     private static final long serialVersionUID = 0L;
+
     @Override
     public boolean equals(final Object obj) {
       if (obj == this) {
@@ -4207,31 +4390,31 @@ public final class ProtoGlobal {
       result = result && (getPhone()
               == other.getPhone());
       result = result && getFirstName()
-              .equals(other.getFirstName());
+          .equals(other.getFirstName());
       result = result && getLastName()
-              .equals(other.getLastName());
+          .equals(other.getLastName());
       result = result && getDisplayName()
               .equals(other.getDisplayName());
       result = result && getInitials()
-              .equals(other.getInitials());
+          .equals(other.getInitials());
       result = result && getColor()
           .equals(other.getColor());
       result = result && status_ == other.status_;
       result = result && (getLastSeen()
-              == other.getLastSeen());
+          == other.getLastSeen());
       result = result && (getAvatarCount()
-          == other.getAvatarCount());
+              == other.getAvatarCount());
       result = result && (hasAvatar() == other.hasAvatar());
       if (hasAvatar()) {
         result = result && getAvatar()
-                .equals(other.getAvatar());
+            .equals(other.getAvatar());
       }
       result = result && (getMutual()
-              == other.getMutual());
+          == other.getMutual());
       result = result && (getDeleted()
-              == other.getDeleted());
+          == other.getDeleted());
       result = result && getCacheId()
-              .equals(other.getCacheId());
+          .equals(other.getCacheId());
       return result;
     }
 
@@ -4272,10 +4455,10 @@ public final class ProtoGlobal {
       }
       hash = (37 * hash) + MUTUAL_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
-              getMutual());
+          getMutual());
       hash = (37 * hash) + DELETED_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
-              getDeleted());
+          getDeleted());
       hash = (37 * hash) + CACHE_ID_FIELD_NUMBER;
       hash = (53 * hash) + getCacheId().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
@@ -4299,23 +4482,23 @@ public final class ProtoGlobal {
       return PARSER.parseFrom(data);
     }
     public static RegisteredUser parseFrom(
-        byte[] data,
+            byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
+
     public static RegisteredUser parseFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static RegisteredUser parseFrom(
-            java.io.InputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input, extensionRegistry);
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
     public static RegisteredUser parseDelimitedFrom(java.io.InputStream input)
@@ -4326,10 +4509,10 @@ public final class ProtoGlobal {
 
     public static RegisteredUser parseDelimitedFrom(
             java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
     public static RegisteredUser parseFrom(
@@ -4338,50 +4521,51 @@ public final class ProtoGlobal {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
+
     public static RegisteredUser parseFrom(
-            com.google.protobuf.CodedInputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input, extensionRegistry);
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public Builder newBuilderForType() { return newBuilder(); }
+    public Builder newBuilderForType() { return newBuilder();
+    }
+
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
     public static Builder newBuilder(RegisteredUser prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
-              ? new Builder() : new Builder().mergeFrom(this);
+          ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @Override
     protected Builder newBuilderForType(
-        BuilderParent parent) {
+            BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.RegisteredUser}
      */
     public static final class Builder extends
-            com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-            // @@protoc_insertion_point(builder_implements:proto.RegisteredUser)
-            RegisteredUserOrBuilder {
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:proto.RegisteredUser)
+        RegisteredUserOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
         return ProtoGlobal.internal_static_proto_RegisteredUser_descriptor;
       }
 
       protected FieldAccessorTable
-      internalGetFieldAccessorTable() {
+          internalGetFieldAccessorTable() {
         return ProtoGlobal.internal_static_proto_RegisteredUser_fieldAccessorTable
-                .ensureFieldAccessorsInitialized(
+            .ensureFieldAccessorsInitialized(
                 RegisteredUser.class, Builder.class);
       }
 
@@ -4395,7 +4579,6 @@ public final class ProtoGlobal {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
@@ -4441,7 +4624,7 @@ public final class ProtoGlobal {
       }
 
       public com.google.protobuf.Descriptors.Descriptor
-      getDescriptorForType() {
+          getDescriptorForType() {
         return ProtoGlobal.internal_static_proto_RegisteredUser_descriptor;
       }
 
@@ -4485,35 +4668,29 @@ public final class ProtoGlobal {
       public Builder clone() {
         return (Builder) super.clone();
       }
-
       public Builder setField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
-              Object value) {
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
         return (Builder) super.setField(field, value);
       }
-
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof RegisteredUser) {
           return mergeFrom((RegisteredUser)other);
@@ -4586,9 +4763,9 @@ public final class ProtoGlobal {
       }
 
       public Builder mergeFrom(
-              com.google.protobuf.CodedInputStream input,
-              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-              throws java.io.IOException {
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
         RegisteredUser parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
@@ -4623,14 +4800,13 @@ public final class ProtoGlobal {
        * <code>optional uint64 id = 1;</code>
        */
       public Builder clearId() {
-
+        
         id_ = 0L;
         onChanged();
         return this;
       }
 
       private Object username_ = "";
-
       /**
        * <code>optional string username = 2;</code>
        */
@@ -4646,12 +4822,11 @@ public final class ProtoGlobal {
           return (String) ref;
         }
       }
-
       /**
        * <code>optional string username = 2;</code>
        */
       public com.google.protobuf.ByteString
-      getUsernameBytes() {
+          getUsernameBytes() {
         Object ref = username_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
@@ -4663,7 +4838,6 @@ public final class ProtoGlobal {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string username = 2;</code>
        */
@@ -4686,12 +4860,11 @@ public final class ProtoGlobal {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string username = 2;</code>
        */
       public Builder setUsernameBytes(
-              com.google.protobuf.ByteString value) {
+          com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -4722,14 +4895,13 @@ public final class ProtoGlobal {
        * <code>optional uint64 phone = 3;</code>
        */
       public Builder clearPhone() {
-
+        
         phone_ = 0L;
         onChanged();
         return this;
       }
 
       private Object firstName_ = "";
-
       /**
        * <code>optional string first_name = 4;</code>
        */
@@ -4737,7 +4909,7 @@ public final class ProtoGlobal {
         Object ref = firstName_;
         if (!(ref instanceof String)) {
           com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
+                  (com.google.protobuf.ByteString) ref;
           String s = bs.toStringUtf8();
           firstName_ = s;
           return s;
@@ -4745,12 +4917,11 @@ public final class ProtoGlobal {
           return (String) ref;
         }
       }
-
       /**
        * <code>optional string first_name = 4;</code>
        */
       public com.google.protobuf.ByteString
-      getFirstNameBytes() {
+          getFirstNameBytes() {
         Object ref = firstName_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
@@ -4762,7 +4933,6 @@ public final class ProtoGlobal {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string first_name = 4;</code>
        */
@@ -4785,24 +4955,22 @@ public final class ProtoGlobal {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string first_name = 4;</code>
        */
       public Builder setFirstNameBytes(
-              com.google.protobuf.ByteString value) {
+          com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
-
+        
         firstName_ = value;
         onChanged();
         return this;
       }
 
       private Object lastName_ = "";
-
       /**
        * <code>optional string last_name = 5;</code>
        */
@@ -4810,7 +4978,7 @@ public final class ProtoGlobal {
         Object ref = lastName_;
         if (!(ref instanceof String)) {
           com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
+                  (com.google.protobuf.ByteString) ref;
           String s = bs.toStringUtf8();
           lastName_ = s;
           return s;
@@ -4818,12 +4986,11 @@ public final class ProtoGlobal {
           return (String) ref;
         }
       }
-
       /**
        * <code>optional string last_name = 5;</code>
        */
       public com.google.protobuf.ByteString
-      getLastNameBytes() {
+          getLastNameBytes() {
         Object ref = lastName_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
@@ -4835,7 +5002,6 @@ public final class ProtoGlobal {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string last_name = 5;</code>
        */
@@ -4858,16 +5024,15 @@ public final class ProtoGlobal {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string last_name = 5;</code>
        */
       public Builder setLastNameBytes(
-              com.google.protobuf.ByteString value) {
+          com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
-        }
-        checkByteStringIsUtf8(value);
+  }
+  checkByteStringIsUtf8(value);
         
         lastName_ = value;
         onChanged();
@@ -4875,7 +5040,6 @@ public final class ProtoGlobal {
       }
 
       private Object displayName_ = "";
-
       /**
        * <code>optional string display_name = 6;</code>
        */
@@ -4883,7 +5047,7 @@ public final class ProtoGlobal {
         Object ref = displayName_;
         if (!(ref instanceof String)) {
           com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
+                  (com.google.protobuf.ByteString) ref;
           String s = bs.toStringUtf8();
           displayName_ = s;
           return s;
@@ -4891,12 +5055,11 @@ public final class ProtoGlobal {
           return (String) ref;
         }
       }
-
       /**
        * <code>optional string display_name = 6;</code>
        */
       public com.google.protobuf.ByteString
-      getDisplayNameBytes() {
+          getDisplayNameBytes() {
         Object ref = displayName_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
@@ -4930,16 +5093,15 @@ public final class ProtoGlobal {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string display_name = 6;</code>
        */
       public Builder setDisplayNameBytes(
-              com.google.protobuf.ByteString value) {
+          com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
-        }
-        checkByteStringIsUtf8(value);
+  }
+  checkByteStringIsUtf8(value);
         
         displayName_ = value;
         onChanged();
@@ -4947,7 +5109,6 @@ public final class ProtoGlobal {
       }
 
       private Object initials_ = "";
-
       /**
        * <code>optional string initials = 7;</code>
        */
@@ -4963,12 +5124,11 @@ public final class ProtoGlobal {
           return (String) ref;
         }
       }
-
       /**
        * <code>optional string initials = 7;</code>
        */
       public com.google.protobuf.ByteString
-      getInitialsBytes() {
+          getInitialsBytes() {
         Object ref = initials_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
@@ -5002,16 +5162,15 @@ public final class ProtoGlobal {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string initials = 7;</code>
        */
       public Builder setInitialsBytes(
-              com.google.protobuf.ByteString value) {
+          com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
-        }
-        checkByteStringIsUtf8(value);
+  }
+  checkByteStringIsUtf8(value);
         
         initials_ = value;
         onChanged();
@@ -5019,7 +5178,6 @@ public final class ProtoGlobal {
       }
 
       private Object color_ = "";
-
       /**
        * <code>optional string color = 8;</code>
        */
@@ -5035,12 +5193,11 @@ public final class ProtoGlobal {
           return (String) ref;
         }
       }
-
       /**
        * <code>optional string color = 8;</code>
        */
       public com.google.protobuf.ByteString
-      getColorBytes() {
+          getColorBytes() {
         Object ref = color_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
@@ -5052,7 +5209,6 @@ public final class ProtoGlobal {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string color = 8;</code>
        */
@@ -5070,7 +5226,7 @@ public final class ProtoGlobal {
        * <code>optional string color = 8;</code>
        */
       public Builder clearColor() {
-
+        
         color_ = getDefaultInstance().getColor();
         onChanged();
         return this;
@@ -5105,7 +5261,6 @@ public final class ProtoGlobal {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional .proto.RegisteredUser.Status status = 9;</code>
        */
@@ -5181,7 +5336,7 @@ public final class ProtoGlobal {
        * <code>optional uint32 avatar_count = 11;</code>
        */
       public Builder clearAvatarCount() {
-
+        
         avatarCount_ = 0;
         onChanged();
         return this;
@@ -5196,7 +5351,6 @@ public final class ProtoGlobal {
       public boolean hasAvatar() {
         return avatarBuilder_ != null || avatar_ != null;
       }
-
       /**
        * <code>optional .proto.Avatar avatar = 12;</code>
        */
@@ -5273,10 +5427,11 @@ public final class ProtoGlobal {
        * <code>optional .proto.Avatar avatar = 12;</code>
        */
       public Avatar.Builder getAvatarBuilder() {
-
+        
         onChanged();
         return getAvatarFieldBuilder().getBuilder();
       }
+
       /**
        * <code>optional .proto.Avatar avatar = 12;</code>
        */
@@ -5285,16 +5440,15 @@ public final class ProtoGlobal {
           return avatarBuilder_.getMessageOrBuilder();
         } else {
           return avatar_ == null ?
-                  Avatar.getDefaultInstance() : avatar_;
+              Avatar.getDefaultInstance() : avatar_;
         }
       }
-
       /**
        * <code>optional .proto.Avatar avatar = 12;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-              Avatar, Avatar.Builder, AvatarOrBuilder>
-      getAvatarFieldBuilder() {
+          Avatar, Avatar.Builder, AvatarOrBuilder>
+          getAvatarFieldBuilder() {
         if (avatarBuilder_ == null) {
           avatarBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
               Avatar, Avatar.Builder, AvatarOrBuilder>(
@@ -5326,14 +5480,13 @@ public final class ProtoGlobal {
        * <code>optional bool mutual = 13;</code>
        */
       public Builder clearMutual() {
-
+        
         mutual_ = false;
         onChanged();
         return this;
       }
 
-      private boolean deleted_;
-
+      private boolean deleted_ ;
       /**
        * <code>optional bool deleted = 14;</code>
        */
@@ -5345,24 +5498,22 @@ public final class ProtoGlobal {
        * <code>optional bool deleted = 14;</code>
        */
       public Builder setDeleted(boolean value) {
-
+        
         deleted_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional bool deleted = 14;</code>
        */
       public Builder clearDeleted() {
-
+        
         deleted_ = false;
         onChanged();
         return this;
       }
 
       private Object cacheId_ = "";
-
       /**
        * <code>optional string cache_id = 15;</code>
        */
@@ -5383,53 +5534,50 @@ public final class ProtoGlobal {
        * <code>optional string cache_id = 15;</code>
        */
       public com.google.protobuf.ByteString
-      getCacheIdBytes() {
+          getCacheIdBytes() {
         Object ref = cacheId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b =
-                  com.google.protobuf.ByteString.copyFromUtf8(
-                          (String) ref);
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                      (String) ref);
           cacheId_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string cache_id = 15;</code>
        */
       public Builder setCacheId(
-              String value) {
+          String value) {
         if (value == null) {
-          throw new NullPointerException();
-        }
-
+    throw new NullPointerException();
+  }
+  
         cacheId_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string cache_id = 15;</code>
        */
       public Builder clearCacheId() {
-
+        
         cacheId_ = getDefaultInstance().getCacheId();
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string cache_id = 15;</code>
        */
       public Builder setCacheIdBytes(
-              com.google.protobuf.ByteString value) {
+          com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        
+        }
+        checkByteStringIsUtf8(value);
+
         cacheId_ = value;
         onChanged();
         return this;
@@ -5440,7 +5588,7 @@ public final class ProtoGlobal {
       }
 
       public final Builder mergeUnknownFields(
-              final com.google.protobuf.UnknownFieldSet unknownFields) {
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
       }
 
@@ -5450,7 +5598,6 @@ public final class ProtoGlobal {
 
     // @@protoc_insertion_point(class_scope:proto.RegisteredUser)
     private static final RegisteredUser DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new RegisteredUser();
     }
@@ -5464,8 +5611,8 @@ public final class ProtoGlobal {
       public RegisteredUser parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-              throws com.google.protobuf.InvalidProtocolBufferException {
-        return new RegisteredUser(input, extensionRegistry);
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new RegisteredUser(input, extensionRegistry);
       }
     };
 
@@ -5497,12 +5644,10 @@ public final class ProtoGlobal {
      * <code>optional .proto.File file = 2;</code>
      */
     boolean hasFile();
-
     /**
      * <code>optional .proto.File file = 2;</code>
      */
     File getFile();
-
     /**
      * <code>optional .proto.File file = 2;</code>
      */
@@ -5514,12 +5659,11 @@ public final class ProtoGlobal {
   public  static final class Avatar extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:proto.Avatar)
-          AvatarOrBuilder {
+      AvatarOrBuilder {
     // Use Avatar.newBuilder() to construct.
     private Avatar(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private Avatar() {
       id_ = 0L;
     }
@@ -5573,14 +5717,13 @@ public final class ProtoGlobal {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
-                e).setUnfinishedMessage(this);
+            e).setUnfinishedMessage(this);
       } finally {
         makeExtensionsImmutable();
       }
     }
-
     public static final com.google.protobuf.Descriptors.Descriptor
-    getDescriptor() {
+        getDescriptor() {
       return ProtoGlobal.internal_static_proto_Avatar_descriptor;
     }
 
@@ -5602,14 +5745,12 @@ public final class ProtoGlobal {
 
     public static final int FILE_FIELD_NUMBER = 2;
     private File file_;
-
     /**
      * <code>optional .proto.File file = 2;</code>
      */
     public boolean hasFile() {
       return file_ != null;
     }
-
     /**
      * <code>optional .proto.File file = 2;</code>
      */
@@ -5624,7 +5765,6 @@ public final class ProtoGlobal {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -5655,14 +5795,13 @@ public final class ProtoGlobal {
       }
       if (file_ != null) {
         size += com.google.protobuf.CodedOutputStream
-                .computeMessageSize(2, getFile());
+          .computeMessageSize(2, getFile());
       }
       memoizedSize = size;
       return size;
     }
 
     private static final long serialVersionUID = 0L;
-
     @Override
     public boolean equals(final Object obj) {
       if (obj == this) {
@@ -5693,7 +5832,7 @@ public final class ProtoGlobal {
       hash = (19 * hash) + getDescriptorForType().hashCode();
       hash = (37 * hash) + ID_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-              getId());
+          getId());
       if (hasFile()) {
         hash = (37 * hash) + FILE_FIELD_NUMBER;
         hash = (53 * hash) + getFile().hashCode();
@@ -5709,11 +5848,12 @@ public final class ProtoGlobal {
       return PARSER.parseFrom(data);
     }
     public static Avatar parseFrom(
-            com.google.protobuf.ByteString data,
+        com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
+
     public static Avatar parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
@@ -5731,13 +5871,12 @@ public final class ProtoGlobal {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static Avatar parseFrom(
-            java.io.InputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input, extensionRegistry);
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
     public static Avatar parseDelimitedFrom(java.io.InputStream input)
@@ -5745,32 +5884,30 @@ public final class ProtoGlobal {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input);
     }
-
     public static Avatar parseDelimitedFrom(
-            java.io.InputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
+
     public static Avatar parseFrom(
-        com.google.protobuf.CodedInputStream input)
-            throws java.io.IOException {
+            com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
 
     public static Avatar parseFrom(
             com.google.protobuf.CodedInputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input, extensionRegistry);
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public Builder newBuilderForType() { return newBuilder();
-    }
-
+    public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
@@ -5789,14 +5926,13 @@ public final class ProtoGlobal {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.Avatar}
      */
     public static final class Builder extends
-            com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-            // @@protoc_insertion_point(builder_implements:proto.Avatar)
-            AvatarOrBuilder {
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:proto.Avatar)
+        AvatarOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return ProtoGlobal.internal_static_proto_Avatar_descriptor;
@@ -5805,7 +5941,7 @@ public final class ProtoGlobal {
       protected FieldAccessorTable
           internalGetFieldAccessorTable() {
         return ProtoGlobal.internal_static_proto_Avatar_fieldAccessorTable
-                .ensureFieldAccessorsInitialized(
+            .ensureFieldAccessorsInitialized(
                 Avatar.class, Builder.class);
       }
 
@@ -5839,7 +5975,7 @@ public final class ProtoGlobal {
       }
 
       public com.google.protobuf.Descriptors.Descriptor
-      getDescriptorForType() {
+          getDescriptorForType() {
         return ProtoGlobal.internal_static_proto_Avatar_descriptor;
       }
 
@@ -5870,7 +6006,6 @@ public final class ProtoGlobal {
       public Builder clone() {
         return (Builder) super.clone();
       }
-
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           Object value) {
@@ -5886,17 +6021,15 @@ public final class ProtoGlobal {
       }
 
       public Builder setRepeatedField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
+          com.google.protobuf.Descriptors.FieldDescriptor field,
           int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-
       public Builder addRepeatedField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
+          com.google.protobuf.Descriptors.FieldDescriptor field,
           Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof Avatar) {
           return mergeFrom((Avatar)other);
@@ -5925,7 +6058,7 @@ public final class ProtoGlobal {
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-              throws java.io.IOException {
+          throws java.io.IOException {
         Avatar parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
@@ -5951,12 +6084,11 @@ public final class ProtoGlobal {
        * <code>optional uint64 id = 1;</code>
        */
       public Builder setId(long value) {
-
+        
         id_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional uint64 id = 1;</code>
        */
@@ -6048,7 +6180,6 @@ public final class ProtoGlobal {
 
         return this;
       }
-
       /**
        * <code>optional .proto.File file = 2;</code>
        */
@@ -6057,7 +6188,6 @@ public final class ProtoGlobal {
         onChanged();
         return getFileFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.File file = 2;</code>
        */
@@ -6069,13 +6199,12 @@ public final class ProtoGlobal {
               File.getDefaultInstance() : file_;
         }
       }
-
       /**
        * <code>optional .proto.File file = 2;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-              File, File.Builder, FileOrBuilder>
-      getFileFieldBuilder() {
+          File, File.Builder, FileOrBuilder>
+          getFileFieldBuilder() {
         if (fileBuilder_ == null) {
           fileBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
               File, File.Builder, FileOrBuilder>(
@@ -6092,7 +6221,7 @@ public final class ProtoGlobal {
       }
 
       public final Builder mergeUnknownFields(
-              final com.google.protobuf.UnknownFieldSet unknownFields) {
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
       }
 
@@ -6102,7 +6231,6 @@ public final class ProtoGlobal {
 
     // @@protoc_insertion_point(class_scope:proto.Avatar)
     private static final Avatar DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new Avatar();
     }
@@ -6116,8 +6244,8 @@ public final class ProtoGlobal {
       public Avatar parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-              throws com.google.protobuf.InvalidProtocolBufferException {
-        return new Avatar(input, extensionRegistry);
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new Avatar(input, extensionRegistry);
       }
     };
 
@@ -6168,7 +6296,6 @@ public final class ProtoGlobal {
      * <code>optional .proto.RoomMessageType message_type = 5;</code>
      */
     int getMessageTypeValue();
-
     /**
      * <code>optional .proto.RoomMessageType message_type = 5;</code>
      */
@@ -6490,14 +6617,13 @@ public final class ProtoGlobal {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
-                e).setUnfinishedMessage(this);
+            e).setUnfinishedMessage(this);
       } finally {
         makeExtensionsImmutable();
       }
     }
-
     public static final com.google.protobuf.Descriptors.Descriptor
-    getDescriptor() {
+        getDescriptor() {
       return ProtoGlobal.internal_static_proto_RoomMessage_descriptor;
     }
 
@@ -6528,7 +6654,6 @@ public final class ProtoGlobal {
 
     public static final int STATUS_FIELD_NUMBER = 3;
     private int status_;
-
     /**
      * <code>optional .proto.RoomMessageStatus status = 3;</code>
      */
@@ -6554,7 +6679,6 @@ public final class ProtoGlobal {
 
     public static final int MESSAGE_TYPE_FIELD_NUMBER = 5;
     private int messageType_;
-
     /**
      * <code>optional .proto.RoomMessageType message_type = 5;</code>
      */
@@ -6571,7 +6695,6 @@ public final class ProtoGlobal {
 
     public static final int MESSAGE_FIELD_NUMBER = 6;
     private volatile Object message_;
-
     /**
      * <code>optional string message = 6;</code>
      */
@@ -6580,14 +6703,13 @@ public final class ProtoGlobal {
       if (ref instanceof String) {
         return (String) ref;
       } else {
-        com.google.protobuf.ByteString bs =
-                (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
         String s = bs.toStringUtf8();
         message_ = s;
         return s;
       }
     }
-
     /**
      * <code>optional string message = 6;</code>
      */
@@ -6607,14 +6729,12 @@ public final class ProtoGlobal {
 
     public static final int ATTACHMENT_FIELD_NUMBER = 7;
     private File attachment_;
-
     /**
      * <code>optional .proto.File attachment = 7;</code>
      */
     public boolean hasAttachment() {
       return attachment_ != null;
     }
-
     /**
      * <code>optional .proto.File attachment = 7;</code>
      */
@@ -6639,7 +6759,6 @@ public final class ProtoGlobal {
 
     public static final int LOCATION_FIELD_NUMBER = 9;
     private RoomMessageLocation location_;
-
     /**
      * <code>optional .proto.RoomMessageLocation location = 9;</code>
      */
@@ -6661,14 +6780,12 @@ public final class ProtoGlobal {
 
     public static final int LOG_FIELD_NUMBER = 10;
     private RoomMessageLog log_;
-
     /**
      * <code>optional .proto.RoomMessageLog log = 10;</code>
      */
     public boolean hasLog() {
       return log_ != null;
     }
-
     /**
      * <code>optional .proto.RoomMessageLog log = 10;</code>
      */
@@ -6684,14 +6801,12 @@ public final class ProtoGlobal {
 
     public static final int CONTACT_FIELD_NUMBER = 11;
     private RoomMessageContact contact_;
-
     /**
      * <code>optional .proto.RoomMessageContact contact = 11;</code>
      */
     public boolean hasContact() {
       return contact_ != null;
     }
-
     /**
      * <code>optional .proto.RoomMessageContact contact = 11;</code>
      */
@@ -6743,14 +6858,12 @@ public final class ProtoGlobal {
 
     public static final int FORWARD_FROM_FIELD_NUMBER = 16;
     private RoomMessage forwardFrom_;
-
     /**
      * <code>optional .proto.RoomMessage forward_from = 16;</code>
      */
     public boolean hasForwardFrom() {
       return forwardFrom_ != null;
     }
-
     /**
      * <code>optional .proto.RoomMessage forward_from = 16;</code>
      */
@@ -6766,14 +6879,12 @@ public final class ProtoGlobal {
 
     public static final int REPLY_TO_FIELD_NUMBER = 17;
     private RoomMessage replyTo_;
-
     /**
      * <code>optional .proto.RoomMessage reply_to = 17;</code>
      */
     public boolean hasReplyTo() {
       return replyTo_ != null;
     }
-
     /**
      * <code>optional .proto.RoomMessage reply_to = 17;</code>
      */
@@ -6797,7 +6908,6 @@ public final class ProtoGlobal {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -6876,7 +6986,7 @@ public final class ProtoGlobal {
       }
       if (messageVersion_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
-                .computeUInt64Size(2, messageVersion_);
+          .computeUInt64Size(2, messageVersion_);
       }
       if (status_ != RoomMessageStatus.FAILED.getNumber()) {
         size += com.google.protobuf.CodedOutputStream
@@ -6927,7 +7037,7 @@ public final class ProtoGlobal {
       }
       if (deleted_ != false) {
         size += com.google.protobuf.CodedOutputStream
-                .computeBoolSize(15, deleted_);
+          .computeBoolSize(15, deleted_);
       }
       if (forwardFrom_ != null) {
         size += com.google.protobuf.CodedOutputStream
@@ -6939,14 +7049,13 @@ public final class ProtoGlobal {
       }
       if (previousMessageId_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
-                .computeUInt64Size(18, previousMessageId_);
+          .computeUInt64Size(18, previousMessageId_);
       }
       memoizedSize = size;
       return size;
     }
 
     private static final long serialVersionUID = 0L;
-
     @Override
     public boolean equals(final Object obj) {
       if (obj == this) {
@@ -6961,10 +7070,10 @@ public final class ProtoGlobal {
       result = result && (getMessageId()
           == other.getMessageId());
       result = result && (getMessageVersion()
-              == other.getMessageVersion());
+          == other.getMessageVersion());
       result = result && status_ == other.status_;
       result = result && (getStatusVersion()
-              == other.getStatusVersion());
+          == other.getStatusVersion());
       result = result && messageType_ == other.messageType_;
       result = result && getMessage()
           .equals(other.getMessage());
@@ -6974,26 +7083,26 @@ public final class ProtoGlobal {
             .equals(other.getAttachment());
       }
       result = result && (getUserId()
-              == other.getUserId());
+          == other.getUserId());
       result = result && (hasLocation() == other.hasLocation());
       if (hasLocation()) {
         result = result && getLocation()
-                .equals(other.getLocation());
+            .equals(other.getLocation());
       }
       result = result && (hasLog() == other.hasLog());
       if (hasLog()) {
         result = result && getLog()
-                .equals(other.getLog());
+            .equals(other.getLog());
       }
       result = result && (hasContact() == other.hasContact());
       if (hasContact()) {
         result = result && getContact()
-                .equals(other.getContact());
+            .equals(other.getContact());
       }
       result = result && (getEdited()
           == other.getEdited());
       result = result && (getCreateTime()
-              == other.getCreateTime());
+          == other.getCreateTime());
       result = result && (getUpdateTime()
           == other.getUpdateTime());
       result = result && (getDeleted()
@@ -7001,7 +7110,7 @@ public final class ProtoGlobal {
       result = result && (hasForwardFrom() == other.hasForwardFrom());
       if (hasForwardFrom()) {
         result = result && getForwardFrom()
-                .equals(other.getForwardFrom());
+            .equals(other.getForwardFrom());
       }
       result = result && (hasReplyTo() == other.hasReplyTo());
       if (hasReplyTo()) {
@@ -7056,7 +7165,7 @@ public final class ProtoGlobal {
       }
       hash = (37 * hash) + EDITED_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
-              getEdited());
+          getEdited());
       hash = (37 * hash) + CREATE_TIME_FIELD_NUMBER;
       hash = (53 * hash) + getCreateTime();
       hash = (37 * hash) + UPDATE_TIME_FIELD_NUMBER;
@@ -7081,24 +7190,23 @@ public final class ProtoGlobal {
     }
 
     public static RoomMessage parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.ByteString data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static RoomMessage parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+        throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
+
     public static RoomMessage parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static RoomMessage parseFrom(
-        byte[] data,
+            byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
@@ -7109,13 +7217,12 @@ public final class ProtoGlobal {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static RoomMessage parseFrom(
-            java.io.InputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input, extensionRegistry);
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
     public static RoomMessage parseDelimitedFrom(java.io.InputStream input)
@@ -7127,17 +7234,17 @@ public final class ProtoGlobal {
     public static RoomMessage parseDelimitedFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
+        throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static RoomMessage parseFrom(
-            com.google.protobuf.CodedInputStream input)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input);
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
+    public static RoomMessage parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
     public static RoomMessage parseFrom(
             com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -7153,38 +7260,36 @@ public final class ProtoGlobal {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(RoomMessage prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
-              ? new Builder() : new Builder().mergeFrom(this);
+          ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @Override
     protected Builder newBuilderForType(
-        BuilderParent parent) {
+            BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.RoomMessage}
      */
     public static final class Builder extends
-            com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-            // @@protoc_insertion_point(builder_implements:proto.RoomMessage)
-            RoomMessageOrBuilder {
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:proto.RoomMessage)
+        RoomMessageOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
-      getDescriptor() {
+          getDescriptor() {
         return ProtoGlobal.internal_static_proto_RoomMessage_descriptor;
       }
 
       protected FieldAccessorTable
           internalGetFieldAccessorTable() {
         return ProtoGlobal.internal_static_proto_RoomMessage_fieldAccessorTable
-                .ensureFieldAccessorsInitialized(
+            .ensureFieldAccessorsInitialized(
                 RoomMessage.class, Builder.class);
       }
 
@@ -7337,13 +7442,12 @@ public final class ProtoGlobal {
         return (Builder) super.clone();
       }
       public Builder setField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
-              Object value) {
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
         return (Builder) super.setField(field, value);
       }
-
       public Builder clearField(
-              com.google.protobuf.Descriptors.FieldDescriptor field) {
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
       public Builder clearOneof(
@@ -7356,13 +7460,11 @@ public final class ProtoGlobal {
           int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-
       public Builder addRepeatedField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
+          com.google.protobuf.Descriptors.FieldDescriptor field,
           Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof RoomMessage) {
           return mergeFrom((RoomMessage)other);
@@ -7438,8 +7540,8 @@ public final class ProtoGlobal {
       }
 
       public Builder mergeFrom(
-              com.google.protobuf.CodedInputStream input,
-              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         RoomMessage parsedMessage = null;
         try {
@@ -7514,7 +7616,6 @@ public final class ProtoGlobal {
       public int getStatusValue() {
         return status_;
       }
-
       /**
        * <code>optional .proto.RoomMessageStatus status = 3;</code>
        */
@@ -7585,7 +7686,6 @@ public final class ProtoGlobal {
       public int getMessageTypeValue() {
         return messageType_;
       }
-
       /**
        * <code>optional .proto.RoomMessageType message_type = 5;</code>
        */
@@ -7608,17 +7708,16 @@ public final class ProtoGlobal {
         if (value == null) {
           throw new NullPointerException();
         }
-
+        
         messageType_ = value.getNumber();
         onChanged();
         return this;
       }
-
       /**
        * <code>optional .proto.RoomMessageType message_type = 5;</code>
        */
       public Builder clearMessageType() {
-
+        
         messageType_ = 0;
         onChanged();
         return this;
@@ -7632,7 +7731,7 @@ public final class ProtoGlobal {
         Object ref = message_;
         if (!(ref instanceof String)) {
           com.google.protobuf.ByteString bs =
-                  (com.google.protobuf.ByteString) ref;
+              (com.google.protobuf.ByteString) ref;
           String s = bs.toStringUtf8();
           message_ = s;
           return s;
@@ -7648,9 +7747,9 @@ public final class ProtoGlobal {
           getMessageBytes() {
         Object ref = message_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b =
-                  com.google.protobuf.ByteString.copyFromUtf8(
-                          (String) ref);
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
           message_ = b;
           return b;
         } else {
@@ -7670,24 +7769,22 @@ public final class ProtoGlobal {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string message = 6;</code>
        */
       public Builder clearMessage() {
-
+        
         message_ = getDefaultInstance().getMessage();
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string message = 6;</code>
        */
       public Builder setMessageBytes(
-              com.google.protobuf.ByteString value) {
+          com.google.protobuf.ByteString value) {
         if (value == null) {
-    throw new NullPointerException();
+          throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
         
@@ -7698,8 +7795,7 @@ public final class ProtoGlobal {
 
       private File attachment_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
-              File, File.Builder, FileOrBuilder> attachmentBuilder_;
-
+          File, File.Builder, FileOrBuilder> attachmentBuilder_;
       /**
        * <code>optional .proto.File attachment = 7;</code>
        */
@@ -7736,7 +7832,7 @@ public final class ProtoGlobal {
        * <code>optional .proto.File attachment = 7;</code>
        */
       public Builder setAttachment(
-              File.Builder builderForValue) {
+          File.Builder builderForValue) {
         if (attachmentBuilder_ == null) {
           attachment_ = builderForValue.build();
           onChanged();
@@ -7782,10 +7878,11 @@ public final class ProtoGlobal {
        * <code>optional .proto.File attachment = 7;</code>
        */
       public File.Builder getAttachmentBuilder() {
-
+        
         onChanged();
         return getAttachmentFieldBuilder().getBuilder();
       }
+
       /**
        * <code>optional .proto.File attachment = 7;</code>
        */
@@ -7794,15 +7891,14 @@ public final class ProtoGlobal {
           return attachmentBuilder_.getMessageOrBuilder();
         } else {
           return attachment_ == null ?
-                  File.getDefaultInstance() : attachment_;
+              File.getDefaultInstance() : attachment_;
         }
       }
-
       /**
        * <code>optional .proto.File attachment = 7;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-              File, File.Builder, FileOrBuilder>
+          File, File.Builder, FileOrBuilder>
           getAttachmentFieldBuilder() {
         if (attachmentBuilder_ == null) {
           attachmentBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
@@ -7826,12 +7922,11 @@ public final class ProtoGlobal {
        * <code>optional uint64 user_id = 8;</code>
        */
       public Builder setUserId(long value) {
-
+        
         userId_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional uint64 user_id = 8;</code>
        */
@@ -7881,7 +7976,7 @@ public final class ProtoGlobal {
        * <code>optional .proto.RoomMessageLocation location = 9;</code>
        */
       public Builder setLocation(
-              RoomMessageLocation.Builder builderForValue) {
+          RoomMessageLocation.Builder builderForValue) {
         if (locationBuilder_ == null) {
           location_ = builderForValue.build();
           onChanged();
@@ -7923,16 +8018,14 @@ public final class ProtoGlobal {
 
         return this;
       }
-
       /**
        * <code>optional .proto.RoomMessageLocation location = 9;</code>
        */
       public RoomMessageLocation.Builder getLocationBuilder() {
-
+        
         onChanged();
         return getLocationFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.RoomMessageLocation location = 9;</code>
        */
@@ -7941,10 +8034,9 @@ public final class ProtoGlobal {
           return locationBuilder_.getMessageOrBuilder();
         } else {
           return location_ == null ?
-              RoomMessageLocation.getDefaultInstance() : location_;
+                  RoomMessageLocation.getDefaultInstance() : location_;
         }
       }
-
       /**
        * <code>optional .proto.RoomMessageLocation location = 9;</code>
        */
@@ -7953,7 +8045,7 @@ public final class ProtoGlobal {
           getLocationFieldBuilder() {
         if (locationBuilder_ == null) {
           locationBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-                  RoomMessageLocation, RoomMessageLocation.Builder, RoomMessageLocationOrBuilder>(
+              RoomMessageLocation, RoomMessageLocation.Builder, RoomMessageLocationOrBuilder>(
                   getLocation(),
                   getParentForChildren(),
                   isClean());
@@ -7964,8 +8056,7 @@ public final class ProtoGlobal {
 
       private RoomMessageLog log_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
-              RoomMessageLog, RoomMessageLog.Builder, RoomMessageLogOrBuilder> logBuilder_;
-
+          RoomMessageLog, RoomMessageLog.Builder, RoomMessageLogOrBuilder> logBuilder_;
       /**
        * <code>optional .proto.RoomMessageLog log = 10;</code>
        */
@@ -8002,7 +8093,7 @@ public final class ProtoGlobal {
        * <code>optional .proto.RoomMessageLog log = 10;</code>
        */
       public Builder setLog(
-              RoomMessageLog.Builder builderForValue) {
+          RoomMessageLog.Builder builderForValue) {
         if (logBuilder_ == null) {
           log_ = builderForValue.build();
           onChanged();
@@ -8048,10 +8139,11 @@ public final class ProtoGlobal {
        * <code>optional .proto.RoomMessageLog log = 10;</code>
        */
       public RoomMessageLog.Builder getLogBuilder() {
-
+        
         onChanged();
         return getLogFieldBuilder().getBuilder();
       }
+
       /**
        * <code>optional .proto.RoomMessageLog log = 10;</code>
        */
@@ -8063,16 +8155,15 @@ public final class ProtoGlobal {
                   RoomMessageLog.getDefaultInstance() : log_;
         }
       }
-
       /**
        * <code>optional .proto.RoomMessageLog log = 10;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-              RoomMessageLog, RoomMessageLog.Builder, RoomMessageLogOrBuilder>
-      getLogFieldBuilder() {
+          RoomMessageLog, RoomMessageLog.Builder, RoomMessageLogOrBuilder>
+          getLogFieldBuilder() {
         if (logBuilder_ == null) {
           logBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-                  RoomMessageLog, RoomMessageLog.Builder, RoomMessageLogOrBuilder>(
+              RoomMessageLog, RoomMessageLog.Builder, RoomMessageLogOrBuilder>(
                   getLog(),
                   getParentForChildren(),
                   isClean());
@@ -8083,8 +8174,7 @@ public final class ProtoGlobal {
 
       private RoomMessageContact contact_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
-              RoomMessageContact, RoomMessageContact.Builder, RoomMessageContactOrBuilder> contactBuilder_;
-
+          RoomMessageContact, RoomMessageContact.Builder, RoomMessageContactOrBuilder> contactBuilder_;
       /**
        * <code>optional .proto.RoomMessageContact contact = 11;</code>
        */
@@ -8121,7 +8211,7 @@ public final class ProtoGlobal {
        * <code>optional .proto.RoomMessageContact contact = 11;</code>
        */
       public Builder setContact(
-              RoomMessageContact.Builder builderForValue) {
+          RoomMessageContact.Builder builderForValue) {
         if (contactBuilder_ == null) {
           contact_ = builderForValue.build();
           onChanged();
@@ -8163,15 +8253,15 @@ public final class ProtoGlobal {
 
         return this;
       }
-
       /**
        * <code>optional .proto.RoomMessageContact contact = 11;</code>
        */
       public RoomMessageContact.Builder getContactBuilder() {
-
+        
         onChanged();
         return getContactFieldBuilder().getBuilder();
       }
+
       /**
        * <code>optional .proto.RoomMessageContact contact = 11;</code>
        */
@@ -8183,12 +8273,11 @@ public final class ProtoGlobal {
                   RoomMessageContact.getDefaultInstance() : contact_;
         }
       }
-
       /**
        * <code>optional .proto.RoomMessageContact contact = 11;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-              RoomMessageContact, RoomMessageContact.Builder, RoomMessageContactOrBuilder>
+          RoomMessageContact, RoomMessageContact.Builder, RoomMessageContactOrBuilder>
           getContactFieldBuilder() {
         if (contactBuilder_ == null) {
           contactBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
@@ -8286,12 +8375,11 @@ public final class ProtoGlobal {
       public boolean getDeleted() {
         return deleted_;
       }
-
       /**
        * <code>optional bool deleted = 15;</code>
        */
       public Builder setDeleted(boolean value) {
-
+        
         deleted_ = value;
         onChanged();
         return this;
@@ -8309,7 +8397,6 @@ public final class ProtoGlobal {
       private RoomMessage forwardFrom_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
           RoomMessage, Builder, RoomMessageOrBuilder> forwardFromBuilder_;
-
       /**
        * <code>optional .proto.RoomMessage forward_from = 16;</code>
        */
@@ -8346,7 +8433,7 @@ public final class ProtoGlobal {
        * <code>optional .proto.RoomMessage forward_from = 16;</code>
        */
       public Builder setForwardFrom(
-              Builder builderForValue) {
+          Builder builderForValue) {
         if (forwardFromBuilder_ == null) {
           forwardFrom_ = builderForValue.build();
           onChanged();
@@ -8392,10 +8479,11 @@ public final class ProtoGlobal {
        * <code>optional .proto.RoomMessage forward_from = 16;</code>
        */
       public Builder getForwardFromBuilder() {
-
+        
         onChanged();
         return getForwardFromFieldBuilder().getBuilder();
       }
+
       /**
        * <code>optional .proto.RoomMessage forward_from = 16;</code>
        */
@@ -8407,13 +8495,12 @@ public final class ProtoGlobal {
                   RoomMessage.getDefaultInstance() : forwardFrom_;
         }
       }
-
       /**
        * <code>optional .proto.RoomMessage forward_from = 16;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
           RoomMessage, Builder, RoomMessageOrBuilder>
-      getForwardFromFieldBuilder() {
+          getForwardFromFieldBuilder() {
         if (forwardFromBuilder_ == null) {
           forwardFromBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
               RoomMessage, Builder, RoomMessageOrBuilder>(
@@ -8427,15 +8514,13 @@ public final class ProtoGlobal {
 
       private RoomMessage replyTo_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
-              RoomMessage, Builder, RoomMessageOrBuilder> replyToBuilder_;
-
+          RoomMessage, Builder, RoomMessageOrBuilder> replyToBuilder_;
       /**
        * <code>optional .proto.RoomMessage reply_to = 17;</code>
        */
       public boolean hasReplyTo() {
         return replyToBuilder_ != null || replyTo_ != null;
       }
-
       /**
        * <code>optional .proto.RoomMessage reply_to = 17;</code>
        */
@@ -8494,7 +8579,6 @@ public final class ProtoGlobal {
 
         return this;
       }
-
       /**
        * <code>optional .proto.RoomMessage reply_to = 17;</code>
        */
@@ -8513,10 +8597,11 @@ public final class ProtoGlobal {
        * <code>optional .proto.RoomMessage reply_to = 17;</code>
        */
       public Builder getReplyToBuilder() {
-
+        
         onChanged();
         return getReplyToFieldBuilder().getBuilder();
       }
+
       /**
        * <code>optional .proto.RoomMessage reply_to = 17;</code>
        */
@@ -8525,10 +8610,9 @@ public final class ProtoGlobal {
           return replyToBuilder_.getMessageOrBuilder();
         } else {
           return replyTo_ == null ?
-                  RoomMessage.getDefaultInstance() : replyTo_;
+              RoomMessage.getDefaultInstance() : replyTo_;
         }
       }
-
       /**
        * <code>optional .proto.RoomMessage reply_to = 17;</code>
        */
@@ -8562,6 +8646,7 @@ public final class ProtoGlobal {
         onChanged();
         return this;
       }
+
       /**
        * <code>optional uint64 previous_message_id = 18;</code>
        */
@@ -8571,9 +8656,8 @@ public final class ProtoGlobal {
         onChanged();
         return this;
       }
-
       public final Builder setUnknownFields(
-              final com.google.protobuf.UnknownFieldSet unknownFields) {
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
       }
 
@@ -8588,7 +8672,6 @@ public final class ProtoGlobal {
 
     // @@protoc_insertion_point(class_scope:proto.RoomMessage)
     private static final RoomMessage DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new RoomMessage();
     }
@@ -8600,8 +8683,8 @@ public final class ProtoGlobal {
     private static final com.google.protobuf.Parser<RoomMessage>
         PARSER = new com.google.protobuf.AbstractParser<RoomMessage>() {
       public RoomMessage parsePartialFrom(
-              com.google.protobuf.CodedInputStream input,
-              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
           return new RoomMessage(input, extensionRegistry);
       }
@@ -8624,12 +8707,13 @@ public final class ProtoGlobal {
 
   public interface RoomDraftOrBuilder extends
       // @@protoc_insertion_point(interface_extends:proto.RoomDraft)
-          com.google.protobuf.MessageOrBuilder {
+      com.google.protobuf.MessageOrBuilder {
 
     /**
      * <code>optional string message = 1;</code>
      */
     String getMessage();
+
     /**
      * <code>optional string message = 1;</code>
      */
@@ -8644,10 +8728,10 @@ public final class ProtoGlobal {
   /**
    * Protobuf type {@code proto.RoomDraft}
    */
-  public static final class RoomDraft extends
-          com.google.protobuf.GeneratedMessageV3 implements
+  public  static final class RoomDraft extends
+      com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:proto.RoomDraft)
-          RoomDraftOrBuilder {
+      RoomDraftOrBuilder {
     // Use RoomDraft.newBuilder() to construct.
     private RoomDraft(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -8704,16 +8788,17 @@ public final class ProtoGlobal {
         makeExtensionsImmutable();
       }
     }
+
     public static final com.google.protobuf.Descriptors.Descriptor
     getDescriptor() {
       return ProtoGlobal.internal_static_proto_RoomDraft_descriptor;
     }
 
     protected FieldAccessorTable
-    internalGetFieldAccessorTable() {
+        internalGetFieldAccessorTable() {
       return ProtoGlobal.internal_static_proto_RoomDraft_fieldAccessorTable
-              .ensureFieldAccessorsInitialized(
-                      RoomDraft.class, Builder.class);
+          .ensureFieldAccessorsInitialized(
+              RoomDraft.class, Builder.class);
     }
 
     public static final int MESSAGE_FIELD_NUMBER = 1;
@@ -8726,8 +8811,8 @@ public final class ProtoGlobal {
       if (ref instanceof String) {
         return (String) ref;
       } else {
-        com.google.protobuf.ByteString bs =
-                (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
         String s = bs.toStringUtf8();
         message_ = s;
         return s;
@@ -8752,7 +8837,6 @@ public final class ProtoGlobal {
 
     public static final int REPLY_TO_FIELD_NUMBER = 2;
     private long replyTo_;
-
     /**
      * <code>optional uint64 reply_to = 2;</code>
      */
@@ -8790,7 +8874,7 @@ public final class ProtoGlobal {
       }
       if (replyTo_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
-                .computeUInt64Size(2, replyTo_);
+          .computeUInt64Size(2, replyTo_);
       }
       memoizedSize = size;
       return size;
@@ -8800,7 +8884,7 @@ public final class ProtoGlobal {
     @Override
     public boolean equals(final Object obj) {
       if (obj == this) {
-       return true;
+        return true;
       }
       if (!(obj instanceof RoomDraft)) {
         return super.equals(obj);
@@ -8811,7 +8895,7 @@ public final class ProtoGlobal {
       result = result && getMessage()
           .equals(other.getMessage());
       result = result && (getReplyTo()
-              == other.getReplyTo());
+          == other.getReplyTo());
       return result;
     }
 
@@ -8833,12 +8917,12 @@ public final class ProtoGlobal {
     }
 
     public static RoomDraft parseFrom(
-            com.google.protobuf.ByteString data)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static RoomDraft parseFrom(
-            com.google.protobuf.ByteString data,
+        com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
@@ -8848,26 +8932,24 @@ public final class ProtoGlobal {
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static RoomDraft parseFrom(
             byte[] data,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
     public static RoomDraft parseFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+              .parseWithIOException(PARSER, input);
     }
-
     public static RoomDraft parseFrom(
-            java.io.InputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input, extensionRegistry);
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
     public static RoomDraft parseDelimitedFrom(java.io.InputStream input)
@@ -8879,36 +8961,32 @@ public final class ProtoGlobal {
     public static RoomDraft parseDelimitedFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
+        throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
     public static RoomDraft parseFrom(
             com.google.protobuf.CodedInputStream input)
-            throws java.io.IOException {
+        throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
     public static RoomDraft parseFrom(
             com.google.protobuf.CodedInputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input, extensionRegistry);
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public Builder newBuilderForType() {
-      return newBuilder();
-    }
-
+    public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
     public static Builder newBuilder(RoomDraft prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
@@ -8920,24 +8998,23 @@ public final class ProtoGlobal {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.RoomDraft}
      */
     public static final class Builder extends
-            com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-            // @@protoc_insertion_point(builder_implements:proto.RoomDraft)
-            RoomDraftOrBuilder {
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:proto.RoomDraft)
+        RoomDraftOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
+      getDescriptor() {
         return ProtoGlobal.internal_static_proto_RoomDraft_descriptor;
       }
 
       protected FieldAccessorTable
           internalGetFieldAccessorTable() {
         return ProtoGlobal.internal_static_proto_RoomDraft_fieldAccessorTable
-                .ensureFieldAccessorsInitialized(
-                        RoomDraft.class, Builder.class);
+            .ensureFieldAccessorsInitialized(
+                RoomDraft.class, Builder.class);
       }
 
       // Construct using com.iGap.proto.ProtoGlobal.RoomDraft.newBuilder()
@@ -8946,17 +9023,15 @@ public final class ProtoGlobal {
       }
 
       private Builder(
-              BuilderParent parent) {
+          BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         message_ = "";
@@ -8967,7 +9042,7 @@ public final class ProtoGlobal {
       }
 
       public com.google.protobuf.Descriptors.Descriptor
-      getDescriptorForType() {
+          getDescriptorForType() {
         return ProtoGlobal.internal_static_proto_RoomDraft_descriptor;
       }
 
@@ -8994,29 +9069,28 @@ public final class ProtoGlobal {
       public Builder clone() {
         return (Builder) super.clone();
       }
-
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
+              com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-
       public Builder clearOneof(
-              com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
+
       public Builder setRepeatedField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
-              int index, Object value) {
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
-              Object value) {
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -9083,12 +9157,12 @@ public final class ProtoGlobal {
        * <code>optional string message = 1;</code>
        */
       public com.google.protobuf.ByteString
-      getMessageBytes() {
+          getMessageBytes() {
         Object ref = message_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
+                      (String) ref);
           message_ = b;
           return b;
         } else {
@@ -9101,14 +9175,13 @@ public final class ProtoGlobal {
       public Builder setMessage(
           String value) {
         if (value == null) {
-          throw new NullPointerException();
-        }
-
+    throw new NullPointerException();
+  }
+  
         message_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string message = 1;</code>
        */
@@ -9144,7 +9217,7 @@ public final class ProtoGlobal {
        * <code>optional uint64 reply_to = 2;</code>
        */
       public Builder setReplyTo(long value) {
-        
+
         replyTo_ = value;
         onChanged();
         return this;
@@ -9153,19 +9226,18 @@ public final class ProtoGlobal {
        * <code>optional uint64 reply_to = 2;</code>
        */
       public Builder clearReplyTo() {
-        
+
         replyTo_ = 0L;
         onChanged();
         return this;
       }
-
       public final Builder setUnknownFields(
-              final com.google.protobuf.UnknownFieldSet unknownFields) {
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
       }
 
       public final Builder mergeUnknownFields(
-              final com.google.protobuf.UnknownFieldSet unknownFields) {
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
       }
 
@@ -9175,7 +9247,6 @@ public final class ProtoGlobal {
 
     // @@protoc_insertion_point(class_scope:proto.RoomDraft)
     private static final RoomDraft DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new RoomDraft();
     }
@@ -9187,8 +9258,8 @@ public final class ProtoGlobal {
     private static final com.google.protobuf.Parser<RoomDraft>
         PARSER = new com.google.protobuf.AbstractParser<RoomDraft>() {
       public RoomDraft parsePartialFrom(
-              com.google.protobuf.CodedInputStream input,
-              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
           return new RoomDraft(input, extensionRegistry);
       }
@@ -9210,7 +9281,7 @@ public final class ProtoGlobal {
   }
 
   public interface RoomOrBuilder extends
-          // @@protoc_insertion_point(interface_extends:proto.Room)
+      // @@protoc_insertion_point(interface_extends:proto.Room)
       com.google.protobuf.MessageOrBuilder {
 
     /**
@@ -9241,6 +9312,7 @@ public final class ProtoGlobal {
      * <code>optional string initials = 4;</code>
      */
     String getInitials();
+
     /**
      * <code>optional string initials = 4;</code>
      */
@@ -9251,12 +9323,11 @@ public final class ProtoGlobal {
      * <code>optional string color = 5;</code>
      */
     String getColor();
-
     /**
      * <code>optional string color = 5;</code>
      */
     com.google.protobuf.ByteString
-    getColorBytes();
+        getColorBytes();
 
     /**
      * <code>optional uint32 unread_count = 6;</code>
@@ -9289,7 +9360,6 @@ public final class ProtoGlobal {
      * <code>optional .proto.RoomDraft draft = 9;</code>
      */
     RoomDraft getDraft();
-
     /**
      * <code>optional .proto.RoomDraft draft = 9;</code>
      */
@@ -9299,12 +9369,10 @@ public final class ProtoGlobal {
      * <code>optional .proto.ChatRoom chat_room = 10;</code>
      */
     boolean hasChatRoom();
-
     /**
      * <code>optional .proto.ChatRoom chat_room = 10;</code>
      */
     ChatRoom getChatRoom();
-
     /**
      * <code>optional .proto.ChatRoom chat_room = 10;</code>
      */
@@ -9353,7 +9421,7 @@ public final class ProtoGlobal {
    */
   public  static final class Room extends
       com.google.protobuf.GeneratedMessageV3 implements
-          // @@protoc_insertion_point(message_implements:proto.Room)
+      // @@protoc_insertion_point(message_implements:proto.Room)
       RoomOrBuilder {
     // Use Room.newBuilder() to construct.
     private Room(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
@@ -9504,7 +9572,7 @@ public final class ProtoGlobal {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
-                e).setUnfinishedMessage(this);
+            e).setUnfinishedMessage(this);
       } finally {
         makeExtensionsImmutable();
       }
@@ -9558,7 +9626,7 @@ public final class ProtoGlobal {
       public final int getNumber() {
         if (this == UNRECOGNIZED) {
           throw new IllegalArgumentException(
-                  "Can't get the number of an unknown enum value.");
+              "Can't get the number of an unknown enum value.");
         }
         return value;
       }
@@ -9573,17 +9641,15 @@ public final class ProtoGlobal {
 
       public static Type forNumber(int value) {
         switch (value) {
-          case 0:
-            return CHAT;
-          case 1:
-            return GROUP;
+          case 0: return CHAT;
+          case 1: return GROUP;
           case 2: return CHANNEL;
           default: return null;
         }
       }
 
       public static com.google.protobuf.Internal.EnumLiteMap<Type>
-      internalGetValueMap() {
+          internalGetValueMap() {
         return internalValueMap;
       }
       private static final com.google.protobuf.Internal.EnumLiteMap<
@@ -9598,7 +9664,6 @@ public final class ProtoGlobal {
           getValueDescriptor() {
         return getDescriptor().getValues().get(ordinal());
       }
-
       public final com.google.protobuf.Descriptors.EnumDescriptor
           getDescriptorForType() {
         return getDescriptor();
@@ -9633,7 +9698,6 @@ public final class ProtoGlobal {
 
     public static final int ID_FIELD_NUMBER = 1;
     private long id_;
-
     /**
      * <code>optional uint64 id = 1;</code>
      */
@@ -9649,7 +9713,6 @@ public final class ProtoGlobal {
     public int getTypeValue() {
       return type_;
     }
-
     /**
      * <code>optional .proto.Room.Type type = 2;</code>
      */
@@ -9660,7 +9723,6 @@ public final class ProtoGlobal {
 
     public static final int TITLE_FIELD_NUMBER = 3;
     private volatile Object title_;
-
     /**
      * <code>optional string title = 3;</code>
      */
@@ -9669,8 +9731,8 @@ public final class ProtoGlobal {
       if (ref instanceof String) {
         return (String) ref;
       } else {
-        com.google.protobuf.ByteString bs =
-                (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
         String s = bs.toStringUtf8();
         title_ = s;
         return s;
@@ -9683,8 +9745,8 @@ public final class ProtoGlobal {
         getTitleBytes() {
       Object ref = title_;
       if (ref instanceof String) {
-        com.google.protobuf.ByteString b =
-                com.google.protobuf.ByteString.copyFromUtf8(
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
                 (String) ref);
         title_ = b;
         return b;
@@ -9703,8 +9765,8 @@ public final class ProtoGlobal {
       if (ref instanceof String) {
         return (String) ref;
       } else {
-        com.google.protobuf.ByteString bs =
-                (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
         String s = bs.toStringUtf8();
         initials_ = s;
         return s;
@@ -9717,8 +9779,8 @@ public final class ProtoGlobal {
         getInitialsBytes() {
       Object ref = initials_;
       if (ref instanceof String) {
-        com.google.protobuf.ByteString b =
-                com.google.protobuf.ByteString.copyFromUtf8(
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
                 (String) ref);
         initials_ = b;
         return b;
@@ -9729,7 +9791,6 @@ public final class ProtoGlobal {
 
     public static final int COLOR_FIELD_NUMBER = 5;
     private volatile Object color_;
-
     /**
      * <code>optional string color = 5;</code>
      */
@@ -9738,13 +9799,14 @@ public final class ProtoGlobal {
       if (ref instanceof String) {
         return (String) ref;
       } else {
-        com.google.protobuf.ByteString bs =
-                (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
         String s = bs.toStringUtf8();
         color_ = s;
         return s;
       }
     }
+
     /**
      * <code>optional string color = 5;</code>
      */
@@ -9754,7 +9816,7 @@ public final class ProtoGlobal {
       if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                    (String) ref);
+                (String) ref);
         color_ = b;
         return b;
       } else {
@@ -9773,7 +9835,6 @@ public final class ProtoGlobal {
 
     public static final int LAST_MESSAGE_FIELD_NUMBER = 7;
     private RoomMessage lastMessage_;
-
     /**
      * <code>optional .proto.RoomMessage last_message = 7;</code>
      */
@@ -9786,7 +9847,6 @@ public final class ProtoGlobal {
     public RoomMessage getLastMessage() {
       return lastMessage_ == null ? RoomMessage.getDefaultInstance() : lastMessage_;
     }
-
     /**
      * <code>optional .proto.RoomMessage last_message = 7;</code>
      */
@@ -9796,7 +9856,6 @@ public final class ProtoGlobal {
 
     public static final int READ_ONLY_FIELD_NUMBER = 8;
     private boolean readOnly_;
-
     /**
      * <code>optional bool read_only = 8;</code>
      */
@@ -9818,7 +9877,6 @@ public final class ProtoGlobal {
     public RoomDraft getDraft() {
       return draft_ == null ? RoomDraft.getDefaultInstance() : draft_;
     }
-
     /**
      * <code>optional .proto.RoomDraft draft = 9;</code>
      */
@@ -9849,7 +9907,6 @@ public final class ProtoGlobal {
 
     public static final int GROUP_ROOM_FIELD_NUMBER = 11;
     private GroupRoom groupRoom_;
-
     /**
      * <code>optional .proto.GroupRoom group_room = 11;</code>
      */
@@ -9871,7 +9928,6 @@ public final class ProtoGlobal {
 
     public static final int CHANNEL_ROOM_FIELD_NUMBER = 12;
     private ChannelRoom channelRoom_;
-
     /**
      * <pre>
      * TODO [Amerehie] - 2016-08-08 12:44 PM - notification
@@ -9964,7 +10020,7 @@ public final class ProtoGlobal {
       }
       if (type_ != Type.CHAT.getNumber()) {
         size += com.google.protobuf.CodedOutputStream
-                .computeEnumSize(2, type_);
+          .computeEnumSize(2, type_);
       }
       if (!getTitleBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, title_);
@@ -9981,15 +10037,15 @@ public final class ProtoGlobal {
       }
       if (lastMessage_ != null) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(7, getLastMessage());
+                .computeMessageSize(7, getLastMessage());
       }
       if (readOnly_ != false) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(8, readOnly_);
+                .computeBoolSize(8, readOnly_);
       }
       if (draft_ != null) {
         size += com.google.protobuf.CodedOutputStream
-                .computeMessageSize(9, getDraft());
+          .computeMessageSize(9, getDraft());
       }
       if (chatRoom_ != null) {
         size += com.google.protobuf.CodedOutputStream
@@ -10001,7 +10057,7 @@ public final class ProtoGlobal {
       }
       if (channelRoom_ != null) {
         size += com.google.protobuf.CodedOutputStream
-                .computeMessageSize(12, getChannelRoom());
+          .computeMessageSize(12, getChannelRoom());
       }
       memoizedSize = size;
       return size;
@@ -10011,7 +10067,7 @@ public final class ProtoGlobal {
     @Override
     public boolean equals(final Object obj) {
       if (obj == this) {
-        return true;
+       return true;
       }
       if (!(obj instanceof Room)) {
         return super.equals(obj);
@@ -10020,7 +10076,7 @@ public final class ProtoGlobal {
 
       boolean result = true;
       result = result && (getId()
-              == other.getId());
+          == other.getId());
       result = result && type_ == other.type_;
       result = result && getTitle()
           .equals(other.getTitle());
@@ -10036,7 +10092,7 @@ public final class ProtoGlobal {
             .equals(other.getLastMessage());
       }
       result = result && (getReadOnly()
-              == other.getReadOnly());
+          == other.getReadOnly());
       result = result && (hasDraft() == other.hasDraft());
       if (hasDraft()) {
         result = result && getDraft()
@@ -10045,7 +10101,7 @@ public final class ProtoGlobal {
       result = result && (hasChatRoom() == other.hasChatRoom());
       if (hasChatRoom()) {
         result = result && getChatRoom()
-                .equals(other.getChatRoom());
+            .equals(other.getChatRoom());
       }
       result = result && (hasGroupRoom() == other.hasGroupRoom());
       if (hasGroupRoom()) {
@@ -10114,46 +10170,44 @@ public final class ProtoGlobal {
       return PARSER.parseFrom(data);
     }
     public static Room parseFrom(
-        com.google.protobuf.ByteString data,
+            com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static Room parseFrom(byte[] data)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+        throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
     public static Room parseFrom(
             byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
     public static Room parseFrom(java.io.InputStream input)
-            throws java.io.IOException {
+        throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static Room parseFrom(
-            java.io.InputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input, extensionRegistry);
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
     public static Room parseDelimitedFrom(java.io.InputStream input)
-            throws java.io.IOException {
+        throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-
     public static Room parseDelimitedFrom(
-            java.io.InputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
@@ -10162,18 +10216,20 @@ public final class ProtoGlobal {
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+              .parseWithIOException(PARSER, input);
     }
-
     public static Room parseFrom(
-            com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input, extensionRegistry);
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public Builder newBuilderForType() { return newBuilder(); }
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
@@ -10183,7 +10239,7 @@ public final class ProtoGlobal {
     }
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
-              ? new Builder() : new Builder().mergeFrom(this);
+          ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @Override
@@ -10192,13 +10248,12 @@ public final class ProtoGlobal {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.Room}
      */
     public static final class Builder extends
-            com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-            // @@protoc_insertion_point(builder_implements:proto.Room)
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:proto.Room)
         RoomOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
@@ -10335,28 +10390,26 @@ public final class ProtoGlobal {
         return (Builder) super.clone();
       }
       public Builder setField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
-              Object value) {
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
+              com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
 
       public Builder setRepeatedField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
+          com.google.protobuf.Descriptors.FieldDescriptor field,
           int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-
       public Builder addRepeatedField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
+          com.google.protobuf.Descriptors.FieldDescriptor field,
           Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
@@ -10463,7 +10516,6 @@ public final class ProtoGlobal {
       }
 
       private int type_ = 0;
-
       /**
        * <code>optional .proto.Room.Type type = 2;</code>
        */
@@ -10485,7 +10537,6 @@ public final class ProtoGlobal {
         Type result = Type.valueOf(type_);
         return result == null ? Type.UNRECOGNIZED : result;
       }
-
       /**
        * <code>optional .proto.Room.Type type = 2;</code>
        */
@@ -10493,7 +10544,7 @@ public final class ProtoGlobal {
         if (value == null) {
           throw new NullPointerException();
         }
-
+        
         type_ = value.getNumber();
         onChanged();
         return this;
@@ -10509,7 +10560,6 @@ public final class ProtoGlobal {
       }
 
       private Object title_ = "";
-
       /**
        * <code>optional string title = 3;</code>
        */
@@ -10517,7 +10567,7 @@ public final class ProtoGlobal {
         Object ref = title_;
         if (!(ref instanceof String)) {
           com.google.protobuf.ByteString bs =
-                  (com.google.protobuf.ByteString) ref;
+              (com.google.protobuf.ByteString) ref;
           String s = bs.toStringUtf8();
           title_ = s;
           return s;
@@ -10558,29 +10608,27 @@ public final class ProtoGlobal {
        * <code>optional string title = 3;</code>
        */
       public Builder clearTitle() {
-        
+
         title_ = getDefaultInstance().getTitle();
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string title = 3;</code>
        */
       public Builder setTitleBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
-          throw new NullPointerException();
+    throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
-
+        
         title_ = value;
         onChanged();
         return this;
       }
 
       private Object initials_ = "";
-
       /**
        * <code>optional string initials = 4;</code>
        */
@@ -10588,7 +10636,7 @@ public final class ProtoGlobal {
         Object ref = initials_;
         if (!(ref instanceof String)) {
           com.google.protobuf.ByteString bs =
-                  (com.google.protobuf.ByteString) ref;
+              (com.google.protobuf.ByteString) ref;
           String s = bs.toStringUtf8();
           initials_ = s;
           return s;
@@ -10634,7 +10682,6 @@ public final class ProtoGlobal {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string initials = 4;</code>
        */
@@ -10644,7 +10691,7 @@ public final class ProtoGlobal {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
-
+        
         initials_ = value;
         onChanged();
         return this;
@@ -10658,7 +10705,7 @@ public final class ProtoGlobal {
         Object ref = color_;
         if (!(ref instanceof String)) {
           com.google.protobuf.ByteString bs =
-                  (com.google.protobuf.ByteString) ref;
+              (com.google.protobuf.ByteString) ref;
           String s = bs.toStringUtf8();
           color_ = s;
           return s;
@@ -10735,6 +10782,7 @@ public final class ProtoGlobal {
         onChanged();
         return this;
       }
+
       /**
        * <code>optional uint32 unread_count = 6;</code>
        */
@@ -10747,7 +10795,7 @@ public final class ProtoGlobal {
 
       private RoomMessage lastMessage_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
-              RoomMessage, RoomMessage.Builder, RoomMessageOrBuilder> lastMessageBuilder_;
+          RoomMessage, RoomMessage.Builder, RoomMessageOrBuilder> lastMessageBuilder_;
       /**
        * <code>optional .proto.RoomMessage last_message = 7;</code>
        */
@@ -10780,7 +10828,6 @@ public final class ProtoGlobal {
 
         return this;
       }
-
       /**
        * <code>optional .proto.RoomMessage last_message = 7;</code>
        */
@@ -10827,7 +10874,6 @@ public final class ProtoGlobal {
 
         return this;
       }
-
       /**
        * <code>optional .proto.RoomMessage last_message = 7;</code>
        */
@@ -10836,7 +10882,6 @@ public final class ProtoGlobal {
         onChanged();
         return getLastMessageFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.RoomMessage last_message = 7;</code>
        */
@@ -10872,7 +10917,6 @@ public final class ProtoGlobal {
       public boolean getReadOnly() {
         return readOnly_;
       }
-
       /**
        * <code>optional bool read_only = 8;</code>
        */
@@ -10886,7 +10930,7 @@ public final class ProtoGlobal {
        * <code>optional bool read_only = 8;</code>
        */
       public Builder clearReadOnly() {
-
+        
         readOnly_ = false;
         onChanged();
         return this;
@@ -10911,7 +10955,6 @@ public final class ProtoGlobal {
           return draftBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.RoomDraft draft = 9;</code>
        */
@@ -10932,7 +10975,7 @@ public final class ProtoGlobal {
        * <code>optional .proto.RoomDraft draft = 9;</code>
        */
       public Builder setDraft(
-              RoomDraft.Builder builderForValue) {
+          RoomDraft.Builder builderForValue) {
         if (draftBuilder_ == null) {
           draft_ = builderForValue.build();
           onChanged();
@@ -10974,12 +11017,11 @@ public final class ProtoGlobal {
 
         return this;
       }
-
       /**
        * <code>optional .proto.RoomDraft draft = 9;</code>
        */
       public RoomDraft.Builder getDraftBuilder() {
-
+        
         onChanged();
         return getDraftFieldBuilder().getBuilder();
       }
@@ -10992,15 +11034,15 @@ public final class ProtoGlobal {
           return draftBuilder_.getMessageOrBuilder();
         } else {
           return draft_ == null ?
-                  RoomDraft.getDefaultInstance() : draft_;
+              RoomDraft.getDefaultInstance() : draft_;
         }
       }
       /**
        * <code>optional .proto.RoomDraft draft = 9;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-              RoomDraft, RoomDraft.Builder, RoomDraftOrBuilder>
-      getDraftFieldBuilder() {
+          RoomDraft, RoomDraft.Builder, RoomDraftOrBuilder>
+          getDraftFieldBuilder() {
         if (draftBuilder_ == null) {
           draftBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
               RoomDraft, RoomDraft.Builder, RoomDraftOrBuilder>(
@@ -11031,7 +11073,6 @@ public final class ProtoGlobal {
           return chatRoomBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.ChatRoom chat_room = 10;</code>
        */
@@ -11052,7 +11093,7 @@ public final class ProtoGlobal {
        * <code>optional .proto.ChatRoom chat_room = 10;</code>
        */
       public Builder setChatRoom(
-              ChatRoom.Builder builderForValue) {
+          ChatRoom.Builder builderForValue) {
         if (chatRoomBuilder_ == null) {
           chatRoom_ = builderForValue.build();
           onChanged();
@@ -11094,12 +11135,11 @@ public final class ProtoGlobal {
 
         return this;
       }
-
       /**
        * <code>optional .proto.ChatRoom chat_room = 10;</code>
        */
       public ChatRoom.Builder getChatRoomBuilder() {
-
+        
         onChanged();
         return getChatRoomFieldBuilder().getBuilder();
       }
@@ -11112,15 +11152,15 @@ public final class ProtoGlobal {
           return chatRoomBuilder_.getMessageOrBuilder();
         } else {
           return chatRoom_ == null ?
-                  ChatRoom.getDefaultInstance() : chatRoom_;
+              ChatRoom.getDefaultInstance() : chatRoom_;
         }
       }
       /**
        * <code>optional .proto.ChatRoom chat_room = 10;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-              ChatRoom, ChatRoom.Builder, ChatRoomOrBuilder>
-      getChatRoomFieldBuilder() {
+          ChatRoom, ChatRoom.Builder, ChatRoomOrBuilder>
+          getChatRoomFieldBuilder() {
         if (chatRoomBuilder_ == null) {
           chatRoomBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
               ChatRoom, ChatRoom.Builder, ChatRoomOrBuilder>(
@@ -11167,12 +11207,11 @@ public final class ProtoGlobal {
 
         return this;
       }
-
       /**
        * <code>optional .proto.GroupRoom group_room = 11;</code>
        */
       public Builder setGroupRoom(
-              GroupRoom.Builder builderForValue) {
+          GroupRoom.Builder builderForValue) {
         if (groupRoomBuilder_ == null) {
           groupRoom_ = builderForValue.build();
           onChanged();
@@ -11214,16 +11253,14 @@ public final class ProtoGlobal {
 
         return this;
       }
-
       /**
        * <code>optional .proto.GroupRoom group_room = 11;</code>
        */
       public GroupRoom.Builder getGroupRoomBuilder() {
-
+        
         onChanged();
         return getGroupRoomFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.GroupRoom group_room = 11;</code>
        */
@@ -11239,8 +11276,8 @@ public final class ProtoGlobal {
        * <code>optional .proto.GroupRoom group_room = 11;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-              GroupRoom, GroupRoom.Builder, GroupRoomOrBuilder>
-      getGroupRoomFieldBuilder() {
+          GroupRoom, GroupRoom.Builder, GroupRoomOrBuilder>
+          getGroupRoomFieldBuilder() {
         if (groupRoomBuilder_ == null) {
           groupRoomBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
               GroupRoom, GroupRoom.Builder, GroupRoomOrBuilder>(
@@ -11255,7 +11292,6 @@ public final class ProtoGlobal {
       private ChannelRoom channelRoom_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
           ChannelRoom, ChannelRoom.Builder, ChannelRoomOrBuilder> channelRoomBuilder_;
-
       /**
        * <pre>
        * TODO [Amerehie] - 2016-08-08 12:44 PM - notification
@@ -11308,7 +11344,7 @@ public final class ProtoGlobal {
        * <code>optional .proto.ChannelRoom channel_room = 12;</code>
        */
       public Builder setChannelRoom(
-              ChannelRoom.Builder builderForValue) {
+          ChannelRoom.Builder builderForValue) {
         if (channelRoomBuilder_ == null) {
           channelRoom_ = builderForValue.build();
           onChanged();
@@ -11358,7 +11394,6 @@ public final class ProtoGlobal {
 
         return this;
       }
-
       /**
        * <pre>
        * TODO [Amerehie] - 2016-08-08 12:44 PM - notification
@@ -11367,7 +11402,7 @@ public final class ProtoGlobal {
        * <code>optional .proto.ChannelRoom channel_room = 12;</code>
        */
       public ChannelRoom.Builder getChannelRoomBuilder() {
-
+        
         onChanged();
         return getChannelRoomFieldBuilder().getBuilder();
       }
@@ -11386,7 +11421,6 @@ public final class ProtoGlobal {
               ChannelRoom.getDefaultInstance() : channelRoom_;
         }
       }
-
       /**
        * <pre>
        * TODO [Amerehie] - 2016-08-08 12:44 PM - notification
@@ -11407,14 +11441,13 @@ public final class ProtoGlobal {
         }
         return channelRoomBuilder_;
       }
-
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
       }
 
       public final Builder mergeUnknownFields(
-              final com.google.protobuf.UnknownFieldSet unknownFields) {
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
       }
 
@@ -11458,7 +11491,7 @@ public final class ProtoGlobal {
   }
 
   public interface ChatRoomOrBuilder extends
-          // @@protoc_insertion_point(interface_extends:proto.ChatRoom)
+      // @@protoc_insertion_point(interface_extends:proto.ChatRoom)
       com.google.protobuf.MessageOrBuilder {
 
     /**
@@ -11496,7 +11529,7 @@ public final class ProtoGlobal {
     private ChatRoom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+        throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       int mutable_bitField0_ = 0;
       try {
@@ -11532,7 +11565,7 @@ public final class ProtoGlobal {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
+                e).setUnfinishedMessage(this);
       } finally {
         makeExtensionsImmutable();
       }
@@ -11543,7 +11576,7 @@ public final class ProtoGlobal {
     }
 
     protected FieldAccessorTable
-    internalGetFieldAccessorTable() {
+        internalGetFieldAccessorTable() {
       return ProtoGlobal.internal_static_proto_ChatRoom_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
               ChatRoom.class, Builder.class);
@@ -11571,6 +11604,7 @@ public final class ProtoGlobal {
     }
 
     private byte memoizedIsInitialized = -1;
+
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -11581,7 +11615,7 @@ public final class ProtoGlobal {
     }
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-            throws java.io.IOException {
+                        throws java.io.IOException {
       if (peer_ != null) {
         output.writeMessage(1, getPeer());
       }
@@ -11604,7 +11638,7 @@ public final class ProtoGlobal {
     @Override
     public boolean equals(final Object obj) {
       if (obj == this) {
-       return true;
+        return true;
       }
       if (!(obj instanceof ChatRoom)) {
         return super.equals(obj);
@@ -11615,7 +11649,7 @@ public final class ProtoGlobal {
       result = result && (hasPeer() == other.hasPeer());
       if (hasPeer()) {
         result = result && getPeer()
-                .equals(other.getPeer());
+            .equals(other.getPeer());
       }
       return result;
     }
@@ -11644,17 +11678,17 @@ public final class ProtoGlobal {
     public static ChatRoom parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
+
     public static ChatRoom parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static ChatRoom parseFrom(
-            byte[] data,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
@@ -11664,33 +11698,30 @@ public final class ProtoGlobal {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static ChatRoom parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static ChatRoom parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+              .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static ChatRoom parseDelimitedFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input, extensionRegistry);
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-
-    public static ChatRoom parseDelimitedFrom(java.io.InputStream input)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
-    }
-    public static ChatRoom parseDelimitedFrom(
-            java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-    }
-
     public static ChatRoom parseFrom(
-            com.google.protobuf.CodedInputStream input)
+        com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input);
+          .parseWithIOException(PARSER, input);
     }
     public static ChatRoom parseFrom(
         com.google.protobuf.CodedInputStream input,
@@ -11700,7 +11731,10 @@ public final class ProtoGlobal {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public Builder newBuilderForType() { return newBuilder(); }
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
@@ -11715,20 +11749,19 @@ public final class ProtoGlobal {
 
     @Override
     protected Builder newBuilderForType(
-            BuilderParent parent) {
+        BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.ChatRoom}
      */
     public static final class Builder extends
-            com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:proto.ChatRoom)
         ChatRoomOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
-      getDescriptor() {
+          getDescriptor() {
         return ProtoGlobal.internal_static_proto_ChatRoom_descriptor;
       }
 
@@ -11749,13 +11782,11 @@ public final class ProtoGlobal {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (peerBuilder_ == null) {
@@ -11798,27 +11829,24 @@ public final class ProtoGlobal {
       public Builder clone() {
         return (Builder) super.clone();
       }
-
       public Builder setField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
+          com.google.protobuf.Descriptors.FieldDescriptor field,
           Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
+              com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-
       public Builder setRepeatedField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
-              int index, Object value) {
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           Object value) {
@@ -11849,7 +11877,7 @@ public final class ProtoGlobal {
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-              throws java.io.IOException {
+          throws java.io.IOException {
         ChatRoom parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
@@ -11883,7 +11911,6 @@ public final class ProtoGlobal {
           return peerBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.RegisteredUser peer = 1;</code>
        */
@@ -11904,7 +11931,7 @@ public final class ProtoGlobal {
        * <code>optional .proto.RegisteredUser peer = 1;</code>
        */
       public Builder setPeer(
-              RegisteredUser.Builder builderForValue) {
+          RegisteredUser.Builder builderForValue) {
         if (peerBuilder_ == null) {
           peer_ = builderForValue.build();
           onChanged();
@@ -11946,16 +11973,14 @@ public final class ProtoGlobal {
 
         return this;
       }
-
       /**
        * <code>optional .proto.RegisteredUser peer = 1;</code>
        */
       public RegisteredUser.Builder getPeerBuilder() {
-
+        
         onChanged();
         return getPeerFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.RegisteredUser peer = 1;</code>
        */
@@ -11983,14 +12008,13 @@ public final class ProtoGlobal {
         }
         return peerBuilder_;
       }
-
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
       }
 
       public final Builder mergeUnknownFields(
-              final com.google.protobuf.UnknownFieldSet unknownFields) {
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
       }
 
@@ -12054,7 +12078,7 @@ public final class ProtoGlobal {
      * <code>optional string participants_count_label = 2;</code>
      */
     com.google.protobuf.ByteString
-    getParticipantsCountLabelBytes();
+        getParticipantsCountLabelBytes();
 
     /**
      * <code>optional string description = 3;</code>
@@ -12064,7 +12088,7 @@ public final class ProtoGlobal {
      * <code>optional string description = 3;</code>
      */
     com.google.protobuf.ByteString
-    getDescriptionBytes();
+        getDescriptionBytes();
 
     /**
      * <code>optional uint32 avatar_count = 4;</code>
@@ -12231,7 +12255,7 @@ public final class ProtoGlobal {
       public final int getNumber() {
         if (this == UNRECOGNIZED) {
           throw new IllegalArgumentException(
-                  "Can't get the number of an unknown enum value.");
+              "Can't get the number of an unknown enum value.");
         }
         return value;
       }
@@ -12255,10 +12279,9 @@ public final class ProtoGlobal {
       }
 
       public static com.google.protobuf.Internal.EnumLiteMap<Role>
-      internalGetValueMap() {
+          internalGetValueMap() {
         return internalValueMap;
       }
-
       private static final com.google.protobuf.Internal.EnumLiteMap<
           Role> internalValueMap =
             new com.google.protobuf.Internal.EnumLiteMap<Role>() {
@@ -12271,7 +12294,6 @@ public final class ProtoGlobal {
           getValueDescriptor() {
         return getDescriptor().getValues().get(ordinal());
       }
-
       public final com.google.protobuf.Descriptors.EnumDescriptor
           getDescriptorForType() {
         return getDescriptor();
@@ -12312,7 +12334,6 @@ public final class ProtoGlobal {
     public int getRoleValue() {
       return role_;
     }
-
     /**
      * <code>optional .proto.GroupRoom.Role role = 1;</code>
      */
@@ -12338,6 +12359,7 @@ public final class ProtoGlobal {
         return s;
       }
     }
+
     /**
      * <code>optional string participants_count_label = 2;</code>
      */
@@ -12345,9 +12367,9 @@ public final class ProtoGlobal {
         getParticipantsCountLabelBytes() {
       Object ref = participantsCountLabel_;
       if (ref instanceof String) {
-        com.google.protobuf.ByteString b =
-                com.google.protobuf.ByteString.copyFromUtf8(
-                        (String) ref);
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
         participantsCountLabel_ = b;
         return b;
       } else {
@@ -12527,7 +12549,7 @@ public final class ProtoGlobal {
     }
 
     public static GroupRoom parseFrom(
-        com.google.protobuf.ByteString data)
+            com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
@@ -12537,44 +12559,41 @@ public final class ProtoGlobal {
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
+
     public static GroupRoom parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static GroupRoom parseFrom(
-            byte[] data,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static GroupRoom parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static GroupRoom parseFrom(
             java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input, extensionRegistry);
     }
     public static GroupRoom parseDelimitedFrom(java.io.InputStream input)
-            throws java.io.IOException {
+        throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
+              .parseDelimitedWithIOException(PARSER, input);
     }
     public static GroupRoom parseDelimitedFrom(
-            java.io.InputStream input,
+        java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static GroupRoom parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
@@ -12586,10 +12605,13 @@ public final class ProtoGlobal {
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input, extensionRegistry);
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public Builder newBuilderForType() { return newBuilder(); }
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
@@ -12604,20 +12626,19 @@ public final class ProtoGlobal {
 
     @Override
     protected Builder newBuilderForType(
-            BuilderParent parent) {
+        BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.GroupRoom}
      */
     public static final class Builder extends
-            com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:proto.GroupRoom)
         GroupRoomOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
-      getDescriptor() {
+          getDescriptor() {
         return ProtoGlobal.internal_static_proto_GroupRoom_descriptor;
       }
 
@@ -12643,7 +12664,6 @@ public final class ProtoGlobal {
                 .alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         role_ = 0;
@@ -12698,27 +12718,24 @@ public final class ProtoGlobal {
       public Builder clone() {
         return (Builder) super.clone();
       }
-
       public Builder setField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
+          com.google.protobuf.Descriptors.FieldDescriptor field,
           Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
+              com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-
       public Builder setRepeatedField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
-              int index, Object value) {
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           Object value) {
@@ -12779,14 +12796,12 @@ public final class ProtoGlobal {
       }
 
       private int role_ = 0;
-
       /**
        * <code>optional .proto.GroupRoom.Role role = 1;</code>
        */
       public int getRoleValue() {
         return role_;
       }
-
       /**
        * <code>optional .proto.GroupRoom.Role role = 1;</code>
        */
@@ -12809,7 +12824,7 @@ public final class ProtoGlobal {
         if (value == null) {
           throw new NullPointerException();
         }
-
+        
         role_ = value.getNumber();
         onChanged();
         return this;
@@ -12818,7 +12833,7 @@ public final class ProtoGlobal {
        * <code>optional .proto.GroupRoom.Role role = 1;</code>
        */
       public Builder clearRole() {
-
+        
         role_ = 0;
         onChanged();
         return this;
@@ -12844,7 +12859,7 @@ public final class ProtoGlobal {
        * <code>optional string participants_count_label = 2;</code>
        */
       public com.google.protobuf.ByteString
-      getParticipantsCountLabelBytes() {
+          getParticipantsCountLabelBytes() {
         Object ref = participantsCountLabel_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
@@ -12860,7 +12875,7 @@ public final class ProtoGlobal {
        * <code>optional string participants_count_label = 2;</code>
        */
       public Builder setParticipantsCountLabel(
-          String value) {
+              String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -12869,26 +12884,24 @@ public final class ProtoGlobal {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string participants_count_label = 2;</code>
        */
       public Builder clearParticipantsCountLabel() {
-
+        
         participantsCountLabel_ = getDefaultInstance().getParticipantsCountLabel();
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string participants_count_label = 2;</code>
        */
       public Builder setParticipantsCountLabelBytes(
-              com.google.protobuf.ByteString value) {
+          com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-        checkByteStringIsUtf8(value);
+  checkByteStringIsUtf8(value);
         
         participantsCountLabel_ = value;
         onChanged();
@@ -12896,7 +12909,6 @@ public final class ProtoGlobal {
       }
 
       private Object description_ = "";
-
       /**
        * <code>optional string description = 3;</code>
        */
@@ -12916,7 +12928,7 @@ public final class ProtoGlobal {
        * <code>optional string description = 3;</code>
        */
       public com.google.protobuf.ByteString
-      getDescriptionBytes() {
+          getDescriptionBytes() {
         Object ref = description_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
@@ -12966,7 +12978,6 @@ public final class ProtoGlobal {
       }
 
       private int avatarCount_ ;
-
       /**
        * <code>optional uint32 avatar_count = 4;</code>
        */
@@ -12987,7 +12998,7 @@ public final class ProtoGlobal {
        * <code>optional uint32 avatar_count = 4;</code>
        */
       public Builder clearAvatarCount() {
-
+        
         avatarCount_ = 0;
         onChanged();
         return this;
@@ -12996,7 +13007,6 @@ public final class ProtoGlobal {
       private Avatar avatar_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
           Avatar, Avatar.Builder, AvatarOrBuilder> avatarBuilder_;
-
       /**
        * <code>optional .proto.Avatar avatar = 5;</code>
        */
@@ -13079,7 +13089,7 @@ public final class ProtoGlobal {
        * <code>optional .proto.Avatar avatar = 5;</code>
        */
       public Avatar.Builder getAvatarBuilder() {
-
+        
         onChanged();
         return getAvatarFieldBuilder().getBuilder();
       }
@@ -13110,14 +13120,13 @@ public final class ProtoGlobal {
         }
         return avatarBuilder_;
       }
-
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
       }
 
       public final Builder mergeUnknownFields(
-              final com.google.protobuf.UnknownFieldSet unknownFields) {
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
       }
 
@@ -13168,7 +13177,6 @@ public final class ProtoGlobal {
      * <code>optional .proto.ChannelRoom.Role role = 1;</code>
      */
     int getRoleValue();
-
     /**
      * <code>optional .proto.ChannelRoom.Role role = 1;</code>
      */
@@ -13182,7 +13190,7 @@ public final class ProtoGlobal {
      * <code>optional string participants_count_label = 2;</code>
      */
     com.google.protobuf.ByteString
-    getParticipantsCountLabelBytes();
+        getParticipantsCountLabelBytes();
 
     /**
      * <code>optional string description = 3;</code>
@@ -13192,7 +13200,7 @@ public final class ProtoGlobal {
      * <code>optional string description = 3;</code>
      */
     com.google.protobuf.ByteString
-    getDescriptionBytes();
+        getDescriptionBytes();
 
     /**
      * <code>optional uint32 avatar_count = 4;</code>
@@ -13212,7 +13220,6 @@ public final class ProtoGlobal {
      */
     AvatarOrBuilder getAvatarOrBuilder();
   }
-
   /**
    * Protobuf type {@code proto.ChannelRoom}
    */
@@ -13360,7 +13367,7 @@ public final class ProtoGlobal {
       public final int getNumber() {
         if (this == UNRECOGNIZED) {
           throw new IllegalArgumentException(
-                  "Can't get the number of an unknown enum value.");
+              "Can't get the number of an unknown enum value.");
         }
         return value;
       }
@@ -13377,20 +13384,16 @@ public final class ProtoGlobal {
         switch (value) {
           case 0: return MEMBER;
           case 1: return MODERATOR;
-          case 2:
-            return ADMIN;
-          case 3:
-            return OWNER;
-          default:
-            return null;
+          case 2: return ADMIN;
+          case 3: return OWNER;
+          default: return null;
         }
       }
 
       public static com.google.protobuf.Internal.EnumLiteMap<Role>
-      internalGetValueMap() {
+          internalGetValueMap() {
         return internalValueMap;
       }
-
       private static final com.google.protobuf.Internal.EnumLiteMap<
           Role> internalValueMap =
             new com.google.protobuf.Internal.EnumLiteMap<Role>() {
@@ -13403,7 +13406,6 @@ public final class ProtoGlobal {
           getValueDescriptor() {
         return getDescriptor().getValues().get(ordinal());
       }
-
       public final com.google.protobuf.Descriptors.EnumDescriptor
           getDescriptorForType() {
         return getDescriptor();
@@ -13438,14 +13440,12 @@ public final class ProtoGlobal {
 
     public static final int ROLE_FIELD_NUMBER = 1;
     private int role_;
-
     /**
      * <code>optional .proto.ChannelRoom.Role role = 1;</code>
      */
     public int getRoleValue() {
       return role_;
     }
-
     /**
      * <code>optional .proto.ChannelRoom.Role role = 1;</code>
      */
@@ -13476,12 +13476,12 @@ public final class ProtoGlobal {
      * <code>optional string participants_count_label = 2;</code>
      */
     public com.google.protobuf.ByteString
-    getParticipantsCountLabelBytes() {
+        getParticipantsCountLabelBytes() {
       Object ref = participantsCountLabel_;
       if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                    (String) ref);
+                (String) ref);
         participantsCountLabel_ = b;
         return b;
       } else {
@@ -13491,7 +13491,6 @@ public final class ProtoGlobal {
 
     public static final int DESCRIPTION_FIELD_NUMBER = 3;
     private volatile Object description_;
-
     /**
      * <code>optional string description = 3;</code>
      */
@@ -13547,7 +13546,6 @@ public final class ProtoGlobal {
     public Avatar getAvatar() {
       return avatar_ == null ? Avatar.getDefaultInstance() : avatar_;
     }
-
     /**
      * <code>optional .proto.Avatar avatar = 5;</code>
      */
@@ -13663,54 +13661,53 @@ public final class ProtoGlobal {
     }
 
     public static ChannelRoom parseFrom(
-        com.google.protobuf.ByteString data)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static ChannelRoom parseFrom(
-        com.google.protobuf.ByteString data,
+            com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+        throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
     public static ChannelRoom parseFrom(byte[] data)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+        throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static ChannelRoom parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+            byte[] data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
     public static ChannelRoom parseFrom(java.io.InputStream input)
-            throws java.io.IOException {
+        throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static ChannelRoom parseFrom(
             java.io.InputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input, extensionRegistry);
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static ChannelRoom parseDelimitedFrom(java.io.InputStream input)
-            throws java.io.IOException {
+        throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
+              .parseDelimitedWithIOException(PARSER, input);
     }
-
     public static ChannelRoom parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
     public static ChannelRoom parseFrom(
         com.google.protobuf.CodedInputStream input)
@@ -13723,7 +13720,7 @@ public final class ProtoGlobal {
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input, extensionRegistry);
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
     public Builder newBuilderForType() { return newBuilder(); }
@@ -13734,28 +13731,26 @@ public final class ProtoGlobal {
     public static Builder newBuilder(ChannelRoom prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
+              ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @Override
     protected Builder newBuilderForType(
-            BuilderParent parent) {
+        BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.ChannelRoom}
      */
     public static final class Builder extends
-            com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:proto.ChannelRoom)
         ChannelRoomOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
-      getDescriptor() {
+          getDescriptor() {
         return ProtoGlobal.internal_static_proto_ChannelRoom_descriptor;
       }
 
@@ -13781,7 +13776,6 @@ public final class ProtoGlobal {
                 .alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         role_ = 0;
@@ -13836,7 +13830,6 @@ public final class ProtoGlobal {
       public Builder clone() {
         return (Builder) super.clone();
       }
-
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           Object value) {
@@ -13943,24 +13936,22 @@ public final class ProtoGlobal {
         if (value == null) {
           throw new NullPointerException();
         }
-
+        
         role_ = value.getNumber();
         onChanged();
         return this;
       }
-
       /**
        * <code>optional .proto.ChannelRoom.Role role = 1;</code>
        */
       public Builder clearRole() {
-
+        
         role_ = 0;
         onChanged();
         return this;
       }
 
       private Object participantsCountLabel_ = "";
-
       /**
        * <code>optional string participants_count_label = 2;</code>
        */
@@ -13968,7 +13959,7 @@ public final class ProtoGlobal {
         Object ref = participantsCountLabel_;
         if (!(ref instanceof String)) {
           com.google.protobuf.ByteString bs =
-                  (com.google.protobuf.ByteString) ref;
+              (com.google.protobuf.ByteString) ref;
           String s = bs.toStringUtf8();
           participantsCountLabel_ = s;
           return s;
@@ -13996,9 +13987,9 @@ public final class ProtoGlobal {
        * <code>optional string participants_count_label = 2;</code>
        */
       public Builder setParticipantsCountLabel(
-              String value) {
+          String value) {
         if (value == null) {
-          throw new NullPointerException();
+    throw new NullPointerException();
   }
   
         participantsCountLabel_ = value;
@@ -14009,19 +14000,18 @@ public final class ProtoGlobal {
        * <code>optional string participants_count_label = 2;</code>
        */
       public Builder clearParticipantsCountLabel() {
-        
+
         participantsCountLabel_ = getDefaultInstance().getParticipantsCountLabel();
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string participants_count_label = 2;</code>
        */
       public Builder setParticipantsCountLabelBytes(
-              com.google.protobuf.ByteString value) {
+          com.google.protobuf.ByteString value) {
         if (value == null) {
-          throw new NullPointerException();
+    throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
         
@@ -14031,7 +14021,6 @@ public final class ProtoGlobal {
       }
 
       private Object description_ = "";
-
       /**
        * <code>optional string description = 3;</code>
        */
@@ -14047,7 +14036,6 @@ public final class ProtoGlobal {
           return (String) ref;
         }
       }
-
       /**
        * <code>optional string description = 3;</code>
        */
@@ -14101,7 +14089,7 @@ public final class ProtoGlobal {
         return this;
       }
 
-      private int avatarCount_;
+      private int avatarCount_ ;
       /**
        * <code>optional uint32 avatar_count = 4;</code>
        */
@@ -14121,7 +14109,7 @@ public final class ProtoGlobal {
        * <code>optional uint32 avatar_count = 4;</code>
        */
       public Builder clearAvatarCount() {
-
+        
         avatarCount_ = 0;
         onChanged();
         return this;
@@ -14130,7 +14118,6 @@ public final class ProtoGlobal {
       private Avatar avatar_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
           Avatar, Avatar.Builder, AvatarOrBuilder> avatarBuilder_;
-
       /**
        * <code>optional .proto.Avatar avatar = 5;</code>
        */
@@ -14163,7 +14150,6 @@ public final class ProtoGlobal {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Avatar avatar = 5;</code>
        */
@@ -14214,7 +14200,7 @@ public final class ProtoGlobal {
        * <code>optional .proto.Avatar avatar = 5;</code>
        */
       public Avatar.Builder getAvatarBuilder() {
-
+        
         onChanged();
         return getAvatarFieldBuilder().getBuilder();
       }
@@ -14270,7 +14256,7 @@ public final class ProtoGlobal {
     }
 
     private static final com.google.protobuf.Parser<ChannelRoom>
-            PARSER = new com.google.protobuf.AbstractParser<ChannelRoom>() {
+        PARSER = new com.google.protobuf.AbstractParser<ChannelRoom>() {
       public ChannelRoom parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -14296,7 +14282,7 @@ public final class ProtoGlobal {
 
   public interface ThumbnailOrBuilder extends
       // @@protoc_insertion_point(interface_extends:proto.Thumbnail)
-          com.google.protobuf.MessageOrBuilder {
+      com.google.protobuf.MessageOrBuilder {
 
     /**
      * <code>optional int64 size = 1;</code>
@@ -14439,7 +14425,6 @@ public final class ProtoGlobal {
 
     public static final int CACHE_ID_FIELD_NUMBER = 4;
     private volatile Object cacheId_;
-
     /**
      * <code>optional string cache_id = 4;</code>
      */
@@ -14448,8 +14433,8 @@ public final class ProtoGlobal {
       if (ref instanceof String) {
         return (String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs =
+                (com.google.protobuf.ByteString) ref;
         String s = bs.toStringUtf8();
         cacheId_ = s;
         return s;
@@ -14462,8 +14447,8 @@ public final class ProtoGlobal {
         getCacheIdBytes() {
       Object ref = cacheId_;
       if (ref instanceof String) {
-        com.google.protobuf.ByteString b =
-                com.google.protobuf.ByteString.copyFromUtf8(
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
                 (String) ref);
         cacheId_ = b;
         return b;
@@ -14473,6 +14458,7 @@ public final class ProtoGlobal {
     }
 
     private byte memoizedIsInitialized = -1;
+
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -14483,7 +14469,7 @@ public final class ProtoGlobal {
     }
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-            throws java.io.IOException {
+                        throws java.io.IOException {
       if (size_ != 0L) {
         output.writeInt64(1, size_);
       }
@@ -14509,11 +14495,11 @@ public final class ProtoGlobal {
       }
       if (width_ != 0) {
         size += com.google.protobuf.CodedOutputStream
-                .computeInt32Size(2, width_);
+          .computeInt32Size(2, width_);
       }
       if (height_ != 0) {
         size += com.google.protobuf.CodedOutputStream
-                .computeInt32Size(3, height_);
+          .computeInt32Size(3, height_);
       }
       if (!getCacheIdBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, cacheId_);
@@ -14554,7 +14540,7 @@ public final class ProtoGlobal {
       hash = (19 * hash) + getDescriptorForType().hashCode();
       hash = (37 * hash) + SIZE_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-              getSize());
+          getSize());
       hash = (37 * hash) + WIDTH_FIELD_NUMBER;
       hash = (53 * hash) + getWidth();
       hash = (37 * hash) + HEIGHT_FIELD_NUMBER;
@@ -14568,70 +14554,72 @@ public final class ProtoGlobal {
 
     public static Thumbnail parseFrom(
             com.google.protobuf.ByteString data)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+        throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static Thumbnail parseFrom(
             com.google.protobuf.ByteString data,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
     public static Thumbnail parseFrom(byte[] data)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+        throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
     public static Thumbnail parseFrom(
             byte[] data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+        throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
+
     public static Thumbnail parseFrom(java.io.InputStream input)
-            throws java.io.IOException {
+        throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static Thumbnail parseFrom(
-            java.io.InputStream input,
+        java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input, extensionRegistry);
     }
+
     public static Thumbnail parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-              .parseDelimitedWithIOException(PARSER, input);
+          .parseDelimitedWithIOException(PARSER, input);
     }
     public static Thumbnail parseDelimitedFrom(
-            java.io.InputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
+
     public static Thumbnail parseFrom(
-        com.google.protobuf.CodedInputStream input)
-            throws java.io.IOException {
+            com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
+
     public static Thumbnail parseFrom(
-            com.google.protobuf.CodedInputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
     public Builder newBuilderForType() {
-      return newBuilder();
-    }
-
+      return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
@@ -14640,7 +14628,7 @@ public final class ProtoGlobal {
     }
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
-              ? new Builder() : new Builder().mergeFrom(this);
+          ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @Override
@@ -14649,7 +14637,6 @@ public final class ProtoGlobal {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.Thumbnail}
      */
@@ -14675,7 +14662,7 @@ public final class ProtoGlobal {
       }
 
       private Builder(
-              BuilderParent parent) {
+          BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -14728,7 +14715,7 @@ public final class ProtoGlobal {
         return (Builder) super.clone();
       }
       public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
+              com.google.protobuf.Descriptors.FieldDescriptor field,
           Object value) {
         return (Builder) super.setField(field, value);
       }
@@ -14737,7 +14724,7 @@ public final class ProtoGlobal {
         return (Builder) super.clearField(field);
       }
       public Builder clearOneof(
-              com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
       public Builder setRepeatedField(
@@ -14863,12 +14850,11 @@ public final class ProtoGlobal {
        * <code>optional int32 height = 3;</code>
        */
       public Builder setHeight(int value) {
-
+        
         height_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional int32 height = 3;</code>
        */
@@ -14895,7 +14881,6 @@ public final class ProtoGlobal {
           return (String) ref;
         }
       }
-
       /**
        * <code>optional string cache_id = 4;</code>
        */
@@ -14929,7 +14914,7 @@ public final class ProtoGlobal {
        * <code>optional string cache_id = 4;</code>
        */
       public Builder clearCacheId() {
-        
+
         cacheId_ = getDefaultInstance().getCacheId();
         onChanged();
         return this;
@@ -14940,10 +14925,10 @@ public final class ProtoGlobal {
       public Builder setCacheIdBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
-          throw new NullPointerException();
-        }
-        checkByteStringIsUtf8(value);
-
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
         cacheId_ = value;
         onChanged();
         return this;
@@ -14973,7 +14958,7 @@ public final class ProtoGlobal {
     }
 
     private static final com.google.protobuf.Parser<Thumbnail>
-            PARSER = new com.google.protobuf.AbstractParser<Thumbnail>() {
+        PARSER = new com.google.protobuf.AbstractParser<Thumbnail>() {
       public Thumbnail parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -14998,30 +14983,28 @@ public final class ProtoGlobal {
   }
 
   public interface FileOrBuilder extends
-          // @@protoc_insertion_point(interface_extends:proto.File)
-          com.google.protobuf.MessageOrBuilder {
+      // @@protoc_insertion_point(interface_extends:proto.File)
+      com.google.protobuf.MessageOrBuilder {
 
     /**
      * <code>optional string token = 1;</code>
      */
     String getToken();
-
     /**
      * <code>optional string token = 1;</code>
      */
     com.google.protobuf.ByteString
-    getTokenBytes();
+        getTokenBytes();
 
     /**
      * <code>optional string name = 2;</code>
      */
     String getName();
-
     /**
      * <code>optional string name = 2;</code>
      */
     com.google.protobuf.ByteString
-    getNameBytes();
+        getNameBytes();
 
     /**
      * <code>optional int64 size = 3;</code>
@@ -15032,12 +15015,10 @@ public final class ProtoGlobal {
      * <code>optional .proto.Thumbnail large_thumbnail = 4;</code>
      */
     boolean hasLargeThumbnail();
-
     /**
      * <code>optional .proto.Thumbnail large_thumbnail = 4;</code>
      */
     Thumbnail getLargeThumbnail();
-
     /**
      * <code>optional .proto.Thumbnail large_thumbnail = 4;</code>
      */
@@ -15047,7 +15028,6 @@ public final class ProtoGlobal {
      * <code>optional .proto.Thumbnail small_thumbnail = 5;</code>
      */
     boolean hasSmallThumbnail();
-
     /**
      * <code>optional .proto.Thumbnail small_thumbnail = 5;</code>
      */
@@ -15106,6 +15086,7 @@ public final class ProtoGlobal {
     private File(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
+
     private File() {
       token_ = "";
       name_ = "";
@@ -15121,11 +15102,10 @@ public final class ProtoGlobal {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-
     private File(
-            com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+        throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       int mutable_bitField0_ = 0;
       try {
@@ -15230,7 +15210,6 @@ public final class ProtoGlobal {
         makeExtensionsImmutable();
       }
     }
-
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return ProtoGlobal.internal_static_proto_File_descriptor;
@@ -15240,12 +15219,11 @@ public final class ProtoGlobal {
         internalGetFieldAccessorTable() {
       return ProtoGlobal.internal_static_proto_File_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              File.class, Builder.class);
+                  File.class, Builder.class);
     }
 
     public static final int TOKEN_FIELD_NUMBER = 1;
     private volatile Object token_;
-
     /**
      * <code>optional string token = 1;</code>
      */
@@ -15254,14 +15232,13 @@ public final class ProtoGlobal {
       if (ref instanceof String) {
         return (String) ref;
       } else {
-        com.google.protobuf.ByteString bs =
-                (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
         String s = bs.toStringUtf8();
         token_ = s;
         return s;
       }
     }
-
     /**
      * <code>optional string token = 1;</code>
      */
@@ -15300,12 +15277,12 @@ public final class ProtoGlobal {
      * <code>optional string name = 2;</code>
      */
     public com.google.protobuf.ByteString
-    getNameBytes() {
+        getNameBytes() {
       Object ref = name_;
       if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                    (String) ref);
+                (String) ref);
         name_ = b;
         return b;
       } else {
@@ -15315,7 +15292,6 @@ public final class ProtoGlobal {
 
     public static final int SIZE_FIELD_NUMBER = 3;
     private long size_;
-
     /**
      * <code>optional int64 size = 3;</code>
      */
@@ -15325,7 +15301,6 @@ public final class ProtoGlobal {
 
     public static final int LARGE_THUMBNAIL_FIELD_NUMBER = 4;
     private Thumbnail largeThumbnail_;
-
     /**
      * <code>optional .proto.Thumbnail large_thumbnail = 4;</code>
      */
@@ -15338,7 +15313,6 @@ public final class ProtoGlobal {
     public Thumbnail getLargeThumbnail() {
       return largeThumbnail_ == null ? Thumbnail.getDefaultInstance() : largeThumbnail_;
     }
-
     /**
      * <code>optional .proto.Thumbnail large_thumbnail = 4;</code>
      */
@@ -15348,21 +15322,18 @@ public final class ProtoGlobal {
 
     public static final int SMALL_THUMBNAIL_FIELD_NUMBER = 5;
     private Thumbnail smallThumbnail_;
-
     /**
      * <code>optional .proto.Thumbnail small_thumbnail = 5;</code>
      */
     public boolean hasSmallThumbnail() {
       return smallThumbnail_ != null;
     }
-
     /**
      * <code>optional .proto.Thumbnail small_thumbnail = 5;</code>
      */
     public Thumbnail getSmallThumbnail() {
       return smallThumbnail_ == null ? Thumbnail.getDefaultInstance() : smallThumbnail_;
     }
-
     /**
      * <code>optional .proto.Thumbnail small_thumbnail = 5;</code>
      */
@@ -15420,7 +15391,6 @@ public final class ProtoGlobal {
 
     public static final int CACHE_ID_FIELD_NUMBER = 9;
     private volatile Object cacheId_;
-
     /**
      * <code>optional string cache_id = 9;</code>
      */
@@ -15518,7 +15488,7 @@ public final class ProtoGlobal {
       }
       if (smallThumbnail_ != null) {
         size += com.google.protobuf.CodedOutputStream
-                .computeMessageSize(5, getSmallThumbnail());
+          .computeMessageSize(5, getSmallThumbnail());
       }
       if (width_ != 0) {
         size += com.google.protobuf.CodedOutputStream
@@ -15526,11 +15496,11 @@ public final class ProtoGlobal {
       }
       if (height_ != 0) {
         size += com.google.protobuf.CodedOutputStream
-                .computeInt32Size(7, height_);
+          .computeInt32Size(7, height_);
       }
       if (duration_ != 0D) {
         size += com.google.protobuf.CodedOutputStream
-                .computeDoubleSize(8, duration_);
+          .computeDoubleSize(8, duration_);
       }
       if (!getCacheIdBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(9, cacheId_);
@@ -15547,7 +15517,7 @@ public final class ProtoGlobal {
     @Override
     public boolean equals(final Object obj) {
       if (obj == this) {
-       return true;
+        return true;
       }
       if (!(obj instanceof File)) {
         return super.equals(obj);
@@ -15558,18 +15528,18 @@ public final class ProtoGlobal {
       result = result && getToken()
               .equals(other.getToken());
       result = result && getName()
-              .equals(other.getName());
+          .equals(other.getName());
       result = result && (getSize()
-              == other.getSize());
+          == other.getSize());
       result = result && (hasLargeThumbnail() == other.hasLargeThumbnail());
       if (hasLargeThumbnail()) {
         result = result && getLargeThumbnail()
-                .equals(other.getLargeThumbnail());
+            .equals(other.getLargeThumbnail());
       }
       result = result && (hasSmallThumbnail() == other.hasSmallThumbnail());
       if (hasSmallThumbnail()) {
         result = result && getSmallThumbnail()
-                .equals(other.getSmallThumbnail());
+            .equals(other.getSmallThumbnail());
       }
       result = result && (hasWaveformThumbnail() == other.hasWaveformThumbnail());
       if (hasWaveformThumbnail()) {
@@ -15630,40 +15600,39 @@ public final class ProtoGlobal {
     }
 
     public static File parseFrom(
-        com.google.protobuf.ByteString data)
+            com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+
+    public static File parseFrom(
+            com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static File parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static File parseFrom(
-            com.google.protobuf.ByteString data,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-
-    public static File parseFrom(byte[] data)
-            throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-
-    public static File parseFrom(
-            byte[] data,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
     public static File parseFrom(java.io.InputStream input)
-            throws java.io.IOException {
+        throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
     public static File parseFrom(
-            java.io.InputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+              .parseWithIOException(PARSER, input, extensionRegistry);
     }
     public static File parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
@@ -15673,20 +15642,20 @@ public final class ProtoGlobal {
 
     public static File parseDelimitedFrom(
             java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
     public static File parseFrom(
-            com.google.protobuf.CodedInputStream input)
-            throws java.io.IOException {
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
 
     public static File parseFrom(
-            com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
@@ -15694,29 +15663,24 @@ public final class ProtoGlobal {
     }
 
     public Builder newBuilderForType() {
-      return newBuilder();
-    }
-
+      return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(File prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
-              ? new Builder() : new Builder().mergeFrom(this);
+          ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @Override
     protected Builder newBuilderForType(
-            BuilderParent parent) {
+        BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.File}
      */
@@ -15746,13 +15710,11 @@ public final class ProtoGlobal {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         token_ = "";
@@ -15839,22 +15801,21 @@ public final class ProtoGlobal {
         return (Builder) super.clone();
       }
       public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
+              com.google.protobuf.Descriptors.FieldDescriptor field,
           Object value) {
         return (Builder) super.setField(field, value);
       }
+
       public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
+              com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-
       public Builder clearOneof(
-              com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-
       public Builder setRepeatedField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
+          com.google.protobuf.Descriptors.FieldDescriptor field,
           int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
@@ -15918,7 +15879,7 @@ public final class ProtoGlobal {
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-              throws java.io.IOException {
+          throws java.io.IOException {
         File parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
@@ -15934,7 +15895,6 @@ public final class ProtoGlobal {
       }
 
       private Object token_ = "";
-
       /**
        * <code>optional string token = 1;</code>
        */
@@ -15959,7 +15919,7 @@ public final class ProtoGlobal {
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
+                      (String) ref);
           token_ = b;
           return b;
         } else {
@@ -15972,19 +15932,18 @@ public final class ProtoGlobal {
       public Builder setToken(
           String value) {
         if (value == null) {
-          throw new NullPointerException();
+    throw new NullPointerException();
   }
   
         token_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string token = 1;</code>
        */
       public Builder clearToken() {
-        
+
         token_ = getDefaultInstance().getToken();
         onChanged();
         return this;
@@ -15998,14 +15957,13 @@ public final class ProtoGlobal {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
-
+        
         token_ = value;
         onChanged();
         return this;
       }
 
       private Object name_ = "";
-
       /**
        * <code>optional string name = 2;</code>
        */
@@ -16054,7 +16012,7 @@ public final class ProtoGlobal {
        * <code>optional string name = 2;</code>
        */
       public Builder clearName() {
-        
+
         name_ = getDefaultInstance().getName();
         onChanged();
         return this;
@@ -16065,9 +16023,9 @@ public final class ProtoGlobal {
       public Builder setNameBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
-          throw new NullPointerException();
-        }
-        checkByteStringIsUtf8(value);
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
 
         name_ = value;
         onChanged();
@@ -16095,7 +16053,7 @@ public final class ProtoGlobal {
        * <code>optional int64 size = 3;</code>
        */
       public Builder clearSize() {
-
+        
         size_ = 0L;
         onChanged();
         return this;
@@ -16103,8 +16061,7 @@ public final class ProtoGlobal {
 
       private Thumbnail largeThumbnail_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
-              Thumbnail, Thumbnail.Builder, ThumbnailOrBuilder> largeThumbnailBuilder_;
-
+          Thumbnail, Thumbnail.Builder, ThumbnailOrBuilder> largeThumbnailBuilder_;
       /**
        * <code>optional .proto.Thumbnail large_thumbnail = 4;</code>
        */
@@ -16137,7 +16094,6 @@ public final class ProtoGlobal {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Thumbnail large_thumbnail = 4;</code>
        */
@@ -16159,7 +16115,7 @@ public final class ProtoGlobal {
         if (largeThumbnailBuilder_ == null) {
           if (largeThumbnail_ != null) {
             largeThumbnail_ =
-                    Thumbnail.newBuilder(largeThumbnail_).mergeFrom(value).buildPartial();
+              Thumbnail.newBuilder(largeThumbnail_).mergeFrom(value).buildPartial();
           } else {
             largeThumbnail_ = value;
           }
@@ -16170,7 +16126,6 @@ public final class ProtoGlobal {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Thumbnail large_thumbnail = 4;</code>
        */
@@ -16185,12 +16140,11 @@ public final class ProtoGlobal {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Thumbnail large_thumbnail = 4;</code>
        */
       public Thumbnail.Builder getLargeThumbnailBuilder() {
-
+        
         onChanged();
         return getLargeThumbnailFieldBuilder().getBuilder();
       }
@@ -16205,16 +16159,15 @@ public final class ProtoGlobal {
               Thumbnail.getDefaultInstance() : largeThumbnail_;
         }
       }
-
       /**
        * <code>optional .proto.Thumbnail large_thumbnail = 4;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-              Thumbnail, Thumbnail.Builder, ThumbnailOrBuilder>
-      getLargeThumbnailFieldBuilder() {
+          Thumbnail, Thumbnail.Builder, ThumbnailOrBuilder>
+          getLargeThumbnailFieldBuilder() {
         if (largeThumbnailBuilder_ == null) {
           largeThumbnailBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-                  Thumbnail, Thumbnail.Builder, ThumbnailOrBuilder>(
+              Thumbnail, Thumbnail.Builder, ThumbnailOrBuilder>(
                   getLargeThumbnail(),
                   getParentForChildren(),
                   isClean());
@@ -16225,8 +16178,7 @@ public final class ProtoGlobal {
 
       private Thumbnail smallThumbnail_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
-              Thumbnail, Thumbnail.Builder, ThumbnailOrBuilder> smallThumbnailBuilder_;
-
+          Thumbnail, Thumbnail.Builder, ThumbnailOrBuilder> smallThumbnailBuilder_;
       /**
        * <code>optional .proto.Thumbnail small_thumbnail = 5;</code>
        */
@@ -16259,7 +16211,6 @@ public final class ProtoGlobal {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Thumbnail small_thumbnail = 5;</code>
        */
@@ -16281,7 +16232,7 @@ public final class ProtoGlobal {
         if (smallThumbnailBuilder_ == null) {
           if (smallThumbnail_ != null) {
             smallThumbnail_ =
-                    Thumbnail.newBuilder(smallThumbnail_).mergeFrom(value).buildPartial();
+              Thumbnail.newBuilder(smallThumbnail_).mergeFrom(value).buildPartial();
           } else {
             smallThumbnail_ = value;
           }
@@ -16292,7 +16243,6 @@ public final class ProtoGlobal {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Thumbnail small_thumbnail = 5;</code>
        */
@@ -16307,12 +16257,11 @@ public final class ProtoGlobal {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Thumbnail small_thumbnail = 5;</code>
        */
       public Thumbnail.Builder getSmallThumbnailBuilder() {
-
+        
         onChanged();
         return getSmallThumbnailFieldBuilder().getBuilder();
       }
@@ -16327,16 +16276,15 @@ public final class ProtoGlobal {
               Thumbnail.getDefaultInstance() : smallThumbnail_;
         }
       }
-
       /**
        * <code>optional .proto.Thumbnail small_thumbnail = 5;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-              Thumbnail, Thumbnail.Builder, ThumbnailOrBuilder>
-      getSmallThumbnailFieldBuilder() {
+          Thumbnail, Thumbnail.Builder, ThumbnailOrBuilder>
+          getSmallThumbnailFieldBuilder() {
         if (smallThumbnailBuilder_ == null) {
           smallThumbnailBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-                  Thumbnail, Thumbnail.Builder, ThumbnailOrBuilder>(
+              Thumbnail, Thumbnail.Builder, ThumbnailOrBuilder>(
                   getSmallThumbnail(),
                   getParentForChildren(),
                   isClean());
@@ -16347,15 +16295,13 @@ public final class ProtoGlobal {
 
       private Thumbnail waveformThumbnail_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
-              Thumbnail, Thumbnail.Builder, ThumbnailOrBuilder> waveformThumbnailBuilder_;
-
+          Thumbnail, Thumbnail.Builder, ThumbnailOrBuilder> waveformThumbnailBuilder_;
       /**
        * <code>optional .proto.Thumbnail waveform_thumbnail = 10;</code>
        */
       public boolean hasWaveformThumbnail() {
         return waveformThumbnailBuilder_ != null || waveformThumbnail_ != null;
       }
-
       /**
        * <code>optional .proto.Thumbnail waveform_thumbnail = 10;</code>
        */
@@ -16366,7 +16312,6 @@ public final class ProtoGlobal {
           return waveformThumbnailBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Thumbnail waveform_thumbnail = 10;</code>
        */
@@ -16383,12 +16328,11 @@ public final class ProtoGlobal {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Thumbnail waveform_thumbnail = 10;</code>
        */
       public Builder setWaveformThumbnail(
-              Thumbnail.Builder builderForValue) {
+          Thumbnail.Builder builderForValue) {
         if (waveformThumbnailBuilder_ == null) {
           waveformThumbnail_ = builderForValue.build();
           onChanged();
@@ -16406,7 +16350,7 @@ public final class ProtoGlobal {
         if (waveformThumbnailBuilder_ == null) {
           if (waveformThumbnail_ != null) {
             waveformThumbnail_ =
-                    Thumbnail.newBuilder(waveformThumbnail_).mergeFrom(value).buildPartial();
+              Thumbnail.newBuilder(waveformThumbnail_).mergeFrom(value).buildPartial();
           } else {
             waveformThumbnail_ = value;
           }
@@ -16417,7 +16361,6 @@ public final class ProtoGlobal {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Thumbnail waveform_thumbnail = 10;</code>
        */
@@ -16432,12 +16375,11 @@ public final class ProtoGlobal {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Thumbnail waveform_thumbnail = 10;</code>
        */
       public Thumbnail.Builder getWaveformThumbnailBuilder() {
-
+        
         onChanged();
         return getWaveformThumbnailFieldBuilder().getBuilder();
       }
@@ -16450,7 +16392,7 @@ public final class ProtoGlobal {
           return waveformThumbnailBuilder_.getMessageOrBuilder();
         } else {
           return waveformThumbnail_ == null ?
-                  Thumbnail.getDefaultInstance() : waveformThumbnail_;
+              Thumbnail.getDefaultInstance() : waveformThumbnail_;
         }
       }
       /**
@@ -16516,7 +16458,7 @@ public final class ProtoGlobal {
        * <code>optional int32 height = 7;</code>
        */
       public Builder clearHeight() {
-
+        
         height_ = 0;
         onChanged();
         return this;
@@ -16529,7 +16471,6 @@ public final class ProtoGlobal {
       public double getDuration() {
         return duration_;
       }
-
       /**
        * <code>optional double duration = 8;</code>
        */
@@ -16539,12 +16480,11 @@ public final class ProtoGlobal {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional double duration = 8;</code>
        */
       public Builder clearDuration() {
-        
+
         duration_ = 0D;
         onChanged();
         return this;
@@ -16558,7 +16498,7 @@ public final class ProtoGlobal {
         Object ref = cacheId_;
         if (!(ref instanceof String)) {
           com.google.protobuf.ByteString bs =
-                  (com.google.protobuf.ByteString) ref;
+              (com.google.protobuf.ByteString) ref;
           String s = bs.toStringUtf8();
           cacheId_ = s;
           return s;
@@ -16599,7 +16539,7 @@ public final class ProtoGlobal {
        * <code>optional string cache_id = 9;</code>
        */
       public Builder clearCacheId() {
-        
+
         cacheId_ = getDefaultInstance().getCacheId();
         onChanged();
         return this;
@@ -16613,19 +16553,18 @@ public final class ProtoGlobal {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         cacheId_ = value;
         onChanged();
         return this;
       }
-
       public final Builder setUnknownFields(
-              final com.google.protobuf.UnknownFieldSet unknownFields) {
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
       }
 
       public final Builder mergeUnknownFields(
-              final com.google.protobuf.UnknownFieldSet unknownFields) {
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
       }
 
@@ -16644,12 +16583,12 @@ public final class ProtoGlobal {
     }
 
     private static final com.google.protobuf.Parser<File>
-            PARSER = new com.google.protobuf.AbstractParser<File>() {
+        PARSER = new com.google.protobuf.AbstractParser<File>() {
       public File parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-              throws com.google.protobuf.InvalidProtocolBufferException {
-        return new File(input, extensionRegistry);
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new File(input, extensionRegistry);
       }
     };
 
@@ -16669,54 +16608,54 @@ public final class ProtoGlobal {
   }
 
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_proto_RoomMessageLocation_descriptor;
+          internal_static_proto_RoomMessageLocation_descriptor;
   private static final
   com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internal_static_proto_RoomMessageLocation_fieldAccessorTable;
+      internal_static_proto_RoomMessageLocation_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_proto_RoomMessageLog_descriptor;
+          internal_static_proto_RoomMessageLog_descriptor;
   private static final
   com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internal_static_proto_RoomMessageLog_fieldAccessorTable;
+      internal_static_proto_RoomMessageLog_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_proto_RoomMessageContact_descriptor;
-  private static final
-  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internal_static_proto_RoomMessageContact_fieldAccessorTable;
+          internal_static_proto_RoomMessageContact_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_proto_RoomMessageContact_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
           internal_static_proto_RoomMessageForwardFrom_descriptor;
-  private static final
-  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_proto_RoomMessageForwardFrom_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
           internal_static_proto_RegisteredUser_descriptor;
-  private static final
-  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_proto_RegisteredUser_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
           internal_static_proto_Avatar_descriptor;
-  private static final
-  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_proto_Avatar_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
           internal_static_proto_RoomMessage_descriptor;
-  private static final
-  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_proto_RoomMessage_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
           internal_static_proto_RoomDraft_descriptor;
-  private static final
-  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_proto_RoomDraft_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
           internal_static_proto_Room_descriptor;
-  private static final
-  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_proto_Room_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
           internal_static_proto_ChatRoom_descriptor;
-  private static final
-  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_proto_ChatRoom_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
           internal_static_proto_GroupRoom_descriptor;
@@ -16724,15 +16663,15 @@ public final class ProtoGlobal {
   com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_proto_GroupRoom_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_proto_ChannelRoom_descriptor;
+          internal_static_proto_ChannelRoom_descriptor;
   private static final
   com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internal_static_proto_ChannelRoom_fieldAccessorTable;
+      internal_static_proto_ChannelRoom_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
           internal_static_proto_Thumbnail_descriptor;
   private static final
   com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internal_static_proto_Thumbnail_fieldAccessorTable;
+      internal_static_proto_Thumbnail_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
           internal_static_proto_File_descriptor;
   private static final
@@ -16811,38 +16750,46 @@ public final class ProtoGlobal {
                     "\003 \001(\005\022\020\n\010cache_id\030\004 \001(\t\"\370\001\n\004File\022\r\n\005toke",
             "n\030\001 \001(\t\022\014\n\004name\030\002 \001(\t\022\014\n\004size\030\003 \001(\003\022)\n\017l" +
                     "arge_thumbnail\030\004 \001(\0132\020.proto.Thumbnail\022)" +
-                    "\n\017small_thumbnail\030\005 \001(\0132\020.proto.Thumbnai" +
+      "\n\017small_thumbnail\030\005 \001(\0132\020.proto.Thumbnai" +
                     "l\022,\n\022waveform_thumbnail\030\n \001(\0132\020.proto.Th" +
                     "umbnail\022\r\n\005width\030\006 \001(\005\022\016\n\006height\030\007 \001(\005\022\020" +
-                    "\n\010duration\030\010 \001(\001\022\020\n\010cache_id\030\t \001(\t*+\n\006Ge" +
+      "\n\010duration\030\010 \001(\001\022\020\n\010cache_id\030\t \001(\t*+\n\006Ge" +
       "nder\022\013\n\007UNKNOWN\020\000\022\010\n\004MALE\020\001\022\n\n\006FEMALE\020\002*" +
-                    "\275\001\n\017RoomMessageType\022\010\n\004TEXT\020\000\022\t\n\005IMAGE\020\001" +
-      "\022\016\n\nIMAGE_TEXT\020\002\022\t\n\005VIDEO\020\003\022\016\n\nVIDEO_TEX" +
+      "\275\001\n\017RoomMessageType\022\010\n\004TEXT\020\000\022\t\n\005IMAGE\020\001" +
+                    "\022\016\n\nIMAGE_TEXT\020\002\022\t\n\005VIDEO\020\003\022\016\n\nVIDEO_TEX" +
       "T\020\004\022\t\n\005AUDIO\020\005\022\016\n\nAUDIO_TEXT\020\006\022\t\n\005VOICE\020",
-      "\007\022\007\n\003GIF\020\010\022\010\n\004FILE\020\t\022\r\n\tFILE_TEXT\020\n\022\014\n\010L" +
-              "OCATION\020\013\022\007\n\003LOG\020\014\022\013\n\007CONTACT\020\r*O\n\021RoomM" +
-      "essageStatus\022\n\n\006FAILED\020\000\022\013\n\007SENDING\020\001\022\010\n" +
-              "\004SENT\020\002\022\r\n\tDELIVERED\020\003\022\010\n\004SEEN\020\004B\035\n\016com." +
-              "iGap.protoB\013ProtoGlobalb\006proto3"
+            "\007\022\007\n\003GIF\020\010\022\010\n\004FILE\020\t\022\r\n\tFILE_TEXT\020\n\022\014\n\010L" +
+                    "OCATION\020\013\022\007\n\003LOG\020\014\022\013\n\007CONTACT\020\r*O\n\021RoomM" +
+                    "essageStatus\022\n\n\006FAILED\020\000\022\013\n\007SENDING\020\001\022\010\n" +
+                    "\004SENT\020\002\022\r\n\tDELIVERED\020\003\022\010\n\004SEEN\020\004*\243\002\n\014Cli" +
+                    "entAction\022\n\n\006CANCEL\020\000\022\n\n\006TYPING\020\001\022\021\n\rSEN" +
+                    "DING_IMAGE\020\002\022\023\n\017CAPTURING_IMAGE\020\003\022\021\n\rSEN" +
+                    "DING_VIDEO\020\004\022\023\n\017CAPTURING_VIDEO\020\005\022\021\n\rSEN" +
+                    "DING_AUDIO\020\006\022\022\n\016RECORING_VOICE\020\007\022\021\n\rSEND" +
+      "ING_VOICE\020\010\022\024\n\020SENDING_DOCUMENT\020\t\022\017\n\013SEN" +
+                    "DING_GIF\020\n\022\020\n\014SENDING_FILE\020\013\022\024\n\020SENDING_",
+            "LOCATION\020\014\022\024\n\020CHOOSING_CONTACT\020\r\022\014\n\010PAIN" +
+                    "TING\020\016B\035\n\016com.iGap.protoB\013ProtoGlobalb\006p" +
+                    "roto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-            new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
-              public com.google.protobuf.ExtensionRegistry assignDescriptors(
-                      com.google.protobuf.Descriptors.FileDescriptor root) {
-                descriptor = root;
-                return null;
-              }
-            };
+        new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
+          public com.google.protobuf.ExtensionRegistry assignDescriptors(
+              com.google.protobuf.Descriptors.FileDescriptor root) {
+            descriptor = root;
+            return null;
+          }
+        };
     com.google.protobuf.Descriptors.FileDescriptor
             .internalBuildGeneratedFileFrom(descriptorData,
-                    new com.google.protobuf.Descriptors.FileDescriptor[]{
-                    }, assigner);
+        new com.google.protobuf.Descriptors.FileDescriptor[]{
+        }, assigner);
     internal_static_proto_RoomMessageLocation_descriptor =
             getDescriptor().getMessageTypes().get(0);
     internal_static_proto_RoomMessageLocation_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_proto_RoomMessageLocation_descriptor,
-            new String[]{"Lat", "Lon",});
+            internal_static_proto_RoomMessageLocation_descriptor,
+            new String[] { "Lat", "Lon", });
     internal_static_proto_RoomMessageLog_descriptor =
             getDescriptor().getMessageTypes().get(1);
     internal_static_proto_RoomMessageLog_fieldAccessorTable = new
@@ -16850,9 +16797,9 @@ public final class ProtoGlobal {
             internal_static_proto_RoomMessageLog_descriptor,
             new String[]{"Type",});
     internal_static_proto_RoomMessageContact_descriptor =
-            getDescriptor().getMessageTypes().get(2);
+      getDescriptor().getMessageTypes().get(2);
     internal_static_proto_RoomMessageContact_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_proto_RoomMessageContact_descriptor,
             new String[]{"FirstName", "LastName", "Nickname", "Phone", "Email",});
     internal_static_proto_RoomMessageForwardFrom_descriptor =
@@ -16864,9 +16811,9 @@ public final class ProtoGlobal {
     internal_static_proto_RegisteredUser_descriptor =
             getDescriptor().getMessageTypes().get(4);
     internal_static_proto_RegisteredUser_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-            internal_static_proto_RegisteredUser_descriptor,
-            new String[]{"Id", "Username", "Phone", "FirstName", "LastName", "DisplayName", "Initials", "Color", "Status", "LastSeen", "AvatarCount", "Avatar", "Mutual", "Deleted", "CacheId",});
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_proto_RegisteredUser_descriptor,
+            new String[]{"Id", "Username", "Phone", "FirstName", "LastName", "DisplayName", "Initials", "Color", "Status", "LastSeen", "AvatarCount", "Avatar", "Mutual", "Deleted", "CacheId", });
     internal_static_proto_Avatar_descriptor =
             getDescriptor().getMessageTypes().get(5);
     internal_static_proto_Avatar_fieldAccessorTable = new
@@ -16877,8 +16824,8 @@ public final class ProtoGlobal {
             getDescriptor().getMessageTypes().get(6);
     internal_static_proto_RoomMessage_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-            internal_static_proto_RoomMessage_descriptor,
-            new String[]{"MessageId", "MessageVersion", "Status", "StatusVersion", "MessageType", "Message", "Attachment", "UserId", "Location", "Log", "Contact", "Edited", "CreateTime", "UpdateTime", "Deleted", "ForwardFrom", "ReplyTo", "PreviousMessageId",});
+        internal_static_proto_RoomMessage_descriptor,
+            new String[] { "MessageId", "MessageVersion", "Status", "StatusVersion", "MessageType", "Message", "Attachment", "UserId", "Location", "Log", "Contact", "Edited", "CreateTime", "UpdateTime", "Deleted", "ForwardFrom", "ReplyTo", "PreviousMessageId", });
     internal_static_proto_RoomDraft_descriptor =
             getDescriptor().getMessageTypes().get(7);
     internal_static_proto_RoomDraft_fieldAccessorTable = new
@@ -16889,8 +16836,8 @@ public final class ProtoGlobal {
             getDescriptor().getMessageTypes().get(8);
     internal_static_proto_Room_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-            internal_static_proto_Room_descriptor,
-            new String[]{"Id", "Type", "Title", "Initials", "Color", "UnreadCount", "LastMessage", "ReadOnly", "Draft", "ChatRoom", "GroupRoom", "ChannelRoom",});
+        internal_static_proto_Room_descriptor,
+            new String[]{"Id", "Type", "Title", "Initials", "Color", "UnreadCount", "LastMessage", "ReadOnly", "Draft", "ChatRoom", "GroupRoom", "ChannelRoom", });
     internal_static_proto_ChatRoom_descriptor =
             getDescriptor().getMessageTypes().get(9);
     internal_static_proto_ChatRoom_fieldAccessorTable = new
@@ -16898,17 +16845,17 @@ public final class ProtoGlobal {
             internal_static_proto_ChatRoom_descriptor,
             new String[]{"Peer",});
     internal_static_proto_GroupRoom_descriptor =
-            getDescriptor().getMessageTypes().get(10);
+      getDescriptor().getMessageTypes().get(10);
     internal_static_proto_GroupRoom_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_proto_GroupRoom_descriptor,
             new String[]{"Role", "ParticipantsCountLabel", "Description", "AvatarCount", "Avatar",});
     internal_static_proto_ChannelRoom_descriptor =
-            getDescriptor().getMessageTypes().get(11);
+      getDescriptor().getMessageTypes().get(11);
     internal_static_proto_ChannelRoom_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-            internal_static_proto_ChannelRoom_descriptor,
-            new String[]{"Role", "ParticipantsCountLabel", "Description", "AvatarCount", "Avatar", });
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_proto_ChannelRoom_descriptor,
+        new String[] { "Role", "ParticipantsCountLabel", "Description", "AvatarCount", "Avatar", });
     internal_static_proto_Thumbnail_descriptor =
       getDescriptor().getMessageTypes().get(12);
     internal_static_proto_Thumbnail_fieldAccessorTable = new
