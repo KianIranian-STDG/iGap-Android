@@ -38,7 +38,7 @@ public final class AppUtils {
         // icons font MaterialDesign yeksan design nashodan vase hamin man dasti size ro barabar kardam
         switch (status) {
             case "DELIVERED":
-                view.setTextColor(view.getContext().getResources().getColor(R.color.green));
+                view.setTextColor(view.getContext().getResources().getColor(R.color.white));
                 view.setText(G.context.getResources().getString(R.string.md_check_symbol));
                 view.setTextSize(12F);
                 break;
@@ -48,17 +48,17 @@ public final class AppUtils {
                 view.setTextSize(15F);
                 break;
             case "SEEN":
-                view.setTextColor(view.getContext().getResources().getColor(R.color.green));
+                view.setTextColor(view.getContext().getResources().getColor(R.color.white));
                 view.setText(G.context.getResources().getString(R.string.md_double_tick_indicator));
                 view.setTextSize(15F);
                 break;
             case "SENDING":
-                view.setTextColor(view.getContext().getResources().getColor(R.color.green));
+                view.setTextColor(view.getContext().getResources().getColor(R.color.statusSendingColor));
                 view.setText(G.context.getResources().getString(R.string.md_clock_with_white_face));
                 view.setTextSize(12F);
                 break;
             case "SENT":
-                view.setTextColor(view.getContext().getResources().getColor(R.color.gray));
+                view.setTextColor(view.getContext().getResources().getColor(R.color.statusSendingColor));
                 view.setText(G.context.getResources().getString(R.string.md_check_symbol));
                 view.setTextSize(12F);
                 break;

@@ -39,7 +39,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AdapterShearedMedia;
-import com.iGap.adapter.items.ContatItemGroupProfile;
+import com.iGap.adapter.GroupMembersAdapter;
+import com.iGap.adapter.items.ContactItemGroupProfile;
 import com.iGap.fragments.FragmentNotification;
 import com.iGap.fragments.ShowCustomList;
 import com.iGap.interfaces.OnFileUploadForActivities;
@@ -134,7 +135,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
     private FloatingActionButton fab;
     private String tmp = "";
     private int numberUploadItem = 5;
-    private FastAdapter fastAdapter;
+    private GroupMembersAdapter<ContactItemGroupProfile> fastAdapter;
     private long roomId;
     private String title;
     private String description;
@@ -409,7 +410,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                 int listSize = contacts.size();
 
                 for (int i = count; i < listSize && i < count + numberUploadItem; i++) {
-                    items.add(new ContatItemGroupProfile().setContact(contacts.get(i))
+                    items.add(new ContactItemGroupProfile().setContact(contacts.get(i))
                             .withIdentifier(100 + contacts.indexOf(contacts.get(i))));
                 }
 
@@ -500,6 +501,36 @@ public class ActivityGroupProfile extends ActivityEnhanced
         setUiIndependRole();
 
         initRecycleView();
+
+        /*G.onUserInfoResponse = new OnUserInfoResponse() {
+            @Override
+            public void onUserInfo(ProtoGlobal.RegisteredUser user, ProtoResponse.Response response) {
+
+            }
+
+            @Override
+            public void onUserInfoTimeOut() {
+
+            }
+
+            @Override
+            public void onUserInfoError(int majorCode, int minorCode) {
+
+            }
+        };
+
+        G.onGroupGetMemberList = new OnGroupGetMemberList() {
+            @Override
+            public void onGroupGetMemberList(List<ProtoGroupGetMemberList.GroupGetMemberListResponse.Member> members) {
+                // request for user info for each member
+                for (final ProtoGroupGetMemberList.GroupGetMemberListResponse.Member member : members){
+                    new RequestUserInfo().userInfo(member.getUserId());
+                }
+            }
+        };
+
+        // request for getting group members list
+        new RequestGroupGetMemberList().getRoomHistory(roomId);*/
     }
 
     private void setAvatarGroup() {
@@ -555,23 +586,23 @@ public class ActivityGroupProfile extends ActivityEnhanced
     private void initRecycleView() {
 
         //create our FastAdapter
-        fastAdapter = new FastAdapter();
+        fastAdapter = new GroupMembersAdapter<>();
         fastAdapter.withSelectable(true);
 
         //create our adapters
         final StickyHeaderAdapter stickyHeaderAdapter = new StickyHeaderAdapter();
         final HeaderAdapter headerAdapter = new HeaderAdapter();
         itemAdapter = new ItemAdapter();
-        itemAdapter.withFilterPredicate(new IItemAdapter.Predicate<ContatItemGroupProfile>() {
+        itemAdapter.withFilterPredicate(new IItemAdapter.Predicate<ContactItemGroupProfile>() {
             @Override
-            public boolean filter(ContatItemGroupProfile item, CharSequence constraint) {
+            public boolean filter(ContactItemGroupProfile item, CharSequence constraint) {
                 return !item.mContact.displayName.toLowerCase()
                         .startsWith(String.valueOf(constraint).toLowerCase());
             }
         });
-        fastAdapter.withOnClickListener(new FastAdapter.OnClickListener<ContatItemGroupProfile>() {
+        fastAdapter.withOnClickListener(new FastAdapter.OnClickListener<ContactItemGroupProfile>() {
             @Override
-            public boolean onClick(View v, IAdapter adapter, ContatItemGroupProfile item,
+            public boolean onClick(View v, IAdapter adapter, ContactItemGroupProfile item,
                                    final int position) {
 
                 Log.e("dddd", " invite click  " + position);
@@ -675,7 +706,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
         txtMemberNumber.setText(listSize + "");
 
         for (int i = 0; i < listSize && i < 3; i++) {
-            items.add(new ContatItemGroupProfile().setContact(contacts.get(i))
+            items.add(new ContactItemGroupProfile().setContact(contacts.get(i))
                     .withIdentifier(100 + contacts.indexOf(contacts.get(i))));
         }
 
@@ -881,7 +912,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                     final int listSize = contacts.size();
                                     for (int i = count; i < listSize; i++) {
                                         items.add(
-                                                new ContatItemGroupProfile().setContact(contacts.get(i))
+                                                new ContactItemGroupProfile().setContact(contacts.get(i))
                                                         .withIdentifier(
                                                                 100 + contacts.indexOf(contacts.get(i))));
                                     }
@@ -1510,7 +1541,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                         runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                IItem item = (new ContatItemGroupProfile().setContact(
+                                                IItem item = (new ContactItemGroupProfile().setContact(
                                                         contacts.get(finalI))
                                                         .withIdentifier(
                                                                 100 + contacts.indexOf(contacts.get(finalI))));
@@ -1746,7 +1777,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                         runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                IItem item = (new ContatItemGroupProfile().setContact(
+                                                IItem item = (new ContactItemGroupProfile().setContact(
                                                         contacts.get(finalI))
                                                         .withIdentifier(
                                                                 100 + contacts.indexOf(contacts.get(finalI))));
@@ -1860,7 +1891,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                                 ProtoGlobal.GroupRoom.Role.MODERATOR.toString();
 
                                         if (i < itemAdapter.getAdapterItemCount()) {
-                                            IItem item = (new ContatItemGroupProfile().setContact(
+                                            IItem item = (new ContactItemGroupProfile().setContact(
                                                     contacts.get(i))
                                                     .withIdentifier(
                                                             100 + contacts.indexOf(contacts.get(i))));
@@ -1985,7 +2016,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                                 ProtoGlobal.GroupRoom.Role.ADMIN.toString();
 
                                         if (i < itemAdapter.getAdapterItemCount()) {
-                                            IItem item = (new ContatItemGroupProfile().setContact(
+                                            IItem item = (new ContactItemGroupProfile().setContact(
                                                     contacts.get(i))
                                                     .withIdentifier(
                                                             100 + contacts.indexOf(contacts.get(i))));
@@ -2114,7 +2145,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
         public long getHeaderId(int position) {
             IItem item = getItem(position);
 
-            //            ContatItemGroupProfile ci=(ContatItemGroupProfile)item;
+            //            ContactItemGroupProfile ci=(ContactItemGroupProfile)item;
             //            if(ci!=null){
             //                return ci.mContact.displayName.toUpperCase().charAt(0);
             //            }
@@ -2136,10 +2167,10 @@ public class ActivityGroupProfile extends ActivityEnhanced
             CustomTextViewMedium textView = (CustomTextViewMedium) holder.itemView;
 
             IItem item = getItem(position);
-            if (((ContatItemGroupProfile) item).mContact != null) {
+            if (((ContactItemGroupProfile) item).mContact != null) {
                 //based on the position we set the headers text
                 textView.setText(String.valueOf(
-                        ((ContatItemGroupProfile) item).mContact.displayName.toUpperCase().charAt(0)));
+                        ((ContactItemGroupProfile) item).mContact.displayName.toUpperCase().charAt(0)));
             }
         }
 

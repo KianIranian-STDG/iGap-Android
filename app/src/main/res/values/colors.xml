@@ -93,9 +93,10 @@
 
     <color name="colorChatMessageSelectableItemBg">#99AADFF7</color>
 
-    <color name="colorChatMessageTime">#737373</color>
+    <color name="colorChatMessageTime">#eee</color>
 
     <!--ripple-->
     <color name="rippelColor">#FFFFFF</color>
+    <color name="statusSendingColor">#eee</color>
 
 </resources>

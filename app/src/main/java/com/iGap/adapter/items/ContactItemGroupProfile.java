@@ -1,28 +1,26 @@
 package com.iGap.adapter.items;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
 import com.iGap.R;
-import com.iGap.helper.HelperImageBackColor;
+import com.iGap.module.AndroidUtils;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.CustomTextViewMedium;
 import com.iGap.module.StructContactInfo;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
-import java.io.File;
 import java.util.List;
 
-public class ContatItemGroupProfile
-        extends AbstractItem<ContatItemGroupProfile, ContatItemGroupProfile.ViewHolder> {
+public class ContactItemGroupProfile
+        extends AbstractItem<ContactItemGroupProfile, ContactItemGroupProfile.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
     public StructContactInfo mContact;
 
-    public ContatItemGroupProfile setContact(StructContactInfo contact) {
+    public ContactItemGroupProfile setContact(StructContactInfo contact) {
         this.mContact = contact;
         return this;
     }
@@ -51,39 +49,15 @@ public class ContatItemGroupProfile
 
         holder.subtitle.setText(R.string.last_seen_recently);
 
-        holder.image.setImageBitmap(setAvatar(holder.image.getLayoutParams().width));
-    }
+        if (mContact.avatar.getFile().isFileExistsOnLocal()) {
+            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mContact.avatar.getFile().getLocalFilePath()), holder.image);
+        } else if (mContact.avatar.getFile().isThumbnailExistsOnLocal()) {
+            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mContact.avatar.getFile().getLocalThumbnailPath()), holder.image);
+        } else {
+            holder.image.setImageBitmap(
+                    com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.image.getContext().getResources().getDimension(R.dimen.dp60), mContact.initials, mContact.color));
 
-    private Bitmap setAvatar(int size) {
-
-        String path = null;
-        Bitmap bitmap = null;
-
-        if (mContact.avatar.getFile() != null) {
-            if (mContact.avatar.getFile().getLocalFilePath() != null) {
-                path = mContact.avatar.getFile().getLocalFilePath();
-            } else {
-                path = mContact.avatar.getFile().getLocalThumbnailPath();
-            }
         }
-
-        File imgFile = null;
-
-        if (path != null) {
-            imgFile = new File(path);
-        }
-
-        if (imgFile != null) {
-            if (imgFile.exists()) {
-                return BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-            }
-        }
-
-        String name = HelperImageBackColor.getFirstAlphabetName(mContact.displayName);
-        bitmap = HelperImageBackColor.drawAlphabetOnPicture(size, name,
-                HelperImageBackColor.getColor(name));
-
-        return bitmap;
     }
 
     @Override

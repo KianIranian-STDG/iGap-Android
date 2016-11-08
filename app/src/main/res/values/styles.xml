@@ -28,6 +28,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:paddingBottom">2dp</item>
         <item name="android:textSize">@dimen/sp16</item>
+        <item name="android:textColor">@android:color/white</item>
     </style>
 
     <style name="Widget.GifMoviewView" parent="@android:style/Widget"></style>
