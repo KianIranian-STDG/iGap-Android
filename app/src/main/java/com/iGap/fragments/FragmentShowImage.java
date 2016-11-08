@@ -454,6 +454,10 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
         }
 
         private void requestForThumbnail(StructMessageInfo media) {
+            if (media.attachment.smallThumbnail == null) {
+                return;
+            }
+
             // create new download attachment once with attachment token
             if (media.downloadAttachment == null) {
                 media.downloadAttachment = new StructDownloadAttachment(media.attachment.token);
