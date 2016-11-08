@@ -3,7 +3,6 @@ package com.iGap.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -25,11 +24,13 @@ import com.iGap.interfaces.OnChangeUserPhotoListener;
 import com.iGap.interfaces.OnGetPermision;
 import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.libs.flowingdrawer.MenuFragment;
+import com.iGap.module.AndroidUtils;
 import com.iGap.module.HelperDecodeFile;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmAvatarPath;
 import com.iGap.realm.RealmUserInfo;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
 
@@ -277,8 +278,6 @@ public class FragmentDrawerMenu extends MenuFragment {
             }
         };
 
-        //new RequestUserInfo().userInfo(realm.where(RealmUserInfo.class).findFirst().getUserId());
-
         G.onChangeUserPhotoListener = new OnChangeUserPhotoListener() {
             @Override
             public void onChangePhoto(final String imagePath) {
@@ -286,7 +285,6 @@ public class FragmentDrawerMenu extends MenuFragment {
                     @Override
                     public void run() {
                         if (imagePath == null) {
-
                             Realm realm1 = Realm.getDefaultInstance();
                             RealmUserInfo realmUserInfo =
                                     realm1.where(RealmUserInfo.class).findFirst();
@@ -295,12 +293,7 @@ public class FragmentDrawerMenu extends MenuFragment {
                                             .getResources().getDimension(R.dimen.dp100), realmUserInfo.getUserInfo().getInitials(), realmUserInfo.getUserInfo().getColor()));
                             realm1.close();
                         } else {
-                            File imgFile = new File(imagePath);
-                            if (imgFile.exists()) {
-                                Bitmap myBitmap =
-                                        BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                                imgUserPhoto.setImageBitmap(myBitmap);
-                            }
+                            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(imagePath), imgUserPhoto);
                         }
                     }
                 });

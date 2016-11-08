@@ -91,8 +91,9 @@ import com.iGap.module.UploaderUtil;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmAvatar;
-import com.iGap.realm.RealmAvatarPath;
 import com.iGap.realm.RealmMigrationClass;
+import com.iGap.realm.RealmRegisteredInfo;
+import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestClientCondition;
 import com.iGap.request.RequestQueue;
@@ -121,8 +122,6 @@ import javax.crypto.spec.SecretKeySpec;
 import io.fabric.sdk.android.Fabric;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
-import io.realm.RealmResults;
-import io.realm.Sort;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 public class G extends Application {
@@ -337,17 +336,19 @@ public class G extends Application {
                         }
                     });
 
-                    RealmResults<RealmAvatarPath> realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
-
                     if (G.onChangeUserPhotoListener != null) {
-                        if (realmAvatarPaths != null) {
-                            realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
-                        }
-                        if (realmAvatarPaths != null && realmAvatarPaths.size() > 0) {
-                            String pathImageDecode = realmAvatarPaths.first().getPathImage();
-                            G.onChangeUserPhotoListener.onChangePhoto(pathImageDecode);
-                        } else {
+                        RealmRegisteredInfo registeredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, user.getId()).findFirst();
+                        RealmAvatar lastAvatar = registeredInfo.getLastAvatar();
+                        if (lastAvatar == null) {
                             G.onChangeUserPhotoListener.onChangePhoto(null);
+                        } else {
+                            if (lastAvatar.getFile().isFileExistsOnLocal()) {
+                                G.onChangeUserPhotoListener.onChangePhoto(lastAvatar.getFile().getLocalFilePath());
+                            } else if (lastAvatar.getFile().isThumbnailExistsOnLocal()) {
+                                G.onChangeUserPhotoListener.onChangePhoto(lastAvatar.getFile().getLocalThumbnailPath());
+                            } else {
+                                G.onChangeUserPhotoListener.onChangePhoto(null);
+                            }
                         }
                     }
 
