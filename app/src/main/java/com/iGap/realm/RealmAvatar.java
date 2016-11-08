@@ -23,6 +23,10 @@ public class RealmAvatar extends RealmObject {
     }
 
     public static void put(long ownerId, ProtoGlobal.Avatar input) {
+        if (!input.hasFile()) {
+            return;
+        }
+
         Realm realm = Realm.getDefaultInstance();
         RealmResults<RealmAvatar> ownerAvatars = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, ownerId).findAll();
 
