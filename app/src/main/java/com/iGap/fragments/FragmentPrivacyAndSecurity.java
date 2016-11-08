@@ -47,11 +47,7 @@ public class FragmentPrivacyAndSecurity extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         Realm realm = Realm.getDefaultInstance();
-        final RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-        if (realmUserInfo != null) {
-
-            selfRemove = realmUserInfo.getSelfRemove();
-        }
+        selfRemove = realm.where(RealmUserInfo.class).findFirst().getSelfRemove();
 
         RelativeLayout parentPrivacySecurity = (RelativeLayout) view.findViewById(R.id.parentPrivacySecurity);
 
@@ -183,5 +179,7 @@ public class FragmentPrivacyAndSecurity extends Fragment {
                 };
             }
         });
+
+        realm.close();
     }
 }
