@@ -204,8 +204,8 @@ import static com.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 import static java.lang.Long.parseLong;
 
 public class ActivityChat extends ActivityEnhanced
-    implements IEmojiViewCreate, IRecentsLongClick, IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>,
-    OnChatMessageRemove, OnFileDownloadResponse, OnVoiceRecord, OnUserInfoResponse, OnClientGetRoomHistoryResponse, OnFileUploadForActivities {
+        implements IEmojiViewCreate, IRecentsLongClick, IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>,
+        OnChatMessageRemove, OnFileDownloadResponse, OnVoiceRecord, OnUserInfoResponse, OnClientGetRoomHistoryResponse, OnFileUploadForActivities {
 
     public static ActivityChat activityChat;
     public static OnComplete hashListener;
@@ -325,7 +325,7 @@ public class ActivityChat extends ActivityEnhanced
                         for (RealmRoomMessage roomMessage : element) {
                             if (roomMessage != null) {
                                 if (roomMessage.getUserId() != realm.where(RealmUserInfo.class).findFirst().getUserId() && !roomMessage.getStatus()
-                                    .equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
+                                        .equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
 
                                     roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
 
@@ -1178,16 +1178,16 @@ public class ActivityChat extends ActivityEnhanced
                     public void onClick(View view) {
 
                         new MaterialDialog.Builder(ActivityChat.this).title(R.string.clear_history)
-                            .content(R.string.clear_history_content)
-                            .positiveText(R.string.B_ok)
-                            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                @Override
-                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                    onSelectRoomMenu("txtClearHistory", (int) mRoomId);
-                                }
-                            })
-                            .negativeText(R.string.B_cancel)
-                            .show();
+                                .content(R.string.clear_history_content)
+                                .positiveText(R.string.B_ok)
+                                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                        onSelectRoomMenu("txtClearHistory", (int) mRoomId);
+                                    }
+                                })
+                                .negativeText(R.string.B_cancel)
+                                .show();
                         popupWindow.dismiss();
                     }
                 });
@@ -1196,16 +1196,16 @@ public class ActivityChat extends ActivityEnhanced
                     public void onClick(View view) {
 
                         new MaterialDialog.Builder(ActivityChat.this).title(R.string.delete_chat)
-                            .content(R.string.delete_chat_content)
-                            .positiveText(R.string.B_ok)
-                            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                @Override
-                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                    onSelectRoomMenu("txtDeleteChat", (int) mRoomId);
-                                }
-                            })
-                            .negativeText(R.string.B_cancel)
-                            .show();
+                                .content(R.string.delete_chat_content)
+                                .positiveText(R.string.B_ok)
+                                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                        onSelectRoomMenu("txtDeleteChat", (int) mRoomId);
+                                    }
+                                })
+                                .negativeText(R.string.B_cancel)
+                                .show();
                         popupWindow.dismiss();
                     }
                 });
@@ -1433,7 +1433,7 @@ public class ActivityChat extends ActivityEnhanced
                                 // user wants to replay to a message
                                 if (mReplayLayout != null && mReplayLayout.getTag() instanceof StructMessageInfo) {
                                     RealmRoomMessage messageToReplay =
-                                        realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID)).findFirst();
+                                            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID)).findFirst();
                                     if (messageToReplay != null) {
                                         roomMessage.setReplyTo(messageToReplay);
                                     }
@@ -1977,7 +1977,7 @@ public class ActivityChat extends ActivityEnhanced
 
         Drawable[] subButtonDrawables = new Drawable[3];
         int[] drawablesResource = new int[]{
-            R.mipmap.am_camera, R.mipmap.am_music, R.mipmap.am_paint, R.mipmap.am_picture, R.mipmap.am_document, R.mipmap.am_location, R.mipmap.am_video, R.mipmap.am_file, R.mipmap.am_contact
+                R.mipmap.am_camera, R.mipmap.am_music, R.mipmap.am_paint, R.mipmap.am_picture, R.mipmap.am_document, R.mipmap.am_location, R.mipmap.am_video, R.mipmap.am_file, R.mipmap.am_contact
         };
         for (int i = 0; i < 3; i++)
             subButtonDrawables[i] = ContextCompat.getDrawable(G.context, drawablesResource[i]);
@@ -1991,24 +1991,24 @@ public class ActivityChat extends ActivityEnhanced
         BoomMenuButton.Builder bb = new BoomMenuButton.Builder();
 
         bb.addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_camera), subButtonColors[0], getResources().getString(R.string.am_camera))
-            .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_picture), subButtonColors[0], getResources().getString(R.string.am_picture))
-            .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_video), subButtonColors[0], getResources().getString(R.string.am_video))
-            .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_music), subButtonColors[0], getResources().getString(R.string.am_music))
-            .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_document), subButtonColors[0], getResources().getString(R.string.am_document))
-            .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_file), subButtonColors[0], getResources().getString(R.string.am_file))
-            .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_paint), subButtonColors[0], getResources().getString(R.string.am_paint))
-            .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_location), subButtonColors[0], getResources().getString(R.string.am_location))
-            .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_contact), subButtonColors[0], getResources().getString(R.string.am_contact))
-            .autoDismiss(true)
-            .cancelable(true)
-            .boomButtonShadow(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2))
-            .subButtonTextColor(ContextCompat.getColor(G.context, R.color.am_iconFab_black))
-            .button(ButtonType.CIRCLE)
-            .boom(BoomType.PARABOLA)
-            .place(PlaceType.CIRCLE_9_1)
-            .subButtonTextColor(ContextCompat.getColor(G.context, R.color.colorAccent))
-            .subButtonsShadow(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2))
-            .init(boomMenuButton);
+                .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_picture), subButtonColors[0], getResources().getString(R.string.am_picture))
+                .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_video), subButtonColors[0], getResources().getString(R.string.am_video))
+                .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_music), subButtonColors[0], getResources().getString(R.string.am_music))
+                .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_document), subButtonColors[0], getResources().getString(R.string.am_document))
+                .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_file), subButtonColors[0], getResources().getString(R.string.am_file))
+                .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_paint), subButtonColors[0], getResources().getString(R.string.am_paint))
+                .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_location), subButtonColors[0], getResources().getString(R.string.am_location))
+                .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_contact), subButtonColors[0], getResources().getString(R.string.am_contact))
+                .autoDismiss(true)
+                .cancelable(true)
+                .boomButtonShadow(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2))
+                .subButtonTextColor(ContextCompat.getColor(G.context, R.color.am_iconFab_black))
+                .button(ButtonType.CIRCLE)
+                .boom(BoomType.PARABOLA)
+                .place(PlaceType.CIRCLE_9_1)
+                .subButtonTextColor(ContextCompat.getColor(G.context, R.color.colorAccent))
+                .subButtonsShadow(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2))
+                .init(boomMenuButton);
         boomMenuButton.setTextViewColor(getResources().getColor(R.color.am_iconFab_black));
 
         boomMenuButton.setOnSubButtonClickListener(new BoomMenuButton.OnSubButtonClickListener() {
@@ -2068,6 +2068,10 @@ public class ActivityChat extends ActivityEnhanced
             return;
         }
 
+        if (data == null) {
+            return;
+        }
+
         listPathString = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             if (data.getClipData() != null)
@@ -2078,13 +2082,13 @@ public class ActivityChat extends ActivityEnhanced
             latestFilePath = AttachFile.imagePath;
             latestUri = null;
         } else {
-            if (data != null) latestUri = data.getData();
+            latestUri = data.getData();
             latestFilePath = "";
         }
         latestRequestCode = requestCode;
 
         if (resultCode == Activity.RESULT_OK && sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 0) == 1 &&
-            requestCode == AttachFile.requestOpenGalleryForImageMultipleSelect) {
+                requestCode == AttachFile.requestOpenGalleryForImageMultipleSelect) {
 
             Intent intent = new Intent(ActivityChat.this, ActivityCrop.class);
             intent.putExtra("IMAGE_CAMERA", data.getData().toString());
@@ -2208,11 +2212,11 @@ public class ActivityChat extends ActivityEnhanced
                 }
                 if (userTriesReplay()) {
                     messageInfo =
-                        new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath,
-                            updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
+                            new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath,
+                                    updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
                 } else {
                     messageInfo = new StructMessageInfo(Long.toString(messageId), getWrittenMessage(), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
-                        MyType.SendType.send, null, filePath, updateTime);
+                            MyType.SendType.send, null, filePath, updateTime);
                 }
                 break;
             case AttachFile.request_code_TAKE_PICTURE:
@@ -2230,11 +2234,11 @@ public class ActivityChat extends ActivityEnhanced
                 }
                 if (userTriesReplay()) {
                     messageInfo =
-                        new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath,
-                            updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
+                            new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath,
+                                    updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
                 } else {
                     messageInfo = new StructMessageInfo(Long.toString(messageId), getWrittenMessage(), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
-                        MyType.SendType.send, null, filePath, updateTime);
+                            MyType.SendType.send, null, filePath, updateTime);
                 }
 
                 break;
@@ -2253,11 +2257,11 @@ public class ActivityChat extends ActivityEnhanced
                 }
                 if (userTriesReplay()) {
                     messageInfo =
-                        new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath,
-                            updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
+                            new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath,
+                                    updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
                 } else {
                     messageInfo = new StructMessageInfo(Long.toString(messageId), getWrittenMessage(), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
-                        MyType.SendType.send, null, filePath, updateTime);
+                            MyType.SendType.send, null, filePath, updateTime);
                 }
                 break;
 
@@ -2275,11 +2279,11 @@ public class ActivityChat extends ActivityEnhanced
                 String videoFileMime = FileUtils.getMimeType(videoFile);
                 if (userTriesReplay()) {
                     messageInfo =
-                        new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, videoFileMime,
-                            filePath, null, filePath, null, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
+                            new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, videoFileMime,
+                                    filePath, null, filePath, null, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
                 } else {
                     messageInfo = new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), getWrittenMessage(), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
-                        MyType.SendType.send, videoFileMime, filePath, null, filePath, null, updateTime);
+                            MyType.SendType.send, videoFileMime, filePath, null, filePath, null, updateTime);
                 }
                 break;
             case AttachFile.request_code_pic_audi:
@@ -2296,8 +2300,8 @@ public class ActivityChat extends ActivityEnhanced
                 long songDuration = AndroidUtils.getAudioDuration(getApplicationContext(), filePath);
 
                 messageInfo =
-                    StructMessageInfo.buildForAudio(messageId, senderID, ProtoGlobal.RoomMessageStatus.SENDING, messageType, MyType.SendType.send, updateTime, getWrittenMessage(), null, filePath,
-                        songArtist, songDuration, userTriesReplay() ? parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID) : 0);
+                        StructMessageInfo.buildForAudio(messageId, senderID, ProtoGlobal.RoomMessageStatus.SENDING, messageType, MyType.SendType.send, updateTime, getWrittenMessage(), null, filePath,
+                                songArtist, songDuration, userTriesReplay() ? parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID) : 0);
                 break;
             case AttachFile.request_code_pic_file:
                 fileName = new File(filePath).getName();
@@ -2311,11 +2315,11 @@ public class ActivityChat extends ActivityEnhanced
                 String fileFileMime = FileUtils.getMimeType(fileFile);
                 if (userTriesReplay()) {
                     messageInfo =
-                        new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, fileFileMime,
-                            filePath, null, filePath, null, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
+                            new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, fileFileMime,
+                                    filePath, null, filePath, null, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
                 } else {
                     messageInfo = new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), getWrittenMessage(), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
-                        MyType.SendType.send, fileFileMime, filePath, null, filePath, null, updateTime);
+                            MyType.SendType.send, fileFileMime, filePath, null, filePath, null, updateTime);
                 }
                 break;
             case AttachFile.request_code_contact_phone:
@@ -2327,7 +2331,7 @@ public class ActivityChat extends ActivityEnhanced
                 messageType = ProtoGlobal.RoomMessageType.CONTACT;
                 // FIXME: 10/18/2016 [Alireza] lastName "" gozashtam jash, firstName esme kamele
                 messageInfo = StructMessageInfo.buildForContact(messageId, senderID, MyType.SendType.send, updateTime, ProtoGlobal.RoomMessageStatus.SENDING, username, name, "", number,
-                    userTriesReplay() ? parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID) : -1);
+                        userTriesReplay() ? parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID) : -1);
                 break;
             case AttachFile.request_code_paint:
                 fileName = new File(filePath).getName();
@@ -2340,11 +2344,11 @@ public class ActivityChat extends ActivityEnhanced
                 }
                 if (userTriesReplay()) {
                     messageInfo =
-                        new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath,
-                            updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
+                            new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath,
+                                    updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
                 } else {
                     messageInfo = new StructMessageInfo(Long.toString(messageId), getWrittenMessage(), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
-                        MyType.SendType.send, null, filePath, updateTime);
+                            MyType.SendType.send, null, filePath, updateTime);
                 }
                 break;
         }
@@ -2741,7 +2745,7 @@ public class ActivityChat extends ActivityEnhanced
 
         Realm realm = Realm.getDefaultInstance();
         RealmResults<RealmRoomMessage> realmRoomMessages =
-            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
         for (final RealmRoomMessage realmRoomMessage : realmRoomMessages) {
             if (!clearMessage && realmRoomMessage.getMessageId() == clearId) {
                 clearMessage = true;
@@ -3126,17 +3130,17 @@ public class ActivityChat extends ActivityEnhanced
         final long duration = AndroidUtils.getAudioDuration(getApplicationContext(), savedPath);
         if (userTriesReplay()) {
             mAdapter.add(new VoiceItem(chatType, this).setMessage(
-                new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.VOICE, MyType.SendType.send,
-                    null, savedPath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID))).withIdentifier(System.nanoTime()));
+                    new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.VOICE, MyType.SendType.send,
+                            null, savedPath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID))).withIdentifier(System.nanoTime()));
         } else {
             if (isMessageWrote()) {
                 mAdapter.add(new VoiceItem(chatType, this).setMessage(
-                    new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.VOICE, MyType.SendType.send,
-                        null, savedPath, updateTime)).withIdentifier(System.nanoTime()));
+                        new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.VOICE, MyType.SendType.send,
+                                null, savedPath, updateTime)).withIdentifier(System.nanoTime()));
             } else {
                 mAdapter.add(new VoiceItem(chatType, this).setMessage(
-                    new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.VOICE, MyType.SendType.send,
-                        null, savedPath, updateTime)).withIdentifier(System.nanoTime()));
+                        new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.VOICE, MyType.SendType.send,
+                                null, savedPath, updateTime)).withIdentifier(System.nanoTime()));
             }
         }
 
@@ -3283,9 +3287,9 @@ public class ActivityChat extends ActivityEnhanced
     @Override
     public void onFileUploaded(final FileUploadStructure uploadStructure, final String identity) {
         new ChatSendMessageUtil().newBuilder(chatType, uploadStructure.messageType, uploadStructure.roomId)
-            .attachment(uploadStructure.token)
-            .message(uploadStructure.text)
-            .sendMessage(Long.toString(uploadStructure.messageId));
+                .attachment(uploadStructure.token)
+                .message(uploadStructure.text)
+                .sendMessage(Long.toString(uploadStructure.messageId));
 
         runOnUiThread(new Runnable() {
             @Override
@@ -3714,12 +3718,12 @@ public class ActivityChat extends ActivityEnhanced
     @Override
     public void onOpenClick(View view, StructMessageInfo message, int pos) {
         if (message.messageType == ProtoGlobal.RoomMessageType.VOICE || message.messageType == ProtoGlobal.RoomMessageType.AUDIO ||
-            message.messageType == ProtoGlobal.RoomMessageType.AUDIO_TEXT) {
+                message.messageType == ProtoGlobal.RoomMessageType.AUDIO_TEXT) {
             MusicPlayer.startPlayer(message.getAttachment().getLocalFilePath(), title, mRoomId, true);
         } else if (message.messageType == ProtoGlobal.RoomMessageType.IMAGE || message.messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
             showImage(message);
         } else if (message.messageType == ProtoGlobal.RoomMessageType.FILE || message.messageType == ProtoGlobal.RoomMessageType.FILE_TEXT ||
-            message.messageType == ProtoGlobal.RoomMessageType.VIDEO || message.messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
+                message.messageType == ProtoGlobal.RoomMessageType.VIDEO || message.messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
             Intent intent = HelperMimeType.appropriateProgram(message.getAttachment().getLocalFilePath());
             if (intent != null) startActivity(intent);
         }

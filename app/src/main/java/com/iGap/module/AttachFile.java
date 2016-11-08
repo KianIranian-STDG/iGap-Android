@@ -116,52 +116,11 @@ public class AttachFile {
         locationManager = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
     }
 
-    //*************************************************************************************************************
-
-    private static String getRealPathFromURI(Uri contentUri) {
-
-        String path = FileUtils.getPath(G.context, contentUri);
-
-        //Cursor cursor = null;
-        //try {
-        //
-        //    String docId = null;
-        //    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-        //        docId = DocumentsContract.getDocumentId(contentUri);
-        //    }
-        //
-        //    final String[] split = docId.split(":");
-        //    final String type = split[0];
-        //
-        //    Uri content = null;
-        //    if ("image".equals(type)) {
-        //        content = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-        //    } else if ("video".equals(type)) {
-        //        content = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-        //    } else if ("audio".equals(type)) {
-        //        content = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        //    }
-        //
-        //    String[] proj = { content.toString() };
-        //    cursor = G.context.getContentResolver().query(contentUri, proj, null, null, null);
-        //    int column_index = cursor.getColumnIndexOrThrow(proj[0]);
-        //    cursor.moveToFirst();
-        //    return cursor.getString(column_index);
-        //} finally {
-        //    if (cursor != null) {
-        //        cursor.close();
-        //    }
-        //}
-
-        return path;
-    }
-
     public static String getFilePathFromUri(Uri uri) {
-
         String path;
 
         if (uri.getScheme() != null && uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
-            path = getRealPathFromURI(uri);
+            path = FileUtils.getPath(G.context, uri);
         } else {
             path = uri.getPath();
         }
