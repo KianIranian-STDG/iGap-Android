@@ -770,7 +770,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                         .findFirst();
                 if (realmAvatar == null) {
                     realmAvatar = realm.createObject(RealmAvatar.class);
-                    realmAvatar.setId(System.nanoTime());
+                    realmAvatar.setId(avatar.getId());
                     realmAvatar.setOwnerId(roomId);
                 }
 

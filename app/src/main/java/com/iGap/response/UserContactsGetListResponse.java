@@ -82,7 +82,7 @@ public class UserContactsGetListResponse extends MessageHandler {
                     if (realmAvatar == null) {
                         realmAvatar = realm.createObject(RealmAvatar.class);
                         realmAvatar.setOwnerId(registerUser.getId());
-                        realmAvatar.setId(System.nanoTime());
+                        realmAvatar.setId(registerUser.getAvatar().getId());
                     }
 
                     RealmAttachment realmAttachment =

@@ -363,19 +363,6 @@ public class ActivityProfile extends ActivityEnhanced
 
             lastUploadedAvatarId = idAvatar + 1;
 
-            Realm realm = Realm.getDefaultInstance();
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
-                    RealmAvatar realmAvatar = realm.createObject(RealmAvatar.class);
-                    realmAvatar.setOwnerId(userId);
-                    realmAvatar.setId(lastUploadedAvatarId);
-
-                }
-            });
-            realm.close();
-
             new UploadTask().execute(pathImageUser, lastUploadedAvatarId);
         }
     }
@@ -438,8 +425,11 @@ public class ActivityProfile extends ActivityEnhanced
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
+                long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
                 RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.ID, lastUploadedAvatarId).findFirst();
+                realmAvatar.setOwnerId(userId);
                 realmAvatar.setFile(RealmAttachment.build(avatar.getFile()));
+                realmAvatar.setId(avatar.getId());
             }
         });
         realm.close();

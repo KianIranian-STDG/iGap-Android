@@ -7,6 +7,7 @@ import com.iGap.proto.ProtoGlobal;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
+import io.realm.Sort;
 import io.realm.annotations.PrimaryKey;
 
 public class RealmRegisteredInfo extends RealmObject {
@@ -123,7 +124,7 @@ public class RealmRegisteredInfo extends RealmObject {
     public RealmList<RealmAvatar> getAvatars() {
         RealmList<RealmAvatar> avatars = new RealmList<>();
         Realm realm = Realm.getDefaultInstance();
-        for (RealmAvatar avatar : realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, id).findAll()) {
+        for (RealmAvatar avatar : realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, id).findAllSorted(RealmAvatarFields.ID, Sort.ASCENDING)) {
             avatars.add(avatar);
         }
         realm.close();

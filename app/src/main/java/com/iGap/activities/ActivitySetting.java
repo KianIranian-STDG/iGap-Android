@@ -6,8 +6,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -68,7 +66,6 @@ import com.iGap.proto.ProtoUserProfileCheckUsername;
 import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmAvatarFields;
-import com.iGap.realm.RealmAvatarPath;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestUserAvatarAdd;
 import com.iGap.request.RequestUserAvatarDelete;
@@ -79,6 +76,7 @@ import com.iGap.request.RequestUserProfileSetEmail;
 import com.iGap.request.RequestUserProfileSetGender;
 import com.iGap.request.RequestUserProfileSetNickname;
 import com.iGap.request.RequestUserProfileUpdateUsername;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
 import java.io.IOException;
@@ -88,8 +86,6 @@ import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
-import io.realm.RealmResults;
-import io.realm.Sort;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarResponse, OnFileUploadForActivities {
@@ -179,29 +175,41 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         return hrSize;
     }
 
-    private void setImage() {
+    private void setImage(final long avatarId) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 Realm realm = Realm.getDefaultInstance();
-                final RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-                final RealmAvatar lastAvatar = userInfo.getUserInfo().getLastAvatar();
-                if (lastAvatar == null) {
-                    circleImageView.setImageBitmap(
-                            com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp60), userInfo.getUserInfo().getInitials(),
-                                    userInfo.getUserInfo().getColor()));
+                if (avatarId == 0) {
+                    final RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+                    final RealmAvatar lastAvatar = userInfo.getUserInfo().getLastAvatar();
+                    if (lastAvatar == null) {
+                        circleImageView.setImageBitmap(
+                                com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp60), userInfo.getUserInfo().getInitials(),
+                                        userInfo.getUserInfo().getColor()));
+                    } else {
+                        if (lastAvatar.getFile().isFileExistsOnLocal()) {
+                            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(lastAvatar.getFile().getLocalFilePath()), circleImageView);
+                        } else if (lastAvatar.getFile().isThumbnailExistsOnLocal()) {
+                            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(lastAvatar.getFile().getLocalThumbnailPath()), circleImageView);
+                        } else {
+                            circleImageView.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp60),
+                                    userInfo.getUserInfo().getInitials(), userInfo.getUserInfo().getColor()));
+                        }
+                    }
                 } else {
-                    if (lastAvatar.getFile().isFileExistsOnLocal()) {
-                        Bitmap myBitmap = BitmapFactory.decodeFile(lastAvatar.getFile().getLocalFilePath());
-                        circleImageView.setImageBitmap(myBitmap);
-                    } else if (lastAvatar.getFile().isThumbnailExistsOnLocal()) {
-                        Bitmap myBitmap = BitmapFactory.decodeFile(lastAvatar.getFile().getLocalThumbnailPath());
-                        circleImageView.setImageBitmap(myBitmap);
+                    final RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+                    RealmAvatar avatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.ID, avatarId).findFirst();
+                    if (avatar.getFile().isFileExistsOnLocal()) {
+                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatar.getFile().getLocalFilePath()), circleImageView);
+                    } else if (avatar.getFile().isThumbnailExistsOnLocal()) {
+                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatar.getFile().getLocalThumbnailPath()), circleImageView);
                     } else {
                         circleImageView.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp60),
                                 userInfo.getUserInfo().getInitials(), userInfo.getUserInfo().getColor()));
                     }
                 }
+                realm.close();
             }
         });
     }
@@ -975,14 +983,14 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             public void onClick(View view) {
 
                 Realm realm = Realm.getDefaultInstance();
-                RealmResults<RealmAvatarPath> realmAvatarPaths = realm.where(RealmAvatarPath.class).findAll();
 
-                if (realmAvatarPaths.size() > 0) {
+                if (realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).count() > 0) {
                     startDialog(R.array.profile_delete);
                 } else {
-
                     startDialog(R.array.profile);
                 }
+
+                realm.close();
             }
         });
 
@@ -1535,7 +1543,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         realm.close();
 
-        setImage();
+        setImage(0);
     }
 
     //dialog for choose pic from gallery or camera
@@ -1544,11 +1552,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         new MaterialDialog.Builder(this).title("Choose Picture").negativeText("CANCEL").items(r).itemsCallback(new MaterialDialog.ListCallback() {
             @Override
             public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-
                 if (text.toString().equals("From Camera")) {
-
                     if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
-
                         idAvatar = System.nanoTime();
                         pathSaveImage = G.imageFile.toString() + "_" + System.currentTimeMillis() + "_" + idAvatar + ".jpg";
                         nameImageFile = new File(pathSaveImage);
@@ -1556,13 +1561,11 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                         uriIntent = Uri.fromFile(nameImageFile);
                         intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
                         startActivityForResult(intent, IntentRequests.REQ_CAMERA);
-                        //                                realm.close();
                         dialog.dismiss();
                     } else {
                         Toast.makeText(ActivitySetting.this, "Please check your Camera", Toast.LENGTH_SHORT).show();
                     }
                 } else if (text.toString().equals("Delete photo")) {
-
                     G.onUserAvatarDelete = new OnUserAvatarDelete() {
                         @Override
                         public void onUserAvatarDelete(final long avatarId, final String token) {
@@ -1574,16 +1577,10 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                         @Override
                                         public void execute(Realm realm) {
                                             Log.i("XXX", "RealmAvatarPath 3");
-                                            for (RealmAvatarPath avatarPath : realm.where(RealmAvatarPath.class).findAll()) {
-                                                Log.i("XXX", "RealmAvatarPath 4 avatarPath.getId() : " + avatarPath.getId());
-                                                if (avatarId == avatarPath.getId()) {
-                                                    new File(avatarPath.getPathImage()).delete();
-                                                    avatarPath.deleteFromRealm();
-
-                                                    //realm.where(RealmAvatarToken.class)
-                                                    // .equalTo(RealmAvatarTokenFields.TOKEN,
-                                                    // token).findFirst().deleteFromRealm();
-                                                }
+                                            RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.ID, avatarId).findFirst();
+                                            if (realmAvatar != null) {
+                                                realmAvatar.deleteFromRealm();
+                                                new RequestUserAvatarDelete().userAvatarDelete(realmAvatar.getId());
                                             }
                                         }
                                     });
@@ -1592,27 +1589,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                             });
                         }
                     };
-                    Realm realm1 = Realm.getDefaultInstance();
-                    RealmResults<RealmAvatarPath> realmAvatarPaths = realm1.where(RealmAvatarPath.class).findAll();
-                    realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
-                    Log.i("XXX", "RequestUserAvatarDelete 1 avatarId : " + realmAvatarPaths.first().getId());
-
-                    //                            RealmAvatarToken realmAvatarToken = realm1
-                    // .where(RealmAvatarToken.class).equalTo(RealmAvatarTokenFields.ID,
-                    // realmAvatarPaths.first().getId()).findFirst();
-                    //                            realmAvatarToken.getToken();
-                    //                            Log.i("XXX", "RequestUserAvatarDelete 1
-                    // realmAvatarToken.getToken() : " + realmAvatarToken.getToken());
-                    //
-                    //                             /*
-                    //                              * set token for identity , when i get
-                    // response fetch RealmAvatarToken
-                    //                              * with this identity(token) and delete
-                    // that row from RealmAvatarToken
-                    //                              * */
-
-                    new RequestUserAvatarDelete().userAvatarDelete(realmAvatarPaths.first().getId(), "");
-                    realm1.close();
                 } else {
                     Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     idAvatar = System.nanoTime();
@@ -1657,19 +1633,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
             lastUploadedAvatarId = idAvatar + 1L;
 
-            //            getIndexRealm();
-            Realm realm = Realm.getDefaultInstance();
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmAvatar avatar = realm.createObject(RealmAvatar.class);
-                    avatar.setOwnerId(userId);
-                    avatar.setId(lastUploadedAvatarId);
-                }
-            });
-            realm.close();
-
-            G.onChangeUserPhotoListener.onChangePhoto(pathSaveImage);
             new UploadTask().execute(pathSaveImage, lastUploadedAvatarId);
         }
     }
@@ -1734,13 +1697,29 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.ID, lastUploadedAvatarId).findFirst();
+                RealmAvatar realmAvatar = realm.createObject(RealmAvatar.class);
+                realmAvatar.setOwnerId(userId);
+                realmAvatar.setId(avatar.getId());
                 realmAvatar.setFile(RealmAttachment.build(avatar.getFile()));
+
+                try {
+                    AndroidUtils.copyFile(new File(pathSaveImage), new File(G.DIR_IMAGE_USER + "/" + avatar.getFile().getToken() + "_" + avatar.getFile().getName()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
-        realm.close();
 
-        setImage();
+        // have to be inside a delayed handler
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                G.onChangeUserPhotoListener.onChangePhoto(pathSaveImage);
+                setImage(0);
+            }
+        }, 500);
+
+        realm.close();
     }
 
     @Override
