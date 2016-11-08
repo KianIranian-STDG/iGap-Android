@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -92,6 +90,7 @@ import com.mikepenz.fastadapter.IItem;
 import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.adapters.HeaderAdapter;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
@@ -535,52 +534,39 @@ public class ActivityGroupProfile extends ActivityEnhanced
 
     private void setAvatarGroup() {
 
-        Bitmap bitmap = null;
-        RealmAttachment realmAttachment = null;
-
         Realm realm = Realm.getDefaultInstance();
-        RealmRoom realmRoom =
-                realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-        if (realmRoom != null) {
+        RealmResults<RealmAvatar> avatars = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findAll();
 
-            if (realmRoom.getGroupRoom() != null) {
-                if (realmRoom.getGroupRoom().getAvatar() != null) {
-                    realmAttachment = realmRoom.getGroupRoom().getAvatar().getFile();
-                }
-            }
-
-
-            if (realmAttachment != null) {
-
-                String mainFilePath = realmAttachment.getLocalFilePath();
-
-                if (mainFilePath != null) {
-                    File file = new File(mainFilePath);
-                    if (!file.exists()) {
-                        mainFilePath = realmAttachment.getLocalThumbnailPath();
-                    }
-                } else {
-                    mainFilePath = realmAttachment.getLocalThumbnailPath();
-                }
-
-                if (mainFilePath != null) {
-                    File fileb = new File(mainFilePath);
-                    if (fileb.exists()) {
-                        bitmap = BitmapFactory.decodeFile(fileb.getPath());
-                    }
-                }
-            }
-
-            if (bitmap != null) {
-                imvGroupAvatar.setImageBitmap(bitmap);
-            } else {
-                imvGroupAvatar.setImageBitmap(
-                        com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture(
-                                (int) imvGroupAvatar.getContext().getResources().getDimension(R.dimen.dp60),
-                                initials, color));
+        if (avatars.isEmpty()) {
+            imvGroupAvatar.setImageBitmap(
+                    com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvGroupAvatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+            return;
+        }
+        RealmAvatar realmAvatar = null;
+        for (int i = avatars.size() - 1; i >= 0; i--) {
+            RealmAvatar avatar = avatars.get(i);
+            if (avatar.getFile() != null) {
+                realmAvatar = avatar;
+                break;
             }
         }
 
+        if (realmAvatar == null) {
+            imvGroupAvatar.setImageBitmap(
+                    com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvGroupAvatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+            return;
+        }
+
+        if (realmAvatar.getFile().isFileExistsOnLocal()) {
+            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalFilePath()), imvGroupAvatar);
+        } else if (realmAvatar.getFile().isThumbnailExistsOnLocal()) {
+            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalThumbnailPath()), imvGroupAvatar);
+        } else {
+            imvGroupAvatar.setImageBitmap(
+                    com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvGroupAvatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+        }
+
+        realm.close();
     }
 
     private void initRecycleView() {
