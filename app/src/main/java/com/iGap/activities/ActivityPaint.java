@@ -417,18 +417,21 @@ public class ActivityPaint extends ActivityEnhanced {
 
                 if (!captureimage) {
                     String[] projection = {MediaColumns.DATA};
-                    @SuppressWarnings("deprecation") Cursor cursor =
-                            managedQuery(PicAddress, projection, null, null, null);
-                    int column_index = cursor.getColumnIndexOrThrow(MediaColumns.DATA);
-                    cursor.moveToFirst();
-                    String selectedImagePath = cursor.getString(column_index);
-                    cursor.close();
-                    File imgFile = new File(selectedImagePath);
-                    Bitmap b = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                    Cursor cursor = managedQuery(PicAddress, projection, null, null, null);
+                    try {
+                        int column_index = cursor.getColumnIndexOrThrow(MediaColumns.DATA);
+                        cursor.moveToFirst();
+                        String selectedImagePath = cursor.getString(column_index);
 
-                    b = Bitmap.createScaledBitmap(b, w, h, false);
-                    Paint paint = new Paint();
-                    mCanvas.drawBitmap(b, 0, 0, paint);
+                        File imgFile = new File(selectedImagePath);
+                        Bitmap b = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+
+                        b = Bitmap.createScaledBitmap(b, w, h, false);
+                        Paint paint = new Paint();
+                        mCanvas.drawBitmap(b, 0, 0, paint);
+                    } finally {
+                        cursor.close();
+                    }
                 } else {
                     String filePath = AttachFile.imagePath;
                     File imgFile = new File(filePath);

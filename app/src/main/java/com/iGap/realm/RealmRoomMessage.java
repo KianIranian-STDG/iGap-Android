@@ -181,11 +181,9 @@ public class RealmRoomMessage extends RealmObject {
 
     public boolean isSenderMe() {
         Realm realm = Realm.getDefaultInstance();
-        try {
-            return getUserId() == realm.where(RealmUserInfo.class).findFirst().getUserId();
-        } finally {
-            realm.close();
-        }
+        boolean output = getUserId() == realm.where(RealmUserInfo.class).findFirst().getUserId();
+        realm.close();
+        return output;
     }
 
     public boolean isOnlyTime() {
@@ -225,22 +223,24 @@ public class RealmRoomMessage extends RealmObject {
 
                 this.attachment = realmAttachment;
             } else {
-                this.attachment.setCacheId(attachment.getCacheId());
-                this.attachment.setDuration(attachment.getDuration());
-                this.attachment.setHeight(attachment.getHeight());
-                this.attachment.setName(attachment.getName());
-                this.attachment.setSize(attachment.getSize());
-                this.attachment.setToken(attachment.getToken());
-                this.attachment.setWidth(attachment.getWidth());
+                if (this.attachment.isValid()) {
+                    this.attachment.setCacheId(attachment.getCacheId());
+                    this.attachment.setDuration(attachment.getDuration());
+                    this.attachment.setHeight(attachment.getHeight());
+                    this.attachment.setName(attachment.getName());
+                    this.attachment.setSize(attachment.getSize());
+                    this.attachment.setToken(attachment.getToken());
+                    this.attachment.setWidth(attachment.getWidth());
 
-                long smallMessageThumbnail = System.nanoTime();
-                RealmThumbnail.create(smallMessageThumbnail, messageId, attachment.getSmallThumbnail());
+                    long smallMessageThumbnail = System.nanoTime();
+                    RealmThumbnail.create(smallMessageThumbnail, messageId, attachment.getSmallThumbnail());
 
-                long largeMessageThumbnail = System.nanoTime();
-                RealmThumbnail.create(largeMessageThumbnail, messageId, attachment.getSmallThumbnail());
+                    long largeMessageThumbnail = System.nanoTime();
+                    RealmThumbnail.create(largeMessageThumbnail, messageId, attachment.getSmallThumbnail());
 
-                this.attachment.setSmallThumbnail(realm.where(RealmThumbnail.class).equalTo("id", smallMessageThumbnail).findFirst());
-                this.attachment.setLargeThumbnail(realm.where(RealmThumbnail.class).equalTo("id", largeMessageThumbnail).findFirst());
+                    this.attachment.setSmallThumbnail(realm.where(RealmThumbnail.class).equalTo("id", smallMessageThumbnail).findFirst());
+                    this.attachment.setLargeThumbnail(realm.where(RealmThumbnail.class).equalTo("id", largeMessageThumbnail).findFirst());
+                }
             }
             realm.close();
         }
@@ -270,10 +270,12 @@ public class RealmRoomMessage extends RealmObject {
             realmAttachment.setDuration(duration);
             attachment = realmAttachment;
         } else {
-            if (type == LocalFileType.THUMBNAIL) {
-                attachment.setLocalThumbnailPath(path);
-            } else {
-                attachment.setLocalFilePath(path);
+            if (attachment.isValid()) {
+                if (type == LocalFileType.THUMBNAIL) {
+                    attachment.setLocalThumbnailPath(path);
+                } else {
+                    attachment.setLocalFilePath(path);
+                }
             }
         }
         realm.close();
