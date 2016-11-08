@@ -224,8 +224,7 @@ public class StructMessageInfo implements Parcelable {
         this.fileHash = in.createByteArray();
         this.uploadProgress = in.readInt();
         this.attachment = in.readParcelable(StructMessageAttachment.class.getClassLoader());
-        this.downloadAttachment =
-                in.readParcelable(StructDownloadAttachment.class.getClassLoader());
+        this.downloadAttachment = Parcels.unwrap(in.readParcelable(StructDownloadAttachment.class.getClassLoader()));
         this.userInfo = in.readParcelable(StructRegisteredInfo.class.getClassLoader());
         this.senderAvatar = in.readParcelable(StructMessageAttachment.class.getClassLoader());
         this.time = in.readLong();

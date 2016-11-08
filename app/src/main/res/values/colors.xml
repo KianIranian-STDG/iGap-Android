@@ -98,5 +98,8 @@
     <!--ripple-->
     <color name="rippelColor">#FFFFFF</color>
     <color name="statusSendingColor">#eee</color>
+    <color name="iGapColor">#3dbcb3</color>
+
+    <color name="newBlack">#171717</color>
 
 </resources>

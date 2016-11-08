@@ -109,20 +109,20 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         } else {
             // I don't use offset in getting thumbnail
             String identity = mMessage.downloadAttachment.token
-                + '*'
-                + selector.toString()
-                + '*'
-                + mMessage.senderAvatar.largeThumbnail.size
-                + '*'
-                + fileName
-                + '*'
-                + mMessage.downloadAttachment.offset
-                + "*"
-                + Boolean.toString(true)
-                + "*"
-                + mMessage.senderID
-                + "*"
-                + type.toString();
+                    + '*'
+                    + selector.toString()
+                    + '*'
+                    + mMessage.senderAvatar.largeThumbnail.size
+                    + '*'
+                    + fileName
+                    + '*'
+                    + mMessage.downloadAttachment.offset
+                    + "*"
+                    + Boolean.toString(true)
+                    + "*"
+                    + mMessage.senderID
+                    + "*"
+                    + type.toString();
 
             new RequestFileDownload().download(mMessage.downloadAttachment.token, offset, (int) mMessage.senderAvatar.largeThumbnail.size, selector, identity);
         }
@@ -184,11 +184,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mMessage.senderAvatar.getLocalFilePath()), (ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar));
                     } else if (mMessage.senderAvatar.isThumbnailExistsOnLocal()) {
                         ImageLoader.getInstance()
-                            .displayImage(AndroidUtils.suitablePath(mMessage.senderAvatar.getLocalThumbnailPath()), (ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar));
+                                .displayImage(AndroidUtils.suitablePath(mMessage.senderAvatar.getLocalThumbnailPath()), (ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar));
                     } else {
                         ((ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar)).setImageBitmap(
-                            com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), mMessage.initials,
-                                mMessage.senderColor));
+                                com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), mMessage.initials,
+                                        mMessage.senderColor));
 
                         if (mMessage.senderAvatar.token != null && !mMessage.senderAvatar.token.isEmpty()) {
                             requestForAvatar();
@@ -198,8 +198,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     }
                 } else {
                     ((ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar)).setImageBitmap(
-                        com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), mMessage.initials,
-                            mMessage.senderColor));
+                            com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), mMessage.initials,
+                                    mMessage.senderColor));
 
                     requestForUserInfo();
                 }
@@ -280,9 +280,16 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 if (replayToInfo != null) {
                     ((TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_from)).setText(replayToInfo.getUserInfo().getDisplayName());
                 }
-                realm.close();
                 ((TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_message)).setText(mMessage.replayTo.getMessage());
+
+                if (mMessage.isSenderMe()) {
+                    holder.itemView.findViewById(R.id.verticalLine).setBackgroundColor(holder.itemView.getContext().getResources().getColor(R.color.iGapColor));
+                } else {
+                    holder.itemView.findViewById(R.id.verticalLine).setBackgroundColor(holder.itemView.getContext().getResources().getColor(R.color.newBlack));
+                }
+
                 replayContainer.setVisibility(View.VISIBLE);
+                realm.close();
             } else {
                 replayContainer.setVisibility(View.GONE);
             }
