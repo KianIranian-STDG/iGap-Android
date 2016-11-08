@@ -60,8 +60,8 @@ public class RealmAvatar extends RealmObject {
      * avatar exist in channel info)
      */
 
-    //TODO [Saeed Mozaffari] [2016-10-04 5:40 PM] - check this code . i guess is wrong!!! maybe overwriting realmAvatar
-    public static RealmAvatar convert(final ProtoGlobal.Room room, Realm realm) {
+    public static RealmAvatar convert(final ProtoGlobal.Room room) {
+        Realm realm = Realm.getDefaultInstance();
         ProtoGlobal.File file = null;
         switch (room.getType()) {
             case GROUP:
@@ -101,23 +101,9 @@ public class RealmAvatar extends RealmObject {
         }
         realmAvatar.setFile(RealmAttachment.build(file));
 
-        return realmAvatar;
-    }
-
-    public static RealmAvatar convert(final ProtoGlobal.Room room) {
-        Realm realm = Realm.getDefaultInstance();
-        final RealmAvatar[] realmAvatar = {null};
-
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                realmAvatar[0] = convert(room, realm);
-            }
-        });
-
         realm.close();
 
-        return realmAvatar[0];
+        return realmAvatar;
     }
 
     public static RealmAvatar convert(long userId, final RealmAttachment attachment) {
@@ -133,40 +119,6 @@ public class RealmAvatar extends RealmObject {
         realmAvatar.setFile(attachment);
 
         realm.close();
-
-        return realmAvatar;
-    }
-
-    public static RealmAvatar convert(ProtoGlobal.RegisteredUser user, Realm realm) {
-
-        ProtoGlobal.File file = user.getAvatar().getFile();
-
-        //small thumbnail
-        ProtoGlobal.Thumbnail smallThumbnail = file.getSmallThumbnail();
-        RealmThumbnail realmThumbnailSmall = realm.createObject(RealmThumbnail.class);
-        realmThumbnailSmall.setId(getCorrectId(realm));
-        realmThumbnailSmall.setSize(smallThumbnail.getSize());
-        realmThumbnailSmall.setWidth(smallThumbnail.getWidth());
-        realmThumbnailSmall.setHeight(smallThumbnail.getHeight());
-        realmThumbnailSmall.setCacheId(smallThumbnail.getCacheId());
-
-        //large thumbnail
-        ProtoGlobal.Thumbnail largeThumbnail = file.getLargeThumbnail();
-        RealmThumbnail realmThumbnailLarge = realm.createObject(RealmThumbnail.class);
-        realmThumbnailLarge.setId(getCorrectId(realm));
-        realmThumbnailLarge.setSize(largeThumbnail.getSize());
-        realmThumbnailLarge.setWidth(largeThumbnail.getWidth());
-        realmThumbnailLarge.setHeight(largeThumbnail.getHeight());
-        realmThumbnailLarge.setCacheId(largeThumbnail.getCacheId());
-
-        //File info for avatar
-        RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, user.getId()).findFirst();
-        if (realmAvatar == null) {
-            realmAvatar = realm.createObject(RealmAvatar.class);
-            realmAvatar.setOwnerId(user.getId());
-            realmAvatar.setId(user.getAvatar().getId());
-        }
-        realmAvatar.setFile(RealmAttachment.build(file));
 
         return realmAvatar;
     }
