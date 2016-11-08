@@ -128,6 +128,7 @@ import com.iGap.module.OnComplete;
 import com.iGap.module.RecyclerViewPauseOnScrollListener;
 import com.iGap.module.ResendMessage;
 import com.iGap.module.SHP_SETTING;
+import com.iGap.module.SUID;
 import com.iGap.module.ShouldScrolledBehavior;
 import com.iGap.module.SortMessages;
 import com.iGap.module.StructMessageAttachment;
@@ -1412,7 +1413,7 @@ public class ActivityChat extends ActivityEnhanced
                     final long senderId = realm.where(RealmUserInfo.class).findFirst().getUserId();
                     if (!message.isEmpty()) {
                         RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-                        String identity = Long.toString(System.nanoTime());
+                        String identity = Long.toString(SUID.id().get());
                         if (room != null && room.getLastMessageId() != 0) {
                             identity = Long.toString(room.getLastMessageId() + 1L);
                         }
@@ -2684,9 +2685,7 @@ public class ActivityChat extends ActivityEnhanced
             @Override
             public void onNoMore(EndlessRecyclerOnScrollListener listener) {
                 // find last item from adapter (not database for better performance!)
-                // TODO: 10/17/2016 [Alireza] todo something to not request everytime
-                for (int p = mAdapter.getAdapterItemCount() - 1; p >= 0; p--) {
-                    AbstractMessage item = mAdapter.getAdapterItem(p);
+                for (AbstractMessage item : mAdapter.getAdapterItems()) {
                     // not time message
                     if (!item.mMessage.isTimeMessage()) {
                         new RequestClientGetRoomHistory().getRoomHistory(mRoomId, Long.parseLong(item.mMessage.messageID), Long.toString(mRoomId));
