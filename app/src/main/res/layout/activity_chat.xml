@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.iGap.module.NotTouchableCoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/ac_ll_parent"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@mipmap/back_chat3"
-    android:fitsSystemWindows="true"
-    android:layoutDirection="ltr"
-    tools:ignore="MissingPrefix">
+                                               xmlns:app="http://schemas.android.com/apk/res-auto"
+                                               xmlns:tools="http://schemas.android.com/tools"
+                                               android:id="@+id/ac_ll_parent"
+                                               android:layout_width="match_parent"
+                                               android:layout_height="match_parent"
+                                               android:background="@mipmap/back"
+                                               android:fitsSystemWindows="true"
+                                               android:layoutDirection="ltr"
+                                               tools:ignore="MissingPrefix">
 
     <com.iGap.module.MyAppBarLayout
         android:id="@+id/appBarLayout"
@@ -433,14 +433,16 @@
             android:singleLine="true"
             android:text="New Text" />
 
-        <Button
+        <com.iGap.module.MaterialDesignTextView
             android:id="@+id/ac_btn_cancel_sending_file"
             android:layout_width="@dimen/dp40"
             android:layout_height="match_parent"
             android:background="@null"
-            android:text="@string/md_cancel_button"
+            android:gravity="center_vertical"
+            android:text="@string/md_close_button"
             android:textColor="@color/red"
-            android:textSize="@dimen/sp22" />
+            fontPath="fonts/Flaticon.ttf"
+            android:textSize="@dimen/sp18"/>
     </LinearLayout>
 
 

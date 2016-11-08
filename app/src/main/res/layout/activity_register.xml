@@ -42,12 +42,12 @@
             android:id="@+id/rg_txt_title_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp24"
+            android:layout_marginTop="@dimen/dp16"
             android:background="@android:color/transparent"
             android:gravity="center"
             android:text="@string/rg_title_register"
             android:textColor="@color/rg_black_register"
-            android:textSize="@dimen/sp22" />
+            android:textSize="@dimen/sp20"/>
 
         <View
             android:layout_width="match_parent"
@@ -70,7 +70,7 @@
             android:gravity="center"
             android:text="@string/rg_confirm_text_register"
             android:textColor="@color/rg_confirm_country"
-            android:textSize="@dimen/sp16"
+            android:textSize="@dimen/sp15"
 
             />
     </RelativeLayout>
@@ -94,6 +94,8 @@
             android:drawableLeft="@mipmap/flesh"
             android:paddingLeft="@dimen/dp12"
             android:paddingRight="@dimen/dp28"
+            android:paddingTop="@dimen/dp4"
+            android:paddingBottom="@dimen/dp4"
             android:text="Iran" />
 
         <LinearLayout
@@ -150,6 +152,8 @@
             android:layout_marginTop="@dimen/dp12"
             android:background="@drawable/rg_background_button_start_register"
             android:text="@string/rg_Start"
+            android:paddingTop="@dimen/dp4"
+            android:paddingBottom="@dimen/dp4"
             android:textColor="@color/rg_whit_background" />
 
     </RelativeLayout>

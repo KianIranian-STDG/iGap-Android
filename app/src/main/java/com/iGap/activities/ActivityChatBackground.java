@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.iGap.G;
+import com.iGap.IntentRequests;
 import com.iGap.R;
 import com.iGap.adapter.AdapterChatBackground;
 import com.iGap.libs.rippleeffect.RippleView;
@@ -109,30 +110,28 @@ public class ActivityChatBackground extends ActivityEnhanced {
                 }
             }
         }
-
         adapterChatBackgroundSetting.notifyDataSetChanged();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == myResultCodeCamera && resultCode == RESULT_OK) {// result for camera
+        Log.i("CCCC", "0000000000: ");
+        if (requestCode == IntentRequests.REQ_CAMERA && resultCode == RESULT_OK) {// result for camera
 
             items.clear();
             AdapterChatBackground.imageLoader.clearDiskCache();
             AdapterChatBackground.imageLoader.clearMemoryCache();
             setItem();
-        } else if (requestCode == myResultCodeGallery
-                && resultCode == RESULT_OK) {// result for gallery
-
+        } else if (requestCode == IntentRequests.REQ_GALLERY && resultCode == RESULT_OK) {// result for gallery
+            Log.i("CCCC", "a44444444: ");
             String pathImageUser = getRealPathFromURI(data.getData());
             HelperCopyFile.copyFile(pathImageUser, G.chatBackground.toString());
             items.clear();
             AdapterChatBackground.imageLoader.clearDiskCache();
             AdapterChatBackground.imageLoader.clearMemoryCache();
             setItem();
-            Log.i("CCCC", "a4: " + pathImageUser);
+            Log.i("CCCC", "a4: " + data.getData().toString());
         }
     }
 

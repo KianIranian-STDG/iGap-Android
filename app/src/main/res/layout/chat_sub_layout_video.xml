@@ -85,6 +85,7 @@
                         android:layout_marginLeft="@dimen/dp4"
                         android:gravity="bottom"
                         android:text="@string/md_clock_with_white_face"
+                        fontPath="fonts/Flaticon.ttf"
                         android:textColor="@color/green" />
 
 

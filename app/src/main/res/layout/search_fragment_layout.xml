@@ -43,7 +43,10 @@
                         android:gravity="center"
                         android:text="@string/md_back_arrow"
                         android:textColor="@android:color/white"
-                        android:textSize="@dimen/sp18" />
+                        android:textSize="@dimen/sp18"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"/>
                 </com.iGap.libs.rippleeffect.RippleView>
 
                 <EditText
@@ -54,6 +57,8 @@
                     android:autoText="false"
                     android:background="@null"
                     android:hint="@string/search"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:layout_marginBottom="@dimen/dp16"
                     android:textColor="@color/white"
                     android:textColorHint="@color/colorEmojiPopupCategoryBottomBorder"
                     android:textCursorDrawable="@drawable/white_cursor_color" />
@@ -76,8 +81,8 @@
                         android:background="@null"
                         android:gravity="center"
                         android:text="@string/md_close_button"
-                        android:textColor="@color/gray"
-                        android:textSize="@dimen/sp16" />
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/sp18"/>
                 </com.iGap.libs.rippleeffect.RippleView>
 
             </LinearLayout>

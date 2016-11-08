@@ -512,7 +512,7 @@
 
                 <TextView
 
-                    fontPath="fonts/IRANSansMedium.ttf"
+                    fontPath="fonts/IRANSansBold.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -520,13 +520,13 @@
                     android:text="@string/st_title_message"
                     android:textColor="@color/green"
                     android:textSize="@dimen/sp18"
-                    android:textStyle="bold" />
+                    android:textStyle="normal"/>
 
 
                 <LinearLayout
                     android:id="@+id/st_layout_messageTextSize"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp40"
+                    android:layout_height="@dimen/dp48"
                     android:orientation="horizontal">
 
                     <TextView
@@ -539,7 +539,8 @@
                         android:paddingRight="@dimen/dp16"
                         android:text="@string/st_title_message_textSize"
                         android:textColor="@color/black_register"
-                        android:textSize="@dimen/sp15"
+                        android:textSize="@dimen/sp16"
+                        android:paddingTop="@dimen/dp8"
                         android:textStyle="normal" />
 
                     <TextView
@@ -554,7 +555,8 @@
                         android:paddingRight="@dimen/dp16"
                         android:text="16"
                         android:textColor="@color/toolbar_background"
-                        android:textSize="@dimen/sp15"
+                        android:textSize="@dimen/sp16"
+                        android:paddingTop="@dimen/dp8"
                         android:textStyle="normal" />
                 </LinearLayout>
 
@@ -567,13 +569,14 @@
                     android:id="@+id/st_txt_sticker"
                     fontPath="fonts/IRANSansMedium.ttf"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp40"
+                    android:layout_height="@dimen/dp48"
                     android:gravity="center_vertical"
                     android:paddingLeft="@dimen/dp16"
                     android:paddingRight="@dimen/dp16"
                     android:text="@string/st_stickers"
                     android:textColor="@color/black_register"
-                    android:textSize="@dimen/sp15"
+                    android:textSize="@dimen/sp16"
+                    android:paddingTop="@dimen/dp8"
                     android:textStyle="normal" />
 
                 <View
@@ -585,13 +588,14 @@
                     android:id="@+id/st_txt_chatBackground"
                     fontPath="fonts/IRANSansMedium.ttf"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp40"
+                    android:layout_height="@dimen/dp48"
                     android:gravity="center_vertical"
                     android:paddingLeft="@dimen/dp16"
                     android:paddingRight="@dimen/dp16"
                     android:text="@string/st_chatBackground"
                     android:textColor="@color/black_register"
-                    android:textSize="@dimen/sp15"
+                    android:textSize="@dimen/sp16"
+                    android:paddingTop="@dimen/dp8"
                     android:textStyle="normal" />
 
                 <View
@@ -601,7 +605,7 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp40"
+                    android:layout_height="@dimen/dp48"
                     android:orientation="horizontal"
                     android:paddingEnd="@dimen/dp16"
                     android:paddingLeft="@dimen/dp16"
@@ -617,6 +621,7 @@
                         android:layout_centerInParent="true"
                         android:background="@drawable/st_switch_button"
                         android:paddingRight="@dimen/dp4"
+                        android:paddingLeft="@dimen/dp4"
                         android:textOff=""
                         android:textOn="" />
 
@@ -629,7 +634,8 @@
                         android:gravity="center_vertical"
                         android:text="@string/st_inApp_Browser"
                         android:textColor="@color/black_register"
-                        android:textSize="@dimen/sp15"
+                        android:textSize="@dimen/sp16"
+                        android:paddingTop="@dimen/dp4"
                         android:textStyle="normal" />
 
                 </RelativeLayout>
@@ -643,7 +649,7 @@
                 <RelativeLayout
 
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp40"
+                    android:layout_height="@dimen/dp48"
                     android:orientation="horizontal"
                     android:paddingEnd="@dimen/dp16"
                     android:paddingLeft="@dimen/dp16"
@@ -672,7 +678,8 @@
                         android:gravity="center_vertical"
                         android:text="@string/st_send_by_enter"
                         android:textColor="@color/black_register"
-                        android:textSize="@dimen/sp15"
+                        android:textSize="@dimen/sp16"
+                        android:paddingTop="@dimen/dp4"
                         android:textStyle="normal" />
 
                 </RelativeLayout>

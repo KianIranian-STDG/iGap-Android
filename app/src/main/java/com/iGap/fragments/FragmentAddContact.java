@@ -58,14 +58,13 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
     private void initComponent(final View view) {
 
         MaterialDesignTextView btnBack = (MaterialDesignTextView) view.findViewById(R.id.ac_txt_back);
-        RippleView rippleBack = (RippleView) view.findViewById(R.id.ac_ripple_back);
+        final RippleView rippleBack = (RippleView) view.findViewById(R.id.ac_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
 
-                InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                changePage();
+
+                changePage(rippleView);
             }
         });
 
@@ -180,7 +179,7 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
         rippleSet.setEnabled(false);
         rippleSet.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
-            public void onComplete(RippleView rippleView) {
+            public void onComplete(final RippleView rippleView) {
 
                 new MaterialDialog.Builder(getActivity())
                         .title(R.string.add_to_list_contact)
@@ -189,67 +188,8 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                if (edtFirstName.getText().toString().length() > 0 || edtLastName.getText().toString().length() > 0) {
-                                    if (edtPhoneNumber.getText().toString().length() > 0) {
+                                addToContactList(rippleView);
 
-                                        String displayName =
-                                                edtFirstName.getText().toString() + " " + edtLastName.getText().toString();
-                                        String phone = edtPhoneNumber.getText().toString();
-
-                                        ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
-
-                                        ops.add(ContentProviderOperation.newInsert(
-                                                ContactsContract.RawContacts.CONTENT_URI)
-                                                .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, null)
-                                                .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, null)
-                                                .build());
-
-                                        //------------------------------------------------------ Names
-                                        if (displayName != null) {
-                                            ops.add(ContentProviderOperation.newInsert(
-                                                    ContactsContract.Data.CONTENT_URI)
-                                                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
-                                                    .withValue(ContactsContract.Data.MIMETYPE,
-                                                            ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
-                                                    .withValue(
-                                                            ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME,
-                                                            displayName)
-                                                    .build());
-                                        }
-                                        //------------------------------------------------------ Mobile Number
-                                        if (phone != null) {
-                                            ops.add(ContentProviderOperation.
-                                                    newInsert(ContactsContract.Data.CONTENT_URI)
-                                                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
-                                                    .withValue(ContactsContract.Data.MIMETYPE,
-                                                            ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
-                                                    .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, phone)
-                                                    .withValue(ContactsContract.CommonDataKinds.Phone.TYPE,
-                                                            ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)
-                                                    .build());
-                                        }
-
-                                        try {
-                                            G.context.getContentResolver()
-                                                    .applyBatch(ContactsContract.AUTHORITY, ops);
-                                            addContactToServer();
-                                            Toast.makeText(G.context, R.string.save_ok, Toast.LENGTH_SHORT).show();
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                            Toast.makeText(G.context,
-                                                    getString(R.string.exception) + e.getMessage(), Toast.LENGTH_SHORT)
-                                                    .show();
-                                        }
-
-                                        changePage();
-                                    } else {
-                                        Toast.makeText(G.context, R.string.please_enter_phone_number,
-                                                Toast.LENGTH_SHORT).show();
-                                    }
-                                } else {
-                                    Toast.makeText(G.context, R.string.please_enter_firstname_or_lastname,
-                                            Toast.LENGTH_SHORT).show();
-                                }
                             }
                         })
                         .negativeText(R.string.B_cancel)
@@ -261,20 +201,11 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
                                     @Override
                                     public void onContactImport() {
                                         new RequestUserContactsGetList().userContactGetList();
-                                        changePage();
+                                        changePage(rippleView);
                                     }
                                 };
 
-                                ArrayList<StructListOfContact> contacyList = new ArrayList<StructListOfContact>();
-                                StructListOfContact structListOfContact = new StructListOfContact();
-
-                                structListOfContact.setFirstName(edtFirstName.getText().toString());
-                                structListOfContact.setLastName(edtLastName.getText().toString());
-                                structListOfContact.setDisplayName(edtFirstName.getText().toString() + " " + edtLastName.getText().toString());
-                                structListOfContact.setPhone(edtLastName.getText().toString());
-                                contacyList.add(structListOfContact);
-                                new RequestUserContactImport().contactImport(contacyList, true);
-
+                                addContactToServer();
                             }
                         })
                         .show();
@@ -297,9 +228,10 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
         }
     }
 
-    private void changePage() {
-        final RegisteredContactsFragment registeredContactsFragment = new RegisteredContactsFragment();
+    private void changePage(View view) {
 
+        InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         getActivity().getSupportFragmentManager().popBackStack();
     }
 
@@ -317,6 +249,65 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
         contacts.add(contact);
 
         new RequestUserContactImport().contactImport(contacts, true);
+    }
+
+    private void addToContactList(View view) {
+        if (edtFirstName.getText().toString().length() > 0 || edtLastName.getText().toString().length() > 0) {
+            if (edtPhoneNumber.getText().toString().length() > 0) {
+
+                String displayName = edtFirstName.getText().toString() + " " + edtLastName.getText().toString();
+                String phone = edtPhoneNumber.getText().toString();
+
+                ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+
+                ops.add(ContentProviderOperation.newInsert(
+                        ContactsContract.RawContacts.CONTENT_URI)
+                        .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, null)
+                        .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, null)
+                        .build());
+
+                //------------------------------------------------------ Names
+                if (displayName != null) {
+                    ops.add(ContentProviderOperation.newInsert(
+                            ContactsContract.Data.CONTENT_URI)
+                            .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+                            .withValue(ContactsContract.Data.MIMETYPE,
+                                    ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
+                            .withValue(
+                                    ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME,
+                                    displayName)
+                            .build());
+                }
+                //------------------------------------------------------ Mobile Number
+                if (phone != null) {
+                    ops.add(ContentProviderOperation.
+                            newInsert(ContactsContract.Data.CONTENT_URI)
+                            .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+                            .withValue(ContactsContract.Data.MIMETYPE,
+                                    ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
+                            .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, phone)
+                            .withValue(ContactsContract.CommonDataKinds.Phone.TYPE,
+                                    ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)
+                            .build());
+                }
+
+                try {
+                    G.context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
+                    addContactToServer();
+                    changePage(view);
+                    Toast.makeText(G.context, R.string.save_ok, Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(G.context, getString(R.string.exception) + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+
+            } else {
+                Toast.makeText(G.context, R.string.please_enter_phone_number, Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(G.context, R.string.please_enter_firstname_or_lastname,
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
     //***************************************************************************************

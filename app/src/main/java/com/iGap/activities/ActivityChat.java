@@ -232,7 +232,7 @@ public class ActivityChat extends ActivityEnhanced
     private MaterialDesignTextView btnCopySelected;
     private MaterialDesignTextView btnForwardSelected;
     private MaterialDesignTextView btnDeleteSelected;
-    private Button btnCancelSeningFile;
+    private MaterialDesignTextView btnCancelSeningFile;
     private TextView txtFileNameForSend;
     private LinearLayout ll_attach_text;
     private TextView txtNumberOfSelected;
@@ -1021,8 +1021,7 @@ public class ActivityChat extends ActivityEnhanced
 
         ll_attach_text = (LinearLayout) findViewById(R.id.ac_ll_attach_text);
         txtFileNameForSend = (TextView) findViewById(R.id.ac_txt_file_neme_for_sending);
-        btnCancelSeningFile = (Button) findViewById(R.id.ac_btn_cancel_sending_file);
-        btnCancelSeningFile.setTypeface(G.flaticon);
+        btnCancelSeningFile = (MaterialDesignTextView) findViewById(R.id.ac_btn_cancel_sending_file);
         btnCancelSeningFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

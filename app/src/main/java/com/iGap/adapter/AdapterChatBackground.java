@@ -64,9 +64,17 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
             }
             break;
             case ALL: {
+
                 ViewHolderItem holder2 = (ViewHolderItem) holder;
-                Bitmap bmp = imageLoader.loadImageSync("file://" + item.getPathImage());
-                holder2.img.setImageBitmap(bmp);
+                if (position == 1 && G.chatBackground.exists()) {
+
+                    Bitmap bmp = imageLoader.loadImageSync("file://" + G.chatBackground);
+                    holder2.img.setImageBitmap(bmp);
+                } else {
+                    Bitmap bmp = imageLoader.loadImageSync("file://" + item.getPathImage());
+                    holder2.img.setImageBitmap(bmp);
+                }
+
 
                 if (selected_position == position) {
                     holder2.itemView.setBackgroundColor(
@@ -114,23 +122,19 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
                                                         CharSequence text) {
 
                                     if (text.toString().equals("From Camera")) {
-                                        if (G.context.getPackageManager()
-                                                .hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
+                                        if (G.context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
                                             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                            intent.putExtra(MediaStore.EXTRA_OUTPUT,
-                                                    Uri.fromFile(G.chatBackground));
-                                            G.currentActivity.startActivityForResult(intent,
-                                                    IntentRequests.REQ_CAMERA);
+                                            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(G.chatBackground));
+                                            G.currentActivity.startActivityForResult(intent, IntentRequests.REQ_CAMERA);
                                             dialog.dismiss();
                                         } else {
                                             Toast.makeText(G.currentActivity,
                                                     "Please check your Camera", Toast.LENGTH_SHORT).show();
                                         }
                                     } else {
-                                        Intent intent = new Intent(Intent.ACTION_PICK,
-                                                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                                        G.currentActivity.startActivityForResult(intent,
-                                                IntentRequests.REQ_GALLERY);
+                                        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                                        G.currentActivity.startActivityForResult(intent, IntentRequests.REQ_GALLERY);
+
                                         dialog.dismiss();
                                     }
                                 }

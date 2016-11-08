@@ -26,6 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp4"
-        android:text="@string/md_clock_with_white_face" />
+        android:text="@string/md_clock_with_white_face"
+        fontPath="fonts/Flaticon.ttf"/>
 
 </LinearLayout>
