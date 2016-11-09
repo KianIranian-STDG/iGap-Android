@@ -9,6 +9,8 @@ import com.iGap.realm.RealmContacts;
 import com.iGap.realm.RealmContactsFields;
 import com.iGap.realm.RealmInviteFriend;
 import com.iGap.realm.RealmInviteFriendFields;
+import com.iGap.realm.RealmRegisteredInfo;
+import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.request.RequestUserContactImport;
 
 import java.util.ArrayList;
@@ -47,6 +49,10 @@ public class Contacts {
             String header = contacts.get(i).getDisplay_name();
             long peerId = contacts.get(i).getId();
 
+            //TODO [Saeed Mozaffari] [2016-11-09 5:26 PM] - Clear This Code nabayad ba RegisteredUserInfo gerfte beshe
+
+            RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, contacts.get(i).getId()).findFirst();
+
             // new header exists
             if (lastHeader.isEmpty() || (!lastHeader.isEmpty()
                     && !header.isEmpty()
@@ -56,14 +62,16 @@ public class Contacts {
                         new StructContactInfo(peerId, header, "", true, false, "");
                 structContactInfo.initials = contacts.get(i).getInitials();
                 structContactInfo.color = contacts.get(i).getColor();
-                structContactInfo.avatar = contacts.get(i).getAvatar();
+                //structContactInfo.avatar = contacts.get(i).getAvatar(); //TODO [Saeed Mozaffari] [2016-11-09 5:28 PM] - in code nabayd comment beshe va khat paiin ejrabeshe
+                structContactInfo.avatar = realmRegisteredInfo.getLastAvatar();
                 items.add(structContactInfo);
             } else {
                 StructContactInfo structContactInfo =
                         new StructContactInfo(peerId, header, "", false, false, "");
                 structContactInfo.initials = contacts.get(i).getInitials();
                 structContactInfo.color = contacts.get(i).getColor();
-                structContactInfo.avatar = contacts.get(i).getAvatar();
+                //structContactInfo.avatar = contacts.get(i).getAvatar(); // //TODO [Saeed Mozaffari] [2016-11-09 5:28 PM] - in code nabayd comment beshe va khat paiin ejrabeshe
+                structContactInfo.avatar = realmRegisteredInfo.getLastAvatar();
                 items.add(structContactInfo);
             }
             lastHeader = header;

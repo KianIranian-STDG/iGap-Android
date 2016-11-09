@@ -69,7 +69,7 @@ public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItem
         String path = null;
         Bitmap bitmap = null;
 
-        if (mContact.avatar.getFile() != null) {
+        if (mContact.avatar != null && mContact.avatar.getFile() != null) {
             if (mContact.avatar.getFile().getLocalFilePath() != null) {
                 path = mContact.avatar.getFile().getLocalFilePath();
             } else {

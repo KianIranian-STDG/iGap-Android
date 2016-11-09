@@ -44,6 +44,7 @@ import com.iGap.interfaces.OnDraftMessage;
 import com.iGap.interfaces.OnFileDownloadResponse;
 import com.iGap.interfaces.OnGetPermision;
 import com.iGap.interfaces.OnGroupDelete;
+import com.iGap.interfaces.OnSetAction;
 import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.libs.floatingAddButton.ArcMenu;
 import com.iGap.libs.floatingAddButton.StateChangeListener;
@@ -88,7 +89,7 @@ import io.realm.Sort;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityMain extends ActivityEnhanced
-    implements OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnFileDownloadResponse, OnUserInfoResponse, OnDraftMessage {
+        implements OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnFileDownloadResponse, OnUserInfoResponse, OnDraftMessage, OnSetAction {
 
     public static LeftDrawerLayout mLeftDrawerLayout;
     public static boolean isMenuButtonAddShown = false;
@@ -297,8 +298,8 @@ public class ActivityMain extends ActivityEnhanced
             public void onComplete(RippleView rippleView) {
                 Fragment fragment = SearchFragment.newInstance();
                 getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                    .replace(R.id.fragmentContainer, fragment, "Search_fragment")
-                    .commit();
+                        .replace(R.id.fragmentContainer, fragment, "Search_fragment")
+                        .commit();
             }
         });
 
@@ -376,9 +377,9 @@ public class ActivityMain extends ActivityEnhanced
                 bundle.putString("TITLE", "New Chat");
                 fragment.setArguments(bundle);
                 getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                    .addToBackStack(null)
-                    .replace(R.id.fragmentContainer, fragment)
-                    .commit();
+                        .addToBackStack(null)
+                        .replace(R.id.fragmentContainer, fragment)
+                        .commit();
 
                 arcMenu.toggleMenu();
 
@@ -397,11 +398,11 @@ public class ActivityMain extends ActivityEnhanced
                 bundle.putString("TYPE", "NewGroup");
                 fragment.setArguments(bundle);
                 ActivityMain.this.getSupportFragmentManager()
-                    .beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                    .addToBackStack(null)
-                    .replace(R.id.fragmentContainer, fragment)
-                    .commit();
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                        .addToBackStack(null)
+                        .replace(R.id.fragmentContainer, fragment)
+                        .commit();
                 arcMenu.toggleMenu();
             }
         });
@@ -416,11 +417,11 @@ public class ActivityMain extends ActivityEnhanced
                 bundle.putString("TYPE", "NewChanel");
                 fragment.setArguments(bundle);
                 ActivityMain.this.getSupportFragmentManager()
-                    .beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                    .addToBackStack(null)
-                    .replace(R.id.fragmentContainer, fragment)
-                    .commit();
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                        .addToBackStack(null)
+                        .replace(R.id.fragmentContainer, fragment)
+                        .commit();
                 arcMenu.toggleMenu();
             }
         });
@@ -1130,7 +1131,7 @@ public class ActivityMain extends ActivityEnhanced
             boolean clearMessage = false;
 
             RealmResults<RealmRoomMessage> realmRoomMessages =
-                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+                    realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
             for (final RealmRoomMessage realmRoomMessage : realmRoomMessages) {
                 if (!clearMessage && realmRoomMessage.getMessageId() == clearId) {
                     clearMessage = true;
@@ -1279,7 +1280,12 @@ public class ActivityMain extends ActivityEnhanced
 
     @Override
     public void onDraftMessage(long roomId, String draftMessage) {
-        mAdapter.norifyDraft(roomId, draftMessage);
+        mAdapter.notifyDraft(roomId, draftMessage);
         mAdapter.goToTop(roomId);
+    }
+
+    @Override
+    public void onSetAction(long roomId, long userId, ProtoGlobal.ClientAction clientAction) {
+
     }
 }

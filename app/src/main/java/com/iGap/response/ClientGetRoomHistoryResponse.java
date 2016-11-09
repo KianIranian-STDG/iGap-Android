@@ -35,7 +35,7 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-
+        Log.i("YYY", "ClientGetRoomHistoryResponse handler : " + message);
         Realm realm = Realm.getDefaultInstance();
         final long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
 

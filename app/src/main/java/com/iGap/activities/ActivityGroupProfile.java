@@ -69,6 +69,8 @@ import com.iGap.realm.RealmContacts;
 import com.iGap.realm.RealmContactsFields;
 import com.iGap.realm.RealmGroupRoom;
 import com.iGap.realm.RealmMember;
+import com.iGap.realm.RealmRegisteredInfo;
+import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
@@ -703,8 +705,8 @@ public class ActivityGroupProfile extends ActivityEnhanced
             String role = member.getRole();
             long id = member.getPeerId();
 
-            RealmContacts rc =
-                    realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, id).findFirst();
+            RealmContacts rc = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, id).findFirst();
+            RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, id).findFirst();
 
             if (rc != null) {
 
@@ -712,7 +714,9 @@ public class ActivityGroupProfile extends ActivityEnhanced
                         new StructContactInfo(rc.getId(), rc.getDisplay_name(), rc.getStatus(), false,
                                 false, rc.getPhone() + "");
                 s.role = role;
-                s.avatar = rc.getAvatar();
+                s.avatar = realmRegisteredInfo.getLastAvatar();
+                Log.i("III", "rc.getLastAvatar() : " + realmRegisteredInfo.getLastAvatar());
+                Log.i("III", "rc.getAvatar() : " + rc.getAvatar());
                 contacts.add(s);
             }
         }
@@ -1305,7 +1309,10 @@ public class ActivityGroupProfile extends ActivityEnhanced
         StructContactInfo item = null;
 
         for (int i = 0; i < list.size(); i++) {
+            Log.i("III", "list.get(i).peerId : " + list.get(i).peerId);
+            Log.i("III", "UserId : " + UserId);
             if (list.get(i).peerId == UserId) {
+                Log.i("III", "Equal");
                 item = list.get(i);
                 break;
             }
@@ -1320,10 +1327,12 @@ public class ActivityGroupProfile extends ActivityEnhanced
                 int count = items.size();
                 final int listSize = contacts.size();
                 for (int i = count; i < listSize; i++) {
+                    Log.i("III", "Add");
                     items.add(new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
                 }
                 itemAdapter.clear();
                 itemAdapter.add(items);
+//                itemAdapter.add(new ContactItemGroupProfile().setContact(contacts.get(0)).withIdentifier(100 + contacts.indexOf(contacts.get(0))));
                 txtMore.setVisibility(View.GONE);
             }
         });

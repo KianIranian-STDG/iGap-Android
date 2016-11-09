@@ -57,14 +57,12 @@ public class ContactItemGroupProfile
         setRoleStarColor(holder.roleStar);
 
 
-        if (mContact.avatar.getFile().isFileExistsOnLocal()) {
+        if (mContact.avatar != null && mContact.avatar.getFile().isFileExistsOnLocal()) {
             ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mContact.avatar.getFile().getLocalFilePath()), holder.image);
-        } else if (mContact.avatar.getFile().isThumbnailExistsOnLocal()) {
+        } else if (mContact.avatar != null && mContact.avatar.getFile().isThumbnailExistsOnLocal()) {
             ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mContact.avatar.getFile().getLocalThumbnailPath()), holder.image);
         } else {
-            holder.image.setImageBitmap(
-                    com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.image.getContext().getResources().getDimension(R.dimen.dp60), mContact.initials, mContact.color));
-
+            holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.image.getContext().getResources().getDimension(R.dimen.dp60), mContact.initials, mContact.color));
         }
 
         holder.btnMenu.setOnClickListener(new View.OnClickListener() {

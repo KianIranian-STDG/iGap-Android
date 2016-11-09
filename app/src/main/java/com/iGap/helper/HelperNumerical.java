@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
+import java.util.Random;
 
 /**
  * HelperNumerical use for processing at numerical formats in java like int , long , byte .etc
@@ -95,5 +96,17 @@ public class HelperNumerical {
             bytes[i] = (byte) (value >>> (i * 8));
         }
         return bytes;
+    }
+
+    public static int generateRandomNumber(int length) {
+
+        String random = "";
+        Random rand = new Random();
+        for (int i = 0; i < length; i++) {
+            int number = rand.nextInt(20);
+            random = random + number;
+        }
+
+        return Integer.parseInt(random);
     }
 }

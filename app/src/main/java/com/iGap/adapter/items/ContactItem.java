@@ -12,8 +12,8 @@ import com.iGap.module.CustomTextViewMedium;
 import com.iGap.module.StructContactInfo;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.realm.RealmAttachment;
-import com.iGap.realm.RealmContacts;
-import com.iGap.realm.RealmContactsFields;
+import com.iGap.realm.RealmRegisteredInfo;
+import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.request.RequestFileDownload;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
@@ -81,7 +81,7 @@ public class ContactItem extends AbstractItem<ContactItem, ContactItem.ViewHolde
                 Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                 holder.image.setImageBitmap(myBitmap);
             } else {
-                if (mContact.avatar.getFile() != null) {
+                if (mContact.avatar != null && mContact.avatar.getFile() != null) {
                     onRequestDownloadAvatar();
                 }
                 holder.image.setImageBitmap(
@@ -90,7 +90,7 @@ public class ContactItem extends AbstractItem<ContactItem, ContactItem.ViewHolde
                                 mContact.initials, mContact.color));
             }
         } else {
-            if (mContact.avatar.getFile() != null) {
+            if (mContact.avatar != null && mContact.avatar.getFile() != null) {
                 onRequestDownloadAvatar();
             }
             holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture(
@@ -117,10 +117,20 @@ public class ContactItem extends AbstractItem<ContactItem, ContactItem.ViewHolde
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmContacts realmContacts = realm.where(RealmContacts.class)
-                        .equalTo(RealmContactsFields.ID, mContact.peerId)
+//                RealmContacts realmContacts = realm.where(RealmContacts.class)
+//                        .equalTo(RealmContactsFields.ID, mContact.peerId)
+//                        .findFirst();
+//                realmContacts.getAvatar().getFile().setLocalThumbnailPath(filepath);
+
+                //TODO [Saeed Mozaffari] [2016-11-09 5:33 PM] - code new ro pak kon va code bala ro uncomment kon
+
+                // New Start
+                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class)
+                        .equalTo(RealmRegisteredInfoFields.ID, mContact.peerId)
                         .findFirst();
-                realmContacts.getAvatar().getFile().setLocalThumbnailPath(filepath);
+
+                realmRegisteredInfo.getLastAvatar().getFile().setLocalThumbnailPath(filepath);
+                // New End
             }
         });
         realm.close();

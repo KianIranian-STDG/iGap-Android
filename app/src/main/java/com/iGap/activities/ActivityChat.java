@@ -107,6 +107,7 @@ import com.iGap.interfaces.OnClientGetRoomHistoryResponse;
 import com.iGap.interfaces.OnDeleteChatFinishActivity;
 import com.iGap.interfaces.OnFileDownloadResponse;
 import com.iGap.interfaces.OnFileUploadForActivities;
+import com.iGap.interfaces.OnSetAction;
 import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.interfaces.OnVoiceRecord;
 import com.iGap.libs.rippleeffect.RippleView;
@@ -207,7 +208,7 @@ import static java.lang.Long.parseLong;
 
 public class ActivityChat extends ActivityEnhanced
         implements IEmojiViewCreate, IRecentsLongClick, IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>,
-        OnChatMessageRemove, OnFileDownloadResponse, OnVoiceRecord, OnUserInfoResponse, OnClientGetRoomHistoryResponse, OnFileUploadForActivities {
+        OnChatMessageRemove, OnFileDownloadResponse, OnVoiceRecord, OnUserInfoResponse, OnClientGetRoomHistoryResponse, OnFileUploadForActivities, OnSetAction {
 
     public static ActivityChat activityChat;
     public static OnComplete hashListener;
@@ -397,6 +398,16 @@ public class ActivityChat extends ActivityEnhanced
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
+    private void getChatHistory() {
+        Realm realm = Realm.getDefaultInstance();
+        Log.i("YYY", "realm.where(RealmRoomMessage.class).findAll() : " + realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll().size());
+        Log.i("YYY", "mRoomId : " + mRoomId);
+        if (realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll().size() == 0) {
+            new RequestClientGetRoomHistory().getRoomHistory(mRoomId, 0, Long.toString(mRoomId));
+        }
+        realm.close();
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -537,8 +548,8 @@ public class ActivityChat extends ActivityEnhanced
         clearHistoryFromContactsProfileInterface();
         onDeleteChatFinishActivityInterface();
 
+        getChatHistory();
         getDraft();
-
         setAvatar();
     }
 
@@ -1630,6 +1641,8 @@ public class ActivityChat extends ActivityEnhanced
             @Override
             public void onTextChanged(CharSequence text, int i, int i1, int i2) {
 
+                //new RequestChatSetAction().chatSetAction(mRoomId, ProtoGlobal.ClientAction.TYPING, HelperNumerical.generateRandomNumber(10));
+
                 // if in the seeting page send by enter is on message send by enter key
                 if (text.toString().endsWith(System.getProperty("line.separator"))) {
                     if (sendByEnter) imvSendButton.performClick();
@@ -1682,6 +1695,9 @@ public class ActivityChat extends ActivityEnhanced
                 }
             }
         });
+    }
+
+    private void setAction() {
     }
 
     private void initLayoutSearchNavigation() {
@@ -3917,6 +3933,37 @@ public class ActivityChat extends ActivityEnhanced
                 }
             }
         }, parseLong(message.messageID), failedMessages);
+    }
+
+    @Override
+    public void onSetAction(long roomId, long userId, final ProtoGlobal.ClientAction clientAction) {
+
+        if (mRoomId == roomId) {
+            if (chatType == ProtoGlobal.Room.Type.CHAT) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        txtLastSeen.setText(clientAction.toString());
+                    }
+                });
+            } else if (chatType == ProtoGlobal.Room.Type.GROUP) {
+
+                Realm realm = Realm.getDefaultInstance();
+                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
+                final String name = realmRegisteredInfo.getDisplayName();
+                realm.close();
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        txtLastSeen.setText(name + " " + clientAction.toString());
+                    }
+                });
+
+            }
+        }
+
+
     }
 
     public static class UploadTask extends AsyncTask<Object, FileUploadStructure, FileUploadStructure> {

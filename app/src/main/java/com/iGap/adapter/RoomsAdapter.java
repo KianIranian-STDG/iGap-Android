@@ -84,7 +84,7 @@ public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
         updateChat(chatId, item);
     }
 
-    public void norifyDraft(long chatId, String draftMessage) {
+    public void notifyDraft(long chatId, String draftMessage) {
         List<Item> items = getAdapterItems();
         for (Item chat : items) {
             if (chat.mInfo.chatId == chatId) {
