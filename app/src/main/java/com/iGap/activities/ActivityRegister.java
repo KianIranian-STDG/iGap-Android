@@ -39,7 +39,9 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AdapterDialog;
 import com.iGap.helper.HelperLogout;
+import com.iGap.helper.HelperPermision;
 import com.iGap.helper.HelperString;
+import com.iGap.interfaces.OnGetPermision;
 import com.iGap.interfaces.OnInfoCountryResponse;
 import com.iGap.interfaces.OnSmsReceive;
 import com.iGap.interfaces.OnUserInfoResponse;
@@ -1098,7 +1100,15 @@ public class ActivityRegister extends ActivityEnhanced {
             }
         });
 
-        registerReceiver(smsReceiver, filter);
+        Log.e("dddd", "ddddddddddddddddddddddddddddddddddddddd");
+
+        HelperPermision.getSmsPermision(ActivityRegister.this, new OnGetPermision() {
+            @Override
+            public void Allow() {
+                registerReceiver(smsReceiver, filter);
+            }
+        });
+
         super.onResume();
     }
 

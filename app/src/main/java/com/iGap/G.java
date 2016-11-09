@@ -1,10 +1,12 @@
 package com.iGap;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Typeface;
@@ -13,6 +15,7 @@ import android.net.NetworkInfo;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.multidex.MultiDex;
+import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -289,8 +292,17 @@ public class G extends Application {
                 getContactListFromServer();
             }
         };
+
+
         // this can be go in the activity for cheke permision in api 6+
-        Contacts.getListOfContact(true);
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+            Contacts.getListOfContact(true);
+        }
+
+
+
+
+
     }
 
     public static void getContactListFromServer() {

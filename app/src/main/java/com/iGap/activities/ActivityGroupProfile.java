@@ -386,7 +386,10 @@ public class ActivityGroupProfile extends ActivityEnhanced
             }
         });
 
+
         fab = (FloatingActionButton) findViewById(R.id.agp_fab_setPic);
+
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
