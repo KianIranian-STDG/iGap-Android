@@ -27,8 +27,6 @@ import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.Contacts;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.StructContactInfo;
-import com.iGap.proto.ProtoGlobal;
-import com.iGap.realm.RealmMember;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
 import com.iGap.request.RequestGroupAddMember;
@@ -44,7 +42,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
-import io.realm.RealmList;
 
 public class ContactGroupFragment extends Fragment {
     private FastAdapter fastAdapter;
@@ -102,23 +99,19 @@ public class ContactGroupFragment extends Fragment {
             public void onComplete(RippleView rippleView) {
                 G.onGroupAddMember = new OnGroupAddMember() {
                     @Override
-                    public void onGroupAddMember() { //TODO [Saeed Mozaffari] [2016-10-15 10:34 AM] - bayad id ra begirim ke daghighan motevajeh shavim ke chand nafar add shodeand
+                    public void onGroupAddMember(Long Roomid, Long UserId) {
                         countAddMemberResponse++;
                         if (countAddMemberResponse >= countAddMemberRequest) {
 
                             Realm realm = Realm.getDefaultInstance();
+                            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
                             realm.executeTransaction(new Realm.Transaction() {
                                 @Override
                                 public void execute(Realm realm) {
-                                    RealmRoom realmRoom = realm.where(RealmRoom.class)
-                                            .equalTo(RealmRoomFields.ID, roomId)
-                                            .findFirst();
-                                    realmRoom.getGroupRoom()
-                                            .setParticipantsCountLabel(countAddMemberResponse + "");
+                                    realmRoom.getGroupRoom().setParticipantsCountLabel(realmRoom.getGroupRoom().getMembers().size() + "");
                                 }
                             });
-
                             realm.close();
 
                             Intent intent = new Intent(G.context, ActivityChat.class);
@@ -130,6 +123,10 @@ public class ContactGroupFragment extends Fragment {
 
                     @Override
                     public void onError(int majorCode, int minorCode) {
+
+                        G.onGroupAddMember.onGroupAddMember(-1l, -1l);
+
+
                         if (majorCode == 302 && minorCode == 1) {
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
@@ -260,46 +257,14 @@ public class ContactGroupFragment extends Fragment {
                     }
                 };
 
-                Realm realm = Realm.getDefaultInstance();
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        final RealmList<RealmMember> members = new RealmList<>();
-                        for (long peerId : getSelectedList()) {
 
-                            //add member to realm
-                            RealmMember realmMember = new RealmMember();
-                            int autoIncrement = 0;
-                            if (realm.where(RealmMember.class).max("id") != null) {
-                                autoIncrement =
-                                        realm.where(RealmMember.class).max("id").intValue() + 1;
-                            }
-                            realmMember.setId(autoIncrement);
-                            realmMember.setPeerId(peerId);
-                            realmMember.setRole(ProtoGlobal.GroupRoom.Role.MEMBER.toString());
-                            realmMember = realm.copyToRealm(realmMember);
+                for (long peerId : getSelectedList()) {
+                    new RequestGroupAddMember().groupAddMember(roomId, peerId, 0);
+                }
 
-                            members.add(realmMember);
-
-                            //request for add member
-                            new RequestGroupAddMember().groupAddMember(roomId, peerId, 0,
-                                    ProtoGlobal.GroupRoom.Role.MEMBER);
-                        }
-
-                        RealmRoom realmRoom = realm.where(RealmRoom.class)
-                                .equalTo(RealmRoomFields.ID, roomId)
-                                .findFirst();
-
-                        for (RealmMember member : realmRoom.getGroupRoom().getMembers()) {
-                            members.add(member);
-                        }
-
-                        realmRoom.getGroupRoom().setMembers(members);
-                    }
-                });
-                realm.close();
             }
         });
+
         //create our FastAdapter
         fastAdapter = new FastAdapter();
         fastAdapter.withSelectable(true);

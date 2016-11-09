@@ -14,5 +14,5 @@
         android:padding="@dimen/dp4"
         android:text="contacts"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@color/black_register" />
+        android:textColor="@android:color/black"/>
 </LinearLayout>

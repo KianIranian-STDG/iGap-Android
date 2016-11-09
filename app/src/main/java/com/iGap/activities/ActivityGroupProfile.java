@@ -144,8 +144,6 @@ public class ActivityGroupProfile extends ActivityEnhanced
     private String participantsCountLabel;
     private RealmList<RealmMember> members;
 
-    private int countAddMemberResponse = 0;
-    private int countAddMemberRequest = 0;
 
     private long startMessageId = 0;
 
@@ -873,41 +871,13 @@ public class ActivityGroupProfile extends ActivityEnhanced
 
         Fragment fragment = ShowCustomList.newInstance(userList, new OnSelectedList() {
             @Override
-            public void getSelectedList(boolean result, String message, int countForShowLastMessage,
-                                        final ArrayList<StructContactInfo> list) {
+            public void getSelectedList(boolean result, String message, int countForShowLastMessage, final ArrayList<StructContactInfo> list) {
 
-                countAddMemberResponse = 0;
-                countAddMemberRequest = list.size();
 
                 G.onGroupAddMember = new OnGroupAddMember() {
                     @Override
-                    public void onGroupAddMember() {
-                        countAddMemberResponse++;
-
-                        if (countAddMemberResponse >= countAddMemberRequest) {
-
-                            for (int i = 0; i < list.size(); i++) {
-                                contacts.add(list.get(i));
-                            }
-
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    txtMemberNumber.setText(contacts.size() + "");
-                                    int count = items.size();
-                                    final int listSize = contacts.size();
-                                    for (int i = count; i < listSize; i++) {
-                                        items.add(
-                                                new ContactItemGroupProfile().setContact(contacts.get(i))
-                                                        .withIdentifier(
-                                                                100 + contacts.indexOf(contacts.get(i))));
-                                    }
-                                    itemAdapter.clear();
-                                    itemAdapter.add(items);
-                                    txtMore.setVisibility(View.GONE);
-                                }
-                            });
-                        }
+                    public void onGroupAddMember(Long Roomid, Long UserId) {
+                        updateUi(list, UserId);
                     }
 
                     @Override
@@ -1042,21 +1012,57 @@ public class ActivityGroupProfile extends ActivityEnhanced
                     }
                 };
 
-                memberRealmAndRequest(list, countForShowLastMessage);
+                //    memberRealmAndRequest(list, countForShowLastMessage);
+
+                for (int i = 0; i < list.size(); i++) {
+
+                    new RequestGroupAddMember().groupAddMember(roomId, list.get(i).peerId, startMessageId);
+                }
+
             }
         });
+
         Bundle bundle = new Bundle();
         bundle.putBoolean("DIALOG_SHOWING", true);
         fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction()
-                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
-                        R.anim.slide_in_right, R.anim.slide_out_left)
+                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
                 .addToBackStack(null)
-                .replace(R.id.fragmentContainer_group_profile, fragment)
-                .commit();
+                .replace(R.id.fragmentContainer_group_profile, fragment).commit();
     }
 
     //***********************************************************************************************************************
+
+
+    private void updateUi(ArrayList<StructContactInfo> list, Long UserId) {
+
+        StructContactInfo item = null;
+
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).peerId == UserId) {
+                item = list.get(i);
+                break;
+            }
+        }
+
+        contacts.add(item);
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                txtMemberNumber.setText(contacts.size() + "");
+                int count = items.size();
+                final int listSize = contacts.size();
+                for (int i = count; i < listSize; i++) {
+                    items.add(new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
+                }
+                itemAdapter.clear();
+                itemAdapter.add(items);
+                txtMore.setVisibility(View.GONE);
+            }
+        });
+
+    }
 
     /**
      * add member to realm and send request to server for really added this contacts to this group
@@ -1119,8 +1125,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                     members.add(realmMember);
 
                     //request for add member
-                    new RequestGroupAddMember().groupAddMember(roomId, peerId, startMessageId,
-                            ProtoGlobal.GroupRoom.Role.MEMBER);
+                    new RequestGroupAddMember().groupAddMember(roomId, peerId, startMessageId);
                 }
 
                 RealmRoom realmRoom =

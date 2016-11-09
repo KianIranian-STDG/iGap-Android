@@ -214,6 +214,7 @@ public class ActivityChat extends ActivityEnhanced
     BoomMenuButton boomMenuButton;
     LinearLayout mediaLayout;
     MusicPlayer musicPlayer;
+    RippleView rippleClose;
     LinearLayout ll_Search;
     Button btnCloseLayoutSearch;
     EditText edtSearchMessage;
@@ -1703,7 +1704,8 @@ public class ActivityChat extends ActivityEnhanced
                 }
             }
         });
-        RippleView rippleClose = (RippleView) findViewById(R.id.chl_btn_close_ripple_search_message);
+        rippleClose = (RippleView) findViewById(R.id.chl_btn_close_ripple_search_message);
+        ((View) rippleClose).setEnabled(false);
         rippleClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1760,8 +1762,10 @@ public class ActivityChat extends ActivityEnhanced
 
                 if (charSequence.length() > 0) {
                     txtClearMessageSearch.setTextColor(Color.WHITE);
+                    ((View) rippleClose).setEnabled(true);
                 } else {
-                    txtClearMessageSearch.setTextColor(getResources().getColor(R.color.gray));
+                    txtClearMessageSearch.setTextColor(getResources().getColor(R.color.colorChatMessageSelectableItemBg));
+                    ((View) rippleClose).setEnabled(false);
                 }
             }
 

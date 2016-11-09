@@ -358,7 +358,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                         public void run() {
                             fillList();
                             viewPager.setAdapter(mAdapter);
-                            btnMessageCounter.setText(1 + " " + getString(R.string.of) + " " + unreadList.size());
+                            btnMessageCounter.setText(1 + "/" + unreadList.size());
                             setImageAndTextAppBar(viewPager.getCurrentItem());
                             listSize = unreadList.size();
                         }
@@ -426,7 +426,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             viewPager.setAdapter(mAdapter);
             listSize = unreadList.size();
 
-            btnMessageCounter.setText(1 + " " + getString(R.string.of) + " " + listSize);
+            btnMessageCounter.setText(1 + "/" + listSize);
 
             setImageAndTextAppBar(viewPager.getCurrentItem());
 
@@ -438,7 +438,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
                 @Override
                 public void onPageSelected(int position) {
-                    btnMessageCounter.setText(position + 1 + " " + getString(R.string.of) + " " + listSize);
+                    btnMessageCounter.setText(position + 1 + "/" + listSize);
 
                     setImageAndTextAppBar(position);
                 }

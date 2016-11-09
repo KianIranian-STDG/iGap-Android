@@ -33,7 +33,7 @@
 
                 <com.iGap.module.MaterialDesignTextView
                     fontPath="fonts/Flaticon.ttf"
-                    android:layout_width="@dimen/dp60"
+                    android:layout_width="@dimen/dp40"
                     android:layout_height="match_parent"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
@@ -44,6 +44,20 @@
                     android:textSize="@dimen/sp18" />
 
             </com.iGap.libs.rippleeffect.RippleView>
+
+
+            <Button
+                android:id="@+id/apn_btn_message_counter"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:gravity="center|left"
+                android:singleLine="true"
+                android:minWidth="@dimen/dp60"
+                android:maxWidth="@dimen/dp120"
+                android:text="1/1"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp16"/>
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -86,23 +100,7 @@
                 android:id="@+id/apn_imv_user_picture"
                 android:layout_width="@dimen/dp60"
                 android:layout_height="match_parent"
-                android:paddingBottom="@dimen/dp4"
-                android:paddingEnd="0dp"
-                android:paddingLeft="@dimen/dp4"
-                android:paddingRight="0dp"
-                android:paddingTop="@dimen/dp4" />
-
-
-            <Button
-                android:id="@+id/apn_btn_message_counter"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="@null"
-                android:gravity="center"
-                android:minWidth="@dimen/dp60"
-                android:text="1/1"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/sp16" />
+                android:padding="@dimen/dp6"/>
 
 
         </LinearLayout>

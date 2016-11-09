@@ -52,6 +52,7 @@ public class SearchFragment extends Fragment {
     private FastAdapter fastAdapter;
     private EditText edtSearch;
     MaterialDesignTextView btnClose;
+    RippleView rippleDown;
     private ArrayList<StructSearch> list = new ArrayList<>();
     private RecyclerView recyclerView;
     private ItemAdapter itemAdapter;
@@ -96,8 +97,11 @@ public class SearchFragment extends Fragment {
 
                 if (charSequence.length() > 0) {
                     btnClose.setTextColor(Color.WHITE);
+                    ((View) rippleDown).setEnabled(true);
+
                 } else {
-                    btnClose.setTextColor(getResources().getColor(R.color.gray));
+                    btnClose.setTextColor(getResources().getColor(R.color.colorChatMessageSelectableItemBg));
+                    ((View) rippleDown).setEnabled(false);
                 }
             }
 
@@ -147,7 +151,8 @@ public class SearchFragment extends Fragment {
         });
 
         btnClose = (MaterialDesignTextView) view.findViewById(R.id.sfl_btn_close);
-        RippleView rippleDown = (RippleView) view.findViewById(R.id.sfl_ripple_done);
+        rippleDown = (RippleView) view.findViewById(R.id.sfl_ripple_done);
+        ((View) rippleDown).setEnabled(false);
         rippleDown.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {

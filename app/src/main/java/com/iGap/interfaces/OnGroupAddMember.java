@@ -7,7 +7,7 @@ package com.iGap.interfaces;
 
 public interface OnGroupAddMember {
 
-    void onGroupAddMember();
+    void onGroupAddMember(Long Roomid, Long UserId);
 
     void onError(int majorCode, int minorCode);
 }
