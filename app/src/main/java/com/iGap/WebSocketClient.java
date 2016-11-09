@@ -38,43 +38,41 @@ public class WebSocketClient {
             websocketFactory.addListener(new WebSocketAdapter() {
 
                 @Override
-                public void onConnected(WebSocket websocket, Map<String, List<String>> headers)
-                        throws Exception {
+                public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
                     Log.i("SOC_WebSocket", "onConnected");
-                    G.socketConnection = true;
-                    HelperConnectionState.connectionState(Config.ConnectionState.CONNECTING);
-                    checkFirstResponse();
+                    if (G.isSecure) {
+                        webSocketClient.disconnect();
+                    } else {
+                        G.socketConnection = true;
+                        HelperConnectionState.connectionState(Config.ConnectionState.CONNECTING);
+                        checkFirstResponse();
+                    }
                     super.onConnected(websocket, headers);
                 }
 
                 @Override
-                public void onBinaryMessage(WebSocket websocket, final byte[] binary)
-                        throws Exception {
+                public void onBinaryMessage(WebSocket websocket, final byte[] binary) throws Exception {
                     Log.i("SOC_WebSocket", "WebSocketClient binary : " + binary);
                     new HandleResponse(binary).run();
                     super.onBinaryMessage(websocket, binary);
                 }
 
                 @Override
-                public void onError(WebSocket websocket, WebSocketException cause)
-                        throws Exception {
+                public void onError(WebSocket websocket, WebSocketException cause) throws Exception {
                     Log.i("SOC_WebSocket", "onError");
                     reconnect();
                     super.onError(websocket, cause);
                 }
 
                 @Override
-                public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame,
-                                           WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
+                public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
                     Log.i("SOC_WebSocketD", "onDisconnected");
                     reconnect();
-                    super.onDisconnected(websocket, serverCloseFrame, clientCloseFrame,
-                            closedByServer);
+                    super.onDisconnected(websocket, serverCloseFrame, clientCloseFrame, closedByServer);
                 }
 
                 @Override
-                public void onConnectError(WebSocket websocket, WebSocketException exception)
-                        throws Exception {
+                public void onConnectError(WebSocket websocket, WebSocketException exception) throws Exception {
                     Log.i("SOC_WebSocket", "onConnectError");
                     reconnect();
                     super.onConnectError(websocket, exception);

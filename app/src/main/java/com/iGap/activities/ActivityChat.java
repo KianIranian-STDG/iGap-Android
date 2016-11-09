@@ -199,6 +199,7 @@ import io.realm.RealmResults;
 import io.realm.Sort;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+import static com.iGap.module.AttachFile.getFilePathFromUri;
 import static com.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 import static com.iGap.proto.ProtoGlobal.Room.Type.CHAT;
 import static com.iGap.proto.ProtoGlobal.Room.Type.GROUP;
@@ -214,7 +215,6 @@ public class ActivityChat extends ActivityEnhanced
     BoomMenuButton boomMenuButton;
     LinearLayout mediaLayout;
     MusicPlayer musicPlayer;
-    RippleView rippleClose;
     LinearLayout ll_Search;
     Button btnCloseLayoutSearch;
     EditText edtSearchMessage;
@@ -1037,6 +1037,7 @@ public class ActivityChat extends ActivityEnhanced
         ll_attach_text = (LinearLayout) findViewById(R.id.ac_ll_attach_text);
         txtFileNameForSend = (TextView) findViewById(R.id.ac_txt_file_neme_for_sending);
         btnCancelSeningFile = (MaterialDesignTextView) findViewById(R.id.ac_btn_cancel_sending_file);
+        btnCancelSeningFile.setTypeface(G.flaticon);
         btnCancelSeningFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1363,7 +1364,8 @@ public class ActivityChat extends ActivityEnhanced
                 clearDraftRequest();
 
                 if (ll_attach_text.getVisibility() == View.VISIBLE) {
-                    sendMessage(latestRequestCode, latestUri);
+                    sendMessage(latestRequestCode, listPathString.get(0));
+                    listPathString.clear();
                     ll_attach_text.setVisibility(View.GONE);
                     edtChat.setText("");
                     return;
@@ -1718,8 +1720,7 @@ public class ActivityChat extends ActivityEnhanced
                 }
             }
         });
-        rippleClose = (RippleView) findViewById(R.id.chl_btn_close_ripple_search_message);
-        ((View) rippleClose).setEnabled(false);
+        final RippleView rippleClose = (RippleView) findViewById(R.id.chl_btn_close_ripple_search_message);
         rippleClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -2081,56 +2082,63 @@ public class ActivityChat extends ActivityEnhanced
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == AttachFile.request_code_position && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            attachFile.requestGetPosition(complete);
-            return;
-        }
 
-        if (data == null) {
-            return;
-        }
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == AttachFile.request_code_position && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                attachFile.requestGetPosition(complete);
+                return;
+            }
+            if (requestCode == AttachFile.request_code_contact_phone) {
+                latestUri = data.getData();
+                // contacts user uri so filePath is empty for contact
+                sendMessage(requestCode, "");
+                return;
+            }
 
-        listPathString = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            if (data.getClipData() != null)
-                listPathString = attachFile.getClipData(data.getClipData());
-        }
+            listPathString = null;
+            if (AttachFile.request_code_TAKE_PICTURE == requestCode) {
+                listPathString = new ArrayList<>();
+                listPathString.add(AttachFile.imagePath);
+                // latestFilePath = AttachFile.imagePath;
+                latestUri = null; // check
+            } else {
 
-        if (AttachFile.request_code_TAKE_PICTURE == requestCode) {
-            latestFilePath = AttachFile.imagePath;
-            latestUri = null;
-        } else {
-            latestUri = data.getData();
-            latestFilePath = "";
-        }
-        latestRequestCode = requestCode;
-
-        if (resultCode == Activity.RESULT_OK && sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 0) == 1 &&
-                requestCode == AttachFile.requestOpenGalleryForImageMultipleSelect) {
-
-            Intent intent = new Intent(ActivityChat.this, ActivityCrop.class);
-            intent.putExtra("IMAGE_CAMERA", data.getData().toString());
-            intent.putExtra("TYPE", "gallery");
-            intent.putExtra("PAGE", "chat");
-            startActivityForResult(intent, IntentRequests.REQ_CROP);
-
-            return;
-        } else if (resultCode == Activity.RESULT_OK && sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 0) == 1 && requestCode == AttachFile.request_code_TAKE_PICTURE) {
-
-            Intent intent = new Intent(ActivityChat.this, ActivityCrop.class);
-            intent.putExtra("IMAGE_CAMERA", AttachFile.imagePath);
-            intent.putExtra("TYPE", "camera");
-            intent.putExtra("PAGE", "chat");
-            startActivityForResult(intent, IntentRequests.REQ_CROP);
-            return;
-        } else if (resultCode == Activity.RESULT_OK && ll_attach_text.getVisibility() == View.GONE) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    if (data.getClipData() != null) { // multi select file
+                        listPathString = attachFile.getClipData(data.getClipData());
+                    } else { // single file selected
+                        listPathString = new ArrayList<>();
+                        listPathString.add(getFilePathFromUri(data.getData()));
+                    }
+                }
+            }
             latestRequestCode = requestCode;
 
-            showDraftLayout();
+            if (listPathString.size() == 1) {
+                showDraftLayout();
+                setDraftMessage(requestCode);
+            } else {
+                for (String path : listPathString) {
+                    sendMessage(requestCode, path);
+                }
+            }
 
-            setDraftMessage(requestCode);
+            if (sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 0) == 1 && requestCode == AttachFile.requestOpenGalleryForImageMultipleSelect && (listPathString.size() == 1)) {
 
-            return;
+                Intent intent = new Intent(ActivityChat.this, ActivityCrop.class);
+                intent.putExtra("IMAGE_CAMERA", listPathString.get(0));
+                intent.putExtra("TYPE", "gallery");
+                intent.putExtra("PAGE", "chat");
+                startActivityForResult(intent, IntentRequests.REQ_CROP);
+
+            } else if (sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 0) == 1 && requestCode == AttachFile.request_code_TAKE_PICTURE) {
+
+                Intent intent = new Intent(ActivityChat.this, ActivityCrop.class);
+                intent.putExtra("IMAGE_CAMERA", AttachFile.imagePath);
+                intent.putExtra("TYPE", "camera");
+                intent.putExtra("PAGE", "chat");
+                startActivityForResult(intent, IntentRequests.REQ_CROP);
+            }
         }
     }
 
@@ -2142,7 +2150,7 @@ public class ActivityChat extends ActivityEnhanced
                 break;
             case AttachFile.requestOpenGalleryForImageMultipleSelect:
                 if (latestUri != null) {
-                    txtFileNameForSend.setText(attachFile.getFileName(AttachFile.getFilePathFromUri(latestUri)));
+                    txtFileNameForSend.setText(attachFile.getFileName(getFilePathFromUri(latestUri)));
                 } else if (listPathString != null) {
                     if (listPathString.size() > 0) {
                         txtFileNameForSend.setText(attachFile.getFileName(listPathString.size() + getString(R.string.image_selected_for_send)));
@@ -2154,7 +2162,7 @@ public class ActivityChat extends ActivityEnhanced
             case AttachFile.requestOpenGalleryForVideoMultipleSelect:
 
                 if (latestUri != null) {
-                    txtFileNameForSend.setText(attachFile.getFileName(AttachFile.getFilePathFromUri(latestUri)));
+                    txtFileNameForSend.setText(attachFile.getFileName(getFilePathFromUri(latestUri)));
                 } else if (listPathString != null) {
                     if (listPathString.size() > 0) {
                         txtFileNameForSend.setText(attachFile.getFileName(listPathString.size() + getString(R.string.video_selected_for_send)));
@@ -2166,7 +2174,7 @@ public class ActivityChat extends ActivityEnhanced
 
             case AttachFile.request_code_pic_audi:
                 if (latestUri != null) {
-                    txtFileNameForSend.setText(attachFile.getFileName(AttachFile.getFilePathFromUri(latestUri)));
+                    txtFileNameForSend.setText(attachFile.getFileName(getFilePathFromUri(latestUri)));
                 } else if (listPathString != null) {
                     if (listPathString.size() > 0) {
                         txtFileNameForSend.setText(attachFile.getFileName(listPathString.size() + getString(R.string.audio_selected_for_send)));
@@ -2175,12 +2183,12 @@ public class ActivityChat extends ActivityEnhanced
                 break;
             case AttachFile.request_code_pic_file:
                 if (latestUri != null) {
-                    txtFileNameForSend.setText(attachFile.getFileName(AttachFile.getFilePathFromUri(latestUri)));
+                    txtFileNameForSend.setText(attachFile.getFileName(getFilePathFromUri(latestUri)));
                 }
                 break;
             case AttachFile.request_code_paint:
                 if (latestUri != null) {
-                    txtFileNameForSend.setText(attachFile.getFileName(AttachFile.getFilePathFromUri(latestUri)));
+                    txtFileNameForSend.setText(attachFile.getFileName(getFilePathFromUri(latestUri)));
                 }
                 break;
             case AttachFile.request_code_contact_phone:
@@ -2192,23 +2200,31 @@ public class ActivityChat extends ActivityEnhanced
         }
     }
 
+    long latestMessageId = 0;
+
+    private long getCorrectMessageId() {
+        if (latestMessageId == 0) {
+            latestMessageId = System.nanoTime();
+        } else {
+            latestMessageId++;
+        }
+        return latestMessageId;
+    }
+
     //TODO [Saeed Mozaffari] [2016-10-29 10:45 AM] - work on gps
-    private void sendMessage(int requestCode, Uri uri) {
+    private void sendMessage(int requestCode, String filePath) {
         // TODO: 10/30/2016 [Alireza]  test
         Realm realm = Realm.getDefaultInstance();
-        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-        long messageId = System.nanoTime();
-        if (room.getLastMessageId() != 0) {
-            messageId = room.getLastMessageId() + 1L;
-        }
-        String filePath;
-        if (AttachFile.request_code_TAKE_PICTURE == requestCode) {
-            filePath = AttachFile.imagePath;
-        } else {
-            Log.i("YYY", "uri : " + uri);
-            filePath = uri.toString();
-            Log.i("YYY", "filePath uri: " + filePath);
-        }
+        //RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+
+        long messageId = getCorrectMessageId();
+//        String filePath;
+//        if (AttachFile.request_code_TAKE_PICTURE == requestCode) {
+//            filePath = AttachFile.imagePath;
+//        } else {
+//            filePath = uri.toString();
+//            Log.i("YYY", "filePath uri: " + filePath);
+//        }
         final long updateTime = System.currentTimeMillis();
         ProtoGlobal.RoomMessageType messageType = null;
         String fileName = null;
@@ -2262,7 +2278,7 @@ public class ActivityChat extends ActivityEnhanced
                 break;
 
             case AttachFile.requestOpenGalleryForImageMultipleSelect:
-                filePath = AttachFile.getFilePathFromUri(uri);
+                //filePath = getFilePathFromUri(uri);
                 resizeImage(filePath);
 
                 fileName = new File(filePath).getName();
@@ -2284,7 +2300,7 @@ public class ActivityChat extends ActivityEnhanced
                 break;
 
             case AttachFile.request_code_VIDEO_CAPTURED:
-                filePath = AttachFile.getFilePathFromUri(uri);
+                //filePath = getFilePathFromUri(uri);
                 fileName = new File(filePath).getName();
                 fileSize = new File(filePath).length();
                 duration = AndroidUtils.getAudioDuration(getApplicationContext(), filePath);
@@ -2305,7 +2321,7 @@ public class ActivityChat extends ActivityEnhanced
                 }
                 break;
             case AttachFile.request_code_pic_audi:
-                filePath = AttachFile.getFilePathFromUri(uri);
+                //filePath = getFilePathFromUri(uri);
                 fileName = new File(filePath).getName();
                 fileSize = new File(filePath).length();
                 duration = AndroidUtils.getAudioDuration(getApplicationContext(), filePath);
@@ -2341,7 +2357,7 @@ public class ActivityChat extends ActivityEnhanced
                 }
                 break;
             case AttachFile.request_code_contact_phone:
-                ContactUtils contactUtils = new ContactUtils(getApplicationContext(), uri);
+                ContactUtils contactUtils = new ContactUtils(getApplicationContext(), latestUri);
                 String name = contactUtils.retrieveName();
                 String number = contactUtils.retrieveNumber();
                 // FIXME: 10/5/2016 [Alireza] get username
@@ -3643,7 +3659,7 @@ public class ActivityChat extends ActivityEnhanced
                     latestUri = null;
                 } else {
                     latestUri = Uri.parse(realmDraftFile.getUri());
-                    filePath = AttachFile.getFilePathFromUri(latestUri);
+                    filePath = getFilePathFromUri(latestUri);
                     latestFilePath = "";
                 }
 
