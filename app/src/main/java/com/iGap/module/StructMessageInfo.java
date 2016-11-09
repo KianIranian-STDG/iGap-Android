@@ -11,7 +11,6 @@ import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.RealmUserInfo;
-import com.iGap.realm.RealmUserInfoFields;
 
 import org.parceler.Parcels;
 
@@ -326,10 +325,10 @@ public class StructMessageInfo implements Parcelable {
             messageInfo.sendType = MyType.SendType.recvive;
         }
         if (message.getForwardFrom() != null) {
-            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).equalTo(RealmUserInfoFields.USER_INFO.ID, message.getForwardFrom().getUserId())
+            RealmRegisteredInfo userInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, message.getForwardFrom().getUserId())
                     .findFirst();
             if (userInfo != null) {
-                messageInfo.forwardMessageFrom = userInfo.getUserInfo().getDisplayName();
+                messageInfo.forwardMessageFrom = userInfo.getDisplayName();
             }
         }
         return messageInfo;
@@ -373,10 +372,10 @@ public class StructMessageInfo implements Parcelable {
             messageInfo.userInfo = StructRegisteredInfo.build(roomMessage.getRoomMessageContact());
         }
         if (roomMessage.getForwardMessage() != null) {
-            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).equalTo(RealmUserInfoFields.USER_INFO.ID, roomMessage.getForwardMessage().getUserId())
+            RealmRegisteredInfo userInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, roomMessage.getForwardMessage().getUserId())
                     .findFirst();
             if (userInfo != null) {
-                messageInfo.forwardMessageFrom = userInfo.getUserInfo().getDisplayName();
+                messageInfo.forwardMessageFrom = userInfo.getDisplayName();
             }
         }
 

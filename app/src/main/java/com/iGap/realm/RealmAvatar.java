@@ -5,7 +5,6 @@ import com.iGap.proto.ProtoGlobal;
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
-import io.realm.Sort;
 import io.realm.annotations.PrimaryKey;
 
 public class RealmAvatar extends RealmObject {
@@ -22,9 +21,9 @@ public class RealmAvatar extends RealmObject {
         this.id = id;
     }
 
-    public static void put(long ownerId, ProtoGlobal.Avatar input) {
+    public static RealmAvatar put(long ownerId, ProtoGlobal.Avatar input) {
         if (!input.hasFile()) {
-            return;
+            return null;
         }
 
         Realm realm = Realm.getDefaultInstance();
@@ -38,25 +37,15 @@ public class RealmAvatar extends RealmObject {
             }
         }
 
+        RealmAvatar avatar = null;
         if (!exists) {
-            RealmAvatar avatar = realm.createObject(RealmAvatar.class);
+            avatar = realm.createObject(RealmAvatar.class);
             avatar.setId(input.getId());
             avatar.setOwnerId(ownerId);
             avatar.setFile(RealmAttachment.build(input.getFile()));
         }
         realm.close();
-    }
-
-    private static long getCorrectId(Realm realm) {
-        RealmResults results = realm.where(RealmThumbnail.class).findAllSorted("id", Sort.DESCENDING);
-
-        long id = 1;
-        if (results.size() > 0) {
-            id = realm.where(RealmThumbnail.class).findAllSorted("id", Sort.DESCENDING).first().getId();
-            id++;
-        }
-
-        return id;
+        return avatar;
     }
 
     /**
@@ -65,49 +54,19 @@ public class RealmAvatar extends RealmObject {
      */
 
     public static RealmAvatar convert(final ProtoGlobal.Room room) {
-        Realm realm = Realm.getDefaultInstance();
-        ProtoGlobal.File file = null;
+        ProtoGlobal.Avatar avatar = null;
         switch (room.getType()) {
             case GROUP:
                 ProtoGlobal.GroupRoom groupRoom = room.getGroupRoom();
-                file = groupRoom.getAvatar().getFile();
+                avatar = groupRoom.getAvatar();
                 break;
             case CHANNEL:
                 ProtoGlobal.ChannelRoom channelRoom = room.getChannelRoom();
-                file = channelRoom.getAvatar().getFile();
+                avatar = channelRoom.getAvatar();
                 break;
         }
 
-        //small thumbnail
-        ProtoGlobal.Thumbnail smallThumbnail = file.getSmallThumbnail();
-        RealmThumbnail realmThumbnailSmall = realm.createObject(RealmThumbnail.class);
-        realmThumbnailSmall.setId(getCorrectId(realm));
-        realmThumbnailSmall.setSize(smallThumbnail.getSize());
-        realmThumbnailSmall.setWidth(smallThumbnail.getWidth());
-        realmThumbnailSmall.setHeight(smallThumbnail.getHeight());
-        realmThumbnailSmall.setCacheId(smallThumbnail.getCacheId());
-
-        //large thumbnail
-        ProtoGlobal.Thumbnail largeThumbnail = file.getLargeThumbnail();
-        RealmThumbnail realmThumbnailLarge = realm.createObject(RealmThumbnail.class);
-        realmThumbnailLarge.setId(getCorrectId(realm));
-        realmThumbnailLarge.setSize(largeThumbnail.getSize());
-        realmThumbnailLarge.setWidth(largeThumbnail.getWidth());
-        realmThumbnailLarge.setHeight(largeThumbnail.getHeight());
-        realmThumbnailLarge.setCacheId(largeThumbnail.getCacheId());
-
-        //File info for avatar
-        RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, room.getId()).findFirst();
-        if (realmAvatar == null) {
-            realmAvatar = realm.createObject(RealmAvatar.class);
-            realmAvatar.setOwnerId(room.getId());
-            realmAvatar.setId(System.nanoTime());
-        }
-        realmAvatar.setFile(RealmAttachment.build(file));
-
-        realm.close();
-
-        return realmAvatar;
+        return RealmAvatar.put(room.getId(), avatar);
     }
 
     public static RealmAvatar convert(long userId, final RealmAttachment attachment) {
