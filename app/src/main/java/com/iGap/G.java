@@ -143,6 +143,7 @@ public class G extends Application {
     public static final String DIR_TEMP = DIR_APP + "/.temp";
     public static final String CHAT_MESSAGE_TIME = "H:mm";
     public static final String ROOM_LAST_MESSAGE_TIME = "h:mm a";
+    public static final long IGAP_MESSENGER_CHAT_ID = 137;
     public static Typeface neuroplp;
     public static Typeface robotoBold;
     // list of actionId that can be doing without login

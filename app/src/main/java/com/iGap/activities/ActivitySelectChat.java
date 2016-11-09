@@ -4,16 +4,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v7.widget.DefaultItemAnimator;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.items.RoomItem;
 import com.iGap.module.MaterialDesignTextView;
+import com.iGap.module.ShouldScrolledBehavior;
 import com.iGap.module.StructChatInfo;
 import com.iGap.module.StructMessageAttachment;
 import com.iGap.realm.RealmRegisteredInfo;
@@ -79,18 +81,26 @@ public class ActivitySelectChat extends ActivityEnhanced {
             @Override
             public boolean onClick(View v, IAdapter<RoomItem> adapter, RoomItem item,
                                    int position) {
-                Intent intent = new Intent(ActivitySelectChat.this, ActivityChat.class);
-                intent.putExtra("RoomId", item.mInfo.chatId);
-                intent.putParcelableArrayListExtra(ARG_FORWARD_MESSAGE, mForwardMessages);
-                startActivity(intent);
-                finish();
+                if (!item.mInfo.readOnly) {
+                    Intent intent = new Intent(ActivitySelectChat.this, ActivityChat.class);
+                    intent.putExtra("RoomId", item.mInfo.chatId);
+                    intent.putParcelableArrayListExtra(ARG_FORWARD_MESSAGE, mForwardMessages);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    new MaterialDialog.Builder(ActivitySelectChat.this).title(R.string.dialog_readonly_chat).positiveText("OK").show();
+                }
                 return false;
             }
         });
-        RecyclerView.LayoutManager mLayoutManager =
+        LinearLayoutManager mLayoutManager =
                 new LinearLayoutManager(ActivitySelectChat.this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setItemAnimator(null);
+        // set behavior to RecyclerView
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) mRecyclerView.getLayoutParams();
+        params.setBehavior(new ShouldScrolledBehavior(mLayoutManager, mAdapter));
+        mRecyclerView.setLayoutParams(params);
         mRecyclerView.setAdapter(mAdapter);
 
         loadLocalChatList();
