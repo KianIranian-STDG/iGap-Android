@@ -1,5 +1,6 @@
 package com.iGap.activities;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
@@ -9,6 +10,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -85,6 +87,7 @@ import com.iGap.helper.Emojione;
 import com.iGap.helper.HelperGetDataFromOtherApp;
 import com.iGap.helper.HelperMimeType;
 import com.iGap.helper.HelperNotificationAndBadge;
+import com.iGap.helper.HelperPermision;
 import com.iGap.interfaces.IEmojiBackspaceClick;
 import com.iGap.interfaces.IEmojiClickListener;
 import com.iGap.interfaces.IEmojiLongClickListener;
@@ -1512,10 +1515,20 @@ public class ActivityChat extends ActivityEnhanced
             @Override
             public boolean onLongClick(View view) {
 
-                voiceRecord.setItemTag("ivVoice");
-                viewAttachFile.setVisibility(View.GONE);
-                viewMicRecorder.setVisibility(View.VISIBLE);
-                voiceRecord.startVoiceRecord();
+                if (ContextCompat.checkSelfPermission(ActivityChat.this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                    HelperPermision.getMicroPhonePermision(ActivityChat.this, null);
+                } else {
+                    if (ContextCompat.checkSelfPermission(ActivityChat.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        HelperPermision.getStoragePermision(ActivityChat.this, null);
+                    } else {
+                        voiceRecord.setItemTag("ivVoice");
+                        viewAttachFile.setVisibility(View.GONE);
+                        viewMicRecorder.setVisibility(View.VISIBLE);
+                        voiceRecord.startVoiceRecord();
+                    }
+                }
+
+
 
                 return true;
             }

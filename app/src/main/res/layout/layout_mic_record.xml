@@ -79,7 +79,6 @@
 
                 <com.iGap.module.MaterialDesignTextView
                     style="@style/ChatMessages.MaterialDesignTextView.BottomIcon"
-                    fontPath="fonts/fontawesome.ttf"
                     android:layout_width="@dimen/dp68"
                     android:layout_height="@dimen/dp68"
                     android:background="@drawable/circle_mic"
