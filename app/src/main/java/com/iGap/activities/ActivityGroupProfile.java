@@ -37,7 +37,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AdapterShearedMedia;
-import com.iGap.adapter.GroupMembersAdapter;
 import com.iGap.adapter.items.ContactItemGroupProfile;
 import com.iGap.fragments.FragmentNotification;
 import com.iGap.fragments.ShowCustomList;
@@ -51,6 +50,7 @@ import com.iGap.interfaces.OnGroupKickAdmin;
 import com.iGap.interfaces.OnGroupKickMember;
 import com.iGap.interfaces.OnGroupKickModerator;
 import com.iGap.interfaces.OnGroupLeft;
+import com.iGap.interfaces.OnMenuClick;
 import com.iGap.interfaces.OnSelectedList;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.AndroidUtils;
@@ -134,7 +134,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
     private FloatingActionButton fab;
     private String tmp = "";
     private int numberUploadItem = 5;
-    private GroupMembersAdapter<ContactItemGroupProfile> fastAdapter;
+    private FastAdapter fastAdapter;
     private long roomId;
     private String title;
     private String description;
@@ -143,7 +143,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
     private GroupChatRole role;
     private String participantsCountLabel;
     private RealmList<RealmMember> members;
-
+    public static OnMenuClick onMenuClick;
 
     private long startMessageId = 0;
 
@@ -569,8 +569,17 @@ public class ActivityGroupProfile extends ActivityEnhanced
 
     private void initRecycleView() {
 
+
+        onMenuClick = new OnMenuClick() {
+            @Override
+            public void clicked(View view, int position) {
+                new CreatePopUpMessage().show(view, position);
+            }
+        };
+
+
         //create our FastAdapter
-        fastAdapter = new GroupMembersAdapter<>();
+        fastAdapter = new FastAdapter<>();
         fastAdapter.withSelectable(true);
 
         //create our adapters
@@ -586,43 +595,11 @@ public class ActivityGroupProfile extends ActivityEnhanced
         });
         fastAdapter.withOnClickListener(new FastAdapter.OnClickListener<ContactItemGroupProfile>() {
             @Override
-            public boolean onClick(View v, IAdapter adapter, ContactItemGroupProfile item,
-                                   final int position) {
+            public boolean onClick(View v, IAdapter adapter, ContactItemGroupProfile item, final int position) {
 
-                Log.e("dddd", " invite click  " + position);
+                Log.e("dddd", " invite click  " + position + "   " + v + "       " + adapter + "    " + item + "     " + v.getTag());
                 // TODO: 9/14/2016 nejati     go into clicked user page
 
-                MaterialDesignTextView moreButton =
-                        (MaterialDesignTextView) v.findViewById(R.id.cigp_moreButton);
-                moreButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        PopupMenu popup =
-                                new PopupMenu(ActivityGroupProfile.this, view, Gravity.TOP);
-                        // Inflate the menu from xml
-                        popup.getMenuInflater()
-                                .inflate(R.menu.menu_item_group_profile, popup.getMenu());
-                        // Setup menu item selection
-                        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                            public boolean onMenuItemClick(MenuItem item) {
-                                switch (item.getItemId()) {
-                                    case R.id.menu_setAdmin:
-                                        Toast.makeText(ActivityGroupProfile.this, "Keyword!",
-                                                Toast.LENGTH_SHORT).show();
-                                        return true;
-                                    case R.id.menu_kick:
-                                        kickMember(contacts.get(position).peerId);
-                                        return true;
-                                    default:
-                                        return false;
-                                }
-                            }
-                        });
-                        // Handle dismissal with: popup.setOnDismissListener(...);
-                        // Show the menu
-                        popup.show();
-                    }
-                });
 
                 return false;
             }
@@ -1029,6 +1006,286 @@ public class ActivityGroupProfile extends ActivityEnhanced
                 .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
                 .addToBackStack(null)
                 .replace(R.id.fragmentContainer_group_profile, fragment).commit();
+    }
+
+    private class CreatePopUpMessage {
+
+
+        private void show(View view, final int position) {
+            PopupMenu popup = new PopupMenu(ActivityGroupProfile.this, view, Gravity.TOP);
+            popup.getMenuInflater().inflate(R.menu.menu_item_group_profile, popup.getMenu());
+
+
+            if (role == GroupChatRole.OWNER) {
+
+                if (contacts.get(position).role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+                    popup.getMenu().getItem(2).setVisible(false);
+                    popup.getMenu().getItem(3).setVisible(false);
+                } else if (contacts.get(position).role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
+                    popup.getMenu().getItem(0).setVisible(false);
+                    popup.getMenu().getItem(1).setVisible(false);
+                    popup.getMenu().getItem(3).setVisible(false);
+                    popup.getMenu().getItem(4).setVisible(false);
+                } else if (contacts.get(position).role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
+                    popup.getMenu().getItem(1).setVisible(false);
+                    popup.getMenu().getItem(2).setVisible(false);
+                    popup.getMenu().getItem(4).setVisible(false);
+                }
+            } else if (role == GroupChatRole.ADMIN) {
+
+                if (contacts.get(position).role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+                    popup.getMenu().getItem(0).setVisible(false);
+                    popup.getMenu().getItem(2).setVisible(false);
+                    popup.getMenu().getItem(3).setVisible(false);
+                } else if (contacts.get(position).role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
+                    popup.getMenu().getItem(0).setVisible(false);
+                    popup.getMenu().getItem(1).setVisible(false);
+                    popup.getMenu().getItem(2).setVisible(false);
+                    popup.getMenu().getItem(4).setVisible(false);
+                }
+            } else if (role == GroupChatRole.MODERATOR) {
+
+                if (contacts.get(position).role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+                    popup.getMenu().getItem(0).setVisible(false);
+                    popup.getMenu().getItem(1).setVisible(false);
+                    popup.getMenu().getItem(2).setVisible(false);
+                    popup.getMenu().getItem(3).setVisible(false);
+                }
+            } else {
+
+                return;
+            }
+
+
+            // Setup menu item selection
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.menu_setAdmin:
+                            setToAdmin(contacts.get(position).peerId);
+                            return true;
+                        case R.id.menu_set_moderator:
+                            setToModerator(contacts.get(position).peerId);
+                            return true;
+                        case R.id.menu_remove_admin:
+                            kickAdmin(contacts.get(position).peerId);
+                            return true;
+                        case R.id.menu_remove_moderator:
+                            kickModerator(contacts.get(position).peerId);
+                            return true;
+                        case R.id.menu_kick:
+                            kickMember(contacts.get(position).peerId);
+                            return true;
+                        default:
+                            return false;
+                    }
+                }
+            });
+            // Handle dismissal with: popup.setOnDismissListener(...);
+            // Show the menu
+            popup.show();
+
+        }
+
+
+        private void setToAdmin(Long perid) {
+
+            G.onGroupAddAdmin = new OnGroupAddAdmin() {
+                @Override
+                public void onGroupAddAdmin(long roomId, final long memberId) {
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            for (int i = 0; i < contacts.size(); i++) {
+                                if (contacts.get(i).peerId == memberId) {
+                                    contacts.get(i).role = ProtoGlobal.GroupRoom.Role.ADMIN.toString();
+
+                                    if (i < itemAdapter.getAdapterItemCount()) {
+                                        IItem item = (new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(
+                                                100 + contacts.indexOf(contacts.get(i))));
+                                        itemAdapter.set(i, item);
+                                    }
+
+                                    break;
+                                }
+                            }
+                        }
+                    });
+                }
+
+                @Override
+                public void onError(int majorCode, int minorCode) {
+                    if (majorCode == 321) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                final Snackbar snack =
+                                        Snackbar.make(findViewById(android.R.id.content),
+                                                getResources().getString(R.string.E_321),
+                                                Snackbar.LENGTH_LONG);
+
+                                snack.setAction("CANCEL", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        snack.dismiss();
+                                    }
+                                });
+                                snack.show();
+                            }
+                        });
+                    } else if (majorCode == 322) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                final Snackbar snack =
+                                        Snackbar.make(findViewById(android.R.id.content),
+                                                getResources().getString(R.string.E_322),
+                                                Snackbar.LENGTH_LONG);
+
+                                snack.setAction("CANCEL", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        snack.dismiss();
+                                    }
+                                });
+                                snack.show();
+                            }
+                        });
+                    } else if (majorCode == 323) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                final Snackbar snack =
+                                        Snackbar.make(findViewById(android.R.id.content),
+                                                getResources().getString(R.string.E_323),
+                                                Snackbar.LENGTH_LONG);
+
+                                snack.setAction("CANCEL", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        snack.dismiss();
+                                    }
+                                });
+                                snack.show();
+                            }
+                        });
+                    }
+                }
+            };
+
+
+            new RequestGroupAddAdmin().groupAddAdmin(roomId, perid);
+
+
+        }
+
+        private void setToModerator(Long perid) {
+
+            G.onGroupAddModerator = new OnGroupAddModerator() {
+                @Override
+                public void onGroupAddModerator(long roomId, final long memberId) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            for (int i = 0; i < contacts.size(); i++) {
+                                if (contacts.get(i).peerId == memberId) {
+                                    contacts.get(i).role = ProtoGlobal.GroupRoom.Role.MODERATOR.toString();
+
+                                    if (i < itemAdapter.getAdapterItemCount()) {
+                                        IItem item = (new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier
+                                                (100 + contacts.indexOf(contacts.get(i))));
+                                        itemAdapter.set(i, item);
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                    });
+                }
+
+                @Override
+                public void onError(int majorCode, final int minorCode) {
+                    if (majorCode == 318) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                if (minorCode == 1) {
+                                    final Snackbar snack =
+                                            Snackbar.make(findViewById(android.R.id.content),
+                                                    getResources().getString(R.string.E_318_1),
+                                                    Snackbar.LENGTH_LONG);
+
+                                    snack.setAction("CANCEL", new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            snack.dismiss();
+                                        }
+                                    });
+                                    snack.show();
+                                } else {
+                                    final Snackbar snack =
+                                            Snackbar.make(findViewById(android.R.id.content),
+                                                    getResources().getString(R.string.E_318_2),
+                                                    Snackbar.LENGTH_LONG);
+
+                                    snack.setAction("CANCEL", new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            snack.dismiss();
+                                        }
+                                    });
+                                    snack.show();
+                                }
+                            }
+                        });
+                    } else if (majorCode == 319) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                final Snackbar snack =
+                                        Snackbar.make(findViewById(android.R.id.content),
+                                                getResources().getString(R.string.E_319),
+                                                Snackbar.LENGTH_LONG);
+
+                                snack.setAction("CANCEL", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        snack.dismiss();
+                                    }
+                                });
+                                snack.show();
+                            }
+                        });
+                    } else if (majorCode == 320) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                final Snackbar snack =
+                                        Snackbar.make(findViewById(android.R.id.content),
+                                                getResources().getString(R.string.E_320),
+                                                Snackbar.LENGTH_LONG);
+
+                                snack.setAction("CANCEL", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        snack.dismiss();
+                                    }
+                                });
+                                snack.show();
+                            }
+                        });
+                    }
+                }
+            };
+
+
+            new RequestGroupAddModerator().groupAddModerator(roomId, perid);
+
+
+        }
+
     }
 
     //***********************************************************************************************************************
@@ -1650,6 +1907,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                     public void run() {
                                         for (int j = 0; j < contacts.size(); j++) {
                                             if (contacts.get(j).peerId == memberId) {
+                                                items.remove(j);
                                                 contacts.remove(j);
                                                 itemAdapter.remove(j);
 
@@ -2003,14 +2261,11 @@ public class ActivityGroupProfile extends ActivityEnhanced
                             public void run() {
                                 for (int i = 0; i < contacts.size(); i++) {
                                     if (contacts.get(i).peerId == memberId) {
-                                        contacts.get(i).role =
-                                                ProtoGlobal.GroupRoom.Role.ADMIN.toString();
+                                        contacts.get(i).role = ProtoGlobal.GroupRoom.Role.ADMIN.toString();
 
                                         if (i < itemAdapter.getAdapterItemCount()) {
-                                            IItem item = (new ContactItemGroupProfile().setContact(
-                                                    contacts.get(i))
-                                                    .withIdentifier(
-                                                            100 + contacts.indexOf(contacts.get(i))));
+                                            IItem item = (new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(
+                                                    100 + contacts.indexOf(contacts.get(i))));
                                             itemAdapter.set(i, item);
                                         }
 

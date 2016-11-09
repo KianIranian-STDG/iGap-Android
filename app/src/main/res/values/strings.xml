@@ -402,4 +402,7 @@
     <string name="video_selected_for_send">" video selected for send"</string>
     <string name="audio_selected_for_send">" audio selected for send"</string>
     <string name="dialog_readonly_chat">Sorry, you can\'t send messages to this chat.</string>
+    <string name="remove_admin">Remove Admin</string>
+    <string name="remove_moderator">Remove Moderator</string>
+    <string name="set_member">Set Member</string>
 </resources>

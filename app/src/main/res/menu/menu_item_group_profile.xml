@@ -7,9 +7,27 @@
         android:numericShortcut="1"
         android:title="@string/set_admin" />
     <item
+        android:id="@+id/menu_set_moderator"
+        android:icon="@mipmap/cross"
+        android:numericShortcut="2"
+        android:title="@string/set_modereator"/>
+    <item
+        android:id="@+id/menu_remove_admin"
+        android:icon="@mipmap/cross"
+        android:numericShortcut="3"
+        android:title="@string/remove_admin"/>
+
+    <item
+        android:id="@+id/menu_remove_moderator"
+        android:icon="@mipmap/cross"
+        android:numericShortcut="4"
+        android:title="@string/remove_moderator"/>
+
+
+    <item
         android:id="@+id/menu_kick"
         android:icon="@mipmap/cross"
-        android:numericShortcut="1"
+        android:numericShortcut="6"
         android:title="@string/set_kick" />
 
 

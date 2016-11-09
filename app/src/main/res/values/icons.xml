@@ -41,6 +41,8 @@
     <string name="md_expand_arrow">\uf176</string>
     <string name="md_downwards_arrow">\uf16a</string>
     <string name="md_check_box">\uf142</string>
+    <string name="md_rate_star">\uf20f</string>
+
 
     <string name="fa_bell_slash_o">&#xf1f7;</string>
     <string name="fa_bullhorn">&#xf0a1;</string>
