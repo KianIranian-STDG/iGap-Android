@@ -58,33 +58,53 @@ public class ImageWithTextItem
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mMessage.status.equalsIgnoreCase(
-                        ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
-                    return;
+                if (!isSelected()) {
+                    if (mMessage.status.equalsIgnoreCase(
+                            ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                        return;
+                    }
+                    if (mMessage.status.equalsIgnoreCase(
+                            ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                        messageClickListener.onFailedMessageClick(v, mMessage,
+                                holder.getAdapterPosition());
+                    } else {
+                        messageClickListener.onOpenClick(v, mMessage, holder.getAdapterPosition());
+                    }
                 }
-                if (mMessage.status.equalsIgnoreCase(
-                        ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
-                    messageClickListener.onFailedMessageClick(v, mMessage,
-                            holder.getAdapterPosition());
-                } else {
-                    messageClickListener.onOpenClick(v, mMessage, holder.getAdapterPosition());
-                }
+            }
+        });
+
+        holder.image.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                holder.itemView.performLongClick();
+                return false;
+            }
+        });
+
+        holder.messageText.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                holder.itemView.performLongClick();
+                return false;
             }
         });
 
         holder.messageText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mMessage.status.equalsIgnoreCase(
-                        ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
-                    return;
-                }
-                if (mMessage.status.equalsIgnoreCase(
-                        ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
-                    messageClickListener.onFailedMessageClick(v, mMessage,
-                            holder.getAdapterPosition());
-                } else {
-                    messageClickListener.onContainerClick(v, mMessage, holder.getAdapterPosition());
+                if (!isSelected()) {
+                    if (mMessage.status.equalsIgnoreCase(
+                            ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                        return;
+                    }
+                    if (mMessage.status.equalsIgnoreCase(
+                            ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                        messageClickListener.onFailedMessageClick(v, mMessage,
+                                holder.getAdapterPosition());
+                    } else {
+                        messageClickListener.onContainerClick(v, mMessage, holder.getAdapterPosition());
+                    }
                 }
             }
         });

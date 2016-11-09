@@ -55,26 +55,36 @@ public class ImageItem extends AbstractMessage<ImageItem, ImageItem.ViewHolder> 
 
         if (mMessage.attachment != null) {
             int[] dimens = AndroidUtils.scaleDimenWithSavedRatio(holder.itemView.getContext(),
-                mMessage.attachment.width, mMessage.attachment.height);
+                    mMessage.attachment.width, mMessage.attachment.height);
             ((ViewGroup) holder.image.getParent()).setLayoutParams(
-                new LinearLayout.LayoutParams(dimens[0], dimens[1]));
+                    new LinearLayout.LayoutParams(dimens[0], dimens[1]));
             holder.image.getParent().requestLayout();
         }
 
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mMessage.status.equalsIgnoreCase(
-                    ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
-                    return;
+                if (!isSelected()) {
+                    if (mMessage.status.equalsIgnoreCase(
+                            ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                        return;
+                    }
+                    if (mMessage.status.equalsIgnoreCase(
+                            ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                        messageClickListener.onFailedMessageClick(v, mMessage,
+                                holder.getAdapterPosition());
+                    } else {
+                        messageClickListener.onOpenClick(v, mMessage, holder.getAdapterPosition());
+                    }
                 }
-                if (mMessage.status.equalsIgnoreCase(
-                    ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
-                    messageClickListener.onFailedMessageClick(v, mMessage,
-                        holder.getAdapterPosition());
-                } else {
-                    messageClickListener.onOpenClick(v, mMessage, holder.getAdapterPosition());
-                }
+            }
+        });
+
+        holder.image.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                holder.itemView.performLongClick();
+                return false;
             }
         });
     }

@@ -40,7 +40,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
             if (onChatMessageSelectionChanged != null) {
                 onChatMessageSelectionChanged.onChatMessageSelectionChanged(getSelectedItems().size(), getSelectedItems());
             }
-            return true;
+            return false;
         }
     };
 
