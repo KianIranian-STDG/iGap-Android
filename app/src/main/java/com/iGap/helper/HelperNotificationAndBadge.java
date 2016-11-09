@@ -22,7 +22,6 @@ import com.iGap.R;
 import com.iGap.activities.ActivityChat;
 import com.iGap.activities.ActivityMain;
 import com.iGap.activities.ActivityPopUpNotification;
-import com.iGap.module.AttachFile;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoGlobal;
@@ -545,7 +544,7 @@ public class HelperNotificationAndBadge {
             if (updateNotification) {
                 setNotification();
 
-                if (!G.isAppInFg && !AttachFile.isInAttach) startActivityPopUpNotification();
+                //  if (!G.isAppInFg && !AttachFile.isInAttach) startActivityPopUpNotification();
             }
             try {
                 // ShortcutBadger.applyCount(context, unreadMessageCount);

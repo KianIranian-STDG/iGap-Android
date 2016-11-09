@@ -389,17 +389,23 @@ public class ActivityGroupProfile extends ActivityEnhanced
 
         fab = (FloatingActionButton) findViewById(R.id.agp_fab_setPic);
 
+        if (role == GroupChatRole.OWNER || role == GroupChatRole.ADMIN) {
+            fab.setVisibility(View.VISIBLE);
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!G.imageFile.exists()) {
-                    startDialogSelectPicture(R.array.profile);
-                } else {
-                    startDialogSelectPicture(R.array.profile_delete);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (!G.imageFile.exists()) {
+                        startDialogSelectPicture(R.array.profile);
+                    } else {
+                        startDialogSelectPicture(R.array.profile_delete);
+                    }
                 }
-            }
-        });
+            });
+
+        }
+
+
 
         txtMore = (TextView) findViewById(R.id.agp_txt_more);
         txtMore.setOnClickListener(new View.OnClickListener() {

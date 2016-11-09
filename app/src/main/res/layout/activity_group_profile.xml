@@ -563,6 +563,7 @@
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/agp_fab_setPic"
             android:layout_width="wrap_content"
+            android:visibility="gone"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp20"
             android:clickable="true"
