@@ -11,6 +11,25 @@ public class RequestUserContactImport {
 
     public void contactImport(ArrayList<StructListOfContact> itemContactList, boolean force) {
 
+        RequestWrapper requestWrapper = new RequestWrapper(106, contact(itemContactList, force));
+        try {
+            RequestQueue.sendRequest(requestWrapper);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void contactImportAndGetReponse(ArrayList<StructListOfContact> itemContactList, boolean force) {
+
+        RequestWrapper requestWrapper = new RequestWrapper(106, contact(itemContactList, force), "identity");
+        try {
+            RequestQueue.sendRequest(requestWrapper);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private ProtoUserContactsImport.UserContactsImport.Builder contact(ArrayList<StructListOfContact> itemContactList, boolean force) {
         ProtoUserContactsImport.UserContactsImport.Builder userContactsImport = ProtoUserContactsImport.UserContactsImport.newBuilder();
 
         for (int i = 0; i < itemContactList.size(); i++) {
@@ -30,11 +49,6 @@ public class RequestUserContactImport {
             userContactsImport.addContacts(i, contact);
         }
 
-        RequestWrapper requestWrapper = new RequestWrapper(106, userContactsImport);
-        try {
-            RequestQueue.sendRequest(requestWrapper);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
+        return userContactsImport;
     }
 }

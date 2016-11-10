@@ -7,6 +7,7 @@
     <string name="group">Group</string>
     <string name="channel">Channel</string>
     <string name="do_you_want_delete_this">"Do you want delete this "</string>
+    <string name="do_you_want_left_this">"Do you want left this "</string>
     <string name="igap">iGap</string>
     <string name="igapChanel">iGap / </string>
     <string name="clear_history">Clear History</string>
@@ -134,12 +135,12 @@
     <string name="st_Contact_joined_igap">Contact joined iGap</string>
     <string name="st_pinned_message">Pinned Message</string>
     <string name="st_title_other">Other</string>
-    <string name="st_text_keep_alive_service">Relaunch app when down by user or\n system. this will ensure app can\n show notifications</string>
+    <string name="st_text_keep_alive_service">Relaunch app when down by user or\nsystem. this will ensure app can\nshow notifications</string>
     <string name="st_keep_alive_service">Keep-Alive Service</string>
     <string name="st_background_connection">Background Connection</string>
-    <string name="st_text_background_connection">Keep a low impact background connection to iGap to receive notifications. Enable for reliable notifications  </string>
-    <string name="st_badge_counter">Pinned Message</string>
-    <string name="st_Repeat_Notifications">Pinned Message</string>
+    <string name="st_text_background_connection">Keep a low impact background\nconnection to iGap to receive\nnotifications. Enable for reliable\nnotifications  </string>
+    <string name="st_badge_counter">Badge Counter</string>
+    <string name="st_Repeat_Notifications">Repeat Notifications</string>
     <string name="st_title_reset">Reset</string>
     <string name="st_reset_all_notification">Reset all Notifications</string>
     <string name="st_text_reset_all_notification">Undo all custom notifications settings for all your contacts and groups</string>
@@ -224,11 +225,13 @@
     <string name="share_item_dialog">Share</string>
     <string name="forward_item_dialog">Forward</string>
     <string name="delete_item_dialog">Delete</string>
+    <string name="left">Left</string>
     <string name="saveToDownload_item_dialog">Save to Download</string>
     <string name="edit_item_dialog">Edit</string>
     <string name="Search">Search</string>
     <string name="Delete_and_leave_Group">Delete and Leave Group</string>
     <string name="New_Chanel">New Chanel</string>
+    <string name="Channel_name">New Chanel</string>
     <string name="New_Group">New Group</string>
     <string name="month_1">1 Month</string>
     <string name="month_3">3 Month</string>
@@ -316,6 +319,17 @@
     <string name="unknown">unknown</string>
     <string name="add_to_list_contact">Add to List Contact</string>
     <string name="text_add_to_list_contact">Do you want add this number to your contact?</string>
+    <string name="log_out">LogOut</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="delete_account_text">Are you sure delete your account?</string>
+    <string name="confirmation_code_text">Please enter the confirmation code sent to:</string>
+    <string name="receive_code_text">Don\'t receive a text message?</string>
+    <string name="please_wait">Please wait </string>
+    <string name="personality">personality</string>
+    <string name="personality2">personality</string>
+    <string name="personality3">personality</string>
+    <string name="personality4">personality</string>
+    <string name="personality5">personality</string>
 
     <string name="desc">Description</string>
 
@@ -405,4 +419,6 @@
     <string name="remove_admin">Remove Admin</string>
     <string name="remove_moderator">Remove Moderator</string>
     <string name="set_member">Set Member</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

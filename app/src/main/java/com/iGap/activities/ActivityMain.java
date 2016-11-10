@@ -44,6 +44,7 @@ import com.iGap.interfaces.OnDraftMessage;
 import com.iGap.interfaces.OnFileDownloadResponse;
 import com.iGap.interfaces.OnGetPermision;
 import com.iGap.interfaces.OnGroupDelete;
+import com.iGap.interfaces.OnGroupLeft;
 import com.iGap.interfaces.OnSetAction;
 import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.libs.floatingAddButton.ArcMenu;
@@ -76,6 +77,7 @@ import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestChatDelete;
 import com.iGap.request.RequestClientGetRoomList;
 import com.iGap.request.RequestGroupDelete;
+import com.iGap.request.RequestGroupLeft;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItemAdapter;
@@ -454,10 +456,12 @@ public class ActivityMain extends ActivityEnhanced
                 if (ActivityMain.isMenuButtonAddShown) {
                     item.mComplete.complete(true, "closeMenuButton", "");
                 } else {
-                    MyDialog.showDialogMenuItemRooms(ActivityMain.this, item.mInfo.chatType, item.mInfo.muteNotification, new OnComplete() {
+                    MyDialog.showDialogMenuItemRooms(ActivityMain.this, item.mInfo.chatType, item.mInfo.muteNotification, item.mInfo.role, new OnComplete() {
                         @Override
                         public void complete(boolean result, String messageOne, String MessageTow) {
                             onSelectRoomMenu(messageOne, position, item);
+
+
                         }
                     });
                 }
@@ -712,10 +716,33 @@ public class ActivityMain extends ActivityEnhanced
             @Override
             public void Error(int majorCode, int minorCode) {
 
+                Toast.makeText(ActivityMain.this, "Just owner can delete", Toast.LENGTH_SHORT).show();
             }
         };
 
         new RequestGroupDelete().groupDelete(item.getInfo().chatId);
+    }
+
+    private void lefGroup(final RoomItem item) {
+
+        G.onGroupLeft = new OnGroupLeft() {
+            @Override
+            public void onGroupLeft(long roomId, long memberId) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapter.remove(mAdapter.getPosition(item));
+                    }
+                });
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+
+            }
+        };
+
+        new RequestGroupLeft().groupLeft(item.getInfo().chatId);
     }
 
     /**
@@ -738,7 +765,13 @@ public class ActivityMain extends ActivityEnhanced
 
                     deleteChat(item);
                 } else if (item.mInfo.chatType == RoomType.GROUP) {
-                    deleteGroup(item);
+                    if (item.mInfo.role.equals("OWNER")) {
+
+                        deleteGroup(item);
+                    } else {
+
+                        lefGroup(item);
+                    }
                 } else if (item.mInfo.chatType == RoomType.CHANNEL) {
                     //delete channel
                 }
@@ -746,6 +779,7 @@ public class ActivityMain extends ActivityEnhanced
                 break;
         }
     }
+
 
     // FIXME: 9/6/2016 [Alireza Eskandarpour Shoferi] not to be on handler, but for fixing
     // securing for testing purposes
@@ -857,6 +891,7 @@ public class ActivityMain extends ActivityEnhanced
                     info.memberCount = realmRoom.getGroupRoom().getParticipantsCountLabel();
                     info.description = realmRoom.getGroupRoom().getDescription();
                     info.avatarCount = realmRoom.getGroupRoom().getAvatarCount();
+                    info.role = realmRoom.getGroupRoom().getRole().toString();
                     info.avatar = StructMessageAttachment.convert(realmRoom.getAvatar());
                     break;
             }
@@ -976,6 +1011,7 @@ public class ActivityMain extends ActivityEnhanced
                 chatInfo.description = room.getGroupRoom().getDescription();
                 chatInfo.avatarCount = room.getGroupRoom().getAvatarCount();
                 chatInfo.avatar = StructMessageAttachment.convert(room.getAvatar());
+                chatInfo.role = room.getGroupRoom().getRole().toString();
                 break;
             case CHANNEL:
                 chatInfo.memberCount = room.getChannelRoom().getParticipantsCountLabel();

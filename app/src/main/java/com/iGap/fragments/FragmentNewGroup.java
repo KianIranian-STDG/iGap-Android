@@ -196,9 +196,9 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
         });
 
         if (prefix.equals("NewChanel")) {
-            txtInputNewGroup.setHint(getResources().getString(R.string.New_Chanel));
+            txtInputNewGroup.setHint(getResources().getString(R.string.Channel_name));
         } else {
-            txtInputNewGroup.setHint(getResources().getString(R.string.New_Group));
+            txtInputNewGroup.setHint(getResources().getString(R.string.group_name));
         }
 
         //=======================description group

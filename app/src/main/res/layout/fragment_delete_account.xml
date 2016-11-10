@@ -1,0 +1,179 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:background="@color/white"
+              android:id="@+id/rootDeleteAccount"
+              android:orientation="vertical"
+              tools:context="com.iGap.fragments.FragmentDeleteAccount">
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp60"
+        android:background="@color/toolbar_background"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        app:layout_collapseMode="pin">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:text="@string/fac_Add_Contact"
+                android:textColor="@color/whit_background"
+                android:textSize="@dimen/sp22"
+                android:textStyle="bold"
+                android:visibility="visible"/>
+
+            <com.iGap.libs.rippleeffect.RippleView
+                android:id="@+id/stda_ripple_back"
+                rv_centered="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:rv_alpha="200"
+                app:rv_centered="true"
+                app:rv_rippleDuration="150"
+                app:rv_ripplePadding="5dp">
+
+                <com.iGap.module.MaterialDesignTextView
+                    android:id="@+id/stda_txt_back"
+                    fontPath="fonts/Flaticon.ttf"
+                    android:layout_width="@dimen/dp60"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:gravity="center"
+                    android:text="@string/md_back_arrow"
+                    android:textColor="@color/whit_background"
+                    android:textSize="@dimen/sp18"/>
+            </com.iGap.libs.rippleeffect.RippleView>
+
+            <com.iGap.libs.rippleeffect.RippleView
+                android:id="@+id/stda_ripple_set"
+                rv_centered="true"
+                android:layout_width="@dimen/dp60"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                app:rv_alpha="200"
+                app:rv_centered="true"
+                app:rv_rippleDuration="150"
+                app:rv_ripplePadding="5dp">
+
+                <com.iGap.module.MaterialDesignTextView
+                    android:id="@+id/stda_txt_set"
+                    fontPath="fonts/Flaticon.ttf"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/md_check_symbol"
+                    android:textColor="@color/whit_background"
+                    android:textSize="@dimen/sp18"/>
+            </com.iGap.libs.rippleeffect.RippleView>
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/confirmation_code_text"
+        android:textSize="@dimen/sp15"
+        android:textColor="@android:color/black"
+        android:layout_marginRight="@dimen/dp20"
+        android:layout_marginLeft="@dimen/dp20"
+        android:layout_marginTop="@dimen/dp20"
+        android:gravity="center"
+        />
+
+    <TextView
+        android:id="@+id/stda_txt_phoneNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="9121111111"
+        android:layout_gravity="center"
+        android:textSize="@dimen/sp16"
+        android:gravity="center"
+        android:textColor="@android:color/black"
+        android:layout_marginRight="@dimen/dp20"
+        android:layout_marginLeft="@dimen/dp20"
+        android:layout_marginTop="@dimen/dp8"
+        />
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp20"
+        >
+
+        <com.iGap.module.EditTextAdjustPan
+            android:id="@+id/stda_edt_dleteAccount"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/Enter_Code"
+            android:gravity="center"
+            android:inputType="number"
+            android:background="@android:color/transparent"
+            android:singleLine="true"
+            android:maxLength="10"
+            android:textColorHint="@color/colorAccent"
+            />
+
+        <View
+            android:id="@+id/stda_line_below_editText"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/pu_edt_nikeName"
+            android:background="@color/border_editText"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/receive_code_text"
+        android:textSize="@dimen/sp16"
+        android:gravity="center"
+        android:textColor="@android:color/black"
+        android:layout_marginRight="@dimen/dp20"
+        android:layout_marginLeft="@dimen/dp20"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/dp8"
+        android:layout_marginRight="@dimen/dp52"
+        android:layout_marginLeft="@dimen/dp52">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/please_wait"
+            android:textSize="@dimen/sp16"
+            android:gravity="center"
+            android:textColor="@android:color/black"
+            android:padding="@dimen/dp12"
+
+            />
+
+        <TextView
+            android:id="@+id/stda_txt_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="01:00"
+            android:textSize="@dimen/sp16"
+            android:gravity="center"
+            android:textColor="@color/toolbar_background"
+
+            />
+    </LinearLayout>
+
+
+</LinearLayout>

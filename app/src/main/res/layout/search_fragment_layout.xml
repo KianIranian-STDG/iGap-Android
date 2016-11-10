@@ -57,8 +57,10 @@
                     android:autoText="false"
                     android:background="@null"
                     android:hint="@string/search"
-                    android:layout_marginTop="@dimen/dp16"
-                    android:layout_marginBottom="@dimen/dp16"
+                    android:paddingStart="@dimen/dp8"
+                    android:paddingLeft="@dimen/dp8"
+                    android:paddingRight="@dimen/dp8"
+                    android:paddingEnd="@dimen/dp8"
                     android:textColor="@color/white"
                     android:textColorHint="#dededd"
                     android:textCursorDrawable="@drawable/white_cursor_color" />

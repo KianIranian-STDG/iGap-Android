@@ -31,6 +31,7 @@ public class StructChatInfo {
     public String lastMessageStatus = "";
     public String description = "";
     public int avatarCount;
+    public String role = "";
     public StructMessageAttachment avatar;
     public long ownerId;
     public boolean userInfoAlreadyRequested;

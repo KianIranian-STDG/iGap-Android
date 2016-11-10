@@ -94,8 +94,8 @@
             android:drawableLeft="@mipmap/flesh"
             android:paddingLeft="@dimen/dp12"
             android:paddingRight="@dimen/dp28"
-            android:paddingTop="@dimen/dp4"
-            android:paddingBottom="@dimen/dp4"
+            android:paddingTop="@dimen/dp8"
+            android:paddingBottom="@dimen/dp8"
             android:text="Iran" />
 
         <LinearLayout
@@ -135,7 +135,7 @@
                 android:background="@drawable/rg_background_agreement"
                 android:gravity="start"
                 android:inputType="phone"
-                android:padding="@dimen/dp8"
+                android:padding="@dimen/dp4"
                 android:textColor="@color/rg_black_register"
                 android:textSize="@dimen/sp14"
                 app:mask="###-###-####" />

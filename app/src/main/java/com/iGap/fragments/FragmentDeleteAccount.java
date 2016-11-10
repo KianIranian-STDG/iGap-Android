@@ -1,0 +1,252 @@
+package com.iGap.fragments;
+
+
+import android.content.Context;
+import android.content.IntentFilter;
+import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.iGap.G;
+import com.iGap.R;
+import com.iGap.helper.HelperLogout;
+import com.iGap.helper.HelperPermision;
+import com.iGap.helper.HelperString;
+import com.iGap.interfaces.OnGetPermision;
+import com.iGap.interfaces.OnSmsReceive;
+import com.iGap.interfaces.OnUserDelete;
+import com.iGap.interfaces.OnUserGetDeleteToken;
+import com.iGap.libs.rippleeffect.RippleView;
+import com.iGap.module.EditTextAdjustPan;
+import com.iGap.module.IncomingSms;
+import com.iGap.proto.ProtoUserDelete;
+import com.iGap.request.RequestUserDelete;
+import com.iGap.request.RequestUserGetDeleteToken;
+
+import static com.iGap.helper.HelperGetDataFromOtherApp.message;
+
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class FragmentDeleteAccount extends Fragment {
+
+    private String regex;
+    private IncomingSms smsReceiver;
+    private EditTextAdjustPan edtDeleteAccount;
+    private RippleView txtSet;
+    private CountDownTimer countDownTimer;
+    private String phone;
+
+    public FragmentDeleteAccount() {
+        // Required empty public constructor
+    }
+
+    @Override
+    public void onResume() {
+
+        final IntentFilter filter = new IntentFilter();
+        filter.addAction("android.provider.Telephony.SMS_RECEIVED");
+        smsReceiver = new IncomingSms(new OnSmsReceive() {
+
+            @Override
+            public void onSmsReceive(String message) {
+                try {
+                    if (message != null && !message.isEmpty() && !message.equals("null") && !message.equals("")) {
+                        getSms(message);
+                        Log.i("XXXAA", "onSmsReceive: " + message);
+                    }
+                } catch (Exception e1) {
+                    e1.getStackTrace();
+                }
+            }
+        });
+
+        HelperPermision.getSmsPermision(getActivity(), new OnGetPermision() {
+            @Override
+            public void Allow() {
+                getActivity().registerReceiver(smsReceiver, filter);
+            }
+        });
+        super.onResume();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_delete_account, container, false);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (getArguments().getString("PHONE") != null) {
+
+            phone = getArguments().getString("PHONE");
+        }
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        G.onUserGetDeleteToken = new OnUserGetDeleteToken() {
+            @Override
+            public void onUserGetDeleteToken(int resendDelay, String tokenRegex, String tokenLength) {
+                regex = tokenRegex;
+                Log.i("XXXAA", "onUserGetDeleteToken: " + regex);
+            }
+        };
+
+        new RequestUserGetDeleteToken().userGetDeleteToken();
+
+        ViewGroup rootDeleteAccount = (ViewGroup) view.findViewById(R.id.rootDeleteAccount);
+        rootDeleteAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        RippleView txtBack = (RippleView) view.findViewById(R.id.stda_ripple_back);
+        txtBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentDeleteAccount.this).commit();
+            }
+        });
+
+        TextView txtPhoneNumber = (TextView) view.findViewById(R.id.stda_txt_phoneNumber);
+        if (phone != null) txtPhoneNumber.setText("" + phone);
+
+        txtSet = (RippleView) view.findViewById(R.id.stda_ripple_set);
+        txtSet.setEnabled(false);
+        txtSet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new MaterialDialog.Builder(getActivity())
+                        .title(getResources().getString(R.string.delete_account))
+                        .titleColor(getResources().getColor(android.R.color.black))
+                        .items(R.array.language)
+                        .itemsCallbackSingleChoice(1, new MaterialDialog.ListCallbackSingleChoice() {
+                            @Override
+                            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+
+                                switch (which) {
+                                    case 0:
+                                        Toast.makeText(G.context, "1", Toast.LENGTH_SHORT).show();
+                                        break;
+                                    case 1:
+                                        Toast.makeText(G.context, "2", Toast.LENGTH_SHORT).show();
+                                        break;
+                                    case 2:
+                                        Toast.makeText(G.context, "3", Toast.LENGTH_SHORT).show();
+                                        break;
+                                    case 3:
+                                        Toast.makeText(G.context, "4", Toast.LENGTH_SHORT).show();
+                                        break;
+                                }
+
+                                return false;
+                            }
+                        })
+                        .positiveText(getResources().getString(R.string.B_ok))
+                        .negativeText(getResources().getString(R.string.B_cancel))
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                                String verificationCode = HelperString.regexExtractValue(message, regex);
+                                if (verificationCode != null && !verificationCode.isEmpty()) {
+
+                                    G.onUserDelete = new OnUserDelete() {
+                                        @Override
+                                        public void onUserDeleteResponse() {
+                                            Log.i("UUU", "onUserDeleteResponse");
+                                            HelperLogout.logout();
+                                        }
+                                    };
+
+                                    Log.i("UUU", "RequestUserDelete verificationCode : " + verificationCode);
+                                    new RequestUserDelete().userDelete(verificationCode, ProtoUserDelete.UserDelete.Reason.OTHER);
+                                }
+                            }
+                        })
+                        .show();
+            }
+        });
+
+        edtDeleteAccount = (EditTextAdjustPan) view.findViewById(R.id.stda_edt_dleteAccount);
+        edtDeleteAccount.setEnabled(false);
+
+        final View viewLineBottom = view.findViewById(R.id.stda_line_below_editText);
+        txtSet.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    viewLineBottom.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
+                } else {
+                    viewLineBottom.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+                }
+            }
+        });
+
+        final TextView txtTimerLand = (TextView) view.findViewById(R.id.stda_txt_time);
+
+
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                countDownTimer = new CountDownTimer(1000 * 61, 1000) {
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                        int seconds = (int) ((millisUntilFinished) / 1000);
+                        int minutes = seconds / 60;
+                        seconds = seconds % 60;
+                        txtTimerLand.setText("" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        edtDeleteAccount.setEnabled(true);
+                    }
+                };
+                countDownTimer.start();
+            }
+        });
+
+
+    }
+
+    private void getSms(String message) {
+
+        edtDeleteAccount.setText("" + message);
+        txtSet.setEnabled(true);
+        countDownTimer.onFinish();
+        Log.i("XXXAA", "getSms: " + message);
+//
+    }
+
+    @Override
+    public void onPause() {
+        try {
+            getActivity().unregisterReceiver(smsReceiver);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        super.onPause();
+    }
+}

@@ -2,7 +2,6 @@ package com.iGap.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -38,17 +37,16 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.IntentRequests;
 import com.iGap.R;
+import com.iGap.fragments.FragmentDeleteAccount;
 import com.iGap.fragments.FragmentPrivacyAndSecurity;
 import com.iGap.fragments.FragmentShowAvatars;
 import com.iGap.fragments.FragmentSticker;
 import com.iGap.helper.HelperLogout;
 import com.iGap.helper.HelperString;
 import com.iGap.interfaces.OnFileUploadForActivities;
-import com.iGap.interfaces.OnSmsReceive;
 import com.iGap.interfaces.OnUserAvatarDelete;
 import com.iGap.interfaces.OnUserAvatarResponse;
 import com.iGap.interfaces.OnUserDelete;
-import com.iGap.interfaces.OnUserGetDeleteToken;
 import com.iGap.interfaces.OnUserProfileCheckUsername;
 import com.iGap.interfaces.OnUserProfileSetEmailResponse;
 import com.iGap.interfaces.OnUserProfileSetGenderResponse;
@@ -70,7 +68,6 @@ import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestUserAvatarAdd;
 import com.iGap.request.RequestUserAvatarDelete;
 import com.iGap.request.RequestUserDelete;
-import com.iGap.request.RequestUserGetDeleteToken;
 import com.iGap.request.RequestUserProfileCheckUsername;
 import com.iGap.request.RequestUserProfileSetEmail;
 import com.iGap.request.RequestUserProfileSetGender;
@@ -87,6 +84,8 @@ import java.util.Locale;
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
+import static com.iGap.R.id.st_layoutParent;
 
 public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarResponse, OnFileUploadForActivities {
 
@@ -923,17 +922,26 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutDialog.setOrientation(LinearLayout.VERTICAL);
                 layoutDialog.setBackgroundColor(getResources().getColor(android.R.color.white));
-                TextView textView = new TextView(ActivitySetting.this);
-                textView.setText("LogOut");
-                textView.setTextColor(getResources().getColor(android.R.color.black));
+
+                TextView txtLogOut = new TextView(ActivitySetting.this);
+                TextView txtDeleteAccount = new TextView(ActivitySetting.this);
+
+                txtLogOut.setText(getResources().getString(R.string.log_out));
+                txtDeleteAccount.setText(getResources().getString(R.string.delete_account));
+
+                txtLogOut.setTextColor(getResources().getColor(android.R.color.black));
+                txtDeleteAccount.setTextColor(getResources().getColor(android.R.color.black));
 
                 int dim20 = (int) getResources().getDimension(R.dimen.dp20);
                 int dim12 = (int) getResources().getDimension(R.dimen.dp12);
+                int dim16 = (int) getResources().getDimension(R.dimen.dp16);
+                txtLogOut.setTextSize(16);
+                txtDeleteAccount.setTextSize(16);
 
-                textView.setTextSize(16);
-                textView.setPadding(dim20, dim12, dim12, dim12);
-
-                layoutDialog.addView(textView, params);
+                txtLogOut.setPadding(dim20, dim12, dim12, dim20);
+                txtDeleteAccount.setPadding(dim20, 0, dim12, dim16);
+                layoutDialog.addView(txtLogOut, params);
+                layoutDialog.addView(txtDeleteAccount, params);
 
                 popupWindow = new PopupWindow(layoutDialog, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT, true);
                 popupWindow.setBackgroundDrawable(new BitmapDrawable());
@@ -957,20 +965,43 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 popupWindow.showAtLocation(layoutDialog, Gravity.RIGHT | Gravity.TOP, (int) getResources().getDimension(R.dimen.dp16), (int) getResources().getDimension(R.dimen.dp32));
                 //                popupWindow.showAsDropDown(v);
 
-                textView.setOnClickListener(new View.OnClickListener() {
+                txtLogOut.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        //HelperLogout.logout();
-                        //popupWindow.dismiss();
+                        HelperLogout.logout();
+                        popupWindow.dismiss();
 
-                        G.onUserGetDeleteToken = new OnUserGetDeleteToken() {
-                            @Override
-                            public void onUserGetDeleteToken(int resendDelay, String tokenRegex, String tokenLength) {
-                                regex = tokenRegex;
-                            }
-                        };
+                    }
+                });
 
-                        new RequestUserGetDeleteToken().userGetDeleteToken();
+                txtDeleteAccount.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        new MaterialDialog.Builder(ActivitySetting.this)
+                                .title(getResources().getString(R.string.delete_account))
+                                .content(getResources().getString(R.string.delete_account_text))
+                                .positiveText(getResources().getString(R.string.B_ok))
+                                .negativeText(getResources().getString(R.string.B_cancel))
+                                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                                        FragmentDeleteAccount fragmentDeleteAccount = new FragmentDeleteAccount();
+
+                                        Bundle bundle = new Bundle();
+                                        bundle.putString("PHONE", txtPhoneNumber.getText().toString());
+                                        fragmentDeleteAccount.setArguments(bundle);
+                                        getSupportFragmentManager()
+                                                .beginTransaction()
+                                                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                                                .replace(R.id.st_layoutParent, fragmentDeleteAccount)
+                                                .commit();
+
+                                    }
+                                })
+                                .show();
+                        popupWindow.dismiss();
                     }
                 });
             }
@@ -1001,7 +1032,10 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             @Override
             public void onComplete(RippleView rippleView) {
                 FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(userId);
-                ActivitySetting.this.getSupportFragmentManager().beginTransaction().replace(R.id.st_layoutParent, fragment, null).commit();
+                ActivitySetting.this.getSupportFragmentManager()
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(st_layoutParent, fragment, null).commit();
             }
         });
         textLanguage = sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, "English");
@@ -1136,7 +1170,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             public void onClick(View view) {
                 FragmentPrivacyAndSecurity fragmentPrivacyAndSecurity = new FragmentPrivacyAndSecurity();
                 getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.st_layoutParent, fragmentPrivacyAndSecurity)
+                        .replace(st_layoutParent, fragmentPrivacyAndSecurity)
                         .commit();
             }
         });
@@ -1183,7 +1217,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             public void onClick(View view) {
                 FragmentSticker fragmentSticker = new FragmentSticker();
                 getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.st_layoutParent, fragmentSticker)
+                        .replace(st_layoutParent, fragmentSticker)
                         .commit();
             }
         });
@@ -1669,25 +1703,24 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
     @Override
     protected void onResume() {
-        final IntentFilter filter = new IntentFilter();
-        filter.addAction("android.provider.Telephony.SMS_RECEIVED");
-
-        smsReceiver = new IncomingSms(new OnSmsReceive() {
-
-            @Override
-            public void onSmsReceive(String message) {
-                try {
-                    if (message != null && !message.isEmpty() && !message.equals("null") &&
-                            !message.equals("")) {
-                        getSms(message);
-                    }
-                } catch (Exception e1) {
-                    e1.getStackTrace();
-                }
-            }
-        });
-
-        registerReceiver(smsReceiver, filter);
+//        final IntentFilter filter = new IntentFilter();
+//        filter.addAction("android.provider.Telephony.SMS_RECEIVED");
+//        smsReceiver = new IncomingSms(new OnSmsReceive() {
+//
+//            @Override
+//            public void onSmsReceive(String message) {
+//                try {
+//                    if (message != null && !message.isEmpty() && !message.equals("null") &&
+//                            !message.equals("")) {
+//                        getSms(message);
+//                    }
+//                } catch (Exception e1) {
+//                    e1.getStackTrace();
+//                }
+//            }
+//        });
+//
+//        registerReceiver(smsReceiver, filter);
         super.onResume();
     }
 

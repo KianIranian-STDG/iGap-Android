@@ -49,6 +49,11 @@ dependencies {
     compile('com.afollestad.material-dialogs:core:0.9.0.1') {
         transitive = true
     }
+
+
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
+        transitive = true;
+    }
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.neovisionaries:nv-websocket-client:1.29'
     compile 'com.nineoldandroids:library:2.4.0'
@@ -70,13 +75,8 @@ dependencies {
     compile 'com.makeramen:roundedimageview:2.2.1'
     compile 'dk.ilios:realmfieldnameshelper:1.1.0'
     compile 'com.hanks.animatecheckbox:library:0.1'
-    testCompile 'junit:junit:4.12'
-    provided 'com.android.support:support-annotations:24.2.1'
     compile 'org.parceler:parceler-api:1.1.6'
+    testCompile 'junit:junit:4.12'
     apt 'org.parceler:parceler:1.1.6'
-
-
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
-        transitive = true;
-    }
+    provided 'com.android.support:support-annotations:24.2.1'
 }

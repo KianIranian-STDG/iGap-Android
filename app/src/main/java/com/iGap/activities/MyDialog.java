@@ -2,6 +2,7 @@ package com.iGap.activities;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -18,8 +19,7 @@ import com.iGap.realm.enums.RoomType;
  */
 public class MyDialog {
 
-    public static void showDialogMenuItemRooms(final Context context, final RoomType mType,
-                                               boolean isMute, final OnComplete complete) {
+    public static void showDialogMenuItemRooms(final Context context, final RoomType mType, boolean isMute, final String role, final OnComplete complete) {
 
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -62,7 +62,14 @@ public class MyDialog {
         if (mType == RoomType.CHAT) {
             txtDeleteChat.setText(context.getString(R.string.delete_item_dialog) + " " + context.getString(R.string.chat));
         } else if (mType == RoomType.GROUP) {
-            txtDeleteChat.setText(context.getString(R.string.delete_item_dialog) + " " + context.getString(R.string.group));
+            if (role.equals("OWNER")) {
+                Log.i("ZZZZZZ", "showDialogMenuItemRooms: " + role);
+                txtDeleteChat.setText(context.getString(R.string.delete_item_dialog) + " " + context.getString(R.string.group));
+            } else {
+                Log.i("ZZZZZZ", "showDialogMenuItemRooms222: " + role);
+
+                txtDeleteChat.setText(context.getString(R.string.left) + " " + context.getString(R.string.group));
+            }
         } else if (mType == RoomType.CHANNEL) {
             txtDeleteChat.setText(context.getString(R.string.delete_item_dialog) + " " + context.getString(R.string.channel));
         }
@@ -70,14 +77,26 @@ public class MyDialog {
         txtDeleteChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String str0 = "";
                 String str = "";
                 if (mType == RoomType.CHAT) {
+                    ;
+                    str0 = context.getString(R.string.do_you_want_delete_this);
                     str = context.getString(R.string.chat);
                 } else if (mType == RoomType.GROUP) {
                     str = context.getString(R.string.group);
-                } else if (mType == RoomType.CHANNEL) str = context.getString(R.string.channel);
+                    if (role.equals("OWNER")) {
+                        str0 = context.getString(R.string.do_you_want_delete_this);
+                    } else {
+                        str0 = context.getString(R.string.do_you_want_left_this);
+                    }
 
-                showDialogNotification(context, context.getString(R.string.do_you_want_delete_this) + str + " ?", complete, "txtDeleteChat");
+                } else if (mType == RoomType.CHANNEL) {
+                    str0 = context.getString(R.string.do_you_want_delete_this);
+                    str = context.getString(R.string.channel);
+                }
+
+                showDialogNotification(context, str0 + str + " ?", complete, "txtDeleteChat");
 
                 dialog.cancel();
             }

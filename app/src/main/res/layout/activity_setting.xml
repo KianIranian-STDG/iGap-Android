@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/st_layoutParent"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layoutDirection="ltr"
-    tools:ignore="MissingPrefix">
+                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                 xmlns:tools="http://schemas.android.com/tools"
+                                                 android:id="@+id/st_layoutParent"
+                                                 android:layout_width="match_parent"
+                                                 android:layout_height="match_parent"
+                                                 android:layoutDirection="ltr"
+                                                 tools:ignore="MissingPrefix">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/st_appbar"
@@ -29,7 +29,7 @@
 
             <android.support.v7.widget.Toolbar
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp52"
+                android:layout_height="@dimen/dp60"
                 app:contentInsetLeft="0dp"
                 app:contentInsetStart="0dp"
                 app:layout_collapseMode="pin">
@@ -40,15 +40,16 @@
 
                     <TextView
                         android:id="@+id/st_txt_titleToolbar"
+                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_centerInParent="true"
                         android:gravity="center"
                         android:text="@string/st_titleToolbar"
                         android:textColor="@color/whit_background"
-                        android:textSize="@dimen/sp20"
+                        android:textSize="@dimen/sp18"
                         android:textStyle="bold"
-                        android:visibility="gone" />
+                        android:visibility="gone"/>
 
                     <com.iGap.libs.rippleeffect.RippleView
                         android:id="@+id/st_ripple_back"
@@ -67,7 +68,7 @@
                             android:gravity="center"
                             android:text="@string/md_back_arrow"
                             android:textColor="@color/whit_background"
-                            android:textSize="@dimen/sp18" />
+                            android:textSize="@dimen/sp18"/>
                     </com.iGap.libs.rippleeffect.RippleView>
 
                     <com.iGap.libs.rippleeffect.RippleView
@@ -88,7 +89,7 @@
                             android:gravity="center"
                             android:text="@string/md_show_more_button"
                             android:textColor="@color/whit_background"
-                            android:textSize="@dimen/sp18" />
+                            android:textSize="@dimen/sp18"/>
 
                     </com.iGap.libs.rippleeffect.RippleView>
                 </RelativeLayout>
@@ -119,19 +120,20 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
-                        android:src="@mipmap/b" />
+                        android:src="@mipmap/b"/>
                 </com.iGap.libs.rippleeffect.RippleView>
 
                 <TextView
                     android:id="@+id/ac_txt_nickname_title"
+                    fontPath="fonts/IRANSansMobile.ttf"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/dp4"
                     android:text="AM"
                     android:textColor="@android:color/white"
-                    android:textSize="@dimen/sp16"
-                    android:textStyle="bold" />
+                    android:textSize="@dimen/sp15"
+                    android:textStyle="bold"/>
 
             </LinearLayout>
 
@@ -166,15 +168,17 @@
                 android:visibility="visible">
 
                 <TextView
+                    android:id="@+id/textView5"
                     fontPath="fonts/IRANSansMobile_Bold.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:paddingBottom="@dimen/dp16"
+                    android:paddingTop="@dimen/dp12"
                     android:text="@string/st_Info"
                     android:textColor="@color/green"
-                    android:textSize="@dimen/sp20"
-                    android:textStyle="bold" />
+                    android:textSize="@dimen/sp18"
+                    android:textStyle="bold"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -190,17 +194,19 @@
 
 
                         <TextView
+                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:paddingEnd="@dimen/dp4"
                             android:paddingStart="@dimen/dp4"
                             android:text="@string/st_nickname"
                             android:textColor="@color/black_register"
-                            android:textSize="@dimen/sp16"
-                            android:textStyle="normal" />
+                            android:textSize="@dimen/sp15"
+                            android:textStyle="normal"/>
 
                         <TextView
                             android:id="@+id/st_txt_nikName"
+                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/dp28"
                             android:gravity="center_vertical"
@@ -209,9 +215,9 @@
                             android:paddingStart="@dimen/dp4"
                             android:singleLine="true"
                             android:text="Alexander Smith"
-                            android:textColor="@color/colorChatMessageTime"
-                            android:textSize="@dimen/sp13"
-                            android:theme="@style/Setting_editText" />
+                            android:textColor="@color/cardview_dark_background"
+                            android:textSize="@dimen/sp14"
+                            android:theme="@style/Setting_editText"/>
 
                     </LinearLayout>
 
@@ -219,7 +225,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight=".04"
-                        android:orientation="vertical" />
+                        android:orientation="vertical"/>
 
                     <LinearLayout
                         android:id="@+id/st_layout_gander"
@@ -230,17 +236,19 @@
 
 
                         <TextView
+                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:paddingEnd="@dimen/dp4"
                             android:paddingStart="@dimen/dp4"
                             android:text="@string/st_Gander"
                             android:textColor="@color/black_register"
-                            android:textSize="@dimen/sp16"
-                            android:textStyle="normal" />
+                            android:textSize="@dimen/sp15"
+                            android:textStyle="normal"/>
 
                         <TextView
                             android:id="@+id/st_txt_gander"
+                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/dp28"
                             android:gravity="center_vertical"
@@ -248,9 +256,9 @@
                             android:paddingEnd="@dimen/dp4"
                             android:paddingStart="@dimen/dp4"
                             android:text="unknown"
-                            android:textColor="@color/colorChatMessageTime"
-                            android:textSize="@dimen/sp13"
-                            android:theme="@style/Setting_editText" />
+                            android:textColor="@color/cardview_dark_background"
+                            android:textSize="@dimen/sp14"
+                            android:theme="@style/Setting_editText"/>
 
                     </LinearLayout>
                 </LinearLayout>
@@ -268,6 +276,7 @@
                         android:orientation="vertical">
 
                         <TextView
+                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/dp12"
@@ -275,11 +284,12 @@
                             android:paddingStart="@dimen/dp4"
                             android:text="@string/st_username"
                             android:textColor="@color/black_register"
-                            android:textSize="@dimen/sp16"
-                            android:textStyle="normal" />
+                            android:textSize="@dimen/sp15"
+                            android:textStyle="normal"/>
 
                         <TextView
                             android:id="@+id/st_txt_userName"
+                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/dp28"
                             android:gravity="center_vertical"
@@ -288,16 +298,16 @@
                             android:paddingStart="@dimen/dp4"
                             android:singleLine="true"
                             android:text="Alexander Smith:"
-                            android:textColor="@color/colorChatMessageTime"
-                            android:textSize="@dimen/sp13"
-                            android:theme="@style/Setting_editText" />
+                            android:textColor="@color/cardview_dark_background"
+                            android:textSize="@dimen/sp14"
+                            android:theme="@style/Setting_editText"/>
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight=".04"
-                        android:orientation="vertical" />
+                        android:orientation="vertical"/>
 
                     <LinearLayout
                         android:id="@+id/st_layout_email"
@@ -308,6 +318,7 @@
 
                         <TextView
                             android:id="@+id/textView2"
+                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/dp12"
@@ -315,11 +326,12 @@
                             android:paddingStart="@dimen/dp4"
                             android:text="@string/st_email"
                             android:textColor="@color/black_register"
-                            android:textSize="@dimen/sp16"
-                            android:textStyle="normal" />
+                            android:textSize="@dimen/sp15"
+                            android:textStyle="normal"/>
 
                         <TextView
                             android:id="@+id/st_txt_email"
+                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/dp28"
                             android:gravity="center_vertical"
@@ -328,14 +340,15 @@
                             android:paddingStart="@dimen/dp4"
                             android:singleLine="true"
                             android:text="example@Gmail.com"
-                            android:textColor="@color/colorChatMessageTime"
+                            android:textColor="@color/cardview_dark_background"
                             android:textSize="@dimen/sp14"
-                            android:theme="@style/Setting_editText" />
+                            android:theme="@style/Setting_editText"/>
                     </LinearLayout>
 
                 </LinearLayout>
 
                 <TextView
+                    fontPath="fonts/IRANSansMobile.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp20"
@@ -343,11 +356,12 @@
                     android:paddingStart="@dimen/dp4"
                     android:text="@string/st_phoneNumber"
                     android:textColor="@color/black_register"
-                    android:textSize="@dimen/sp16"
-                    android:textStyle="normal" />
+                    android:textSize="@dimen/sp15"
+                    android:textStyle="normal"/>
 
                 <TextView
                     android:id="@+id/st_txt_phoneNumber"
+                    fontPath="fonts/IRANSansMobile.ttf"
                     android:layout_width="@dimen/dp200"
                     android:layout_height="@dimen/dp28"
                     android:background="@null"
@@ -357,9 +371,9 @@
                     android:paddingEnd="@dimen/dp4"
                     android:paddingStart="@dimen/dp4"
                     android:text="09121234567"
-                    android:textColor="@color/colorChatMessageTime"
-                    android:textSize="@dimen/sp13"
-                    android:theme="@style/Setting_editText" />
+                    android:textColor="@color/cardview_dark_background"
+                    android:textSize="@dimen/sp14"
+                    android:theme="@style/Setting_editText"/>
 
             </LinearLayout>
 
@@ -373,6 +387,7 @@
 
 
                 <TextView
+                    fontPath="fonts/IRANSansMobile_Bold.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -382,33 +397,34 @@
                     android:paddingTop="@dimen/dp12"
                     android:text="@string/st_title_general"
                     android:textColor="@color/green"
-                    android:textSize="@dimen/sp20"
+                    android:textSize="@dimen/sp18"
                     android:textStyle="bold"
 
                     />
 
                 <TextView
                     android:id="@+id/st_txt_notifyAndSound"
-                    fontPath="fonts/IRANSansMedium.ttf"
+                    fontPath="fonts/IRANSansMobile.ttf"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp52"
+                    android:layout_height="@dimen/dp48"
                     android:gravity="center_vertical"
                     android:paddingLeft="@dimen/dp16"
                     android:paddingRight="@dimen/dp16"
+                    android:paddingTop="@dimen/dp4"
                     android:text="@string/st_title_notification_sounds"
                     android:textColor="@color/black_register"
                     android:textSize="@dimen/sp15"
-                    android:textStyle="normal" />
+                    android:textStyle="normal"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/background_editText" />
+                    android:background="@color/background_editText"/>
 
                 <LinearLayout
                     android:id="@+id/st_layout_language"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp52"
+                    android:layout_height="@dimen/dp48"
                     android:orientation="horizontal"
 
                     >
@@ -421,13 +437,15 @@
                         android:gravity="center_vertical"
                         android:paddingEnd="@dimen/dp16"
                         android:paddingStart="@dimen/dp16"
+                        android:paddingTop="@dimen/dp4"
                         android:text="@string/st_Language"
                         android:textColor="@color/black_register"
-                        android:textSize="@dimen/sp16"
-                        android:textStyle="normal" />
+                        android:textSize="@dimen/sp15"
+                        android:textStyle="normal"/>
 
                     <TextView
                         android:id="@+id/st_txt_language"
+                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
@@ -437,22 +455,23 @@
                         android:paddingStart="@dimen/dp16"
                         android:text="English"
                         android:textColor="@color/toolbar_background"
-                        android:textSize="@dimen/sp16"
-                        android:textStyle="normal" />
+                        android:textSize="@dimen/sp15"
+                        android:textStyle="normal"/>
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/background_editText" />
+                    android:background="@color/background_editText"/>
 
                 <RelativeLayout
                     android:id="@+id/st_layout_clearCache"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp52">
+                    android:layout_height="@dimen/dp48">
 
                     <TextView
                         android:id="@+id/st_txt_clearCache"
+                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_alignParentRight="true"
@@ -461,43 +480,46 @@
                         android:paddingRight="@dimen/dp16"
                         android:text="0 KB"
                         android:textColor="@color/toolbar_background"
-                        android:textSize="@dimen/sp16"
-                        android:textStyle="normal" />
+                        android:textSize="@dimen/sp15"
+                        android:textStyle="normal"/>
 
                     <TextView
-
                         android:id="@+id/textView3"
-                        fontPath="fonts/IRANSansMobile_Bold.ttf"
+                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp52"
+                        android:layout_height="match_parent"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
-                        android:padding="@dimen/dp16"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/dp16"
+                        android:paddingRight="@dimen/dp16"
+                        android:paddingTop="@dimen/dp8"
                         android:text="@string/st_title_Clear_Cache"
                         android:textColor="@color/black_register"
-                        android:textSize="@dimen/sp16"
-                        android:textStyle="normal" />
+                        android:textSize="@dimen/sp15"
+                        android:textStyle="normal"/>
 
                 </RelativeLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/background_editText" />
+                    android:background="@color/background_editText"/>
 
                 <TextView
                     android:id="@+id/st_txt_privacySecurity"
-                    fontPath="fonts/iransanslite.ttf"
+                    fontPath="fonts/IRANSansMobile.ttf"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp52"
+                    android:layout_height="@dimen/dp48"
                     android:gravity="center_vertical"
                     android:paddingLeft="@dimen/dp16"
                     android:paddingRight="@dimen/dp16"
+                    android:paddingTop="@dimen/dp8"
                     android:text="@string/st_title_Privacy_Security"
                     android:textColor="@color/black_register"
-                    android:textSize="@dimen/sp16"
-                    android:textStyle="normal" />
+                    android:textSize="@dimen/sp15"
+                    android:textStyle="normal"/>
 
             </LinearLayout>
 
@@ -512,11 +534,12 @@
 
                 <TextView
 
-                    fontPath="fonts/IRANSansBold.ttf"
+                    fontPath="fonts/IRANSansMobile_Bold.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:paddingBottom="@dimen/dp16"
+                    android:paddingTop="@dimen/dp12"
                     android:text="@string/st_title_message"
                     android:textColor="@color/green"
                     android:textSize="@dimen/sp18"
@@ -530,78 +553,78 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        fontPath="fonts/IRANSansMedium.ttf"
+                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight=".5"
                         android:gravity="center_vertical"
                         android:paddingLeft="@dimen/dp16"
                         android:paddingRight="@dimen/dp16"
+                        android:paddingTop="@dimen/dp4"
                         android:text="@string/st_title_message_textSize"
                         android:textColor="@color/black_register"
-                        android:textSize="@dimen/sp16"
-                        android:paddingTop="@dimen/dp8"
-                        android:textStyle="normal" />
+                        android:textSize="@dimen/sp15"
+                        android:textStyle="normal"/>
 
                     <TextView
-
                         android:id="@+id/st_txt_messageTextSize_number"
-                        fontPath="fonts/IRANSansMedium.ttf"
+                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight=".15"
                         android:gravity="center"
                         android:paddingLeft="@dimen/dp16"
                         android:paddingRight="@dimen/dp16"
+                        android:paddingTop="@dimen/dp4"
                         android:text="16"
                         android:textColor="@color/toolbar_background"
-                        android:textSize="@dimen/sp16"
-                        android:paddingTop="@dimen/dp8"
-                        android:textStyle="normal" />
+                        android:textSize="@dimen/sp15"
+                        android:textStyle="normal"/>
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/background_editText" />
+                    android:background="@color/background_editText"/>
 
                 <TextView
                     android:id="@+id/st_txt_sticker"
-                    fontPath="fonts/IRANSansMedium.ttf"
+                    fontPath="fonts/IRANSansMobile.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp48"
                     android:gravity="center_vertical"
                     android:paddingLeft="@dimen/dp16"
                     android:paddingRight="@dimen/dp16"
+                    android:paddingTop="@dimen/dp4"
                     android:text="@string/st_stickers"
                     android:textColor="@color/black_register"
-                    android:textSize="@dimen/sp16"
-                    android:paddingTop="@dimen/dp8"
-                    android:textStyle="normal" />
+                    android:textSize="@dimen/sp15"
+                    android:textStyle="normal"
+                    />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/background_editText" />
+                    android:background="@color/background_editText"/>
 
                 <TextView
                     android:id="@+id/st_txt_chatBackground"
-                    fontPath="fonts/IRANSansMedium.ttf"
+                    fontPath="fonts/IRANSansMobile.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp48"
                     android:gravity="center_vertical"
                     android:paddingLeft="@dimen/dp16"
                     android:paddingRight="@dimen/dp16"
+                    android:paddingTop="@dimen/dp4"
                     android:text="@string/st_chatBackground"
                     android:textColor="@color/black_register"
-                    android:textSize="@dimen/sp16"
-                    android:paddingTop="@dimen/dp8"
-                    android:textStyle="normal" />
+                    android:textSize="@dimen/sp15"
+                    android:textStyle="normal"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/background_editText" />
+                    android:background="@color/background_editText"/>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -614,36 +637,34 @@
 
                     <ToggleButton
                         android:id="@+id/st_toggle_inAppBrowser"
-                        android:layout_width="@dimen/dp40"
+                        android:layout_width="@dimen/dp44"
                         android:layout_height="@dimen/dp40"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
                         android:layout_centerInParent="true"
                         android:background="@drawable/st_switch_button"
-                        android:paddingRight="@dimen/dp4"
-                        android:paddingLeft="@dimen/dp4"
                         android:textOff=""
-                        android:textOn="" />
+                        android:textOn=""/>
 
                     <TextView
                         android:id="@+id/st_txt_inAppBrowser"
-                        fontPath="fonts/IRANSansMedium.ttf"
+                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_centerInParent="true"
                         android:gravity="center_vertical"
+                        android:paddingTop="@dimen/dp4"
                         android:text="@string/st_inApp_Browser"
                         android:textColor="@color/black_register"
-                        android:textSize="@dimen/sp16"
-                        android:paddingTop="@dimen/dp4"
-                        android:textStyle="normal" />
+                        android:textSize="@dimen/sp15"
+                        android:textStyle="normal"/>
 
                 </RelativeLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/background_editText" />
+                    android:background="@color/background_editText"/>
 
 
                 <RelativeLayout
@@ -659,28 +680,27 @@
 
                     <ToggleButton
                         android:id="@+id/st_toggle_sendEnter"
-                        android:layout_width="@dimen/dp40"
+                        android:layout_width="@dimen/dp44"
                         android:layout_height="@dimen/dp40"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
                         android:layout_centerInParent="true"
                         android:background="@drawable/st_switch_button"
-                        android:paddingRight="@dimen/dp4"
                         android:textOff=""
-                        android:textOn="" />
+                        android:textOn=""/>
 
                     <TextView
                         android:id="@+id/st_txt_sendEnter"
-                        fontPath="fonts/IRANSansMedium.ttf"
+                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_centerInParent="true"
                         android:gravity="center_vertical"
+                        android:paddingTop="@dimen/dp4"
                         android:text="@string/st_send_by_enter"
                         android:textColor="@color/black_register"
-                        android:textSize="@dimen/sp16"
-                        android:paddingTop="@dimen/dp4"
-                        android:textStyle="normal" />
+                        android:textSize="@dimen/sp15"
+                        android:textStyle="normal"/>
 
                 </RelativeLayout>
 
@@ -693,93 +713,105 @@
                 android:layout_height="wrap_content"
                 android:background="@color/st_background2"
                 android:orientation="vertical"
-                android:paddingTop="@dimen/dp8"
+                android:paddingTop="@dimen/dp4"
                 android:visibility="visible">
 
                 <TextView
-
+                    android:id="@+id/textView4"
+                    fontPath="fonts/IRANSansMobile_Bold.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:paddingBottom="@dimen/dp16"
+                    android:paddingTop="@dimen/dp12"
                     android:text="@string/st_title_Media"
                     android:textColor="@color/green"
-                    android:textSize="@dimen/sp20"
-                    android:textStyle="bold" />
+                    android:textSize="@dimen/sp18"
+                    android:textStyle="normal"/>
 
                 <TextView
                     android:id="@+id/st_txt_keepMedia"
+                    fontPath="fonts/IRANSansMobile.ttf"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp52"
+                    android:layout_height="@dimen/dp48"
                     android:gravity="center_vertical"
                     android:paddingLeft="@dimen/dp16"
                     android:paddingRight="@dimen/dp16"
+                    android:paddingTop="@dimen/dp4"
                     android:text="@string/st_keepMedia"
                     android:textColor="@color/black_register"
-                    android:textSize="@dimen/sp16"
-                    android:textStyle="normal" />
+                    android:textSize="@dimen/sp15"
+                    android:textStyle="normal"
+                    />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/background_editText" />
+                    android:background="@color/background_editText"/>
 
                 <TextView
                     android:id="@+id/st_txt_autoDownloadData"
+                    fontPath="fonts/IRANSansMobile.ttf"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp52"
+                    android:layout_height="@dimen/dp48"
                     android:gravity="center_vertical"
                     android:paddingLeft="@dimen/dp16"
                     android:paddingRight="@dimen/dp16"
+                    android:paddingTop="@dimen/dp4"
                     android:text="@string/st_auto_download_data"
                     android:textColor="@color/black_register"
-                    android:textSize="@dimen/sp16"
-                    android:textStyle="normal" />
+                    android:textSize="@dimen/sp15"
+                    android:textStyle="normal"
+                    />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/background_editText" />
+                    android:background="@color/background_editText"/>
 
                 <TextView
                     android:id="@+id/st_txt_autoDownloadWifi"
+                    fontPath="fonts/IRANSansMobile.ttf"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp52"
-                    android:padding="@dimen/dp16"
+                    android:layout_height="@dimen/dp48"
+                    android:gravity="center_vertical"
                     android:paddingLeft="@dimen/dp16"
                     android:paddingRight="@dimen/dp16"
                     android:text="@string/st_auto_download_wifi"
                     android:textColor="@color/black_register"
-                    android:textSize="@dimen/sp16"
-                    android:textStyle="normal" />
+                    android:textSize="@dimen/sp15"
+                    android:textStyle="normal"
+                    />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/background_editText" />
+                    android:background="@color/background_editText"/>
 
                 <TextView
                     android:id="@+id/st_txt_autoDownloadRoaming"
+                    fontPath="fonts/IRANSansMobile.ttf"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp52"
-                    android:padding="@dimen/dp16"
+                    android:layout_height="@dimen/dp48"
+                    android:gravity="center_vertical"
                     android:paddingLeft="@dimen/dp16"
                     android:paddingRight="@dimen/dp16"
                     android:text="@string/st_auto_download_roaming"
                     android:textColor="@color/black_register"
-                    android:textSize="@dimen/sp16"
-                    android:textStyle="normal" />
+                    android:textSize="@dimen/sp15"
+                    android:textStyle="normal"
+                    />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/background_editText" />
+                    android:background="@color/background_editText"/>
 
 
                 <RelativeLayout
 
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp52"
+                    android:layout_height="@dimen/dp48"
                     android:orientation="horizontal"
                     android:paddingEnd="@dimen/dp16"
                     android:paddingLeft="@dimen/dp16"
@@ -788,26 +820,28 @@
 
                     <ToggleButton
                         android:id="@+id/st_toggle_enableAnimation"
-                        android:layout_width="@dimen/dp40"
+                        android:layout_width="@dimen/dp44"
                         android:layout_height="@dimen/dp40"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
                         android:layout_centerInParent="true"
                         android:background="@drawable/st_switch_button"
-                        android:paddingRight="@dimen/dp4"
                         android:textOff=""
-                        android:textOn="" />
+                        android:textOn=""/>
 
                     <TextView
                         android:id="@+id/st_txt_enableAnimation"
+                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_centerInParent="true"
                         android:gravity="center_vertical"
+                        android:paddingTop="@dimen/dp4"
                         android:text="@string/st_Enable_Animation"
                         android:textColor="@color/black_register"
-                        android:textSize="@dimen/sp16"
-                        android:textStyle="normal" />
+                        android:textSize="@dimen/sp15"
+                        android:textStyle="normal"
+                        />
 
 
                 </RelativeLayout>
@@ -815,12 +849,12 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/background_editText" />
+                    android:background="@color/background_editText"/>
 
                 <RelativeLayout
 
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp52"
+                    android:layout_height="@dimen/dp48"
                     android:orientation="horizontal"
                     android:paddingEnd="@dimen/dp16"
                     android:paddingLeft="@dimen/dp16"
@@ -829,27 +863,28 @@
 
                     <ToggleButton
                         android:id="@+id/st_toggle_autoGif"
-                        android:layout_width="@dimen/dp40"
+                        android:layout_width="@dimen/dp44"
                         android:layout_height="@dimen/dp40"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
                         android:layout_centerInParent="true"
                         android:background="@drawable/st_switch_button"
-                        android:paddingLeft="@dimen/dp4"
-                        android:paddingRight="@dimen/dp4"
                         android:textOff=""
-                        android:textOn="" />
+                        android:textOn=""/>
 
                     <TextView
                         android:id="@+id/st_txt_autoGif"
+                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_centerInParent="true"
                         android:gravity="center_vertical"
+                        android:paddingTop="@dimen/dp4"
                         android:text="@string/st_auto_gif"
                         android:textColor="@color/black_register"
-                        android:textSize="@dimen/sp16"
-                        android:textStyle="normal" />
+                        android:textSize="@dimen/sp15"
+                        android:textStyle="normal"
+                        />
 
 
                 </RelativeLayout>
@@ -857,12 +892,12 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/background_editText" />
+                    android:background="@color/background_editText"/>
 
                 <RelativeLayout
 
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp52"
+                    android:layout_height="@dimen/dp48"
                     android:orientation="horizontal"
                     android:paddingEnd="@dimen/dp16"
                     android:paddingLeft="@dimen/dp16"
@@ -871,27 +906,28 @@
 
                     <ToggleButton
                         android:id="@+id/st_toggle_saveGallery"
-                        android:layout_width="@dimen/dp40"
+                        android:layout_width="@dimen/dp44"
                         android:layout_height="@dimen/dp40"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
                         android:layout_centerInParent="true"
                         android:background="@drawable/st_switch_button"
-                        android:paddingLeft="@dimen/dp4"
-                        android:paddingRight="@dimen/dp4"
                         android:textOff=""
-                        android:textOn="" />
+                        android:textOn=""/>
 
                     <TextView
                         android:id="@+id/st_txt_saveGallery"
+                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_centerInParent="true"
                         android:gravity="center_vertical"
+                        android:paddingTop="@dimen/dp4"
                         android:text="@string/st_save_to_gallery"
                         android:textColor="@color/black_register"
-                        android:textSize="@dimen/sp16"
-                        android:textStyle="normal" />
+                        android:textSize="@dimen/sp15"
+                        android:textStyle="normal"
+                        />
 
 
                 </RelativeLayout>
@@ -903,63 +939,73 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/white"
                 android:orientation="vertical"
-                android:paddingTop="@dimen/dp8"
                 android:visibility="visible">
 
                 <TextView
+                    fontPath="fonts/IRANSansMobile_Bold.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:paddingBottom="@dimen/dp16"
+                    android:paddingTop="@dimen/dp12"
                     android:text="@string/st_title_support"
                     android:textColor="@color/green"
-                    android:textSize="@dimen/sp20"
-                    android:textStyle="bold" />
+                    android:textSize="@dimen/sp18"
+                    android:textStyle="normal"/>
 
                 <TextView
+                    fontPath="fonts/IRANSansMobile.ttf"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp52"
+                    android:layout_height="@dimen/dp48"
                     android:gravity="center_vertical"
                     android:paddingLeft="@dimen/dp16"
                     android:paddingRight="@dimen/dp16"
+                    android:paddingTop="@dimen/dp4"
                     android:text="@string/st_ask_question"
                     android:textColor="@color/black_register"
-                    android:textSize="@dimen/sp16"
-                    android:textStyle="normal" />
+                    android:textSize="@dimen/sp15"
+                    android:textStyle="normal"
+                    />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/background_editText" />
+                    android:background="@color/background_editText"/>
 
                 <TextView
                     android:id="@+id/st_txt_faq"
+                    fontPath="fonts/IRANSansMobile.ttf"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp52"
+                    android:layout_height="@dimen/dp48"
                     android:gravity="center_vertical"
                     android:paddingLeft="@dimen/dp16"
                     android:paddingRight="@dimen/dp16"
+                    android:paddingTop="@dimen/dp4"
                     android:text="@string/st_About_iGap"
                     android:textColor="@color/black_register"
-                    android:textSize="@dimen/sp16"
-                    android:textStyle="normal" />
+                    android:textSize="@dimen/sp15"
+                    android:textStyle="normal"
+                    />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/background_editText" />
+                    android:background="@color/background_editText"/>
 
                 <TextView
                     android:id="@+id/st_txt_privacy_policy"
+                    fontPath="fonts/IRANSansMobile.ttf"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp52"
+                    android:layout_height="@dimen/dp48"
                     android:gravity="center_vertical"
                     android:paddingLeft="@dimen/dp16"
                     android:paddingRight="@dimen/dp16"
+                    android:paddingTop="@dimen/dp4"
                     android:text="@string/st_privacy_policy"
                     android:textColor="@color/black_register"
-                    android:textSize="@dimen/sp16"
-                    android:textStyle="normal" />
+                    android:textSize="@dimen/sp15"
+                    android:textStyle="normal"
+                    />
             </LinearLayout>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
@@ -976,7 +1022,7 @@
         android:tint="@color/gray"
         app:fabSize="mini"
         app:layout_anchor="@+id/st_appbar"
-        app:layout_anchorGravity="bottom|right|end" />
+        app:layout_anchorGravity="bottom|right|end"/>
 
 </android.support.design.widget.CoordinatorLayout>
 

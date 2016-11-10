@@ -63,7 +63,6 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
             @Override
             public void onComplete(RippleView rippleView) {
 
-
                 changePage(rippleView);
             }
         });
@@ -248,7 +247,7 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
 
         contacts.add(contact);
 
-        new RequestUserContactImport().contactImport(contacts, true);
+        new RequestUserContactImport().contactImportAndGetReponse(contacts, true);
     }
 
     private void addToContactList(View view) {

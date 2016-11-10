@@ -291,6 +291,7 @@ public class G extends Application {
                 Log.i("WWW", "getContactListFromServer");
                 getContactListFromServer();
             }
+
         };
 
 
@@ -480,24 +481,44 @@ public class G extends Application {
 
         switch (language) {
             case "فارسی":
-                CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf").setFontAttrId(R.attr.fontPath).build());
+
+                CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                        .setDefaultFontPath("fonts/IRANSansMobile.ttf")
+                        .setFontAttrId(R.attr.fontPath)
+                        .build());
                 setLocale("fa");
 
                 break;
             case "English":
-                CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf").setFontAttrId(R.attr.fontPath).build());
+                CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                        .setDefaultFontPath("fonts/IRANSansMobile.ttf")
+                        .setFontAttrId(R.attr.fontPath)
+                        .build());
                 setLocale("en");
                 break;
             case "العربی":
-                CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf").setFontAttrId(R.attr.fontPath).build());
+                CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                        .setDefaultFontPath("fonts/IRANSansMobile.ttf")
+                        .setFontAttrId(R.attr.fontPath)
+                        .build());
                 setLocale("ar");
 
                 break;
             case "Deutsch":
-                CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf").setFontAttrId(R.attr.fontPath).build());
+                CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                        .setDefaultFontPath("fonts/IRANSansMobile.ttf")
+                        .setFontAttrId(R.attr.fontPath)
+                        .build());
                 setLocale("nl");
 
                 break;
+            default:
+                CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                        .setDefaultFontPath("fonts/IRANSansMobile.ttf")
+                        .setFontAttrId(R.attr.fontPath)
+                        .build());
+                break;
+
         }
     }
 

@@ -57,7 +57,7 @@
                         android:id="@+id/cs_txt_contact_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"
+                        android:layout_gravity="center"
                         android:layout_marginRight="@dimen/dp8"
                         android:paddingBottom="2dp"
                         android:textColor="@android:color/black"
@@ -68,11 +68,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:maxWidth="@dimen/dp160"
-                        android:paddingBottom="2dp"
+                        android:paddingBottom="1dp"
                         android:singleLine="true"
                         android:text="naddddddd"
                         android:textColor="@android:color/black"
-                        android:textSize="@dimen/sp16"
+                        android:textSize="@dimen/sp15"
                         android:textStyle="bold" />
 
                     <TextView
@@ -96,21 +96,21 @@
                         android:id="@+id/cs_txt_last_message_sender"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingBottom="2dp"
+                        android:paddingBottom="1dp"
                         android:singleLine="true"
                         android:textColor="#2bbfbd"
-                        android:textSize="@dimen/sp14" />
+                        android:textSize="@dimen/sp13"/>
 
                     <com.iGap.module.EmojiTextView
                         android:id="@+id/cs_txt_last_message"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:paddingBottom="2dp"
+                        android:paddingBottom="1dp"
                         android:singleLine="true"
                         android:text="LAST MESSAGE"
                         android:textColor="#FF616161"
-                        android:textSize="@dimen/sp14" />
+                        android:textSize="@dimen/sp13"/>
                 </LinearLayout>
 
             </LinearLayout>
