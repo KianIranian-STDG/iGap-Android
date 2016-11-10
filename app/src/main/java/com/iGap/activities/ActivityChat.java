@@ -1032,12 +1032,16 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     private void selectMessage(int position) {
-        //  mAdapter.select(position, true);// TODO: 10/16/2016  work on blue back ground
-        // selected item
+        if (mAdapter.getItem(position).mMessage.view != null) {
+            ((FrameLayout) mAdapter.getItem(position).mMessage.view).setForeground(new ColorDrawable(getResources().getColor(R.color.colorChatMessageSelectableItemBg)));
+        }
     }
 
     private void deSelectMessage(int position) {
-        // mAdapter.deselect(position);
+
+        if (mAdapter.getItem(position).mMessage.view != null) {
+            ((FrameLayout) mAdapter.getItem(position).mMessage.view).setForeground(null);
+        }
     }
 
     private void initComponent() {
@@ -1813,13 +1817,13 @@ public class ActivityChat extends ActivityEnhanced
                             selectedPosition = 0;
                         }
                     }
-                }, 1000);
+                }, 500);
 
                 if (charSequence.length() > 0) {
                     txtClearMessageSearch.setTextColor(Color.WHITE);
                     ((View) rippleClose).setEnabled(true);
                 } else {
-                    txtClearMessageSearch.setTextColor(getResources().getColor(R.color.colorChatMessageSelectableItemBg));
+                    txtClearMessageSearch.setTextColor(Color.parseColor("#dededd"));
                     ((View) rippleClose).setEnabled(false);
                 }
             }
