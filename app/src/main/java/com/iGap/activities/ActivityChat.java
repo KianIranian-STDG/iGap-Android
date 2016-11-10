@@ -3271,8 +3271,7 @@ public class ActivityChat extends ActivityEnhanced
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    switchAddItem(new ArrayList<>(Arrays.asList(StructMessageInfo.convert(roomMessage))), false);
-                    scrollToEnd();
+                    switchAddItem(new ArrayList<>(Arrays.asList(StructMessageInfo.convert(roomMessage))), true);
                 }
             });
         }
