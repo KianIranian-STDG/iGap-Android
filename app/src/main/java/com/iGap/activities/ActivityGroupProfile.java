@@ -187,6 +187,16 @@ public class ActivityGroupProfile extends ActivityEnhanced
         G.onGroupAvatarResponse = this;
     }
 
+    @Override
+    protected void onPause() {
+        int me = setGroupParticipantLable();
+        if (ActivityChat.onComplete != null) {
+            ActivityChat.onComplete.complete(true, me + "", "");
+        }
+
+        super.onPause();
+    }
+
     private void initComponent() {
 
         MaterialDesignTextView btnBack = (MaterialDesignTextView) findViewById(R.id.agp_btn_back);
@@ -622,29 +632,23 @@ public class ActivityGroupProfile extends ActivityEnhanced
 
                 if (role == GroupChatRole.OWNER) {
 
-                    if (contacts.get(position).role.equals(
-                            ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+                    if (contacts.get(position).role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
                         kickMember(contacts.get(position).peerId);
-                    } else if (contacts.get(position).role.equals(
-                            ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
+                    } else if (contacts.get(position).role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
                         kickAdmin(contacts.get(position).peerId);
-                    } else if (contacts.get(position).role.equals(
-                            ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
+                    } else if (contacts.get(position).role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
                         kickModerator(contacts.get(position).peerId);
                     }
                 } else if (role == GroupChatRole.ADMIN) {
 
-                    if (contacts.get(position).role.equals(
-                            ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+                    if (contacts.get(position).role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
                         kickMember(contacts.get(position).peerId);
-                    } else if (contacts.get(position).role.equals(
-                            ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
+                    } else if (contacts.get(position).role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
                         kickModerator(contacts.get(position).peerId);
                     }
                 } else if (role == GroupChatRole.MODERATOR) {
 
-                    if (contacts.get(position).role.equals(
-                            ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+                    if (contacts.get(position).role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
                         kickMember(contacts.get(position).peerId);
                     }
                 }
@@ -2474,5 +2478,28 @@ public class ActivityGroupProfile extends ActivityEnhanced
         public int getGlobalPosition(int position) {
             return -1;
         }
+    }
+
+    private int setGroupParticipantLable() {
+
+        final int[] _member = {0};
+
+        Realm realm = Realm.getDefaultInstance();
+
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        final RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+        realmGroupRoom.getMembers();
+
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                _member[0] = realmGroupRoom.getMembers().size();
+                realmGroupRoom.setParticipantsCountLabel(_member[0] + "");
+            }
+        });
+
+        realm.close();
+
+        return _member[0];
     }
 }

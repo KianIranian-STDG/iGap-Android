@@ -83,9 +83,9 @@ public class ContactItemGroupProfile
             color = Color.WHITE;
             view.setVisibility(View.GONE);
         } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
-            color = Color.CYAN;
+            color = Color.GRAY;
         } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
-            color = Color.GREEN;
+            color = Color.RED;
         } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString())) {
             color = Color.BLUE;
         }

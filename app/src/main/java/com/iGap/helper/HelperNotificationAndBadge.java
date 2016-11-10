@@ -9,11 +9,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.hardware.display.DisplayManager;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -22,6 +25,7 @@ import com.iGap.R;
 import com.iGap.activities.ActivityChat;
 import com.iGap.activities.ActivityMain;
 import com.iGap.activities.ActivityPopUpNotification;
+import com.iGap.module.AttachFile;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoGlobal;
@@ -388,6 +392,8 @@ public class HelperNotificationAndBadge {
                         updateNotificationAndBadge(updateNotification, type);
                     }
 
+                    startActivityPopUpNotification();
+
                     break;
                 case GROUP:
 
@@ -544,7 +550,6 @@ public class HelperNotificationAndBadge {
             if (updateNotification) {
                 setNotification();
 
-                //  if (!G.isAppInFg && !AttachFile.isInAttach) startActivityPopUpNotification();
             }
             try {
                 // ShortcutBadger.applyCount(context, unreadMessageCount);
@@ -640,6 +645,44 @@ public class HelperNotificationAndBadge {
 
     private void startActivityPopUpNotification() {
 
+        if (!G.isAppInFg) {
+            if (!AttachFile.isInAttach) {
+                if (true) {
+                    SharedPreferences sharedPreferences = context.getSharedPreferences(SHP_SETTING.FILE_NAME, context.MODE_PRIVATE);
+                    int mode = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, 0);
+
+
+                    switch (mode) {
+
+                        case 0:
+                            // no popup
+                            break;
+                        case 1:
+                            //only when screen on
+                            if (isScreenOn(context))
+                                goToPopUpActivity();
+                            break;
+                        case 2:
+                            //only when screen off
+                            if (!isScreenOn(context))
+                                goToPopUpActivity();
+                            break;
+                        case 3:
+                            //always
+                            goToPopUpActivity();
+                            break;
+                    }
+
+                }
+            }
+        }
+
+
+    }
+
+
+    private void goToPopUpActivity() {
+
         if (ActivityPopUpNotification.isPopUpVisible) {
             if (ActivityPopUpNotification.onComplete != null) {
                 ActivityPopUpNotification.onComplete.complete(true, "", "");
@@ -649,7 +692,34 @@ public class HelperNotificationAndBadge {
             popUpActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             context.getApplicationContext().startActivity(popUpActivityIntent);
         }
+
     }
+
+
+    /**
+     * Is the screen of the device on.
+     *
+     * @param context the context
+     * @return true when (at least one) screen is on
+     */
+    public boolean isScreenOn(Context context) {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+            DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
+            boolean screenOn = false;
+            for (Display display : dm.getDisplays()) {
+                if (display.getState() != Display.STATE_OFF) {
+                    screenOn = true;
+                }
+            }
+            return screenOn;
+        } else {
+            PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+            //noinspection deprecation
+            return pm.isScreenOn();
+        }
+    }
+
+
 
     public static class RemoteActionReciver extends BroadcastReceiver {
 

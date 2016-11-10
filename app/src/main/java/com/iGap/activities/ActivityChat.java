@@ -302,6 +302,8 @@ public class ActivityChat extends ActivityEnhanced
 
     private MaterialDesignTextView iconMute;
 
+    public static OnComplete onComplete;
+
     private boolean hasDraft = false;
     private long replyToMessageId = 0;
 
@@ -415,6 +417,15 @@ public class ActivityChat extends ActivityEnhanced
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        onComplete = new OnComplete() {
+            @Override
+            public void complete(boolean result, String messageOne, String MessageTow) {
+
+                txtLastSeen.setText(messageOne + " member");
+
+            }
+        };
 
         mediaLayout = (LinearLayout) findViewById(R.id.ac_ll_music_layout);
         musicPlayer = new MusicPlayer(mediaLayout);

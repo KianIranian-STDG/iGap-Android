@@ -122,6 +122,38 @@ public class ActivityRegister extends ActivityEnhanced {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+
+        final IntentFilter filter = new IntentFilter();
+        filter.addAction("android.provider.Telephony.SMS_RECEIVED");
+
+        smsReceiver = new IncomingSms(new OnSmsReceive() {
+
+            @Override
+            public void onSmsReceive(String message) {
+                Log.i("UUU", "onSmsReceive 1 message : " + message);
+                try {
+                    if (message != null && !message.isEmpty() && !message.equals("null") && !message.equals("")) {
+                        Log.i("UUU", "onSmsReceive 2");
+                        rg_txt_verify_sms.setText(message);
+                        receiveVerifySms(message);
+                    }
+                } catch (Exception e1) {
+                    e1.getStackTrace();
+                }
+            }
+        });
+
+        Log.e("dddd", "ddddddddddddddddddddddddddddddddddddddd");
+
+        HelperPermision.getSmsPermision(ActivityRegister.this, new OnGetPermision() {
+            @Override
+            public void Allow() {
+                registerReceiver(smsReceiver, filter);
+            }
+        });
+
+
         edtCodeNumber = (EditText) findViewById(R.id.rg_edt_CodeNumber);
         btnChoseCountry = (Button) findViewById(R.id.rg_btn_choseCountry);
 
@@ -1078,48 +1110,16 @@ public class ActivityRegister extends ActivityEnhanced {
         userVerify(userName, verificationCode);
     }
 
-    @Override
-    protected void onResume() {
-        final IntentFilter filter = new IntentFilter();
-        filter.addAction("android.provider.Telephony.SMS_RECEIVED");
-
-        smsReceiver = new IncomingSms(new OnSmsReceive() {
-
-            @Override
-            public void onSmsReceive(String message) {
-                Log.i("UUU", "onSmsReceive 1 message : " + message);
-                try {
-                    if (message != null && !message.isEmpty() && !message.equals("null") && !message.equals("")) {
-                        Log.i("UUU", "onSmsReceive 2");
-                        rg_txt_verify_sms.setText(message);
-                        receiveVerifySms(message);
-                    }
-                } catch (Exception e1) {
-                    e1.getStackTrace();
-                }
-            }
-        });
-
-        Log.e("dddd", "ddddddddddddddddddddddddddddddddddddddd");
-
-        HelperPermision.getSmsPermision(ActivityRegister.this, new OnGetPermision() {
-            @Override
-            public void Allow() {
-                registerReceiver(smsReceiver, filter);
-            }
-        });
-
-        super.onResume();
-    }
 
     @Override
-    protected void onPause() {
+    protected void onStop() {
+
         try {
             unregisterReceiver(smsReceiver);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        super.onPause();
+        super.onStop();
     }
 
     @Override
