@@ -33,6 +33,7 @@ import com.iGap.request.RequestUserInfo;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -432,6 +433,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     @CallSuper
     public void onRequestDownloadFile(int offset, int progress) {
         String fileName = mMessage.attachment.token + "_" + mMessage.attachment.name;
+        if (mMessage.attachment.isThumbnailExistsOnLocal()) {
+            File file = new File(mMessage.attachment.getLocalThumbnailPath());
+            if (file.exists()) {
+                file.delete();
+            }
+        }
         if (progress == 100) {
             mMessage.attachment.setLocalFilePath(Long.parseLong(mMessage.messageID), AndroidUtils.suitableAppFilePath(mMessage.messageType) + "/" + fileName);
 
@@ -453,7 +460,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     public void onRequestDownloadThumbnail(String token, boolean done) {
         if (mMessage.attachment.smallThumbnail.size != 0) {
 
-            final String fileName = token + "_" + mMessage.attachment.name;
+            final String fileName = "thumb_" + token + "_" + mMessage.attachment.name;
             if (done) {
                 mMessage.attachment.setLocalThumbnailPath(Long.parseLong(mMessage.messageID), G.DIR_TEMP + "/" + fileName);
 
@@ -464,34 +471,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             String identity = mMessage.attachment.token + '*' + selector.toString() + '*' + mMessage.attachment.smallThumbnail.size + '*' + fileName + '*' + 0;
 
             new RequestFileDownload().download(token, 0, (int) mMessage.attachment.smallThumbnail.size, selector, identity);
-
-            /*
-
-            ProtoFileDownload.FileDownload.Selector selector =
-                ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
-            if (mMessage.attachment.getLocalThumbnailPath() == null
-                || mMessage.attachment.getLocalThumbnailPath().isEmpty()) {
-                mMessage.attachment.setLocalThumbnailPath(Long.parseLong(mMessage.messageID),
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-                        + "/"
-                        + mMessage.downloadAttachment.token
-                        + System.nanoTime()
-                        + ".jpg");
-            }
-
-            // I don't use offset in getting thumbnail
-            String identity = mMessage.downloadAttachment.token
-                + '*'
-                + selector.toString()
-                + '*'
-                + mMessage.attachment.smallThumbnail.size
-                + '*'
-                + mMessage.attachment.getLocalThumbnailPath()
-                + '*'
-                + mMessage.downloadAttachment.offset;
-
-            new RequestFileDownload().download(mMessage.downloadAttachment.token, 0,
-                (int) mMessage.attachment.smallThumbnail.size, selector, identity);*/
         }
     }
 
