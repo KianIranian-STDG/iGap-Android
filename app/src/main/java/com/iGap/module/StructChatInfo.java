@@ -30,6 +30,7 @@ public class StructChatInfo {
     public String initials = "";
     public String lastMessageStatus = "";
     public String description = "";
+    public String lastMessage = "";
     public int avatarCount;
     public String role = "";
     public StructMessageAttachment avatar;

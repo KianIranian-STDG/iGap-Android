@@ -19,6 +19,7 @@ import com.iGap.module.OnComplete;
 import com.iGap.module.StructChatInfo;
 import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoFileDownload;
+import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmAttachmentFields;
 import com.iGap.realm.RealmRegisteredInfo;
@@ -50,6 +51,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
     public StructChatInfo mInfo;
     public OnComplete mComplete;
+    private String VOICE = "Voice Message";
 
     public RoomItem setComplete(OnComplete complete) {
         this.mComplete = complete;
@@ -223,9 +225,11 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
             Log.i("BBB", "**********");
             Log.i("BBB", "*****");
         } else {
-            String lastMessage =
-                    AppUtils.rightLastMessage(holder.itemView.getResources(), mInfo.chatType,
-                            mInfo.lastMessageId);
+            String lastMessage = AppUtils.rightLastMessage(holder.itemView.getResources(), mInfo.chatType, mInfo.lastMessageId);
+            if (lastMessage == null) {
+                lastMessage = mInfo.lastMessage;
+            }
+
             if (lastMessage == null || lastMessage.isEmpty()) {
                 holder.messageStatus.setVisibility(View.GONE);
                 holder.lastMessage.setVisibility(View.GONE);
@@ -279,27 +283,32 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
                 }
 
                 holder.lastMessage.setVisibility(View.VISIBLE);
-                holder.lastMessage.setText(lastMessage);
+
+
+                Realm realm = Realm.getDefaultInstance();
+                RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, mInfo.lastMessageId).findFirst();
+                if (realmRoomMessage != null && (realmRoomMessage.getMessageType().equals(ProtoGlobal.RoomMessageType.VOICE.toString()))) {
+                    holder.lastMessage.setText(VOICE);
+                } else {
+                    holder.lastMessage.setText(lastMessage);
+                }
+                realm.close();
             }
         }
 
         if (mInfo.avatar != null) {
 
             if (mInfo.avatar.isFileExistsOnLocal()) {
-                ImageLoader.getInstance()
-                        .displayImage(AndroidUtils.suitablePath(mInfo.avatar.getLocalFilePath()),
-                                holder.image);
+                Log.i("PPP", "1");
+                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mInfo.avatar.getLocalFilePath()), holder.image);
             } else if (mInfo.avatar.isThumbnailExistsOnLocal()) {
-                ImageLoader.getInstance()
-                        .displayImage(AndroidUtils.suitablePath(mInfo.avatar.getLocalThumbnailPath()),
-                                holder.image);
+                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mInfo.avatar.getLocalThumbnailPath()), holder.image);
 
             } else {
-                holder.image.setImageBitmap(
-                        com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView
-                                .getContext()
-                                .getResources()
-                                .getDimension(R.dimen.dp60), mInfo.initials, mInfo.color));
+                holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView
+                        .getContext()
+                        .getResources()
+                        .getDimension(R.dimen.dp60), mInfo.initials, mInfo.color));
 
                 if (mInfo.chatType != RoomType.CHAT) {
                     if (mInfo.avatar.token != null && !mInfo.avatar.token.isEmpty()) {
@@ -314,9 +323,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
                 }
             }
         } else {
-            holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture(
-                    (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60),
-                    mInfo.initials, mInfo.color));
+            holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), mInfo.initials, mInfo.color));
 
             if (mInfo.chatType != RoomType.CHAT) {
                 requestForAvatarThumbnail(mInfo.avatar.token);

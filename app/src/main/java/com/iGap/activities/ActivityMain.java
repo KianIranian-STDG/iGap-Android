@@ -810,6 +810,7 @@ public class ActivityMain extends ActivityEnhanced
                         Toast.makeText(ActivityMain.this, "rooms list fetched: " + Integer.toString(roomList.size()), Toast.LENGTH_LONG).show();
 
                         for (final ProtoGlobal.Room room : roomList) {
+                            Log.i("PPP", "getTitle : " + room.getTitle() + "  ||  getMessage : " + room.getLastMessage().getMessage() + "  ||  getStatus : " + room.getLastMessage().getStatus());
                             putChatToDatabase(room);
                         }
                         loadLocalChatList();
@@ -869,6 +870,7 @@ public class ActivityMain extends ActivityEnhanced
             info.initials = realmRoom.getInitials();
             info.ownerId = realmRoom.getId();
             info.readOnly = realmRoom.getReadOnly();
+            info.lastMessage = realmRoom.getLastMessage();
             if (realmRoom.getDraft() != null) {
                 info.draftMessage = realmRoom.getDraft().getMessage();
             }

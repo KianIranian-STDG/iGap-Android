@@ -167,8 +167,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
         Realm realm = Realm.getDefaultInstance();
 
         //group info
-        RealmRoom realmRoom =
-                realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
         title = realmRoom.getTitle();
         initials = realmRoom.getInitials();
@@ -418,7 +417,6 @@ public class ActivityGroupProfile extends ActivityEnhanced
         }
 
 
-
         txtMore = (TextView) findViewById(R.id.agp_txt_more);
         txtMore.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -632,23 +630,29 @@ public class ActivityGroupProfile extends ActivityEnhanced
 
                 if (role == GroupChatRole.OWNER) {
 
-                    if (contacts.get(position).role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+                    if (contacts.get(position).role.equals(
+                            ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
                         kickMember(contacts.get(position).peerId);
-                    } else if (contacts.get(position).role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
+                    } else if (contacts.get(position).role.equals(
+                            ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
                         kickAdmin(contacts.get(position).peerId);
-                    } else if (contacts.get(position).role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
+                    } else if (contacts.get(position).role.equals(
+                            ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
                         kickModerator(contacts.get(position).peerId);
                     }
                 } else if (role == GroupChatRole.ADMIN) {
 
-                    if (contacts.get(position).role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+                    if (contacts.get(position).role.equals(
+                            ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
                         kickMember(contacts.get(position).peerId);
-                    } else if (contacts.get(position).role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
+                    } else if (contacts.get(position).role.equals(
+                            ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
                         kickModerator(contacts.get(position).peerId);
                     }
                 } else if (role == GroupChatRole.MODERATOR) {
 
-                    if (contacts.get(position).role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+                    if (contacts.get(position).role.equals(
+                            ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
                         kickMember(contacts.get(position).peerId);
                     }
                 }

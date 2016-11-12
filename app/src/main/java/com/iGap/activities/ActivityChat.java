@@ -307,6 +307,9 @@ public class ActivityChat extends ActivityEnhanced
     private boolean hasDraft = false;
     private long replyToMessageId = 0;
 
+    private long latestIdentity;//TODO [Saeed Mozaffari] [2016-11-10 1:03 PM] - Clear This code nabayad idenetity yeki beshe
+    private long latestIdentityFinal;
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -403,11 +406,14 @@ public class ActivityChat extends ActivityEnhanced
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
+    boolean firstTimeGetHistory = false; //TODO [Saeed Mozaffari] [2016-11-10 12:47 PM] - hataman firstTimeGetHistory estefade nashavad chon eshtebah ast in ravesh
+
     private void getChatHistory() {
         Realm realm = Realm.getDefaultInstance();
         Log.i("YYY", "realm.where(RealmRoomMessage.class).findAll() : " + realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll().size());
         Log.i("YYY", "mRoomId : " + mRoomId);
         if (realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll().size() == 0) {
+            firstTimeGetHistory = true;
             new RequestClientGetRoomHistory().getRoomHistory(mRoomId, 0, Long.toString(mRoomId));
         }
         realm.close();
@@ -1459,10 +1465,12 @@ public class ActivityChat extends ActivityEnhanced
                     if (!message.isEmpty()) {
                         RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                         String identity = Long.toString(SUID.id().get());
-                        if (room != null && room.getLastMessageId() != 0) {
-                            identity = Long.toString(room.getLastMessageId() + 1L);
-                        }
+//                        if (room != null && room.getLastMessageId() != 0) {
+//                            identity = Long.toString(room.getLastMessageId() + 1L);
+//                        }
+
                         final String finalIdentity = identity;
+
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
@@ -1472,7 +1480,9 @@ public class ActivityChat extends ActivityEnhanced
                                 roomMessage.setRoomId(mRoomId);
                                 roomMessage.setMessage(message);
                                 roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
+
                                 roomMessage.setMessageId(parseLong(finalIdentity));
+
                                 roomMessage.setUserId(senderId);
                                 roomMessage.setUpdateTime(System.currentTimeMillis());
 
@@ -1542,7 +1552,6 @@ public class ActivityChat extends ActivityEnhanced
                         voiceRecord.startVoiceRecord();
                     }
                 }
-
 
 
                 return true;
@@ -1980,8 +1989,7 @@ public class ActivityChat extends ActivityEnhanced
         }
 
         if (avatars.isEmpty()) {
-            imvUserPicture.setImageBitmap(
-                    com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
+            imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
             return;
         }
         RealmAvatar realmAvatar = null;
@@ -1994,8 +2002,7 @@ public class ActivityChat extends ActivityEnhanced
         }
 
         if (realmAvatar == null) {
-            imvUserPicture.setImageBitmap(
-                    com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
+            imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
             return;
         }
 
@@ -2004,8 +2011,7 @@ public class ActivityChat extends ActivityEnhanced
         } else if (realmAvatar.getFile().isThumbnailExistsOnLocal()) {
             ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalThumbnailPath()), imvUserPicture);
         } else {
-            imvUserPicture.setImageBitmap(
-                    com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
+            imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
         }
 
         realm.close();
@@ -3286,7 +3292,12 @@ public class ActivityChat extends ActivityEnhanced
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    switchAddItem(new ArrayList<>(Arrays.asList(StructMessageInfo.convert(roomMessage))), true);
+                    if (firstTimeGetHistory) {
+                        firstTimeGetHistory = false;
+                        switchAddItem(new ArrayList<>(Arrays.asList(StructMessageInfo.convert(roomMessage))), false);
+                    } else {
+                        switchAddItem(new ArrayList<>(Arrays.asList(StructMessageInfo.convert(roomMessage))), true);
+                    }
                 }
             });
         }
@@ -3636,11 +3647,15 @@ public class ActivityChat extends ActivityEnhanced
                             new RequestGroupUpdateDraft().groupUpdateDraft(mRoomId, edtChat.getText().toString(), replyToMessageId);
                         }
 
-                        G.onDraftMessage.onDraftMessage(mRoomId, edtChat.getText().toString());
+                        if (G.onDraftMessage != null) {
+                            G.onDraftMessage.onDraftMessage(mRoomId, edtChat.getText().toString());
+                        }
                     } else {
 
                         clearDraftRequest();
-                        G.onDraftMessage.onDraftMessage(mRoomId, "");
+                        if (G.onDraftMessage != null) {
+                            G.onDraftMessage.onDraftMessage(mRoomId, "");
+                        }
                     }
 
                     realmRoom.setDraftFile(realmDraftFile);
@@ -3671,8 +3686,9 @@ public class ActivityChat extends ActivityEnhanced
                             } else if (chatType == GROUP) {
                                 new RequestGroupUpdateDraft().groupUpdateDraft(mRoomId, message, replyToMessageId);
                             }
-
-                            G.onDraftMessage.onDraftMessage(mRoomId, message);
+                            if (G.onDraftMessage != null) { // zamani ke mostaghim varede chat beshim bedune vorud be list room ha onDraftMessage null mishe
+                                G.onDraftMessage.onDraftMessage(mRoomId, message);
+                            }
                         }
                     }
                 });

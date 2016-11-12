@@ -4,7 +4,7 @@ import com.iGap.proto.ProtoGroupGetMemberList;
 
 public class RequestGroupGetMemberList {
 
-    public void getRoomHistory(long roomId) {
+    public void getMemberList(long roomId) {
 
         ProtoGroupGetMemberList.GroupGetMemberList.Builder builder =
                 ProtoGroupGetMemberList.GroupGetMemberList.newBuilder();
