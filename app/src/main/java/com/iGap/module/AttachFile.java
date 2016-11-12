@@ -50,6 +50,8 @@ public class AttachFile {
     public static final int MEDIA_TYPE_IMAGE = 18;
     public static final int requestOpenGalleryForImageMultipleSelect = 19;
     public static final int requestOpenGalleryForVideoMultipleSelect = 20;
+    public static final int request_code_open_document = 21;
+
     public static final String IMAGE_DIRECTORY_NAME = "Upload";
     public static boolean isInAttach = false;
     public static String imagePath = "";
@@ -330,6 +332,20 @@ public class AttachFile {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void requestOpenDocumentFolder() {
+
+
+        HelperPermision.getStoragePermision(context, new OnGetPermision() {
+            @Override
+            public void Allow() {
+                Intent intent = new Intent(context, ActivityExplorer.class);
+                intent.putExtra("Mode", "documnet");
+                ((Activity) context).startActivityForResult(intent, request_code_pic_file);
+            }
+        });
+
     }
 
     //*************************************************************************************************************

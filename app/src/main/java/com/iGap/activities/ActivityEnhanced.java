@@ -2,12 +2,17 @@ package com.iGap.activities;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
+import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.helper.HelperPermision;
 import com.iGap.module.AttachFile;
+import com.iGap.proto.ProtoUserUpdateStatus;
+import com.iGap.request.RequestUserUpdateStatus;
 
 public class ActivityEnhanced extends AppCompatActivity {
     @Override
@@ -41,6 +46,11 @@ public class ActivityEnhanced extends AppCompatActivity {
 
         AttachFile.isInAttach = false;
 
+        if (!G.isUserStatusOnline) {
+            new RequestUserUpdateStatus().userUpdateStatus(ProtoUserUpdateStatus.UserUpdateStatus.Status.ONLINE);
+            Log.e("ddd", "request online");
+        }
+
         super.onStart();
     }
 
@@ -52,5 +62,19 @@ public class ActivityEnhanced extends AppCompatActivity {
             G.isAppInFg = false;
         }
         G.isScrInFg = false;
+
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (!G.isAppInFg) {
+                    new RequestUserUpdateStatus().userUpdateStatus(ProtoUserUpdateStatus.UserUpdateStatus.Status.OFFLINE);
+                    Log.e("ddd", "request offline");
+                }
+            }
+        }, Config.CheckUpdateStatusTime);
+
+
     }
+
 }

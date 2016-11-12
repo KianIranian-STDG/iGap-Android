@@ -3,6 +3,7 @@ package com.iGap.module;
 import android.content.Context;
 import android.media.MediaRecorder;
 import android.os.Vibrator;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -63,6 +64,8 @@ public class VoiceRecord {
         this.layoutAttach = layoutAttach;
         this.layoutMic = layoutMic;
         this.onVoiceRecordListener = listener;
+
+        DistanceToCancel = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 70, context.getResources().getDisplayMetrics());
     }
 
     public void setItemTag(String itemTag) {
@@ -193,7 +196,7 @@ public class VoiceRecord {
                 @Override
                 public void run() {
                     milisecend++;
-                    if (milisecend > 100) milisecend = 1;
+                    if (milisecend > 99) milisecend = 1;
                     txtMilisecend.post(new Runnable() {
                         @Override
                         public void run() {

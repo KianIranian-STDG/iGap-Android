@@ -372,6 +372,8 @@ public class HelperNotificationAndBadge {
             Realm realm = Realm.getDefaultInstance();
             RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
+            startActivityPopUpNotification();
+
             switch (type) {
                 case CHAT:
                     if (realmRoom != null
@@ -392,7 +394,6 @@ public class HelperNotificationAndBadge {
                         updateNotificationAndBadge(updateNotification, type);
                     }
 
-                    startActivityPopUpNotification();
 
                     break;
                 case GROUP:
@@ -647,7 +648,7 @@ public class HelperNotificationAndBadge {
 
         if (!G.isAppInFg) {
             if (!AttachFile.isInAttach) {
-                if (true) {
+                if (true) {// TODO: 11/12/2016   check other program not run
                     SharedPreferences sharedPreferences = context.getSharedPreferences(SHP_SETTING.FILE_NAME, context.MODE_PRIVATE);
                     int mode = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, 0);
 

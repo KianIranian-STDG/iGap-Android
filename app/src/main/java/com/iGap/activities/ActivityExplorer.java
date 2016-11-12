@@ -41,6 +41,9 @@ public class ActivityExplorer extends ActivityEnhanced {
     RecyclerView recyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
 
+    String mode = "normal";
+    boolean first = true;
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
@@ -50,6 +53,13 @@ public class ActivityExplorer extends ActivityEnhanced {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_explorer);
+
+
+        if (getIntent().getExtras() != null)
+            mode = getIntent().getExtras().getString("Mode");
+        if (mode == null)
+            mode = "normal";
+
 
         recyclerView = (RecyclerView) findViewById(R.id.ae_recycler_view_explorer);
         recyclerView.setItemViewCacheSize(100);
@@ -145,6 +155,7 @@ public class ActivityExplorer extends ActivityEnhanced {
             rootcount++;
         }
 
+
         recyclerView.setAdapter(
                 new AdapterExplorer(item, new AdapterExplorer.OnItemClickListenerExplorer() {
 
@@ -154,6 +165,62 @@ public class ActivityExplorer extends ActivityEnhanced {
                         onItemClickInernal(position);
                     }
                 }));
+
+
+        if (first) {
+
+            if (mode.equals("documnet")) {
+
+                String documentPath = Environment.getExternalStorageDirectory().toString() + "/Documents";
+
+                File file = new File(documentPath);
+
+                if (file.exists()) {
+                    onItemClickInernal(0);
+
+
+                    int po = getItemId(Environment.getExternalStorageDirectory().toString(), "Documents");
+
+                    onItemClickInernal(po);
+                }
+            }
+            first = false;
+        }
+
+
+    }
+
+    private int getItemId(String path, String name) {
+
+        File fileDir = new File(path);
+
+        if (fileDir.isDirectory()) {
+
+            String[] tmpname = fileDir.list();
+
+            if (tmpname == null) {
+                return -1;
+            }
+
+
+            for (int i = 0; i < tmpname.length; i++) {
+
+                if (tmpname[i].startsWith(".")) {
+                    continue;
+                } else {
+                    File tmp = new File(fileDir.getAbsolutePath() + "/" + tmpname[i]);
+                    if (tmp.canRead()) {
+
+                        if (tmpname[i].equals(name))
+                            return i;
+
+
+                    }
+                }
+            }
+        }
+
+        return -1;
     }
 
     void fill(String nextnod, int position) {
@@ -178,16 +245,20 @@ public class ActivityExplorer extends ActivityEnhanced {
                     } else {
                         File tmp = new File(fileDir.getAbsolutePath() + "/" + tmpname[i]);
                         if (tmp.canRead()) {
-                            x = new StructExplorerItem();
-                            x.name = tmpname[i];
 
-                            if (tmp.isDirectory()) {
-                                x.image = R.mipmap.actionbar_icon_myfiles;
-                            } else {
-                                x.image = HelperMimeType.getMimeResource(tmpname[i]);
+                            if (canAddFile(tmpname[i]) || tmp.isDirectory()) {
+
+                                x = new StructExplorerItem();
+                                x.name = tmpname[i];
+
+                                if (tmp.isDirectory()) {
+                                    x.image = R.mipmap.actionbar_icon_myfiles;
+                                } else {
+                                    x.image = HelperMimeType.getMimeResource(tmpname[i]);
+                                }
+                                x.path = tmp.getAbsolutePath();
+                                item.add(x);
                             }
-                            x.path = tmp.getAbsolutePath();
-                            item.add(x);
                         }
                     }
                 }
@@ -213,6 +284,31 @@ public class ActivityExplorer extends ActivityEnhanced {
         } catch (Exception e) {
             Toast.makeText(ActivityExplorer.this, e.toString(), Toast.LENGTH_LONG).show();
         }
+    }
+
+    private boolean canAddFile(String mime) {
+        boolean result = false;
+
+        if (mode.equals("documnet")) {
+
+
+            if (mime == null)
+                return false;
+
+            if (mime.length() < 1)
+                return false;
+
+            mime = mime.toLowerCase();
+
+            if (mime.endsWith(".txt") || mime.endsWith(".pdf") || mime.endsWith(".doc") || mime.endsWith(".xls") || mime.endsWith(".snb")
+                    || mime.endsWith(".ppt") || mime.endsWith(".html") || mime.endsWith(".htm"))
+                result = true;
+
+        } else {
+            return true;
+        }
+
+        return result;
     }
 
     //    Integer setPicture(File f) {

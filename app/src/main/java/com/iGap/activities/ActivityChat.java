@@ -499,6 +499,7 @@ public class ActivityChat extends ActivityEnhanced
 
                 if (isChatReadOnly) {
                     viewAttachFile.setVisibility(View.GONE);
+                    ((RecyclerView) findViewById(R.id.chl_recycler_view_chat)).setPadding(0, 0, 0, 0);
                 }
 
                 if (realmRoom.getType() == RoomType.CHAT) {
@@ -1811,6 +1812,7 @@ public class ActivityChat extends ActivityEnhanced
 
                 mAdapter.filter(charSequence);
 
+
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -1820,13 +1822,13 @@ public class ActivityChat extends ActivityEnhanced
                             selectedPosition = messageCounter - 1;
                             recyclerView.scrollToPosition(selectedPosition);
                             txtMessageCounter.setText(messageCounter + " " + getString(R.string.of) + messageCounter);
-                            selectMessage(selectedPosition);
+                            //  selectMessage(selectedPosition);
                         } else {
                             txtMessageCounter.setText("0 " + getString(R.string.of) + messageCounter);
                             selectedPosition = 0;
                         }
                     }
-                }, 500);
+                }, 600);
 
                 if (charSequence.length() > 0) {
                     txtClearMessageSearch.setTextColor(Color.WHITE);
@@ -2103,7 +2105,7 @@ public class ActivityChat extends ActivityEnhanced
                         attachFile.requestPickAudio();
                         break;
                     case 4:
-                        Log.i("TAG12", "onClick: " + buttonIndex);
+                        attachFile.requestOpenDocumentFolder();
                         break;
                     case 5:
                         attachFile.requestPickFile();
@@ -2194,51 +2196,52 @@ public class ActivityChat extends ActivityEnhanced
 
 
     private void setDraftMessage(int requestCode) {
+
+        if (listPathString == null)
+            return;
+        if (listPathString.size() < 1)
+            return;
+
         switch (requestCode) {
             case AttachFile.request_code_TAKE_PICTURE:
-                txtFileNameForSend.setText(attachFile.getFileName(latestFilePath));
+                txtFileNameForSend.setText(attachFile.getFileName(listPathString.get(0)));
                 break;
             case AttachFile.requestOpenGalleryForImageMultipleSelect:
-                if (latestUri != null) {
-                    txtFileNameForSend.setText(attachFile.getFileName(getFilePathFromUri(latestUri)));
-                } else if (listPathString != null) {
-                    if (listPathString.size() > 0) {
-                        txtFileNameForSend.setText(attachFile.getFileName(listPathString.size() + getString(R.string.image_selected_for_send)));
-                    }
+                if (listPathString.size() == 1) {
+                    txtFileNameForSend.setText(attachFile.getFileName(listPathString.get(0)));
+                } else {
+                    txtFileNameForSend.setText(listPathString.size() + getString(R.string.image_selected_for_send));
                 }
 
                 break;
 
             case AttachFile.requestOpenGalleryForVideoMultipleSelect:
 
-                if (latestUri != null) {
-                    txtFileNameForSend.setText(attachFile.getFileName(getFilePathFromUri(latestUri)));
-                } else if (listPathString != null) {
-                    if (listPathString.size() > 0) {
-                        txtFileNameForSend.setText(attachFile.getFileName(listPathString.size() + getString(R.string.video_selected_for_send)));
-                    }
+                if (listPathString.size() == 1) {
+                    txtFileNameForSend.setText(attachFile.getFileName(listPathString.get(0)));
+                } else {
+                    txtFileNameForSend.setText(listPathString.size() + getString(R.string.video_selected_for_send));
+
                 }
 
                 break;
 
 
             case AttachFile.request_code_pic_audi:
-                if (latestUri != null) {
-                    txtFileNameForSend.setText(attachFile.getFileName(getFilePathFromUri(latestUri)));
-                } else if (listPathString != null) {
-                    if (listPathString.size() > 0) {
-                        txtFileNameForSend.setText(attachFile.getFileName(listPathString.size() + getString(R.string.audio_selected_for_send)));
-                    }
+                if (listPathString.size() == 1) {
+                    txtFileNameForSend.setText(attachFile.getFileName(listPathString.get(0)));
+                } else {
+                    txtFileNameForSend.setText(listPathString.size() + getString(R.string.audio_selected_for_send));
                 }
                 break;
             case AttachFile.request_code_pic_file:
-                if (latestUri != null) {
-                    txtFileNameForSend.setText(attachFile.getFileName(getFilePathFromUri(latestUri)));
+                if (listPathString.size() == 1) {
+                    txtFileNameForSend.setText(attachFile.getFileName(listPathString.get(0)));
                 }
                 break;
             case AttachFile.request_code_paint:
-                if (latestUri != null) {
-                    txtFileNameForSend.setText(attachFile.getFileName(getFilePathFromUri(latestUri)));
+                if (listPathString.size() == 1) {
+                    txtFileNameForSend.setText(attachFile.getFileName(listPathString.get(0)));
                 }
                 break;
             case AttachFile.request_code_contact_phone:
@@ -2890,7 +2893,7 @@ public class ActivityChat extends ActivityEnhanced
 
     @Override
     public void onChatMessageSelectionChanged(int selectedCount, Set<AbstractMessage> selectedItems) {
-        Toast.makeText(ActivityChat.this, "selected: " + Integer.toString(selectedCount), Toast.LENGTH_SHORT).show();
+        //   Toast.makeText(ActivityChat.this, "selected: " + Integer.toString(selectedCount), Toast.LENGTH_SHORT).show();
         if (selectedCount > 0) {
             toolbar.setVisibility(View.GONE);
 

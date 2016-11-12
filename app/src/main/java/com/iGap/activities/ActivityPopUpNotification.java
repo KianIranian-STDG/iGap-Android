@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.app.KeyguardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -74,6 +75,7 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
+import static com.iGap.G.context;
 import static com.iGap.proto.ProtoGlobal.Room.Type.CHAT;
 import static com.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
@@ -175,7 +177,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                     if (unreadList.size() > 0) initComponnet = new InitComponnet();
                 }
             }
-        }, 250);
+        }, 350);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -275,7 +277,8 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             for (RealmRoomMessage roomMessage : realmRoomMessages) {
                 if (roomMessage != null) {
                     if (roomMessage.getUserId() != userId) {
-                        if (roomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENT.toString()) || roomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.DELIVERED.toString())) {
+                        if (roomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENT.toString()) ||
+                                roomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.DELIVERED.toString())) {
 
                             if (roomMessage.getMessageType().toString().toLowerCase().contains("text")) {
                                 unreadList.add(roomMessage);
@@ -430,10 +433,28 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             });
 
             txtName = (TextView) findViewById(R.id.apn_txt_name);
+            txtName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, ActivityChat.class);
+                    intent.putExtra("RoomId", unreadList.get(viewPager.getCurrentItem()).getRoomId());
+                    startActivity(intent);
+                    finish();
+                }
+            });
 
             txtLastSeen = (TextView) findViewById(R.id.apn_txt_last_seen);
 
             imvUserPicture = (ImageView) findViewById(R.id.apn_imv_user_picture);
+            imvUserPicture.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, ActivityChat.class);
+                    intent.putExtra("RoomId", unreadList.get(viewPager.getCurrentItem()).getRoomId());
+                    startActivity(intent);
+                    finish();
+                }
+            });
 
             btnMessageCounter = (Button) findViewById(R.id.apn_btn_message_counter);
             btnMessageCounter.setOnClickListener(new View.OnClickListener() {
@@ -473,6 +494,8 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
                 }
             });
+
+
         }
 
         private void initImojiPopUp() {
@@ -723,13 +746,25 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         }
 
         @Override
-        public Object instantiateItem(View container, int position) {
+        public Object instantiateItem(View container, final int position) {
 
             LayoutInflater inflater = LayoutInflater.from(ActivityPopUpNotification.this);
             ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.sub_layout_activity_popup_notification, (ViewGroup) container, false);
 
             TextView txtMessage = (TextView) layout.findViewById(R.id.slapn_txt_message);
             txtMessage.setText(unreadList.get(position).getMessage());
+
+            layout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, ActivityChat.class);
+                    intent.putExtra("RoomId", unreadList.get(position).getRoomId());
+                    startActivity(intent);
+                    finish();
+
+                }
+            });
+
 
             ((ViewGroup) container).addView(layout);
 

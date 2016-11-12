@@ -162,6 +162,7 @@ public class G extends Application {
     public static boolean isAppInFg = false;
     public static boolean isScrInFg = false;
     public static boolean isChangeScrFg = false;
+    public static boolean isUserStatusOnline = false;
     public static ArrayList<String> unSecure = new ArrayList<>();
     // list of actionId that can be doing without secure
     public static ArrayList<String> unLogin = new ArrayList<>();

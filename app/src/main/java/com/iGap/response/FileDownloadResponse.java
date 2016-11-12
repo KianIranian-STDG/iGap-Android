@@ -24,6 +24,7 @@ public class FileDownloadResponse extends MessageHandler {
 
     @Override
     public void handler() {
+        super.handler();
         Log.i("BBB", "setAvatar  FileDownloadResponse message : " + message);
         ProtoFileDownload.FileDownloadResponse.Builder builder =
                 (ProtoFileDownload.FileDownloadResponse.Builder) message;
