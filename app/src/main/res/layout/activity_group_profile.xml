@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/fragmentContainer_group_profile"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layoutDirection="ltr">
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/fragmentContainer_group_profile"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layoutDirection="ltr">
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -54,7 +54,7 @@
                             android:id="@+id/agp_imv_group_avatar"
                             android:layout_width="@dimen/dp88"
                             android:layout_height="@dimen/dp88"
-                            android:src="@mipmap/back_chat3" />
+                            android:src="@mipmap/back_chat3"/>
                     </com.iGap.libs.rippleeffect.RippleView>
 
                     <TextView
@@ -65,7 +65,7 @@
                         android:text=""
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="@android:color/white"
-                        android:textSize="@dimen/sp18" />
+                        android:textSize="@dimen/sp18"/>
 
                 </LinearLayout>
 
@@ -100,7 +100,7 @@
                                 android:gravity="center"
                                 android:text="@string/md_back_arrow"
                                 android:textColor="@android:color/white"
-                                android:textSize="@dimen/sp18" />
+                                android:textSize="@dimen/sp18"/>
                         </com.iGap.libs.rippleeffect.RippleView>
 
                         <TextView
@@ -113,7 +113,7 @@
                             android:textColor="@color/whit_background"
                             android:textSize="@dimen/sp22"
                             android:textStyle="bold"
-                            android:visibility="gone" />
+                            android:visibility="gone"/>
 
                         <com.iGap.libs.rippleeffect.RippleView
                             android:id="@+id/agp_ripple_menu"
@@ -134,7 +134,7 @@
                                 android:gravity="center"
                                 android:text="@string/md_show_more_button"
                                 android:textColor="@android:color/white"
-                                android:textSize="@dimen/sp18" />
+                                android:textSize="@dimen/sp18"/>
                         </com.iGap.libs.rippleeffect.RippleView>
                     </RelativeLayout>
                 </android.support.v7.widget.Toolbar>
@@ -170,7 +170,7 @@
                         android:text="INFO"
                         android:textColor="@color/green"
                         android:textSize="@dimen/sp18"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -195,7 +195,7 @@
                                 android:layout_height="wrap_content"
                                 android:singleLine="true"
                                 android:text="@string/group_name"
-                                android:textSize="@dimen/sp16" />
+                                android:textSize="@dimen/sp16"/>
 
                             <TextView
                                 android:id="@+id/agp_txt_group_name"
@@ -206,7 +206,7 @@
                                 android:singleLine="true"
                                 android:text=""
                                 android:textColor="@android:color/black"
-                                android:textSize="@dimen/sp16" />
+                                android:textSize="@dimen/sp16"/>
 
                         </LinearLayout>
 
@@ -225,7 +225,7 @@
                                 android:layout_height="wrap_content"
                                 android:singleLine="true"
                                 android:text="@string/shared_media"
-                                android:textSize="@dimen/sp16" />
+                                android:textSize="@dimen/sp16"/>
 
                             <TextView
                                 android:id="@+id/agp_txt_number_of_shared_media"
@@ -236,7 +236,7 @@
                                 android:singleLine="true"
                                 android:text="12"
                                 android:textColor="@android:color/black"
-                                android:textSize="@dimen/sp16" />
+                                android:textSize="@dimen/sp16"/>
                         </LinearLayout>
 
 
@@ -266,7 +266,7 @@
                                 android:layout_height="wrap_content"
                                 android:singleLine="true"
                                 android:text="@string/group_description"
-                                android:textSize="@dimen/sp16" />
+                                android:textSize="@dimen/sp16"/>
 
                             <TextView
                                 android:id="@+id/agp_txt_group_description"
@@ -277,7 +277,7 @@
                                 android:singleLine="true"
                                 android:text=""
                                 android:textColor="@android:color/black"
-                                android:textSize="@dimen/sp16" />
+                                android:textSize="@dimen/sp16"/>
 
                         </LinearLayout>
 
@@ -295,7 +295,7 @@
                                 android:layout_height="wrap_content"
                                 android:singleLine="true"
                                 android:text="@string/member"
-                                android:textSize="@dimen/sp16" />
+                                android:textSize="@dimen/sp16"/>
 
                             <TextView
                                 android:id="@+id/agp_txt_member_number"
@@ -306,7 +306,7 @@
                                 android:singleLine="true"
                                 android:text=""
                                 android:textColor="@android:color/black"
-                                android:textSize="@dimen/sp16" />
+                                android:textSize="@dimen/sp16"/>
 
                         </LinearLayout>
 
@@ -332,7 +332,7 @@
                         android:text="Members"
                         android:textColor="@color/green"
                         android:textSize="@dimen/sp18"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"/>
 
 
                     <LinearLayout
@@ -349,7 +349,7 @@
                             android:layout_height="@dimen/dp48"
                             android:layout_marginLeft="@dimen/dp4"
                             android:scaleType="centerCrop"
-                            android:src="@mipmap/add_chat_background3" />
+                            android:src="@mipmap/add_chat_background3"/>
 
                         <TextView
                             android:layout_width="match_parent"
@@ -357,7 +357,7 @@
                             android:gravity="center_vertical"
                             android:padding="@dimen/dp8"
                             android:text="@string/add_new_member"
-                            android:textSize="@dimen/sp16" />
+                            android:textSize="@dimen/sp16"/>
 
 
                     </LinearLayout>
@@ -369,7 +369,7 @@
                         android:layout_height="wrap_content"
                         android:scrollbars="vertical"
                         android:visibility="visible"
-                        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
                     <TextView
                         android:id="@+id/agp_txt_more"
@@ -378,7 +378,7 @@
                         android:gravity="center"
                         android:padding="@dimen/dp12"
                         android:text="more..."
-                        android:textSize="@dimen/sp16" />
+                        android:textSize="@dimen/sp16"/>
 
 
                 </LinearLayout>
@@ -399,7 +399,7 @@
                         android:text="Settings"
                         android:textColor="@color/green"
                         android:textSize="@dimen/sp18"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"/>
 
                     <LinearLayout
                         android:id="@+id/agp_ll_set_admin"
@@ -419,14 +419,14 @@
                             android:singleLine="true"
                             android:text="@string/set_admin"
                             android:textColor="@android:color/black"
-                            android:textSize="@dimen/sp16" />
+                            android:textSize="@dimen/sp16"/>
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1px"
                             android:layout_marginBottom="@dimen/dp4"
                             android:layout_marginTop="@dimen/dp12"
-                            android:background="@color/gray" />
+                            android:background="@color/gray"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -447,14 +447,14 @@
                             android:singleLine="true"
                             android:text="@string/set_modereator"
                             android:textColor="@android:color/black"
-                            android:textSize="@dimen/sp16" />
+                            android:textSize="@dimen/sp16"/>
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1px"
                             android:layout_marginBottom="@dimen/dp4"
                             android:layout_marginTop="@dimen/dp12"
-                            android:background="@color/gray" />
+                            android:background="@color/gray"/>
 
                     </LinearLayout>
 
@@ -483,7 +483,7 @@
                                 android:singleLine="true"
                                 android:text="@string/member_can_add_new_member"
                                 android:textColor="@android:color/black"
-                                android:textSize="@dimen/sp16" />
+                                android:textSize="@dimen/sp16"/>
 
                             <ToggleButton
                                 android:id="@+id/agp_toggle_member_can_add_member"
@@ -492,7 +492,7 @@
                                 android:background="@drawable/st_switch_button"
                                 android:paddingRight="@dimen/dp4"
                                 android:textOff=""
-                                android:textOn="" />
+                                android:textOn=""/>
 
 
                         </LinearLayout>
@@ -502,7 +502,8 @@
                             android:layout_height="1px"
                             android:layout_marginBottom="@dimen/dp12"
                             android:layout_marginTop="@dimen/dp4"
-                            android:background="@color/gray" />
+                            android:background="@color/gray"
+                            android:visibility="gone"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -523,14 +524,14 @@
                             android:singleLine="true"
                             android:text="@string/notificaion_and_sound"
                             android:textColor="@android:color/black"
-                            android:textSize="@dimen/sp16" />
+                            android:textSize="@dimen/sp16"/>
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1px"
                             android:layout_marginBottom="@dimen/dp12"
                             android:layout_marginTop="@dimen/dp12"
-                            android:background="@color/gray" />
+                            android:background="@color/gray"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -551,7 +552,7 @@
                             android:singleLine="true"
                             android:text="@string/Delete_and_leave_Group"
                             android:textColor="@android:color/black"
-                            android:textSize="@dimen/sp16" />
+                            android:textSize="@dimen/sp16"/>
                     </LinearLayout>
 
                 </LinearLayout>
@@ -564,16 +565,16 @@
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/agp_fab_setPic"
             android:layout_width="wrap_content"
-            android:visibility="gone"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp20"
             android:clickable="true"
             android:src="@mipmap/pu_camera"
             android:theme="@style/FabButton"
             android:tint="@color/gray"
+            android:visibility="gone"
             app:fabSize="mini"
             app:layout_anchor="@+id/agp_appbar"
-            app:layout_anchorGravity="bottom|right|end" />
+            app:layout_anchorGravity="bottom|right|end"/>
 
     </android.support.design.widget.CoordinatorLayout>
 

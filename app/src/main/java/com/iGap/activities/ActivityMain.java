@@ -1282,7 +1282,7 @@ public class ActivityMain extends ActivityEnhanced
     }
 
     @Override
-    public void onUserInfo(final ProtoGlobal.RegisteredUser user, ProtoResponse.Response response) {
+    public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
         String f = "df";
         // FIXME: 10/23/2016 Alireza uncomment
         /*runOnUiThread(new Runnable() {

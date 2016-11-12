@@ -46,12 +46,14 @@ import com.iGap.interfaces.OnGroupAddMember;
 import com.iGap.interfaces.OnGroupAddModerator;
 import com.iGap.interfaces.OnGroupAvatarResponse;
 import com.iGap.interfaces.OnGroupEdit;
+import com.iGap.interfaces.OnGroupGetMemberList;
 import com.iGap.interfaces.OnGroupKickAdmin;
 import com.iGap.interfaces.OnGroupKickMember;
 import com.iGap.interfaces.OnGroupKickModerator;
 import com.iGap.interfaces.OnGroupLeft;
 import com.iGap.interfaces.OnMenuClick;
 import com.iGap.interfaces.OnSelectedList;
+import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.AttachFile;
@@ -62,6 +64,7 @@ import com.iGap.module.FileUploadStructure;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.StructContactInfo;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.proto.ProtoGroupGetMemberList;
 import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmAvatarFields;
@@ -69,6 +72,7 @@ import com.iGap.realm.RealmContacts;
 import com.iGap.realm.RealmContactsFields;
 import com.iGap.realm.RealmGroupRoom;
 import com.iGap.realm.RealmMember;
+import com.iGap.realm.RealmMemberFields;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmRoom;
@@ -81,10 +85,12 @@ import com.iGap.request.RequestGroupAddMember;
 import com.iGap.request.RequestGroupAddModerator;
 import com.iGap.request.RequestGroupAvatarAdd;
 import com.iGap.request.RequestGroupEdit;
+import com.iGap.request.RequestGroupGetMemberList;
 import com.iGap.request.RequestGroupKickAdmin;
 import com.iGap.request.RequestGroupKickMember;
 import com.iGap.request.RequestGroupKickModerator;
 import com.iGap.request.RequestGroupLeft;
+import com.iGap.request.RequestUserInfo;
 import com.mikepenz.fastadapter.AbstractAdapter;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
@@ -175,6 +181,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
         role = realmGroupRoom.getRole();
         participantsCountLabel = realmGroupRoom.getParticipantsCountLabel();
         members = realmGroupRoom.getMembers();
+        Log.i("PPP", "********** members : " + members);
         description = realmGroupRoom.getDescription();
 
         realm.close();
@@ -515,12 +522,49 @@ public class ActivityGroupProfile extends ActivityEnhanced
         txtMemberNumber.setText(participantsCountLabel);
 
         setUiIndependRole();
-
         initRecycleView();
+        getMemberList();
+    }
 
-        /*G.onUserInfoResponse = new OnUserInfoResponse() {
+    private void getMemberList() {
+
+        G.onUserInfoResponse = new OnUserInfoResponse() {
             @Override
-            public void onUserInfo(ProtoGlobal.RegisteredUser user, ProtoResponse.Response response) {
+            public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
+                if (Long.parseLong(identity) == roomId) {
+
+                    if (!userExistInList(user.getId())) { // if user exist in current list don't add that, because maybe duplicated this user and show twice.
+                        Log.i("PPP", "RequestGroupGetMemberList 3 add user : " + user.getDisplayName());
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Realm realm = Realm.getDefaultInstance();
+                                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, user.getId()).findFirst();
+                                RealmMember realmMember = realm.where(RealmMember.class).equalTo(RealmMemberFields.ID, user.getId()).findFirst();
+                                realm.close();
+
+                                final StructContactInfo struct = new StructContactInfo(user.getId(), user.getDisplayName(), user.getStatus().toString(), false, false, user.getPhone() + "");
+                                if (realmMember != null) {
+                                    struct.role = realmMember.getRole();
+                                }
+                                if (realmRegisteredInfo != null) {
+                                    struct.avatar = realmRegisteredInfo.getLastAvatar();
+                                    struct.initials = realmRegisteredInfo.getInitials();
+                                    struct.color = realmRegisteredInfo.getColor();
+                                }
+
+                                Log.i("PPP", "RequestGroupGetMemberList 4 add user ");
+                                items.clear();
+                                items.add(new ContactItemGroupProfile().setContact(struct).withIdentifier(100 + contacts.indexOf(struct)));
+                                Log.i("PPP", "RequestGroupGetMemberList 5 add user ");
+                                itemAdapter.add(items);
+                            }
+                        });
+                    } else {
+                        Log.i("PPP", "RequestGroupGetMemberList user was exist in list");
+                    }
+                }
 
             }
 
@@ -538,15 +582,16 @@ public class ActivityGroupProfile extends ActivityEnhanced
         G.onGroupGetMemberList = new OnGroupGetMemberList() {
             @Override
             public void onGroupGetMemberList(List<ProtoGroupGetMemberList.GroupGetMemberListResponse.Member> members) {
-                // request for user info for each member
-                for (final ProtoGroupGetMemberList.GroupGetMemberListResponse.Member member : members){
-                    new RequestUserInfo().userInfo(member.getUserId());
+                Log.i("PPP", "RequestGroupGetMemberList 2 members : " + members);
+                Log.i("PPP", "RequestGroupGetMemberList 2 roomId : " + roomId);
+                for (final ProtoGroupGetMemberList.GroupGetMemberListResponse.Member member : members) {
+                    new RequestUserInfo().userInfo(member.getUserId(), roomId + "");
                 }
             }
         };
 
-        // request for getting group members list
-        new RequestGroupGetMemberList().getRoomHistory(roomId);*/
+        Log.i("PPP", "RequestGroupGetMemberList 1 roomId : " + roomId);
+        new RequestGroupGetMemberList().getMemberList(roomId);
     }
 
     private void setAvatarGroup() {
@@ -591,8 +636,8 @@ public class ActivityGroupProfile extends ActivityEnhanced
 
         onMenuClick = new OnMenuClick() {
             @Override
-            public void clicked(View view, int position) {
-                new CreatePopUpMessage().show(view, position);
+            public void clicked(View view, StructContactInfo info) {
+                new CreatePopUpMessage().show(view, info);
             }
         };
 
@@ -683,7 +728,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
 
         int listSize = contacts.size();
 
-        txtMemberNumber.setText(listSize + "");
+        //txtMemberNumber.setText(listSize + "");
 
         for (int i = 0; i < listSize && i < 3; i++) {
             items.add(new ContactItemGroupProfile().setContact(contacts.get(i))
@@ -703,6 +748,17 @@ public class ActivityGroupProfile extends ActivityEnhanced
         });
     }
 
+    private boolean userExistInList(long userId) {
+
+        for (StructContactInfo info : contacts) {
+            if (info.peerId == userId) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private void fillItem() {
 
         contacts = new ArrayList<>();
@@ -717,14 +773,11 @@ public class ActivityGroupProfile extends ActivityEnhanced
             RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, id).findFirst();
 
             if (rc != null) {
-
-                StructContactInfo s =
-                        new StructContactInfo(rc.getId(), rc.getDisplay_name(), rc.getStatus(), false,
-                                false, rc.getPhone() + "");
+                StructContactInfo s = new StructContactInfo(rc.getId(), rc.getDisplay_name(), rc.getStatus(), false, false, rc.getPhone() + "");
                 s.role = role;
                 s.avatar = realmRegisteredInfo.getLastAvatar();
-                Log.i("III", "rc.getLastAvatar() : " + realmRegisteredInfo.getLastAvatar());
-                Log.i("III", "rc.getAvatar() : " + rc.getAvatar());
+                s.initials = realmRegisteredInfo.getInitials();
+                s.color = realmRegisteredInfo.getColor();
                 contacts.add(s);
             }
         }
@@ -1032,33 +1085,33 @@ public class ActivityGroupProfile extends ActivityEnhanced
     private class CreatePopUpMessage {
 
 
-        private void show(View view, final int position) {
+        private void show(View view, final StructContactInfo info) {
             PopupMenu popup = new PopupMenu(ActivityGroupProfile.this, view, Gravity.TOP);
             popup.getMenuInflater().inflate(R.menu.menu_item_group_profile, popup.getMenu());
 
 
             if (role == GroupChatRole.OWNER) {
 
-                if (contacts.get(position).role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+                if (info.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
                     popup.getMenu().getItem(2).setVisible(false);
                     popup.getMenu().getItem(3).setVisible(false);
-                } else if (contacts.get(position).role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
+                } else if (info.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
                     popup.getMenu().getItem(0).setVisible(false);
                     popup.getMenu().getItem(1).setVisible(false);
                     popup.getMenu().getItem(3).setVisible(false);
                     popup.getMenu().getItem(4).setVisible(false);
-                } else if (contacts.get(position).role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
+                } else if (info.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
                     popup.getMenu().getItem(1).setVisible(false);
                     popup.getMenu().getItem(2).setVisible(false);
                     popup.getMenu().getItem(4).setVisible(false);
                 }
             } else if (role == GroupChatRole.ADMIN) {
 
-                if (contacts.get(position).role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+                if (info.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
                     popup.getMenu().getItem(0).setVisible(false);
                     popup.getMenu().getItem(2).setVisible(false);
                     popup.getMenu().getItem(3).setVisible(false);
-                } else if (contacts.get(position).role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
+                } else if (info.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
                     popup.getMenu().getItem(0).setVisible(false);
                     popup.getMenu().getItem(1).setVisible(false);
                     popup.getMenu().getItem(2).setVisible(false);
@@ -1066,7 +1119,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                 }
             } else if (role == GroupChatRole.MODERATOR) {
 
-                if (contacts.get(position).role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+                if (info.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
                     popup.getMenu().getItem(0).setVisible(false);
                     popup.getMenu().getItem(1).setVisible(false);
                     popup.getMenu().getItem(2).setVisible(false);
@@ -1083,19 +1136,19 @@ public class ActivityGroupProfile extends ActivityEnhanced
                 public boolean onMenuItemClick(MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.menu_setAdmin:
-                            setToAdmin(contacts.get(position).peerId);
+                            setToAdmin(info.peerId);
                             return true;
                         case R.id.menu_set_moderator:
-                            setToModerator(contacts.get(position).peerId);
+                            setToModerator(info.peerId);
                             return true;
                         case R.id.menu_remove_admin:
-                            kickAdmin(contacts.get(position).peerId);
+                            kickAdmin(info.peerId);
                             return true;
                         case R.id.menu_remove_moderator:
-                            kickModerator(contacts.get(position).peerId);
+                            kickModerator(info.peerId);
                             return true;
                         case R.id.menu_kick:
-                            kickMember(contacts.get(position).peerId);
+                            kickMember(info.peerId);
                             return true;
                         default:
                             return false;
@@ -1109,7 +1162,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
         }
 
 
-        private void setToAdmin(Long perid) {
+        private void setToAdmin(Long peerId) {
 
             G.onGroupAddAdmin = new OnGroupAddAdmin() {
                 @Override
@@ -1196,12 +1249,12 @@ public class ActivityGroupProfile extends ActivityEnhanced
             };
 
 
-            new RequestGroupAddAdmin().groupAddAdmin(roomId, perid);
+            new RequestGroupAddAdmin().groupAddAdmin(roomId, peerId);
 
 
         }
 
-        private void setToModerator(Long perid) {
+        private void setToModerator(Long peerId) {
 
             G.onGroupAddModerator = new OnGroupAddModerator() {
                 @Override
@@ -1302,7 +1355,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
             };
 
 
-            new RequestGroupAddModerator().groupAddModerator(roomId, perid);
+            new RequestGroupAddModerator().groupAddModerator(roomId, peerId);
 
 
         }

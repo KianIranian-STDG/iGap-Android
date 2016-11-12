@@ -6,12 +6,10 @@ public class RequestGroupGetMemberList {
 
     public void getMemberList(long roomId) {
 
-        ProtoGroupGetMemberList.GroupGetMemberList.Builder builder =
-                ProtoGroupGetMemberList.GroupGetMemberList.newBuilder();
-
+        ProtoGroupGetMemberList.GroupGetMemberList.Builder builder = ProtoGroupGetMemberList.GroupGetMemberList.newBuilder();
         builder.setRoomId(roomId);
 
-        RequestWrapper requestWrapper = new RequestWrapper(317, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(317, builder, roomId + "");
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

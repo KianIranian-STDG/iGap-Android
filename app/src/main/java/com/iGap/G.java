@@ -92,7 +92,6 @@ import com.iGap.module.Contacts;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.UploaderUtil;
 import com.iGap.proto.ProtoGlobal;
-import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmMigrationClass;
 import com.iGap.realm.RealmRegisteredInfo;
@@ -335,7 +334,7 @@ public class G extends Application {
 
         G.onUserInfoResponse = new OnUserInfoResponse() {
             @Override
-            public void onUserInfo(final ProtoGlobal.RegisteredUser user, ProtoResponse.Response response) {
+            public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
                 // fill own user info
                 if (userId == user.getId()) {
                     Realm realm = Realm.getDefaultInstance();

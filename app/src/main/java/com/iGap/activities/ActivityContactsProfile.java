@@ -57,7 +57,6 @@ import com.iGap.module.StructListOfContact;
 import com.iGap.module.StructMessageAttachment;
 import com.iGap.module.StructMessageInfo;
 import com.iGap.proto.ProtoGlobal;
-import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmClientConditionFields;
@@ -1262,7 +1261,7 @@ public class ActivityContactsProfile extends ActivityEnhanced {
 
         G.onUserInfoResponse = new OnUserInfoResponse() {
             @Override
-            public void onUserInfo(final ProtoGlobal.RegisteredUser user, ProtoResponse.Response response) {
+            public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
 
                 runOnUiThread(new Runnable() {
                     @Override

@@ -226,8 +226,7 @@ public class ActivityProfile extends ActivityEnhanced
 
         G.onUserInfoResponse = new OnUserInfoResponse() {
             @Override
-            public void onUserInfo(final ProtoGlobal.RegisteredUser user,
-                                   ProtoResponse.Response response) {
+            public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
 
                 Realm realm = Realm.getDefaultInstance();
                 realm.executeTransaction(new Realm.Transaction() {

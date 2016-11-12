@@ -69,7 +69,7 @@ public class ContactItemGroupProfile
             @Override
             public void onClick(View v) {
                 if (ActivityGroupProfile.onMenuClick != null)
-                    ActivityGroupProfile.onMenuClick.clicked(v, holder.getAdapterPosition());
+                    ActivityGroupProfile.onMenuClick.clicked(v, mContact);
             }
         });
     }

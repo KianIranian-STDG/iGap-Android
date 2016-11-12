@@ -27,7 +27,6 @@ import com.iGap.libs.flowingdrawer.MenuFragment;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.HelperDecodeFile;
 import com.iGap.proto.ProtoGlobal;
-import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmAvatarPath;
 import com.iGap.realm.RealmUserInfo;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -262,8 +261,7 @@ public class FragmentDrawerMenu extends MenuFragment {
 
         G.onUserInfoResponse = new OnUserInfoResponse() {
             @Override
-            public void onUserInfo(ProtoGlobal.RegisteredUser user,
-                                   ProtoResponse.Response response) {
+            public void onUserInfo(ProtoGlobal.RegisteredUser user, String identity) {
 
             }
 

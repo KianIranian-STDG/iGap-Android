@@ -54,7 +54,6 @@ import com.iGap.module.SoftKeyboard;
 import com.iGap.module.StructCountry;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoRequest;
-import com.iGap.proto.ProtoResponse;
 import com.iGap.proto.ProtoUserRegister;
 import com.iGap.proto.ProtoUserVerify;
 import com.iGap.realm.RealmRegisteredInfo;
@@ -1051,7 +1050,7 @@ public class ActivityRegister extends ActivityEnhanced {
 
         G.onUserInfoResponse = new OnUserInfoResponse() {
             @Override
-            public void onUserInfo(final ProtoGlobal.RegisteredUser user, ProtoResponse.Response response) {
+            public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
 
                 Realm realm = Realm.getDefaultInstance();
                 realm.executeTransaction(new Realm.Transaction() {

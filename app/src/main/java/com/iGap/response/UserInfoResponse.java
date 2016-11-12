@@ -1,7 +1,5 @@
 package com.iGap.response;
 
-import android.util.Log;
-
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoUserInfo;
@@ -26,8 +24,8 @@ public class UserInfoResponse extends MessageHandler {
 
     @Override
     public void handler() {
-        final ProtoUserInfo.UserInfoResponse.Builder builder =
-                (ProtoUserInfo.UserInfoResponse.Builder) message;
+        super.handler();
+        final ProtoUserInfo.UserInfoResponse.Builder builder = (ProtoUserInfo.UserInfoResponse.Builder) message;
 
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
@@ -58,25 +56,22 @@ public class UserInfoResponse extends MessageHandler {
         realm.close();
 
         if (G.onUserInfoResponse != null) {
-            G.onUserInfoResponse.onUserInfo(builder.getUser(), builder.getResponse());
+            G.onUserInfoResponse.onUserInfo(builder.getUser(), identity);
         }
     }
 
     @Override
     public void timeOut() {
-        Log.i("SOCA", "UserInfoResponse timeout");
-
+        super.timeOut();
         G.onUserInfoResponse.onUserInfoTimeOut();
     }
 
     @Override
     public void error() {
+        super.error();
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
-
-        Log.i("SOCA", "UserInfoResponse response.majorCode() : " + majorCode);
-        Log.i("SOCA", "UserInfoResponse response.minorCode() : " + minorCode);
         G.onUserInfoResponse.onUserInfoError(majorCode, minorCode);
     }
 }

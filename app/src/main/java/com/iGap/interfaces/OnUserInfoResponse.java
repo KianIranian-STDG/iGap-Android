@@ -6,10 +6,11 @@
 package com.iGap.interfaces;
 
 import com.iGap.proto.ProtoGlobal;
-import com.iGap.proto.ProtoResponse;
 
 public interface OnUserInfoResponse {
-    void onUserInfo(ProtoGlobal.RegisteredUser user, ProtoResponse.Response response);
+
+
+    void onUserInfo(ProtoGlobal.RegisteredUser user, String identity);
 
     void onUserInfoTimeOut();
 

@@ -35,7 +35,6 @@ import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.StructContactInfo;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
-import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
@@ -340,8 +339,7 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
 
         G.onUserInfoResponse = new OnUserInfoResponse() {
             @Override
-            public void onUserInfo(final ProtoGlobal.RegisteredUser user,
-                                   ProtoResponse.Response response) {
+            public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
 
                 G.currentActivity.runOnUiThread(new Runnable() {
                     @Override

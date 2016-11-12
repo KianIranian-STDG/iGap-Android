@@ -15,8 +15,7 @@ public class StructContactInfo {
     public String role = ProtoGlobal.GroupRoom.Role.MEMBER.toString();
     public RealmAvatar avatar;
 
-    public StructContactInfo(long peerId, String displayName, String status, boolean isHeader,
-                             boolean isSelected, String phone) {
+    public StructContactInfo(long peerId, String displayName, String status, boolean isHeader, boolean isSelected, String phone) {
         this.peerId = peerId;
         this.isHeader = isHeader;
         this.displayName = displayName;

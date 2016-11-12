@@ -3259,7 +3259,7 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     @Override
-    public void onUserInfo(final ProtoGlobal.RegisteredUser user, ProtoResponse.Response response) {
+    public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
