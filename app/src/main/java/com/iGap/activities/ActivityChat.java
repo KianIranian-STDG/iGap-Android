@@ -2349,7 +2349,7 @@ public class ActivityChat extends ActivityEnhanced
                 }
                 break;
 
-            case AttachFile.request_code_VIDEO_CAPTURED:
+            case AttachFile.requestOpenGalleryForVideoMultipleSelect:
                 //filePath = getFilePathFromUri(uri);
                 fileName = new File(filePath).getName();
                 fileSize = new File(filePath).length();

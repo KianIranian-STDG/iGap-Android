@@ -209,7 +209,7 @@ public class AttachFile {
         intent.setType("video/*");
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        ((Activity) context).startActivityForResult(intent, requestOpenGalleryForImageMultipleSelect);
+        ((Activity) context).startActivityForResult(intent, requestOpenGalleryForVideoMultipleSelect);
         isInAttach = true;
     }
 
