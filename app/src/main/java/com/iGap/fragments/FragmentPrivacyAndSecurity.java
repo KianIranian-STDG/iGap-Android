@@ -93,7 +93,7 @@ public class FragmentPrivacyAndSecurity extends Fragment {
         ltSelfDestruction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new MaterialDialog.Builder(getActivity()).title("Language")
+                new MaterialDialog.Builder(getActivity()).title(getResources().getString(R.string.st_Language))
                         .titleGravity(GravityEnum.START)
                         .titleColor(getResources().getColor(android.R.color.black))
                         .items(R.array.account_self_destruct).itemsCallbackSingleChoice(poSelfRemove, new MaterialDialog.ListCallbackSingleChoice() {
@@ -147,8 +147,8 @@ public class FragmentPrivacyAndSecurity extends Fragment {
                         return false;
                     }
                 })
-                        .positiveText("OK")
-                        .negativeText("CANCEL")
+                        .positiveText(getResources().getString(R.string.B_ok))
+                        .negativeText(getResources().getString(R.string.B_cancel))
                         .show();
 
                 G.onUserProfileSetSelfRemove = new OnUserProfileSetSelfRemove() {

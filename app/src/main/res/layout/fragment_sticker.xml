@@ -14,6 +14,7 @@
         android:background="@color/toolbar_background"
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp"
+        android:layoutDirection="ltr"
         app:layout_collapseMode="pin">
 
         <RelativeLayout
@@ -43,7 +44,7 @@
 
                 <com.iGap.module.MaterialDesignTextView
                     fontPath="fonts/Flaticon.ttf"
-                    android:layout_width="@dimen/dp60"
+                    android:layout_width="@dimen/dp52"
                     android:layout_height="match_parent"
                     android:layout_alignParentLeft="true"
                     android:gravity="center"
@@ -55,34 +56,37 @@
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/stsp_layout_crop"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp60"
+        android:layout_height="@dimen/dp52"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="@dimen/dp16">
+        android:paddingRight="@dimen/dp16"
+        android:paddingLeft="@dimen/dp16">
 
         <TextView
 
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight=".5"
             android:text="@string/st_crop"
+            android:gravity="center_vertical"
             android:textColor="@color/black_register"
             android:textSize="@dimen/sp18"
             android:textStyle="normal" />
 
         <ToggleButton
             android:id="@+id/stsp_toggle_crop"
-            android:layout_width="@dimen/dp40"
+            android:layout_width="@dimen/dp44"
             android:layout_height="@dimen/dp40"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
             android:background="@drawable/st_switch_button"
-            android:paddingRight="@dimen/dp4"
             android:textOff=""
-            android:textOn="" />
+            android:textOn=""/>
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <View
         android:layout_width="match_parent"

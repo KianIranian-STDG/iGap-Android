@@ -16,7 +16,7 @@
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
@@ -33,7 +33,7 @@
                 <com.iGap.module.MaterialDesignTextView
                     android:id="@+id/ntg_txt_back"
                     fontPath="fonts/Flaticon.ttf"
-                    android:layout_width="@dimen/dp60"
+                    android:layout_width="@dimen/dp52"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="@string/md_back_arrow"
@@ -42,41 +42,43 @@
             </com.iGap.libs.rippleeffect.RippleView>
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="@string/ntg_title_toolbar"
                 android:textColor="@color/whit_background"
-                android:textSize="@dimen/sp22"
+                android:textSize="@dimen/sp18"
                 android:textStyle="bold"
                 android:visibility="visible" />
 
-        </LinearLayout>
+        </RelativeLayout>
     </android.support.v7.widget.Toolbar>
 
     <LinearLayout
         android:id="@+id/ntg_layout_notifications"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp60"
+        android:layout_height="@dimen/dp48"
         android:background="@android:color/white"
         android:orientation="vertical"
-        android:paddingLeft="@dimen/dp16">
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/dp16"
+        android:paddingEnd="@dimen/sp16"
+        android:paddingStart="@dimen/sp16"
+        android:paddingRight="@dimen/sp16">
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight=".6"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:text="@string/ntg_notifications"
             android:textColor="@color/black_register"
-            android:textSize="@dimen/sp18"
+            android:textSize="@dimen/sp15"
             android:textStyle="normal" />
 
         <TextView
             android:id="@+id/ntg_txt_desc_notifications"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight=".4"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical|top"
             android:text="@string/st_sound"
             android:textColor="@color/cardview_dark_background"
@@ -92,26 +94,28 @@
     <LinearLayout
         android:id="@+id/ntg_layout_vibrate"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp60"
+        android:layout_height="@dimen/dp48"
         android:background="@color/white"
+        android:gravity="center_vertical"
         android:orientation="vertical"
-        android:paddingLeft="@dimen/dp16">
+        android:paddingLeft="@dimen/dp16"
+        android:paddingEnd="@dimen/sp16"
+        android:paddingStart="@dimen/sp16"
+        android:paddingRight="@dimen/sp16">
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight=".6"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:text="@string/st_vibrate"
             android:textColor="@color/black_register"
-            android:textSize="@dimen/sp18"
+            android:textSize="@dimen/sp15"
             android:textStyle="normal" />
 
         <TextView
             android:id="@+id/ntg_txt_desc_vibrate"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight=".4"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical|top"
             android:text="@string/st_sound"
             android:textColor="@color/cardview_dark_background"
@@ -128,25 +132,27 @@
     <LinearLayout
         android:id="@+id/ntg_layout_sound"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp60"
+        android:layout_height="@dimen/dp48"
+        android:gravity="center_vertical"
         android:orientation="vertical"
-        android:paddingLeft="@dimen/dp16">
+        android:paddingLeft="@dimen/dp16"
+        android:paddingEnd="@dimen/sp16"
+        android:paddingStart="@dimen/sp16"
+        android:paddingRight="@dimen/sp16">
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight=".6"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:text="@string/ntg_Sound"
             android:textColor="@color/black_register"
-            android:textSize="@dimen/sp18"
+            android:textSize="@dimen/sp15"
             android:textStyle="normal" />
 
         <TextView
             android:id="@+id/ntg_txt_desc_sound"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight=".4"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical|top"
             android:text="@string/st_sound"
             android:textColor="@color/cardview_dark_background"
@@ -163,26 +169,28 @@
     <LinearLayout
         android:id="@+id/ntg_layout_smartNotifications"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp60"
+        android:layout_height="@dimen/dp48"
         android:background="@color/white"
         android:orientation="vertical"
-        android:paddingLeft="@dimen/dp16">
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/dp16"
+        android:paddingEnd="@dimen/sp16"
+        android:paddingStart="@dimen/sp16"
+        android:paddingRight="@dimen/sp16">
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight=".6"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:text="@string/ntg_smart_notifications"
             android:textColor="@color/black_register"
-            android:textSize="@dimen/sp18"
+            android:textSize="@dimen/sp15"
             android:textStyle="normal" />
 
         <TextView
             android:id="@+id/ntg_txt_desc_smartNotifications"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight=".4"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical|top"
             android:text="@string/st_sound"
             android:textColor="@color/cardview_dark_background"
@@ -199,7 +207,7 @@
     <LinearLayout
         android:id="@+id/ntg_layout_ledColorMessage"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp60"
+        android:layout_height="@dimen/dp48"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -207,10 +215,14 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:padding="@dimen/dp16"
+            android:gravity="center_vertical"
+            android:paddingRight="@dimen/dp16"
+            android:paddingEnd="@dimen/dp16"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingStart="@dimen/dp16"
             android:text="@string/st_led_color"
             android:textColor="@color/black_register"
-            android:textSize="@dimen/sp18"
+            android:textSize="@dimen/sp15"
             android:textStyle="normal" />
 
         <ImageView
@@ -219,6 +231,9 @@
             android:layout_height="@dimen/dp24"
             android:layout_gravity="center_vertical"
             android:layout_marginRight="@dimen/dp16"
+            android:layout_marginEnd="@dimen/sp16"
+            android:layout_marginStart="@dimen/sp16"
+            android:layout_marginLeft="@dimen/sp16"
             android:background="@drawable/circle_color_notificatin_setting"
             android:gravity="center" />
 

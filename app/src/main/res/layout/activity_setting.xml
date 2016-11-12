@@ -5,7 +5,6 @@
                                                  android:id="@+id/st_layoutParent"
                                                  android:layout_width="match_parent"
                                                  android:layout_height="match_parent"
-                                                 android:layoutDirection="ltr"
                                                  tools:ignore="MissingPrefix">
 
     <android.support.design.widget.AppBarLayout
@@ -32,6 +31,7 @@
                 android:layout_height="@dimen/dp60"
                 app:contentInsetLeft="0dp"
                 app:contentInsetStart="0dp"
+                android:layoutDirection="ltr"
                 app:layout_collapseMode="pin">
 
                 <RelativeLayout
@@ -63,7 +63,7 @@
 
                         <com.iGap.module.MaterialDesignTextView
                             fontPath="fonts/Flaticon.ttf"
-                            android:layout_width="@dimen/dp48"
+                            android:layout_width="@dimen/dp52"
                             android:layout_height="match_parent"
                             android:gravity="center"
                             android:text="@string/md_back_arrow"
@@ -84,7 +84,7 @@
 
                         <com.iGap.module.MaterialDesignTextView
                             fontPath="fonts/Flaticon.ttf"
-                            android:layout_width="@dimen/dp48"
+                            android:layout_width="@dimen/dp52"
                             android:layout_height="match_parent"
                             android:gravity="center"
                             android:text="@string/md_show_more_button"
@@ -351,7 +351,7 @@
                     fontPath="fonts/IRANSansMobile.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp20"
+                    android:layout_marginTop="@dimen/dp12"
                     android:paddingEnd="@dimen/dp4"
                     android:paddingStart="@dimen/dp4"
                     android:text="@string/st_phoneNumber"
@@ -359,21 +359,25 @@
                     android:textSize="@dimen/sp15"
                     android:textStyle="normal"/>
 
-                <TextView
-                    android:id="@+id/st_txt_phoneNumber"
-                    fontPath="fonts/IRANSansMobile.ttf"
-                    android:layout_width="@dimen/dp200"
-                    android:layout_height="@dimen/dp28"
-                    android:background="@null"
-                    android:editable="false"
-                    android:gravity="center_vertical"
-                    android:maxLength="11"
-                    android:paddingEnd="@dimen/dp4"
-                    android:paddingStart="@dimen/dp4"
-                    android:text="09121234567"
-                    android:textColor="@color/cardview_dark_background"
-                    android:textSize="@dimen/sp14"
-                    android:theme="@style/Setting_editText"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start">
+
+
+                    <TextView
+                        android:id="@+id/st_txt_phoneNumber"
+                        fontPath="fonts/IRANSansMobile.ttf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:paddingEnd="@dimen/dp4"
+                        android:paddingStart="@dimen/dp4"
+                        android:text="09121234567"
+                        android:textColor="@color/cardview_dark_background"
+                        android:textSize="@dimen/sp14"
+                        android:textStyle="normal"/>
+                </RelativeLayout>
 
             </LinearLayout>
 
@@ -421,19 +425,17 @@
                     android:layout_height="1dp"
                     android:background="@color/background_editText"/>
 
-                <LinearLayout
+
+                <RelativeLayout
                     android:id="@+id/st_layout_language"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp48"
-                    android:orientation="horizontal"
+                    android:layout_height="@dimen/dp52">
 
-                    >
 
                     <TextView
                         fontPath="fonts/IRANSansMobile.ttf"
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight=".5"
                         android:gravity="center_vertical"
                         android:paddingEnd="@dimen/dp16"
                         android:paddingStart="@dimen/dp16"
@@ -448,6 +450,8 @@
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
                         android:gravity="center_vertical"
                         android:paddingEnd="@dimen/dp16"
                         android:paddingLeft="@dimen/dp8"
@@ -457,7 +461,8 @@
                         android:textColor="@color/toolbar_background"
                         android:textSize="@dimen/sp15"
                         android:textStyle="normal"/>
-                </LinearLayout>
+                </RelativeLayout>
+
 
                 <View
                     android:layout_width="match_parent"
@@ -474,6 +479,7 @@
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
                         android:gravity="center"
                         android:paddingLeft="@dimen/dp16"
@@ -546,17 +552,15 @@
                     android:textStyle="normal"/>
 
 
-                <LinearLayout
+                <RelativeLayout
                     android:id="@+id/st_layout_messageTextSize"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp48"
-                    android:orientation="horizontal">
+                    android:layout_height="@dimen/dp48">
 
                     <TextView
                         fontPath="fonts/IRANSansMobile.ttf"
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight=".5"
                         android:gravity="center_vertical"
                         android:paddingLeft="@dimen/dp16"
                         android:paddingRight="@dimen/dp16"
@@ -569,10 +573,11 @@
                     <TextView
                         android:id="@+id/st_txt_messageTextSize_number"
                         fontPath="fonts/IRANSansMobile.ttf"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_weight=".15"
                         android:gravity="center"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
                         android:paddingLeft="@dimen/dp16"
                         android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
@@ -580,7 +585,7 @@
                         android:textColor="@color/toolbar_background"
                         android:textSize="@dimen/sp15"
                         android:textStyle="normal"/>
-                </LinearLayout>
+                </RelativeLayout>
 
                 <View
                     android:layout_width="match_parent"

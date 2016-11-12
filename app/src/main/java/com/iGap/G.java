@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -17,7 +16,6 @@ import android.os.Handler;
 import android.support.multidex.MultiDex;
 import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.Toast;
@@ -472,10 +470,9 @@ public class G extends Application {
         setUserTextSize();
     }
 
-    private void setFont() {
+    public void setFont() {
 
         SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-
         String language = sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, "en");
 
         switch (language) {
@@ -523,12 +520,13 @@ public class G extends Application {
 
     public void setLocale(String lang) {
 
-        Locale myLocale = new Locale(lang);
-        Resources res = getResources();
-        DisplayMetrics dm = res.getDisplayMetrics();
-        Configuration conf = res.getConfiguration();
-        conf.locale = myLocale;
-        res.updateConfiguration(conf, dm);
+
+        Locale locale = new Locale(lang);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+
     }
 
     private void copyFromAsset() throws IOException {

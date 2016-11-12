@@ -19,6 +19,7 @@
         android:layout_height="@dimen/dp60"
         android:background="#55000000"
         android:gravity="center"
+        android:layoutDirection="ltr"
         android:orientation="horizontal">
 
         <com.iGap.libs.rippleeffect.RippleView
@@ -33,7 +34,7 @@
 
             <com.iGap.module.MaterialDesignTextView
                 fontPath="fonts/Flaticon.ttf"
-                android:layout_width="@dimen/dp60"
+                android:layout_width="@dimen/dp52"
                 android:layout_height="match_parent"
                 android:background="@null"
                 android:gravity="center"
@@ -65,7 +66,7 @@
 
             <com.iGap.module.MaterialDesignTextView
                 fontPath="fonts/Flaticon.ttf"
-                android:layout_width="@dimen/dp60"
+                android:layout_width="@dimen/dp52"
                 android:layout_height="match_parent"
                 android:background="@null"
                 android:gravity="center"

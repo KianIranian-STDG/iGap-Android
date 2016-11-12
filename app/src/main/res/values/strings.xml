@@ -19,11 +19,11 @@
     <string name="cancel">Cancel</string>
     <string name="B_cancel">Cancel</string>
     <string name="B_skip">SKIP</string>
-    <string name="B_finish">FINISH</string>
+    <string name="B_finish">Finish</string>
     <string name="ok">OK</string>
     <string name="if_you_are_away_for">if you\'re away for</string>
     <string name="B_ok">OK</string>
-    <string name="set">SET</string>
+    <string name="set">Set</string>
     <string name="am_camera">Camera</string>
     <string name="am_music">Music</string>
     <string name="am_paint">Paint</string>
@@ -168,7 +168,7 @@
     <string name="chi_title_setting">Settings</string>
     <string name="chi_popup_call">Call</string>
     <string name="chi_popup_copy">Copy</string>
-    <string name="chi_NEXT_STEP">NEXT STEP</string>
+    <string name="chi_NEXT_STEP">Next Step</string>
     <string name="fac_Add_Contact">Add Contact</string>
     <string name="fac_contact_info">Contact Info</string>
     <string name="fac_First_Name">First Name</string>
@@ -330,6 +330,10 @@
     <string name="personality3">personality</string>
     <string name="personality4">personality</string>
     <string name="personality5">personality</string>
+    <string name="Invite_Friends">Invite Friends</string>
+    <string name="iGap_FAQ">iGap FAQ</string>
+    <string name="New_Chat">New Chat</string>
+    <string name="Documents">Documents</string>
 
     <string name="desc">Description</string>
 

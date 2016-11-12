@@ -19,6 +19,7 @@
         android:background="@color/toolbar_background"
         app:contentInsetLeft="0dp"
         tools:ignore="MissingPrefix"
+        android:layoutDirection="ltr"
         app:contentInsetStart="0dp">
 
         <RelativeLayout
@@ -49,7 +50,7 @@
 
                 <com.iGap.module.MaterialDesignTextView
                     fontPath="fonts/Flaticon.ttf"
-                    android:layout_width="@dimen/dp60"
+                    android:layout_width="@dimen/dp52"
                     android:layout_height="match_parent"
                     android:layout_alignParentLeft="true"
                     android:gravity="center"
@@ -94,7 +95,7 @@
             <TextView
                 android:paddingTop="@dimen/dp4"
                 fontPath="fonts/IRANSansMobile.ttf"
-                android:textSize="@dimen/sp16"
+                android:textSize="@dimen/sp15"
                 android:gravity="center_vertical|start"
                 android:id="@+id/st_txt_notifyAndSound"
                 android:layout_width="match_parent"
@@ -289,7 +290,7 @@
                         android:textSize="@dimen/sp16"
                         android:gravity="center_vertical|start"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight=".5"
                         android:paddingLeft="@dimen/dp16"
                         android:paddingRight="@dimen/dp16"
@@ -304,7 +305,7 @@
                         android:gravity="center_vertical|start"
                         android:id="@+id/stps_txt_Self_destruction"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:paddingLeft="@dimen/dp16"
                         android:paddingRight="@dimen/dp16"
                         android:text="1 year"

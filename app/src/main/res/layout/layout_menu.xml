@@ -104,7 +104,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="@dimen/dp8"
-                        android:text="New Chat"
+                        android:text="@string/New_Chat"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/sp16" />
 
@@ -131,7 +131,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="@dimen/dp8"
-                        android:text="New Group"
+                        android:text="@string/New_Group"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/sp16" />
 
@@ -160,7 +160,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="@dimen/dp8"
-                        android:text="New Channel"
+                        android:text="@string/New_Chanel"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/sp16" />
 
@@ -195,7 +195,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="@dimen/dp8"
-                        android:text="Contacts"
+                        android:text="@string/contacts"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/sp16" />
 
@@ -224,7 +224,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="@dimen/dp8"
-                        android:text="Invite Friends"
+                        android:text="@string/Invite_Friends"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/sp16" />
 
@@ -252,7 +252,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="@dimen/dp8"
-                        android:text="Settings"
+                        android:text="@string/chi_title_setting"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/sp16" />
 
@@ -280,7 +280,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="@dimen/dp8"
-                        android:text="iGap FAQ"
+                        android:text="@string/iGap_FAQ"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/sp16" />
 

@@ -10,13 +10,13 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
-import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AdapterExplorer;
 import com.iGap.helper.HelperMimeType;
+import com.iGap.libs.rippleeffect.RippleView;
+import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.StructExplorerItem;
 
 import java.io.File;
@@ -35,7 +35,7 @@ public class ActivityExplorer extends ActivityEnhanced {
     ArrayList<String> node;          //path of the hierychical directory
     ArrayList<Integer> mscroll;
 
-    Button btnBack;
+    MaterialDesignTextView btnBack;
 
     StructExplorerItem x;
     RecyclerView recyclerView;
@@ -60,13 +60,11 @@ public class ActivityExplorer extends ActivityEnhanced {
         node = new ArrayList<String>();
         mscroll = new ArrayList<Integer>();
 
-        btnBack = (Button) findViewById(R.id.ae_btn_back);
-        btnBack.setTypeface(G.fontawesome);
-        btnBack.setOnClickListener(new View.OnClickListener() {
-
+        btnBack = (MaterialDesignTextView) findViewById(R.id.ae_btn_back);
+        RippleView rippleBack = (RippleView) findViewById(R.id.ae_ripple_back);
+        rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
-            public void onClick(View v) {
-
+            public void onComplete(RippleView rippleView) {
                 onBackPressed();
             }
         });

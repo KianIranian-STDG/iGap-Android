@@ -50,7 +50,7 @@
                     <com.iGap.module.MaterialDesignTextView
                         android:id="@+id/asm_btn_back"
                         fontPath="fonts/Flaticon.ttf"
-                        android:layout_width="@dimen/dp60"
+                        android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/md_back_arrow"
@@ -84,7 +84,7 @@
                     <com.iGap.module.MaterialDesignTextView
                         android:id="@+id/asm_btn_menu"
                         fontPath="fonts/Flaticon.ttf"
-                        android:layout_width="@dimen/dp60"
+                        android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
                         android:background="@null"
                         android:gravity="center"
@@ -98,7 +98,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#34a49f"></View>
+                android:background="#34a49f"/>
 
             <include
                 android:id="@+id/asm_ll_music_layout"
@@ -139,7 +139,7 @@
 
                 <Button
                     android:id="@+id/asm_btn_close_layout"
-                    android:layout_width="@dimen/dp60"
+                    android:layout_width="@dimen/dp52"
                     android:layout_height="match_parent"
                     android:background="@null"
                     android:paddingLeft="@dimen/dp12"
@@ -179,7 +179,7 @@
 
                 <Button
                     android:id="@+id/asm_btn_delete_selected"
-                    android:layout_width="@dimen/dp60"
+                    android:layout_width="@dimen/dp52"
                     android:layout_height="match_parent"
                     android:background="@null"
                     android:gravity="center"
@@ -192,7 +192,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/gray"></View>
+            android:background="@color/gray"/>
 
     </LinearLayout>
 

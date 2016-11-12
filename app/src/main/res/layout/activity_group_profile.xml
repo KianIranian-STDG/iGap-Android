@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
                 android:id="@+id/fragmentContainer_group_profile"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layoutDirection="ltr">
+                tools:ignore="MissingPrefix"
+    >
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -72,6 +74,7 @@
                 <android.support.v7.widget.Toolbar
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp60"
+                    android:layoutDirection="ltr"
                     app:contentInsetLeft="0dp"
                     app:contentInsetStart="0dp"
                     app:layout_collapseMode="pin">
@@ -94,7 +97,7 @@
                             <com.iGap.module.MaterialDesignTextView
                                 android:id="@+id/agp_btn_back"
                                 fontPath="fonts/Flaticon.ttf"
-                                android:layout_width="@dimen/dp60"
+                                android:layout_width="@dimen/dp52"
                                 android:layout_height="match_parent"
                                 android:layout_alignParentLeft="true"
                                 android:gravity="center"
@@ -129,7 +132,7 @@
                             <com.iGap.module.MaterialDesignTextView
                                 android:id="@+id/agp_btn_menu"
                                 fontPath="fonts/Flaticon.ttf"
-                                android:layout_width="@dimen/dp60"
+                                android:layout_width="@dimen/dp52"
                                 android:layout_height="match_parent"
                                 android:gravity="center"
                                 android:text="@string/md_show_more_button"
@@ -159,14 +162,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="visible">
 
 
                     <TextView
+                        fontPath="fonts/IRANSansMobile_Bold.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:padding="@dimen/dp8"
+                        android:paddingBottom="@dimen/dp16"
+                        android:paddingLeft="@dimen/dp16"
+                        android:paddingRight="@dimen/dp16"
+                        android:paddingTop="@dimen/dp12"
                         android:text="INFO"
                         android:textColor="@color/green"
                         android:textSize="@dimen/sp18"
@@ -193,20 +201,27 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:paddingEnd="@dimen/dp4"
+                                android:paddingStart="@dimen/dp4"
                                 android:singleLine="true"
                                 android:text="@string/group_name"
-                                android:textSize="@dimen/sp16"/>
+                                android:textColor="@color/black_register"
+                                android:textSize="@dimen/sp15"
+                                />
 
                             <TextView
                                 android:id="@+id/agp_txt_group_name"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:paddingBottom="@dimen/dp18"
+                                android:paddingBottom="@dimen/dp12"
+                                android:paddingEnd="@dimen/dp4"
+                                android:paddingStart="@dimen/dp4"
                                 android:paddingTop="@dimen/dp4"
                                 android:singleLine="true"
                                 android:text=""
-                                android:textColor="@android:color/black"
-                                android:textSize="@dimen/sp16"/>
+                                android:textColor="@color/cardview_dark_background"
+                                android:textSize="@dimen/sp13"
+                                />
 
                         </LinearLayout>
 
@@ -223,20 +238,27 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:paddingEnd="@dimen/dp4"
+                                android:paddingStart="@dimen/dp4"
                                 android:singleLine="true"
                                 android:text="@string/shared_media"
-                                android:textSize="@dimen/sp16"/>
+                                android:textColor="@color/black_register"
+                                android:textSize="@dimen/sp15"
+                                />
 
                             <TextView
                                 android:id="@+id/agp_txt_number_of_shared_media"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:paddingBottom="@dimen/dp18"
+                                android:paddingBottom="@dimen/dp12"
+                                android:paddingEnd="@dimen/dp4"
+                                android:paddingStart="@dimen/dp4"
                                 android:paddingTop="@dimen/dp4"
                                 android:singleLine="true"
                                 android:text="12"
-                                android:textColor="@android:color/black"
-                                android:textSize="@dimen/sp16"/>
+                                android:textColor="@color/cardview_dark_background"
+                                android:textSize="@dimen/sp13"
+                                />
                         </LinearLayout>
 
 
@@ -264,20 +286,27 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:paddingEnd="@dimen/dp4"
+                                android:paddingStart="@dimen/dp4"
                                 android:singleLine="true"
                                 android:text="@string/group_description"
-                                android:textSize="@dimen/sp16"/>
+                                android:textColor="@color/black_register"
+                                android:textSize="@dimen/sp15"
+                                />
 
                             <TextView
                                 android:id="@+id/agp_txt_group_description"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:paddingBottom="@dimen/dp18"
+                                android:paddingBottom="@dimen/dp12"
+                                android:paddingEnd="@dimen/dp4"
+                                android:paddingStart="@dimen/dp4"
                                 android:paddingTop="@dimen/dp4"
                                 android:singleLine="true"
                                 android:text=""
-                                android:textColor="@android:color/black"
-                                android:textSize="@dimen/sp16"/>
+                                android:textColor="@color/cardview_dark_background"
+                                android:textSize="@dimen/sp13"
+                                />
 
                         </LinearLayout>
 
@@ -293,20 +322,25 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:paddingEnd="@dimen/dp4"
+                                android:paddingStart="@dimen/dp4"
                                 android:singleLine="true"
                                 android:text="@string/member"
-                                android:textSize="@dimen/sp16"/>
+                                android:textColor="@color/black_register"
+                                android:textSize="@dimen/sp15"/>
 
                             <TextView
                                 android:id="@+id/agp_txt_member_number"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:paddingBottom="@dimen/dp18"
+                                android:paddingBottom="@dimen/dp12"
+                                android:paddingEnd="@dimen/dp4"
+                                android:paddingStart="@dimen/dp4"
                                 android:paddingTop="@dimen/dp4"
                                 android:singleLine="true"
                                 android:text=""
-                                android:textColor="@android:color/black"
-                                android:textSize="@dimen/sp16"/>
+                                android:textColor="@color/cardview_dark_background"
+                                android:textSize="@dimen/sp13"/>
 
                         </LinearLayout>
 
@@ -322,13 +356,18 @@
                     android:layout_height="wrap_content"
                     android:background="@color/gray_f2"
                     android:gravity="left"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="visible">
 
                     <TextView
+                        fontPath="fonts/IRANSansMobile_Bold.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:padding="@dimen/dp8"
+                        android:paddingBottom="@dimen/dp16"
+                        android:paddingLeft="@dimen/dp16"
+                        android:paddingRight="@dimen/dp16"
+                        android:paddingTop="@dimen/dp12"
                         android:text="Members"
                         android:textColor="@color/green"
                         android:textSize="@dimen/sp18"
@@ -392,71 +431,77 @@
                     android:orientation="vertical">
 
                     <TextView
+                        fontPath="fonts/IRANSansMobile_Bold.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:padding="@dimen/dp12"
+                        android:paddingBottom="@dimen/dp16"
+                        android:paddingLeft="@dimen/dp16"
+                        android:paddingRight="@dimen/dp16"
+                        android:paddingTop="@dimen/dp12"
                         android:text="Settings"
                         android:textColor="@color/green"
                         android:textSize="@dimen/sp18"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold"
+                        tools:ignore="MissingPrefix"/>
 
                     <LinearLayout
                         android:id="@+id/agp_ll_set_admin"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
+                        android:layout_height="@dimen/dp48"
                         android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/agp_txt_set_admin"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="left"
-                            android:paddingBottom="@dimen/dp4"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_vertical"
+                            android:gravity="center_vertical"
+                            android:paddingEnd="@dimen/sp16"
                             android:paddingLeft="@dimen/dp16"
-                            android:paddingTop="@dimen/dp4"
+                            android:paddingRight="@dimen/sp16"
+                            android:paddingStart="@dimen/sp16"
                             android:singleLine="true"
                             android:text="@string/set_admin"
                             android:textColor="@android:color/black"
-                            android:textSize="@dimen/sp16"/>
+                            android:textSize="@dimen/sp15"/>
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1px"
-                            android:layout_marginBottom="@dimen/dp4"
-                            android:layout_marginTop="@dimen/dp12"
-                            android:background="@color/gray"/>
+
                     </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/background_editText"/>
 
                     <LinearLayout
                         android:id="@+id/agp_ll_set_modereator"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
+                        android:layout_height="@dimen/dp48"
                         android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/agp_txt_add_modereator"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="left"
-                            android:paddingBottom="@dimen/dp4"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:paddingEnd="@dimen/sp16"
                             android:paddingLeft="@dimen/dp16"
-                            android:paddingTop="@dimen/dp4"
+                            android:paddingRight="@dimen/sp16"
+                            android:paddingStart="@dimen/sp16"
                             android:singleLine="true"
                             android:text="@string/set_modereator"
                             android:textColor="@android:color/black"
-                            android:textSize="@dimen/sp16"/>
+                            android:textSize="@dimen/sp15"/>
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1px"
-                            android:layout_marginBottom="@dimen/dp4"
-                            android:layout_marginTop="@dimen/dp12"
-                            android:background="@color/gray"/>
 
                     </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/background_editText"/>
 
                     <LinearLayout
                         android:id="@+id/agp_ll_member_can_add_member"
@@ -465,94 +510,92 @@
                         android:gravity="left"
                         android:orientation="vertical">
 
-                        <LinearLayout
+                        <RelativeLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:orientation="horizontal"
-                            android:visibility="gone">
+                            android:layout_height="@dimen/dp48"
+                            android:paddingEnd="@dimen/dp16"
+                            android:paddingLeft="@dimen/dp16"
+                            android:paddingRight="@dimen/dp16"
+                            android:paddingStart="@dimen/dp16"
+                            >
 
                             <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:gravity="left"
-                                android:paddingBottom="@dimen/dp4"
-                                android:paddingLeft="@dimen/dp16"
-                                android:paddingTop="@dimen/dp4"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
                                 android:singleLine="true"
                                 android:text="@string/member_can_add_new_member"
                                 android:textColor="@android:color/black"
-                                android:textSize="@dimen/sp16"/>
+                                android:textSize="@dimen/sp15"/>
 
                             <ToggleButton
                                 android:id="@+id/agp_toggle_member_can_add_member"
-                                android:layout_width="@dimen/dp40"
+                                android:layout_width="@dimen/dp44"
                                 android:layout_height="@dimen/dp40"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerInParent="true"
                                 android:background="@drawable/st_switch_button"
-                                android:paddingRight="@dimen/dp4"
                                 android:textOff=""
                                 android:textOn=""/>
 
 
-                        </LinearLayout>
+                        </RelativeLayout>
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1px"
-                            android:layout_marginBottom="@dimen/dp12"
-                            android:layout_marginTop="@dimen/dp4"
-                            android:background="@color/gray"
-                            android:visibility="gone"/>
+                            android:background="@color/background_editText"
+                            />
                     </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/agp_ll_notification"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
+                        android:layout_height="@dimen/dp48"
                         android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/agp_txt_str_notification_and_sound"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="left"
-                            android:paddingBottom="@dimen/dp4"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:paddingEnd="@dimen/sp16"
                             android:paddingLeft="@dimen/dp16"
-                            android:paddingTop="@dimen/dp4"
+                            android:paddingRight="@dimen/sp16"
+                            android:paddingStart="@dimen/sp16"
                             android:singleLine="true"
                             android:text="@string/notificaion_and_sound"
                             android:textColor="@android:color/black"
-                            android:textSize="@dimen/sp16"/>
+                            android:textSize="@dimen/sp15"/>
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1px"
-                            android:layout_marginBottom="@dimen/dp12"
-                            android:layout_marginTop="@dimen/dp12"
-                            android:background="@color/gray"/>
                     </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+
+                        android:background="@color/background_editText"/>
 
                     <LinearLayout
                         android:id="@+id/agp_ll_delete_and_left_group"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
+                        android:layout_height="@dimen/dp48"
                         android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/agp_txt_str_delete_and_leave_group"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="left"
-                            android:paddingBottom="@dimen/dp18"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:paddingEnd="@dimen/sp16"
                             android:paddingLeft="@dimen/dp16"
-                            android:paddingTop="@dimen/dp4"
+                            android:paddingRight="@dimen/sp16"
+                            android:paddingStart="@dimen/sp16"
                             android:singleLine="true"
                             android:text="@string/Delete_and_leave_Group"
                             android:textColor="@android:color/black"
-                            android:textSize="@dimen/sp16"/>
+                            android:textSize="@dimen/sp15"/>
                     </LinearLayout>
 
                 </LinearLayout>

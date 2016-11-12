@@ -5,6 +5,7 @@
     android:layout_height="match_parent">
 
     <android.support.v7.widget.Toolbar
+        android:layoutDirection="ltr"
         android:id="@+id/stfaq_toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp60"
@@ -43,7 +44,7 @@
                     <com.iGap.module.MaterialDesignTextView
                         android:id="@+id/stfaq_txt_back"
                         fontPath="fonts/Flaticon.ttf"
-                        android:layout_width="@dimen/dp60"
+                        android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/md_close_button"
@@ -76,7 +77,7 @@
                     <com.iGap.module.MaterialDesignTextView
                         android:id="@+id/stfaq_txt_share"
                         fontPath="fonts/Flaticon.ttf"
-                        android:layout_width="@dimen/dp60"
+                        android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
                         android:layout_gravity="right"
                         android:gravity="center"
@@ -99,16 +100,16 @@
                     <com.iGap.module.MaterialDesignTextView
                         android:id="@+id/stfaq_txt_menuPopup"
                         fontPath="fonts/Flaticon.ttf"
-                        android:layout_width="@dimen/dp60"
+                        android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentTop="true"
                         android:layout_gravity="right"
                         android:gravity="center"
                         android:text="@string/md_show_more_button"
                         android:textColor="@color/whit_background"
-                        android:textSize="@dimen/sp18" />
+                        android:textSize="@dimen/sp18"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"/>
                 </com.iGap.libs.rippleeffect.RippleView>
             </LinearLayout>
 

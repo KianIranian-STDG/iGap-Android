@@ -21,6 +21,7 @@
             app:submitBackground="@color/red" />
 
         <TextView
+            android:layoutDirection="ltr"
             android:id="@+id/rg_txt_titleToolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

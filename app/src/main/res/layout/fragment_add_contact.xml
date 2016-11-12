@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/ac_layoutParent"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/white"
-    android:orientation="vertical">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/ac_layoutParent"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@android:color/white"
+              tools:ignore="MissingPrefix"
+              android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
@@ -13,7 +15,9 @@
         android:background="@color/toolbar_background"
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp"
-        app:layout_collapseMode="pin">
+        app:layout_collapseMode="pin"
+        android:layoutDirection="ltr"
+        android:id="@+id/toolbar3">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -26,7 +30,7 @@
                 android:gravity="center"
                 android:text="@string/fac_Add_Contact"
                 android:textColor="@color/whit_background"
-                android:textSize="@dimen/sp22"
+                android:textSize="@dimen/sp18"
                 android:textStyle="bold"
                 android:visibility="visible" />
 
@@ -43,7 +47,7 @@
                 <com.iGap.module.MaterialDesignTextView
                     android:id="@+id/ac_txt_back"
                     fontPath="fonts/Flaticon.ttf"
-                    android:layout_width="@dimen/dp60"
+                    android:layout_width="@dimen/dp52"
                     android:layout_height="match_parent"
                     android:layout_alignParentLeft="true"
                     android:gravity="center"
@@ -55,7 +59,7 @@
             <com.iGap.libs.rippleeffect.RippleView
                 android:id="@+id/ac_ripple_set"
                 rv_centered="true"
-                android:layout_width="@dimen/dp60"
+                android:layout_width="@dimen/dp52"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 app:rv_alpha="200"
@@ -71,19 +75,23 @@
                     android:gravity="center"
                     android:text="@string/md_check_symbol"
                     android:textColor="@color/whit_background"
-                    android:textSize="@dimen/sp18" />
+                    android:textSize="@dimen/sp18"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"/>
             </com.iGap.libs.rippleeffect.RippleView>
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
 
     <TextView
+        fontPath="fonts/IRANSansMobile_Bold.ttf"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/sp16"
         android:text="@string/fac_contact_info"
         android:textColor="@android:color/black"
-        android:textSize="@dimen/sp22"
-        android:textStyle="bold" />
+        android:textSize="@dimen/sp18"
+        />
 
     <android.support.design.widget.TextInputLayout
 
@@ -91,7 +99,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp16"
         android:layout_marginRight="@dimen/dp16"
-        android:layout_marginTop="@dimen/dp8">
+        >
 
         <EditText
             android:id="@+id/ac_edt_firstName"
@@ -101,7 +109,8 @@
             android:layout_marginTop="@dimen/dp8"
             android:background="@android:color/transparent"
             android:hint="@string/fac_First_Name"
-            android:paddingTop="@dimen/dp8"
+
+            android:textSize="@dimen/sp15"
             android:singleLine="true"
             android:textColorHint="@color/hint_edit_text" />
 
@@ -120,17 +129,15 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp16"
         android:layout_marginRight="@dimen/dp16"
-        android:layout_marginTop="@dimen/dp20">
+        android:layout_marginTop="@dimen/dp12">
 
         <EditText
             android:id="@+id/ac_edt_lastName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dp4"
-            android:layout_marginTop="@dimen/dp8"
             android:background="@android:color/transparent"
             android:hint="@string/fac_Last_Name"
-            android:paddingTop="@dimen/dp8"
+            android:textSize="@dimen/sp15"
             android:singleLine="true"
             android:textColorHint="@color/hint_edit_text" />
 
@@ -144,23 +151,20 @@
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp16"
         android:layout_marginRight="@dimen/dp16"
-        android:layout_marginTop="@dimen/dp20">
+        android:layout_marginTop="@dimen/dp12">
 
         <EditText
             android:id="@+id/ac_edt_phoneNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dp4"
-            android:layout_marginTop="@dimen/dp8"
             android:background="@android:color/transparent"
             android:hint="@string/fac_Phone_Number"
             android:inputType="phone"
-            android:paddingTop="@dimen/dp8"
+            android:textSize="@dimen/sp15"
             android:singleLine="true"
             android:textColorHint="@color/hint_edit_text" />
 

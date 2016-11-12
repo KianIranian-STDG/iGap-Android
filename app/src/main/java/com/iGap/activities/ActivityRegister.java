@@ -189,6 +189,7 @@ public class ActivityRegister extends ActivityEnhanced {
         }
 
         int getHeight = G.context.getResources().getDisplayMetrics().heightPixels;
+        Log.i("AZAZ", "onCreate: " + getHeight);
 
         txtTitleRegister = (TextView) findViewById(R.id.rg_txt_title_register);
         txtDesc = (TextView) findViewById(R.id.rg_txt_text_descRegister);

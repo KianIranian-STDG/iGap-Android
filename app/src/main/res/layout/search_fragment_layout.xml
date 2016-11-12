@@ -37,7 +37,7 @@
                     <com.iGap.module.MaterialDesignTextView
                         android:id="@+id/sfl_btn_back"
                         fontPath="fonts/Flaticon.ttf"
-                        android:layout_width="@dimen/dp60"
+                        android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
                         android:background="@null"
                         android:gravity="center"
@@ -61,6 +61,7 @@
                     android:paddingLeft="@dimen/dp8"
                     android:paddingRight="@dimen/dp8"
                     android:paddingEnd="@dimen/dp8"
+                    android:textSize="@dimen/sp15"
                     android:textColor="@color/white"
                     android:textColorHint="#dededd"
                     android:textCursorDrawable="@drawable/white_cursor_color" />
@@ -78,7 +79,7 @@
                     <com.iGap.module.MaterialDesignTextView
                         android:id="@+id/sfl_btn_close"
                         fontPath="fonts/Flaticon.ttf"
-                        android:layout_width="@dimen/dp60"
+                        android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
                         android:background="@null"
                         android:gravity="center"

@@ -35,7 +35,7 @@
             <com.iGap.module.MaterialDesignTextView
                 android:id="@+id/asi_btn_back"
                 fontPath="fonts/Flaticon.ttf"
-                android:layout_width="@dimen/dp60"
+                android:layout_width="@dimen/dp52"
                 android:layout_height="match_parent"
                 android:background="@null"
                 android:gravity="center"
@@ -68,7 +68,7 @@
             <com.iGap.module.MaterialDesignTextView
                 android:id="@+id/asi_btn_menu"
                 fontPath="fonts/Flaticon.ttf"
-                android:layout_width="@dimen/dp60"
+                android:layout_width="@dimen/dp52"
                 android:layout_height="match_parent"
                 android:background="@null"
                 android:gravity="center"

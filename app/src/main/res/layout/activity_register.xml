@@ -70,7 +70,7 @@
             android:gravity="center"
             android:text="@string/rg_confirm_text_register"
             android:textColor="@color/rg_confirm_country"
-            android:textSize="@dimen/sp15"
+            android:textSize="@dimen/sp14"
 
             />
     </RelativeLayout>
@@ -133,7 +133,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight=".7"
                 android:background="@drawable/rg_background_agreement"
-                android:gravity="start"
+                android:gravity="start|center_vertical"
                 android:inputType="phone"
                 android:padding="@dimen/dp4"
                 android:textColor="@color/rg_black_register"

@@ -5,7 +5,6 @@
     android:id="@+id/chi_layoutParent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layoutDirection="ltr"
     tools:ignore="MissingPrefix">
 
     <android.support.design.widget.AppBarLayout
@@ -28,6 +27,7 @@
 
 
             <android.support.v7.widget.Toolbar
+                android:layoutDirection="ltr"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp60"
                 app:contentInsetLeft="0dp"
@@ -85,7 +85,7 @@
                         <com.iGap.module.MaterialDesignTextView
                             android:id="@+id/chi_txt_back"
                             fontPath="fonts/Flaticon.ttf"
-                            android:layout_width="@dimen/dp60"
+                            android:layout_width="@dimen/dp52"
                             android:layout_height="match_parent"
                             android:layout_alignParentLeft="true"
                             android:gravity="center"
@@ -100,6 +100,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
                         app:rv_alpha="200"
                         app:rv_centered="true"
                         app:rv_rippleDuration="150"
@@ -108,9 +109,8 @@
                         <com.iGap.module.MaterialDesignTextView
                             android:id="@+id/chi_img_menuPopup"
                             fontPath="fonts/Flaticon.ttf"
-                            android:layout_width="@dimen/dp60"
+                            android:layout_width="@dimen/dp52"
                             android:layout_height="match_parent"
-                            android:layout_gravity="right"
                             android:gravity="center"
                             android:text="@string/md_show_more_button"
                             android:textColor="@color/whit_background"
@@ -178,13 +178,15 @@
                 android:visibility="visible">
 
                 <TextView
+                    fontPath="fonts/IRANSansMobile_Bold.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:paddingBottom="@dimen/dp20"
+                    android:paddingBottom="@dimen/dp16"
+                    android:paddingTop="@dimen/dp12"
                     android:text="@string/st_title_info"
                     android:textColor="@color/green"
-                    android:textSize="@dimen/sp22"
+                    android:textSize="@dimen/sp18"
                     android:textStyle="bold" />
 
 
@@ -200,22 +202,26 @@
                         android:paddingLeft="@dimen/dp4"
                         android:paddingStart="@dimen/dp4"
                         android:text="@string/st_contactName"
+                        android:paddingRight="@dimen/dp4"
+                        android:paddingEnd="@dimen/dp4"
                         android:textColor="@android:color/secondary_text_light"
-                        android:textSize="@dimen/sp18"
+                        android:textSize="@dimen/sp15"
                         android:textStyle="bold" />
 
 
                     <TextView
                         android:id="@+id/chi_txt_nikName"
                         android:layout_width="wrap_content"
-                        android:layout_height="@dimen/dp40"
+                        android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:paddingLeft="@dimen/dp4"
                         android:paddingStart="@dimen/dp4"
                         android:text="Alexander Smith"
-                        android:textColor="@android:color/secondary_text_light"
-                        android:textSize="@dimen/sp18"
-                        android:theme="@style/Setting_editText" />
+                        android:paddingRight="@dimen/dp4"
+                        android:paddingEnd="@dimen/dp4"
+                        android:textColor="@color/cardview_dark_background"
+                        android:textSize="@dimen/sp13"
+                        />
 
                 </LinearLayout>
 
@@ -228,27 +234,31 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp20"
                         android:paddingLeft="@dimen/dp4"
                         android:paddingStart="@dimen/dp4"
+                        android:paddingRight="@dimen/dp4"
+                        android:paddingEnd="@dimen/dp4"
                         android:text="@string/st_username"
                         android:textColor="@android:color/secondary_text_light"
-                        android:textSize="@dimen/sp18"
+                        android:textSize="@dimen/sp15"
+                        android:layout_marginTop="@dimen/dp8"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/chi_txt_userName"
                         android:layout_width="wrap_content"
-                        android:layout_height="@dimen/dp40"
+                        android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:clickable="false"
                         android:gravity="center_vertical"
                         android:maxLength="25"
                         android:paddingLeft="@dimen/dp4"
                         android:paddingStart="@dimen/dp4"
+                        android:paddingRight="@dimen/dp4"
+                        android:paddingEnd="@dimen/dp4"
                         android:text="Alexander Smith:"
-                        android:textColor="@android:color/secondary_text_light"
-                        android:textSize="@dimen/sp18" />
+                        android:textColor="@color/cardview_dark_background"
+                        android:textSize="@dimen/sp13"/>
 
                 </LinearLayout>
 
@@ -263,25 +273,29 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp20"
+                        android:layout_marginTop="@dimen/dp4"
                         android:paddingLeft="@dimen/dp4"
                         android:paddingStart="@dimen/dp4"
+                        android:paddingRight="@dimen/dp4"
+                        android:paddingEnd="@dimen/dp4"
                         android:text="@string/st_phoneNumber"
                         android:textColor="@android:color/secondary_text_light"
-                        android:textSize="@dimen/sp18"
+                        android:textSize="@dimen/sp15"
                         android:textStyle="bold" />
 
 
                     <TextView
                         android:id="@+id/chi_txt_phoneNumber"
                         android:layout_width="wrap_content"
-                        android:layout_height="@dimen/dp40"
+                        android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:paddingLeft="@dimen/dp4"
                         android:paddingStart="@dimen/dp4"
+                        android:paddingRight="@dimen/dp4"
+                        android:paddingEnd="@dimen/dp4"
                         android:text="09125554433"
-                        android:textColor="@android:color/secondary_text_light"
-                        android:textSize="@dimen/sp18" />
+                        android:textColor="@color/cardview_dark_background"
+                        android:textSize="@dimen/sp13"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -293,28 +307,31 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp20"
                         android:clickable="false"
                         android:paddingLeft="@dimen/dp4"
                         android:paddingStart="@dimen/dp4"
+                        android:paddingRight="@dimen/dp4"
+                        android:paddingEnd="@dimen/dp4"
                         android:text="@string/chi_shared_Media"
                         android:textColor="@android:color/secondary_text_light"
-                        android:textSize="@dimen/sp18"
+                        android:textSize="@dimen/sp15"
+                        android:layout_marginTop="@dimen/dp8"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/chi_txt_count_of_sharedMedia"
                         android:layout_width="wrap_content"
-                        android:layout_height="@dimen/dp40"
+                        android:layout_height="wrap_content"
                         android:clickable="false"
                         android:gravity="center_vertical"
-                        android:inputType="phone"
                         android:maxLength="11"
                         android:paddingLeft="@dimen/dp4"
                         android:paddingStart="@dimen/dp4"
+                        android:paddingRight="@dimen/dp4"
+                        android:paddingEnd="@dimen/dp4"
                         android:text="12"
-                        android:textColor="@android:color/secondary_text_light"
-                        android:textSize="@dimen/sp18"
+                        android:textColor="@color/cardview_dark_background"
+                        android:textSize="@dimen/sp13"
                         android:theme="@style/Setting_editText" />
 
                 </LinearLayout>
@@ -329,28 +346,29 @@
                 android:orientation="vertical">
 
                 <TextView
+                    fontPath="fonts/IRANSansMobile_Bold.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:paddingBottom="@dimen/dp20"
                     android:paddingLeft="@dimen/dp16"
                     android:paddingRight="@dimen/dp16"
+                    android:paddingBottom="@dimen/dp16"
                     android:paddingTop="@dimen/dp12"
                     android:text="@string/chi_title_setting"
                     android:textColor="@color/green"
-                    android:textSize="@dimen/sp22"
+                    android:textSize="@dimen/sp18"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/chi_txtNotifyAndSound"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="@dimen/dp16"
+                    android:layout_height="@dimen/dp48"
                     android:paddingLeft="@dimen/dp16"
                     android:paddingRight="@dimen/dp16"
+                    android:gravity="center_vertical"
                     android:text="@string/st_title_notification_sounds"
                     android:textColor="@color/black_register"
-                    android:textSize="@dimen/sp18"
+                    android:textSize="@dimen/sp15"
                     android:textStyle="normal" />
 
                 <View
@@ -361,11 +379,13 @@
                 <TextView
                     android:id="@+id/chi_txt_clearChat"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/dp16"
+                    android:layout_height="@dimen/dp48"
+                    android:paddingLeft="@dimen/dp16"
+                    android:paddingRight="@dimen/dp16"
+                    android:gravity="center_vertical"
                     android:text="@string/chi_clearChat"
                     android:textColor="@color/black_register"
-                    android:textSize="@dimen/sp18"
+                    android:textSize="@dimen/sp15"
                     android:textStyle="normal" />
 
 
@@ -377,22 +397,14 @@
                 <TextView
                     android:id="@+id/chi_txt_blockContact"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/dp16"
+                    android:layout_height="@dimen/dp48"
+                    android:paddingLeft="@dimen/dp16"
+                    android:paddingRight="@dimen/dp16"
+                    android:gravity="center_vertical"
                     android:text="@string/chi_blockContact"
                     android:textColor="@color/black_register"
-                    android:textSize="@dimen/sp18"
+                    android:textSize="@dimen/sp15"
                     android:textStyle="normal" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/background_editText" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/background_editText" />
 
             </LinearLayout>
 

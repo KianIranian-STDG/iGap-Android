@@ -19,7 +19,8 @@
         <RelativeLayout
             android:id="@+id/menu_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layoutDirection="ltr">
         <com.iGap.libs.rippleeffect.RippleView
             android:id="@+id/menu_ripple_txtBack"
             rv_centered="true"
@@ -33,7 +34,7 @@
             <com.iGap.module.MaterialDesignTextView
                 android:id="@+id/menu_txtBack"
                 fontPath="fonts/Flaticon.ttf"
-                android:layout_width="@dimen/dp60"
+                android:layout_width="@dimen/dp52"
                 android:layout_height="match_parent"
                 android:layout_gravity="left"
                 android:gravity="center"
@@ -62,7 +63,7 @@
                 android:text="@string/igap"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/sp20"
+                android:textSize="@dimen/sp18"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"/>

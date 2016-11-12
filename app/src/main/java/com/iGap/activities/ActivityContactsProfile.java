@@ -1003,9 +1003,9 @@ public class ActivityContactsProfile extends ActivityEnhanced {
         int dim20 = (int) getResources().getDimension(R.dimen.dp20);
         int dim12 = (int) getResources().getDimension(R.dimen.dp12);
 
-        text1.setTextSize(16);
-        text2.setTextSize(16);
-        text3.setTextSize(16);
+        text1.setTextSize(14);
+        text2.setTextSize(14);
+        text3.setTextSize(14);
 
         text1.setPadding(dim20, dim12, dim12, dim20);
         text2.setPadding(dim20, 0, dim12, dim20);

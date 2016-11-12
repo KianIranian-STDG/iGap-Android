@@ -18,6 +18,7 @@
         android:background="@color/toolbar_background"
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp"
+        android:layoutDirection="ltr"
         app:layout_collapseMode="pin">
 
         <RelativeLayout
@@ -32,7 +33,7 @@
                 android:gravity="center"
                 android:text="@string/st_title_Background"
                 android:textColor="@color/whit_background"
-                android:textSize="@dimen/sp22"
+                android:textSize="@dimen/sp18"
                 android:textStyle="bold"
                 android:visibility="visible" />
 
@@ -49,7 +50,7 @@
                 <com.iGap.module.MaterialDesignTextView
                     android:id="@+id/stcb_txt_back"
                     fontPath="fonts/Flaticon.ttf"
-                    android:layout_width="@dimen/dp60"
+                    android:layout_width="@dimen/dp52"
                     android:layout_height="match_parent"
                     android:layout_alignParentLeft="true"
                     android:gravity="center"

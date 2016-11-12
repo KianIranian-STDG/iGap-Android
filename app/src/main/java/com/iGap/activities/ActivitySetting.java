@@ -42,11 +42,9 @@ import com.iGap.fragments.FragmentPrivacyAndSecurity;
 import com.iGap.fragments.FragmentShowAvatars;
 import com.iGap.fragments.FragmentSticker;
 import com.iGap.helper.HelperLogout;
-import com.iGap.helper.HelperString;
 import com.iGap.interfaces.OnFileUploadForActivities;
 import com.iGap.interfaces.OnUserAvatarDelete;
 import com.iGap.interfaces.OnUserAvatarResponse;
-import com.iGap.interfaces.OnUserDelete;
 import com.iGap.interfaces.OnUserProfileCheckUsername;
 import com.iGap.interfaces.OnUserProfileSetEmailResponse;
 import com.iGap.interfaces.OnUserProfileSetGenderResponse;
@@ -59,7 +57,6 @@ import com.iGap.module.IncomingSms;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
-import com.iGap.proto.ProtoUserDelete;
 import com.iGap.proto.ProtoUserProfileCheckUsername;
 import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmAvatar;
@@ -67,7 +64,6 @@ import com.iGap.realm.RealmAvatarFields;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestUserAvatarAdd;
 import com.iGap.request.RequestUserAvatarDelete;
-import com.iGap.request.RequestUserDelete;
 import com.iGap.request.RequestUserProfileCheckUsername;
 import com.iGap.request.RequestUserProfileSetEmail;
 import com.iGap.request.RequestUserProfileSetGender;
@@ -281,7 +277,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                 TextInputLayout inputFirstName = new TextInputLayout(ActivitySetting.this);
                 final EditText edtFirstName = new EditText(ActivitySetting.this);
-                edtFirstName.setHint("First Name");
+                edtFirstName.setHint(getResources().getString(R.string.fac_First_Name));
                 edtFirstName.setText(firsName);
                 edtFirstName.setTextColor(getResources().getColor(R.color.text_edit_text));
                 edtFirstName.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
@@ -297,7 +293,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                 TextInputLayout inputLastName = new TextInputLayout(ActivitySetting.this);
                 final EditText edtLastName = new EditText(ActivitySetting.this);
-                edtLastName.setHint("Last Name");
+                edtLastName.setHint(getResources().getString(R.string.fac_Last_Name));
                 edtLastName.setText(lastName);
                 edtLastName.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
                 edtLastName.setTextColor(getResources().getColor(R.color.text_edit_text));
@@ -935,8 +931,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 int dim20 = (int) getResources().getDimension(R.dimen.dp20);
                 int dim12 = (int) getResources().getDimension(R.dimen.dp12);
                 int dim16 = (int) getResources().getDimension(R.dimen.dp16);
-                txtLogOut.setTextSize(16);
-                txtDeleteAccount.setTextSize(16);
+                txtLogOut.setTextSize(14);
+                txtDeleteAccount.setTextSize(14);
 
                 txtLogOut.setPadding(dim20, dim12, dim12, dim20);
                 txtDeleteAccount.setPadding(dim20, 0, dim12, dim16);
@@ -1056,7 +1052,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             @Override
             public void onClick(View view) {
 
-                new MaterialDialog.Builder(ActivitySetting.this).title("Language")
+                new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_Language))
                         .titleGravity(GravityEnum.START)
                         .titleColor(getResources().getColor(android.R.color.black)).items(R.array.language).itemsCallbackSingleChoice(poRbDialogLangouage, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
@@ -1583,7 +1579,10 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     //dialog for choose pic from gallery or camera
     private void startDialog(int r) {
 
-        new MaterialDialog.Builder(this).title("Choose Picture").negativeText("CANCEL").items(r).itemsCallback(new MaterialDialog.ListCallback() {
+        new MaterialDialog.Builder(this).title(getResources().getString(R.string.choose_picture))
+                .negativeText(getResources().getString(R.string.B_cancel))
+                .items(r)
+                .itemsCallback(new MaterialDialog.ListCallback() {
             @Override
             public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                 if (text.toString().equals("From Camera")) {
@@ -1680,26 +1679,27 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         config.locale = locale;
         getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
         startActivity(new Intent(ActivitySetting.this, ActivitySetting.class));
+        overridePendingTransition(0, 0);
         finish();
     }
 
-    private void getSms(String message) {
-        String verificationCode = HelperString.regexExtractValue(message, regex);
-
-        if (verificationCode != null && !verificationCode.isEmpty()) {
-
-            G.onUserDelete = new OnUserDelete() {
-                @Override
-                public void onUserDeleteResponse() {
-                    Log.i("UUU", "onUserDeleteResponse");
-                    HelperLogout.logout();
-                }
-            };
-
-            Log.i("UUU", "RequestUserDelete verificationCode : " + verificationCode);
-            new RequestUserDelete().userDelete(verificationCode, ProtoUserDelete.UserDelete.Reason.OTHER);
-        }
-    }
+//    private void getSms(String message) {
+//        String verificationCode = HelperString.regexExtractValue(message, regex);
+//
+//        if (verificationCode != null && !verificationCode.isEmpty()) {
+//
+//            G.onUserDelete = new OnUserDelete() {
+//                @Override
+//                public void onUserDeleteResponse() {
+//                    Log.i("UUU", "onUserDeleteResponse");
+//                    HelperLogout.logout();
+//                }
+//            };
+//
+//            Log.i("UUU", "RequestUserDelete verificationCode : " + verificationCode);
+//            new RequestUserDelete().userDelete(verificationCode, ProtoUserDelete.UserDelete.Reason.OTHER);
+//        }
+//    }
 
     @Override
     protected void onResume() {

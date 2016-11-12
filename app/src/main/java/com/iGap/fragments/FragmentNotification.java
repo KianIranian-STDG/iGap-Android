@@ -36,6 +36,7 @@ import com.larswerkman.holocolorpicker.SVBar;
 import io.realm.Realm;
 
 import static com.iGap.R.id.ntg_txt_back;
+import static com.iGap.R.string.DISCARD;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -82,6 +83,7 @@ public class FragmentNotification extends Fragment {
         roomId = getArguments().getLong("ID");
         callObject(view);
 
+        Log.i("CCCCVV", "onViewCreated: " + roomId);
         //=================================================Realm
 
         switch (page) {
@@ -89,18 +91,20 @@ public class FragmentNotification extends Fragment {
 
                 Realm realm = Realm.getDefaultInstance();
 
-                RealmRoom realmRoom =
-                        realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                 RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
 
-                if (realmGroupRoom.getRealmNotificationSetting() == null) {
-                    setRealm(realm, realmGroupRoom, null, null);
-                } else {
+                if (realmRoom.getGroupRoom() != null) {
 
-                    realmNotificationSetting = realmGroupRoom.getRealmNotificationSetting();
+
+                    if (realmGroupRoom.getRealmNotificationSetting() == null) {
+                        setRealm(realm, realmGroupRoom, null, null);
+                    } else {
+
+                        realmNotificationSetting = realmGroupRoom.getRealmNotificationSetting();
+                    }
+                    getRealm();
                 }
-                getRealm();
 
                 realm.close();
             }
@@ -108,38 +112,38 @@ public class FragmentNotification extends Fragment {
             break;
             case "CHANNEL": {
                 Realm realm = Realm.getDefaultInstance();
-                RealmRoom realmRoom =
-                        realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                 RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-                if (realmChannelRoom.getRealmNotificationSetting() == null) {
-                    setRealm(realm, null, realmChannelRoom, null);
-                } else {
-                    realmNotificationSetting = realmChannelRoom.getRealmNotificationSetting();
+
+                if (realmRoom.getChannelRoom() != null) {
+
+
+                    if (realmChannelRoom.getRealmNotificationSetting() == null) {
+                        setRealm(realm, null, realmChannelRoom, null);
+                    } else {
+                        realmNotificationSetting = realmChannelRoom.getRealmNotificationSetting();
+                    }
+                    getRealm();
                 }
 
-                getRealm();
-
-                getRealm();
                 realm.close();
                 break;
             }
             case "CONTACT": {
 
                 Realm realm = Realm.getDefaultInstance();
-                RealmRoom realmRoom =
-                        realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                 RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
-                realmNotificationSetting = realmChatRoom.getRealmNotificationSetting();
 
-                if (realmChatRoom.getRealmNotificationSetting() == null) {
-                    setRealm(realm, null, null, realmChatRoom);
-                } else {
-                    realmNotificationSetting = realmChatRoom.getRealmNotificationSetting();
+                if (realmRoom.getChatRoom() != null) {
+                    if (realmChatRoom.getRealmNotificationSetting() == null) {
+                        setRealm(realm, null, null, realmChatRoom);
+                    } else {
+                        realmNotificationSetting = realmChatRoom.getRealmNotificationSetting();
+                    }
+                    getRealm();
                 }
 
-                getRealm();
-
-                getRealm();
                 realm.close();
 
                 break;
@@ -181,9 +185,9 @@ public class FragmentNotification extends Fragment {
             @Override
             public void onClick(View view) {
 
-                new MaterialDialog.Builder(getActivity()).title("Popup Notification")
+                new MaterialDialog.Builder(getActivity()).title(getResources().getString(R.string.st_popupNotification))
                         .items(R.array.notifications_notification)
-                        .negativeText("CANCEL")
+                        .negativeText(getResources().getString(R.string.B_cancel))
                         .itemsCallback(new MaterialDialog.ListCallback() {
                             @Override
                             public void onSelection(MaterialDialog dialog, View view, int which,
@@ -239,8 +243,7 @@ public class FragmentNotification extends Fragment {
 
                                                 switch (page) {
                                                     case "GROUP": {
-                                                        RealmGroupRoom realmGroupRoom =
-                                                                realmRoom.getGroupRoom();
+                                                        RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
                                                         realmGroupRoom.getRealmNotificationSetting()
                                                                 .setNotification(1);
                                                         break;
@@ -316,7 +319,7 @@ public class FragmentNotification extends Fragment {
             @Override
             public void onClick(View view) {
 
-                new MaterialDialog.Builder(getActivity()).title("Ringtone")
+                new MaterialDialog.Builder(getActivity()).title(getResources().getString(R.string.Ringtone))
                         .titleGravity(GravityEnum.START)
                         .titleColor(getResources().getColor(android.R.color.black))
                         .items(R.array.sound_message)
@@ -389,10 +392,8 @@ public class FragmentNotification extends Fragment {
                                                     case "GROUP": {
                                                         RealmGroupRoom realmGroupRoom =
                                                                 realmRoom.getGroupRoom();
-                                                        realmGroupRoom.getRealmNotificationSetting()
-                                                                .setSound(text.toString());
-                                                        realmGroupRoom.getRealmNotificationSetting()
-                                                                .setIdRadioButtonSound(which);
+                                                        realmGroupRoom.getRealmNotificationSetting().setSound(text.toString());
+                                                        realmGroupRoom.getRealmNotificationSetting().setIdRadioButtonSound(which);
                                                         break;
                                                     }
                                                     case "CHANNEL": {
@@ -420,8 +421,8 @@ public class FragmentNotification extends Fragment {
                                         return true;
                                     }
                                 })
-                        .positiveText("OK")
-                        .negativeText("CANCEL")
+                        .positiveText(getResources().getString(R.string.B_ok))
+                        .negativeText(getResources().getString(R.string.B_cancel))
                         .show();
             }
         });
@@ -432,9 +433,9 @@ public class FragmentNotification extends Fragment {
             @Override
             public void onClick(View view) {
 
-                new MaterialDialog.Builder(getActivity()).title("Vibrate")
+                new MaterialDialog.Builder(getActivity()).title(getResources().getString(R.string.st_vibrate))
                         .items(R.array.notifications_vibrate)
-                        .negativeText("CANCEL")
+                        .negativeText(getResources().getString(R.string.B_cancel))
                         .itemsCallback(new MaterialDialog.ListCallback() {
                             @Override
                             public void onSelection(MaterialDialog dialog, View view, int which,
@@ -754,9 +755,9 @@ public class FragmentNotification extends Fragment {
                 boolean wrapInScrollView = true;
                 final MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).customView(
                         R.layout.stns_popup_colorpicer, wrapInScrollView)
-                        .positiveText("SET")
-                        .negativeText("DISCARD")
-                        .title("LED Color")
+                        .positiveText(getResources().getString(R.string.set))
+                        .negativeText(getResources().getString(DISCARD))
+                        .title(getResources().getString(ledColor))
                         .onNegative(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog,
