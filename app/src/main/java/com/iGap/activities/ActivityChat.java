@@ -618,15 +618,10 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
                     RealmRoomMessage forwardedMessage = realm.createObject(RealmRoomMessage.class);
                     forwardedMessage.setMessageId(messageId);
-                    forwardedMessage.setMessage(roomMessage.getMessage());
-                    forwardedMessage.setAttachment(roomMessage.getAttachment());
                     forwardedMessage.setForwardMessage(roomMessage);
                     forwardedMessage.setCreateTime(System.currentTimeMillis());
-                    forwardedMessage.setLocation(roomMessage.getLocation());
-                    forwardedMessage.setLog(roomMessage.getLog());
-                    forwardedMessage.setMessageType(roomMessage.getMessageType());
+                    forwardedMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT.toString());
                     forwardedMessage.setRoomId(mRoomId);
-                    forwardedMessage.setRoomMessageContact(roomMessage.getRoomMessageContact());
                     forwardedMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
                     forwardedMessage.setUserId(userId);
                 }
