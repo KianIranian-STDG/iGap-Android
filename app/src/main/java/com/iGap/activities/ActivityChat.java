@@ -3219,25 +3219,54 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     }
 
     @Override
-    public void onGetRoomHistory(final long roomId, String message, String messageType, final ProtoGlobal.RoomMessage roomMessage) {
-        final Realm realm = Realm.getDefaultInstance();
-
+    public void onGetRoomHistory(final long roomId, final List<ProtoGlobal.RoomMessage> messages) {
         // I'm in the room
         if (roomId == mRoomId) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if (firstTimeGetHistory) {
-                        firstTimeGetHistory = false;
-                        switchAddItem(new ArrayList<>(Arrays.asList(StructMessageInfo.convert(roomMessage))), false);
-                    } else {
-                        switchAddItem(new ArrayList<>(Arrays.asList(StructMessageInfo.convert(roomMessage))), true);
+                    final Realm realm = Realm.getDefaultInstance();
+
+                    List<RealmRoomMessage> realmRoomMessages = new ArrayList<>();
+                    for (ProtoGlobal.RoomMessage roomMessage : messages) {
+                        realmRoomMessages.add(realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst());
                     }
+
+                    Collections.sort(realmRoomMessages, SortMessages.ASC);
+
+                    final List<RealmRoomMessage> lastResultMessages = new ArrayList<>();
+
+                    for (RealmRoomMessage message : realmRoomMessages) {
+                        String timeString = getTimeSettingMessage(message.getUpdateTime());
+                        if (timeString != null) {
+                            RealmRoomMessage timeMessage = new RealmRoomMessage();
+                            timeMessage.setMessageId(System.currentTimeMillis());
+                            // -1 means time message
+                            timeMessage.setUserId(-1);
+                            timeMessage.setUpdateTime(message.getUpdateTime() - 1L);
+                            timeMessage.setMessage(timeString);
+                            timeMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT.toString());
+                            lastResultMessages.add(timeMessage);
+                        }
+
+                        lastResultMessages.add(message);
+                    }
+
+                    Collections.sort(lastResultMessages, SortMessages.DESC);
+
+                    for (RealmRoomMessage roomMessage : lastResultMessages) {
+                        if (firstTimeGetHistory) {
+                            firstTimeGetHistory = false;
+                            switchAddItem(new ArrayList<>(Arrays.asList(StructMessageInfo.convert(roomMessage))), false);
+                        } else {
+                            switchAddItem(new ArrayList<>(Arrays.asList(StructMessageInfo.convert(roomMessage))), true);
+                        }
+                    }
+
+                    realm.close();
                 }
             });
         }
-
-        realm.close();
     }
 
     @Override
@@ -3378,7 +3407,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                             Log.i("CLI1", "CLEAR RoomId : " + chatId + "  ||  realmRoom.getLastMessageId() : " + realmRoom.getLastMessageId());
                             element.setClearId(realmRoom.getLastMessageId());
 
-                            G.clearMessagesUtil.clearMessages(chatId, realmRoom.getLastMessageId());
+                            // G.clearMessagesUtil.clearMessages(chatId, realmRoom.getLastMessageId());
                         }
 
                         RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, chatId).findAll();

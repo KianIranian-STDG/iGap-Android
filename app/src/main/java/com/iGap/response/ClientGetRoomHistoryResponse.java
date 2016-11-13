@@ -16,6 +16,9 @@ import com.iGap.realm.RealmRoomMessageLocation;
 import com.iGap.realm.RealmRoomMessageLog;
 import com.iGap.realm.RealmUserInfo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.realm.Realm;
 
 public class ClientGetRoomHistoryResponse extends MessageHandler {
@@ -41,6 +44,8 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
 
         final ProtoClientGetRoomHistory.ClientGetRoomHistoryResponse.Builder builder =
                 (ProtoClientGetRoomHistory.ClientGetRoomHistoryResponse.Builder) message;
+
+        final List<RealmRoomMessage> realmRoomMessages = new ArrayList<>();
 
         realm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -92,13 +97,13 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
                                     ProtoGlobal.Room.Type.CHAT, Long.parseLong(identity));
                         }
                     }
-
-                    G.onClientGetRoomHistoryResponse.onGetRoomHistory(Long.parseLong(identity),
-                            roomMessage.getMessage(), roomMessage.getMessageType().toString(),
-                            roomMessage);
+                    realmRoomMessages.add(realmRoomMessage);
                 }
             }
         });
+
+        G.onClientGetRoomHistoryResponse.onGetRoomHistory(Long.parseLong(identity), builder.getMessageList());
+
 
         realm.close();
     }
