@@ -89,10 +89,11 @@ public class GroupSendMessageResponse extends MessageHandler {
                 // but sender. so I check current userId with room message user id, and if not
                 // equals
                 // and response is null, so we sure recipient is another user
-                if (userId != roomMessage.getUserId() && builder.getResponse().getId().isEmpty()) {
+                //TODO [Saeed Mozaffari] [2016-11-13 7:40 PM] - AUTHOR_CHECK . niaz hast inja check beshe ke author user bud ya room? chon inja vase group hast va faghat user darim.
+                if (userId != roomMessage.getAuthor().getUser().getUserId() && builder.getResponse().getId().isEmpty()) {
                     // i'm the recipient
 
-                    HelperCheckUserInfoExist.checkUserInfoExist(roomMessage.getUserId());
+                    HelperCheckUserInfoExist.checkUserInfoExist(roomMessage.getAuthor().getUser().getUserId());
 
                     RealmRoomMessage realmRoomMessage =
                             realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
@@ -156,7 +157,7 @@ public class GroupSendMessageResponse extends MessageHandler {
             }
         });
 
-        if (userId != roomMessage.getUserId() && builder.getResponse().getId().isEmpty()) {
+        if (userId != roomMessage.getAuthor().getUser().getUserId() && builder.getResponse().getId().isEmpty()) {
             // invoke following callback when i'm not the sender, because I already done
             // everything after sending message
             if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst() != null) {
@@ -180,7 +181,7 @@ public class GroupSendMessageResponse extends MessageHandler {
         if (roomMessage.hasAttachment()) {
             realmRoomMessage.setAttachment(roomMessage.getMessageId(), roomMessage.getAttachment());
         }
-        realmRoomMessage.setUserId(roomMessage.getUserId());
+        realmRoomMessage.setUserId(roomMessage.getAuthor().getUser().getUserId());
         if (roomMessage.hasLocation()) {
             realmRoomMessage.setLocation(RealmRoomMessageLocation.build(roomMessage.getLocation()));
         } else if (roomMessage.hasLog()) {

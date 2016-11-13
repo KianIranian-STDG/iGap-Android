@@ -139,7 +139,8 @@ public class ChatSendMessageResponse extends MessageHandler {
                         realmRoomMessage.setReplyTo(fillRoomMessage(reply, roomMessage));
                     }
 
-                    if (roomMessage.getUserId() != userId) { // show notification if this message isn't for another account
+                    //TODO [Saeed Mozaffari] [2016-11-13 7:24 PM] - AUTHOR_CHECK . niaz hast inja check beshe ke author user bud ya room? chon inja vase chat hast va faghat user darim.
+                    if (roomMessage.getAuthor().getUser().getUserId() != userId) { // show notification if this message isn't for another account
                         G.helperNotificationAndBadge.checkAlert(true, ProtoGlobal.Room.Type.CHAT, chatSendMessageResponse.getRoomId());
                     }
                 } else {
@@ -212,7 +213,7 @@ public class ChatSendMessageResponse extends MessageHandler {
         if (roomMessage.hasAttachment()) {
             realmRoomMessage.setAttachment(roomMessage.getMessageId(), roomMessage.getAttachment());
         }
-        realmRoomMessage.setUserId(roomMessage.getUserId());
+        realmRoomMessage.setUserId(roomMessage.getAuthor().getUser().getUserId());
         if (roomMessage.hasLocation()) {
             realmRoomMessage.setLocation(RealmRoomMessageLocation.build(roomMessage.getLocation()));
         } else if (roomMessage.hasLog()) {

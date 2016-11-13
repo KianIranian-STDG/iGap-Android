@@ -79,7 +79,7 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
 
                     realmRoomMessage.setAttachment(roomMessage.getMessageId(),
                             roomMessage.getAttachment());
-                    realmRoomMessage.setUserId(roomMessage.getUserId());
+                    realmRoomMessage.setUserId(roomMessage.getAuthor().getUser().getUserId());
                     realmRoomMessage.setLocation(
                             RealmRoomMessageLocation.build(roomMessage.getLocation()));
                     realmRoomMessage.setLog(RealmRoomMessageLog.build(roomMessage.getLog()));
@@ -89,8 +89,7 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
                     realmRoomMessage.setUpdateTime(
                             roomMessage.getUpdateTime() * DateUtils.SECOND_IN_MILLIS);
 
-                    if (roomMessage.getUserId()
-                            != userId) { // show notification if this message isn't for another account
+                    if (roomMessage.getAuthor().getUser().getUserId() != userId) { // show notification if this message isn't for another account
                         if (!G.isAppInFg) {
 
                             G.helperNotificationAndBadge.checkAlert(true,

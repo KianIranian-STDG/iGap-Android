@@ -23,9 +23,17 @@ public class ChatGetRoomResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        ProtoChatGetRoom.ChatGetRoomResponse.Builder chatGetRoomResponse =
-                (ProtoChatGetRoom.ChatGetRoomResponse.Builder) message;
-        G.onChatGetRoom.onChatGetRoom(chatGetRoomResponse.getRoomId());
+        ProtoChatGetRoom.ChatGetRoomResponse.Builder chatGetRoomResponse = (ProtoChatGetRoom.ChatGetRoomResponse.Builder) message;
+
+        /**
+         * before client just get roomId from server and send that with receiver
+         * and later get room info . but now client receive room with complete
+         * info , but now i send roomId like before . i do that for don't change
+         * other code . because i guess don't need for this actions.
+         *
+         * hint : we can set another interface for another state.
+         */
+        G.onChatGetRoom.onChatGetRoom(chatGetRoomResponse.getRoom().getId());
     }
 
     @Override

@@ -90,6 +90,8 @@ import io.realm.RealmResults;
 import io.realm.Sort;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+import static com.iGap.R.string.updating;
+
 public class ActivityMain extends ActivityEnhanced
         implements OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnFileDownloadResponse, OnUserInfoResponse, OnDraftMessage, OnSetAction {
 
@@ -314,7 +316,7 @@ public class ActivityMain extends ActivityEnhanced
         } else if (G.connectionState == Config.ConnectionState.CONNECTING) {
             txtIgap.setText(R.string.connecting);
         } else if (G.connectionState == Config.ConnectionState.UPDATING) {
-            txtIgap.setText(R.string.updating);
+            txtIgap.setText(updating);
         } else {
             txtIgap.setText(R.string.igap);
             txtIgap.setTypeface(G.neuroplp, Typeface.NORMAL);
@@ -332,7 +334,7 @@ public class ActivityMain extends ActivityEnhanced
                         } else if (connectionState == Config.ConnectionState.CONNECTING) {
                             txtIgap.setText(R.string.connecting);
                         } else if (connectionState == Config.ConnectionState.UPDATING) {
-                            txtIgap.setText(R.string.updating);
+                            txtIgap.setText(updating);
                         } else {
                             txtIgap.setText(R.string.igap);
                             txtIgap.setTypeface(G.neuroplp, Typeface.NORMAL);
@@ -1237,21 +1239,36 @@ public class ActivityMain extends ActivityEnhanced
     public void onMessageReceive(final long roomId, String message, String messageType, final ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType) {
         // I'm not in the room, so I have to add 1 to the unread messages count
         Realm realm = Realm.getDefaultInstance();
-        if (roomMessage.getUserId() != realm.where(RealmUserInfo.class).findFirst().getUserId()) {
-            //if another account not send this message , and really i'm recipient not sender
-            // update unread count
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                    if (room != null) {
-                        final int updatedUnreadCount = room.getUnreadCount() + 1;
-                        room.setUnreadCount(updatedUnreadCount);
-                        realm.copyToRealmOrUpdate(room);
+
+        if (roomMessage.getAuthor().getUser() != null) {
+
+            // check if another account send message don't update unread count
+
+            if (roomMessage.getAuthor().getUser().getUserId() != realm.where(RealmUserInfo.class).findFirst().getUserId()) {
+                //if another account not send this message , and really i'm recipient not sender
+                // update unread count
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                        if (room != null) {
+                            final int updatedUnreadCount = room.getUnreadCount() + 1;
+                            room.setUnreadCount(updatedUnreadCount);
+                            realm.copyToRealmOrUpdate(room);
+                        }
                     }
-                }
-            });
+                });
+            }
+        } else {
+
+            /*
+             * when i have roomMessage.getAuthor().getRoom(); how detect
+             * another account send message or not for updating unread count !
+             */
+
         }
+
+
         realm.close();
 
         if (mAdapter != null) {

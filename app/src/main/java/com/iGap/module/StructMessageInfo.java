@@ -8,6 +8,8 @@ import android.view.View;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
+import com.iGap.realm.RealmRoom;
+import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.RealmUserInfo;
@@ -297,40 +299,71 @@ public class StructMessageInfo implements Parcelable {
         StructMessageInfo messageInfo = new StructMessageInfo();
         messageInfo.status = message.getStatus().toString();
         messageInfo.messageID = Long.toString(message.getMessageId());
-        if (message.getUserId() != userId) {
+
+        // Start author or room
+        if (message.getAuthor().getUser() != null) {
+
+            ProtoGlobal.RoomMessage.Author.User user = message.getAuthor().getUser();
+
             RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class)
-                    .equalTo(RealmRegisteredInfoFields.ID, message.getUserId())
+                    .equalTo(RealmRegisteredInfoFields.ID, user.getUserId())
                     .findFirst();
             if (realmRegisteredInfo != null) {
-                messageInfo.senderAvatar =
-                        StructMessageAttachment.convert(realmRegisteredInfo.getLastAvatar());
+                messageInfo.senderAvatar = StructMessageAttachment.convert(realmRegisteredInfo.getLastAvatar());
                 messageInfo.senderColor = realmRegisteredInfo.getColor();
                 messageInfo.initials = realmRegisteredInfo.getInitials();
             }
+
+            messageInfo.senderID = Long.toString(user.getUserId());
+
+            if (user.getUserId() == userId) {
+                messageInfo.sendType = MyType.SendType.send;
+            } else if (user.getUserId() != userId) {
+                messageInfo.sendType = MyType.SendType.recvive;
+            }
+
+            if (message.getForwardFrom() != null) {
+                RealmRegisteredInfo userInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, message.getForwardFrom().getAuthor().getUser().getUserId()).findFirst();
+                if (userInfo != null) {
+                    messageInfo.forwardMessageFrom = userInfo.getDisplayName();
+                }
+            }
+
+        } else {
+
+            ProtoGlobal.RoomMessage.Author.Room room = message.getAuthor().getRoom();
+
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getRoomId()).findFirst();
+
+            if (realmRoom != null) {
+                messageInfo.senderAvatar = StructMessageAttachment.convert(message.getAttachment());
+                messageInfo.senderColor = realmRoom.getColor();
+                messageInfo.initials = realmRoom.getInitials();
+            }
+
+            messageInfo.senderID = Long.toString(room.getRoomId());
+
+            //TODO [Saeed Mozaffari] [2016-11-13 7:20 PM] - sendType not set yet for room . maybe don't need .
+
+            if (message.getForwardFrom() != null) {
+                RealmRoom roomInfo = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, message.getForwardFrom().getAuthor().getRoom().getRoomId()).findFirst();
+                if (roomInfo != null) {
+                    messageInfo.forwardMessageFrom = roomInfo.getTitle();
+                }
+            }
         }
+
+        // End author or room
+
         messageInfo.messageType = message.getMessageType();
         messageInfo.time = message.getUpdateTime() * DateUtils.SECOND_IN_MILLIS;
         messageInfo.messageText = message.getMessage();
-        messageInfo.senderID = Long.toString(message.getUserId());
         messageInfo.attachment = StructMessageAttachment.convert(message.getAttachment());
         if (message.getMessageType() == ProtoGlobal.RoomMessageType.CONTACT) {
             messageInfo.userInfo = StructRegisteredInfo.build(message.getContact());
         }
-        messageInfo.uploadProgress =
-                messageInfo.attachment.token != null && !messageInfo.attachment.token.isEmpty() ? 100
-                        : 0;
-        if (message.getUserId() == userId) {
-            messageInfo.sendType = MyType.SendType.send;
-        } else if (message.getUserId() != userId) {
-            messageInfo.sendType = MyType.SendType.recvive;
-        }
-        if (message.getForwardFrom() != null) {
-            RealmRegisteredInfo userInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, message.getForwardFrom().getUserId())
-                    .findFirst();
-            if (userInfo != null) {
-                messageInfo.forwardMessageFrom = userInfo.getDisplayName();
-            }
-        }
+        messageInfo.uploadProgress = messageInfo.attachment.token != null && !messageInfo.attachment.token.isEmpty() ? 100 : 0;
+
         return messageInfo;
     }
 
