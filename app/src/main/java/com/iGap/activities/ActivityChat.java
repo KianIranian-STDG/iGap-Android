@@ -3414,7 +3414,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                             Log.i("CLI1", "CLEAR RoomId : " + chatId + "  ||  realmRoom.getLastMessageId() : " + realmRoom.getLastMessageId());
                             element.setClearId(realmRoom.getLastMessageId());
 
-                            // G.clearMessagesUtil.clearMessages(chatId, realmRoom.getLastMessageId());
+                            G.clearMessagesUtil.clearMessages(chatId, realmRoom.getLastMessageId());
                         }
 
                         RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, chatId).findAll();
