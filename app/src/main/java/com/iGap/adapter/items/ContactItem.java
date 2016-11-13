@@ -60,11 +60,14 @@ public class ContactItem extends AbstractItem<ContactItem, ContactItem.ViewHolde
         }
 
         holder.title.setText(mContact.displayName);
+        Realm realm = Realm.getDefaultInstance();
+        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mContact.peerId).findFirst();
+        if (realmRegisteredInfo != null) {
+            holder.subtitle.setText(realmRegisteredInfo.getStatus());
+        }
+        realm.close();
 
         setAvatar(holder);
-
-        // TODO set image
-        // TODO set subtitle
     }
 
     private void setAvatar(ViewHolder holder) {

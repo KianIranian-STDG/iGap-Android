@@ -86,6 +86,7 @@ import com.iGap.helper.HelperGetDataFromOtherApp;
 import com.iGap.helper.HelperMimeType;
 import com.iGap.helper.HelperNotificationAndBadge;
 import com.iGap.helper.HelperPermision;
+import com.iGap.helper.HelperSetAction;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.interfaces.IResendMessage;
 import com.iGap.interfaces.OnChatClearMessageResponse;
@@ -103,6 +104,7 @@ import com.iGap.interfaces.OnFileDownloadResponse;
 import com.iGap.interfaces.OnFileUploadForActivities;
 import com.iGap.interfaces.OnSetAction;
 import com.iGap.interfaces.OnUserInfoResponse;
+import com.iGap.interfaces.OnUserUpdateStatus;
 import com.iGap.interfaces.OnVoiceRecord;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.AndroidUtils;
@@ -132,6 +134,7 @@ import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
+import com.iGap.proto.ProtoUserUpdateStatus;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmAvatarFields;
 import com.iGap.realm.RealmChannelRoom;
@@ -205,8 +208,9 @@ import static com.iGap.proto.ProtoGlobal.Room.Type.CHAT;
 import static com.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 import static java.lang.Long.parseLong;
 
-public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>,
-        OnChatMessageRemove, OnFileDownloadResponse, OnVoiceRecord, OnUserInfoResponse, OnClientGetRoomHistoryResponse, OnFileUploadForActivities, OnSetAction {
+public class ActivityChat extends ActivityEnhanced
+        implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>,
+        OnChatMessageRemove, OnFileDownloadResponse, OnVoiceRecord, OnUserInfoResponse, OnClientGetRoomHistoryResponse, OnFileUploadForActivities, OnSetAction, OnUserUpdateStatus {
 
     public static ActivityChat activityChat;
     public static OnComplete hashListener;
@@ -301,6 +305,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     MyAppBarLayout appBarLayout;
     private boolean hasDraft = false;
     private long replyToMessageId = 0;
+    private long userId;
 
     private long latestIdentity;//TODO [Saeed Mozaffari] [2016-11-10 1:03 PM] - Clear This code nabayad idenetity yeki beshe
     private long latestIdentityFinal;
@@ -405,8 +410,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
     private void getChatHistory() {
         Realm realm = Realm.getDefaultInstance();
-        Log.i("YYY", "realm.where(RealmRoomMessage.class).findAll() : " + realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll().size());
-        Log.i("YYY", "mRoomId : " + mRoomId);
         if (realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll().size() == 0) {
             firstTimeGetHistory = true;
             new RequestClientGetRoomHistory().getRoomHistory(mRoomId, 0, Long.toString(mRoomId));
@@ -436,6 +439,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         musicPlayer = new MusicPlayer(mediaLayout);
 
         activityChat = this;
+        G.onSetAction = this;
+        G.onUserUpdateStatus = this;
         G.helperNotificationAndBadge.cancelNotification();
 
         // get sendByEnter action from setting value
@@ -486,6 +491,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             messageId = extras.getLong("MessageId");
 
             Realm realm = Realm.getDefaultInstance();
+
+            //get userId . use in chat set action.
+            userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
 
             final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
 
@@ -1578,7 +1586,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             @Override
             public void onTextChanged(CharSequence text, int i, int i1, int i2) {
 
-                //new RequestChatSetAction().chatSetAction(mRoomId, ProtoGlobal.ClientAction.TYPING, HelperNumerical.generateRandomNumber(10));
+                if (text.length() > 0) {
+                    HelperSetAction.setAction(mRoomId, ProtoGlobal.ClientAction.TYPING);
+                }
 
                 // if in the seeting page send by enter is on message send by enter key
                 if (text.toString().endsWith(System.getProperty("line.separator"))) {
@@ -1626,6 +1636,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             }
         });
     }
+
 
     private void initLayoutSearchNavigation() {
 
@@ -3961,8 +3972,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
     @Override
     public void onSetAction(long roomId, long userId, final ProtoGlobal.ClientAction clientAction) {
-
-        if (mRoomId == roomId) {
+        if (mRoomId == roomId && this.userId != userId) {
             if (chatType == ProtoGlobal.Room.Type.CHAT) {
                 runOnUiThread(new Runnable() {
                     @Override
@@ -3971,7 +3981,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     }
                 });
             } else if (chatType == ProtoGlobal.Room.Type.GROUP) {
-
                 Realm realm = Realm.getDefaultInstance();
                 RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
                 final String name = realmRegisteredInfo.getDisplayName();
@@ -3983,11 +3992,26 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         txtLastSeen.setText(name + " " + clientAction.toString());
                     }
                 });
-
             }
         }
 
 
+    }
+
+    @Override
+    public void onUserUpdateStatus(long userId, final ProtoUserUpdateStatus.UserUpdateStatus.Status status) {
+        Log.i("DDD", "chatPeerId : " + chatPeerId);
+        Log.i("DDD", "userId : " + userId);
+        Log.i("DDD", "chatType : " + chatType);
+        if (chatType == CHAT && chatPeerId == userId) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Log.i("DDD", "txtLastSeen.setText(status.toString())");
+                    txtLastSeen.setText(status.toString());
+                }
+            });
+        }
     }
 
     public static class UploadTask extends AsyncTask<Object, FileUploadStructure, FileUploadStructure> {

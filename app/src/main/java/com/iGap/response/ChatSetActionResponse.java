@@ -1,5 +1,8 @@
 package com.iGap.response;
 
+import android.util.Log;
+
+import com.iGap.G;
 import com.iGap.proto.ProtoChatSetAction;
 
 public class ChatSetActionResponse extends MessageHandler {
@@ -18,19 +21,22 @@ public class ChatSetActionResponse extends MessageHandler {
 
     @Override
     public void handler() {
+        super.handler();
         ProtoChatSetAction.ChatSetActionResponse.Builder builder = (ProtoChatSetAction.ChatSetActionResponse.Builder) message;
-        builder.getUserId();
-        builder.getRoomId();
-        builder.getAction();
+        Log.i("TTT", "message : " + message);
+        Log.i("TTT", "builder.getUserId() : " + builder.getUserId());
+        G.onSetAction.onSetAction(builder.getRoomId(), builder.getUserId(), builder.getAction());
     }
 
     @Override
     public void timeOut() {
+        Log.i("TTT", "timeOut : " + message);
         super.timeOut();
     }
 
     @Override
     public void error() {
+        Log.i("TTT", "error : " + message);
         super.error();
     }
 }

@@ -58,6 +58,7 @@ import com.iGap.interfaces.OnInfoTime;
 import com.iGap.interfaces.OnReceiveInfoLocation;
 import com.iGap.interfaces.OnReceivePageInfoTOS;
 import com.iGap.interfaces.OnSecuring;
+import com.iGap.interfaces.OnSetAction;
 import com.iGap.interfaces.OnUserAvatarDelete;
 import com.iGap.interfaces.OnUserAvatarGetList;
 import com.iGap.interfaces.OnUserAvatarResponse;
@@ -253,6 +254,7 @@ public class G extends Application {
     public static OnGroupDelete onGroupDelete;
     public static OnChatConvertToGroup onChatConvertToGroup;
     public static OnUserUpdateStatus onUserUpdateStatus;
+    public static OnSetAction onSetAction;
     public static File chatBackground;
     public static File IMAGE_NEW_GROUP;
     public static File IMAGE_NEW_CHANEL;
@@ -297,9 +299,6 @@ public class G extends Application {
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
             Contacts.getListOfContact(true);
         }
-
-
-
 
 
     }

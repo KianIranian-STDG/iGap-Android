@@ -17,6 +17,7 @@ public class HeartbeatResponse extends MessageHandler {
 
     @Override
     public void handler() {
+        super.handler();
         new RequestHeartbeat().heartBeat();
     }
 

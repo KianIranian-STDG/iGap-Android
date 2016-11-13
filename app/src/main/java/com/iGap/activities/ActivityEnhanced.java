@@ -72,7 +72,7 @@ public class ActivityEnhanced extends AppCompatActivity {
                     Log.e("ddd", "request offline");
                 }
             }
-        }, Config.CheckUpdateStatusTime);
+        }, Config.UPDATE_STATUS_TIME);
 
 
     }
