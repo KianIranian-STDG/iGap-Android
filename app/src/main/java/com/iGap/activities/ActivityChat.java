@@ -1457,13 +1457,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     final Realm realm = Realm.getDefaultInstance();
                     final long senderId = realm.where(RealmUserInfo.class).findFirst().getUserId();
                     if (!message.isEmpty()) {
-                        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-                        String identity = Long.toString(SUID.id().get());
-//                        if (room != null && room.getLastMessageId() != 0) {
-//                            identity = Long.toString(room.getLastMessageId() + 1L);
-//                        }
-
-                        final String finalIdentity = identity;
+                        final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                        final String identity = Long.toString(SUID.id().get());
 
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override
@@ -1475,7 +1470,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                 roomMessage.setMessage(message);
                                 roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
 
-                                roomMessage.setMessageId(parseLong(finalIdentity));
+                                roomMessage.setMessageId(parseLong(identity));
 
                                 roomMessage.setUserId(senderId);
                                 roomMessage.setUpdateTime(System.currentTimeMillis());
@@ -1491,7 +1486,17 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                             }
                         });
 
-                        RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(identity)).findFirst();
+                        final RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(identity)).findFirst();
+
+                        realm.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                room.setLastMessageId(roomMessage.getMessageId());
+                                room.setLastMessageTime(roomMessage.getUpdateTimeAsSeconds());
+                            }
+                        });
+
+                        realm.copyToRealmOrUpdate(room);
 
                         mAdapter.add(new TextItem(chatType, ActivityChat.this).setMessage(StructMessageInfo.convert(roomMessage)).withIdentifier(System.nanoTime()));
 
