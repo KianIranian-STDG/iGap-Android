@@ -122,10 +122,7 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
                 new RippleView.OnRippleCompleteListener() {
                     @Override
                     public void onComplete(RippleView rippleView) {
-                        getActivity().getSupportFragmentManager()
-                                .beginTransaction()
-                                .remove(FragmentShowImageMessages.this)
-                                .commit();
+                        getActivity().onBackPressed();
                     }
                 });
 

@@ -297,7 +297,7 @@ public class ActivityChat extends ActivityEnhanced
     private int latestRequestCode;
     private String latestFilePath;
     private Calendar lastDateCalendar = Calendar.getInstance();
-    private LinearLayout mReplayLayout;
+    private RelativeLayout mReplayLayout;
 
     private MaterialDesignTextView iconMute;
 
@@ -2422,7 +2422,7 @@ public class ActivityChat extends ActivityEnhanced
 
             inflateReplayLayoutIntoStub(chatItem);
         } else {
-            mReplayLayout = (LinearLayout) findViewById(R.id.replayLayoutAboveEditText);
+            mReplayLayout = (RelativeLayout) findViewById(R.id.replayLayoutAboveEditText);
             mReplayLayout.setVisibility(View.VISIBLE);
             TextView replayTo = (TextView) mReplayLayout.findViewById(R.id.replayTo);
             TextView replayFrom = (TextView) mReplayLayout.findViewById(R.id.replyFrom);
@@ -2779,9 +2779,8 @@ public class ActivityChat extends ActivityEnhanced
         FragmentShowImageMessages.appBarLayout = appBarLayout;
 
         FragmentShowImageMessages fragment = FragmentShowImageMessages.newInstance(mRoomId, messageInfo.attachment.token);
-        getSupportFragmentManager().beginTransaction().replace(R.id.ac_ll_parent, fragment, null).commit();
+        getSupportFragmentManager().beginTransaction().addToBackStack("hello").replace(R.id.ac_ll_parent, fragment, null).commit();
     }
-
 
     @Override
     public void onChatClearMessage(long roomId, long clearId, ProtoResponse.Response response) {
