@@ -5,7 +5,6 @@
                                                android:id="@+id/ac_ll_parent"
                                                android:layout_width="match_parent"
                                                android:layout_height="match_parent"
-                                               android:background="@mipmap/chat_background3"
                                                android:fitsSystemWindows="true"
                                                android:layoutDirection="ltr"
                                                tools:ignore="MissingPrefix">

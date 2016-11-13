@@ -64,7 +64,7 @@ public class RealmRoom extends RealmObject {
                 realmRoom.setChannelRoom(
                         RealmChannelRoom.convert(room.getChannelRoom(), realmRoom.getChannelRoom(),
                                 realm));
-                realmRoom.setAvatar(RealmAvatar.convert(room));
+                realmRoom.setAvatar(RealmAvatar.put(realmRoom.getId(), room.getChannelRoom().getAvatar()));
                 break;
             case CHAT:
                 realmRoom.setType(RoomType.CHAT);
@@ -80,7 +80,7 @@ public class RealmRoom extends RealmObject {
                 realmRoom.setGroupRoom(
                         RealmGroupRoom.convert(room.getGroupRoom(), realmRoom.getGroupRoom(), realm));
                 realmRoom.getGroupRoom().setDescription(room.getGroupRoom().getDescription());
-                realmRoom.setAvatar(RealmAvatar.convert(room));
+                realmRoom.setAvatar(RealmAvatar.put(realmRoom.getId(), room.getGroupRoom().getAvatar()));
                 break;
         }
         realmRoom.setLastMessageTime(room.getLastMessage().getUpdateTime());

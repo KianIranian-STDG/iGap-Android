@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -423,6 +424,8 @@ public class ActivityChat extends ActivityEnhanced
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        checkIfOrientationChanged(getResources().getConfiguration());
 
         onComplete = new OnComplete() {
             @Override
@@ -2723,6 +2726,18 @@ public class ActivityChat extends ActivityEnhanced
             txtChannelMute.setText("UnMute");
         } else {
             txtChannelMute.setText("Mute");
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        checkIfOrientationChanged(newConfig);
+    }
+
+    private void checkIfOrientationChanged(Configuration configuration) {
+        if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            getWindow().setBackgroundDrawableResource(R.mipmap.chat_background3);
         }
     }
 

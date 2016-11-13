@@ -43,6 +43,8 @@ public class RealmAvatar extends RealmObject {
             avatar.setId(input.getId());
             avatar.setOwnerId(ownerId);
             avatar.setFile(RealmAttachment.build(input.getFile()));
+        } else {
+            avatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.ID, input.getId()).findFirst();
         }
         realm.close();
         return avatar;
