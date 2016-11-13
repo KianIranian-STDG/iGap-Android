@@ -378,6 +378,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
         bundle.putInt("SelectedImage", selectedPicture);
         fragment.setArguments(bundle);
 
+
         ((Activity) context).getFragmentManager()
                 .beginTransaction()
                 .replace(R.id.asm_ll_parent, fragment, "Show_Image_fragment_shared_media")

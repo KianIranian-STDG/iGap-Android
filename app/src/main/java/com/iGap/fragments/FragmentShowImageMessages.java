@@ -1,5 +1,6 @@
 package com.iGap.fragments;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -56,6 +57,8 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
     private RecyclerView mRecyclerView;
     private ImageMessagesAdapter<ImageMessageItem> mAdapter;
 
+    public static View appBarLayout;
+
     public static FragmentShowImageMessages newInstance(long roomId, String selectedToken) {
         Bundle args = new Bundle();
         args.putLong(ARG_ROOM_ID, roomId);
@@ -65,6 +68,23 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
         fragment.setArguments(args);
         return fragment;
     }
+
+    @Override
+    public void onDetach() {
+        if (appBarLayout != null)
+            appBarLayout.setVisibility(View.VISIBLE);
+
+        super.onDetach();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        if (appBarLayout != null)
+            appBarLayout.setVisibility(View.GONE);
+
+        super.onAttach(context);
+    }
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

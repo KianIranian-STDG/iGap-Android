@@ -282,7 +282,7 @@ public class HelperNotificationAndBadge {
             messageToshow = messageToshow.substring(0, 40);
         }
 
-        notification = new NotificationCompat.Builder(context).setSmallIcon(R.mipmap.logo)
+        notification = new NotificationCompat.Builder(context).setSmallIcon(R.mipmap.iconsmal)
                 .setContentTitle(context.getString(R.string.new_message_recicve))
                 .setContent(remoteViews)
                 .setContentIntent(pi)

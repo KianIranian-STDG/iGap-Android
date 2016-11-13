@@ -301,7 +301,7 @@ public class ActivityExplorer extends ActivityEnhanced {
             mime = mime.toLowerCase();
 
             if (mime.endsWith(".txt") || mime.endsWith(".pdf") || mime.endsWith(".doc") || mime.endsWith(".xls") || mime.endsWith(".snb")
-                    || mime.endsWith(".ppt") || mime.endsWith(".html") || mime.endsWith(".htm"))
+                    || mime.endsWith(".ppt") || mime.endsWith(".html") || mime.endsWith(".htm") || mime.endsWith(".docx"))
                 result = true;
 
         } else {

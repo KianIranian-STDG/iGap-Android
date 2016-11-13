@@ -8,16 +8,23 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -51,6 +58,8 @@ public class AttachFile {
     public static final int requestOpenGalleryForImageMultipleSelect = 19;
     public static final int requestOpenGalleryForVideoMultipleSelect = 20;
     public static final int request_code_open_document = 21;
+
+    private PopupWindow popupWindow;
 
     public static final String IMAGE_DIRECTORY_NAME = "Upload";
     public static boolean isInAttach = false;
@@ -143,17 +152,32 @@ public class AttachFile {
 
     public void requestTakePicture() {
 
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        Uri outPath = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
 
-        if (outPath != null) {
-            imagePath = outPath.getPath();
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, outPath);
-            ((Activity) context).startActivityForResult(intent, request_code_TAKE_PICTURE);
-            isInAttach = true;
-        } else {
-            Log.e("dddd", "file path is null");
+        PackageManager packageManager = context.getPackageManager();
+        if (packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA) == false) {
+            Toast.makeText(context, context.getString(R.string.device_dosenot_camera_en), Toast.LENGTH_SHORT).show();
+            return;
         }
+
+
+        HelperPermision.getCamarePermision(context, new OnGetPermision() {
+            @Override
+            public void Allow() {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                Uri outPath = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+
+                if (outPath != null) {
+                    imagePath = outPath.getPath();
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, outPath);
+                    ((Activity) context).startActivityForResult(intent, request_code_TAKE_PICTURE);
+                    isInAttach = true;
+                } else {
+                    Log.e("dddd", "file path is null");
+                }
+            }
+        });
+
+
     }
 
     private Uri getOutputMediaFileUri(int type) {
@@ -235,9 +259,95 @@ public class AttachFile {
             return;
         }
 
-        Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-        ((Activity) context).startActivityForResult(intent, request_code_VIDEO_CAPTURED);
-        isInAttach = true;
+        HelperPermision.getCamarePermision(context, new OnGetPermision() {
+            @Override
+            public void Allow() {
+                Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+                ((Activity) context).startActivityForResult(intent, request_code_VIDEO_CAPTURED);
+                isInAttach = true;
+            }
+        });
+
+
+    }
+
+    public void showDialogOpenCamera(View view) {
+
+        LinearLayout layoutDialog = new LinearLayout(context);
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutDialog.setOrientation(LinearLayout.VERTICAL);
+        layoutDialog.setBackgroundColor(context.getResources().getColor(android.R.color.white));
+        TextView text1 = new TextView(context);
+        TextView text2 = new TextView(context);
+
+
+        text1.setTextColor(context.getResources().getColor(android.R.color.black));
+        text2.setTextColor(context.getResources().getColor(android.R.color.black));
+
+
+        text1.setText("capture image");
+        text2.setText("capture video");
+
+
+        int dim20 = (int) context.getResources().getDimension(R.dimen.dp20);
+        int dim16 = (int) context.getResources().getDimension(R.dimen.dp16);
+        int dim12 = (int) context.getResources().getDimension(R.dimen.dp12);
+        int sp16 = (int) context.getResources().getDimension(R.dimen.sp12);
+
+        text1.setTextSize(14);
+        text2.setTextSize(14);
+
+
+        text1.setPadding(dim20, dim12, dim12, dim20);
+        text2.setPadding(dim20, 0, dim12, dim20);
+
+
+        layoutDialog.addView(text1, params);
+        layoutDialog.addView(text2, params);
+
+        final int screenWidth = (int) (context.getResources().getDisplayMetrics().widthPixels / 1.7);
+
+        popupWindow = new PopupWindow(layoutDialog, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+        popupWindow.setOutsideTouchable(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            popupWindow.setBackgroundDrawable(context.getResources().getDrawable(R.mipmap.shadow2, context.getTheme()));
+        } else {
+            popupWindow.setBackgroundDrawable((context.getResources().getDrawable(R.mipmap.shadow2)));
+        }
+        if (popupWindow.isOutsideTouchable()) {
+            popupWindow.dismiss();
+        }
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                //TODO do sth here on dismiss
+            }
+        });
+
+        popupWindow.showAsDropDown(view);
+
+        text1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                requestTakePicture();
+
+                popupWindow.dismiss();
+
+            }
+        });
+        text2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                requestVideoCapture();
+
+                popupWindow.dismiss();
+
+
+            }
+        });
     }
 
     //*************************************************************************************************************
@@ -342,7 +452,7 @@ public class AttachFile {
             public void Allow() {
                 Intent intent = new Intent(context, ActivityExplorer.class);
                 intent.putExtra("Mode", "documnet");
-                ((Activity) context).startActivityForResult(intent, request_code_pic_file);
+                ((Activity) context).startActivityForResult(intent, request_code_open_document);
             }
         });
 
