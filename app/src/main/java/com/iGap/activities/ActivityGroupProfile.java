@@ -195,9 +195,9 @@ public class ActivityGroupProfile extends ActivityEnhanced
 
     @Override
     protected void onPause() {
-        int me = setGroupParticipantLable();
+//        int me = setGroupParticipantLable();
         if (ActivityChat.onComplete != null) {
-            ActivityChat.onComplete.complete(true, me + "", "");
+            ActivityChat.onComplete.complete(true, txtMemberNumber.getText().toString(), "");
         }
 
         super.onPause();
@@ -534,14 +534,12 @@ public class ActivityGroupProfile extends ActivityEnhanced
                 if (Long.parseLong(identity) == roomId) {
 
                     if (!userExistInList(user.getId())) { // if user exist in current list don't add that, because maybe duplicated this user and show twice.
-                        Log.i("PPP", "RequestGroupGetMemberList 3 add user : " + user.getDisplayName());
-
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 Realm realm = Realm.getDefaultInstance();
                                 RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, user.getId()).findFirst();
-                                RealmMember realmMember = realm.where(RealmMember.class).equalTo(RealmMemberFields.ID, user.getId()).findFirst();
+                                RealmMember realmMember = realm.where(RealmMember.class).equalTo(RealmMemberFields.PEER_ID, user.getId()).findFirst();
                                 realm.close();
 
                                 final StructContactInfo struct = new StructContactInfo(user.getId(), user.getDisplayName(), user.getStatus().toString(), false, false, user.getPhone() + "");
@@ -554,18 +552,13 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                     struct.color = realmRegisteredInfo.getColor();
                                 }
 
-                                Log.i("PPP", "RequestGroupGetMemberList 4 add user ");
                                 items.clear();
                                 items.add(new ContactItemGroupProfile().setContact(struct).withIdentifier(100 + contacts.indexOf(struct)));
-                                Log.i("PPP", "RequestGroupGetMemberList 5 add user ");
                                 itemAdapter.add(items);
                             }
                         });
-                    } else {
-                        Log.i("PPP", "RequestGroupGetMemberList user was exist in list");
                     }
                 }
-
             }
 
             @Override
@@ -581,16 +574,21 @@ public class ActivityGroupProfile extends ActivityEnhanced
 
         G.onGroupGetMemberList = new OnGroupGetMemberList() {
             @Override
-            public void onGroupGetMemberList(List<ProtoGroupGetMemberList.GroupGetMemberListResponse.Member> members) {
-                Log.i("PPP", "RequestGroupGetMemberList 2 members : " + members);
-                Log.i("PPP", "RequestGroupGetMemberList 2 roomId : " + roomId);
+            public void onGroupGetMemberList(final List<ProtoGroupGetMemberList.GroupGetMemberListResponse.Member> members) {
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        txtMemberNumber.setText(members.size() + "");
+                    }
+                });
+
                 for (final ProtoGroupGetMemberList.GroupGetMemberListResponse.Member member : members) {
                     new RequestUserInfo().userInfo(member.getUserId(), roomId + "");
                 }
             }
         };
 
-        Log.i("PPP", "RequestGroupGetMemberList 1 roomId : " + roomId);
         new RequestGroupGetMemberList().getMemberList(roomId);
     }
 
@@ -730,12 +728,13 @@ public class ActivityGroupProfile extends ActivityEnhanced
 
         //txtMemberNumber.setText(listSize + "");
 
-        for (int i = 0; i < listSize && i < 3; i++) {
+        for (int i = 0; i < listSize; i++) {
             items.add(new ContactItemGroupProfile().setContact(contacts.get(i))
                     .withIdentifier(100 + contacts.indexOf(contacts.get(i))));
         }
 
-        if (listSize < 4) txtMore.setVisibility(View.GONE);
+        //if (listSize < 4) txtMore.setVisibility(View.GONE);
+        txtMore.setVisibility(View.GONE);
 
         itemAdapter.add(items);
 
@@ -927,8 +926,50 @@ public class ActivityGroupProfile extends ActivityEnhanced
 
                 G.onGroupAddMember = new OnGroupAddMember() {
                     @Override
-                    public void onGroupAddMember(Long Roomid, Long UserId) {
-                        updateUi(list, UserId);
+                    public void onGroupAddMember(Long Roomid, final Long UserId) {
+
+                        /*runOnUiThread(new Runnable() {
+                                          @Override
+                                          public void run() {
+
+                                              List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
+
+                                              for (int i = 0; i < items.size(); i++) {
+                                                  if (items.get(i).mContact.peerId == memberId) {
+                                                      items.get(i).mContact.role = role.toString();
+                                                      if (i < itemAdapter.getAdapterItemCount()) {
+                                                          IItem item = (new ContactItemGroupProfile().setContact(items.get(i).mContact).withIdentifier(100 + i));
+                                                          itemAdapter.set(i, item);
+                                                      }
+                                                  }
+                                              }
+                                          }
+                                      }
+                        );*/
+
+                        runOnUiThread(new Runnable() { //TODO [Saeed Mozaffari] [2016-11-12 5:15 PM] - get member list from group and add new member . like get member list response
+                            @Override
+                            public void run() {
+                                Realm realm = Realm.getDefaultInstance();
+                                RealmRegisteredInfo realmRegistered = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, UserId).findFirst();
+                                StructContactInfo struct = new StructContactInfo(realmRegistered.getId(), realmRegistered.getDisplayName(), realmRegistered.getStatus().toString(), false, false, realmRegistered.getPhoneNumber() + "");
+
+                                if (realmRegistered != null) {
+                                    struct.avatar = realmRegistered.getLastAvatar();
+                                    struct.initials = realmRegistered.getInitials();
+                                    struct.color = realmRegistered.getColor();
+                                }
+
+                                IItem item = (new ContactItemGroupProfile().setContact(struct).withIdentifier(100 + (Integer.parseInt(participantsCountLabel) + 1)));
+                                itemAdapter.add(item);
+
+
+                                realm.close();
+                            }
+                        });
+
+
+//                        updateUi(list, UserId);
                     }
 
                     @Override
@@ -1161,31 +1202,33 @@ public class ActivityGroupProfile extends ActivityEnhanced
 
         }
 
+        private void updateRole(final long memberId, final ProtoGlobal.GroupRoom.Role role) {
+            runOnUiThread(new Runnable() {
+                              @Override
+                              public void run() {
+
+                                  List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
+
+                                  for (int i = 0; i < items.size(); i++) {
+                                      if (items.get(i).mContact.peerId == memberId) {
+                                          items.get(i).mContact.role = role.toString();
+                                          if (i < itemAdapter.getAdapterItemCount()) {
+                                              IItem item = (new ContactItemGroupProfile().setContact(items.get(i).mContact).withIdentifier(100 + i));
+                                              itemAdapter.set(i, item);
+                                          }
+                                      }
+                                  }
+                              }
+                          }
+            );
+        }
 
         private void setToAdmin(Long peerId) {
 
             G.onGroupAddAdmin = new OnGroupAddAdmin() {
                 @Override
                 public void onGroupAddAdmin(long roomId, final long memberId) {
-
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            for (int i = 0; i < contacts.size(); i++) {
-                                if (contacts.get(i).peerId == memberId) {
-                                    contacts.get(i).role = ProtoGlobal.GroupRoom.Role.ADMIN.toString();
-
-                                    if (i < itemAdapter.getAdapterItemCount()) {
-                                        IItem item = (new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(
-                                                100 + contacts.indexOf(contacts.get(i))));
-                                        itemAdapter.set(i, item);
-                                    }
-
-                                    break;
-                                }
-                            }
-                        }
-                    });
+                    updateRole(memberId, ProtoGlobal.GroupRoom.Role.ADMIN);
                 }
 
                 @Override
@@ -1248,10 +1291,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                 }
             };
 
-
             new RequestGroupAddAdmin().groupAddAdmin(roomId, peerId);
-
-
         }
 
         private void setToModerator(Long peerId) {
@@ -1259,23 +1299,26 @@ public class ActivityGroupProfile extends ActivityEnhanced
             G.onGroupAddModerator = new OnGroupAddModerator() {
                 @Override
                 public void onGroupAddModerator(long roomId, final long memberId) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            for (int i = 0; i < contacts.size(); i++) {
-                                if (contacts.get(i).peerId == memberId) {
-                                    contacts.get(i).role = ProtoGlobal.GroupRoom.Role.MODERATOR.toString();
 
-                                    if (i < itemAdapter.getAdapterItemCount()) {
-                                        IItem item = (new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier
-                                                (100 + contacts.indexOf(contacts.get(i))));
-                                        itemAdapter.set(i, item);
-                                    }
-                                    break;
-                                }
-                            }
-                        }
-                    });
+                    updateRole(memberId, ProtoGlobal.GroupRoom.Role.MODERATOR);
+
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            for (int i = 0; i < contacts.size(); i++) {
+//                                if (contacts.get(i).peerId == memberId) {
+//                                    contacts.get(i).role = ProtoGlobal.GroupRoom.Role.MODERATOR.toString();
+//
+//                                    if (i < itemAdapter.getAdapterItemCount()) {
+//                                        IItem item = (new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier
+//                                                (100 + contacts.indexOf(contacts.get(i))));
+//                                        itemAdapter.set(i, item);
+//                                    }
+//                                    break;
+//                                }
+//                            }
+//                        }
+//                    });
                 }
 
                 @Override
@@ -1843,6 +1886,27 @@ public class ActivityGroupProfile extends ActivityEnhanced
                 .show();
     }
 
+    private void updateRole(final long memberId, final ProtoGlobal.GroupRoom.Role role) {
+        runOnUiThread(new Runnable() {
+                          @Override
+                          public void run() {
+
+                              List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
+
+                              for (int i = 0; i < items.size(); i++) {
+                                  if (items.get(i).mContact.peerId == memberId) {
+                                      items.get(i).mContact.role = role.toString();
+                                      if (i < itemAdapter.getAdapterItemCount()) {
+                                          IItem item = (new ContactItemGroupProfile().setContact(items.get(i).mContact).withIdentifier(100 + i));
+                                          itemAdapter.set(i, item);
+                                      }
+                                  }
+                              }
+                          }
+                      }
+        );
+    }
+
     /**
      * if user was admin set  role to member
      */
@@ -1860,25 +1924,24 @@ public class ActivityGroupProfile extends ActivityEnhanced
                             @Override
                             public void onGroupKickAdmin(long roomId, long memberId) {
 
-                                for (int i = 0; i < contacts.size(); i++) {
-                                    if (contacts.get(i).peerId == memberId) {
-                                        contacts.get(i).role =
-                                                ProtoGlobal.GroupRoom.Role.MEMBER.toString();
-                                        final int finalI = i;
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                IItem item = (new ContactItemGroupProfile().setContact(
-                                                        contacts.get(finalI))
-                                                        .withIdentifier(
-                                                                100 + contacts.indexOf(contacts.get(finalI))));
-                                                itemAdapter.set(finalI, item);
-                                            }
-                                        });
+                                updateRole(memberId, ProtoGlobal.GroupRoom.Role.MEMBER);
 
-                                        break;
-                                    }
-                                }
+//                                List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
+//
+//                                for (int i = 0; i < items.size(); i++) {
+//                                    Log.i("OOO", "displayName" + items.get(i).mContact.displayName);
+//                                    if (items.get(i).mContact.peerId == memberId) {
+//                                        items.get(i).mContact.role = ProtoGlobal.GroupRoom.Role.MEMBER.toString();
+//                                        Log.i("OOO", "notifyItemChanged(i) : " + i);
+//                                        final int index = i;
+//                                        runOnUiThread(new Runnable() {
+//                                            @Override
+//                                            public void run() {
+//                                                itemAdapter.notifyItemChanged(index);
+//                                            }
+//                                        });
+//                                    }
+//                                }
                             }
 
                             @Override
@@ -1979,24 +2042,65 @@ public class ActivityGroupProfile extends ActivityEnhanced
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         G.onGroupKickMember = new OnGroupKickMember() {
                             @Override
-                            public void onGroupKickMember(long roomId, final long memberId) {
+                            public void onGroupKickMember(final long roomId, final long memberId) {
 
                                 runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        for (int j = 0; j < contacts.size(); j++) {
-                                            if (contacts.get(j).peerId == memberId) {
-                                                items.remove(j);
-                                                contacts.remove(j);
-                                                itemAdapter.remove(j);
+                                                  @Override
+                                                  public void run() {
 
-                                                break;
-                                            }
-                                        }
+                                                      List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
 
-                                        txtMemberNumber.setText(contacts.size() + "");
-                                    }
-                                });
+                                                      for (int i = 0; i < items.size(); i++) {
+                                                          if (items.get(i).mContact.peerId == memberId) {
+                                                              itemAdapter.remove(i);
+                                                              Realm realm = Realm.getDefaultInstance();
+                                                              realm.executeTransaction(new Realm.Transaction() {
+                                                                  @Override
+                                                                  public void execute(Realm realm) {
+                                                                      RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                                                                      for (RealmMember realmMember : realmRoom.getGroupRoom().getMembers()) {
+                                                                          if (realmMember.getPeerId() == memberId) {
+                                                                              realmMember.deleteFromRealm();
+                                                                              participantsCountLabel = realmRoom.getGroupRoom().getParticipantsCountLabel();
+                                                                              Log.i("OOO", " 1 participantsCountLabel : " + participantsCountLabel);
+                                                                              participantsCountLabel = (Integer.parseInt(participantsCountLabel) - 1) + "";
+                                                                              realmRoom.getGroupRoom().setParticipantsCountLabel(participantsCountLabel);
+                                                                              break;
+                                                                          }
+                                                                      }
+
+                                                                      runOnUiThread(new Runnable() {
+                                                                          @Override
+                                                                          public void run() {
+                                                                              Log.i("OOO", " 2 participantsCountLabel : " + participantsCountLabel);
+                                                                              txtMemberNumber.setText(participantsCountLabel);
+                                                                          }
+                                                                      });
+                                                                  }
+                                                              });
+                                                              realm.close();
+                                                          }
+                                                      }
+                                                  }
+                                              }
+                                );
+
+//                                runOnUiThread(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//                                        for (int j = 0; j < contacts.size(); j++) {
+//                                            if (contacts.get(j).peerId == memberId) {
+//                                                items.remove(j);
+//                                                contacts.remove(j);
+//                                                itemAdapter.remove(j);
+//
+//                                                break;
+//                                            }
+//                                        }
+//
+//                                        txtMemberNumber.setText(contacts.size() + "");
+//                                    }
+//                                });
                             }
 
                             @Override
@@ -2097,25 +2201,27 @@ public class ActivityGroupProfile extends ActivityEnhanced
                             @Override
                             public void onGroupKickModerator(long roomId, long memberId) {
 
-                                for (int i = 0; i < contacts.size(); i++) {
-                                    if (contacts.get(i).peerId == memberId) {
-                                        contacts.get(i).role =
-                                                ProtoGlobal.GroupRoom.Role.MEMBER.toString();
-                                        final int finalI = i;
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                IItem item = (new ContactItemGroupProfile().setContact(
-                                                        contacts.get(finalI))
-                                                        .withIdentifier(
-                                                                100 + contacts.indexOf(contacts.get(finalI))));
-                                                itemAdapter.set(finalI, item);
-                                            }
-                                        });
+                                updateRole(memberId, ProtoGlobal.GroupRoom.Role.MEMBER);
 
-                                        break;
-                                    }
-                                }
+//                                for (int i = 0; i < contacts.size(); i++) {
+//                                    if (contacts.get(i).peerId == memberId) {
+//                                        contacts.get(i).role =
+//                                                ProtoGlobal.GroupRoom.Role.MEMBER.toString();
+//                                        final int finalI = i;
+//                                        runOnUiThread(new Runnable() {
+//                                            @Override
+//                                            public void run() {
+//                                                IItem item = (new ContactItemGroupProfile().setContact(
+//                                                        contacts.get(finalI))
+//                                                        .withIdentifier(
+//                                                                100 + contacts.indexOf(contacts.get(finalI))));
+//                                                itemAdapter.set(finalI, item);
+//                                            }
+//                                        });
+//
+//                                        break;
+//                                    }
+//                                }
                             }
 
                             @Override

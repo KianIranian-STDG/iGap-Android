@@ -19,6 +19,10 @@ import io.realm.annotations.PrimaryKey;
 public class RealmRoomMessage extends RealmObject {
     @PrimaryKey
     private long messageId;
+
+    @Index
+    private long roomId;
+
     private long messageVersion;
     private String status;
     private long statusVersion;
@@ -36,8 +40,6 @@ public class RealmRoomMessage extends RealmObject {
     private RealmRoomMessage forwardMessage;
     private RealmRoomMessage replyTo;
 
-    @Index
-    private long roomId;
 
     public long getRoomId() {
         return roomId;

@@ -19,8 +19,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
-public class ContactItemGroupProfile
-        extends AbstractItem<ContactItemGroupProfile, ContactItemGroupProfile.ViewHolder> {
+public class ContactItemGroupProfile extends AbstractItem<ContactItemGroupProfile, ContactItemGroupProfile.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
     public StructContactInfo mContact;
 

@@ -1,7 +1,5 @@
 package com.iGap.response;
 
-import android.util.Log;
-
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGlobal;
@@ -30,36 +28,23 @@ public class GroupAddAdminResponse extends MessageHandler {
 
     @Override
     public void handler() {
+        super.handler();
 
-        final ProtoGroupAddAdmin.GroupAddAdminResponse.Builder builder =
-                (ProtoGroupAddAdmin.GroupAddAdminResponse.Builder) message;
-        builder.getRoomId();
-        builder.getMemberId();
-
-        // RealmRoom , RealmGroupRoom , RealmList<RealmMember> wher id =memberId , role = ADMIN
-
-
-        Log.e("dddd", builder.getRoomId() + "    xxxxxxx");
+        final ProtoGroupAddAdmin.GroupAddAdminResponse.Builder builder = (ProtoGroupAddAdmin.GroupAddAdminResponse.Builder) message;
 
         Realm realm = Realm.getDefaultInstance();
-
-        final RealmRoom realmRoom = realm.where(RealmRoom.class)
-                .equalTo(RealmRoomFields.ID, builder.getRoomId())
-                .findFirst();
+        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst();
 
         if (realmRoom != null) {
-
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
                     RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
                     RealmList<RealmMember> realmMemberRealmList = realmGroupRoom.getMembers();
-
                     for (RealmMember member : realmMemberRealmList) {
                         if (member.getPeerId() == builder.getMemberId()) {
                             member.setRole(ProtoGlobal.GroupRoom.Role.ADMIN.toString());
-                            G.onGroupAddAdmin.onGroupAddAdmin(builder.getRoomId(),
-                                    builder.getMemberId());
+                            G.onGroupAddAdmin.onGroupAddAdmin(builder.getRoomId(), builder.getMemberId());
                             break;
                         }
                     }
@@ -72,13 +57,16 @@ public class GroupAddAdminResponse extends MessageHandler {
     }
 
     @Override
+    public void timeOut() {
+        super.timeOut();
+    }
+
+    @Override
     public void error() {
+        super.error();
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
-        Log.i("XXX", "GroupAddAdminResponse majorCode : " + majorCode);
-        Log.i("XXX", "GroupAddAdminResponse minorCode : " + minorCode);
-
         G.onGroupAddAdmin.onError(majorCode, minorCode);
     }
 }

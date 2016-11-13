@@ -20,7 +20,7 @@ public class UserUpdateStatusResponse extends MessageHandler {
 
     @Override
     public void handler() {
-
+        super.handler();
         ProtoUserUpdateStatus.UserUpdateStatusResponse.Builder builder = (ProtoUserUpdateStatus.UserUpdateStatusResponse.Builder) message;
         //    G.onUserUpdateStatus.onUserUpdateStatus(builder.getUserId(), builder.getStatus());
 
