@@ -2408,7 +2408,14 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             mReplayLayout = (LinearLayout) findViewById(R.id.replayLayoutAboveEditText);
             mReplayLayout.setVisibility(View.VISIBLE);
             TextView replayTo = (TextView) mReplayLayout.findViewById(R.id.replayTo);
+            TextView replayFrom = (TextView) mReplayLayout.findViewById(R.id.replyFrom);
             replayTo.setText(chatItem.messageText);
+            Realm realm = Realm.getDefaultInstance();
+            RealmRegisteredInfo userInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, Long.parseLong(chatItem.senderID)).findFirst();
+            if (userInfo != null) {
+                replayFrom.setText(userInfo.getDisplayName());
+            }
+            realm.close();
             // I set tag to retrieve it later when sending message
             mReplayLayout.setTag(chatItem);
         }
