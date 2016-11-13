@@ -12,7 +12,6 @@ import com.iGap.fragments.SearchFragment;
 import com.iGap.helper.HelperImageBackColor;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.CustomTextViewMedium;
-import com.iGap.module.EmojiTextView;
 import com.iGap.module.TimeUtils;
 import com.iGap.realm.enums.RoomType;
 import com.mikepenz.fastadapter.items.AbstractItem;
@@ -20,6 +19,8 @@ import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 
 import java.io.File;
 import java.util.List;
+
+import io.github.meness.emoji.EmojiTextView;
 
 public class SearchItem extends AbstractItem<SearchItem, SearchItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();

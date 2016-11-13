@@ -137,11 +137,12 @@
                 android:text="@string/md_emoticon_with_happy_face"
                 android:textColor="@color/gray" />
 
-            <com.iGap.module.EmojiEditText
+            <io.github.meness.emoji.EmojiEditText
                 android:id="@+id/apn_edt_chat"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                app:emojiSize="26sp"
                 android:background="@null"
                 android:hint="Type Message"
                 android:maxLines="4"

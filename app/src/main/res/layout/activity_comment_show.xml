@@ -205,23 +205,22 @@
             android:background="@color/gray_f2"
             android:orientation="horizontal">
 
-            <ImageButton
+            <com.iGap.module.MaterialDesignTextView
                 android:id="@+id/acs_btn_smile"
-                android:layout_width="@dimen/dp40"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/sp12"
-                android:background="@null"
-                android:gravity="center"
-                android:padding="@dimen/dp4"
-                android:scaleType="centerCrop"
-                android:src="@drawable/emoticon_with_happy_face" />
+                style="@style/ChatMessages.MaterialDesignTextView.BottomIcon"
+                fontPath="fonts/Flaticon.ttf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dp8"
+                android:text="@string/md_emoticon_with_happy_face"/>
 
-            <com.iGap.module.EmojiEditText
+            <io.github.meness.emoji.EmojiEditText
                 android:id="@+id/acs_edt_chat"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@null"
+                app:emojiSize="26sp"
                 android:hint="   Type Message"
                 android:maxLines="4"
                 android:paddingLeft="@dimen/dp6"

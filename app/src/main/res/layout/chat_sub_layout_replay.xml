@@ -33,7 +33,7 @@
         android:gravity="left|center"
         android:orientation="vertical">
 
-        <com.iGap.module.EmojiTextView
+        <io.github.meness.emoji.EmojiTextView
             android:id="@+id/chslr_txt_replay_from"
             style="@style/ChatMessages.EmojiTextView"
             android:maxLines="1"
@@ -42,7 +42,7 @@
             android:textColor="@color/newBlack"
             android:textSize="@dimen/sp14"/>
 
-        <com.iGap.module.EmojiTextView
+        <io.github.meness.emoji.EmojiTextView
             android:id="@+id/chslr_txt_replay_message"
             style="@style/ChatMessages.EmojiTextView"
             android:layout_marginTop="@dimen/dp4"

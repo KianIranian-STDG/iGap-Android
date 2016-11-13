@@ -1,1 +1,1 @@
-include ':app', ':messageprogress', ':proto'
+include ':app', ':messageprogress', ':proto', ':emoji'

@@ -156,7 +156,7 @@
 
             </LinearLayout>
 
-            <com.iGap.module.EmojiTextView
+            <io.github.meness.emoji.EmojiTextView
                 android:id="@+id/messageText"
                 style="@style/ChatMessages.EmojiTextView"
                 android:layout_marginTop="@dimen/dp20"

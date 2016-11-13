@@ -35,12 +35,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ViewStubCompat;
 import android.text.Editable;
-import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,20 +82,12 @@ import com.iGap.adapter.items.chat.VideoItem;
 import com.iGap.adapter.items.chat.VideoWithTextItem;
 import com.iGap.adapter.items.chat.VoiceItem;
 import com.iGap.fragments.FragmentShowImageMessages;
-import com.iGap.helper.Emojione;
 import com.iGap.helper.HelperGetDataFromOtherApp;
 import com.iGap.helper.HelperMimeType;
 import com.iGap.helper.HelperNotificationAndBadge;
 import com.iGap.helper.HelperPermision;
-import com.iGap.interfaces.IEmojiBackspaceClick;
-import com.iGap.interfaces.IEmojiClickListener;
-import com.iGap.interfaces.IEmojiLongClickListener;
-import com.iGap.interfaces.IEmojiStickerClick;
-import com.iGap.interfaces.IEmojiViewCreate;
 import com.iGap.interfaces.IMessageItem;
-import com.iGap.interfaces.IRecentsLongClick;
 import com.iGap.interfaces.IResendMessage;
-import com.iGap.interfaces.ISoftKeyboardOpenClose;
 import com.iGap.interfaces.OnChatClearMessageResponse;
 import com.iGap.interfaces.OnChatDelete;
 import com.iGap.interfaces.OnChatDeleteMessageResponse;
@@ -119,9 +109,6 @@ import com.iGap.module.AndroidUtils;
 import com.iGap.module.AttachFile;
 import com.iGap.module.ChatSendMessageUtil;
 import com.iGap.module.ContactUtils;
-import com.iGap.module.EmojiEditText;
-import com.iGap.module.EmojiPopup;
-import com.iGap.module.EmojiRecentsManager;
 import com.iGap.module.EndlessRecyclerOnScrollListener;
 import com.iGap.module.FileUploadStructure;
 import com.iGap.module.FileUtils;
@@ -198,6 +185,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import io.github.meness.emoji.emoji.Emoji;
+import io.github.meness.emoji.listeners.OnEmojiBackspaceClickListener;
+import io.github.meness.emoji.listeners.OnEmojiClickedListener;
+import io.github.meness.emoji.listeners.OnEmojiPopupDismissListener;
+import io.github.meness.emoji.listeners.OnEmojiPopupShownListener;
+import io.github.meness.emoji.listeners.OnSoftKeyboardCloseListener;
+import io.github.meness.emoji.listeners.OnSoftKeyboardOpenListener;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
@@ -210,8 +204,7 @@ import static com.iGap.proto.ProtoGlobal.Room.Type.CHAT;
 import static com.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 import static java.lang.Long.parseLong;
 
-public class ActivityChat extends ActivityEnhanced
-        implements IEmojiViewCreate, IRecentsLongClick, IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>,
+public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>,
         OnChatMessageRemove, OnFileDownloadResponse, OnVoiceRecord, OnUserInfoResponse, OnClientGetRoomHistoryResponse, OnFileUploadForActivities, OnSetAction {
 
     public static ActivityChat activityChat;
@@ -227,7 +220,7 @@ public class ActivityChat extends ActivityEnhanced
     int scroolPosition = 0;
     private RelativeLayout parentLayout;
     private SharedPreferences sharedPreferences;
-    private EmojiEditText edtChat;
+    private io.github.meness.emoji.EmojiEditText edtChat;
     private MaterialDesignTextView imvSendButton;
     private MaterialDesignTextView imvAttachFileButton;
     private LinearLayout layoutAttachBottom;
@@ -575,6 +568,8 @@ public class ActivityChat extends ActivityEnhanced
         getChatHistory();
         getDraft();
         setAvatar();
+
+        setUpEmojiPopup();
     }
 
     private void clearHistoryFromContactsProfileInterface() {
@@ -1304,7 +1299,7 @@ public class ActivityChat extends ActivityEnhanced
 
         imvSmileButton = (MaterialDesignTextView) findViewById(R.id.chl_imv_smile_button);
 
-        edtChat = (EmojiEditText) findViewById(R.id.chl_edt_chat);
+        edtChat = (io.github.meness.emoji.EmojiEditText) findViewById(R.id.chl_edt_chat);
         edtChat.requestFocus();
 
         imvSendButton = (MaterialDesignTextView) findViewById(R.id.chl_imv_send_button);
@@ -1562,117 +1557,15 @@ public class ActivityChat extends ActivityEnhanced
             }
         });
 
-        // init emoji popup
-        // give the topmost view of your activity layout hierarchy. this will be used to measure
-        // soft keyboard height
-        final EmojiPopup emojiPopup = new EmojiPopup(getWindow().findViewById(android.R.id.content), getApplicationContext(), this);
-        emojiPopup.setRecentsLongClick(this);
-        emojiPopup.setAnimationStyle(R.style.EmojiPopupAnimation);
-        emojiPopup.setBackgroundDrawable(new ColorDrawable());
-        // will automatically set size according to the soft keyboard size
-        emojiPopup.setSizeForSoftKeyboard();
-        emojiPopup.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                // if the emoji popup is dismissed, change emoji image resource to smiley icon
-                changeEmojiButtonImageResource(R.string.md_emoticon_with_happy_face);
-            }
-        });
-        emojiPopup.setEmojiStickerClickListener(new IEmojiStickerClick() {
-            @Override
-            public void onEmojiStickerClick(View view) {
-                // TODO useful for showing stickers panel
-            }
-        });
-        emojiPopup.setOnSoftKeyboardOpenCloseListener(new ISoftKeyboardOpenClose() {
-            @Override
-            public void onKeyboardOpen(int keyboardHeight) {
-            }
-
-            @Override
-            public void onKeyboardClose() {
-                // if the keyboard closed, also dismiss the emoji popup
-                if (emojiPopup.isShowing()) {
-                    emojiPopup.dismiss();
-                }
-            }
-        });
-        emojiPopup.setEmojiLongClickListener(new IEmojiLongClickListener() {
-            @Override
-            public boolean onEmojiLongClick(View view, String emoji) {
-                // TODO useful for showing a PopupWindow to select emoji in different colors
-                return false;
-            }
-        });
-        emojiPopup.setOnEmojiClickListener(new IEmojiClickListener() {
-
-            @Override
-            public void onEmojiClick(View view, String emoji) {
-                // on emoji clicked, add to EditText
-                if (edtChat == null || emoji == null) {
-                    return;
-                }
-
-                String emojiUnicode = Emojione.shortnameToUnicode(emoji, false);
-                int start = edtChat.getSelectionStart();
-                int end = edtChat.getSelectionEnd();
-                if (start < 0) {
-                    edtChat.append(emojiUnicode);
-                } else {
-                    edtChat.getText().replace(Math.min(start, end), Math.max(start, end), emojiUnicode, 0, emojiUnicode.length());
-                }
-            }
-        });
-        emojiPopup.setOnEmojiBackspaceClickListener(new IEmojiBackspaceClick() {
-            @Override
-            public void onEmojiBackspaceClick(View v) {
-                // on backspace clicked, emulate the KEYCODE_DEL key event
-                edtChat.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
-            }
-        });
-
         // to toggle between keyboard and emoji popup
         imvSmileButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-
-                // if popup is not showing => emoji keyboard is not visible, we need to show it
-                if (!emojiPopup.isShowing()) {
-                    // if keyboard is visible, simply show the emoji popup
-                    if (emojiPopup.isKeyboardOpen()) {
-                        emojiPopup.showAtBottom();
-                        changeEmojiButtonImageResource(R.string.md_black_keyboard_with_white_keys);
-                    }
-                    // else, open the text keyboard first and immediately after that show the
-                    // emoji popup
-                    else {
-                        edtChat.setFocusableInTouchMode(true);
-                        edtChat.requestFocus();
-
-                        emojiPopup.showAtBottomPending();
-
-                        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                        inputMethodManager.showSoftInput(edtChat, InputMethodManager.SHOW_IMPLICIT);
-
-                        changeEmojiButtonImageResource(R.string.md_black_keyboard_with_white_keys);
-                    }
-                }
-                // if popup is showing, simply dismiss it to show the underlying keyboard
-                else {
-                    emojiPopup.dismiss();
-                }
+                emojiPopup.toggle();
             }
         });
 
-        edtChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (emojiPopup.isShowing()) {
-                    emojiPopup.dismiss();
-                }
-            }
-        });
         edtChat.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -1727,18 +1620,8 @@ public class ActivityChat extends ActivityEnhanced
                         }).start();
                     }
                 }
-
-                // android emoji one doesn't support common space unicode
-                // to support space character, a new unicode will be replaced.
-                if (editable.toString().contains("\u0020")) {
-                    Editable ab = new SpannableStringBuilder(editable.toString().replace("\u0020", "\u2000"));
-                    editable.replace(0, editable.length(), ab);
-                }
             }
         });
-    }
-
-    private void setAction() {
     }
 
     private void initLayoutSearchNavigation() {
@@ -2032,6 +1915,8 @@ public class ActivityChat extends ActivityEnhanced
             mAdapter.deselect();
         } else if (boomMenuButton.isOpen()) {
             boomMenuButton.dismiss();
+        } else if (emojiPopup != null && emojiPopup.isShowing()) {
+            emojiPopup.dismiss();
         } else {
             super.onBackPressed();
         }
@@ -2529,17 +2414,6 @@ public class ActivityChat extends ActivityEnhanced
         }
     }
 
-    @Override
-    public void onEmojiViewCreate(View view, EmojiPopup emojiPopup) {
-
-    }
-
-    @Override
-    public boolean onRecentsLongClick(View view, EmojiRecentsManager recentsManager) {
-        // TODO useful for clearing recents
-        return false;
-    }
-
     private Intent makeIntentForForwardMessages(ArrayList<Parcelable> messageInfos) {
         Intent intent = new Intent(ActivityChat.this, ActivitySelectChat.class);
         intent.putParcelableArrayListExtra(ActivitySelectChat.ARG_FORWARD_MESSAGE, messageInfos);
@@ -2727,6 +2601,49 @@ public class ActivityChat extends ActivityEnhanced
         } else {
             txtChannelMute.setText("Mute");
         }
+    }
+
+    private io.github.meness.emoji.EmojiPopup emojiPopup;
+
+    private void setUpEmojiPopup() {
+        emojiPopup = io.github.meness.emoji.EmojiPopup.Builder.fromRootView(findViewById(R.id.ac_ll_parent))
+                .setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
+                    @Override
+                    public void onEmojiBackspaceClicked(final View v) {
+                        Log.d("MainActivity", "Clicked on Backspace");
+                    }
+                })
+                .setOnEmojiClickedListener(new OnEmojiClickedListener() {
+                    @Override
+                    public void onEmojiClicked(final Emoji emoji) {
+                        Log.d("MainActivity", "Clicked on emoji");
+                    }
+                })
+                .setOnEmojiPopupShownListener(new OnEmojiPopupShownListener() {
+                    @Override
+                    public void onEmojiPopupShown() {
+                        changeEmojiButtonImageResource(R.string.md_black_keyboard_with_white_keys);
+                    }
+                })
+                .setOnSoftKeyboardOpenListener(new OnSoftKeyboardOpenListener() {
+                    @Override
+                    public void onKeyboardOpen(final int keyBoardHeight) {
+                        Log.d("MainActivity", "Opened soft keyboard");
+                    }
+                })
+                .setOnEmojiPopupDismissListener(new OnEmojiPopupDismissListener() {
+                    @Override
+                    public void onEmojiPopupDismiss() {
+                        changeEmojiButtonImageResource(R.string.md_emoticon_with_happy_face);
+                    }
+                })
+                .setOnSoftKeyboardCloseListener(new OnSoftKeyboardCloseListener() {
+                    @Override
+                    public void onKeyboardClose() {
+                        emojiPopup.dismiss();
+                    }
+                })
+                .build(edtChat);
     }
 
     @Override

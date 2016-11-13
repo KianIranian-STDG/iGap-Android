@@ -46,6 +46,7 @@ dependencies {
     }
     compile project(":messageprogress")
     compile project(":proto")
+    compile project(":emoji")
     compile('com.afollestad.material-dialogs:core:0.9.0.1') {
         transitive = true
     }

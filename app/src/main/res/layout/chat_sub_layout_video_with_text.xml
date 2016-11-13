@@ -81,7 +81,7 @@
                 android:textColor="@color/gray"
                 android:textSize="@dimen/sp14" />
 
-            <com.iGap.module.EmojiTextView
+            <io.github.meness.emoji.EmojiTextView
                 android:id="@+id/messageText"
                 style="@style/ChatMessages.EmojiTextView"
                 android:layout_marginTop="4dp"

@@ -39,7 +39,7 @@
                 android:id="@+id/cslr_ll_forward"
                 layout="@layout/chat_sub_layout_forward" />
 
-            <com.iGap.module.EmojiTextView
+            <io.github.meness.emoji.EmojiTextView
                 android:id="@+id/messageText"
                 style="@style/ChatMessages.EmojiTextView"
                 android:text="SAMPLE TEXT"/>

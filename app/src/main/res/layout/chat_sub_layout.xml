@@ -63,7 +63,7 @@
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/sp14" />
 
-                    <com.iGap.module.EmojiTextView
+                    <io.github.meness.emoji.EmojiTextView
                         android:id="@+id/cs_txt_contact_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -92,7 +92,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <com.iGap.module.EmojiTextView
+                    <io.github.meness.emoji.EmojiTextView
                         android:id="@+id/cs_txt_last_message_sender"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -101,7 +101,7 @@
                         android:textColor="#2bbfbd"
                         android:textSize="@dimen/sp13"/>
 
-                    <com.iGap.module.EmojiTextView
+                    <io.github.meness.emoji.EmojiTextView
                         android:id="@+id/cs_txt_last_message"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
