@@ -3,6 +3,7 @@ package com.iGap.activities;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -54,6 +55,8 @@ public class ActivityShearedMedia extends ActivityEnhanced {
     private LinearLayout mediaLayout;
     private MusicPlayer musicPlayer;
 
+    private AppBarLayout appBarLayout;
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -82,8 +85,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
     @Override
     public void onBackPressed() {
-        FragmentShowImage myFragment = (FragmentShowImage) getFragmentManager().findFragmentByTag(
-                "Show_Image_fragment_shared_media");
+        FragmentShowImage myFragment = (FragmentShowImage) getFragmentManager().findFragmentByTag("Show_Image_fragment_shared_media");
         if (myFragment != null && myFragment.isVisible()) {
             getFragmentManager().beginTransaction().remove(myFragment).commit();
         } else if (!mAdapter.resetSelected()) {
@@ -92,6 +94,10 @@ public class ActivityShearedMedia extends ActivityEnhanced {
     }
 
     private void initComponent() {
+
+        appBarLayout = (AppBarLayout) findViewById(R.id.asm_appbar_shared_media);
+
+        FragmentShowImage.appBarLayout = appBarLayout;
 
         MaterialDesignTextView btnBack = (MaterialDesignTextView) findViewById(R.id.asm_btn_back);
         RippleView rippleBack = (RippleView) findViewById(R.id.asm_ripple_back);

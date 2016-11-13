@@ -115,6 +115,7 @@ import com.iGap.module.FileUtils;
 import com.iGap.module.HelperDecodeFile;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.MusicPlayer;
+import com.iGap.module.MyAppBarLayout;
 import com.iGap.module.MyType;
 import com.iGap.module.OnComplete;
 import com.iGap.module.RecyclerViewPauseOnScrollListener;
@@ -297,7 +298,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private MaterialDesignTextView iconMute;
 
     public static OnComplete onComplete;
-
+    MyAppBarLayout appBarLayout;
     private boolean hasDraft = false;
     private long replyToMessageId = 0;
 
@@ -428,6 +429,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
             }
         };
+
+        appBarLayout = (MyAppBarLayout) findViewById(R.id.ac_appBarLayout);
 
         mediaLayout = (LinearLayout) findViewById(R.id.ac_ll_music_layout);
         musicPlayer = new MusicPlayer(mediaLayout);
@@ -1980,8 +1983,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 switch (buttonIndex) {
 
                     case 0:
-
-                        attachFile.requestTakePicture();
+                        attachFile.showDialogOpenCamera(toolbar);
                         break;
                     case 1:
                         attachFile.requestOpenGalleryForImageMultipleSelect();
@@ -2021,7 +2023,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
 
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == AttachFile.request_code_position && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -2104,6 +2105,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 break;
 
             case AttachFile.requestOpenGalleryForVideoMultipleSelect:
+            case AttachFile.request_code_VIDEO_CAPTURED:
 
                 if (listPathString.size() == 1) {
                     txtFileNameForSend.setText(attachFile.getFileName(listPathString.get(0)));
@@ -2123,6 +2125,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 }
                 break;
             case AttachFile.request_code_pic_file:
+            case AttachFile.request_code_open_document:
                 if (listPathString.size() == 1) {
                     txtFileNameForSend.setText(attachFile.getFileName(listPathString.get(0)));
                 }
@@ -2241,6 +2244,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 break;
 
             case AttachFile.requestOpenGalleryForVideoMultipleSelect:
+            case AttachFile.request_code_VIDEO_CAPTURED:
                 //filePath = getFilePathFromUri(uri);
                 fileName = new File(filePath).getName();
                 fileSize = new File(filePath).length();
@@ -2279,6 +2283,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                 songArtist, songDuration, userTriesReplay() ? parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID) : 0);
                 break;
             case AttachFile.request_code_pic_file:
+            case AttachFile.request_code_open_document:
+
                 fileName = new File(filePath).getName();
                 fileSize = new File(filePath).length();
                 if (isMessageWrote()) {
@@ -2758,9 +2764,13 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     }
 
     private void showImage(StructMessageInfo messageInfo) {
+
+        FragmentShowImageMessages.appBarLayout = appBarLayout;
+
         FragmentShowImageMessages fragment = FragmentShowImageMessages.newInstance(mRoomId, messageInfo.attachment.token);
         getSupportFragmentManager().beginTransaction().replace(R.id.ac_ll_parent, fragment, null).commit();
     }
+
 
     @Override
     public void onChatClearMessage(long roomId, long clearId, ProtoResponse.Response response) {

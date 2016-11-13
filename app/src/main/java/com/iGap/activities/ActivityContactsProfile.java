@@ -205,6 +205,8 @@ public class ActivityContactsProfile extends ActivityEnhanced {
             public void onClick(View view) {
 
                 if (avatarList != null) {
+                    FragmentShowImage.appBarLayout = fab;
+
                     Fragment fragment = FragmentShowImage.newInstance();
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("listPic", setItem());

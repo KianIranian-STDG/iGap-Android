@@ -1,6 +1,7 @@
 package com.iGap.fragments;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -68,6 +69,8 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
 
     private long peerId = 0;
 
+    public static View appBarLayout;
+
     public static FragmentShowImage newInstance() {
         return new FragmentShowImage();
     }
@@ -85,6 +88,24 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
 
         if (getIntentData(this.getArguments())) initComponent(view);
     }
+
+
+    @Override
+    public void onDetach() {
+        if (appBarLayout != null)
+            appBarLayout.setVisibility(View.VISIBLE);
+
+        super.onDetach();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        if (appBarLayout != null)
+            appBarLayout.setVisibility(View.GONE);
+
+        super.onAttach(context);
+    }
+
 
     private boolean getIntentData(Bundle bundle) {
 
