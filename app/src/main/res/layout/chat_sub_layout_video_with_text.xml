@@ -33,7 +33,7 @@
             android:paddingBottom="4.5dp"
             android:paddingLeft="@dimen/messageContainerPadding"
             android:paddingRight="@dimen/messageContainerPadding"
-            android:paddingTop="@dimen/messageContainerPadding">
+            android:padding="@dimen/messageContainerPadding">
 
             <include
                 android:id="@+id/replayLayout"
@@ -68,7 +68,7 @@
                 android:id="@+id/fileName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:singleLine="true"
+                android:maxLines="1"
                 android:text="FILENAME.MP4"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/sp16"
