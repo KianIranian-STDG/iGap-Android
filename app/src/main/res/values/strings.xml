@@ -432,13 +432,6 @@
     <string name="recently">recently</string>
     <string name="support">support</string>
     <string name="service_notification">service notification</string>
-    <string name="video_message">video Message</string>
-    <string name="file_message">file Message</string>
-    <string name="audio_message">Audio Message</string>
-    <string name="image_message">image Message</string>
-    <string name="contact_message">contact Message</string>
-    <string name="gif_message">gif Message</string>
-    <string name="location_message">Location Message</string>
 
     <string name="video_message">video Message</string>
     <string name="file_message">file Message</string>
