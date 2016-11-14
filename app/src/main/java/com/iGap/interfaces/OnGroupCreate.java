@@ -9,6 +9,7 @@ public interface OnGroupCreate {
 
     void onGroupCreate(long roomId);
 
+    void onTimeOut();
     void onError(int majorCode, int minorCode);
 
 

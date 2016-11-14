@@ -3,6 +3,7 @@
     <string name="app_name">iGap</string>
     <string name="unmute_notification">UnMute Notifications</string>
     <string name="mute_notification">Mute Notifications</string>
+    <string name="chat_to_group">Convert Chat to Group</string>
     <string name="chat">Chat</string>
     <string name="group">Group</string>
     <string name="channel">Channel</string>
@@ -422,7 +423,7 @@
     <string name="dialog_readonly_chat">Sorry, you can\'t send messages to this chat.</string>
     <string name="remove_admin">Remove Admin</string>
     <string name="remove_moderator">Remove Moderator</string>
-    <string name="set_member">Set Member</string>
+    <string name="set_member">Set Members</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="online">online</string>

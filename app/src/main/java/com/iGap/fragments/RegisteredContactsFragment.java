@@ -120,6 +120,8 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                 rv.setEnabled(false);
                 vgAddContact.setEnabled(false);
                 searchView.setEnabled(false);
+                rv.setEnabled(false);
+                rv.setClickable(false);
 
                 return false;
             }
@@ -260,6 +262,8 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                     rv.setEnabled(true);
                     vgAddContact.setEnabled(true);
                     searchView.setEnabled(true);
+                    rv.setEnabled(true);
+                    rv.setClickable(true);
                 }
 
                 @Override
@@ -268,6 +272,8 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                     rv.setEnabled(true);
                     vgAddContact.setEnabled(true);
                     searchView.setEnabled(true);
+                    rv.setEnabled(true);
+                    rv.setClickable(true);
 
                     if (majorCode == 200) {
                         getActivity().runOnUiThread(new Runnable() {
@@ -399,6 +405,8 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                 rv.setEnabled(true);
                 vgAddContact.setEnabled(true);
                 searchView.setEnabled(true);
+                rv.setEnabled(true);
+                rv.setClickable(true);
             }
 
             @Override
@@ -407,6 +415,8 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                 rv.setEnabled(true);
                 vgAddContact.setEnabled(true);
                 searchView.setEnabled(true);
+                rv.setEnabled(true);
+                rv.setClickable(true);
             }
         };
 

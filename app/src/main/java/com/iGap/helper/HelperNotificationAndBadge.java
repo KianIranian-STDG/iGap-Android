@@ -400,8 +400,7 @@ public class HelperNotificationAndBadge {
 
                     if (realmRoom != null) {
                         RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-                        if (realmGroupRoom.getRealmNotificationSetting() != null
-                                && realmGroupRoom.getRealmNotificationSetting().getNotification() != 0) {
+                        if (realmGroupRoom.getRealmNotificationSetting() != null && realmGroupRoom.getRealmNotificationSetting().getNotification() != 0) {
                             updateNotificationAndBadge(updateNotification, type);
                         }
                     }
@@ -413,7 +412,7 @@ public class HelperNotificationAndBadge {
         }
     }
 
-    public void updateNotificationAndBadge(boolean updateNotification, ProtoGlobal.Room.Type type) {
+    private void updateNotificationAndBadge(boolean updateNotification, ProtoGlobal.Room.Type type) {
 
         sharedPreferences = context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
 
@@ -422,16 +421,21 @@ public class HelperNotificationAndBadge {
         switch (type) {
             case CHAT:
 
-                if (realmRoom != null && realmRoom.getChatRoom() != null
+                if (realmRoom != null
+                        && realmRoom.getChatRoom() != null
                         && realmRoom.getChatRoom().getRealmNotificationSetting() != null
                         && realmRoom.getChatRoom().getRealmNotificationSetting().getLedColor() != 0) {
+
                     led = realmRoom.getChatRoom().getRealmNotificationSetting().getLedColor();
+
                 } else {
                     led = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_LED_COLOR_MESSAGE, -8257792);
                 }
-                if (realmRoom != null && realmRoom.getChatRoom() != null
+                if (realmRoom != null
+                        && realmRoom.getChatRoom() != null
                         && realmRoom.getChatRoom().getRealmNotificationSetting() != null
                         && realmRoom.getChatRoom().getRealmNotificationSetting().getVibrate() != null) {
+
                     vibrator = realmRoom.getChatRoom().getRealmNotificationSetting().getVibrate();
                 } else {
                     vibrator = sharedPreferences.getString(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, "Default");
@@ -442,6 +446,7 @@ public class HelperNotificationAndBadge {
                         && realmRoom.getChatRoom() != null
                         && realmRoom.getChatRoom().getRealmNotificationSetting() != null
                         && realmRoom.getChatRoom().getRealmNotificationSetting().getIdRadioButtonSound() != 0) {
+
                     sound = realmRoom.getChatRoom().getRealmNotificationSetting().getIdRadioButtonSound();
                 } else {
                     sound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_MESSAGE_POSITION, 3);
@@ -451,14 +456,37 @@ public class HelperNotificationAndBadge {
                 break;
 
             case GROUP:
-                led = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, -8257792);
-                vibrator = sharedPreferences.getString(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, "Default");
+                if (realmRoom != null
+                        && realmRoom.getGroupRoom() != null
+                        && realmRoom.getGroupRoom().getRealmNotificationSetting() != null
+                        && realmRoom.getGroupRoom().getRealmNotificationSetting().getLedColor() != 0) {
+
+                    led = realmRoom.getGroupRoom().getRealmNotificationSetting().getLedColor();
+                } else {
+
+                    led = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, -8257792);
+                }
+
+                if (realmRoom != null
+                        && realmRoom.getGroupRoom() != null
+                        && realmRoom.getGroupRoom().getRealmNotificationSetting() != null
+                        && realmRoom.getGroupRoom().getRealmNotificationSetting().getVibrate() != null) {
+
+                    vibrator = realmRoom.getGroupRoom().getRealmNotificationSetting().getVibrate();
+                } else {
+                    vibrator = sharedPreferences.getString(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, "Default");
+                }
+
+
+
                 popupNotification = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, 3);
 
 
-                if (realmRoom.getGroupRoom() != null
-                        && realmRoom.getChatRoom().getRealmNotificationSetting() != null
+                if (realmRoom != null
+                        && realmRoom.getGroupRoom() != null
+                        && realmRoom.getGroupRoom().getRealmNotificationSetting() != null
                         && realmRoom.getGroupRoom().getRealmNotificationSetting().getIdRadioButtonSound() != 0) {
+
                     sound = realmRoom.getGroupRoom().getRealmNotificationSetting().getIdRadioButtonSound();
                 } else {
                     sound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, 3);
@@ -466,7 +494,6 @@ public class HelperNotificationAndBadge {
 
                 messagePeriview = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_GROUP, 1);
 
-                RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
 
                 break;
             case CHANNEL:

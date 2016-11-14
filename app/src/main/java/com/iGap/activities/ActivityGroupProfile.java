@@ -179,9 +179,11 @@ public class ActivityGroupProfile extends ActivityEnhanced
         initials = realmRoom.getInitials();
         color = realmRoom.getColor();
         role = realmGroupRoom.getRole();
+
         participantsCountLabel = realmGroupRoom.getParticipantsCountLabel();
         members = realmGroupRoom.getMembers();
         Log.i("PPP", "********** members : " + members);
+        Log.i("PPP", "********** role : " + role);
         description = realmGroupRoom.getDescription();
 
         realm.close();
@@ -433,8 +435,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                 int listSize = contacts.size();
 
                 for (int i = count; i < listSize && i < count + numberUploadItem; i++) {
-                    items.add(new ContactItemGroupProfile().setContact(contacts.get(i))
-                            .withIdentifier(100 + contacts.indexOf(contacts.get(i))));
+                    items.add(new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
                 }
 
                 itemAdapter.clear();
@@ -636,6 +637,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
             @Override
             public void clicked(View view, StructContactInfo info) {
                 new CreatePopUpMessage().show(view, info);
+                Log.i("HHHHHGGGG", "bindView3: " + info.role);
             }
         };
 
@@ -721,6 +723,8 @@ public class ActivityGroupProfile extends ActivityEnhanced
         recyclerView.addItemDecoration(decoration);
 
         items = new ArrayList<>();
+
+        ContactItemGroupProfile.mainRole = role.toString();
 
         fillItem();
 

@@ -15,6 +15,7 @@ import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,7 @@ import com.iGap.R;
 import com.iGap.activities.ActivityCrop;
 import com.iGap.activities.ActivityMain;
 import com.iGap.activities.ActivityNewChanelFinish;
+import com.iGap.interfaces.OnChatConvertToGroup;
 import com.iGap.interfaces.OnClientGetRoomResponse;
 import com.iGap.interfaces.OnGroupCreate;
 import com.iGap.libs.rippleeffect.RippleView;
@@ -41,10 +43,20 @@ import com.iGap.module.LinedEditText;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.proto.ProtoClientGetRoom;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.realm.RealmGroupRoom;
+import com.iGap.realm.RealmRoom;
+import com.iGap.realm.RealmRoomFields;
+import com.iGap.realm.enums.GroupChatRole;
+import com.iGap.realm.enums.RoomType;
+import com.iGap.request.RequestChatConvertToGroup;
 import com.iGap.request.RequestClientGetRoom;
 import com.iGap.request.RequestGroupCreate;
 
 import java.io.File;
+
+import io.realm.Realm;
+
+import static com.iGap.R.id.fragmentContainer;
 
 public class FragmentNewGroup extends android.support.v4.app.Fragment {
 
@@ -54,6 +66,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
     private Uri uriIntent;
     private TextView txtNextStep, txtCancel, txtTitleToolbar;
     private String prefix = "NewGroup";
+    private long roomId = 0;
     private String path;
     private RelativeLayout parent;
 
@@ -87,10 +100,16 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
 
         if (bundle != null) { // get a list of image
             prefix = bundle.getString("TYPE");
+            if (bundle.getLong("ROOMID") != 0) {
+                roomId = bundle.getLong("ROOMID");
+            }
         }
     }
 
     public void initComponent(View view) {
+
+
+        Log.i("ZZZZZZCCC", "initComponent: " + roomId);
 
         prgWaiting = (ProgressBar) view.findViewById(R.id.prgWaiting);
         prgWaiting.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
@@ -117,8 +136,8 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
         txtTitleToolbar = (TextView) view.findViewById(R.id.ng_txt_titleToolbar);
         if (prefix.equals("NewChanel")) {
             txtTitleToolbar.setText(getResources().getString(R.string.New_Chanel));
-        } else {
-            txtTitleToolbar.setText(getResources().getString(R.string.New_Group));
+        } else if (prefix.equals("ConvertToGroup")) {
+            txtTitleToolbar.setText(getResources().getString(R.string.chat_to_group));
         }
 
         parent = (RelativeLayout) view.findViewById(R.id.ng_fragmentContainer);
@@ -195,10 +214,16 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
             }
         });
 
-        if (prefix.equals("NewChanel")) {
-            txtInputNewGroup.setHint(getResources().getString(R.string.Channel_name));
-        } else {
-            txtInputNewGroup.setHint(getResources().getString(R.string.group_name));
+        switch (prefix) {
+            case "NewChanel":
+                txtInputNewGroup.setHint(getResources().getString(R.string.Channel_name));
+                break;
+            case "ConvertToGroup":
+                txtInputNewGroup.setHint(getResources().getString(R.string.chat_to_group));
+                break;
+            default:
+                txtInputNewGroup.setHint(getResources().getString(R.string.group_name));
+                break;
         }
 
         //=======================description group
@@ -261,6 +286,8 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
                         success = G.IMAGE_NEW_CHANEL.renameTo(file2);
                         startActivity(new Intent(G.context, ActivityNewChanelFinish.class));
                         getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
+                    } else if (prefix.equals("ConvertToGroup")) {
+                        chatToGroup();
                     } else {
                         success = G.IMAGE_NEW_GROUP.renameTo(file2);
                         createGroup();
@@ -293,11 +320,85 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
         );
     }
 
+    private void chatToGroup() {
+
+
+        G.onChatConvertToGroup = new OnChatConvertToGroup() {
+            @Override
+            public void onChatConvertToGroup(final long roomId, final String name, final String description, ProtoGlobal.GroupRoom.Role role) {
+
+                Realm realm = Realm.getDefaultInstance();
+
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                        realmRoom.setType(RoomType.GROUP);
+                        realmRoom.setTitle(name);
+
+                        RealmGroupRoom realmGroupRoom = realm.createObject(RealmGroupRoom.class);
+
+                        realmGroupRoom.setRole(GroupChatRole.OWNER);
+                        realmGroupRoom.setDescription(description);
+                        realmGroupRoom.setParticipantsCountLabel("2");
+                        realmRoom.setGroupRoom(realmGroupRoom);
+
+                    }
+                });
+                realm.close();
+                getRoom(roomId);
+            }
+
+            @Override
+            public void Error(int majorCode, int minorCode) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        prgWaiting.setVisibility(View.GONE);
+                        txtNextStep.setEnabled(true);
+                        txtBack.setEnabled(true);
+                        txtCancel.setEnabled(true);
+                        edtDescription.setEnabled(true);
+                        edtGroupName.setEnabled(true);
+                        imgCircleImageView.setEnabled(true);
+                        Toast.makeText(G.context, "Error", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            @Override
+            public void timeOut() {
+                prgWaiting.setVisibility(View.GONE);
+                txtNextStep.setEnabled(true);
+                txtBack.setEnabled(true);
+                txtCancel.setEnabled(true);
+                edtDescription.setEnabled(true);
+                edtGroupName.setEnabled(true);
+                imgCircleImageView.setEnabled(true);
+                Log.i("XXXCCC", "timeOut: ");
+            }
+        };
+
+        new RequestChatConvertToGroup().chatConvertToGroup(roomId, edtGroupName.getText().toString(), edtDescription.getText().toString());
+    }
+
     private void createGroup() {
         G.onGroupCreate = new OnGroupCreate() {
             @Override
             public void onGroupCreate(long roomId) {
                 getRoom(roomId);
+            }
+
+            @Override
+            public void onTimeOut() {
+                prgWaiting.setVisibility(View.GONE);
+                txtNextStep.setEnabled(true);
+                txtBack.setEnabled(true);
+                txtCancel.setEnabled(true);
+                edtDescription.setEnabled(true);
+                edtGroupName.setEnabled(true);
+                imgCircleImageView.setEnabled(true);
+                Log.i("XXXCCC", "createGroup timeOut: ");
             }
 
             @Override
@@ -380,9 +481,10 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
                 bundle.putBoolean("NewRoom", true);
                 fragment.setArguments(bundle);
                 getActivity().getSupportFragmentManager()
-                        .beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
                         .addToBackStack(null)
-                        .replace(R.id.fragmentContainer, fragment)
+                        .replace(fragmentContainer, fragment)
                         .commit();
                 ActivityMain.mLeftDrawerLayout.closeDrawer();
                 prgWaiting.setVisibility(View.GONE);
@@ -467,6 +569,18 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
                         }
                     });
                 }
+            }
+
+            @Override
+            public void onTimeOut() {
+                prgWaiting.setVisibility(View.GONE);
+                txtNextStep.setEnabled(true);
+                txtBack.setEnabled(true);
+                txtCancel.setEnabled(true);
+                edtDescription.setEnabled(true);
+                edtGroupName.setEnabled(true);
+                imgCircleImageView.setEnabled(true);
+                Log.i("XXXCCC", "getRoom timeOut: ");
             }
         };
 

@@ -2,6 +2,7 @@ package com.iGap.adapter.items;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -22,6 +23,7 @@ import java.util.List;
 public class ContactItemGroupProfile extends AbstractItem<ContactItemGroupProfile, ContactItemGroupProfile.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
     public StructContactInfo mContact;
+    public static String mainRole;
 
 
     public ContactItemGroupProfile setContact(StructContactInfo contact) {
@@ -64,13 +66,27 @@ public class ContactItemGroupProfile extends AbstractItem<ContactItemGroupProfil
             holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.image.getContext().getResources().getDimension(R.dimen.dp60), mContact.initials, mContact.color));
         }
 
-        holder.btnMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (ActivityGroupProfile.onMenuClick != null)
-                    ActivityGroupProfile.onMenuClick.clicked(v, mContact);
+
+        if (mainRole.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+
+            holder.btnMenu.setVisibility(View.GONE);
+        } else {
+            Log.i("HHHHHGGGG", "bindView0: " + mainRole);
+            if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString())) {
+                holder.btnMenu.setVisibility(View.GONE);
+                Log.i("HHHHHGGGG", "bindView1: " + mContact.role);
+            } else {
+
+                holder.btnMenu.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (ActivityGroupProfile.onMenuClick != null)
+                            ActivityGroupProfile.onMenuClick.clicked(v, mContact);
+                        Log.i("HHHHHGGGG", "bindView2: " + mContact.role);
+                    }
+                });
             }
-        });
+        }
     }
 
     private void setRoleStarColor(MaterialDesignTextView view) {

@@ -1150,16 +1150,19 @@ public class ActivityChat extends ActivityEnhanced
                 TextView text2 = new TextView(ActivityChat.this);
                 TextView text3 = new TextView(ActivityChat.this);
                 final TextView text4 = new TextView(ActivityChat.this);
+                TextView text5 = new TextView(ActivityChat.this);
 
                 text1.setTextColor(getResources().getColor(android.R.color.black));
                 text2.setTextColor(getResources().getColor(android.R.color.black));
                 text3.setTextColor(getResources().getColor(android.R.color.black));
                 text4.setTextColor(getResources().getColor(android.R.color.black));
+                text5.setTextColor(getResources().getColor(android.R.color.black));
 
                 text1.setText(getResources().getString(R.string.Search));
                 text2.setText(getResources().getString(R.string.clear_history));
                 text3.setText(getResources().getString(R.string.delete_chat));
                 text4.setText(getResources().getString(R.string.mute_notification));
+                text5.setText(getResources().getString(R.string.chat_to_group));
 
                 int dim20 = (int) getResources().getDimension(R.dimen.dp20);
                 int dim16 = (int) getResources().getDimension(R.dimen.dp16);
@@ -1170,16 +1173,19 @@ public class ActivityChat extends ActivityEnhanced
                 text2.setTextSize(14);
                 text3.setTextSize(14);
                 text4.setTextSize(14);
+                text5.setTextSize(14);
 
                 text1.setPadding(dim20, dim12, dim12, dim20);
                 text2.setPadding(dim20, 0, dim12, dim20);
                 text3.setPadding(dim20, 0, dim12, dim20);
+                text4.setPadding(dim20, 0, dim12, dim20);
                 text4.setPadding(dim20, 0, dim12, (dim16));
 
                 layoutDialog.addView(text1, params);
                 layoutDialog.addView(text2, params);
                 layoutDialog.addView(text3, params);
                 layoutDialog.addView(text4, params);
+                layoutDialog.addView(text5, params);
 
                 final Realm realm = Realm.getDefaultInstance();
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
@@ -1194,6 +1200,12 @@ public class ActivityChat extends ActivityEnhanced
                     }
                 }
                 realm.close();
+
+                if (chatType == CHAT) {
+                    text5.setVisibility(View.VISIBLE);
+                } else {
+                    text5.setVisibility(View.GONE);
+                }
 
                 popupWindow = new PopupWindow(layoutDialog, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT, true);
                 popupWindow.setBackgroundDrawable(new BitmapDrawable());
@@ -1300,6 +1312,16 @@ public class ActivityChat extends ActivityEnhanced
                         popupWindow.dismiss();
                     }
                 });
+                text5.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        G.onConverttoGroup.openFragmentOnActivity("ConvertToGroup", mRoomId);
+                        finish();
+                        popupWindow.dismiss();
+                    }
+                });
+
             }
         });
 

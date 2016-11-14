@@ -49,14 +49,13 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
+                android:gravity="end"
                 android:layout_below="@+id/ng_ripple_circle_image">
-
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/ng_txtInput_newGroup"
-                    android:layout_width="match_parent"
+                    android:layout_width="@dimen/dp240"
                     android:layout_height="wrap_content"
-                    android:gravity="start"
                     android:layout_marginLeft="@dimen/dp20"
                     android:layout_marginStart="@dimen/dp20"
                     android:layout_marginEnd="@dimen/dp20"
@@ -68,7 +67,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
-                    android:paddingBottom="@dimen/dp8"
+                    android:paddingBottom="@dimen/dp4"
                     android:paddingTop="@dimen/dp8"
                     android:textSize="@dimen/sp15"
                     android:singleLine="true" />
@@ -76,9 +75,9 @@
                 <View
                     android:id="@+id/ng_view_newGroup"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
+                    android:layout_height="0.5dp"
                     android:background="@color/line_edit_text"
-                    android:scaleY=".5" />
+                    />
 
             </android.support.design.widget.TextInputLayout>
             </RelativeLayout>

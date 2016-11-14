@@ -2,6 +2,7 @@ package com.iGap.response;
 
 import com.iGap.G;
 import com.iGap.proto.ProtoChatConvertToGroup;
+import com.iGap.proto.ProtoError;
 
 public class ChatConvertToGroupResponse extends MessageHandler {
 
@@ -30,6 +31,12 @@ public class ChatConvertToGroupResponse extends MessageHandler {
     @Override
     public void error() {
         super.error();
+
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        int majorCode = errorResponse.getMajorCode();
+        int minorCode = errorResponse.getMinorCode();
+
+        G.onChatConvertToGroup.Error(majorCode, minorCode);
     }
 }
 

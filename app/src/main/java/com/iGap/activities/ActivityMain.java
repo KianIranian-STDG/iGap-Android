@@ -20,7 +20,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.iGap.Config;
 import com.iGap.G;
@@ -47,6 +46,7 @@ import com.iGap.interfaces.OnGroupDelete;
 import com.iGap.interfaces.OnGroupLeft;
 import com.iGap.interfaces.OnSetAction;
 import com.iGap.interfaces.OnUserInfoResponse;
+import com.iGap.interfaces.OpenFragment;
 import com.iGap.libs.floatingAddButton.ArcMenu;
 import com.iGap.libs.floatingAddButton.StateChangeListener;
 import com.iGap.libs.flowingdrawer.FlowingView;
@@ -157,6 +157,28 @@ public class ActivityMain extends ActivityEnhanced
 
         G.helperNotificationAndBadge.cancelNotification();
 
+        G.onConverttoGroup = new OpenFragment() {
+            @Override
+            public void openFragmentOnActivity(String type, final Long roomId) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        FragmentNewGroup fragmentNewGroup = new FragmentNewGroup();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("TYPE", "ConvertToGroup");
+                        bundle.putLong("ROOMID", roomId);
+                        fragmentNewGroup.setArguments(bundle);
+                        getSupportFragmentManager()
+                                .beginTransaction()
+                                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                                .replace(R.id.fragmentContainer, fragmentNewGroup)
+                                .commitAllowingStateLoss();
+                    }
+                });
+
+            }
+        };
+
         G.onFileDownloadResponse = this;
         G.onUserInfoResponse = this;
         G.onDraftMessage = this;
@@ -229,7 +251,13 @@ public class ActivityMain extends ActivityEnhanced
                     });
                 }
             }
+
+            @Override
+            public void onTimeOut() {
+
+            }
         };
+
 
         initComponent();
         initRecycleView();
@@ -706,11 +734,12 @@ public class ActivityMain extends ActivityEnhanced
 
         G.onGroupDelete = new OnGroupDelete() {
             @Override
-            public void onGroupDelete(long roomId) {
+            public void onGroupDelete(final long roomId) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         mAdapter.remove(mAdapter.getPosition(item));
+                        Log.i("LLLLLL", "deleteGroup: " + roomId);
                     }
                 });
             }
@@ -718,7 +747,14 @@ public class ActivityMain extends ActivityEnhanced
             @Override
             public void Error(int majorCode, int minorCode) {
 
-                Toast.makeText(ActivityMain.this, "Just owner can delete", Toast.LENGTH_SHORT).show();
+                final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), "Just owner can delete", Snackbar.LENGTH_LONG);
+                snack.setAction("CANCEL", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        snack.dismiss();
+                    }
+                });
+                snack.show();
             }
         };
 
@@ -729,18 +765,26 @@ public class ActivityMain extends ActivityEnhanced
 
         G.onGroupLeft = new OnGroupLeft() {
             @Override
-            public void onGroupLeft(long roomId, long memberId) {
+            public void onGroupLeft(final long roomId, long memberId) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         mAdapter.remove(mAdapter.getPosition(item));
+                        Log.i("LLLLLL", "lefGroup1: " + roomId);
                     }
                 });
             }
 
             @Override
             public void onError(int majorCode, int minorCode) {
-
+                final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), "lefGroup", Snackbar.LENGTH_LONG);
+                snack.setAction("CANCEL", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        snack.dismiss();
+                    }
+                });
+                snack.show();
             }
         };
 
@@ -808,8 +852,6 @@ public class ActivityMain extends ActivityEnhanced
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-
-                        Toast.makeText(ActivityMain.this, "rooms list fetched: " + Integer.toString(roomList.size()), Toast.LENGTH_LONG).show();
 
                         for (final ProtoGlobal.Room room : roomList) {
                             Log.i("PPP", "getTitle : " + room.getTitle() + "  ||  getMessage : " + room.getLastMessage().getMessage() + "  ||  getStatus : " + room.getLastMessage().getStatus());
@@ -944,7 +986,6 @@ public class ActivityMain extends ActivityEnhanced
         if (MusicPlayer.mp != null) {
             MusicPlayer.initLayoutTripMusic(mediaLayout);
         }
-
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
         G.chatSendMessageUtil.setOnChatSendMessageResponse(this);
         G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);

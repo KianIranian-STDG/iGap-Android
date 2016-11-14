@@ -132,7 +132,7 @@ public class ContactGroupFragment extends Fragment {
                                 @Override
                                 public void run() {
                                     final Snackbar snack =
-                                            Snackbar.make(view.findViewById(android.R.id.content),
+                                            Snackbar.make(getActivity().findViewById(android.R.id.content),
                                                     getResources().getString(R.string.E_302_1),
                                                     Snackbar.LENGTH_LONG);
 
@@ -150,7 +150,7 @@ public class ContactGroupFragment extends Fragment {
                                 @Override
                                 public void run() {
                                     final Snackbar snack =
-                                            Snackbar.make(view.findViewById(android.R.id.content),
+                                            Snackbar.make(getActivity().findViewById(android.R.id.content),
                                                     getResources().getString(R.string.E_302_2),
                                                     Snackbar.LENGTH_LONG);
 
@@ -168,7 +168,7 @@ public class ContactGroupFragment extends Fragment {
                                 @Override
                                 public void run() {
                                     final Snackbar snack =
-                                            Snackbar.make(view.findViewById(android.R.id.content),
+                                            Snackbar.make(getActivity().findViewById(android.R.id.content),
                                                     getResources().getString(R.string.E_302_3),
                                                     Snackbar.LENGTH_LONG);
 
@@ -186,7 +186,7 @@ public class ContactGroupFragment extends Fragment {
                                 @Override
                                 public void run() {
                                     final Snackbar snack =
-                                            Snackbar.make(view.findViewById(android.R.id.content),
+                                            Snackbar.make(getActivity().findViewById(android.R.id.content),
                                                     getResources().getString(R.string.E_302_4),
                                                     Snackbar.LENGTH_LONG);
 
@@ -204,7 +204,7 @@ public class ContactGroupFragment extends Fragment {
                                 @Override
                                 public void run() {
                                     final Snackbar snack =
-                                            Snackbar.make(view.findViewById(android.R.id.content),
+                                            Snackbar.make(getActivity().findViewById(android.R.id.content),
                                                     getResources().getString(R.string.E_303),
                                                     Snackbar.LENGTH_LONG);
 
@@ -222,7 +222,7 @@ public class ContactGroupFragment extends Fragment {
                                 @Override
                                 public void run() {
                                     final Snackbar snack =
-                                            Snackbar.make(view.findViewById(android.R.id.content),
+                                            Snackbar.make(getActivity().findViewById(android.R.id.content),
                                                     getResources().getString(R.string.E_304),
                                                     Snackbar.LENGTH_LONG);
 
@@ -240,7 +240,7 @@ public class ContactGroupFragment extends Fragment {
                                 @Override
                                 public void run() {
                                     final Snackbar snack =
-                                            Snackbar.make(view.findViewById(android.R.id.content),
+                                            Snackbar.make(getActivity().findViewById(android.R.id.content),
                                                     getResources().getString(R.string.E_305),
                                                     Snackbar.LENGTH_LONG);
 

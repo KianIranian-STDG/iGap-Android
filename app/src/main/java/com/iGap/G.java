@@ -84,6 +84,7 @@ import com.iGap.interfaces.OnUserRegistration;
 import com.iGap.interfaces.OnUserUpdateStatus;
 import com.iGap.interfaces.OnUserUsernameToId;
 import com.iGap.interfaces.OnUserVerification;
+import com.iGap.interfaces.OpenFragment;
 import com.iGap.module.ChatSendMessageUtil;
 import com.iGap.module.ChatUpdateStatusUtil;
 import com.iGap.module.ClearMessagesUtil;
@@ -252,6 +253,7 @@ public class G extends Application {
     public static OnGroupGetMemberList onGroupGetMemberList;
     public static OnUserGetDeleteToken onUserGetDeleteToken;
     public static OnGroupDelete onGroupDelete;
+    public static OpenFragment onConverttoGroup;
     public static OnChatConvertToGroup onChatConvertToGroup;
     public static OnUserUpdateStatus onUserUpdateStatus;
     public static OnSetAction onSetAction;

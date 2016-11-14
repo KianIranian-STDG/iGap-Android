@@ -44,18 +44,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <com.iGap.module.MaterialDesignTextView
-                        android:id="@+id/cigp_txt_member_role"
-                        style="@style/ChatMessages.MaterialDesignTextView.BottomIcon"
-                        fontPath="fonts/Flaticon.ttf"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="@dimen/sp14"
-                        android:text="@string/md_rate_star"/>
-
                     <com.iGap.module.CustomTextViewMedium
                         android:id="@+id/cigp_txt_contact_name"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentTop="true"
                         android:gravity="left"
@@ -64,6 +55,16 @@
                         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:textColor="#000000"
                         android:textSize="@dimen/sp16"/>
+
+                    <com.iGap.module.MaterialDesignTextView
+                        android:id="@+id/cigp_txt_member_role"
+                        style="@style/ChatMessages.MaterialDesignTextView.BottomIcon"
+                        fontPath="fonts/Flaticon.ttf"
+                        android:layout_marginLeft="@dimen/dp4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/sp14"
+                        android:text="@string/md_rate_star"/>
 
 
                 </LinearLayout>
@@ -74,7 +75,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:gravity="bottom|left"
+                    android:gravity="center_vertical|left"
                     android:tag="menu"
                     android:singleLine="true"
                     android:text="Last seen recently"

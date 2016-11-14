@@ -11,4 +11,6 @@ public interface OnClientGetRoomResponse {
                                  ProtoClientGetRoom.ClientGetRoomResponse.Builder builder);
 
     void onError(int majorCode, int minorCode);
+
+    void onTimeOut();
 }
