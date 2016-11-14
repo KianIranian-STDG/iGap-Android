@@ -1,7 +1,5 @@
 package com.iGap.helper;
 
-import android.util.Log;
-
 import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.proto.ProtoGlobal;
@@ -14,14 +12,38 @@ public class HelperSetAction {
     private static ArrayList<StructAction> structActions = new ArrayList<>();
 
     /**
-     * set action for show in audience chat.
+     * set action for showing audience typing.
      *
      * @param roomId roomId that send action from that
-     * @param action action that doing
      */
 
-    public static void setAction(final long roomId, final ProtoGlobal.ClientAction action) {
+    public static void setActionTyping(final long roomId) {
 
+        if (!checkExistAction(roomId, ProtoGlobal.ClientAction.TYPING)) {
+            int randomNumber = HelperNumerical.generateRandomNumber(8);
+
+            final StructAction structAction = new StructAction();
+            structAction.roomId = roomId;
+            structAction.currentTime = System.currentTimeMillis();
+            structAction.randomKey = randomNumber;
+            structAction.action = ProtoGlobal.ClientAction.TYPING;
+
+            structActions.add(structAction);
+            new RequestChatSetAction().chatSetAction(roomId, ProtoGlobal.ClientAction.TYPING, randomNumber);
+
+            timeOutChecking(structAction);
+        }
+    }
+
+    /**
+     * set action for showing audience action
+     *
+     * @param roomId    roomId that send action from that
+     * @param messageId unique number that we have in start upload and end of that
+     * @param action    action that doing
+     */
+
+    public static void setActionFiles(long roomId, long messageId, ProtoGlobal.ClientAction action) {
         if (!checkExistAction(roomId, action)) {
             int randomNumber = HelperNumerical.generateRandomNumber(8);
 
@@ -30,14 +52,10 @@ public class HelperSetAction {
             structAction.currentTime = System.currentTimeMillis();
             structAction.randomKey = randomNumber;
             structAction.action = action;
+            structAction.messageId = messageId;
 
             structActions.add(structAction);
-            Log.i("WWW", "setAction");
             new RequestChatSetAction().chatSetAction(roomId, action, randomNumber);
-
-            if (action == ProtoGlobal.ClientAction.TYPING) {
-                timeOutChecking(structAction);
-            }
         }
     }
 
@@ -45,7 +63,7 @@ public class HelperSetAction {
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (sendCancel(structAction.currentTime)) {
+                if (autoCancel(structAction.currentTime)) {
                     removeStruct(structAction.randomKey);
                     new RequestChatSetAction().chatSetAction(structAction.roomId, ProtoGlobal.ClientAction.CANCEL, structAction.randomKey);
                 } else {
@@ -58,15 +76,14 @@ public class HelperSetAction {
     /**
      * send cancel for files
      *
-     * @param roomId roomId that send action from that
-     * @param action action that doing
+     * @param messageId unique number that we have in start upload and end of that
      */
 
-    public static void sendCancel(long roomId, ProtoGlobal.ClientAction action) {
+    public static void sendCancel(long messageId) {
         for (StructAction struct : structActions) {
-            if (struct.roomId == roomId && struct.action == action) {
-                removeStruct(struct.randomKey);
+            if (struct.messageId == messageId) {
                 new RequestChatSetAction().chatSetAction(struct.roomId, ProtoGlobal.ClientAction.CANCEL, struct.randomKey);
+                removeStruct(struct.randomKey);
             }
         }
     }
@@ -80,7 +97,7 @@ public class HelperSetAction {
      * @return
      */
 
-    private static boolean sendCancel(long startActionTime) {
+    private static boolean autoCancel(long startActionTime) {
 
         long difference;
 
@@ -99,6 +116,7 @@ public class HelperSetAction {
 
         public long roomId;
         public long currentTime;
+        public long messageId; // messageId is a unique number that we have it in start and end of upload
         public int randomKey;
         public ProtoGlobal.ClientAction action;
     }
@@ -114,7 +132,6 @@ public class HelperSetAction {
     private static boolean checkExistAction(long roomId, ProtoGlobal.ClientAction action) {
         for (StructAction struct : structActions) {
             if (struct.roomId == roomId && struct.action == action) {
-                Log.i("WWW", "ExistAction");
                 struct.currentTime = System.currentTimeMillis();
                 return true;
             }
@@ -130,7 +147,6 @@ public class HelperSetAction {
     private static void removeStruct(int randomKey) {
         for (int i = 0; i < structActions.size(); i++) {
             if (structActions.get(i).randomKey == randomKey) {
-                Log.i("WWW", "removeStruct");
                 structActions.remove(i);
                 break;
             }

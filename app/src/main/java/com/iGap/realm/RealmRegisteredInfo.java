@@ -1,8 +1,9 @@
 package com.iGap.realm;
 
-import android.util.Log;
-
+import com.iGap.G;
+import com.iGap.R;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.proto.ProtoUserUpdateStatus;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -21,6 +22,7 @@ public class RealmRegisteredInfo extends RealmObject {
     private String initials;
     private String color;
     private String status;
+    private String cacheId;
     private int lastSeen;
     private int avatarCount;
     private boolean mutual;
@@ -90,11 +92,19 @@ public class RealmRegisteredInfo extends RealmObject {
     }
 
     public String getStatus() {
-        return status;
+        return getStatsForUser(status);
     }
 
     public void setStatus(String status) {
-        this.status = status;
+        this.status = getStatsForUser(status);
+    }
+
+    public String getCacheId() {
+        return cacheId;
+    }
+
+    public void setCacheId(String cacheId) {
+        this.cacheId = cacheId;
     }
 
     public int getLastSeen() {
@@ -146,26 +156,27 @@ public class RealmRegisteredInfo extends RealmObject {
         return null;
     }
 
-    /**
-     * create new object from RealmRegisteredInfo and set all fields with registeredUser Proto
-     *
-     * @param registeredUser proto that get from server
-     * @param realm          realm that get from executeTransaction
-     */
+    public String getStatsForUser(String status) {
 
-    public void setRegisteredUserInfo(ProtoGlobal.RegisteredUser registeredUser, RealmRegisteredInfo realmRegisteredInfo, Realm realm) {
-        fillRegisteredUserInfo(registeredUser, realmRegisteredInfo, realm);
-    }
-
-    /**
-     * get exist row from RealmRegisteredInfo and set all fields with registeredUser Proto
-     *
-     * @param registeredUser      proto that get from server
-     * @param realmRegisteredInfo current object from realm
-     * @param realm               realm that get from executeTransaction
-     */
-    public void updateRegisteredUserInfo(ProtoGlobal.RegisteredUser registeredUser, RealmRegisteredInfo realmRegisteredInfo, Realm realm) {
-        fillRegisteredUserInfo(registeredUser, realmRegisteredInfo, realm);
+        String userStatus = "";
+        if (status.equals(ProtoUserUpdateStatus.UserUpdateStatus.Status.OFFLINE.toString())) {
+            userStatus = G.context.getResources().getString(R.string.last_seen_recently);
+        } else if (status.equals(ProtoGlobal.RegisteredUser.Status.LONG_TIME_AGO.toString())) {
+            userStatus = G.context.getResources().getString(R.string.long_time_ago);
+        } else if (status.equals(ProtoGlobal.RegisteredUser.Status.LAST_MONTH.toString())) {
+            userStatus = G.context.getResources().getString(R.string.last_month);
+        } else if (status.equals(ProtoGlobal.RegisteredUser.Status.LAST_WEEK.toString())) {
+            userStatus = G.context.getResources().getString(R.string.last_week);
+        } else if (status.equals(ProtoGlobal.RegisteredUser.Status.RECENTLY.toString())) {
+            userStatus = G.context.getResources().getString(R.string.recently);
+        } else if (status.equals(ProtoGlobal.RegisteredUser.Status.SUPPORT.toString())) {
+            userStatus = G.context.getResources().getString(R.string.support);
+        } else if (status.equals(ProtoGlobal.RegisteredUser.Status.SERVICE_NOTIFICATIONS.toString())) {
+            userStatus = G.context.getResources().getString(R.string.service_notification);
+        } else if (status.equals(ProtoGlobal.RegisteredUser.Status.ONLINE.toString())) {
+            userStatus = G.context.getResources().getString(R.string.online);
+        }
+        return userStatus;
     }
 
     /**
@@ -173,10 +184,9 @@ public class RealmRegisteredInfo extends RealmObject {
      *
      * @param registeredUser proto that get from server
      * @param info           object from RealmRegisteredInfo
-     * @param realm          realm that get from executeTransaction
      */
 
-    private void fillRegisteredUserInfo(ProtoGlobal.RegisteredUser registeredUser, RealmRegisteredInfo info, Realm realm) {
+    public void fillRegisteredUserInfo(ProtoGlobal.RegisteredUser registeredUser, RealmRegisteredInfo info) {
 
         info.setId(registeredUser.getId());
         info.setUsername(registeredUser.getUsername());
@@ -190,11 +200,6 @@ public class RealmRegisteredInfo extends RealmObject {
         info.setLastName(registeredUser.getLastName());
         info.setAvatarCount(registeredUser.getAvatarCount());
         info.setMutual(registeredUser.getMutual());
-
-        if (registeredUser.getAvatarCount() > 0) {
-            Log.i("SSS", "Avatar Exist");
-            RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.FILE.TOKEN, registeredUser.getAvatar().getFile().getToken()).findFirst();
-            Log.i("SSS", "realmAvatar : " + realmAvatar);
-        }
+        info.setCacheId(registeredUser.getCacheId());
     }
 }

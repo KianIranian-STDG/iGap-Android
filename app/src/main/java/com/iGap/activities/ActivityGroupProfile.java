@@ -674,6 +674,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
         fastAdapter.withOnLongClickListener(new FastAdapter.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v, IAdapter adapter, IItem item, int position) {
+                ContactItemGroupProfile contactItemGroupProfile = (ContactItemGroupProfile) item;
 
                 ContactItemGroupProfile contactItemGroupProfile = (ContactItemGroupProfile) item;
 
@@ -1541,7 +1542,6 @@ public class ActivityGroupProfile extends ActivityEnhanced
     //***********************************************************************************************************************
 
     private void ChangeGroupName() {
-
 
         MaterialDialog dialog =
                 new MaterialDialog.Builder(ActivityGroupProfile.this)

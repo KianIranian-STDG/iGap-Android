@@ -354,7 +354,7 @@ public class AttachFile {
 
     public void requestPickAudio() {
         //Intent intent = new Intent();
-        //intent.setAction(Intent.ACTION_PICK);
+        //intent.setActionTyping(Intent.ACTION_PICK);
         //intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         //intent.setData(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
         //((Activity) context).startActivityForResult(intent, request_code_pic_audi);

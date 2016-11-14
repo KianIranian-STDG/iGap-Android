@@ -1,8 +1,7 @@
 package com.iGap.response;
 
-import android.util.Log;
-
 import com.iGap.G;
+import com.iGap.proto.ProtoResponse;
 import com.iGap.proto.ProtoUserUpdateStatus;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
@@ -27,20 +26,16 @@ public class UserUpdateStatusResponse extends MessageHandler {
     public void handler() {
         super.handler();
         final ProtoUserUpdateStatus.UserUpdateStatusResponse.Builder builder = (ProtoUserUpdateStatus.UserUpdateStatusResponse.Builder) message;
+
+        ProtoResponse.Response response = builder.getResponse();
+
         Realm realm = Realm.getDefaultInstance();
+        final RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, builder.getUserId()).findFirst();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, builder.getUserId()).findFirst();
-                if (builder.getStatus() == ProtoUserUpdateStatus.UserUpdateStatus.Status.OFFLINE) {
-                    realmRegisteredInfo.setStatus("last seen recently");
-                } else {
-                    realmRegisteredInfo.setStatus("online");
-                }
 
-
-                Log.i("DDD", "UserUpdateStatusResponse : " + builder);
-                Log.i("DDD", "realmRegisteredInfo.getDisplayName() : " + realmRegisteredInfo.getDisplayName());
+                realmRegisteredInfo.setStatus(builder.getStatus().toString());
 
                 if (builder.getUserId() == realm.where(RealmUserInfo.class).findFirst().getUserId()) {
                     if (builder.getStatus() == ProtoUserUpdateStatus.UserUpdateStatus.Status.ONLINE) {
@@ -53,24 +48,19 @@ public class UserUpdateStatusResponse extends MessageHandler {
             }
         });
         realm.close();
-        Log.i("DDD", "onUserUpdateStatus : " + G.onUserUpdateStatus);
         if (G.onUserUpdateStatus != null) {
-            G.onUserUpdateStatus.onUserUpdateStatus(builder.getUserId(), builder.getStatus());
+            G.onUserUpdateStatus.onUserUpdateStatus(builder.getUserId(), response.getTimestamp(), realmRegisteredInfo.getStatsForUser(builder.getStatus().toString()));
         }
-
-
     }
 
     @Override
     public void timeOut() {
         super.timeOut();
-        Log.i("DDD", "timeOut : " + message);
     }
 
     @Override
     public void error() {
         super.error();
-        Log.i("DDD", "error : " + message);
     }
 }
 

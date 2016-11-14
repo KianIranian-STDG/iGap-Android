@@ -1,11 +1,8 @@
 package com.iGap.response;
 
-import android.util.Log;
-
 import com.iGap.G;
-import com.iGap.proto.ProtoError;
+import com.iGap.helper.HelperSetAction;
 import com.iGap.proto.ProtoFileUpload;
-import com.iGap.proto.ProtoResponse;
 
 public class FileUploadResponse extends MessageHandler {
 
@@ -23,31 +20,21 @@ public class FileUploadResponse extends MessageHandler {
 
     @Override
     public void handler() {
-        ProtoFileUpload.FileUploadResponse.Builder fileUploadResponse =
-                (ProtoFileUpload.FileUploadResponse.Builder) message;
-
-        ProtoResponse.Response.Builder response =
-                ProtoResponse.Response.newBuilder().mergeFrom(fileUploadResponse.getResponse());
-        Log.i("SOC", "FileUploadResponse response.getId() : " + response.getId());
-        Log.i("SOC", "FileUploadResponse response.getTimestamp() : " + response.getTimestamp());
-        G.uploaderUtil.onFileUpload(fileUploadResponse.getProgress(),
-                fileUploadResponse.getNextOffset(), fileUploadResponse.getNextLimit(), this.identity,
-                fileUploadResponse.getResponse());
+        super.handler();
+        ProtoFileUpload.FileUploadResponse.Builder fileUploadResponse = (ProtoFileUpload.FileUploadResponse.Builder) message;
+        G.uploaderUtil.onFileUpload(fileUploadResponse.getProgress(), fileUploadResponse.getNextOffset(), fileUploadResponse.getNextLimit(), this.identity, fileUploadResponse.getResponse());
     }
 
     @Override
     public void timeOut() {
-        Log.i("SOC", "FileUploadResponse timeout");
+        HelperSetAction.sendCancel(Long.parseLong(this.identity));
+        super.timeOut();
     }
 
     @Override
     public void error() {
-        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
-        int majorCode = errorResponse.getMajorCode();
-        int minorCode = errorResponse.getMinorCode();
-
-        Log.i("SOC", "FileUploadResponse response.majorCode() : " + majorCode);
-        Log.i("SOC", "FileUploadResponse response.minorCode() : " + minorCode);
+        HelperSetAction.sendCancel(Long.parseLong(this.identity));
+        super.error();
     }
 }
 

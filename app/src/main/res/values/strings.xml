@@ -264,7 +264,6 @@
     <string name="waiting_for_network">Waiting For Network…</string>
     <string name="connecting">Connecting…</string>
     <string name="updating">Updating…</string>
-    <string name="last_seen_recently">Last seen Recently</string>
     <string name="member">" Members"</string>
     <string name="save_ok">"Save OK: "</string>
     <string name="exception">"Exception: "</string>
@@ -423,12 +422,15 @@
     <string name="remove_moderator">Remove Moderator</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="last_seen_recently">last seen recently</string>
+    <string name="long_time_ago">long time ago</string>
+    <string name="last_month">last month</string>
+    <string name="last_week">last week</string>
     <string name="online">online</string>
-    <string name="video_message">video Message</string>
-    <string name="file_message">file Message</string>
-    <string name="audio_message">Audio Message</string>
-    <string name="image_message">image Message</string>
-    <string name="contact_message">contact Message</string>
-    <string name="gif_message">gif Message</string>
-    <string name="location_message">Location Message</string>
+    <string name="exactly">exactly</string>
+    <string name="recently">recently</string>
+    <string name="support">support</string>
+    <string name="service_notification">service notification</string>
+
 </resources>

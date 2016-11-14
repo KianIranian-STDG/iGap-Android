@@ -50,6 +50,7 @@ import com.iGap.interfaces.OnUserAvatarGetList;
 import com.iGap.interfaces.OnUserContactDelete;
 import com.iGap.interfaces.OnUserContactEdit;
 import com.iGap.interfaces.OnUserInfoResponse;
+import com.iGap.interfaces.OnUserUpdateStatus;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.StructListOfContact;
@@ -89,7 +90,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
 
-public class ActivityContactsProfile extends ActivityEnhanced {
+public class ActivityContactsProfile extends ActivityEnhanced implements OnUserUpdateStatus {
     private long userId = 0;
     private long roomId;
     private String phone = "";
@@ -101,6 +102,7 @@ public class ActivityContactsProfile extends ActivityEnhanced {
     private String initials;
     private String color;
     private String enterFrom;
+    private String userStatus;
 
     private boolean showNumber = true;
 
@@ -126,10 +128,21 @@ public class ActivityContactsProfile extends ActivityEnhanced {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (G.onUpdateUserStatusInChangePage != null) {
+            G.onUpdateUserStatusInChangePage.updateStatus(userStatus);
+        }
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts_profile);
         final Realm realm = Realm.getDefaultInstance();
+
+        G.onUserUpdateStatus = this;
 
         Bundle extras = getIntent().getExtras();
         userId = extras.getLong("peerId");
@@ -152,16 +165,7 @@ public class ActivityContactsProfile extends ActivityEnhanced {
 
         RealmContacts realmUser = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, userId).findFirst();
 
-        if (realmUser != null) {
-            phone = Long.toString(realmUser.getPhone());
-            displayName = realmUser.getDisplay_name();
-            firstName = realmUser.getFirst_name();
-            lastName = realmUser.getLast_name();
-            username = realmUser.getUsername();
-            lastSeen = realmUser.getLast_seen();
-            color = realmUser.getColor();
-            initials = realmUser.getInitials();
-        } else {
+        if (realmRegisteredInfo != null) {
             phone = realmRegisteredInfo.getPhoneNumber();
             displayName = realmRegisteredInfo.getDisplayName();
             firstName = realmRegisteredInfo.getFirstName();
@@ -170,6 +174,16 @@ public class ActivityContactsProfile extends ActivityEnhanced {
             lastSeen = realmRegisteredInfo.getLastSeen();
             color = realmRegisteredInfo.getColor();
             initials = realmRegisteredInfo.getInitials();
+            userStatus = realmRegisteredInfo.getStatus();
+        } else {
+            phone = Long.toString(realmUser.getPhone());
+            displayName = realmUser.getDisplay_name();
+            firstName = realmUser.getFirst_name();
+            lastName = realmUser.getLast_name();
+            username = realmUser.getUsername();
+            lastSeen = realmUser.getLast_seen();
+            color = realmUser.getColor();
+            initials = realmUser.getInitials();
         }
 
         RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo(RealmContactsFields.PHONE, Long.parseLong(phone)).findFirst();
@@ -617,52 +631,25 @@ public class ActivityContactsProfile extends ActivityEnhanced {
         //            @Override
         //            public void onClick(View view) {
 
-        txtLastSeen = (TextView)
-
-                findViewById(R.id.chi_txt_lastSeen_title);
-
-        txtLastSeen.setText("Last seen at " + lastSeen);
-
-        txtUserName = (TextView)
-
-                findViewById(R.id.chi_txt_userName);
-
-        txtUserName.setText(username);
-
-        txtPhoneNumber = (TextView)
-
-                findViewById(R.id.chi_txt_phoneNumber);
-
-        txtPhoneNumber.setText("" + phone);
-
-        vgPhoneNumber = (ViewGroup)
-
-                findViewById(R.id.chi_layout_phoneNumber);
-
-        if (!showNumber)
-
-        {
+        txtLastSeen = (TextView) findViewById(R.id.chi_txt_lastSeen_title);
+        titleToolbar = (TextView) findViewById(R.id.chi_txt_titleToolbar_DisplayName);
+        titleLastSeen = (TextView) findViewById(R.id.chi_txt_titleToolbar_LastSeen);
+        txtUserName = (TextView) findViewById(R.id.chi_txt_userName);
+        txtPhoneNumber = (TextView) findViewById(R.id.chi_txt_phoneNumber);
+        vgPhoneNumber = (ViewGroup) findViewById(R.id.chi_layout_phoneNumber);
+        if (!showNumber) {
             vgPhoneNumber.setVisibility(View.GONE);
         }
 
         TextView txtCountOfShearedMedia = (TextView) findViewById(R.id.chi_txt_count_of_sharedMedia);
         txtCountOfShearedMedia.setText(AdapterShearedMedia.getCountOfSheareddMedia(roomId) + "");
 
-        titleToolbar = (TextView)
+        txtUserName.setText(username);
+        txtPhoneNumber.setText("" + phone);
 
-                findViewById(R.id.chi_txt_titleToolbar_DisplayName);
+        titleToolbar.setText(displayName);
 
-        titleToolbar.setText("nickname");
-
-        titleLastSeen = (TextView)
-
-                findViewById(R.id.chi_txt_titleToolbar_LastSeen);
-
-        titleLastSeen.setText("Last Seen at " + lastSeen);
-
-        appBarLayout = (AppBarLayout)
-
-                findViewById(R.id.chi_appbar);
+        appBarLayout = (AppBarLayout) findViewById(R.id.chi_appbar);
 
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener()
 
@@ -689,18 +676,8 @@ public class ActivityContactsProfile extends ActivityEnhanced {
             }
         });
 
-        screenWidth = (int) (
-
-                getResources()
-
-                        .
-
-                                getDisplayMetrics()
-
-                        .widthPixels / 1.7);
-        imgMenu = (MaterialDesignTextView)
-
-                findViewById(R.id.chi_img_menuPopup);
+        screenWidth = (int) (getResources().getDisplayMetrics().widthPixels / 1.7);
+        imgMenu = (MaterialDesignTextView) findViewById(R.id.chi_img_menuPopup);
 
         RippleView rippleMenu = (RippleView) findViewById(R.id.chi_ripple_menuPopup);
 
@@ -805,8 +782,22 @@ public class ActivityContactsProfile extends ActivityEnhanced {
         );
 
         realm.close();
-
+        getUserInfo(); // client should send request for get user info because need to update user online timing
+        setUserStatus(userStatus, lastSeen);
         getAvatarList();
+    }
+
+    private void setUserStatus(String userStatus, long time) {
+        Log.i("CCC", "setUserStatus 1 userStatus : " + userStatus);
+        if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
+            Log.i("CCC", "setUserStatus 2 ");
+            //TODO [Saeed Mozaffari] [2016-11-14 2:27 PM] - compute time from last seen
+
+        } else {
+            Log.i("CCC", "setUserStatus 3");
+            titleLastSeen.setText(userStatus);
+            txtLastSeen.setText(userStatus);
+        }
     }
 
     private void showPopupPhoneNumber(View v, String number) {
@@ -1263,7 +1254,7 @@ public class ActivityContactsProfile extends ActivityEnhanced {
 
             }
         };
-
+        Log.i("CCC", "RequestUserInfo 1");
         new RequestUserInfo().userInfo(userId);
     }
 
@@ -1357,6 +1348,20 @@ public class ActivityContactsProfile extends ActivityEnhanced {
                 }
             }
         });
+    }
+
+    @Override
+    public void onUserUpdateStatus(long userId, final long time, final String status) {
+        Log.i("CCC", "onUserUpdateStatus : " + userId);
+        Log.i("CCC", "onUserUpdateStatus this.userId : " + this.userId);
+        if (this.userId == userId) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    setUserStatus(status, time);
+                }
+            });
+        }
     }
 }
 

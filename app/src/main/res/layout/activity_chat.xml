@@ -111,7 +111,6 @@
                         android:layout_height="wrap_content"
                         android:gravity="top"
                         android:singleLine="true"
-                        android:text="New Text"
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/sp12" />
 

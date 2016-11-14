@@ -1,7 +1,10 @@
 package com.iGap.response;
 
+import android.util.Log;
+
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
+import com.iGap.proto.ProtoResponse;
 import com.iGap.proto.ProtoUserInfo;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmRegisteredInfo;
@@ -26,6 +29,7 @@ public class UserInfoResponse extends MessageHandler {
     public void handler() {
         super.handler();
         final ProtoUserInfo.UserInfoResponse.Builder builder = (ProtoUserInfo.UserInfoResponse.Builder) message;
+        final ProtoResponse.Response response = builder.getResponse();
 
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
@@ -48,9 +52,16 @@ public class UserInfoResponse extends MessageHandler {
                 realmRegisteredInfo.setInitials(builder.getUser().getInitials());
                 realmRegisteredInfo.setLastSeen(builder.getUser().getLastSeen());
                 realmRegisteredInfo.setPhoneNumber(Long.toString(builder.getUser().getPhone()));
-                realmRegisteredInfo.setStatus(builder.getUser().getStatus().toString());
+                realmRegisteredInfo.setStatus(realmRegisteredInfo.getStatsForUser(builder.getUser().getStatus().toString()));
                 realmRegisteredInfo.setUsername(builder.getUser().getUsername());
                 realmRegisteredInfo.setMutual(builder.getUser().getMutual());
+                realmRegisteredInfo.setCacheId(builder.getUser().getCacheId());
+
+                Log.i("CCC", "********************1111111");
+                if (G.onUserUpdateStatus != null) {
+                    G.onUserUpdateStatus.onUserUpdateStatus(builder.getUser().getId(), response.getTimestamp(), realmRegisteredInfo.getStatsForUser(builder.getUser().getStatus().toString()));
+                }
+                Log.i("CCC", "********************2222222");
             }
         });
         realm.close();
@@ -58,6 +69,7 @@ public class UserInfoResponse extends MessageHandler {
         if (G.onUserInfoResponse != null) {
             G.onUserInfoResponse.onUserInfo(builder.getUser(), identity);
         }
+
     }
 
     @Override

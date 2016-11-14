@@ -13,6 +13,7 @@ public class RealmContacts extends RealmObject {
     private String initials;
     private String color;
     private String status;
+    private String cacheId;
     private long last_seen;
     private int avatarCount;
     private RealmAvatar avatar;
@@ -95,6 +96,14 @@ public class RealmContacts extends RealmObject {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getCacheId() {
+        return cacheId;
+    }
+
+    public void setCacheId(String cacheId) {
+        this.cacheId = cacheId;
     }
 
     public int getAvatarCount() {

@@ -103,6 +103,7 @@ import com.iGap.interfaces.OnDeleteChatFinishActivity;
 import com.iGap.interfaces.OnFileDownloadResponse;
 import com.iGap.interfaces.OnFileUploadForActivities;
 import com.iGap.interfaces.OnSetAction;
+import com.iGap.interfaces.OnUpdateUserStatusInChangePage;
 import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.interfaces.OnUserUpdateStatus;
 import com.iGap.interfaces.OnVoiceRecord;
@@ -134,15 +135,12 @@ import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
-import com.iGap.proto.ProtoUserUpdateStatus;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmAvatarFields;
 import com.iGap.realm.RealmChannelRoom;
 import com.iGap.realm.RealmChatRoom;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmClientConditionFields;
-import com.iGap.realm.RealmContacts;
-import com.iGap.realm.RealmContactsFields;
 import com.iGap.realm.RealmDraftFile;
 import com.iGap.realm.RealmGroupRoom;
 import com.iGap.realm.RealmOfflineDelete;
@@ -167,6 +165,7 @@ import com.iGap.request.RequestChatEditMessage;
 import com.iGap.request.RequestChatUpdateDraft;
 import com.iGap.request.RequestClientGetRoomHistory;
 import com.iGap.request.RequestGroupUpdateDraft;
+import com.iGap.request.RequestUserInfo;
 import com.mikepenz.fastadapter.IItemAdapter;
 import com.nightonke.boommenu.BoomMenuButton;
 import com.nightonke.boommenu.Types.BoomType;
@@ -266,11 +265,11 @@ public class ActivityChat extends ActivityEnhanced
     private Button btnDownHash;
     private TextView txtHashCounter;
     private Button btnHashLayoutClose;
-    private SearhHash searhHash;
+    private SearchHash searchHash;
     private MessagesAdapter<AbstractMessage> mAdapter;
     private ProtoGlobal.Room.Type chatType;
-    private String lastSeen;
-    private long mRoomId;
+    private long lastSeen;
+    private static long mRoomId;
     private Button btnUp;
     private Button btnDown;
     private TextView txtChannelMute;
@@ -283,6 +282,8 @@ public class ActivityChat extends ActivityEnhanced
     //chat
     private long chatPeerId;
     private boolean isMuteNotification;
+    private String userStatus;
+
     //group
     private GroupChatRole groupRole;
     private String groupParticipantsCountLabel;
@@ -306,9 +307,6 @@ public class ActivityChat extends ActivityEnhanced
     private boolean hasDraft = false;
     private long replyToMessageId = 0;
     private long userId;
-
-    private long latestIdentity;//TODO [Saeed Mozaffari] [2016-11-10 1:03 PM] - Clear This code nabayad idenetity yeki beshe
-    private long latestIdentityFinal;
 
     @Override
     protected void onStart() {
@@ -514,7 +512,6 @@ public class ActivityChat extends ActivityEnhanced
                     chatType = CHAT;
                     RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
                     chatPeerId = realmChatRoom.getPeerId();
-                    RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, chatPeerId).findFirst();
 
                     RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
 
@@ -522,17 +519,13 @@ public class ActivityChat extends ActivityEnhanced
                         title = realmRegisteredInfo.getDisplayName();
                         initialize = realmRegisteredInfo.getInitials();
                         color = realmRegisteredInfo.getColor();
-                        lastSeen = Long.toString(realmRegisteredInfo.getLastSeen());
-                    } else if (realmContacts != null) {
-                        title = realmContacts.getDisplay_name();
-                        initialize = realmContacts.getInitials();
-                        color = realmContacts.getColor();
-                        lastSeen = Long.toString(realmContacts.getLast_seen());
+                        lastSeen = realmRegisteredInfo.getLastSeen();
+                        userStatus = realmRegisteredInfo.getStatus();
                     } else {
                         title = realmRoom.getTitle();
                         initialize = realmRoom.getInitials();
                         color = realmRoom.getColor();
-                        lastSeen = "last seen";
+                        userStatus = "Last Seen Recently";
                     }
                 } else if (realmRoom.getType() == RoomType.GROUP) {
                     chatType = GROUP;
@@ -554,7 +547,7 @@ public class ActivityChat extends ActivityEnhanced
                     title = realmRegisteredInfo.getDisplayName();
                     initialize = realmRegisteredInfo.getInitials();
                     color = realmRegisteredInfo.getColor();
-                    lastSeen = Long.toString(realmRegisteredInfo.getLastSeen());
+                    lastSeen = realmRegisteredInfo.getLastSeen();
                 }
             }
             realm.close();
@@ -579,8 +572,27 @@ public class ActivityChat extends ActivityEnhanced
         getChatHistory();
         getDraft();
         setAvatar();
-
+        getUserInfo();
+        updateStatus();
         setUpEmojiPopup();
+    }
+
+    private void updateStatus() {
+        G.onUpdateUserStatusInChangePage = new OnUpdateUserStatusInChangePage() {
+            @Override
+            public void updateStatus(String status) {
+                setUserStatus(status, 0);
+            }
+        };
+    }
+
+    private void getUserInfo() {
+        /*
+         * client should send request for get user info because need to update user online timing
+         */
+        if (chatType == CHAT) {
+            new RequestUserInfo().userInfo(chatPeerId);
+        }
     }
 
     private void clearHistoryFromContactsProfileInterface() {
@@ -1110,8 +1122,9 @@ public class ActivityChat extends ActivityEnhanced
 
         if (chatType == CHAT) {
 
-            if (lastSeen != null) {
-                txtLastSeen.setText(lastSeen);
+            if (lastSeen != 0) {
+                Log.i("CCC", "setUserStatus 1");
+                setUserStatus(userStatus, lastSeen);
             }
         } else if (chatType == GROUP) {
 
@@ -1609,7 +1622,7 @@ public class ActivityChat extends ActivityEnhanced
             public void onTextChanged(CharSequence text, int i, int i1, int i2) {
 
                 if (text.length() > 0) {
-                    HelperSetAction.setAction(mRoomId, ProtoGlobal.ClientAction.TYPING);
+                    HelperSetAction.setActionTyping(mRoomId);
                 }
 
                 // if in the seeting page send by enter is on message send by enter key
@@ -1659,6 +1672,16 @@ public class ActivityChat extends ActivityEnhanced
         });
     }
 
+    private void setUserStatus(String status, long time) {
+        Log.i("CCC", "setUserStatus status : " + status);
+        if (status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
+            Log.i("CCC", "setUserStatus 2 EXACTLY");
+            //TODO [Saeed Mozaffari] [2016-11-14 2:10 PM] - compute time from last seen
+        } else {
+            Log.i("CCC", "setUserStatus 3");
+            txtLastSeen.setText(status);
+        }
+    }
 
     private void initLayoutSearchNavigation() {
 
@@ -1774,8 +1797,8 @@ public class ActivityChat extends ActivityEnhanced
             @Override
             public void complete(boolean result, String text, String messageId) {
 
-                searhHash.setHashString(text);
-                searhHash.setPosition(messageId);
+                searchHash.setHashString(text);
+                searchHash.setPosition(messageId);
                 ll_navigateHash.setVisibility(View.VISIBLE);
                 viewAttachFile.setVisibility(View.GONE);
             }
@@ -1788,7 +1811,7 @@ public class ActivityChat extends ActivityEnhanced
         btnDownHash.setTypeface(G.flaticon);
         txtHashCounter = (TextView) findViewById(R.id.ac_txt_hash_counter);
 
-        searhHash = new SearhHash();
+        searchHash = new SearchHash();
 
         btnHashLayoutClose = (Button) findViewById(R.id.ac_btn_hash_close);
         btnHashLayoutClose.setOnClickListener(new View.OnClickListener() {
@@ -1798,8 +1821,8 @@ public class ActivityChat extends ActivityEnhanced
                 ll_navigateHash.setVisibility(View.GONE);
                 viewAttachFile.setVisibility(View.VISIBLE);
 
-                if (mAdapter.getItem(searhHash.curentSelectedPosition).mMessage.view != null) {
-                    ((FrameLayout) mAdapter.getItem(searhHash.curentSelectedPosition).mMessage.view).setForeground(null);
+                if (mAdapter.getItem(searchHash.curentSelectedPosition).mMessage.view != null) {
+                    ((FrameLayout) mAdapter.getItem(searchHash.curentSelectedPosition).mMessage.view).setForeground(null);
                 }
             }
         });
@@ -1808,14 +1831,14 @@ public class ActivityChat extends ActivityEnhanced
             @Override
             public void onClick(View view) {
 
-                searhHash.upHash();
+                searchHash.upHash();
             }
         });
 
         btnDownHash.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                searhHash.downHash();
+                searchHash.downHash();
             }
         });
     }
@@ -3392,6 +3415,9 @@ public class ActivityChat extends ActivityEnhanced
 
     @Override
     public void onFileUploaded(final FileUploadStructure uploadStructure, final String identity) {
+
+        HelperSetAction.sendCancel(uploadStructure.messageId);
+
         new ChatSendMessageUtil().newBuilder(chatType, uploadStructure.messageType, uploadStructure.roomId)
                 .attachment(uploadStructure.token)
                 .message(uploadStructure.text)
@@ -4027,16 +4053,12 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     @Override
-    public void onUserUpdateStatus(long userId, final ProtoUserUpdateStatus.UserUpdateStatus.Status status) {
-        Log.i("DDD", "chatPeerId : " + chatPeerId);
-        Log.i("DDD", "userId : " + userId);
-        Log.i("DDD", "chatType : " + chatType);
+    public void onUserUpdateStatus(long userId, final long time, final String status) {
         if (chatType == CHAT && chatPeerId == userId) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Log.i("DDD", "txtLastSeen.setText(status.toString())");
-                    txtLastSeen.setText(status.toString());
+                    setUserStatus(status, time);
                 }
             });
         }
@@ -4075,10 +4097,40 @@ public class ActivityChat extends ActivityEnhanced
             super.onPostExecute(result);
             MessagesAdapter.uploading.put(result.messageId, 0);
             G.uploaderUtil.startUploading(result, Long.toString(result.messageId));
+
+            HelperSetAction.setActionFiles(mRoomId, result.messageId, getAction(result.messageType));
         }
     }
 
-    private class SearhHash {
+    private static ProtoGlobal.ClientAction getAction(ProtoGlobal.RoomMessageType type) {
+
+        //TODO [Saeed Mozaffari] [2016-11-14 11:14 AM] - some actions need to detect
+
+        ProtoGlobal.ClientAction action = null;
+
+        if ((type == ProtoGlobal.RoomMessageType.IMAGE) || (type == ProtoGlobal.RoomMessageType.IMAGE_TEXT)) {
+            action = ProtoGlobal.ClientAction.SENDING_IMAGE;
+        } else if ((type == ProtoGlobal.RoomMessageType.VIDEO) || (type == ProtoGlobal.RoomMessageType.VIDEO_TEXT)) {
+            action = ProtoGlobal.ClientAction.SENDING_VIDEO;
+        } else if ((type == ProtoGlobal.RoomMessageType.AUDIO) || (type == ProtoGlobal.RoomMessageType.AUDIO_TEXT)) {
+            action = ProtoGlobal.ClientAction.SENDING_AUDIO;
+        } else if (type == ProtoGlobal.RoomMessageType.VOICE) {
+            action = ProtoGlobal.ClientAction.SENDING_VOICE;
+        } else if (type == ProtoGlobal.RoomMessageType.GIF) {
+            action = ProtoGlobal.ClientAction.SENDING_GIF;
+        } else if ((type == ProtoGlobal.RoomMessageType.FILE) || (type == ProtoGlobal.RoomMessageType.FILE_TEXT)) {
+            action = ProtoGlobal.ClientAction.SENDING_FILE;
+        } else if (type == ProtoGlobal.RoomMessageType.LOCATION) {
+            action = ProtoGlobal.ClientAction.SENDING_LOCATION;
+        } else if (type == ProtoGlobal.RoomMessageType.CONTACT) {
+            action = ProtoGlobal.ClientAction.CHOOSING_CONTACT;
+        }
+
+        return action;
+    }
+
+
+    private class SearchHash {
 
         public int curentSelectedPosition = 0;
         private String hashString = "";

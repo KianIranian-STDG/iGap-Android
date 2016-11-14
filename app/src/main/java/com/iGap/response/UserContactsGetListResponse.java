@@ -1,7 +1,6 @@
 package com.iGap.response;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.iGap.G;
 import com.iGap.helper.HelperPermision;
@@ -33,7 +32,7 @@ public class UserContactsGetListResponse extends MessageHandler {
 
     @Override
     public void handler() {
-        Log.i("OOO", "UserContactsGetListResponse : " + message);
+        super.handler();
         final ProtoUserContactsGetList.UserContactsGetListResponse.Builder builder =
                 (ProtoUserContactsGetList.UserContactsGetListResponse.Builder) message;
         Realm realm = Realm.getDefaultInstance();
@@ -43,14 +42,11 @@ public class UserContactsGetListResponse extends MessageHandler {
                 realm.delete(RealmContacts.class);
 
                 for (ProtoGlobal.RegisteredUser registerUser : builder.getRegisteredUserList()) {
-                    RealmRegisteredInfo realmRegisteredInfo =
-                            realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, registerUser.getId()).findFirst();
+                    RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, registerUser.getId()).findFirst();
                     if (realmRegisteredInfo == null) {
                         realmRegisteredInfo = realm.createObject(RealmRegisteredInfo.class);
-                        realmRegisteredInfo.setRegisteredUserInfo(registerUser, realmRegisteredInfo, realm);
-                    } else {
-                        realmRegisteredInfo.updateRegisteredUserInfo(registerUser, realmRegisteredInfo, realm);
                     }
+                    realmRegisteredInfo.fillRegisteredUserInfo(registerUser, realmRegisteredInfo);
 
                     RealmContacts listResponse = realm.createObject(RealmContacts.class);
                     listResponse.setId(registerUser.getId());
@@ -64,6 +60,7 @@ public class UserContactsGetListResponse extends MessageHandler {
                     listResponse.setStatus(registerUser.getStatus().toString());
                     listResponse.setLast_seen(registerUser.getLastSeen());
                     listResponse.setAvatarCount(registerUser.getAvatarCount());
+                    listResponse.setCacheId(registerUser.getCacheId());
 
                     listResponse.setAvatar(RealmAvatar.put(registerUser.getId(), registerUser.getAvatar()));
                 }

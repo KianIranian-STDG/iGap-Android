@@ -59,6 +59,7 @@ import com.iGap.interfaces.OnReceiveInfoLocation;
 import com.iGap.interfaces.OnReceivePageInfoTOS;
 import com.iGap.interfaces.OnSecuring;
 import com.iGap.interfaces.OnSetAction;
+import com.iGap.interfaces.OnUpdateUserStatusInChangePage;
 import com.iGap.interfaces.OnUserAvatarDelete;
 import com.iGap.interfaces.OnUserAvatarGetList;
 import com.iGap.interfaces.OnUserAvatarResponse;
@@ -255,6 +256,7 @@ public class G extends Application {
     public static OpenFragment onConverttoGroup;
     public static OnChatConvertToGroup onChatConvertToGroup;
     public static OnUserUpdateStatus onUserUpdateStatus;
+    public static OnUpdateUserStatusInChangePage onUpdateUserStatusInChangePage;
     public static OnSetAction onSetAction;
     public static File chatBackground;
     public static File IMAGE_NEW_GROUP;

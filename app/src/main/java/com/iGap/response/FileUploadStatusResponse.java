@@ -1,9 +1,7 @@
 package com.iGap.response;
 
-import android.util.Log;
-
 import com.iGap.G;
-import com.iGap.proto.ProtoError;
+import com.iGap.helper.HelperSetAction;
 import com.iGap.proto.ProtoFileUploadStatus;
 
 public class FileUploadStatusResponse extends MessageHandler {
@@ -22,25 +20,21 @@ public class FileUploadStatusResponse extends MessageHandler {
 
     @Override
     public void handler() {
-        ProtoFileUploadStatus.FileUploadStatusResponse.Builder builder =
-                (ProtoFileUploadStatus.FileUploadStatusResponse.Builder) message;
-        G.onFileUploadStatusResponse.onFileUploadStatus(builder.getStatus(), builder.getProgress(),
-                builder.getRecheckDelayMs(), this.identity, builder.getResponse());
+        super.handler();
+        ProtoFileUploadStatus.FileUploadStatusResponse.Builder builder = (ProtoFileUploadStatus.FileUploadStatusResponse.Builder) message;
+        G.onFileUploadStatusResponse.onFileUploadStatus(builder.getStatus(), builder.getProgress(), builder.getRecheckDelayMs(), this.identity, builder.getResponse());
     }
 
     @Override
     public void timeOut() {
-        Log.i("SOC", "FileUploadStatusResponse timeout");
+        HelperSetAction.sendCancel(Long.parseLong(this.identity));
+        super.timeOut();
     }
 
     @Override
     public void error() {
-        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
-        int majorCode = errorResponse.getMajorCode();
-        int minorCode = errorResponse.getMinorCode();
-
-        Log.i("SOC", "FileUploadStatusResponse response.majorCode() : " + majorCode);
-        Log.i("SOC", "FileUploadStatusResponse response.minorCode() : " + minorCode);
+        HelperSetAction.sendCancel(Long.parseLong(this.identity));
+        super.error();
     }
 }
 
