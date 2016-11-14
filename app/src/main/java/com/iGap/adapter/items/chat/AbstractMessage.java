@@ -372,7 +372,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                     messageClickListener.onOpenClick(progress, mMessage, holder.getAdapterPosition());
                                 }
                             } else {
-                                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_cancel);
+                                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_gray_cancel);
                                 // create new download attachment once with attachment token
                                 if (mMessage.downloadAttachment == null) {
                                     mMessage.downloadAttachment = new StructDownloadAttachment(mMessage.attachment.token);
@@ -502,7 +502,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (mMessage.sendType == MyType.SendType.send) {
             // update progress when user trying to upload or download
             if (MessagesAdapter.uploading.containsKey(Long.parseLong(mMessage.messageID))) {
-                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_cancel);
+                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_gray_cancel);
                 holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
                 ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withProgress(MessagesAdapter.uploading.get(Long.parseLong(mMessage.messageID)));
                 if (MessagesAdapter.uploading.get(Long.parseLong(mMessage.messageID)) == 100) {
@@ -519,7 +519,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     private void checkForDownloading(VH holder) {
         if (mMessage.downloadAttachment != null) {
             if (MessagesAdapter.downloading.containsKey(mMessage.attachment.token)) {
-                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_cancel);
+                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_gray_cancel);
                 holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
                 ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withProgress(MessagesAdapter.downloading.get(mMessage.attachment.token));
 

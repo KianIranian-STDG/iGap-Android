@@ -43,6 +43,6 @@
         android:layout_height="@dimen/dp32"
         android:layout_alignParentRight="true"
         android:contentDescription="@null"
-        android:src="@drawable/ic_cancel"/>
+        android:src="@drawable/ic_gray_cancel"/>
 
 </RelativeLayout>

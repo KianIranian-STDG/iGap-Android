@@ -170,7 +170,7 @@ public class ImageMessageItem extends AbstractItem<ImageMessageItem, ImageMessag
             holder.progress.withOnMessageProgress(new OnMessageProgressClick() {
                 @Override
                 public void onMessageProgressClick(MessageProgress progress) {
-                    holder.progress.withDrawable(R.drawable.ic_cancel);
+                    holder.progress.withDrawable(R.drawable.ic_gray_cancel);
                     holder.progress.withIndeterminate(true);
 
                     // make sure to not request multiple times by checking last offset with the new one
@@ -190,7 +190,7 @@ public class ImageMessageItem extends AbstractItem<ImageMessageItem, ImageMessag
         } else {
             if (AvatarsAdapter.hasFileRequested(message.getAttachment().getToken())) {
                 holder.progress.setVisibility(View.VISIBLE);
-                holder.progress.withDrawable(R.drawable.ic_cancel);
+                holder.progress.withDrawable(R.drawable.ic_gray_cancel);
                 holder.progress.withProgress(
                         AvatarsAdapter.requestsProgress.get(message.getAttachment().getToken()));
             } else {

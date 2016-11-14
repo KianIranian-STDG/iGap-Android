@@ -183,8 +183,8 @@ public final class AppUtils {
         String output = Double.toString(d);
 
         if (output.contains(".")) {
-            String[] split = output.split(".");
-            if (split.length > 1 && split[1].length() > 2) {
+            String[] split = output.split("\\.");
+            if (split[1].length() > 2) {
                 output = split[0] + "." + split[1].charAt(0) + split[1].charAt(1);
             }
         }
