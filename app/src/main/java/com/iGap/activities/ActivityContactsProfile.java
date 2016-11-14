@@ -216,6 +216,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         imgUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                FragmentShowAvatars.appBarLayout = fab;
                 getSupportFragmentManager().beginTransaction().replace(R.id.chi_layoutParent, FragmentShowAvatars.newInstance(userId)).commit();
             }
         });

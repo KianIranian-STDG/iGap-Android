@@ -68,8 +68,6 @@ import com.iGap.proto.ProtoGroupGetMemberList;
 import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmAvatarFields;
-import com.iGap.realm.RealmContacts;
-import com.iGap.realm.RealmContactsFields;
 import com.iGap.realm.RealmGroupRoom;
 import com.iGap.realm.RealmMember;
 import com.iGap.realm.RealmMemberFields;
@@ -774,17 +772,27 @@ public class ActivityGroupProfile extends ActivityEnhanced
             String role = member.getRole();
             long id = member.getPeerId();
 
-            RealmContacts rc = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, id).findFirst();
             RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, id).findFirst();
 
-            if (rc != null) {
-                StructContactInfo s = new StructContactInfo(rc.getId(), rc.getDisplay_name(), rc.getStatus(), false, false, rc.getPhone() + "");
+            if (realmRegisteredInfo != null) {
+                StructContactInfo s = new StructContactInfo(realmRegisteredInfo.getId(), realmRegisteredInfo.getDisplayName(), realmRegisteredInfo.getStatus(), false, false, realmRegisteredInfo.getPhoneNumber() + "");
                 s.role = role;
                 s.avatar = realmRegisteredInfo.getLastAvatar();
                 s.initials = realmRegisteredInfo.getInitials();
                 s.color = realmRegisteredInfo.getColor();
-                contacts.add(s);
+
+                Log.e("ddd", s.role + "");
+                if (s.role.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString())) {
+                    contacts.add(0, s);
+
+                } else {
+                    contacts.add(s);
+                }
+
+
             }
+
+
         }
 
         realm.close();
