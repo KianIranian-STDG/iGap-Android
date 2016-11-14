@@ -170,7 +170,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
         roomId = extras.getLong("RoomId");
 
         Realm realm = Realm.getDefaultInstance();
-
+        Log.i("PPP", "********** roomId : " + roomId);
         //group info
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();

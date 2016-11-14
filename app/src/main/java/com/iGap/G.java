@@ -18,7 +18,6 @@ import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
@@ -310,13 +309,7 @@ public class G extends Application {
         G.onUserContactGetList = new OnUserContactGetList() {
             @Override
             public void onContactGetList() {
-                Log.i("WWW", "onContactGetList");
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(G.context, "Get Contact List!", Toast.LENGTH_SHORT).show();
-                    }
-                });
+
             }
         };
 
@@ -618,8 +611,6 @@ public class G extends Application {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        Log.i("FFF", "Login");
-                        Toast.makeText(G.context, "User Login!", Toast.LENGTH_SHORT).show();
                         new RequestClientCondition().clientCondition();
                         getUserInfo();
                         importContact();
@@ -638,9 +629,7 @@ public class G extends Application {
             @Override
             public void run() {
                 if (G.isSecure) {
-                    Log.i("FFF", "Login 1");
                     Realm realm = Realm.getDefaultInstance();
-                    Log.i("FFF", "Login 2");
                     RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
                     Log.i("FFF", "Login 3 userInfo : " + userInfo);
                     if (!G.userLogin && userInfo != null && userInfo.getUserRegistrationState()) {

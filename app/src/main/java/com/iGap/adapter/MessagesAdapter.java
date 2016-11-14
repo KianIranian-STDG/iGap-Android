@@ -28,8 +28,6 @@ import java.util.List;
 
 import io.realm.Realm;
 
-import static com.iGap.R.id.fileName;
-
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/6/2016.
  */
@@ -151,7 +149,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
             RealmAttachment attachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, token).findFirst();
             if (attachment != null) {
                 ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
-                String identity = attachment.getToken() + '*' + selector.toString() + '*' + attachment.getSize() + '*' + fileName + '*' + offset;
+                String identity = attachment.getToken() + '*' + selector.toString() + '*' + attachment.getSize() + '*' + attachment.getToken() + "_" + attachment.getName() + '*' + offset;
                 new RequestFileDownload().download(token, offset, (int) attachment.getSize(), selector, identity);
             }
 

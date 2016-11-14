@@ -440,4 +440,29 @@
     <string name="gif_message">gif Message</string>
     <string name="location_message">Location Message</string>
 
+    <string name="video_message">video Message</string>
+    <string name="file_message">file Message</string>
+    <string name="audio_message">Audio Message</string>
+    <string name="image_message">image Message</string>
+    <string name="contact_message">contact Message</string>
+    <string name="gif_message">gif Message</string>
+    <string name="location_message">Location Message</string>
+
+
+    <string name="typing">typing</string>
+    <string name="sending_image">sending image</string>
+    <string name="capturing_image">capturing_image</string>
+    <string name="sending_video">sending video</string>
+    <string name="capturing_video">capturing video</string>
+    <string name="sending_audio">sending audio</string>
+    <string name="recording_voice">recording voice</string>
+    <string name="sending_voice">sending voice</string>
+    <string name="sending_document">sending document</string>
+    <string name="sending_gif">sending gif</string>
+    <string name="sending_file">sending file</string>
+    <string name="sending_location">sending location</string>
+    <string name="choosing_contact">choosing_contact</string>
+    <string name="painting">painting</string>
+
+
 </resources>

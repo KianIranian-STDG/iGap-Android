@@ -1,5 +1,6 @@
 package com.iGap.realm;
 
+import com.iGap.module.SUID;
 import com.iGap.module.StringListParcelConverter;
 import com.iGap.proto.ProtoGlobal;
 
@@ -28,7 +29,7 @@ public class RealmRoomMessageContact extends RealmObject {
     public static RealmRoomMessageContact build(final ProtoGlobal.RoomMessageContact input) {
         Realm realm = Realm.getDefaultInstance();
         RealmRoomMessageContact messageContact = realm.createObject(RealmRoomMessageContact.class);
-        messageContact.setId(System.nanoTime());
+        messageContact.setId(SUID.id().get());
         for (String phone : input.getPhoneList()) {
             messageContact.addPhone(phone);
         }

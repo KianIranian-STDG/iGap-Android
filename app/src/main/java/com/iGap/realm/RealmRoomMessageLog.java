@@ -1,5 +1,6 @@
 package com.iGap.realm;
 
+import com.iGap.module.SUID;
 import com.iGap.proto.ProtoGlobal;
 
 import org.parceler.Parcel;
@@ -20,7 +21,7 @@ public class RealmRoomMessageLog extends RealmObject {
     public static RealmRoomMessageLog build(final ProtoGlobal.RoomMessageLog input) {
         Realm realm = Realm.getDefaultInstance();
         RealmRoomMessageLog messageLocation = realm.createObject(RealmRoomMessageLog.class);
-        messageLocation.setId(System.nanoTime());
+        messageLocation.setId(SUID.id().get());
         messageLocation.setType(input.getType());
         realm.close();
 

@@ -23,20 +23,20 @@ public class ChatSetActionResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoChatSetAction.ChatSetActionResponse.Builder builder = (ProtoChatSetAction.ChatSetActionResponse.Builder) message;
-        Log.i("TTT", "message : " + message);
-        Log.i("TTT", "builder.getUserId() : " + builder.getUserId());
+        Log.i("YYY", "message : " + message);
+        Log.i("YYY", "builder.getUserId() : " + builder.getUserId());
         G.onSetAction.onSetAction(builder.getRoomId(), builder.getUserId(), builder.getAction());
     }
 
     @Override
     public void timeOut() {
-        Log.i("TTT", "timeOut : " + message);
+        Log.i("YYY", "timeOut : " + message);
         super.timeOut();
     }
 
     @Override
     public void error() {
-        Log.i("TTT", "error : " + message);
+        Log.i("YYY", "error : " + message);
         super.error();
     }
 }

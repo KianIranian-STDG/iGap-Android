@@ -789,15 +789,18 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
     }
 
     private void setUserStatus(String userStatus, long time) {
+        this.userStatus = userStatus;
         Log.i("CCC", "setUserStatus 1 userStatus : " + userStatus);
-        if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-            Log.i("CCC", "setUserStatus 2 ");
-            //TODO [Saeed Mozaffari] [2016-11-14 2:27 PM] - compute time from last seen
+        if (userStatus != null) {
+            if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
+                Log.i("CCC", "setUserStatus 2 ");
+                //TODO [Saeed Mozaffari] [2016-11-14 2:27 PM] - compute time from last seen
 
-        } else {
-            Log.i("CCC", "setUserStatus 3");
-            titleLastSeen.setText(userStatus);
-            txtLastSeen.setText(userStatus);
+            } else {
+                Log.i("CCC", "setUserStatus 3");
+                titleLastSeen.setText(userStatus);
+                txtLastSeen.setText(userStatus);
+            }
         }
     }
 

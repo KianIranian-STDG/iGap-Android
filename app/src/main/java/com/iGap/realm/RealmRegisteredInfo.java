@@ -1,5 +1,7 @@
 package com.iGap.realm;
 
+import android.util.Log;
+
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.proto.ProtoGlobal;
@@ -158,7 +160,8 @@ public class RealmRegisteredInfo extends RealmObject {
 
     public String getStatsForUser(String status) {
 
-        String userStatus = "";
+        String userStatus = "Online";
+        Log.i("CCCV", "status : " + status);
         if (status.equals(ProtoUserUpdateStatus.UserUpdateStatus.Status.OFFLINE.toString())) {
             userStatus = G.context.getResources().getString(R.string.last_seen_recently);
         } else if (status.equals(ProtoGlobal.RegisteredUser.Status.LONG_TIME_AGO.toString())) {

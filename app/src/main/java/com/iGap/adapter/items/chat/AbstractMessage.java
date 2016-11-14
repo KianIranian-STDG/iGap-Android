@@ -33,7 +33,6 @@ import com.iGap.request.RequestUserInfo;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -433,12 +432,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     @CallSuper
     public void onRequestDownloadFile(long offset, int progress) {
         String fileName = mMessage.attachment.token + "_" + mMessage.attachment.name;
-        if (mMessage.attachment.isThumbnailExistsOnLocal()) {
-            File file = new File(mMessage.attachment.getLocalThumbnailPath());
-            if (file.exists()) {
-                file.delete();
-            }
-        }
         if (progress == 100) {
             mMessage.attachment.setLocalFilePath(Long.parseLong(mMessage.messageID), AndroidUtils.suitableAppFilePath(mMessage.messageType) + "/" + fileName);
 

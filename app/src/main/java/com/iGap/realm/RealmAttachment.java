@@ -3,6 +3,7 @@ package com.iGap.realm;
 import android.support.annotation.Nullable;
 
 import com.iGap.G;
+import com.iGap.module.SUID;
 import com.iGap.proto.ProtoGlobal;
 
 import org.parceler.Parcel;
@@ -12,8 +13,6 @@ import java.io.File;
 import io.realm.Realm;
 import io.realm.RealmAttachmentRealmProxy;
 import io.realm.RealmObject;
-import io.realm.RealmResults;
-import io.realm.Sort;
 import io.realm.annotations.PrimaryKey;
 
 /**
@@ -40,19 +39,6 @@ public class RealmAttachment extends RealmObject {
     @Nullable
     private String localFilePath;
 
-    private static long getCorrectId(Realm realm) {
-
-        RealmResults results = realm.where(RealmThumbnail.class).findAllSorted("id", Sort.DESCENDING);
-
-        long id = 1;
-        if (results.size() > 0) {
-            id = realm.where(RealmThumbnail.class).findAllSorted("id", Sort.DESCENDING).first().getId();
-            id++;
-        }
-
-        return id;
-    }
-
     public static RealmAttachment build(ProtoGlobal.File file) {
         Realm realm = Realm.getDefaultInstance();
 
@@ -67,9 +53,9 @@ public class RealmAttachment extends RealmObject {
             realmAttachment.setDuration(file.getDuration());
             realmAttachment.setHeight(file.getHeight());
 
-            long largeId = getCorrectId(realm);
+            long largeId = SUID.id().get();
             RealmThumbnail.create(largeId, id, file.getLargeThumbnail());
-            long smallId = getCorrectId(realm);
+            long smallId = SUID.id().get();
             RealmThumbnail.create(smallId, id, file.getSmallThumbnail());
 
             RealmThumbnail largeThumbnail = realm.where(RealmThumbnail.class).equalTo("id", largeId).findFirst();

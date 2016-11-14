@@ -25,17 +25,13 @@ public class FileDownloadResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        Log.i("BBB", "setAvatar  FileDownloadResponse message : " + message);
-        ProtoFileDownload.FileDownloadResponse.Builder builder =
-                (ProtoFileDownload.FileDownloadResponse.Builder) message;
+        ProtoFileDownload.FileDownloadResponse.Builder builder = (ProtoFileDownload.FileDownloadResponse.Builder) message;
         String[] identityParams = identity.split("\\*");
         String token = identityParams[0];
         ProtoFileDownload.FileDownload.Selector selector =
                 ProtoFileDownload.FileDownload.Selector.valueOf(identityParams[1]);
         long fileSize = Long.parseLong(identityParams[2]);
         String filePath = G.DIR_TEMP + "/" + identityParams[3];
-        Log.i("GGG", "identityParams[3] : " + identityParams[3]);
-        Log.i("GGG", "G.DIR_TEMP : " + G.DIR_TEMP);
         int previousOffset = Integer.parseInt(identityParams[4]);
         boolean avatarRequested = false;
         long userId = -1;

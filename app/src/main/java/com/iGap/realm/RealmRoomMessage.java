@@ -235,10 +235,10 @@ public class RealmRoomMessage extends RealmObject {
                     this.attachment.setToken(attachment.getToken());
                     this.attachment.setWidth(attachment.getWidth());
 
-                    long smallMessageThumbnail = System.nanoTime();
+                    long smallMessageThumbnail = SUID.id().get();
                     RealmThumbnail.create(smallMessageThumbnail, messageId, attachment.getSmallThumbnail());
 
-                    long largeMessageThumbnail = System.nanoTime();
+                    long largeMessageThumbnail = SUID.id().get();
                     RealmThumbnail.create(largeMessageThumbnail, messageId, attachment.getSmallThumbnail());
 
                     this.attachment.setSmallThumbnail(realm.where(RealmThumbnail.class).equalTo("id", smallMessageThumbnail).findFirst());
