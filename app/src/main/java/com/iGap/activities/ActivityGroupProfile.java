@@ -676,8 +676,6 @@ public class ActivityGroupProfile extends ActivityEnhanced
             public boolean onLongClick(View v, IAdapter adapter, IItem item, int position) {
                 ContactItemGroupProfile contactItemGroupProfile = (ContactItemGroupProfile) item;
 
-                ContactItemGroupProfile contactItemGroupProfile = (ContactItemGroupProfile) item;
-
                 if (role == GroupChatRole.OWNER) {
 
                     if (contactItemGroupProfile.mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
