@@ -13,7 +13,8 @@
         android:layout_marginRight="@dimen/dp4"
         android:text="Forwarded from"
         android:textColor="@color/newBlack"
-        android:textSize="@dimen/sp14"/>
+        android:textSize="@dimen/sp12"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/cslr_txt_forward_from"
@@ -21,5 +22,6 @@
         android:layout_height="wrap_content"
         android:text="SAMPLE TEXT"
         android:textColor="@color/newBlack"
-        android:textSize="@dimen/sp14"/>
+        android:textSize="@dimen/sp12"
+        android:textStyle="bold"/>
 </LinearLayout>

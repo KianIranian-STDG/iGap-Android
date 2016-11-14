@@ -101,8 +101,12 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
             }
         });
 
-        G.onClientGetRoomHistoryResponse.onGetRoomHistory(Long.parseLong(identity), builder.getMessageList());
-
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                G.onClientGetRoomHistoryResponse.onGetRoomHistory(Long.parseLong(identity), builder.getMessageList());
+            }
+        }, 300);
 
         realm.close();
     }

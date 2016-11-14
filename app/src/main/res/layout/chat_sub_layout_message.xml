@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/chatSubLayoutMessage"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/dp4"
-    android:maxWidth="@dimen/dp300"
-    android:textDirection="firstStrong">
+             xmlns:tools="http://schemas.android.com/tools"
+             android:id="@+id/chatSubLayoutMessage"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_marginBottom="@dimen/dp4"
+             android:maxWidth="@dimen/dp300"
+             android:textDirection="firstStrong">
 
     <LinearLayout
         android:id="@+id/mainContainer"
@@ -21,7 +21,7 @@
             android:layout_width="@dimen/dp52"
             android:layout_height="@dimen/dp52"
             android:layout_marginRight="@dimen/dp8"
-            android:src="@mipmap/b" />
+            android:src="@mipmap/b"/>
 
         <LinearLayout
             android:id="@+id/contentContainer"
@@ -29,22 +29,27 @@
             android:layout_height="wrap_content"
             android:background="@drawable/rectangle_round_white"
             android:orientation="vertical"
-            android:padding="@dimen/messageContainerPadding">
+            android:paddingBottom="4.5dp"
+            android:paddingLeft="@dimen/messageContainerPadding"
+            android:paddingRight="@dimen/messageContainerPadding"
+            android:paddingTop="@dimen/messageContainerPadding"
+            >
 
             <include
                 android:id="@+id/replayLayout"
-                layout="@layout/chat_sub_layout_replay" />
+                layout="@layout/chat_sub_layout_replay"/>
 
             <include
                 android:id="@+id/cslr_ll_forward"
-                layout="@layout/chat_sub_layout_forward" />
+                layout="@layout/chat_sub_layout_forward"/>
 
             <io.github.meness.emoji.EmojiTextView
                 android:id="@+id/messageText"
                 style="@style/ChatMessages.EmojiTextView"
+                android:lineSpacingExtra="14dp"
                 android:text="SAMPLE TEXT"/>
 
-            <include layout="@layout/chat_sub_layout_messages_time" />
+            <include layout="@layout/chat_sub_layout_messages_time"/>
         </LinearLayout>
     </LinearLayout>
 </FrameLayout>

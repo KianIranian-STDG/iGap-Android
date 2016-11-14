@@ -3282,7 +3282,10 @@ public class ActivityChat extends ActivityEnhanced
 
                     List<RealmRoomMessage> realmRoomMessages = new ArrayList<>();
                     for (ProtoGlobal.RoomMessage roomMessage : messages) {
-                        realmRoomMessages.add(realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst());
+                        RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
+                        if (message != null) {
+                            realmRoomMessages.add(message);
+                        }
                     }
 
                     Collections.sort(realmRoomMessages, SortMessages.ASC);

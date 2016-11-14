@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/chatSubLayoutAudio"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/dp4"
-    android:maxWidth="@dimen/dp300">
+             xmlns:tools="http://schemas.android.com/tools"
+             android:id="@+id/chatSubLayoutAudio"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_marginBottom="@dimen/dp4"
+             android:maxWidth="@dimen/dp300">
 
     <LinearLayout
         android:id="@+id/mainContainer"
@@ -20,7 +20,7 @@
             android:layout_width="@dimen/dp52"
             android:layout_height="@dimen/dp52"
             android:layout_marginRight="@dimen/dp8"
-            android:src="@mipmap/b" />
+            android:src="@mipmap/b"/>
 
         <LinearLayout
             android:id="@+id/contentContainer"
@@ -28,15 +28,18 @@
             android:layout_height="wrap_content"
             android:background="@drawable/rectangle_round_white"
             android:orientation="vertical"
-            android:padding="@dimen/messageContainerPadding">
+            android:paddingBottom="4.5dp"
+            android:paddingLeft="@dimen/messageContainerPadding"
+            android:paddingRight="@dimen/messageContainerPadding"
+            android:paddingTop="@dimen/messageContainerPadding">
 
             <include
                 android:id="@+id/replayLayout"
-                layout="@layout/chat_sub_layout_replay" />
+                layout="@layout/chat_sub_layout_replay"/>
 
             <include
                 android:id="@+id/cslr_ll_forward"
-                layout="@layout/chat_sub_layout_forward" />
+                layout="@layout/chat_sub_layout_forward"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -53,31 +56,19 @@
                         android:id="@+id/thumbnail"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/gray_bg_rounded_corner" />
+                        android:background="@drawable/gray_bg_rounded_corner"/>
 
                     <include
                         android:id="@+id/progress"
                         layout="@layout/msg_progress_item"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
-                        android:layout_gravity="center" />
-
-                    <TextView
-                        android:id="@+id/fileSize"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom|center_horizontal"
-                        android:layout_marginBottom="2dp"
-                        android:singleLine="true"
-                        android:text="3.2 mb"
-                        android:textAllCaps="true"
-                        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
-                        android:textColor="@color/white" />
+                        android:layout_gravity="center"/>
                 </FrameLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/dp8"
                     android:orientation="vertical">
 
@@ -90,25 +81,27 @@
                             android:id="@+id/fileName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:singleLine="true"
+                            android:maxLines="1"
                             android:text="file_name.ext"
                             android:textAllCaps="true"
                             android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
-                            android:textColor="@android:color/black"
-                            android:textStyle="bold" />
+                            android:textColor="@android:color/white"
+                            android:textSize="@dimen/sp14"
+                            android:textStyle="bold"/>
 
                         <TextView
                             android:id="@+id/songArtist"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:singleLine="true"
+                            android:maxLines="1"
                             android:text="Artist"
                             android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
-                            android:textColor="@color/gray" />
+                            android:textColor="@color/gray"/>
 
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:visibility="gone"
                             android:layout_gravity="right"
                             android:orientation="horizontal">
 
@@ -118,14 +111,14 @@
                                 android:layout_height="wrap_content"
                                 android:text="2:33"
                                 android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
-                                android:textSize="@dimen/sp12" />
+                                android:textSize="@dimen/sp12"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="2dp"
                                 android:layout_marginRight="2dp"
-                                android:text="/" />
+                                android:text="/"/>
 
                             <TextView
                                 android:id="@+id/duration"
@@ -134,7 +127,7 @@
                                 android:text="5:21"
                                 android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
                                 android:textColor="@android:color/black"
-                                android:textSize="@dimen/sp12" />
+                                android:textSize="@dimen/sp12"/>
                         </LinearLayout>
 
                         <SeekBar
@@ -142,7 +135,7 @@
                             android:layout_height="wrap_content"
                             android:max="100"
                             android:progress="0"
-                            android:visibility="gone" />
+                            android:visibility="gone"/>
 
                         <MediaController
                             android:id="@+id/mediaController"
@@ -151,6 +144,17 @@
 
                         </MediaController>
                     </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/fileSize"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="bottom"
+                        android:maxLines="1"
+                        android:text="3.2 mb"
+                        android:textAllCaps="true"
+                        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
+                        android:textColor="@color/white"/>
 
                 </LinearLayout>
 
@@ -161,9 +165,9 @@
                 style="@style/ChatMessages.EmojiTextView"
                 android:layout_marginTop="@dimen/dp20"
                 android:text="SAMPLE TEXT"
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/black"/>
 
-            <include layout="@layout/chat_sub_layout_messages_time" />
+            <include layout="@layout/chat_sub_layout_messages_time"/>
         </LinearLayout>
     </LinearLayout>
 </FrameLayout>

@@ -6,7 +6,7 @@
 
     <dimen name="chatMessageImageCorner">@dimen/dp4</dimen>
 
-    <dimen name="messageContainerPadding">@dimen/dp6</dimen>
+    <dimen name="messageContainerPadding">9dp</dimen>
 
     <dimen name="design_fab_size_mini">44dp</dimen>
     <dimen name="design_fab_size_normal">62dp</dimen>

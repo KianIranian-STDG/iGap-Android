@@ -37,7 +37,13 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
 
         holder.name.setText(mMessage.userInfo.displayName);
         holder.number.setText(mMessage.userInfo.phone);
-        holder.username.setText("@" + mMessage.userInfo.username);
+
+        if (mMessage.userInfo.username != null && !mMessage.userInfo.username.isEmpty()) {
+            holder.username.setVisibility(View.VISIBLE);
+            holder.username.setText("@" + mMessage.userInfo.username);
+        } else {
+            holder.username.setVisibility(View.GONE);
+        }
     }
 
     @Override

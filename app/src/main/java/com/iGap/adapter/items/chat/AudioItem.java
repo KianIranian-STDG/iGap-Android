@@ -60,7 +60,11 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         holder.fileSize.setText(
                 AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true));
         holder.fileName.setText(mMessage.attachment.name);
-        holder.songArtist.setText(mMessage.songArtist);
+        if (mMessage.songArtist != null && !mMessage.songArtist.isEmpty()) {
+            holder.songArtist.setText(mMessage.songArtist);
+        } else {
+            holder.songArtist.setText(holder.itemView.getResources().getString(R.string.unknown_artist));
+        }
         holder.elapsedTime.setText("0");
         holder.duration.setText(AppUtils.humanReadableDuration(mMessage.attachment.duration));
         setTextIfNeeded(holder.messageText);
