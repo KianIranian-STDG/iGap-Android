@@ -45,14 +45,21 @@ public class FileDownloadResponse extends MessageHandler {
             userId = Long.parseLong(identityParams[6]);
             roomType = RoomType.GROUP;
         }
-        int nextOffset = previousOffset + builder.getBytes().size();
-        int progress = nextOffset * 100 / (int) fileSize;
+        long nextOffset = previousOffset + builder.getBytes().size();
+        long progress = (nextOffset * 100) / fileSize;
+
+        Log.i("Injaro", "INJARO> filesize: " + fileSize);
+        Log.i("Injaro", "INJARO> Progress: " + progress);
+        Log.i("Injaro", "INJARO> builder.getBytes().size(): " + builder.getBytes().size());
+        Log.i("Injaro", "INJARO> Previous offset: " + previousOffset);
+        Log.i("Injaro", "INJARO> Next offset: " + nextOffset);
+
         AndroidUtils.writeBytesToFile(filePath, builder.getBytes().toByteArray());
         if (!avatarRequested) {
-            G.onFileDownloadResponse.onFileDownload(token, nextOffset, selector, progress);
+            G.onFileDownloadResponse.onFileDownload(token, nextOffset, selector, (int) progress);
         } else {
             Log.i("NNN", "setAvatar onFileDownloadResponse");
-            G.onFileDownloadResponse.onAvatarDownload(token, nextOffset, selector, progress, userId,
+            G.onFileDownloadResponse.onAvatarDownload(token, nextOffset, selector, (int) progress, userId,
                     roomType);
         }
     }

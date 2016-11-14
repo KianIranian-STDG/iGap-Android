@@ -3046,7 +3046,7 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     @Override
-    public void onFileDownload(final String token, final int offset, final ProtoFileDownload.FileDownload.Selector selector, final int progress) {
+    public void onFileDownload(final String token, final long offset, final ProtoFileDownload.FileDownload.Selector selector, final int progress) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -3062,7 +3062,7 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     @Override
-    public void onAvatarDownload(final String token, final int offset, final ProtoFileDownload.FileDownload.Selector selector, final int progress, final long userId, final RoomType roomType) {
+    public void onAvatarDownload(final String token, final long offset, final ProtoFileDownload.FileDownload.Selector selector, final int progress, final long userId, final RoomType roomType) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {

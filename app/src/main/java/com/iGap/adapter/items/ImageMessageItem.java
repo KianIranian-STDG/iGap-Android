@@ -55,7 +55,7 @@ public class ImageMessageItem extends AbstractItem<ImageMessageItem, ImageMessag
     private void requestForAvatarFile(String token) {
         if (!AvatarsAdapter.hasFileRequested(token)) {
             AvatarsAdapter.requestsProgress.put(token, 0);
-            AvatarsAdapter.requestsOffset.put(token, 0);
+            AvatarsAdapter.requestsOffset.put(token, 0L);
 
             onRequestDownloadAvatar(0, 0);
         }
@@ -108,7 +108,7 @@ public class ImageMessageItem extends AbstractItem<ImageMessageItem, ImageMessag
     }
 
     @Override
-    public void onRequestDownloadAvatar(int offset, int progress) {
+    public void onRequestDownloadAvatar(long offset, int progress) {
         ProtoFileDownload.FileDownload.Selector selector =
                 ProtoFileDownload.FileDownload.Selector.FILE;
         final String fileName =

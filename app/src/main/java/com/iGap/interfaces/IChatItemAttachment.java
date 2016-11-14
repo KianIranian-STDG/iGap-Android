@@ -10,7 +10,7 @@ import com.iGap.module.enums.LocalFileType;
 public interface IChatItemAttachment<VH extends RecyclerView.ViewHolder> {
     void onLoadFromLocal(VH holder, String localPath, LocalFileType fileType);
 
-    void onRequestDownloadFile(int offset, int progress);
+    void onRequestDownloadFile(long offset, int progress);
 
     void onRequestDownloadThumbnail(String token, boolean done);
 }

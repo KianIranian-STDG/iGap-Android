@@ -96,7 +96,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     }
 
     @Override
-    public void onRequestDownloadAvatar(int offset, int progress) {
+    public void onRequestDownloadAvatar(long offset, int progress) {
         ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL;
         String fileName = mMessage.downloadAttachment.token + "_" + mMessage.senderAvatar.name;
         if (progress == 100) {
@@ -372,7 +372,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                     messageClickListener.onOpenClick(progress, mMessage, holder.getAdapterPosition());
                                 }
                             } else {
-                                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_gray_cancel);
+                                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_cancel);
                                 // create new download attachment once with attachment token
                                 if (mMessage.downloadAttachment == null) {
                                     mMessage.downloadAttachment = new StructDownloadAttachment(mMessage.attachment.token);
@@ -431,7 +431,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     @Override
     @CallSuper
-    public void onRequestDownloadFile(int offset, int progress) {
+    public void onRequestDownloadFile(long offset, int progress) {
         String fileName = mMessage.attachment.token + "_" + mMessage.attachment.name;
         if (mMessage.attachment.isThumbnailExistsOnLocal()) {
             File file = new File(mMessage.attachment.getLocalThumbnailPath());
@@ -450,10 +450,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
             return; // necessary
         }
-        ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
-        String identity = mMessage.attachment.token + '*' + selector.toString() + '*' + mMessage.attachment.size + '*' + fileName + '*' + mMessage.downloadAttachment.offset;
 
-        new RequestFileDownload().download(mMessage.downloadAttachment.token, offset, (int) mMessage.attachment.size, selector, identity);
+        if (!MessagesAdapter.hasDownloadRequested(mMessage.attachment.token)) {
+            MessagesAdapter.requestDownload(mMessage.attachment.token, progress, offset);
+        }
     }
 
     @Override
@@ -502,7 +502,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (mMessage.sendType == MyType.SendType.send) {
             // update progress when user trying to upload or download
             if (MessagesAdapter.uploading.containsKey(Long.parseLong(mMessage.messageID))) {
-                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_gray_cancel);
+                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_cancel);
                 holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
                 ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withProgress(MessagesAdapter.uploading.get(Long.parseLong(mMessage.messageID)));
                 if (MessagesAdapter.uploading.get(Long.parseLong(mMessage.messageID)) == 100) {
@@ -519,7 +519,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     private void checkForDownloading(VH holder) {
         if (mMessage.downloadAttachment != null) {
             if (MessagesAdapter.downloading.containsKey(mMessage.attachment.token)) {
-                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_gray_cancel);
+                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_cancel);
                 holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
                 ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withProgress(MessagesAdapter.downloading.get(mMessage.attachment.token));
 

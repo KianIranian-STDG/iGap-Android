@@ -12,7 +12,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class ImageMessagesAdapter<Item extends ImageMessageItem> extends FastItemAdapter<Item> {
     public static ArrayMap<String, Integer> requestsProgress = new ArrayMap<>();
-    public static ArrayMap<String, Integer> requestsOffset = new ArrayMap<>();
+    public static ArrayMap<String, Long> requestsOffset = new ArrayMap<>();
     public static CopyOnWriteArrayList<String> thumbnailRequests = new CopyOnWriteArrayList<>();
 
     public ImageMessagesAdapter() {
@@ -39,7 +39,7 @@ public class ImageMessagesAdapter<Item extends ImageMessageItem> extends FastIte
         return thumbnailRequests.contains(token);
     }
 
-    public void downloadingAvatarFile(String token, int progress, int offset) {
+    public void downloadingAvatarFile(String token, int progress, long offset) {
         for (Item item : getAdapterItems()) {
             if (item.message.getAttachment().getToken().equalsIgnoreCase(token)) {
                 int pos = getAdapterItems().indexOf(item);

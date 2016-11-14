@@ -12,7 +12,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class AvatarsAdapter<Item extends AvatarItem> extends FastItemAdapter<Item> {
     public static ArrayMap<String, Integer> requestsProgress = new ArrayMap<>();
-    public static ArrayMap<String, Integer> requestsOffset = new ArrayMap<>();
+    public static ArrayMap<String, Long> requestsOffset = new ArrayMap<>();
     public static CopyOnWriteArrayList<String> thumbnailRequests = new CopyOnWriteArrayList<>();
 
     public AvatarsAdapter() {
@@ -39,7 +39,7 @@ public class AvatarsAdapter<Item extends AvatarItem> extends FastItemAdapter<Ite
         return thumbnailRequests.contains(token);
     }
 
-    public void downloadingAvatarFile(String token, int progress, int offset) {
+    public void downloadingAvatarFile(String token, int progress, long offset) {
         for (Item item : getAdapterItems()) {
             if (item.avatar.getToken().equalsIgnoreCase(token)) {
                 int pos = getAdapterItems().indexOf(item);

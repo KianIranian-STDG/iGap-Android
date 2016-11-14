@@ -263,7 +263,7 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
     }
 
     @Override
-    public void onFileDownload(final String token, final int offset,
+    public void onFileDownload(final String token, final long offset,
                                final ProtoFileDownload.FileDownload.Selector selector, final int progress) {
         getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -280,7 +280,7 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
     }
 
     @Override
-    public void onAvatarDownload(String token, int offset,
+    public void onAvatarDownload(String token, long offset,
                                  ProtoFileDownload.FileDownload.Selector selector, int progress, long userId,
                                  RoomType roomType) {
         // empty

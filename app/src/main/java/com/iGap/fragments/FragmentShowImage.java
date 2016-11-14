@@ -248,7 +248,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
     }
 
     @Override
-    public void onFileDownload(final String token, final int offset,
+    public void onFileDownload(final String token, final long offset,
                                final ProtoFileDownload.FileDownload.Selector selector, final int progress) {
         // if thumbnail
         if (selector != ProtoFileDownload.FileDownload.Selector.FILE) {
@@ -265,7 +265,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
     }
 
     @Override
-    public void onAvatarDownload(String token, int offset,
+    public void onAvatarDownload(String token, long offset,
                                  ProtoFileDownload.FileDownload.Selector selector, int progress, long userId,
                                  RoomType roomType) {
         // empty
@@ -447,7 +447,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
 
     private class AdapterViewPager extends PagerAdapter {
 
-        public void updateDownloadFields(String token, int progress, int offset) {
+        public void updateDownloadFields(String token, int progress, long offset) {
             for (StructMessageInfo item : list) {
                 if (item.downloadAttachment != null
                         && item.downloadAttachment.token.equalsIgnoreCase(token)) {

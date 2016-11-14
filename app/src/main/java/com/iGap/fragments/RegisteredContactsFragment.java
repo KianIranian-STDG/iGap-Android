@@ -451,13 +451,13 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
     }
 
     @Override
-    public void onFileDownload(String token, int offset,
+    public void onFileDownload(String token, long offset,
                                ProtoFileDownload.FileDownload.Selector selector, int progress) {
         // empty
     }
 
     @Override
-    public void onAvatarDownload(String token, int offset,
+    public void onAvatarDownload(String token, long offset,
                                  final ProtoFileDownload.FileDownload.Selector selector, int progress, final long userId,
                                  RoomType roomType) {
         G.currentActivity.runOnUiThread(new Runnable() {

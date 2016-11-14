@@ -133,7 +133,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
     }
 
     @Override
-    public void onRequestDownloadAvatar(int offset, int progress) {
+    public void onRequestDownloadAvatar(long offset, int progress) {
 
     }
 

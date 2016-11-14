@@ -10,8 +10,8 @@ import org.parceler.ParcelConstructor;
 public class StructDownloadAttachment {
     public String token;
     public int progress;
-    public int offset;
-    public int lastOffset = -1;
+    public long offset;
+    public long lastOffset = -1;
     public boolean thumbnailRequested;
 
     @ParcelConstructor

@@ -13,14 +13,22 @@ import com.iGap.interfaces.OnChatMessageRemove;
 import com.iGap.interfaces.OnChatMessageSelectionChanged;
 import com.iGap.module.StructMessageAttachment;
 import com.iGap.module.StructMessageInfo;
+import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.realm.RealmAttachment;
+import com.iGap.realm.RealmAttachmentFields;
 import com.iGap.realm.RealmRegisteredInfo;
+import com.iGap.request.RequestFileDownload;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.adapters.FastItemAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.Realm;
+
+import static com.iGap.R.id.fileName;
 
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/6/2016.
@@ -95,7 +103,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         return failedMessages;
     }
 
-    public void downloadingAvatar(long peerId, int progress, int offset, StructMessageAttachment avatar) {
+    public void downloadingAvatar(long peerId, int progress, long offset, StructMessageAttachment avatar) {
         for (Item item : getAdapterItems()) {
             if (item.mMessage.downloadAttachment != null && Long.parseLong(item.mMessage.senderID) == peerId) {
                 int pos = getAdapterItems().indexOf(item);
@@ -108,19 +116,57 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         }
     }
 
-    public void updateDownloadFields(String token, int progress, int offset) {
+    /**
+     * update progress while file uploading
+     * NOTE: it needs rewriting, because currently updates whole item view not just the progress
+     * (almost)
+     */
+    public void updateProgress(long messageId, int progress) {
+        if (!uploading.containsKey(messageId)) {
+            uploading.put(messageId, progress);
+        } else {
+            int pos2 = uploading.indexOfKey(messageId);
+            uploading.setValueAt(pos2, progress);
+        }
+
+        Item item = getItemByFileIdentity(messageId);
+        if (item != null && uploading.get(messageId) < progress) {
+            int pos = getAdapterItems().indexOf(item);
+            item.mMessage.uploadProgress = progress;
+
+            set(pos, item);
+        }
+    }
+
+    public static void requestDownload(String token, int progress, long offset) {
+        if (!downloading.containsKey(token)) {
+            downloading.put(token, progress);
+        } else {
+            int pos2 = downloading.indexOfKey(token);
+            downloading.setValueAt(pos2, progress);
+        }
+
+        if (progress != 100) {
+            Realm realm = Realm.getDefaultInstance();
+            RealmAttachment attachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, token).findFirst();
+            if (attachment != null) {
+                ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
+                String identity = attachment.getToken() + '*' + selector.toString() + '*' + attachment.getSize() + '*' + fileName + '*' + offset;
+                new RequestFileDownload().download(token, offset, (int) attachment.getSize(), selector, identity);
+            }
+
+            realm.close();
+        }
+    }
+
+    public void updateDownloadFields(String token, int progress, long offset) {
+        requestDownload(token, progress, offset);
+
         for (Item item : getAdapterItems()) {
             if (item.mMessage.downloadAttachment != null && item.mMessage.downloadAttachment.token.equalsIgnoreCase(token)) {
                 int pos = getAdapterItems().indexOf(item);
                 item.mMessage.downloadAttachment.offset = offset;
                 item.mMessage.downloadAttachment.progress = progress;
-
-                if (!downloading.containsKey(token)) {
-                    downloading.put(token, progress);
-                } else {
-                    int pos2 = downloading.indexOfKey(token);
-                    downloading.setValueAt(pos2, progress);
-                }
 
                 item.onRequestDownloadFile(offset, progress);
 
@@ -167,28 +213,6 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
                 set(pos, messageInfo);
                 break;
             }
-        }
-    }
-
-    /**
-     * update progress while file uploading
-     * NOTE: it needs rewriting, because currently updates whole item view not just the progress
-     * (almost)
-     */
-    public void updateProgress(long messageId, int progress) {
-        Item item = getItemByFileIdentity(messageId);
-        if (item != null && uploading.get(messageId) < progress) {
-            int pos = getAdapterItems().indexOf(item);
-            item.mMessage.uploadProgress = progress;
-
-            if (!uploading.containsKey(messageId)) {
-                uploading.put(messageId, progress);
-            } else {
-                int pos2 = uploading.indexOfKey(messageId);
-                uploading.setValueAt(pos2, progress);
-            }
-
-            set(pos, item);
         }
     }
 
