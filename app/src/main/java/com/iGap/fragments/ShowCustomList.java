@@ -47,6 +47,7 @@ public class ShowCustomList extends Fragment {
     private String textString = "";
     private int sizeTextEdittext = 0;
     private boolean dialogShowing = false;
+    private long lastId = 0;
     private int count = 0;
 
     public static ShowCustomList newInstance(List<StructContactInfo> list,
@@ -75,6 +76,9 @@ public class ShowCustomList extends Fragment {
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             dialogShowing = bundle.getBoolean("DIALOG_SHOWING");
+            if (bundle.getLong("COUNT_MESSAGE") != 0) {
+                lastId = bundle.getLong("COUNT_MESSAGE");
+            }
         }
 
         txtStatus = (TextView) view.findViewById(R.id.fcg_txt_status);
@@ -216,36 +220,70 @@ public class ShowCustomList extends Fragment {
     }
 
     private void showDialog() {
-        MaterialDialog dialog =
-                new MaterialDialog.Builder(getActivity()).title(R.string.show_message_count)
-                        .positiveText(getString(R.string.ok))
-                        .alwaysCallInputCallback()
-                        .widgetColor(getResources().getColor(R.color.toolbar_background))
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog,
-                                                @NonNull DialogAction which) {
+
+        new MaterialDialog.Builder(getActivity())
+                .title(R.string.show_message_count)
+                .items(R.array.numberCountGroup)
+                .itemsCallback(new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+
+                        switch (which) {
+                            case 0:
+                                count = 0;
                                 if (onSelectedList != null) {
                                     onSelectedList.getSelectedList(true, "", count, getSelectedList());
                                 }
                                 getActivity().getSupportFragmentManager().popBackStack();
-                            }
-                        })
-                        .negativeText(getString(R.string.cancel))
-                        .inputType(InputType.TYPE_CLASS_PHONE)
-                        .input(getString(R.string.count_of_show_message), "50",
-                                new MaterialDialog.InputCallback() {
-                                    @Override
-                                    public void onInput(MaterialDialog dialog, CharSequence input) {
-                                        if (input.toString() != null && !input.toString().isEmpty()) {
-                                            count = Integer.parseInt(input.toString());
-                                        } else {
-                                            count = 0;
-                                        }
-                                    }
-                                })
-                        .build();
-        dialog.show();
+                                break;
+                            case 1:
+                                count = (int) lastId;
+                                if (onSelectedList != null) {
+                                    onSelectedList.getSelectedList(true, "", count, getSelectedList());
+                                }
+                                getActivity().getSupportFragmentManager().popBackStack();
+                                break;
+                            case 2:
+                                count = 50;
+                                if (onSelectedList != null) {
+                                    onSelectedList.getSelectedList(true, "", count, getSelectedList());
+                                }
+                                getActivity().getSupportFragmentManager().popBackStack();
+                                break;
+                            case 3:
+                                dialog.dismiss();
+                                new MaterialDialog.Builder(getActivity()).title(R.string.customs)
+                                        .positiveText(getString(R.string.B_ok))
+                                        .alwaysCallInputCallback()
+                                        .widgetColor(getResources().getColor(R.color.toolbar_background))
+                                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                            @Override
+                                            public void onClick(@NonNull MaterialDialog dialog,
+                                                                @NonNull DialogAction which) {
+                                                if (onSelectedList != null) {
+                                                    onSelectedList.getSelectedList(true, "", count, getSelectedList());
+                                                }
+                                                getActivity().getSupportFragmentManager().popBackStack();
+                                            }
+                                        })
+                                        .inputType(InputType.TYPE_CLASS_PHONE)
+                                        .input(getString(R.string.count_of_show_message), "50",
+                                                new MaterialDialog.InputCallback() {
+                                                    @Override
+                                                    public void onInput(MaterialDialog dialog, CharSequence input) {
+                                                        if (input.toString() != null && !input.toString().isEmpty()) {
+                                                            count = Integer.parseInt(input.toString());
+                                                        } else {
+                                                            count = 0;
+                                                        }
+                                                    }
+                                                })
+                                        .show();
+                                break;
+                        }
+                    }
+                })
+                .show();
     }
 
     private void refreshView() {

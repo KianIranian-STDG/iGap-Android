@@ -2,8 +2,10 @@ package com.iGap.fragments;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
@@ -68,6 +70,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
     private AdapterViewPager mAdapter;
 
     private long peerId = 0;
+    private String pathImage;
 
     public static View appBarLayout;
 
@@ -398,7 +401,8 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
     public void popUpMenuShowImage() {
 
         MaterialDialog dialog =
-                new MaterialDialog.Builder(getActivity()).items(R.array.pop_up_menu_show_image)
+                new MaterialDialog.Builder(getActivity())
+                        .items(R.array.pop_up_menu_show_image)
                         .contentColor(Color.BLACK)
                         .itemsCallback(new MaterialDialog.ListCallback() {
                             @Override
@@ -409,7 +413,24 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
                                     showAllMedia();
                                 } else if (which == 1) {
                                     saveToGalary();
+
                                 } else if (which == 2) {
+
+                                    Intent intent = new Intent(Intent.ACTION_SEND);
+                                    intent.putExtra(Intent.EXTRA_TEXT, "Hey view/download this image");
+                                    Uri screenshotUri = Uri.parse(pathImage);
+
+                                    intent.putExtra(Intent.EXTRA_STREAM, screenshotUri);
+                                    intent.setType("image/*");
+                                    startActivity(Intent.createChooser(intent, "Share image via..."));
+
+//                                    Intent share = new Intent(Intent.ACTION_SEND);
+//                                    share.setType("image/jpg");
+//                                    share.putExtra(Intent.EXTRA_STREAM, Uri.parse(pathImage));
+//                                    startActivity(Intent.createChooser(share, "Share Image"));
+
+
+                                } else if (which == 3) {
 
                                     int pageIndex = mAdapter.removeView(viewPager, getCurrentPage());
                                     if (list.size() == 0) {
@@ -519,9 +540,9 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
             }
         }
 
-        private void onLoadFromLocal(final ImageView imageView, String localPath,
-                                     LocalFileType fileType) {
+        private void onLoadFromLocal(final ImageView imageView, String localPath, LocalFileType fileType) {
             Log.i("VVV", "localPath : " + localPath);
+            pathImage = localPath;
             ImageLoader.getInstance()
                     .displayImage(AndroidUtils.suitablePath(localPath), imageView,
                             new ImageLoadingListener() {
@@ -585,8 +606,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
                 // if file already exists, simply show the local one
                 if (media.attachment.isFileExistsOnLocal()) {
                     // load file from local
-                    onLoadFromLocal(touchImageView, media.attachment.getLocalFilePath(),
-                            LocalFileType.FILE);
+                    onLoadFromLocal(touchImageView, media.attachment.getLocalFilePath(), LocalFileType.FILE);
                 } else {
                     // file doesn't exist on local, I check for a thumbnail
                     // if thumbnail exists, I load it into the view

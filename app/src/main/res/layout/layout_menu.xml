@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layoutDirection="ltr"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layoutDirection="ltr"
+              android:orientation="vertical"
+              android:background="@color/white">
 
     <ScrollView
         android:id="@+id/scrollView"
@@ -18,12 +19,13 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:background="@color/white">
 
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
-                    android:layout_marginRight="@dimen/dp8"
+                    android:layout_marginRight="@dimen/dp16"
                     android:adjustViewBounds="true"
                     android:scaleType="centerCrop"
                     android:src="@mipmap/back_phone" />
@@ -79,6 +81,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="left"
+                android:background="@color/white"
                 android:orientation="vertical"
                 android:paddingLeft="@dimen/dp8">
 

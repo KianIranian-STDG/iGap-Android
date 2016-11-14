@@ -24,6 +24,7 @@
     <string name="ok">OK</string>
     <string name="if_you_are_away_for">if you\'re away for</string>
     <string name="B_ok">OK</string>
+    <string name="B_edit">Edit</string>
     <string name="set">Set</string>
     <string name="am_camera">Camera</string>
     <string name="am_music">Music</string>
@@ -231,8 +232,8 @@
     <string name="edit_item_dialog">Edit</string>
     <string name="Search">Search</string>
     <string name="Delete_and_leave_Group">Delete and Leave Group</string>
-    <string name="New_Chanel">New Chanel</string>
-    <string name="Channel_name">New Chanel</string>
+    <string name="New_Chanel">New Channel</string>
+    <string name="Channel_name">New Channel</string>
     <string name="New_Group">New Group</string>
     <string name="month_1">1 Month</string>
     <string name="month_3">3 Month</string>
@@ -269,7 +270,7 @@
     <string name="exception">"Exception: "</string>
     <string name="please_enter_phone_number">Please Enter PhoneNumber</string>
     <string name="please_enter_firstname_or_lastname">Please Enter FirstName or LastName</string>
-    <string name="new_chanel">New Chanel</string>
+    <string name="new_chanel">New Channel</string>
     <string name="can_not_save_picture_pleas_try_again">Can\'t save picture,pleas try again.</string>
     <string name="chats">Chats</string>
     <string name="contacts">Contacts</string>
@@ -328,6 +329,10 @@
     <string name="iGap_FAQ">iGap FAQ</string>
     <string name="New_Chat">New Chat</string>
     <string name="Documents">Documents</string>
+    <string name="from_beginning">From Beginning</string>
+    <string name="from_Now">From Now</string>
+    <string name="last_50_Messages">Last 50 Messages</string>
+    <string name="customs">Customs</string>
 
     <string name="desc">Description</string>
 

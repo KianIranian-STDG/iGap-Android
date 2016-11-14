@@ -67,8 +67,9 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"/>
-        </RelativeLayout>
 
+
+        </RelativeLayout>
 
     </LinearLayout>
 
@@ -134,6 +135,11 @@
 
         </com.iGap.module.MyAppBarLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#34a49f"
+            android:layout_alignTop="@+id/menu_layout_addContact"/>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
@@ -142,6 +148,7 @@
 
 
     </android.support.design.widget.CoordinatorLayout>
+
 
     <ProgressBar
         android:id="@+id/prgWaiting_addContact"

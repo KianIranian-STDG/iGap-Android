@@ -59,6 +59,11 @@
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#34a49f"
+        android:layout_below="@+id/nclf_backgroundToolbar"/>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

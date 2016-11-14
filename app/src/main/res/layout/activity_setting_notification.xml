@@ -58,6 +58,10 @@
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#34a49f"/>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">

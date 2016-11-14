@@ -189,12 +189,10 @@
                     android:textSize="@dimen/sp18" />
             </com.iGap.libs.rippleeffect.RippleView>
         </LinearLayout>
-
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/gray"/>
-
+            android:background="#34a49f"/>
     </LinearLayout>
 
 

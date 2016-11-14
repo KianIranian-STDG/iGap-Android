@@ -96,6 +96,11 @@
             </RelativeLayout>
         </android.support.v7.widget.Toolbar>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#34a49f"/>
+
         <ImageView
             android:id="@+id/pu_img_imageBefore"
             android:layout_width="match_parent"

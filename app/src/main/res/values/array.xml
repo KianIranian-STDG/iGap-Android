@@ -179,6 +179,7 @@
     <string-array name="pop_up_menu_show_image">
         <item>@string/show_all_media</item>
         <item>@string/save_to_gallery</item>
+        <item>@string/share_item_dialog</item>
         <item>@string/delete_from_gallery</item>
     </string-array>
 
@@ -194,5 +195,18 @@
         <item>@string/Female</item>
     </string-array>
 
+    <string-array name="delete_account">
+        <item>@string/personality</item>
+        <item>@string/personality2</item>
+        <item>@string/personality3</item>
+        <item>@string/personality4</item>
+    </string-array>
+
+    <string-array name="numberCountGroup">
+        <item>@string/from_beginning</item>
+        <item>@string/from_Now</item>
+        <item>@string/last_50_Messages</item>
+        <item>@string/customs</item>
+    </string-array>
 
 </resources>

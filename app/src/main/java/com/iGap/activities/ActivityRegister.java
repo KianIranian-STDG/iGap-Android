@@ -445,8 +445,8 @@ public class ActivityRegister extends ActivityEnhanced {
 
                     MaterialDialog dialog = new MaterialDialog.Builder(ActivityRegister.this)
                             .customView(R.layout.rg_mdialog_text, true)
-                            .positiveText("OK")
-                            .negativeText("EDIT")
+                            .positiveText(getResources().getString(R.string.B_ok))
+                            .negativeText(getResources().getString(R.string.B_edit))
                             .onPositive(new MaterialDialog.SingleButtonCallback() {
                                 @Override
                                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {

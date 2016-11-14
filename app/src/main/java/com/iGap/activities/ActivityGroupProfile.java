@@ -149,6 +149,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
     private String initials;
     private String color;
     private GroupChatRole role;
+    private long noLastMessage;
     private String participantsCountLabel;
     private RealmList<RealmMember> members;
     public static OnMenuClick onMenuClick;
@@ -179,6 +180,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
         initials = realmRoom.getInitials();
         color = realmRoom.getColor();
         role = realmGroupRoom.getRole();
+        noLastMessage = realmRoom.getLastMessageId();
 
         participantsCountLabel = realmGroupRoom.getParticipantsCountLabel();
         members = realmGroupRoom.getMembers();
@@ -673,32 +675,33 @@ public class ActivityGroupProfile extends ActivityEnhanced
             @Override
             public boolean onLongClick(View v, IAdapter adapter, IItem item, int position) {
 
+                ContactItemGroupProfile contactItemGroupProfile = (ContactItemGroupProfile) item;
+
                 if (role == GroupChatRole.OWNER) {
 
-                    if (contacts.get(position).role.equals(
-                            ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-                        kickMember(contacts.get(position).peerId);
+                    if (contactItemGroupProfile.mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+                        kickMember(contactItemGroupProfile.mContact.peerId);
                     } else if (contacts.get(position).role.equals(
                             ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
-                        kickAdmin(contacts.get(position).peerId);
-                    } else if (contacts.get(position).role.equals(
+                        kickAdmin(contactItemGroupProfile.mContact.peerId);
+                    } else if (contactItemGroupProfile.mContact.role.equals(
                             ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
-                        kickModerator(contacts.get(position).peerId);
+                        kickModerator(contactItemGroupProfile.mContact.peerId);
                     }
                 } else if (role == GroupChatRole.ADMIN) {
 
-                    if (contacts.get(position).role.equals(
+                    if (contactItemGroupProfile.mContact.role.equals(
                             ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-                        kickMember(contacts.get(position).peerId);
-                    } else if (contacts.get(position).role.equals(
+                        kickMember(contactItemGroupProfile.mContact.peerId);
+                    } else if (contactItemGroupProfile.mContact.role.equals(
                             ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
                         kickModerator(contacts.get(position).peerId);
                     }
                 } else if (role == GroupChatRole.MODERATOR) {
 
-                    if (contacts.get(position).role.equals(
+                    if (contactItemGroupProfile.mContact.role.equals(
                             ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-                        kickMember(contacts.get(position).peerId);
+                        kickMember(contactItemGroupProfile.mContact.peerId);
                     }
                 }
 
@@ -1120,6 +1123,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
 
         Bundle bundle = new Bundle();
         bundle.putBoolean("DIALOG_SHOWING", true);
+        bundle.putLong("COUNT_MESSAGE", noLastMessage);
         fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
@@ -1538,8 +1542,10 @@ public class ActivityGroupProfile extends ActivityEnhanced
 
     private void ChangeGroupName() {
 
+
         MaterialDialog dialog =
-                new MaterialDialog.Builder(ActivityGroupProfile.this).title(R.string.group_name)
+                new MaterialDialog.Builder(ActivityGroupProfile.this)
+                        .title(R.string.group_name)
                         .positiveText(R.string.save)
                         .alwaysCallInputCallback()
                         .widgetColor(getResources().getColor(R.color.toolbar_background))

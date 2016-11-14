@@ -684,7 +684,7 @@ public class ActivityChat extends ActivityEnhanced
                         public void run() {
                             final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_209_1), Snackbar.LENGTH_LONG);
 
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();
@@ -699,7 +699,7 @@ public class ActivityChat extends ActivityEnhanced
                         public void run() {
                             final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_209_2), Snackbar.LENGTH_LONG);
 
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();
@@ -714,7 +714,7 @@ public class ActivityChat extends ActivityEnhanced
                         public void run() {
                             final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_209_3), Snackbar.LENGTH_LONG);
 
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();
@@ -729,7 +729,7 @@ public class ActivityChat extends ActivityEnhanced
                         public void run() {
                             final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_210), Snackbar.LENGTH_LONG);
 
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();
@@ -744,7 +744,7 @@ public class ActivityChat extends ActivityEnhanced
                         public void run() {
                             final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_211), Snackbar.LENGTH_LONG);
 
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();
@@ -797,7 +797,7 @@ public class ActivityChat extends ActivityEnhanced
                         public void run() {
                             final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_212_1), Snackbar.LENGTH_LONG);
 
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();
@@ -812,7 +812,7 @@ public class ActivityChat extends ActivityEnhanced
                         public void run() {
                             final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_212_1), Snackbar.LENGTH_LONG);
 
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();
@@ -827,7 +827,7 @@ public class ActivityChat extends ActivityEnhanced
                         public void run() {
                             final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_213), Snackbar.LENGTH_LONG);
 
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();
@@ -842,7 +842,7 @@ public class ActivityChat extends ActivityEnhanced
                         public void run() {
                             final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_214), Snackbar.LENGTH_LONG);
 
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();
@@ -1179,7 +1179,7 @@ public class ActivityChat extends ActivityEnhanced
                 text2.setPadding(dim20, 0, dim12, dim20);
                 text3.setPadding(dim20, 0, dim12, dim20);
                 text4.setPadding(dim20, 0, dim12, dim20);
-                text4.setPadding(dim20, 0, dim12, (dim16));
+                text5.setPadding(dim20, 0, dim12, (dim16));
 
                 layoutDialog.addView(text1, params);
                 layoutDialog.addView(text2, params);
@@ -3089,7 +3089,7 @@ public class ActivityChat extends ActivityEnhanced
                 public void run() {
                     final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_713_1), Snackbar.LENGTH_LONG);
 
-                    snack.setAction("CANCEL", new View.OnClickListener() {
+                    snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             snack.dismiss();
@@ -3104,7 +3104,7 @@ public class ActivityChat extends ActivityEnhanced
                 public void run() {
                     final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_713_2), Snackbar.LENGTH_LONG);
 
-                    snack.setAction("CANCEL", new View.OnClickListener() {
+                    snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             snack.dismiss();
@@ -3119,7 +3119,7 @@ public class ActivityChat extends ActivityEnhanced
                 public void run() {
                     final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_713_3), Snackbar.LENGTH_LONG);
 
-                    snack.setAction("CANCEL", new View.OnClickListener() {
+                    snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             snack.dismiss();
@@ -3134,7 +3134,7 @@ public class ActivityChat extends ActivityEnhanced
                 public void run() {
                     final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_713_4), Snackbar.LENGTH_LONG);
 
-                    snack.setAction("CANCEL", new View.OnClickListener() {
+                    snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             snack.dismiss();
@@ -3149,7 +3149,7 @@ public class ActivityChat extends ActivityEnhanced
                 public void run() {
                     final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_713_5), Snackbar.LENGTH_LONG);
 
-                    snack.setAction("CANCEL", new View.OnClickListener() {
+                    snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             snack.dismiss();
@@ -3164,7 +3164,7 @@ public class ActivityChat extends ActivityEnhanced
                 public void run() {
                     final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_714), Snackbar.LENGTH_LONG);
 
-                    snack.setAction("CANCEL", new View.OnClickListener() {
+                    snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             snack.dismiss();
@@ -3179,7 +3179,7 @@ public class ActivityChat extends ActivityEnhanced
                 public void run() {
                     final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_715), Snackbar.LENGTH_LONG);
 
-                    snack.setAction("CANCEL", new View.OnClickListener() {
+                    snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             snack.dismiss();
@@ -3333,7 +3333,7 @@ public class ActivityChat extends ActivityEnhanced
                 public void run() {
                     final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_615_1), Snackbar.LENGTH_LONG);
 
-                    snack.setAction("CANCEL", new View.OnClickListener() {
+                    snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             snack.dismiss();
@@ -3348,7 +3348,7 @@ public class ActivityChat extends ActivityEnhanced
                 public void run() {
                     final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_615_2), Snackbar.LENGTH_LONG);
 
-                    snack.setAction("CANCEL", new View.OnClickListener() {
+                    snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             snack.dismiss();
@@ -3363,7 +3363,7 @@ public class ActivityChat extends ActivityEnhanced
                 public void run() {
                     final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_616), Snackbar.LENGTH_LONG);
 
-                    snack.setAction("CANCEL", new View.OnClickListener() {
+                    snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             snack.dismiss();
@@ -3378,13 +3378,13 @@ public class ActivityChat extends ActivityEnhanced
                 public void run() {
                     final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_617), Snackbar.LENGTH_LONG);
 
-                    snack.setAction("CANCEL", new View.OnClickListener() {
+                    snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             snack.dismiss();
                         }
                     });
-                    snack.show();
+//                    snack.show();
                 }
             });
         }
@@ -3519,7 +3519,7 @@ public class ActivityChat extends ActivityEnhanced
                         public void run() {
                             final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_218), Snackbar.LENGTH_LONG);
 
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();
@@ -3533,7 +3533,7 @@ public class ActivityChat extends ActivityEnhanced
                         public void run() {
                             final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_219), Snackbar.LENGTH_LONG);
 
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();
@@ -3547,7 +3547,7 @@ public class ActivityChat extends ActivityEnhanced
                         public void run() {
                             final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_220), Snackbar.LENGTH_LONG);
 
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();

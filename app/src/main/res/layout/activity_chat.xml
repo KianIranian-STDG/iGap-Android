@@ -317,12 +317,13 @@
 
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#34a49f" />
+
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#34a49f"/>
         <LinearLayout
             android:id="@+id/ac_ll_search_message"
             android:layout_width="match_parent"

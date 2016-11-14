@@ -122,8 +122,14 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp4"
         android:layout_below="@+id/stfaq_toolbar"
-
         android:background="@color/toolbar_background" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#34a49f"
+        android:layout_alignTop="@+id/stfaq_webView"
+        />
 
     <WebView
         android:id="@+id/stfaq_webView"
