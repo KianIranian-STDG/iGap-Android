@@ -2,6 +2,7 @@ package com.iGap.realm;
 
 import android.text.format.DateUtils;
 
+import com.iGap.module.SUID;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 
@@ -214,10 +215,10 @@ public class RealmRoomMessage extends RealmObject {
                 realmAttachment.setToken(attachment.getToken());
                 realmAttachment.setWidth(attachment.getWidth());
 
-                long smallMessageThumbnail = System.nanoTime();
+                long smallMessageThumbnail = SUID.id().get();
                 RealmThumbnail.create(smallMessageThumbnail, messageId, attachment.getSmallThumbnail());
 
-                long largeMessageThumbnail = System.nanoTime();
+                long largeMessageThumbnail = SUID.id().get();
                 RealmThumbnail.create(largeMessageThumbnail, messageId, attachment.getSmallThumbnail());
 
                 realmAttachment.setSmallThumbnail(realm.where(RealmThumbnail.class).equalTo("id", smallMessageThumbnail).findFirst());

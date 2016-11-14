@@ -6,9 +6,7 @@ import org.parceler.Parcel;
 
 import io.realm.Realm;
 import io.realm.RealmObject;
-import io.realm.RealmResults;
 import io.realm.RealmThumbnailRealmProxy;
-import io.realm.Sort;
 import io.realm.annotations.PrimaryKey;
 
 /**
@@ -26,18 +24,6 @@ public class RealmThumbnail extends RealmObject {
     private int height;
     private String cacheId;
 
-    private static long getCorrectId(Realm realm) {
-        RealmResults results = realm.where(RealmThumbnail.class).findAllSorted("id", Sort.DESCENDING);
-
-        long id = 1;
-        if (results.size() > 0) {
-            id = realm.where(RealmThumbnail.class).findAllSorted("id", Sort.DESCENDING).first().getId();
-            id++;
-        }
-
-        return id;
-    }
-
     public static void create(long id, final long messageId, final ProtoGlobal.Thumbnail thumbnail) {
         Realm realm = Realm.getDefaultInstance();
         RealmThumbnail realmThumbnail = realm.createObject(RealmThumbnail.class);
@@ -45,7 +31,7 @@ public class RealmThumbnail extends RealmObject {
         realmThumbnail.setWidth(thumbnail.getWidth());
         realmThumbnail.setSize(thumbnail.getSize());
         realmThumbnail.setHeight(thumbnail.getHeight());
-        realmThumbnail.setId(getCorrectId(realm));
+        realmThumbnail.setId(id);
         realmThumbnail.setMessageId(messageId);
 
         realm.close();
