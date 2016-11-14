@@ -73,7 +73,7 @@ public class AvatarItem extends AbstractItem<AvatarItem, AvatarItem.ViewHolder>
     }
 
     public void onRequestDownloadThumbnail(String token, boolean done) {
-        final String fileName = token + "_" + avatar.getName();
+        final String fileName = "thumb_" + token + "_" + avatar.getName();
         if (done) {
             Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {

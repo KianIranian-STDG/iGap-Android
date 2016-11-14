@@ -11,6 +11,7 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.module.AndroidUtils;
+import com.iGap.module.AppUtils;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
@@ -58,7 +59,7 @@ public class VideoWithTextItem
         holder.fileName.setText(mMessage.attachment.name);
         holder.duration.setText(
                 String.format(holder.itemView.getResources().getString(R.string.video_duration),
-                        Double.toString(mMessage.attachment.duration).replace(".", ":"),
+                        AppUtils.humanReadableDuration(mMessage.attachment.duration).replace(".", ":"),
                         AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true)));
 
         setTextIfNeeded(holder.messageText);

@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.iGap.R;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.module.AndroidUtils;
+import com.iGap.module.AppUtils;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 import com.makeramen.roundedimageview.RoundedImageView;
@@ -65,7 +66,7 @@ public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> 
         holder.fileName.setText(mMessage.attachment.name);
         holder.duration.setText(
                 String.format(holder.itemView.getResources().getString(R.string.video_duration),
-                        Double.toString(mMessage.attachment.duration).replace(".", ":"),
+                        AppUtils.humanReadableDuration(mMessage.attachment.duration).replace(".", ":"),
                         AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true)));
     }
 

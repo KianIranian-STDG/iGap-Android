@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.interfaces.IMessageItem;
+import com.iGap.module.AppUtils;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
@@ -53,7 +54,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         super.bindView(holder, payloads);
 
         holder.elapsedTime.setText("0");
-        holder.duration.setText(Double.toString(mMessage.attachment.duration));
+        holder.duration.setText(AppUtils.humanReadableDuration(mMessage.attachment.duration));
         setTextIfNeeded(holder.messageText);
     }
 

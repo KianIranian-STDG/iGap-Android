@@ -9,7 +9,6 @@
               tools:ignore="MissingPrefix">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar2"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp60"
         android:background="@color/toolbar_background"

@@ -71,7 +71,6 @@
 
 
             <TextView
-                android:id="@+id/textView"
                 fontPath="fonts/IRANSansMobile_Bold.ttf"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

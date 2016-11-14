@@ -178,4 +178,17 @@ public final class AppUtils {
                     }
                 });
     }
+
+    public static String humanReadableDuration(double d) {
+        String output = Double.toString(d);
+
+        if (output.contains(".")) {
+            String[] split = output.split(".");
+            if (split[1].length() > 2) {
+                output = split[0] + "." + split[1].charAt(0) + split[1].charAt(1);
+            }
+        }
+
+        return output;
+    }
 }

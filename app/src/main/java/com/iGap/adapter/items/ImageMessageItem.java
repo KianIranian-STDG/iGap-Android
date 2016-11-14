@@ -73,7 +73,7 @@ public class ImageMessageItem extends AbstractItem<ImageMessageItem, ImageMessag
     }
 
     public void onRequestDownloadThumbnail(String token, boolean done) {
-        final String fileName = token + "_" + message.getAttachment().getName();
+        final String fileName = "thumb_" + token + "_" + message.getAttachment().getName();
         if (done) {
             Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {

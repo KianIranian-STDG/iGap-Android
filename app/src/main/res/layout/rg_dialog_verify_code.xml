@@ -30,7 +30,7 @@
         android:text="@string/rg_verify_dialog_enter_code"
         android:textColor="@color/rg_border_editText"
         android:textSize="@dimen/sp14"
-        android:id="@+id/justifiedTextView"/>
+        />
 
 
     <EditText

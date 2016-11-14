@@ -11,7 +11,6 @@ import com.iGap.module.CircleImageView;
 import com.iGap.module.CustomTextViewMedium;
 import com.iGap.module.StructContactInfo;
 import com.iGap.proto.ProtoFileDownload;
-import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.request.RequestFileDownload;
@@ -85,7 +84,7 @@ public class ContactItem extends AbstractItem<ContactItem, ContactItem.ViewHolde
                 holder.image.setImageBitmap(myBitmap);
             } else {
                 if (mContact.avatar != null && mContact.avatar.getFile() != null) {
-                    onRequestDownloadAvatar();
+                    onRequestDownloadThumbnail(mContact.avatar.getFile().getToken(), false);
                 }
                 holder.image.setImageBitmap(
                         com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture(
@@ -94,7 +93,7 @@ public class ContactItem extends AbstractItem<ContactItem, ContactItem.ViewHolde
             }
         } else {
             if (mContact.avatar != null && mContact.avatar.getFile() != null) {
-                onRequestDownloadAvatar();
+                onRequestDownloadThumbnail(mContact.avatar.getFile().getToken(), false);
             }
             holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture(
                     (int) holder.image.getContext().getResources().getDimension(R.dimen.dp60),
@@ -102,61 +101,29 @@ public class ContactItem extends AbstractItem<ContactItem, ContactItem.ViewHolde
         }
     }
 
-    public void onRequestDownloadAvatar() {
+    public void onRequestDownloadThumbnail(String token, boolean done) {
+        final String fileName = "thumb_" + token + "_" + mContact.avatar.getFile().getName();
+        if (done) {
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    mContact.avatar.getFile().setLocalThumbnailPath(G.DIR_TEMP + "/" + fileName);
+                }
+            });
+            realm.close();
+
+            return; // necessary
+        }
 
         ProtoFileDownload.FileDownload.Selector selector =
                 ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
-        RealmAttachment file = mContact.avatar.getFile();
+        String identity =
+                mContact.avatar.getFile().getToken() + '*' + selector.toString() + '*' + mContact.avatar.getFile().getSmallThumbnail()
+                        .getSize() + '*' + fileName + '*' + 0;
 
-        final String filepath = G.DIR_IMAGE_USER
-                + "/"
-                + file.getToken()
-                + "_"
-                + System.nanoTime()
-                + "_"
-                + selector.toString();
-
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-//                RealmContacts realmContacts = realm.where(RealmContacts.class)
-//                        .equalTo(RealmContactsFields.ID, mContact.peerId)
-//                        .findFirst();
-//                realmContacts.getAvatar().getFile().setLocalThumbnailPath(filepath);
-
-                //TODO [Saeed Mozaffari] [2016-11-09 5:33 PM] - code new ro pak kon va code bala ro uncomment kon
-
-                // New Start
-                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class)
-                        .equalTo(RealmRegisteredInfoFields.ID, mContact.peerId)
-                        .findFirst();
-
-                realmRegisteredInfo.getLastAvatar().getFile().setLocalThumbnailPath(filepath);
-                // New End
-            }
-        });
-        realm.close();
-
-        // I don't use offset in getting thumbnail
-        String identity = file.getToken()
-                + '*'
-                + selector.toString()
-                + '*'
-                + file.getSmallThumbnail().getSize()
-                + '*'
-                + filepath
-                + '*'
-                + file.getSmallThumbnail().getSize()
-                + '*'
-                + "true"
-                + '*'
-                + mContact.peerId;
-
-        if (!file.getToken().isEmpty()) {
-            new RequestFileDownload().download(file.getToken(), 0,
-                    (int) file.getSmallThumbnail().getSize(), selector, identity);
-        }
+        new RequestFileDownload().download(token, 0, (int) mContact.avatar.getFile().getSmallThumbnail().getSize(),
+                selector, identity);
     }
 
     @Override

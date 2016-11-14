@@ -4,13 +4,10 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 
-import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmAttachmentFields;
 import com.iGap.realm.RealmAvatar;
-import com.iGap.realm.RealmRegisteredInfo;
-import com.iGap.realm.RealmRegisteredInfoFields;
 
 import java.io.File;
 
@@ -197,52 +194,6 @@ public class StructMessageAttachment implements Parcelable {
             });
         }
         realm.close();
-    }
-
-    public void setLocalThumbnailPathForAvatar(final long userId, @Nullable final String localPath,
-                                               final ProtoFileDownload.FileDownload.Selector selector) {
-        this.localThumbnailPath = localPath;
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmAttachment realmAttachment = realm.where(RealmAttachment.class)
-                        .equalTo(RealmAttachmentFields.ID, userId)
-                        .findFirst();
-
-                if (realmAttachment == null) {
-                    realmAttachment = realm.createObject(RealmAttachment.class);
-                    setPath(realmAttachment, localPath, selector);
-                    realmAttachment.setId(userId);
-                } else {
-                    setPath(realmAttachment, localPath, selector);
-                    realmAttachment.setLocalThumbnailPath(localPath);
-                }
-
-                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class)
-                        .equalTo(RealmRegisteredInfoFields.ID, userId)
-                        .findFirst();
-                if (realmRegisteredInfo == null) {
-                    realmRegisteredInfo = realm.createObject(RealmRegisteredInfo.class);
-                    realmRegisteredInfo.setId(userId);
-                }
-            }
-        });
-
-        realm.close();
-    }
-
-    /*
-     * now one thumbnail just save for each file
-     * Large thumbnail or Small thumbnail
-     */
-    private void setPath(RealmAttachment realmAttachment, String filepath,
-                         ProtoFileDownload.FileDownload.Selector selector) {
-        if (selector == ProtoFileDownload.FileDownload.Selector.FILE) {
-            realmAttachment.setLocalFilePath(filepath);
-        } else {
-            realmAttachment.setLocalThumbnailPath(filepath);
-        }
     }
 
     public boolean isFileExistsOnLocal() {

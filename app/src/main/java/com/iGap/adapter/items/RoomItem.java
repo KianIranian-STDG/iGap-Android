@@ -107,23 +107,8 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
         }
     }
 
-    /*private void requestForAvatar() {
-        // create new download attachment once with attachment token
-        if (mInfo.downloadAttachment == null) {
-            mInfo.downloadAttachment = new StructDownloadAttachment(mInfo.avatar.token);
-        }
-
-        // request thumbnail
-        if (!MessagesAdapter.avatarsRequested.contains(Long.toString(mInfo.chatId))) {
-            onRequestDownloadAvatar(mInfo.downloadAttachment.offset,
-                    mInfo.downloadAttachment.progress);
-            // prevent from multiple requesting thumbnail
-            MessagesAdapter.avatarsRequested.add(Long.toString(mInfo.chatId));
-        }
-    }*/
-
     public void onRequestDownloadAvatarThumbnail(String token, boolean done) {
-        final String fileName = token + "_" + mInfo.avatar.name;
+        final String fileName = "thumb_" + token + "_" + mInfo.avatar.name;
         if (done) {
             Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
@@ -149,45 +134,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
 
     @Override
     public void onRequestDownloadAvatar(int offset, int progress) {
-      /*  ProtoFileDownload.FileDownload.Selector selector =
-                ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL;
-        String fileName = mInfo.downloadAttachment.token + "_" + mInfo.avatar.name;
-        if (progress == 100) {
-            if (mInfo.chatType == RoomType.CHAT) {
-                mInfo.avatar.setLocalThumbnailPathForAvatar(mInfo.ownerId,
-                        G.DIR_IMAGE_USER + "/" + fileName, selector);
-            } else {
-                mInfo.avatar.setLocalThumbnailPath(mInfo.chatId, G.DIR_IMAGE_USER + "/" + fileName);
-            }
 
-            try {
-                AndroidUtils.cutFromTemp(fileName);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            return; // necessary
-        }
-
-        // I don't use offset in getting thumbnail
-        String identity = mInfo.downloadAttachment.token
-                + '*'
-                + selector.toString()
-                + '*'
-                + mInfo.avatar.largeThumbnail.size
-                + '*'
-                + fileName
-                + '*'
-                + mInfo.downloadAttachment.offset
-                + "*"
-                + Boolean.toString(true)
-                + "*"
-                + mInfo.chatId
-                + "*"
-                + mInfo.chatType.toString();
-
-        new RequestFileDownload().download(mInfo.downloadAttachment.token, offset,
-                (int) mInfo.avatar.largeThumbnail.size, selector, identity);*/
     }
 
     private void requestForUserInfo() {
@@ -202,15 +149,6 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
     @Override
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
-
-        //RealmRoomDraft draft = null;
-        //Realm realm = Realm.getDefaultInstance();
-        //RealmRoom realmRoom =
-        //    realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mInfo.chatId).findFirst();
-        //if (realmRoom != null) {
-        //    draft = realmRoom.getDraft();
-        //}
-        //realm.close();
 
         if (!mInfo.draftMessage.isEmpty()) {
             holder.messageStatus.setVisibility(View.GONE);

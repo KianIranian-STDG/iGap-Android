@@ -10,6 +10,7 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.module.AndroidUtils;
+import com.iGap.module.AppUtils;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
@@ -61,7 +62,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         holder.fileName.setText(mMessage.attachment.name);
         holder.songArtist.setText(mMessage.songArtist);
         holder.elapsedTime.setText("0");
-        holder.duration.setText(Double.toString(mMessage.attachment.duration));
+        holder.duration.setText(AppUtils.humanReadableDuration(mMessage.attachment.duration));
         setTextIfNeeded(holder.messageText);
     }
 

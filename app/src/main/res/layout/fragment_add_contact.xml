@@ -17,7 +17,7 @@
         app:contentInsetStart="0dp"
         app:layout_collapseMode="pin"
         android:layoutDirection="ltr"
-        android:id="@+id/toolbar3">
+        >
 
         <RelativeLayout
             android:layout_width="match_parent"

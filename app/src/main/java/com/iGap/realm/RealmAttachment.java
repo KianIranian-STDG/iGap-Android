@@ -77,8 +77,11 @@ public class RealmAttachment extends RealmObject {
             RealmThumbnail smallThumbnail = realm.where(RealmThumbnail.class).equalTo("id", smallId).findFirst();
             realmAttachment.setSmallThumbnail(smallThumbnail);
 
-            realmAttachment.setLocalFilePath(G.DIR_IMAGE_USER + "/" + file.getToken() + "_" + file.getName());
-            realmAttachment.setLocalThumbnailPath(G.DIR_TEMP + "/" + "thumb_" + file.getToken() + "_" + file.getName());
+            String filePath = G.DIR_IMAGE_USER + "/" + file.getToken() + "_" + file.getName();
+            String tempFilePath = G.DIR_TEMP + "/" + "thumb_" + file.getToken() + "_" + file.getName();
+
+            realmAttachment.setLocalFilePath(new File(filePath).exists() ? filePath : null);
+            realmAttachment.setLocalThumbnailPath(new File(tempFilePath).exists() ? tempFilePath : null);
             realmAttachment.setName(file.getName());
             realmAttachment.setSize(file.getSize());
             realmAttachment.setToken(file.getToken());

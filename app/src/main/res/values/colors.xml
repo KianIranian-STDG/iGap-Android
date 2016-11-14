@@ -88,7 +88,6 @@
     <color name="primary">#009688</color>
 
     <!-- emoji popup window-->
-    <color name="colorEmojiPopupBackground">#f4f6f5</color>
     <color name="colorEmojiPopupCategoryBottomBorder">#e4e6e5</color>
 
     <color name="colorChatMessageSelectableItemBg">#99AADFF7</color>

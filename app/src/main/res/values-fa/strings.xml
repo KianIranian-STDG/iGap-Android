@@ -308,8 +308,6 @@
     <string name="member_can_add_new_member">"اعضا می‌توانند عضوهای جدید بیافزایند."</string>
     <string name="notificaion_and_sound">"اعلانات و صدا"</string>
     <string name="your_link">"پیوند شما"</string>
-    <string name="link">"پیوند"</string>
-    <string name="channel_info">"اطلاعات کانال"</string>
     <string name="public_channel">"کانال عمومی"</string>
     <string name="private_channel">"کانال خصوصی"</string>
     <string name="desc_private_channel">"برای پیوستن به کانال‌های خصوصی باید از طریق پیوند دعوت اقدام کرد."</string>

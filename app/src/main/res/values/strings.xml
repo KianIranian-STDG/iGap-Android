@@ -292,8 +292,6 @@
     <string name="member_can_add_new_member">Members Can Add New Members</string>
     <string name="notificaion_and_sound">Notifications and Sound</string>
     <string name="your_link">Your Link</string>
-    <string name="link">Link</string>
-    <string name="channel_info">Channel Info</string>
     <string name="public_channel">Public Channel</string>
     <string name="private_channel">Private Channel</string>
     <string name="desc_private_channel">Privet channel can only be joined via an invite link</string>
@@ -326,11 +324,6 @@
     <string name="confirmation_code_text">Please enter the confirmation code sent to:</string>
     <string name="receive_code_text">Don\'t receive a text message?</string>
     <string name="please_wait">Please wait </string>
-    <string name="personality">personality</string>
-    <string name="personality2">personality</string>
-    <string name="personality3">personality</string>
-    <string name="personality4">personality</string>
-    <string name="personality5">personality</string>
     <string name="Invite_Friends">Invite Friends</string>
     <string name="iGap_FAQ">iGap FAQ</string>
     <string name="New_Chat">New Chat</string>
@@ -423,8 +416,6 @@
     <string name="dialog_readonly_chat">Sorry, you can\'t send messages to this chat.</string>
     <string name="remove_admin">Remove Admin</string>
     <string name="remove_moderator">Remove Moderator</string>
-    <string name="set_member">Set Members</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="online">online</string>
 </resources>

@@ -3,7 +3,6 @@
 
     <!--emoji popup window dimens-->
     <dimen name="emojiPopupIconSize">24sp</dimen>
-    <dimen name="keyboard_height">250dp</dimen>
 
     <dimen name="chatMessageImageCorner">@dimen/dp4</dimen>
 
@@ -30,7 +29,6 @@
     <dimen name="dp4">4dp</dimen>
     <dimen name="dp6">6dp</dimen>
     <dimen name="dp8">8dp</dimen>
-    <dimen name="dp10">10dp</dimen>
     <dimen name="dp12">12dp</dimen>
     <dimen name="dp16">16dp</dimen>
     <dimen name="dp18">18dp</dimen>

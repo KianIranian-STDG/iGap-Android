@@ -1,7 +1,6 @@
 package com.iGap.activities;
 
 import android.Manifest;
-import android.app.Fragment;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentProviderOperation;
@@ -44,7 +43,7 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AdapterShearedMedia;
 import com.iGap.fragments.FragmentNotification;
-import com.iGap.fragments.FragmentShowImage;
+import com.iGap.fragments.FragmentShowAvatars;
 import com.iGap.interfaces.OnChatDelete;
 import com.iGap.interfaces.OnChatGetRoom;
 import com.iGap.interfaces.OnUserAvatarGetList;
@@ -203,26 +202,7 @@ public class ActivityContactsProfile extends ActivityEnhanced {
         imgUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                if (avatarList != null) {
-                    FragmentShowImage.appBarLayout = fab;
-
-                    Fragment fragment = FragmentShowImage.newInstance();
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("listPic", setItem());
-                    bundle.putInt("SelectedImage", 0);
-                    bundle.putLong("PeedId", userId);
-                    fragment.setArguments(bundle);
-                    ActivityContactsProfile.this.getFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.chi_layoutParent, fragment, "Show_Image_fragment")
-                            .commit();
-                } else {
-                    Toast.makeText(context, "Avatar Not exist!", Toast.LENGTH_SHORT).show();
-                }
-                //                ActivityContactsProfile.this.getFragmentManager().beginTransaction().replace(R.id.chi_layoutParent, fragment)
-                // .commit();
-
+                getSupportFragmentManager().beginTransaction().replace(R.id.chi_layoutParent, FragmentShowAvatars.newInstance(userId)).commit();
             }
         });
 
