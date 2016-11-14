@@ -1,5 +1,6 @@
 package com.iGap.fragments;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -47,6 +48,8 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
     private RecyclerView mRecyclerView;
     private AvatarsAdapter<AvatarItem> mAdapter;
 
+    public static View appBarLayout;
+
     public static FragmentShowAvatars newInstance(long peerId) {
         Bundle args = new Bundle();
         args.putLong(ARG_PEER_ID, peerId);
@@ -55,6 +58,23 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
         fragment.setArguments(args);
         return fragment;
     }
+
+    @Override
+    public void onDetach() {
+        if (appBarLayout != null)
+            appBarLayout.setVisibility(View.VISIBLE);
+
+        super.onDetach();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        if (appBarLayout != null)
+            appBarLayout.setVisibility(View.GONE);
+
+        super.onAttach(context);
+    }
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

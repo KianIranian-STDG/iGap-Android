@@ -22,6 +22,7 @@
     <!-- required for drawer contacts fragment -->
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.GET_TASKS"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     <application
@@ -159,6 +160,7 @@
         <activity android:name=".activities.ActivityProfileChannel"/>
 
         <service android:name=".helper.ServiceContact"/>
+        <service android:name=".module.UploadService"/>
         <service
             android:name=".helper.MyService"
             android:enabled="true"

@@ -1,5 +1,6 @@
 package com.iGap.helper;
 
+import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -39,6 +40,7 @@ import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.RealmUserInfo;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -282,7 +284,8 @@ public class HelperNotificationAndBadge {
             messageToshow = messageToshow.substring(0, 40);
         }
 
-        notification = new NotificationCompat.Builder(context).setSmallIcon(R.mipmap.iconsmal)
+        notification = new NotificationCompat.Builder(context)
+                .setSmallIcon(R.mipmap.iconsmal)
                 .setContentTitle(context.getString(R.string.new_message_recicve))
                 .setContent(remoteViews)
                 .setContentIntent(pi)
@@ -364,6 +367,11 @@ public class HelperNotificationAndBadge {
 
     public void checkAlert(boolean updateNotification, ProtoGlobal.Room.Type type, long roomId) {
 
+        if (G.isAppInFg || AttachFile.isInAttach) {
+
+            return;   // if program is in forground do not show notification
+        }
+
         idRoom = (int) roomId;
 
         SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
@@ -372,7 +380,7 @@ public class HelperNotificationAndBadge {
             Realm realm = Realm.getDefaultInstance();
             RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
-            startActivityPopUpNotification();
+            startActivityPopUpNotification(type);
 
             switch (type) {
                 case CHAT:
@@ -671,41 +679,77 @@ public class HelperNotificationAndBadge {
         return intVibrator;
     }
 
-    private void startActivityPopUpNotification() {
+    private void startActivityPopUpNotification(ProtoGlobal.Room.Type type) {
+
+
+        SharedPreferences sharedPreferences;
+        boolean popUpSetting = false;
+        int mode = 0;
+
+        switch (type) {
+            case CHAT:
+                sharedPreferences = context.getSharedPreferences(SHP_SETTING.FILE_NAME, context.MODE_PRIVATE);
+                mode = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, 0);
+                break;
+            case GROUP:
+                sharedPreferences = context.getSharedPreferences(SHP_SETTING.FILE_NAME, context.MODE_PRIVATE);
+                mode = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, 0);
+                break;
+            case CHANNEL:
+                break;
+        }
+
+        switch (mode) {
+
+            case 0:
+                // no popup
+                break;
+            case 1:
+                //only when screen on
+                if (isScreenOn(context))
+                    popUpSetting = true;
+                break;
+            case 2:
+                //only when screen off
+                if (!isScreenOn(context))
+                    popUpSetting = true;
+                break;
+            case 3:
+                //always
+                popUpSetting = true;
+                break;
+        }
+
+
+        Log.e("ddd", mode + "");
 
         if (!G.isAppInFg) {
             if (!AttachFile.isInAttach) {
-                if (true) {// TODO: 11/12/2016   check other program not run
-                    SharedPreferences sharedPreferences = context.getSharedPreferences(SHP_SETTING.FILE_NAME, context.MODE_PRIVATE);
-                    int mode = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, 0);
+                if (popUpSetting) {
+                    if (getForegroundApp() || ActivityPopUpNotification.isPopUpVisible) { //check that any other program is in background
 
+                        goToPopUpActivity();
 
-                    switch (mode) {
-
-                        case 0:
-                            // no popup
-                            break;
-                        case 1:
-                            //only when screen on
-                            if (isScreenOn(context))
-                                goToPopUpActivity();
-                            break;
-                        case 2:
-                            //only when screen off
-                            if (!isScreenOn(context))
-                                goToPopUpActivity();
-                            break;
-                        case 3:
-                            //always
-                            goToPopUpActivity();
-                            break;
                     }
-
                 }
             }
         }
 
 
+    }
+
+    private boolean getForegroundApp() {
+
+        ActivityManager am = (ActivityManager) context.getSystemService(context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);
+
+        try {
+            if (taskInfo.get(0).topActivity.getClassName().toString().contains("com.android.launcher"))
+                return true;
+        } catch (Exception e) {
+        }
+
+        return false;
     }
 
 

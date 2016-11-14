@@ -196,12 +196,14 @@ public class VoiceRecord {
                 @Override
                 public void run() {
                     milisecend++;
-                    if (milisecend > 99) milisecend = 1;
+                    if (milisecend >= 99) milisecend = 1;
                     txtMilisecend.post(new Runnable() {
                         @Override
                         public void run() {
-
-                            txtMilisecend.setText(":" + milisecend + "");
+                            if (milisecend < 10)
+                                txtMilisecend.setText(":0" + milisecend + "");
+                            else
+                                txtMilisecend.setText(":" + milisecend + "");
                         }
                     });
                 }

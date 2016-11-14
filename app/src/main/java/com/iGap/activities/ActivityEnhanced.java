@@ -67,7 +67,7 @@ public class ActivityEnhanced extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (!G.isAppInFg) {
+                if (!G.isAppInFg && !AttachFile.isInAttach) {
                     new RequestUserUpdateStatus().userUpdateStatus(ProtoUserUpdateStatus.UserUpdateStatus.Status.OFFLINE);
                     Log.e("ddd", "request offline");
                 }

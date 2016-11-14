@@ -225,8 +225,29 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
 
                 Realm realm = Realm.getDefaultInstance();
                 RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, mInfo.lastMessageId).findFirst();
-                if (realmRoomMessage != null && (realmRoomMessage.getMessageType().equals(ProtoGlobal.RoomMessageType.VOICE.toString()))) {
-                    holder.lastMessage.setText(VOICE);
+                if (realmRoomMessage != null) {
+
+                    if (realmRoomMessage.getMessageType().contains(ProtoGlobal.RoomMessageType.VOICE.toString())) {
+                        holder.lastMessage.setText(VOICE);
+                    } else if (realmRoomMessage.getMessageType().contains(ProtoGlobal.RoomMessageType.VIDEO.toString())) {
+                        holder.lastMessage.setText(R.string.video_message);
+                    } else if (realmRoomMessage.getMessageType().contains(ProtoGlobal.RoomMessageType.FILE.toString())) {
+                        holder.lastMessage.setText(R.string.file_message);
+                    } else if (realmRoomMessage.getMessageType().contains(ProtoGlobal.RoomMessageType.AUDIO.toString())) {
+                        holder.lastMessage.setText(R.string.audio_message);
+                    } else if (realmRoomMessage.getMessageType().contains(ProtoGlobal.RoomMessageType.IMAGE.toString())) {
+                        holder.lastMessage.setText(R.string.image_message);
+                    } else if (realmRoomMessage.getMessageType().contains(ProtoGlobal.RoomMessageType.CONTACT.toString())) {
+                        holder.lastMessage.setText(R.string.contact_message);
+                    } else if (realmRoomMessage.getMessageType().contains(ProtoGlobal.RoomMessageType.GIF.toString())) {
+                        holder.lastMessage.setText(R.string.gif_message);
+                    } else if (realmRoomMessage.getMessageType().contains(ProtoGlobal.RoomMessageType.LOCATION.toString())) {
+                        holder.lastMessage.setText(R.string.location_message);
+                    } else {
+                        holder.lastMessage.setText(lastMessage);
+                    }
+
+
                 } else {
                     holder.lastMessage.setText(lastMessage);
                 }

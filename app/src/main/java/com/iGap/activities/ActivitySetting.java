@@ -134,6 +134,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
     public static long getFolderSize(File dir) {
         long size = 0;
+        if (dir == null)
+            return size;
+
         for (File file : dir.listFiles()) {
             if (file.isFile()) {
                 System.out.println(file.getName() + " " + file.length());
@@ -1027,6 +1030,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
             @Override
             public void onComplete(RippleView rippleView) {
+
+                FragmentShowAvatars.appBarLayout = fab;
+
                 FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(userId);
                 ActivitySetting.this.getSupportFragmentManager()
                         .beginTransaction()

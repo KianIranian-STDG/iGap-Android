@@ -33,13 +33,12 @@ import android.widget.TextView;
 import com.iGap.R;
 import com.iGap.interfaces.OnVoiceRecord;
 import com.iGap.libs.rippleeffect.RippleView;
-import com.iGap.module.AndroidUtils;
 import com.iGap.module.ChatSendMessageUtil;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.OnComplete;
 import com.iGap.module.SHP_SETTING;
+import com.iGap.module.UploadService;
 import com.iGap.module.VoiceRecord;
-import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmChatRoom;
 import com.iGap.realm.RealmContacts;
@@ -175,7 +174,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             }
         }, 350);
 
-        setUpEmojiPopup();
+
     }
 
     private void changeEmojiButtonImageResource(@StringRes int drawableResourceId) {
@@ -379,35 +378,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         new ChatSendMessageUtil().newBuilder(chatType, ProtoGlobal.RoomMessageType.TEXT, mRoomId).message(message).sendMessage(identity);
     }
 
-    private void sendVoice(final String savedPath, final Long mRoomId) {
 
-        Realm realm = Realm.getDefaultInstance();
-        final long messageId = System.nanoTime();
-        final long updateTime = System.currentTimeMillis();
-        final long senderID = realm.where(RealmUserInfo.class).findFirst().getUserId();
-        final long duration = AndroidUtils.getAudioDuration(getApplicationContext(), savedPath);
-
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class);
-
-                roomMessage.setMessageType(ProtoGlobal.RoomMessageType.VOICE.toString());
-                //  roomMessage.setMessage(getWrittenMessage());
-                roomMessage.setRoomId(mRoomId);
-                roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
-                roomMessage.setAttachment(messageId, savedPath, 0, 0, 0, null, duration, LocalFileType.FILE);
-                roomMessage.setMessageId(messageId);
-                roomMessage.setUserId(senderID);
-                roomMessage.setUpdateTime((int) (updateTime / DateUtils.SECOND_IN_MILLIS));
-            }
-        });
-
-        new ActivityChat.UploadTask().execute(savedPath, messageId, ProtoGlobal.RoomMessageType.VOICE, mRoomId, "");
-
-        Log.e("ddd", "voice");
-        realm.close();
-    }
 
     private class InitComponnet {
 
@@ -417,6 +388,8 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             initAppbar();
             initViewPager();
             initLayoutAttach();
+
+            setUpEmojiPopup();
         }
 
         private void initMethode() {
@@ -446,7 +419,12 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                 @Override
                 public void onVoiceRecordDone(String savedPath) {
 
-                    sendVoice(savedPath, unreadList.get(viewPager.getCurrentItem()).getRoomId());
+                    Intent uploadService = new Intent(ActivityPopUpNotification.this, UploadService.class);
+                    uploadService.putExtra("Path", savedPath);
+                    uploadService.putExtra("Roomid", unreadList.get(viewPager.getCurrentItem()).getRoomId());
+                    startService(uploadService);
+
+                    // sendVoice(savedPath, unreadList.get(viewPager.getCurrentItem()).getRoomId());
 
                     finish();
                     overridePendingTransition(0, 0);
