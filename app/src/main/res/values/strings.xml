@@ -456,6 +456,7 @@
     <string name="sending_location">sending location</string>
     <string name="choosing_contact">choosing_contact</string>
     <string name="painting">painting</string>
+    <string name="voice_message">Voice Message</string>
 
 
 </resources>

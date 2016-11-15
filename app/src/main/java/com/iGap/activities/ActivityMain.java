@@ -103,6 +103,7 @@ public class ActivityMain extends ActivityEnhanced
     FloatingActionButton btnCreateNewChannel;
     LinearLayout mediaLayout;
     MusicPlayer musicPlayer;
+    public static MyAppBarLayout appBarLayout;
     private RecyclerView recyclerView;
     private RoomsAdapter<RoomItem> mAdapter;
     private ArcMenu arcMenu;
@@ -506,7 +507,7 @@ public class ActivityMain extends ActivityEnhanced
         recyclerView.setLayoutParams(params);
         recyclerView.setAdapter(mAdapter);
 
-        MyAppBarLayout appBarLayout = (MyAppBarLayout) findViewById(R.id.appBarLayout);
+        appBarLayout = (MyAppBarLayout) findViewById(R.id.appBarLayout);
         final RelativeLayout toolbar = (RelativeLayout) findViewById(R.id.toolbar);
         appBarLayout.addOnMoveListener(new MyAppBarLayout.OnMoveListener() {
             @Override

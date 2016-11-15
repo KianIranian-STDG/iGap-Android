@@ -324,9 +324,9 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                         if (roomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENT.toString()) ||
                                 roomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.DELIVERED.toString())) {
 
-                            if (roomMessage.getMessageType().toString().toLowerCase().contains("text")) {
+                            // if (roomMessage.getMessageType().toString().toLowerCase().contains("text")) {
                                 unreadList.add(roomMessage);
-                            }
+                            // }
                         }
                     }
                 }
@@ -652,7 +652,29 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.sub_layout_activity_popup_notification, (ViewGroup) container, false);
 
             TextView txtMessage = (TextView) layout.findViewById(R.id.slapn_txt_message);
-            txtMessage.setText(unreadList.get(position).getMessage());
+
+
+            if (unreadList.get(position).getMessageType().contains(ProtoGlobal.RoomMessageType.VOICE.toString())) {
+                txtMessage.setText(R.string.voice_message);
+            } else if (unreadList.get(position).getMessageType().contains(ProtoGlobal.RoomMessageType.VIDEO.toString())) {
+                txtMessage.setText(R.string.video_message);
+            } else if (unreadList.get(position).getMessageType().contains(ProtoGlobal.RoomMessageType.FILE.toString())) {
+                txtMessage.setText(R.string.file_message);
+            } else if (unreadList.get(position).getMessageType().contains(ProtoGlobal.RoomMessageType.AUDIO.toString())) {
+                txtMessage.setText(R.string.audio_message);
+            } else if (unreadList.get(position).getMessageType().contains(ProtoGlobal.RoomMessageType.IMAGE.toString())) {
+                txtMessage.setText(R.string.image_message);
+            } else if (unreadList.get(position).getMessageType().contains(ProtoGlobal.RoomMessageType.CONTACT.toString())) {
+                txtMessage.setText(R.string.contact_message);
+            } else if (unreadList.get(position).getMessageType().contains(ProtoGlobal.RoomMessageType.GIF.toString())) {
+                txtMessage.setText(R.string.gif_message);
+            } else if (unreadList.get(position).getMessageType().contains(ProtoGlobal.RoomMessageType.LOCATION.toString())) {
+                txtMessage.setText(R.string.location_message);
+            } else {
+                txtMessage.setText(unreadList.get(position).getMessage());
+            }
+
+
 
             layout.setOnClickListener(new View.OnClickListener() {
                 @Override

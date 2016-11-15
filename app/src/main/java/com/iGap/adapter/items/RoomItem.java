@@ -51,7 +51,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
     public StructChatInfo mInfo;
     public OnComplete mComplete;
-    private String VOICE = "Voice Message";
+
 
     public RoomItem setComplete(OnComplete complete) {
         this.mComplete = complete;
@@ -228,7 +228,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
                 if (realmRoomMessage != null) {
 
                     if (realmRoomMessage.getMessageType().contains(ProtoGlobal.RoomMessageType.VOICE.toString())) {
-                        holder.lastMessage.setText(VOICE);
+                        holder.lastMessage.setText(R.string.voice_message);
                     } else if (realmRoomMessage.getMessageType().contains(ProtoGlobal.RoomMessageType.VIDEO.toString())) {
                         holder.lastMessage.setText(R.string.video_message);
                     } else if (realmRoomMessage.getMessageType().contains(ProtoGlobal.RoomMessageType.FILE.toString())) {

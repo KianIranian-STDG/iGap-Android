@@ -448,7 +448,7 @@ public class HelperNotificationAndBadge {
                 } else {
                     vibrator = sharedPreferences.getString(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, "Default");
                 }
-                popupNotification = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, 3);
+                //    popupNotification = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, 3);
 
                 if (realmRoom != null
                         && realmRoom.getChatRoom() != null
@@ -486,8 +486,7 @@ public class HelperNotificationAndBadge {
                 }
 
 
-
-                popupNotification = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, 3);
+                //   popupNotification = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, 3);
 
 
                 if (realmRoom != null
@@ -693,7 +692,20 @@ public class HelperNotificationAndBadge {
                 break;
             case GROUP:
                 sharedPreferences = context.getSharedPreferences(SHP_SETTING.FILE_NAME, context.MODE_PRIVATE);
-                mode = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, 0);
+                String _setting = sharedPreferences.getString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, context.getResources().getString(R.string.array_No_popup));
+
+                if (_setting.equals(context.getResources().getString(R.string.array_No_popup))) {
+                    mode = 0;
+                } else if (_setting.equals(context.getResources().getString(R.string.array_Only_when_screen_on))) {
+                    mode = 1;
+                } else if (_setting.equals(context.getResources().getString(R.string.array_Only_when_screen_off))) {
+                    mode = 2;
+                } else if (_setting.equals(context.getResources().getString(R.string.array_Always_show_popup))) {
+                    mode = 3;
+                }
+
+
+                Log.e("ddd", mode + "");
                 break;
             case CHANNEL:
                 break;

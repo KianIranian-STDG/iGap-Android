@@ -10,8 +10,8 @@
 
     <dimen name="chatBoxMaxWidth">270dp</dimen>
 
-    <dimen name="design_fab_size_mini">44dp</dimen>
-    <dimen name="design_fab_size_normal">62dp</dimen>
+    <dimen name="design_fab_size_mini">48dp</dimen>
+    <dimen name="design_fab_size_normal">70dp</dimen>
 
 
     <dimen name="sp10">10sp</dimen>

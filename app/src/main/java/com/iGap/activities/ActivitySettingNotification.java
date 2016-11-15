@@ -1138,7 +1138,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
                                 editor.putInt(SHP_SETTING.KEY_STNS_ALERT_GROUP, 1);
                                 editor.putInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_GROUP, 1);
                                 editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, getResources().getString(R.string.array_Default));
-                                editor.putString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, getResources().getString(R.string.array_Always_show_popup));
+                                editor.putString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, getResources().getString(R.string.array_No_popup));
                                 editor.putInt(SHP_SETTING.KEY_STNS_APP_SOUND, 1);
                                 editor.putInt(SHP_SETTING.KEY_STNS_APP_VIBRATE, 1);
                                 editor.putInt(SHP_SETTING.KEY_STNS_APP_PREVIEW, 1);

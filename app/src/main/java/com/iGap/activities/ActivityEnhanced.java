@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.iGap.Config;
 import com.iGap.G;
@@ -48,7 +47,6 @@ public class ActivityEnhanced extends AppCompatActivity {
 
         if (!G.isUserStatusOnline) {
             new RequestUserUpdateStatus().userUpdateStatus(ProtoUserUpdateStatus.UserUpdateStatus.Status.ONLINE);
-            Log.e("ddd", "request online");
         }
 
         super.onStart();
@@ -69,7 +67,6 @@ public class ActivityEnhanced extends AppCompatActivity {
             public void run() {
                 if (!G.isAppInFg && !AttachFile.isInAttach) {
                     new RequestUserUpdateStatus().userUpdateStatus(ProtoUserUpdateStatus.UserUpdateStatus.Status.OFFLINE);
-                    Log.e("ddd", "request offline");
                 }
             }
         }, Config.UPDATE_STATUS_TIME);

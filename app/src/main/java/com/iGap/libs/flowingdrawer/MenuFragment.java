@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.iGap.activities.ActivityMain;
+
 public class MenuFragment extends Fragment {
 
     private boolean isShown;
@@ -47,12 +49,23 @@ public class MenuFragment extends Fragment {
     }
 
     public void onOpenMenu() {
+
+        if (ActivityMain.appBarLayout != null) {
+
+            ((View) ActivityMain.appBarLayout).setEnabled(false);
+        }
+
     }
 
-    ;
+
 
     public void onCloseMenu() {
+
+        if (ActivityMain.appBarLayout != null) {
+
+            ((View) ActivityMain.appBarLayout).setEnabled(true);
+        }
     }
 
-    ;
+
 }

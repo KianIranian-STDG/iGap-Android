@@ -2,6 +2,7 @@ package com.iGap.module;
 
 import android.content.Context;
 import android.media.MediaRecorder;
+import android.os.Handler;
 import android.os.Vibrator;
 import android.util.TypedValue;
 import android.view.MotionEvent;
@@ -223,7 +224,15 @@ public class VoiceRecord {
                 if (itemTag.equals("ivVoice")) moving((int) event.getX());
                 break;
             case MotionEvent.ACTION_UP:
-                if (itemTag.equals("ivVoice")) reset();
+                if (itemTag.equals("ivVoice")) {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            reset();
+                        }
+                    }, 100);
+
+                }
                 break;
         }
     }

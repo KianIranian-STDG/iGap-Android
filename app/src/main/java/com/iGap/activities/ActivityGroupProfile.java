@@ -70,7 +70,6 @@ import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmAvatarFields;
 import com.iGap.realm.RealmGroupRoom;
 import com.iGap.realm.RealmMember;
-import com.iGap.realm.RealmMemberFields;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmRoom;
@@ -542,12 +541,27 @@ public class ActivityGroupProfile extends ActivityEnhanced
                             public void run() {
                                 Realm realm = Realm.getDefaultInstance();
                                 RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, user.getId()).findFirst();
-                                RealmMember realmMember = realm.where(RealmMember.class).equalTo(RealmMemberFields.PEER_ID, user.getId()).findFirst();
+
+                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                                RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+
+                                RealmList<RealmMember> result = realmRoom.getGroupRoom().getMembers();
+
+                                String _Role = "";
+
+                                for (int i = 0; i < result.size(); i++) {
+                                    if (result.get(i).getPeerId() == user.getId()) {
+                                        _Role = result.get(i).getRole().toString();
+                                        break;
+                                    }
+                                }
+
                                 realm.close();
 
+
                                 final StructContactInfo struct = new StructContactInfo(user.getId(), user.getDisplayName(), user.getStatus().toString(), false, false, user.getPhone() + "");
-                                if (realmMember != null) {
-                                    struct.role = realmMember.getRole();
+                                if (realmGroupRoom != null) {
+                                    struct.role = _Role;
                                 }
                                 if (realmRegisteredInfo != null) {
                                     struct.avatar = realmRegisteredInfo.getLastAvatar();
@@ -555,9 +569,17 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                     struct.color = realmRegisteredInfo.getColor();
                                 }
 
-                                items.clear();
-                                items.add(new ContactItemGroupProfile().setContact(struct).withIdentifier(100 + contacts.indexOf(struct)));
-                                itemAdapter.add(items);
+
+                                IItem item = new ContactItemGroupProfile().setContact(struct).withIdentifier(realmRegisteredInfo.getId());
+
+
+                                if (struct.role.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString())) {
+                                    itemAdapter.add(0, item);
+                                } else {
+                                    itemAdapter.add(item);
+                                }
+
+                                itemAdapter.notifyDataSetChanged();
                             }
                         });
                     }
@@ -976,7 +998,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                     struct.color = realmRegistered.getColor();
                                 }
 
-                                IItem item = (new ContactItemGroupProfile().setContact(struct).withIdentifier(100 + (Integer.parseInt(participantsCountLabel) + 1)));
+                                IItem item = (new ContactItemGroupProfile().setContact(struct).withIdentifier(realmRegistered.getId()));
                                 itemAdapter.add(item);
 
 
