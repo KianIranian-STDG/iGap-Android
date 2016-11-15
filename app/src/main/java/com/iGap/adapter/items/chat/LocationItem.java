@@ -2,6 +2,7 @@ package com.iGap.adapter.items.chat;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 
 import com.iGap.R;
 import com.iGap.interfaces.IMessageItem;
@@ -33,6 +34,8 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
     @Override
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
+
+        holder.location.setText(mMessage.location);
     }
 
     @Override
@@ -47,9 +50,11 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
-
+        protected TextView location;
         public ViewHolder(View view) {
             super(view);
+
+            location = (TextView) view.findViewById(R.id.location);
         }
     }
 }

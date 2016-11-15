@@ -38,7 +38,10 @@
                 android:id="@+id/cslr_ll_forward"
                 layout="@layout/chat_sub_layout_forward" />
 
-            <!--TODO implement location view-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:id="@+id/location"
+                android:layout_height="wrap_content"/>
 
             <include layout="@layout/chat_sub_layout_messages_time" />
         </LinearLayout>

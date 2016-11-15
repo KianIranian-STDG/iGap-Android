@@ -155,6 +155,7 @@ import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageContact;
 import com.iGap.realm.RealmRoomMessageFields;
+import com.iGap.realm.RealmRoomMessageLocation;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.realm.enums.ChannelChatRole;
 import com.iGap.realm.enums.GroupChatRole;
@@ -202,20 +203,6 @@ import io.realm.Sort;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.module.AttachFile.getFilePathFromUri;
-import static com.iGap.proto.ProtoGlobal.ClientAction.CAPTURING_IMAGE;
-import static com.iGap.proto.ProtoGlobal.ClientAction.CAPTURING_VIDEO;
-import static com.iGap.proto.ProtoGlobal.ClientAction.CHOOSING_CONTACT;
-import static com.iGap.proto.ProtoGlobal.ClientAction.PAINTING;
-import static com.iGap.proto.ProtoGlobal.ClientAction.RECORING_VOICE;
-import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_AUDIO;
-import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_DOCUMENT;
-import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_FILE;
-import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_GIF;
-import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_IMAGE;
-import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_LOCATION;
-import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_VIDEO;
-import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_VOICE;
-import static com.iGap.proto.ProtoGlobal.ClientAction.TYPING;
 import static com.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 import static com.iGap.proto.ProtoGlobal.Room.Type.CHAT;
 import static com.iGap.proto.ProtoGlobal.Room.Type.GROUP;
@@ -482,7 +469,49 @@ public class ActivityChat extends ActivityEnhanced
         initAttach();
         complete = new OnComplete() {
             @Override
-            public void complete(boolean result, String messageOne, String MessageTow) {
+            public void complete(boolean result, final String messageOne, String MessageTow) {
+                Realm realm = Realm.getDefaultInstance();
+                final long id = SUID.id().get();
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        String[] split = messageOne.split(",");
+                        RealmRoomMessageLocation messageLocation = realm.createObject(RealmRoomMessageLocation.class);
+                        messageLocation.setId(SUID.id().get());
+                        messageLocation.setLocationLat(Double.parseDouble(split[0]));
+                        messageLocation.setLocationLong(Double.parseDouble(split[1]));
+
+                        RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class);
+                        roomMessage.setLocation(messageLocation);
+                        roomMessage.setUpdateTime(System.nanoTime());
+                        roomMessage.setCreateTime(System.nanoTime());
+                        roomMessage.setMessageType(ProtoGlobal.RoomMessageType.LOCATION.toString());
+                        roomMessage.setRoomId(mRoomId);
+                        roomMessage.setUserId(userId);
+                        roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
+                        roomMessage.setMessageId(id);
+
+                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+
+                        if (realmRoom != null) {
+                            realmRoom.setLastMessage(getString(R.string.location_message));
+                            realmRoom.setLastMessageId(roomMessage.getMessageId());
+                            realmRoom.setLastMessageStatus(roomMessage.getStatus());
+                            realmRoom.setLastMessageTime(roomMessage.getUpdateTimeAsSeconds());
+                        }
+                    }
+                });
+                realm.close();
+                G.handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Realm realm1 = Realm.getDefaultInstance();
+                        RealmRoomMessage roomMessage = realm1.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, id).findFirst();
+                        switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(roomMessage))), false);
+                        G.chatSendMessageUtil.build(chatType, mRoomId, roomMessage);
+                        realm1.close();
+                    }
+                }, 300);
 
                 Log.e("ddd", messageOne);
             }
@@ -1688,14 +1717,12 @@ public class ActivityChat extends ActivityEnhanced
 
     private void setUserStatus(String status, long time) {
         Log.i("CCC", "setUserStatus status : " + status);
-        if (status != null) {
-            if (status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                Log.i("CCC", "setUserStatus 2 EXACTLY");
-                //TODO [Saeed Mozaffari] [2016-11-14 2:10 PM] - compute time from last seen
-            } else {
-                Log.i("CCC", "setUserStatus 3");
-                txtLastSeen.setText(status);
-            }
+        if (status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
+            Log.i("CCC", "setUserStatus 2 EXACTLY");
+            //TODO [Saeed Mozaffari] [2016-11-14 2:10 PM] - compute time from last seen
+        } else {
+            Log.i("CCC", "setUserStatus 3");
+            txtLastSeen.setText(status);
         }
     }
 
@@ -4042,26 +4069,15 @@ public class ActivityChat extends ActivityEnhanced
 
     @Override
     public void onSetAction(long roomId, long userId, final ProtoGlobal.ClientAction clientAction) {
-        Log.i("YYY", "clientAction 111");
         if (mRoomId == roomId && this.userId != userId) {
-            Log.i("YYY", "clientAction 222");
             if (chatType == ProtoGlobal.Room.Type.CHAT) {
-                Log.i("YYY", "clientAction 333");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Log.i("YYY", "clientAction.toString() : " + clientAction.toString());
-                        String action = getCorrectNameAction(clientAction.toString());
-                        Log.i("YYY", "action : " + action);
-                        if (action != null) {
-                            txtLastSeen.setText(action);
-                        } else {
-                            txtLastSeen.setText(userStatus);
-                        }
+                        txtLastSeen.setText(clientAction.toString());
                     }
                 });
             } else if (chatType == ProtoGlobal.Room.Type.GROUP) {
-                Log.i("YYY", "clientAction 444");
                 Realm realm = Realm.getDefaultInstance();
                 RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
                 final String name = realmRegisteredInfo.getDisplayName();
@@ -4074,47 +4090,9 @@ public class ActivityChat extends ActivityEnhanced
                     }
                 });
             }
-        } else {
-            Log.i("YYY", "clientAction 555");
         }
 
 
-    }
-
-    private String getCorrectNameAction(String action) {
-        String actionName = null;
-
-        if (action.equals(TYPING.toString())) {
-            actionName = getResources().getString(R.string.typing);
-        } else if (action.equals(SENDING_IMAGE.toString())) {
-            actionName = getResources().getString(R.string.sending_image);
-        } else if (action.equals(CAPTURING_IMAGE.toString())) {
-            actionName = getResources().getString(R.string.capturing_image);
-        } else if (action.equals(SENDING_VIDEO.toString())) {
-            actionName = getResources().getString(R.string.sending_video);
-        } else if (action.equals(CAPTURING_VIDEO.toString())) {
-            actionName = getResources().getString(R.string.capturing_video);
-        } else if (action.equals(SENDING_AUDIO.toString())) {
-            actionName = getResources().getString(R.string.sending_audio);
-        } else if (action.equals(RECORING_VOICE.toString())) {
-            actionName = getResources().getString(R.string.recording_voice);
-        } else if (action.equals(SENDING_VOICE.toString())) {
-            actionName = getResources().getString(R.string.sending_voice);
-        } else if (action.equals(SENDING_DOCUMENT.toString())) {
-            actionName = getResources().getString(R.string.sending_document);
-        } else if (action.equals(SENDING_GIF.toString())) {
-            actionName = getResources().getString(R.string.sending_gif);
-        } else if (action.equals(SENDING_FILE.toString())) {
-            actionName = getResources().getString(R.string.sending_file);
-        } else if (action.equals(SENDING_LOCATION.toString())) {
-            actionName = getResources().getString(R.string.sending_location);
-        } else if (action.equals(CHOOSING_CONTACT.toString())) {
-            actionName = getResources().getString(R.string.choosing_contact);
-        } else if (action.equals(PAINTING.toString())) {
-            actionName = getResources().getString(R.string.painting);
-        }
-
-        return actionName;
     }
 
     @Override
@@ -4174,21 +4152,21 @@ public class ActivityChat extends ActivityEnhanced
         ProtoGlobal.ClientAction action = null;
 
         if ((type == ProtoGlobal.RoomMessageType.IMAGE) || (type == ProtoGlobal.RoomMessageType.IMAGE_TEXT)) {
-            action = SENDING_IMAGE;
+            action = ProtoGlobal.ClientAction.SENDING_IMAGE;
         } else if ((type == ProtoGlobal.RoomMessageType.VIDEO) || (type == ProtoGlobal.RoomMessageType.VIDEO_TEXT)) {
-            action = SENDING_VIDEO;
+            action = ProtoGlobal.ClientAction.SENDING_VIDEO;
         } else if ((type == ProtoGlobal.RoomMessageType.AUDIO) || (type == ProtoGlobal.RoomMessageType.AUDIO_TEXT)) {
-            action = SENDING_AUDIO;
+            action = ProtoGlobal.ClientAction.SENDING_AUDIO;
         } else if (type == ProtoGlobal.RoomMessageType.VOICE) {
-            action = SENDING_VOICE;
+            action = ProtoGlobal.ClientAction.SENDING_VOICE;
         } else if (type == ProtoGlobal.RoomMessageType.GIF) {
-            action = SENDING_GIF;
+            action = ProtoGlobal.ClientAction.SENDING_GIF;
         } else if ((type == ProtoGlobal.RoomMessageType.FILE) || (type == ProtoGlobal.RoomMessageType.FILE_TEXT)) {
-            action = SENDING_FILE;
+            action = ProtoGlobal.ClientAction.SENDING_FILE;
         } else if (type == ProtoGlobal.RoomMessageType.LOCATION) {
-            action = SENDING_LOCATION;
+            action = ProtoGlobal.ClientAction.SENDING_LOCATION;
         } else if (type == ProtoGlobal.RoomMessageType.CONTACT) {
-            action = CHOOSING_CONTACT;
+            action = ProtoGlobal.ClientAction.CHOOSING_CONTACT;
         }
 
         return action;

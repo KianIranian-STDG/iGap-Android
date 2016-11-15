@@ -49,6 +49,7 @@ public class StructMessageInfo implements Parcelable {
     public String songArtist;
     public long songLength;
     public String messageText = "";
+    public String location;
     public String fileMime = "";
     public String filePic = "";
     public String filePath = "";
@@ -410,6 +411,11 @@ public class StructMessageInfo implements Parcelable {
             if (userInfo != null) {
                 messageInfo.forwardMessageFrom = userInfo.getDisplayName();
             }
+        }
+        if (roomMessage.getLocation() != null) {
+            double lat = roomMessage.getLocation().getLocationLat();
+            double lon = roomMessage.getLocation().getLocationLong();
+            messageInfo.location = Double.toString(lat) + "," + Double.toString(lon);
         }
 
         messageInfo.replayTo = roomMessage.getReplyTo();

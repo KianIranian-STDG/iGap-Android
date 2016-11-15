@@ -99,8 +99,8 @@ public class AttachFile {
                 location.getLatitude();
                 location.getLongitude();
 
-                String position = context.getString(R.string.my_Position_is) + "\n" + context.getString(R.string.latitude) + String.valueOf(location.getLatitude()) +
-                        "\n" + context.getString(R.string.longitude) + String.valueOf(location.getLongitude());
+                String position = String.valueOf(location.getLatitude()) +
+                        "," + String.valueOf(location.getLongitude());
 
                 if (complete != null) complete.complete(true, position, "");
             }
@@ -425,8 +425,8 @@ public class AttachFile {
                     location.getLatitude();
                     location.getLongitude();
 
-                    String position = context.getString(R.string.my_Position_is) + "\n" + context.getString(R.string.latitude) + String.valueOf(location.getLatitude()) +
-                            "\n" + context.getString(R.string.longitude) + String.valueOf(location.getLongitude());
+                    String position = String.valueOf(location.getLatitude()) +
+                            "," + String.valueOf(location.getLongitude());
 
                     if (complete != null) complete.complete(true, position, "");
                 } else {
