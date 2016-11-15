@@ -86,6 +86,7 @@ import com.iGap.interfaces.OnUserUpdateStatus;
 import com.iGap.interfaces.OnUserUsernameToId;
 import com.iGap.interfaces.OnUserVerification;
 import com.iGap.interfaces.OpenFragment;
+import com.iGap.interfaces.UpdateListAfterKick;
 import com.iGap.module.ChatSendMessageUtil;
 import com.iGap.module.ChatUpdateStatusUtil;
 import com.iGap.module.ClearMessagesUtil;
@@ -259,6 +260,8 @@ public class G extends Application {
     public static OnUpdateUserStatusInChangePage onUpdateUserStatusInChangePage;
     public static OnLastSeenUpdateTiming onLastSeenUpdateTiming;
     public static OnSetAction onSetAction;
+    public static UpdateListAfterKick updateListAfterKick;
+
     public static File chatBackground;
     public static File IMAGE_NEW_GROUP;
     public static File IMAGE_NEW_CHANEL;

@@ -25,7 +25,7 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
-                    android:layout_marginRight="@dimen/dp16"
+                    android:layout_marginRight="@dimen/dp8"
                     android:adjustViewBounds="true"
                     android:scaleType="centerCrop"
                     android:src="@mipmap/back_phone" />
@@ -69,7 +69,7 @@
                             android:layout_marginTop="@dimen/dp4"
                             android:singleLine="true"
                             android:text="+98 9125544669"
-                            android:textColor="@android:color/black"
+                            android:textColor="@color/gray_5c"
                             android:textSize="@dimen/sp14" />
                     </RelativeLayout>
                 </LinearLayout>
@@ -101,7 +101,7 @@
                         android:gravity="center"
                         android:minWidth="@dimen/dp32"
                         android:text="@string/md_user_shape"
-                        android:textSize="@dimen/sp16" />
+                        android:textSize="@dimen/sp18"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -109,7 +109,7 @@
                         android:padding="@dimen/dp8"
                         android:text="@string/New_Chat"
                         android:textColor="@android:color/black"
-                        android:textSize="@dimen/sp16" />
+                        android:textSize="@dimen/sp14"/>
 
                 </LinearLayout>
 
@@ -128,7 +128,7 @@
                         android:gravity="center"
                         android:minWidth="@dimen/dp32"
                         android:text="@string/md_users_social_symbol"
-                        android:textSize="@dimen/sp20" />
+                        android:textSize="@dimen/sp18"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -136,7 +136,7 @@
                         android:padding="@dimen/dp8"
                         android:text="@string/New_Group"
                         android:textColor="@android:color/black"
-                        android:textSize="@dimen/sp16" />
+                        android:textSize="@dimen/sp14"/>
 
                 </LinearLayout>
 
@@ -165,7 +165,7 @@
                         android:padding="@dimen/dp8"
                         android:text="@string/New_Chanel"
                         android:textColor="@android:color/black"
-                        android:textSize="@dimen/sp16" />
+                        android:textSize="@dimen/sp14"/>
 
                 </LinearLayout>
 
@@ -200,7 +200,7 @@
                         android:padding="@dimen/dp8"
                         android:text="@string/contacts"
                         android:textColor="@android:color/black"
-                        android:textSize="@dimen/sp16" />
+                        android:textSize="@dimen/sp14"/>
 
                 </LinearLayout>
 
@@ -229,7 +229,7 @@
                         android:padding="@dimen/dp8"
                         android:text="@string/Invite_Friends"
                         android:textColor="@android:color/black"
-                        android:textSize="@dimen/sp16" />
+                        android:textSize="@dimen/sp14"/>
 
                 </LinearLayout>
 
@@ -257,7 +257,7 @@
                         android:padding="@dimen/dp8"
                         android:text="@string/chi_title_setting"
                         android:textColor="@android:color/black"
-                        android:textSize="@dimen/sp16" />
+                        android:textSize="@dimen/sp14"/>
 
                 </LinearLayout>
 
@@ -285,7 +285,7 @@
                         android:padding="@dimen/dp8"
                         android:text="@string/iGap_FAQ"
                         android:textColor="@android:color/black"
-                        android:textSize="@dimen/sp16" />
+                        android:textSize="@dimen/sp14"/>
 
                 </LinearLayout>
             </LinearLayout>

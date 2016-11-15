@@ -89,7 +89,7 @@
     <string name="st_title_general">General</string>
     <string name="st_username">Username:</string>
     <string name="st_nickname">Nickname:</string>
-    <string name="st_Gander">Gander:</string>
+    <string name="st_Gander">Gender:</string>
     <string name="st_email">Email:</string>
     <string name="st_contactName">Contact Name:</string>
     <string name="st_phoneNumber">Phone Number:</string>
@@ -287,7 +287,9 @@
     <string name="unknown_artist">Unknown Artist</string>
     <string name="add_new_member">Add New Members</string>
     <string name="set_admin">Set Admin</string>
+    <string name="list_admin">List Admin</string>
     <string name="set_modereator">Set Moderator</string>
+    <string name="list_modereator">List Moderator</string>
     <string name="set_kick">KICK</string>
     <string name="member_can_add_new_member">Members Can Add New Members</string>
     <string name="notificaion_and_sound">Notifications and Sound</string>
@@ -332,6 +334,8 @@
     <string name="from_Now">From Now</string>
     <string name="last_50_Messages">Last 50 Messages</string>
     <string name="customs">Customs</string>
+    <string name="text_kick_admin">Are you sure kick this admin?</string>
+    <string name="text_kick_moderator">Are you sure kick this moderator?</string>
 
     <string name="desc">Description</string>
 
@@ -416,7 +420,12 @@
     <string name="resend_all_messages" formatted="false">Resend %d messages</string>
     <string name="image_selected_for_send">" image selected for send"</string>
     <string name="video_selected_for_send">" video selected for send"</string>
+    <string name="multi_video_selected_for_send">" video selected for send"</string>
     <string name="audio_selected_for_send">" audio selected for send"</string>
+    <string name="file_selected_for_send">" file selected for send"</string>
+    <string name="pain_selected_for_send">" paint image selected for send"</string>
+    <string name="phone_selected_for_send">" phone selected for send"</string>
+    <string name="crop_selected_for_send">" crop image selected for send"</string>
     <string name="dialog_readonly_chat">Sorry, you can\'t send messages to this chat.</string>
     <string name="remove_admin">Remove Admin</string>
     <string name="remove_moderator">Remove Moderator</string>

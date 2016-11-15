@@ -219,7 +219,7 @@
                         android:text="Alexander Smith"
                         android:paddingRight="@dimen/dp4"
                         android:paddingEnd="@dimen/dp4"
-                        android:textColor="@color/cardview_dark_background"
+                        android:textColor="@color/gray_5c"
                         android:textSize="@dimen/sp13"
                         />
 
@@ -294,7 +294,7 @@
                         android:paddingRight="@dimen/dp4"
                         android:paddingEnd="@dimen/dp4"
                         android:text="09125554433"
-                        android:textColor="@color/cardview_dark_background"
+                        android:textColor="@color/gray_5c"
                         android:textSize="@dimen/sp13"/>
                 </LinearLayout>
 
@@ -330,7 +330,7 @@
                         android:paddingRight="@dimen/dp4"
                         android:paddingEnd="@dimen/dp4"
                         android:text="12"
-                        android:textColor="@color/cardview_dark_background"
+                        android:textColor="@color/gray_5c"
                         android:textSize="@dimen/sp13"
                         android:theme="@style/Setting_editText" />
 

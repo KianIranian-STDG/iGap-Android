@@ -218,7 +218,7 @@
                             android:paddingStart="@dimen/dp4"
                             android:singleLine="true"
                             android:text="Alexander Smith"
-                            android:textColor="@color/cardview_dark_background"
+                            android:textColor="@color/gray_5c"
                             android:textSize="@dimen/sp14"
                             android:theme="@style/Setting_editText"/>
 
@@ -259,7 +259,7 @@
                             android:paddingEnd="@dimen/dp4"
                             android:paddingStart="@dimen/dp4"
                             android:text="unknown"
-                            android:textColor="@color/cardview_dark_background"
+                            android:textColor="@color/gray_5c"
                             android:textSize="@dimen/sp14"
                             android:theme="@style/Setting_editText"/>
 
@@ -301,7 +301,7 @@
                             android:paddingStart="@dimen/dp4"
                             android:singleLine="true"
                             android:text="Alexander Smith:"
-                            android:textColor="@color/cardview_dark_background"
+                            android:textColor="@color/gray_5c"
                             android:textSize="@dimen/sp14"
                             android:theme="@style/Setting_editText"/>
                     </LinearLayout>
@@ -342,7 +342,7 @@
                             android:paddingStart="@dimen/dp4"
                             android:singleLine="true"
                             android:text="example@Gmail.com"
-                            android:textColor="@color/cardview_dark_background"
+                            android:textColor="@color/gray_5c"
                             android:textSize="@dimen/sp14"
                             android:theme="@style/Setting_editText"/>
                     </LinearLayout>
@@ -376,7 +376,7 @@
                         android:paddingEnd="@dimen/dp4"
                         android:paddingStart="@dimen/dp4"
                         android:text="09121234567"
-                        android:textColor="@color/cardview_dark_background"
+                        android:textColor="@color/gray_5c"
                         android:textSize="@dimen/sp14"
                         android:textStyle="normal"/>
                 </RelativeLayout>

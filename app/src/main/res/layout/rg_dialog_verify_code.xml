@@ -12,7 +12,6 @@
         android:paddingLeft="@dimen/dp24"
         android:paddingRight="@dimen/dp24"
         android:text="@string/Re_Phone_Verification"
-
         android:textColor="@color/toolbar_background"
         android:textSize="@dimen/sp22"
         android:textStyle="bold" />
@@ -64,6 +63,8 @@
             android:layout_height="@dimen/dp36"
             android:background="@android:color/transparent"
             android:gravity="center"
+            android:layout_marginRight="@dimen/dp16"
+            android:layout_marginEnd="@dimen/dp16"
             android:text="@string/rg_verify_dialog_resend_code"
             android:textColor="@color/toolbar_background"
             android:textSize="@dimen/sp14"
@@ -71,9 +72,11 @@
 
         <TextView
             android:id="@+id/rg_btn_cancelVerifyCode"
-            android:layout_width="@dimen/dp60"
+            android:layout_width="wrap_content"
             android:layout_height="@dimen/dp36"
             android:layout_marginLeft="@dimen/dp8"
+            android:layout_marginRight="@dimen/dp24"
+            android:layout_marginEnd="@dimen/dp24"
             android:background="@android:color/transparent"
             android:gravity="center"
             android:text="@string/rg_verify_dialog_try_code"

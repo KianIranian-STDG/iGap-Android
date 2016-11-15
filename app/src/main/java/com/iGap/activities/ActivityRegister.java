@@ -690,8 +690,9 @@ public class ActivityRegister extends ActivityEnhanced {
             @Override
             public void onClick(View v) {
                 userRegister();
-                edtPhoneNumber.setText("");
                 dialog.dismiss();
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
             }
         });
         dialog.setCancelable(false);

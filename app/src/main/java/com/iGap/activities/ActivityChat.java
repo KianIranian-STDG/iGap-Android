@@ -2079,6 +2079,8 @@ public class ActivityChat extends ActivityEnhanced
                 .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_contact), subButtonColors[0], getResources().getString(R.string.am_contact))
                 .autoDismiss(true)
                 .cancelable(true)
+                .duration(500)
+                .delay(10)
                 .boomButtonShadow(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2))
                 .subButtonTextColor(ContextCompat.getColor(G.context, R.color.am_iconFab_black))
                 .button(ButtonType.CIRCLE)
@@ -2209,11 +2211,13 @@ public class ActivityChat extends ActivityEnhanced
 
         switch (requestCode) {
             case AttachFile.request_code_TAKE_PICTURE:
-                txtFileNameForSend.setText(attachFile.getFileName(listPathString.get(0)));
+//                txtFileNameForSend.setText(attachFile.getFileName(listPathString.get(0)));
+                txtFileNameForSend.setText(getString(R.string.image_selected_for_send));
                 break;
             case AttachFile.requestOpenGalleryForImageMultipleSelect:
                 if (listPathString.size() == 1) {
-                    txtFileNameForSend.setText(attachFile.getFileName(listPathString.get(0)));
+//                    txtFileNameForSend.setText(attachFile.getFileName(listPathString.get(0)));
+                    txtFileNameForSend.setText(getString(R.string.image_selected_for_send));
                 } else {
                     txtFileNameForSend.setText(listPathString.size() + getString(R.string.image_selected_for_send));
                 }
@@ -2221,41 +2225,46 @@ public class ActivityChat extends ActivityEnhanced
                 break;
 
             case AttachFile.requestOpenGalleryForVideoMultipleSelect:
+                txtFileNameForSend.setText(getString(R.string.multi_video_selected_for_send));
+                break;
             case AttachFile.request_code_VIDEO_CAPTURED:
 
                 if (listPathString.size() == 1) {
-                    txtFileNameForSend.setText(attachFile.getFileName(listPathString.get(0)));
+//                    txtFileNameForSend.setText(attachFile.getFileName(listPathString.get(0)));
+                    txtFileNameForSend.setText(getString(R.string.video_selected_for_send));
                 } else {
                     txtFileNameForSend.setText(listPathString.size() + getString(R.string.video_selected_for_send));
-
                 }
-
                 break;
-
 
             case AttachFile.request_code_pic_audi:
                 if (listPathString.size() == 1) {
-                    txtFileNameForSend.setText(attachFile.getFileName(listPathString.get(0)));
+//                    txtFileNameForSend.setText(attachFile.getFileName(listPathString.get(0)));
+                    txtFileNameForSend.setText(getString(R.string.audio_selected_for_send));
                 } else {
                     txtFileNameForSend.setText(listPathString.size() + getString(R.string.audio_selected_for_send));
                 }
                 break;
             case AttachFile.request_code_pic_file:
+                txtFileNameForSend.setText(getString(R.string.file_selected_for_send));
+                break;
             case AttachFile.request_code_open_document:
                 if (listPathString.size() == 1) {
-                    txtFileNameForSend.setText(attachFile.getFileName(listPathString.get(0)));
+//                    txtFileNameForSend.setText(attachFile.getFileName(listPathString.get(0)));
+                    txtFileNameForSend.setText(getString(R.string.file_selected_for_send));
                 }
                 break;
             case AttachFile.request_code_paint:
                 if (listPathString.size() == 1) {
-                    txtFileNameForSend.setText(attachFile.getFileName(listPathString.get(0)));
+//                    txtFileNameForSend.setText(attachFile.getFileName(listPathString.get(0)));
+                    txtFileNameForSend.setText(getString(R.string.pain_selected_for_send));
                 }
                 break;
             case AttachFile.request_code_contact_phone:
-                txtFileNameForSend.setText("Send Phone Contact");
+                txtFileNameForSend.setText(getString(R.string.phone_selected_for_send));
                 break;
             case IntentRequests.REQ_CROP:
-                txtFileNameForSend.setText("Crop Image");
+                txtFileNameForSend.setText(getString(R.string.crop_selected_for_send));
                 break;
         }
     }

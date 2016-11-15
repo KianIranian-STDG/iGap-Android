@@ -50,8 +50,7 @@ public class ShowCustomList extends Fragment {
     private long lastId = 0;
     private int count = 0;
 
-    public static ShowCustomList newInstance(List<StructContactInfo> list,
-                                             OnSelectedList onSelectedListResult) {
+    public static ShowCustomList newInstance(List<StructContactInfo> list, OnSelectedList onSelectedListResult) {
         onSelectedList = onSelectedListResult;
         contacts = list;
 

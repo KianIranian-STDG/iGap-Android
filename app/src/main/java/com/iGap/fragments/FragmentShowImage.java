@@ -25,6 +25,7 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.helper.HelperSaveFile;
 import com.iGap.interfaces.OnFileDownloadResponse;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.AndroidUtils;
@@ -411,24 +412,20 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
 
                                 if (which == 0) {
                                     showAllMedia();
+                                    // TODO: 11/15/2016 this part it dose'nt work
                                 } else if (which == 1) {
-                                    saveToGalary();
+
+                                    HelperSaveFile.savePicToGallary(pathImage);
 
                                 } else if (which == 2) {
 
                                     Intent intent = new Intent(Intent.ACTION_SEND);
-                                    intent.putExtra(Intent.EXTRA_TEXT, "Hey view/download this image");
+                                    intent.putExtra(Intent.EXTRA_TEXT, "iGap/download this image");
                                     Uri screenshotUri = Uri.parse(pathImage);
 
                                     intent.putExtra(Intent.EXTRA_STREAM, screenshotUri);
                                     intent.setType("image/*");
-                                    startActivity(Intent.createChooser(intent, "Share image via..."));
-
-//                                    Intent share = new Intent(Intent.ACTION_SEND);
-//                                    share.setType("image/jpg");
-//                                    share.putExtra(Intent.EXTRA_STREAM, Uri.parse(pathImage));
-//                                    startActivity(Intent.createChooser(share, "Share Image"));
-
+                                    startActivity(Intent.createChooser(intent, "Share image from iGap"));
 
                                 } else if (which == 3) {
 

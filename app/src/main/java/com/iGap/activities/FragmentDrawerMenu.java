@@ -95,7 +95,7 @@ public class FragmentDrawerMenu extends MenuFragment {
         txtUserName = (TextView) v.findViewById(R.id.lm_txt_user_name);
 
         TextView txtPhoneNumber = (TextView) v.findViewById(R.id.lm_txt_phone_number);
-        txtPhoneNumber.setTypeface(G.fontawesome);
+
 
         txtUserName.setText(username);
         txtPhoneNumber.setText(phoneNumber);

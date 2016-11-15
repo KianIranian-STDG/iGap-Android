@@ -38,6 +38,7 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AdapterShearedMedia;
 import com.iGap.adapter.items.ContactItemGroupProfile;
+import com.iGap.fragments.FragmentListAdmin;
 import com.iGap.fragments.FragmentNotification;
 import com.iGap.fragments.ShowCustomList;
 import com.iGap.interfaces.OnFileUploadForActivities;
@@ -54,6 +55,7 @@ import com.iGap.interfaces.OnGroupLeft;
 import com.iGap.interfaces.OnMenuClick;
 import com.iGap.interfaces.OnSelectedList;
 import com.iGap.interfaces.OnUserInfoResponse;
+import com.iGap.interfaces.UpdateListAfterKick;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.AttachFile;
@@ -110,6 +112,8 @@ import io.realm.RealmList;
 import io.realm.RealmResults;
 import io.realm.Sort;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
+import static com.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
 /**
  * Created by android3 on 9/18/2016.
@@ -337,6 +341,14 @@ public class ActivityGroupProfile extends ActivityEnhanced
         //            public void onClick(View view) {
         //            }
         //        });
+
+
+        G.updateListAfterKick = new UpdateListAfterKick() {
+            @Override
+            public void updateList(long memberId, ProtoGlobal.GroupRoom.Role role) {
+                updateRole(memberId, role);
+            }
+        };
 
         layoutSetting = (LinearLayout) findViewById(R.id.agp_ll_seetting);
         layoutSetAdmin = (LinearLayout) findViewById(R.id.agp_ll_set_admin);
@@ -688,6 +700,12 @@ public class ActivityGroupProfile extends ActivityEnhanced
                 Log.e("dddd", " invite click  " + position + "   " + v + "       " + adapter + "    " + item + "     " + v.getTag());
                 // TODO: 9/14/2016 nejati     go into clicked user page
 
+                ContactItemGroupProfile contactItemGroupProfile = (ContactItemGroupProfile) item;
+                Intent intent = new Intent(ActivityGroupProfile.this, ActivityContactsProfile.class);
+                intent.putExtra("peerId", contactItemGroupProfile.mContact.peerId);
+                intent.putExtra("RoomId", roomId);
+                intent.putExtra("enterFrom", GROUP.toString());
+                startActivity(intent);
 
                 return false;
             }
@@ -1966,22 +1984,6 @@ public class ActivityGroupProfile extends ActivityEnhanced
 
                                 updateRole(memberId, ProtoGlobal.GroupRoom.Role.MEMBER);
 
-//                                List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
-//
-//                                for (int i = 0; i < items.size(); i++) {
-//                                    Log.i("OOO", "displayName" + items.get(i).mContact.displayName);
-//                                    if (items.get(i).mContact.peerId == memberId) {
-//                                        items.get(i).mContact.role = ProtoGlobal.GroupRoom.Role.MEMBER.toString();
-//                                        Log.i("OOO", "notifyItemChanged(i) : " + i);
-//                                        final int index = i;
-//                                        runOnUiThread(new Runnable() {
-//                                            @Override
-//                                            public void run() {
-//                                                itemAdapter.notifyItemChanged(index);
-//                                            }
-//                                        });
-//                                    }
-//                                }
                             }
 
                             @Override
@@ -2347,231 +2349,28 @@ public class ActivityGroupProfile extends ActivityEnhanced
     }
 
     private void setMemberRoleToModerator() {
-
-        Fragment fragment = ShowCustomList.newInstance(contacts, new OnSelectedList() {
-            @Override
-            public void getSelectedList(boolean result, String message, int count,
-                                        final ArrayList<StructContactInfo> list) {
-
-                G.onGroupAddModerator = new OnGroupAddModerator() {
-                    @Override
-                    public void onGroupAddModerator(long roomId, final long memberId) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                for (int i = 0; i < contacts.size(); i++) {
-                                    if (contacts.get(i).peerId == memberId) {
-                                        contacts.get(i).role =
-                                                ProtoGlobal.GroupRoom.Role.MODERATOR.toString();
-
-                                        if (i < itemAdapter.getAdapterItemCount()) {
-                                            IItem item = (new ContactItemGroupProfile().setContact(
-                                                    contacts.get(i))
-                                                    .withIdentifier(
-                                                            100 + contacts.indexOf(contacts.get(i))));
-                                            itemAdapter.set(i, item);
-                                        }
-                                        break;
-                                    }
-                                }
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onError(int majorCode, final int minorCode) {
-                        if (majorCode == 318) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-
-                                    if (minorCode == 1) {
-                                        final Snackbar snack =
-                                                Snackbar.make(findViewById(android.R.id.content),
-                                                        getResources().getString(R.string.E_318_1),
-                                                        Snackbar.LENGTH_LONG);
-
-                                        snack.setAction("CANCEL", new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View view) {
-                                                snack.dismiss();
-                                            }
-                                        });
-                                        snack.show();
-                                    } else {
-                                        final Snackbar snack =
-                                                Snackbar.make(findViewById(android.R.id.content),
-                                                        getResources().getString(R.string.E_318_2),
-                                                        Snackbar.LENGTH_LONG);
-
-                                        snack.setAction("CANCEL", new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View view) {
-                                                snack.dismiss();
-                                            }
-                                        });
-                                        snack.show();
-                                    }
-                                }
-                            });
-                        } else if (majorCode == 319) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    final Snackbar snack =
-                                            Snackbar.make(findViewById(android.R.id.content),
-                                                    getResources().getString(R.string.E_319),
-                                                    Snackbar.LENGTH_LONG);
-
-                                    snack.setAction("CANCEL", new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            snack.dismiss();
-                                        }
-                                    });
-                                    snack.show();
-                                }
-                            });
-                        } else if (majorCode == 320) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    final Snackbar snack =
-                                            Snackbar.make(findViewById(android.R.id.content),
-                                                    getResources().getString(R.string.E_320),
-                                                    Snackbar.LENGTH_LONG);
-
-                                    snack.setAction("CANCEL", new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            snack.dismiss();
-                                        }
-                                    });
-                                    snack.show();
-                                }
-                            });
-                        }
-                    }
-                };
-
-                for (int i = 0; i < list.size(); i++) {
-                    new RequestGroupAddModerator().groupAddModerator(roomId, list.get(i).peerId);
-                }
-            }
-        });
+        Fragment fragment = FragmentListAdmin.newInstance(contacts);
         Bundle bundle = new Bundle();
+        bundle.putString("TYPE", "MODERATOR");
+        bundle.putLong("ID", roomId);
         bundle.putBoolean("DIALOG_SHOWING", false);
         fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction()
-                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
-                        R.anim.slide_in_right, R.anim.slide_out_left)
+                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
                 .addToBackStack(null)
                 .replace(R.id.fragmentContainer_group_profile, fragment)
                 .commit();
     }
 
     private void setMemberRoleToAdmin() {
-
-        Fragment fragment = ShowCustomList.newInstance(contacts, new OnSelectedList() {
-            @Override
-            public void getSelectedList(boolean result, String message, int count,
-                                        ArrayList<StructContactInfo> list) {
-
-                G.onGroupAddAdmin = new OnGroupAddAdmin() {
-                    @Override
-                    public void onGroupAddAdmin(long roomId, final long memberId) {
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                for (int i = 0; i < contacts.size(); i++) {
-                                    if (contacts.get(i).peerId == memberId) {
-                                        contacts.get(i).role = ProtoGlobal.GroupRoom.Role.ADMIN.toString();
-
-                                        if (i < itemAdapter.getAdapterItemCount()) {
-                                            IItem item = (new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(
-                                                    100 + contacts.indexOf(contacts.get(i))));
-                                            itemAdapter.set(i, item);
-                                        }
-
-                                        break;
-                                    }
-                                }
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onError(int majorCode, int minorCode) {
-                        if (majorCode == 321) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    final Snackbar snack =
-                                            Snackbar.make(findViewById(android.R.id.content),
-                                                    getResources().getString(R.string.E_321),
-                                                    Snackbar.LENGTH_LONG);
-
-                                    snack.setAction("CANCEL", new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            snack.dismiss();
-                                        }
-                                    });
-                                    snack.show();
-                                }
-                            });
-                        } else if (majorCode == 322) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    final Snackbar snack =
-                                            Snackbar.make(findViewById(android.R.id.content),
-                                                    getResources().getString(R.string.E_322),
-                                                    Snackbar.LENGTH_LONG);
-
-                                    snack.setAction("CANCEL", new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            snack.dismiss();
-                                        }
-                                    });
-                                    snack.show();
-                                }
-                            });
-                        } else if (majorCode == 323) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    final Snackbar snack =
-                                            Snackbar.make(findViewById(android.R.id.content),
-                                                    getResources().getString(R.string.E_323),
-                                                    Snackbar.LENGTH_LONG);
-
-                                    snack.setAction("CANCEL", new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            snack.dismiss();
-                                        }
-                                    });
-                                    snack.show();
-                                }
-                            });
-                        }
-                    }
-                };
-
-                for (int i = 0; i < list.size(); i++) {
-                    new RequestGroupAddAdmin().groupAddAdmin(roomId, list.get(i).peerId);
-                }
-            }
-        });
+        Fragment fragment = FragmentListAdmin.newInstance(contacts);
         Bundle bundle = new Bundle();
         bundle.putBoolean("DIALOG_SHOWING", false);
+        bundle.putLong("ID", roomId);
+        bundle.putString("TYPE", "ADMIN");
         fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction()
-                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
-                        R.anim.slide_in_right, R.anim.slide_out_left)
+                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
                 .addToBackStack(null)
                 .replace(R.id.fragmentContainer_group_profile, fragment)
                 .commit();

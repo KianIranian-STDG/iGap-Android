@@ -219,7 +219,7 @@
                                 android:paddingTop="@dimen/dp4"
                                 android:singleLine="true"
                                 android:text=""
-                                android:textColor="@color/cardview_dark_background"
+                                android:textColor="@color/gray_5c"
                                 android:textSize="@dimen/sp13"
                                 />
 
@@ -256,7 +256,7 @@
                                 android:paddingTop="@dimen/dp4"
                                 android:singleLine="true"
                                 android:text="12"
-                                android:textColor="@color/cardview_dark_background"
+                                android:textColor="@color/gray_5c"
                                 android:textSize="@dimen/sp13"
                                 />
                         </LinearLayout>
@@ -304,7 +304,7 @@
                                 android:paddingTop="@dimen/dp4"
                                 android:singleLine="true"
                                 android:text=""
-                                android:textColor="@color/cardview_dark_background"
+                                android:textColor="@color/gray_5c"
                                 android:textSize="@dimen/sp13"
                                 />
 
@@ -339,7 +339,7 @@
                                 android:paddingTop="@dimen/dp4"
                                 android:singleLine="true"
                                 android:text=""
-                                android:textColor="@color/cardview_dark_background"
+                                android:textColor="@color/gray_5c"
                                 android:textSize="@dimen/sp13"/>
 
                         </LinearLayout>
@@ -463,7 +463,7 @@
                             android:paddingRight="@dimen/sp16"
                             android:paddingStart="@dimen/sp16"
                             android:singleLine="true"
-                            android:text="@string/set_admin"
+                            android:text="@string/list_admin"
                             android:textColor="@android:color/black"
                             android:textSize="@dimen/sp15"/>
 
@@ -491,7 +491,7 @@
                             android:paddingRight="@dimen/sp16"
                             android:paddingStart="@dimen/sp16"
                             android:singleLine="true"
-                            android:text="@string/set_modereator"
+                            android:text="@string/list_modereator"
                             android:textColor="@android:color/black"
                             android:textSize="@dimen/sp15"/>
 
