@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/replayLayoutAboveEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?android:attr/windowBackground"
-                android:gravity="center_vertical">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/replayLayoutAboveEditText"
+              android:layout_width="match_parent"
+              android:layout_height="@dimen/dp48"
+              android:background="?android:attr/windowBackground"
+              android:clickable="true"
+              android:gravity="center_vertical">
 
     <ImageView
         android:id="@+id/replyIcon"
         android:layout_width="@dimen/dp32"
         android:layout_height="@dimen/dp32"
-        android:layout_alignParentLeft="true"
         android:layout_marginRight="@dimen/dp4"
         android:contentDescription="@null"
         android:src="@drawable/ic_reply"/>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/cancelIcon"
-        android:layout_toRightOf="@+id/replyIcon"
+        android:layout_weight="1"
         android:orientation="vertical">
 
         <io.github.meness.emoji.EmojiTextView
@@ -41,8 +40,7 @@
         android:id="@+id/cancelIcon"
         android:layout_width="@dimen/dp32"
         android:layout_height="@dimen/dp32"
-        android:layout_alignParentRight="true"
         android:contentDescription="@null"
         android:src="@drawable/ic_gray_cancel"/>
 
-</RelativeLayout>
+</LinearLayout>

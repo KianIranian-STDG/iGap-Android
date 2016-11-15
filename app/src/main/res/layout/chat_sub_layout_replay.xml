@@ -4,6 +4,7 @@
               android:layout_height="wrap_content"
               android:layout_marginBottom="@dimen/dp8"
               android:gravity="left|center"
+              android:clickable="true"
               android:orientation="horizontal"
               android:paddingBottom="@dimen/dp4"
               android:paddingRight="@dimen/dp4"
@@ -30,7 +31,7 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="@dimen/dp8"
         android:layout_weight="1"
-        android:gravity="left|center"
+        android:gravity="left"
         android:orientation="vertical">
 
         <io.github.meness.emoji.EmojiTextView
@@ -45,9 +46,8 @@
         <io.github.meness.emoji.EmojiTextView
             android:id="@+id/chslr_txt_replay_message"
             style="@style/ChatMessages.EmojiTextView"
-            android:layout_marginTop="@dimen/dp4"
-            android:maxWidth="@dimen/dp280"
             android:maxLines="1"
+            android:maxWidth="@dimen/dp280"
             android:text="SAMPLE TEXT"
             android:textColor="@android:color/white"
             android:textSize="@dimen/sp14"/>

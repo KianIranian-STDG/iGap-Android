@@ -54,14 +54,6 @@
                 android:layout_height="wrap_content"
                 android:text="09373778686"
                 android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small" />
-
-            <TextView
-                android:id="@+id/username"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="username"
-                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small" />
-
             <include layout="@layout/chat_sub_layout_messages_time" />
         </LinearLayout>
     </LinearLayout>

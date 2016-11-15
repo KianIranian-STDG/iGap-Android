@@ -37,13 +37,6 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
 
         holder.name.setText(mMessage.userInfo.displayName);
         holder.number.setText(mMessage.userInfo.phone);
-
-        if (mMessage.userInfo.username != null && !mMessage.userInfo.username.isEmpty()) {
-            holder.username.setVisibility(View.VISIBLE);
-            holder.username.setText("@" + mMessage.userInfo.username);
-        } else {
-            holder.username.setVisibility(View.GONE);
-        }
     }
 
     @Override
@@ -60,13 +53,11 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
     protected static class ViewHolder extends RecyclerView.ViewHolder {
         protected TextView name;
         protected TextView number;
-        protected TextView username;
 
         public ViewHolder(View view) {
             super(view);
             name = (TextView) view.findViewById(R.id.name);
             number = (TextView) view.findViewById(R.id.number);
-            username = (TextView) view.findViewById(R.id.username);
         }
     }
 }

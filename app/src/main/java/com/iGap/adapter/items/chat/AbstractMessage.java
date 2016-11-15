@@ -26,8 +26,8 @@ import com.iGap.module.TimeUtils;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
-import com.iGap.realm.RealmUserInfo;
-import com.iGap.realm.RealmUserInfoFields;
+import com.iGap.realm.RealmRegisteredInfo;
+import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.request.RequestFileDownload;
 import com.iGap.request.RequestUserInfo;
 import com.mikepenz.fastadapter.items.AbstractItem;
@@ -268,17 +268,33 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         LinearLayout replayContainer = (LinearLayout) holder.itemView.findViewById(R.id.replayLayout);
         if (replayContainer != null) {
             if (mMessage.replayTo != null) {
-                if (mMessage.replayTo.getAttachment() != null) {
-                    holder.itemView.findViewById(R.id.chslr_imv_replay_pic).setVisibility(View.VISIBLE);
-                    ImageLoader.getInstance().displayImage(mMessage.replayTo.getAttachment().getLocalThumbnailPath(), (ImageView) holder.itemView.findViewById(R.id.chslr_imv_replay_pic));
-                } else {
-                    holder.itemView.findViewById(R.id.chslr_imv_replay_pic).setVisibility(View.GONE);
+                holder.itemView.findViewById(R.id.chslr_imv_replay_pic).setVisibility(View.VISIBLE);
+
+                switch (ProtoGlobal.RoomMessageType.valueOf(mMessage.replayTo.getMessageType())) {
+                    case AUDIO:
+                    case AUDIO_TEXT:
+                        ((ImageView) holder.itemView.findViewById(R.id.chslr_imv_replay_pic)).setImageResource(R.drawable.docx);
+                        break;
+                    default:
+                        if (mMessage.replayTo.getAttachment() != null) {
+                            if (mMessage.replayTo.getAttachment().isFileExistsOnLocal()) {
+                                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mMessage.replayTo.getAttachment().getLocalFilePath()), (ImageView) holder.itemView.findViewById(R.id.chslr_imv_replay_pic));
+                            } else if (mMessage.replayTo.getAttachment().isThumbnailExistsOnLocal()) {
+                                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mMessage.replayTo.getAttachment().getLocalThumbnailPath()), (ImageView) holder.itemView.findViewById(R.id.chslr_imv_replay_pic));
+                            } else {
+                                holder.itemView.findViewById(R.id.chslr_imv_replay_pic).setVisibility(View.GONE);
+                                // TODO: 11/15/2016 [Alireza] request download bede
+                            }
+                        } else {
+                            holder.itemView.findViewById(R.id.chslr_imv_replay_pic).setVisibility(View.GONE);
+                        }
+                        break;
                 }
 
                 Realm realm = Realm.getDefaultInstance();
-                RealmUserInfo replayToInfo = realm.where(RealmUserInfo.class).equalTo(RealmUserInfoFields.USER_INFO.ID, mMessage.replayTo.getUserId()).findFirst();
+                RealmRegisteredInfo replayToInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mMessage.replayTo.getUserId()).findFirst();
                 if (replayToInfo != null) {
-                    ((TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_from)).setText(replayToInfo.getUserInfo().getDisplayName());
+                    ((TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_from)).setText(replayToInfo.getDisplayName());
                 }
                 ((TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_message)).setText(mMessage.replayTo.getMessage());
 
