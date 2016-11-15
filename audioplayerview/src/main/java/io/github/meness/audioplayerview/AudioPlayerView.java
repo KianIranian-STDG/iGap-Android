@@ -111,19 +111,16 @@ public class AudioPlayerView extends FrameLayout {
         mPauseButton = (ImageButton) v.findViewById(R.id.pause);
         if (mPauseButton != null) {
             mPauseButton.setOnClickListener(mPauseListener);
-            mPauseButton.setImageResource(R.drawable.ic_media_pause);
         }
 
         mPlayButton = (ImageButton) v.findViewById(R.id.play);
         if (mPlayButton != null) {
             mPlayButton.setOnClickListener(mPlayListener);
-            mPlayButton.setImageResource(R.drawable.ic_media_play);
         }
 
         mStopButton = (ImageButton) v.findViewById(R.id.stop);
         if (mStopButton != null) {
             mStopButton.setOnClickListener(mStopListener);
-            mStopButton.setImageResource(R.drawable.ic_media_stop);
         }
 
         mProgress = (SeekBar) v.findViewById(R.id.seekBar);
@@ -208,9 +205,9 @@ public class AudioPlayerView extends FrameLayout {
 
         mFormatBuilder.setLength(0);
         if (hours > 0) {
-            return mFormatter.format((separator ? " / " : "") + "%d:%02d:%02d", hours, minutes, seconds).toString();
+            return mFormatter.format((separator ? "/ " : "") + "%d:%02d:%02d", hours, minutes, seconds).toString();
         } else {
-            return mFormatter.format((separator ? " / " : "") + "%02d:%02d", minutes, seconds).toString();
+            return mFormatter.format((separator ? "/ " : "") + "%02d:%02d", minutes, seconds).toString();
         }
     }
 

@@ -23,14 +23,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="4dp"
-                android:textSize="14sp"
+                android:textSize="10sp"
                 />
 
             <TextView
                 android:id="@+id/totalTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
+                android:textSize="10sp"
                 />
         </LinearLayout>
 
@@ -47,25 +47,36 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:layout_marginTop="6dp"
         android:orientation="horizontal"
-        android:paddingTop="4dp"
         >
 
         <ImageButton
             android:id="@+id/pause"
-            android:contentDescription="@string/audioplayerview_desc_pause"
+            android:src="@drawable/ic_media_pause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="40dp"
+            android:padding="4dp"
             style="@android:style/MediaButton.Pause"
             />
 
         <ImageButton
             android:id="@+id/play"
-            android:contentDescription="@string/audioplayerview_desc_play"
+            android:src="@drawable/ic_media_play"
+            android:layout_width="wrap_content"
+            android:layout_marginRight="40dp"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
             style="@android:style/MediaButton.Play"
             />
 
         <ImageButton
             android:id="@+id/stop"
-            android:contentDescription="@string/audioplayerview_desc_stop"
+            android:src="@drawable/ic_media_stop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
             style="@android:style/MediaButton.Previous"
             />
 

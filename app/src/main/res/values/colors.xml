@@ -101,5 +101,6 @@
     <color name="iGapColor">#3dbcb3</color>
 
     <color name="newBlack">#171717</color>
+    <color name="gray10">#e5e5e5</color>
 
 </resources>
