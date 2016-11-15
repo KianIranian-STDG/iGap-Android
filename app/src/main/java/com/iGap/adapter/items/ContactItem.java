@@ -3,6 +3,7 @@ package com.iGap.adapter.items;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.view.View;
 
 import com.iGap.G;
@@ -10,7 +11,9 @@ import com.iGap.R;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.CustomTextViewMedium;
 import com.iGap.module.StructContactInfo;
+import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoFileDownload;
+import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.request.RequestFileDownload;
@@ -62,7 +65,17 @@ public class ContactItem extends AbstractItem<ContactItem, ContactItem.ViewHolde
         Realm realm = Realm.getDefaultInstance();
         RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mContact.peerId).findFirst();
         if (realmRegisteredInfo != null) {
-            holder.subtitle.setText(realmRegisteredInfo.getStatus());
+
+            if (realmRegisteredInfo.getStatus() != null) {
+                if (realmRegisteredInfo.getStatus().equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
+                    String timeUser = TimeUtils.toLocal(realmRegisteredInfo.getLastSeen() * DateUtils.SECOND_IN_MILLIS, G.ROOM_LAST_MESSAGE_TIME);
+                    holder.subtitle.setText(G.context.getResources().getString(R.string.last_seen_at) + " " + timeUser);
+                } else {
+                    holder.subtitle.setText(realmRegisteredInfo.getStatus());
+                }
+            }
+
+
         }
         realm.close();
 
