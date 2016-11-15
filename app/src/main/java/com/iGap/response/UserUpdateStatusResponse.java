@@ -44,13 +44,12 @@ public class UserUpdateStatusResponse extends MessageHandler {
                         G.isUserStatusOnline = false;
                     }
                 }
-
             }
         });
-        realm.close();
         if (G.onUserUpdateStatus != null) {
-            G.onUserUpdateStatus.onUserUpdateStatus(builder.getUserId(), response.getTimestamp(), realmRegisteredInfo.getStatsForUser(builder.getStatus().toString()));
+            G.onUserUpdateStatus.onUserUpdateStatus(builder.getUserId(), response.getTimestamp(), realmRegisteredInfo.setStatsForUser(builder.getStatus().toString()));
         }
+        realm.close();
     }
 
     @Override

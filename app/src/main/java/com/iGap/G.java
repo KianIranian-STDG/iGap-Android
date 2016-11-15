@@ -54,6 +54,7 @@ import com.iGap.interfaces.OnGroupKickModerator;
 import com.iGap.interfaces.OnGroupLeft;
 import com.iGap.interfaces.OnInfoCountryResponse;
 import com.iGap.interfaces.OnInfoTime;
+import com.iGap.interfaces.OnLastSeenUpdateTiming;
 import com.iGap.interfaces.OnReceiveInfoLocation;
 import com.iGap.interfaces.OnReceivePageInfoTOS;
 import com.iGap.interfaces.OnSecuring;
@@ -256,6 +257,7 @@ public class G extends Application {
     public static OnChatConvertToGroup onChatConvertToGroup;
     public static OnUserUpdateStatus onUserUpdateStatus;
     public static OnUpdateUserStatusInChangePage onUpdateUserStatusInChangePage;
+    public static OnLastSeenUpdateTiming onLastSeenUpdateTiming;
     public static OnSetAction onSetAction;
     public static File chatBackground;
     public static File IMAGE_NEW_GROUP;

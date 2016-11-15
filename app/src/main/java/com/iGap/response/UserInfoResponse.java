@@ -50,14 +50,15 @@ public class UserInfoResponse extends MessageHandler {
                 realmRegisteredInfo.setInitials(builder.getUser().getInitials());
                 realmRegisteredInfo.setLastSeen(builder.getUser().getLastSeen());
                 realmRegisteredInfo.setPhoneNumber(Long.toString(builder.getUser().getPhone()));
-                realmRegisteredInfo.setStatus(realmRegisteredInfo.getStatsForUser(builder.getUser().getStatus().toString()));
+                realmRegisteredInfo.setStatus(builder.getUser().getStatus().toString());
                 realmRegisteredInfo.setUsername(builder.getUser().getUsername());
                 realmRegisteredInfo.setMutual(builder.getUser().getMutual());
                 realmRegisteredInfo.setCacheId(builder.getUser().getCacheId());
 
                 if (G.onUserUpdateStatus != null) {
-                    G.onUserUpdateStatus.onUserUpdateStatus(builder.getUser().getId(), response.getTimestamp(), realmRegisteredInfo.getStatsForUser(builder.getUser().getStatus().toString()));
+                    G.onUserUpdateStatus.onUserUpdateStatus(builder.getUser().getId(), response.getTimestamp(), realmRegisteredInfo.setStatsForUser(builder.getUser().getStatus().toString()));
                 }
+
             }
         });
         realm.close();

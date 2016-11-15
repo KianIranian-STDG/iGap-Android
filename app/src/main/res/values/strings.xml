@@ -424,6 +424,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="last_seen_recently">last seen recently</string>
+    <string name="last_seen_at">last seen at</string>
     <string name="long_time_ago">long time ago</string>
     <string name="last_month">last month</string>
     <string name="last_week">last week</string>

@@ -102,6 +102,7 @@ import com.iGap.interfaces.OnClientGetRoomHistoryResponse;
 import com.iGap.interfaces.OnDeleteChatFinishActivity;
 import com.iGap.interfaces.OnFileDownloadResponse;
 import com.iGap.interfaces.OnFileUploadForActivities;
+import com.iGap.interfaces.OnLastSeenUpdateTiming;
 import com.iGap.interfaces.OnSetAction;
 import com.iGap.interfaces.OnUpdateUserStatusInChangePage;
 import com.iGap.interfaces.OnUserInfoResponse;
@@ -224,7 +225,7 @@ import static java.lang.Long.parseLong;
 
 public class ActivityChat extends ActivityEnhanced
         implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>,
-        OnChatMessageRemove, OnFileDownloadResponse, OnVoiceRecord, OnUserInfoResponse, OnClientGetRoomHistoryResponse, OnFileUploadForActivities, OnSetAction, OnUserUpdateStatus {
+        OnChatMessageRemove, OnFileDownloadResponse, OnVoiceRecord, OnUserInfoResponse, OnClientGetRoomHistoryResponse, OnFileUploadForActivities, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming {
 
     public static ActivityChat activityChat;
     public static OnComplete hashListener;
@@ -407,6 +408,11 @@ public class ActivityChat extends ActivityEnhanced
     protected void onResume() {
         super.onResume();
 
+        activityChat = this;
+        G.onSetAction = this;
+        G.onUserUpdateStatus = this;
+        G.onLastSeenUpdateTiming = this;
+
         HelperNotificationAndBadge.isChatRoomNow = true;
 
         if (MusicPlayer.mp != null) {
@@ -451,9 +457,7 @@ public class ActivityChat extends ActivityEnhanced
         mediaLayout = (LinearLayout) findViewById(R.id.ac_ll_music_layout);
         musicPlayer = new MusicPlayer(mediaLayout);
 
-        activityChat = this;
-        G.onSetAction = this;
-        G.onUserUpdateStatus = this;
+
         G.helperNotificationAndBadge.cancelNotification();
 
         // get sendByEnter action from setting value
@@ -637,8 +641,8 @@ public class ActivityChat extends ActivityEnhanced
     private void updateStatus() {
         G.onUpdateUserStatusInChangePage = new OnUpdateUserStatusInChangePage() {
             @Override
-            public void updateStatus(String status) {
-                setUserStatus(status, 0);
+            public void updateStatus(String status, long lastSeen) {
+                setUserStatus(status, lastSeen);
             }
         };
     }
@@ -1730,13 +1734,12 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     private void setUserStatus(String status, long time) {
-        Log.i("CCC", "setUserStatus status : " + status);
         if (status != null) {
             if (status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                Log.i("CCC", "setUserStatus 2 EXACTLY");
-                //TODO [Saeed Mozaffari] [2016-11-14 2:10 PM] - compute time from last seen
+                Log.i("CCC", "setUserStatus AcitivityChat time : " + time);
+                String timeUser = TimeUtils.toLocal(time * DateUtils.SECOND_IN_MILLIS, G.ROOM_LAST_MESSAGE_TIME);
+                txtLastSeen.setText(G.context.getResources().getString(R.string.last_seen_at) + " " + timeUser);
             } else {
-                Log.i("CCC", "setUserStatus 3");
                 txtLastSeen.setText(status);
             }
         }
@@ -3769,9 +3772,14 @@ public class ActivityChat extends ActivityEnhanced
             realm.close();
         } else {
             final String message = edtChat.getText().toString();
-            Log.i("EEE", "message : " + message);
+            String nullTest = null;
+            Log.i("EEE", "nullTest : " + nullTest);
+            Log.i("EEE", "message != null : " + (message != null));
+            Log.i("EEE", "message : " + (message));
+            Log.i("EEE", "message.trim().length : " + message.trim().length());
+            Log.i("EEE", "message.length : " + message.length());
             Log.i("EEE", "message.isEmpty() : " + message.isEmpty());
-            if (!message.isEmpty()) {
+            if (!message.trim().isEmpty()) {
 
                 hasDraft = true;
 
@@ -4175,6 +4183,11 @@ public class ActivityChat extends ActivityEnhanced
                 }
             });
         }
+    }
+
+    @Override
+    public void onLastSeenUpdate(long userId, String time) {
+
     }
 
     public static class UploadTask extends AsyncTask<Object, FileUploadStructure, FileUploadStructure> {

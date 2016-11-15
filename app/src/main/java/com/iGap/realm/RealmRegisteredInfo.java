@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoUserUpdateStatus;
 
@@ -94,11 +95,17 @@ public class RealmRegisteredInfo extends RealmObject {
     }
 
     public String getStatus() {
-        return getStatsForUser(status);
+      /*  if (status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
+            String time = TimeUtils.toLocal(lastSeen, G.ROOM_LAST_MESSAGE_TIME);
+            return G.context.getResources().getString(R.string.last_seen_at) + " " + time;
+        } else {
+            return status;
+        }*/
+        return status;
     }
 
     public void setStatus(String status) {
-        this.status = getStatsForUser(status);
+        this.status = setStatsForUser(status);
     }
 
     public String getCacheId() {
@@ -158,7 +165,14 @@ public class RealmRegisteredInfo extends RealmObject {
         return null;
     }
 
-    public String getStatsForUser(String status) {
+    /**
+     * change enum to string for simple showing in toolbar when get status
+     *
+     * @param status UserUpdateStatus
+     * @return
+     */
+
+    public String setStatsForUser(String status) {
 
         String userStatus = "Online";
         Log.i("CCCV", "status : " + status);
@@ -178,6 +192,35 @@ public class RealmRegisteredInfo extends RealmObject {
             userStatus = G.context.getResources().getString(R.string.service_notification);
         } else if (status.equals(ProtoGlobal.RegisteredUser.Status.ONLINE.toString())) {
             userStatus = G.context.getResources().getString(R.string.online);
+        } else if (status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
+            userStatus = ProtoGlobal.RegisteredUser.Status.EXACTLY.toString();
+        }
+        return userStatus;
+    }
+
+    public static String getStateForUser(String status, long lastSeen) {
+
+        String userStatus = "Online";
+        Log.i("CCCV", "getStateForUser : " + status);
+        if (status.equals(ProtoUserUpdateStatus.UserUpdateStatus.Status.OFFLINE.toString())) {
+            userStatus = G.context.getResources().getString(R.string.last_seen_recently);
+        } else if (status.equals(ProtoGlobal.RegisteredUser.Status.LONG_TIME_AGO.toString())) {
+            userStatus = G.context.getResources().getString(R.string.long_time_ago);
+        } else if (status.equals(ProtoGlobal.RegisteredUser.Status.LAST_MONTH.toString())) {
+            userStatus = G.context.getResources().getString(R.string.last_month);
+        } else if (status.equals(ProtoGlobal.RegisteredUser.Status.LAST_WEEK.toString())) {
+            userStatus = G.context.getResources().getString(R.string.last_week);
+        } else if (status.equals(ProtoGlobal.RegisteredUser.Status.RECENTLY.toString())) {
+            userStatus = G.context.getResources().getString(R.string.recently);
+        } else if (status.equals(ProtoGlobal.RegisteredUser.Status.SUPPORT.toString())) {
+            userStatus = G.context.getResources().getString(R.string.support);
+        } else if (status.equals(ProtoGlobal.RegisteredUser.Status.SERVICE_NOTIFICATIONS.toString())) {
+            userStatus = G.context.getResources().getString(R.string.service_notification);
+        } else if (status.equals(ProtoGlobal.RegisteredUser.Status.ONLINE.toString())) {
+            userStatus = G.context.getResources().getString(R.string.online);
+        } else if (status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
+            String time = TimeUtils.toLocal(lastSeen, G.ROOM_LAST_MESSAGE_TIME);
+            return G.context.getResources().getString(R.string.last_seen_at) + " " + time;
         }
         return userStatus;
     }

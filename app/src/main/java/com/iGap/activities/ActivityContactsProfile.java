@@ -26,6 +26,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -46,6 +47,7 @@ import com.iGap.fragments.FragmentNotification;
 import com.iGap.fragments.FragmentShowAvatars;
 import com.iGap.interfaces.OnChatDelete;
 import com.iGap.interfaces.OnChatGetRoom;
+import com.iGap.interfaces.OnLastSeenUpdateTiming;
 import com.iGap.interfaces.OnUserAvatarGetList;
 import com.iGap.interfaces.OnUserContactDelete;
 import com.iGap.interfaces.OnUserContactEdit;
@@ -56,6 +58,7 @@ import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.StructListOfContact;
 import com.iGap.module.StructMessageAttachment;
 import com.iGap.module.StructMessageInfo;
+import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmClientCondition;
@@ -90,7 +93,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
 
-public class ActivityContactsProfile extends ActivityEnhanced implements OnUserUpdateStatus {
+public class ActivityContactsProfile extends ActivityEnhanced implements OnUserUpdateStatus, OnLastSeenUpdateTiming {
     private long userId = 0;
     private long roomId;
     private String phone = "";
@@ -132,17 +135,18 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         super.onPause();
 
         if (G.onUpdateUserStatusInChangePage != null) {
-            G.onUpdateUserStatusInChangePage.updateStatus(userStatus);
+            G.onUpdateUserStatusInChangePage.updateStatus(userStatus, lastSeen);
         }
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts_profile);
         final Realm realm = Realm.getDefaultInstance();
-
         G.onUserUpdateStatus = this;
+        G.onLastSeenUpdateTiming = this;
 
         Bundle extras = getIntent().getExtras();
         userId = extras.getLong("peerId");
@@ -790,11 +794,15 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
     private void setUserStatus(String userStatus, long time) {
         this.userStatus = userStatus;
-        Log.i("CCC", "setUserStatus 1 userStatus : " + userStatus);
+        this.lastSeen = time;
+        Log.i("CCCV", "setUserStatus 1 userStatus : " + userStatus);
         if (userStatus != null) {
             if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                Log.i("CCC", "setUserStatus 2 ");
-                //TODO [Saeed Mozaffari] [2016-11-14 2:27 PM] - compute time from last seen
+                Log.i("CCC", "setUserStatus 2 time : " + time);
+                String timeUser = TimeUtils.toLocal(time * DateUtils.SECOND_IN_MILLIS, G.ROOM_LAST_MESSAGE_TIME);
+                String status = G.context.getResources().getString(R.string.last_seen_at) + " " + timeUser;
+                titleLastSeen.setText(status);
+                txtLastSeen.setText(status);
 
             } else {
                 Log.i("CCC", "setUserStatus 3");
@@ -803,6 +811,13 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
             }
         }
     }
+
+    /*private void setUserStatus(String userStatus, long time) {
+        this.userStatus = userStatus;
+        String status = RealmRegisteredInfo.getStateForUser(userStatus, time);
+        titleLastSeen.setText(status);
+        txtLastSeen.setText(status);
+    }*/
 
     private void showPopupPhoneNumber(View v, String number) {
 
@@ -1366,6 +1381,11 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                 }
             });
         }
+    }
+
+    @Override
+    public void onLastSeenUpdate(long userId, String time) {
+
     }
 }
 

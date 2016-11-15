@@ -47,8 +47,7 @@ public class RequestQueue {
         }
     }
 
-    protected static synchronized void prepareRequest(String randomId,
-                                                      RequestWrapper requestWrapper) {
+    protected static synchronized void prepareRequest(String randomId, RequestWrapper requestWrapper) {
         if (!G.pullRequestQueueRunned.get()) {
             G.pullRequestQueueRunned.getAndSet(true);
             G.handler.postDelayed(new Runnable() {
