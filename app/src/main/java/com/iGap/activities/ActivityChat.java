@@ -930,7 +930,7 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     private void switchAddItem(ArrayList<StructMessageInfo> messageInfos, boolean addTop) {
-        long identifier = System.nanoTime();
+        long identifier = SUID.id().get();
         for (StructMessageInfo messageInfo : messageInfos) {
             if (!messageInfo.isTimeMessage()) {
                 switch (messageInfo.messageType) {
@@ -1110,8 +1110,6 @@ public class ActivityChat extends ActivityEnhanced
                     mAdapter.add(0, new TimeItem(this).setMessage(messageInfo).withIdentifier(identifier));
                 }
             }
-
-            identifier++; //required
         }
     }
 

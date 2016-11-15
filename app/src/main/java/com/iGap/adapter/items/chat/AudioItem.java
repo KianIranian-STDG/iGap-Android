@@ -1,23 +1,27 @@
 package com.iGap.adapter.items.chat;
 
+import android.content.Context;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.MediaController;
 import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.module.AndroidUtils;
-import com.iGap.module.AppUtils;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.io.IOException;
 import java.util.List;
 
+import io.github.meness.audioplayerview.AudioPlayerView;
 import io.github.meness.emoji.EmojiTextView;
 
 import static com.iGap.module.AndroidUtils.suitablePath;
@@ -53,6 +57,19 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.thumbnail);
     }
 
+    private MediaPlayer makeMediaPlayer(Context context, String filePath) {
+        MediaPlayer mediaPlayer = new MediaPlayer();
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        try {
+            mediaPlayer.setDataSource(filePath);
+            mediaPlayer.prepare(); // might take long! (for buffering, etc)
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return mediaPlayer;
+    }
+
     @Override
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
@@ -65,8 +82,12 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         } else {
             holder.songArtist.setText(holder.itemView.getResources().getString(R.string.unknown_artist));
         }
-        holder.elapsedTime.setText("0");
-        holder.duration.setText(AppUtils.humanReadableDuration(mMessage.attachment.duration));
+
+        holder.playerView.setEnabled(mMessage.attachment.isFileExistsOnLocal());
+        if (mMessage.attachment.isFileExistsOnLocal()) {
+            holder.playerView.setMediaPlayer(makeMediaPlayer(holder.itemView.getContext(), AndroidUtils.suitablePath(mMessage.attachment.getLocalFilePath())));
+        }
+
         setTextIfNeeded(holder.messageText);
     }
 
@@ -82,10 +103,8 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         protected TextView fileSize;
         protected TextView fileName;
         protected TextView songArtist;
-        protected TextView elapsedTime;
-        protected TextView duration;
-        protected MediaController mediaController;
         protected EmojiTextView messageText;
+        protected AudioPlayerView playerView;
 
         public ViewHolder(View view) {
             super(view);
@@ -93,11 +112,12 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             fileSize = (TextView) view.findViewById(R.id.fileSize);
             fileName = (TextView) view.findViewById(R.id.fileName);
             songArtist = (TextView) view.findViewById(R.id.songArtist);
-            elapsedTime = (TextView) view.findViewById(R.id.elapsedTime);
-            duration = (TextView) view.findViewById(R.id.duration);
-            mediaController = (MediaController) view.findViewById(R.id.mediaController);
             messageText = (EmojiTextView) view.findViewById(R.id.messageText);
             messageText.setTextSize(G.userTextSize);
+
+            playerView = new AudioPlayerView(view.getContext());
+            playerView.setAnchorView((ViewGroup) view.findViewById(R.id.audioPlayerViewContainer));
+            playerView.show();
         }
     }
 }

@@ -1,0 +1,5 @@
+<resources>
+    <string name="audioplayerview_desc_pause">Pause</string>
+    <string name="audioplayerview_desc_play">Play</string>
+    <string name="audioplayerview_desc_stop">Stop</string>
+</resources>
