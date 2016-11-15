@@ -6,7 +6,7 @@
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
              android:layout_marginBottom="@dimen/dp4"
-             android:maxWidth="@dimen/dp300">
+             android:maxWidth="@dimen/chatBoxMaxWidth">
 
     <LinearLayout
         android:id="@+id/mainContainer"
