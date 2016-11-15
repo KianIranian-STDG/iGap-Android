@@ -203,6 +203,20 @@ import io.realm.Sort;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.module.AttachFile.getFilePathFromUri;
+import static com.iGap.proto.ProtoGlobal.ClientAction.CAPTURING_IMAGE;
+import static com.iGap.proto.ProtoGlobal.ClientAction.CAPTURING_VIDEO;
+import static com.iGap.proto.ProtoGlobal.ClientAction.CHOOSING_CONTACT;
+import static com.iGap.proto.ProtoGlobal.ClientAction.PAINTING;
+import static com.iGap.proto.ProtoGlobal.ClientAction.RECORING_VOICE;
+import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_AUDIO;
+import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_DOCUMENT;
+import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_FILE;
+import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_GIF;
+import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_IMAGE;
+import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_LOCATION;
+import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_VIDEO;
+import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_VOICE;
+import static com.iGap.proto.ProtoGlobal.ClientAction.TYPING;
 import static com.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 import static com.iGap.proto.ProtoGlobal.Room.Type.CHAT;
 import static com.iGap.proto.ProtoGlobal.Room.Type.GROUP;
@@ -268,7 +282,7 @@ public class ActivityChat extends ActivityEnhanced
     private Button btnHashLayoutClose;
     private SearchHash searchHash;
     private MessagesAdapter<AbstractMessage> mAdapter;
-    private ProtoGlobal.Room.Type chatType;
+    private static ProtoGlobal.Room.Type chatType;
     private long lastSeen;
     private static long mRoomId;
     private Button btnUp;
@@ -1665,7 +1679,7 @@ public class ActivityChat extends ActivityEnhanced
             public void onTextChanged(CharSequence text, int i, int i1, int i2) {
 
                 if (text.length() > 0) {
-                    HelperSetAction.setActionTyping(mRoomId);
+                    HelperSetAction.setActionTyping(mRoomId, chatType);
                 }
 
                 // if in the seeting page send by enter is on message send by enter key
@@ -1717,12 +1731,14 @@ public class ActivityChat extends ActivityEnhanced
 
     private void setUserStatus(String status, long time) {
         Log.i("CCC", "setUserStatus status : " + status);
-        if (status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-            Log.i("CCC", "setUserStatus 2 EXACTLY");
-            //TODO [Saeed Mozaffari] [2016-11-14 2:10 PM] - compute time from last seen
-        } else {
-            Log.i("CCC", "setUserStatus 3");
-            txtLastSeen.setText(status);
+        if (status != null) {
+            if (status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
+                Log.i("CCC", "setUserStatus 2 EXACTLY");
+                //TODO [Saeed Mozaffari] [2016-11-14 2:10 PM] - compute time from last seen
+            } else {
+                Log.i("CCC", "setUserStatus 3");
+                txtLastSeen.setText(status);
+            }
         }
     }
 
@@ -3753,6 +3769,8 @@ public class ActivityChat extends ActivityEnhanced
             realm.close();
         } else {
             final String message = edtChat.getText().toString();
+            Log.i("EEE", "message : " + message);
+            Log.i("EEE", "message.isEmpty() : " + message.isEmpty());
             if (!message.isEmpty()) {
 
                 hasDraft = true;
@@ -4068,31 +4086,83 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     @Override
-    public void onSetAction(long roomId, long userId, final ProtoGlobal.ClientAction clientAction) {
+    public void onSetAction(long roomId, final long userId, final ProtoGlobal.ClientAction clientAction) {
         if (mRoomId == roomId && this.userId != userId) {
             if (chatType == ProtoGlobal.Room.Type.CHAT) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        txtLastSeen.setText(clientAction.toString());
+                        String action = getCorrectNameAction(clientAction.toString());
+                        if (action != null) {
+                            txtLastSeen.setText(action);
+                        } else {
+                            txtLastSeen.setText(userStatus);
+                        }
                     }
                 });
             } else if (chatType == ProtoGlobal.Room.Type.GROUP) {
-                Realm realm = Realm.getDefaultInstance();
-                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
-                final String name = realmRegisteredInfo.getDisplayName();
-                realm.close();
-
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        txtLastSeen.setText(name + " " + clientAction.toString());
+                        Realm realm = Realm.getDefaultInstance();
+                        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
+                        String name = "";
+                        if (realmRegisteredInfo != null) {
+                            name = realmRegisteredInfo.getDisplayName();
+                        }
+                        realm.close();
+
+
+                        String action = getCorrectNameAction(clientAction.toString());
+                        if (action != null) {
+                            if (!name.isEmpty()) {
+                                txtLastSeen.setText(name + " is " + action);
+                            } else {
+                                txtLastSeen.setText(action);
+                            }
+                        } else {
+                            txtLastSeen.setText(groupParticipantsCountLabel + " member");
+                        }
                     }
                 });
             }
         }
+    }
 
+    private String getCorrectNameAction(String action) {
+        String actionName = null;
 
+        if (action.equals(TYPING.toString())) {
+            actionName = getResources().getString(R.string.typing);
+        } else if (action.equals(SENDING_IMAGE.toString())) {
+            actionName = getResources().getString(R.string.sending_image);
+        } else if (action.equals(CAPTURING_IMAGE.toString())) {
+            actionName = getResources().getString(R.string.capturing_image);
+        } else if (action.equals(SENDING_VIDEO.toString())) {
+            actionName = getResources().getString(R.string.sending_video);
+        } else if (action.equals(CAPTURING_VIDEO.toString())) {
+            actionName = getResources().getString(R.string.capturing_video);
+        } else if (action.equals(SENDING_AUDIO.toString())) {
+            actionName = getResources().getString(R.string.sending_audio);
+        } else if (action.equals(RECORING_VOICE.toString())) {
+            actionName = getResources().getString(R.string.recording_voice);
+        } else if (action.equals(SENDING_VOICE.toString())) {
+            actionName = getResources().getString(R.string.sending_voice);
+        } else if (action.equals(SENDING_DOCUMENT.toString())) {
+            actionName = getResources().getString(R.string.sending_document);
+        } else if (action.equals(SENDING_GIF.toString())) {
+            actionName = getResources().getString(R.string.sending_gif);
+        } else if (action.equals(SENDING_FILE.toString())) {
+            actionName = getResources().getString(R.string.sending_file);
+        } else if (action.equals(SENDING_LOCATION.toString())) {
+            actionName = getResources().getString(R.string.sending_location);
+        } else if (action.equals(CHOOSING_CONTACT.toString())) {
+            actionName = getResources().getString(R.string.choosing_contact);
+        } else if (action.equals(PAINTING.toString())) {
+            actionName = getResources().getString(R.string.painting);
+        }
+
+        return actionName;
     }
 
     @Override
@@ -4141,7 +4211,7 @@ public class ActivityChat extends ActivityEnhanced
             MessagesAdapter.uploading.put(result.messageId, 0);
             G.uploaderUtil.startUploading(result, Long.toString(result.messageId));
 
-            HelperSetAction.setActionFiles(mRoomId, result.messageId, getAction(result.messageType));
+            HelperSetAction.setActionFiles(mRoomId, result.messageId, getAction(result.messageType), chatType);
         }
     }
 
@@ -4152,21 +4222,21 @@ public class ActivityChat extends ActivityEnhanced
         ProtoGlobal.ClientAction action = null;
 
         if ((type == ProtoGlobal.RoomMessageType.IMAGE) || (type == ProtoGlobal.RoomMessageType.IMAGE_TEXT)) {
-            action = ProtoGlobal.ClientAction.SENDING_IMAGE;
+            action = SENDING_IMAGE;
         } else if ((type == ProtoGlobal.RoomMessageType.VIDEO) || (type == ProtoGlobal.RoomMessageType.VIDEO_TEXT)) {
-            action = ProtoGlobal.ClientAction.SENDING_VIDEO;
+            action = SENDING_VIDEO;
         } else if ((type == ProtoGlobal.RoomMessageType.AUDIO) || (type == ProtoGlobal.RoomMessageType.AUDIO_TEXT)) {
-            action = ProtoGlobal.ClientAction.SENDING_AUDIO;
+            action = SENDING_AUDIO;
         } else if (type == ProtoGlobal.RoomMessageType.VOICE) {
-            action = ProtoGlobal.ClientAction.SENDING_VOICE;
+            action = SENDING_VOICE;
         } else if (type == ProtoGlobal.RoomMessageType.GIF) {
-            action = ProtoGlobal.ClientAction.SENDING_GIF;
+            action = SENDING_GIF;
         } else if ((type == ProtoGlobal.RoomMessageType.FILE) || (type == ProtoGlobal.RoomMessageType.FILE_TEXT)) {
-            action = ProtoGlobal.ClientAction.SENDING_FILE;
+            action = SENDING_FILE;
         } else if (type == ProtoGlobal.RoomMessageType.LOCATION) {
-            action = ProtoGlobal.ClientAction.SENDING_LOCATION;
+            action = SENDING_LOCATION;
         } else if (type == ProtoGlobal.RoomMessageType.CONTACT) {
-            action = ProtoGlobal.ClientAction.CHOOSING_CONTACT;
+            action = CHOOSING_CONTACT;
         }
 
         return action;

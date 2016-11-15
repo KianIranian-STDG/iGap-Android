@@ -103,7 +103,7 @@ public class HelperNumerical {
         String random = "";
         Random rand = new Random();
         for (int i = 0; i < length; i++) {
-            int number = rand.nextInt(9);
+            int number = rand.nextInt(8) + 1;
             random = random + number;
         }
 

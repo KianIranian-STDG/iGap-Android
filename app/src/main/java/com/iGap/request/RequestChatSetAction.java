@@ -1,7 +1,5 @@
 package com.iGap.request;
 
-import android.util.Log;
-
 import com.iGap.proto.ProtoChatSetAction;
 import com.iGap.proto.ProtoGlobal;
 
@@ -12,7 +10,6 @@ public class RequestChatSetAction {
         builder.setRoomId(roomId);
         builder.setAction(clientAction);
         builder.setActionId(actionId);
-        Log.i("YYY", "RequestChatSetAction : " + clientAction);
         RequestWrapper requestWrapper = new RequestWrapper(210, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);

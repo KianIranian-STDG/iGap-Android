@@ -1,7 +1,5 @@
 package com.iGap.response;
 
-import android.util.Log;
-
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoResponse;
@@ -57,11 +55,9 @@ public class UserInfoResponse extends MessageHandler {
                 realmRegisteredInfo.setMutual(builder.getUser().getMutual());
                 realmRegisteredInfo.setCacheId(builder.getUser().getCacheId());
 
-                Log.i("CCC", "********************1111111");
                 if (G.onUserUpdateStatus != null) {
                     G.onUserUpdateStatus.onUserUpdateStatus(builder.getUser().getId(), response.getTimestamp(), realmRegisteredInfo.getStatsForUser(builder.getUser().getStatus().toString()));
                 }
-                Log.i("CCC", "********************2222222");
             }
         });
         realm.close();

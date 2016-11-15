@@ -24,8 +24,9 @@ public class ChatSetActionResponse extends MessageHandler {
         super.handler();
         ProtoChatSetAction.ChatSetActionResponse.Builder builder = (ProtoChatSetAction.ChatSetActionResponse.Builder) message;
         Log.i("YYY", "message : " + message);
-        Log.i("YYY", "builder.getUserId() : " + builder.getUserId());
-        G.onSetAction.onSetAction(builder.getRoomId(), builder.getUserId(), builder.getAction());
+        if (G.onSetAction != null) {
+            G.onSetAction.onSetAction(builder.getRoomId(), builder.getUserId(), builder.getAction());
+        }
     }
 
     @Override

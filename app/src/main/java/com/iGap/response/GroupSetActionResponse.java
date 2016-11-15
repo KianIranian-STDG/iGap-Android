@@ -1,5 +1,8 @@
 package com.iGap.response;
 
+import android.util.Log;
+
+import com.iGap.G;
 import com.iGap.proto.ProtoGroupSetAction;
 
 public class GroupSetActionResponse extends MessageHandler {
@@ -19,9 +22,10 @@ public class GroupSetActionResponse extends MessageHandler {
     @Override
     public void handler() {
         ProtoGroupSetAction.GroupSetActionResponse.Builder builder = (ProtoGroupSetAction.GroupSetActionResponse.Builder) message;
-        builder.getUserId();
-        builder.getRoomId();
-        builder.getAction();
+        Log.i("YYY", "GroupSetActionResponse : " + message);
+        if (G.onSetAction != null) {
+            G.onSetAction.onSetAction(builder.getRoomId(), builder.getUserId(), builder.getAction());
+        }
     }
 
     @Override

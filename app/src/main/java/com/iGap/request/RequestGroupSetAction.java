@@ -12,7 +12,7 @@ public class RequestGroupSetAction {
         builder.setAction(clientAction);
         builder.setActionId(actionId);
 
-        RequestWrapper requestWrapper = new RequestWrapper(210, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(319, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

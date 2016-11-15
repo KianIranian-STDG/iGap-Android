@@ -4,6 +4,7 @@ import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.request.RequestChatSetAction;
+import com.iGap.request.RequestGroupSetAction;
 
 import java.util.ArrayList;
 
@@ -17,7 +18,7 @@ public class HelperSetAction {
      * @param roomId roomId that send action from that
      */
 
-    public static void setActionTyping(final long roomId) {
+    public static void setActionTyping(final long roomId, ProtoGlobal.Room.Type chatType) {
 
         if (!checkExistAction(roomId, ProtoGlobal.ClientAction.TYPING)) {
             int randomNumber = HelperNumerical.generateRandomNumber(8);
@@ -27,10 +28,15 @@ public class HelperSetAction {
             structAction.currentTime = System.currentTimeMillis();
             structAction.randomKey = randomNumber;
             structAction.action = ProtoGlobal.ClientAction.TYPING;
+            structAction.chatType = chatType;
 
             structActions.add(structAction);
-            new RequestChatSetAction().chatSetAction(roomId, ProtoGlobal.ClientAction.TYPING, randomNumber);
 
+            if (structAction.chatType.toString().equals(ProtoGlobal.Room.Type.GROUP.toString())) {
+                new RequestGroupSetAction().groupSetAction(roomId, ProtoGlobal.ClientAction.TYPING, randomNumber);
+            } else {
+                new RequestChatSetAction().chatSetAction(roomId, ProtoGlobal.ClientAction.TYPING, randomNumber);
+            }
             timeOutChecking(structAction);
         }
     }
@@ -43,7 +49,7 @@ public class HelperSetAction {
      * @param action    action that doing
      */
 
-    public static void setActionFiles(long roomId, long messageId, ProtoGlobal.ClientAction action) {
+    public static void setActionFiles(long roomId, long messageId, ProtoGlobal.ClientAction action, ProtoGlobal.Room.Type chatType) {
         if (!checkExistAction(roomId, action)) {
             int randomNumber = HelperNumerical.generateRandomNumber(8);
 
@@ -52,10 +58,16 @@ public class HelperSetAction {
             structAction.currentTime = System.currentTimeMillis();
             structAction.randomKey = randomNumber;
             structAction.action = action;
+            structAction.chatType = chatType;
             structAction.messageId = messageId;
 
             structActions.add(structAction);
-            new RequestChatSetAction().chatSetAction(roomId, action, randomNumber);
+
+            if (structAction.chatType.toString().equals(ProtoGlobal.Room.Type.GROUP.toString())) {
+                new RequestGroupSetAction().groupSetAction(roomId, action, randomNumber);
+            } else {
+                new RequestChatSetAction().chatSetAction(roomId, action, randomNumber);
+            }
         }
     }
 
@@ -65,7 +77,13 @@ public class HelperSetAction {
             public void run() {
                 if (autoCancel(structAction.currentTime)) {
                     removeStruct(structAction.randomKey);
-                    new RequestChatSetAction().chatSetAction(structAction.roomId, ProtoGlobal.ClientAction.CANCEL, structAction.randomKey);
+
+                    if (structAction.chatType.toString().equals(ProtoGlobal.Room.Type.GROUP.toString())) {
+                        new RequestGroupSetAction().groupSetAction(structAction.roomId, ProtoGlobal.ClientAction.CANCEL, structAction.randomKey);
+                    } else {
+                        new RequestChatSetAction().chatSetAction(structAction.roomId, ProtoGlobal.ClientAction.CANCEL, structAction.randomKey);
+                    }
+
                 } else {
                     timeOutChecking(structAction);
                 }
@@ -82,7 +100,13 @@ public class HelperSetAction {
     public static void sendCancel(long messageId) {
         for (StructAction struct : structActions) {
             if (struct.messageId == messageId) {
-                new RequestChatSetAction().chatSetAction(struct.roomId, ProtoGlobal.ClientAction.CANCEL, struct.randomKey);
+
+                if (struct.chatType.toString().equals(ProtoGlobal.Room.Type.GROUP.toString())) {
+                    new RequestGroupSetAction().groupSetAction(struct.roomId, ProtoGlobal.ClientAction.CANCEL, struct.randomKey);
+                } else {
+                    new RequestChatSetAction().chatSetAction(struct.roomId, ProtoGlobal.ClientAction.CANCEL, struct.randomKey);
+                }
+
                 removeStruct(struct.randomKey);
             }
         }
@@ -118,6 +142,7 @@ public class HelperSetAction {
         public long currentTime;
         public long messageId; // messageId is a unique number that we have it in start and end of upload
         public int randomKey;
+        public ProtoGlobal.Room.Type chatType;
         public ProtoGlobal.ClientAction action;
     }
 
