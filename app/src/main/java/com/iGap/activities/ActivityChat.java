@@ -313,7 +313,7 @@ public class ActivityChat extends ActivityEnhanced
     private int latestRequestCode;
     private String latestFilePath;
     private Calendar lastDateCalendar = Calendar.getInstance();
-    private RelativeLayout mReplayLayout;
+    private LinearLayout mReplayLayout;
 
     private MaterialDesignTextView iconMute;
 
@@ -2526,7 +2526,7 @@ public class ActivityChat extends ActivityEnhanced
 
             inflateReplayLayoutIntoStub(chatItem);
         } else {
-            mReplayLayout = (RelativeLayout) findViewById(R.id.replayLayoutAboveEditText);
+            mReplayLayout = (LinearLayout) findViewById(R.id.replayLayoutAboveEditText);
             mReplayLayout.setVisibility(View.VISIBLE);
             TextView replayTo = (TextView) mReplayLayout.findViewById(R.id.replayTo);
             TextView replayFrom = (TextView) mReplayLayout.findViewById(R.id.replyFrom);

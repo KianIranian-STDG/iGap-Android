@@ -271,9 +271,22 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 holder.itemView.findViewById(R.id.chslr_imv_replay_pic).setVisibility(View.VISIBLE);
 
                 switch (ProtoGlobal.RoomMessageType.valueOf(mMessage.replayTo.getMessageType())) {
-                    case AUDIO:
-                    case AUDIO_TEXT:
-                        ((ImageView) holder.itemView.findViewById(R.id.chslr_imv_replay_pic)).setImageResource(R.drawable.docx);
+                    case VOICE:
+                        ((ImageView) holder.itemView.findViewById(R.id.chslr_imv_replay_pic)).setImageResource(R.drawable.microphone);
+                        break;
+                    case FILE:
+                    case FILE_TEXT:
+                        if (mMessage.replayTo.getAttachment().getName().toLowerCase().endsWith(".pdf")) {
+                            ((ImageView) holder.itemView.findViewById(R.id.chslr_imv_replay_pic)).setImageResource(R.drawable.pdf);
+                        } else if (mMessage.replayTo.getAttachment().getName().toLowerCase().endsWith(".docx")) {
+                            ((ImageView) holder.itemView.findViewById(R.id.chslr_imv_replay_pic)).setImageResource(R.drawable.docx);
+                        } else if (mMessage.replayTo.getAttachment().getName().toLowerCase().endsWith(".rar")) {
+                            ((ImageView) holder.itemView.findViewById(R.id.chslr_imv_replay_pic)).setImageResource(R.drawable.rar);
+                        } else if (mMessage.replayTo.getAttachment().getName().toLowerCase().endsWith(".txt")) {
+                            ((ImageView) holder.itemView.findViewById(R.id.chslr_imv_replay_pic)).setImageResource(R.drawable.txt);
+                        } else {
+                            ((ImageView) holder.itemView.findViewById(R.id.chslr_imv_replay_pic)).setImageResource(R.drawable.file);
+                        }
                         break;
                     default:
                         if (mMessage.replayTo.getAttachment() != null) {
