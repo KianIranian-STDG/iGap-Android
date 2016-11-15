@@ -323,6 +323,7 @@ public class ActivityChat extends ActivityEnhanced
     private boolean hasDraft = false;
     private long replyToMessageId = 0;
     private long userId;
+    public static Activity activityChatForFinish;
 
     @Override
     protected void onStart() {
@@ -440,6 +441,7 @@ public class ActivityChat extends ActivityEnhanced
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        activityChatForFinish = this;
 
         checkIfOrientationChanged(getResources().getConfiguration());
 
@@ -1582,8 +1584,7 @@ public class ActivityChat extends ActivityEnhanced
 
                                 // user wants to replay to a message
                                 if (mReplayLayout != null && mReplayLayout.getTag() instanceof StructMessageInfo) {
-                                    RealmRoomMessage messageToReplay =
-                                            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID)).findFirst();
+                                    RealmRoomMessage messageToReplay = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID)).findFirst();
                                     if (messageToReplay != null) {
                                         roomMessage.setReplyTo(messageToReplay);
                                     }
@@ -3728,65 +3729,10 @@ public class ActivityChat extends ActivityEnhanced
         }
 
         if (ll_attach_text.getVisibility() == View.VISIBLE) {
-            Realm realm = Realm.getDefaultInstance();
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-
-                    RealmDraftFile realmDraftFile = realm.createObject(RealmDraftFile.class);
-
-                    if (AttachFile.request_code_TAKE_PICTURE == latestRequestCode) {
-                        realmDraftFile.setUri(null);
-                        realmDraftFile.setFilePath(latestFilePath);
-                    } else {
-                        realmDraftFile.setUri(latestUri.toString());
-                        realmDraftFile.setFilePath("");
-                    }
-
-                    realmDraftFile.setRequestCode(latestRequestCode);
-
-                    if (isMessageWrote()) {
-
-                        hasDraft = true;
-
-                        RealmRoomDraft draft = realm.createObject(RealmRoomDraft.class);
-                        draft.setMessage(edtChat.getText().toString());
-                        draft.setReplyToMessageId(replyToMessageId);
-
-                        realmRoom.setDraft(draft);
-
-                        if (chatType == CHAT) {
-                            new RequestChatUpdateDraft().chatUpdateDraft(mRoomId, edtChat.getText().toString(), replyToMessageId);
-                        } else if (chatType == GROUP) {
-                            new RequestGroupUpdateDraft().groupUpdateDraft(mRoomId, edtChat.getText().toString(), replyToMessageId);
-                        }
-
-                        if (G.onDraftMessage != null) {
-                            G.onDraftMessage.onDraftMessage(mRoomId, edtChat.getText().toString());
-                        }
-                    } else {
-
-                        clearDraftRequest();
-                        if (G.onDraftMessage != null) {
-                            G.onDraftMessage.onDraftMessage(mRoomId, "");
-                        }
-                    }
-
-                    realmRoom.setDraftFile(realmDraftFile);
-                }
-            });
-            realm.close();
+            //draftForFile();
         } else {
             final String message = edtChat.getText().toString();
-            String nullTest = null;
-            Log.i("EEE", "nullTest : " + nullTest);
-            Log.i("EEE", "message != null : " + (message != null));
-            Log.i("EEE", "message : " + (message));
-            Log.i("EEE", "message.trim().length : " + message.trim().length());
-            Log.i("EEE", "message.length : " + message.length());
-            Log.i("EEE", "message.isEmpty() : " + message.isEmpty());
-            if (!message.trim().isEmpty()) {
+            if (!message.trim().isEmpty() || ((mReplayLayout != null && mReplayLayout.getVisibility() == View.VISIBLE))) {
 
                 hasDraft = true;
 
@@ -3827,57 +3773,27 @@ public class ActivityChat extends ActivityEnhanced
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
 
         if (realmRoom != null) {
-            if (realmRoom.getDraftFile() != null) {
+//            if (realmRoom.getDraftFile() != null) {
+//                getDraftFile(realmRoom,realm);
+//            } else {
+            RealmRoomDraft draft = realmRoom.getDraft();
+            if (draft != null) {
+                hasDraft = true;
+                edtChat.setText(draft.getMessage());
 
-                RealmDraftFile realmDraftFile = realmRoom.getDraftFile();
+                if (draft.getReplyToMessageId() != 0) {
 
-                latestRequestCode = realmDraftFile.getRequestCode();
-
-                String filePath = "";
-                if (AttachFile.request_code_TAKE_PICTURE == latestRequestCode) {
-                    latestFilePath = realmDraftFile.getFilePath();
-                    AttachFile.imagePath = latestFilePath;
-                    latestUri = null;
-                } else {
-                    latestUri = Uri.parse(realmDraftFile.getUri());
-                    filePath = getFilePathFromUri(latestUri);
-                    latestFilePath = "";
-                }
-
-                //&& new File(latestUri.toString()).exists()
-                if ((latestUri != null && new File(filePath).exists()) || (!latestFilePath.isEmpty() && new File(latestFilePath).exists())) {
-                    showDraftLayout();
-                    RealmRoomDraft draft = realmRoom.getDraft();
-
-                    if (draft != null) {
-                        hasDraft = true;
-                        edtChat.setText(draft.getMessage());
-
-                        if (draft.getReplyToMessageId() != 0) {
-                            RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, draft.getReplyToMessageId()).findFirst();
-
-                            if (realmRoomMessage != null) {
-
-                                StructMessageInfo struct = new StructMessageInfo();
-                                struct.messageText = realmRoomMessage.getMessage();
-
-                                replay(struct);
-                            }
-                        }
-                    }
-                    setDraftMessage(latestRequestCode);
-                }
-            } else {
-                RealmRoomDraft draft = realmRoom.getDraft();
-                if (draft != null) {
-                    hasDraft = true;
-                    edtChat.setText(draft.getMessage());
-
-                    if (draft.getReplyToMessageId() != 0) {
-                        //TODO [Saeed Mozaffari] [2016-10-31 4:24 PM] - set reply view for draft
+                    RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, draft.getReplyToMessageId()).findFirst();
+                    if (realmRoomMessage != null) {
+                        StructMessageInfo struct = new StructMessageInfo();
+                        struct.messageText = realmRoomMessage.getMessage();
+                        struct.senderID = realmRoomMessage.getUserId() + "";
+                        struct.messageID = draft.getReplyToMessageId() + "";
+                        inflateReplayLayoutIntoStub(struct);
                     }
                 }
             }
+//            }
         }
         realm.close();
 
@@ -3901,7 +3817,6 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     private void clearDraftRequest() {
-        Log.i("UUU", "clearDraftRequest hasDraft : " + hasDraft);
         if (hasDraft) {
             hasDraft = false;
             if (chatType == CHAT) {
@@ -3911,6 +3826,99 @@ public class ActivityChat extends ActivityEnhanced
             }
 
             clearLocalDraft();
+        }
+    }
+
+    private void draftForFile() { // this method not used because we don't have draft for file
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+
+                RealmDraftFile realmDraftFile = realm.createObject(RealmDraftFile.class);
+
+                if (AttachFile.request_code_TAKE_PICTURE == latestRequestCode) {
+                    realmDraftFile.setUri(null);
+                    realmDraftFile.setFilePath(latestFilePath);
+                } else {
+                    realmDraftFile.setUri(latestUri.toString());
+                    realmDraftFile.setFilePath("");
+                }
+
+                realmDraftFile.setRequestCode(latestRequestCode);
+
+                if (isMessageWrote()) {
+
+                    hasDraft = true;
+
+                    RealmRoomDraft draft = realm.createObject(RealmRoomDraft.class);
+                    draft.setMessage(edtChat.getText().toString());
+                    draft.setReplyToMessageId(replyToMessageId);
+
+                    realmRoom.setDraft(draft);
+
+                    if (chatType == CHAT) {
+                        new RequestChatUpdateDraft().chatUpdateDraft(mRoomId, edtChat.getText().toString(), replyToMessageId);
+                    } else if (chatType == GROUP) {
+                        new RequestGroupUpdateDraft().groupUpdateDraft(mRoomId, edtChat.getText().toString(), replyToMessageId);
+                    }
+
+                    if (G.onDraftMessage != null) {
+                        G.onDraftMessage.onDraftMessage(mRoomId, edtChat.getText().toString());
+                    }
+                } else {
+
+                    clearDraftRequest();
+                    if (G.onDraftMessage != null) {
+                        G.onDraftMessage.onDraftMessage(mRoomId, "");
+                    }
+                }
+
+                realmRoom.setDraftFile(realmDraftFile);
+            }
+        });
+        realm.close();
+    }
+
+    private void getDraftFile(RealmRoom realmRoom, Realm realm) { // this method not used because we don't have draft for file
+        RealmDraftFile realmDraftFile = realmRoom.getDraftFile();
+
+        latestRequestCode = realmDraftFile.getRequestCode();
+
+        String filePath = "";
+        if (AttachFile.request_code_TAKE_PICTURE == latestRequestCode) {
+            latestFilePath = realmDraftFile.getFilePath();
+            AttachFile.imagePath = latestFilePath;
+            latestUri = null;
+        } else {
+            latestUri = Uri.parse(realmDraftFile.getUri());
+            filePath = getFilePathFromUri(latestUri);
+            latestFilePath = "";
+        }
+
+        //&& new File(latestUri.toString()).exists()
+        if ((latestUri != null && new File(filePath).exists()) || (!latestFilePath.isEmpty() && new File(latestFilePath).exists())) {
+            showDraftLayout();
+            RealmRoomDraft draft = realmRoom.getDraft();
+
+            if (draft != null) {
+                hasDraft = true;
+                edtChat.setText(draft.getMessage());
+
+                if (draft.getReplyToMessageId() != 0) {
+                    RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, draft.getReplyToMessageId()).findFirst();
+
+                    if (realmRoomMessage != null) {
+
+                        StructMessageInfo struct = new StructMessageInfo();
+                        struct.messageText = realmRoomMessage.getMessage();
+
+                        replay(struct);
+                    }
+                }
+            }
+            setDraftMessage(latestRequestCode);
         }
     }
 

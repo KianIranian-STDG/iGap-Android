@@ -2,7 +2,6 @@ package com.iGap.adapter.items;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -157,11 +156,6 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
             holder.lastMessageSender.setText("Draft : ");
             holder.lastMessageSender.setTextColor(Color.parseColor("#ff4644"));
             holder.lastMessage.setText(mInfo.draftMessage);
-            Log.i("BBB", "mInfo.getTitle() : " + mInfo.chatTitle);
-            Log.i("BBB", "draft.getMessage() : " + mInfo.draftMessage);
-            Log.i("BBB", "*****");
-            Log.i("BBB", "**********");
-            Log.i("BBB", "*****");
         } else {
             String lastMessage = AppUtils.rightLastMessage(holder.itemView.getResources(), mInfo.chatType, mInfo.lastMessageId);
             if (lastMessage == null) {
@@ -258,7 +252,6 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
         if (mInfo.avatar != null) {
 
             if (mInfo.avatar.isFileExistsOnLocal()) {
-                Log.i("PPP", "1");
                 ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mInfo.avatar.getLocalFilePath()), holder.image);
             } else if (mInfo.avatar.isThumbnailExistsOnLocal()) {
                 ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mInfo.avatar.getLocalThumbnailPath()), holder.image);

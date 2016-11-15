@@ -245,6 +245,8 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                     final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, userId).findFirst();
 
                     if (realmRoom != null) {
+                        ActivityChat.activityChatForFinish.finish();
+
                         Intent intent = new Intent(context, ActivityChat.class);
                         intent.putExtra("RoomId", realmRoom.getId());
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -257,6 +259,8 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                                 G.currentActivity.runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
+                                        ActivityChat.activityChatForFinish.finish();
+
                                         Realm realm = Realm.getDefaultInstance();
                                         Intent intent = new Intent(context, ActivityChat.class);
                                         intent.putExtra("peerId", userId);
