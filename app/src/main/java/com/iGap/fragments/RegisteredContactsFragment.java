@@ -545,13 +545,10 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                 @Override
                 public void run() {
 
-                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    /*getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                     prgWaiting.setVisibility(View.GONE);
-//
 
-                    final Snackbar snack =
-                            Snackbar.make(getActivity().findViewById(android.R.id.content),
-                                    getResources().getString(R.string.E_713_3), Snackbar.LENGTH_LONG);
+                    final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_713_3), Snackbar.LENGTH_LONG);
 
                     snack.setAction("CANCEL", new View.OnClickListener() {
                         @Override
@@ -559,7 +556,7 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                             snack.dismiss();
                         }
                     });
-                    snack.show();
+                    snack.show();*/
                 }
             });
         } else if (majorCode == 713 && minorCode == 4) {

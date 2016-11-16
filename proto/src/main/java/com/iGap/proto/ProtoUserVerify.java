@@ -3,2029 +3,1711 @@
 
 package com.iGap.proto;
 
-import com.google.protobuf.AbstractMessageLite;
-
 public final class ProtoUserVerify {
-    private static final com.google.protobuf.Descriptors.Descriptor
-        internal_static_proto_UserVerify_descriptor;
-    private static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-        internal_static_proto_UserVerify_fieldAccessorTable;
-    private static final com.google.protobuf.Descriptors.Descriptor
-        internal_static_proto_UserVerifyResponse_descriptor;
-    private static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-        internal_static_proto_UserVerifyResponse_fieldAccessorTable;
-    private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
+  private ProtoUserVerify() {
+  }
 
-    static {
-        java.lang.String[] descriptorData = {
-            "\n\020UserVerify.proto\022\005proto\032\rRequest.proto"
-                +
-                "\032\016Response.proto\"\202\001\n\nUserVerify\022\037\n\007reque"
-                +
-                "st\030\001 \001(\0132\016.proto.Request\022\014\n\004code\030\002 \001(\r\022\020"
-                +
-                "\n\010username\030\003 \001(\t\022\016\n\006device\030\004 \001(\t\022\017\n\007os_n"
-                +
-                "ame\030\005 \001(\t\022\022\n\nos_version\030\006 \001(\t\"X\n\022UserVer"
-                +
-                "ifyResponse\022!\n\010response\030\001 \001(\0132\017.proto.Re"
-                +
-                "sponse\022\r\n\005token\030\002 \001(\t\022\020\n\010new_user\030\003 \001(\010B"
-                +
-                "!\n\016com.iGap.protoB\017ProtoUserVerifyb\006prot"
-                +
-                "o3"
-        };
-        com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-            new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
-                public com.google.protobuf.ExtensionRegistry assignDescriptors(
-                    com.google.protobuf.Descriptors.FileDescriptor root) {
-                    descriptor = root;
-                    return null;
-                }
-            };
-        com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
-            descriptorData, new com.google.protobuf.Descriptors.FileDescriptor[] {
-                com.iGap.proto.ProtoRequest.getDescriptor(),
-                com.iGap.proto.ProtoResponse.getDescriptor(),
-            }, assigner);
-        internal_static_proto_UserVerify_descriptor = getDescriptor().getMessageTypes().get(0);
-        internal_static_proto_UserVerify_fieldAccessorTable =
-            new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-                internal_static_proto_UserVerify_descriptor, new java.lang.String[] {
-                "Request", "Code", "Username", "Device", "OsName", "OsVersion",
-            });
-        internal_static_proto_UserVerifyResponse_descriptor =
-            getDescriptor().getMessageTypes().get(1);
-        internal_static_proto_UserVerifyResponse_fieldAccessorTable =
-            new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-                internal_static_proto_UserVerifyResponse_descriptor,
-                new java.lang.String[] { "Response", "Token", "NewUser", });
-        com.iGap.proto.ProtoRequest.getDescriptor();
-        com.iGap.proto.ProtoResponse.getDescriptor();
+  public static void registerAllExtensions(
+          com.google.protobuf.ExtensionRegistryLite registry) {
+  }
+
+  public static void registerAllExtensions(
+          com.google.protobuf.ExtensionRegistry registry) {
+    registerAllExtensions(
+            (com.google.protobuf.ExtensionRegistryLite) registry);
+  }
+
+  public interface UserVerifyOrBuilder extends
+          // @@protoc_insertion_point(interface_extends:proto.UserVerify)
+          com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>optional .proto.Request request = 1;</code>
+     */
+    boolean hasRequest();
+
+    /**
+     * <code>optional .proto.Request request = 1;</code>
+     */
+    ProtoRequest.Request getRequest();
+
+    /**
+     * <code>optional .proto.Request request = 1;</code>
+     */
+    ProtoRequest.RequestOrBuilder getRequestOrBuilder();
+
+    /**
+     * <code>optional uint32 code = 2;</code>
+     */
+    int getCode();
+
+    /**
+     * <code>optional string username = 3;</code>
+     */
+    String getUsername();
+
+    /**
+     * <code>optional string username = 3;</code>
+     */
+    com.google.protobuf.ByteString
+    getUsernameBytes();
+  }
+
+  /**
+   * Protobuf type {@code proto.UserVerify}
+   */
+  public static final class UserVerify extends
+          com.google.protobuf.GeneratedMessageV3 implements
+          // @@protoc_insertion_point(message_implements:proto.UserVerify)
+          UserVerifyOrBuilder {
+    // Use UserVerify.newBuilder() to construct.
+    private UserVerify(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
     }
 
-    private ProtoUserVerify() {
+    private UserVerify() {
+      code_ = 0;
+      username_ = "";
     }
 
-    public static void registerAllExtensions(com.google.protobuf.ExtensionRegistryLite registry) {
+    @Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
 
-    public static void registerAllExtensions(com.google.protobuf.ExtensionRegistry registry) {
-        registerAllExtensions((com.google.protobuf.ExtensionRegistryLite) registry);
+    private UserVerify(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      int mutable_bitField0_ = 0;
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!input.skipField(tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              ProtoRequest.Request.Builder subBuilder = null;
+              if (request_ != null) {
+                subBuilder = request_.toBuilder();
+              }
+              request_ = input.readMessage(ProtoRequest.Request.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(request_);
+                request_ = subBuilder.buildPartial();
+              }
+
+              break;
+            }
+            case 16: {
+
+              code_ = input.readUInt32();
+              break;
+            }
+            case 26: {
+              String s = input.readStringRequireUtf8();
+
+              username_ = s;
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+                e).setUnfinishedMessage(this);
+      } finally {
+        makeExtensionsImmutable();
+      }
     }
 
-    public static com.google.protobuf.Descriptors.FileDescriptor getDescriptor() {
-        return descriptor;
+    public static final com.google.protobuf.Descriptors.Descriptor
+    getDescriptor() {
+      return ProtoUserVerify.internal_static_proto_UserVerify_descriptor;
     }
 
-    public interface UserVerifyOrBuilder extends
-        // @@protoc_insertion_point(interface_extends:proto.UserVerify)
-        com.google.protobuf.MessageOrBuilder {
-
-        /**
-         * <code>optional .proto.Request request = 1;</code>
-         */
-        boolean hasRequest();
-
-        /**
-         * <code>optional .proto.Request request = 1;</code>
-         */
-        com.iGap.proto.ProtoRequest.Request getRequest();
-
-        /**
-         * <code>optional .proto.Request request = 1;</code>
-         */
-        com.iGap.proto.ProtoRequest.RequestOrBuilder getRequestOrBuilder();
-
-        /**
-         * <code>optional uint32 code = 2;</code>
-         */
-        int getCode();
-
-        /**
-         * <code>optional string username = 3;</code>
-         */
-        java.lang.String getUsername();
-
-        /**
-         * <code>optional string username = 3;</code>
-         */
-        com.google.protobuf.ByteString getUsernameBytes();
-
-        /**
-         * <code>optional string device = 4;</code>
-         */
-        java.lang.String getDevice();
-
-        /**
-         * <code>optional string device = 4;</code>
-         */
-        com.google.protobuf.ByteString getDeviceBytes();
-
-        /**
-         * <code>optional string os_name = 5;</code>
-         */
-        java.lang.String getOsName();
-
-        /**
-         * <code>optional string os_name = 5;</code>
-         */
-        com.google.protobuf.ByteString getOsNameBytes();
-
-        /**
-         * <code>optional string os_version = 6;</code>
-         */
-        java.lang.String getOsVersion();
-
-        /**
-         * <code>optional string os_version = 6;</code>
-         */
-        com.google.protobuf.ByteString getOsVersionBytes();
+    protected FieldAccessorTable
+    internalGetFieldAccessorTable() {
+      return ProtoUserVerify.internal_static_proto_UserVerify_fieldAccessorTable
+              .ensureFieldAccessorsInitialized(
+                      UserVerify.class, Builder.class);
     }
 
-    public interface UserVerifyResponseOrBuilder extends
-        // @@protoc_insertion_point(interface_extends:proto.UserVerifyResponse)
-        com.google.protobuf.MessageOrBuilder {
+    public static final int REQUEST_FIELD_NUMBER = 1;
+    private ProtoRequest.Request request_;
 
-        /**
-         * <code>optional .proto.Response response = 1;</code>
-         */
-        boolean hasResponse();
+    /**
+     * <code>optional .proto.Request request = 1;</code>
+     */
+    public boolean hasRequest() {
+      return request_ != null;
+    }
 
-        /**
-         * <code>optional .proto.Response response = 1;</code>
-         */
-        com.iGap.proto.ProtoResponse.Response getResponse();
+    /**
+     * <code>optional .proto.Request request = 1;</code>
+     */
+    public ProtoRequest.Request getRequest() {
+      return request_ == null ? ProtoRequest.Request.getDefaultInstance() : request_;
+    }
 
-        /**
-         * <code>optional .proto.Response response = 1;</code>
-         */
-        com.iGap.proto.ProtoResponse.ResponseOrBuilder getResponseOrBuilder();
+    /**
+     * <code>optional .proto.Request request = 1;</code>
+     */
+    public ProtoRequest.RequestOrBuilder getRequestOrBuilder() {
+      return getRequest();
+    }
 
-        /**
-         * <code>optional string token = 2;</code>
-         */
-        java.lang.String getToken();
+    public static final int CODE_FIELD_NUMBER = 2;
+    private int code_;
 
-        /**
-         * <code>optional string token = 2;</code>
-         */
-        com.google.protobuf.ByteString getTokenBytes();
+    /**
+     * <code>optional uint32 code = 2;</code>
+     */
+    public int getCode() {
+      return code_;
+    }
 
-        /**
-         * <code>optional bool new_user = 3;</code>
-         */
-        boolean getNewUser();
+    public static final int USERNAME_FIELD_NUMBER = 3;
+    private volatile Object username_;
+
+    /**
+     * <code>optional string username = 3;</code>
+     */
+    public String getUsername() {
+      Object ref = username_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs =
+                (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        username_ = s;
+        return s;
+      }
+    }
+
+    /**
+     * <code>optional string username = 3;</code>
+     */
+    public com.google.protobuf.ByteString
+    getUsernameBytes() {
+      Object ref = username_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b =
+                com.google.protobuf.ByteString.copyFromUtf8(
+                        (String) ref);
+        username_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    private byte memoizedIsInitialized = -1;
+
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+            throws java.io.IOException {
+      if (request_ != null) {
+        output.writeMessage(1, getRequest());
+      }
+      if (code_ != 0) {
+        output.writeUInt32(2, code_);
+      }
+      if (!getUsernameBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, username_);
+      }
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (request_ != null) {
+        size += com.google.protobuf.CodedOutputStream
+                .computeMessageSize(1, getRequest());
+      }
+      if (code_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+                .computeUInt32Size(2, code_);
+      }
+      if (!getUsernameBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, username_);
+      }
+      memoizedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+
+    @Override
+    public boolean equals(final Object obj) {
+      if (obj == this) {
+        return true;
+      }
+      if (!(obj instanceof UserVerify)) {
+        return super.equals(obj);
+      }
+      UserVerify other = (UserVerify) obj;
+
+      boolean result = true;
+      result = result && (hasRequest() == other.hasRequest());
+      if (hasRequest()) {
+        result = result && getRequest()
+                .equals(other.getRequest());
+      }
+      result = result && (getCode()
+              == other.getCode());
+      result = result && getUsername()
+              .equals(other.getUsername());
+      return result;
+    }
+
+    @Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptorForType().hashCode();
+      if (hasRequest()) {
+        hash = (37 * hash) + REQUEST_FIELD_NUMBER;
+        hash = (53 * hash) + getRequest().hashCode();
+      }
+      hash = (37 * hash) + CODE_FIELD_NUMBER;
+      hash = (53 * hash) + getCode();
+      hash = (37 * hash) + USERNAME_FIELD_NUMBER;
+      hash = (53 * hash) + getUsername().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static UserVerify parseFrom(
+            com.google.protobuf.ByteString data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+
+    public static UserVerify parseFrom(
+            com.google.protobuf.ByteString data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+
+    public static UserVerify parseFrom(byte[] data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+
+    public static UserVerify parseFrom(
+            byte[] data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+
+    public static UserVerify parseFrom(java.io.InputStream input)
+            throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+              .parseWithIOException(PARSER, input);
+    }
+
+    public static UserVerify parseFrom(
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+              .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public static UserVerify parseDelimitedFrom(java.io.InputStream input)
+            throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+              .parseDelimitedWithIOException(PARSER, input);
+    }
+
+    public static UserVerify parseDelimitedFrom(
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public static UserVerify parseFrom(
+            com.google.protobuf.CodedInputStream input)
+            throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+              .parseWithIOException(PARSER, input);
+    }
+
+    public static UserVerify parseFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+              .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+
+    public static Builder newBuilder(UserVerify prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+              ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @Override
+    protected Builder newBuilderForType(
+            BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
     }
 
     /**
      * Protobuf type {@code proto.UserVerify}
      */
-    public static final class UserVerify extends com.google.protobuf.GeneratedMessageV3 implements
-        // @@protoc_insertion_point(message_implements:proto.UserVerify)
-        UserVerifyOrBuilder {
-        public static final int REQUEST_FIELD_NUMBER = 1;
-        public static final int CODE_FIELD_NUMBER = 2;
-        public static final int USERNAME_FIELD_NUMBER = 3;
-        public static final int DEVICE_FIELD_NUMBER = 4;
-        public static final int OS_NAME_FIELD_NUMBER = 5;
-        public static final int OS_VERSION_FIELD_NUMBER = 6;
-        private static final long serialVersionUID = 0L;
-        // @@protoc_insertion_point(class_scope:proto.UserVerify)
-        private static final com.iGap.proto.ProtoUserVerify.UserVerify DEFAULT_INSTANCE;
-        private static final com.google.protobuf.Parser<UserVerify> PARSER =
-            new com.google.protobuf.AbstractParser<UserVerify>() {
-                public UserVerify parsePartialFrom(com.google.protobuf.CodedInputStream input,
-                    com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                    throws com.google.protobuf.InvalidProtocolBufferException {
-                    return new UserVerify(input, extensionRegistry);
-                }
-            };
+    public static final class Builder extends
+            com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:proto.UserVerify)
+            UserVerifyOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+      getDescriptor() {
+        return ProtoUserVerify.internal_static_proto_UserVerify_descriptor;
+      }
 
-        static {
-            DEFAULT_INSTANCE = new com.iGap.proto.ProtoUserVerify.UserVerify();
+      protected FieldAccessorTable
+      internalGetFieldAccessorTable() {
+        return ProtoUserVerify.internal_static_proto_UserVerify_fieldAccessorTable
+                .ensureFieldAccessorsInitialized(
+                        UserVerify.class, Builder.class);
+      }
+
+      // Construct using com.iGap.proto.ProtoUserVerify.UserVerify.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+              BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+
+      public Builder clear() {
+        super.clear();
+        if (requestBuilder_ == null) {
+          request_ = null;
+        } else {
+          request_ = null;
+          requestBuilder_ = null;
+        }
+        code_ = 0;
+
+        username_ = "";
+
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+      getDescriptorForType() {
+        return ProtoUserVerify.internal_static_proto_UserVerify_descriptor;
+      }
+
+      public UserVerify getDefaultInstanceForType() {
+        return UserVerify.getDefaultInstance();
+      }
+
+      public UserVerify build() {
+        UserVerify result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public UserVerify buildPartial() {
+        UserVerify result = new UserVerify(this);
+        if (requestBuilder_ == null) {
+          result.request_ = request_;
+        } else {
+          result.request_ = requestBuilder_.build();
+        }
+        result.code_ = code_;
+        result.username_ = username_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+
+      public Builder setField(
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              Object value) {
+        return (Builder) super.setField(field, value);
+      }
+
+      public Builder clearField(
+              com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+
+      public Builder clearOneof(
+              com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+
+      public Builder setRepeatedField(
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+
+      public Builder addRepeatedField(
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof UserVerify) {
+          return mergeFrom((UserVerify) other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(UserVerify other) {
+        if (other == UserVerify.getDefaultInstance()) return this;
+        if (other.hasRequest()) {
+          mergeRequest(other.getRequest());
+        }
+        if (other.getCode() != 0) {
+          setCode(other.getCode());
+        }
+        if (!other.getUsername().isEmpty()) {
+          username_ = other.username_;
+          onChanged();
+        }
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws java.io.IOException {
+        UserVerify parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (UserVerify) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private ProtoRequest.Request request_ = null;
+      private com.google.protobuf.SingleFieldBuilderV3<
+              ProtoRequest.Request, ProtoRequest.Request.Builder, ProtoRequest.RequestOrBuilder> requestBuilder_;
+
+      /**
+       * <code>optional .proto.Request request = 1;</code>
+       */
+      public boolean hasRequest() {
+        return requestBuilder_ != null || request_ != null;
+      }
+
+      /**
+       * <code>optional .proto.Request request = 1;</code>
+       */
+      public ProtoRequest.Request getRequest() {
+        if (requestBuilder_ == null) {
+          return request_ == null ? ProtoRequest.Request.getDefaultInstance() : request_;
+        } else {
+          return requestBuilder_.getMessage();
+        }
+      }
+
+      /**
+       * <code>optional .proto.Request request = 1;</code>
+       */
+      public Builder setRequest(ProtoRequest.Request value) {
+        if (requestBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          request_ = value;
+          onChanged();
+        } else {
+          requestBuilder_.setMessage(value);
         }
 
-        private com.iGap.proto.ProtoRequest.Request request_;
-        private int code_;
-        private volatile java.lang.Object username_;
-        private volatile java.lang.Object device_;
-        private volatile java.lang.Object osName_;
-        private volatile java.lang.Object osVersion_;
-        private byte memoizedIsInitialized = -1;
+        return this;
+      }
 
-        // Use UserVerify.newBuilder() to construct.
-        private UserVerify(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
-            super(builder);
+      /**
+       * <code>optional .proto.Request request = 1;</code>
+       */
+      public Builder setRequest(
+              ProtoRequest.Request.Builder builderForValue) {
+        if (requestBuilder_ == null) {
+          request_ = builderForValue.build();
+          onChanged();
+        } else {
+          requestBuilder_.setMessage(builderForValue.build());
         }
 
-        private UserVerify() {
-            code_ = 0;
-            username_ = "";
-            device_ = "";
-            osName_ = "";
-            osVersion_ = "";
+        return this;
+      }
+
+      /**
+       * <code>optional .proto.Request request = 1;</code>
+       */
+      public Builder mergeRequest(ProtoRequest.Request value) {
+        if (requestBuilder_ == null) {
+          if (request_ != null) {
+            request_ =
+                    ProtoRequest.Request.newBuilder(request_).mergeFrom(value).buildPartial();
+          } else {
+            request_ = value;
+          }
+          onChanged();
+        } else {
+          requestBuilder_.mergeFrom(value);
         }
 
-        private UserVerify(com.google.protobuf.CodedInputStream input,
+        return this;
+      }
+
+      /**
+       * <code>optional .proto.Request request = 1;</code>
+       */
+      public Builder clearRequest() {
+        if (requestBuilder_ == null) {
+          request_ = null;
+          onChanged();
+        } else {
+          request_ = null;
+          requestBuilder_ = null;
+        }
+
+        return this;
+      }
+
+      /**
+       * <code>optional .proto.Request request = 1;</code>
+       */
+      public ProtoRequest.Request.Builder getRequestBuilder() {
+
+        onChanged();
+        return getRequestFieldBuilder().getBuilder();
+      }
+
+      /**
+       * <code>optional .proto.Request request = 1;</code>
+       */
+      public ProtoRequest.RequestOrBuilder getRequestOrBuilder() {
+        if (requestBuilder_ != null) {
+          return requestBuilder_.getMessageOrBuilder();
+        } else {
+          return request_ == null ?
+                  ProtoRequest.Request.getDefaultInstance() : request_;
+        }
+      }
+
+      /**
+       * <code>optional .proto.Request request = 1;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<
+              ProtoRequest.Request, ProtoRequest.Request.Builder, ProtoRequest.RequestOrBuilder>
+      getRequestFieldBuilder() {
+        if (requestBuilder_ == null) {
+          requestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+                  ProtoRequest.Request, ProtoRequest.Request.Builder, ProtoRequest.RequestOrBuilder>(
+                  getRequest(),
+                  getParentForChildren(),
+                  isClean());
+          request_ = null;
+        }
+        return requestBuilder_;
+      }
+
+      private int code_;
+
+      /**
+       * <code>optional uint32 code = 2;</code>
+       */
+      public int getCode() {
+        return code_;
+      }
+
+      /**
+       * <code>optional uint32 code = 2;</code>
+       */
+      public Builder setCode(int value) {
+
+        code_ = value;
+        onChanged();
+        return this;
+      }
+
+      /**
+       * <code>optional uint32 code = 2;</code>
+       */
+      public Builder clearCode() {
+
+        code_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private Object username_ = "";
+
+      /**
+       * <code>optional string username = 3;</code>
+       */
+      public String getUsername() {
+        Object ref = username_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+                  (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          username_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+
+      /**
+       * <code>optional string username = 3;</code>
+       */
+      public com.google.protobuf.ByteString
+      getUsernameBytes() {
+        Object ref = username_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b =
+                  com.google.protobuf.ByteString.copyFromUtf8(
+                          (String) ref);
+          username_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+
+      /**
+       * <code>optional string username = 3;</code>
+       */
+      public Builder setUsername(
+              String value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+
+        username_ = value;
+        onChanged();
+        return this;
+      }
+
+      /**
+       * <code>optional string username = 3;</code>
+       */
+      public Builder clearUsername() {
+
+        username_ = getDefaultInstance().getUsername();
+        onChanged();
+        return this;
+      }
+
+      /**
+       * <code>optional string username = 3;</code>
+       */
+      public Builder setUsernameBytes(
+              com.google.protobuf.ByteString value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        checkByteStringIsUtf8(value);
+
+        username_ = value;
+        onChanged();
+        return this;
+      }
+
+      public final Builder setUnknownFields(
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
+      }
+
+      public final Builder mergeUnknownFields(
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:proto.UserVerify)
+    }
+
+    // @@protoc_insertion_point(class_scope:proto.UserVerify)
+    private static final UserVerify DEFAULT_INSTANCE;
+
+    static {
+      DEFAULT_INSTANCE = new UserVerify();
+    }
+
+    public static UserVerify getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<UserVerify>
+            PARSER = new com.google.protobuf.AbstractParser<UserVerify>() {
+      public UserVerify parsePartialFrom(
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws com.google.protobuf.InvalidProtocolBufferException {
+        return new UserVerify(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<UserVerify> parser() {
+      return PARSER;
+    }
+
+    @Override
+    public com.google.protobuf.Parser<UserVerify> getParserForType() {
+      return PARSER;
+    }
+
+    public UserVerify getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface UserVerifyResponseOrBuilder extends
+          // @@protoc_insertion_point(interface_extends:proto.UserVerifyResponse)
+          com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>optional .proto.Response response = 1;</code>
+     */
+    boolean hasResponse();
+
+    /**
+     * <code>optional .proto.Response response = 1;</code>
+     */
+    ProtoResponse.Response getResponse();
+
+    /**
+     * <code>optional .proto.Response response = 1;</code>
+     */
+    ProtoResponse.ResponseOrBuilder getResponseOrBuilder();
+
+    /**
+     * <code>optional string token = 2;</code>
+     */
+    String getToken();
+
+    /**
+     * <code>optional string token = 2;</code>
+     */
+    com.google.protobuf.ByteString
+    getTokenBytes();
+
+    /**
+     * <code>optional bool new_user = 3;</code>
+     */
+    boolean getNewUser();
+  }
+
+  /**
+   * Protobuf type {@code proto.UserVerifyResponse}
+   */
+  public static final class UserVerifyResponse extends
+          com.google.protobuf.GeneratedMessageV3 implements
+          // @@protoc_insertion_point(message_implements:proto.UserVerifyResponse)
+          UserVerifyResponseOrBuilder {
+    // Use UserVerifyResponse.newBuilder() to construct.
+    private UserVerifyResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+
+    private UserVerifyResponse() {
+      token_ = "";
+      newUser_ = false;
+    }
+
+    @Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+    }
+
+    private UserVerifyResponse(
+            com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
-            this();
-            int mutable_bitField0_ = 0;
-            try {
-                boolean done = false;
-                while (!done) {
-                    int tag = input.readTag();
-                    switch (tag) {
-                        case 0:
-                            done = true;
-                            break;
-                        default: {
-                            if (!input.skipField(tag)) {
-                                done = true;
-                            }
-                            break;
-                        }
-                        case 10: {
-                            com.iGap.proto.ProtoRequest.Request.Builder subBuilder = null;
-                            if (request_ != null) {
-                                subBuilder = request_.toBuilder();
-                            }
-                            request_ =
-                                input.readMessage(com.iGap.proto.ProtoRequest.Request.parser(),
-                                    extensionRegistry);
-                            if (subBuilder != null) {
-                                subBuilder.mergeFrom(request_);
-                                request_ = subBuilder.buildPartial();
-                            }
-
-                            break;
-                        }
-                        case 16: {
-
-                            code_ = input.readUInt32();
-                            break;
-                        }
-                        case 26: {
-                            java.lang.String s = input.readStringRequireUtf8();
-
-                            username_ = s;
-                            break;
-                        }
-                        case 34: {
-                            java.lang.String s = input.readStringRequireUtf8();
-
-                            device_ = s;
-                            break;
-                        }
-                        case 42: {
-                            java.lang.String s = input.readStringRequireUtf8();
-
-                            osName_ = s;
-                            break;
-                        }
-                        case 50: {
-                            java.lang.String s = input.readStringRequireUtf8();
-
-                            osVersion_ = s;
-                            break;
-                        }
-                    }
-                }
-            } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-                throw e.setUnfinishedMessage(this);
-            } catch (java.io.IOException e) {
-                throw new com.google.protobuf.InvalidProtocolBufferException(
-                    e).setUnfinishedMessage(this);
-            } finally {
-                makeExtensionsImmutable();
+      this();
+      int mutable_bitField0_ = 0;
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!input.skipField(tag)) {
+                done = true;
+              }
+              break;
             }
-        }
+            case 10: {
+              ProtoResponse.Response.Builder subBuilder = null;
+              if (response_ != null) {
+                subBuilder = response_.toBuilder();
+              }
+              response_ = input.readMessage(ProtoResponse.Response.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(response_);
+                response_ = subBuilder.buildPartial();
+              }
 
-        public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-            return com.iGap.proto.ProtoUserVerify.internal_static_proto_UserVerify_descriptor;
-        }
+              break;
+            }
+            case 18: {
+              String s = input.readStringRequireUtf8();
 
-        public static com.iGap.proto.ProtoUserVerify.UserVerify parseFrom(
+              token_ = s;
+              break;
+            }
+            case 24: {
+
+              newUser_ = input.readBool();
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+                e).setUnfinishedMessage(this);
+      } finally {
+        makeExtensionsImmutable();
+      }
+    }
+
+    public static final com.google.protobuf.Descriptors.Descriptor
+    getDescriptor() {
+      return ProtoUserVerify.internal_static_proto_UserVerifyResponse_descriptor;
+    }
+
+    protected FieldAccessorTable
+    internalGetFieldAccessorTable() {
+      return ProtoUserVerify.internal_static_proto_UserVerifyResponse_fieldAccessorTable
+              .ensureFieldAccessorsInitialized(
+                      UserVerifyResponse.class, Builder.class);
+    }
+
+    public static final int RESPONSE_FIELD_NUMBER = 1;
+    private ProtoResponse.Response response_;
+
+    /**
+     * <code>optional .proto.Response response = 1;</code>
+     */
+    public boolean hasResponse() {
+      return response_ != null;
+    }
+
+    /**
+     * <code>optional .proto.Response response = 1;</code>
+     */
+    public ProtoResponse.Response getResponse() {
+      return response_ == null ? ProtoResponse.Response.getDefaultInstance() : response_;
+    }
+
+    /**
+     * <code>optional .proto.Response response = 1;</code>
+     */
+    public ProtoResponse.ResponseOrBuilder getResponseOrBuilder() {
+      return getResponse();
+    }
+
+    public static final int TOKEN_FIELD_NUMBER = 2;
+    private volatile Object token_;
+
+    /**
+     * <code>optional string token = 2;</code>
+     */
+    public String getToken() {
+      Object ref = token_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs =
+                (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        token_ = s;
+        return s;
+      }
+    }
+
+    /**
+     * <code>optional string token = 2;</code>
+     */
+    public com.google.protobuf.ByteString
+    getTokenBytes() {
+      Object ref = token_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b =
+                com.google.protobuf.ByteString.copyFromUtf8(
+                        (String) ref);
+        token_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int NEW_USER_FIELD_NUMBER = 3;
+    private boolean newUser_;
+
+    /**
+     * <code>optional bool new_user = 3;</code>
+     */
+    public boolean getNewUser() {
+      return newUser_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+            throws java.io.IOException {
+      if (response_ != null) {
+        output.writeMessage(1, getResponse());
+      }
+      if (!getTokenBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, token_);
+      }
+      if (newUser_ != false) {
+        output.writeBool(3, newUser_);
+      }
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (response_ != null) {
+        size += com.google.protobuf.CodedOutputStream
+                .computeMessageSize(1, getResponse());
+      }
+      if (!getTokenBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, token_);
+      }
+      if (newUser_ != false) {
+        size += com.google.protobuf.CodedOutputStream
+                .computeBoolSize(3, newUser_);
+      }
+      memoizedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+
+    @Override
+    public boolean equals(final Object obj) {
+      if (obj == this) {
+        return true;
+      }
+      if (!(obj instanceof UserVerifyResponse)) {
+        return super.equals(obj);
+      }
+      UserVerifyResponse other = (UserVerifyResponse) obj;
+
+      boolean result = true;
+      result = result && (hasResponse() == other.hasResponse());
+      if (hasResponse()) {
+        result = result && getResponse()
+                .equals(other.getResponse());
+      }
+      result = result && getToken()
+              .equals(other.getToken());
+      result = result && (getNewUser()
+              == other.getNewUser());
+      return result;
+    }
+
+    @Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptorForType().hashCode();
+      if (hasResponse()) {
+        hash = (37 * hash) + RESPONSE_FIELD_NUMBER;
+        hash = (53 * hash) + getResponse().hashCode();
+      }
+      hash = (37 * hash) + TOKEN_FIELD_NUMBER;
+      hash = (53 * hash) + getToken().hashCode();
+      hash = (37 * hash) + NEW_USER_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+              getNewUser());
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static UserVerifyResponse parseFrom(
             com.google.protobuf.ByteString data)
             throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data);
-        }
+      return PARSER.parseFrom(data);
+    }
 
-        public static com.iGap.proto.ProtoUserVerify.UserVerify parseFrom(
+    public static UserVerifyResponse parseFrom(
             com.google.protobuf.ByteString data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data, extensionRegistry);
-        }
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
 
-        public static com.iGap.proto.ProtoUserVerify.UserVerify parseFrom(byte[] data)
+    public static UserVerifyResponse parseFrom(byte[] data)
             throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data);
-        }
+      return PARSER.parseFrom(data);
+    }
 
-        public static com.iGap.proto.ProtoUserVerify.UserVerify parseFrom(byte[] data,
+    public static UserVerifyResponse parseFrom(
+            byte[] data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data, extensionRegistry);
-        }
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
 
-        public static com.iGap.proto.ProtoUserVerify.UserVerify parseFrom(java.io.InputStream input)
+    public static UserVerifyResponse parseFrom(java.io.InputStream input)
             throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
-        }
+      return com.google.protobuf.GeneratedMessageV3
+              .parseWithIOException(PARSER, input);
+    }
 
-        public static com.iGap.proto.ProtoUserVerify.UserVerify parseFrom(java.io.InputStream input,
+    public static UserVerifyResponse parseFrom(
+            java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input,
-                extensionRegistry);
-        }
+      return com.google.protobuf.GeneratedMessageV3
+              .parseWithIOException(PARSER, input, extensionRegistry);
+    }
 
-        public static com.iGap.proto.ProtoUserVerify.UserVerify parseDelimitedFrom(
-            java.io.InputStream input) throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER,
-                input);
-        }
-
-        public static com.iGap.proto.ProtoUserVerify.UserVerify parseDelimitedFrom(
-            java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+    public static UserVerifyResponse parseDelimitedFrom(java.io.InputStream input)
             throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER,
-                input, extensionRegistry);
-        }
+      return com.google.protobuf.GeneratedMessageV3
+              .parseDelimitedWithIOException(PARSER, input);
+    }
 
-        public static com.iGap.proto.ProtoUserVerify.UserVerify parseFrom(
-            com.google.protobuf.CodedInputStream input) throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
-        }
+    public static UserVerifyResponse parseDelimitedFrom(
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
 
-        public static com.iGap.proto.ProtoUserVerify.UserVerify parseFrom(
+    public static UserVerifyResponse parseFrom(
+            com.google.protobuf.CodedInputStream input)
+            throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+              .parseWithIOException(PARSER, input);
+    }
+
+    public static UserVerifyResponse parseFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input,
-                extensionRegistry);
-        }
-
-        public static Builder newBuilder() {
-            return DEFAULT_INSTANCE.toBuilder();
-        }
-
-        public static Builder newBuilder(com.iGap.proto.ProtoUserVerify.UserVerify prototype) {
-            return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-        }
-
-        public static com.iGap.proto.ProtoUserVerify.UserVerify getDefaultInstance() {
-            return DEFAULT_INSTANCE;
-        }
-
-        public static com.google.protobuf.Parser<UserVerify> parser() {
-            return PARSER;
-        }
-
-        @java.lang.Override public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-            return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
-        }
-
-        protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-            return com.iGap.proto.ProtoUserVerify.internal_static_proto_UserVerify_fieldAccessorTable
-                .ensureFieldAccessorsInitialized(com.iGap.proto.ProtoUserVerify.UserVerify.class,
-                    com.iGap.proto.ProtoUserVerify.UserVerify.Builder.class);
-        }
-
-        /**
-         * <code>optional .proto.Request request = 1;</code>
-         */
-        public boolean hasRequest() {
-            return request_ != null;
-        }
-
-        /**
-         * <code>optional .proto.Request request = 1;</code>
-         */
-        public com.iGap.proto.ProtoRequest.Request getRequest() {
-            return request_ == null ? com.iGap.proto.ProtoRequest.Request.getDefaultInstance()
-                : request_;
-        }
-
-        /**
-         * <code>optional .proto.Request request = 1;</code>
-         */
-        public com.iGap.proto.ProtoRequest.RequestOrBuilder getRequestOrBuilder() {
-            return getRequest();
-        }
-
-        /**
-         * <code>optional uint32 code = 2;</code>
-         */
-        public int getCode() {
-            return code_;
-        }
-
-        /**
-         * <code>optional string username = 3;</code>
-         */
-        public java.lang.String getUsername() {
-            java.lang.Object ref = username_;
-            if (ref instanceof java.lang.String) {
-                return (java.lang.String) ref;
-            } else {
-                com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
-                java.lang.String s = bs.toStringUtf8();
-                username_ = s;
-                return s;
-            }
-        }
-
-        /**
-         * <code>optional string username = 3;</code>
-         */
-        public com.google.protobuf.ByteString getUsernameBytes() {
-            java.lang.Object ref = username_;
-            if (ref instanceof java.lang.String) {
-                com.google.protobuf.ByteString b =
-                    com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
-                username_ = b;
-                return b;
-            } else {
-                return (com.google.protobuf.ByteString) ref;
-            }
-        }
-
-        /**
-         * <code>optional string device = 4;</code>
-         */
-        public java.lang.String getDevice() {
-            java.lang.Object ref = device_;
-            if (ref instanceof java.lang.String) {
-                return (java.lang.String) ref;
-            } else {
-                com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
-                java.lang.String s = bs.toStringUtf8();
-                device_ = s;
-                return s;
-            }
-        }
-
-        /**
-         * <code>optional string device = 4;</code>
-         */
-        public com.google.protobuf.ByteString getDeviceBytes() {
-            java.lang.Object ref = device_;
-            if (ref instanceof java.lang.String) {
-                com.google.protobuf.ByteString b =
-                    com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
-                device_ = b;
-                return b;
-            } else {
-                return (com.google.protobuf.ByteString) ref;
-            }
-        }
-
-        /**
-         * <code>optional string os_name = 5;</code>
-         */
-        public java.lang.String getOsName() {
-            java.lang.Object ref = osName_;
-            if (ref instanceof java.lang.String) {
-                return (java.lang.String) ref;
-            } else {
-                com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
-                java.lang.String s = bs.toStringUtf8();
-                osName_ = s;
-                return s;
-            }
-        }
-
-        /**
-         * <code>optional string os_name = 5;</code>
-         */
-        public com.google.protobuf.ByteString getOsNameBytes() {
-            java.lang.Object ref = osName_;
-            if (ref instanceof java.lang.String) {
-                com.google.protobuf.ByteString b =
-                    com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
-                osName_ = b;
-                return b;
-            } else {
-                return (com.google.protobuf.ByteString) ref;
-            }
-        }
-
-        /**
-         * <code>optional string os_version = 6;</code>
-         */
-        public java.lang.String getOsVersion() {
-            java.lang.Object ref = osVersion_;
-            if (ref instanceof java.lang.String) {
-                return (java.lang.String) ref;
-            } else {
-                com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
-                java.lang.String s = bs.toStringUtf8();
-                osVersion_ = s;
-                return s;
-            }
-        }
-
-        /**
-         * <code>optional string os_version = 6;</code>
-         */
-        public com.google.protobuf.ByteString getOsVersionBytes() {
-            java.lang.Object ref = osVersion_;
-            if (ref instanceof java.lang.String) {
-                com.google.protobuf.ByteString b =
-                    com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
-                osVersion_ = b;
-                return b;
-            } else {
-                return (com.google.protobuf.ByteString) ref;
-            }
-        }
-
-        public final boolean isInitialized() {
-            byte isInitialized = memoizedIsInitialized;
-            if (isInitialized == 1) return true;
-            if (isInitialized == 0) return false;
-
-            memoizedIsInitialized = 1;
-            return true;
-        }
-
-        public void writeTo(com.google.protobuf.CodedOutputStream output)
-            throws java.io.IOException {
-            if (request_ != null) {
-                output.writeMessage(1, getRequest());
-            }
-            if (code_ != 0) {
-                output.writeUInt32(2, code_);
-            }
-            if (!getUsernameBytes().isEmpty()) {
-                com.google.protobuf.GeneratedMessageV3.writeString(output, 3, username_);
-            }
-            if (!getDeviceBytes().isEmpty()) {
-                com.google.protobuf.GeneratedMessageV3.writeString(output, 4, device_);
-            }
-            if (!getOsNameBytes().isEmpty()) {
-                com.google.protobuf.GeneratedMessageV3.writeString(output, 5, osName_);
-            }
-            if (!getOsVersionBytes().isEmpty()) {
-                com.google.protobuf.GeneratedMessageV3.writeString(output, 6, osVersion_);
-            }
-        }
-
-        public int getSerializedSize() {
-            int size = memoizedSize;
-            if (size != -1) return size;
-
-            size = 0;
-            if (request_ != null) {
-                size += com.google.protobuf.CodedOutputStream.computeMessageSize(1, getRequest());
-            }
-            if (code_ != 0) {
-                size += com.google.protobuf.CodedOutputStream.computeUInt32Size(2, code_);
-            }
-            if (!getUsernameBytes().isEmpty()) {
-                size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, username_);
-            }
-            if (!getDeviceBytes().isEmpty()) {
-                size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, device_);
-            }
-            if (!getOsNameBytes().isEmpty()) {
-                size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, osName_);
-            }
-            if (!getOsVersionBytes().isEmpty()) {
-                size += com.google.protobuf.GeneratedMessageV3.computeStringSize(6, osVersion_);
-            }
-            memoizedSize = size;
-            return size;
-        }
-
-        @java.lang.Override public boolean equals(final java.lang.Object obj) {
-            if (obj == this) {
-                return true;
-            }
-            if (!(obj instanceof com.iGap.proto.ProtoUserVerify.UserVerify)) {
-                return super.equals(obj);
-            }
-            com.iGap.proto.ProtoUserVerify.UserVerify other =
-                (com.iGap.proto.ProtoUserVerify.UserVerify) obj;
-
-            boolean result = true;
-            result = result && (hasRequest() == other.hasRequest());
-            if (hasRequest()) {
-                result = result && getRequest().equals(other.getRequest());
-            }
-            result = result && (getCode() == other.getCode());
-            result = result && getUsername().equals(other.getUsername());
-            result = result && getDevice().equals(other.getDevice());
-            result = result && getOsName().equals(other.getOsName());
-            result = result && getOsVersion().equals(other.getOsVersion());
-            return result;
-        }
-
-        @java.lang.Override public int hashCode() {
-            if (memoizedHashCode != 0) {
-                return memoizedHashCode;
-            }
-            int hash = 41;
-            hash = (19 * hash) + getDescriptorForType().hashCode();
-            if (hasRequest()) {
-                hash = (37 * hash) + REQUEST_FIELD_NUMBER;
-                hash = (53 * hash) + getRequest().hashCode();
-            }
-            hash = (37 * hash) + CODE_FIELD_NUMBER;
-            hash = (53 * hash) + getCode();
-            hash = (37 * hash) + USERNAME_FIELD_NUMBER;
-            hash = (53 * hash) + getUsername().hashCode();
-            hash = (37 * hash) + DEVICE_FIELD_NUMBER;
-            hash = (53 * hash) + getDevice().hashCode();
-            hash = (37 * hash) + OS_NAME_FIELD_NUMBER;
-            hash = (53 * hash) + getOsName().hashCode();
-            hash = (37 * hash) + OS_VERSION_FIELD_NUMBER;
-            hash = (53 * hash) + getOsVersion().hashCode();
-            hash = (29 * hash) + unknownFields.hashCode();
-            memoizedHashCode = hash;
-            return hash;
-        }
-
-        public Builder newBuilderForType() {
-            return newBuilder();
-        }
-
-        public Builder toBuilder() {
-            return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
-        }
-
-        @java.lang.Override protected Builder newBuilderForType(
-            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-            Builder builder = new Builder(parent);
-            return builder;
-        }
-
-        @java.lang.Override public com.google.protobuf.Parser<UserVerify> getParserForType() {
-            return PARSER;
-        }
-
-        public com.iGap.proto.ProtoUserVerify.UserVerify getDefaultInstanceForType() {
-            return DEFAULT_INSTANCE;
-        }
-
-        /**
-         * Protobuf type {@code proto.UserVerify}
-         */
-        public static final class Builder
-            extends com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-            // @@protoc_insertion_point(builder_implements:proto.UserVerify)
-            com.iGap.proto.ProtoUserVerify.UserVerifyOrBuilder {
-            private com.iGap.proto.ProtoRequest.Request request_ = null;
-            private com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder>
-                requestBuilder_;
-            private int code_;
-            private java.lang.Object username_ = "";
-            private java.lang.Object device_ = "";
-            private java.lang.Object osName_ = "";
-            private java.lang.Object osVersion_ = "";
-
-            // Construct using com.iGap.proto.ProtoUserVerify.UserVerify.newBuilder()
-            private Builder() {
-                maybeForceBuilderInitialization();
-            }
-
-            private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-                super(parent);
-                maybeForceBuilderInitialization();
-            }
-
-            public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-                return com.iGap.proto.ProtoUserVerify.internal_static_proto_UserVerify_descriptor;
-            }
-
-            protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-                return com.iGap.proto.ProtoUserVerify.internal_static_proto_UserVerify_fieldAccessorTable
-                    .ensureFieldAccessorsInitialized(
-                        com.iGap.proto.ProtoUserVerify.UserVerify.class,
-                        com.iGap.proto.ProtoUserVerify.UserVerify.Builder.class);
-            }
-
-            private void maybeForceBuilderInitialization() {
-                if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
-                }
-            }
-
-            public Builder clear() {
-                super.clear();
-                if (requestBuilder_ == null) {
-                    request_ = null;
-                } else {
-                    request_ = null;
-                    requestBuilder_ = null;
-                }
-                code_ = 0;
-
-                username_ = "";
-
-                device_ = "";
-
-                osName_ = "";
-
-                osVersion_ = "";
-
-                return this;
-            }
-
-            public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
-                return com.iGap.proto.ProtoUserVerify.internal_static_proto_UserVerify_descriptor;
-            }
-
-            public com.iGap.proto.ProtoUserVerify.UserVerify getDefaultInstanceForType() {
-                return com.iGap.proto.ProtoUserVerify.UserVerify.getDefaultInstance();
-            }
-
-            public com.iGap.proto.ProtoUserVerify.UserVerify build() {
-                com.iGap.proto.ProtoUserVerify.UserVerify result = buildPartial();
-                if (!result.isInitialized()) {
-                    throw Builder.newUninitializedMessageException(result);
-                }
-                return result;
-            }
-
-            public com.iGap.proto.ProtoUserVerify.UserVerify buildPartial() {
-                com.iGap.proto.ProtoUserVerify.UserVerify result =
-                    new com.iGap.proto.ProtoUserVerify.UserVerify(this);
-                if (requestBuilder_ == null) {
-                    result.request_ = request_;
-                } else {
-                    result.request_ = requestBuilder_.build();
-                }
-                result.code_ = code_;
-                result.username_ = username_;
-                result.device_ = device_;
-                result.osName_ = osName_;
-                result.osVersion_ = osVersion_;
-                onBuilt();
-                return result;
-            }
-
-            public Builder clone() {
-                return (Builder) super.clone();
-            }
-
-            public Builder setField(com.google.protobuf.Descriptors.FieldDescriptor field,
-                Object value) {
-                return (Builder) super.setField(field, value);
-            }
-
-            public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
-                return (Builder) super.clearField(field);
-            }
-
-            public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-                return (Builder) super.clearOneof(oneof);
-            }
-
-            public Builder setRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field,
-                int index, Object value) {
-                return (Builder) super.setRepeatedField(field, index, value);
-            }
-
-            public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field,
-                Object value) {
-                return (Builder) super.addRepeatedField(field, value);
-            }
-
-            public Builder mergeFrom(com.google.protobuf.Message other) {
-                if (other instanceof com.iGap.proto.ProtoUserVerify.UserVerify) {
-                    return mergeFrom((com.iGap.proto.ProtoUserVerify.UserVerify) other);
-                } else {
-                    super.mergeFrom(other);
-                    return this;
-                }
-            }
-
-            public Builder mergeFrom(com.iGap.proto.ProtoUserVerify.UserVerify other) {
-                if (other == com.iGap.proto.ProtoUserVerify.UserVerify.getDefaultInstance()) {
-                    return this;
-                }
-                if (other.hasRequest()) {
-                    mergeRequest(other.getRequest());
-                }
-                if (other.getCode() != 0) {
-                    setCode(other.getCode());
-                }
-                if (!other.getUsername().isEmpty()) {
-                    username_ = other.username_;
-                    onChanged();
-                }
-                if (!other.getDevice().isEmpty()) {
-                    device_ = other.device_;
-                    onChanged();
-                }
-                if (!other.getOsName().isEmpty()) {
-                    osName_ = other.osName_;
-                    onChanged();
-                }
-                if (!other.getOsVersion().isEmpty()) {
-                    osVersion_ = other.osVersion_;
-                    onChanged();
-                }
-                onChanged();
-                return this;
-            }
-
-            public final boolean isInitialized() {
-                return true;
-            }
-
-            public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws java.io.IOException {
-                com.iGap.proto.ProtoUserVerify.UserVerify parsedMessage = null;
-                try {
-                    parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-                } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-                    parsedMessage =
-                        (com.iGap.proto.ProtoUserVerify.UserVerify) e.getUnfinishedMessage();
-                    throw e.unwrapIOException();
-                } finally {
-                    if (parsedMessage != null) {
-                        mergeFrom(parsedMessage);
-                    }
-                }
-                return this;
-            }
-
-            /**
-             * <code>optional .proto.Request request = 1;</code>
-             */
-            public boolean hasRequest() {
-                return requestBuilder_ != null || request_ != null;
-            }
-
-            /**
-             * <code>optional .proto.Request request = 1;</code>
-             */
-            public com.iGap.proto.ProtoRequest.Request getRequest() {
-                if (requestBuilder_ == null) {
-                    return request_ == null
-                        ? com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
-                } else {
-                    return requestBuilder_.getMessage();
-                }
-            }
-
-            /**
-             * <code>optional .proto.Request request = 1;</code>
-             */
-            public Builder setRequest(com.iGap.proto.ProtoRequest.Request.Builder builderForValue) {
-                if (requestBuilder_ == null) {
-                    request_ = builderForValue.build();
-                    onChanged();
-                } else {
-                    requestBuilder_.setMessage(builderForValue.build());
-                }
-
-                return this;
-            }
-
-            /**
-             * <code>optional .proto.Request request = 1;</code>
-             */
-            public Builder setRequest(com.iGap.proto.ProtoRequest.Request value) {
-                if (requestBuilder_ == null) {
-                    if (value == null) {
-                        throw new NullPointerException();
-                    }
-                    request_ = value;
-                    onChanged();
-                } else {
-                    requestBuilder_.setMessage(value);
-                }
-
-                return this;
-            }
-
-            /**
-             * <code>optional .proto.Request request = 1;</code>
-             */
-            public Builder mergeRequest(com.iGap.proto.ProtoRequest.Request value) {
-                if (requestBuilder_ == null) {
-                    if (request_ != null) {
-                        request_ = com.iGap.proto.ProtoRequest.Request.newBuilder(request_)
-                            .mergeFrom(value)
-                            .buildPartial();
-                    } else {
-                        request_ = value;
-                    }
-                    onChanged();
-                } else {
-                    requestBuilder_.mergeFrom(value);
-                }
-
-                return this;
-            }
-
-            /**
-             * <code>optional .proto.Request request = 1;</code>
-             */
-            public Builder clearRequest() {
-                if (requestBuilder_ == null) {
-                    request_ = null;
-                    onChanged();
-                } else {
-                    request_ = null;
-                    requestBuilder_ = null;
-                }
-
-                return this;
-            }
-
-            /**
-             * <code>optional .proto.Request request = 1;</code>
-             */
-            public com.iGap.proto.ProtoRequest.Request.Builder getRequestBuilder() {
-
-                onChanged();
-                return getRequestFieldBuilder().getBuilder();
-            }
-
-            /**
-             * <code>optional .proto.Request request = 1;</code>
-             */
-            public com.iGap.proto.ProtoRequest.RequestOrBuilder getRequestOrBuilder() {
-                if (requestBuilder_ != null) {
-                    return requestBuilder_.getMessageOrBuilder();
-                } else {
-                    return request_ == null
-                        ? com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
-                }
-            }
-
-            /**
-             * <code>optional .proto.Request request = 1;</code>
-             */
-            private com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder> getRequestFieldBuilder() {
-                if (requestBuilder_ == null) {
-                    requestBuilder_ =
-                        new com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder>(
-                            getRequest(), getParentForChildren(), isClean());
-                    request_ = null;
-                }
-                return requestBuilder_;
-            }
-
-            /**
-             * <code>optional uint32 code = 2;</code>
-             */
-            public int getCode() {
-                return code_;
-            }
-
-            /**
-             * <code>optional uint32 code = 2;</code>
-             */
-            public Builder setCode(int value) {
-
-                code_ = value;
-                onChanged();
-                return this;
-            }
-
-            /**
-             * <code>optional uint32 code = 2;</code>
-             */
-            public Builder clearCode() {
-
-                code_ = 0;
-                onChanged();
-                return this;
-            }
-
-            /**
-             * <code>optional string username = 3;</code>
-             */
-            public java.lang.String getUsername() {
-                java.lang.Object ref = username_;
-                if (!(ref instanceof java.lang.String)) {
-                    com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
-                    java.lang.String s = bs.toStringUtf8();
-                    username_ = s;
-                    return s;
-                } else {
-                    return (java.lang.String) ref;
-                }
-            }
-
-            /**
-             * <code>optional string username = 3;</code>
-             */
-            public Builder setUsername(java.lang.String value) {
-                if (value == null) {
-                    throw new NullPointerException();
-                }
-
-                username_ = value;
-                onChanged();
-                return this;
-            }
-
-            /**
-             * <code>optional string username = 3;</code>
-             */
-            public com.google.protobuf.ByteString getUsernameBytes() {
-                java.lang.Object ref = username_;
-                if (ref instanceof String) {
-                    com.google.protobuf.ByteString b =
-                        com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
-                    username_ = b;
-                    return b;
-                } else {
-                    return (com.google.protobuf.ByteString) ref;
-                }
-            }
-
-            /**
-             * <code>optional string username = 3;</code>
-             */
-            public Builder setUsernameBytes(com.google.protobuf.ByteString value) {
-                if (value == null) {
-                    throw new NullPointerException();
-                }
-                AbstractMessageLite.checkByteStringIsUtf8(value);
-
-                username_ = value;
-                onChanged();
-                return this;
-            }
-
-            /**
-             * <code>optional string username = 3;</code>
-             */
-            public Builder clearUsername() {
-
-                username_ = getDefaultInstance().getUsername();
-                onChanged();
-                return this;
-            }
-
-            /**
-             * <code>optional string device = 4;</code>
-             */
-            public java.lang.String getDevice() {
-                java.lang.Object ref = device_;
-                if (!(ref instanceof java.lang.String)) {
-                    com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
-                    java.lang.String s = bs.toStringUtf8();
-                    device_ = s;
-                    return s;
-                } else {
-                    return (java.lang.String) ref;
-                }
-            }
-
-            /**
-             * <code>optional string device = 4;</code>
-             */
-            public Builder setDevice(java.lang.String value) {
-                if (value == null) {
-                    throw new NullPointerException();
-                }
-
-                device_ = value;
-                onChanged();
-                return this;
-            }
-
-            /**
-             * <code>optional string device = 4;</code>
-             */
-            public com.google.protobuf.ByteString getDeviceBytes() {
-                java.lang.Object ref = device_;
-                if (ref instanceof String) {
-                    com.google.protobuf.ByteString b =
-                        com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
-                    device_ = b;
-                    return b;
-                } else {
-                    return (com.google.protobuf.ByteString) ref;
-                }
-            }
-
-            /**
-             * <code>optional string device = 4;</code>
-             */
-            public Builder setDeviceBytes(com.google.protobuf.ByteString value) {
-                if (value == null) {
-                    throw new NullPointerException();
-                }
-                AbstractMessageLite.checkByteStringIsUtf8(value);
-
-                device_ = value;
-                onChanged();
-                return this;
-            }
-
-            /**
-             * <code>optional string device = 4;</code>
-             */
-            public Builder clearDevice() {
-
-                device_ = getDefaultInstance().getDevice();
-                onChanged();
-                return this;
-            }
-
-            /**
-             * <code>optional string os_name = 5;</code>
-             */
-            public java.lang.String getOsName() {
-                java.lang.Object ref = osName_;
-                if (!(ref instanceof java.lang.String)) {
-                    com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
-                    java.lang.String s = bs.toStringUtf8();
-                    osName_ = s;
-                    return s;
-                } else {
-                    return (java.lang.String) ref;
-                }
-            }
-
-            /**
-             * <code>optional string os_name = 5;</code>
-             */
-            public Builder setOsName(java.lang.String value) {
-                if (value == null) {
-                    throw new NullPointerException();
-                }
-
-                osName_ = value;
-                onChanged();
-                return this;
-            }
-
-            /**
-             * <code>optional string os_name = 5;</code>
-             */
-            public com.google.protobuf.ByteString getOsNameBytes() {
-                java.lang.Object ref = osName_;
-                if (ref instanceof String) {
-                    com.google.protobuf.ByteString b =
-                        com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
-                    osName_ = b;
-                    return b;
-                } else {
-                    return (com.google.protobuf.ByteString) ref;
-                }
-            }
-
-            /**
-             * <code>optional string os_name = 5;</code>
-             */
-            public Builder setOsNameBytes(com.google.protobuf.ByteString value) {
-                if (value == null) {
-                    throw new NullPointerException();
-                }
-                AbstractMessageLite.checkByteStringIsUtf8(value);
-
-                osName_ = value;
-                onChanged();
-                return this;
-            }
-
-            /**
-             * <code>optional string os_name = 5;</code>
-             */
-            public Builder clearOsName() {
-
-                osName_ = getDefaultInstance().getOsName();
-                onChanged();
-                return this;
-            }
-
-            /**
-             * <code>optional string os_version = 6;</code>
-             */
-            public java.lang.String getOsVersion() {
-                java.lang.Object ref = osVersion_;
-                if (!(ref instanceof java.lang.String)) {
-                    com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
-                    java.lang.String s = bs.toStringUtf8();
-                    osVersion_ = s;
-                    return s;
-                } else {
-                    return (java.lang.String) ref;
-                }
-            }
-
-            /**
-             * <code>optional string os_version = 6;</code>
-             */
-            public Builder setOsVersion(java.lang.String value) {
-                if (value == null) {
-                    throw new NullPointerException();
-                }
-
-                osVersion_ = value;
-                onChanged();
-                return this;
-            }
-
-            /**
-             * <code>optional string os_version = 6;</code>
-             */
-            public com.google.protobuf.ByteString getOsVersionBytes() {
-                java.lang.Object ref = osVersion_;
-                if (ref instanceof String) {
-                    com.google.protobuf.ByteString b =
-                        com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
-                    osVersion_ = b;
-                    return b;
-                } else {
-                    return (com.google.protobuf.ByteString) ref;
-                }
-            }
-
-            /**
-             * <code>optional string os_version = 6;</code>
-             */
-            public Builder setOsVersionBytes(com.google.protobuf.ByteString value) {
-                if (value == null) {
-                    throw new NullPointerException();
-                }
-                AbstractMessageLite.checkByteStringIsUtf8(value);
-
-                osVersion_ = value;
-                onChanged();
-                return this;
-            }
-
-            /**
-             * <code>optional string os_version = 6;</code>
-             */
-            public Builder clearOsVersion() {
-
-                osVersion_ = getDefaultInstance().getOsVersion();
-                onChanged();
-                return this;
-            }
-
-            public final Builder setUnknownFields(
-                final com.google.protobuf.UnknownFieldSet unknownFields) {
-                return this;
-            }
-
-            public final Builder mergeUnknownFields(
-                final com.google.protobuf.UnknownFieldSet unknownFields) {
-                return this;
-            }
-
-            // @@protoc_insertion_point(builder_scope:proto.UserVerify)
-        }
+      return com.google.protobuf.GeneratedMessageV3
+              .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+
+    public static Builder newBuilder(UserVerifyResponse prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+              ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @Override
+    protected Builder newBuilderForType(
+            BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
     }
 
     /**
      * Protobuf type {@code proto.UserVerifyResponse}
      */
-    public static final class UserVerifyResponse extends com.google.protobuf.GeneratedMessageV3
-        implements
-        // @@protoc_insertion_point(message_implements:proto.UserVerifyResponse)
-        UserVerifyResponseOrBuilder {
-        public static final int RESPONSE_FIELD_NUMBER = 1;
-        public static final int TOKEN_FIELD_NUMBER = 2;
-        public static final int NEW_USER_FIELD_NUMBER = 3;
-        private static final long serialVersionUID = 0L;
-        // @@protoc_insertion_point(class_scope:proto.UserVerifyResponse)
-        private static final com.iGap.proto.ProtoUserVerify.UserVerifyResponse DEFAULT_INSTANCE;
-        private static final com.google.protobuf.Parser<UserVerifyResponse> PARSER =
-            new com.google.protobuf.AbstractParser<UserVerifyResponse>() {
-                public UserVerifyResponse parsePartialFrom(
-                    com.google.protobuf.CodedInputStream input,
-                    com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                    throws com.google.protobuf.InvalidProtocolBufferException {
-                    return new UserVerifyResponse(input, extensionRegistry);
-                }
-            };
-
-        static {
-            DEFAULT_INSTANCE = new com.iGap.proto.ProtoUserVerify.UserVerifyResponse();
-        }
-
-        private com.iGap.proto.ProtoResponse.Response response_;
-        private volatile java.lang.Object token_;
-        private boolean newUser_;
-        private byte memoizedIsInitialized = -1;
-
-        // Use UserVerifyResponse.newBuilder() to construct.
-        private UserVerifyResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
-            super(builder);
-        }
-
-        private UserVerifyResponse() {
-            token_ = "";
-            newUser_ = false;
-        }
-
-        private UserVerifyResponse(com.google.protobuf.CodedInputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
-            this();
-            int mutable_bitField0_ = 0;
-            try {
-                boolean done = false;
-                while (!done) {
-                    int tag = input.readTag();
-                    switch (tag) {
-                        case 0:
-                            done = true;
-                            break;
-                        default: {
-                            if (!input.skipField(tag)) {
-                                done = true;
-                            }
-                            break;
-                        }
-                        case 10: {
-                            com.iGap.proto.ProtoResponse.Response.Builder subBuilder = null;
-                            if (response_ != null) {
-                                subBuilder = response_.toBuilder();
-                            }
-                            response_ =
-                                input.readMessage(com.iGap.proto.ProtoResponse.Response.parser(),
-                                    extensionRegistry);
-                            if (subBuilder != null) {
-                                subBuilder.mergeFrom(response_);
-                                response_ = subBuilder.buildPartial();
-                            }
-
-                            break;
-                        }
-                        case 18: {
-                            java.lang.String s = input.readStringRequireUtf8();
-
-                            token_ = s;
-                            break;
-                        }
-                        case 24: {
-
-                            newUser_ = input.readBool();
-                            break;
-                        }
-                    }
-                }
-            } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-                throw e.setUnfinishedMessage(this);
-            } catch (java.io.IOException e) {
-                throw new com.google.protobuf.InvalidProtocolBufferException(
-                    e).setUnfinishedMessage(this);
-            } finally {
-                makeExtensionsImmutable();
-            }
-        }
-
-        public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-            return com.iGap.proto.ProtoUserVerify.internal_static_proto_UserVerifyResponse_descriptor;
-        }
-
-        public static com.iGap.proto.ProtoUserVerify.UserVerifyResponse parseFrom(
-            com.google.protobuf.ByteString data)
-            throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data);
-        }
-
-        public static com.iGap.proto.ProtoUserVerify.UserVerifyResponse parseFrom(
-            com.google.protobuf.ByteString data,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data, extensionRegistry);
-        }
-
-        public static com.iGap.proto.ProtoUserVerify.UserVerifyResponse parseFrom(byte[] data)
-            throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data);
-        }
-
-        public static com.iGap.proto.ProtoUserVerify.UserVerifyResponse parseFrom(byte[] data,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data, extensionRegistry);
-        }
-
-        public static com.iGap.proto.ProtoUserVerify.UserVerifyResponse parseFrom(
-            java.io.InputStream input) throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
-        }
-
-        public static com.iGap.proto.ProtoUserVerify.UserVerifyResponse parseFrom(
-            java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input,
-                extensionRegistry);
-        }
-
-        public static com.iGap.proto.ProtoUserVerify.UserVerifyResponse parseDelimitedFrom(
-            java.io.InputStream input) throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER,
-                input);
-        }
-
-        public static com.iGap.proto.ProtoUserVerify.UserVerifyResponse parseDelimitedFrom(
-            java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER,
-                input, extensionRegistry);
-        }
-
-        public static com.iGap.proto.ProtoUserVerify.UserVerifyResponse parseFrom(
-            com.google.protobuf.CodedInputStream input) throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
-        }
-
-        public static com.iGap.proto.ProtoUserVerify.UserVerifyResponse parseFrom(
-            com.google.protobuf.CodedInputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input,
-                extensionRegistry);
-        }
-
-        public static Builder newBuilder() {
-            return DEFAULT_INSTANCE.toBuilder();
-        }
-
-        public static Builder newBuilder(
-            com.iGap.proto.ProtoUserVerify.UserVerifyResponse prototype) {
-            return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-        }
-
-        public static com.iGap.proto.ProtoUserVerify.UserVerifyResponse getDefaultInstance() {
-            return DEFAULT_INSTANCE;
-        }
-
-        public static com.google.protobuf.Parser<UserVerifyResponse> parser() {
-            return PARSER;
-        }
-
-        @java.lang.Override public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-            return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
-        }
-
-        protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-            return com.iGap.proto.ProtoUserVerify.internal_static_proto_UserVerifyResponse_fieldAccessorTable
-                .ensureFieldAccessorsInitialized(
-                    com.iGap.proto.ProtoUserVerify.UserVerifyResponse.class,
-                    com.iGap.proto.ProtoUserVerify.UserVerifyResponse.Builder.class);
-        }
-
-        /**
-         * <code>optional .proto.Response response = 1;</code>
-         */
-        public boolean hasResponse() {
-            return response_ != null;
-        }
-
-        /**
-         * <code>optional .proto.Response response = 1;</code>
-         */
-        public com.iGap.proto.ProtoResponse.Response getResponse() {
-            return response_ == null ? com.iGap.proto.ProtoResponse.Response.getDefaultInstance()
-                : response_;
-        }
-
-        /**
-         * <code>optional .proto.Response response = 1;</code>
-         */
-        public com.iGap.proto.ProtoResponse.ResponseOrBuilder getResponseOrBuilder() {
-            return getResponse();
-        }
-
-        /**
-         * <code>optional string token = 2;</code>
-         */
-        public java.lang.String getToken() {
-            java.lang.Object ref = token_;
-            if (ref instanceof java.lang.String) {
-                return (java.lang.String) ref;
-            } else {
-                com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
-                java.lang.String s = bs.toStringUtf8();
-                token_ = s;
-                return s;
-            }
-        }
-
-        /**
-         * <code>optional string token = 2;</code>
-         */
-        public com.google.protobuf.ByteString getTokenBytes() {
-            java.lang.Object ref = token_;
-            if (ref instanceof java.lang.String) {
-                com.google.protobuf.ByteString b =
-                    com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
-                token_ = b;
-                return b;
-            } else {
-                return (com.google.protobuf.ByteString) ref;
-            }
-        }
-
-        /**
-         * <code>optional bool new_user = 3;</code>
-         */
-        public boolean getNewUser() {
-            return newUser_;
-        }
-
-        public final boolean isInitialized() {
-            byte isInitialized = memoizedIsInitialized;
-            if (isInitialized == 1) return true;
-            if (isInitialized == 0) return false;
-
-            memoizedIsInitialized = 1;
-            return true;
-        }
-
-        public void writeTo(com.google.protobuf.CodedOutputStream output)
-            throws java.io.IOException {
-            if (response_ != null) {
-                output.writeMessage(1, getResponse());
-            }
-            if (!getTokenBytes().isEmpty()) {
-                com.google.protobuf.GeneratedMessageV3.writeString(output, 2, token_);
-            }
-            if (newUser_ != false) {
-                output.writeBool(3, newUser_);
-            }
-        }
-
-        public int getSerializedSize() {
-            int size = memoizedSize;
-            if (size != -1) return size;
-
-            size = 0;
-            if (response_ != null) {
-                size += com.google.protobuf.CodedOutputStream.computeMessageSize(1, getResponse());
-            }
-            if (!getTokenBytes().isEmpty()) {
-                size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, token_);
-            }
-            if (newUser_ != false) {
-                size += com.google.protobuf.CodedOutputStream.computeBoolSize(3, newUser_);
-            }
-            memoizedSize = size;
-            return size;
-        }
-
-        @java.lang.Override public boolean equals(final java.lang.Object obj) {
-            if (obj == this) {
-                return true;
-            }
-            if (!(obj instanceof com.iGap.proto.ProtoUserVerify.UserVerifyResponse)) {
-                return super.equals(obj);
-            }
-            com.iGap.proto.ProtoUserVerify.UserVerifyResponse other =
-                (com.iGap.proto.ProtoUserVerify.UserVerifyResponse) obj;
-
-            boolean result = true;
-            result = result && (hasResponse() == other.hasResponse());
-            if (hasResponse()) {
-                result = result && getResponse().equals(other.getResponse());
-            }
-            result = result && getToken().equals(other.getToken());
-            result = result && (getNewUser() == other.getNewUser());
-            return result;
-        }
-
-        @java.lang.Override public int hashCode() {
-            if (memoizedHashCode != 0) {
-                return memoizedHashCode;
-            }
-            int hash = 41;
-            hash = (19 * hash) + getDescriptorForType().hashCode();
-            if (hasResponse()) {
-                hash = (37 * hash) + RESPONSE_FIELD_NUMBER;
-                hash = (53 * hash) + getResponse().hashCode();
-            }
-            hash = (37 * hash) + TOKEN_FIELD_NUMBER;
-            hash = (53 * hash) + getToken().hashCode();
-            hash = (37 * hash) + NEW_USER_FIELD_NUMBER;
-            hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(getNewUser());
-            hash = (29 * hash) + unknownFields.hashCode();
-            memoizedHashCode = hash;
-            return hash;
-        }
-
-        public Builder newBuilderForType() {
-            return newBuilder();
-        }
-
-        public Builder toBuilder() {
-            return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
-        }
-
-        @java.lang.Override protected Builder newBuilderForType(
-            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-            Builder builder = new Builder(parent);
-            return builder;
-        }
-
-        @java.lang.Override
-        public com.google.protobuf.Parser<UserVerifyResponse> getParserForType() {
-            return PARSER;
-        }
-
-        public com.iGap.proto.ProtoUserVerify.UserVerifyResponse getDefaultInstanceForType() {
-            return DEFAULT_INSTANCE;
-        }
-
-        /**
-         * Protobuf type {@code proto.UserVerifyResponse}
-         */
-        public static final class Builder
-            extends com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+    public static final class Builder extends
+            com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
             // @@protoc_insertion_point(builder_implements:proto.UserVerifyResponse)
-            com.iGap.proto.ProtoUserVerify.UserVerifyResponseOrBuilder {
-            private com.iGap.proto.ProtoResponse.Response response_ = null;
-            private com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder>
-                responseBuilder_;
-            private java.lang.Object token_ = "";
-            private boolean newUser_;
+            UserVerifyResponseOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+      getDescriptor() {
+        return ProtoUserVerify.internal_static_proto_UserVerifyResponse_descriptor;
+      }
 
-            // Construct using com.iGap.proto.ProtoUserVerify.UserVerifyResponse.newBuilder()
-            private Builder() {
-                maybeForceBuilderInitialization();
-            }
+      protected FieldAccessorTable
+      internalGetFieldAccessorTable() {
+        return ProtoUserVerify.internal_static_proto_UserVerifyResponse_fieldAccessorTable
+                .ensureFieldAccessorsInitialized(
+                        UserVerifyResponse.class, Builder.class);
+      }
 
-            private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-                super(parent);
-                maybeForceBuilderInitialization();
-            }
+      // Construct using com.iGap.proto.ProtoUserVerify.UserVerifyResponse.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
 
-            public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-                return com.iGap.proto.ProtoUserVerify.internal_static_proto_UserVerifyResponse_descriptor;
-            }
-
-            protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-                return com.iGap.proto.ProtoUserVerify.internal_static_proto_UserVerifyResponse_fieldAccessorTable
-                    .ensureFieldAccessorsInitialized(
-                        com.iGap.proto.ProtoUserVerify.UserVerifyResponse.class,
-                        com.iGap.proto.ProtoUserVerify.UserVerifyResponse.Builder.class);
-            }
-
-            private void maybeForceBuilderInitialization() {
-                if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
-                }
-            }
-
-            public Builder clear() {
-                super.clear();
-                if (responseBuilder_ == null) {
-                    response_ = null;
-                } else {
-                    response_ = null;
-                    responseBuilder_ = null;
-                }
-                token_ = "";
-
-                newUser_ = false;
-
-                return this;
-            }
-
-            public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
-                return com.iGap.proto.ProtoUserVerify.internal_static_proto_UserVerifyResponse_descriptor;
-            }
-
-            public com.iGap.proto.ProtoUserVerify.UserVerifyResponse getDefaultInstanceForType() {
-                return com.iGap.proto.ProtoUserVerify.UserVerifyResponse.getDefaultInstance();
-            }
-
-            public com.iGap.proto.ProtoUserVerify.UserVerifyResponse build() {
-                com.iGap.proto.ProtoUserVerify.UserVerifyResponse result = buildPartial();
-                if (!result.isInitialized()) {
-                    throw Builder.newUninitializedMessageException(result);
-                }
-                return result;
-            }
-
-            public com.iGap.proto.ProtoUserVerify.UserVerifyResponse buildPartial() {
-                com.iGap.proto.ProtoUserVerify.UserVerifyResponse result =
-                    new com.iGap.proto.ProtoUserVerify.UserVerifyResponse(this);
-                if (responseBuilder_ == null) {
-                    result.response_ = response_;
-                } else {
-                    result.response_ = responseBuilder_.build();
-                }
-                result.token_ = token_;
-                result.newUser_ = newUser_;
-                onBuilt();
-                return result;
-            }
-
-            public Builder clone() {
-                return (Builder) super.clone();
-            }
-
-            public Builder setField(com.google.protobuf.Descriptors.FieldDescriptor field,
-                Object value) {
-                return (Builder) super.setField(field, value);
-            }
-
-            public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
-                return (Builder) super.clearField(field);
-            }
-
-            public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-                return (Builder) super.clearOneof(oneof);
-            }
-
-            public Builder setRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field,
-                int index, Object value) {
-                return (Builder) super.setRepeatedField(field, index, value);
-            }
-
-            public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field,
-                Object value) {
-                return (Builder) super.addRepeatedField(field, value);
-            }
-
-            public Builder mergeFrom(com.google.protobuf.Message other) {
-                if (other instanceof com.iGap.proto.ProtoUserVerify.UserVerifyResponse) {
-                    return mergeFrom((com.iGap.proto.ProtoUserVerify.UserVerifyResponse) other);
-                } else {
-                    super.mergeFrom(other);
-                    return this;
-                }
-            }
-
-            public Builder mergeFrom(com.iGap.proto.ProtoUserVerify.UserVerifyResponse other) {
-                if (other
-                    == com.iGap.proto.ProtoUserVerify.UserVerifyResponse.getDefaultInstance()) {
-                    return this;
-                }
-                if (other.hasResponse()) {
-                    mergeResponse(other.getResponse());
-                }
-                if (!other.getToken().isEmpty()) {
-                    token_ = other.token_;
-                    onChanged();
-                }
-                if (other.getNewUser() != false) {
-                    setNewUser(other.getNewUser());
-                }
-                onChanged();
-                return this;
-            }
-
-            public final boolean isInitialized() {
-                return true;
-            }
-
-            public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws java.io.IOException {
-                com.iGap.proto.ProtoUserVerify.UserVerifyResponse parsedMessage = null;
-                try {
-                    parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-                } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-                    parsedMessage =
-                        (com.iGap.proto.ProtoUserVerify.UserVerifyResponse) e.getUnfinishedMessage();
-                    throw e.unwrapIOException();
-                } finally {
-                    if (parsedMessage != null) {
-                        mergeFrom(parsedMessage);
-                    }
-                }
-                return this;
-            }
-
-            /**
-             * <code>optional .proto.Response response = 1;</code>
-             */
-            public boolean hasResponse() {
-                return responseBuilder_ != null || response_ != null;
-            }
-
-            /**
-             * <code>optional .proto.Response response = 1;</code>
-             */
-            public com.iGap.proto.ProtoResponse.Response getResponse() {
-                if (responseBuilder_ == null) {
-                    return response_ == null
-                        ? com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
-                } else {
-                    return responseBuilder_.getMessage();
-                }
-            }
-
-            /**
-             * <code>optional .proto.Response response = 1;</code>
-             */
-            public Builder setResponse(
-                com.iGap.proto.ProtoResponse.Response.Builder builderForValue) {
-                if (responseBuilder_ == null) {
-                    response_ = builderForValue.build();
-                    onChanged();
-                } else {
-                    responseBuilder_.setMessage(builderForValue.build());
-                }
-
-                return this;
-            }
-
-            /**
-             * <code>optional .proto.Response response = 1;</code>
-             */
-            public Builder setResponse(com.iGap.proto.ProtoResponse.Response value) {
-                if (responseBuilder_ == null) {
-                    if (value == null) {
-                        throw new NullPointerException();
-                    }
-                    response_ = value;
-                    onChanged();
-                } else {
-                    responseBuilder_.setMessage(value);
-                }
-
-                return this;
-            }
-
-            /**
-             * <code>optional .proto.Response response = 1;</code>
-             */
-            public Builder mergeResponse(com.iGap.proto.ProtoResponse.Response value) {
-                if (responseBuilder_ == null) {
-                    if (response_ != null) {
-                        response_ = com.iGap.proto.ProtoResponse.Response.newBuilder(response_)
-                            .mergeFrom(value)
-                            .buildPartial();
-                    } else {
-                        response_ = value;
-                    }
-                    onChanged();
-                } else {
-                    responseBuilder_.mergeFrom(value);
-                }
-
-                return this;
-            }
-
-            /**
-             * <code>optional .proto.Response response = 1;</code>
-             */
-            public Builder clearResponse() {
-                if (responseBuilder_ == null) {
-                    response_ = null;
-                    onChanged();
-                } else {
-                    response_ = null;
-                    responseBuilder_ = null;
-                }
-
-                return this;
-            }
-
-            /**
-             * <code>optional .proto.Response response = 1;</code>
-             */
-            public com.iGap.proto.ProtoResponse.Response.Builder getResponseBuilder() {
-
-                onChanged();
-                return getResponseFieldBuilder().getBuilder();
-            }
-
-            /**
-             * <code>optional .proto.Response response = 1;</code>
-             */
-            public com.iGap.proto.ProtoResponse.ResponseOrBuilder getResponseOrBuilder() {
-                if (responseBuilder_ != null) {
-                    return responseBuilder_.getMessageOrBuilder();
-                } else {
-                    return response_ == null
-                        ? com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
-                }
-            }
-
-            /**
-             * <code>optional .proto.Response response = 1;</code>
-             */
-            private com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder> getResponseFieldBuilder() {
-                if (responseBuilder_ == null) {
-                    responseBuilder_ =
-                        new com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder>(
-                            getResponse(), getParentForChildren(), isClean());
-                    response_ = null;
-                }
-                return responseBuilder_;
-            }
-
-            /**
-             * <code>optional string token = 2;</code>
-             */
-            public java.lang.String getToken() {
-                java.lang.Object ref = token_;
-                if (!(ref instanceof java.lang.String)) {
-                    com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
-                    java.lang.String s = bs.toStringUtf8();
-                    token_ = s;
-                    return s;
-                } else {
-                    return (java.lang.String) ref;
-                }
-            }
-
-            /**
-             * <code>optional string token = 2;</code>
-             */
-            public Builder setToken(java.lang.String value) {
-                if (value == null) {
-                    throw new NullPointerException();
-                }
-
-                token_ = value;
-                onChanged();
-                return this;
-            }
-
-            /**
-             * <code>optional string token = 2;</code>
-             */
-            public com.google.protobuf.ByteString getTokenBytes() {
-                java.lang.Object ref = token_;
-                if (ref instanceof String) {
-                    com.google.protobuf.ByteString b =
-                        com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
-                    token_ = b;
-                    return b;
-                } else {
-                    return (com.google.protobuf.ByteString) ref;
-                }
-            }
-
-            /**
-             * <code>optional string token = 2;</code>
-             */
-            public Builder setTokenBytes(com.google.protobuf.ByteString value) {
-                if (value == null) {
-                    throw new NullPointerException();
-                }
-                AbstractMessageLite.checkByteStringIsUtf8(value);
-
-                token_ = value;
-                onChanged();
-                return this;
-            }
-
-            /**
-             * <code>optional string token = 2;</code>
-             */
-            public Builder clearToken() {
-
-                token_ = getDefaultInstance().getToken();
-                onChanged();
-                return this;
-            }
-
-            /**
-             * <code>optional bool new_user = 3;</code>
-             */
-            public boolean getNewUser() {
-                return newUser_;
-            }
-
-            /**
-             * <code>optional bool new_user = 3;</code>
-             */
-            public Builder setNewUser(boolean value) {
-
-                newUser_ = value;
-                onChanged();
-                return this;
-            }
-
-            /**
-             * <code>optional bool new_user = 3;</code>
-             */
-            public Builder clearNewUser() {
-
-                newUser_ = false;
-                onChanged();
-                return this;
-            }
-
-            public final Builder setUnknownFields(
-                final com.google.protobuf.UnknownFieldSet unknownFields) {
-                return this;
-            }
-
-            public final Builder mergeUnknownFields(
-                final com.google.protobuf.UnknownFieldSet unknownFields) {
-                return this;
-            }
-
-            // @@protoc_insertion_point(builder_scope:proto.UserVerifyResponse)
+      private Builder(
+              BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
         }
+      }
+
+      public Builder clear() {
+        super.clear();
+        if (responseBuilder_ == null) {
+          response_ = null;
+        } else {
+          response_ = null;
+          responseBuilder_ = null;
+        }
+        token_ = "";
+
+        newUser_ = false;
+
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+      getDescriptorForType() {
+        return ProtoUserVerify.internal_static_proto_UserVerifyResponse_descriptor;
+      }
+
+      public UserVerifyResponse getDefaultInstanceForType() {
+        return UserVerifyResponse.getDefaultInstance();
+      }
+
+      public UserVerifyResponse build() {
+        UserVerifyResponse result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public UserVerifyResponse buildPartial() {
+        UserVerifyResponse result = new UserVerifyResponse(this);
+        if (responseBuilder_ == null) {
+          result.response_ = response_;
+        } else {
+          result.response_ = responseBuilder_.build();
+        }
+        result.token_ = token_;
+        result.newUser_ = newUser_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+
+      public Builder setField(
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              Object value) {
+        return (Builder) super.setField(field, value);
+      }
+
+      public Builder clearField(
+              com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+
+      public Builder clearOneof(
+              com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+
+      public Builder setRepeatedField(
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+
+      public Builder addRepeatedField(
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof UserVerifyResponse) {
+          return mergeFrom((UserVerifyResponse) other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(UserVerifyResponse other) {
+        if (other == UserVerifyResponse.getDefaultInstance()) return this;
+        if (other.hasResponse()) {
+          mergeResponse(other.getResponse());
+        }
+        if (!other.getToken().isEmpty()) {
+          token_ = other.token_;
+          onChanged();
+        }
+        if (other.getNewUser() != false) {
+          setNewUser(other.getNewUser());
+        }
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws java.io.IOException {
+        UserVerifyResponse parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (UserVerifyResponse) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private ProtoResponse.Response response_ = null;
+      private com.google.protobuf.SingleFieldBuilderV3<
+              ProtoResponse.Response, ProtoResponse.Response.Builder, ProtoResponse.ResponseOrBuilder> responseBuilder_;
+
+      /**
+       * <code>optional .proto.Response response = 1;</code>
+       */
+      public boolean hasResponse() {
+        return responseBuilder_ != null || response_ != null;
+      }
+
+      /**
+       * <code>optional .proto.Response response = 1;</code>
+       */
+      public ProtoResponse.Response getResponse() {
+        if (responseBuilder_ == null) {
+          return response_ == null ? ProtoResponse.Response.getDefaultInstance() : response_;
+        } else {
+          return responseBuilder_.getMessage();
+        }
+      }
+
+      /**
+       * <code>optional .proto.Response response = 1;</code>
+       */
+      public Builder setResponse(ProtoResponse.Response value) {
+        if (responseBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          response_ = value;
+          onChanged();
+        } else {
+          responseBuilder_.setMessage(value);
+        }
+
+        return this;
+      }
+
+      /**
+       * <code>optional .proto.Response response = 1;</code>
+       */
+      public Builder setResponse(
+              ProtoResponse.Response.Builder builderForValue) {
+        if (responseBuilder_ == null) {
+          response_ = builderForValue.build();
+          onChanged();
+        } else {
+          responseBuilder_.setMessage(builderForValue.build());
+        }
+
+        return this;
+      }
+
+      /**
+       * <code>optional .proto.Response response = 1;</code>
+       */
+      public Builder mergeResponse(ProtoResponse.Response value) {
+        if (responseBuilder_ == null) {
+          if (response_ != null) {
+            response_ =
+                    ProtoResponse.Response.newBuilder(response_).mergeFrom(value).buildPartial();
+          } else {
+            response_ = value;
+          }
+          onChanged();
+        } else {
+          responseBuilder_.mergeFrom(value);
+        }
+
+        return this;
+      }
+
+      /**
+       * <code>optional .proto.Response response = 1;</code>
+       */
+      public Builder clearResponse() {
+        if (responseBuilder_ == null) {
+          response_ = null;
+          onChanged();
+        } else {
+          response_ = null;
+          responseBuilder_ = null;
+        }
+
+        return this;
+      }
+
+      /**
+       * <code>optional .proto.Response response = 1;</code>
+       */
+      public ProtoResponse.Response.Builder getResponseBuilder() {
+
+        onChanged();
+        return getResponseFieldBuilder().getBuilder();
+      }
+
+      /**
+       * <code>optional .proto.Response response = 1;</code>
+       */
+      public ProtoResponse.ResponseOrBuilder getResponseOrBuilder() {
+        if (responseBuilder_ != null) {
+          return responseBuilder_.getMessageOrBuilder();
+        } else {
+          return response_ == null ?
+                  ProtoResponse.Response.getDefaultInstance() : response_;
+        }
+      }
+
+      /**
+       * <code>optional .proto.Response response = 1;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<
+              ProtoResponse.Response, ProtoResponse.Response.Builder, ProtoResponse.ResponseOrBuilder>
+      getResponseFieldBuilder() {
+        if (responseBuilder_ == null) {
+          responseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+                  ProtoResponse.Response, ProtoResponse.Response.Builder, ProtoResponse.ResponseOrBuilder>(
+                  getResponse(),
+                  getParentForChildren(),
+                  isClean());
+          response_ = null;
+        }
+        return responseBuilder_;
+      }
+
+      private Object token_ = "";
+
+      /**
+       * <code>optional string token = 2;</code>
+       */
+      public String getToken() {
+        Object ref = token_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+                  (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          token_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+
+      /**
+       * <code>optional string token = 2;</code>
+       */
+      public com.google.protobuf.ByteString
+      getTokenBytes() {
+        Object ref = token_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b =
+                  com.google.protobuf.ByteString.copyFromUtf8(
+                          (String) ref);
+          token_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+
+      /**
+       * <code>optional string token = 2;</code>
+       */
+      public Builder setToken(
+              String value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+
+        token_ = value;
+        onChanged();
+        return this;
+      }
+
+      /**
+       * <code>optional string token = 2;</code>
+       */
+      public Builder clearToken() {
+
+        token_ = getDefaultInstance().getToken();
+        onChanged();
+        return this;
+      }
+
+      /**
+       * <code>optional string token = 2;</code>
+       */
+      public Builder setTokenBytes(
+              com.google.protobuf.ByteString value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        checkByteStringIsUtf8(value);
+
+        token_ = value;
+        onChanged();
+        return this;
+      }
+
+      private boolean newUser_;
+
+      /**
+       * <code>optional bool new_user = 3;</code>
+       */
+      public boolean getNewUser() {
+        return newUser_;
+      }
+
+      /**
+       * <code>optional bool new_user = 3;</code>
+       */
+      public Builder setNewUser(boolean value) {
+
+        newUser_ = value;
+        onChanged();
+        return this;
+      }
+
+      /**
+       * <code>optional bool new_user = 3;</code>
+       */
+      public Builder clearNewUser() {
+
+        newUser_ = false;
+        onChanged();
+        return this;
+      }
+
+      public final Builder setUnknownFields(
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
+      }
+
+      public final Builder mergeUnknownFields(
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:proto.UserVerifyResponse)
     }
 
-    // @@protoc_insertion_point(outer_class_scope)
+    // @@protoc_insertion_point(class_scope:proto.UserVerifyResponse)
+    private static final UserVerifyResponse DEFAULT_INSTANCE;
+
+    static {
+      DEFAULT_INSTANCE = new UserVerifyResponse();
+    }
+
+    public static UserVerifyResponse getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<UserVerifyResponse>
+            PARSER = new com.google.protobuf.AbstractParser<UserVerifyResponse>() {
+      public UserVerifyResponse parsePartialFrom(
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws com.google.protobuf.InvalidProtocolBufferException {
+        return new UserVerifyResponse(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<UserVerifyResponse> parser() {
+      return PARSER;
+    }
+
+    @Override
+    public com.google.protobuf.Parser<UserVerifyResponse> getParserForType() {
+      return PARSER;
+    }
+
+    public UserVerifyResponse getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  private static final com.google.protobuf.Descriptors.Descriptor
+          internal_static_proto_UserVerify_descriptor;
+  private static final
+  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internal_static_proto_UserVerify_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+          internal_static_proto_UserVerifyResponse_descriptor;
+  private static final
+  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internal_static_proto_UserVerifyResponse_fieldAccessorTable;
+
+  public static com.google.protobuf.Descriptors.FileDescriptor
+  getDescriptor() {
+    return descriptor;
+  }
+
+  private static com.google.protobuf.Descriptors.FileDescriptor
+          descriptor;
+
+  static {
+    String[] descriptorData = {
+            "\n\020UserVerify.proto\022\005proto\032\rRequest.proto" +
+                    "\032\016Response.proto\"M\n\nUserVerify\022\037\n\007reques" +
+                    "t\030\001 \001(\0132\016.proto.Request\022\014\n\004code\030\002 \001(\r\022\020\n" +
+                    "\010username\030\003 \001(\t\"X\n\022UserVerifyResponse\022!\n" +
+                    "\010response\030\001 \001(\0132\017.proto.Response\022\r\n\005toke" +
+                    "n\030\002 \001(\t\022\020\n\010new_user\030\003 \001(\010B!\n\016com.iGap.pr" +
+                    "otoB\017ProtoUserVerifyb\006proto3"
+    };
+    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
+            new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
+              public com.google.protobuf.ExtensionRegistry assignDescriptors(
+                      com.google.protobuf.Descriptors.FileDescriptor root) {
+                descriptor = root;
+                return null;
+              }
+            };
+    com.google.protobuf.Descriptors.FileDescriptor
+            .internalBuildGeneratedFileFrom(descriptorData,
+                    new com.google.protobuf.Descriptors.FileDescriptor[]{
+                            ProtoRequest.getDescriptor(),
+                            ProtoResponse.getDescriptor(),
+                    }, assigner);
+    internal_static_proto_UserVerify_descriptor =
+            getDescriptor().getMessageTypes().get(0);
+    internal_static_proto_UserVerify_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_proto_UserVerify_descriptor,
+        new String[] { "Request", "Code", "Username", });
+    internal_static_proto_UserVerifyResponse_descriptor =
+      getDescriptor().getMessageTypes().get(1);
+    internal_static_proto_UserVerifyResponse_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_proto_UserVerifyResponse_descriptor,
+        new String[] { "Response", "Token", "NewUser", });
+    ProtoRequest.getDescriptor();
+    ProtoResponse.getDescriptor();
+  }
+
+  // @@protoc_insertion_point(outer_class_scope)
 }

@@ -856,6 +856,12 @@ public class ActivityMain extends ActivityEnhanced
 
                         for (final ProtoGlobal.Room room : roomList) {
                             Log.i("PPP", "getTitle : " + room.getTitle() + "  ||  getMessage : " + room.getLastMessage().getMessage() + "  ||  getStatus : " + room.getLastMessage().getStatus());
+                            if (room.getType() == ProtoGlobal.Room.Type.GROUP) {
+                                Log.i("UUU", "" + room.getGroupRoom().getParticipantsCount());
+                                Log.i("UUU", "" + room.getGroupRoom().getParticipantsCountLabel());
+                                Log.i("UUU", "" + room.getGroupRoom().getParticipantsCountLimit());
+                                Log.i("UUU", "" + room.getGroupRoom().getParticipantsCountLimitLabel());
+                            }
                             putChatToDatabase(room);
                         }
                         loadLocalChatList();

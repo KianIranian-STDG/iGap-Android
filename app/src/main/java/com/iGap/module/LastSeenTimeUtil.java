@@ -31,7 +31,7 @@ public class LastSeenTimeUtil {
             updateLastSeenTime();
             hashMapLastSeen.put(userId, lastSeen);
 
-            return Integer.toString((int) ((lastSeen / (1000 * 60)) % 60));
+            return getMinute(lastSeen);
         }
 
     }
@@ -54,7 +54,7 @@ public class LastSeenTimeUtil {
                 showLastSeen = TimeUtils.toLocal(value, G.ROOM_LAST_MESSAGE_TIME);
                 userIdList.add(userId);
             } else {
-                showLastSeen = Integer.toString((int) ((value / (1000 * 60)) % 60));
+                showLastSeen = getMinute(value);
             }
 
             G.onLastSeenUpdateTiming.onLastSeenUpdate(userId, G.context.getResources().getString(R.string.last_seen_at) + " " + showLastSeen);
@@ -89,5 +89,9 @@ public class LastSeenTimeUtil {
         }
 
         return false;
+    }
+
+    private static String getMinute(long time) {
+        return Integer.toString((int) ((time / (1000 * 60)) % 60)) + " " + G.context.getResources().getString(R.string.minute_ago);
     }
 }

@@ -1,20 +1,20 @@
 package com.iGap.response;
 
 import com.iGap.G;
-import com.iGap.proto.ProtoChatDeleteMessage;
+import com.iGap.proto.ProtoGroupDeleteMessage;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmClientConditionFields;
 import com.iGap.realm.RealmOfflineDelete;
 
 import io.realm.Realm;
 
-public class ChatDeleteMessageResponse extends MessageHandler {
+public class GroupDeleteMessageResponse extends MessageHandler {
 
     public int actionId;
     public Object message;
     public String identity;
 
-    public ChatDeleteMessageResponse(int actionId, Object protoClass, String identity) {
+    public GroupDeleteMessageResponse(int actionId, Object protoClass, String identity) {
         super(actionId, protoClass, identity);
 
         this.message = protoClass;
@@ -25,24 +25,26 @@ public class ChatDeleteMessageResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        final ProtoChatDeleteMessage.ChatDeleteMessageResponse.Builder chatDeleteMessage = (ProtoChatDeleteMessage.ChatDeleteMessageResponse.Builder) message;
+
+
+        final ProtoGroupDeleteMessage.GroupDeleteMessageResponse.Builder groupDeleteMessage = (ProtoGroupDeleteMessage.GroupDeleteMessageResponse.Builder) message;
 
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, chatDeleteMessage.getRoomId()).findFirst();
+                RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, groupDeleteMessage.getRoomId()).findFirst();
                 if (realmClientCondition != null) {
-                    realmClientCondition.setDeleteVersion(chatDeleteMessage.getDeleteVersion());
+                    realmClientCondition.setDeleteVersion(groupDeleteMessage.getDeleteVersion());
                     for (RealmOfflineDelete realmOfflineDeleted : realmClientCondition.getOfflineDeleted()) {
-                        if (realmOfflineDeleted.getOfflineDelete() == chatDeleteMessage.getMessageId()) {
+                        if (realmOfflineDeleted.getOfflineDelete() == groupDeleteMessage.getMessageId()) {
                             realmOfflineDeleted.deleteFromRealm();
                             break;
                         }
                     }
                 }
-                G.onChatDeleteMessageResponse.onChatDeleteMessage(chatDeleteMessage.getDeleteVersion()
-                        , chatDeleteMessage.getMessageId(), chatDeleteMessage.getRoomId(), chatDeleteMessage.getResponse());
+                G.onChatDeleteMessageResponse.onChatDeleteMessage(groupDeleteMessage.getDeleteVersion()
+                        , groupDeleteMessage.getMessageId(), groupDeleteMessage.getRoomId(), groupDeleteMessage.getResponse());
             }
         });
         realm.close();

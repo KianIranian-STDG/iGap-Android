@@ -112,6 +112,7 @@ import com.iGap.module.EndlessRecyclerOnScrollListener;
 import com.iGap.module.FileUploadStructure;
 import com.iGap.module.FileUtils;
 import com.iGap.module.HelperDecodeFile;
+import com.iGap.module.LastSeenTimeUtil;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.MusicPlayer;
 import com.iGap.module.MyAppBarLayout;
@@ -161,6 +162,7 @@ import com.iGap.request.RequestChatDeleteMessage;
 import com.iGap.request.RequestChatEditMessage;
 import com.iGap.request.RequestChatUpdateDraft;
 import com.iGap.request.RequestClientGetRoomHistory;
+import com.iGap.request.RequestGroupDeleteMessage;
 import com.iGap.request.RequestGroupUpdateDraft;
 import com.iGap.request.RequestUserInfo;
 import com.mikepenz.fastadapter.IItemAdapter;
@@ -849,21 +851,23 @@ public class ActivityChat extends ActivityEnhanced
                     }
                     realm.close();
 
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Log.i("CLI_DELETE", "onChatDeleteMessageResponse 5 messageId : " + messageId);
-                            // remove deleted message from adapter
-                            mAdapter.removeMessage(messageId);
+                    // if deleted message is for current room clear from adapter
+                    if (roomId == mRoomId) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                // remove deleted message from adapter
+                                mAdapter.removeMessage(messageId);
 
-                            // remove tag from edtChat if the message has deleted
-                            if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
-                                if (Long.toString(messageId).equals(((StructMessageInfo) edtChat.getTag()).messageID)) {
-                                    edtChat.setTag(null);
+                                // remove tag from edtChat if the message has deleted
+                                if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
+                                    if (Long.toString(messageId).equals(((StructMessageInfo) edtChat.getTag()).messageID)) {
+                                        edtChat.setTag(null);
+                                    }
                                 }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
             }
 
@@ -1124,7 +1128,7 @@ public class ActivityChat extends ActivityEnhanced
         if (chatType == CHAT) {
 
             if (lastSeen != 0) {
-                Log.i("CCC", "setUserStatus 1");
+                Log.i("CCC", "setUserStatus 1 userStatus : " + userStatus);
                 setUserStatus(userStatus, lastSeen);
             }
         } else if (chatType == GROUP) {
@@ -1680,8 +1684,9 @@ public class ActivityChat extends ActivityEnhanced
         Log.i("CCC", "2 status : " + status);
         if (status != null) {
             if (status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                String timeUser = TimeUtils.toLocal(time * DateUtils.SECOND_IN_MILLIS, G.ROOM_LAST_MESSAGE_TIME);
-                txtLastSeen.setText(G.context.getResources().getString(R.string.last_seen_at) + " " + timeUser);
+                //String timeUser = TimeUtils.toLocal(time * DateUtils.SECOND_IN_MILLIS, G.ROOM_LAST_MESSAGE_TIME);
+                //txtLastSeen.setText(G.context.getResources().getString(R.string.last_seen_at) + " " + timeUser);
+                txtLastSeen.setText(LastSeenTimeUtil.computeTime(userId, time));
             } else {
                 txtLastSeen.setText(status);
             }
@@ -2652,7 +2657,11 @@ public class ActivityChat extends ActivityEnhanced
                                     }
                                 }
                             });
-                            new RequestChatDeleteMessage().chatDeleteMessage(mRoomId, parseLong(messageID.mMessage.messageID));
+                            if (chatType == GROUP) {
+                                new RequestGroupDeleteMessage().groupDeleteMessage(mRoomId, parseLong(messageID.mMessage.messageID));
+                            } else if (chatType == CHAT) {
+                                new RequestChatDeleteMessage().chatDeleteMessage(mRoomId, parseLong(messageID.mMessage.messageID));
+                            }
                         }
                     }
                 });
@@ -4018,7 +4027,11 @@ public class ActivityChat extends ActivityEnhanced
                                                 }
                                             });
                                             // delete message
-                                            new RequestChatDeleteMessage().chatDeleteMessage(mRoomId, parseLong(message.messageID));
+                                            if (chatType == GROUP) {
+                                                new RequestGroupDeleteMessage().groupDeleteMessage(mRoomId, parseLong(message.messageID));
+                                            } else if (chatType == CHAT) {
+                                                new RequestChatDeleteMessage().chatDeleteMessage(mRoomId, parseLong(message.messageID));
+                                            }
                                         }
                                         element.removeChangeListeners();
                                     }

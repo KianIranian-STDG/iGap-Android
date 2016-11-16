@@ -824,9 +824,6 @@ public class ActivityRegister extends ActivityEnhanced {
         ProtoUserVerify.UserVerify.Builder userVerify = ProtoUserVerify.UserVerify.newBuilder();
         userVerify.setCode(Integer.parseInt(verificationCode));
         userVerify.setUsername(userName);
-        userVerify.setDevice(getResources().getBoolean(R.bool.isTablet) ? "Tablet" : "Mobile");
-        userVerify.setOsName("android");
-        userVerify.setOsVersion(Integer.toString(android.os.Build.VERSION.SDK_INT));
 
         RequestWrapper requestWrapper = new RequestWrapper(101, userVerify);
         try {

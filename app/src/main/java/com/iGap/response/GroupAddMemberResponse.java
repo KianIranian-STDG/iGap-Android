@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
-import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoGroupAddMember;
 import com.iGap.realm.RealmGroupRoom;
 import com.iGap.realm.RealmMember;
@@ -52,7 +51,7 @@ public class GroupAddMemberResponse extends MessageHandler {
                 }
                 realmMember.setId(autoIncrement);
                 realmMember.setPeerId(userId);
-                realmMember.setRole(ProtoGlobal.GroupRoom.Role.MEMBER.toString());
+                realmMember.setRole(response.getRole().toString());
                 // realmMember = realm.copyToRealm(realmMember);
 
                 realm.executeTransaction(new Realm.Transaction() {

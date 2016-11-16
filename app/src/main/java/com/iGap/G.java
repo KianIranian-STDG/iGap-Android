@@ -82,6 +82,8 @@ import com.iGap.interfaces.OnUserProfileSetNickNameResponse;
 import com.iGap.interfaces.OnUserProfileSetSelfRemove;
 import com.iGap.interfaces.OnUserProfileUpdateUsername;
 import com.iGap.interfaces.OnUserRegistration;
+import com.iGap.interfaces.OnUserSessionGetActiveList;
+import com.iGap.interfaces.OnUserSessionLogout;
 import com.iGap.interfaces.OnUserUpdateStatus;
 import com.iGap.interfaces.OnUserUsernameToId;
 import com.iGap.interfaces.OnUserVerification;
@@ -260,6 +262,8 @@ public class G extends Application {
     public static OnUpdateUserStatusInChangePage onUpdateUserStatusInChangePage;
     public static OnLastSeenUpdateTiming onLastSeenUpdateTiming;
     public static OnSetAction onSetAction;
+    public static OnUserSessionGetActiveList onUserSessionGetActiveList;
+    public static OnUserSessionLogout onUserSessionLogout;
     public static UpdateListAfterKick updateListAfterKick;
 
     public static File chatBackground;

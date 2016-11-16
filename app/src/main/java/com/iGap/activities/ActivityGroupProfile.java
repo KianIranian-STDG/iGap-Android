@@ -1019,7 +1019,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
 
                 G.onGroupAddMember = new OnGroupAddMember() {
                     @Override
-                    public void onGroupAddMember(Long Roomid, final Long UserId) {
+                    public void onGroupAddMember(Long roomId, final Long UserId) {
 
                         /*runOnUiThread(new Runnable() {
                                           @Override
@@ -1045,7 +1045,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                             public void run() {
                                 Realm realm = Realm.getDefaultInstance();
                                 RealmRegisteredInfo realmRegistered = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, UserId).findFirst();
-                                StructContactInfo struct = new StructContactInfo(realmRegistered.getId(), realmRegistered.getDisplayName(), realmRegistered.getStatus().toString(), false, false, realmRegistered.getPhoneNumber() + "");
+                                StructContactInfo struct = new StructContactInfo(realmRegistered.getId(), realmRegistered.getDisplayName(), realmRegistered.getStatus(), false, false, realmRegistered.getPhoneNumber() + "");
 
                                 if (realmRegistered != null) {
                                     struct.avatar = realmRegistered.getLastAvatar();

@@ -492,4 +492,5 @@
     <string name="choosing_contact">choosing_contact</string>
     <string name="painting">painting</string>
     <string name="voice_message">Voice Message</string>
+    <string name="minute_ago">minute ago</string>
 </resources>
