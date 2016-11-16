@@ -47,7 +47,7 @@
             android:gravity="center"
             android:text="@string/rg_title_register"
             android:textColor="@color/rg_black_register"
-            android:textSize="@dimen/sp20"/>
+            android:textSize="@dimen/sp18"/>
 
         <View
             android:layout_width="match_parent"
@@ -121,12 +121,11 @@
                 android:gravity="center"
                 android:inputType="phone"
                 android:maxLength="5"
-                android:padding="@dimen/dp8"
                 android:singleLine="true"
                 android:text="+98"
                 android:textColor="@color/rg_black_register"
                 android:textIsSelectable="false"
-                android:textSize="@dimen/sp16" />
+                android:textSize="@dimen/sp14"/>
 
             <com.vicmikhailau.maskededittext.MaskedEditText
                 android:id="@+id/rg_edt_PhoneNumber"
@@ -170,6 +169,7 @@
         android:background="@drawable/rg_background_agreement2"
         android:fitsSystemWindows="true"
         android:orientation="vertical"
+        android:layoutDirection="ltr"
         android:visibility="visible">
 
         <!--1-->
@@ -186,7 +186,7 @@
             android:layout_marginTop="@dimen/dp4"
             android:background="@drawable/rg_background_agreement2"
             android:orientation="vertical"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -218,7 +218,8 @@
                 <TextView
                     android:id="@+id/rg_txt_verify_connect"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
                     android:layout_weight=".80"
                     android:text="@string/rg_verify_register1"
                     android:textColor="@color/rg_text_dark_verify"
@@ -230,7 +231,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp4"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layoutDirection="ltr">
 
                 <ProgressBar
                     android:id="@+id/rg_prg_verify_sms"
@@ -256,9 +258,10 @@
                 <TextView
                     android:id="@+id/rg_txt_verify_sms"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight=".6"
                     android:singleLine="true"
+                    android:gravity="center_vertical"
                     android:text="@string/rg_verify_register2"
                     android:textColor="@color/rg_text_verify"
                     android:textSize="@dimen/sp13"/>
@@ -266,7 +269,7 @@
                 <TextView
                     android:id="@+id/rg_txt_verify_timer"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight=".2"
                     android:gravity="center"
                     android:singleLine="true"
@@ -308,8 +311,9 @@
                 <TextView
                     android:id="@+id/rg_txt_verify_key"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight=".80"
+                    android:gravity="center_vertical"
                     android:text="@string/rg_verify_register3"
                     android:textColor="@color/rg_text_verify"
                     android:textSize="@dimen/sp13"/>
@@ -348,8 +352,9 @@
                 <TextView
                     android:id="@+id/rg_txt_verify_server"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight=".80"
+                    android:gravity="center_vertical"
                     android:text="@string/rg_verify_register4"
                     android:textColor="@color/rg_text_verify"
                     android:textSize="@dimen/sp13"/>
@@ -376,7 +381,7 @@
                 android:gravity="center"
                 android:text="@string/rg_agreement_title_register"
                 android:textColor="@color/rg_black_register"
-                android:textSize="@dimen/sp18" />
+                android:textSize="@dimen/sp16"/>
 
             <TextView
                 android:id="@+id/txtAgreement_register"
@@ -387,6 +392,7 @@
                 android:lineSpacingExtra="@dimen/dp4"
                 android:overScrollMode="always"
                 android:padding="@dimen/dp4"
+                android:textSize="@dimen/sp14"
                 android:scrollbarSize="@dimen/dp4"
                 android:scrollbarThumbVertical="@color/rg_start_background"
                 android:scrollbars="vertical"

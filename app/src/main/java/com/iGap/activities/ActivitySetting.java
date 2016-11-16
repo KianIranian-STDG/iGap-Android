@@ -63,7 +63,6 @@ import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmAvatarFields;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestUserAvatarAdd;
-import com.iGap.request.RequestUserAvatarDelete;
 import com.iGap.request.RequestUserProfileCheckUsername;
 import com.iGap.request.RequestUserProfileSetEmail;
 import com.iGap.request.RequestUserProfileSetGender;
@@ -677,6 +676,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 G.onUserProfileSetEmailResponse = new OnUserProfileSetEmailResponse() {
                     @Override
                     public void onUserProfileEmailResponse(final String email, ProtoResponse.Response response) {
+                        inputEmail.setErrorEnabled(true);
+                        inputEmail.setError("");
 
                         runOnUiThread(new Runnable() {
                             @Override
@@ -790,6 +791,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                     } else {
                                         positive.setEnabled(false);
                                     }
+                                    inputUserName.setErrorEnabled(true);
+                                    inputUserName.setError("");
                                 } else if (status == ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status.INVALID) {
 
                                     inputUserName.setErrorEnabled(true);
@@ -1591,7 +1594,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 .itemsCallback(new MaterialDialog.ListCallback() {
             @Override
             public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                if (text.toString().equals("From Camera")) {
+                if (text.toString().equals(getResources().getString(R.string.array_From_Camera))) {
                     if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
                         idAvatar = System.nanoTime();
                         pathSaveImage = G.imageFile.toString() + "_" + System.currentTimeMillis() + "_" + idAvatar + ".jpg";
@@ -1604,7 +1607,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     } else {
                         Toast.makeText(ActivitySetting.this, "Please check your Camera", Toast.LENGTH_SHORT).show();
                     }
-                } else if (text.toString().equals("Delete photo")) {
+                } else if (text.toString().equals(getResources().getString(R.string.array_Delete_photo))) {
                     G.onUserAvatarDelete = new OnUserAvatarDelete() {
                         @Override
                         public void onUserAvatarDelete(final long avatarId, final String token) {
@@ -1619,7 +1622,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                             RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.ID, avatarId).findFirst();
                                             if (realmAvatar != null) {
                                                 realmAvatar.deleteFromRealm();
-                                                new RequestUserAvatarDelete().userAvatarDelete(realmAvatar.getId());
+
                                             }
                                         }
                                     });
@@ -1628,6 +1631,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                             });
                         }
                     };
+//                    new RequestUserAvatarDelete().userAvatarDelete(realmAvatar.getId());
                 } else {
                     Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     idAvatar = System.nanoTime();

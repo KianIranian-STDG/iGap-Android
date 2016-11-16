@@ -70,7 +70,7 @@ public class GroupKickAdminResponse extends MessageHandler {
         Log.i("XXX", "GroupKickAdminResponse majorCode : " + majorCode);
         Log.i("XXX", "GroupKickAdminResponse minorCode : " + minorCode);
 
-        G.onGroupAddMember.onError(majorCode, minorCode);
+        G.onGroupKickAdmin.onError(majorCode, minorCode);
     }
 
     @Override
@@ -78,5 +78,7 @@ public class GroupKickAdminResponse extends MessageHandler {
 
         Log.e("XXX", "GroupKickAdminResponse      timout      " + message);
         super.timeOut();
+
+        G.onGroupKickAdmin.onTimeOut();
     }
 }

@@ -11,4 +11,6 @@ public interface OnGroupKickMember {
 
     void onError(int majorCode, int minorCode);
 
+    void onTimeOut();
+
 }

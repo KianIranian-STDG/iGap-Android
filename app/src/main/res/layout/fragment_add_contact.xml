@@ -113,7 +113,6 @@
             android:layout_marginTop="@dimen/dp8"
             android:background="@android:color/transparent"
             android:hint="@string/fac_First_Name"
-
             android:textSize="@dimen/sp15"
             android:singleLine="true"
             android:textColorHint="@color/hint_edit_text" />
@@ -121,9 +120,9 @@
         <View
             android:id="@+id/ac_view_firstName"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height=".5dp"
             android:background="@color/line_edit_text"
-            android:scaleY=".5" />
+            />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -148,9 +147,9 @@
         <View
             android:id="@+id/ac_view_lastName"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height=".5dp"
             android:background="@color/line_edit_text"
-            android:scaleY=".5" />
+            />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -175,10 +174,8 @@
         <View
             android:id="@+id/ac_view_phoneNumber"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/line_edit_text"
-
-            android:scaleY=".5" />
+            android:layout_height=".5dp"
+            android:background="@color/line_edit_text"/>
 
     </android.support.design.widget.TextInputLayout>
 

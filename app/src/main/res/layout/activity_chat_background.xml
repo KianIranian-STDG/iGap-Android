@@ -15,6 +15,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:elevation="@dimen/dp4"
         android:background="@color/toolbar_background"
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp"

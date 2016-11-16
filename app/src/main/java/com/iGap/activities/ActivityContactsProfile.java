@@ -427,11 +427,12 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                                                   layoutNickname.addView(inputLastName, lastNameLayoutParams);
 
                                                   final MaterialDialog dialog =
-                                                          new MaterialDialog.Builder(ActivityContactsProfile.this).title("Nickname")
-                                                                  .positiveText("SAVE")
+                                                          new MaterialDialog.Builder(ActivityContactsProfile.this)
+                                                                  .title(getResources().getString(R.string.pu_nikname_profileUser))
+                                                                  .positiveText(getResources().getString(R.string.B_ok))
                                                                   .customView(layoutNickname, true)
                                                                   .widgetColor(getResources().getColor(R.color.toolbar_background))
-                                                                  .negativeText("CANCEL")
+                                                                  .negativeText(getResources().getString(R.string.B_cancel))
                                                                   .build();
 
                                                   final View positive = dialog.getActionButton(DialogAction.POSITIVE);
@@ -1088,7 +1089,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(context, "onUserAvatarGetList", Toast.LENGTH_SHORT).show();
+
                     }
                 });
             }

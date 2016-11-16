@@ -40,6 +40,7 @@ import com.iGap.adapter.AdapterShearedMedia;
 import com.iGap.adapter.items.ContactItemGroupProfile;
 import com.iGap.fragments.FragmentListAdmin;
 import com.iGap.fragments.FragmentNotification;
+import com.iGap.fragments.FragmentShowAvatars;
 import com.iGap.fragments.ShowCustomList;
 import com.iGap.interfaces.OnFileUploadForActivities;
 import com.iGap.interfaces.OnGroupAddAdmin;
@@ -113,6 +114,7 @@ import io.realm.RealmResults;
 import io.realm.Sort;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+import static com.iGap.R.id.fragmentContainer_group_profile;
 import static com.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
 /**
@@ -342,14 +344,6 @@ public class ActivityGroupProfile extends ActivityEnhanced
         //            }
         //        });
 
-
-        G.updateListAfterKick = new UpdateListAfterKick() {
-            @Override
-            public void updateList(long memberId, ProtoGlobal.GroupRoom.Role role) {
-                updateRole(memberId, role);
-            }
-        };
-
         layoutSetting = (LinearLayout) findViewById(R.id.agp_ll_seetting);
         layoutSetAdmin = (LinearLayout) findViewById(R.id.agp_ll_set_admin);
         layoutSetModereator = (LinearLayout) findViewById(R.id.agp_ll_set_modereator);
@@ -401,21 +395,43 @@ public class ActivityGroupProfile extends ActivityEnhanced
             }
         });
 
+        final TextView titleToolbar = (TextView) findViewById(R.id.agp_txt_titleToolbar);
+        final ViewGroup viewGroup = (ViewGroup) findViewById(R.id.apg_parentLayoutCircleImage);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
 
-                TextView titleToolbar = (TextView) findViewById(R.id.agp_txt_titleToolbar);
-                if (verticalOffset < -appBarLayout.getTotalScrollRange() / 4) {
+                if (verticalOffset < -5) {
 
-                    titleToolbar.animate().alpha(1).setDuration(300);
+                    viewGroup.setVisibility(View.GONE);
                     titleToolbar.setVisibility(View.VISIBLE);
+                    viewGroup.animate().alpha(0).setDuration(500);
+                    titleToolbar.animate().alpha(1).setDuration(250);
                 } else {
-                    titleToolbar.animate().alpha(0).setDuration(500);
+
                     titleToolbar.setVisibility(View.GONE);
+                    viewGroup.setVisibility(View.VISIBLE);
+                    titleToolbar.animate().alpha(0).setDuration(250);
+                    viewGroup.animate().alpha(1).setDuration(500);
                 }
             }
         });
+
+//        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+//            @Override
+//            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+//
+//                TextView titleToolbar = (TextView) findViewById(R.id.agp_txt_titleToolbar);
+//                if (verticalOffset < -appBarLayout.getTotalScrollRange() / 4) {
+//
+//                    titleToolbar.animate().alpha(1).setDuration(300);
+//                    titleToolbar.setVisibility(View.VISIBLE);
+//                } else {
+//                    titleToolbar.animate().alpha(0).setDuration(500);
+//                    titleToolbar.setVisibility(View.GONE);
+//                }
+//            }
+//        });
 
 
         fab = (FloatingActionButton) findViewById(R.id.agp_fab_setPic);
@@ -508,7 +524,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                 getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
                                 R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragmentContainer_group_profile, fragmentNotification)
+                        .replace(fragmentContainer_group_profile, fragmentNotification)
                         .commit();
             }
         });
@@ -523,9 +539,16 @@ public class ActivityGroupProfile extends ActivityEnhanced
 
         RippleView rippleCircleImage = (RippleView) findViewById(R.id.agp_ripple_group_avatar);
         rippleCircleImage.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-
             @Override
             public void onComplete(RippleView rippleView) {
+
+                FragmentShowAvatars.appBarLayout = fab;
+
+                FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(roomId);
+                ActivityGroupProfile.this.getSupportFragmentManager()
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(R.id.fragmentContainer_group_profile, fragment, null).commit();
 
             }
         });
@@ -536,6 +559,20 @@ public class ActivityGroupProfile extends ActivityEnhanced
         setUiIndependRole();
         initRecycleView();
         getMemberList();
+
+
+        G.updateListAfterKick = new UpdateListAfterKick() {
+            @Override
+            public void updateList(final long memberId, final ProtoGlobal.GroupRoom.Role role) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateRole(memberId, role);
+
+                    }
+                });
+            }
+        };
     }
 
     private void getMemberList() {
@@ -1177,7 +1214,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
         getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
                 .addToBackStack(null)
-                .replace(R.id.fragmentContainer_group_profile, fragment).commit();
+                .replace(fragmentContainer_group_profile, fragment).commit();
     }
 
     private class CreatePopUpMessage {
@@ -1949,14 +1986,17 @@ public class ActivityGroupProfile extends ActivityEnhanced
                           @Override
                           public void run() {
 
-                              List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
 
+                              List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
+                              Log.i("CCVV", "itemsgggg: " + role.toString());
                               for (int i = 0; i < items.size(); i++) {
                                   if (items.get(i).mContact.peerId == memberId) {
                                       items.get(i).mContact.role = role.toString();
+                                      Log.i("CCVV", "rolegggg: " + role.toString());
                                       if (i < itemAdapter.getAdapterItemCount()) {
                                           IItem item = (new ContactItemGroupProfile().setContact(items.get(i).mContact).withIdentifier(100 + i));
                                           itemAdapter.set(i, item);
+                                          Log.i("CCVV", "ggggggg: " + i);
                                       }
                                   }
                               }
@@ -2061,6 +2101,11 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                         }
                                     });
                                 }
+                            }
+
+                            @Override
+                            public void onTimeOut() {
+
                             }
                         };
 
@@ -2221,6 +2266,11 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                     });
                                 }
                             }
+
+                            @Override
+                            public void onTimeOut() {
+
+                            }
                         };
 
                         new RequestGroupKickMember().groupKickMember(roomId, memberID);
@@ -2340,6 +2390,11 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                     });
                                 }
                             }
+
+                            @Override
+                            public void timeOut() {
+
+                            }
                         };
 
                         new RequestGroupKickModerator().groupKickModerator(roomId, memberID);
@@ -2358,7 +2413,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
         getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
                 .addToBackStack(null)
-                .replace(R.id.fragmentContainer_group_profile, fragment)
+                .replace(fragmentContainer_group_profile, fragment)
                 .commit();
     }
 
@@ -2372,7 +2427,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
         getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
                 .addToBackStack(null)
-                .replace(R.id.fragmentContainer_group_profile, fragment)
+                .replace(fragmentContainer_group_profile, fragment)
                 .commit();
     }
 

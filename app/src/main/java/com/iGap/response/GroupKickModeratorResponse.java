@@ -69,6 +69,6 @@ public class GroupKickModeratorResponse extends MessageHandler {
         Log.i("XXX", "GroupKickModeratorResponse majorCode : " + majorCode);
         Log.i("XXX", "GroupKickModeratorResponse minorCode : " + minorCode);
 
-        G.onGroupKickMember.onError(majorCode, minorCode);
+        G.onGroupKickModerator.onError(majorCode, minorCode);
     }
 }

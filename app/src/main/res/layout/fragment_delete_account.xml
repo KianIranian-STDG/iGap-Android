@@ -6,6 +6,7 @@
               android:background="@color/white"
               android:id="@+id/rootDeleteAccount"
               android:orientation="vertical"
+              android:elevation="999dp"
               tools:context="com.iGap.fragments.FragmentDeleteAccount">
 
     <android.support.v7.widget.Toolbar

@@ -13,7 +13,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -40,8 +42,6 @@ import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.iGap.module.MusicPlayer.roomId;
-
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -56,8 +56,10 @@ public class FragmentListAdmin extends Fragment {
     private EditText edtSearch;
     private String textString = "";
     private String type;
-    private long roomid;
+    private long roomId;
     private ItemAdapter itemAdapter;
+    private ProgressBar prgWait;
+    private ViewGroup layoutRoot;
 
     public static FragmentListAdmin newInstance(List<StructContactInfo> list) {
 
@@ -85,12 +87,14 @@ public class FragmentListAdmin extends Fragment {
         if (bundle != null) {
 
             type = bundle.getString("TYPE");
-            roomid = bundle.getLong("ID");
+            roomId = bundle.getLong("ID");
         }
 
         txtStatus = (TextView) view.findViewById(R.id.fcg_txt_status);
+        layoutRoot = (ViewGroup) view.findViewById(R.id.fcg_layoutRoot);
+        prgWait = (ProgressBar) view.findViewById(R.id.fcg_prgWaiting);
+        prgWait.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
         txtNumberOfMember = (TextView) view.findViewById(R.id.fcg_txt_number_of_member);
-        edtSearch = (EditText) view.findViewById(R.id.fcg_edt_search);
         edtSearch = (EditText) view.findViewById(R.id.fcg_edt_search);
         edtSearch.setVisibility(View.GONE);
         MaterialDesignTextView btnBack = (MaterialDesignTextView) view.findViewById(R.id.fcg_btn_back);
@@ -104,6 +108,19 @@ public class FragmentListAdmin extends Fragment {
             }
         });
 
+        layoutRoot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        if (type.equals("ADMIN")) {
+//
+            txtNumberOfMember.setText(getResources().getString(R.string.list_admin));
+        } else {
+            txtNumberOfMember.setText(getResources().getString(R.string.list_modereator));
+        }
 
         MaterialDesignTextView txtDone = (MaterialDesignTextView) view.findViewById(R.id.fcg_btn_done);
         txtDone.setVisibility(View.GONE);
@@ -131,11 +148,24 @@ public class FragmentListAdmin extends Fragment {
                             .onPositive(new MaterialDialog.SingleButtonCallback() {
                                 @Override
                                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                    prgWait.setVisibility(View.VISIBLE);
+                                    getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
                                     G.onGroupKickAdmin = new OnGroupKickAdmin() {
                                         @Override
-                                        public void onGroupKickAdmin(long roomId, long memberId) {
-                                            updateRole(memberId, ProtoGlobal.GroupRoom.Role.ADMIN, position);
-                                            G.updateListAfterKick.updateList(memberId, ProtoGlobal.GroupRoom.Role.MEMBER);
+                                        public void onGroupKickAdmin(long roomId, final long memberId) {
+                                            getActivity().runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    prgWait.setVisibility(View.GONE);
+                                                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                                                    updateRole(memberId, ProtoGlobal.GroupRoom.Role.MEMBER, position);
+                                                    G.updateListAfterKick.updateList(memberId, ProtoGlobal.GroupRoom.Role.MEMBER);
+                                                    Log.i("CCVV", "updateListAfterKick: " + memberId);
+                                                }
+                                            });
                                         }
 
                                         @Override
@@ -146,6 +176,9 @@ public class FragmentListAdmin extends Fragment {
                                                     public void run() {
 
                                                         if (minorCode == 1) {
+
+                                                            prgWait.setVisibility(View.GONE);
+                                                            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
                                                             final Snackbar snack =
                                                                     Snackbar.make(getActivity().findViewById(android.R.id.content),
@@ -161,8 +194,10 @@ public class FragmentListAdmin extends Fragment {
                                                             snack.show();
                                                         } else {
 
-                                                            final Snackbar snack =
-                                                                    Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                                            prgWait.setVisibility(View.GONE);
+                                                            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                                                            final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content),
                                                                             getResources().getString(R.string.E_327_B),
                                                                             Snackbar.LENGTH_LONG);
 
@@ -177,9 +212,14 @@ public class FragmentListAdmin extends Fragment {
                                                     }
                                                 });
                                             } else if (majorCode == 328) {
+
                                                 getActivity().runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
+
+                                                        prgWait.setVisibility(View.GONE);
+                                                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
                                                         final Snackbar snack =
                                                                 Snackbar.make(getActivity().findViewById(android.R.id.content),
                                                                         getResources().getString(R.string.E_328),
@@ -195,9 +235,16 @@ public class FragmentListAdmin extends Fragment {
                                                     }
                                                 });
                                             } else if (majorCode == 329) {
+
+
                                                 getActivity().runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
+
+
+                                                        prgWait.setVisibility(View.GONE);
+                                                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
                                                         final Snackbar snack =
                                                                 Snackbar.make(getActivity().findViewById(android.R.id.content),
                                                                         getResources().getString(R.string.E_329),
@@ -214,9 +261,34 @@ public class FragmentListAdmin extends Fragment {
                                                 });
                                             }
                                         }
+
+                                        @Override
+                                        public void onTimeOut() {
+                                            getActivity().runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+
+                                                    prgWait.setVisibility(View.GONE);
+                                                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                                                    final Snackbar snack =
+                                                            Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                                                    "Server don't respase",
+                                                                    Snackbar.LENGTH_LONG);
+
+                                                    snack.setAction(getResources().getString(R.string.cancel), new View.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(View view) {
+                                                            snack.dismiss();
+                                                        }
+                                                    });
+                                                    snack.show();
+                                                }
+                                            });
+                                        }
                                     };
 
-                                    new RequestGroupKickAdmin().groupKickAdmin(roomid, contactItemGroupProfile.mContact.peerId);
+                                    new RequestGroupKickAdmin().groupKickAdmin(roomId, contactItemGroupProfile.mContact.peerId);
                                 }
                             })
                             .negativeText(R.string.B_cancel)
@@ -230,12 +302,26 @@ public class FragmentListAdmin extends Fragment {
                                 @Override
                                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
+                                    prgWait.setVisibility(View.VISIBLE);
+                                    getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
                                     G.onGroupKickModerator = new OnGroupKickModerator() {
                                         @Override
-                                        public void onGroupKickModerator(long roomId, long memberId) {
+                                        public void onGroupKickModerator(long roomId, final long memberId) {
 
-                                            updateRole(memberId, ProtoGlobal.GroupRoom.Role.MODERATOR, position);
-                                            G.updateListAfterKick.updateList(memberId, ProtoGlobal.GroupRoom.Role.MEMBER);
+
+                                            getActivity().runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+
+                                                    prgWait.setVisibility(View.GONE);
+                                                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                                                    updateRole(memberId, ProtoGlobal.GroupRoom.Role.MEMBER, position);
+                                                    G.updateListAfterKick.updateList(memberId, ProtoGlobal.GroupRoom.Role.MEMBER);
+                                                }
+                                            });
 
                                         }
 
@@ -245,6 +331,9 @@ public class FragmentListAdmin extends Fragment {
                                                 getActivity().runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
+
+                                                        prgWait.setVisibility(View.GONE);
+                                                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
                                                         if (minorCode == 1) {
                                                             final Snackbar snack =
@@ -260,6 +349,9 @@ public class FragmentListAdmin extends Fragment {
                                                             });
                                                             snack.show();
                                                         } else {
+
+                                                            prgWait.setVisibility(View.GONE);
+                                                            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                                             final Snackbar snack =
                                                                     Snackbar.make(getActivity().findViewById(android.R.id.content),
                                                                             getResources().getString(R.string.E_324_2),
@@ -279,6 +371,10 @@ public class FragmentListAdmin extends Fragment {
                                                 getActivity().runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
+
+                                                        prgWait.setVisibility(View.GONE);
+                                                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
                                                         final Snackbar snack =
                                                                 Snackbar.make(getActivity().findViewById(android.R.id.content),
                                                                         getResources().getString(R.string.E_325),
@@ -294,9 +390,16 @@ public class FragmentListAdmin extends Fragment {
                                                     }
                                                 });
                                             } else if (majorCode == 326) {
+
+
                                                 getActivity().runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
+
+                                                        prgWait.setVisibility(View.GONE);
+                                                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+
                                                         final Snackbar snack =
                                                                 Snackbar.make(getActivity().findViewById(android.R.id.content),
                                                                         getResources().getString(R.string.E_326),
@@ -312,6 +415,32 @@ public class FragmentListAdmin extends Fragment {
                                                     }
                                                 });
                                             }
+                                        }
+
+                                        @Override
+                                        public void timeOut() {
+                                            getActivity().runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+
+                                                    prgWait.setVisibility(View.GONE);
+                                                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+
+                                                    final Snackbar snack =
+                                                            Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                                                    "Server don't respase",
+                                                                    Snackbar.LENGTH_LONG);
+
+                                                    snack.setAction(getResources().getString(R.string.cancel), new View.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(View view) {
+                                                            snack.dismiss();
+                                                        }
+                                                    });
+                                                    snack.show();
+                                                }
+                                            });
                                         }
                                     };
 
@@ -341,7 +470,7 @@ public class FragmentListAdmin extends Fragment {
                 new StickyRecyclerHeadersDecoration(stickyHeaderAdapter);
         rv.addItemDecoration(decoration);
 
-        ContactItemGroupProfile.mainRole = ProtoGlobal.GroupRoom.Role.OWNER.toString();
+        ContactItemGroupProfile.isShoMore = true;
 
         List<IItem> items = new ArrayList<>();
         for (int i = 0; i < contacts.size(); i++) {
@@ -381,45 +510,6 @@ public class FragmentListAdmin extends Fragment {
         //restore selections (this has to be done after the items were added
         fastAdapter.withSavedInstanceState(savedInstanceState);
 
-        refreshView();
-    }
-
-
-    private void refreshView() {
-
-        int selectedNumber = 0;
-        textString = "";
-
-        int size = contacts.size();
-
-        for (int i = 0; i < size; i++) {
-            if (contacts.get(i).isSelected) {
-                selectedNumber++;
-                textString += contacts.get(i).displayName + ",";
-            }
-        }
-
-        if (type.equals("ADMIN")) {
-
-            txtNumberOfMember.setText(getResources().getString(R.string.list_admin));
-        } else {
-            txtNumberOfMember.setText(getResources().getString(R.string.list_modereator));
-        }
-
-//        edtSearch.setText(textString);
-    }
-
-    private ArrayList<StructContactInfo> getSelectedList() {
-
-        ArrayList<StructContactInfo> list = new ArrayList<>();
-
-        for (int i = 0; i < contacts.size(); i++) {
-            if (contacts.get(i).isSelected) {
-                list.add(contacts.get(i));
-            }
-        }
-
-        return list;
     }
 
     @Override
@@ -431,13 +521,18 @@ public class FragmentListAdmin extends Fragment {
 
     private void updateRole(final long memberId, final ProtoGlobal.GroupRoom.Role role, final int po) {
 
+        Log.i("CCVV", "run1: " + role.toString());
+
         getActivity().runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
                                             List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
+                                            Log.i("CCVV", "items.size: " + items.size());
+
                                             for (int i = 0; i < items.size(); i++) {
                                                 if (items.get(i).mContact.peerId == memberId) {
                                                     itemAdapter.remove(po);
+                                                    Log.i("CCVV", "remove: " + items.size());
                                                     if (items.size() == 0) {
                                                         getActivity().getSupportFragmentManager().popBackStack();
                                                         return;

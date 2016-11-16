@@ -293,15 +293,16 @@ public class ActivityProfile extends ActivityEnhanced
 
     private void startDialog() {
 
-        new MaterialDialog.Builder(this).title("Choose Picture")
-                .negativeText("CANCEL")
+        new MaterialDialog.Builder(this)
+                .title(getResources().getString(R.string.choose_picture))
+                .negativeText(getResources().getString(R.string.B_cancel))
                 .items(R.array.profile)
                 .itemsCallback(new MaterialDialog.ListCallback() {
                     @Override
                     public void onSelection(MaterialDialog dialog, View view, int which,
                                             CharSequence text) {
 
-                        if (text.toString().equals("From Camera")) {
+                        if (text.toString().equals(getResources().getString(R.string.array_From_Camera))) {
 
                             if (getPackageManager().hasSystemFeature(
                                     PackageManager.FEATURE_CAMERA_ANY)) {

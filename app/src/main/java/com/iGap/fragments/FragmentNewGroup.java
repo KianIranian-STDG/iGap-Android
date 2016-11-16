@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -115,7 +116,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
         prgWaiting.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
 
         prgWaiting.setVisibility(View.GONE);
-
+        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         txtBack = (MaterialDesignTextView) view.findViewById(R.id.ng_txt_back);
         RippleView rippleBack = (RippleView) view.findViewById(R.id.ng_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
@@ -270,12 +271,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
 
                 if (edtGroupName.getText().toString().length() > 0) {
                     prgWaiting.setVisibility(View.VISIBLE);
-                    txtNextStep.setEnabled(false);
-                    txtBack.setEnabled(false);
-                    txtCancel.setEnabled(false);
-                    edtDescription.setEnabled(false);
-                    edtGroupName.setEnabled(false);
-                    imgCircleImageView.setEnabled(false);
+                    getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                     InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
@@ -355,13 +351,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
                     @Override
                     public void run() {
                         prgWaiting.setVisibility(View.GONE);
-                        txtNextStep.setEnabled(true);
-                        txtBack.setEnabled(true);
-                        txtCancel.setEnabled(true);
-                        edtDescription.setEnabled(true);
-                        edtGroupName.setEnabled(true);
-                        imgCircleImageView.setEnabled(true);
-                        Toast.makeText(G.context, "Error", Toast.LENGTH_SHORT).show();
+                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                     }
                 });
             }
@@ -369,13 +359,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
             @Override
             public void timeOut() {
                 prgWaiting.setVisibility(View.GONE);
-                txtNextStep.setEnabled(true);
-                txtBack.setEnabled(true);
-                txtCancel.setEnabled(true);
-                edtDescription.setEnabled(true);
-                edtGroupName.setEnabled(true);
-                imgCircleImageView.setEnabled(true);
-                Log.i("XXXCCC", "timeOut: ");
+                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }
         };
 
@@ -392,13 +376,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
             @Override
             public void onTimeOut() {
                 prgWaiting.setVisibility(View.GONE);
-                txtNextStep.setEnabled(true);
-                txtBack.setEnabled(true);
-                txtCancel.setEnabled(true);
-                edtDescription.setEnabled(true);
-                edtGroupName.setEnabled(true);
-                imgCircleImageView.setEnabled(true);
-                Log.i("XXXCCC", "createGroup timeOut: ");
+                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }
 
             @Override
@@ -408,12 +386,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
                     @Override
                     public void run() {
                         prgWaiting.setVisibility(View.GONE);
-                        txtNextStep.setEnabled(true);
-                        txtBack.setEnabled(true);
-                        txtCancel.setEnabled(true);
-                        edtDescription.setEnabled(true);
-                        edtGroupName.setEnabled(true);
-                        imgCircleImageView.setEnabled(true);
+                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                     }
                 });
 
@@ -488,6 +461,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
                         .commit();
                 ActivityMain.mLeftDrawerLayout.closeDrawer();
                 prgWaiting.setVisibility(View.GONE);
+                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
             }
 
@@ -574,13 +548,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
             @Override
             public void onTimeOut() {
                 prgWaiting.setVisibility(View.GONE);
-                txtNextStep.setEnabled(true);
-                txtBack.setEnabled(true);
-                txtCancel.setEnabled(true);
-                edtDescription.setEnabled(true);
-                edtGroupName.setEnabled(true);
-                imgCircleImageView.setEnabled(true);
-                Log.i("XXXCCC", "getRoom timeOut: ");
+                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }
         };
 

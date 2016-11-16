@@ -10,4 +10,6 @@ public interface OnGroupAddMember {
     void onGroupAddMember(Long Roomid, Long UserId);
 
     void onError(int majorCode, int minorCode);
+
+
 }

@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -62,7 +63,7 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
     private FastAdapter fastAdapter;
     private SearchView searchView;
     private TextView menu_txt_titleToolbar;
-    private ViewGroup vgAddContact;
+    private ViewGroup vgAddContact, vgRoot;
     private List<StructContactInfo> contacts;
     private RecyclerView rv;
 
@@ -89,6 +90,9 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                 .setColorFilter(getResources().getColor(R.color.toolbar_background),
                         android.graphics.PorterDuff.Mode.MULTIPLY);
         prgWaiting.setVisibility(View.GONE);
+        vgAddContact = (ViewGroup) view.findViewById(R.id.menu_layout_addContact);
+        vgRoot = (ViewGroup) view.findViewById(R.id.menu_parent_layout);
+
 
         G.onFileDownloadResponse = this;
 
@@ -116,12 +120,10 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
             @Override
             public boolean onClick(View v, IAdapter adapter, ContactItem item, int position) {
                 chatGetRoom(item.mContact.peerId);
+
+                getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 prgWaiting.setVisibility(View.VISIBLE);
-                rv.setEnabled(false);
-                vgAddContact.setEnabled(false);
-                searchView.setEnabled(false);
-                rv.setEnabled(false);
-                rv.setClickable(false);
+
 
                 return false;
             }
@@ -164,7 +166,7 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                 ((EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text));
         searchBox.setTextColor(getResources().getColor(R.color.white));
 
-        vgAddContact = (ViewGroup) view.findViewById(R.id.menu_layout_addContact);
+
         vgAddContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -258,27 +260,31 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
 
                 @Override
                 public void onChatGetRoomTimeOut() {
-                    prgWaiting.setVisibility(View.GONE);
-                    rv.setEnabled(true);
-                    vgAddContact.setEnabled(true);
-                    searchView.setEnabled(true);
-                    rv.setEnabled(true);
-                    rv.setClickable(true);
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            prgWaiting.setVisibility(View.GONE);
+
+                        }
+                    });
+
+
                 }
 
                 @Override
                 public void onChatGetRoomError(int majorCode, int minorCode) {
-                    prgWaiting.setVisibility(View.GONE);
-                    rv.setEnabled(true);
-                    vgAddContact.setEnabled(true);
-                    searchView.setEnabled(true);
-                    rv.setEnabled(true);
-                    rv.setClickable(true);
+
 
                     if (majorCode == 200) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+
+                                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                prgWaiting.setVisibility(View.GONE);
+
                                 final Snackbar snack =
                                         Snackbar.make(getActivity().findViewById(android.R.id.content),
                                                 getResources().getString(R.string.E_200),
@@ -298,6 +304,10 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+
+                                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                prgWaiting.setVisibility(View.GONE);
+
                                 final Snackbar snack =
                                         Snackbar.make(getActivity().findViewById(android.R.id.content),
                                                 getResources().getString(R.string.E_201),
@@ -317,6 +327,11 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+
+                                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                prgWaiting.setVisibility(View.GONE);
+//
+
                                 final Snackbar snack =
                                         Snackbar.make(getActivity().findViewById(android.R.id.content),
                                                 getResources().getString(R.string.E_202),
@@ -347,7 +362,7 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
             @Override
             public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
 
-                G.currentActivity.runOnUiThread(new Runnable() {
+                getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
 
@@ -383,6 +398,7 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                             }, new Realm.Transaction.OnSuccess() {
                                 @Override
                                 public void onSuccess() {
+                                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                     prgWaiting.setVisibility(View.GONE);
                                     Intent intent = new Intent(context, ActivityChat.class);
                                     intent.putExtra("peerId", peerId);
@@ -401,22 +417,27 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
 
             @Override
             public void onUserInfoTimeOut() {
-                prgWaiting.setVisibility(View.GONE);
-                rv.setEnabled(true);
-                vgAddContact.setEnabled(true);
-                searchView.setEnabled(true);
-                rv.setEnabled(true);
-                rv.setClickable(true);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        prgWaiting.setVisibility(View.GONE);
+
+                    }
+                });
+
             }
 
             @Override
             public void onUserInfoError(int majorCode, int minorCode) {
-                prgWaiting.setVisibility(View.GONE);
-                rv.setEnabled(true);
-                vgAddContact.setEnabled(true);
-                searchView.setEnabled(true);
-                rv.setEnabled(true);
-                rv.setClickable(true);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        prgWaiting.setVisibility(View.GONE);
+                    }
+                });
+
             }
         };
 
@@ -479,6 +500,11 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+
+                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    prgWaiting.setVisibility(View.GONE);
+//
+
                     final Snackbar snack =
                             Snackbar.make(getActivity().findViewById(android.R.id.content),
                                     getResources().getString(R.string.E_713_1), Snackbar.LENGTH_LONG);
@@ -496,6 +522,11 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+
+                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    prgWaiting.setVisibility(View.GONE);
+//
+
                     final Snackbar snack =
                             Snackbar.make(getActivity().findViewById(android.R.id.content),
                                     getResources().getString(R.string.E_713_2), Snackbar.LENGTH_LONG);
@@ -513,6 +544,11 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+
+                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    prgWaiting.setVisibility(View.GONE);
+//
+
                     final Snackbar snack =
                             Snackbar.make(getActivity().findViewById(android.R.id.content),
                                     getResources().getString(R.string.E_713_3), Snackbar.LENGTH_LONG);
@@ -530,6 +566,11 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+
+                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    prgWaiting.setVisibility(View.GONE);
+//
+
                     final Snackbar snack =
                             Snackbar.make(getActivity().findViewById(android.R.id.content),
                                     getResources().getString(R.string.E_713_4), Snackbar.LENGTH_LONG);
@@ -547,6 +588,11 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+
+                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    prgWaiting.setVisibility(View.GONE);
+//
+
                     final Snackbar snack =
                             Snackbar.make(getActivity().findViewById(android.R.id.content),
                                     getResources().getString(R.string.E_713_5), Snackbar.LENGTH_LONG);
@@ -564,6 +610,11 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+
+                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    prgWaiting.setVisibility(View.GONE);
+//
+
                     final Snackbar snack =
                             Snackbar.make(getActivity().findViewById(android.R.id.content),
                                     getResources().getString(R.string.E_714), Snackbar.LENGTH_LONG);
@@ -581,6 +632,11 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+
+                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    prgWaiting.setVisibility(View.GONE);
+//
+
                     final Snackbar snack =
                             Snackbar.make(getActivity().findViewById(android.R.id.content),
                                     getResources().getString(R.string.E_715), Snackbar.LENGTH_LONG);

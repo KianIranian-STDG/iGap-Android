@@ -2,7 +2,6 @@ package com.iGap.adapter.items;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -24,6 +23,7 @@ public class ContactItemGroupProfile extends AbstractItem<ContactItemGroupProfil
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
     public StructContactInfo mContact;
     public static String mainRole;
+    public static boolean isShoMore;
 
 
     public ContactItemGroupProfile setContact(StructContactInfo contact) {
@@ -67,14 +67,13 @@ public class ContactItemGroupProfile extends AbstractItem<ContactItemGroupProfil
         }
 
 
-        if (mainRole.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+        if (mainRole.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString()) || isShoMore) {
 
             holder.btnMenu.setVisibility(View.GONE);
         } else {
-            Log.i("HHHHHGGGG", "bindView0: " + mainRole);
+
             if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString())) {
                 holder.btnMenu.setVisibility(View.GONE);
-                Log.i("HHHHHGGGG", "bindView1: " + mContact.role);
             } else {
 
                 holder.btnMenu.setOnClickListener(new View.OnClickListener() {
@@ -82,7 +81,6 @@ public class ContactItemGroupProfile extends AbstractItem<ContactItemGroupProfil
                     public void onClick(View v) {
                         if (ActivityGroupProfile.onMenuClick != null)
                             ActivityGroupProfile.onMenuClick.clicked(v, mContact);
-                        Log.i("HHHHHGGGG", "bindView2: " + mContact.role);
                     }
                 });
             }

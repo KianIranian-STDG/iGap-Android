@@ -72,7 +72,9 @@ public class GroupKickMemberResponse extends MessageHandler {
     @Override
     public void timeOut() {
 
-        Log.e("ddd", "GroupKickMemberResponse      timout      " + message);
+        Log.e("XXX", "GroupKickMemberResponse      timout      " + message);
         super.timeOut();
+
+        G.onGroupKickMember.onTimeOut();
     }
 }
