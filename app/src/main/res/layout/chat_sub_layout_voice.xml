@@ -130,8 +130,7 @@
                 android:id="@+id/messageText"
                 style="@style/ChatMessages.EmojiTextView"
                 android:layout_marginTop="@dimen/dp20"
-                android:text="SAMPLE TEXT df df df d fd f df df df d f df df df df  df df df "
-                android:textColor="@android:color/black" />
+                android:text="SAMPLE TEXT"/>
 
             <include layout="@layout/chat_sub_layout_messages_time" />
         </LinearLayout>

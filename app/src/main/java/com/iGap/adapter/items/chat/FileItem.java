@@ -9,14 +9,18 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.module.AndroidUtils;
+import com.iGap.module.AppUtils;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.realm.RealmRoomMessage;
+import com.iGap.realm.RealmRoomMessageFields;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
 import io.github.meness.emoji.EmojiTextView;
+import io.realm.Realm;
 
 import static com.iGap.module.AndroidUtils.suitablePath;
 
@@ -46,10 +50,10 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
     }
 
     @Override
-    public void onLoadFromLocal(final ViewHolder holder, String localPath, LocalFileType fileType) {
-        super.onLoadFromLocal(holder, localPath, fileType);
+    public void onLoadThumbnailFromLocal(final ViewHolder holder, String localPath, LocalFileType fileType) {
+        super.onLoadThumbnailFromLocal(holder, localPath, fileType);
 
-        ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.image);
+        ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.thumbnail);
     }
 
     @Override
@@ -73,6 +77,13 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
 
             setTextIfNeeded(holder.messageText, mMessage.messageText);
         }
+
+        Realm realm = Realm.getDefaultInstance();
+        RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.valueOf(mMessage.messageID)).findFirst();
+        if (roomMessage != null) {
+            AppUtils.rightFileThumbnailIcon(holder.thumbnail, mMessage.messageType, roomMessage.getAttachment());
+        }
+        realm.close();
     }
 
     protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {
@@ -85,7 +96,7 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
         protected TextView cslf_txt_file_name;
         protected TextView cslf_txt_file_size;
         protected EmojiTextView messageText;
-        protected ImageView image;
+        protected ImageView thumbnail;
 
         public ViewHolder(View view) {
             super(view);
@@ -94,7 +105,7 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
             messageText.setTextSize(G.userTextSize);
             cslf_txt_file_name = (TextView) view.findViewById(R.id.songArtist);
             cslf_txt_file_size = (TextView) view.findViewById(R.id.fileSize);
-            image = (ImageView) view.findViewById(R.id.thumbnail);
+            thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
         }
     }
 }

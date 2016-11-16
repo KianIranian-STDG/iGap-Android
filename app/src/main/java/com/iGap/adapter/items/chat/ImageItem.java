@@ -44,8 +44,8 @@ public class ImageItem extends AbstractMessage<ImageItem, ImageItem.ViewHolder> 
     }
 
     @Override
-    public void onLoadFromLocal(final ViewHolder holder, String localPath, LocalFileType fileType) {
-        super.onLoadFromLocal(holder, localPath, fileType);
+    public void onLoadThumbnailFromLocal(final ViewHolder holder, String localPath, LocalFileType fileType) {
+        super.onLoadThumbnailFromLocal(holder, localPath, fileType);
         ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.image);
     }
 

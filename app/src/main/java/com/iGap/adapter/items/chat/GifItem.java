@@ -37,8 +37,8 @@ public class GifItem extends AbstractMessage<GifItem, GifItem.ViewHolder> {
     }
 
     @Override
-    public void onLoadFromLocal(ViewHolder holder, String localPath, LocalFileType fileType) {
-        super.onLoadFromLocal(holder, localPath, fileType);
+    public void onLoadThumbnailFromLocal(ViewHolder holder, String localPath, LocalFileType fileType) {
+        super.onLoadThumbnailFromLocal(holder, localPath, fileType);
         // TODO: 9/28/2016 [Alireza]
     }
 

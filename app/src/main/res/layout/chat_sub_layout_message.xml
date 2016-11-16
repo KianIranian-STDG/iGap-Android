@@ -46,7 +46,6 @@
             <io.github.meness.emoji.EmojiTextView
                 android:id="@+id/messageText"
                 style="@style/ChatMessages.EmojiTextView"
-                android:lineSpacingExtra="14dp"
                 android:text="SAMPLE TEXT"/>
 
             <include layout="@layout/chat_sub_layout_messages_time"/>

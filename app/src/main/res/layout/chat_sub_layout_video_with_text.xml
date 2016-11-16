@@ -70,8 +70,9 @@
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:text="FILENAME.MP4"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/sp16"
+                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp14"
                 android:textStyle="bold" />
 
             <TextView
@@ -81,15 +82,14 @@
                 android:singleLine="true"
                 android:text="3:48 (4.5 MB)"
                 android:textAllCaps="true"
-                android:textColor="@color/gray"
+                android:textColor="@color/gray10"
                 android:textSize="@dimen/sp14" />
 
             <io.github.meness.emoji.EmojiTextView
                 android:id="@+id/messageText"
-                style="@style/ChatMessages.EmojiTextView"
                 android:layout_marginTop="4dp"
-                android:text="SAMPLE TEXT"
-                android:textColor="@android:color/black" />
+                style="@style/ChatMessages.EmojiTextView"
+                android:text="SAMPLE TEXT"/>
 
             <include layout="@layout/chat_sub_layout_messages_time" />
         </LinearLayout>

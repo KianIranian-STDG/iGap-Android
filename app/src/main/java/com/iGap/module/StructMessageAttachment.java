@@ -204,6 +204,11 @@ public class StructMessageAttachment implements Parcelable {
         return localThumbnailPath != null && new File(localThumbnailPath).exists();
     }
 
+    public boolean isFileExistsOnLocalAndIsThumbnail() {
+        assert localFilePath != null;
+        return isFileExistsOnLocal() && localFilePath.endsWith(".jpg");
+    }
+
     @Override
     public int describeContents() {
         return 0;

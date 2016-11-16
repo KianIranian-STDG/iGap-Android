@@ -3,7 +3,9 @@ package com.iGap.module;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -11,9 +13,11 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.interfaces.IResendMessage;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.enums.RoomType;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +30,43 @@ import io.realm.Realm;
 
 public final class AppUtils {
     private AppUtils() throws InstantiationException {
-        throw new InstantiationException("This class is not for Instantiation.");
+        throw new InstantiationException("This class is not for instantiation.");
+    }
+
+    public static void rightFileThumbnailIcon(ImageView view, ProtoGlobal.RoomMessageType messageType, @Nullable RealmAttachment attachment) {
+        switch (messageType) {
+            case VOICE:
+                view.setImageResource(R.drawable.microphone);
+                break;
+            case FILE:
+            case FILE_TEXT:
+                if (attachment.getName().toLowerCase().endsWith(".pdf")) {
+                    view.setImageResource(R.drawable.pdf);
+                } else if (attachment.getName().toLowerCase().endsWith(".docx")) {
+                    view.setImageResource(R.drawable.docx);
+                } else if (attachment.getName().toLowerCase().endsWith(".rar")) {
+                    view.setImageResource(R.drawable.rar);
+                } else if (attachment.getName().toLowerCase().endsWith(".txt")) {
+                    view.setImageResource(R.drawable.txt);
+                } else {
+                    view.setImageResource(R.drawable.file);
+                }
+                break;
+            default:
+                if (attachment != null) {
+                    if (attachment.isFileExistsOnLocal()) {
+                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(attachment.getLocalFilePath()), view);
+                    } else if (attachment.isThumbnailExistsOnLocal()) {
+                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(attachment.getLocalThumbnailPath()), view);
+                    } else {
+                        view.setVisibility(View.GONE);
+                        // TODO: 11/15/2016 [Alireza] request download bede
+                    }
+                } else {
+                    view.setVisibility(View.GONE);
+                }
+                break;
+        }
     }
 
     /**
@@ -36,28 +76,28 @@ public final class AppUtils {
      */
     public static void rightMessageStatus(TextView view, String status) {
         // icons font MaterialDesign yeksan design nashodan vase hamin man dasti size ro barabar kardam
-        switch (status) {
-            case "DELIVERED":
+        switch (ProtoGlobal.RoomMessageStatus.valueOf(status)) {
+            case DELIVERED:
                 view.setTextColor(view.getContext().getResources().getColor(R.color.white));
                 view.setText(G.context.getResources().getString(R.string.md_check_symbol));
                 view.setTextSize(12F);
                 break;
-            case "FAILED":
+            case FAILED:
                 view.setTextColor(Color.RED);
                 view.setText(G.context.getResources().getString(R.string.md_cancel_button));
                 view.setTextSize(15F);
                 break;
-            case "SEEN":
+            case SEEN:
                 view.setTextColor(view.getContext().getResources().getColor(R.color.white));
                 view.setText(G.context.getResources().getString(R.string.md_double_tick_indicator));
                 view.setTextSize(15F);
                 break;
-            case "SENDING":
+            case SENDING:
                 view.setTextColor(view.getContext().getResources().getColor(R.color.statusSendingColor));
                 view.setText(G.context.getResources().getString(R.string.md_clock_with_white_face));
                 view.setTextSize(12F);
                 break;
-            case "SENT":
+            case SENT:
                 view.setTextColor(view.getContext().getResources().getColor(R.color.statusSendingColor));
                 view.setText(G.context.getResources().getString(R.string.md_check_symbol));
                 view.setTextSize(12F);

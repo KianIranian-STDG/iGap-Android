@@ -77,7 +77,7 @@ public final class AndroidUtils {
 
     public static String saveBitmap(Bitmap bmp) {
         FileOutputStream out = null;
-        String outPath = G.DIR_TEMP + "/thumb_" + Long.toString(SUID.id().get());
+        String outPath = G.DIR_TEMP + "/thumb_" + Long.toString(SUID.id().get()) + ".jpg";
         try {
             out = new FileOutputStream(outPath);
             bmp.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance

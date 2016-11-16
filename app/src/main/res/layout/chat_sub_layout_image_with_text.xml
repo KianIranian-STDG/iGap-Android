@@ -65,10 +65,9 @@
 
             <io.github.meness.emoji.EmojiTextView
                 android:id="@+id/messageText"
+                android:layout_marginTop="4dp"
                 style="@style/ChatMessages.EmojiTextView"
-                android:layout_marginTop="3dp"
-                android:text="SAMPLE TEXT"
-                android:textColor="@android:color/black" />
+                android:text="SAMPLE TEXT"/>
 
             <include layout="@layout/chat_sub_layout_messages_time" />
         </LinearLayout>

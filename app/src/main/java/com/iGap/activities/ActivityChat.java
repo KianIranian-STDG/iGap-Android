@@ -18,12 +18,14 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.support.annotation.ArrayRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -1491,6 +1493,7 @@ public class ActivityChat extends ActivityEnhanced
 
                         // should be null after requesting
                         edtChat.setTag(null);
+                        mReplayLayout.setTag(null);
                         edtChat.setText("");
 
                         // send edit message request
@@ -1556,6 +1559,7 @@ public class ActivityChat extends ActivityEnhanced
 
                         // if replay layout is visible, gone it
                         if (mReplayLayout != null) {
+                            mReplayLayout.setTag(null);
                             mReplayLayout.setVisibility(View.GONE);
                         }
                     } else {
@@ -2439,10 +2443,16 @@ public class ActivityChat extends ActivityEnhanced
                 }
 
                 if (finalMessageType == ProtoGlobal.RoomMessageType.VIDEO || finalMessageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
-                    Bitmap bitmap = FileUtils.getThumbnail(getApplicationContext(), new File(finalFilePath));
+                    Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(finalFilePath, MediaStore.Video.Thumbnails.MINI_KIND);
                     if (bitmap != null) {
                         String path = AndroidUtils.saveBitmap(bitmap);
                         roomMessage.getAttachment().setLocalThumbnailPath(path);
+                        roomMessage.getAttachment().setWidth(bitmap.getWidth());
+                        roomMessage.getAttachment().setHeight(bitmap.getHeight());
+
+                        finalMessageInfo.attachment.setLocalFilePath(roomMessage.getMessageId(), path);
+                        finalMessageInfo.attachment.width = bitmap.getWidth();
+                        finalMessageInfo.attachment.height = bitmap.getHeight();
                     }
                 }
                 switchAddItem(new ArrayList<>(Collections.singletonList(finalMessageInfo)), false);
@@ -2486,6 +2496,33 @@ public class ActivityChat extends ActivityEnhanced
             mReplayLayout.setVisibility(View.VISIBLE);
             TextView replayTo = (TextView) mReplayLayout.findViewById(R.id.replayTo);
             TextView replayFrom = (TextView) mReplayLayout.findViewById(R.id.replyFrom);
+            ImageView thumbnail = (ImageView) mReplayLayout.findViewById(R.id.thumbnail);
+            thumbnail.setVisibility(View.VISIBLE);
+            if (chatItem.forwardedFrom != null) {
+                if (chatItem.forwardedFrom.getAttachment() != null) {
+                    if (chatItem.forwardedFrom.getAttachment().isFileExistsOnLocalAndIsThumbnail()) {
+                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(chatItem.forwardedFrom.getAttachment().getLocalFilePath()), thumbnail);
+                    } else if (chatItem.forwardedFrom.getAttachment().isThumbnailExistsOnLocal()) {
+                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(chatItem.forwardedFrom.getAttachment().getLocalThumbnailPath()), thumbnail);
+                    } else {
+                        thumbnail.setVisibility(View.GONE);
+                    }
+                } else {
+                    thumbnail.setVisibility(View.GONE);
+                }
+            } else {
+                if (chatItem.attachment != null) {
+                    if (chatItem.attachment.isFileExistsOnLocalAndIsThumbnail()) {
+                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(chatItem.attachment.getLocalFilePath()), thumbnail);
+                    } else if (chatItem.attachment.isThumbnailExistsOnLocal()) {
+                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(chatItem.attachment.getLocalThumbnailPath()), thumbnail);
+                    } else {
+                        thumbnail.setVisibility(View.GONE);
+                    }
+                } else {
+                    thumbnail.setVisibility(View.GONE);
+                }
+            }
             replayTo.setText(chatItem.messageText);
             Realm realm = Realm.getDefaultInstance();
             RealmRegisteredInfo userInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, Long.parseLong(chatItem.senderID)).findFirst();
@@ -3239,16 +3276,16 @@ public class ActivityChat extends ActivityEnhanced
         if (userTriesReplay()) {
             mAdapter.add(new VoiceItem(chatType, this).setMessage(
                     new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.VOICE, MyType.SendType.send,
-                            null, savedPath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID))).withIdentifier(System.nanoTime()));
+                            null, savedPath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID))).withIdentifier(SUID.id().get()));
         } else {
             if (isMessageWrote()) {
                 mAdapter.add(new VoiceItem(chatType, this).setMessage(
                         new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.VOICE, MyType.SendType.send,
-                                null, savedPath, updateTime)).withIdentifier(System.nanoTime()));
+                                null, savedPath, updateTime)).withIdentifier(SUID.id().get()));
             } else {
                 mAdapter.add(new VoiceItem(chatType, this).setMessage(
                         new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.VOICE, MyType.SendType.send,
-                                null, savedPath, updateTime)).withIdentifier(System.nanoTime()));
+                                null, savedPath, updateTime)).withIdentifier(SUID.id().get()));
             }
         }
 

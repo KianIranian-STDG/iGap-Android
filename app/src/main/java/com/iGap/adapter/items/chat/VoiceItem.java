@@ -44,8 +44,8 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
     }
 
     @Override
-    public void onLoadFromLocal(ViewHolder holder, String localPath, LocalFileType fileType) {
-        super.onLoadFromLocal(holder, localPath, fileType);
+    public void onLoadThumbnailFromLocal(ViewHolder holder, String localPath, LocalFileType fileType) {
+        super.onLoadThumbnailFromLocal(holder, localPath, fileType);
         // TODO: 9/28/2016 [Alireza]
     }
 
@@ -64,6 +64,8 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             }
             setTextIfNeeded(holder.messageText, mMessage.messageText);
         }
+
+        AppUtils.rightFileThumbnailIcon(holder.thumbnail, mMessage.messageType, null);
     }
 
     protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {

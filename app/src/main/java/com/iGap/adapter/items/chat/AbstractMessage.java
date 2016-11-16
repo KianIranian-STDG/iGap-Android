@@ -279,39 +279,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             if (mMessage.replayTo != null) {
                 holder.itemView.findViewById(R.id.chslr_imv_replay_pic).setVisibility(View.VISIBLE);
 
-                switch (ProtoGlobal.RoomMessageType.valueOf(mMessage.replayTo.getMessageType())) {
-                    case VOICE:
-                        ((ImageView) holder.itemView.findViewById(R.id.chslr_imv_replay_pic)).setImageResource(R.drawable.microphone);
-                        break;
-                    case FILE:
-                    case FILE_TEXT:
-                        if (mMessage.replayTo.getAttachment().getName().toLowerCase().endsWith(".pdf")) {
-                            ((ImageView) holder.itemView.findViewById(R.id.chslr_imv_replay_pic)).setImageResource(R.drawable.pdf);
-                        } else if (mMessage.replayTo.getAttachment().getName().toLowerCase().endsWith(".docx")) {
-                            ((ImageView) holder.itemView.findViewById(R.id.chslr_imv_replay_pic)).setImageResource(R.drawable.docx);
-                        } else if (mMessage.replayTo.getAttachment().getName().toLowerCase().endsWith(".rar")) {
-                            ((ImageView) holder.itemView.findViewById(R.id.chslr_imv_replay_pic)).setImageResource(R.drawable.rar);
-                        } else if (mMessage.replayTo.getAttachment().getName().toLowerCase().endsWith(".txt")) {
-                            ((ImageView) holder.itemView.findViewById(R.id.chslr_imv_replay_pic)).setImageResource(R.drawable.txt);
-                        } else {
-                            ((ImageView) holder.itemView.findViewById(R.id.chslr_imv_replay_pic)).setImageResource(R.drawable.file);
-                        }
-                        break;
-                    default:
-                        if (mMessage.replayTo.getAttachment() != null) {
-                            if (mMessage.replayTo.getAttachment().isFileExistsOnLocal()) {
-                                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mMessage.replayTo.getAttachment().getLocalFilePath()), (ImageView) holder.itemView.findViewById(R.id.chslr_imv_replay_pic));
-                            } else if (mMessage.replayTo.getAttachment().isThumbnailExistsOnLocal()) {
-                                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mMessage.replayTo.getAttachment().getLocalThumbnailPath()), (ImageView) holder.itemView.findViewById(R.id.chslr_imv_replay_pic));
-                            } else {
-                                holder.itemView.findViewById(R.id.chslr_imv_replay_pic).setVisibility(View.GONE);
-                                // TODO: 11/15/2016 [Alireza] request download bede
-                            }
-                        } else {
-                            holder.itemView.findViewById(R.id.chslr_imv_replay_pic).setVisibility(View.GONE);
-                        }
-                        break;
-                }
+                AppUtils.rightFileThumbnailIcon(((ImageView) holder.itemView.findViewById(R.id.chslr_imv_replay_pic)), ProtoGlobal.RoomMessageType.valueOf(mMessage.replayTo.getMessageType()), mMessage.replayTo.getAttachment());
 
                 Realm realm = Realm.getDefaultInstance();
                 RealmRegisteredInfo replayToInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mMessage.replayTo.getUserId()).findFirst();
@@ -362,14 +330,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         // runs if message has attachment
         if (attachment != null) {
             // if file already exists, simply show the local one
-            if (attachment.isFileExistsOnLocal()) {
+            if (attachment.isFileExistsOnLocalAndIsThumbnail()) {
                 // load file from local
-                onLoadFromLocal(holder, attachment.getLocalFilePath(), LocalFileType.FILE);
+                onLoadThumbnailFromLocal(holder, attachment.getLocalFilePath(), LocalFileType.FILE);
             } else {
                 // file doesn't exist on local, I check for a thumbnail
                 // if thumbnail exists, I load it into the view
                 if (attachment.isThumbnailExistsOnLocal()) {
-                    if ((mMessage.forwardedFrom != null && (mMessage.forwardedFrom.getMessageType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.IMAGE.toString()) || mMessage.forwardedFrom.getMessageType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.IMAGE_TEXT.toString()))) || mMessage.messageType == ProtoGlobal.RoomMessageType.IMAGE || mMessage.messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
+                    if ((mMessage.forwardedFrom != null && (mMessage.forwardedFrom.getMessageType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.IMAGE.toString()) || mMessage.forwardedFrom.getMessageType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.IMAGE_TEXT.toString()) || mMessage.forwardedFrom.getMessageType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.VIDEO.toString()) || mMessage.forwardedFrom.getMessageType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.VIDEO_TEXT.toString()))) || mMessage.messageType == ProtoGlobal.RoomMessageType.IMAGE || mMessage.messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT || mMessage.messageType == ProtoGlobal.RoomMessageType.VIDEO || mMessage.messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
                         ViewGroup view = (ViewGroup) holder.itemView.findViewById(R.id.thumbnail).getParent();
                         if (view != null) {
                             int[] dimens = AndroidUtils.scaleDimenWithSavedRatio(holder.itemView.getContext(), attachment.getWidth(), attachment.getHeight());
@@ -379,7 +347,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     }
 
                     // load thumbnail from local
-                    onLoadFromLocal(holder, attachment.getLocalThumbnailPath(), LocalFileType.THUMBNAIL);
+                    onLoadThumbnailFromLocal(holder, attachment.getLocalThumbnailPath(), LocalFileType.THUMBNAIL);
                 } else {
                     requestForThumbnail();
                 }
@@ -462,7 +430,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     @Override
     @CallSuper
-    public void onLoadFromLocal(VH holder, String localPath, LocalFileType fileType) {
+    public void onLoadThumbnailFromLocal(VH holder, String localPath, LocalFileType fileType) {
 
     }
 
@@ -531,7 +499,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 new RequestFileDownload().download(token, 0, (int) mMessage.forwardedFrom.getAttachment().getSmallThumbnail().getSize(), selector, identity);
             }
         } else {
-            if (mMessage.attachment.smallThumbnail.size != 0) {
+            if (mMessage.attachment.smallThumbnail != null && mMessage.attachment.smallThumbnail.size != 0) {
 
                 final String fileName = "thumb_" + token + "_" + mMessage.attachment.name;
                 if (done) {
