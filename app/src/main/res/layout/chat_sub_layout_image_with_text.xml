@@ -30,10 +30,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/rectangle_round_white"
             android:orientation="vertical"
-            android:paddingBottom="4.5dp"
-            android:paddingLeft="@dimen/messageContainerPadding"
-            android:paddingRight="@dimen/messageContainerPadding"
-            android:paddingTop="@dimen/messageContainerPadding">
+            android:padding="4.5dp">
 
             <include
                 android:id="@+id/replayLayout"

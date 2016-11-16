@@ -55,7 +55,6 @@ public class VideoWithTextItem
                 ((ViewGroup) holder.image.getParent()).setLayoutParams(
                         new LinearLayout.LayoutParams(dimens[0], dimens[1]));
                 holder.image.getParent().requestLayout();
-                holder.fileName.setText(mMessage.forwardedFrom.getAttachment().getName());
                 holder.duration.setText(
                         String.format(holder.itemView.getResources().getString(R.string.video_duration),
                                 AppUtils.humanReadableDuration(mMessage.forwardedFrom.getAttachment().getDuration()).replace(".", ":"),
@@ -70,7 +69,6 @@ public class VideoWithTextItem
                 ((ViewGroup) holder.image.getParent()).setLayoutParams(
                         new LinearLayout.LayoutParams(dimens[0], dimens[1]));
                 holder.image.getParent().requestLayout();
-                holder.fileName.setText(mMessage.attachment.name);
                 holder.duration.setText(
                         String.format(holder.itemView.getResources().getString(R.string.video_duration),
                                 AppUtils.humanReadableDuration(mMessage.attachment.duration).replace(".", ":"),
@@ -100,7 +98,6 @@ public class VideoWithTextItem
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
         protected ImageView image;
-        protected TextView fileName;
         protected TextView duration;
         protected EmojiTextView messageText;
 
@@ -110,7 +107,6 @@ public class VideoWithTextItem
             messageText = (EmojiTextView) view.findViewById(R.id.messageText);
             messageText.setTextSize(G.userTextSize);
             image = (ImageView) view.findViewById(R.id.thumbnail);
-            fileName = (TextView) view.findViewById(R.id.fileName);
             duration = (TextView) view.findViewById(R.id.duration);
         }
     }

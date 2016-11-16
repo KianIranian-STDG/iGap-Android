@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.iGap.G;
@@ -19,17 +18,16 @@ import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
+import com.makeramen.roundedimageview.RoundedImageView;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.IOException;
 import java.util.List;
 
 import io.github.meness.audioplayerview.AudioPlayerView;
+import io.github.meness.audioplayerview.listeners.OnAudioPlayerViewControllerClick;
 import io.github.meness.emoji.EmojiTextView;
 import io.realm.Realm;
-
-import static com.iGap.module.AndroidUtils.suitablePath;
 
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/2016.
@@ -59,7 +57,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
     @Override
     public void onLoadThumbnailFromLocal(ViewHolder holder, String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, localPath, fileType);
-        ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.thumbnail);
+        //ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.thumbnail);
     }
 
     private MediaPlayer makeMediaPlayer(Context context, String filePath) {
@@ -76,7 +74,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
     }
 
     @Override
-    public void bindView(ViewHolder holder, List payloads) {
+    public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
         if (mMessage.forwardedFrom != null) {
@@ -84,6 +82,22 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
                 holder.fileSize.setText(
                         AndroidUtils.humanReadableByteCount(mMessage.forwardedFrom.getAttachment().getSize(), true));
                 holder.fileName.setText(mMessage.forwardedFrom.getAttachment().getName());
+                holder.playerView.setClickListener(new OnAudioPlayerViewControllerClick() {
+                    @Override
+                    public void onPlayClick(AudioPlayerView playerView) {
+                        messageClickListener.onOpenClick(null, mMessage, holder.getAdapterPosition());
+                    }
+
+                    @Override
+                    public void onPauseClick(AudioPlayerView playerView) {
+
+                    }
+
+                    @Override
+                    public void onStopClick(AudioPlayerView playerView) {
+
+                    }
+                });
                 holder.playerView.setEnabled(mMessage.forwardedFrom.getAttachment().isFileExistsOnLocal());
                 if (mMessage.forwardedFrom.getAttachment().isFileExistsOnLocal()) {
                     holder.playerView.setMediaPlayer(makeMediaPlayer(holder.itemView.getContext(), AndroidUtils.suitablePath(mMessage.forwardedFrom.getAttachment().getLocalFilePath())));
@@ -103,6 +117,22 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
                 holder.fileSize.setText(
                         AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true));
                 holder.fileName.setText(mMessage.attachment.name);
+                holder.playerView.setClickListener(new OnAudioPlayerViewControllerClick() {
+                    @Override
+                    public void onPlayClick(AudioPlayerView playerView) {
+                        messageClickListener.onOpenClick(null, mMessage, holder.getAdapterPosition());
+                    }
+
+                    @Override
+                    public void onPauseClick(AudioPlayerView playerView) {
+
+                    }
+
+                    @Override
+                    public void onStopClick(AudioPlayerView playerView) {
+
+                    }
+                });
                 holder.playerView.setEnabled(mMessage.attachment.isFileExistsOnLocal());
                 if (mMessage.attachment.isFileExistsOnLocal()) {
                     holder.playerView.setMediaPlayer(makeMediaPlayer(holder.itemView.getContext(), AndroidUtils.suitablePath(mMessage.attachment.getLocalFilePath())));
@@ -133,7 +163,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
 
-        protected ImageView thumbnail;
+        protected RoundedImageView thumbnail;
         protected TextView fileSize;
         protected TextView fileName;
         protected TextView songArtist;
@@ -142,7 +172,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
 
         public ViewHolder(View view) {
             super(view);
-            thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
+            thumbnail = (RoundedImageView) view.findViewById(R.id.thumbnail);
             fileSize = (TextView) view.findViewById(R.id.fileSize);
             fileName = (TextView) view.findViewById(R.id.fileName);
             songArtist = (TextView) view.findViewById(R.id.songArtist);

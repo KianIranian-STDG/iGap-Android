@@ -519,6 +519,7 @@ public class ActivityChat extends ActivityEnhanced
                         RealmRoomMessage roomMessage = realm1.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, id).findFirst();
                         switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(roomMessage))), false);
                         G.chatSendMessageUtil.build(chatType, mRoomId, roomMessage);
+                        scrollToEnd();
                         realm1.close();
                     }
                 }, 300);

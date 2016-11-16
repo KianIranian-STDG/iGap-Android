@@ -10,16 +10,16 @@
 
     <ImageView
         android:id="@+id/replyIcon"
-        android:layout_width="@dimen/dp32"
-        android:layout_height="@dimen/dp32"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_marginRight="@dimen/dp4"
         android:contentDescription="@null"
         android:src="@drawable/ic_reply"/>
 
     <ImageView
         android:id="@+id/thumbnail"
-        android:layout_width="@dimen/dp32"
-        android:layout_height="@dimen/dp32"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_marginRight="@dimen/dp4"
         android:contentDescription="@null"/>
 
@@ -46,8 +46,8 @@
 
     <ImageView
         android:id="@+id/cancelIcon"
-        android:layout_width="@dimen/dp32"
-        android:layout_height="@dimen/dp32"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:contentDescription="@null"
         android:src="@drawable/ic_gray_cancel"/>
 

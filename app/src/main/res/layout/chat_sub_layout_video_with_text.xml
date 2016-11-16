@@ -30,10 +30,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/rectangle_round_white"
             android:orientation="vertical"
-            android:paddingBottom="4.5dp"
-            android:paddingLeft="@dimen/messageContainerPadding"
-            android:paddingRight="@dimen/messageContainerPadding"
-            android:padding="@dimen/messageContainerPadding">
+            android:padding="4.5dp">
 
             <include
                 android:id="@+id/replayLayout"
@@ -55,6 +52,21 @@
                     android:scaleType="fitXY"
                     app:riv_corner_radius="@dimen/chatMessageImageCorner" />
 
+                <TextView
+                    android:id="@+id/duration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/dp4"
+                    android:maxLines="1"
+                    android:background="@drawable/bg_message_image_time"
+                    android:layout_gravity="left|top"
+                    android:text="3:48 (4.5 MB)"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginTop="2dp"
+                    android:textAllCaps="true"
+                    android:textColor="@color/gray10"
+                    android:textSize="@dimen/sp14"/>
+
                 <include
                     android:id="@+id/progress"
                     layout="@layout/msg_progress_item"
@@ -63,27 +75,6 @@
                     android:layout_gravity="center" />
 
             </FrameLayout>
-
-            <TextView
-                android:id="@+id/fileName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:text="FILENAME.MP4"
-                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/sp14"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/duration"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:text="3:48 (4.5 MB)"
-                android:textAllCaps="true"
-                android:textColor="@color/gray10"
-                android:textSize="@dimen/sp14" />
 
             <io.github.meness.emoji.EmojiTextView
                 android:id="@+id/messageText"
